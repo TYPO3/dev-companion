@@ -15,7 +15,9 @@ runtime rather than at build time. That version is targetVersion, or the
 installation this server was started in where none is stated — state one when
 the work is on another branch than what is installed. It computes a reference
 from a path and reads no label: whether the installation already registers one
-to reuse, and under which id, is typo3_label_lookup. Answers from: knowledge.
+to reuse, and under which id, is typo3_label_lookup. The answer also carries the
+specifier a backend JavaScript module imports that domain under, which is the
+same value in the form that module needs. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -58,6 +60,12 @@ Answers with
     # Set only in that second case: what the domain would be on a version that has
     # them. It is not usable on this installation.
     domainOnNewerVersions: string or null  # optional
+    # The specifier a backend JavaScript module imports the same domain under:
+    # import labels from '~labels/<domain>', read with labels.get(). Returned where
+    # a domain was handed over, and absent where none was — the import map prefix
+    # arrived with the domains themselves, so there is nothing to write on a version
+    # below them.
+    moduleImport: string or null  # optional
 
 Answered
 --------

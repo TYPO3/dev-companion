@@ -126,6 +126,42 @@ final class VersionsTest extends TestCase
     }
 
     /**
+     * The domain answered as the module imports it, on the majors that have
+     * both.
+     *
+     * `D-ANS-132`. The resolver and the `~labels` import map prefix arrived
+     * together, so the branch with no domain has nothing to import either and
+     * the field is absent there rather than null.
+     */
+    #[Decision('D-ANS-132')]
+    #[Test]
+    public function theDomainIsAnsweredInTheFormAModuleImportsIt(): void
+    {
+        Instance::discoverFrom($this->composerProject('vendor', $this->versionOn(TranslationDomainLookup::SINCE)));
+        $answered = Registry::call('typo3_translation_domain_lookup', [
+            'path' => 'EXT:my_ext/Resources/Private/Language/locallang_db.xlf',
+        ]);
+
+        self::assertSame('~labels/my_ext.db', $answered->data['moduleImport']);
+        self::assertStringContainsString('import labels from "~labels/my_ext.db"', $answered->text);
+
+        $below = array_values(array_filter(
+            Versions::majors(),
+            static fn(int $major): bool => $major < TranslationDomainLookup::SINCE,
+        ));
+        if ($below === []) {
+            self::fail('no covered major is below the version domains arrived in');
+        }
+
+        Instance::discoverFrom($this->composerProject('vendor', $this->versionOn(max($below))));
+        $withheld = Registry::call('typo3_translation_domain_lookup', [
+            'path' => 'EXT:my_ext/Resources/Private/Language/locallang_db.xlf',
+        ]);
+
+        self::assertArrayNotHasKey('moduleImport', $withheld->data);
+    }
+
+    /**
      * A version string on a covered major, from the branch that major is
      * verified against — so `main` becomes a number rather than a branch name.
      */

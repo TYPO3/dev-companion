@@ -47,7 +47,7 @@ final class TranslationDomainLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Compute the translation domain an XLF file resolves to, from its path. The domain is the canonical way to reference a label (backend.alt_doc:key) in TCA, LanguageService::sL() and f:translate, and it is registered nowhere: it follows from the path by the rules the core itself applies, in TranslationDomainMapper on one branch and TranslationDomainResolver on the next. Being computed, it also answers for a file outside the core and for one a patch is about to add. On a version older than translation domains it answers with the full LLL:EXT: reference instead, because the domain form renders nothing there and fails at runtime rather than at build time. That version is targetVersion, or the installation this server was started in where none is stated — state one when the work is on another branch than what is installed. It computes a reference from a path and reads no label: whether the installation already registers one to reuse, and under which id, is typo3_label_lookup.';
+        return 'Compute the translation domain an XLF file resolves to, from its path. The domain is the canonical way to reference a label (backend.alt_doc:key) in TCA, LanguageService::sL() and f:translate, and it is registered nowhere: it follows from the path by the rules the core itself applies, in TranslationDomainMapper on one branch and TranslationDomainResolver on the next. Being computed, it also answers for a file outside the core and for one a patch is about to add. On a version older than translation domains it answers with the full LLL:EXT: reference instead, because the domain form renders nothing there and fails at runtime rather than at build time. That version is targetVersion, or the installation this server was started in where none is stated — state one when the work is on another branch than what is installed. It computes a reference from a path and reads no label: whether the installation already registers one to reuse, and under which id, is typo3_label_lookup. The answer also carries the specifier a backend JavaScript module imports that domain under, which is the same value in the form that module needs.';
     }
 
     public static function inputSchema(): array
@@ -69,6 +69,7 @@ final class TranslationDomainLookup extends ReadOnlyTool
             'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the answer was composed for — stated by the caller, or read from the installation. Null means neither said, and the domain comes back unqualified: it is the form from ' . self::SINCE . ' onwards, and nothing placed this call on a version.'],
             'domain' => Schema::nullableString('The translation domain it resolves to. Null when the path names no extension, and also when the version this was composed for is too old to resolve domains at all — there the full LLL:EXT: reference is the answer.'),
             'domainOnNewerVersions' => Schema::nullableString('Set only in that second case: what the domain would be on a version that has them. It is not usable on this installation.'),
+            'moduleImport' => Schema::nullableString('The specifier a backend JavaScript module imports the same domain under: import labels from \'~labels/<domain>\', read with labels.get(). Returned where a domain was handed over, and absent where none was — the import map prefix arrived with the domains themselves, so there is nothing to write on a version below them.'),
         ], ['path', 'domain']);
     }
 
@@ -134,11 +135,19 @@ final class TranslationDomainLookup extends ReadOnlyTool
                 '',
                 'Reference a label in it as "' . $domain . ':<trans-unit id>" — in TCA, in LanguageService::sL(), '
                     . 'and in f:translate as separate domain and key attributes.',
+                'A backend JavaScript module writes the same value as an import: import labels from '
+                    . '"~labels/' . $domain . '", then labels.get("<trans-unit id>").',
                 self::composedFor($stated, $target),
                 'Which trans-units the file actually holds is a property of your checkout: read the file, and remember '
                     . 'that an installation can override it through LANG/resourceOverrides.',
             ]),
-            ['path' => $path, 'targetVersion' => $target, 'domain' => $domain, 'domainOnNewerVersions' => null],
+            [
+                'path' => $path,
+                'targetVersion' => $target,
+                'domain' => $domain,
+                'domainOnNewerVersions' => null,
+                'moduleImport' => '~labels/' . $domain,
+            ],
         );
     }
 

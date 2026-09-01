@@ -3,6 +3,8 @@ id: D-GUI-019
 title: 'The audit brief names the lookup that reads a configuration default'
 date: 2026-08-26
 status: open
+readings:
+  - 2026-09-01
 ---
 
 # D-GUI-019 — The audit brief names the lookup that reads a configuration default

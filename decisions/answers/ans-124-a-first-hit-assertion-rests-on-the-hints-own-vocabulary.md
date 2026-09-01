@@ -3,6 +3,8 @@ id: D-ANS-124
 title: A first-hit assertion rests on the hint's own vocabulary
 date: 2026-08-27
 status: open
+readings:
+  - 2026-09-01
 coveredBy: []
 ---
 

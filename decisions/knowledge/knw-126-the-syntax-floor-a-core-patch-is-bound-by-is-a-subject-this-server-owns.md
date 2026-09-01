@@ -3,6 +3,8 @@ id: D-KNW-126
 title: 'The syntax floor a core patch is bound by is a subject this server owns'
 date: 2026-08-27
 status: open
+readings:
+  - 2026-09-01
 coveredBy: []
 ---
 

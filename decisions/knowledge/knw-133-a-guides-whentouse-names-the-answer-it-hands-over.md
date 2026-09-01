@@ -3,6 +3,8 @@ id: D-KNW-133
 title: A guide's whenToUse names the answer it hands over
 date: 2026-08-28
 status: open
+readings:
+  - 2026-09-01
 ---
 
 # D-KNW-133 — A guide's whenToUse names the answer it hands over

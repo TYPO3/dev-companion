@@ -3,6 +3,8 @@ id: D-KNW-134
 title: What the functional harness does to the working directory is stated
 date: 2026-08-28
 status: open
+readings:
+  - 2026-09-01
 ---
 
 # D-KNW-134 — What the functional harness does to the working directory is stated

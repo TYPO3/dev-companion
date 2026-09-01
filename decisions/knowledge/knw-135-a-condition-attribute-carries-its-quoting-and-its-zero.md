@@ -3,6 +3,8 @@ id: D-KNW-135
 title: A condition attribute carries its quoting and its zero
 date: 2026-08-28
 status: open
+readings:
+  - 2026-09-01
 ---
 
 # D-KNW-135 — A condition attribute carries its quoting and its zero

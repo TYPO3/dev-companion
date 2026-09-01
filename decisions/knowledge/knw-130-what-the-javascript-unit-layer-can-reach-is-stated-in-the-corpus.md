@@ -3,6 +3,8 @@ id: D-KNW-130
 title: What the JavaScript unit layer can reach is stated in the corpus
 date: 2026-08-27
 status: open
+readings:
+  - 2026-09-01
 coveredBy: []
 ---
 

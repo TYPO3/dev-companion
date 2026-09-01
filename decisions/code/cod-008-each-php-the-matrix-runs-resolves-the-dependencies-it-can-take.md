@@ -3,6 +3,8 @@ id: D-COD-008
 title: 'Each PHP the matrix runs resolves the dependencies it can take'
 date: 2026-08-29
 status: open
+readings:
+  - 2026-09-01
 coveredBy: []
 ---
 

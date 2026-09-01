@@ -3,6 +3,8 @@ id: D-KNW-136
 title: A fixture's sys_template row discards what the site's sets built
 date: 2026-08-28
 status: open
+readings:
+  - 2026-09-01
 ---
 
 # D-KNW-136 — A fixture's sys_template row discards what the site's sets built

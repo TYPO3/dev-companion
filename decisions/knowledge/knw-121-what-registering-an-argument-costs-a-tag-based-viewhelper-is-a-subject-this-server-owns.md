@@ -3,6 +3,8 @@ id: D-KNW-121
 title: What registering an argument costs a tag-based ViewHelper is a subject this server owns
 date: 2026-08-25
 status: open
+readings:
+  - 2026-09-01
 coveredBy: []
 ---
 

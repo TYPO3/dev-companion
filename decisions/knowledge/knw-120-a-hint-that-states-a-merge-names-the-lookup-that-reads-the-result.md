@@ -3,6 +3,8 @@ id: D-KNW-120
 title: A hint that states a merge names the lookup that reads the result
 date: 2026-08-25
 status: open
+readings:
+  - 2026-09-01
 coveredBy: []
 ---
 

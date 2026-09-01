@@ -3,6 +3,8 @@ id: D-AUD-015
 title: What decides whether to call a tool stands in its description
 date: 2026-08-27
 status: open
+readings:
+  - 2026-09-01
 coveredBy: []
 ---
 

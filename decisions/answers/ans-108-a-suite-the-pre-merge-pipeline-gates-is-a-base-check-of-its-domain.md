@@ -3,6 +3,8 @@ id: D-ANS-108
 title: A suite the pre-merge pipeline gates is a base check of its domain
 date: 2026-08-25
 status: open
+readings:
+  - 2026-09-01
 ---
 
 # D-ANS-108 — A suite the pre-merge pipeline gates is a base check of its domain

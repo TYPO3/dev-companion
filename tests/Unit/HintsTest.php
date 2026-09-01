@@ -1129,31 +1129,6 @@ final class HintsTest extends TestCase
      * calls `renderStatic()` and drops the check with it, which is why the same
      * page throws once and then renders nothing.
      */
-    /**
-     * The shadowing is reached from the class as much as from the template.
-     *
-     * `D-KNW-075`'s third **Wrong if**, measured rather than reported: the
-     * session that writes `hasItems()` is holding the PHP class, and the query
-     * it holds is the ViewHelper's exception, which carries no Fluid word. A
-     * hint tagged `fluid` alone was no candidate for it — on 2026-09-02 that
-     * call reached nothing at all — so the tag was what filed the answer where
-     * the failure is read rather than where it is made.
-     */
-    #[Decision('D-KNW-075')]
-    #[Test]
-    public function theShadowingIsReachedFromTheClassAndFromTheTemplate(): void
-    {
-        $message = 'The argument "each" was registered with type "array", but is of type "boolean"';
-
-        foreach ([
-            'packages/my_ext/Classes/Dto/Result.php',
-            'packages/my_ext/Resources/Private/Templates/List.html',
-        ] as $path) {
-            $ids = array_column(Hints::find([$path], $message, 6)['matchedHints'], 'id');
-            self::assertContains('fluid-object-access', $ids, $path);
-        }
-    }
-
     #[Test]
     public function anObjectPathIsAnsweredWithTheGetterFirst(): void
     {
@@ -1201,6 +1176,31 @@ final class HintsTest extends TestCase
         $viewHelpers = implode("\n", array_column(Hints::byId('fluid-viewhelpers', 13)['hints'], 'text'));
         self::assertStringContainsString('every empty value passes whatever the type says', $viewHelpers);
         self::assertStringNotContainsString('is passed to the ViewHelper unchanged', $viewHelpers);
+    }
+
+    /**
+     * The shadowing is reached from the class as much as from the template.
+     *
+     * `D-KNW-075`'s third **Wrong if**, measured rather than reported: the
+     * session that writes `hasItems()` is holding the PHP class, and the query
+     * it holds is the ViewHelper's exception, which carries no Fluid word. A
+     * hint tagged `fluid` alone was no candidate for it — on 2026-09-02 that
+     * call reached nothing at all — so the tag was what filed the answer where
+     * the failure is read rather than where it is made.
+     */
+    #[Decision('D-KNW-075')]
+    #[Test]
+    public function theShadowingIsReachedFromTheClassAndFromTheTemplate(): void
+    {
+        $message = 'The argument "each" was registered with type "array", but is of type "boolean"';
+
+        foreach ([
+            'packages/my_ext/Classes/Dto/Result.php',
+            'packages/my_ext/Resources/Private/Templates/List.html',
+        ] as $path) {
+            $ids = array_column(Hints::find([$path], $message, 6)['matchedHints'], 'id');
+            self::assertContains('fluid-object-access', $ids, $path);
+        }
     }
 
     #[Test]

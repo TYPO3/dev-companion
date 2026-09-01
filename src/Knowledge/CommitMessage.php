@@ -714,9 +714,8 @@ final class CommitMessage
             $checks[] = [
                 'level' => 'warning',
                 'code' => 'body-written-as-a-list',
-                'message' => 'The body is written as a list. Write the argument as sentences: a list in a '
-                    . 'commit body enumerates what the change touched — the classes it moved, the rules it '
-                    . 'dropped — and the reasoning around it is prose.',
+                'message' => 'The body is written as a list. Write it as short, precise prose; a list '
+                    . 'belongs there to name what the change touched, not to carry the argument.',
             ];
         }
 

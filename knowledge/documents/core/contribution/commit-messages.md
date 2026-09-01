@@ -56,10 +56,7 @@ Guide.
 - Keep the body brief and focused on what changed and why.
 - Do not repeat full reproduction instructions from the Forge issue.
 - Wrap body lines manually at 72 characters.
-- The body is prose. A list in it enumerates items the change touched — the
-  classes it moved, the rules it dropped — and the argument is written as
-  sentences around it. Of the last thousand merged commits on `main` carrying a
-  body, read on 2026-09-02, 115 hold a list line and one is written as a list.
+- Write the body as short, precise prose rather than as a list.
 
 ## The Longest Line The Hook Accepts
 

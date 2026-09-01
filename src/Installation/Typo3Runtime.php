@@ -106,6 +106,22 @@ final class Typo3Runtime
     }
 
     /**
+     * The service definitions this installation assembles, or null where there
+     * was no full reading to take them from.
+     *
+     * Asked for, because it builds the container a second time — `D-DIS-023`.
+     *
+     * @return array{definitionCount: int, aliasCount: int, services: array<int, array<string, mixed>>}|array{unavailable: string}|null
+     */
+    public static function services(string $query, string $tag): ?array
+    {
+        /** @var array{definitionCount: int, aliasCount: int, services: array<int, array<string, mixed>>}|array{unavailable: string}|null $read */
+        $read = self::asked('services', ['services' => ['query' => $query, 'tag' => $tag]]);
+
+        return $read;
+    }
+
+    /**
      * What the database has for a table, or the tables it has at all, or null
      * where there was no full reading to take it from.
      *

@@ -211,6 +211,13 @@ at all in the state the machine is in.
 
         Orientation for this server.
 
+    .. card:: :doc:`typo3_service_lookup <typo3_service_lookup>`
+        :label: Lookup
+        :action: Open reference
+
+        Find what the dependency injection container of the TYPO3 installation
+        you are working in assembles.
+
     .. card:: :doc:`typo3_snapshot_scope <typo3_snapshot_scope>`
         :label: Scope
         :action: Open reference
@@ -279,6 +286,7 @@ at all in the state the machine is in.
     typo3_schema_lookup
     typo3_script_lookup
     typo3_server_scope
+    typo3_service_lookup
     typo3_snapshot_scope
     typo3_system_extension_lookup
     typo3_task_guide

@@ -80,6 +80,13 @@ final class FixtureTest extends TestCase
             if (!$this->declaresAnsweredBy($name)) {
                 continue;
             }
+            // The one call this root cannot stand in for. It assembles the
+            // installation's container a second time through the core's own
+            // builder, and a fixture that could answer it would have to be a
+            // TYPO3 rather than a shape of one — `D-DIS-023`.
+            if ($name === 'typo3_service_lookup') {
+                continue;
+            }
             $data = Registry::call($name, $arguments)->data;
             if (isset($data['unsupported'])) {
                 $unanswered[] = $label . ': ' . ($data['unsupported']['reason'] ?? '');

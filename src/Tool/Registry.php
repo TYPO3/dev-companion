@@ -47,6 +47,7 @@ final class Registry
         FluidNamespaceList::class,
         ConfigurationLookup::class,
         SchemaLookup::class,
+        ServiceLookup::class,
         FlexFormLookup::class,
         BackendModuleLookup::class,
         IconLookup::class,

@@ -44,6 +44,7 @@ try {
     $configurationPath = (string) ($parameters['configurationPath'] ?? '');
     $flexForm = is_array($parameters['flexForm'] ?? null) ? $parameters['flexForm'] : null;
     $liveSchema = is_array($parameters['liveSchema'] ?? null) ? $parameters['liveSchema'] : null;
+    $services = is_array($parameters['services'] ?? null) ? $parameters['services'] : null;
     if (!is_file($autoload)) {
         $answer['reason'] = 'no autoloader at ' . $autoload . ' below ' . getcwd();
         throw new RuntimeException('', 1);
@@ -474,6 +475,87 @@ try {
             $answer['topics']['liveSchema'] = $topic;
         } catch (Throwable $failure) {
             $answer['topics']['liveSchema'] = [
+                'unavailable' => get_class($failure) . ': ' . $failure->getMessage(),
+            ];
+        }
+    }
+
+    // The container the installation runs is compiled, and a compiled one has
+    // forgotten every private service — which is nearly all of them. What can
+    // be read is the builder before that, and it is assembled by asking the
+    // core's own ContainerBuilder rather than by repeating what it does: the
+    // passes, the load order and the synthetic early services are its, and a
+    // copy of them here would drift without anything failing. `buildContainer`
+    // is protected, so this reaches it by reflection and reports the topic
+    // unavailable where that stops working — `D-DIS-023`.
+    if ($services !== null) {
+        try {
+            $packageManager = $container->get(TYPO3\CMS\Core\Package\PackageManager::class);
+            $early = [];
+            foreach ($container->getServiceIds() as $id) {
+                if (str_starts_with((string) $id, '_early.')) {
+                    $early[substr((string) $id, 7)] = $container->get($id);
+                }
+            }
+            $coreBuilder = new TYPO3\CMS\Core\DependencyInjection\ContainerBuilder($early);
+            $build = new ReflectionMethod($coreBuilder, 'buildContainer');
+            $build->setAccessible(true);
+            $builder = $build->invoke(
+                $coreBuilder,
+                $packageManager,
+                new TYPO3\CMS\Core\DependencyInjection\ServiceProviderRegistry($packageManager),
+            );
+
+            // `buildContainer` compiles before it returns, so what comes back
+            // is the builder with autowiring resolved and the unused private
+            // definitions already removed. That is the set the running
+            // container has, which is the one a caller is asking about.
+            $definitions = $builder->getDefinitions();
+
+            $wanted = strtolower((string) ($services['query'] ?? ''));
+            $tag = (string) ($services['tag'] ?? '');
+            $found = [];
+            foreach ($definitions as $id => $definition) {
+                $class = (string) ($definition->getClass() ?? '');
+                $tags = array_keys($definition->getTags());
+                if ($tag !== '' && !in_array($tag, $tags, true)) {
+                    continue;
+                }
+                if ($wanted !== ''
+                    && !str_contains(strtolower((string) $id), $wanted)
+                    && !str_contains(strtolower($class), $wanted)
+                ) {
+                    continue;
+                }
+                $arguments = [];
+                foreach ($definition->getArguments() as $position => $argument) {
+                    $arguments[] = [
+                        'position' => is_int($position) ? $position : -1,
+                        'resolves' => $argument instanceof Symfony\Component\DependencyInjection\Reference
+                            ? (string) $argument
+                            : (is_scalar($argument) ? 'value: ' . var_export($argument, true) : 'value'),
+                    ];
+                }
+                $found[] = [
+                    'id' => (string) $id,
+                    'class' => $class,
+                    'public' => $definition->isPublic(),
+                    'shared' => $definition->isShared(),
+                    'autowired' => $definition->isAutowired(),
+                    'abstract' => $definition->isAbstract(),
+                    'synthetic' => $definition->isSynthetic(),
+                    'tags' => $tags,
+                    'arguments' => $arguments,
+                ];
+            }
+            usort($found, static fn(array $a, array $b): int => strcmp($a['id'], $b['id']));
+            $answer['topics']['services'] = [
+                'definitionCount' => count($definitions),
+                'aliasCount' => count($builder->getAliases()),
+                'services' => $found,
+            ];
+        } catch (Throwable $failure) {
+            $answer['topics']['services'] = [
                 'unavailable' => get_class($failure) . ': ' . $failure->getMessage(),
             ];
         }

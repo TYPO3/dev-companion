@@ -368,8 +368,8 @@
       "scope": "any"
     },
     {
-      "topic": "What the installation you are working in supplies: backend component contracts, labels, icons, backend modules, Fluid namespaces, effective configuration, the columns TYPO3 derives for a table, and the data structure one of its flex fields resolves to",
-      "depth": "Answered by that installation rather than from a snapshot, across the packages it has active — project extensions included. Component presence, classes and custom properties come from the installed backend CSS and JavaScript, with installed styleguide markup where available. Label reuse is restricted to the XLF resource used at the consuming code; an instance-wide match from another resource is discovery, not a reuse candidate. Its console does the answering wherever a command exists, and where none does — the icon registry, and the effective configuration, whose command arrived in TYPO3 14.2 and would leave the two LTS lines holding \"command is not defined\" — or where the command carries less than the registry — the backend modules, whose navigation component is inherited and whose routes it does not export — TYPO3 is booted in a subprocess and its container asked; package files answer where neither can be reached, or where the installation has no configuration yet and boots into a core-only failsafe container. The columns a table gets from its TCA are read the same way and have no file to fall back on: they are what the core would create, so only the core can say them. A type=flex column is resolved through that installation's own FlexFormTools, from a record emulated out of values the caller passes, so what comes back is what the backend form would build rather than what the referenced file says. Every answer identifies its source, so a fallback stays visible.",
+      "topic": "What the installation you are working in supplies: backend component contracts, labels, icons, backend modules, Fluid namespaces, effective configuration, the columns TYPO3 derives for a table beside what its database has, the services its container assembles, and the data structure one of its flex fields resolves to",
+      "depth": "Answered by that installation rather than from a snapshot, across the packages it has active — project extensions included. Component presence, classes and custom properties come from the installed backend CSS and JavaScript, with installed styleguide markup where available. Label reuse is restricted to the XLF resource used at the consuming code; an instance-wide match from another resource is discovery, not a reuse candidate. Its console does the answering wherever a command exists, and where none does — the icon registry, and the effective configuration, whose command arrived in TYPO3 14.2 and would leave the two LTS lines holding \"command is not defined\" — or where the command carries less than the registry — the backend modules, whose navigation component is inherited and whose routes it does not export — TYPO3 is booted in a subprocess and its container asked; package files answer where neither can be reached, or where the installation has no configuration yet and boots into a core-only failsafe container. The columns a table gets from its TCA are read the same way and have no file to fall back on: they are what the core would create, so only the core can say them. A type=flex column is resolved through that installation's own FlexFormTools, from a record emulated out of values the caller passes, so what comes back is what the backend form would build rather than what the referenced file says. Every answer identifies its source, so a fallback stays visible. A schema answer carries what the database has for the named table beside what TYPO3 derives, and what TYPO3 itself would change to make the two agree. The container is assembled a second time to be read, so a private service, a decoration and what each constructor is really handed are answered rather than what a Services.yaml says.",
       "tools": [
         "typo3_component_lookup",
         "typo3_label_lookup",
@@ -378,6 +378,7 @@
         "typo3_fluid_namespace_list",
         "typo3_configuration_lookup",
         "typo3_schema_lookup",
+        "typo3_service_lookup",
         "typo3_flexform_lookup"
       ],
       "source": "the discovered TYPO3 installation — read from the installation being worked in, not from a bundled snapshot.",
@@ -658,6 +659,14 @@
     {
       "when": "Writing or reading a FlexForm — a plugin's settings, a content element's own sheet, or the values a Fluid template reads out of one. The file the registration names is not what the backend resolves.",
       "call": "typo3_flexform_lookup with the table, the flex column and the record values that decide which structure applies, CType for a content element"
+    },
+    {
+      "when": "Asking which class stands behind an interface here, whether a service is public, what a constructor is handed, or what registers into an extension point",
+      "call": "typo3_service_lookup with a substring of the id or the class, or with one exact tag"
+    },
+    {
+      "when": "Asking whether the database matches what the extensions and the TCA declare",
+      "call": "typo3_schema_lookup with the table"
     }
   ]
 }

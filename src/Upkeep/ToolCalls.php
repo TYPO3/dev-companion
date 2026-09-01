@@ -281,6 +281,8 @@ final class ToolCalls
             'configuration' => ['typo3_configuration_lookup', ['path' => 'SYS/fluid']],
             'schema: one table' => ['typo3_schema_lookup', ['table' => 'tt_content']],
             'schema: every table' => ['typo3_schema_lookup', []],
+            'services: by class' => ['typo3_service_lookup', ['query' => 'PageRenderer']],
+            'services: by tag' => ['typo3_service_lookup', ['tag' => 'event.listener', 'limit' => 3]],
             // The record is what decides which structure applies, so the two
             // calls are one with it and one about a column that is not flex.
             'flexform: the structure a content element resolves to' => ['typo3_flexform_lookup', [

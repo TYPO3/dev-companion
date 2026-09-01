@@ -8,8 +8,8 @@ use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Knowledge\Catalog\TranslationDomain;
 
 /**
- * The labels shipped by the packages of the discovered installation, read from
- * their XLF files.
+ * The labels shipped by the packages and site configuration of the discovered
+ * installation, read from their XLF files.
  *
  * `language:domain:search` is the better answer and stays the first one asked:
  * it knows the assembled runtime state, including the overrides an installation
@@ -23,36 +23,61 @@ use TYPO3\DevCompanion\Knowledge\Catalog\TranslationDomain;
  */
 final class Labels
 {
-    /** Where a package keeps label files, relative to its root. */
+    /** Where a package keeps general label files, relative to its root. */
     private const LANGUAGE_DIRECTORY = 'Resources/Private/Language';
 
+    /** Where a project keeps its site configuration, relative to its root. */
+    private const SITE_DIRECTORY = 'config/sites';
+
     /**
-     * Every label of every installed package, or of one of them.
+     * Every label of every installed package and project site, or of one
+     * package where an extension key narrows the call.
      *
-     * @return array<int, array{ref: string, domain: string, key: string, source: string, resource: string}>
+     * @return array<int, array{
+     *     ref: string,
+     *     domain: string,
+     *     key: string,
+     *     source: string,
+     *     resource: string,
+     *     conventionalName: bool,
+     *     references: array<int, string>,
+     *     location: string
+     * }>
      */
     public static function all(string $extension = ''): array
     {
-        $labels = [];
-        foreach (Instance::packages() as $key => $path) {
-            if ($extension !== '' && $key !== $extension) {
-                continue;
+        $instance = Instance::describe();
+        if ($instance === null) {
+            return [];
+        }
+
+        $packages = Instance::packages();
+        $files = [];
+        foreach ($packages as $key => $path) {
+            if ($extension === '' || $key === $extension) {
+                array_push($files, ...self::packageFiles($key, $path));
             }
-            foreach (self::files($path) as $file) {
-                $reference = 'EXT:' . $key . '/' . $file;
-                $domain = TranslationDomain::fromReference($reference);
-                if ($domain === null) {
-                    continue;
-                }
-                foreach (self::units($path . '/' . $file) as $id => $source) {
-                    $labels[] = [
-                        'ref' => $domain . ':' . $id,
-                        'domain' => $domain,
-                        'key' => $id,
-                        'source' => $source,
-                        'resource' => $reference,
-                    ];
-                }
+        }
+        if ($extension === '') {
+            array_push($files, ...self::siteFiles($instance['root']));
+        }
+
+        $references = LabelReference::find($files, $instance['root'], $packages);
+        $labels = [];
+        foreach ($files as $file) {
+            foreach (self::units($file['absolute']) as $id => $source) {
+                $labels[] = [
+                    'ref' => $file['domain'] === ''
+                        ? 'LLL:' . $file['resource'] . ':' . $id
+                        : $file['domain'] . ':' . $id,
+                    'domain' => $file['domain'],
+                    'key' => $id,
+                    'source' => $source,
+                    'resource' => $file['resource'],
+                    'conventionalName' => $file['conventionalName'],
+                    'references' => $references[$file['resource']] ?? [],
+                    'location' => $file['location'],
+                ];
             }
         }
 
@@ -60,22 +85,29 @@ final class Labels
     }
 
     /**
-     * The label files of one package, relative to its root: everything below
-     * Resources/Private/Language/, and the labels.xlf of every site set.
+     * The label files of one package: everything below the language and site-set
+     * directories TYPO3's LabelFileResolver searches.
      *
-     * @return array<int, string>
+     * @return array<int, array{
+     *     absolute: string,
+     *     resource: string,
+     *     domain: string,
+     *     conventionalName: bool,
+     *     implicitReferences: array<int, string>,
+     *     location: string
+     * }>
      */
-    private static function files(string $packagePath): array
+    private static function packageFiles(string $key, string $packagePath): array
     {
         $language = $packagePath . '/' . self::LANGUAGE_DIRECTORY;
         $sets = $packagePath . '/Configuration/Sets';
 
         $found = [];
         if (is_dir($language)) {
-            $found[] = Finder::create()->files()->in($language)->depth('< 2')->name('*.xlf')->sortByName();
+            $found[] = Finder::create()->files()->in($language)->name('*.xlf')->sortByName();
         }
         if (is_dir($sets)) {
-            $found[] = Finder::create()->files()->in($sets)->depth(1)->name('labels.xlf')->sortByName();
+            $found[] = Finder::create()->files()->in($sets)->name('*.xlf')->sortByName();
         }
 
         $files = [];
@@ -86,11 +118,89 @@ final class Labels
                 if (preg_match('/^[a-z]{2}([_-][A-Za-z]{2,3})?\./', $file->getFilename()) === 1) {
                     continue;
                 }
-                $files[] = substr($file->getPathname(), strlen($packagePath) + 1);
+                $relative = substr($file->getPathname(), strlen($packagePath) + 1);
+                $resource = 'EXT:' . $key . '/' . $relative;
+                $domain = TranslationDomain::fromReference($resource);
+                if ($domain === null) {
+                    continue;
+                }
+                $implicit = [];
+                if (str_starts_with($relative, 'Configuration/Sets/')
+                    && $file->getFilename() === 'labels.xlf'
+                    && self::usesImplicitLabels($file->getPath() . '/config.yaml')) {
+                    $implicit[] = 'EXT:' . $key . '/' . dirname($relative) . '/config.yaml (implicit labels.xlf)';
+                }
+                $files[] = [
+                    'absolute' => $file->getPathname(),
+                    'resource' => $resource,
+                    'domain' => $domain,
+                    'conventionalName' => self::isConventional($relative),
+                    'implicitReferences' => $implicit,
+                    'location' => str_starts_with($relative, 'Configuration/Sets/') ? 'site-set' : 'package',
+                ];
             }
         }
 
         return $files;
+    }
+
+    /**
+     * XLF resources kept with project site configuration. TYPO3 does not
+     * enumerate this directory as package labels, so every one needs an explicit
+     * reference and the lookup reports that boundary.
+     *
+     * @return array<int, array{
+     *     absolute: string,
+     *     resource: string,
+     *     domain: string,
+     *     conventionalName: bool,
+     *     implicitReferences: array<int, string>,
+     *     location: string
+     * }>
+     */
+    private static function siteFiles(string $root): array
+    {
+        $directory = $root . '/' . self::SITE_DIRECTORY;
+        if (!is_dir($directory)) {
+            return [];
+        }
+
+        $files = [];
+        foreach (Finder::create()->files()->in($directory)->name('*.xlf')->sortByName() as $file) {
+            if (preg_match('/^[a-z]{2}([_-][A-Za-z]{2,3})?\./', $file->getFilename()) === 1) {
+                continue;
+            }
+            $relative = substr($file->getPathname(), strlen($root) + 1);
+            $files[] = [
+                'absolute' => $file->getPathname(),
+                'resource' => $relative,
+                'domain' => '',
+                'conventionalName' => $file->getFilename() === 'labels.xlf',
+                'implicitReferences' => [],
+                'location' => 'project-site',
+            ];
+        }
+
+        return $files;
+    }
+
+    private static function isConventional(string $relative): bool
+    {
+        if (str_starts_with($relative, 'Configuration/Sets/')) {
+            return basename($relative) === 'labels.xlf';
+        }
+
+        return preg_match('/^locallang(?:_[^.]+)?\.xlf$/', basename($relative)) === 1;
+    }
+
+    private static function usesImplicitLabels(string $configuration): bool
+    {
+        if (!is_file($configuration)) {
+            return false;
+        }
+        $content = file_get_contents($configuration);
+
+        return is_string($content) && preg_match('/^labels\s*:/m', $content) !== 1;
     }
 
     /**

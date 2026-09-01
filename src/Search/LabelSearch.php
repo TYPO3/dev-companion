@@ -85,9 +85,9 @@ final class LabelSearch
      * writes, which a term reaches whole rather than as a substring. That is the
      * second way of carrying a term, and an item without the field has one.
      *
-     * @param array<int, array<string, string>> $items
+     * @param array<int, array<string, mixed>> $items
      * @param array<int, string> $terms
-     * @return array<int, array<string, string>>
+     * @return array<int, array<string, mixed>>
      */
     public static function carryingEvery(array $items, array $terms): array
     {
@@ -97,7 +97,7 @@ final class LabelSearch
 
         return array_values(array_filter($items, static function (array $item) use ($terms): bool {
             $haystack = self::haystack($item);
-            $identifiers = mb_strtolower($item['identifiers'] ?? '');
+            $identifiers = mb_strtolower((string) ($item['identifiers'] ?? ''));
             foreach ($terms as $term) {
                 if (!self::carries($haystack, $term) && !self::names($identifiers, $term)) {
                     return false;
@@ -116,11 +116,15 @@ final class LabelSearch
      * alone reached nothing — `D-ANS-041`. What an entry's body names is not
      * here: an identifier is reached whole, by `names()`.
      *
-     * @param array<string, string> $item
+     * @param array<string, mixed> $item
      */
     private static function haystack(array $item): string
     {
-        return mb_strtolower(($item['key'] ?? '') . ' ' . ($item['source'] ?? '') . ' ' . ($item['title'] ?? ''));
+        return mb_strtolower(
+            (string) ($item['key'] ?? '') . ' '
+            . (string) ($item['source'] ?? '') . ' '
+            . (string) ($item['title'] ?? ''),
+        );
     }
 
     /**
@@ -185,7 +189,7 @@ final class LabelSearch
      * narrows enough is the one to ask with, and the term that reaches nothing
      * is the one that was misspelled or does not exist here.
      *
-     * @param array<int, array<string, string>> $items
+     * @param array<int, array<string, mixed>> $items
      * @param array<int, string> $terms
      * @return array<int, array{term: string, matchCount: int}>
      */
@@ -207,7 +211,7 @@ final class LabelSearch
      * and the matching — the same `carries()` `carryingEvery()` and
      * `perTermCounts()` answer with, identifier spellings included (`D-ANS-016`).
      *
-     * @param array<int, array<string, string>> $items
+     * @param array<int, array<string, mixed>> $items
      * @param array<int, string> $terms
      * @return array<int, array{terms: array<int, string>, matchCount: int}> Narrowest first.
      */

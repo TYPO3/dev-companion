@@ -1771,6 +1771,47 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
+     * How much of the question the closest hint carries, and the sentence that
+     * says so where it is under the floor a hint answers on its own from.
+     *
+     * A path admits a hint whatever its words say, so an answer assembled from
+     * path matches alone is well-formed, adjacent and about something else —
+     * which is what six hints looked like to the session that reported this
+     * (`D-ANS-130`). The two calls below are the two sides: one whose subject
+     * the corpus carries, and one that names a path and asks about something
+     * nobody wrote down.
+     */
+    #[Decision('D-ANS-130')]
+    #[Test]
+    public function aHintAnswerSaysHowMuchOfTheQuestionItCarries(): void
+    {
+        $covered = Registry::call('typo3_hint_lookup', [
+            'task' => 'restrict which content element types editors can select through page TSconfig',
+            'targetVersion' => '14',
+        ]);
+        self::assertGreaterThanOrEqual(Hints::MIN_COVERAGE, $covered->data['bestCoverage']);
+        self::assertStringNotContainsString('of your question', $covered->text);
+
+        $adjacent = Registry::call('typo3_hint_lookup', [
+            'task' => 'measure the memory a content element costs while rendering',
+            'paths' => ['packages/x/Configuration/TCA/Overrides/tt_content.php'],
+            'targetVersion' => '14',
+        ]);
+        self::assertNotSame([], $adjacent->data['hints'], 'the path matched nothing, so there is no answer to read');
+        self::assertLessThan(Hints::MIN_COVERAGE, $adjacent->data['bestCoverage']);
+        self::assertStringContainsString('of your question', $adjacent->text);
+        // Above the hints, because it says how to read them.
+        self::assertLessThan(
+            strpos($adjacent->text, '### '),
+            strpos($adjacent->text, 'of your question'),
+        );
+
+        // An id is not a guess at a phrasing, so there is no coverage to state.
+        $named = Registry::call('typo3_hint_lookup', ['id' => 'content-elements', 'targetVersion' => '14']);
+        self::assertNull($named->data['bestCoverage']);
+    }
+
+    /**
      * The floor `D-ANS-101` puts under `D-ANS-076`.
      *
      * `feedback/2026-08-24-110851` asked for `signed-off-by` and was handed

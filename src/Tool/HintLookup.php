@@ -69,13 +69,40 @@ final class HintLookup extends ReadOnlyTool
             'domains' => Schema::listOf(Schema::string(), 'Hints outside these domains are returned only where the task spells out a phrase one of them was indexed under and no hint inside them claims it, which is how a symptom reaches the layer that explains it.'),
             'withheldCategories' => Schema::listOf(Schema::string(), 'Categories that matched the domains but were left out because the task names the frontend. "Backend CSS" and "Backend TypeScript and JavaScript" describe the TYPO3 backend interface and are wrong advice for what a website renders; see docs.typo3.org for frontend theming.'),
             'hints' => Schema::listOf(Schema::hintRecord()),
+            'bestCoverage' => ['type' => ['number', 'null'], 'description' => 'How much of the task the closest hint above carries, between 0 and 1, where 1 is every word of it. A hint answers on its own from 0.5; below that it was returned because it claims one of the paths you named or a phrase somebody anticipated, which is a different thing from being about the question. Six well-formed hints that all got in that way read exactly like six that answer you, and this is what tells them apart. Null on a call that named an id, which is not a guess at anybody\'s words.'],
             'availableHints' => Schema::listOf(Schema::hintReference(), 'The hints that exist in the searched domains, minus the ones returned above, closest first: what the limit cut stands before what matched too little to return. That order is the matcher\'s, so it holds where a query was matched — which is every call except one that names an id. An id that matched nothing lists every id there is, in corpus order. An id that matched carries this empty unless the call asked for it, and availableHintsWithheld says how many were left out.'),
             'availableHintsWithheld' => ['type' => 'integer', 'description' => 'How many neighbouring ids were left out of availableHints. Non-zero only on a call that named an id and matched one without asking for the index; pass availableHints true to receive them.'],
             'documents' => Schema::listOf(Schema::object([
                 'uri' => Schema::string(),
                 'hint' => Schema::string('The returned hint this document is the long form of.'),
             ], ['uri', 'hint']), 'Knowledge documents declaring themselves the long form of a hint above. A hint is the convention in short; the document is the same subject at length, and where it hands over a file it is the file itself.'),
-        ], ['paths', 'domains', 'withheldCategories', 'scopes', 'hints', 'availableHints', 'availableHintsWithheld', 'documents']);
+        ], ['paths', 'domains', 'withheldCategories', 'scopes', 'hints', 'bestCoverage', 'availableHints', 'availableHintsWithheld', 'documents']);
+    }
+
+    /**
+     * How much of the query the closest returned hint carries, or null where
+     * nothing was matched against words at all.
+     *
+     * Read off what the matcher already recorded per hit rather than scored
+     * again — `D-ANS-115` put it there for the probe, and this is the same
+     * number in the answer. The unmatched words of the query were the other
+     * candidate and are worse: a term is weighed by how few hints carry it, so
+     * the rarest unmatched word of a real query was "via".
+     *
+     * @param array<int, array<string, mixed>> $hints
+     */
+    private static function bestCoverage(array $hints): ?float
+    {
+        $best = null;
+        foreach ($hints as $hint) {
+            $on = $hint['matchedOn'] ?? null;
+            if (!is_array($on) || !is_float($on['coverage'] ?? null)) {
+                continue;
+            }
+            $best = max($best ?? 0.0, $on['coverage']);
+        }
+
+        return $best === null ? null : round($best, 2);
     }
 
     public static function answer(array $args): ToolResult
@@ -152,6 +179,22 @@ final class HintLookup extends ReadOnlyTool
         }
         $lines[] = '';
         $lines[] = 'Hints:';
+
+        // Before the hints rather than after them, because it is what says how
+        // to read them — `D-ANS-130`. A caller that got six adjacent hints and
+        // no sign of the miss spent three calls establishing that none of them
+        // was about the question.
+        $coverage = self::bestCoverage($result['matchedHints']);
+        if ($coverage !== null && $coverage < Hints::MIN_COVERAGE) {
+            $lines[] = sprintf(
+                'The closest of these carries %d%% of your question. Each got here by claiming a path you named or '
+                . 'a phrase this corpus anticipated, rather than by being about what you asked — so read them as '
+                . 'the nearest subjects rather than as the answer, and search the official manual with '
+                . 'typo3_documentation_lookup where none of them is it.',
+                (int) round($coverage * 100),
+            );
+            $lines[] = '';
+        }
 
         if ($result['matchedHints'] !== []) {
             // One block per scope, and the heading only where there is more
@@ -247,6 +290,7 @@ final class HintLookup extends ReadOnlyTool
             'domains' => $result['domains'],
             'withheldCategories' => $result['withheldCategories'],
             'hints' => MatchedHints::records($result['matchedHints']),
+            'bestCoverage' => $coverage,
             'availableHints' => $result['availableHints'],
             'availableHintsWithheld' => $result['availableHintsWithheld'],
             'documents' => array_map(

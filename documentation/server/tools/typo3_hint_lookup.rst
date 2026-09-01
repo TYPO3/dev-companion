@@ -127,6 +127,14 @@ Answers with
             # ordinary case, means it holds wherever TYPO3 is written: an API that
             # throws throws in a sitepackage too.
             scope: string or null
+    # How much of the task the closest hint above carries, between 0 and 1, where 1
+    # is every word of it. A hint answers on its own from 0.5; below that it was
+    # returned because it claims one of the paths you named or a phrase somebody
+    # anticipated, which is a different thing from being about the question. Six
+    # well-formed hints that all got in that way read exactly like six that answer
+    # you, and this is what tells them apart. Null on a call that named an id, which
+    # is not a guess at anybody's words.
+    bestCoverage: number or null
     # The hints that exist in the searched domains, minus the ones returned above,
     # closest first: what the limit cut stands before what matched too little to
     # return. That order is the matcher's, so it holds where a query was matched —
@@ -185,6 +193,8 @@ Text:
     Domains: php (a hint outside these domains is shown only where the task names its own vocabulary)
 
     Hints:
+    The closest of these carries 0% of your question. Each got here by claiming a path you named or a phrase this corpus anticipated, rather than by being about what you asked — so read them as the nearest subjects rather than as the answer, and search the official manual with typo3_documentation_lookup where none of them is it.
+
     ### PHP
 
     ## System Extension Boundaries
@@ -435,6 +445,7 @@ Data:
                 ]
             }
         ],
+        "bestCoverage": 0,
         "availableHints": [
             {
                 "id": "environment-placeholders",
@@ -1409,6 +1420,7 @@ Data:
                 ]
             }
         ],
+        "bestCoverage": 1,
         "availableHints": [
             {
                 "id": "browser-test-accessibility",
@@ -1656,6 +1668,7 @@ Data:
         ],
         "withheldCategories": [],
         "hints": [],
+        "bestCoverage": null,
         "availableHints": [
             {
                 "id": "environment-placeholders",

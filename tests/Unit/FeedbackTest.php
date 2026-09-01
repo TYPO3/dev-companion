@@ -883,11 +883,6 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * A name this server does not register is the only kind that carries
-     * capitals, and it is the kind that arrives because a session reached for
-     * somebody else's tool instead of one of these — `D-FBK-039`.
-     */
-    /**
      * The observation is asked to open with the task, so every feedback from
      * one session opens on the same words and the title derived from it says
      * nothing that tells them apart. The subject is what only this one says,
@@ -937,6 +932,11 @@ final class FeedbackTest extends TestCase
         );
     }
 
+    /**
+     * A name this server does not register is the only kind that carries
+     * capitals, and it is the kind that arrives because a session reached for
+     * somebody else's tool instead of one of these — `D-FBK-039`.
+     */
     #[Requirement('R-FBK-013')]
     #[Test]
     public function aNameFromOutsideThisServerKeepsItsCapitals(): void

@@ -22,6 +22,14 @@ use TYPO3\DevCompanion\Result\Unsupported;
 final class IconLookup extends ReadOnlyTool
 {
     /**
+     * How many neighbours a missing identifier is offered.
+     *
+     * Few, because a validation of several names is one answer: the reported
+     * case was three identifiers, and one of them alone had come back with 22.
+     */
+    private const SUGGESTIONS_PER_MISS = 5;
+
+    /**
      * Where the identifiers this tool answers with may be used.
      *
      * It travels with every answer rather than with the ones that look like
@@ -31,14 +39,6 @@ final class IconLookup extends ReadOnlyTool
      * frontend template reaches neither — so an answer without this sentence is
      * usable in a place where it is wrong.
      */
-    /**
-     * How many neighbours a missing identifier is offered.
-     *
-     * Few, because a validation of several names is one answer: the reported
-     * case was three identifiers, and one of them alone had come back with 22.
-     */
-    private const SUGGESTIONS_PER_MISS = 5;
-
     private const SCOPE = 'These identifiers address the backend icon registry. They are resolved by '
         . 'IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, '
         . 'and needs its own inline SVG or asset file.';

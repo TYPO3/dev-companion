@@ -20,19 +20,19 @@ use TYPO3\DevCompanion\Paths;
 final class Decisions
 {
     /**
-     * The prefix of an id says what the decision is about, and that is the
-     * directory it lives in. A new prefix is a new group and belongs here in
-     * the same commit that writes the first entry under it.
-     *
-     * @var array<string, string>
-     */
-    /**
      * The heading the revoked entries stand under, wherever a listing is
      * written. They keep a run of their own rather than a marker in the one
      * above, which is what the listing's own comment says why.
      */
     public const REVOKED = 'Revoked, and kept as the record';
 
+    /**
+     * The prefix of an id says what the decision is about, and that is the
+     * directory it lives in. A new prefix is a new group and belongs here in
+     * the same commit that writes the first entry under it.
+     *
+     * @var array<string, string>
+     */
     public const GROUPS = [
         'AUD' => 'audience',
         'DIS' => 'discovery',

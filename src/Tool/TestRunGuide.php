@@ -343,11 +343,6 @@ final class TestRunGuide extends ReadOnlyTool
         . 'it changed, and how what a service holds mid-request is printed.';
 
     /**
-     * The invocation rules that apply to every suite. Emitted with every answer:
-     * without CI=true and the passthrough form, a suite command alone is rarely
-     * what a patch actually needs.
-     */
-    /**
      * What has to be true before any of the suites below can run.
      *
      * A session establishing whether a bug reproduced reached for `ls` and
@@ -366,6 +361,11 @@ final class TestRunGuide extends ReadOnlyTool
         return implode("\n", $lines);
     }
 
+    /**
+     * The invocation rules that apply to every suite. Emitted with every answer:
+     * without CI=true and the passthrough form, a suite command alone is rarely
+     * what a patch actually needs.
+     */
     private static function invocationBlock(): string
     {
         $invocation = TestSuiteHints::invocation();

@@ -2563,15 +2563,6 @@ final class SkillTest extends TestCase
     }
 
     /**
-     * A skill exists for its readers as soon as its directory does.
-     *
-     * `Installer` carried a list of the published names once, and a declaration
-     * in each file holding one back after that. Both are a second place one
-     * fact lives, and both disagree in the direction nobody notices: a workflow
-     * loadable by nobody, or one published while it reads as unfinished. This
-     * holds what is left — `D-SKL-087`.
-     */
-    /**
      * `skills/base.md` is the shared start of a task, and nothing is the shared
      * ending: what holds wherever a workflow closes — the stop at a
      * vulnerability, the form of a report — is written into each body that
@@ -2606,6 +2597,15 @@ final class SkillTest extends TestCase
         }
     }
 
+    /**
+     * A skill exists for its readers as soon as its directory does.
+     *
+     * `Installer` carried a list of the published names once, and a declaration
+     * in each file holding one back after that. Both are a second place one
+     * fact lives, and both disagree in the direction nobody notices: a workflow
+     * loadable by nobody, or one published while it reads as unfinished. This
+     * holds what is left — `D-SKL-087`.
+     */
     #[Decision('D-SKL-087')]
     #[Test]
     public function everySkillInTheDirectoryIsPublished(): void

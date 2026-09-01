@@ -150,12 +150,6 @@ final class RequirementsTest extends TestCase
     }
 
     /**
-     * What holds a requirement is the only thing that separates it from a wish.
-     * A test named here has to exist: a requirement claiming a test that was
-     * renamed away is a claim nobody answers for, and it reads exactly like one
-     * that is held.
-     */
-    /**
      * The sections are what a reader navigates an entry by, and the order
      * carries meaning: where the demand came from is evidence, and what holds
      * it there is the claim the suite keeps — `D-DOC-004`.

@@ -3,6 +3,8 @@ id: D-KNW-078
 title: The corpus states the shape a Record-sourced row has
 date: 2026-08-14
 status: open
+readings:
+  - 2026-09-01
 coveredBy:
   - HintsTest::theRecordShapeIsWithheldFromTheBranchThatHasNoRecordApi
   - HintsTest::theShapeOfARecordSourcedRowNamesTheFieldsThatMoved

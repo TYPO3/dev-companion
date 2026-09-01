@@ -418,7 +418,7 @@ Text:
     - Settling an API Question on a Declared Major That Is Not Installed: Which Majors the Question Is About, What the Changelog Settles and What It Does Not, Reading the Branch, What Reading Proves, and What It Does Not
     - Running a Package on a Declared Major That Is Not Installed: Ask What CI Already Covers, Before Installing Anything, A Composer Root of Its Own, What It Writes, and What the Installation Keeps, What the Second Root Resolves Differently, Whether the Database Survives, Which Checks Are Worth Re-running There, What the Second Root Does Not Give, What Is Left Behind
     - Setting Up an Extension Manual: Documentation/guides.xml, Documentation/Index.rst, The two conventional files, Rendering it before it is published
-    - Setting Up PHPUnit in a TYPO3 Extension: Build/UnitTests.xml, Build/FunctionalTests.xml, What was changed in the copied files, Running the suites, Database credentials for the functional suite, What is left after a run
+    - Setting Up PHPUnit in a TYPO3 Extension: Build/UnitTests.xml, Build/FunctionalTests.xml, What was changed in the copied files, Where the Configuration Sits in a Project, Running the suites, Database credentials for the functional suite, What is left after a run
     - Booting a Clone Into a Running Installation: What the Clone Does Not Carry, The Order the Steps Go In, Why the Environment Is Started Twice, Where the Data Comes From, Making the Installation Agree With the Code, The Login the Dump Did Not Bring, The Host the Site Is Served Under, What Says the Boot Worked
     - Renaming an Extension That Already Holds Content: What Moves Itself and What Does Not, Where an Identifier Is Stored as a Value, The Trap That Is Not a Substitution, What Proves It
     - Setting Up Playwright in a TYPO3 Project: Build/playwright.config.ts, Build/tests/browser/helper/login.setup.ts, Build/tests/browser/frontend/pages.spec.ts, Build/tests/browser/e2e/backend.spec.ts, Reaching into a module, An Assertion Is Evidence Once It Has Been Seen to Fail, The environment the suite reads, What the login setup asserts, and why it differs by version, When the extension itself is the Composer root, What is not committed
@@ -653,6 +653,7 @@ Data:
                     "Build/UnitTests.xml",
                     "Build/FunctionalTests.xml",
                     "What was changed in the copied files",
+                    "Where the Configuration Sits in a Project",
                     "Running the suites",
                     "Database credentials for the functional suite",
                     "What is left after a run"

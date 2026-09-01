@@ -205,6 +205,29 @@ PHPUnit a `typo3/testing-framework` release admits decides it, so a
 configuration naming a schema that release does not ship is a validation error
 before a test runs.
 
+## Where the Configuration Sits in a Project
+
+Both attributes are relative to the configuration file, so a package developed
+inside a project rather than as the Composer root corrects them again. Two
+layouts, and the project decides which:
+
+- The configuration at the project root, in `Build/`, beside `packages/` and
+  `vendor/`. The bootstrap stays `../vendor/typo3/testing-framework/…`, and the
+  testsuite directory becomes `../packages/<extension key>/Tests/Unit/`. One
+  configuration then covers every package the repository holds, by naming a
+  directory each.
+- The configuration inside the package, in `packages/<extension key>/Build/`.
+  The testsuite directory is `../Tests/Unit/` again, and it is the bootstrap
+  that grows: `../../../vendor/typo3/testing-framework/…`, because `vendor/` is
+  three directories up rather than one.
+
+Neither is more correct, and the one to take is the one the repository already
+uses for its other checks. What is not a variant is leaving the paths as they
+are written above, because neither mistake is loud: a directory that is not
+there is reported as `Test directory "…" not found` and a directory with no
+tests in it as `No tests executed!`, and PHPUnit exits 0 on both. Measured on
+PHPUnit 12.5.34.
+
 ## Running the suites
 
 ```bash

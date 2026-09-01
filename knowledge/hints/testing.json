@@ -289,7 +289,12 @@
         "text": "A defect that has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — is looked at rather than specced first. The core installs the instance the specs run against, publishes it and waits, so the backend can be opened in a browser; typo3_test_run_guide has that suite, what it prints and what the run costs.",
         "since": 13
       },
-      "browser-test-accessibility is what the same spec can assert, and it is why a site suite must not copy the core's disabled color-contrast rule: contrast is where a theme actually fails and no assertion on the markup sees it. browser-tests-outside-core is the site they run against outside the core, where the specs speak to a real URL and the browsers do not go into the development environment's web container."
+      "browser-test-accessibility is what the same spec can assert, and it is why a site suite must not copy the core's disabled color-contrast rule: contrast is where a theme actually fails and no assertion on the markup sees it. browser-tests-outside-core is the site they run against outside the core, where the specs speak to a real URL and the browsers do not go into the development environment's web container.",
+      "A new assertion is evidence once it has been seen to fail: break what it is about, watch it go red, restore, watch it go green. A browser suite needs it more than a unit suite because three shapes pass silently — a locator that matches nothing, a substring the surrounding chrome carries, and an assertion on text the module never emits. project/testing/playwright carries the countermeasure to each.",
+      {
+        "text": "The record list is addressed as /module/content/records, and web_list survives as an identifier alias rather than as a path. A backend spec carried over from an older project therefore names a path that no longer routes there, and what it lands on carries the chrome an assertion on a substring matches. typo3_backend_module_lookup answers what the path is here.",
+        "since": 14
+      }
     ]
   },
   {

@@ -420,7 +420,7 @@ Text:
     - Setting Up an Extension Manual: Documentation/guides.xml, Documentation/Index.rst, The two conventional files, Rendering it before it is published
     - Setting Up PHPUnit in a TYPO3 Extension: Build/UnitTests.xml, Build/FunctionalTests.xml, What was changed in the copied files, Running the suites, Database credentials for the functional suite, What is left after a run
     - Booting a Clone Into a Running Installation: What the Clone Does Not Carry, The Order the Steps Go In, Why the Environment Is Started Twice, Where the Data Comes From, Making the Installation Agree With the Code, The Login the Dump Did Not Bring, The Host the Site Is Served Under, What Says the Boot Worked
-    - Setting Up Playwright in a TYPO3 Project: Build/playwright.config.ts, Build/tests/browser/helper/login.setup.ts, Build/tests/browser/frontend/pages.spec.ts, Build/tests/browser/e2e/backend.spec.ts, Reaching into a module, The environment the suite reads, What the login setup asserts, and why it differs by version, When the extension itself is the Composer root, What is not committed
+    - Setting Up Playwright in a TYPO3 Project: Build/playwright.config.ts, Build/tests/browser/helper/login.setup.ts, Build/tests/browser/frontend/pages.spec.ts, Build/tests/browser/e2e/backend.spec.ts, Reaching into a module, An Assertion Is Evidence Once It Has Been Seen to Fail, The environment the suite reads, What the login setup asserts, and why it differs by version, When the extension itself is the Composer root, What is not committed
 
     For backend UI components use typo3_component_lookup, and call typo3_server_scope for what this server covers at all. If the topic should be covered here, leave a feedback with typo3_feedback_record.
 
@@ -680,6 +680,7 @@ Data:
                     "Build/tests/browser/frontend/pages.spec.ts",
                     "Build/tests/browser/e2e/backend.spec.ts",
                     "Reaching into a module",
+                    "An Assertion Is Evidence Once It Has Been Seen to Fail",
                     "The environment the suite reads",
                     "What the login setup asserts, and why it differs by version",
                     "When the extension itself is the Composer root",

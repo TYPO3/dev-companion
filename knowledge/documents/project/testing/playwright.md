@@ -189,6 +189,33 @@ The module menu is the `nav` with the id `modulemenu`. Its accessible name is a
 translated label, so a spec that addresses it by name asserts the backend's
 language along with it, and the id does not.
 
+## An Assertion Is Evidence Once It Has Been Seen to Fail
+
+A green suite is a claim about its assertions and not about the site. Before a
+new assertion counts, break the thing it is about — change the row, hide the
+element, rename the identifier — run it, watch it go red, restore, and watch it
+go green. Both directions, because an assertion that is red for an unrelated
+reason proves as little as one that cannot fail.
+
+It matters more here than in a unit suite, because three shapes pass silently in
+a browser and all three read as a passing test:
+
+- **A locator that matches nothing.** An assertion on an empty locator set, a
+  filter that eliminated everything, a loop over a list that came back empty.
+  Assert the count before the loop.
+- **A substring that the surrounding chrome carries.** Module headers, the site
+  name, navigation labels: they are on the page whatever the module under test
+  rendered. Assert on data the page under test owns.
+- **An assertion on text the module never emits.** This is what a wrong route
+  produces — the backend answers with another module, whose chrome then matches
+  the substring above. Assert on a marker the intended route owns.
+
+The third one is the reason a module path is read rather than remembered. A
+backend module is addressed by its own path, its identifier is what an alias
+keeps, and a spec carried over from an older project can therefore name a path
+that has moved. `typo3_backend_module_lookup` answers what the path is in the
+installation the suite runs against.
+
 ## The environment the suite reads
 
 ```dotenv

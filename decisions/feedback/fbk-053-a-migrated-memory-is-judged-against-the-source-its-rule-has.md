@@ -29,9 +29,11 @@ source in the core settles, and what only the maintainer can.
 - The named-argument rule has a source and the corpus names it:
   `NamedArgumentUsageRule` under `custom.namedArguments`, in
   `.checkouts/main/Build/phpstan/` and `14.3` and not in `13.4`.
-- `phpstan/phpstan-strict-rules` is in no core `composer.json` and no
-  `Build/phpstan/*.neon`, so the rule against `empty()` is not the core's own
-  analysis and the memory's reason for it does not hold there.
+- The rule against `empty()` rests on what the construct is rather than on a
+  package: it is a falsy test, so six values satisfy it and the condition states
+  none of them. `phpstan/phpstan-strict-rules` rejects the call for that reason
+  and is in no core `composer.json` and no `Build/phpstan/*.neon`, so what the
+  statement may not say is that the core's own analysis refuses it.
 - The sign-off memory is older than the rule it contradicts. The maintainer
   reversed that rule on 2026-08-25 on the board's statement (`D-KNW-125`,
   `R-KNW-075`), and `core/contribution/commit-messages` has required the trailer

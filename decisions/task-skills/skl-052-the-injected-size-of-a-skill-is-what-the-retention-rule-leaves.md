@@ -92,3 +92,17 @@ it is a rule, and that rule is guarded on two of the four kinds it names.
 - The drift arrives after all: a domain wide enough for its own skill folded
   into an existing one because adding a section is cheaper than publishing a
   file. `D-SKL-050` is the counter-example today and one case is not the rule.
+
+## Since then
+
+Measured on 2026-09-01 against `typo3-development-installation`: the three
+branches its dispatch chooses between are 11,638 of its 21,280 characters, and a
+task takes one. None of it is retained fact, so the rule above holds and what
+the size is made of is routing that forked.
+
+Taking a branch into a reference is blocked by a rule rather than by the
+writing. `typo3_documentation_lookup` stands only in the create branch, so a
+reference carrying it takes a routed call out of `SKILL.md` and
+`SkillTest::everySkillRoutesThroughTheOwnersOfItsOwnFactsInOrder` fails — seen
+by moving that branch out and running it. What would be settled first is whether
+a routed call may stand in a reference.

@@ -67,9 +67,11 @@ Answers with
     requires:  # optional
       - package: string
         constraint: string
-    # Tables its Configuration/TCA/ defines, by file name.
+    # Tables its Configuration/TCA/ defines, by file name. typo3_schema_lookup takes
+    # one of these names and answers what columns the core derives for it.
     tcaTables: [string]  # optional
-    # Tables it extends below Configuration/TCA/Overrides/.
+    # Tables it extends below Configuration/TCA/Overrides/. typo3_schema_lookup
+    # answers these the same way.
     tcaOverrides: [string]  # optional
     # The content elements it adds to tt_content, where each renders, and what it
     # configures through.
@@ -102,10 +104,10 @@ Answers with
         # than one that does.
         flexForm: string or null
     # FlexForm bindings read from the override files whose content type none of the
-    # contentElements entries above carries. Usually empty. An entry here is a
-    # registration this answer read and could not attribute: the identifier is real
-    # and the binding is real, and whatever else registers that element was not
-    # established.
+    # contentElements entries above carries. typo3_flexform_lookup resolves one to
+    # its fields. Usually empty. An entry here is a registration this answer read
+    # and could not attribute: the identifier is real and the binding is real, and
+    # whatever else registers that element was not established.
     unlistedFlexForms:  # optional
       - # The content type the binding names.
         identifier: string

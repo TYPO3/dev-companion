@@ -55,6 +55,14 @@ final class ExtensionDescribe extends ReadOnlyTool
         'artifacts' => ['manual' => null, 'readme' => null, 'tests' => [], 'languageFiles' => []],
     ];
 
+    /**
+     * The call a listed binding raises, said once and rendered wherever one is
+     * listed — `D-ANS-129`.
+     */
+    private const FLEX_FORM_CALL = 'typo3_flexform_lookup resolves one of those structures to the fields it holds '
+        . 'and the names a template and a settings array read them by: the table, the type=flex column the binding '
+        . 'sits on, and record={"CType": "<the identifier>"} for the element it applies to.';
+
     public static function name(): string
     {
         return 'typo3_extension_describe';
@@ -94,8 +102,8 @@ final class ExtensionDescribe extends ReadOnlyTool
                 'package' => Schema::string(),
                 'constraint' => Schema::string(),
             ], ['package', 'constraint']), 'What it requires, which is where a version conflict during an upgrade comes from.'),
-            'tcaTables' => Schema::listOf(Schema::string(), 'Tables its Configuration/TCA/ defines, by file name.'),
-            'tcaOverrides' => Schema::listOf(Schema::string(), 'Tables it extends below Configuration/TCA/Overrides/.'),
+            'tcaTables' => Schema::listOf(Schema::string(), 'Tables its Configuration/TCA/ defines, by file name. typo3_schema_lookup takes one of these names and answers what columns the core derives for it.'),
+            'tcaOverrides' => Schema::listOf(Schema::string(), 'Tables it extends below Configuration/TCA/Overrides/. typo3_schema_lookup answers these the same way.'),
             'contentElements' => Schema::listOf(Schema::object([
                 'identifier' => Schema::string('The CType value, read from an addTcaSelectItem(), addRecordType() or registerPlugin() call in one of those override files. An identifier assembled at runtime or taken from a constant is not among them.'),
                 'kind' => ['type' => 'string', 'enum' => ['element', 'plugin'], 'description' => 'plugin: an Extbase plugin, registered by ExtensionUtility::registerPlugin(), which renders through the dispatcher rather than through a templateName of its own. element: everything else.'],
@@ -107,7 +115,7 @@ final class ExtensionDescribe extends ReadOnlyTool
             'unlistedFlexForms' => Schema::listOf(Schema::object([
                 'identifier' => Schema::string('The content type the binding names.'),
                 'flexForm' => Schema::string('The data structure, as above.'),
-            ], ['identifier', 'flexForm']), 'FlexForm bindings read from the override files whose content type none of the contentElements entries above carries. Usually empty. An entry here is a registration this answer read and could not attribute: the identifier is real and the binding is real, and whatever else registers that element was not established.'),
+            ], ['identifier', 'flexForm']), 'FlexForm bindings read from the override files whose content type none of the contentElements entries above carries. typo3_flexform_lookup resolves one to its fields. Usually empty. An entry here is a registration this answer read and could not attribute: the identifier is real and the binding is real, and whatever else registers that element was not established.'),
             'backendModules' => Schema::listOf(Schema::string(), 'Module identifiers from Configuration/Backend/Modules.php.'),
             'backendRoutes' => Schema::listOf(Schema::string(), 'Route names from Configuration/Backend/Routes.php and AjaxRoutes.php.'),
             'icons' => Schema::listOf(Schema::string(), 'Identifiers from Configuration/Icons.php. typo3_icon_lookup searches every package at once.'),
@@ -189,6 +197,17 @@ final class ExtensionDescribe extends ReadOnlyTool
             }
         }
 
+        // The next call, named where the list that raises it stands. A session
+        // holding this answer read a FlexForm with grep and diffed two tables'
+        // columns through `SHOW COLUMNS`, having called neither tool all day —
+        // `D-ANS-129`.
+        if ($extension['tcaTables'] !== [] || $extension['tcaOverrides'] !== []) {
+            $lines[] = 'typo3_schema_lookup with one of those table names answers what columns the core derives '
+                . 'for it, with the type, the default and the length of each. That is the resolved schema rather '
+                . 'than what the TCA file declares, and two tables generated from one TCA do not have to agree on '
+                . 'the order they come back in.';
+        }
+
         // Apart from the registrations above, because this one is three is_dir()
         // calls: an extension appending its layout root from an event listener
         // got the same line as one that declares it — D-ANS-045.
@@ -248,6 +267,9 @@ final class ExtensionDescribe extends ReadOnlyTool
                 . 'once, is in neither. An element named without a FlexForm binds none: the binding is read from the '
                 . 'same files, from addPiFlexFormValue(), from the data structure argument addPlugin() and '
                 . 'registerPlugin() take since v14.2, and from a columnsOverrides assignment on pi_flexform.';
+            if (array_filter(array_column($extension['contentElements'], 'flexForm')) !== []) {
+                $lines[] = self::FLEX_FORM_CALL;
+            }
             if (in_array('plugin', array_column($extension['contentElements'], 'kind'), true)) {
                 $lines[] = 'A plugin renders through the Extbase dispatcher: configurePlugin() generates '
                     . 'tt_content.<identifier> on lib.contentElement with templateName = Generic and an EXTBASEPLUGIN '
@@ -266,6 +288,7 @@ final class ExtensionDescribe extends ReadOnlyTool
             }
             $lines[] = 'Each identifier is registered by a call this answer does not read, so the element is real '
                 . 'and what else it registers was not established. It is not a stray file.';
+            $lines[] = self::FLEX_FORM_CALL;
         }
 
         if ($extension['siteSets'] !== []) {

@@ -35,12 +35,15 @@ Not called in a 5h session: typo3_flexform_lookup, typo3_schema_lookup, typo3_co
 
 ## Suggestion
 
-The pattern is not that the tools are bad. It is that at the moment of need I was inside a shell loop and a shell answer was one keystroke away, while a tool call required remembering the tool exists. Nothing in the session put those names in front of me at the moment they applied.
+Trimmed on 2026-09-01. Two of the three asks are answered: typo3_extension_describe
+now names typo3_schema_lookup where it lists the tables and typo3_flexform_lookup
+where it lists a binding, each with the argument to pass — D-ANS-129; and
+typo3_ter_lookup does not reach Composer packages, which its description already
+says in as many words, so the assumption was right and there is nothing to
+correct. What is left open is the other one.
 
-Two cheap interventions:
-
-When typo3_extension_describe reports an extension that ships FlexForms, name typo3_flexform_lookup in the answer, with the identifier to pass. Its `unlistedFlexForms` field already looks at them. The same for tcaTables and typo3_schema_lookup. A describe answer is exactly where a caller is oriented and it is the natural place to say "and here is what asks the next question".
-
-Give the hint answers the same treatment they already give documents. project-extension-tests carries a documents array and that is how I found the phpunit guide — the single best call of the session. Hints that imply a tool could name it the same way: browser-tests naming typo3_test_run_guide, frontend-dataprocessors naming typo3_configuration_lookup.
-
-And a note on scope in typo3_ter_lookup's description: if it reaches Composer packages as well as TER extensions, say so in the first line, because the name says otherwise and I believed the name.
+Give the hint answers the same treatment they already give documents.
+project-extension-tests carries a documents array and that is how I found the
+phpunit guide — the single best call of the session. Hints that imply a tool
+could name it the same way: browser-tests naming typo3_test_run_guide,
+frontend-dataprocessors naming typo3_configuration_lookup.

@@ -33,8 +33,20 @@ Whole session, 796 tool calls, 682 Bash, 51 typo3_*, nine typo3_* tools never ca
 
 ## Suggestion
 
-Against cause 1 and 6, which are the ones fully in your reach: make the tools name each other at the moment of use. An answer is the only place a caller reliably reads. typo3_extension_describe already reports unlistedFlexForms and tcaTables — those two lines are where "typo3_flexform_lookup answers what is in them" and "typo3_schema_lookup answers what the table looks like" belong, with the argument to pass. The same idea already works: the documents array on a hint answer is the only reason I found the phpunit guide, which was the best call of the session. Extend that pattern from documents to tools.
+Trimmed on 2026-09-01. Cause 1 was withdrawn by this session's own correction of
+the following minute, and the intervention against causes 1 and 6 landed for the
+describe answer — D-ANS-129. What is left open are the two below.
 
-Against cause 3: where a tool reports a resolved value, say in the answer that it is resolved and what it differs from. "This is the merged value after every extension; the file at config/sites/main/settings.yaml carries only the site's own layer" is a sentence that would have stopped me reading the file and believing I was done. An answer that does not distinguish itself from the file loses to the file, because the file is closer.
+Against cause 3: where a tool reports a resolved value, say in the answer that it
+is resolved and what it differs from. "This is the merged value after every
+extension; the file at config/sites/main/settings.yaml carries only the site's own
+layer" is a sentence that would have stopped me reading the file and believing I
+was done. An answer that does not distinguish itself from the file loses to the
+file, because the file is closer.
 
-Against cause 4, which is the expensive one: a periodic re-entry. The server's instructions already say to call typo3_task_guide again at the first test, check, commit or shipped file the task did not name. I read that once at session start and never acted on it. If any answer late in a session could carry "this is the Nth call in this session and the last task_guide was at 18:44 — the task has moved", that is a nudge arriving where I am rather than where I was.
+Against cause 4, which is the expensive one: a periodic re-entry. The server's
+instructions already say to call typo3_task_guide again at the first test, check,
+commit or shipped file the task did not name. I read that once at session start
+and never acted on it. If any answer late in a session could carry "this is the
+Nth call in this session and the last task_guide was at 18:44 — the task has
+moved", that is a nudge arriving where I am rather than where I was.

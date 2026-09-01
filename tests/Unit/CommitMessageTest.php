@@ -224,6 +224,41 @@ final class CommitMessageTest extends TestCase
         self::assertContains('summary-length-preferred', array_column($preferred['checks'], 'code'));
     }
 
+    /**
+     * The body that carries its argument as bullets, and the one that lists
+     * what the change touched.
+     *
+     * `D-GUI-026`. A list is how a body enumerates classes, paths or rule
+     * names, and the core writes one that way in about a tenth of its bodies —
+     * so the shape reported is the item long enough to be a sentence, and the
+     * list of names beside a paragraph passes.
+     */
+    #[Decision('D-GUI-026')]
+    #[Test]
+    public function aBodyWritingItsArgumentAsBulletsIsReported(): void
+    {
+        $bulleted = CommitMessage::create([
+            'changeType' => 'TASK',
+            'summary' => 'Rework the thing',
+            'body' => "- moves the service into its own class\n"
+                . "- drops the singleton marker\n- adds a functional test for it",
+            'workflow' => CommitMessage::WORKFLOW_PROJECT,
+        ]);
+
+        self::assertContains('body-written-as-a-list', array_column($bulleted['checks'], 'code'));
+
+        $enumerating = CommitMessage::create([
+            'changeType' => 'TASK',
+            'summary' => 'Drop the marker from the classes that do not need it',
+            'body' => "The tag makes every service shared, so the marker has no effect\n"
+                . "where the service is reachable without it. It is removed from:\n\n"
+                . "* Scheduler\n* SessionService",
+            'workflow' => CommitMessage::WORKFLOW_PROJECT,
+        ]);
+
+        self::assertNotContains('body-written-as-a-list', array_column($enumerating['checks'], 'code'));
+    }
+
     #[Test]
     public function deprecationRulesAreEnforced(): void
     {

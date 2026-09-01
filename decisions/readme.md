@@ -682,6 +682,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### guides
 
+- [`D-GUI-026`][D-GUI-026] — The commit body is prose, and the check says so · 2026-09-02
 - [`D-GUI-025`][D-GUI-025] — A checklist item says that it does not decide everything · 2026-09-01
 - [`D-GUI-024`][D-GUI-024] — The intent that states an obligation names the page discharging it · 2026-08-28
 - [`D-GUI-021`][D-GUI-021] — The subject a draft carries is the summary the caller wrote · 2026-08-27
@@ -707,6 +708,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-GUI-008`][D-GUI-008] — Operating an installation is a change type of its own · 2026-08-03
 - [`D-GUI-001`][D-GUI-001] — A missing release target becomes a placeholder, not `main` · 2026-07-29
 
+[D-GUI-026]: guides/gui-026-the-commit-body-is-prose-and-the-check-says-so.md
 [D-GUI-025]: guides/gui-025-a-checklist-item-says-that-it-does-not-decide-everything.md
 [D-GUI-024]: guides/gui-024-the-intent-that-states-an-obligation-names-the-page-discharging-it.md
 [D-GUI-021]: guides/gui-021-the-subject-a-draft-carries-is-the-summary-the-caller-wrote.md

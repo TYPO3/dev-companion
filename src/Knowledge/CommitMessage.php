@@ -710,6 +710,16 @@ final class CommitMessage
             ];
         }
 
+        if (self::bodyIsWrittenAsAList($body)) {
+            $checks[] = [
+                'level' => 'warning',
+                'code' => 'body-written-as-a-list',
+                'message' => 'The body is written as a list. Write the argument as sentences: a list in a '
+                    . 'commit body enumerates what the change touched — the classes it moved, the rules it '
+                    . 'dropped — and the reasoning around it is prose.',
+            ];
+        }
+
         if ($isDeprecation === true && $isBreaking === true) {
             $checks[] = ['level' => 'error', 'code' => 'deprecation-breaking-prefix', 'message' => 'Deprecations must not use the [!!!] breaking prefix.'];
         }
@@ -915,6 +925,31 @@ final class CommitMessage
             self::BODY_WIDTH,
             self::BODY_WIDTH + 1,
         );
+    }
+
+    /**
+     * Whether the body carries its argument as a list rather than as prose.
+     *
+     * An item of four words or more is a sentence somebody wrote as a bullet;
+     * a shorter one names a class, a path or a rule the change touched, which
+     * is what a list in a body is for. Half of the lines, and only the first
+     * kind counted: over the thousand merged core commits carrying a body that
+     * `D-GUI-026` measured, that fires on none of them.
+     */
+    private static function bodyIsWrittenAsAList(string $body): bool
+    {
+        $lines = array_values(array_filter(
+            preg_split('/\R/', $body) ?: [],
+            static fn(string $line): bool => trim($line) !== '',
+        ));
+
+        $sentences = array_filter($lines, static function (string $line): bool {
+            $item = preg_replace('/^\s*([-*+]\s|\d+[.)]\s)/', '', $line, 1, $replaced);
+
+            return $replaced === 1 && count(preg_split('/\s+/', trim((string) $item)) ?: []) >= 4;
+        });
+
+        return $sentences !== [] && count($sentences) * 2 >= count($lines);
     }
 
     /**

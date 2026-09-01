@@ -24,5 +24,32 @@
       "A new TSconfig option is user-facing configuration: it needs a Feature changelog entry and documentation, not just the default.",
       "Behaviour that depends on TSconfig is covered by functional tests; the parser itself lives in typo3/sysext/core/Classes/TypoScript/."
     ]
+  },
+  {
+    "id": "content-element-selector-restriction",
+    "title": "Restricting Which Content Elements an Editor May Create",
+    "domains": [
+      "typoscript",
+      "php"
+    ],
+    "appliesTo": [
+      "restrict content element types",
+      "which content elements editors can select",
+      "remove an element from the wizard",
+      "hide a content element type",
+      "CType selector",
+      "keepItems",
+      "removeItems",
+      "TCEFORM",
+      "new content element wizard",
+      "zzz_tt_content"
+    ],
+    "hints": [
+      "Which content elements a site offers is a decision that site makes, so it belongs in page TSconfig rather than in TCA: TCEFORM.tt_content.CType.keepItems is a comma-separated list of the values to keep and removeItems a list of the values to drop, both applied to the items the form offers. A keepItems set to the empty string removes every item, and a value that is not a string is ignored.",
+      "They restrict the form and nothing else. A value already stored stays stored, the element goes on rendering, and an import or a DataHandler call may still write one — what changes is the list an editor is offered.",
+      "Page TSconfig is inherited down the tree, so the restriction holds from the page it is set on downwards. That is what makes it the right place for one site in an installation that serves several.",
+      "Unsetting the TCA items and the types entry of an element is a different act with a different consequence. It removes the element from the installation rather than from one site's selector, and a record already stored under that type does not fail: FormEngine falls back to the types entry '0', or to '1' where there is none, and opens the record in another type's form without saying so. The page module draws \"Invalid value\" on such a record, and the record list does not.",
+      "So the order is: restrict the selector where the decision is a site's, and remove the type from TCA only where the element is genuinely gone — and then migrate the rows that carry it, because nothing else will."
+    ]
   }
 ]

@@ -250,6 +250,7 @@ Text:
     - content-elements — Registering a Content Element (PHP)
     - typoscript-condition-providers — Registering a TypoScript Condition Provider (TypoScript)
     - icon-usage — Rendering and Registering Icons (PHP)
+    - content-element-selector-restriction — Restricting Which Content Elements an Editor May Create (TypoScript)
     - record-routing — Routing a Record Detail View (PHP)
     - routing-request-handling — Routing, Middleware, and Request Handling (PHP)
     - core-static-analysis — Satisfying PHPStan in a Core Patch (PHP)
@@ -649,6 +650,11 @@ Data:
                 "id": "icon-usage",
                 "title": "Rendering and Registering Icons",
                 "category": "PHP"
+            },
+            {
+                "id": "content-element-selector-restriction",
+                "title": "Restricting Which Content Elements an Editor May Create",
+                "category": "TypoScript"
             },
             {
                 "id": "record-routing",
@@ -1565,6 +1571,7 @@ Text:
     - content-elements — Registering a Content Element (PHP)
     - typoscript-condition-providers — Registering a TypoScript Condition Provider (TypoScript)
     - icon-usage — Rendering and Registering Icons (PHP)
+    - content-element-selector-restriction — Restricting Which Content Elements an Editor May Create (TypoScript)
     - record-routing — Routing a Record Detail View (PHP)
     - routing-request-handling — Routing, Middleware, and Request Handling (PHP)
     - core-static-analysis — Satisfying PHPStan in a Core Patch (PHP)
@@ -1869,6 +1876,11 @@ Data:
                 "id": "icon-usage",
                 "title": "Rendering and Registering Icons",
                 "category": "PHP"
+            },
+            {
+                "id": "content-element-selector-restriction",
+                "title": "Restricting Which Content Elements an Editor May Create",
+                "category": "TypoScript"
             },
             {
                 "id": "record-routing",

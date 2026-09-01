@@ -31,8 +31,16 @@ typo3_hint_lookup(task="restrict which content element types editors can select,
 
 ## Suggestion
 
-A hint on the subject. The shape it should have: which of the two places a restriction belongs in, and why. That the CType item list is a decision one site makes and therefore belongs in TCEFORM.tt_content.CType.keepItems / removeItems in the set's page.tsconfig; that unsetting TCA items and TCA ['types'] entries is a different act with a different consequence — a record already stored under a removed type opens a form that no longer exists, and the ctrl default has to be one of the survivors or FormEngine builds a form for a type it cannot find. Both of those I had discovered the hard way in the pre-compaction part of the session and written into a README as if they were the price of the approach, rather than as evidence the approach was wrong.
+Trimmed on 2026-09-01. The subject is written up as
+content-element-selector-restriction, which the probe for this query now
+reaches: keepItems and removeItems as the site's decision, that they restrict
+the form and not what is stored, and what unsetting the TCA items does instead —
+FormEngine falls back to the types entry '0' or '1' and opens the record in
+another type's form, and the page module is where "Invalid value" is drawn. What
+is left open is the answer shape.
 
-Suggested id: content-element-selector-restriction, or a paragraph in the existing tsconfig hint, which is the one a caller asking this question lands on.
-
-Separately: when a hint answer's top match is well below whatever score means "this is about your question", say so in the answer. "These are the closest hints; none of them states anything about <the subject terms>" is a different answer from six hints, and it is the one that would have sent me to typo3_documentation_lookup in one step instead of three.
+When a hint answer's top match is well below whatever score means "this is about
+your question", say so in the answer. "These are the closest hints; none of them
+states anything about <the subject terms>" is a different answer from six hints,
+and it is the one that would have sent me to typo3_documentation_lookup in one
+step instead of three.

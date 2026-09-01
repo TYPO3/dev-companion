@@ -35,6 +35,7 @@ at all where it cannot be reached.
 :doc:`typo3_fluid_namespace_list <tools/typo3_fluid_namespace_list>`,
 :doc:`typo3_icon_lookup <tools/typo3_icon_lookup>`,
 :doc:`typo3_label_lookup <tools/typo3_label_lookup>`,
+:doc:`typo3_record_lookup <tools/typo3_record_lookup>`,
 :doc:`typo3_schema_lookup <tools/typo3_schema_lookup>`,
 :doc:`typo3_server_scope <tools/typo3_server_scope>`,
 :doc:`typo3_service_lookup <tools/typo3_service_lookup>`.

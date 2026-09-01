@@ -385,6 +385,15 @@
       "scope": "any"
     },
     {
+      "topic": "How many rows one of this project's own tables holds, and on which page",
+      "depth": "A count per page and per state — live, hidden, deleted — for the tables a project-owned extension registers in its TCA, and nothing else about a row. It is what says where the records are maintained: one page of the record list is a table nobody has to leave the list for, and three thousand rows on one storage folder is an editing surface of its own. Every other table is refused, the user tables and the core's among them, and every count says it was read with the shell user's database access rather than with a backend user's permissions.",
+      "tools": [
+        "typo3_record_lookup"
+      ],
+      "source": "the discovered installation, booted, with one grouped count against its database. No column of any row is selected.",
+      "scope": "project"
+    },
+    {
       "topic": "The project around the installation: its extensions, its sites and their sets, its own commands, the environment it declares and what that environment runs by itself, and what one of those extensions registers",
       "depth": "Read from the repository's files — composer.json, package.json, config/sites, .github/workflows, and the .ddev configuration where there is one — so it answers on a fresh clone, before anything is installed or migrated. The declared commands are what a caller may run; a DDEV project also states the PHP its container runs, the hooks that fire at a stage of their own with the command each runs, and the pull recipes its database and files come from. Both interpreters those commands run on are stated and related: the PHP the manifest declares, the installed core requires, the install is bounded at and the environment runs; and for the npm half of the list the Node engines.node admits, an .nvmrc pins, an actions/setup-node step sets up and a DDEV nodejs_version states. A workflow is read for that one field rather than for what it asserts, and a version it leaves to a matrix or another file is handed back unresolved. It describes what is there and does not rate it; the one thing it volunteers is a core deprecation whose predicate is a registration file the extension ships, because nothing a caller would think to search for reaches that. Per extension: the tables its TCA defines and extends, the content elements it adds to tt_content with the Fluid template each renders through and the FlexForm each binds, its backend modules and routes, its icons, its site sets and the files core reads each set for, the form configurations it registers and the definitions they store, its service tags, its middlewares, which of the Fluid root directories it ships and the namespaces it registers globally, the shape of its Classes/ directory, and which of the registration files it ships a deprecation names. Its tables, content elements and icons come from the booted installation where there is one; the rest is read from files, and where the installation could not be booted the answer says what a file-read list leaves out.",
       "tools": [
@@ -461,8 +470,8 @@
     },
     {
       "topic": "The content itself: a record read or written — a page, a content element, a file reference, a workspace",
-      "why": "The content model is answered here and the content is not. typo3_schema_lookup returns a table as the installation's container assembles it, and no tool touches a row of one. The reason is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and reading a record would put the shell user's database access where a backend user's permissions belong.",
-      "instead": "Work the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for what may be written into one of its flex columns, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup."
+      "why": "The content model is answered here and the content is not. typo3_schema_lookup returns a table as the installation's container assembles it, and no tool reads a column of any row. The reason is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and reading a record would put the shell user's database access where a backend user's permissions belong. How many rows a table holds is the one thing that side of the line does answer, and typo3_record_lookup does it for the tables this project's own extensions register — a count reads no field, and it says what it was counted with.",
+      "instead": "Work the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for how many rows are in one of your own tables and on which page, typo3_record_lookup; for what may be written into one of its flex columns, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup."
     }
   ],
   "checkoutDiscovery": [
@@ -667,6 +676,10 @@
     {
       "when": "Asking whether the database matches what the extensions and the TCA declare",
       "call": "typo3_schema_lookup with the table"
+    },
+    {
+      "when": "Asking whether a table has grown past what the generic record list can be edited in",
+      "call": "typo3_record_lookup with the table, or with none for the ones it counts"
     }
   ]
 }

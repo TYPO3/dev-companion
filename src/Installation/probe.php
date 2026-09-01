@@ -44,6 +44,7 @@ try {
     $configurationPath = (string) ($parameters['configurationPath'] ?? '');
     $flexForm = is_array($parameters['flexForm'] ?? null) ? $parameters['flexForm'] : null;
     $liveSchema = is_array($parameters['liveSchema'] ?? null) ? $parameters['liveSchema'] : null;
+    $recordCount = is_array($parameters['recordCount'] ?? null) ? $parameters['recordCount'] : null;
     $services = is_array($parameters['services'] ?? null) ? $parameters['services'] : null;
     if (!is_file($autoload)) {
         $answer['reason'] = 'no autoloader at ' . $autoload . ' below ' . getcwd();
@@ -475,6 +476,67 @@ try {
             $answer['topics']['liveSchema'] = $topic;
         } catch (Throwable $failure) {
             $answer['topics']['liveSchema'] = [
+                'unavailable' => get_class($failure) . ': ' . $failure->getMessage(),
+            ];
+        }
+    }
+
+    // The one query this probe runs over rows, and the only one it may run:
+    // how many there are, grouped by the page they sit on and by the state the
+    // enable fields put them in. No column of any row is selected, so there is
+    // no field value for the answer to carry — `D-AUD-016`.
+    //
+    // Every restriction is removed on purpose: a deleted or hidden row is what
+    // the caller is asking about, and the default restrictions would count it
+    // as absent rather than as deleted.
+    if ($recordCount !== null) {
+        try {
+            $wanted = (string) ($recordCount['table'] ?? '');
+            $control = is_array($tca[$wanted]['ctrl'] ?? null) ? $tca[$wanted]['ctrl'] : [];
+            $deleted = is_string($control['delete'] ?? null) ? $control['delete'] : '';
+            $hidden = is_string($control['enablecolumns']['disabled'] ?? null)
+                ? $control['enablecolumns']['disabled']
+                : '';
+
+            $pool = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                TYPO3\CMS\Core\Database\ConnectionPool::class,
+            );
+            $builder = $pool->getQueryBuilderForTable($wanted);
+            $builder->getRestrictions()->removeAll();
+            $columns = ['pid'];
+            foreach ([$deleted, $hidden] as $flag) {
+                if ($flag !== '' && !in_array($flag, $columns, true)) {
+                    $columns[] = $flag;
+                }
+            }
+            // The alias is given rather than taken: what a bare COUNT(*)
+            // comes back keyed by is the platform's, and the three this server
+            // covers do not agree on it.
+            $builder->selectLiteral($builder->expr()->count('*', 'rowCount'))->from($wanted);
+            foreach ($columns as $column) {
+                $builder->addSelect($column);
+                $builder->addGroupBy($column);
+            }
+            $groups = [];
+            foreach ($builder->executeQuery()->fetchAllAssociative() as $row) {
+                $groups[] = [
+                    'pid' => (int) ($row['pid'] ?? 0),
+                    'deleted' => $deleted !== '' && (int) ($row[$deleted] ?? 0) !== 0,
+                    'hidden' => $hidden !== '' && (int) ($row[$hidden] ?? 0) !== 0,
+                    'rows' => (int) ($row['rowCount'] ?? 0),
+                ];
+            }
+            $answer['topics']['recordCount'] = [
+                'table' => $wanted,
+                // Said rather than inferred from an empty grouping: a table
+                // with no delete field counts nothing as deleted, and that is
+                // not the same answer as nothing having been deleted.
+                'deleteField' => $deleted,
+                'hiddenField' => $hidden,
+                'groups' => $groups,
+            ];
+        } catch (Throwable $failure) {
+            $answer['topics']['recordCount'] = [
                 'unavailable' => get_class($failure) . ': ' . $failure->getMessage(),
             ];
         }

@@ -207,6 +207,7 @@ final class ToolContractTest extends TestCase
         'typo3_changelog_lookup' => ['query' => 'deprecation'],
         'typo3_fluid_namespace_list' => [],
         'typo3_schema_lookup' => ['table' => 'tt_content'],
+        'typo3_record_lookup' => ['table' => 'tx_acme_thing'],
         'typo3_service_lookup' => ['query' => 'PageRenderer'],
         'typo3_flexform_lookup' => ['table' => 'tt_content', 'field' => 'pi_flexform'],
         'typo3_project_describe' => [],

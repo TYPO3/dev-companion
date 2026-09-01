@@ -142,6 +142,24 @@ final class Typo3Runtime
     }
 
     /**
+     * How many rows a table holds, grouped by page and by state, or null where
+     * there was no full reading to take it from.
+     *
+     * Asked for, because it is the one query this server runs over rows and no
+     * reading taken for anything else wants it. What comes back is counts: no
+     * column of any row is selected, which is the boundary `D-AUD-016` drew.
+     *
+     * @return array{table: string, deleteField: string, hiddenField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>}|array{unavailable: string}|null
+     */
+    public static function recordCount(string $table): ?array
+    {
+        /** @var array{table: string, deleteField: string, hiddenField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>}|array{unavailable: string}|null $read */
+        $read = self::asked('recordCount', ['recordCount' => ['table' => $table]]);
+
+        return $read;
+    }
+
+    /**
      * What one `type=flex` column of this installation resolves to, or null
      * where there was no full reading to take it from.
      *

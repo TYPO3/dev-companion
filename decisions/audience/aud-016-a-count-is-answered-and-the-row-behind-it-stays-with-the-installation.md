@@ -3,6 +3,12 @@ id: D-AUD-016
 title: A count is answered and the row behind it stays with the installation
 date: 2026-09-01
 status: open
+coveredBy:
+  - RecordLookupTest::aTableFullEnoughToLeaveTheRecordListIsSaidToBe
+  - RecordLookupTest::aTableNoProjectExtensionRegistersIsRefusedRatherThanCounted
+  - RecordLookupTest::aTableOneScreenLongAsksForNothing
+  - RecordLookupTest::everyCountSaysItWasReadWithoutBackendPermissions
+  - RecordLookupTest::theTablesItWillCountAreListedWithoutOneBeingNamed
 ---
 
 # D-AUD-016 — A count is answered and the row behind it stays with the installation

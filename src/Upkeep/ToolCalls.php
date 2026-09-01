@@ -281,6 +281,11 @@ final class ToolCalls
             'configuration' => ['typo3_configuration_lookup', ['path' => 'SYS/fluid']],
             'schema: one table' => ['typo3_schema_lookup', ['table' => 'tt_content']],
             'schema: every table' => ['typo3_schema_lookup', []],
+            // The three states the count has: a table of this project's own,
+            // one the boundary refuses, and the list of what it will count.
+            'records: a table of this project' => ['typo3_record_lookup', ['table' => 'tx_acme_events_event']],
+            'records: a table it will not count' => ['typo3_record_lookup', ['table' => 'tt_content']],
+            'records: what it counts' => ['typo3_record_lookup', []],
             'services: by class' => ['typo3_service_lookup', ['query' => 'PageRenderer']],
             'services: by tag' => ['typo3_service_lookup', ['tag' => 'event.listener', 'limit' => 3]],
             // The record is what decides which structure applies, so the two

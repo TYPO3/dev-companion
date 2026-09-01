@@ -87,6 +87,13 @@ final class FixtureTest extends TestCase
             if ($name === 'typo3_service_lookup') {
                 continue;
             }
+            // And the one call that reaches the database. The fixture is a
+            // shape of an installation and holds no rows to count, so what it
+            // stands in for here is the boundary — the other two calls of this
+            // tool are answered from it — `D-AUD-016`.
+            if ($label === 'records: a table of this project') {
+                continue;
+            }
             $data = Registry::call($name, $arguments)->data;
             if (isset($data['unsupported'])) {
                 $unanswered[] = $label . ': ' . ($data['unsupported']['reason'] ?? '');

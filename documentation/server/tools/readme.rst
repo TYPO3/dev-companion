@@ -180,6 +180,14 @@ at all in the state the machine is in.
         Describe the repository this server was started in and the TYPO3
         installation it has made.
 
+    .. card:: :doc:`typo3_record_lookup <typo3_record_lookup>`
+        :label: Lookup
+        :action: Open reference
+
+        Count the rows a table of one of this project's own extensions holds,
+        broken down by the page they sit on and by whether they are live, hidden
+        or deleted.
+
     .. card:: :doc:`typo3_reference_list <typo3_reference_list>`
         :label: List
         :action: Open reference
@@ -281,6 +289,7 @@ at all in the state the machine is in.
     typo3_label_lookup
     typo3_permalink_lookup
     typo3_project_describe
+    typo3_record_lookup
     typo3_reference_list
     typo3_rule_lookup
     typo3_schema_lookup

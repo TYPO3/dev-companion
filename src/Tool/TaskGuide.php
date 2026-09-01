@@ -141,13 +141,15 @@ final class TaskGuide extends ReadOnlyTool
      * It is step 5 of `skills/base.md`, and the paragraph before it exempts the
      * task that produces no change — so a session that walked the order on a 404
      * and then wrote four PHP files has read the step and taken the exemption.
-     * What is placed here is the obligation and its axes; the step's reasoning
-     * stays where it is.
+     * What is placed here is the obligation, its axes and the condition it is
+     * skipped under (`D-GUI-025`); the step's reasoning stays where it is.
      */
     public const DEPRECATION_SWEEP = 'Sweep the deprecations before writing: typo3_changelog_lookup with '
-        . 'type "deprecation" and the query omitted, %s. One call per tag: the ext: tag of each system extension '
-        . 'this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every '
-        . 'call also returns the tags that major carries, so the second onwards is read off the first.';
+        . 'type "deprecation" and the query omitted, %s. Only a change touching no TYPO3 API skips it, a CI '
+        . 'file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: '
+        . 'tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the '
+        . 'kinds of file it ships. Every call also returns the tags that major carries, so the second '
+        . 'onwards is read off the first.';
 
     /**
      * The page this kind of work is written up in, said in the same place

@@ -134,10 +134,12 @@ skip the ones that matter too.
    declared major, carrying that major's deprecations whole. Which side a change
    falls on is read off the files it touches and never off the task it started
    as — one PHP file edited along the way puts it back among the ordinary ones,
-   and a skip there costs the deprecation no finding would have walked into. A
-   test file is one of those wherever it sits: it calls the API it exercises and
-   the framework around it, both of which deprecate. A fixture is exempt where
-   it is data the suite reads and not where it is a class.
+   and a skip there costs the deprecation no finding would have walked into. How
+   small the change is decides nothing either, because three statements can call
+   a deprecated API as easily as three hundred. A test file is one of those
+   wherever it sits: it calls the API it exercises and the framework around it,
+   both of which deprecate. A fixture is exempt where it is data the suite reads
+   and not where it is a class.
 
 **Before the reading**, write down what the order established: the version every
 later answer is filtered by, the packages in scope, the commands this repository

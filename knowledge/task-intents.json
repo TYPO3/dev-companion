@@ -112,7 +112,7 @@
     "rulesQuery": "changelog rst documentation",
     "checklist": [
       "Changelog files live below typo3/sysext/core/Documentation/Changelog/, in the directory of the minor version the change is released in; a backport goes into the <lts>.x directory of the oldest branch it reaches. The file is named <Type>-<forgeIssueNumber>-<UpperCamelCaseDescription>.rst.",
-      "The type is the first of four that describes the change: Breaking where it moves or removes core functionality third-party code may use, Deprecation where it marks core functionality for a planned removal, Feature where it adds functionality, Important for anything else that may require manual action and the only one an LTS release may carry. A casual bug fix owes no entry. There is no Task type; checkRst fails a title opening with anything else.",
+      "The type is the first of four that describes the change: Breaking where it moves or removes core functionality third-party code may use, Deprecation where it marks core functionality for a planned removal, Feature where it adds functionality, Important for anything else that may require manual action and the only one an LTS release may carry. A casual bug fix owes no entry, and which fix is casual is settled by typo3_rule_lookup with documentId=core/contribution/changelog rather than by this item. There is no Task type; checkRst fails a title opening with anything else.",
       "Do not assemble the skeleton by hand: the core ships Build/rstTemplates/rstTemplate<Type>.rst per type, and ./Build/Scripts/runTests.sh -s watchRst core interactive writes the file from it and renders it while you edit. It writes into the directory of the release that branch develops, so a backport's file is moved afterwards."
     ],
     "checks": [

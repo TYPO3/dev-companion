@@ -6135,6 +6135,45 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * A checklist item that summarizes a rule says it does not decide the rest.
+     *
+     * `D-GUI-025`. Two sessions acted on an item and never opened the page
+     * behind it: one read the changelog item as saying an `@internal` bugfix
+     * owes no entry, the other read the sweep as unconditional and dropped it on
+     * a three-statement diff. So the item carries the clause and the page
+     * carries the edge, which is what the two halves below read.
+     */
+    #[Decision('D-GUI-025')]
+    #[Test]
+    public function aChecklistItemThatSummarizesARuleSaysItDoesNotDecideTheRest(): void
+    {
+        $entry = Registry::call('typo3_task_guide', [
+            'task' => 'write the changelog entry this bugfix owes',
+            'changeType' => 'bugfix',
+            'targetVersion' => '14',
+        ]);
+
+        $checklist = implode("\n", $entry->data['checklist']);
+        // The clause and the id that decides it, in the item that was misread.
+        self::assertStringContainsString(
+            'which fix is casual is settled by typo3_rule_lookup with '
+                . 'documentId=core/contribution/changelog rather than by this item',
+            $checklist,
+        );
+        // The sweep names no page, so it carries its condition instead — and
+        // the reading the second session took is what it refuses.
+        self::assertStringContainsString('Only a change touching no TYPO3 API skips it', $checklist);
+        self::assertStringContainsString('how small the diff is decides nothing', $checklist);
+
+        // The other half: the page the clause names decides the case that
+        // session decided for itself. Step 5's own edge is read where the rest
+        // of that step is — SkillTest::theDeprecationSweepIsSkippedWhereNoTypo3ApiIsTouched.
+        $page = Registry::call('typo3_rule_lookup', ['documentId' => 'core/contribution/changelog']);
+
+        self::assertStringContainsString('`@internal` on the changed member does not exempt it', $page->text);
+    }
+
+    /**
      * A brief names the task skill that owns the work.
      *
      * `D-SKL-013`. `skills/base.md` and the `instructions` every client

@@ -34,6 +34,11 @@ list.
 - A `BUGFIX` that does change one of the three owes an `Important`, and that is
   the entry a review asks such a fix for. The keyword is what the obligation is
   read off in the common case and not what settles it.
+- `@internal` on the changed member does not exempt it either. The test is what
+  the fix changes for an installation, and the core has filed entries for
+  `@internal` members on the ground that extensions used them —
+  `Important-107848-DataHandlerPropertiesUseridAndAdminRemoved.rst` in the 14.0
+  directory is one.
 - `Breaking` reaches past a moved PHP member. `affect` in that definition covers
   a change in what an installation renders or is configured by, and which of
   those the core files as breaking, and where the boundary against `Important`

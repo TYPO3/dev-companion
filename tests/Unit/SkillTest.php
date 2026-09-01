@@ -821,6 +821,7 @@ final class SkillTest extends TestCase
     }
 
     #[Requirement('R-SKL-005')]
+    #[Decision('D-GUI-025')]
     #[Decision('D-SKL-034')]
     #[Decision('D-SKL-037')]
     #[Test]
@@ -863,6 +864,13 @@ final class SkillTest extends TestCase
         // reading the condition off the task it was described as.
         self::assertStringContainsString(
             'read off the files it touches and never off the task it started as',
+            self::flat($base),
+        );
+        // And what keeps the same task from reading it off the size of the
+        // diff, which is the other half a session took as an exemption
+        // (`D-GUI-025`).
+        self::assertStringContainsString(
+            'How small the change is decides nothing either',
             self::flat($base),
         );
 

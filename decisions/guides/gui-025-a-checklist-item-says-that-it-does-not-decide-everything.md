@@ -3,6 +3,9 @@ id: D-GUI-025
 title: A checklist item says that it does not decide everything
 date: 2026-09-01
 status: open
+coveredBy:
+  - HintsTest::aChecklistItemThatSummarizesARuleSaysItDoesNotDecideTheRest
+  - SkillTest::theDeprecationSweepIsSkippedWhereNoTypo3ApiIsTouched
 ---
 
 # D-GUI-025 — A checklist item says that it does not decide everything

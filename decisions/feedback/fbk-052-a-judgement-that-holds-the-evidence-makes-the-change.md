@@ -68,3 +68,14 @@ the gap is real.
   same run now has somewhere else to put its finding.
 - The queue stops shortening anyway. Then the two slots per feedback were not
   what held it, and what did is the rate feedback arrives at.
+
+## Since then
+
+Twenty feedback from one debrief were judged on 2026-09-01, most of them with
+the change in the same run, and the first **Wrong if** fired once: a hint
+written that day said the record list draws an invalid value, and the next
+judgement read `StandardContentPreviewRenderer` and corrected it to the page
+module. One statement of six, caught the same day by the reading the next
+feedback needed anyway. The third did not fire — the queue went from twenty
+cards to none.
+

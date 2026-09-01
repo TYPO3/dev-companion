@@ -7,9 +7,8 @@ status: open
 
 # D-FBK-053 — A migrated memory is judged against the source its rule has
 
-**Fourteen feedback recorded in three minutes on 2026-09-01 are one session
-emptying a memory directory, and each one is worth what its rule can be held
-against rather than what the memory asserted.**
+**A migrated memory is judged against the source its rule has, and not against
+what the memory asserts.**
 
 Read as reports they are fourteen gaps. Read as a migration they are three
 kinds, and the kind decides the judgement: what the corpus already says, what a

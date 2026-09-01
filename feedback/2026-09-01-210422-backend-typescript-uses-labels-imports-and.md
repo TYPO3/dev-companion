@@ -11,23 +11,15 @@ directory: /home/benji/projects/typo3-cms
 
 ## Observation
 
-Migrating a local memory into the server: this is a convention the server does not state today, and it decides how every backend TypeScript file reaches a translated string.
+Trimmed on 2026-09-02. The convention is stated: `javascript-labels` carries the
+`~labels/<domain>` import, `labels.get()` with its ICU placeholders, what the
+missing key throws, and the flush and hard reload a new trans-unit owes. What
+this report added is the predecessor, and that is written now — the bundle
+import as what replaced `lll()` on the majors that have it, and `lll()` from
+`@typo3/core/lit-helper` with its silent empty string in `language-files` for
+the branch below, read across the checkouts.
 
-Backend TypeScript must use ~labels imports and labels.get(), never lll(). The import form is:
-
-  import coreLabels from '~labels/core.core';
-  coreLabels.get('key');
-
-The domain segment of the import path ('core.core' here) is exactly the value typo3_translation_domain_lookup already computes for the XLF file, so the two are the same answer reached from two directions — that tool tells you what to write in the import.
-
-lll() is the predecessor and still appears in older files, so a file using it is a file that predates the convention rather than a counter-example to follow.
-
-## Query
-
-Migrated from a local project memory file (the "No lll() in TypeScript" section of MEMORY.md). Applies to every backend TypeScript file that renders a translated string.
-
-## Suggestion
-
-Say this in typo3_translation_domain_lookup's own answer: it already computes the domain, so it should also say what the import line looks like and that lll() is not to be used. Alternatively attach it to the backend-typescript hint. Either way the connection between the computed domain and the ~labels import path should be explicit — right now the tool answers the domain and the caller has to know that it belongs in an import specifier.
-
-Related and already filed separately: a newly added label needs cache:flush plus a hard reload before ~labels serves it.
+What is left is the suggestion itself: `typo3_translation_domain_lookup`
+computes the domain and stops there, so the caller has to know the value belongs
+in an import specifier. Naming the import form in that answer touches the tool,
+which the judging run does not do.

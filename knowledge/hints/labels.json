@@ -26,7 +26,10 @@
       "de.locallang",
       "locale prefix",
       "default locale",
-      "fallback locale"
+      "fallback locale",
+      "lll(",
+      "lit-helper",
+      "label in a JavaScript module"
     ],
     "hints": [
       "Use clear, stable label identifiers and concise wording.",
@@ -50,6 +53,10 @@
       {
         "text": "A unit a JavaScript module consumes arrives there later than it arrives in PHP — the l10n cache and a year-long browser cache sit between the file and the module. javascript-labels is that subject.",
         "since": 14
+      },
+      {
+        "text": "A backend JavaScript module reads a label with lll() from @typo3/core/lit-helper, and the key is one of window.TYPO3.lang, not an LLL: reference. What fills that object is the file a controller passed to PageRenderer::addInlineLanguageLabelFile(), so a label nobody inlined is missing from it and lll() answers the empty string — no error, and an empty caption where the text was expected.",
+        "until": 13
       }
     ]
   },
@@ -75,11 +82,16 @@
       "import labels",
       "new label does not appear",
       "label does not show up",
-      "label is missing at runtime"
+      "label is missing at runtime",
+      "lll("
     ],
     "hints": [
       {
         "text": "A module reaches a label by its translation domain: import labels from '~labels/core.bookmarks', then labels.get('groupType.global') with ICU placeholders. A key the imported bundle does not carry fails at runtime and nowhere earlier — label-provider.ts throws \"Label is not defined: <key>\". Nothing on disk answers that module name either: the backend resolves the ~labels/ import map prefix onto its language_domain route, where JavaScriptLanguageDomainProvider::createLanguageDomainResponse() builds the module per request out of LanguageService::getLabelsFromResource().",
+        "since": 14
+      },
+      {
+        "text": "That import is what replaced lll() from @typo3/core/lit-helper, which is still exported and which no module calls any more. So a call to it is a file older than the convention rather than a second way of reading a label.",
         "since": 14
       },
       {

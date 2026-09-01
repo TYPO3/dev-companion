@@ -62,9 +62,10 @@ Answers with
         # True where TYPO3 creates the table itself for an MM relation. No
         # ext_tables.sql declares one at all.
         relationTable: boolean
-    # What the database has for the named table. Null where no table was named, or
-    # where the schema could not be read — a project that is down, or an
-    # installation whose tables were never created.
+    # What the database has for the named table, read from the connection that table
+    # maps to. Null where no table was named, or where the schema could not be read
+    # — a project that is down, or an installation whose tables were never
+    # created.
     actual:  # optional
       # Whether the database has the table at all.
       present: boolean

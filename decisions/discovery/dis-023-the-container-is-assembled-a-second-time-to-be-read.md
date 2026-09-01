@@ -3,6 +3,9 @@ id: D-DIS-023
 title: The container is assembled a second time to be read
 date: 2026-09-01
 status: open
+coveredBy:
+  - ServiceLookupTest::aContainerThatDoesNotAssembleIsTheAnswer
+  - ServiceLookupTest::anAliasCarriesTheClassBehindIt
 ---
 
 # D-DIS-023 — The container is assembled a second time to be read

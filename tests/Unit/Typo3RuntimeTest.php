@@ -295,6 +295,7 @@ final class Typo3RuntimeTest extends TestCase
         self::assertArrayNotHasKey('configuration', $topics);
         self::assertArrayNotHasKey('flexForm', $topics);
         self::assertArrayNotHasKey('liveSchema', $topics);
+        self::assertArrayNotHasKey('services', $topics);
 
         self::assertSame(
             ['found' => true, 'value' => '10.0.0.1'],

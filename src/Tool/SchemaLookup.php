@@ -83,7 +83,7 @@ final class SchemaLookup extends ReadOnlyTool
                     'unique' => ['type' => 'boolean'],
                     'primary' => ['type' => 'boolean'],
                 ], ['name', 'columns', 'unique', 'primary'])),
-            ], ['present', 'columns', 'indexes'], 'What the database has for the named table. Null where no table was named, or where the schema could not be read — a project that is down, or an installation whose tables were never created.'),
+            ], ['present', 'columns', 'indexes'], 'What the database has for the named table, read from the connection that table maps to. Null where no table was named, or where the schema could not be read — a project that is down, or an installation whose tables were never created.'),
             'updates' => ['type' => ['array', 'null']] + Schema::listOf(Schema::object([
                 'connection' => Schema::string('The TYPO3 database connection the change is on.'),
                 'change' => Schema::string('The change type in TYPO3\'s own vocabulary — create_table, add, change, change_currentValue, drop, drop_table, change_table — which is also the argument `typo3 database:updateschema` takes.'),

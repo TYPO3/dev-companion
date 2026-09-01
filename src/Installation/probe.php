@@ -501,106 +501,111 @@ try {
             $build = new ReflectionMethod($coreBuilder, 'buildContainer');
             $build->setAccessible(true);
             $registry = new TYPO3\CMS\Core\DependencyInjection\ServiceProviderRegistry($packageManager);
+            $builder = null;
             try {
                 $builder = $build->invoke($coreBuilder, $packageManager, $registry);
             } catch (Symfony\Component\DependencyInjection\Exception\ExceptionInterface $broken) {
                 // A container that will not assemble is the finding rather than
                 // the absence of one: the message names the service and the
-                // argument, which is what the caller came for.
+                // argument, which is what the caller came for. It is answered
+                // and not thrown on — one try wraps this whole file, so a throw
+                // here would end the reading and take every other topic with
+                // it.
                 $answer['topics']['services'] = [
                     'definitionCount' => 0,
                     'aliasCount' => 0,
                     'compilationFailure' => get_class($broken) . ': ' . $broken->getMessage(),
                     'services' => [],
                 ];
-                throw new RuntimeException('', 2);
             }
 
-            // `buildContainer` compiles before it returns, so what comes back
-            // is the builder with autowiring resolved and the unused private
-            // definitions already removed. That is the set the running
-            // container has, which is the one a caller is asking about.
-            $definitions = $builder->getDefinitions();
+            if ($builder !== null) {
+                // `buildContainer` compiles before it returns, so what comes back
+                // is the builder with autowiring resolved and the unused private
+                // definitions already removed. That is the set the running
+                // container has, which is the one a caller is asking about.
+                $definitions = $builder->getDefinitions();
 
-            $wanted = strtolower((string) ($services['query'] ?? ''));
-            $tag = (string) ($services['tag'] ?? '');
-            $found = [];
-            foreach ($definitions as $id => $definition) {
-                $class = (string) ($definition->getClass() ?? '');
-                $tags = array_keys($definition->getTags());
-                if ($tag !== '' && !in_array($tag, $tags, true)) {
-                    continue;
-                }
-                if ($wanted !== ''
-                    && !str_contains(strtolower((string) $id), $wanted)
-                    && !str_contains(strtolower($class), $wanted)
-                ) {
-                    continue;
-                }
-                $arguments = [];
-                foreach ($definition->getArguments() as $position => $argument) {
-                    $arguments[] = [
-                        'position' => is_int($position) ? $position : -1,
-                        'resolves' => $argument instanceof Symfony\Component\DependencyInjection\Reference
-                            ? (string) $argument
-                            : (is_scalar($argument) ? 'value: ' . var_export($argument, true) : 'value'),
+                $wanted = strtolower((string) ($services['query'] ?? ''));
+                $tag = (string) ($services['tag'] ?? '');
+                $found = [];
+                foreach ($definitions as $id => $definition) {
+                    $class = (string) ($definition->getClass() ?? '');
+                    $tags = array_keys($definition->getTags());
+                    if ($tag !== '' && !in_array($tag, $tags, true)) {
+                        continue;
+                    }
+                    if ($wanted !== ''
+                        && !str_contains(strtolower((string) $id), $wanted)
+                        && !str_contains(strtolower($class), $wanted)
+                    ) {
+                        continue;
+                    }
+                    $arguments = [];
+                    foreach ($definition->getArguments() as $position => $argument) {
+                        $arguments[] = [
+                            'position' => is_int($position) ? $position : -1,
+                            'resolves' => $argument instanceof Symfony\Component\DependencyInjection\Reference
+                                ? (string) $argument
+                                : (is_scalar($argument) ? 'value: ' . var_export($argument, true) : 'value'),
+                        ];
+                    }
+                    $found[] = [
+                        'id' => (string) $id,
+                        'class' => $class,
+                        'aliasFor' => '',
+                        'public' => $definition->isPublic(),
+                        'shared' => $definition->isShared(),
+                        'autowired' => $definition->isAutowired(),
+                        'abstract' => $definition->isAbstract(),
+                        'synthetic' => $definition->isSynthetic(),
+                        'tags' => $tags,
+                        'arguments' => $arguments,
                     ];
                 }
-                $found[] = [
-                    'id' => (string) $id,
-                    'class' => $class,
-                    'aliasFor' => '',
-                    'public' => $definition->isPublic(),
-                    'shared' => $definition->isShared(),
-                    'autowired' => $definition->isAutowired(),
-                    'abstract' => $definition->isAbstract(),
-                    'synthetic' => $definition->isSynthetic(),
-                    'tags' => $tags,
-                    'arguments' => $arguments,
-                ];
-            }
-            // An interface usually reaches its implementation through an alias,
-            // and a lookup that reads definitions alone answers "nothing" to
-            // the commonest question there is — `D-DIS-023`.
-            $aliases = $builder->getAliases();
-            foreach ($aliases as $id => $alias) {
-                $target = (string) $alias;
-                $seen = [];
-                while (isset($aliases[$target]) && !isset($seen[$target])) {
-                    $seen[$target] = true;
-                    $target = (string) $aliases[$target];
+                // An interface usually reaches its implementation through an alias,
+                // and a lookup that reads definitions alone answers "nothing" to
+                // the commonest question there is — `D-DIS-023`.
+                $aliases = $builder->getAliases();
+                foreach ($aliases as $id => $alias) {
+                    $target = (string) $alias;
+                    $seen = [];
+                    while (isset($aliases[$target]) && !isset($seen[$target])) {
+                        $seen[$target] = true;
+                        $target = (string) $aliases[$target];
+                    }
+                    $class = isset($definitions[$target]) ? (string) ($definitions[$target]->getClass() ?? '') : '';
+                    if ($tag !== '') {
+                        continue;
+                    }
+                    if ($wanted !== ''
+                        && !str_contains(strtolower((string) $id), $wanted)
+                        && !str_contains(strtolower($class), $wanted)
+                    ) {
+                        continue;
+                    }
+                    $found[] = [
+                        'id' => (string) $id,
+                        'class' => $class,
+                        'aliasFor' => $target,
+                        'public' => $alias->isPublic(),
+                        'shared' => false,
+                        'autowired' => false,
+                        'abstract' => false,
+                        'synthetic' => false,
+                        'tags' => [],
+                        'arguments' => [],
+                    ];
                 }
-                $class = isset($definitions[$target]) ? (string) ($definitions[$target]->getClass() ?? '') : '';
-                if ($tag !== '') {
-                    continue;
-                }
-                if ($wanted !== ''
-                    && !str_contains(strtolower((string) $id), $wanted)
-                    && !str_contains(strtolower($class), $wanted)
-                ) {
-                    continue;
-                }
-                $found[] = [
-                    'id' => (string) $id,
-                    'class' => $class,
-                    'aliasFor' => $target,
-                    'public' => $alias->isPublic(),
-                    'shared' => false,
-                    'autowired' => false,
-                    'abstract' => false,
-                    'synthetic' => false,
-                    'tags' => [],
-                    'arguments' => [],
-                ];
-            }
 
-            usort($found, static fn(array $a, array $b): int => strcmp($a['id'], $b['id']));
-            $answer['topics']['services'] = [
-                'definitionCount' => count($definitions),
-                'aliasCount' => count($aliases),
-                'compilationFailure' => '',
-                'services' => $found,
-            ];
+                usort($found, static fn(array $a, array $b): int => strcmp($a['id'], $b['id']));
+                $answer['topics']['services'] = [
+                    'definitionCount' => count($definitions),
+                    'aliasCount' => count($aliases),
+                    'compilationFailure' => '',
+                    'services' => $found,
+                ];
+            }
         } catch (Throwable $failure) {
             $answer['topics']['services'] = [
                 'unavailable' => get_class($failure) . ': ' . $failure->getMessage(),

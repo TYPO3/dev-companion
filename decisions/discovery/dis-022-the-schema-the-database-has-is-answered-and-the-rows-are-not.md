@@ -3,6 +3,10 @@ id: D-DIS-022
 title: The schema the database has is answered and the rows are not
 date: 2026-09-01
 status: open
+coveredBy:
+  - SchemaLookupTest::anUnreadableDatabaseLeavesTheDerivedSideStanding
+  - SchemaLookupTest::bothSidesStandBesideEachOtherAndAgreementIsSaidPlainly
+  - SchemaLookupTest::whatTypo3WouldChangeIsNamedByItsOwnChangeType
 ---
 
 # D-DIS-022 — The schema the database has is answered and the rows are not

@@ -184,9 +184,8 @@ at all in the state the machine is in.
         :label: Lookup
         :action: Open reference
 
-        Count the rows a table of one of this project's own extensions holds,
-        broken down by the page they sit on and by whether they are live, hidden
-        or deleted.
+        Read the rows of a table belonging to one of this project's own
+        extensions.
 
     .. card:: :doc:`typo3_reference_list <typo3_reference_list>`
         :label: List

@@ -2,13 +2,9 @@
 id: D-AUD-016
 title: A count is answered and the row behind it stays with the installation
 date: 2026-09-01
-status: open
-coveredBy:
-  - RecordLookupTest::aTableFullEnoughToLeaveTheRecordListIsSaidToBe
-  - RecordLookupTest::aTableNoProjectExtensionRegistersIsRefusedRatherThanCounted
-  - RecordLookupTest::aTableOneScreenLongAsksForNothing
-  - RecordLookupTest::everyCountSaysItWasReadWithoutBackendPermissions
-  - RecordLookupTest::theTablesItWillCountAreListedWithoutOneBeingNamed
+status: revoked
+revokedBy: D-AUD-017
+coveredBy: []
 ---
 
 # D-AUD-016 — A count is answered and the row behind it stays with the installation
@@ -85,3 +81,15 @@ field while still running over the data with the shell user's database access.
 - A grouping turns out to be a field value after all: a `pid` is a page, and an
   installation where the storage folders are named after clients has its
   structure in the answer.
+
+## Revoked on 2026-09-01
+
+Revoked the day it was decided, by the maintainer who decided it: what was asked
+for is reading records — a list or a count — and a tool that only counts is not
+worth being a tool of its own. `D-AUD-017` is what replaces it, and the count
+survives inside it as one half of an ordinary lookup answer rather than as the
+whole of one.
+
+What the reading here still holds is the boundary around it: only the tables a
+project-owned extension registers, and the access said in every answer. What
+does not is the sentence that no column of any row is read.

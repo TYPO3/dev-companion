@@ -18,7 +18,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### audience
 
-- [`D-AUD-016`][D-AUD-016] — A count is answered and the row behind it stays with the installation · 2026-09-01
+- [`D-AUD-017`][D-AUD-017] — Records are read and the boundary is the table they are in · 2026-09-01
 - [`D-AUD-014`][D-AUD-014] — A description opens with what the caller's own route cannot do · 2026-08-27
 - [`D-AUD-015`][D-AUD-015] — What decides whether to call a tool stands in its description · 2026-08-27
 - [`D-AUD-012`][D-AUD-012] — The second call of the entry point is an imperative · 2026-08-19
@@ -33,7 +33,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-AUD-003`][D-AUD-003] — The instructions carry the entry point, because the tool descriptions never arrive · 2026-07-31 · confirmed
 - [`D-AUD-001`][D-AUD-001] — The outward description stays core-first until there is non-core knowledge · 2026-07-29 · confirmed
 
-[D-AUD-016]: audience/aud-016-a-count-is-answered-and-the-row-behind-it-stays-with-the-installation.md
+[D-AUD-017]: audience/aud-017-records-are-read-and-the-boundary-is-the-table-they-are-in.md
 [D-AUD-014]: audience/aud-014-a-description-opens-with-what-the-callers-own-route-cannot-do.md
 [D-AUD-015]: audience/aud-015-what-decides-whether-to-call-a-tool-stands-in-its-description.md
 [D-AUD-012]: audience/aud-012-the-second-call-of-the-entry-point-is-an-imperative.md
@@ -1144,6 +1144,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### Revoked, and kept as the record
 
+- [`D-AUD-016`][D-AUD-016] — A count is answered and the row behind it stays with the installation · 2026-09-01 → D-AUD-017
 - [`D-AUD-013`][D-AUD-013] — A competing route is corrected where it is written · 2026-08-25 → D-AUD-014
 - [`D-KNW-109`][D-KNW-109] — Whether a core commit owes a sign-off is a subject this server owns · 2026-08-24 → D-KNW-110
 - [`D-KNW-110`][D-KNW-110] — A core commit message carries three trailers and the hook's Change-Id · 2026-08-24 → D-KNW-125
@@ -1188,6 +1189,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SCO-004`][D-SCO-004] — The frontend is recognised by name · 2026-07-29
 - [`D-VER-002`][D-VER-002] — The prose is not bound; it says which half it is · 2026-07-29 → D-VER-005
 
+[D-AUD-016]: audience/aud-016-a-count-is-answered-and-the-row-behind-it-stays-with-the-installation.md
 [D-AUD-013]: audience/aud-013-a-competing-route-is-corrected-where-it-is-written.md
 [D-KNW-109]: knowledge/knw-109-whether-a-core-commit-owes-a-sign-off-is-a-subject-this-server-owns.md
 [D-KNW-110]: knowledge/knw-110-a-core-commit-message-carries-three-trailers-and-the-hooks-change-id.md

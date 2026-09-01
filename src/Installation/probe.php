@@ -44,7 +44,7 @@ try {
     $configurationPath = (string) ($parameters['configurationPath'] ?? '');
     $flexForm = is_array($parameters['flexForm'] ?? null) ? $parameters['flexForm'] : null;
     $liveSchema = is_array($parameters['liveSchema'] ?? null) ? $parameters['liveSchema'] : null;
-    $recordCount = is_array($parameters['recordCount'] ?? null) ? $parameters['recordCount'] : null;
+    $records = is_array($parameters['records'] ?? null) ? $parameters['records'] : null;
     $services = is_array($parameters['services'] ?? null) ? $parameters['services'] : null;
     if (!is_file($autoload)) {
         $answer['reason'] = 'no autoloader at ' . $autoload . ' below ' . getcwd();
@@ -481,44 +481,73 @@ try {
         }
     }
 
-    // The one query this probe runs over rows, and the only one it may run:
-    // how many there are, grouped by the page they sit on and by the state the
-    // enable fields put them in. No column of any row is selected, so there is
-    // no field value for the answer to carry — `D-AUD-016`.
+    // The queries this probe runs over rows, and the only ones it may run: how
+    // many there are, grouped by the page they sit on and by the state the
+    // enable fields put them in, and the rows themselves where the caller asked
+    // for them — `D-AUD-017`.
+    //
+    // What a row carries is fixed here rather than by the caller: the
+    // identifiers, the label the table names in its own ctrl, the timestamps
+    // and the two flags. A column list the caller composes would make every
+    // column of a countable table readable, which is the boundary rather than a
+    // convenience.
     //
     // Every restriction is removed on purpose: a deleted or hidden row is what
-    // the caller is asking about, and the default restrictions would count it
+    // the caller is asking about, and the default restrictions would report it
     // as absent rather than as deleted.
-    if ($recordCount !== null) {
+    if ($records !== null) {
         try {
-            $wanted = (string) ($recordCount['table'] ?? '');
+            $wanted = (string) ($records['table'] ?? '');
+            $where = is_array($records['where'] ?? null) ? $records['where'] : [];
+            $limit = (int) ($records['limit'] ?? 0);
             $control = is_array($tca[$wanted]['ctrl'] ?? null) ? $tca[$wanted]['ctrl'] : [];
             $deleted = is_string($control['delete'] ?? null) ? $control['delete'] : '';
             $hidden = is_string($control['enablecolumns']['disabled'] ?? null)
                 ? $control['enablecolumns']['disabled']
                 : '';
+            $label = is_string($control['label'] ?? null) ? $control['label'] : '';
+            $changed = is_string($control['tstamp'] ?? null) ? $control['tstamp'] : '';
+            $created = is_string($control['crdate'] ?? null) ? $control['crdate'] : '';
 
             $pool = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 TYPO3\CMS\Core\Database\ConnectionPool::class,
             );
-            $builder = $pool->getQueryBuilderForTable($wanted);
-            $builder->getRestrictions()->removeAll();
-            $columns = ['pid'];
+
+            // One place builds the filter, so the count and the rows are two
+            // answers about one set. Every value is bound rather than written
+            // into the SQL, and every column name is one the caller was told
+            // this table has.
+            $constrain = static function (
+                TYPO3\CMS\Core\Database\Query\QueryBuilder $builder
+            ) use ($where): TYPO3\CMS\Core\Database\Query\QueryBuilder {
+                foreach ($where as $column => $value) {
+                    $builder->andWhere($builder->expr()->eq(
+                        (string) $column,
+                        $builder->createNamedParameter($value),
+                    ));
+                }
+
+                return $builder;
+            };
+
+            $counting = $constrain($pool->getQueryBuilderForTable($wanted));
+            $counting->getRestrictions()->removeAll();
+            $grouped = ['pid'];
             foreach ([$deleted, $hidden] as $flag) {
-                if ($flag !== '' && !in_array($flag, $columns, true)) {
-                    $columns[] = $flag;
+                if ($flag !== '' && !in_array($flag, $grouped, true)) {
+                    $grouped[] = $flag;
                 }
             }
-            // The alias is given rather than taken: what a bare COUNT(*)
-            // comes back keyed by is the platform's, and the three this server
-            // covers do not agree on it.
-            $builder->selectLiteral($builder->expr()->count('*', 'rowCount'))->from($wanted);
-            foreach ($columns as $column) {
-                $builder->addSelect($column);
-                $builder->addGroupBy($column);
+            // The alias is given rather than taken: what a bare COUNT(*) comes
+            // back keyed by is the platform's, and the three this server covers
+            // do not agree on it.
+            $counting->selectLiteral($counting->expr()->count('*', 'rowCount'))->from($wanted);
+            foreach ($grouped as $column) {
+                $counting->addSelect($column);
+                $counting->addGroupBy($column);
             }
             $groups = [];
-            foreach ($builder->executeQuery()->fetchAllAssociative() as $row) {
+            foreach ($counting->executeQuery()->fetchAllAssociative() as $row) {
                 $groups[] = [
                     'pid' => (int) ($row['pid'] ?? 0),
                     'deleted' => $deleted !== '' && (int) ($row[$deleted] ?? 0) !== 0,
@@ -526,17 +555,49 @@ try {
                     'rows' => (int) ($row['rowCount'] ?? 0),
                 ];
             }
-            $answer['topics']['recordCount'] = [
+
+            $rows = [];
+            if ($limit !== 0) {
+                $selecting = $constrain($pool->getQueryBuilderForTable($wanted));
+                $selecting->getRestrictions()->removeAll();
+                $columns = ['uid', 'pid'];
+                foreach ([$label, $changed, $created, $deleted, $hidden] as $column) {
+                    if ($column !== '' && !in_array($column, $columns, true)) {
+                        $columns[] = $column;
+                    }
+                }
+                $selecting->select(...$columns)->from($wanted)->orderBy('uid', 'ASC');
+                if ($limit > 0) {
+                    $selecting->setMaxResults($limit);
+                }
+                foreach ($selecting->executeQuery()->fetchAllAssociative() as $row) {
+                    $rows[] = [
+                        'uid' => (int) ($row['uid'] ?? 0),
+                        'pid' => (int) ($row['pid'] ?? 0),
+                        'label' => $label === '' ? '' : (string) ($row[$label] ?? ''),
+                        'changed' => $changed === '' ? 0 : (int) ($row[$changed] ?? 0),
+                        'created' => $created === '' ? 0 : (int) ($row[$created] ?? 0),
+                        'deleted' => $deleted !== '' && (int) ($row[$deleted] ?? 0) !== 0,
+                        'hidden' => $hidden !== '' && (int) ($row[$hidden] ?? 0) !== 0,
+                    ];
+                }
+            }
+
+            $answer['topics']['records'] = [
                 'table' => $wanted,
-                // Said rather than inferred from an empty grouping: a table
-                // with no delete field counts nothing as deleted, and that is
-                // not the same answer as nothing having been deleted.
+                // Said rather than inferred from what came back: a table with
+                // no delete field marks nothing as deleted, and that is not the
+                // same answer as nothing having been deleted. The label field
+                // is here for the same reason — an empty label on every row is
+                // a table whose ctrl names none.
                 'deleteField' => $deleted,
                 'hiddenField' => $hidden,
+                'labelField' => $label,
                 'groups' => $groups,
+                'rows' => $rows,
             ];
         } catch (Throwable $failure) {
-            $answer['topics']['recordCount'] = [
+            $answer['topics']['records'] = [
                 'unavailable' => get_class($failure) . ': ' . $failure->getMessage(),
             ];
         }

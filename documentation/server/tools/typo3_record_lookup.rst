@@ -3,19 +3,21 @@
 ``typo3_record_lookup``
 =======================
 
-Count the rows a table of one of this project's own extensions holds, broken
-down by the page they sit on and by whether they are live, hidden or deleted.
-That is the fact that decides where records are maintained: a table with a few
-dozen rows is edited in the generic record list, and one with three thousand on
-a single storage folder needs a backend module with its own filtering and
-paging, which nothing else in this server will tell you. It counts and nothing
-more — no column of any row is read, so it answers nothing about what a record
-contains, and asking what one says is the backend's or the installation's own
-console. It refuses every table a project-owned extension does not register:
-pages, tt_content, the user tables and everything a dependency brings are
-outside it, because a count of those is an inventory of somebody else's
-installation rather than a fact about the work. Omit the table to see which ones
-it will count. Answers from: installation.
+Read the rows of a table belonging to one of this project's own extensions: how
+many there are, which page they sit on, whether they are live, hidden or
+deleted, and the rows themselves — uid, the label the table names in its own
+TCA, the timestamps and the two flags. That is what a backend visit would have
+told you and the one question a schema answer cannot: what is actually stored.
+It is also the fact that decides where records are maintained, because a table
+with a few dozen rows is edited in the generic record list and one with three
+thousand on a single storage folder needs a module with its own filtering and
+paging. Narrow it with where, which takes exact values for any column of the
+table, pid among them; pass count to get the numbers without the rows, and limit
+to say how many rows come back. It refuses every table a project-owned extension
+does not register: pages, tt_content, the user tables and everything a
+dependency brings are outside it, and reading those is the backend's or the
+installation's own console. Omit the table to see which ones it will read. It
+never writes. Answers from: installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -26,10 +28,22 @@ Takes
 
 .. code-block:: yaml
 
-    # The table to count, for example "tx_myext_animal". Omit to list the tables
-    # this project's own extensions register, which are the ones that can be
-    # counted.
+    # The table to read, for example "tx_myext_animal". Omit to list the tables this
+    # project's own extensions register, which are the ones that can be read.
     table: string  # optional
+    # Exact values to narrow by, one per column: {"pid": 2, "status": "adopted"}.
+    # Every column of the table can be named, pid and uid among them, and a column
+    # the table does not have is an answer saying so rather than an empty result.
+    # Exact equality only — there is no operator, no wildcard and no range, which
+    # is what keeps this a lookup rather than a query language.
+    where: object  # optional
+    # True to answer with the numbers alone and read no row. Use it where the
+    # question is how much is in there rather than what.
+    count: boolean  # optional
+    # How many rows to return, ordered by uid. Defaults to 20, which is one page of
+    # the record list. Zero means every matching row, which on a full table is the
+    # whole table in one answer.
+    limit: integer  # optional
 
 Answers with
 ------------
@@ -37,17 +51,25 @@ Answers with
 .. code-block:: yaml
 
     # The table asked about. Null where none was named and the answer is the list of
-    # countable ones.
+    # readable ones.
     table: string or null
-    # Rows for a named table, countable tables for a call that named none. Zero on a
-    # table that is refused as well as on one that is empty, and the text says
-    # which.
+    # Rows matching the filter, whatever the limit returned. Tables for a call that
+    # named none. Zero on a table that is refused as well as on one that is empty,
+    # and the text says which.
     matchCount: integer  # optional
     # One of: installation. installation: its assembled runtime state answered.
     answeredBy: string  # optional
-    # Null where no table was counted.
-    rows:  # optional
-      # Every row in the table, whatever state it is in.
+    # The filter the answer was read under, echoed so a count reported onwards
+    # carries what it counted. A list rather than a map keyed by column, because an
+    # empty map is [] in JSON and a schema saying object refuses it — a client
+    # reads one shape either way. Empty where the whole table was read.
+    where:  # optional
+      - column: string
+        # The value the column was matched against, exactly as it was passed.
+        value: object
+    # Null where no table was read.
+    counts:  # optional
+      # Every matching row, whatever state it is in.
       total: integer
       # Rows that are neither hidden nor deleted.
       live: integer
@@ -56,8 +78,8 @@ Answers with
       # Rows the delete field marks. They are still in the table until the garbage
       # collection runs.
       deleted: integer
-    # One entry per page that holds a row, the fullest first. Empty where no table
-    # was counted.
+    # One entry per page that holds a matching row, the fullest first. Empty where
+    # no table was read.
     pages:  # optional
       - # The page the rows sit on. Zero is the root, which is where records that
         # belong to no page end up.
@@ -66,14 +88,29 @@ Answers with
         live: integer
         hidden: integer
         deleted: integer
-    # Every table this tool will count in this installation.
+    # The rows read, ordered by uid. Empty where count was asked for, where no table
+    # was named, and where nothing matched.
+    records:  # optional
+      - # What the backend edits the record by, and what a URL into it carries.
+        uid: integer
+        pid: integer
+        # The column the table names as its label in ctrl. Empty where it names
+        # none, which is a property of the table rather than of the row.
+        label: string
+        # Unix time of the last change, 0 where the table has no tstamp column.
+        changed: integer
+        # Unix time of creation, 0 where the table has no crdate column.
+        created: integer
+        deleted: boolean
+        hidden: boolean
+    # Every table this tool will read in this installation.
     countable:  # optional
       - table: string
         # The project-owned extension whose TCA registers it.
         extension: string
-    # What the count was read with. Said on every answer that carries one, because a
-    # number reported onwards is read as a backend user's view of the table unless
-    # it says otherwise.
+    # What the reading was made with. Said on every answer that carries one, because
+    # a number or a row reported onwards is read as a backend user's view of the
+    # table unless it says otherwise.
     readWith: string  # optional
     unsupported:  # optional
       # One of: no-installation, misconfigured, installation-not-answering.
@@ -113,8 +150,8 @@ Answers with
         console: string
 
 The answer carries exactly one of these sets of fields: ``table``,
-``matchCount``, ``answeredBy``, ``rows``, ``pages``, ``countable``, ``readWith``
-— or ``table``, ``unsupported``.
+``matchCount``, ``answeredBy``, ``where``, ``counts``, ``pages``, ``records``,
+``countable``, ``readWith`` — or ``table``, ``unsupported``.
 
 Answered
 --------
@@ -149,7 +186,7 @@ Text:
 
 .. code-block:: text
 
-    "tx_acme_events_event" is not counted here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
+    "tx_acme_events_event" is not read here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
     No extension of this project registers a table of its own.
 
 Data:
@@ -160,10 +197,12 @@ Data:
         "table": "tx_acme_events_event",
         "matchCount": 0,
         "answeredBy": "installation",
-        "rows": null,
+        "where": [],
+        "counts": null,
         "pages": [],
+        "records": [],
         "countable": [],
-        "readWith": "Counted with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
     }
 
 From the fixture installation
@@ -173,7 +212,7 @@ Text:
 
 .. code-block:: text
 
-    This is not answerable here, which is not the same as an empty answer: the installation booted and could not count tx_acme_events_event: Error: Class "TYPO3\CMS\Core\Database\ConnectionPool" not found.
+    This is not answerable here, which is not the same as an empty answer: the installation booted and could not read tx_acme_events_event: Error: Class "TYPO3\CMS\Core\Database\ConnectionPool" not found.
 
 Data:
 
@@ -183,7 +222,7 @@ Data:
         "table": "tx_acme_events_event",
         "unsupported": {
             "cause": "installation-not-answering",
-            "reason": "the installation booted and could not count tx_acme_events_event: Error: Class \"TYPO3\\CMS\\Core\\Database\\ConnectionPool\" not found",
+            "reason": "the installation booted and could not read tx_acme_events_event: Error: Class \"TYPO3\\CMS\\Core\\Database\\ConnectionPool\" not found",
             "repositoryState": "installed",
             "diagnosis": "",
             "searched": [
@@ -197,8 +236,77 @@ Data:
         }
     }
 
-records: a table it will not count
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+records: counted rather than read
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Called with:
+
+.. code-block:: json
+
+    {
+        "table": "tx_acme_events_event",
+        "count": true
+    }
+
+From the E-SITE-14.3 environment
+""""""""""""""""""""""""""""""""
+
+Text:
+
+.. code-block:: text
+
+    "tx_acme_events_event" is not read here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
+    No extension of this project registers a table of its own.
+
+Data:
+
+.. code-block:: json
+
+    {
+        "table": "tx_acme_events_event",
+        "matchCount": 0,
+        "answeredBy": "installation",
+        "where": [],
+        "counts": null,
+        "pages": [],
+        "records": [],
+        "countable": [],
+        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+    }
+
+From the fixture installation
+"""""""""""""""""""""""""""""
+
+Text:
+
+.. code-block:: text
+
+    This is not answerable here, which is not the same as an empty answer: the installation booted and could not read tx_acme_events_event: Error: Class "TYPO3\CMS\Core\Database\ConnectionPool" not found.
+
+Data:
+
+.. code-block:: json
+
+    {
+        "table": "tx_acme_events_event",
+        "unsupported": {
+            "cause": "installation-not-answering",
+            "reason": "the installation booted and could not read tx_acme_events_event: Error: Class \"TYPO3\\CMS\\Core\\Database\\ConnectionPool\" not found",
+            "repositoryState": "installed",
+            "diagnosis": "",
+            "searched": [
+                "<installation>"
+            ],
+            "misconfiguration": null,
+            "settings": {
+                "root": "TYPO3_DEV_COMPANION_ROOT",
+                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+            }
+        }
+    }
+
+records: a table it will not read
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Called with:
 
@@ -215,7 +323,7 @@ Text:
 
 .. code-block:: text
 
-    "tt_content" is not counted here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
+    "tt_content" is not read here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
     No extension of this project registers a table of its own.
 
 Data:
@@ -226,10 +334,12 @@ Data:
         "table": "tt_content",
         "matchCount": 0,
         "answeredBy": "installation",
-        "rows": null,
+        "where": [],
+        "counts": null,
         "pages": [],
+        "records": [],
         "countable": [],
-        "readWith": "Counted with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
     }
 
 From the fixture installation
@@ -239,8 +349,8 @@ Text:
 
 .. code-block:: text
 
-    "tt_content" is not counted here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
-    What it does count: tx_acme_events_event.
+    "tt_content" is not read here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
+    What it does read: tx_acme_events_event.
 
 Data:
 
@@ -250,19 +360,21 @@ Data:
         "table": "tt_content",
         "matchCount": 0,
         "answeredBy": "installation",
-        "rows": null,
+        "where": [],
+        "counts": null,
         "pages": [],
+        "records": [],
         "countable": [
             {
                 "table": "tx_acme_events_event",
                 "extension": "acme_events"
             }
         ],
-        "readWith": "Counted with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
     }
 
-records: what it counts
-~~~~~~~~~~~~~~~~~~~~~~~
+records: what it reads
+~~~~~~~~~~~~~~~~~~~~~~
 
 Called with:
 
@@ -277,20 +389,22 @@ Text:
 
 .. code-block:: text
 
-    No extension of this project registers a table of its own, so there is nothing here to count. A project whose content lives in pages and tt_content is that case.
+    No extension of this project registers a table of its own, so there is nothing here to read. A project whose content lives in pages and tt_content is that case.
 
 Data:
 
 .. code-block:: json
 
     {
-        "table": null,
         "matchCount": 0,
+        "table": null,
         "answeredBy": "installation",
-        "rows": null,
+        "where": [],
+        "counts": null,
         "pages": [],
+        "records": [],
         "countable": [],
-        "readWith": "Counted with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
     }
 
 From the fixture installation
@@ -300,7 +414,7 @@ Text:
 
 .. code-block:: text
 
-    This project's own extensions register 1 tables. Name one to count its rows, which is what says whether it is still edited in the record list.
+    This project's own extensions register 1 tables. Name one to read what is in it.
 
     - tx_acme_events_event (acme_events)
 
@@ -309,16 +423,18 @@ Data:
 .. code-block:: json
 
     {
-        "table": null,
         "matchCount": 1,
+        "table": null,
         "answeredBy": "installation",
-        "rows": null,
+        "where": [],
+        "counts": null,
         "pages": [],
+        "records": [],
         "countable": [
             {
                 "table": "tx_acme_events_event",
                 "extension": "acme_events"
             }
         ],
-        "readWith": "Counted with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
     }

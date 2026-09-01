@@ -20,7 +20,7 @@ use TYPO3\DevCompanion\Tool\Registry;
  * The count exists because a session held the number 3101 twice and drew
  * nothing from it, so the answer says what the number means for where the
  * records are edited. What it may be asked about is the other half: a table a
- * project-owned extension registers, and no other — `D-AUD-016`.
+ * project-owned extension registers, and no other — `D-AUD-017`.
  */
 final class RecordLookupTest extends TestCase
 {
@@ -38,7 +38,7 @@ final class RecordLookupTest extends TestCase
         }
     }
 
-    #[Decision('D-AUD-016')]
+    #[Decision('D-AUD-017')]
     #[Test]
     public function aTableFullEnoughToLeaveTheRecordListIsSaidToBe(): void
     {
@@ -54,7 +54,7 @@ final class RecordLookupTest extends TestCase
         self::assertSame(3111, $result->data['matchCount']);
         self::assertSame(
             ['total' => 3111, 'live' => 3000, 'hidden' => 104, 'deleted' => 7],
-            $result->data['rows'],
+            $result->data['counts'],
         );
         // The fullest page first, and a deleted row counted as deleted rather
         // than twice.
@@ -66,7 +66,7 @@ final class RecordLookupTest extends TestCase
         self::assertStringContainsString('typo3_backend_module_lookup', $result->text);
     }
 
-    #[Decision('D-AUD-016')]
+    #[Decision('D-AUD-017')]
     #[Test]
     public function aTableOneScreenLongAsksForNothing(): void
     {
@@ -79,7 +79,7 @@ final class RecordLookupTest extends TestCase
         self::assertStringNotContainsString('backend module', $result->text);
     }
 
-    #[Decision('D-AUD-016')]
+    #[Decision('D-AUD-017')]
     #[Test]
     public function everyCountSaysItWasReadWithoutBackendPermissions(): void
     {
@@ -91,9 +91,9 @@ final class RecordLookupTest extends TestCase
         self::assertStringContainsString('shell user\'s database access', $result->data['readWith']);
     }
 
-    #[Decision('D-AUD-016')]
+    #[Decision('D-AUD-017')]
     #[Test]
-    public function aTableNoProjectExtensionRegistersIsRefusedRatherThanCounted(): void
+    public function aTableNoProjectExtensionRegistersIsRefusedRatherThanRead(): void
     {
         $this->reading([['pid' => 1, 'deleted' => false, 'hidden' => false, 'rows' => 4]]);
 
@@ -101,17 +101,17 @@ final class RecordLookupTest extends TestCase
 
         // Zero and no rows object, so nothing reads as an empty table.
         self::assertSame(0, $result->data['matchCount']);
-        self::assertNull($result->data['rows']);
-        self::assertStringContainsString('is not counted here', $result->text);
+        self::assertNull($result->data['counts']);
+        self::assertStringContainsString('is not read here', $result->text);
         self::assertStringContainsString('vendor/bin/typo3', $result->text);
         // And what it does count is in the same answer, so the refusal is not
         // the end of the call.
         self::assertSame(['tx_acme_thing'], array_column($result->data['countable'], 'table'));
     }
 
-    #[Decision('D-AUD-016')]
+    #[Decision('D-AUD-017')]
     #[Test]
-    public function theTablesItWillCountAreListedWithoutOneBeingNamed(): void
+    public function theTablesItWillReadAreListedWithoutOneBeingNamed(): void
     {
         $this->reading([]);
 
@@ -125,6 +125,80 @@ final class RecordLookupTest extends TestCase
         );
     }
 
+    #[Decision('D-AUD-017')]
+    #[Test]
+    public function theRowsComeBackBesideTheCountThatSaysHowManyThereAre(): void
+    {
+        $this->reading(
+            [['pid' => 2, 'deleted' => false, 'hidden' => false, 'rows' => 3101]],
+            [
+                ['uid' => 1, 'pid' => 2, 'label' => 'Rex', 'changed' => 100, 'created' => 90, 'deleted' => false, 'hidden' => false],
+                ['uid' => 2, 'pid' => 2, 'label' => 'Bella', 'changed' => 101, 'created' => 91, 'deleted' => false, 'hidden' => true],
+            ],
+        );
+
+        $result = Registry::call('typo3_record_lookup', ['table' => 'tx_acme_thing']);
+
+        // The count is the table's and the rows are the page of it that was
+        // read, and the answer says which is which.
+        self::assertSame(3101, $result->data['matchCount']);
+        self::assertSame([1, 2], array_column($result->data['records'], 'uid'));
+        self::assertStringContainsString('The first 2 of them by uid, labelled by name', $result->text);
+        self::assertStringContainsString('- [2] Bella — hidden', $result->text);
+    }
+
+    #[Decision('D-AUD-017')]
+    #[Test]
+    public function askingForTheCountLeavesTheRowsUnread(): void
+    {
+        $this->reading(
+            [['pid' => 2, 'deleted' => false, 'hidden' => false, 'rows' => 3101]],
+            [],
+        );
+
+        $result = Registry::call('typo3_record_lookup', ['table' => 'tx_acme_thing', 'count' => true]);
+
+        self::assertSame(3101, $result->data['matchCount']);
+        self::assertSame([], $result->data['records']);
+    }
+
+    #[Decision('D-AUD-017')]
+    #[Test]
+    public function aFilterIsEchoedSoTheNumberSaysWhatItCounted(): void
+    {
+        $this->reading([['pid' => 2, 'deleted' => false, 'hidden' => false, 'rows' => 104]]);
+
+        $result = Registry::call('typo3_record_lookup', [
+            'table' => 'tx_acme_thing',
+            'where' => ['status' => 'adopted'],
+        ]);
+
+        self::assertSame([['column' => 'status', 'value' => 'adopted']], $result->data['where']);
+        self::assertStringContainsString("tx_acme_thing where status = 'adopted' holds 104 rows", $result->text);
+        // And the sentence about the editing surface is withheld, because 104
+        // of a filtered set says nothing about the page an editor opens.
+        self::assertStringContainsString('That is the filtered set', $result->text);
+        self::assertStringNotContainsString('backend module', $result->text);
+    }
+
+    #[Decision('D-AUD-017')]
+    #[Test]
+    public function aFilterOnAColumnTheTableHasNotIsAnsweredRatherThanRun(): void
+    {
+        $this->reading([['pid' => 2, 'deleted' => false, 'hidden' => false, 'rows' => 104]]);
+
+        $result = Registry::call('typo3_record_lookup', [
+            'table' => 'tx_acme_thing',
+            'where' => ['quantumflux' => 1],
+        ]);
+
+        // Nothing was read, so nothing reads as an empty table.
+        self::assertSame(0, $result->data['matchCount']);
+        self::assertNull($result->data['counts']);
+        self::assertStringContainsString('has no column quantumflux', $result->text);
+        self::assertStringContainsString('typo3_schema_lookup', $result->text);
+    }
+
     /**
      * A project installation with one extension of its own, and one reading of
      * it.
@@ -134,8 +208,9 @@ final class RecordLookupTest extends TestCase
      * list: the installation has it and the tool will not count it.
      *
      * @param array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}> $groups
+     * @param array<int, array<string, mixed>> $rows
      */
-    private function reading(array $groups): void
+    private function reading(array $groups, array $rows = []): void
     {
         $this->root = sys_get_temp_dir() . '/typo3-dev-companion-records-' . bin2hex(random_bytes(6));
         mkdir($this->root . '/packages/acme_thing', 0o777, true);
@@ -167,11 +242,21 @@ final class RecordLookupTest extends TestCase
                         'tx_acme_thing' => 'LLL:EXT:acme_thing/Resources/Private/Language/locallang_db.xlf:thing',
                         'tt_content' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:tt_content',
                     ],
-                    'recordCount' => [
+                    'derivedColumns' => ['tables' => ['tx_acme_thing' => [
+                        'columns' => [
+                            ['name' => 'uid', 'type' => 'integer', 'notnull' => true],
+                            ['name' => 'pid', 'type' => 'integer', 'notnull' => true],
+                            ['name' => 'status', 'type' => 'string', 'notnull' => false],
+                        ],
+                        'relationTable' => false,
+                    ]]],
+                    'records' => [
                         'table' => 'tx_acme_thing',
                         'deleteField' => 'deleted',
                         'hiddenField' => 'hidden',
+                        'labelField' => 'name',
                         'groups' => $groups,
+                        'rows' => $rows,
                     ],
                 ],
             ], JSON_THROW_ON_ERROR),

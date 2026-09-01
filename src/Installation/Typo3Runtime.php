@@ -142,19 +142,25 @@ final class Typo3Runtime
     }
 
     /**
-     * How many rows a table holds, grouped by page and by state, or null where
-     * there was no full reading to take it from.
+     * The rows of a table, and how many there are, or null where there was no
+     * full reading to take them from.
      *
-     * Asked for, because it is the one query this server runs over rows and no
-     * reading taken for anything else wants it. What comes back is counts: no
-     * column of any row is selected, which is the boundary `D-AUD-016` drew.
+     * Asked for, because it is the only reading this server takes over rows and
+     * no reading taken for anything else wants it. What a row carries is the
+     * probe's to decide rather than the caller's — `D-AUD-017`.
      *
-     * @return array{table: string, deleteField: string, hiddenField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>}|array{unavailable: string}|null
+     * @param array<string, scalar> $where exact matches, one per column
+     * @param int $limit rows to read, 0 for none and -1 for all of them
+     * @return array{table: string, deleteField: string, hiddenField: string, labelField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>, rows: array<int, array{uid: int, pid: int, label: string, changed: int, created: int, deleted: bool, hidden: bool}>}|array{unavailable: string}|null
      */
-    public static function recordCount(string $table): ?array
+    public static function records(string $table, array $where, int $limit): ?array
     {
-        /** @var array{table: string, deleteField: string, hiddenField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>}|array{unavailable: string}|null $read */
-        $read = self::asked('recordCount', ['recordCount' => ['table' => $table]]);
+        /** @var array{table: string, deleteField: string, hiddenField: string, labelField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>, rows: array<int, array{uid: int, pid: int, label: string, changed: int, created: int, deleted: bool, hidden: bool}>}|array{unavailable: string}|null $read */
+        $read = self::asked('records', ['records' => [
+            'table' => $table,
+            'where' => $where,
+            'limit' => $limit,
+        ]]);
 
         return $read;
     }

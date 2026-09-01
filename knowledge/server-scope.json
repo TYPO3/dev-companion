@@ -385,12 +385,12 @@
       "scope": "any"
     },
     {
-      "topic": "How many rows one of this project's own tables holds, and on which page",
-      "depth": "A count per page and per state — live, hidden, deleted — for the tables a project-owned extension registers in its TCA, and nothing else about a row. It is what says where the records are maintained: one page of the record list is a table nobody has to leave the list for, and three thousand rows on one storage folder is an editing surface of its own. Every other table is refused, the user tables and the core's among them, and every count says it was read with the shell user's database access rather than with a backend user's permissions.",
+      "topic": "What is in a table of one of this project's own extensions",
+      "depth": "The rows and the numbers over them: how many there are, which page they sit on, whether they are live, hidden or deleted, and the rows themselves with their uid, the label the table names in its own ctrl, the timestamps and the two flags. Narrowed by exact values for any column, pid among them. It is what says where the records are maintained — one page of the record list is a table nobody has to leave the list for — and what is actually stored, which no schema answer reaches. Every other table is refused, the user tables and the core's among them, and every answer says it was read with the shell user's database access rather than with a backend user's permissions.",
       "tools": [
         "typo3_record_lookup"
       ],
-      "source": "the discovered installation, booted, with one grouped count against its database. No column of any row is selected.",
+      "source": "the discovered installation, booted, with one grouped count and one row read against its database. What a row carries is fixed here rather than composed by the caller.",
       "scope": "project"
     },
     {
@@ -469,9 +469,9 @@
       "instead": "Use the TYPO3 documentation at https://docs.typo3.org/. typo3_project_describe reports what the environment file configures. Which interpreter to declare in it is typo3_hint_lookup with id=php-versions, asked before there is an installation to ask anything else."
     },
     {
-      "topic": "The content itself: a record read or written — a page, a content element, a file reference, a workspace",
-      "why": "The content model is answered here and the content is not. typo3_schema_lookup returns a table as the installation's container assembles it, and no tool reads a column of any row. The reason is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and reading a record would put the shell user's database access where a backend user's permissions belong. How many rows a table holds is the one thing that side of the line does answer, and typo3_record_lookup does it for the tables this project's own extensions register — a count reads no field, and it says what it was counted with.",
-      "instead": "Work the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for how many rows are in one of your own tables and on which page, typo3_record_lookup; for what may be written into one of its flex columns, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup."
+      "topic": "The content of the installation's own tables: a record of pages, tt_content, a file reference, a workspace, a user",
+      "why": "The content model is answered here throughout, and the content only where the project owns the table it is in. typo3_schema_lookup returns any table as the installation's container assembles it; typo3_record_lookup reads the rows of the tables a project-owned extension registers, and refuses every other. The reason for that line is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and reading a record puts the shell user's database access where a backend user's permissions belong. A project's own table is what this server takes that responsibility for, and every answer says what it was read with.",
+      "instead": "Work the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for the rows of one of your own tables, how many there are and which page they sit on, typo3_record_lookup; for what may be written into a flex column, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup."
     }
   ],
   "checkoutDiscovery": [
@@ -678,8 +678,8 @@
       "call": "typo3_schema_lookup with the table"
     },
     {
-      "when": "Asking whether a table has grown past what the generic record list can be edited in",
-      "call": "typo3_record_lookup with the table, or with none for the ones it counts"
+      "when": "Asking what is actually stored in one of this project's own tables, or how much of it there is",
+      "call": "typo3_record_lookup with the table, count where only the numbers are wanted, where to narrow it"
     }
   ]
 }

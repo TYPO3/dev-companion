@@ -3,6 +3,8 @@ id: D-KNW-108
 title: 'Where an impexp import puts the records it writes is a subject this server owns'
 date: 2026-08-24
 status: open
+readings:
+  - 2026-09-01
 ---
 
 # D-KNW-108 — Where an impexp import puts the records it writes is a subject this server owns

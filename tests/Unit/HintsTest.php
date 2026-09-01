@@ -6171,6 +6171,24 @@ final class HintsTest extends TestCase
         $page = Registry::call('typo3_rule_lookup', ['documentId' => 'core/contribution/changelog']);
 
         self::assertStringContainsString('`@internal` on the changed member does not exempt it', $page->text);
+        // And the edge the sweep over the rest of the items reached: an item
+        // that names one directory, where the page names two.
+        self::assertStringContainsString('Add the entry to both `.x` directories', $page->text);
+
+        // The rest of the sweep, in the two intents that summarize the same
+        // page: the directory a backport's file goes into is the judgement
+        // neither item decides.
+        $breaking = Registry::call('typo3_task_guide', [
+            'task' => 'remove the deprecated renderer method and file the breaking change',
+            'changeType' => 'feature',
+            'targetVersion' => '14',
+        ]);
+
+        self::assertStringContainsString(
+            "Which directory a backport's file goes into is settled by typo3_rule_lookup with "
+                . 'documentId=core/contribution/changelog rather than by this item',
+            implode("\n", $breaking->data['checklist']),
+        );
     }
 
     /**

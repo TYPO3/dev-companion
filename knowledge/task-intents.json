@@ -12,7 +12,7 @@
       "Annotate the member @deprecated since TYPO3 v<the version this lands in>, will be removed in TYPO3 v<the next major>. and close that line with the migration sentence. Read both versions off the branch you are on rather than off an example.",
       "Keep the member working and open its body with trigger_error('<Class>-><member>() is deprecated since TYPO3 v<the version this lands in> and will be removed in TYPO3 v<the next major>. <migration>', E_USER_DEPRECATED). The docblock and the message say the same three things, and the removal is a patch of its own in that major.",
       "Migrate every caller of the deprecated API in the same patch, and confirm none is left behind.",
-      "Add a changelog file below typo3/sysext/core/Documentation/Changelog/<the minor this is released in>/ named Deprecation-<issue>-<UpperCamelCaseDescription>.rst. Nothing has to include it: that directory's Index.rst pulls Deprecation-* in by glob, so the filename is the inclusion.",
+      "Add a changelog file below typo3/sysext/core/Documentation/Changelog/<the minor this is released in>/ named Deprecation-<issue>-<UpperCamelCaseDescription>.rst. Nothing has to include it: that directory's Index.rst pulls Deprecation-* in by glob, so the filename is the inclusion. Which directory a backport's file goes into is settled by typo3_rule_lookup with documentId=core/contribution/changelog rather than by this item.",
       "Open the changelog file with .. include:: /Includes.rst.txt and a unique .. _deprecation-<issue>-<unix timestamp>: anchor directly above the 'Deprecation: #<issue> - <title>' headline, with See :issue:`<issue>` under it. Then Description, Impact, Affected installations and Migration — the last two are what this type owes over a feature entry.",
       "End the changelog file with .. index:: carrying at least one subject tag and exactly one of FullyScanned, PartiallyScanned or NotScanned. Build/Scripts/validateRstFiles.php rejects a Deprecation file without the scanner tag, so it is owed rather than considered.",
       "Back a FullyScanned or PartiallyScanned tag with an extension scanner matcher: an entry below typo3/sysext/install/Configuration/ExtensionScanner/Php/, keyed by the deprecated symbol and naming the changelog file in its restFiles. NotScanned is for what no matcher can find, not for what nobody wrote.",
@@ -43,11 +43,11 @@
     "rulesQuery": "breaking change changelog",
     "checklist": [
       "Settle first that the change is breaking at all: @internal says the API is not public and does not decide it, and what does is whether anything outside the core calls it. The core has removed @internal members both ways. A change that moves no member is settled on what it renders instead, which typo3_hint_lookup with the id breaking-without-a-moved-member states.",
-      "Add a changelog file below typo3/sysext/core/Documentation/Changelog/<version>/ named Breaking-<issue>-<Title>.rst.",
+      "Add a changelog file below typo3/sysext/core/Documentation/Changelog/<version>/ named Breaking-<issue>-<Title>.rst. Which directory a backport's file goes into is settled by typo3_rule_lookup with documentId=core/contribution/changelog rather than by this item.",
       "Prefix the commit summary with [!!!] before the keyword.",
-      "Target main; confirm any older release target with the release managers.",
+      "Target main; confirm any older release target with the release managers. Which lines a change may name is settled by typo3_rule_lookup with documentId=core/contribution/commit-messages rather than by this item.",
       "Describe the migration path for extension authors.",
-      "Add an extension scanner matcher entry below typo3/sysext/install/Configuration/ExtensionScanner/Php/ for every method, property and class the changelog entry removes, with restFiles naming that entry. Which file takes which kind of removal is in the Breaking Changes section typo3_rule_lookup answers with.",
+      "Add an extension scanner matcher entry below typo3/sysext/install/Configuration/ExtensionScanner/Php/ for every method, property and class the changelog entry removes, with restFiles naming that entry. Which file takes which kind of removal is the Breaking Changes section of typo3_rule_lookup with documentId=core/contribution/commit-messages.",
       "Tag the changelog entry NotScanned, PartiallyScanned or FullyScanned for what those matchers actually reach."
     ],
     "checks": [
@@ -111,7 +111,7 @@
     ],
     "rulesQuery": "changelog rst documentation",
     "checklist": [
-      "Changelog files live below typo3/sysext/core/Documentation/Changelog/, in the directory of the minor version the change is released in; a backport goes into the <lts>.x directory of the oldest branch it reaches. The file is named <Type>-<forgeIssueNumber>-<UpperCamelCaseDescription>.rst.",
+      "Changelog files live below typo3/sysext/core/Documentation/Changelog/, in the directory of the minor version the change is released in; a backport goes into the <lts>.x directory of the oldest branch it reaches, and how many directories one change writes into is settled by typo3_rule_lookup with documentId=core/contribution/changelog rather than by this item. The file is named <Type>-<forgeIssueNumber>-<UpperCamelCaseDescription>.rst.",
       "The type is the first of four that describes the change: Breaking where it moves or removes core functionality third-party code may use, Deprecation where it marks core functionality for a planned removal, Feature where it adds functionality, Important for anything else that may require manual action and the only one an LTS release may carry. A casual bug fix owes no entry, and which fix is casual is settled by typo3_rule_lookup with documentId=core/contribution/changelog rather than by this item. There is no Task type; checkRst fails a title opening with anything else.",
       "Do not assemble the skeleton by hand: the core ships Build/rstTemplates/rstTemplate<Type>.rst per type, and ./Build/Scripts/runTests.sh -s watchRst core interactive writes the file from it and renders it while you edit. It writes into the directory of the release that branch develops, so a backport's file is moved afterwards."
     ],

@@ -60,3 +60,17 @@ a summary good enough to act on costs.
   day: a clause promising an edge the page no longer states.
 - The clause lands on items nobody was going to misread, and every brief grows
   for the two that were.
+
+## Since then
+
+Read over all 143 items on 2026-09-01, against the 23 pages in
+`knowledge/documents/`. Four more take a clause, in the same shape as the two
+sighted ones: the changelog directory in `deprecation`, `breaking` and
+`changelog`, where the item names one directory and the page names two on a
+backport, and the release target in `breaking`, which says to confirm with the
+release managers and never says where the rule is. A fifth, `breaking`'s matcher
+item, named `typo3_rule_lookup` with no `documentId`.
+
+Everything else compresses a procedure rather than a judgement, and was left
+alone. So the assumption above holds for the shape rather than for the two: six
+items of 143 summarize a decidable rule.

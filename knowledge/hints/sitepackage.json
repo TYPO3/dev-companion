@@ -94,5 +94,33 @@
     "hints": [
       "page.<n> =< lib.fluidPage is a reference and not a copy: it is resolved while the page renders, out of the merged setup, so a data processor added to lib.fluidPage in a file that is imported later still arrives. The copy operator < is the one where the order of the imports decides what the object ends up holding."
     ]
+  },
+  {
+    "id": "sitepackage-fluid-styled-content",
+    "title": "What a Sitepackage Takes From fluid_styled_content",
+    "domains": [
+      "typoscript",
+      "fluid"
+    ],
+    "appliesTo": [
+      "fluid_styled_content",
+      "fluid-styled-content",
+      "lib.contentElement",
+      "fluid-styled-content-css",
+      "depend on fluid styled content",
+      "do I need fluid_styled_content",
+      "own content element rendering",
+      "_CSS_DEFAULT_STYLE"
+    ],
+    "hints": [
+      "The object a sitepackage takes the dependency for is lib.contentElement: a FLUIDTEMPLATE with templateName Default, the extension's own Templates, Partials and Layouts first and the styles.templates.* constants above them, and the settings the shipped templates read — the header type, the image lazy loading and decoding, the lightbox wrap. An element written as tt_content.<CType> =< lib.contentElement copies all of that and then overrides the template name.",
+      {
+        "text": "It also carries a dataProcessing entry of its own, record-transformation, so an element copying it is handed the transformed record rather than the raw row.",
+        "since": 14
+      },
+      "lib.parseFunc and lib.parseFunc_RTE are not its. EXT:frontend declares both in its own ext_localconf.php, so rich text rendering is there whether or not this extension is required.",
+      "The typo3/fluid-styled-content-css set adds one thing: plugin.tx_frontend._CSS_DEFAULT_STYLE with the .ce-* rules that style the elements this extension renders. A site whose page TSconfig removes every one of those elements from the selector is shipping stylesheet rules for markup it never emits.",
+      "Defining lib.contentElement in the sitepackage instead is a FLUIDTEMPLATE of a few lines and drops the dependency, and what goes with it is the rendering of the core's own elements — text, textmedia, header, table, the menus. That is the decision to make deliberately: a site that keeps a few of them keeps the dependency, and one that offers only its own elements is paying for a scaffold it overrode."
+    ]
   }
 ]

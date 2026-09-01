@@ -29,8 +29,15 @@ typo3_extension_describe(extension="fluid_styled_content") at 21:12:32 -> siteSe
 
 ## Suggestion
 
-Two things.
+Trimmed on 2026-09-01. The decision this session made without noticing is now a
+hint, sitepackage-fluid-styled-content, established against .checkouts: what
+lib.contentElement is and what copying it brings, that fluid-styled-content-css
+adds the .ce-* rules and nothing else, and — correcting this report —
+that lib.parseFunc and lib.parseFunc_RTE belong to EXT:frontend rather than to
+this extension. What is left open is the tool half.
 
-In typo3_extension_describe, report the TypoScript objects an extension defines at the top level of its setup, not only the file names. For fluid_styled_content that is lib.contentElement and lib.parseFunc / lib.parseFunc_RTE — the three things any project sitepackage actually consumes from it. A caller looking at "contentElements: []" concludes the extension is inert for them; the truth is the opposite.
-
-A hint on the decision itself, findable by a sitepackage author: what depending on typo3/fluid-styled-content buys (lib.contentElement with its stdWrap, dataProcessing and layout defaults; lib.parseFunc_RTE for rich text), what typo3/fluid-styled-content-css additionally buys (styling for elements a project that hides them will never render — so it is dead weight the moment keepItems removes them), and what defining your own lib.contentElement costs. That is a decision every project sitepackage makes silently, and this session made it without noticing it had.
+In typo3_extension_describe, report the TypoScript objects an extension defines
+at the top level of its setup, not only the file names. For fluid_styled_content
+that is lib.contentElement — the thing any project sitepackage actually consumes
+from it. A caller looking at "contentElements: []" concludes the extension is
+inert for them; the truth is the opposite.

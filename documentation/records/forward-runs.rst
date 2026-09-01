@@ -79,6 +79,14 @@ things.
   every path, count and line right and still call a design decision a defect.
   ``REVIEW-02`` was ``partial`` on its first run and ``covered`` on its second
   with the same reading underneath.
+* **A tool a judgment quotes is one the trace carries.**
+  ``bin/cli scenarios:check`` prints every tool name in a run's evidence that
+  its own trace has no call for, under the table and outside the exit code. It
+  reports rather than fails because the two cases read alike from there: a
+  judgment quoting a call the session never made, and one naming a tool in order
+  to say it was never called. ``REVIEW-03`` is the second, and the defect it
+  reports was found by hand
+  (`D-EVI-009 <../../decisions/evidence/evi-009-a-run-is-read-against-its-own-trace.md>`_).
 * **One change, one run.** Editing the criteria resets the recorded run to
   ``unrun`` by design — the digest check catches a judgment answering criteria
   that have since been rewritten — so the superseded run survives only in its

@@ -197,6 +197,49 @@ final class ScenariosTest extends TestCase
         self::assertSame([], $problems);
     }
 
+    /**
+     * The two cases read alike from here, which is why the command reports them
+     * rather than failing: a judgment quoting a call the session never made,
+     * and one naming a tool in order to say it was never called.
+     *
+     * @param array<string, mixed> $run
+     * @param array<int, string> $expected
+     */
+    #[Decision('D-EVI-009')]
+    #[DataProvider('quotedTools')]
+    #[Test]
+    public function aRunIsReadAgainstItsOwnTrace(array $run, array $expected): void
+    {
+        self::assertSame($expected, Scenarios::unbackedTools($run));
+    }
+
+    /**
+     * @return array<string, array{array<string, mixed>, array<int, string>}>
+     */
+    public static function quotedTools(): array
+    {
+        $trace = [['tool' => 'typo3_task_guide', 'arguments' => []]];
+
+        return [
+            'a tool the trace carries' => [
+                ['toolTrace' => $trace, 'outcomes' => [['met' => true, 'evidence' => 'It read what `typo3_task_guide` returned.']]],
+                [],
+            ],
+            'a tool the trace does not carry' => [
+                ['toolTrace' => $trace, 'outcomes' => [['met' => true, 'evidence' => 'Two hints are quoted as `typo3_hint_lookup`.']]],
+                ['typo3_hint_lookup'],
+            ],
+            'a tool quoted in a failure' => [
+                ['toolTrace' => $trace, 'failures' => [['avoided' => false, 'evidence' => 'It reported `typo3_icon_lookup` as the source.']]],
+                ['typo3_icon_lookup'],
+            ],
+            'a run with no trace at all' => [
+                ['outcomes' => [['met' => true, 'evidence' => 'It read what `typo3_task_guide` returned.']]],
+                ['typo3_task_guide'],
+            ],
+        ];
+    }
+
     #[Requirement('R-FBK-004')]
     #[Test]
     public function aTargetedContractCaseIsNotSomethingARunCanAnswer(): void

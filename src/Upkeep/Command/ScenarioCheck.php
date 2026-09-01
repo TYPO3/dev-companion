@@ -24,6 +24,7 @@ final class ScenarioCheck
     {
         $runs = Scenarios::runs();
         $problems = 0;
+        $unbacked = [];
 
         foreach ($runs as $id => $recorded) {
             $state = $recorded['verdict'];
@@ -41,6 +42,15 @@ final class ScenarioCheck
                 ++$problems;
                 $output->writeln(sprintf('  %s', $problem));
             }
+            $quoted = Scenarios::unbackedTools($recorded['run']);
+            if ($quoted !== []) {
+                $unbacked[$id] = $quoted;
+            }
+        }
+
+        foreach ($unbacked as $id => $quoted) {
+            $output->writeln('');
+            $output->writeln(sprintf('%s quotes %s, and its trace carries no such call.', $id, implode(', ', $quoted)));
         }
 
         // Not a failure. Most scenarios have never been run forward, and a suite

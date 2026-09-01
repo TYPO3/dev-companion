@@ -373,6 +373,44 @@ final class Scenarios
     }
 
     /**
+     * The tools a run's evidence quotes that its own trace does not carry.
+     *
+     * A run holds the claim and what backs it in one file, and nothing read the
+     * two against each other: REVIEW-03 quotes two hints as
+     * `typo3_hint_lookup` where `typo3_task_guide` returned them and no such
+     * call was made, which a judge found by hand. It reports rather than fails,
+     * because a judgment naming a tool in order to say it was never called
+     * reads the same from here — `D-EVI-009`.
+     *
+     * @param array<string, mixed> $run
+     * @return array<int, string>
+     */
+    public static function unbackedTools(array $run): array
+    {
+        $called = [];
+        foreach (is_array($run['toolTrace'] ?? null) ? $run['toolTrace'] : [] as $call) {
+            $tool = is_array($call) ? ($call['tool'] ?? null) : null;
+            if (is_string($tool)) {
+                $called[] = $tool;
+            }
+        }
+
+        $named = [];
+        foreach (['outcomes', 'failures'] as $section) {
+            foreach (is_array($run[$section] ?? null) ? $run[$section] : [] as $entry) {
+                $evidence = is_array($entry) ? ($entry['evidence'] ?? null) : null;
+                preg_match_all('/\btypo3_[a-z_]+/', is_string($evidence) ? $evidence : '', $matches);
+                $named = [...$named, ...$matches[0]];
+            }
+        }
+
+        $unbacked = array_values(array_unique(array_diff($named, $called)));
+        sort($unbacked);
+
+        return $unbacked;
+    }
+
+    /**
      * @param array<string, mixed> $run
      * @return array<int, bool|null>
      */

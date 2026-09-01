@@ -112,6 +112,14 @@ final class Domains
             // two spellings they are written in. `partial` already carries
             // partialRootPaths by prefix; the other two carry no Fluid signal
             // at all, and a question about which of them wins fell to PHP.
+            // The one phrasing a caller carries who is not asking about Fluid
+            // at all. The argument check names the ViewHelper it rejected and
+            // nothing else, and it is quoted from a PHP class being edited,
+            // where the paths say `php` correctly and the answer to the
+            // failure is filed here. `D-KNW-075` measured the alternative:
+            // tagging the hint `php` took five of twelve ordinary PHP tasks
+            // with it.
+            'was registered with type',
             'templaterootpaths', 'layoutrootpaths', 'template root path',
             'page template', 'frontend template', 'content area', 'page layout',
             'backend layout',

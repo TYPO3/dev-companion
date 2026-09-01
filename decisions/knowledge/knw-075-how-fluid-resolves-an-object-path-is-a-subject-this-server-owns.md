@@ -3,6 +3,8 @@ id: D-KNW-075
 title: 'How Fluid resolves an object path is a subject this server owns'
 date: 2026-08-14
 status: confirmed
+coveredBy:
+  - HintsTest::theShadowingIsReachedFromTheClassAndFromTheTemplate
 ---
 
 # D-KNW-075 — How Fluid resolves an object path is a subject this server owns
@@ -126,14 +128,14 @@ was wrong and is corrected in the same commit.
 ## Since then
 
 The same memory was filed again on 2026-09-01, from the same directory and the
-same local file, and the corpus answers all of it — that half is trimmed off the
-report.
+same local file, and the corpus answers all of it.
 
-What the re-run measured is the third **Wrong if** from the other end. The
-exception string reaches `fluid-object-access` first with a `.html` path in the
-call and reaches nothing with a `Classes/` one, because `Domains` places a query
-carrying no Fluid word in `php`. The session that writes `hasItems()` is holding
-the class, so the hint is filed where the failure is read rather than where it
-is made. Which of the two levers moves — the hint's domains or the keyword list
-— is `T-260901-21de`.
-
+The re-run measured the third **Wrong if** from the other end: the ViewHelper's
+exception reached the hint with a `.html` path in the call and reached nothing
+with a `Classes/` one, because `Domains` places a query carrying no Fluid word
+in `php`. Tagging the hint `php` as well was the obvious lever and was tried and
+dropped on 2026-09-02: it took five of twelve ordinary PHP tasks with it, first
+of all for "add a getter for a new property", and it displaced a PHP hint out of
+the recorded deprecation brief. What moved instead is one phrasing —
+`was registered with type` — into the Fluid keywords, which is the words of a
+caller who is not asking about Fluid at all. The twelve are untouched by it.

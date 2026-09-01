@@ -1,7 +1,8 @@
 ---
 date: 2026-09-01T21:03:45+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-09-01
 model: claude-opus-5
 tool: typo3_hint_lookup, typo3_documentation_lookup
 directory: /home/benji/projects/typo3-cms
@@ -20,8 +21,10 @@ binds what `<f:for>` does with a boolean per major, which this report asserts
 unbound. The searchable half the suggestion asked for is there too: the
 exception string, `f:for each` and `shadows the property` are in its `appliesTo`.
 
-What is left is that none of it fires where the class is written. Measured on
-2026-09-01: the exception message with a `.html` path reaches the hint first,
-and with a `Classes/` path reaches nothing, because the query carries no Fluid
-word and `Domains` places it in `php`. The card serving this carries the two
-levers.
+The half that did not fire where the class is written is answered on
+2026-09-02. The exception message with a `Classes/` path reached nothing,
+because the query carries no Fluid word and the paths place it in `php`; the
+message itself is the word now, so both calls reach the hint. `D-KNW-075` holds
+what the wider lever cost, and
+`HintsTest::theShadowingIsReachedFromTheClassAndFromTheTemplate` holds the
+reach.

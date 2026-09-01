@@ -1523,6 +1523,41 @@ final class ScopeTest extends TestCase
         self::assertStringContainsString('14', implode("\n", array_column($labels->data['nextTools'], 'when')));
     }
 
+    /**
+     * The brief carries the count where the count decides something.
+     *
+     * The tool shipped on 2026-09-01 named in `server-scope.json` and in no
+     * intent, so `typo3_task_guide` routed to it from nothing — including the
+     * two wordings the sighting itself was made of. Measured that day over
+     * seven task shapes: not one reached it. What it decides is where records
+     * are maintained, what renders them, and what default a new column takes on
+     * the rows already there — `D-AUD-017`,
+     * `feedback/archive/2026-08-31-233952`.
+     */
+    #[Decision('D-AUD-017')]
+    #[Test]
+    public function theBriefRoutesToTheCountWhereTheCountDecidesSomething(): void
+    {
+        // The sighting's own words, which matched no intent at all before the
+        // three needles were added.
+        $complaint = Registry::call('typo3_task_guide', [
+            'task' => 'the editors complain the record list takes minutes to open',
+            'changeType' => 'feature',
+        ]);
+
+        self::assertContains('backend-module', array_column($complaint->data['intents'], 'id'));
+        self::assertContains('typo3_record_lookup', array_column($complaint->data['nextTools'], 'tool'));
+
+        // And the task shape the sighting was worked as, where the count is
+        // what the content model is decided on.
+        $element = Registry::call('typo3_task_guide', [
+            'task' => 'build a content element for the animal records',
+            'changeType' => 'feature',
+        ]);
+
+        self::assertContains('typo3_record_lookup', array_column($element->data['nextTools'], 'tool'));
+    }
+
     #[Requirement('R-SCO-002')]
     #[Test]
     public function aBriefOutsideTheCoreKeepsNothingThatOnlyTheCoreHas(): void

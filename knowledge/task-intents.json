@@ -196,7 +196,10 @@
       "Configuration/Backend/Modules.php",
       "module identifier",
       "doc header",
-      "docheader"
+      "docheader",
+      "record list",
+      "storage folder",
+      "too many records"
     ],
     "rulesQuery": "",
     "checklist": [
@@ -207,6 +210,7 @@
     ],
     "checks": [],
     "tools": [
+      "typo3_record_lookup, where the installation already holds the records: how many rows the table has, on which page and what they are — the count that decides whether the record list is still the editing surface",
       "typo3_backend_module_lookup, before choosing the identifier, the parent or the route: it reports what this installation already registers",
       "typo3_hint_lookup with id=backend-modules, for the registration file, what a module builds into its doc header, and what its own POST answers with",
       "typo3_translation_domain_lookup, for the XLF the module's labels are declared through"
@@ -757,7 +761,8 @@
     "tools": [
       "typo3_hint_lookup with id=content-elements, for what an element owns and how the record type is registered",
       "typo3_extension_describe, for what the target installation already registers to import into",
-      "typo3_hint_lookup with id=extbase, for whether what the count describes is a plugin rather than a data processor"
+      "typo3_hint_lookup with id=extbase, for whether what the count describes is a plugin rather than a data processor",
+      "typo3_record_lookup, after the import: how many rows landed and on which page, which is the same count the model was decided on and the check that it produced what was counted"
     ]
   },
   {
@@ -906,7 +911,8 @@
     "checks": [],
     "tools": [
       "typo3_hint_lookup with id=content-elements, for what the element owns and how the record type is registered, then with id=extbase and id=frontend-records for the two sides of the Extbase fork",
-      "typo3_extension_describe, for the architecture this extension already has: each content element it registers with a kind of element or plugin, and the templates they render through"
+      "typo3_extension_describe, for the architecture this extension already has: each content element it registers with a kind of element or plugin, and the templates they render through",
+      "typo3_record_lookup, where the installation already holds the records: how many rows the table has, on which page and what they are — the count that decides whether the record list is still the editing surface"
     ]
   },
   {
@@ -939,7 +945,8 @@
     "tools": [
       "typo3_schema_lookup, for the column this field produces and whether ext_tables.sql has to declare it at all",
       "typo3_hint_lookup with id=tca-formengine and id=tca-schema-api, for the conventions the field is written under",
-      "typo3_extension_describe, for what the table and the extension around it already register"
+      "typo3_extension_describe, for what the table and the extension around it already register",
+      "typo3_record_lookup, for how many rows the new column lands on — a table that already holds four figures is where the default the column takes for existing records is a decision rather than a detail"
     ]
   },
   {

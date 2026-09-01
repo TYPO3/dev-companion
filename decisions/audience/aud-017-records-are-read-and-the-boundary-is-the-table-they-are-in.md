@@ -13,6 +13,7 @@ coveredBy:
   - RecordLookupTest::everyCountSaysItWasReadWithoutBackendPermissions
   - RecordLookupTest::theRowsComeBackBesideTheCountThatSaysHowManyThereAre
   - RecordLookupTest::theTablesItWillReadAreListedWithoutOneBeingNamed
+  - ScopeTest::theBriefRoutesToTheCountWhereTheCountDecidesSomething
   - ScopeTest::theTwoLookupsThatBothReadAsATableQuestionNameEachOther
 ---
 

@@ -47,10 +47,12 @@ content before implementing it.
   an owned repeatable model.
 
 **How many records the table will hold decides where they are maintained, and
-the count is knowable before any import runs.** The record list on a storage
-folder searches, sorts by column and pages; it filters on no field's value and
-groups nothing, so a table an editor works in at four figures is a scroll on a
-page that has become slow to open. That is a module of its own — invoke
+the count is knowable before any import runs** — and afterwards it is read
+rather than estimated: `typo3_record_lookup` with the table says how many rows
+there are and which page they sit on. The record list on a storage folder
+searches, sorts by column and pages; it filters on no field's value and groups
+nothing, so a table an editor works in at four figures is a scroll on a page
+that has become slow to open. That is a module of its own — invoke
 `typo3-backend-module-development` where the count says so, and decide it with
 the TCA rather than retrofitting it around records that already exist, because
 the fields the module filters and sorts by are the same decision.

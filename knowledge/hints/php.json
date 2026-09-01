@@ -112,5 +112,33 @@
         "since": 15
       }
     ]
+  },
+  {
+    "id": "php-value-checks",
+    "title": "Testing a Value Rather Than Its Falsiness",
+    "domains": [
+      "php"
+    ],
+    "appliesTo": [
+      "empty()",
+      "empty check",
+      "isset",
+      "!isset",
+      "null check",
+      "is the array empty",
+      "is the string empty",
+      "falsy",
+      "falsiness",
+      "loose comparison",
+      "strict comparison",
+      "??",
+      "default value check"
+    ],
+    "hints": [
+      "empty() tests falsiness rather than a value against the type it is expected to have: 0, '0', '', null, false and [] all satisfy it. So the condition names none of them, and a value arriving wrong as one of the others reads as the case the code was written for — nothing raises, and the branch taken is the intended one.",
+      "What replaces it is the check the expected type makes: ($x ?? false) where a bool is meant, ($x ?? null) !== null for an object that may be absent, $x !== [] for an array, $x !== '' for a string. The type decides which, so the substitution is a reading of what the value is and never mechanical.",
+      "!isset($x) || empty($x) is that one check written twice, and it collapses to !($x ?? false) rather than to the empty() half.",
+      "The core's own code is full of empty() and nothing there fails on it: Build/phpstan/phpstan.neon runs at level 5, and none of the rules it adds is about this call. So a call standing beside the line being changed is a finding to raise rather than a local style to keep, which core-static-analysis says the analysis will not raise for you."
+    ]
   }
 ]

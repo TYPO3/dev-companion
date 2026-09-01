@@ -1900,6 +1900,40 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The one statement here that is not what the core does.
+     *
+     * `empty()` stands 2614 times in the sysext classes and the core's own
+     * analysis has no rule that could raise one, so a hint saying to write
+     * something else is only usable where it says so — `D-KNW-140`. The
+     * substitution is asserted per type as well, because the call is one word
+     * and its replacements are four different readings of the value.
+     */
+    #[Decision('D-KNW-140')]
+    #[Test]
+    public function theCheckThatSaysWhichValueWasMeantNamesWhatWillNotRaiseIt(): void
+    {
+        $text = self::statementsOf('php-value-checks');
+
+        self::assertStringContainsString('tests falsiness rather than a value against the type', $text);
+        self::assertStringContainsString("0, '0', '', null, false and [] all satisfy it", $text);
+
+        // The four replacements, which are what a caller does with it.
+        foreach (['($x ?? false)', '($x ?? null) !== null', '$x !== []', '$x !== \'\''] as $replacement) {
+            self::assertStringContainsString($replacement, $text, $replacement . ' is not offered');
+        }
+        self::assertStringContainsString('never mechanical', $text);
+
+        // And the half that keeps it from reading as something the checkout
+        // enforces.
+        self::assertStringContainsString('none of the rules it adds is about this call', $text);
+        self::assertStringContainsString(
+            'a finding to raise rather than a local style to keep',
+            $text,
+            'the tension with the code around it, which is where the report came from',
+        );
+    }
+
+    /**
      * What to write instead, beside the rule that nothing pushes it.
      *
      * A session imitating a neighbouring file was told the two rules are off

@@ -274,6 +274,7 @@ Text:
     - fal-storages-drivers — Storages and the Drivers Behind Them (PHP)
     - tca-schema-api — TCA Schema API (PHP)
     - tca-formengine — TCA, FormEngine, and Backend Forms (PHP)
+    - php-value-checks — Testing a Value Rather Than Its Falsiness (PHP)
     - content-element-preview — The Backend Preview of a Content Element (Fluid)
     - core-exception-codes — The Exception Code Every Core Throw Carries (PHP)
     - extension-declarative-files — The Files an Extension Is Configured By (PHP)
@@ -731,6 +732,11 @@ Data:
             {
                 "id": "tca-formengine",
                 "title": "TCA, FormEngine, and Backend Forms",
+                "category": "PHP"
+            },
+            {
+                "id": "php-value-checks",
+                "title": "Testing a Value Rather Than Its Falsiness",
                 "category": "PHP"
             },
             {
@@ -1605,6 +1611,7 @@ Text:
     - tca-schema-api — TCA Schema API (PHP)
     - tca-formengine — TCA, FormEngine, and Backend Forms (PHP)
     - datahandler-testing — Testing DataHandler Behaviour (PHP)
+    - php-value-checks — Testing a Value Rather Than Its Falsiness (PHP)
     - content-element-preview — The Backend Preview of a Content Element (Fluid)
     - core-exception-codes — The Exception Code Every Core Throw Carries (PHP)
     - extension-declarative-files — The Files an Extension Is Configured By (PHP)
@@ -1975,6 +1982,11 @@ Data:
             {
                 "id": "datahandler-testing",
                 "title": "Testing DataHandler Behaviour",
+                "category": "PHP"
+            },
+            {
+                "id": "php-value-checks",
+                "title": "Testing a Value Rather Than Its Falsiness",
                 "category": "PHP"
             },
             {

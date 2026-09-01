@@ -1,7 +1,8 @@
 ---
 date: 2026-08-31T23:39:17+00:00
 category: idea
-status: open
+status: closed
+closed: 2026-09-01
 model: claude-opus-5[1m]
 tool: typo3_task_guide, typo3-development-installation, typo3-content-element-development
 directory: /home/benji/projects/site-tierheim

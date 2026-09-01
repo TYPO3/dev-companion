@@ -819,6 +819,7 @@ final class KnowledgeTest extends TestCase
             'cleanup' => 'Clean up the repository and work off the findings',
             'patch-review' => 'Say what stops this pull request being merged',
             'distribution-content' => 'Ship the page tree of this site as initial content in the package',
+            'content-relaunch' => 'Relaunch the association website on TYPO3 and carry the content over',
             'installation-setup' => 'Set up a new TYPO3 installation for development',
             'installation-upgrade' => 'Upgrade the installation to the new major',
             'installation-operations' => 'Boot the local environment from a fresh clone',

@@ -723,6 +723,44 @@
     ]
   },
   {
+    "id": "content-relaunch",
+    "title": "Carrying an existing body of content onto TYPO3",
+    "skill": "typo3-content-element-development",
+    "match": [
+      "relaunch",
+      "migrate content",
+      "content migration",
+      "migrate the existing content",
+      "take over the content",
+      "carry the content over",
+      "existing content"
+    ],
+    "matchWeak": [
+      "legacy",
+      "migrate",
+      "import the content",
+      "drupal",
+      "wordpress",
+      "crawl the site",
+      "scrape"
+    ],
+    "condition": "only if a body of content already exists somewhere else and is being carried into TYPO3, rather than code being upgraded inside one",
+    "rulesQuery": "",
+    "checklist": [
+      "Decide what the content elements are before writing anything that reads the old site. An import writes whatever model it is handed and one blob per page is a model, so the elements are settled from how an editor will maintain the result rather than from how the source is marked up.",
+      "Read the legacy pages for the shapes that recur — a team list, a fee table, a bullet list with links — rather than for what a crawler would have to parse. Those shapes are the elements, and what the source cannot express is exactly where the new model is decided.",
+      "The core html element is not a migration target. Its template renders bodytext through f:format.raw, so whatever the import stored is handed to the visitor as it stands, and a page that arrived as one of them has been pasted rather than migrated.",
+      "Count what the migration will produce before it runs. The count is knowable from the source, and it decides where the records are maintained and what renders them — both of which are retrofitted at a cost once the import has filled the table.",
+      "The installation is the scaffolding the model lands in. Setting it up is not the question this task opens with, and a session that starts there designs the content model out of whatever the scraper produced."
+    ],
+    "checks": [],
+    "tools": [
+      "typo3_hint_lookup with id=content-elements, for what an element owns and how the record type is registered",
+      "typo3_extension_describe, for what the target installation already registers to import into",
+      "typo3_hint_lookup with id=extbase, for whether what the count describes is a plugin rather than a data processor"
+    ]
+  },
+  {
     "id": "installation-setup",
     "title": "Setting an installation up",
     "skill": "typo3-development-installation",

@@ -13,6 +13,12 @@ hints:
 A spec asserts what somebody already knows. Looking is the step before it, and
 it needs an installation that can show the case at all.
 
+Both sides are looked at. The backend is the half that gets skipped, because
+every request to check something names the frontend — and what an editor is
+handed is visible from no frontend screenshot: the entry in the element wizard,
+the preview a record draws in the page module, and the badges it carries when
+its type is one nothing declares.
+
 ## Which Installation Shows It
 
 The core ships a suite that installs the instance its own browser tests run

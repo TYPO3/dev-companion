@@ -101,6 +101,19 @@ the installed source, which the base fixes as the step after the lookups rather
 than one instead of them. Finding nothing is an answer, and the reading is what
 follows it.
 
+## Look at it before you assert anything about it
+
+**When the element renders at all, open it and look — the frontend and the
+backend both.** `typo3_rule_lookup` with
+`documentId="any/testing/browser-check"` is that step, and it is not the suite
+below: it says which installation shows the case, how a browser reaches it and
+where the harness goes. A spec asserts what somebody already knows, so a session
+that writes one first has written down what it believes rather than what is
+there — and the two assertions that then pass for the wrong reason are the
+ordinary result. The editor's half is the one that is skipped: the wizard entry,
+the preview, the icon and the badges on the record are visible from no frontend
+screenshot.
+
 ## Verify at the right layers
 
 - Validate PHP, YAML, Fluid, XLIFF and TypoScript through commands the project

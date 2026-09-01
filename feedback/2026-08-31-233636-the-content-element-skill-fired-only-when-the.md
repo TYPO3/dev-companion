@@ -45,10 +45,25 @@ Whole session, /home/benji/projects/site-tierheim. Skill(typo3-content-element-d
 
 ## Suggestion
 
-The gap is between a symptom and a skill description. A skill is chosen on its description alone, and "Design the editor workflow before choosing fields or rendering" does not read as the answer to "my migration produced 136 html elements".
+Trimmed on 2026-09-01. What the skills could carry landed: the looking step
+stands where the element is finished rather than among the test layers, in this
+skill and in typo3-development-installation's "Prove it" — D-ANS-127. The two
+asks below are what is left, and neither is a skill's.
 
-Two things would help.
+A hint that fires on the symptom. typo3_hint_lookup takes a symptom as its task
+— the content-element skill says so itself. But no hint in the corpus states
+"content migrated into the html CType is not a content model", so there is
+nothing for such a query to land on, and I never made the query anyway. A hint
+id like content-model-vs-markup, whose statements are "raw markup in a bodytext
+or an html CType is not a typed element", "an import that produces one blob per
+page has not modelled anything", "the html CType hands unfiltered markup to the
+visitor and belongs in no editor's selector", would be findable from the words a
+failing session actually uses.
 
-A hint that fires on the symptom. typo3_hint_lookup takes a symptom as its task — the content-element skill says so itself. But no hint in the corpus states "content migrated into the html CType is not a content model", so there is nothing for such a query to land on, and I never made the query anyway. A hint id like content-model-vs-markup, whose statements are "raw markup in a bodytext or an html CType is not a typed element", "an import that produces one blob per page has not modelled anything", "the html CType hands unfiltered markup to the visitor and belongs in no editor's selector", would be findable from the words a failing session actually uses.
-
-A re-entry trigger on typo3_task_guide. Its answers could end with the condition under which it must be called again, stated as a list of concrete events rather than a sentence in the server instructions — "call this again before: the first test, a rename of an extension key or table, a change to what editors can select, the first shipped README". I read the instruction once at session start and never acted on it; a line at the bottom of every answer sits where the next call is decided.
+A re-entry trigger on typo3_task_guide. Its answers could end with the condition
+under which it must be called again, stated as a list of concrete events rather
+than a sentence in the server instructions — "call this again before: the first
+test, a rename of an extension key or table, a change to what editors can
+select, the first shipped README". I read the instruction once at session start
+and never acted on it; a line at the bottom of every answer sits where the next
+call is decided.

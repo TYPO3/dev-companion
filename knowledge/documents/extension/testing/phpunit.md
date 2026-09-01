@@ -15,6 +15,11 @@ do with each after writing it out. There is no `runTests.sh` outside the core
 repository: what runs is `vendor/bin/phpunit` against a configuration this
 package owns.
 
+This page is one step of a larger workflow. Where the harness is being set up
+rather than a configuration repaired, `typo3-extension-testing` is what orders
+that work and this is the file it writes; where the suite exists and something
+about it is wrong, this page answers on its own.
+
 ## Build/UnitTests.xml
 
 **Since:** 13

@@ -11,6 +11,11 @@ hints:
 
 # Setting Up Playwright in a TYPO3 Project
 
+This page is one step of a larger workflow: where a browser harness is being set
+up rather than a spec repaired, `typo3-extension-testing` is what orders that
+work. Looking at a change rather than specifying it is a different act at a
+different moment, and `any/testing/browser-check` is that one.
+
 The suite belongs to what is deployed rather than to a package: the specs need a
 served site and a real URL. It runs in three projects — the frontend as a
 visitor sees it, the login that authenticates once, and the backend journeys

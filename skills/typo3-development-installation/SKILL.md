@@ -177,6 +177,14 @@ the URL the installation is configured for. Nothing is torn down to establish
 that, whoever wrote the sequence — an installation that was asked for and then
 destroyed is a change nobody asked for.
 
+**A status code is not what the site looks like, and both sides are looked at.**
+`typo3_rule_lookup` with `documentId="any/testing/browser-check"` carries which
+installation shows a case, how a browser reaches it, and where the harness goes.
+The backend is the half that is skipped: a page that answers 200 and renders
+unreadably is what a frontend check passes, and what an editor is handed — the
+element wizard, a preview, an icon, a record's own badges — is visible from no
+frontend screenshot at all.
+
 Where a side errors, the failure is read from what the installation wrote down
 rather than out of the page it rendered. `typo3_hint_lookup` with
 `id=installation-exception-output` owns that: where an uncaught exception is

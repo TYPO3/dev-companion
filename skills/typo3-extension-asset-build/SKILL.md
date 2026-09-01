@@ -37,6 +37,16 @@ invocation rewritten from habit runs the build in the wrong directory or on a
 Node that CI does not use, and both of those surface as a diff nobody can
 explain.
 
+**A pin is read against the release current on the day.** That step reports what
+each source states and none of them says whether it is still current, so
+establish the current release where it is published — the runtime's own release
+schedule, the registry a package is published to, the repository an action is
+tagged in — and report every pin behind it as a finding carrying the raise. What
+speaks against one is a bound this repository declares: the Node the build
+needs, the majors the package supports. The finding then names the newest
+release that bound allows, raising is the maintainer's, and moving the bound is
+a task of its own.
+
 ## Which of the output is committed, and how it reaches a page
 
 This server does not read your working tree, so these are the repository's

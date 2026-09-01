@@ -2460,6 +2460,43 @@ final class SkillTest extends TestCase
     }
 
     /**
+     * A skill that reads a project's pins checks them against the day's
+     * release.
+     *
+     * A version written into a skill is not corrected by the next release of
+     * this server: the file sits in somebody else's project, and a project
+     * following it stays pinned to whatever was current when the skill was
+     * published — `R-SKL-029`. So the check is made on the day, against where
+     * the release is published, and what the project itself declares is what
+     * can speak against the raise.
+     */
+    #[Requirement('R-SKL-029')]
+    #[Test]
+    public function everySkillThatReadsAPinChecksItAgainstTheDaysRelease(): void
+    {
+        $reading = [
+            'typo3-extension-asset-build' => 'SKILL.md',
+            'typo3-development-installation' => 'SKILL.md',
+            'typo3-extension-health' => 'references/checklist.md',
+        ];
+
+        foreach ($reading as $skill => $file) {
+            $body = self::flat((string) file_get_contents(
+                Paths::root() . '/skills/' . $skill . '/' . $file,
+            ));
+            self::assertStringContainsString(
+                'against the release current on the day',
+                $body,
+                $skill . ' reads a pin and never says what it is measured against',
+            );
+            // The raise is offered rather than taken, and the project's own
+            // bound is what can refuse it.
+            self::assertStringContainsString('a finding carrying the raise', $body, $skill . ' raises rather than reports');
+            self::assertStringContainsString('speaks against', $body, $skill . ' names nothing that can refuse the raise');
+        }
+    }
+
+    /**
      * A skill exists for its readers as soon as its directory does.
      *
      * `Installer` carried a list of the published names once, and a declaration

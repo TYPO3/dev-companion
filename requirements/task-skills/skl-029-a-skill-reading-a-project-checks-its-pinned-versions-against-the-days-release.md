@@ -1,7 +1,9 @@
 ---
 id: R-SKL-029
 title: "A skill reading a project checks its pinned versions against the day's release"
-status: open
+status: held
+heldBy:
+  - SkillTest::everySkillThatReadsAPinChecksItAgainstTheDaysRelease
 ---
 
 # R-SKL-029 — A skill reading a project checks its pinned versions against the day's release
@@ -36,5 +38,9 @@ found no skill covering the build those versions sit in.
 
 ## Held by
 
-- Nothing yet. No published skill's checklist names the check, and no test reads
-  the skills for it.
+- `SkillTest::everySkillThatReadsAPinChecksItAgainstTheDaysRelease`, over the
+  three skills whose task reads a pin: the asset build for the Node and the
+  manifest, the development installation for what the environment configuration
+  pins, and the extension health checklist for the actions and the declared
+  dependencies. What it reads is the measure, the raise offered rather than
+  taken, and the bound that can refuse it.

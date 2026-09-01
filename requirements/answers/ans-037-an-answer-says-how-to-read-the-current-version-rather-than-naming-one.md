@@ -1,7 +1,8 @@
 ---
 id: R-ANS-037
 title: An answer says how to read the current version rather than naming one
-status: open
+status: held
+judged: 2026-09-01
 ---
 
 # R-ANS-037 — An answer says how to read the current version rather than naming one
@@ -25,10 +26,19 @@ published skill.
 
 ## From
 
-The maintainer's instruction of 2026-08-29. The corpus has not been read for
-version numbers of this kind, so what it costs today is unmeasured.
+The maintainer's instruction of 2026-08-29. The corpus had not been read for
+version numbers of this kind, so what it cost was unmeasured.
 
 ## Held by
 
-- Nothing. No check counts a named version in `knowledge/`, and the sweep that
-  would say how many there are has not been run.
+`not guarded`. The sweep was run on 2026-09-01 over `knowledge/` and found
+nothing to rewrite: no answer offers an outside version as the one to adopt.
+What it did find is four kinds of number that stay — what a TYPO3 line declares
+as a floor, a version quoted out of a tool's own output, a format's version such
+as XLIFF, and a phrase a query matches on such as "PHP 8.4 syntax". A check
+would report all four, so telling them from a recommendation is a reading rather
+than a pattern, and that is why nothing holds this.
+
+`task-intents.json` is what the demand already looks like where it is met: the
+answer about `typo3/coding-standards` names no release and says to let the
+solver pick one.

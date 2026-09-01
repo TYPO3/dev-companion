@@ -44,7 +44,7 @@ when it is added.
 - [`R-ANS-034`][R-ANS-034] — A suite an answer offers says what running it does to the checkout · held
 - [`R-ANS-035`][R-ANS-035] — An answer that names a target branch names the lines that take a patch · held
 - [`R-ANS-036`][R-ANS-036] — A suite list names the paths no suite covers · held
-- [`R-ANS-037`][R-ANS-037] — An answer says how to read the current version rather than naming one · **open**
+- [`R-ANS-037`][R-ANS-037] — An answer says how to read the current version rather than naming one · not guarded
 
 [R-ANS-001]: ans-001-could-not-ask-never-looks-like-does-not-exist.md
 [R-ANS-002]: ans-002-the-reason-is-in-the-data-not-only-in-the-text.md

@@ -125,7 +125,7 @@ test. Both are legitimate, nothing fails on either, and
 - [`R-ANS-034`][R-ANS-034] — A suite an answer offers says what running it does to the checkout · held
 - [`R-ANS-035`][R-ANS-035] — An answer that names a target branch names the lines that take a patch · held
 - [`R-ANS-036`][R-ANS-036] — A suite list names the paths no suite covers · held
-- [`R-ANS-037`][R-ANS-037] — An answer says how to read the current version rather than naming one · **open**
+- [`R-ANS-037`][R-ANS-037] — An answer says how to read the current version rather than naming one · not guarded
 
 [R-ANS-001]: answers/ans-001-could-not-ask-never-looks-like-does-not-exist.md
 [R-ANS-002]: answers/ans-002-the-reason-is-in-the-data-not-only-in-the-text.md
@@ -206,7 +206,7 @@ test. Both are legitimate, nothing fails on either, and
 - [`R-SKL-026`][R-SKL-026] — A runtime lookup a step names says what it adds after the extension answer · held
 - [`R-SKL-027`][R-SKL-027] — A core patch covers every point its issue lists · held
 - [`R-SKL-028`][R-SKL-028] — A widened request re-establishes what the patch is and what it owes · held
-- [`R-SKL-029`][R-SKL-029] — A skill reading a project checks its pinned versions against the day's release · **open**
+- [`R-SKL-029`][R-SKL-029] — A skill reading a project checks its pinned versions against the day's release · held
 
 [R-SKL-001]: task-skills/skl-001-a-backend-module-task-activates-its-own-guidance.md
 [R-SKL-002]: task-skills/skl-002-a-testing-task-verifies-the-harness-before-relying-on-it.md

@@ -23,6 +23,12 @@ Absence of an optional subsystem is not a defect.
   layer, documentation — `typo3_hint_lookup` with `id=extension-documentation`,
   which says what a manual consists of and that it ships with the package —
   deprecations, and upgrade readiness.
+- Pinned versions: the Node, the actions under `.github/workflows/`, the
+  container configuration and the declared dependencies, each read against the
+  release current on the day rather than against the file. One behind it is a
+  finding carrying the raise; what speaks against the raise is a bound the
+  package declares, and the finding then names the newest release that bound
+  allows.
 
 ## The check layer
 

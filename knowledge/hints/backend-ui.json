@@ -26,6 +26,14 @@
       "Prefer existing TYPO3 backend imports, event patterns, and custom element conventions used nearby.",
       "Build/eslint.config.mjs decides the style, and CI=true ./Build/Scripts/runTests.sh -s lintTypescript settles a question about it. That file is the list: what it does not configure is untidiness rather than a lint failure.",
       "@typescript-eslint/member-ordering is enforced, so where a member sits in a class is checked rather than left to taste, and adding a static method is where that lands. @typescript-eslint/no-explicit-any and @typescript-eslint/no-inferrable-types are off on purpose, so neither is a finding — imitating a neighbouring file turns a rule that is switched off into a diff nobody asked for.",
+      {
+        "text": "jQuery is reached through an import, import $ from 'jquery', and the bare globals $ and jQuery are refused with that import as the message. The restriction is why a file cannot pick the global up from the page the way a script tag once did.",
+        "until": 14
+      },
+      {
+        "text": "jQuery is not a core dependency: Build/package.json does not list it and the lint config carries no restriction on it, because there is nothing left to restrict.",
+        "since": 15
+      },
       "Frontend modules with state transitions should have focused JavaScript unit coverage."
     ]
   },
@@ -71,7 +79,9 @@
       "Keep custom elements focused on rendering and interaction orchestration.",
       "Keep state transitions explicit and testable.",
       "Check accessibility behavior for controls, dialogs, drag and drop, and status indicators.",
-      "For custom elements, keep CSS aligned with the host element API, stable attributes, slots, parts, and custom properties."
+      "For custom elements, keep CSS aligned with the host element API, stable attributes, slots, parts, and custom properties.",
+      "A custom element's constructor takes no parameters, which wc/no-constructor-params enforces and the browser imposes anyway: it constructs the element with none. What the element needs arrives as an attribute, a property or a slot.",
+      "A listener a component adds is removed again, which wc/require-listener-teardown enforces. The one that leaks is the listener on something outliving the element - document, window, or another element - because the element is torn down and the listener is not."
     ]
   }
 ]

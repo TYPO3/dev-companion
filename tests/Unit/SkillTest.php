@@ -532,19 +532,24 @@ final class SkillTest extends TestCase
             'changeType' => 'test',
         ];
 
-        // A copy of what this package publishes is not behind on anything, and
-        // the field is a subset of `skills` rather than a second list.
-        $current = Registry::call('typo3_task_guide', $arguments);
-        self::assertSame([$skill], $current->data['skills']);
-        self::assertSame([], $current->data['staleSkills']);
+        // In a finally, because a failing assertion is exactly when the
+        // directory is left behind and `sys_get_temp_dir()` is shared by every
+        // worktree running the suite — `D-COD-006`.
+        try {
+            // A copy of what this package publishes is not behind on anything,
+            // and the field is a subset of `skills` rather than a second list.
+            $current = Registry::call('typo3_task_guide', $arguments);
+            self::assertSame([$skill], $current->data['skills']);
+            self::assertSame([], $current->data['staleSkills']);
 
-        file_put_contents($published . '/SKILL.md', "\nwhat an older publication said\n", FILE_APPEND);
-        $stale = Registry::call('typo3_task_guide', $arguments);
+            file_put_contents($published . '/SKILL.md', "\nwhat an older publication said\n", FILE_APPEND);
+            $stale = Registry::call('typo3_task_guide', $arguments);
 
-        self::assertSame([$skill], $stale->data['staleSkills']);
-        self::assertStringContainsString('typo3-dev-companion update', $stale->text);
-
-        self::removeDirectory($project);
+            self::assertSame([$skill], $stale->data['staleSkills']);
+            self::assertStringContainsString('typo3-dev-companion update', $stale->text);
+        } finally {
+            self::removeDirectory($project);
+        }
     }
 
     private static function copyDirectory(string $source, string $target): void

@@ -11,6 +11,7 @@ use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Installation\Typo3Runtime;
 use TYPO3\DevCompanion\Process\CommandRunner;
+use TYPO3\DevCompanion\Tests\Support\Directory;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Upkeep\Fixture;
 
@@ -36,6 +37,13 @@ final class Typo3RuntimeTest extends TestCase
         Typo3Cli::useRunner(null);
         Typo3Cli::forget();
         Typo3Runtime::forget();
+        // And the installation this test wrote. A unique name is not
+        // overwritten by the next run, so nothing but this takes one away —
+        // `D-COD-006`, whose third **Wrong if** this fired.
+        if ($this->root !== '') {
+            Directory::remove($this->root);
+            $this->root = '';
+        }
     }
 
     #[Requirement('R-DIS-019')]

@@ -75,3 +75,15 @@ than about the path.
 - `sys_get_temp_dir()` fills with variant roots. A fixed name was overwritten by
   the next run, and a unique one is not, so the `#[After]` is the whole of what
   takes one away.
+
+## Since then
+
+The third **Wrong if** fired, and it had been firing since the entry was
+written. `sys_get_temp_dir()` held 510 `typo3-dev-companion-runtime-*` roots on
+2026-09-01: `Typo3RuntimeTest` names each installation after its own process and
+its `#[After]` forgot the instance without removing the directory. The second
+leak was `SkillTest`'s stale project, removed on the last line of the test and
+so not on a failing one — 56 of those. Both are repaired in the commit that
+records this, and no other creator of a temporary root leaks: every remaining
+family in that directory is one entry.
+

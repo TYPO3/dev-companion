@@ -37,6 +37,9 @@ already answers them as prose in a quarter of its entries.
 - No `tools` field and no `whereElse` field on a hint. What a hint implies is
   said in the statement that implies it, where the matcher searches it and
   `ToolNamingTest` holds the name.
+- `D-ANS-129` is the same move on the other surface and came out the other way:
+  a tool's answer names the next call in prose it composes per call, and a hint
+  is a file somebody writes. The two are one idea and two questions.
 - `frontend-dataprocessors` gains the sentence it was missing: the resolved
   value is `typo3_configuration_lookup`'s.
 - The general form of the repair scope stays one statement in one hint rather

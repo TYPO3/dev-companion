@@ -3,6 +3,8 @@ id: D-COD-005
 title: 'The static analysis runs at level 7'
 date: 2026-08-23
 status: open
+readings:
+  - 2026-09-01
 coveredBy: []
 ---
 

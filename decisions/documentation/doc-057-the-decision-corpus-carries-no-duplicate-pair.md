@@ -3,6 +3,8 @@ id: D-DOC-057
 title: 'The decision corpus carries no duplicate pair'
 date: 2026-08-23
 status: open
+readings:
+  - 2026-09-01
 ---
 
 # D-DOC-057 — The decision corpus carries no duplicate pair

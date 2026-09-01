@@ -18,7 +18,9 @@ check. Which suites the script offers changes between majors, so a suite that
 branch does not have is left out rather than handed over as a command. The
 script belongs to the core repository, so paths that read as a project or
 third-party extension get no suite at all rather than commands that cannot run
-there. Answers from: knowledge.
+there. The script's own notes are typo3_script_lookup: the commands it offers
+per subject, and what the pre-commit hook does to a commit. Answers from:
+knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

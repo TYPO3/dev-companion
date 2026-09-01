@@ -12,10 +12,11 @@ Where the target is the active installation, its backend CSS, JavaScript, and
 installed styleguide templates supply the component contract; the curated
 catalog supplies the searchable names and fallback markup. Without usable
 installed sources, the bundled version-bound snapshot answers. Returns markup,
-classes, custom properties, and every source used. A class the query names
-outright is answered even where the entry it belongs to was withheld for the
-target version — as a name and the versions it holds on, never as markup.
-Answers from: packages, knowledge.
+classes, custom properties, and every source used. Which of those answered, and
+which core revision the bundled one was taken from, is typo3_snapshot_scope. A
+class the query names outright is answered even where the entry it belongs to
+was withheld for the target version — as a name and the versions it holds on,
+never as markup. Answers from: packages, knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

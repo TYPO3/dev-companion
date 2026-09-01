@@ -14,7 +14,7 @@ coveredBy:
   - RecordLookupTest::theRowsComeBackBesideTheCountThatSaysHowManyThereAre
   - RecordLookupTest::theTablesItWillReadAreListedWithoutOneBeingNamed
   - ScopeTest::theBriefRoutesToTheCountWhereTheCountDecidesSomething
-  - ScopeTest::theTwoLookupsThatBothReadAsATableQuestionNameEachOther
+  - ScopeTest::theToolsACallerCannotChooseBetweenNameEachOther
 ---
 
 # D-AUD-017 — Records are read and the boundary is the table they are in

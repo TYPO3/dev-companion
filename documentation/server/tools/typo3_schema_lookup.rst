@@ -16,7 +16,9 @@ functional test, and nothing about a TCA type in the abstract. It describes what
 TYPO3 would create, never what the database currently has, and it says so rather
 than answering empty when it cannot boot. It is about the shape of the table and
 not about what is in it: how many rows one of this project's own tables holds
-and what they are is typo3_record_lookup. Answers from: installation.
+and what they are is typo3_record_lookup. A type=flex column is one column here
+and a data structure elsewhere: what this installation resolves it to, sheet by
+sheet, is typo3_flexform_lookup. Answers from: installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

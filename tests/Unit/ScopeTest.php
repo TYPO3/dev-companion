@@ -490,47 +490,72 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * `D-ANS-072` was written for `typo3_script_lookup` and holds on the pair
-     * that carries most of the corpus. Both names read as "how does this
-     * codebase do X", a session that could not choose grepped its checkout
-     * instead, and only a description can tell two adjacent tools apart.
-     */
-    #[Decision('D-ANS-072')]
-    #[Test]
-    public function theTwoLookupsThatBothReadAsAConventionNameEachOther(): void
-    {
-        $described = array_column(Registry::definitions(), 'description', 'name');
-
-        self::assertStringContainsString('typo3_rule_lookup', $described['typo3_hint_lookup']);
-        self::assertStringContainsString('typo3_hint_lookup', $described['typo3_rule_lookup']);
-    }
-
-    /**
-     * The two tools that both read as "tell me about this table" name each
-     * other.
+     * A caller holding two names that both take its question has the
+     * descriptions and nothing else: the initialize index is six entries
+     * against a fixed budget and carries almost none of these tools.
      *
-     * `D-ANS-072` again, on the pair this server gained on 2026-09-01.
-     * `typo3_schema_lookup` answers what a table is made of and
-     * `typo3_record_lookup` what is in it, and a caller holding only the two
-     * names has nothing to choose on — the initialize index is six entries
-     * against a fixed budget and carries neither, so the description is the
-     * whole of what tells them apart.
-     *
-     * `typo3_extension_describe` is the third, and it is where the sighted
-     * session was standing: it lists what an extension registers, which reads
-     * as the answer to "what is in this extension" — so its description says
-     * what it does not answer and names the tool that does (`D-AUD-017`).
+     * Which two are such a pair is a reading rather than a property of the
+     * declarations — `D-ANS-072` says what was measured against making it a
+     * check — so the pairs somebody noticed are the rows below, one row per
+     * direction, and noticing one is a step of adding a tool.
      */
     #[Decision('D-ANS-072')]
     #[Decision('D-AUD-017')]
+    #[DataProvider('toolsACallerCannotChooseBetween')]
     #[Test]
-    public function theTwoLookupsThatBothReadAsATableQuestionNameEachOther(): void
+    public function theToolsACallerCannotChooseBetweenNameEachOther(string $tool, string $other): void
     {
         $described = array_column(Registry::definitions(), 'description', 'name');
 
-        self::assertStringContainsString('typo3_record_lookup', $described['typo3_schema_lookup']);
-        self::assertStringContainsString('typo3_schema_lookup', $described['typo3_record_lookup']);
-        self::assertStringContainsString('typo3_record_lookup', $described['typo3_extension_describe']);
+        self::assertStringContainsString($other, $described[$tool]);
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function toolsACallerCannotChooseBetween(): iterable
+    {
+        // Both names read as "how does this codebase do X", and the session
+        // that could not choose grepped its checkout instead — the pair
+        // `D-ANS-072` was written on, carrying most of the corpus.
+        yield 'the convention lookup names the procedure lookup' => ['typo3_hint_lookup', 'typo3_rule_lookup'];
+        yield 'the procedure lookup names the convention lookup' => ['typo3_rule_lookup', 'typo3_hint_lookup'];
+
+        // What a table is made of against what is in it, the pair this server
+        // gained on 2026-09-01.
+        yield 'the schema lookup names the record lookup' => ['typo3_schema_lookup', 'typo3_record_lookup'];
+        yield 'the record lookup names the schema lookup' => ['typo3_record_lookup', 'typo3_schema_lookup'];
+
+        // The third tool on that question, and where the sighted session was
+        // standing: what an extension registers reads as "what is in this
+        // extension" (`D-AUD-017`).
+        yield 'the extension answer names the record lookup' => ['typo3_extension_describe', 'typo3_record_lookup'];
+
+        // The two describes: the project lists the extensions, and one of them
+        // is what the other answers for.
+        yield 'the project answer names the extension answer' => ['typo3_project_describe', 'typo3_extension_describe'];
+        yield 'the extension answer names the project answer' => ['typo3_extension_describe', 'typo3_project_describe'];
+
+        // A type=flex column is one column in the schema answer and a data
+        // structure in the other.
+        yield 'the schema lookup names the flex lookup' => ['typo3_schema_lookup', 'typo3_flexform_lookup'];
+        yield 'the flex lookup names the schema lookup' => ['typo3_flexform_lookup', 'typo3_schema_lookup'];
+
+        // Both read as "how do I run the core's tests": the guide answers which
+        // suite and what it does, the lookup the script's own notes.
+        yield 'the suite guide names the script lookup' => ['typo3_test_run_guide', 'typo3_script_lookup'];
+        yield 'the script lookup names the suite guide' => ['typo3_script_lookup', 'typo3_test_run_guide'];
+
+        // Both read as "what about this label": one searches what is
+        // registered, the other computes the reference from a path, including
+        // for a file that is not there yet.
+        yield 'the label lookup names the domain lookup' => ['typo3_label_lookup', 'typo3_translation_domain_lookup'];
+        yield 'the domain lookup names the label lookup' => ['typo3_translation_domain_lookup', 'typo3_label_lookup'];
+
+        // The scope exists to say what a component miss is worth, and the
+        // lookup it reports on never named it.
+        yield 'the component lookup names its scope' => ['typo3_component_lookup', 'typo3_snapshot_scope'];
+        yield 'the snapshot scope names the component lookup' => ['typo3_snapshot_scope', 'typo3_component_lookup'];
     }
 
     /**

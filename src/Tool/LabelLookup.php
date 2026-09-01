@@ -65,7 +65,7 @@ final class LabelLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Search the labels registered in the TYPO3 installation you are working in. Reuse is local to the translation resource already used at the consuming code: pass resource whenever it is known, and do not reference a match from another module or package merely because its text is identical. The console answers with the resource overrides the installation applies; where it cannot be reached — an installed TYPO3 whose database has no schema yet is the common case — the same packages\' XLF files are read instead.';
+        return 'Search the labels registered in the TYPO3 installation you are working in. Reuse is local to the translation resource already used at the consuming code: pass resource whenever it is known, and do not reference a match from another module or package merely because its text is identical. The console answers with the resource overrides the installation applies; where it cannot be reached — an installed TYPO3 whose database has no schema yet is the common case — the same packages\' XLF files are read instead. Every match comes back as a translation domain reference; computing that reference for a file this installation does not have, one a patch is about to add, is typo3_translation_domain_lookup.';
     }
 
     public static function inputSchema(): array

@@ -31,7 +31,7 @@ final class SnapshotScope extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Report whether component contracts come from the active installation or the bundled fallback, which TYPO3 core revision the fallback catalogs were taken from, what they cover, and how to re-check them. Call this to judge whether a lookup miss is authoritative: even with installed sources, component names remain a curated index rather than every backend class.';
+        return 'Report whether component contracts come from the active installation or the bundled fallback, which TYPO3 core revision the fallback catalogs were taken from, what they cover, and how to re-check them. Call this to judge whether a typo3_component_lookup miss is authoritative: even with installed sources, component names remain a curated index rather than every backend class.';
     }
 
     public static function inputSchema(): array

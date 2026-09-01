@@ -4,8 +4,7 @@ title: 'A tool description says which questions it takes'
 date: 2026-08-10
 status: open
 coveredBy:
-  - ScopeTest::theTwoLookupsThatBothReadAsAConventionNameEachOther
-  - ScopeTest::theTwoLookupsThatBothReadAsATableQuestionNameEachOther
+  - ScopeTest::theToolsACallerCannotChooseBetweenNameEachOther
 ---
 
 # D-ANS-072 — A tool description says which questions it takes
@@ -45,6 +44,34 @@ other tool had already answered, and grepped a 1400-line script instead.
   name a suite every covered major carries, which `KnowledgeTest` holds, and the
   browser suites are not on every one — that is exactly why the suite list is
   where they live, with a version range each.
+- **The pairing is a step of adding a tool, and no check proposes one.** Two
+  tools sharing a `covers` entry is the candidate rule the data allows, and that
+  set is wrong in both directions. It holds 45 pairs on 2026-09-01, 36 of them
+  out of the one entry naming the nine installation tools, where the icon lookup
+  against the label lookup is a choice nobody makes. The pair this entry's own
+  test holds is not in the set at all: `typo3_record_lookup` carries a `covers`
+  entry of its own.
+- **Naming another tool back cannot be demanded either.** A description names
+  one to hand a caller on as much as to tell itself apart, and the string does
+  not say which it is doing. `typo3_gerrit_lookup` names the three tools its
+  answer composes with, and none of the three owes it a mention.
+- **What holds a pair is a row.**
+  `ScopeTest::theToolsACallerCannotChooseBetweenNameEachOther` takes one per
+  direction, so a pair somebody notices costs a line, and what made it a pair is
+  written beside it.
+- **Four pairs came out of reading the thirty-one descriptions on 2026-09-01.**
+  `typo3_label_lookup` searches the labels an installation registers and
+  `typo3_translation_domain_lookup` computes the reference to one from a path, a
+  file no installation has yet included; neither named the other. The other
+  three were half-linked, so what the reading added is the missing direction:
+  the project answer to the extension answer, the schema lookup to the flex
+  lookup, and the suite guide to the script lookup. `typo3_snapshot_scope` is
+  named now by the lookup whose misses it judges, which is that fix one step
+  away from a pair.
+- **`typo3_forge_lookup` and `typo3_gerrit_lookup` stay as they are**, and so
+  does `typo3_server_scope`. The first two name each other's server in their own
+  prose, so a caller has the tracker against the review server to choose on, and
+  the third routes to the rest rather than competing with them.
 - The container image and the network parameters stay unanswered here. A session
   building its own harness needs the route rather than runTests.sh's internals,
   and that is

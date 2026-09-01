@@ -354,6 +354,12 @@ source and states the boundary of what it can be asked; a describe answers for
 one thing the caller named and states what that thing is. `D-SCO-010` is why the
 two project and extension tools carry the second.
 
+**A new tool names the tool a caller might have called instead**, and that one
+names it back. Which two those are is a reading of the descriptions rather than
+anything the declarations say — `D-ANS-072` measured what a check over `covers`
+would have proposed — so it is a step of adding a tool, and the pair is held by
+a row in `ScopeTest::theToolsACallerCannotChooseBetweenNameEachOther`.
+
 A new tool takes the verb whose answer shape it already has, and two tools
 sharing an output schema share their verb. When none of the six fits, the tool
 is probably doing two things at once — split it before inventing a seventh verb.

@@ -13,7 +13,9 @@ version older than translation domains it answers with the full LLL:EXT:
 reference instead, because the domain form renders nothing there and fails at
 runtime rather than at build time. That version is targetVersion, or the
 installation this server was started in where none is stated — state one when
-the work is on another branch than what is installed. Answers from: knowledge.
+the work is on another branch than what is installed. It computes a reference
+from a path and reads no label: whether the installation already registers one
+to reuse, and under which id, is typo3_label_lookup. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

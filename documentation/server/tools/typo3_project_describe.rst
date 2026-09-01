@@ -41,7 +41,9 @@ outright is read; one a matrix or another file decides is handed back as the
 workflow states it, unresolved. Call it before booting such a project or before
 recommending or running a check — these are the commands that exist in this
 repository, and the ones marked check are what a task told not to change files
-may run. Answers from: packages.
+may run. What one of the extensions it lists registers — its tables, content
+elements, backend modules and icons — is typo3_extension_describe. Answers from:
+packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

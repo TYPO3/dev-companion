@@ -62,3 +62,9 @@ the work goes instead. The first **Wrong if** met its first real case and came
 out the other way: a session that wanted a flex field resolved against a real
 row read the boundary itself and stopped at it, and what was built from it takes
 caller-supplied column values and no uid. The other two are unchanged.
+
+The second case is a count rather than a row, and it is open:
+`feedback/2026-08-31-233952` asks that a describe answer say how many rows a
+declared table holds. A count reads no field of any row and still runs over the
+data with the shell user's access, so which side it is on is the question
+`todo/waiting/T-260831-029e.md` carries.

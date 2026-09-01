@@ -13,6 +13,7 @@ coveredBy:
   - RecordLookupTest::everyCountSaysItWasReadWithoutBackendPermissions
   - RecordLookupTest::theRowsComeBackBesideTheCountThatSaysHowManyThereAre
   - RecordLookupTest::theTablesItWillReadAreListedWithoutOneBeingNamed
+  - ScopeTest::theTwoLookupsThatBothReadAsATableQuestionNameEachOther
 ---
 
 # D-AUD-017 — Records are read and the boundary is the table they are in

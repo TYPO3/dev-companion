@@ -28,8 +28,10 @@ ext_emconf.php beside a composer.json declaring neither providesPackages nor a
 version, ext_icon.* where no Resources/Public/Icons/Extension.* stands to be
 read first, and an ext_typoscript_*.txt with no .typoscript file of the same
 name beside it. That is those four and nothing else, so it is not an upgrade
-check. typo3_project_describe names the extensions this can be called for.
-Answers from: installation, packages.
+check. It answers what the extension registers and never what is stored through
+it: how many rows one of its tables holds, on which page and what they are is
+typo3_record_lookup. typo3_project_describe names the extensions this can be
+called for. Answers from: installation, packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

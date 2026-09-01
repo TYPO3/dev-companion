@@ -14,7 +14,9 @@ declaration is checked against. It asks the booted installation about a table
 that is in it, so it answers nothing about a table that exists only inside a
 functional test, and nothing about a TCA type in the abstract. It describes what
 TYPO3 would create, never what the database currently has, and it says so rather
-than answering empty when it cannot boot. Answers from: installation.
+than answering empty when it cannot boot. It is about the shape of the table and
+not about what is in it: how many rows one of this project's own tables holds
+and what they are is typo3_record_lookup. Answers from: installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

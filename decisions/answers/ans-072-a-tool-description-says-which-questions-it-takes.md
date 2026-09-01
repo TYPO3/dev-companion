@@ -5,6 +5,7 @@ date: 2026-08-10
 status: open
 coveredBy:
   - ScopeTest::theTwoLookupsThatBothReadAsAConventionNameEachOther
+  - ScopeTest::theTwoLookupsThatBothReadAsATableQuestionNameEachOther
 ---
 
 # D-ANS-072 — A tool description says which questions it takes

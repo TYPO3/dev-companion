@@ -506,6 +506,34 @@ final class ScopeTest extends TestCase
     }
 
     /**
+     * The two tools that both read as "tell me about this table" name each
+     * other.
+     *
+     * `D-ANS-072` again, on the pair this server gained on 2026-09-01.
+     * `typo3_schema_lookup` answers what a table is made of and
+     * `typo3_record_lookup` what is in it, and a caller holding only the two
+     * names has nothing to choose on — the initialize index is six entries
+     * against a fixed budget and carries neither, so the description is the
+     * whole of what tells them apart.
+     *
+     * `typo3_extension_describe` is the third, and it is where the sighted
+     * session was standing: it lists what an extension registers, which reads
+     * as the answer to "what is in this extension" — so its description says
+     * what it does not answer and names the tool that does (`D-AUD-017`).
+     */
+    #[Decision('D-ANS-072')]
+    #[Decision('D-AUD-017')]
+    #[Test]
+    public function theTwoLookupsThatBothReadAsATableQuestionNameEachOther(): void
+    {
+        $described = array_column(Registry::definitions(), 'description', 'name');
+
+        self::assertStringContainsString('typo3_record_lookup', $described['typo3_schema_lookup']);
+        self::assertStringContainsString('typo3_schema_lookup', $described['typo3_record_lookup']);
+        self::assertStringContainsString('typo3_record_lookup', $described['typo3_extension_describe']);
+    }
+
+    /**
      * The room that entry was paid out of, and the reason the index is data.
      *
      * A caller that had excluded most of the server was still told which four

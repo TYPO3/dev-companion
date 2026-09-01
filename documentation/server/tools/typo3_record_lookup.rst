@@ -7,17 +7,18 @@ Read the rows of a table belonging to one of this project's own extensions: how
 many there are, which page they sit on, whether they are live, hidden or
 deleted, and the rows themselves — uid, the label the table names in its own
 TCA, the timestamps and the two flags. That is what a backend visit would have
-told you and the one question a schema answer cannot: what is actually stored.
-It is also the fact that decides where records are maintained, because a table
-with a few dozen rows is edited in the generic record list and one with three
-thousand on a single storage folder needs a module with its own filtering and
-paging. Narrow it with where, which takes exact values for any column of the
-table, pid among them; pass count to get the numbers without the rows, and limit
-to say how many rows come back. It refuses every table a project-owned extension
-does not register: pages, tt_content, the user tables and everything a
-dependency brings are outside it, and reading those is the backend's or the
-installation's own console. Omit the table to see which ones it will read. It
-never writes. Answers from: installation.
+told you and the one question typo3_schema_lookup cannot answer: it returns the
+shape of the table, this returns what is in it. It is also the fact that decides
+where records are maintained, because a table with a few dozen rows is edited in
+the generic record list and one with three thousand on a single storage folder
+needs a module with its own filtering and paging. Narrow it with where, which
+takes exact values for any column of the table, pid among them; pass count to
+get the numbers without the rows, and limit to say how many rows come back. It
+refuses every table a project-owned extension does not register: pages,
+tt_content, the user tables and everything a dependency brings are outside it,
+and reading those is the backend's or the installation's own console. Omit the
+table to see which ones it will read. It never writes. Answers from:
+installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

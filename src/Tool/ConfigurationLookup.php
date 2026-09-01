@@ -94,7 +94,10 @@ final class ConfigurationLookup extends ReadOnlyTool
 
         $text = sprintf(
             "Effective value of TYPO3_CONF_VARS/%s in this installation:\n\n```json\n%s\n```\n\n"
-            . 'This is the assembled runtime value, not the default the core ships.',
+            . 'This is the assembled runtime value, not the default the core ships. Reading the files '
+            . 'instead answers something narrower: config/system/settings.php carries the layer that file '
+            . 'sets, config/system/additional.php the code that runs over it, and every extension changes it '
+            . 'again from ext_localconf.php — none of which the file you opened shows.',
             $path,
             json_encode($read['value'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)
         );

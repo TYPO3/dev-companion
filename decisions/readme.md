@@ -726,6 +726,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### task-skills
 
+- [`D-SKL-087`][D-SKL-087] — Every skill in the directory is published · 2026-09-01
 - [`D-SKL-083`][D-SKL-083] — A test file is on the sweep's side of the exemption · 2026-08-28
 - [`D-SKL-084`][D-SKL-084] — The presence check looks for the qualified tool name too · 2026-08-28
 - [`D-SKL-085`][D-SKL-085] — The crossing into a fix says the sweep is owed again · 2026-08-28
@@ -788,7 +789,6 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-024`][D-SKL-024] — A description names the task and leaves the steps to the body · 2026-08-08 · confirmed
 - [`D-SKL-025`][D-SKL-025] — A routed tool is called and held to what it reads · 2026-08-08
 - [`D-SKL-026`][D-SKL-026] — The descriptions are written to the listing budget they share · 2026-08-08
-- [`D-SKL-027`][D-SKL-027] — A draft declares itself under this server's own metadata key · 2026-08-08
 - [`D-SKL-022`][D-SKL-022] — A handoff between skills is an instruction rather than a closing sentence · 2026-08-07 · confirmed
 - [`D-SKL-021`][D-SKL-021] — Triage and fetching a patch are two workflows · 2026-08-05
 - [`D-SKL-014`][D-SKL-014] — The commit step is named where a workflow ends in a change · 2026-08-04
@@ -809,6 +809,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-087]: task-skills/skl-087-every-skill-in-the-directory-is-published.md
 [D-SKL-083]: task-skills/skl-083-a-test-file-is-on-the-sweeps-side-of-the-exemption.md
 [D-SKL-084]: task-skills/skl-084-the-presence-check-looks-for-the-qualified-tool-name-too.md
 [D-SKL-085]: task-skills/skl-085-the-crossing-into-a-fix-says-the-sweep-is-owed-again.md
@@ -871,7 +872,6 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-SKL-024]: task-skills/skl-024-a-description-names-the-task-and-leaves-the-steps-to-the-body.md
 [D-SKL-025]: task-skills/skl-025-a-routed-tool-is-called-and-held-to-what-it-reads.md
 [D-SKL-026]: task-skills/skl-026-the-descriptions-are-written-to-the-listing-budget-they-share.md
-[D-SKL-027]: task-skills/skl-027-a-draft-declares-itself-under-this-servers-own-metadata-key.md
 [D-SKL-022]: task-skills/skl-022-a-handoff-between-skills-is-an-instruction-rather-than-a-closing-sentence.md
 [D-SKL-021]: task-skills/skl-021-triage-and-fetching-a-patch-are-two-workflows.md
 [D-SKL-014]: task-skills/skl-014-the-commit-step-is-named-where-a-workflow-ends-in-a-change.md
@@ -1128,6 +1128,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DOC-021`][D-DOC-021] — The site is searched in a dialog opened with Ctrl-K · 2026-08-09 → D-DOC-024
 - [`D-DOC-023`][D-DOC-023] — The site is built to the TYPO3 Support App design system · 2026-08-09 → D-DOC-024
 - [`D-DIS-015`][D-DIS-015] — The installed entrypoint is named relatively wherever it exists · 2026-08-08 → D-DIS-016
+- [`D-SKL-027`][D-SKL-027] — A draft declares itself under this server's own metadata key · 2026-08-08 → D-SKL-087
 - [`D-SKL-015`][D-SKL-015] — A step is skipped only where it has already run · 2026-08-04 → D-SKL-034
 - [`D-SKL-016`][D-SKL-016] — Acting on a conformance report earns a task skill of its own · 2026-08-04 → D-SKL-064
 - [`D-ANS-034`][D-ANS-034] — A source outside this package answers JSON, or it did not answer · 2026-08-03 → D-ANS-096
@@ -1171,6 +1172,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-DOC-021]: documentation/doc-021-the-site-is-searched-in-a-dialog-opened-with-ctrl-k.md
 [D-DOC-023]: documentation/doc-023-the-site-is-built-to-the-typo3-support-app-design-system.md
 [D-DIS-015]: discovery/dis-015-the-installed-entrypoint-is-named-relatively-wherever-it-exists.md
+[D-SKL-027]: task-skills/skl-027-a-draft-declares-itself-under-this-servers-own-metadata-key.md
 [D-SKL-015]: task-skills/skl-015-a-step-is-skipped-only-where-it-has-already-run.md
 [D-SKL-016]: task-skills/skl-016-acting-on-a-conformance-report-earns-a-task-skill-of-its-own.md
 [D-ANS-034]: answers/ans-034-a-source-outside-this-package-answers-json-or-it-did-not-answer.md

@@ -207,7 +207,7 @@ final class InstallerRecordTest extends TestCase
 
             self::assertSame(0, $this->execute($directory, ['install', '--agent=claude'], $stdout, $stderr), $stderr);
             self::assertNull(Installer::outdated($directory), 'the run that just published them');
-            self::assertSame(Installer::digest(false), $this->state($directory)['digest']);
+            self::assertSame(Installer::digest(), $this->state($directory)['digest']);
 
             // The skills this package ships have moved on since the install.
             // Nothing in the project changes when they do — the names are the
@@ -264,7 +264,7 @@ final class InstallerRecordTest extends TestCase
         file_put_contents($path, json_encode($state, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . "\n");
     }
 
-    /** @return array{agents: list<string>, skills: list<string>, drafts: list<string>, digest: string} */
+    /** @return array{agents: list<string>, skills: list<string>, digest: string} */
     private function state(string $directory): array
     {
         return json_decode(

@@ -4,7 +4,6 @@ title: 'The listing budget is what a client reads'
 date: 2026-08-18
 status: open
 coveredBy:
-  - SkillTest::aDraftSaysSoInItsOwnFrontMatter
   - SkillTest::everyDescriptionIsWrittenToALengthOfItsOwn
 ---
 
@@ -31,10 +30,9 @@ charged for room in a listing it does not appear in.
   `ScopeTest` announces it, `SkillTest::everyPublishedSkillIsNamedByAnIntent`
   routes to it. `everyDescriptionIsWrittenToALengthOfItsOwn` was the one
   assertion reading the directory instead.
-- A draft is published to nobody, which
-  `InstallerTest::aDraftIsPublishedOnlyWhereTheRunAsksForIt`
-  holds: `install` writes no draft, `install --drafts` writes it into that one
-  project, and the next `update` takes it out again.
+- A draft is published to nobody, which a smoke test over the installer holds:
+  `install` writes no draft, `install --drafts` writes it into that one project,
+  and the next `update` takes it out again.
 - The ceiling is a ratchet rather than a measurement. Its own comment says it is
   "what the trim of 2026-08-08 left, with room for a rename", and what is
   actually left over is decided by the client's own bundled skills, which took
@@ -88,3 +86,7 @@ named, the maintainer took the merge of `typo3-extension-cleanup` and
 `typo3-extension-conformance` over trimming further, and the ratchet moved as
 well because the merge frees 232 of the 350 one description costs —
 `D-SKL-064`.
+
+The distinction went with them on 2026-09-01: `Installer::skills()` is the whole
+directory now, so the budget counts every skill there is and the ceiling is what
+the entry leaves standing — `D-SKL-087`.

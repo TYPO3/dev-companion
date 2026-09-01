@@ -172,21 +172,17 @@ final class Entrypoint
         }
 
         $agent = null;
-        $drafts = false;
         foreach ($arguments as $argument) {
             if (str_starts_with($argument, '--agent=')) {
                 $agent = substr($argument, strlen('--agent='));
-            }
-            if ($argument === '--drafts') {
-                $drafts = true;
             }
         }
 
         try {
             $installer = new Installer($directory, $binary);
             $message = $command === 'install'
-                ? $installer->install($agent, $drafts)
-                : $installer->update($agent, $drafts);
+                ? $installer->install($agent)
+                : $installer->update($agent);
         } catch (\RuntimeException $exception) {
             fwrite(STDERR, 'typo3-dev-companion: ' . $exception->getMessage() . ".\n");
 
@@ -205,21 +201,17 @@ final class Entrypoint
             . "client launches it. The commands below set that up, in the directory\n"
             . "they are run in.\n\n"
             . "  install [--agent=<client>]  Write the client configuration and the\n"
-            . "          [--drafts]          task skills. Without --agent, the entry\n"
+            . "                              task skills. Without --agent, the entry\n"
             . "                              in .mcp.json and the skills in\n"
             . "                              .agents/skills, which every client that\n"
             . "                              reads those two finds on its own.\n"
             . "  update [--agent=<client>]   Republish the skills and rewrite the\n"
-            . "         [--drafts]           client entry, which a project that has\n"
+            . "                              client entry, which a project that has\n"
             . "                              since required this server or gained a\n"
             . "                              DDEV configuration has outgrown.\n"
             . "                              Without --agent, for every client\n"
             . "                              installed here.\n"
             . "  help                        This text.\n\n"
-            . "--drafts also publishes the task skills nobody has reviewed yet, so they\n"
-            . "can be tried where they are actually loaded. It is a choice per run on\n"
-            . "both commands: an update that does not ask for them takes them back out,\n"
-            . "which is the way off one.\n\n"
             . 'Clients: ' . implode(', ', Installer::agents()) . "\n";
     }
 }

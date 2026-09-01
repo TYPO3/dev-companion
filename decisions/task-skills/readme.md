@@ -7,6 +7,7 @@ order it works.
 See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
+- [`D-SKL-087`][D-SKL-087] — Every skill in the directory is published · 2026-09-01
 - [`D-SKL-083`][D-SKL-083] — A test file is on the sweep's side of the exemption · 2026-08-28
 - [`D-SKL-084`][D-SKL-084] — The presence check looks for the qualified tool name too · 2026-08-28
 - [`D-SKL-085`][D-SKL-085] — The crossing into a fix says the sweep is owed again · 2026-08-28
@@ -69,7 +70,6 @@ one is added.
 - [`D-SKL-024`][D-SKL-024] — A description names the task and leaves the steps to the body · 2026-08-08 · confirmed
 - [`D-SKL-025`][D-SKL-025] — A routed tool is called and held to what it reads · 2026-08-08
 - [`D-SKL-026`][D-SKL-026] — The descriptions are written to the listing budget they share · 2026-08-08
-- [`D-SKL-027`][D-SKL-027] — A draft declares itself under this server's own metadata key · 2026-08-08
 - [`D-SKL-022`][D-SKL-022] — A handoff between skills is an instruction rather than a closing sentence · 2026-08-07 · confirmed
 - [`D-SKL-021`][D-SKL-021] — Triage and fetching a patch are two workflows · 2026-08-05
 - [`D-SKL-014`][D-SKL-014] — The commit step is named where a workflow ends in a change · 2026-08-04
@@ -90,6 +90,7 @@ one is added.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-087]: skl-087-every-skill-in-the-directory-is-published.md
 [D-SKL-083]: skl-083-a-test-file-is-on-the-sweeps-side-of-the-exemption.md
 [D-SKL-084]: skl-084-the-presence-check-looks-for-the-qualified-tool-name-too.md
 [D-SKL-085]: skl-085-the-crossing-into-a-fix-says-the-sweep-is-owed-again.md
@@ -152,7 +153,6 @@ one is added.
 [D-SKL-024]: skl-024-a-description-names-the-task-and-leaves-the-steps-to-the-body.md
 [D-SKL-025]: skl-025-a-routed-tool-is-called-and-held-to-what-it-reads.md
 [D-SKL-026]: skl-026-the-descriptions-are-written-to-the-listing-budget-they-share.md
-[D-SKL-027]: skl-027-a-draft-declares-itself-under-this-servers-own-metadata-key.md
 [D-SKL-022]: skl-022-a-handoff-between-skills-is-an-instruction-rather-than-a-closing-sentence.md
 [D-SKL-021]: skl-021-triage-and-fetching-a-patch-are-two-workflows.md
 [D-SKL-014]: skl-014-the-commit-step-is-named-where-a-workflow-ends-in-a-change.md
@@ -176,11 +176,13 @@ one is added.
 ### Revoked, and kept as the record
 
 - [`D-SKL-040`][D-SKL-040] — A skill whose product is a report says it is a file · 2026-08-14 → D-SKL-042
+- [`D-SKL-027`][D-SKL-027] — A draft declares itself under this server's own metadata key · 2026-08-08 → D-SKL-087
 - [`D-SKL-015`][D-SKL-015] — A step is skipped only where it has already run · 2026-08-04 → D-SKL-034
 - [`D-SKL-016`][D-SKL-016] — Acting on a conformance report earns a task skill of its own · 2026-08-04 → D-SKL-064
 - [`D-SKL-011`][D-SKL-011] — The call plan a skill writes down is measured · 2026-08-03 → D-SKL-043
 
 [D-SKL-040]: skl-040-a-skill-whose-product-is-a-report-says-it-is-a-file.md
+[D-SKL-027]: skl-027-a-draft-declares-itself-under-this-servers-own-metadata-key.md
 [D-SKL-015]: skl-015-a-step-is-skipped-only-where-it-has-already-run.md
 [D-SKL-016]: skl-016-acting-on-a-conformance-report-earns-a-task-skill-of-its-own.md
 [D-SKL-011]: skl-011-the-call-plan-a-skill-writes-down-is-measured.md

@@ -76,34 +76,19 @@ maintainer actually runs, whether its order matches how the work really goes, or
 whether the step that decides the outcome is in it at all. The person who asked
 for the skill can say all three, and is the only one who can.
 
-So the draft is shown before it is published: ``SKILL.md`` and every reference,
+So the skill is shown before it is committed: ``SKILL.md`` and every reference,
 whole, not summarised. And feedback is **asked for by name** — does this match
 how the task is really done, which step is missing, which one is wrong, what
 does it claim that is not true here. "Does this look good?" gets agreement, not
-review. What comes back is worked in before the skill is published, because the
-copy in somebody else's project is not corrected by the next release of this
-server.
+review. What comes back is worked in before the commit, because the copy in
+somebody else's project is not corrected by the next release of this server.
 
-Until then the draft says so in its own front matter:
-
-.. code-block:: yaml
-
-    metadata:
-      typo3-dev-companion-status: draft
-
-
-That declaration is what holds it back rather than a label beside something else
-that does — ``Installer::skills()`` is the directory minus what declares it — so
-a session that opens the workflow can see that it is reading something nobody
-has reviewed, and publishing is the one edit that takes it out.
-
-It sits under ``metadata`` because the standard defines six fields and nothing
-else, and the reference validator refuses a file over a key outside them. A
-top-level ``status:`` therefore made the one skill that must not be published
-the one skill that does not validate. ``metadata`` is what the standard leaves
-to a client, and the key carries this server's name because the same paragraph
-asks for one unique enough not to collide with another tool writing the same
-map.
+Nothing holds the file back while that happens. A directory below ``skills/``
+carrying a ``SKILL.md`` is published, so the review is what the commit waits for
+and the commit is what publishes —
+`D-SKL-087 <../../decisions/task-skills/skl-087-every-skill-in-the-directory-is-published.md>`_,
+which took out the declaration that used to do it and says what would bring one
+back.
 
 The rules
 ---------
@@ -116,8 +101,8 @@ The rules
   ``SkillTest::everyFrontMatterFieldIsOneTheStandardDefines``
 * Every description is written to the budget all of them share —
   ``SkillTest::everyDescriptionIsWrittenToALengthOfItsOwn``
-* A draft says so in its own front matter until it is published —
-  ``SkillTest::aDraftSaysSoInItsOwnFrontMatter``
+* Every directory in ``skills/`` is published —
+  ``SkillTest::everySkillInTheDirectoryIsPublished``
 * It starts from the base before it reaches for anything of its own —
   ``SkillTest::everySkillStartsFromTheBaseBeforeItsOwnEvidence``
 * It keeps no second copy of what a tool owns —
@@ -231,13 +216,13 @@ skills and not by its own, and a thirteenth skill costs the twelve.
 is where that arithmetic was read off the client, what the twelve cost after it,
 and what the client's own bundled skills leave over.
 
-A draft stands in no client's listing and costs it nothing, so what the budget
-asks is asked at publication and not of the file being written
+What the budget asks is asked of the commit that adds a skill, because that is
+the commit the listing grows in
 (`D-SKL-054 <../../decisions/task-skills/skl-054-the-listing-budget-is-what-a-client-reads.md>`_).
-Where the room is not there, the publishing commit is where a description is
-shortened or a workflow is merged into one that already exists — a question
-about which twelve descriptions are worth their room, which nobody can answer
-while writing the thirteenth.
+Where the room is not there, it is where a description is shortened or a
+workflow is merged into one that already exists — a question about which
+descriptions are worth their room, and one nobody can answer while writing only
+the newest.
 
 **Starting from the base.** The skill links ``references/base.md`` and then
 states what it *adds* to it. It never restates a step the base already fixes:
@@ -422,7 +407,7 @@ What nothing holds
 
 Three of the steps above are the author's and nothing reads them off a file:
 that a domain earned a skill at all, that the practice was researched before it
-was written, and that the draft was shown and asked about. Each leaves the same
+was written, and that the skill was shown and asked about. Each leaves the same
 trace as its absence — a skill written from recall is shaped exactly like one
 written from the documentation, and it is wrong in places no assertion knows to
 look. They are written down because that is all that can be done for them, and

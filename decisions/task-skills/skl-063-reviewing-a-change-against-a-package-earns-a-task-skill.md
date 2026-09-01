@@ -72,9 +72,10 @@ object.
   `typo3-extension-conformance`'s, carrying findings through to committed
   changes is `typo3-extension-cleanup`'s, and anything on review.typo3.org is
   `typo3-core-patch-review`'s.
-- It is written as a draft under `typo3-dev-companion-status`, so the listing
-  budget `D-SKL-026` measures is asked at publication rather than of the file
-  being written — `D-SKL-054`.
+- It is written as a draft, held back by a declaration in its own front matter
+  that no longer exists — `D-SKL-087` — so the listing budget `D-SKL-026`
+  measures was asked at publication rather than of the file being written
+  (`D-SKL-054`).
 - Rejected: closing this on conformance's focused-review clause. That clause
   narrows on a surface the request names, and a pull request URL names none.
 - The feedback stays open. What it asks for lands in somebody else's project,

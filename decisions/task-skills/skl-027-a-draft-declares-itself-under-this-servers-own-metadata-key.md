@@ -2,17 +2,15 @@
 id: D-SKL-027
 title: A draft declares itself under this server's own metadata key
 date: 2026-08-08
-status: open
-coveredBy:
-  - SkillTest::aDraftIsWhatDeclaresItselfOneUnderThisServersKey
-  - SkillTest::aDraftSaysSoInItsOwnFrontMatter
-  - SkillTest::everyFrontMatterFieldIsOneTheStandardDefines
+status: revoked
+revokedBy: D-SKL-087
+coveredBy: []
 ---
 
 # D-SKL-027 — A draft declares itself under this server's own metadata key
 
 **A skill that is not to be published declares it as
-`metadata: {typo3-dev-companion-status: draft}`, and `Installer::draft()` reads
+`metadata: {typo3-dev-companion-status: draft}`, and Installer::draft() reads
 that with a YAML parser.**
 
 It was a top-level `status: draft`, which is not a field the standard defines.
@@ -76,3 +74,11 @@ refuses, and the line holding it back was the reason.
   would make a published skill read as a draft on the next `update`.
 - A later revision of the standard defines `status` itself, which would make the
   short spelling correct and this one a private duplicate of it.
+
+## Revoked on 2026-09-01
+
+No file ever declared the key after the two drafts of 2026-08-05 were published
+a fortnight later, and the declaration was read by the installer, the
+entrypoint, the record and the digest for the whole of that time. `D-SKL-087`
+publishes the directory and holds the closed field set this decided in the same
+move.

@@ -21,10 +21,8 @@ package moves: the names in the record are the names in the project, and both
 keep saying the same twelve words. `update` was always the answer and nothing
 ever said it was due.
 
-So the record carries a digest of what a publication of that set would write —
-each skill's own files and `skills/base.md`, which is copied into every one of
-them — and the set is part of it, because a project that asked for the drafts
-and a project that did not are two publications.
+So the record carries a digest of what a publication would write — each skill's
+own files and `skills/base.md`, which is copied into every one of them.
 
 What the check says is said twice, because the two readers are different people.
 The line on stderr names what differs and the command that fixes it, for whoever
@@ -47,9 +45,8 @@ about.
 ## From
 
 The remark that the installed skills should always be current, and that nothing
-holds whether a project has the drafts or points out that an update is due
-(2026-08-06). The checkout it was made in had a record naming twelve skills and
-no `.claude/skills` at all.
+points out that an update is due (2026-08-06). The checkout it was made in had a
+record naming twelve skills and no `.claude/skills` at all.
 
 ## Held by
 

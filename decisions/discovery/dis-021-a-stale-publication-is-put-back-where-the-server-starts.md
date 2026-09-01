@@ -39,10 +39,10 @@ moment that arrives without a person deciding to bring it.
 
 - A start that finds the digest changed republishes what the record names, then
   says so on both channels.
-- It adds nothing: the clients are the recorded ones, the drafts are the
-  recorded choice, and no client configuration is written. A project with no
-  record is untouched, which is what keeps `R-DIS-011` — writing into a project
-  is an explicit `install` — true of what put the publication there.
+- It adds nothing: the clients are the recorded ones and no client configuration
+  is written. A project with no record is untouched, which is what keeps
+  `R-DIS-011` — writing into a project is an explicit `install` — true of what
+  put the publication there.
 - A refresh that throws leaves the old notice and the server starts. Writing
   into somebody's project may not be the thing that stops one.
 - `TYPO3_DEV_COMPANION_SKILL_REFRESH=off` keeps the notice and changes nothing,

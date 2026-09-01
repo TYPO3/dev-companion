@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
@@ -523,8 +522,7 @@ final class SkillTest extends TestCase
             'version' => 1,
             'agents' => ['generic'],
             'skills' => [$skill],
-            'drafts' => [],
-            'digest' => Installer::digest(false),
+            'digest' => Installer::digest(),
         ]));
         Instance::discoverFrom($project);
 
@@ -2433,9 +2431,10 @@ final class SkillTest extends TestCase
      * The set is closed rather than checked one field at a time because the
      * failure is the key nobody thought about. `status` was the one that got
      * in, and it got in beside a test that read one field out of the block and
-     * let every other one through — `D-SKL-027`.
+     * let every other one through — `D-SKL-087`, which is where that decision
+     * went when the key it was made for came out.
      */
-    #[Decision('D-SKL-027')]
+    #[Decision('D-SKL-087')]
     #[Test]
     public function everyFrontMatterFieldIsOneTheStandardDefines(): void
     {
@@ -2461,103 +2460,19 @@ final class SkillTest extends TestCase
     }
 
     /**
-     * A draft is a skill nobody may load yet, and its own front matter is what
-     * says so: `metadata` carrying this server's status key at `draft`.
+     * A skill exists for its readers as soon as its directory does.
      *
-     * It sits under `metadata` because the standard defines six fields and the
-     * reference validator refuses a frontmatter key outside them, so a top-level
-     * `status:` made the one file that must not be published the one file that
-     * does not validate. `metadata` is what the standard leaves to a client, and
-     * the key is namespaced because it asks for that.
-     *
-     * That line is the decider rather than a label beside one. `Installer` used
-     * to carry a list of the published names, which is a second place one fact
-     * lives, and the two disagree in the direction nobody notices — a reviewed
-     * draft added to the list with the marker still in its file is published
-     * and reads as unfinished, and one dropped from the list while its file
-     * says nothing reads as ready and can be loaded by nobody. So publishing is
-     * one edit now, and this holds the derivation that made it one: every
-     * directory that declares itself a draft is published to nobody, and every
-     * one that does not is published — `D-SKL-054`, `D-SKL-027`, `D-SKL-021`.
+     * `Installer` carried a list of the published names once, and a declaration
+     * in each file holding one back after that. Both are a second place one
+     * fact lives, and both disagree in the direction nobody notices: a workflow
+     * loadable by nobody, or one published while it reads as unfinished. This
+     * holds what is left — `D-SKL-087`.
      */
-    #[Decision('D-SKL-021')]
-    #[Decision('D-SKL-027')]
-    #[Decision('D-SKL-054')]
+    #[Decision('D-SKL-087')]
     #[Test]
-    public function aDraftSaysSoInItsOwnFrontMatter(): void
+    public function everySkillInTheDirectoryIsPublished(): void
     {
-        $published = Installer::skills();
-        self::assertNotSame([], $published, 'nothing at all is published');
-
-        foreach (self::skills() as $name => $skill) {
-            $metadata = self::frontMatter($name, $skill)['metadata'] ?? [];
-            $declared = is_array($metadata)
-                && ($metadata['typo3-dev-companion-status'] ?? null) === 'draft';
-            self::assertSame($declared, Installer::draft($skill), $name . ' is read as a draft two ways');
-            self::assertSame(
-                !$declared,
-                in_array($name, $published, true),
-                $declared
-                    ? $name . ' says it is a draft and is published anyway'
-                    : $name . ' says nothing and is published to nobody',
-            );
-            self::assertSame(
-                $declared,
-                in_array($name, Installer::drafts(), true),
-                $name . ' is one of the two sets and has to be the other',
-            );
-        }
-
-        // The two are the whole directory and share nothing. `--drafts` adds
-        // the second set to the first, so a skill in both would be published
-        // twice and one in neither would be installable by no command at all.
-        self::assertSame([], array_intersect($published, Installer::drafts()));
-        $both = [...$published, ...Installer::drafts()];
-        sort($both);
-        self::assertSame(array_keys(self::skills()), $both);
-    }
-
-    /**
-     * What the declaration is, on a body rather than on the directory.
-     *
-     * The test above holds the derivation and can only see the shapes the
-     * directory happens to contain, which today is no draft at all — so the
-     * reader itself is held here, on the shapes a file can take. Three of them
-     * are the parser's gain over the pattern this used to be: a quoted value
-     * and an inline mapping are the same declaration to every client and were
-     * not to a regex, and front matter no parser can read is not a declaration
-     * at all — `D-SKL-027`.
-     */
-    #[Decision('D-SKL-027')]
-    #[Test]
-    #[DataProvider('theShapesAFrontMatterCanTake')]
-    public function aDraftIsWhatDeclaresItselfOneUnderThisServersKey(bool $draft, string $body): void
-    {
-        self::assertSame($draft, Installer::draft($body));
-    }
-
-    /** @return array<string, array{0: bool, 1: string}> */
-    public static function theShapesAFrontMatterCanTake(): array
-    {
-        $matter = static fn(string $lines): string => "---\nname: x\ndescription: y\n" . $lines . "---\n\nThe body.\n";
-
-        return [
-            'the declaration' => [true, $matter("metadata:\n  typo3-dev-companion-status: draft\n")],
-            'its value quoted' => [true, $matter("metadata:\n  typo3-dev-companion-status: \"draft\"\n")],
-            'the mapping written inline' => [true, $matter("metadata: {typo3-dev-companion-status: draft}\n")],
-            'the key at another value' => [false, $matter("metadata:\n  typo3-dev-companion-status: published\n")],
-            // The two spellings that came before this one. Neither may hold a
-            // skill back now, because neither is a field a client reads.
-            'the top-level status this replaced' => [false, $matter("status: draft\n")],
-            'the generic key under metadata' => [false, $matter("metadata:\n  status: draft\n")],
-            'no metadata at all' => [false, $matter('')],
-            'the declaration in the body' => [
-                false,
-                "---\nname: x\n---\n\nmetadata:\n  typo3-dev-companion-status: draft\n",
-            ],
-            'front matter no parser reads' => [false, "---\nname: x\ndescription: a: b\n---\n\nThe body.\n"],
-            'no front matter' => [false, "# A skill\n\nThe body.\n"],
-        ];
+        self::assertSame(array_keys(self::skills()), Installer::skills());
     }
 
     /**
@@ -3002,11 +2917,9 @@ final class SkillTest extends TestCase
     }
 
     /**
-     * A skill exists for its readers once it is published, so a skill this
+     * A skill exists for its readers once its directory does, so a skill this
      * server names in an answer is one the caller can actually load
-     * (`D-SKL-013`). The draft in `skills/` is not that: it is shown to
-     * somebody first, and `typo3-development-installation` has been sitting
-     * there since 2026-08-03 waiting for exactly that review.
+     * (`D-SKL-013`, `D-SKL-087`).
      */
     #[Decision('D-SKL-013')]
     #[Test]
@@ -3133,9 +3046,9 @@ final class SkillTest extends TestCase
      * selects one on the intents, so a skill in the first and absent from the
      * second is reachable only by a caller who already knew it existed. What
      * the guide answers such a task with is the nearest intent that did match —
-     * a different workflow, confidently named (`D-SKL-023`). A draft is not in
-     * this set, because a draft reachable by routing is one nobody chose, and
-     * that is the exemption this check has and the only one — `D-SKL-064`.
+     * a different workflow, confidently named (`D-SKL-023`). The set is every
+     * skill this server publishes and the check has no exemption — `D-SKL-064`,
+     * `D-SKL-087`.
      */
     #[Requirement('R-SKL-019')]
     #[Decision('D-SKL-023')]

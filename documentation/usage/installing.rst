@@ -98,10 +98,9 @@ server started in that project compares it before the first call —
 ``R-DIS-025``.
 
 Where they no longer match, the server puts them back and then says so twice. It
-republishes what the record names — the clients it names, the drafts it names —
-and writes no client configuration: this is the publication an explicit
-``install`` asked for, brought up to date, and never a new one. A project with
-no record is untouched.
+republishes what the record names, for the clients it names, and writes no
+client configuration: this is the publication an explicit ``install`` asked for,
+brought up to date, and never a new one. A project with no record is untouched.
 
 The long line goes to stderr, naming what differed and what was republished, for
 whoever is at a terminal. One short sentence goes into the instructions a client
@@ -130,10 +129,6 @@ published there, a digest that no longer matches, and a record written before
 the digest existed. The first is the one to expect — every published directory
 ignores itself, which is also what ``git clean -xdf`` takes with it. A project
 this package never installed into is silent.
-
-Where the record carries drafts, the refresh keeps them: the record says which
-were published here and it is the record this reads. Taking them back out is
-still ``update`` without ``--drafts``, which is a run somebody asked for.
 
 Refreshing on update
 --------------------
@@ -172,36 +167,6 @@ What the hook does not cover is the fresh clone: ``post-update-cmd`` fires on
 ``composer update`` and on an ``install`` with no lock file, so a colleague
 installing from the lock runs nothing. There the notice at the next server start
 is what says the copies are behind.
-
-Add ``--drafts`` to that line where the project has drafts published in it. A
-run that does not ask for them takes them out, and with the hook in place that
-happens on every ``composer update`` rather than when somebody typed the
-command.
-
-Trying a draft
---------------
-
-Both commands take ``--drafts``, which publishes the skills that still declare
-themselves drafts beside the ones this server publishes:
-
-.. code-block:: bash
-
-    /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install --agent=claude --drafts
-
-
-What it is for is the review step :doc:`../contributing/writing-a-skill` makes a
-condition of publishing. Reading a draft in this repository is not reading it
-where it loads, and the questions it exists to raise — is this the order the
-work actually goes in, is the step that decides the outcome in it — are raised
-by using it on a real task.
-
-The drafts are recorded under their own key in
-``.typo3-dev-companion/state.json``, because what is in a project unreviewed is
-the question somebody opens that file to answer. They are the one thing an
-``update`` does not carry over: a run that does not ask for them removes them
-again and says so. Sticky would be the convenient reading and the wrong one — an
-unreviewed workflow that stays in a project because somebody once tried it is
-what publishing being a deliberate edit exists to prevent.
 
 Both commands write the client entry, because what belongs in it is a property
 of the project rather than of the run: a project that required this package

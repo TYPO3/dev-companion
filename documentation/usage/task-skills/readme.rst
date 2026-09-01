@@ -14,10 +14,9 @@ install writes it below ``.agents/skills``. Each installed directory also gets
 ``references/base.md``, the shared start of every workflow, so copying the
 source directory by hand does not produce the same skill.
 
-Only published skills are listed. A skill whose front matter declares it a draft
-is installed only when the command takes ``--drafts``, and the next ``update``
-without that flag removes it again. :doc:`../checking-it-answers` explains how
-to tell a stale copy from a workflow the client did not activate.
+Every skill this server carries is installed, and this lists all of them.
+:doc:`../checking-it-answers` explains how to tell a stale copy from a workflow
+the client did not activate.
 
 Published workflows
 -------------------

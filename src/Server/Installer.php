@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Server;
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Paths;
 
@@ -15,18 +13,6 @@ final class Installer
     private const SERVER = 'typo3-dev-companion';
 
     private const BASE = 'references/base.md';
-    /** What a skill declares while it is not to be published. */
-    private const DRAFT = 'draft';
-    /**
-     * Where it declares it. `metadata` is the one field the standard leaves to
-     * a client — "a map from string keys to string values" for "additional
-     * properties not defined by the Agent Skills spec" — and the six it does
-     * define are a closed set the reference validator refuses anything outside
-     * of. The key is this server's own name because that same paragraph asks
-     * for one unique enough not to collide, and a draft published under
-     * `--drafts` sits in a project where other tools write the same map.
-     */
-    private const DRAFT_KEY = self::SERVER . '-status';
     private const STATE_DIRECTORY = '.typo3-dev-companion';
     private const STATE = self::STATE_DIRECTORY . '/state.json';
     /**
@@ -219,14 +205,12 @@ final class Installer
      * `knowledge/task-intents.json` routes a task to the skill that owns it,
      * and a name this does not carry is one nobody can load.
      *
-     * It is the directory minus the drafts rather than a list beside it. A list
-     * is a second place the same fact lives, and the two disagree in the
-     * direction nobody notices: a draft that was reviewed and added here while
-     * its file still declares itself one is published and reads as unfinished,
-     * and one taken out of the list while its file says nothing reads as ready
-     * and is loadable by nobody. Now publishing is one edit — the declaration
-     * comes out of the front matter — and the file in somebody else's project
-     * is the same file that decided it would go there.
+     * It is the directory rather than a list beside it. A list is a second
+     * place the same fact lives, and the two disagree in the direction nobody
+     * notices: a name in the list whose directory nobody wrote is published as
+     * a missing skill, and a directory the list forgot is loadable by nobody.
+     * So a skill exists for its readers as soon as its directory does —
+     * `D-SKL-087`.
      *
      * Sorted, because it is written into `.typo3-dev-companion/state.json` and
      * compared against what the last run left; a listing whose order moved
@@ -236,30 +220,14 @@ final class Installer
      */
     public static function skills(): array
     {
-        return self::declaring(false);
-    }
+        $skills = [];
+        foreach (Finder::create()->directories()->in(Paths::root() . '/skills')->depth(0)->sortByName() as $skill) {
+            if (is_file($skill->getPathname() . '/SKILL.md')) {
+                $skills[] = $skill->getFilename();
+            }
+        }
 
-    /**
-     * The drafts, which is the rest of the same directory.
-     *
-     * They are published to nobody by default and to a project that asks for
-     * them by name, because a draft has one reader before it is finished: the
-     * person who has to say whether the workflow is the one they actually run.
-     * `documentation/contributing/writing-a-skill.rst` makes that a step, and a step
-     * nobody can carry out is one that gets skipped — reading a skill in the
-     * repository is not reading it where it loads, and the questions it exists
-     * to raise are raised by using it.
-     *
-     * Kept apart from the published set rather than merged into it under a
-     * flag, so that everything answering "what does this server publish" keeps
-     * answering it: `knowledge/task-intents.json` routes to a name from there,
-     * and a draft reachable by routing is one nobody chose.
-     *
-     * @return array<int, string>
-     */
-    public static function drafts(): array
-    {
-        return self::declaring(true);
+        return $skills;
     }
 
     /**
@@ -276,16 +244,12 @@ final class Installer
      * `skills/base.md`, which is copied into every one of them. The `.gitignore`
      * each published directory carries is a constant of this class and moves
      * only when this class does.
-     *
-     * The set is part of it rather than beside it — a project that asked for
-     * the drafts and a project that did not are two publications, and the digest
-     * of one must not read as current in the other.
      */
-    public static function digest(bool $drafts): string
+    public static function digest(): string
     {
         $digest = hash_init('sha256');
         hash_update_file($digest, Paths::root() . '/skills/' . basename(self::BASE));
-        foreach (self::publishSet($drafts) as $skill) {
+        foreach (self::skills() as $skill) {
             hash_update($digest, "\0" . $skill . "\0");
             foreach (Finder::create()->files()->in(Paths::root() . '/skills/' . $skill)->sortByName() as $file) {
                 hash_update($digest, $file->getRelativePathname() . "\0");
@@ -322,23 +286,15 @@ final class Installer
         }
         if ($state['digest'] === '') {
             $reasons[] = 'the record predates this check and says nothing about what was published';
-        } elseif ($state['digest'] !== self::digest($state['drafts'] !== [])) {
+        } elseif ($state['digest'] !== self::digest()) {
             $reasons[] = 'this server publishes something other than what was published here';
         }
         if ($reasons === []) {
             return null;
         }
 
-        // The drafts are a per-run choice, so an update that does not ask for
-        // them takes them out. Somebody acting on this line wants the project
-        // it has, not the one a shorter command would leave.
-        $drafts = $state['drafts'] === []
-            ? ''
-            : ' --drafts is what keeps the unreviewed drafts this project has: ' . implode(', ', $state['drafts']) . '.';
-
         return 'the task skills in this project are not the ones this server publishes now — '
-            . implode('; ', $reasons) . '. Run typo3-dev-companion update' . ($drafts === '' ? '' : ' --drafts') . '.'
-            . $drafts;
+            . implode('; ', $reasons) . '. Run typo3-dev-companion update.';
     }
 
     /**
@@ -349,7 +305,7 @@ final class Installer
      * it: the question here is whether the publication is still there at all,
      * and what its files say is the digest's half.
      *
-     * @param array{skills: list<string>, drafts: list<string>, agents: list<string>, digest: string} $state
+     * @param array{skills: list<string>, agents: list<string>, digest: string} $state
      * @return list<string>
      */
     private static function unpublished(string $project, array $state): array
@@ -360,7 +316,7 @@ final class Installer
             if (in_array($path, $unpublished, true)) {
                 continue;
             }
-            foreach ([...$state['skills'], ...$state['drafts']] as $skill) {
+            foreach ($state['skills'] as $skill) {
                 if (!is_dir($project . '/' . $path . '/' . $skill)) {
                     $unpublished[] = $path;
 
@@ -393,7 +349,7 @@ final class Installer
     public static function behind(string $project, array $skills): array
     {
         $state = self::readState($project);
-        $published = [...$state['skills'], ...$state['drafts']];
+        $published = $state['skills'];
         if ($published === []) {
             return [];
         }
@@ -470,67 +426,6 @@ final class Installer
     }
 
     /**
-     * The skills a run publishes, which is this package's own set and the
-     * drafts where the run asked for them.
-     *
-     * @return array<int, string>
-     */
-    private static function publishSet(bool $drafts): array
-    {
-        $publish = [...self::skills(), ...($drafts ? self::drafts() : [])];
-        sort($publish);
-
-        return $publish;
-    }
-
-    /**
-     * The skills directory, split on the one line that decides where a skill
-     * goes. Two walks over one directory asking opposite questions is one walk
-     * with the answer as its argument.
-     *
-     * @return array<int, string>
-     */
-    private static function declaring(bool $draft): array
-    {
-        $skills = [];
-        foreach (Finder::create()->directories()->in(Paths::root() . '/skills')->depth(0)->sortByName() as $skill) {
-            $body = $skill->getPathname() . '/SKILL.md';
-            if (is_file($body) && self::draft((string) file_get_contents($body)) === $draft) {
-                $skills[] = $skill->getFilename();
-            }
-        }
-
-        return $skills;
-    }
-
-    /**
-     * Whether a skill says it is not to be published.
-     *
-     * Read with a YAML parser rather than matched with a pattern, so that what
-     * this sees and what a client reading the same file sees are one reading. A
-     * pattern agrees with the parser on the line it was written for and parts
-     * from it on the rest of YAML: a quoted value, a mapping written inline, a
-     * key that repeats. Front matter no parser can read is not a declaration
-     * either, which is why that is false rather than an exception.
-     */
-    public static function draft(string $body): bool
-    {
-        if (preg_match('/\A---\R(.*?)\R---\R/s', $body, $block) !== 1) {
-            return false;
-        }
-
-        try {
-            $matter = Yaml::parse($block[1]);
-        } catch (ParseException) {
-            return false;
-        }
-
-        return is_array($matter)
-            && is_array($matter['metadata'] ?? null)
-            && ($matter['metadata'][self::DRAFT_KEY] ?? null) === self::DRAFT;
-    }
-
-    /**
      * The clients `--agent=` accepts, for the entrypoint's own help.
      *
      * @return array<int, string>
@@ -540,9 +435,9 @@ final class Installer
         return array_keys(self::AGENTS);
     }
 
-    public function install(?string $agent, bool $drafts = false): string
+    public function install(?string $agent): string
     {
-        return $this->setUp([$agent ?? self::GENERIC], $drafts, true);
+        return $this->setUp([$agent ?? self::GENERIC], true);
     }
 
     /**
@@ -551,14 +446,11 @@ final class Installer
      * Without an agent that is every client `.typo3-dev-companion/state.json`
      * records, because a project is usually worked on by more than one and
      * naming them one at a time meant remembering which of them the project had.
-     * The drafts are the one thing an update does not carry over: they are a
-     * per-run choice on both commands, so an update that does not ask for them
-     * takes them out again and says so, which is the way back off a draft. A
-     * project with nothing installed is told so and is not a failure — this is
+     * A project with nothing installed is told so and is not a failure — this is
      * the command a project wires into Composer's `post-update-cmd`, where a
      * non-zero exit fails the whole run (`R-DIS-024`, `D-DIS-014`).
      */
-    public function update(?string $agent, bool $drafts = false): string
+    public function update(?string $agent): string
     {
         $update = $agent !== null ? [$agent] : self::readState($this->project)['agents'];
         if ($update === []) {
@@ -566,7 +458,7 @@ final class Installer
                 . 'install --agent=<client> for a client of its own.';
         }
 
-        return $this->setUp($update, $drafts, true);
+        return $this->setUp($update, true);
     }
 
     /**
@@ -581,16 +473,13 @@ final class Installer
      * project is a server starting, and this is what it does there —
      * `D-DIS-021`.
      *
-     * It adds nothing. The clients are the recorded ones, the drafts are the
-     * recorded choice, and no client entry is written: this only puts back what
-     * an explicit `install` already asked for. A project with no record is
-     * untouched, as it was.
+     * It adds nothing. The clients are the recorded ones and no client entry is
+     * written: this only puts back what an explicit `install` already asked
+     * for. A project with no record is untouched, as it was.
      */
     public function refresh(): string
     {
-        $state = self::readState($this->project);
-
-        return $this->setUp($state['agents'], $state['drafts'] !== [], false);
+        return $this->setUp(self::readState($this->project)['agents'], false);
     }
 
     /**
@@ -613,7 +502,7 @@ final class Installer
      *
      * @param list<string> $names
      */
-    private function setUp(array $names, bool $drafts, bool $entries): string
+    private function setUp(array $names, bool $entries): string
     {
         $state = self::readState($this->project);
 
@@ -630,14 +519,10 @@ final class Installer
                 continue;
             }
             $published[] = $definition['skills'];
-            $messages[] = $this->publishSkills(
-                $definition['skills'],
-                [...$state['skills'], ...$state['drafts']],
-                $drafts,
-            );
+            $messages[] = $this->publishSkills($definition['skills'], $state['skills']);
         }
 
-        return implode("\n", $this->record($state, $names, $messages, $drafts));
+        return implode("\n", $this->record($state, $names, $messages));
     }
 
     /**
@@ -648,12 +533,12 @@ final class Installer
      * one file for the whole project. Writing it inside the loop would let the
      * first client of a run decide what the second one sees.
      *
-     * @param array{skills: list<string>, drafts: list<string>, agents: list<string>, digest: string} $state
+     * @param array{skills: list<string>, agents: list<string>, digest: string} $state
      * @param list<string> $installed
      * @param list<string> $messages
      * @return list<string>
      */
-    private function record(array $state, array $installed, array $messages, bool $drafts): array
+    private function record(array $state, array $installed, array $messages): array
     {
         $agents = array_values(array_unique([...$state['agents'], ...$installed]));
         sort($agents);
@@ -661,12 +546,8 @@ final class Installer
             'version' => 1,
             'agents' => $agents,
             'skills' => self::skills(),
-            // Their own key rather than the same list, because what is in this
-            // project unreviewed is the question somebody opens this file to
-            // answer, and a name among the published ones does not answer it.
-            'drafts' => $drafts ? self::drafts() : [],
             // What the names cannot say: which version of them is down there.
-            'digest' => self::digest($drafts),
+            'digest' => self::digest(),
         ]);
         $this->write($this->project . '/' . self::STATE_DIRECTORY . '/.gitignore', self::IGNORE_ALL);
 
@@ -1108,9 +989,9 @@ final class Installer
     }
 
     /** @param list<string> $previousSkills */
-    private function publishSkills(string $skillsPath, array $previousSkills, bool $drafts): string
+    private function publishSkills(string $skillsPath, array $previousSkills): string
     {
-        $publish = self::publishSet($drafts);
+        $publish = self::skills();
 
         $messages = [];
         foreach ($publish as $skill) {
@@ -1119,11 +1000,6 @@ final class Installer
         foreach (array_diff($previousSkills, $publish) as $skill) {
             $this->removeDirectory($this->project . '/' . $skillsPath . '/' . $skill);
             $messages[] = 'Removed stale ' . $skill . ' from ' . $this->project . '/' . $skillsPath . '.';
-        }
-        if ($drafts && self::drafts() !== []) {
-            $messages[] = 'Drafts published here: ' . implode(', ', self::drafts())
-                . '. Nobody has reviewed these, and the next update takes them out again unless it is'
-                . ' asked for them too.';
         }
 
         return implode("\n", $messages);
@@ -1170,13 +1046,13 @@ final class Installer
      * empty list rather than an error — nothing is wrong there, there is just
      * nothing an `update` without an agent could act on.
      *
-     * @return array{skills: list<string>, drafts: list<string>, agents: list<string>, digest: string}
+     * @return array{skills: list<string>, agents: list<string>, digest: string}
      */
     private static function readState(string $project): array
     {
         $path = $project . '/' . self::STATE;
         if (!is_file($path)) {
-            return ['skills' => [], 'drafts' => [], 'agents' => [], 'digest' => ''];
+            return ['skills' => [], 'agents' => [], 'digest' => ''];
         }
         try {
             $state = json_decode((string) file_get_contents($path), true, flags: JSON_THROW_ON_ERROR);
@@ -1190,12 +1066,6 @@ final class Installer
             $state['skills'],
             static fn(mixed $skill): bool => is_string($skill) && $skill !== '',
         ));
-        // Absent in a state file written before drafts could be installed, and
-        // absent is right there: that project has none.
-        $drafts = array_values(array_filter(
-            is_array($state['drafts'] ?? null) ? $state['drafts'] : [],
-            static fn(mixed $draft): bool => is_string($draft) && $draft !== '',
-        ));
         $agents = array_values(array_filter(
             is_array($state['agents'] ?? null) ? $state['agents'] : [],
             static fn(mixed $agent): bool => is_string($agent)
@@ -1207,7 +1077,7 @@ final class Installer
         // than reading silence as a match.
         $digest = is_string($state['digest'] ?? null) ? $state['digest'] : '';
 
-        return ['skills' => $skills, 'drafts' => $drafts, 'agents' => $agents, 'digest' => $digest];
+        return ['skills' => $skills, 'agents' => $agents, 'digest' => $digest];
     }
 
     private function copyDirectory(string $source, string $target): void

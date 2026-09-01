@@ -152,12 +152,9 @@ final class InstallerTest extends TestCase
                     'typo3-extension-testing',
                     'typo3-extension-upgrade',
                 ],
-                // Nothing unreviewed unless the run asked for it, which is what
-                // somebody opens this file to find out.
-                'drafts' => [],
                 // What the names cannot say, and what a later session compares
                 // against to find out that an update is due — `R-DIS-025`.
-                'digest' => Installer::digest(false),
+                'digest' => Installer::digest(),
             ], json_decode((string) file_get_contents($state), true, flags: JSON_THROW_ON_ERROR));
             // The project's own .gitignore is what it was before the install,
             // and every directory this package wrote says `*` about itself.
@@ -825,58 +822,6 @@ final class InstallerTest extends TestCase
     private function install(string $directory, string &$stderr): int
     {
         return $this->execute($directory, ['install'], $stderr);
-    }
-
-    /**
-     * A draft is published where the run asked for it and taken back out where
-     * the next one did not.
-     *
-     * The one that matters is the second half. Sticky would be the convenient
-     * reading, and it is how an unreviewed workflow ends up living in somebody's
-     * project because a session once tried it — which is what publishing being a
-     * deliberate edit exists to prevent. So the flag is a choice per run, and
-     * that is also why there is no second flag for taking one out.
-     */
-    #[Test]
-    public function aDraftIsPublishedOnlyWhereTheRunAsksForIt(): void
-    {
-        $drafts = Installer::drafts();
-        $directory = $this->directory();
-
-        try {
-            $stderr = '';
-            self::assertSame(0, $this->execute($directory, ['install', '--drafts'], $stderr), $stderr);
-
-            $state = $directory . '/.typo3-dev-companion/state.json';
-            $recorded = json_decode((string) file_get_contents($state), true, flags: JSON_THROW_ON_ERROR);
-            self::assertSame($drafts, $recorded['drafts']);
-            self::assertSame(Installer::skills(), $recorded['skills']);
-
-            foreach ($drafts as $draft) {
-                $published = $directory . '/.agents/skills/' . $draft;
-                self::assertFileEquals(Paths::root() . '/skills/' . $draft . '/SKILL.md', $published . '/SKILL.md');
-                // The base goes into a draft the same way, or it reads one step
-                // short of every published skill and the trial measures that
-                // rather than the draft.
-                self::assertFileEquals(Paths::root() . '/skills/base.md', $published . '/references/base.md');
-                self::assertNotContains($draft, $recorded['skills'], 'a draft was recorded as published');
-            }
-
-            self::assertSame(0, $this->execute($directory, ['update'], $stderr), $stderr);
-
-            foreach ($drafts as $draft) {
-                self::assertDirectoryDoesNotExist($directory . '/.agents/skills/' . $draft);
-            }
-            $recorded = json_decode((string) file_get_contents($state), true, flags: JSON_THROW_ON_ERROR);
-            self::assertSame([], $recorded['drafts']);
-            // And the published ones are untouched by either run.
-            self::assertFileEquals(
-                Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
-                $directory . '/.agents/skills/typo3-core-patch-review/SKILL.md',
-            );
-        } finally {
-            Directory::remove($directory);
-        }
     }
 
     /** @param list<string> $arguments */

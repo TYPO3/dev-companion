@@ -88,3 +88,9 @@ under the current name, and every listing on both sides agreed.
   budget is spent either way; what this change establishes is that the notice
   fires rarely and the routing is what pays for it, and the next session may
   read that trade differently.
+
+## Since then
+
+The set came back out on 2026-09-01. There is one publication per release again,
+so the digest covers the skills and `skills/base.md` and nothing folded in —
+`D-SKL-087`.

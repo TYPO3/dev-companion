@@ -28,9 +28,9 @@ Nothing else couples the two.
   the directory, and `D-EVI-003` named a tool renamed weeks earlier.
 - The two whose named code had moved under them and which were right both carry
   one. `TermSearchTest::aStemRunsPastItsOwnEndAndACuratedWordDoesNot` holds
-  `D-ANS-050`'s claim and
-  `SkillTest::aDraftIsWhatDeclaresItselfOneUnderThisServersKey` holds
-  `D-SKL-027`'s. `Text` and `Installer` both changed on 2026-08-18 and neither
+  `D-ANS-050`'s claim, and three tests held `D-SKL-027`'s — of them
+  `SkillTest::everyFrontMatterFieldIsOneTheStandardDefines` outlived the entry
+  (`D-SKL-087`). `Text` and `Installer` both changed on 2026-08-18 and neither
   entry needed a reader.
 - So the signal proposed first was the wrong one. "The statement names code that
   has changed since" would have reported exactly those two and none of the

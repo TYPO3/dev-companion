@@ -68,3 +68,13 @@ The second case is a count rather than a row, and it is open:
 declared table holds. A count reads no field of any row and still runs over the
 data with the shell user's access, so which side it is on is the question
 `todo/waiting/T-260831-029e.md` carries.
+
+## Since then
+
+Asked on 2026-09-01 whether a row count belongs in `typo3_extension_describe`,
+after a session maintained 3101 records through the generic record list and
+reported that nothing connected a count to the question of a backend module. The
+answer was that counting is not that tool's work, and that reading records is
+worth a tool of its own. So the boundary this entry drew is the one being
+reconsidered rather than the describe answer, and what a record tool may answer
+is `T-260901-2b7e`.

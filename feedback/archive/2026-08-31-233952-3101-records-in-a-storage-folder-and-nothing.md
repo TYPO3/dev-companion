@@ -1,7 +1,8 @@
 ---
 date: 2026-08-31T23:39:52+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-09-01
 model: claude-opus-5[1m]
 tool: typo3-backend-module-development, typo3_backend_module_lookup, typo3-content-element-development
 directory: /home/benji/projects/site-tierheim

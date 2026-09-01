@@ -42,6 +42,19 @@ Whole session. Convention stated at 21:55, 22:36, 22:47, 22:48, 23:15. Bulk tran
 
 ## Suggestion
 
-The piece that is yours is small and cheap: let typo3_project_describe report the project's own code language where the repository states it, and say so in the answer. An .editorconfig, a CONTRIBUTING, a README line, the source language declared in the XLF files it already reads — this project's unprefixed XLF files declare source-language="en" and the describe answer already reports that per language file. Turning that into one sentence at the top — "this project's XLF sources declare English; treat English as the code language unless the repository says otherwise" — puts the convention in front of a caller at the moment they are being oriented, rather than leaving it to be discovered through corrections.
+Trimmed on 2026-09-01. The framing at the end of this report landed as a
+statement in verifying-a-change-against-the-installation: a convention is a
+precondition on writing rather than a pass over what is written, and what the
+existing files of a kind already do is one search away. What is left is the
+piece this report calls yours, and it is open rather than answered.
 
-Beyond that, the useful framing for anyone hitting the same thing: a convention is a precondition on generation, not a pass over output. The check that would have caught me is not a linter over the repository — I ran those and they were green, because php-cs-fixer and an XLIFF schema linter do not know what language a string is in. It is asking, before writing a new file, what language this project's existing files of that kind are in. That question is answerable from the checkout in one grep and I did not ask it once.
+The piece that is yours is small and cheap: let typo3_project_describe report
+the project's own code language where the repository states it, and say so in
+the answer. An .editorconfig, a CONTRIBUTING, a README line, the source language
+declared in the XLF files it already reads — this project's unprefixed XLF files
+declare source-language="en" and the describe answer already reports that per
+language file. Turning that into one sentence at the top — "this project's XLF
+sources declare English; treat English as the code language unless the
+repository says otherwise" — puts the convention in front of a caller at the
+moment they are being oriented, rather than leaving it to be discovered through
+corrections.

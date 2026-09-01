@@ -66,7 +66,7 @@ final class PackageSourcesTest extends TestCase
     #[Test]
     public function withoutAConsoleTheDeclarationsAreTheAnswerAndSaySoAsOne(): void
     {
-        $root = $this->coreCheckout();
+        $root = $this->coreCheckout('14.3.0');
         $this->namespaceFile($root . '/typo3/sysext/core', ['core' => ['TYPO3\\CMS\\Core\\ViewHelpers']]);
         Instance::discoverFrom($root);
         Typo3Cli::forget();

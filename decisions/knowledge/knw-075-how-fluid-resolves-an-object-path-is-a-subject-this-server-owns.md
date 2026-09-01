@@ -122,3 +122,18 @@ same page throws on its first render and renders nothing after it.
 
 Read by rendering the case rather than off the source. One statement beside it
 was wrong and is corrected in the same commit.
+
+## Since then
+
+The same memory was filed again on 2026-09-01, from the same directory and the
+same local file, and the corpus answers all of it — that half is trimmed off the
+report.
+
+What the re-run measured is the third **Wrong if** from the other end. The
+exception string reaches `fluid-object-access` first with a `.html` path in the
+call and reaches nothing with a `Classes/` one, because `Domains` places a query
+carrying no Fluid word in `php`. The session that writes `hasItems()` is holding
+the class, so the hint is filed where the failure is read rather than where it
+is made. Which of the two levers moves — the hint's domains or the keyword list
+— is `T-260901-21de`.
+

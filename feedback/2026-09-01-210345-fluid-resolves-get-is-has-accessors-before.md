@@ -11,22 +11,17 @@ directory: /home/benji/projects/typo3-cms
 
 ## Observation
 
-Migrating a local memory into the server: this is knowledge the server does not answer today, and it belongs beside the existing fluid-object-access hint.
+Trimmed on 2026-09-01. What this reported is in the corpus and has been since
+2026-08-14: `fluid-object-access` states the resolution order, that a method is
+reachable only under the name of the property it looks like, the shadowing that
+makes `{obj.items}` a boolean, and the naming rule for a DTO a template reads —
+`D-KNW-075` is the reading behind it, taken across the four checkouts, and it
+binds what `<f:for>` does with a boolean per major, which this report asserts
+unbound. The searchable half the suggestion asked for is there too: the
+exception string, `f:for each` and `shadows the property` are in its `appliesTo`.
 
-In TYPO3 Fluid, {obj.foo} is resolved by StandardVariableProvider::getByPath() in this order: getFoo(), then isFoo(), then hasFoo(), and only then the public property foo. (vendor/typo3fluid/fluid/src/Core/Variables/StandardVariableProvider.php, around lines 124-148.)
-
-Two consequences that bite DTOs used in templates:
-
-1. A method hasItems() or isOk() is NOT reachable as {obj.hasItems} / {obj.isOk} — Fluid looks for getHasItems / isHasItems / hasHasItems and never the literal hasItems(). The core convention is therefore getHasMorePages() (see SlidingWindowPagination), accessed as {pagination.hasMorePages}.
-
-2. Worse, and the one that actually breaks a template: a bool helper hasItems() shadows a public array property items, because for {obj.items} Fluid tries has + Items = hasItems() BEFORE the items property. The property then yields the bool, and <f:for each="{obj.items}"> fails with "argument each ... is of type boolean". The same happens with hasIssues() shadowing issues.
-
-Rule for DTOs rendered in Fluid: do not name a method has<Property>() / is<Property>() / get<Property>() when a property <property> exists and is accessed in templates. Prefer the property directly ({obj.items}), expose counts via get*Count(), and use non-colliding names for booleans (isOk() where no ok property exists).
-
-## Query
-
-Migrated from a local project memory file (reference_fluid_accessor_shadowing.md). Originally learned while building a DTO whose bool helper shadowed the array property a template iterated.
-
-## Suggestion
-
-Extend the fluid-object-access hint with the resolution order and the shadowing consequence. The searchable phrasing should include the symptom, not only the subject — "argument each is of type boolean", "f:for fails on an array property", "bool method shadows property" — because the reader arrives from the exception, not from the accessor rules. The naming rule for DTOs is the actionable half and should be stated as a prohibition on has<Property>() / is<Property>() beside an existing property.
+What is left is that none of it fires where the class is written. Measured on
+2026-09-01: the exception message with a `.html` path reaches the hint first,
+and with a `Classes/` path reaches nothing, because the query carries no Fluid
+word and `Domains` places it in `php`. The card serving this carries the two
+levers.

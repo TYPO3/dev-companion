@@ -13,7 +13,11 @@
       "js module",
       "es module",
       "add javascript",
-      "generated javascript"
+      "generated javascript",
+      "type annotation",
+      "annotate",
+      "inferred type",
+      "redundant annotation"
     ],
     "hints": [
       "TypeScript source lives in Build/Sources/TypeScript/ and the JavaScript generated from it in the owning system extension's Resources/Public/JavaScript/. The generated file is committed, so a source change that is not built leaves the two disagreeing and the browser running the old one.",
@@ -26,6 +30,8 @@
       "Prefer existing TYPO3 backend imports, event patterns, and custom element conventions used nearby.",
       "Build/eslint.config.mjs decides the style, and CI=true ./Build/Scripts/runTests.sh -s lintTypescript settles a question about it. That file is the list: what it does not configure is untidiness rather than a lint failure.",
       "@typescript-eslint/member-ordering is enforced, so where a member sits in a class is checked rather than left to taste, and adding a static method is where that lands. @typescript-eslint/no-explicit-any and @typescript-eslint/no-inferrable-types are off on purpose, so neither is a finding — imitating a neighbouring file turns a rule that is switched off into a diff nobody asked for.",
+      "So an annotation is written where inference cannot reach and nowhere else. What narrows a value is where it is produced — a type argument on querySelectorAll, a return type, a collection type — and the callback walking the result takes its parameter bare, which is how the backend's own modules are written. A second annotation on the same value is a second source of truth, and where it is wrong the code under it is checked against the wrong thing: any on a callback parameter switches the check off exactly where the query had narrowed it.",
+      "Removing a redundant annotation is therefore the change rather than a tidy-up beside it, and the compiler error that appears when one goes is evidence about the annotation before it is a reason to put it back — the first question is what it was claiming. Dropping a name is a different thing: where a widened type had an alias that meant something, the alias stays and the annotation goes.",
       {
         "text": "jQuery is reached through an import, import $ from 'jquery', and the bare globals $ and jQuery are refused with that import as the message. The restriction is why a file cannot pick the global up from the page the way a script tag once did.",
         "until": 14
@@ -51,12 +57,15 @@
       "task.render",
       "async data in a web component",
       "loading state",
-      "error state"
+      "error state",
+      "as const",
+      "task arguments"
     ],
     "hints": [
       "A backend web component loads data through a Task from @lit/task and renders it with task.render(), which takes one branch per state: pending while it runs, complete with the value, error with the reason it rejected.",
       "The error branch renders only where the task function rejects. A task that catches its own failure and returns an empty value renders complete instead, so the branch the component declares is unreachable and the failure reaches the user as an empty result.",
-      "So a failure is surfaced by letting the task reject, and the declared branch renders it. A second error surface written beside that branch duplicates one the component already has and cannot reach."
+      "So a failure is surfaced by letting the task reject, and the declared branch renders it. A second error surface written beside that branch duplicates one the component already has and cannot reach.",
+      "The task function's parameters are typed by args and not by itself. Written args: () => [this.table, this.uid] as const, the tuple is pinned where it is produced and the task destructures it without an annotation, which is how the context menu and the dashboard widget are written. Left unpinned the tuple widens, and every task function then repeats the types — the localization wizard steps are that form."
     ]
   },
   {

@@ -1900,6 +1900,41 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * What to write instead, beside the rule that nothing pushes it.
+     *
+     * A session imitating a neighbouring file was told the two rules are off
+     * and nothing more, so the corpus named the diff not to make and not the
+     * one to make — `D-KNW-139`. The `@lit/task` half is asserted where that
+     * class is already owned, and both forms of it stand in the same checkout,
+     * so what the statement carries is which one pins the tuple.
+     */
+    #[Decision('D-KNW-139')]
+    #[Test]
+    public function whereAnAnnotationIsWrittenIsStatedBesideTheRulesThatAreOff(): void
+    {
+        $text = self::statementsOf('backend-typescript');
+
+        self::assertStringContainsString('where inference cannot reach and nowhere else', $text);
+        self::assertStringContainsString('takes its parameter bare', $text);
+        self::assertStringContainsString('second source of truth', $text);
+        // The instance that needs no reading of the type system, and the
+        // procedure that is the actionable half of the rule.
+        self::assertStringContainsString('switches the check off exactly where the query had narrowed it', $text);
+        self::assertStringContainsString(
+            'evidence about the annotation before it is a reason to put it back',
+            $text,
+            'the rule stops at the removal and says nothing about the error it raises',
+        );
+        self::assertStringContainsString('the alias stays and the annotation goes', $text);
+
+        $task = self::statementsOf('backend-lit-task');
+
+        self::assertStringContainsString('typed by args and not by itself', $task);
+        self::assertStringContainsString('as const', $task);
+        self::assertStringContainsString('Left unpinned the tuple widens', $task);
+    }
+
+    /**
      * `R-KNW-072`. The interpreter is picked before there is an installation to
      * ask, so the answer has to be readable without one — and the numbers a
      * project ends up holding are three different claims rather than three

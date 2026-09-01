@@ -346,6 +346,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### knowledge
 
+- [`D-KNW-139`][D-KNW-139] — The corpus states where an annotation is written · 2026-09-02
 - [`D-KNW-137`][D-KNW-137] — A relaunch is a kind of work rather than a hint beside one · 2026-09-01
 - [`D-KNW-138`][D-KNW-138] — A hint names its next call in a statement · 2026-09-01
 - [`D-KNW-133`][D-KNW-133] — A guide's whenToUse names the answer it hands over · 2026-08-28
@@ -476,6 +477,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-028`][D-KNW-028] — How a file becomes a processed one is a subject this server owns · 2026-08-02
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
+[D-KNW-139]: knowledge/knw-139-the-corpus-states-where-an-annotation-is-written.md
 [D-KNW-137]: knowledge/knw-137-a-relaunch-is-a-kind-of-work-rather-than-a-hint-beside-one.md
 [D-KNW-138]: knowledge/knw-138-a-hint-names-its-next-call-in-a-statement.md
 [D-KNW-133]: knowledge/knw-133-a-guides-whentouse-names-the-answer-it-hands-over.md

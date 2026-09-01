@@ -2514,9 +2514,9 @@ final class SkillTest extends TestCase
      * `skills/base.md` is the shared start of a task, and nothing is the shared
      * ending: what holds wherever a workflow closes — the stop at a
      * vulnerability, the form of a report — is written into each body that
-     * needs it. Two copies are cheaper than eleven skills paying for a rule
-     * that holds for two, and a third is where that stops being true and the
-     * paragraph gets a home — `D-SKL-088`.
+     * needs it. Two copies are cheaper than every other skill paying for a
+     * rule that holds for two, and a third is where that stops being true and
+     * the paragraph gets a home — `D-SKL-088`.
      *
      * The pointer at the base is excluded, because every skill carries it by
      * contract.

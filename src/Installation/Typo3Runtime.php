@@ -106,6 +106,26 @@ final class Typo3Runtime
     }
 
     /**
+     * What the database has for a table, or the tables it has at all, or null
+     * where there was no full reading to take it from.
+     *
+     * Asked for, because it opens a connection and lists a schema — the derived
+     * columns beside it say what TYPO3 would create, and a caller who asked
+     * about an icon should pay for neither. An empty table name lists the
+     * tables and nothing else; a table the schema does not have comes back
+     * `present: false` rather than as a failure — `D-DIS-022`.
+     *
+     * @return array{tables: array<int, string>, statementCount: int, suggestions: array<int, array{connection: string, change: string, tables: array<int, string>}>, table?: string, present?: bool, columns?: array<int, array<string, mixed>>, indexes?: array<int, array<string, mixed>>}|array{unavailable: string}|null
+     */
+    public static function liveSchema(string $table): ?array
+    {
+        /** @var array{tables: array<int, string>, statementCount: int, suggestions: array<int, array{connection: string, change: string, tables: array<int, string>}>, table?: string, present?: bool, columns?: array<int, array<string, mixed>>, indexes?: array<int, array<string, mixed>>}|array{unavailable: string}|null $read */
+        $read = self::asked('liveSchema', ['liveSchema' => ['table' => $table]]);
+
+        return $read;
+    }
+
+    /**
      * What one `type=flex` column of this installation resolves to, or null
      * where there was no full reading to take it from.
      *

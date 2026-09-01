@@ -7,9 +7,11 @@ namespace TYPO3\DevCompanion\Tests\Unit;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Installation\Typo3Runtime;
+use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Process\CommandRunner;
 use TYPO3\DevCompanion\Tests\Support\Directory;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
@@ -292,6 +294,7 @@ final class Typo3RuntimeTest extends TestCase
         $topics = Typo3Runtime::ask()['topics'];
         self::assertArrayNotHasKey('configuration', $topics);
         self::assertArrayNotHasKey('flexForm', $topics);
+        self::assertArrayNotHasKey('liveSchema', $topics);
 
         self::assertSame(
             ['found' => true, 'value' => '10.0.0.1'],
@@ -308,6 +311,53 @@ final class Typo3RuntimeTest extends TestCase
         self::assertSame('', $flexForm['failure']);
         self::assertSame(['default'], $flexForm['keys']);
         self::assertNull(Typo3Runtime::topic('configuration'), 'the path went with the reading it was asked in');
+    }
+
+    /**
+     * The probe and the callers that read it are two files, and a topic name is
+     * the only thing between them: one that nothing asks for is dead weight in
+     * a payload every reading carries, and one nothing writes makes a tool say
+     * the installation could not answer, which is what a caller acts on.
+     *
+     * Nothing else here can hold the probe. It runs in the installation, so no
+     * test loads it — `D-COD-004` — and the readings above exercise it through
+     * a TYPO3 shaped like the real one rather than reading the file.
+     */
+    #[Test]
+    public function everyTopicTheProbeWritesIsOneSomethingAsksFor(): void
+    {
+        $probe = (string) file_get_contents(Paths::root() . '/src/Installation/probe.php');
+        preg_match_all('/\$answer\[.topics.\]\[.([a-zA-Z]+).\]/', $probe, $found);
+        $written = array_unique($found[1]);
+        sort($written);
+
+        $asked = [];
+        foreach (Finder::create()->files()->in(Paths::root() . '/src')->name('*.php') as $file) {
+            preg_match_all(
+                "/(?:Typo3Runtime::|self::)(?:topic|asked)\\('([a-zA-Z]+)'/",
+                (string) file_get_contents($file->getPathname()),
+                $calls,
+            );
+            $asked = [...$asked, ...$calls[1]];
+        }
+        $asked = array_unique($asked);
+        sort($asked);
+
+        self::assertSame($written, $asked);
+    }
+
+    /**
+     * It is delivered to the other side and run there, where nothing of this
+     * package exists. A reference to one of its classes is a fatal error in
+     * somebody else's installation rather than a failure here.
+     */
+    #[Test]
+    public function theProbeReachesNothingOfThisPackage(): void
+    {
+        $probe = (string) file_get_contents(Paths::root() . '/src/Installation/probe.php');
+
+        self::assertStringNotContainsString('TYPO3\\DevCompanion', $probe);
+        self::assertDoesNotMatchRegularExpression('/^\s*(use|require|include)\b/m', $probe);
     }
 
     /** @param array<string, mixed> $manifest */

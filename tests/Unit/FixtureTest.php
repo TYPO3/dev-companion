@@ -54,7 +54,7 @@ final class FixtureTest extends TestCase
 
         self::assertSame(Typo3Runtime::STATE_FULL, $answer['state'], $answer['reason']);
         self::assertSame(
-            ['icons', 'deprecatedIcons', 'tables', 'contentElements', 'derivedColumns', 'formDataGroups', 'modules'],
+            ['icons', 'tables', 'contentElements', 'derivedColumns', 'formDataGroups', 'modules'],
             array_keys($answer['topics']),
             'the topics the probe reads, all of them: a container missing one answers that topic unavailable',
         );

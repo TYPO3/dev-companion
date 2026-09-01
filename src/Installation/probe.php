@@ -43,6 +43,7 @@ try {
     $parameters = [];
     $configurationPath = (string) ($parameters['configurationPath'] ?? '');
     $flexForm = is_array($parameters['flexForm'] ?? null) ? $parameters['flexForm'] : null;
+    $liveSchema = is_array($parameters['liveSchema'] ?? null) ? $parameters['liveSchema'] : null;
     if (!is_file($autoload)) {
         $answer['reason'] = 'no autoloader at ' . $autoload . ' below ' . getcwd();
         throw new RuntimeException('', 1);
@@ -108,7 +109,6 @@ try {
         $icons[$identifier] = is_string($source) ? $source : '';
     }
     $answer['topics']['icons'] = $icons;
-    $answer['topics']['deprecatedIcons'] = array_keys($registry->getDeprecatedIcons());
 
     // TCA as it is after every extension has had its say, which is where the
     // tables an extension adds through a PHP call and the content elements
@@ -353,6 +353,132 @@ try {
             'unavailable' => get_class($failure) . ': ' . $failure->getMessage(),
         ];
     }
+    // Asked for rather than read with everything else: it opens a connection
+    // and lists a schema, which a caller who asked about an icon should not pay
+    // for. The derived columns above say what TYPO3 would create; this says
+    // what is there, and the difference is the finding — `D-DIS-022`.
+    if ($liveSchema !== null) {
+        try {
+            $wanted = (string) ($liveSchema['table'] ?? '');
+            $pool = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                TYPO3\CMS\Core\Database\ConnectionPool::class,
+            );
+            $connection = $pool->getConnectionForTable($wanted !== '' ? $wanted : 'pages');
+            $manager = $connection->createSchemaManager();
+            $names = $manager->listTableNames();
+            sort($names, SORT_NATURAL);
+            $topic = ['tables' => $names];
+            if ($wanted !== '') {
+                // A table the schema does not have is an answer rather than a
+                // failure: an installation whose tables were never created is
+                // the case the derived side exists for.
+                $topic['table'] = $wanted;
+                $topic['present'] = in_array($wanted, $names, true);
+                if ($topic['present']) {
+                    $columns = [];
+                    foreach ($manager->listTableColumns($wanted) as $column) {
+                        $default = $column->getDefault();
+                        $columns[] = [
+                            'name' => $column->getName(),
+                            'type' => Doctrine\DBAL\Types\Type::lookupName($column->getType()),
+                            'notnull' => $column->getNotnull(),
+                            'default' => is_scalar($default) || $default === null ? $default : (string) $default,
+                            'length' => $column->getLength(),
+                        ];
+                    }
+                    $indexes = [];
+                    foreach ($manager->listTableIndexes($wanted) as $index) {
+                        $indexes[] = [
+                            'name' => $index->getName(),
+                            'columns' => array_values($index->getColumns()),
+                            'unique' => $index->isUnique(),
+                            'primary' => $index->isPrimary(),
+                        ];
+                    }
+                    $topic['columns'] = $columns;
+                    $topic['indexes'] = $indexes;
+                }
+            }
+
+            // What the two sides differ by is asked of TYPO3 rather than
+            // computed here. `SqlReader` assembles the effective schema — every
+            // active extension's ext_tables.sql and what TCA generates — and
+            // the migrator diffs that against the connection, which is the
+            // reading the Install Tool and database:updateschema act on. Its
+            // change types are that command's own argument.
+            //
+            // The statements themselves are dropped and only the tables they
+            // name are kept. SQLite cannot alter a column, so one extra column
+            // comes back as a four-kilobyte table rebuild, and a caller who
+            // wants the SQL has the command that prints it.
+            $reader = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                TYPO3\CMS\Core\Database\Schema\SqlReader::class,
+            );
+            $migrator = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                TYPO3\CMS\Core\Database\Schema\SchemaMigrator::class,
+            );
+            $statements = $reader->getCreateTableStatementArray($reader->getTablesDefinitionString());
+            $declared = [];
+            foreach ($statements as $statement) {
+                if (preg_match('/CREATE TABLE\s+[`"]?([a-zA-Z0-9_]+)[`"]?/i', (string) $statement, $found) === 1) {
+                    $declared[] = $found[1];
+                }
+            }
+            $known = array_values(array_unique(array_merge($names, $declared)));
+            $suggestions = [];
+            foreach ([false, true] as $remove) {
+                foreach ($migrator->getUpdateSuggestions($statements, $remove) as $name => $types) {
+                    foreach (is_array($types) ? $types : [] as $type => $entries) {
+                        foreach (is_array($entries) ? $entries : [] as $entry) {
+                            if (!is_string($entry) || $entry === '') {
+                                continue;
+                            }
+                            // Only where a name stands in a table position. A
+                            // column called `backend_layout` sits in the column
+                            // list of a rebuilt `pages`, and matching the bare
+                            // word reported the table of that name as drifting.
+                            preg_match_all(
+                                '/(?:TABLE|INTO)\s+[`"]?([a-zA-Z0-9_]+)[`"]?/i',
+                                $entry,
+                                $found,
+                            );
+                            $named = array_values(array_intersect(array_unique($found[1]), $known));
+                            // A statement naming another table is another
+                            // table's finding, and a caller who named one asked
+                            // about that one.
+                            if ($wanted !== '' && !in_array($wanted, $named, true)) {
+                                continue;
+                            }
+                            // The tables and not how many statements name
+                            // them: one changed column is one ALTER on MySQL
+                            // and a whole table rebuild on SQLite, so a count
+                            // says which platform is under the answer.
+                            $key = $name . "\0" . $type;
+                            $at = array_values(array_unique(array_merge($suggestions[$key]['tables'] ?? [], $named)));
+                            sort($at);
+                            $suggestions[$key] = [
+                                'connection' => (string) $name,
+                                'change' => (string) $type,
+                                'tables' => $at,
+                            ];
+                        }
+                    }
+                }
+            }
+            // A list rather than a map keyed by connection: an empty map is
+            // `[]` in JSON and a schema saying object refuses it, and a client
+            // reads one shape either way.
+            ksort($suggestions);
+            $topic['statementCount'] = count($statements);
+            $topic['suggestions'] = array_values($suggestions);
+            $answer['topics']['liveSchema'] = $topic;
+        } catch (Throwable $failure) {
+            $answer['topics']['liveSchema'] = [
+                'unavailable' => get_class($failure) . ': ' . $failure->getMessage(),
+            ];
+        }
+    }
+
     // A form data group is a dependency graph and not a list: every provider
     // declares `depends` and `before`, and what orders the run is what the core
     // resolves from those. The raw registry hands a reader the inputs and calls

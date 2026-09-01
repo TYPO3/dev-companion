@@ -153,7 +153,9 @@ from one that was dropped.
 A behaviour question that survives the lookups above is read out of the
 installed source rather than guessed at. What answers it is the class that
 implements the behaviour and the one it inherits from. That reading is the step
-after the lookups, and what it replaces is changing the code until it works.
+after the lookups, and what it replaces is changing the code until it works. A
+first change that did not work is evidence about the reading, so the second
+attempt at one failure reads the source rather than changing the code again.
 What it settles is what this installation does and never what TYPO3 supports. So
 a finding says the question could not be settled beyond the version installed,
 and an answer built on the reading names the version it holds for.

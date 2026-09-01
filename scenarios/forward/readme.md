@@ -14,6 +14,27 @@ and [contracts/](../contracts/readme.md) for the targeted cases these are not.
 | [`REVIEW-02`](review-02-reusable-extension.md) | A reusable TYPO3 extension                |
 | [`REVIEW-03`](review-03-core-patch.md)         | A TYPO3 core patch                        |
 
+## What every review has failed at
+
+Three of the failures below **How it fails** stand in all three reviews, each in
+its own wording, and a fourth in two of them. They are what a broad review goes
+wrong at whatever it is reviewing, so the next review is written with its own
+failures rather than these:
+
+- **The corpus instead of this thing** — the generic TYPO3 checklist, every
+  subsystem an extension might need, the whole contribution guide.
+- **Another context's conventions** — core-only commands recommended to a
+  project, a core process applied to an extension, a release branch's rules
+  taken for the patch's.
+- **Changing files under a review-only request**, amending or pushing included.
+- **The invented requirement**, in two of the three: a missing feature nobody
+  asked for, or a recommendation reported as a verified defect.
+
+The three lists still carry their own wordings rather than naming these. What a
+review words as its criteria is what its recorded run was judged against, so
+rewriting one resets that run — measured on 2026-09-01, and the trade is three
+forward runs against three sentences.
+
 ## Status of a forward review
 
 | Mark       | Meaning                                                                        | What a run is for                                                           |

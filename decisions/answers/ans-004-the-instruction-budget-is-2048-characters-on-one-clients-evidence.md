@@ -52,3 +52,13 @@ end at this constant.
 Nothing has re-measured it. This entry took the number from one client's release
 runs, and the client reporting above is a different one that delivered the block
 whole and reports no truncation.
+
+## Since then
+
+Re-measured on 2026-09-01, on Claude Code 2.1.252 rather than on a log line. The
+server's own block came back from a client session byte-identical at 1948
+characters. A stdio server written for the measurement, sending 8000 characters
+of numbered markers, was cut at exactly 2048 with an ellipsis in place of the
+rest — so the number is now read off the cut rather than taken from a client's
+report of it. The largest assembly this server sends today is 2033, which leaves
+fifteen characters.

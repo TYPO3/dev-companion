@@ -209,6 +209,16 @@
       "scope": "project"
     },
     {
+      "topic": "Renaming an extension key, its tables or its CTypes in an installation that holds records",
+      "depth": "What the rename touches on the data side and in which order: that extension:setup creates the new tables and drops nothing, why INSERT ... SELECT * between two tables of one TCA is positional, every column that stores a name as a value — CType, backend_layout, sys_file_reference, sys_refindex, the extensionDataImport registry key — and the command that composes an identifier rather than spelling it. It runs nothing, and the proof it names is a query rather than a suite.",
+      "tools": [
+        "typo3_rule_lookup",
+        "typo3_hint_lookup"
+      ],
+      "source": "typo3://guides/project/refactoring/renaming-an-installed-extension",
+      "scope": "project"
+    },
+    {
       "topic": "Looking at a change in a real browser, against the installation that has the content",
       "depth": "Which installation can show the case at all, how a browser running in a container reaches a DDEV site — the router's network and its hostname aliases, the certificate it does not carry, the wildcard hostname it cannot answer — and where a harness and its screenshots go so neither reaches a commit. It runs nothing and starts no installation.",
       "tools": [

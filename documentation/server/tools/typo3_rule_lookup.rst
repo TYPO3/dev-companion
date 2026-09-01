@@ -309,7 +309,7 @@ Data:
                 "body": "- Deprecations must not use `[!!!]`.\n- Deprecations may only use `[TASK]` or `[FEATURE]`.\n- Deprecations must be documented with a changelog RST file.\n- Deprecations need migration guidance and may need extension scanner\n  considerations.\n- All of the above is the authoring side. Reading it — what a given version\n  deprecated, and what that means for code that uses it — works the other way\n  round: the changelog files below `Documentation/Changelog/` of the core\n  package and the matchers below the install package's\n  `Configuration/ExtensionScanner/Php/` are what an installation is checked\n  against, by the Extension Scanner in the Install Tool. Both directories ship\n  with a Composer installation.",
                 "versions": "",
                 "coverage": 1,
-                "score": 108,
+                "score": 109,
                 "truncated": false
             },
             {
@@ -420,6 +420,7 @@ Text:
     - Setting Up an Extension Manual: Documentation/guides.xml, Documentation/Index.rst, The two conventional files, Rendering it before it is published
     - Setting Up PHPUnit in a TYPO3 Extension: Build/UnitTests.xml, Build/FunctionalTests.xml, What was changed in the copied files, Running the suites, Database credentials for the functional suite, What is left after a run
     - Booting a Clone Into a Running Installation: What the Clone Does Not Carry, The Order the Steps Go In, Why the Environment Is Started Twice, Where the Data Comes From, Making the Installation Agree With the Code, The Login the Dump Did Not Bring, The Host the Site Is Served Under, What Says the Boot Worked
+    - Renaming an Extension That Already Holds Content: What Moves Itself and What Does Not, Where an Identifier Is Stored as a Value, The Trap That Is Not a Substitution, What Proves It
     - Setting Up Playwright in a TYPO3 Project: Build/playwright.config.ts, Build/tests/browser/helper/login.setup.ts, Build/tests/browser/frontend/pages.spec.ts, Build/tests/browser/e2e/backend.spec.ts, Reaching into a module, An Assertion Is Evidence Once It Has Been Seen to Fail, The environment the suite reads, What the login setup asserts, and why it differs by version, When the extension itself is the Composer root, What is not committed
 
     For backend UI components use typo3_component_lookup, and call typo3_server_scope for what this server covers at all. If the topic should be covered here, leave a feedback with typo3_feedback_record.
@@ -669,6 +670,16 @@ Data:
                     "The Login the Dump Did Not Bring",
                     "The Host the Site Is Served Under",
                     "What Says the Boot Worked"
+                ]
+            },
+            {
+                "id": "project/refactoring/renaming-an-installed-extension",
+                "title": "Renaming an Extension That Already Holds Content",
+                "topics": [
+                    "What Moves Itself and What Does Not",
+                    "Where an Identifier Is Stored as a Value",
+                    "The Trap That Is Not a Substitution",
+                    "What Proves It"
                 ]
             },
             {

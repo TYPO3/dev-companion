@@ -274,6 +274,7 @@ Text:
     - unit-test-doubles — Unit Tests, Test Doubles and Data Providers in PHPUnit (PHP)
     - upgrade-wizards — Upgrade Wizards (PHP)
     - installation-upgrade — Upgrading an Installation (PHP)
+    - verifying-a-change-against-the-installation — Verifying a Change Against the Installation Rather Than Against Its Own Output (PHP)
     - extbase-arguments — What Arrives From a Request, and What Silently Does Not (PHP)
     - extbase — What Extbase Is For, and When It Is Not Needed (PHP)
     - extension-manifest — What Makes a Directory an Extension (PHP)
@@ -767,6 +768,11 @@ Data:
             {
                 "id": "installation-upgrade",
                 "title": "Upgrading an Installation",
+                "category": "PHP"
+            },
+            {
+                "id": "verifying-a-change-against-the-installation",
+                "title": "Verifying a Change Against the Installation Rather Than Against Its Own Output",
                 "category": "PHP"
             },
             {
@@ -1585,6 +1591,7 @@ Text:
     - unit-test-doubles — Unit Tests, Test Doubles and Data Providers in PHPUnit (PHP)
     - upgrade-wizards — Upgrade Wizards (PHP)
     - installation-upgrade — Upgrading an Installation (PHP)
+    - verifying-a-change-against-the-installation — Verifying a Change Against the Installation Rather Than Against Its Own Output (PHP)
     - extbase-arguments — What Arrives From a Request, and What Silently Does Not (PHP)
     - extbase — What Extbase Is For, and When It Is Not Needed (PHP)
     - extension-manifest — What Makes a Directory an Extension (PHP)
@@ -1991,6 +1998,11 @@ Data:
             {
                 "id": "installation-upgrade",
                 "title": "Upgrading an Installation",
+                "category": "PHP"
+            },
+            {
+                "id": "verifying-a-change-against-the-installation",
+                "title": "Verifying a Change Against the Installation Rather Than Against Its Own Output",
                 "category": "PHP"
             },
             {

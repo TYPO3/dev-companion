@@ -1183,6 +1183,15 @@ Text:
     - PageRepository::getDefaultConstraints($table, $enableFieldsToIgnore) returns the enable-field conditions as QueryBuilder expressions, for a query that builds its own restrictions. [TYPO3 v13 and newer]
     - All of this is about which rows come back. What the object built from one of them is shaped like — and why $row['hidden'] is absent on it rather than false — is record-system-properties. [TYPO3 v13 and newer]
 
+    ## Verifying a Change Against the Installation Rather Than Against Its Own Output
+    Hints:
+    - What a script printed is evidence that the print was reached. A guard that never matched, a regex that edited nothing and a variable the shell refused to assign all end in the same success line, so the state is read afterwards with something that had no part in producing it.
+    - For a change to files, that reader is a search over the result rather than the script's own count: the count is of the list it iterated, and the two differ exactly when the edit failed.
+    - For a change to records, it is a query against the installation's database — a group by over the column that changed, a count of the rows the old value is still on. The installation's own console at vendor/bin/typo3 and the backend are where those run, because that is where the permissions apply.
+    - A green test suite is a claim about its assertions. It says nothing about rows the assertions never look at, and a suite that passed through a broken installation is the ordinary case rather than a surprising one.
+    - For anything an editor sees, the reader is the backend itself: the record list and the page module draw an invalid value where a record's type is one nothing declares, and no frontend page and no HTTP status says so.
+    - Repair the class rather than the instance. A defect found in one file, one table or one row is a defect of the unit its cause is stated in, so the search that found it is run again for every sibling before the fix is reported — one TCA file out of five with the same option is the shape this takes.
+
     ## System Extension Boundaries
     Hints:
     - Keep changes inside the owning system extension unless a cross-extension contract really changes.
@@ -1197,6 +1206,15 @@ Text:
     Hints:
     - A model maps onto the table its class name implies. Configuration/Extbase/Persistence/Classes.php is where a table named differently is mapped, together with the per-property column names and the record type of a single-table inheritance.
     - Orderings are property names, not column names. Ordering by the order records have in the backend therefore needs a property for that field on the model, although it is not a domain concept.
+
+    ## Verifying a Change Against the Installation Rather Than Against Its Own Output
+    Hints:
+    - What a script printed is evidence that the print was reached. A guard that never matched, a regex that edited nothing and a variable the shell refused to assign all end in the same success line, so the state is read afterwards with something that had no part in producing it.
+    - For a change to files, that reader is a search over the result rather than the script's own count: the count is of the list it iterated, and the two differ exactly when the edit failed.
+    - For a change to records, it is a query against the installation's database — a group by over the column that changed, a count of the rows the old value is still on. The installation's own console at vendor/bin/typo3 and the backend are where those run, because that is where the permissions apply.
+    - A green test suite is a claim about its assertions. It says nothing about rows the assertions never look at, and a suite that passed through a broken installation is the ordinary case rather than a surprising one.
+    - For anything an editor sees, the reader is the backend itself: the record list and the page module draw an invalid value where a record's type is one nothing declares, and no frontend page and no HTTP status says so.
+    - Repair the class rather than the instance. A defect found in one file, one table or one row is a defect of the unit its cause is stated in, so the search that found it is run again for every sibling before the fix is reported — one TCA file out of five with the same option is the shape this takes.
 
     Relevant TYPO3 core checks — the list to run, whatever this task turns out to be:
     - `CI=true ./Build/Scripts/runTests.sh -s unit`
@@ -1360,6 +1378,56 @@ Data:
                         "since": 13,
                         "until": null,
                         "versions": "TYPO3 v13 and newer",
+                        "scope": null
+                    }
+                ]
+            },
+            {
+                "id": "verifying-a-change-against-the-installation",
+                "title": "Verifying a Change Against the Installation Rather Than Against Its Own Output",
+                "category": "PHP",
+                "scope": null,
+                "hints": [
+                    {
+                        "text": "What a script printed is evidence that the print was reached. A guard that never matched, a regex that edited nothing and a variable the shell refused to assign all end in the same success line, so the state is read afterwards with something that had no part in producing it.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "For a change to files, that reader is a search over the result rather than the script's own count: the count is of the list it iterated, and the two differ exactly when the edit failed.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "For a change to records, it is a query against the installation's database — a group by over the column that changed, a count of the rows the old value is still on. The installation's own console at vendor/bin/typo3 and the backend are where those run, because that is where the permissions apply.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "A green test suite is a claim about its assertions. It says nothing about rows the assertions never look at, and a suite that passed through a broken installation is the ordinary case rather than a surprising one.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "For anything an editor sees, the reader is the backend itself: the record list and the page module draw an invalid value where a record's type is one nothing declares, and no frontend page and no HTTP status says so.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "Repair the class rather than the instance. A defect found in one file, one table or one row is a defect of the unit its cause is stated in, so the search that found it is run again for every sibling before the fix is reported — one TCA file out of five with the same option is the shape this takes.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
                         "scope": null
                     }
                 ]

@@ -278,5 +278,32 @@
       "When DDEV writes that file is decided by detection rather than by the start. It chooses the settings paths on every start by looking for an installed TYPO3 — vendor/typo3/cms-core/Classes/Information/Typo3Version.php in a Composer installation, docroot/typo3 in a legacy one — and finding neither it points both paths at the project root and writes nothing there, config/system/.gitignore included. So the first ddev start in a clone whose dependencies are not installed leaves no additional.php, and every request then fails with exception 1396795884 for the trusted hosts pattern that file supplies, while typo3 setup reports success because it writes settings.php from the environment variables. That detection also runs before the post-start hooks, so a hook that installs the dependencies gets the file written at the next start rather than in that one. A boot that starts the environment before Composer therefore starts it again afterwards, and that second start ends the ordering for good. Committing a project-owned additional.php is the other way out rather than the first: it is there from the first request, and it puts installation state under version control. A repository that deploys from the checkout already carries that state. An extension repository does not — the Composer root is the package there and config/ is ignored whole, which extension-repository-installation states.",
       "DDEV is a local-development environment, not the production configuration source. Keep a DDEV-managed additional.php generated and ignored where the four generated sections are all the local environment needs. That generator knows only DDEV's own database container — mysqli or pdo_pgsql at host db — and has no variant that reads the driver the installation was set up with. So an installation on SQLite or with omit_containers: [db] cannot leave the file generated: the DB block merges over the connection settings.php carries and points it at a container that is not running. Take the file over there — remove the #ddev-generated line, drop the DB section, keep GFX, MAIL and SYS — since disabling settings management ends the same collision but leaves all three to be written by hand. When the repository owns one additional.php for every environment, read deployment values and secrets from environment variables and guard DDEV-only overrides with IS_DDEV_PROJECT; never commit production secrets."
     ]
+  },
+  {
+    "id": "verifying-a-change-against-the-installation",
+    "title": "Verifying a Change Against the Installation Rather Than Against Its Own Output",
+    "domains": [
+      "php"
+    ],
+    "appliesTo": [
+      "verify the change",
+      "did it work",
+      "check the result",
+      "confirm the migration",
+      "the script printed",
+      "reported done",
+      "is it applied",
+      "after the rename",
+      "after the import",
+      "idempotent"
+    ],
+    "hints": [
+      "What a script printed is evidence that the print was reached. A guard that never matched, a regex that edited nothing and a variable the shell refused to assign all end in the same success line, so the state is read afterwards with something that had no part in producing it.",
+      "For a change to files, that reader is a search over the result rather than the script's own count: the count is of the list it iterated, and the two differ exactly when the edit failed.",
+      "For a change to records, it is a query against the installation's database — a group by over the column that changed, a count of the rows the old value is still on. The installation's own console at vendor/bin/typo3 and the backend are where those run, because that is where the permissions apply.",
+      "A green test suite is a claim about its assertions. It says nothing about rows the assertions never look at, and a suite that passed through a broken installation is the ordinary case rather than a surprising one.",
+      "For anything an editor sees, the reader is the backend itself: the record list and the page module draw an invalid value where a record's type is one nothing declares, and no frontend page and no HTTP status says so.",
+      "Repair the class rather than the instance. A defect found in one file, one table or one row is a defect of the unit its cause is stated in, so the search that found it is run again for every sibling before the fix is reported — one TCA file out of five with the same option is the shape this takes."
+    ]
   }
 ]

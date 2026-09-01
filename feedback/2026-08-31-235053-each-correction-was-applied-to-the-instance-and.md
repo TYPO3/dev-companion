@@ -33,10 +33,13 @@ Whole session. Correction/recurrence pairs: German code (told 21:55-22:48, recur
 
 ## Suggestion
 
-This is model behaviour and I am not going to pretend otherwise, but there is one thing a knowledge server is unusually well placed to supply, because it is the thing I lacked at each of those six moments: the class a defect belongs to.
+Trimmed on 2026-09-01. The practice landed as a hint,
+verifying-a-change-against-the-installation, whose last statement is the class
+rather than the instance: the search that found a defect is run again for every
+sibling before the fix is reported. What is left open is the other half of this
+report, which is about the shape of a hint rather than about one.
 
-When a hint or a changelog entry describes a defect, say where else it occurs. The searchFields changelog entry names the removed ctrl option; an answer that added "check every table your project declares, not only the one you are editing — the migration runs per table and reports one deprecation per table" would have turned one fix into five. The same for anything whose scope is per-file, per-table or per-package: the natural unit of a repair is the unit the knowledge is stated in, and if the knowledge is stated about one file the repair will be one file.
-
-More generally, a hint could carry a "where else" line as a normal part of its shape. Most of these entries already know it — a TCA ctrl option is per table, a CType value is per row, a code convention is per file including the ones not yet written. Saying so costs a sentence and converts a point fix into a sweep.
-
-That would not have fixed the language problem, which recurred in a file that did not exist when the correction was given. Nothing external fixes that one. It needs the convention to be a precondition on writing rather than a pass over what is written, and only the model can hold that.
+More generally, a hint could carry a "where else" line as a normal part of its
+shape. Most of these entries already know it — a TCA ctrl option is per table, a
+CType value is per row, a code convention is per file including the ones not yet
+written. Saying so costs a sentence and converts a point fix into a sweep.

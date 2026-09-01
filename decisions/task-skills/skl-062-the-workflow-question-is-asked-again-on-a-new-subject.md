@@ -116,6 +116,10 @@ only one this server points at.
 
 ## Since then
 
+The first **Wrong if** fired on 2026-08-31: a session held two briefs carrying
+the line and went on to a harness, a rename, an icon set and a README without
+asking again. `todo/waiting/T-260831-b75b.md` carries what follows from that.
+
 The placement is the brief rather than the instructions, which are full: the
 sentence is a `nextTools` entry, unconditional and in the list the commit
 message pointer already sits in. Then a session took the acts that the placement

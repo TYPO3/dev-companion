@@ -251,6 +251,7 @@ Text:
     - project-repository-layout — How a TYPO3 Project Repository Is Laid Out (PHP)
     - extension-repository-installation — Installing TYPO3 Beneath the Extension Repository (PHP)
     - documentation-links — Linking Into the Official Documentation From a Template or From PHP (Documentation)
+    - content-model-vs-markup — Markup Stored in a Field Is Not a Content Model (PHP)
     - extbase-domain-mapping — Models, Repositories and the Table Behind Them (PHP)
     - extbase-pagination — Paginating a List (PHP)
     - public-assets — Public Assets and the Publish Step (PHP)
@@ -616,6 +617,11 @@ Data:
                 "id": "documentation-links",
                 "title": "Linking Into the Official Documentation From a Template or From PHP",
                 "category": "Documentation"
+            },
+            {
+                "id": "content-model-vs-markup",
+                "title": "Markup Stored in a Field Is Not a Content Model",
+                "category": "PHP"
             },
             {
                 "id": "extbase-domain-mapping",
@@ -1574,6 +1580,7 @@ Text:
     - project-repository-layout — How a TYPO3 Project Repository Is Laid Out (PHP)
     - extension-repository-installation — Installing TYPO3 Beneath the Extension Repository (PHP)
     - documentation-links — Linking Into the Official Documentation From a Template or From PHP (Documentation)
+    - content-model-vs-markup — Markup Stored in a Field Is Not a Content Model (PHP)
     - extbase-domain-mapping — Models, Repositories and the Table Behind Them (PHP)
     - extbase-pagination — Paginating a List (PHP)
     - public-assets — Public Assets and the Publish Step (PHP)
@@ -1844,6 +1851,11 @@ Data:
                 "id": "documentation-links",
                 "title": "Linking Into the Official Documentation From a Template or From PHP",
                 "category": "Documentation"
+            },
+            {
+                "id": "content-model-vs-markup",
+                "title": "Markup Stored in a Field Is Not a Content Model",
+                "category": "PHP"
             },
             {
                 "id": "extbase-domain-mapping",

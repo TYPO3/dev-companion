@@ -45,25 +45,15 @@ Whole session, /home/benji/projects/site-tierheim. Skill(typo3-content-element-d
 
 ## Suggestion
 
-Trimmed on 2026-09-01. What the skills could carry landed: the looking step
-stands where the element is finished rather than among the test layers, in this
-skill and in typo3-development-installation's "Prove it" — D-ANS-127. The two
-asks below are what is left, and neither is a skill's.
+Trimmed on 2026-09-01. The looking step moved to where the element is finished
+(D-ANS-127), and the hint that fires on the symptom is written:
+content-model-vs-markup, which the words this session's user actually used now
+reach. What is left is the re-entry, and it is judged rather than open — the
+brief has ended by naming this call again and the acts to ask at since
+2026-08-18, and this session held two briefs carrying that line. D-SKL-062's
+first Wrong if is what that fired, and what the ask is left asking for is below.
 
-A hint that fires on the symptom. typo3_hint_lookup takes a symptom as its task
-— the content-element skill says so itself. But no hint in the corpus states
-"content migrated into the html CType is not a content model", so there is
-nothing for such a query to land on, and I never made the query anyway. A hint
-id like content-model-vs-markup, whose statements are "raw markup in a bodytext
-or an html CType is not a typed element", "an import that produces one blob per
-page has not modelled anything", "the html CType hands unfiltered markup to the
-visitor and belongs in no editor's selector", would be findable from the words a
-failing session actually uses.
-
-A re-entry trigger on typo3_task_guide. Its answers could end with the condition
-under which it must be called again, stated as a list of concrete events rather
-than a sentence in the server instructions — "call this again before: the first
-test, a rename of an extension key or table, a change to what editors can
-select, the first shipped README". I read the instruction once at session start
-and never acted on it; a line at the bottom of every answer sits where the next
-call is decided.
+A re-entry trigger on typo3_task_guide. If any answer late in a session could
+carry "this is the Nth call in this session and the last task_guide was at 18:44
+— the task has moved", that is a nudge arriving where I am rather than where I
+was.

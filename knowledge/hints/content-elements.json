@@ -162,5 +162,31 @@
         "since": 14
       }
     ]
+  },
+  {
+    "id": "content-model-vs-markup",
+    "title": "Markup Stored in a Field Is Not a Content Model",
+    "domains": [
+      "php",
+      "fluid"
+    ],
+    "appliesTo": [
+      "html element",
+      "html elements everywhere",
+      "raw markup",
+      "markup in bodytext",
+      "one element per page",
+      "blob per page",
+      "CType html",
+      "content is not maintainable",
+      "editors cannot edit this",
+      "imported markup"
+    ],
+    "hints": [
+      "The core html element renders its bodytext through f:format.raw, so whatever is stored is handed to the visitor as it stands. Nothing about that content is a field: it cannot be queried, translated one part at a time, restyled, or rendered anywhere but where the markup already puts it.",
+      "So a page that arrived as one element has been pasted rather than modelled. The unit of a content model is the shape that recurs across pages — a team list, a fee table, a bullet list with links — and each of those is an element with fields of its own, whatever the source stored it as.",
+      "The symptom reads as an editing complaint rather than as an architecture one: an editor says the content cannot be maintained, or that everything is one block. What it means is that the modelling step was skipped, and the repair is the elements plus a migration of the stored markup into them.",
+      "Which types an editor may create is a separate decision and a site's own: content-element-selector-restriction has the page TSconfig that makes it, and removing an element from the selector leaves every record already stored under it exactly as it is."
+    ]
   }
 ]

@@ -1207,6 +1207,24 @@ final class GerritTest extends TestCase
     }
 
     /**
+     * What a chain entry is evidence for, said where the caller reads it.
+     *
+     * A review had the chain in its first answer, read it as "there is a
+     * follow-up", and reported four shapes the change above it explains —
+     * `D-SKL-090`. The paragraph said what a chain is and stopped there.
+     */
+    #[Decision('D-SKL-090')]
+    #[Test]
+    public function theChainSaysWhatAShapeAboveItExplains(): void
+    {
+        $said = implode("\n", GerritLookup::relations(false));
+
+        self::assertStringContainsString('evidence about the shape of the change itself', $said);
+        self::assertStringContainsString('class left non-final', $said);
+        self::assertStringContainsString('reads exactly like an oversight in this one', $said);
+    }
+
+    /**
      * The commit message is what joins a patch to the tracker, and the answer
      * carried neither — `D-ANS-098`.
      *

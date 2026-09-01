@@ -7,6 +7,7 @@ order it works.
 See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
+- [`D-SKL-090`][D-SKL-090] — A review rates the patch and reads the chain for what a shape is for · 2026-09-02
 - [`D-SKL-087`][D-SKL-087] — Every skill in the directory is published · 2026-09-01
 - [`D-SKL-088`][D-SKL-088] — A paragraph three skills share stops being copied · 2026-09-01
 - [`D-SKL-089`][D-SKL-089] — The base says what it established and what it will touch · 2026-09-01
@@ -92,6 +93,7 @@ one is added.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-090]: skl-090-a-review-rates-the-patch-and-reads-the-chain-for-what-a-shape-is-for.md
 [D-SKL-087]: skl-087-every-skill-in-the-directory-is-published.md
 [D-SKL-088]: skl-088-a-paragraph-three-skills-share-stops-being-copied.md
 [D-SKL-089]: skl-089-the-base-says-what-it-established-and-what-it-will-touch.md

@@ -2606,6 +2606,28 @@ final class SkillTest extends TestCase
      * loadable by nobody, or one published while it reads as unfinished. This
      * holds what is left — `D-SKL-087`.
      */
+    /**
+     * The review reads the stack before it calls a shape a defect.
+     *
+     * Four structural findings on one change were refuted by the change above
+     * it, and the checklist is where a finding is held to what it owes —
+     * `D-SKL-090`. The patch is still rated on its own, which is the half the
+     * first draft of this got wrong.
+     */
+    #[Decision('D-SKL-090')]
+    #[Test]
+    public function theReviewChecklistReadsTheChainBeforeCallingAShapeADefect(): void
+    {
+        $checklist = self::flat((string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/references/checklist.md',
+        ));
+
+        self::assertStringContainsString('The chain this change sits in', $checklist);
+        self::assertStringContainsString('rated on its own', $checklist);
+        self::assertStringContainsString('before calling one of those an oversight', $checklist);
+        self::assertStringContainsString('reported as a question rather than as an oversight', $checklist);
+    }
+
     #[Decision('D-SKL-087')]
     #[Test]
     public function everySkillInTheDirectoryIsPublished(): void

@@ -33,7 +33,9 @@ word is unassessed.
   one that can fail on it. A change with no coverage is a finding; coverage that
   cannot fail on this change is a worse one, because it reads as coverage. The
   surface is answered with both halves: what ran, and which of the suites the
-  guide returned nobody started.
+  guide returned nobody started. Where the change sits in a chain, what the
+  follow-up touches decides what a test is worth: one pinning behaviour the next
+  change rewrites is churn, one covering what the follow-up leaves alone lasts.
 - **Documentation and changelog.** What the diff obliges — the entry, its
   directory, its file name, its cross-references — and equally, whether an entry
   is owed at all. Demanding one where the rules do not is a review defect. The
@@ -52,6 +54,12 @@ word is unassessed.
   patch set is the one checked out, and whether a comment from an earlier one
   went unanswered. An unanswered comment is why a change sits unmerged, and none
   of this is visible from the checkout.
+- **The chain this change sits in.** The patch is rated on its own, and the
+  chain says whether a shape in it is preparation. `typo3_gerrit_lookup` answers
+  the chain with the change itself, and an entry stacked above is a follow-up
+  whose own file list says what a namespace holding one class, a class left
+  non-final or a service with no caller here is for. Read it before calling one
+  of those an oversight, and report what it explains as the question it is.
 - **Security.** Where the diff touches authorization, user input, output
   escaping, file paths, or a boundary between what a role may and may not do. A
   finding here is a value and a sink, and both are established or it is not a
@@ -113,9 +121,11 @@ Two dismissals go wrong reliably:
 
 Before a finding is reported, make the author's case against it — the caller
 they know holds the guard, the invariant the subsystem carries, the choice the
-commit message already states. What survives that is reported together with what
-it survived; what does not is a dropped candidate, with the same evidence
-written down.
+commit message already states, the change stacked on this one that may be what a
+shape here is preparing. The patch is still rated on its own; what the follow-up
+explains is reported as a question rather than as an oversight. What survives
+that is reported together with what it survived; what does not is a dropped
+candidate, with the same evidence written down.
 
 ## Severity
 

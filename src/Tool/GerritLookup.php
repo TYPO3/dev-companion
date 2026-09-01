@@ -1089,6 +1089,11 @@ final class GerritLookup extends ReadOnlyTool
             . 'entry\'s status is that entry\'s own, so a MERGED entry says that change landed and says nothing '
             . 'about the change you asked for. Gerrit relates a chain by the commits, which is not the Change-Id '
             . 'relation a backport keeps, and neither set contains the other.'];
+        $lines[] = '';
+        $lines[] = 'What stands above a change is evidence about the shape of the change itself: a namespace '
+            . 'holding one class, a class left non-final, a service declared public with no caller in this patch. '
+            . 'Read those entries before reporting any of that, because groundwork for the next change in the '
+            . 'stack reads exactly like an oversight in this one.';
         if ($moved) {
             $lines[] = '';
             $lines[] = 'An entry chained at an earlier patch set than it stands at now has moved on since the '

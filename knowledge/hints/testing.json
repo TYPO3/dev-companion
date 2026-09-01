@@ -29,7 +29,12 @@
       "contentMatchRegExp",
       "test method name",
       "test comment",
-      "naming a test"
+      "naming a test",
+      "assertSame",
+      "SvgSanitizer",
+      "serialized SVG",
+      "sanitised output",
+      "asserting rendered markup"
     ],
     "hints": [
       "A unit test extends TYPO3\\TestingFramework\\Core\\Unit\\UnitTestCase, a functional test TYPO3\\TestingFramework\\Core\\Functional\\FunctionalTestCase. Both are final and mark cases with the #[Test] attribute rather than a test method-name prefix.",
@@ -47,6 +52,7 @@
         "text": "A change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim — is asserted far outside the class's own test, and one search finds those expectations if it is aimed correctly. Search the whole typo3/sysext/*/Tests/ tree rather than *Test.php: roughly half the files holding such an expectation are fixtures the test loads instead of asserting inline — Fixtures/*.php returning a heredoc, .csv, .xml, .typoscript, .html, and a quoted-printable .message. And search for the stable text around the value rather than the value itself, because the value is escaped in a PCRE ('\\.jpg', '\\?\\d+'), split across a sprintf() format ('@^<img src=\"(%s/%s)\"'), concatenated at runtime (\"'?' . $fileMtime\"), substituted into a fixture placeholder ({$fileMtimeActions}) or soft-wrapped mid-path by quoted-printable, while the resource path around it survives all of them. Two shapes look like nothing: a contentMatchRegExp data-provider key sits nowhere near an assertion, and a test that requires its expected markup from a fixture carries no literal at all — the fixture is what the search finds and what the edit changes.",
         "scope": "core"
       },
+      "Output the pipeline determines whole is asserted whole, with assertSame against the full serialized string: an escape, an attribute order or a namespace that moves is then a failure, and a containsString check passes all three. That is what a sanitiser is worth testing for, and the core's own SvgSanitizer suite asserts with contains, so the shape is not read off the neighbours. Where the string carries a value the change does not decide, the assertion is on the part that is — icon markup embeds the published asset path, and the publisher names that directory by a package hash, so pinning it whole fails on the next unrelated republish.",
       "Write the narrowest test that exercises the change, and let what the change touches decide the kind: isolated logic is a unit test, while service wiring, persistence, TCA, DataHandler, routing and anything reading configuration only behave like themselves in a functional test. A unit test of those asserts the mock.",
       "A backend route in a test is TYPO3\\CMS\\Backend\\Routing\\Route, which takes a path and options; the core class of the same name takes defaults before its options. Built from the wrong one, getOption() answers null with no error and the test passes without reaching what it is named after.",
       {

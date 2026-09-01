@@ -1900,6 +1900,25 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * What an exact assertion is worth, and where it stops being one.
+     *
+     * `D-KNW-143`. The core's own sanitiser suite asserts with contains, so the
+     * shape is not read off the neighbours — and icon markup carries the
+     * published asset path, whose directory the publisher names by a package
+     * hash, so the same reasoning does not reach it.
+     */
+    #[Decision('D-KNW-143')]
+    #[Test]
+    public function sanitisedOutputIsPinnedWholeAndAPublishedPathIsNot(): void
+    {
+        $text = self::statementsOf('core-tests');
+
+        self::assertStringContainsString('assertSame against the full serialized string', $text);
+        self::assertStringContainsString('SvgSanitizer suite asserts with contains', $text);
+        self::assertStringContainsString('names that directory by a package hash', $text);
+    }
+
+    /**
      * What a test is called, and what its comment is not for.
      *
      * `D-KNW-142`. The corpus stated the attribute and the fixtures and said

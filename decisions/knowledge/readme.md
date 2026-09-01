@@ -9,6 +9,7 @@ one is added.
 
 - [`D-KNW-139`][D-KNW-139] — The corpus states where an annotation is written · 2026-09-02
 - [`D-KNW-140`][D-KNW-140] — The corpus states a check the core does not run · 2026-09-02
+- [`D-KNW-141`][D-KNW-141] — The shape of a patch is stated where a patch is judged · 2026-09-02
 - [`D-KNW-137`][D-KNW-137] — A relaunch is a kind of work rather than a hint beside one · 2026-09-01
 - [`D-KNW-138`][D-KNW-138] — A hint names its next call in a statement · 2026-09-01
 - [`D-KNW-133`][D-KNW-133] — A guide's whenToUse names the answer it hands over · 2026-08-28
@@ -141,6 +142,7 @@ one is added.
 
 [D-KNW-139]: knw-139-the-corpus-states-where-an-annotation-is-written.md
 [D-KNW-140]: knw-140-the-corpus-states-a-check-the-core-does-not-run.md
+[D-KNW-141]: knw-141-the-shape-of-a-patch-is-stated-where-a-patch-is-judged.md
 [D-KNW-137]: knw-137-a-relaunch-is-a-kind-of-work-rather-than-a-hint-beside-one.md
 [D-KNW-138]: knw-138-a-hint-names-its-next-call-in-a-statement.md
 [D-KNW-133]: knw-133-a-guides-whentouse-names-the-answer-it-hands-over.md

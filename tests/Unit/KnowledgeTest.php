@@ -401,6 +401,28 @@ final class KnowledgeTest extends TestCase
         self::assertDoesNotMatchRegularExpression('/function \w+\(.*\): /', $page);
     }
 
+    /**
+     * What the patch may not carry, where the patch is judged.
+     *
+     * `D-KNW-141`. The section said to avoid unrelated refactoring in a bug fix
+     * and stopped there, so the array collapsed on the way past and the file
+     * rewritten instead of edited were noise nothing names — and nothing
+     * catches either: the core's fixer normalises the trailing comma per form
+     * and takes no position on which form an array has.
+     */
+    #[Decision('D-KNW-141')]
+    #[Test]
+    public function theRulesSayWhatShapeAPatchIsLeftIn(): void
+    {
+        $rules = Documents::read('core/contribution/rules');
+
+        self::assertStringContainsString('The diff is what a reviewer reads', $rules);
+        self::assertStringContainsString('Edit the file that is there rather than rewriting it', $rules);
+        self::assertStringContainsString('unless that is the change', $rules);
+        self::assertStringContainsString('Write a new array expanded, one key per line', $rules);
+        self::assertStringContainsString('merge an assertion into the test that already', $rules);
+    }
+
     #[Test]
     public function everyBundledDocumentIsListedWithATitle(): void
     {

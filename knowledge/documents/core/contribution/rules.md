@@ -27,6 +27,21 @@ documentation when rules depend on a specific branch or current policy.
 - Prefer existing TYPO3 APIs and services over new local abstractions.
 - Keep public API changes explicit and documented.
 - Avoid unrelated refactoring in bug fix patches.
+- The diff is what a reviewer reads, and it is what the patch is shaped for.
+  Edit the file that is there rather than rewriting it, and leave the formatting
+  you found — the indentation, the line breaks and the order of what you did not
+  touch. Reformatting a line the change does not need is noise that hides the
+  change, and a large diff is what a review pushes back on.
+- Do not collapse a multi-line array onto one line, or expand a single-line one,
+  unless that is the change. `Build/php-cs-fixer/config.php` normalises the
+  trailing comma for each form and takes no position on which form an array has,
+  so nothing in the suite undoes the noise or reports it.
+- Write a new array expanded, one key per line. A later change then marks the
+  key it touched instead of the whole line, which is the same reason the rest of
+  this section is about leaving lines alone.
+- Tests are extended the same way: merge an assertion into the test that already
+  covers the case, and where redundant ones go, the fixtures and helpers they
+  used stay.
 
 ## Testing
 

@@ -4330,7 +4330,12 @@ final class SkillTest extends TestCase
             // that owns the amend, and the checkout skill had no crossing at
             // all until the case it hands over existed.
             'typo3-core-patch-checkout' => ['typo3-core-patch-development'],
+            // The fourth is the one the count decides: a table an editor
+            // maintains at four figures is a module rather than a record list,
+            // and that is settled with the TCA — `feedback/2026-08-31-233952`
+            // reported 3101 records maintained through the generic list.
             'typo3-content-element-development' => [
+                'typo3-backend-module-development',
                 'typo3-extension-testing',
                 'typo3-extension-documentation',
                 'typo3-extension-health',

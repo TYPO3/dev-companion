@@ -46,6 +46,23 @@ content before implementing it.
   is a deliberate requirement. Do not substitute the generic `records` field for
   an owned repeatable model.
 
+**How many records the table will hold decides where they are maintained, and
+the count is knowable before any import runs.** The record list on a storage
+folder searches, sorts by column and pages; it filters on no field's value and
+groups nothing, so a table an editor works in at four figures is a scroll on a
+page that has become slow to open. That is a module of its own — invoke
+`typo3-backend-module-development` where the count says so, and decide it with
+the TCA rather than retrofitting it around records that already exist, because
+the fields the module filters and sorts by are the same decision.
+
+**The same count decides what renders it.** A bounded element renders from
+TypoScript with a core data processor; a list that filters, pages, resolves a
+detail view or carries its own routing is a plugin, and `typo3_hint_lookup` with
+`id=extbase` is where that decision is stated. What it looks like once it has
+been taken by default is readable off the processor: a second query beside the
+list, request arguments read by hand, page numbers computed, a storage pid
+re-checked for one record.
+
 Read [references/checklist.md](references/checklist.md) before creating or
 changing a content element.
 
@@ -147,8 +164,9 @@ render", "is the inline relation right", "why is the order wrong" — each is th
 skill's own work, and answering it is not an audit. Where the sentence could be
 either, ask which was meant.
 
-This skill owns content-element architecture and implementation. Test
-infrastructure is `typo3-extension-testing`'s, manuals are
-`typo3-extension-documentation`'s and a broader extension audit is
-`typo3-extension-health`'s — stop before editing that owner's files, and carry
-across the extension key, the target version and the behaviour already verified.
+This skill owns content-element architecture and implementation. A backend
+module of its own is `typo3-backend-module-development`'s, test infrastructure
+is `typo3-extension-testing`'s, manuals are `typo3-extension-documentation`'s
+and a broader extension audit is `typo3-extension-health`'s — stop before
+editing that owner's files, and carry across the extension key, the target
+version and the behaviour already verified.

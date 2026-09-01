@@ -33,14 +33,13 @@ Whole session. typo3-backend-module-development never activated. typo3_backend_m
 
 ## Suggestion
 
-Put the record count into the modelling question, where a session can trip over it.
+Trimmed on 2026-09-01. The modelling half landed: the count is now an input to
+`typo3-content-element-development`'s "Choose the content model first", where it
+decides both where the records are maintained and what renders them, and the
+skill crosses to `typo3-backend-module-development` at that point. What is left
+open is the other half of this report.
 
-In typo3-content-element-development's checklist, or better in a hint findable on its own, a threshold question beside the existing editor-workflow ones: how many records of this table will exist after the import, and what does the editor do with them. A few dozen belong in the record list on a storage folder. Thousands need a module of their own — a filter, a search, a status the list is grouped by — and that is a decision made when the table is designed, not after the import has filled it, because by then the module has to be retrofitted around records that already exist.
-
-Suggested id: record-volume-and-editing-surface. Worth stating in it:
-
-- The generic record list has no filtering beyond the search box and no grouping; at four figures it is a scroll, and opening the page it sits on becomes slow enough that people stop opening it.
-- A count is knowable before the import runs, from the source, so this is a design question and not a retrospective one.
-- Where the answer is a module, typo3-backend-module-development is the workflow, and the table's TCA is written knowing that — the fields the module filters and sorts by are decided together with the module.
-
-And a routing line: when typo3_extension_describe reports a project extension whose table holds more rows than the record list is comfortable with, say so. The server reads the installation; it can see 3101 rows in tx_animalshelter_animal, and that observation is worth more than most of what a describe answer carries.
+A routing line: when typo3_extension_describe reports a project extension whose
+table holds more rows than the record list is comfortable with, say so. The
+server reads the installation; it can see 3101 rows in tx_animalshelter_animal,
+and that observation is worth more than most of what a describe answer carries.

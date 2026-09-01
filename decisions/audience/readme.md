@@ -8,6 +8,7 @@ client is told to start.
 See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
+- [`D-AUD-016`][D-AUD-016] — A count is answered and the row behind it stays with the installation · 2026-09-01
 - [`D-AUD-014`][D-AUD-014] — A description opens with what the caller's own route cannot do · 2026-08-27
 - [`D-AUD-015`][D-AUD-015] — What decides whether to call a tool stands in its description · 2026-08-27
 - [`D-AUD-012`][D-AUD-012] — The second call of the entry point is an imperative · 2026-08-19
@@ -22,6 +23,7 @@ one is added.
 - [`D-AUD-003`][D-AUD-003] — The instructions carry the entry point, because the tool descriptions never arrive · 2026-07-31 · confirmed
 - [`D-AUD-001`][D-AUD-001] — The outward description stays core-first until there is non-core knowledge · 2026-07-29 · confirmed
 
+[D-AUD-016]: aud-016-a-count-is-answered-and-the-row-behind-it-stays-with-the-installation.md
 [D-AUD-014]: aud-014-a-description-opens-with-what-the-callers-own-route-cannot-do.md
 [D-AUD-015]: aud-015-what-decides-whether-to-call-a-tool-stands-in-its-description.md
 [D-AUD-012]: aud-012-the-second-call-of-the-entry-point-is-an-imperative.md

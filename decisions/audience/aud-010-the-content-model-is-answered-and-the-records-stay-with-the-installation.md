@@ -78,3 +78,13 @@ answer was that counting is not that tool's work, and that reading records is
 worth a tool of its own. So the boundary this entry drew is the one being
 reconsidered rather than the describe answer, and what a record tool may answer
 is `T-260901-2b7e`.
+
+## Since then
+
+The count is settled and it is a tool of its own: `D-AUD-016`, decided on
+2026-09-01. It answers how many rows a project-owned table holds, grouped by
+`pid` and by the state the enable fields put a row in, and reads no column of
+any row — so the boundary this entry drew moves by a query and not by a field.
+What stays refused is every table a project-owned extension does not register,
+`pages` and `tt_content` among them, and the peek at the first rows that would
+have made a label column part of an answer.

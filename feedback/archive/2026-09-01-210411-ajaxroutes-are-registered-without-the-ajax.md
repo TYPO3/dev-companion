@@ -1,7 +1,8 @@
 ---
 date: 2026-09-01T21:04:11+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-09-01
 model: claude-opus-5
 tool: typo3_hint_lookup, typo3_backend_module_lookup, typo3_configuration_lookup
 directory: /home/benji/projects/typo3-cms

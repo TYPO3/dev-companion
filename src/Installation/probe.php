@@ -500,11 +500,21 @@ try {
             $coreBuilder = new TYPO3\CMS\Core\DependencyInjection\ContainerBuilder($early);
             $build = new ReflectionMethod($coreBuilder, 'buildContainer');
             $build->setAccessible(true);
-            $builder = $build->invoke(
-                $coreBuilder,
-                $packageManager,
-                new TYPO3\CMS\Core\DependencyInjection\ServiceProviderRegistry($packageManager),
-            );
+            $registry = new TYPO3\CMS\Core\DependencyInjection\ServiceProviderRegistry($packageManager);
+            try {
+                $builder = $build->invoke($coreBuilder, $packageManager, $registry);
+            } catch (Symfony\Component\DependencyInjection\Exception\ExceptionInterface $broken) {
+                // A container that will not assemble is the finding rather than
+                // the absence of one: the message names the service and the
+                // argument, which is what the caller came for.
+                $answer['topics']['services'] = [
+                    'definitionCount' => 0,
+                    'aliasCount' => 0,
+                    'compilationFailure' => get_class($broken) . ': ' . $broken->getMessage(),
+                    'services' => [],
+                ];
+                throw new RuntimeException('', 2);
+            }
 
             // `buildContainer` compiles before it returns, so what comes back
             // is the builder with autowiring resolved and the unused private
@@ -539,6 +549,7 @@ try {
                 $found[] = [
                     'id' => (string) $id,
                     'class' => $class,
+                    'aliasFor' => '',
                     'public' => $definition->isPublic(),
                     'shared' => $definition->isShared(),
                     'autowired' => $definition->isAutowired(),
@@ -548,10 +559,46 @@ try {
                     'arguments' => $arguments,
                 ];
             }
+            // An interface usually reaches its implementation through an alias,
+            // and a lookup that reads definitions alone answers "nothing" to
+            // the commonest question there is — `D-DIS-023`.
+            $aliases = $builder->getAliases();
+            foreach ($aliases as $id => $alias) {
+                $target = (string) $alias;
+                $seen = [];
+                while (isset($aliases[$target]) && !isset($seen[$target])) {
+                    $seen[$target] = true;
+                    $target = (string) $aliases[$target];
+                }
+                $class = isset($definitions[$target]) ? (string) ($definitions[$target]->getClass() ?? '') : '';
+                if ($tag !== '') {
+                    continue;
+                }
+                if ($wanted !== ''
+                    && !str_contains(strtolower((string) $id), $wanted)
+                    && !str_contains(strtolower($class), $wanted)
+                ) {
+                    continue;
+                }
+                $found[] = [
+                    'id' => (string) $id,
+                    'class' => $class,
+                    'aliasFor' => $target,
+                    'public' => $alias->isPublic(),
+                    'shared' => false,
+                    'autowired' => false,
+                    'abstract' => false,
+                    'synthetic' => false,
+                    'tags' => [],
+                    'arguments' => [],
+                ];
+            }
+
             usort($found, static fn(array $a, array $b): int => strcmp($a['id'], $b['id']));
             $answer['topics']['services'] = [
                 'definitionCount' => count($definitions),
-                'aliasCount' => count($builder->getAliases()),
+                'aliasCount' => count($aliases),
+                'compilationFailure' => '',
                 'services' => $found,
             ];
         } catch (Throwable $failure) {

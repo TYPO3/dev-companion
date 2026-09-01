@@ -50,15 +50,24 @@ Answers with
     # Every service definition the container holds, which is what the match was made
     # against.
     definitionCount: integer  # optional
-    # The aliases beside them. An interface usually reaches its implementation
-    # through one.
+    # The aliases beside them, which are matched too.
     aliasCount: integer  # optional
+    # Why the container did not assemble, empty where it did. A container that will
+    # not compile is the finding rather than the absence of one, and the message
+    # names the service and the argument.
+    compilationFailure: string  # optional
     services:  # optional
       - # The service id, which is the class name for nearly all of them.
         id: string
         # The class the container instantiates, which a decoration or an override
-        # makes different from the id.
+        # makes different from the id. Empty on an alias whose target is not a
+        # definition.
         class: string
+        # The service this id is an alias of, followed to the end of the chain.
+        # Empty where the id is a definition of its own. An interface usually
+        # reaches its implementation this way, so this is the answer to what stands
+        # behind it.
+        aliasFor: string
         # True where the container hands it out by id. A private service is only
         # ever injected.
         public: boolean
@@ -118,7 +127,7 @@ Answers with
 
 The answer carries exactly one of these sets of fields: ``query``, ``tag``,
 ``matchCount``, ``answeredBy``, ``definitionCount``, ``aliasCount``,
-``services`` — or ``query``, ``tag``, ``unsupported``.
+``compilationFailure``, ``services`` — or ``query``, ``tag``, ``unsupported``.
 
 Answered
 --------
@@ -184,10 +193,12 @@ Data:
         "answeredBy": "installation",
         "definitionCount": 1212,
         "aliasCount": 230,
+        "compilationFailure": "",
         "services": [
             {
                 "id": "TYPO3\\CMS\\Core\\Page\\PageRenderer",
                 "class": "TYPO3\\CMS\\Core\\Page\\PageRenderer",
+                "aliasFor": "",
                 "public": true,
                 "shared": true,
                 "autowired": true,
@@ -262,6 +273,7 @@ Data:
             {
                 "id": "TYPO3\\CMS\\Fluid\\ViewHelpers\\Be\\PageRendererViewHelper",
                 "class": "TYPO3\\CMS\\Fluid\\ViewHelpers\\Be\\PageRendererViewHelper",
+                "aliasFor": "",
                 "public": true,
                 "shared": false,
                 "autowired": true,
@@ -348,10 +360,12 @@ Data:
         "answeredBy": "installation",
         "definitionCount": 1212,
         "aliasCount": 230,
+        "compilationFailure": "",
         "services": [
             {
                 "id": "TYPO3\\CMS\\Backend\\EventListener\\AfterBackendPageRenderEventListener",
                 "class": "TYPO3\\CMS\\Backend\\EventListener\\AfterBackendPageRenderEventListener",
+                "aliasFor": "",
                 "public": true,
                 "shared": true,
                 "autowired": true,
@@ -370,6 +384,7 @@ Data:
             {
                 "id": "TYPO3\\CMS\\Backend\\EventListener\\FailedLoginAttemptNotification",
                 "class": "TYPO3\\CMS\\Backend\\EventListener\\FailedLoginAttemptNotification",
+                "aliasFor": "",
                 "public": true,
                 "shared": true,
                 "autowired": true,
@@ -392,6 +407,7 @@ Data:
             {
                 "id": "TYPO3\\CMS\\Backend\\EventListener\\FailedMfaAttemptNotification",
                 "class": "TYPO3\\CMS\\Backend\\EventListener\\FailedMfaAttemptNotification",
+                "aliasFor": "",
                 "public": true,
                 "shared": true,
                 "autowired": true,

@@ -111,11 +111,11 @@ final class Typo3Runtime
      *
      * Asked for, because it builds the container a second time — `D-DIS-023`.
      *
-     * @return array{definitionCount: int, aliasCount: int, services: array<int, array<string, mixed>>}|array{unavailable: string}|null
+     * @return array{definitionCount: int, aliasCount: int, compilationFailure: string, services: array<int, array<string, mixed>>}|array{unavailable: string}|null
      */
     public static function services(string $query, string $tag): ?array
     {
-        /** @var array{definitionCount: int, aliasCount: int, services: array<int, array<string, mixed>>}|array{unavailable: string}|null $read */
+        /** @var array{definitionCount: int, aliasCount: int, compilationFailure: string, services: array<int, array<string, mixed>>}|array{unavailable: string}|null $read */
         $read = self::asked('services', ['services' => ['query' => $query, 'tag' => $tag]]);
 
         return $read;

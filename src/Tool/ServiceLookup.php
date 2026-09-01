@@ -58,10 +58,12 @@ final class ServiceLookup extends ReadOnlyTool
             'matchCount' => Schema::integer('Services matching before the limit. Zero is an answer: nothing this installation assembles carries that id, class or tag.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
             'definitionCount' => Schema::integer('Every service definition the container holds, which is what the match was made against.'),
-            'aliasCount' => Schema::integer('The aliases beside them. An interface usually reaches its implementation through one.'),
+            'aliasCount' => Schema::integer('The aliases beside them, which are matched too.'),
+            'compilationFailure' => Schema::string('Why the container did not assemble, empty where it did. A container that will not compile is the finding rather than the absence of one, and the message names the service and the argument.'),
             'services' => Schema::listOf(Schema::object([
                 'id' => Schema::string('The service id, which is the class name for nearly all of them.'),
-                'class' => Schema::string('The class the container instantiates, which a decoration or an override makes different from the id.'),
+                'class' => Schema::string('The class the container instantiates, which a decoration or an override makes different from the id. Empty on an alias whose target is not a definition.'),
+                'aliasFor' => Schema::string('The service this id is an alias of, followed to the end of the chain. Empty where the id is a definition of its own. An interface usually reaches its implementation this way, so this is the answer to what stands behind it.'),
                 'public' => ['type' => 'boolean', 'description' => 'True where the container hands it out by id. A private service is only ever injected.'],
                 'shared' => ['type' => 'boolean', 'description' => 'True where every caller gets the same instance.'],
                 'autowired' => ['type' => 'boolean'],
@@ -72,8 +74,8 @@ final class ServiceLookup extends ReadOnlyTool
                     'position' => Schema::integer('The constructor position, counted from zero.'),
                     'resolves' => Schema::string('The service id handed to it, or "value" where a configured value is passed instead of a service.'),
                 ], ['position', 'resolves']), 'What the constructor is handed, after autowiring. Empty where it takes nothing.'),
-            ], ['id', 'class', 'public', 'shared', 'autowired', 'abstract', 'synthetic', 'tags', 'arguments'])),
-        ], ['query', 'tag', 'matchCount', 'answeredBy', 'definitionCount', 'aliasCount', 'services'], ['query', 'tag']);
+            ], ['id', 'class', 'aliasFor', 'public', 'shared', 'autowired', 'abstract', 'synthetic', 'tags', 'arguments'])),
+        ], ['query', 'tag', 'matchCount', 'answeredBy', 'definitionCount', 'aliasCount', 'compilationFailure', 'services'], ['query', 'tag']);
     }
 
     public static function answer(array $args): ToolResult
@@ -102,6 +104,20 @@ final class ServiceLookup extends ReadOnlyTool
             );
         }
 
+        if ($read['compilationFailure'] !== '') {
+            return ToolResult::create(
+                'This installation\'s container does not assemble: ' . $read['compilationFailure'],
+                $echo + [
+                    'matchCount' => 0,
+                    'answeredBy' => 'installation',
+                    'definitionCount' => 0,
+                    'aliasCount' => 0,
+                    'compilationFailure' => $read['compilationFailure'],
+                    'services' => [],
+                ],
+            );
+        }
+
         $matches = $read['services'];
         $shown = array_slice($matches, 0, $limit);
 
@@ -126,7 +142,9 @@ final class ServiceLookup extends ReadOnlyTool
                     sprintf(
                         '- %s%s%s%s',
                         (string) $service['id'],
-                        $service['class'] !== $service['id'] ? ' → ' . (string) $service['class'] : '',
+                        $service['class'] !== $service['id'] && $service['class'] !== ''
+                            ? ' → ' . (string) $service['class']
+                            : '',
                         $service['public'] === true ? ' (public)' : '',
                         $service['tags'] === [] ? '' : ' [' . implode(', ', $service['tags']) . ']',
                     ),
@@ -142,6 +160,7 @@ final class ServiceLookup extends ReadOnlyTool
                 'answeredBy' => 'installation',
                 'definitionCount' => $read['definitionCount'],
                 'aliasCount' => $read['aliasCount'],
+                'compilationFailure' => '',
                 'services' => $shown,
             ],
         );

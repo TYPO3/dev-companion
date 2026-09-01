@@ -26,7 +26,10 @@
       "what asserts it",
       "asserts a rendered",
       "which tests assert",
-      "contentMatchRegExp"
+      "contentMatchRegExp",
+      "test method name",
+      "test comment",
+      "naming a test"
     ],
     "hints": [
       "A unit test extends TYPO3\\TestingFramework\\Core\\Unit\\UnitTestCase, a functional test TYPO3\\TestingFramework\\Core\\Functional\\FunctionalTestCase. Both are final and mark cases with the #[Test] attribute rather than a test method-name prefix.",
@@ -38,6 +41,7 @@
         "text": "Tests mirror the class path: typo3/sysext/<ext>/Classes/Foo/Bar.php is tested by typo3/sysext/<ext>/Tests/{Unit,Functional}/Foo/BarTest.php.",
         "scope": "core"
       },
+      "The name says what holds and the comment says which case is exercised: typeSpecificTitleOverridesCtrlTitle, and a docblock naming the path the case takes and why that path matters. Neither carries the issue number — no test method in the core's system extensions is named after one, and the number is already in the commit's Resolves: trailer and in the changelog file name. \"Regression test for #N\" dates the test to the fix it came out of and says nothing a reader needs years later, which is when a test is read.",
       "Run the single test file or method while iterating; a full functional run costs minutes per round. typo3_test_run_guide has the targeted invocation.",
       {
         "text": "A change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim — is asserted far outside the class's own test, and one search finds those expectations if it is aimed correctly. Search the whole typo3/sysext/*/Tests/ tree rather than *Test.php: roughly half the files holding such an expectation are fixtures the test loads instead of asserting inline — Fixtures/*.php returning a heredoc, .csv, .xml, .typoscript, .html, and a quoted-printable .message. And search for the stable text around the value rather than the value itself, because the value is escaped in a PCRE ('\\.jpg', '\\?\\d+'), split across a sprintf() format ('@^<img src=\"(%s/%s)\"'), concatenated at runtime (\"'?' . $fileMtime\"), substituted into a fixture placeholder ({$fileMtimeActions}) or soft-wrapped mid-path by quoted-printable, while the resource path around it survives all of them. Two shapes look like nothing: a contentMatchRegExp data-provider key sits nowhere near an assertion, and a test that requires its expected markup from a fixture carries no literal at all — the fixture is what the search finds and what the edit changes.",

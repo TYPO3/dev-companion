@@ -1900,6 +1900,25 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * What a test is called, and what its comment is not for.
+     *
+     * `D-KNW-142`. The corpus stated the attribute and the fixtures and said
+     * nothing about the name or the docblock, so the framing this repository
+     * was corrected on — a test introduced as the regression test for an issue
+     * number — was a shape nothing here named.
+     */
+    #[Decision('D-KNW-142')]
+    #[Test]
+    public function aTestIsNamedForWhatHoldsRatherThanForTheIssue(): void
+    {
+        $text = self::statementsOf('core-tests');
+
+        self::assertStringContainsString('The name says what holds', $text);
+        self::assertStringContainsString('Resolves: trailer and in the changelog file name', $text);
+        self::assertStringContainsString('says nothing a reader needs years later', $text);
+    }
+
+    /**
      * The one statement here that is not what the core does.
      *
      * `empty()` stands 2614 times in the sysext classes and the core's own

@@ -1826,9 +1826,11 @@ final class KnowledgeTest extends TestCase
      * match is another document, and a concentrated answer is every match
      * coming from one.
      *
-     * `icon` is the thin match that is left, and the second instance
-     * `D-ANS-101` names in its evidence: one section, and the whole
-     * commit-message page handed over on the word appearing once.
+     * `xdebug` is the thin match that stands for the second instance
+     * `D-ANS-101` names in its evidence: one section, and a whole page handed
+     * over on the word appearing once. It was `icon` until 2026-09-01, when a
+     * document about drawing one made that word reach six sections — which is
+     * the corpus taking a thin match away rather than the floor failing.
      *
      * What the floor costs, measured over `Documents::topics()` on 2026-08-24
      * at `targetVersion=15.0`: of the corpus's 103 subjects, 25 reach one page
@@ -1856,15 +1858,15 @@ final class KnowledgeTest extends TestCase
         );
 
         $thin = Registry::call('typo3_rule_lookup', [
-            'query' => 'icon',
+            'query' => 'xdebug',
             'targetVersion' => '15.0',
         ]);
 
         self::assertSame(1, $thin->data['matchCount']);
         self::assertSame([], $thin->data['matchedHeadings']);
-        self::assertSame('Changed Signatures', $thin->data['matches'][0]['heading']);
+        self::assertSame('Invoking runTests.sh', $thin->data['matches'][0]['heading']);
         self::assertStringNotContainsString(
-            Documents::read('core/contribution/commit-messages'),
+            Documents::read('core/testing/scripts'),
             $thin->text,
             'a page is pushed on the evidence of one word',
         );

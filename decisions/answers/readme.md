@@ -11,6 +11,7 @@ one is added.
 - [`D-ANS-128`][D-ANS-128] — An answer's index buys recovery and its foot is read last · 2026-09-01
 - [`D-ANS-129`][D-ANS-129] — A list in an answer names the call it raises · 2026-09-01
 - [`D-ANS-130`][D-ANS-130] — A hint answer says how much of the question it carries · 2026-09-01
+- [`D-ANS-131`][D-ANS-131] — An icon answer says whose picture the identifier already is · 2026-09-01
 - [`D-ANS-126`][D-ANS-126] — The runnable form of a declared command is a field · 2026-08-28
 - [`D-ANS-114`][D-ANS-114] — A page read whole names the hints it declares · 2026-08-27
 - [`D-ANS-115`][D-ANS-115] — A phrasing a requirement rests on is carried by the hint's own vocabulary · 2026-08-27
@@ -137,6 +138,7 @@ one is added.
 [D-ANS-128]: ans-128-an-answers-index-buys-recovery-and-its-foot-is-read-last.md
 [D-ANS-129]: ans-129-a-list-in-an-answer-names-the-call-it-raises.md
 [D-ANS-130]: ans-130-a-hint-answer-says-how-much-of-the-question-it-carries.md
+[D-ANS-131]: ans-131-an-icon-answer-says-whose-picture-the-identifier-already-is.md
 [D-ANS-126]: ans-126-the-runnable-form-of-a-declared-command-is-a-field.md
 [D-ANS-114]: ans-114-a-page-read-whole-names-the-hints-it-declares.md
 [D-ANS-115]: ans-115-a-phrasing-a-requirement-rests-on-is-carried-by-the-hints-own-vocabulary.md

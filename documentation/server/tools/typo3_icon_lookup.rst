@@ -86,6 +86,12 @@ Answers with
         aliasOf: string or null
         # Where it is registered. Empty where it is not.
         source: string
+        # What this identifier is already the icon of in this installation, as
+        # "tt_content.CType=<value>". Registered says the identifier resolves; this
+        # says whose picture it is, which is the question a caller borrowing one is
+        # actually asking. Empty means nothing binds it here — or that the
+        # installation did not answer, which answeredBy is what says.
+        usedBy: [string]
         # Related identifiers, for a miss only. A registered identifier carries
         # none, because its neighbours are not an answer to it.
         suggestions: [string]
@@ -140,7 +146,7 @@ or ``query``, ``unsupported``.
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-01 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
 15.0.0-dev, the main core checkout below .checkouts/, whose console could not
@@ -604,6 +610,7 @@ Data:
                 "category": "actions",
                 "aliasOf": null,
                 "source": "t3icons",
+                "usedBy": [],
                 "suggestions": []
             },
             {
@@ -612,6 +619,7 @@ Data:
                 "category": "actions",
                 "aliasOf": null,
                 "source": "t3icons",
+                "usedBy": [],
                 "suggestions": []
             },
             {
@@ -620,6 +628,7 @@ Data:
                 "category": "",
                 "aliasOf": null,
                 "source": "",
+                "usedBy": [],
                 "suggestions": [
                     "content-text-teaser"
                 ]
@@ -662,6 +671,7 @@ Data:
                 "category": "actions",
                 "aliasOf": null,
                 "source": "EXT:backend/Configuration/Icons.php",
+                "usedBy": [],
                 "suggestions": []
             },
             {
@@ -670,6 +680,7 @@ Data:
                 "category": "",
                 "aliasOf": null,
                 "source": "",
+                "usedBy": [],
                 "suggestions": []
             },
             {
@@ -678,6 +689,7 @@ Data:
                 "category": "acme",
                 "aliasOf": null,
                 "source": "EXT:acme_events/Configuration/Icons.php",
+                "usedBy": [],
                 "suggestions": []
             }
         ],

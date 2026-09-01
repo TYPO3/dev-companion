@@ -119,6 +119,40 @@ final class Icons
     }
 
     /**
+     * The content elements an identifier is the icon of, in this installation.
+     *
+     * "Registered" and "free to use" are different questions and a lookup only
+     * answers the first — the session that read a yes as the second put the
+     * core HTML element's icon on a content element of its own
+     * (`D-ANS-131`). What this adds is the one binding the installation can be
+     * asked for without a further boot: the item icon of each CType, which the
+     * probe already reads for `typo3_extension_describe`.
+     *
+     * Empty where the installation did not answer, which is the same silence as
+     * a CType nothing binds.
+     *
+     * @return array<int, string>
+     */
+    public static function boundTo(string $identifier): array
+    {
+        $elements = Typo3Runtime::topic('contentElements');
+        if (!is_array($elements)) {
+            return [];
+        }
+
+        $bound = [];
+        foreach ($elements as $value => $element) {
+            $icon = is_array($element) ? ($element['icon'] ?? '') : '';
+            if (is_string($icon) && strtolower($icon) === strtolower($identifier)) {
+                $bound[] = 'tt_content.CType=' . $value;
+            }
+        }
+        sort($bound);
+
+        return $bound;
+    }
+
+    /**
      * Where the answer comes from, in the vocabulary every tool reports it in:
      * `installation` for the booted registry, `packages` for the files.
      *

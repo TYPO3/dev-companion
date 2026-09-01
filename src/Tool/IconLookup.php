@@ -94,8 +94,9 @@ final class IconLookup extends ReadOnlyTool
                 'category' => Schema::string(),
                 'aliasOf' => Schema::nullableString('The identifier this one is an alias of.'),
                 'source' => Schema::string('Where it is registered. Empty where it is not.'),
+                'usedBy' => Schema::listOf(Schema::string(), 'What this identifier is already the icon of in this installation, as "tt_content.CType=<value>". Registered says the identifier resolves; this says whose picture it is, which is the question a caller borrowing one is actually asking. Empty means nothing binds it here — or that the installation did not answer, which answeredBy is what says.'),
                 'suggestions' => Schema::listOf(Schema::string(), 'Related identifiers, for a miss only. A registered identifier carries none, because its neighbours are not an answer to it.'),
-            ], ['identifier', 'registered', 'category', 'aliasOf', 'source', 'suggestions']), 'One entry per identifier passed in, in that order. Returned when identifiers were given.'),
+            ], ['identifier', 'registered', 'category', 'aliasOf', 'source', 'usedBy', 'suggestions']), 'One entry per identifier passed in, in that order. Returned when identifiers were given.'),
             'categories' => Schema::listOf(Schema::string(), 'Returned when no query was given.'),
             'concepts' => Schema::listOf(Schema::string(), 'Concept words that map to a shape. Returned when no query was given.'),
             'scope' => Schema::string('Where these identifiers may be used: the backend registry, not frontend rendering. Carried by every answered lookup.'),
@@ -147,6 +148,12 @@ final class IconLookup extends ReadOnlyTool
                 }
                 if ($entry['registered'] && $entry['source'] !== Icons::SOURCE_T3ICONS) {
                     $lines[] = '  registered in ' . $entry['source'];
+                }
+                // Whose picture it already is, which is what a caller asking
+                // whether they may borrow one is actually asking — `D-ANS-131`.
+                if ($entry['usedBy'] !== []) {
+                    $lines[] = '  already the icon of ' . implode(', ', $entry['usedBy'])
+                        . ' — registered says it resolves, not that it is free to describe something else';
                 }
                 if ($entry['suggestions'] !== []) {
                     $lines[] = '  did you mean: ' . implode(', ', $entry['suggestions']);
@@ -284,7 +291,7 @@ final class IconLookup extends ReadOnlyTool
      * `D-ANS-016`. Empty where nothing was passed.
      *
      * @param array<string, array<int, string>> $concepts
-     * @return array<int, array{identifier: string, registered: bool, category: string, aliasOf: ?string, source: string, suggestions: array<int, string>}>
+     * @return array<int, array{identifier: string, registered: bool, category: string, aliasOf: ?string, source: string, usedBy: array<int, string>, suggestions: array<int, string>}>
      */
     private static function validate(mixed $identifiers, array $concepts): array
     {
@@ -301,6 +308,7 @@ final class IconLookup extends ReadOnlyTool
                 'category' => $icon['category'] ?? '',
                 'aliasOf' => $icon['aliasOf'] ?? null,
                 'source' => $icon['source'] ?? '',
+                'usedBy' => $icon === null ? [] : Icons::boundTo($identifier),
                 'suggestions' => $icon !== null ? [] : array_slice(
                     array_column(self::rank($identifier, $concepts), 'identifier'),
                     0,

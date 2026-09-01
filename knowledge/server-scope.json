@@ -229,6 +229,16 @@
       "scope": "any"
     },
     {
+      "topic": "Drawing the icon a content element is picked by, and the set it belongs to",
+      "depth": "The 16-pixel box every icon in the core's own content set shares, what that set actually varies to tell one element from another — silhouette and palette rather than lines inside one frame, measured over its 115 files — and the check that says a set works, which is naming each icon at rendered size without its label. Whether an identifier resolves is typo3_icon_lookup's and is a different question.",
+      "tools": [
+        "typo3_rule_lookup",
+        "typo3_icon_lookup"
+      ],
+      "source": "typo3://guides/any/icons/drawing-a-content-icon",
+      "scope": "any"
+    },
+    {
       "topic": "Proving that a TypoScript condition matched against a running installation",
       "depth": "How a verdict nothing prints is established from the page: what the backend's condition list is and is not, how a marker is derived from what the guarded branch alone renders, the shared Fluid wrapper that is no marker, a marker put into the condition on purpose, the negative control, and which cache stands between two runs. It requests nothing and flushes nothing.",
       "tools": [

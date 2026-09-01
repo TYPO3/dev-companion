@@ -11,7 +11,9 @@ heldBy:
   - SkillTest::theChangelogsSilenceIsNotAnAnswerAboutWhatStillWorks
   - SkillTest::theDeprecationSweepIsSkippedWhereNoTypo3ApiIsTouched
   - SkillTest::theDeprecationSweepRunsFromTheExtensionsSurface
+  - SkillTest::theFilesAChangeWillTouchAreNamedBeforeTheFirstEdit
   - SkillTest::theInstalledSourceIsTheStepAfterTheLookups
+  - SkillTest::theOrderSaysWhatItEstablishedBeforeTheReading
   - SkillTest::theReportNamesTheStepsOfTheOrderItDidNotReach
   - SkillTest::theWorkflowStepRunsInEverySession
 ---

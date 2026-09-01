@@ -139,9 +139,20 @@ skip the ones that matter too.
    the framework around it, both of which deprecate. A fixture is exempt where
    it is data the suite reads and not where it is a class.
 
+**Before the reading**, write down what the order established: the version every
+later answer is filtered by, the packages in scope, the commands this repository
+declares, and which steps were discharged by what. Those are answers already in
+the session rather than a second reading, and what the files show belongs to the
+report at the other end. A caller who cannot see what an answer rests on cannot
+tell it from one that rests on nothing.
+
 **Then** read the checkout. Not before: listing the files first makes everything
 after the listing look optional, and the conventions arrive as a footnote to a
 verdict that has already formed.
+
+**Before the first edit**, name the files this change will create, change or
+delete. A deletion is the caller's to ask for, and this is somebody else's
+checkout: it is the one act nothing here can put back.
 
 **Last**, the report names every step of this order it did not reach, and what
 stood in for it. That is an answer already in the session, a condition that made

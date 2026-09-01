@@ -744,6 +744,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 - [`D-SKL-087`][D-SKL-087] — Every skill in the directory is published · 2026-09-01
 - [`D-SKL-088`][D-SKL-088] — A paragraph three skills share stops being copied · 2026-09-01
+- [`D-SKL-089`][D-SKL-089] — The base says what it established and what it will touch · 2026-09-01
 - [`D-SKL-083`][D-SKL-083] — A test file is on the sweep's side of the exemption · 2026-08-28
 - [`D-SKL-084`][D-SKL-084] — The presence check looks for the qualified tool name too · 2026-08-28
 - [`D-SKL-085`][D-SKL-085] — The crossing into a fix says the sweep is owed again · 2026-08-28
@@ -828,6 +829,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 [D-SKL-087]: task-skills/skl-087-every-skill-in-the-directory-is-published.md
 [D-SKL-088]: task-skills/skl-088-a-paragraph-three-skills-share-stops-being-copied.md
+[D-SKL-089]: task-skills/skl-089-the-base-says-what-it-established-and-what-it-will-touch.md
 [D-SKL-083]: task-skills/skl-083-a-test-file-is-on-the-sweeps-side-of-the-exemption.md
 [D-SKL-084]: task-skills/skl-084-the-presence-check-looks-for-the-qualified-tool-name-too.md
 [D-SKL-085]: task-skills/skl-085-the-crossing-into-a-fix-says-the-sweep-is-owed-again.md

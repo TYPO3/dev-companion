@@ -938,6 +938,59 @@ final class SkillTest extends TestCase
         self::assertStringNotContainsString('under either exemption', $base);
     }
 
+    /**
+     * The order closes on what it did not reach and opened on nothing, so what
+     * the four calls established stayed unwritten until the answer was. One
+     * skill carried the block for its own audit and every other body was held
+     * to nothing — `D-SKL-089`.
+     */
+    #[Requirement('R-SKL-005')]
+    #[Decision('D-SKL-089')]
+    #[Test]
+    public function theOrderSaysWhatItEstablishedBeforeTheReading(): void
+    {
+        $base = self::flat((string) file_get_contents(Paths::root() . '/skills/base.md'));
+
+        $stated = strpos($base, 'write down what the order established');
+        self::assertNotFalse($stated, 'the base never asks what the order established to be written down');
+
+        // Before the sentence that sends the session into the files, because
+        // afterwards it is a summary of the reading rather than what the
+        // reading rests on.
+        self::assertLessThan(
+            (int) strpos($base, '**Then** read the checkout'),
+            $stated,
+            'what the order established is stated after the checkout is opened',
+        );
+
+        // Held to the four calls' own answers, so it stays a few lines.
+        self::assertStringContainsString('the version every later answer is filtered by', $base);
+        self::assertStringContainsString('which steps were discharged by what', $base);
+    }
+
+    /**
+     * The crossings say where a session stops at another owner's files and
+     * nothing said what it would touch of its own, so a deletion in somebody
+     * else's checkout was the one act no rule here named — `D-SKL-089`.
+     */
+    #[Requirement('R-SKL-005')]
+    #[Decision('D-SKL-089')]
+    #[Test]
+    public function theFilesAChangeWillTouchAreNamedBeforeTheFirstEdit(): void
+    {
+        $base = self::flat((string) file_get_contents(Paths::root() . '/skills/base.md'));
+
+        $named = strpos($base, 'name the files this change will create, change or delete');
+        self::assertNotFalse($named, 'the base never asks which files a change will touch');
+
+        // After the reading and before the report: the moment the work turns
+        // from reading to writing is the only place it is still cheap.
+        self::assertGreaterThan((int) strpos($base, '**Then** read the checkout'), $named);
+        self::assertLessThan((int) strpos($base, 'names every step of this order it did not reach'), $named);
+
+        self::assertStringContainsString("A deletion is the caller's to ask for", $base);
+    }
+
     #[Requirement('R-SKL-005')]
     #[Decision('D-ANS-010')]
     #[Decision('D-SKL-085')]

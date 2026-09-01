@@ -1,7 +1,8 @@
 ---
 date: 2026-08-31T23:43:23+00:00
 category: idea
-status: open
+status: closed
+closed: 2026-09-01
 model: claude-opus-5[1m]
 tool: typo3_flexform_lookup, typo3_schema_lookup, typo3_configuration_lookup, typo3_ter_lookup, typo3_test_run_guide, typo3_commit_message_guide
 directory: /home/benji/projects/site-tierheim

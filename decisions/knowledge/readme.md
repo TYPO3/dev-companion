@@ -8,6 +8,7 @@ See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
 - [`D-KNW-137`][D-KNW-137] — A relaunch is a kind of work rather than a hint beside one · 2026-09-01
+- [`D-KNW-138`][D-KNW-138] — A hint names its next call in a statement · 2026-09-01
 - [`D-KNW-133`][D-KNW-133] — A guide's whenToUse names the answer it hands over · 2026-08-28
 - [`D-KNW-134`][D-KNW-134] — What the functional harness does to the working directory is stated · 2026-08-28
 - [`D-KNW-135`][D-KNW-135] — A condition attribute carries its quoting and its zero · 2026-08-28
@@ -137,6 +138,7 @@ one is added.
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
 [D-KNW-137]: knw-137-a-relaunch-is-a-kind-of-work-rather-than-a-hint-beside-one.md
+[D-KNW-138]: knw-138-a-hint-names-its-next-call-in-a-statement.md
 [D-KNW-133]: knw-133-a-guides-whentouse-names-the-answer-it-hands-over.md
 [D-KNW-134]: knw-134-what-the-functional-harness-does-to-the-working-directory-is-stated.md
 [D-KNW-135]: knw-135-a-condition-attribute-carries-its-quoting-and-its-zero.md

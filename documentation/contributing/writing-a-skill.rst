@@ -113,6 +113,8 @@ The rules
   nowhere — ``SkillTest::everyDischargedCallIsWrittenAsOneAndRoutedNowhere``
 * Every reference is one hop away and loaded on demand —
   ``SkillTest::everyReferenceIsOneHopAwayAndLoadedOnDemand``
+* A paragraph three skills share stops being copied —
+  ``SkillTest::aParagraphThreeSkillsShareStopsBeingCopied``
 * A skill that judges keeps its checklist beside it —
   ``SkillTest::judgmentHeavySkillsKeepTheirChecklistBesideThem``
 * It says what it owns — ``SkillTest::everySkillStatesWhatItOwns``

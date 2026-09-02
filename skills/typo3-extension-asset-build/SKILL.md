@@ -148,18 +148,14 @@ of the answer being no is a second pass over markup that reads as finished.
 
 ## What the rebuilt output promises the backend
 
-Built backend JavaScript does not reach the backend by being present. It is
-declared, in an import map: `Configuration/JavaScriptModules.php` maps a bare
-specifier onto a path in the package and lists the extensions its modules depend
-on. A build that renames, splits, hashes or drops an output breaks that mapping
-without anything failing in PHP, so after every rebuild each mapped path is
-checked against the file the build actually wrote.
-
-- **Backend JavaScript is not bundled.** It reaches the browser as ES modules
-  through that map, one specifier per file, so a pipeline written for the
-  frontend produces the wrong shape when it is pointed at backend JavaScript:
-  one hashed bundle where the map names files. Nothing fails in PHP there
-  either.
+Built backend JavaScript does not reach the backend by being present: it is
+declared in an import map, one specifier per file. A build that renames, splits,
+hashes or drops an output breaks that mapping without anything failing in PHP,
+so after every rebuild each mapped path is checked against the file the build
+actually wrote. A pipeline written for the frontend produces the wrong shape
+here — one hashed bundle where the map names files — and nothing fails in PHP
+there either. Which file declares the map, and the check that belongs to it, is
+the document the frontend section below hands over.
 
 ## What the rebuilt output promises the frontend
 

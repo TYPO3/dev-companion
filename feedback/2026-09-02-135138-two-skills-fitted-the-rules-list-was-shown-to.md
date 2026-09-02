@@ -39,8 +39,8 @@ Skill(typo3-backend-module-development, args="Add a backend module for maintaini
 
 The guides list arrives as a field on typo3_project_describe's answer, among thirty other fields, at the very start of a session — before there is any task to match a `when` clause against. By the time I was writing a throwaway Playwright spec for the fifteenth time, that list was far behind me in the transcript.
 
-Two things would have changed it:
-1. Have typo3_task_guide name the rules that match the change type, the way it already names skills and hints. My changeType=feature call for a backend module returned `guides: []`. A browser-verification rule is relevant to almost any change that ends in a backend UI.
-2. In the backend-module skill's "Prove it by opening it" section — which is the moment the browser is needed — name the browser-check rule by id. The skill sends me to typo3-development-installation there; it could send me to the rule in the same breath.
+What would have changed it: have typo3_task_guide name the rules that match the change type, the way it already names skills and hints. My changeType=feature call for a backend module returned `guides: []`. A browser-verification rule is relevant to almost any change that ends in a backend UI.
+
+Trimmed on 2026-09-02: the second ask is done. The backend-module skill's "Prove it by opening it" section now names any/testing/browser-check by id, at the step that needs it.
 
 For the tools I never called: the skill's gather list is long and reads as a menu. The ones that are conditional ("before adding a label", "for a flexform") are the ones I dropped, because at the moment of writing a label I was not re-reading the skill.

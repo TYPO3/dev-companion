@@ -74,6 +74,13 @@ showing their keys, and the access declared lets in whom it claims to. A green
 suite reports none of the five, and a registration file has no schema behind it
 to fail against.
 
+How a browser reaches it and where the throwaway spec goes is a procedure rather
+than a step to invent: `typo3_rule_lookup` with
+`documentId="any/testing/browser-check"`. Ask for it here rather than at the
+start — a session that wrote its own spec fifteen times had that id in the
+guides list its first call returned, hundreds of turns earlier, and never
+matched it against a task it did not have yet.
+
 Opening it needs a backend that runs. Where this repository has none, that is a
 prerequisite of the task rather than a part of it. **Invoke
 `typo3-development-installation` at the verified point — the module is written

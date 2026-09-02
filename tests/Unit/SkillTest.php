@@ -39,6 +39,9 @@ final class SkillTest extends TestCase
      * copies of one order is what the base replaced.
      */
     private const ROUTING_SKILLS = [
+        // The browser-check procedure stands at the step that needs it rather
+        // than in the gather list: a session had its id from the first call and
+        // wrote its own spec fifteen times, having no task yet to match it to.
         'typo3-backend-module-development' => [
             'typo3_backend_module_lookup',
             'typo3_icon_lookup',
@@ -46,6 +49,7 @@ final class SkillTest extends TestCase
             'typo3_translation_domain_lookup',
             'typo3_component_lookup',
             'typo3_documentation_lookup',
+            'typo3_rule_lookup',
             'typo3_commit_message_guide',
         ],
         'typo3-content-element-development' => [

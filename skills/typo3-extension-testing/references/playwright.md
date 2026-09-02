@@ -26,29 +26,11 @@ browser installation commands.
 
 ## Choose the folders
 
-Keep an established repository layout. When none exists, start with one
-project-owned browser surface:
+Keep an established repository layout. Where none exists, `typo3_rule_lookup`
+with `documentId="project/testing/playwright"` is the files, whole:
+`Build/playwright.config.ts`, the login setup, a spec per project, the
+environment they read the site from, and what is not committed.
 
-```text
-playwright.config.ts
-tests/
-  browser/
-    setup/
-      authentication.setup.ts
-    e2e/
-      <journey>.spec.ts
-    accessibility/
-      <page>.spec.ts
-    fixtures/
-      <shared fixture>.ts
-playwright/
-  .auth/                 # generated and ignored
-test-results/            # generated and ignored or uploaded
-playwright-report/       # generated and ignored or uploaded
-```
-
-- Keep the configuration beside the project package manifest that owns the
-  Playwright dependency and scripts.
 - Project-owned describes the suite's lifecycle, not necessarily the repository
   root. Reuse an existing frontend package manifest when it belongs to this
   deployed project and can own browser commands; do not create a second manifest
@@ -60,9 +42,8 @@ playwright-report/       # generated and ignored or uploaded
   Playwright project dependencies.
 - Keep reusable browser fixtures and page objects separate from test cases only
   after a second spec needs them.
-- Keep generated authentication state, traces, screenshots, videos, and reports
-  out of source control. Store accepted visual baselines beside their owning
-  specs or under an explicit snapshot path and commit only those baselines.
+- Store accepted visual baselines beside their owning specs or under an explicit
+  snapshot path and commit only those baselines.
 - If the repository already uses `Tests/Browser/`, `e2e/`, or a frontend-package
   directory, retain it and map the same ownership boundaries there.
 

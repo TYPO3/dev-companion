@@ -30,26 +30,10 @@ package versions, bootstrap APIs, configuration contents, and commands.
 
 ## Choose the folders
 
-Keep an established repository layout. When none exists, start with this
-extension-owned shape and adjust the copied configuration's relative paths:
-
-```text
-Build/
-  phpunit/
-    UnitTests.xml
-    UnitTestsBootstrap.php
-    FunctionalTests.xml
-    FunctionalTestsBootstrap.php
-Tests/
-  Unit/
-    <subject path>/
-      <Subject>Test.php
-  Functional/
-    <subsystem>/
-      <Behavior>Test.php
-      Fixtures/
-        <input and expected data>
-```
+Keep an established repository layout. Where none exists, `typo3_rule_lookup`
+with `documentId="extension/testing/phpunit"` is the files, whole:
+`Build/UnitTests.xml`, `Build/FunctionalTests.xml` and the bootstrap beside
+each, where they sit in a project, and what each needs after it is written out.
 
 - Keep runner configuration and bootstraps out of `Tests/`; they describe how
   the suite runs rather than one tested behavior.
@@ -60,12 +44,9 @@ Tests/
   production classes participate.
 - Put fixtures beside the functional test or its small subsystem, not in one
   extension-wide bucket whose ownership is unclear.
-- Preserve the relative placement used by current testing-framework templates
-  when copying them. If a project already uses `Build/UnitTests.xml` or another
-  working shape, adapt it rather than moving files for cosmetic consistency.
-- Calculate testsuite paths from the final configuration location. A path copied
-  from `Build/phpunit/` is wrong after moving the XML file to `Build/`, even
-  when the rest of the template is unchanged.
+- If a project already uses another working shape, adapt it rather than moving
+  files for cosmetic consistency, and calculate testsuite paths from the final
+  configuration location.
 
 ## Write the test
 

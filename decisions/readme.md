@@ -96,6 +96,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-136`][D-ANS-136] — The Fluid namespace source is chosen by the installed version · 2026-09-02
 - [`D-ANS-137`][D-ANS-137] — Three argument names meant two things each · 2026-09-02
 - [`D-ANS-138`][D-ANS-138] — The hint corpus dilutes its outliers as it grows · 2026-09-02
+- [`D-ANS-139`][D-ANS-139] — Three tools hand over less than they read · 2026-09-02
 - [`D-ANS-127`][D-ANS-127] — Knowledge that yields a judgement is delivered where the work finishes · 2026-09-01
 - [`D-ANS-128`][D-ANS-128] — An answer's index buys recovery and its foot is read last · 2026-09-01
 - [`D-ANS-129`][D-ANS-129] — A list in an answer names the call it raises · 2026-09-01
@@ -230,6 +231,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-ANS-136]: answers/ans-136-the-fluid-namespace-source-is-chosen-by-the-installed-version.md
 [D-ANS-137]: answers/ans-137-three-argument-names-meant-two-things-each.md
 [D-ANS-138]: answers/ans-138-the-hint-corpus-dilutes-its-outliers-as-it-grows.md
+[D-ANS-139]: answers/ans-139-three-tools-hand-over-less-than-they-read.md
 [D-ANS-127]: answers/ans-127-knowledge-that-yields-a-judgement-is-delivered-where-the-work-finishes.md
 [D-ANS-128]: answers/ans-128-an-answers-index-buys-recovery-and-its-foot-is-read-last.md
 [D-ANS-129]: answers/ans-129-a-list-in-an-answer-names-the-call-it-raises.md
@@ -959,6 +961,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### feedback
 
 - [`D-FBK-054`][D-FBK-054] — The server answers what is registered and a person answers what it looks like · 2026-09-02
+- [`D-FBK-055`][D-FBK-055] — A registration file is checked after the cache flush or not at all · 2026-09-02
 - [`D-FBK-053`][D-FBK-053] — A migrated memory is judged against the source its rule has · 2026-09-01
 - [`D-FBK-052`][D-FBK-052] — A judgement that holds the evidence makes the change · 2026-08-24
 - [`D-FBK-051`][D-FBK-051] — What the TER already holds is a lookup of its own · 2026-08-21
@@ -1000,6 +1003,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-FBK-004`][D-FBK-004] — A feedback asks the caller which model is recording it · 2026-07-31 · confirmed
 
 [D-FBK-054]: feedback/fbk-054-the-server-answers-what-is-registered-and-a-person-answers-what-it-looks-like.md
+[D-FBK-055]: feedback/fbk-055-a-registration-file-is-checked-after-the-cache-flush-or-not-at-all.md
 [D-FBK-053]: feedback/fbk-053-a-migrated-memory-is-judged-against-the-source-its-rule-has.md
 [D-FBK-052]: feedback/fbk-052-a-judgement-that-holds-the-evidence-makes-the-change.md
 [D-FBK-051]: feedback/fbk-051-what-the-ter-already-holds-is-a-lookup-of-its-own.md

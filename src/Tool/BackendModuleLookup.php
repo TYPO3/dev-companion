@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tool;
 
 use TYPO3\DevCompanion\Installation\Icons;
+use TYPO3\DevCompanion\Installation\Instance;
+use TYPO3\DevCompanion\Installation\Labels;
 use TYPO3\DevCompanion\Installation\Typo3Runtime;
 use TYPO3\DevCompanion\Result\Schema;
 use TYPO3\DevCompanion\Result\ToolResult;
@@ -42,7 +44,7 @@ final class BackendModuleLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'query' => ['type' => 'string', 'description' => 'Module identifier, label, route, navigation component, or extension name to filter by. Omit to list every module.'],
-                'file' => ['type' => 'string', 'description' => 'A Configuration/Backend/Modules.php to check instead of listing the registry: which parent and which iconIdentifier it names that this installation does not have. Answered without a cache flush and without the file being saved into an installation, which is what the registry needs before it can say anything. The file is read as text and nothing in it is executed, so a value a variable or a constant computes is reported as unresolvable rather than followed. Not with query.'],
+                'file' => ['type' => 'string', 'description' => 'A Configuration/Backend/Modules.php to check instead of listing the registry: which parent, which iconIdentifier and which labels it names that this installation does not have. Answered without a cache flush and without the file being saved into an installation, which is what the registry needs before it can say anything. The file is read as text and nothing in it is executed, so a value a variable or a constant computes is reported as unresolvable rather than followed. Not with query.'],
             ],
         ];
     }
@@ -59,8 +61,10 @@ final class BackendModuleLookup extends ReadOnlyTool
                 'parentRegistered' => ['type' => ['boolean', 'null'], 'description' => 'Whether this installation has a module under that identifier. Null where the entry names no parent, and null where the value was not a plain string in the file.'],
                 'iconIdentifier' => Schema::string('The icon it names. Empty where it names none.'),
                 'iconRegistered' => ['type' => ['boolean', 'null'], 'description' => 'Whether that identifier is registered here. Null where the entry names no icon, and null where the value was not a plain string.'],
-                'labels' => Schema::string('The translation domain or LLL reference it names, as written. Not resolved: a domain resolves once the module is registered, which is the state this call exists to precede.'),
-            ], ['identifier', 'parent', 'parentRegistered', 'iconIdentifier', 'iconRegistered', 'labels']), 'One entry per module the named file declares, in the order it declares them. Empty where no file was named.'),
+                'labels' => Schema::string('The translation domain or LLL reference it names, as written. Empty where it names none, and empty where the value was not a plain string.'),
+                'labelsResource' => Schema::string('The XLF file this installation has behind that reference. Empty where none does, which for a domain means no label file here derives it.'),
+                'labelsRegistered' => ['type' => ['boolean', 'null'], 'description' => 'Whether the trans-unit the module title is read from is in that file — mlang_tabs_tab behind an LLL reference, title behind a domain. False with no labelsResource means nothing here resolves the reference at all, and false with one means the file is here and the unit is not; either way the module renders an empty title. Null where the entry names no labels, and null where the value was not a plain string.'],
+            ], ['identifier', 'parent', 'parentRegistered', 'iconIdentifier', 'iconRegistered', 'labels', 'labelsResource', 'labelsRegistered']), 'One entry per module the named file declares, in the order it declares them. Empty where no file was named.'),
             'modules' => Schema::listOf(Schema::object([
                 'identifier' => Schema::string(),
                 'parents' => Schema::listOf(Schema::string(), 'The modules it sits under, outermost first.'),
@@ -196,9 +200,12 @@ final class BackendModuleLookup extends ReadOnlyTool
         }
 
         $checked = [];
+        $notes = [];
         foreach (self::entries((string) file_get_contents($file)) as $identifier => $entry) {
             $parent = $entry['parent'] ?? null;
             $icon = $entry['iconIdentifier'] ?? null;
+            $labels = self::labels($entry['labels'] ?? null);
+            $notes[(string) $identifier] = $labels['note'];
             $checked[] = [
                 'identifier' => (string) $identifier,
                 'parent' => (string) ($parent ?? ''),
@@ -206,6 +213,8 @@ final class BackendModuleLookup extends ReadOnlyTool
                 'iconIdentifier' => (string) ($icon ?? ''),
                 'iconRegistered' => $icon === null ? null : Icons::find($icon) !== null,
                 'labels' => (string) ($entry['labels'] ?? ''),
+                'labelsResource' => $labels['resource'],
+                'labelsRegistered' => $labels['registered'],
             ];
         }
 
@@ -227,13 +236,13 @@ final class BackendModuleLookup extends ReadOnlyTool
                 );
             }
             if ($entry['labels'] !== '') {
-                $lines[] = '  labels ' . $entry['labels'] . ' — read, not resolved';
+                $lines[] = '  labels ' . $entry['labels'] . ' — ' . $notes[$entry['identifier']];
             }
         }
         $lines[] = '';
         $lines[] = 'Read as text: nothing in the file was executed, so a value a constant or a variable computes is '
-            . 'not seen. A labels domain resolves once the module is registered, which is the state this call '
-            . 'precedes, so it is reported as written.';
+            . 'not seen. The labels are resolved against the label files this installation ships rather than against '
+            . 'the registry, which is what makes them answerable before the module is registered.';
 
         return ToolResult::create(implode("\n", $lines), [
             'query' => '',
@@ -242,6 +251,74 @@ final class BackendModuleLookup extends ReadOnlyTool
             'checked' => $checked,
             'answeredBy' => 'installation',
         ]);
+    }
+
+    /**
+     * What the labels of one entry resolve to in this installation.
+     *
+     * `BaseModule` reads the module title out of one trans-unit, and which one
+     * follows from the form: an `LLL:` reference gets `mlang_tabs_tab`
+     * appended, a translation domain gets `title`, and a value that is neither
+     * matches no branch and leaves the module without a title at all. Read in
+     * `.checkouts/12.4`, `13.4`, `14.3` and `main`, which differ in the domain
+     * branch alone — it arrived with the domains themselves, so below that
+     * version the same value names nothing.
+     *
+     * Each of these fails when a user opens the module and never when the file
+     * is read, which is what `D-FBK-055` had the check built for.
+     *
+     * @return array{resource: string, registered: ?bool, note: string}
+     */
+    private static function labels(?string $labels): array
+    {
+        if ($labels === null || $labels === '') {
+            return ['resource' => '', 'registered' => null, 'note' => ''];
+        }
+
+        $empty = ' — the module renders an empty title';
+        if (str_starts_with($labels, 'LLL:')) {
+            $unit = 'mlang_tabs_tab';
+        } elseif (!str_contains($labels, ':') && str_contains($labels, '.')) {
+            $unit = 'title';
+            $major = Instance::typo3Major();
+            if ($major !== null && $major < TranslationDomainLookup::SINCE) {
+                return [
+                    'resource' => '',
+                    'registered' => false,
+                    'note' => sprintf(
+                        'TYPO3 %d resolves no translation domains, so this names no file%s. Reference the XLF '
+                        . 'itself: LLL:EXT:<key>/Resources/Private/Language/locallang_mod.xlf',
+                        $major,
+                        $empty,
+                    ),
+                ];
+            }
+        } else {
+            return [
+                'resource' => '',
+                'registered' => false,
+                'note' => 'neither an LLL: reference nor a translation domain' . $empty,
+            ];
+        }
+
+        $file = Labels::file($labels);
+        if ($file === null) {
+            return [
+                'resource' => '',
+                'registered' => false,
+                'note' => 'no label file here answers to that' . $empty,
+            ];
+        }
+
+        $registered = isset(Labels::units($file['absolute'])[$unit]);
+
+        return [
+            'resource' => $file['resource'],
+            'registered' => $registered,
+            'note' => $registered
+                ? $file['resource'] . ', which carries ' . $unit
+                : $file['resource'] . ' carries no ' . $unit . ' unit' . $empty,
+        ];
     }
 
     /**

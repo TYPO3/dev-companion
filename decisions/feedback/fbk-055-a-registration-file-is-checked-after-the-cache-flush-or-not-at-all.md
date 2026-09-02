@@ -5,6 +5,8 @@ date: 2026-09-02
 status: open
 coveredBy:
   - Typo3RuntimeTest::aRegistrationFileIsCheckedBeforeItIsInstalled
+  - Typo3RuntimeTest::aTranslationDomainNamesNoFileBelowTheVersionThatResolvesThem
+  - Typo3RuntimeTest::theTitleUnitDecidesWhetherLabelsResolve
 ---
 
 # D-FBK-055 — A registration file is checked after the cache flush or not at all
@@ -71,3 +73,14 @@ that had already been rebuilt.**
 - The hints written the same day close it. If no session reports a registration
   mistake again, what was missing was the knowledge and not the check, and this
   entry paid for a tool nobody needed.
+
+## Since then
+
+The identifier half is whole: `labels` resolves to the XLF file behind it —
+directly for an `LLL:` reference, by searching for the file whose path derives
+it for a translation domain — and the answer is the trans-unit the module title
+is read from, which is `mlang_tabs_tab` behind the one form and `title` behind
+the other. A domain below the version that resolves them names no file at all,
+and the check says so rather than searching. Nothing of the resolution half was
+built, so both **Wrong if** stand unread: what would settle the first is a
+session reporting a placement mistake the hints did not prevent.

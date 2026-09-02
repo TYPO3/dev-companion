@@ -26,12 +26,12 @@ Takes
     # filter by. Omit to list every module.
     query: string  # optional
     # A Configuration/Backend/Modules.php to check instead of listing the registry:
-    # which parent and which iconIdentifier it names that this installation does not
-    # have. Answered without a cache flush and without the file being saved into an
-    # installation, which is what the registry needs before it can say anything. The
-    # file is read as text and nothing in it is executed, so a value a variable or a
-    # constant computes is reported as unresolvable rather than followed. Not with
-    # query.
+    # which parent, which iconIdentifier and which labels it names that this
+    # installation does not have. Answered without a cache flush and without the
+    # file being saved into an installation, which is what the registry needs before
+    # it can say anything. The file is read as text and nothing in it is executed,
+    # so a value a variable or a constant computes is reported as unresolvable
+    # rather than followed. Not with query.
     file: string  # optional
 
 Answers with
@@ -61,10 +61,19 @@ Answers with
         # Whether that identifier is registered here. Null where the entry names no
         # icon, and null where the value was not a plain string.
         iconRegistered: boolean or null
-        # The translation domain or LLL reference it names, as written. Not
-        # resolved: a domain resolves once the module is registered, which is the
-        # state this call exists to precede.
+        # The translation domain or LLL reference it names, as written. Empty where
+        # it names none, and empty where the value was not a plain string.
         labels: string
+        # The XLF file this installation has behind that reference. Empty where none
+        # does, which for a domain means no label file here derives it.
+        labelsResource: string
+        # Whether the trans-unit the module title is read from is in that file —
+        # mlang_tabs_tab behind an LLL reference, title behind a domain. False with
+        # no labelsResource means nothing here resolves the reference at all, and
+        # false with one means the file is here and the unit is not; either way the
+        # module renders an empty title. Null where the entry names no labels, and
+        # null where the value was not a plain string.
+        labelsRegistered: boolean or null
     modules:  # optional
       - identifier: string
         # The modules it sits under, outermost first.

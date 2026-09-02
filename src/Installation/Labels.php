@@ -30,6 +30,49 @@ final class Labels
     private const SITE_DIRECTORY = 'config/sites';
 
     /**
+     * The label file a reference names, as the EXT: resource and the path on
+     * disk, or null where this installation has none.
+     *
+     * Two forms reach here and only one is a path. `LLL:EXT:key/...xlf` names
+     * the file itself; a translation domain names it by what its path derives,
+     * which is a search — `TranslationDomain` computes a domain from a path and
+     * never the other way, and several paths fold onto one domain.
+     *
+     * @return array{resource: string, absolute: string}|null
+     */
+    public static function file(string $reference): ?array
+    {
+        $reference = trim($reference);
+        if (str_starts_with($reference, 'LLL:')) {
+            $reference = substr($reference, 4);
+        }
+
+        if (str_starts_with($reference, 'EXT:')) {
+            $withoutPrefix = substr($reference, 4);
+            $slash = strpos($withoutPrefix, '/');
+            if ($slash === false) {
+                return null;
+            }
+            $package = Instance::packages()[substr($withoutPrefix, 0, $slash)] ?? null;
+            $absolute = $package . '/' . substr($withoutPrefix, $slash + 1);
+
+            return $package !== null && is_file($absolute)
+                ? ['resource' => $reference, 'absolute' => $absolute]
+                : null;
+        }
+
+        foreach (Instance::packages() as $key => $path) {
+            foreach (self::packageFiles($key, $path) as $file) {
+                if ($file['domain'] === $reference) {
+                    return ['resource' => $file['resource'], 'absolute' => $file['absolute']];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Every label of every installed package and project site, or of one
      * package where an extension key narrows the call.
      *
@@ -218,7 +261,7 @@ final class Labels
      *
      * @return array<string, string>
      */
-    private static function units(string $file): array
+    public static function units(string $file): array
     {
         $previous = libxml_use_internal_errors(true);
         $xml = simplexml_load_string((string) file_get_contents($file));

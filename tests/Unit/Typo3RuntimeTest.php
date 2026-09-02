@@ -225,8 +225,8 @@ final class Typo3RuntimeTest extends TestCase
      *
      * Five registration mistakes in one session were each caught by an
      * installation that had already been rebuilt, and the cycle was: edit,
-     * flush the cache, ask the registry — `D-FBK-055`. Parent and icon fail
-     * when a user opens the module and never when the file is read.
+     * flush the cache, ask the registry — `D-FBK-055`. Parent, icon and labels
+     * fail when a user opens the module and never when the file is read.
      */
     #[Decision('D-FBK-055')]
     #[Test]
@@ -236,6 +236,7 @@ final class Typo3RuntimeTest extends TestCase
         Fixture::bootsInto($root, modules: [
             'content' => ['path' => '/module/content'],
         ], icons: ['module-shelter' => 'EXT:animalshelter/Resources/Public/Icons/shelter.svg']);
+        $this->labelFile($root, 'locallang_animals.xlf', ['title']);
         $this->discover($root);
 
         $file = $root . '/Modules.php';
@@ -243,11 +244,12 @@ final class Typo3RuntimeTest extends TestCase
             . "    'animalshelter_animals' => [\n"
             . "        'parent' => 'content',\n"
             . "        'iconIdentifier' => 'module-shelter',\n"
-            . "        'labels' => 'animalshelter.modules.animals',\n"
+            . "        'labels' => 'core.animals',\n"
             . "    ],\n"
             . "    'animalshelter_stray' => [\n"
             . "        'parent' => 'nothing_registers_this',\n"
             . "        'iconIdentifier' => 'module-nothing-registers-this',\n"
+            . "        'labels' => 'animalshelter.modules.stray',\n"
             . "    ],\n"
             . "];\n");
 
@@ -256,12 +258,97 @@ final class Typo3RuntimeTest extends TestCase
 
         self::assertTrue($checked['animalshelter_animals']['parentRegistered']);
         self::assertTrue($checked['animalshelter_animals']['iconRegistered']);
-        self::assertSame('animalshelter.modules.animals', $checked['animalshelter_animals']['labels']);
+        self::assertSame('core.animals', $checked['animalshelter_animals']['labels']);
+        self::assertSame(
+            'EXT:core/Resources/Private/Language/locallang_animals.xlf',
+            $checked['animalshelter_animals']['labelsResource'],
+            'the domain is resolved by the file whose path derives it',
+        );
+        self::assertTrue($checked['animalshelter_animals']['labelsRegistered']);
 
         self::assertFalse($checked['animalshelter_stray']['parentRegistered']);
         self::assertFalse($checked['animalshelter_stray']['iconRegistered']);
+        self::assertSame('', $checked['animalshelter_stray']['labelsResource']);
+        self::assertFalse($checked['animalshelter_stray']['labelsRegistered']);
         self::assertStringContainsString('NOT registered here', $result->text);
+        self::assertStringContainsString('no label file here answers to that', $result->text);
         self::assertStringContainsString('nothing in the file was executed', $result->text);
+    }
+
+    /**
+     * The trans-unit the module title is read from, which the form decides.
+     *
+     * `BaseModule` appends `mlang_tabs_tab` to an LLL reference and `title` to
+     * a domain, so a file that kept the older unit ids resolves and renders an
+     * empty title anyway — the file being there is not the answer.
+     */
+    #[Decision('D-FBK-055')]
+    #[Test]
+    public function theTitleUnitDecidesWhetherLabelsResolve(): void
+    {
+        $root = $this->installationWithAConsole();
+        Fixture::bootsInto($root, modules: ['content' => ['path' => '/module/content']]);
+        $this->labelFile($root, 'locallang_stray.xlf', ['mlang_tabs_tab']);
+        $this->discover($root);
+
+        $file = $root . '/Modules.php';
+        file_put_contents($file, "<?php\n\nreturn [\n"
+            . "    'animalshelter_intake' => [\n"
+            . "        'labels' => 'LLL:EXT:core/Resources/Private/Language/locallang_stray.xlf',\n"
+            . "    ],\n"
+            . "    'animalshelter_adoption' => [\n"
+            . "        'labels' => 'core.stray',\n"
+            . "    ],\n"
+            . "];\n");
+
+        $checked = array_column(
+            Registry::call('typo3_backend_module_lookup', ['file' => $file])->data['checked'],
+            null,
+            'identifier',
+        );
+
+        self::assertTrue($checked['animalshelter_intake']['labelsRegistered']);
+        self::assertSame(
+            'EXT:core/Resources/Private/Language/locallang_stray.xlf',
+            $checked['animalshelter_adoption']['labelsResource'],
+        );
+        self::assertFalse(
+            $checked['animalshelter_adoption']['labelsRegistered'],
+            'the domain form reads the title unit, which this file does not carry',
+        );
+    }
+
+    /**
+     * A domain below the version that resolves them names no file at all.
+     *
+     * `BaseModule` matches neither its LLL branch nor its domain branch there,
+     * which arrived with the domains themselves, so the module is left without
+     * a title — read in `.checkouts/13.4` against `.checkouts/14.3`.
+     */
+    #[Decision('D-FBK-055')]
+    #[Test]
+    public function aTranslationDomainNamesNoFileBelowTheVersionThatResolvesThem(): void
+    {
+        $root = $this->installationWithAConsole();
+        Fixture::bootsInto($root, modules: ['content' => ['path' => '/module/content']]);
+        $this->labelFile($root, 'locallang_animals.xlf', ['title']);
+        $version = $root . '/typo3/sysext/core/Classes/Information';
+        mkdir($version, 0o777, true);
+        file_put_contents($version . '/Typo3Version.php', "<?php\n\nconst VERSION = '13.4.0';\n");
+        $this->discover($root);
+
+        $file = $root . '/Modules.php';
+        file_put_contents($file, "<?php\n\nreturn [\n"
+            . "    'animalshelter_animals' => [\n"
+            . "        'labels' => 'core.animals',\n"
+            . "    ],\n"
+            . "];\n");
+
+        $result = Registry::call('typo3_backend_module_lookup', ['file' => $file]);
+
+        self::assertFalse($result->data['checked'][0]['labelsRegistered']);
+        self::assertSame('', $result->data['checked'][0]['labelsResource']);
+        self::assertStringContainsString('TYPO3 13 resolves no translation domains', $result->text);
     }
 
     #[Test]
@@ -433,6 +520,28 @@ final class Typo3RuntimeTest extends TestCase
         file_put_contents($root . '/bin/typo3', "#!/usr/bin/env php\n<?php\n");
 
         return $root;
+    }
+
+    /**
+     * An XLF below the core package, carrying one trans-unit per id.
+     *
+     * @param array<int, string> $units
+     */
+    private function labelFile(string $root, string $name, array $units): void
+    {
+        $directory = $root . '/typo3/sysext/core/Resources/Private/Language';
+        if (!is_dir($directory)) {
+            mkdir($directory, 0o777, true);
+        }
+        $body = '';
+        foreach ($units as $id) {
+            $body .= '<trans-unit id="' . $id . '"><source>Animals</source></trans-unit>';
+        }
+        file_put_contents(
+            $directory . '/' . $name,
+            '<?xml version="1.0" encoding="UTF-8"?><xliff version="1.0"><file source-language="en" '
+            . 'datatype="plaintext" original="messages"><body>' . $body . '</body></file></xliff>',
+        );
     }
 
     private function discover(string $root): void

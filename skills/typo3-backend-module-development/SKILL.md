@@ -17,11 +17,11 @@ every task here starts in and why that order is not interchangeable.
 
 Then, for this workflow:
 
-- `typo3_server_scope` with `sections: ["covers"]` for the knowledge depth
-  available. What the caller excluded comes back whatever you name.
-- Decide whether this is a core patch, extension, or site task from the task and
-  the affected paths. If the signals disagree, state the uncertainty; do not
-  attach core-only checks to project work.
+- `typo3_server_scope` is discharged by the base's `typo3_project_describe`:
+  whether the installation this module registers into can be reached is what
+  that answer already states. The orientation tool is for a caller who does not
+  know whether this server can answer at all, which is not this workflow's
+  question.
 - `typo3_backend_module_lookup` before choosing the module identifier, parent,
   position, route, or registration shape.
 - `typo3_icon_lookup` for every proposed module or action icon. Do not invent an
@@ -58,14 +58,10 @@ registration afterwards rather than undone.
   caller's changed files.
 - Reuse the module API, backend components, labels, and registered icons. Avoid
   custom CSS that recreates the TYPO3 backend.
-- Keep project paths and commands in the project. Use core-only checks,
-  changelogs, Gerrit rules, and `Build/Scripts/runTests.sh` only for an actual
-  core patch.
-- Run the repository's own relevant checks. Use `typo3_test_run_guide` with the
-  changed paths only for an actual core patch: it answers
-  `Build/Scripts/runTests.sh`, which exists in the core repository alone. Never
-  present it as a project command, whatever the task turns out to be — what
-  decides is the work, not whether the tool is in the list.
+- Run the checks `typo3_project_describe` listed, and no other: a module lives
+  in an extension, a sitepackage or a site project, and the checks that hold it
+  are the ones that repository declares. The core's own suites and rules are
+  another workflow's and reach nothing here.
 - Re-run the lookups when the target version, extension, or implementation
   choice changes; do not treat an earlier result as universal.
 

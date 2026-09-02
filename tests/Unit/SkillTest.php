@@ -40,7 +40,6 @@ final class SkillTest extends TestCase
      */
     private const ROUTING_SKILLS = [
         'typo3-backend-module-development' => [
-            'typo3_server_scope',
             'typo3_backend_module_lookup',
             'typo3_icon_lookup',
             'typo3_label_lookup',
@@ -186,6 +185,9 @@ final class SkillTest extends TestCase
      */
     private const DISCHARGED_TOOLS = [
         'typo3-development-installation' => ['typo3_server_scope'],
+        // The same argument: whether the installation a module registers into
+        // can be reached comes back with the base's first step.
+        'typo3-backend-module-development' => ['typo3_server_scope'],
         // The constraint the package declares is what every version answer in
         // that review turns on, and it comes back with the base's first step
         // rather than from a call the skill makes.
@@ -4090,22 +4092,23 @@ final class SkillTest extends TestCase
     }
 
     #[Test]
-    public function coreTestGuidanceIsGuardedByTheWork(): void
+    public function theModuleSkillRunsTheChecksTheProjectDeclares(): void
     {
         $skill = (string) file_get_contents(
             Paths::root() . '/skills/typo3-backend-module-development/SKILL.md',
         );
 
-        // The tool is offered everywhere, so being able to call it says nothing
-        // about being able to follow the answer: runTests.sh exists in the core
-        // repository alone, and that is what the skill has to gate on.
-        self::assertStringContainsString('only for an actual core patch', self::flat($skill));
-        self::assertStringContainsString('Never present it as a project', self::flat($skill));
-        self::assertStringNotContainsString('profile', $skill);
-        self::assertLessThan(
-            strpos($skill, 'typo3_test_run_guide'),
-            strpos($skill, 'typo3_server_scope'),
-        );
+        // A backend module is project work, so the checks that hold it are the
+        // ones its repository declares. The skill used to gate the core's test
+        // runner on "an actual core patch", and a gate on a case the skill
+        // never has is a branch every reader has to pass over — it named
+        // typo3_test_run_guide, whose answer exists in the core repository
+        // alone, and the reader had to be told not to present it.
+        $flat = self::flat($skill);
+        self::assertStringContainsString('Run the checks `typo3_project_describe` listed', $flat);
+        foreach (['typo3_test_run_guide', 'runTests.sh', 'Gerrit', 'core patch', 'core-only'] as $core) {
+            self::assertStringNotContainsString($core, $skill, 'the module skill reaches for the core\'s ' . $core);
+        }
     }
 
     #[Requirement('R-SKL-003')]

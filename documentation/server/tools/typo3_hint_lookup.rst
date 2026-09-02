@@ -308,6 +308,7 @@ Text:
     - record-system-properties — What a Record Object Carries, and What Moved Into _system (PHP)
     - content-element-record-row — What a Row Handed to lib.contentElement Must Carry (PHP)
     - typoscript-conditions — What a TypoScript Condition Is Handed (TypoScript)
+    - tca-inline-children — What an Inline Child Table Needs (PHP)
     - project-configuration-files — What the Installation Is Configured By (PHP)
     - installation-setup — What typo3 setup Takes and What It Refuses (PHP)
     - development-installation-page-object — Where a Development Installation Gets Its Page Object (TypoScript)
@@ -899,6 +900,11 @@ Data:
                 "id": "typoscript-conditions",
                 "title": "What a TypoScript Condition Is Handed",
                 "category": "TypoScript"
+            },
+            {
+                "id": "tca-inline-children",
+                "title": "What an Inline Child Table Needs",
+                "category": "PHP"
             },
             {
                 "id": "project-configuration-files",
@@ -1645,6 +1651,7 @@ Text:
     - record-system-properties — What a Record Object Carries, and What Moved Into _system (PHP)
     - content-element-record-row — What a Row Handed to lib.contentElement Must Carry (PHP)
     - typoscript-conditions — What a TypoScript Condition Is Handed (TypoScript)
+    - tca-inline-children — What an Inline Child Table Needs (PHP)
     - project-configuration-files — What the Installation Is Configured By (PHP)
     - installation-setup — What typo3 setup Takes and What It Refuses (PHP)
     - development-installation-page-object — Where a Development Installation Gets Its Page Object (TypoScript)
@@ -2149,6 +2156,11 @@ Data:
                 "id": "typoscript-conditions",
                 "title": "What a TypoScript Condition Is Handed",
                 "category": "TypoScript"
+            },
+            {
+                "id": "tca-inline-children",
+                "title": "What an Inline Child Table Needs",
+                "category": "PHP"
             },
             {
                 "id": "project-configuration-files",

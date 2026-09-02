@@ -32,14 +32,13 @@ stated requirement.
 
 ## Persistence
 
-For inline children, verify:
+For inline children, ask `typo3_hint_lookup` with `id=tca-inline-children` for
+what the relation and the child table have to declare — the parent field, the
+ordering, the page types the rows may sit on and the workspace capability. Then
+verify what it leaves to the element:
 
-- explicit parent field and `foreign_field`;
-- explicit sorting and `foreign_sortby`;
-- workspace support;
 - language fields and translation behavior;
 - enable/delete behavior;
-- page-type permission for children stored on normal pages;
 - deterministic query constrained to the current parent.
 
 ## Tests

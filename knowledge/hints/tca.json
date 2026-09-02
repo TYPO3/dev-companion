@@ -154,5 +154,42 @@
         "since": 13
       }
     ]
+  },
+  {
+    "id": "tca-inline-children",
+    "title": "What an Inline Child Table Needs",
+    "domains": [
+      "php"
+    ],
+    "appliesTo": [
+      "inline",
+      "type=inline",
+      "inline relation",
+      "child table",
+      "foreign_field",
+      "foreign_sortby",
+      "foreign_default_sortby",
+      "foreign_table_field",
+      "ignorePageTypeRestriction",
+      "versioningWS",
+      "children in the wrong order",
+      "child table on a normal page",
+      "child records in the wrong order",
+      "sorting of inline children",
+      "the drag order is not saved"
+    ],
+    "hints": [
+      "foreign_field is what makes the relation a child table rather than a list of uids: it names the column in the child that holds the parent uid, and the relation is read by querying the child for it. Without foreign_field and without MM the parent column stores a comma-separated list of child uids instead, and each child stays an ordinary record of its table with a lifecycle of its own.",
+      "foreign_table_field names the column in the child that holds the parent table name, and it is what lets one child table serve more than one parent table. It is written on save and added to the read query, so two parent tables sharing a child table without it read each other's rows wherever their uids collide.",
+      "foreign_sortby is one of four things that can order the children and it is not the required one. The read resolves foreign_sortby, then foreign_default_sortby, then the child's ctrl sortby, then its ctrl default_sortby; the write consults foreign_sortby and the child's ctrl sortby and nothing else. So a child with a ctrl sortby is ordered and re-ordered with no foreign_sortby at all, while a child carrying only a default_sortby reads in that order and the editor's drag persists nowhere.",
+      "The child rows sit on a page, and that page's type decides whether the table may be there. A folder takes any table; a standard page takes pages, sys_category, sys_file_reference and sys_file_collection, plus whatever the installed extensions have added to that list. security.ignorePageTypeRestriction in the child's own ctrl is how a table joins it, and without it DataHandler refuses the record and the new-record wizard does not offer the table.",
+      {
+        "text": "ExtensionManagementUtility::allowTableOnStandardPages() reaches the same list and is deprecated here, raising E_USER_DEPRECATED on every call. The ctrl key is what the next major reads.",
+        "until": 12
+      },
+      "The workspace overlay belongs to the child table rather than to the relation: the read adds a workspace restriction only where the child declares versioningWS. A child without it is read live from inside a workspace, so a draft parent renders the published children.",
+      "type=file is this same relation with every key already filled in — sys_file_reference, uid_foreign, sorting_foreign, tablenames, and the field name as a match field. That is what a fully specified inline relation looks like, and it is why a file relation is declared as type=file rather than configured by hand.",
+      "This is what the parent field and the child table declare. What a relation looks like once it is written — the value the parent column takes, the NEW placeholders in it and when they resolve — is datahandler-relations."
+    ]
   }
 ]

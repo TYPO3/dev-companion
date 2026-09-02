@@ -32,7 +32,7 @@ fifty as the set it was promised.
   The user filed #110533 afterwards, at which point the number answered
   perfectly.
 - Both orderings point at the neglected end. `open` takes `oldest` and `stale`,
-  which `Forge::open()` sends as `created_on:asc` and `updated_on:asc`. A
+  which `Forge::backlog()` sends as `created_on:asc` and `updated_on:asc`. A
   duplicate of a defect somebody has just found is at the other end of both.
 - The page does not cover a large area. Measured 2026-08-27 against the tracker:
   Backend User Interface holds 437 open issues, 227 of them Bugs, and 153 filed
@@ -112,3 +112,5 @@ who narrows only by area is answered that an issue filed under none is in no
 area at all, and told the call that drops it. What the page cannot hold is
 answered at the end it was asked about, the standing sentence pointing the other
 way.
+
+The way in is `backlog` since 2026-09-02, not `open` — `D-ANS-137`.

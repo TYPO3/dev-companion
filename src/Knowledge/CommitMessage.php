@@ -92,7 +92,7 @@ final class CommitMessage
 
     /**
      * @param array{
-     *   changeType?: string,
+     *   keyword?: string,
      *   summary: string,
      *   issue?: ?string,
      *   issues?: array<int, string>,
@@ -110,7 +110,7 @@ final class CommitMessage
     public static function create(array $input): array
     {
         $workflow = self::workflow($input['workflow'] ?? null);
-        $changeType = trim((string) ($input['changeType'] ?? ''));
+        $keyword = trim((string) ($input['keyword'] ?? ''));
         $summary = self::normalizeSummary((string) $input['summary']);
         $isBreaking = self::classification($input['isBreaking'] ?? null);
         $isDeprecation = self::classification($input['isDeprecation'] ?? null);
@@ -146,7 +146,7 @@ final class CommitMessage
         foreach ($input['draftPrefixes'] ?? [] as $marker) {
             $drafts .= '[' . $marker . ']';
         }
-        $prefix = $drafts . ($isBreaking === true ? '[!!!]' : '') . '[' . ($changeType === '' ? 'KEYWORD' : $changeType) . ']';
+        $prefix = $drafts . ($isBreaking === true ? '[!!!]' : '') . '[' . ($keyword === '' ? 'KEYWORD' : $keyword) . ']';
         $subject = $prefix . ' ' . $summary;
         $wrapped = self::wrapBody(isset($input['body']) ? (string) $input['body'] : '');
         $body = $wrapped['body'];
@@ -197,7 +197,7 @@ final class CommitMessage
         return [
             'message' => implode("\n", $parts),
             'checks' => self::checks(
-                $changeType,
+                $keyword,
                 $subject,
                 $summary,
                 $body,
@@ -252,7 +252,7 @@ final class CommitMessage
      *
      * @return array{
      *     input: array{
-     *         changeType: string,
+     *         keyword: string,
      *         summary: string,
      *         issues: array<int, string>,
      *         relatedIssues: array<int, string>,
@@ -276,7 +276,7 @@ final class CommitMessage
             throw new \InvalidArgumentException('The commit message is empty.');
         }
 
-        $changeType = '';
+        $keyword = '';
         // A subject without [!!!] answers nothing: the caller may have
         // classified the change as not breaking, or never have classified it.
         $isBreaking = null;
@@ -315,13 +315,13 @@ final class CommitMessage
         }
 
         if (preg_match('/^\[([A-Za-z]+)\]\s*(.*)$/', $rest, $matches) === 1) {
-            $changeType = strtoupper($matches[1]);
+            $keyword = strtoupper($matches[1]);
             $summary = trim($matches[2]);
 
-            $keywordCheck = self::keywordCheck($changeType, $workflow);
+            $keywordCheck = self::keywordCheck($keyword, $workflow);
             if ($keywordCheck !== null) {
                 $checks[] = $keywordCheck;
-                $changeType = '';
+                $keyword = '';
             }
         } else {
             $checks[] = [
@@ -402,7 +402,7 @@ final class CommitMessage
 
         return [
             'input' => [
-                'changeType' => $changeType,
+                'keyword' => $keyword,
                 'summary' => $summary,
                 'issues' => $issues,
                 'relatedIssues' => $relatedIssues,
@@ -426,14 +426,14 @@ final class CommitMessage
      *
      * @return array{level: string, code: string, message: string}|null
      */
-    private static function keywordCheck(string $changeType, string $workflow): ?array
+    private static function keywordCheck(string $keyword, string $workflow): ?array
     {
         $allowed = $workflow === self::WORKFLOW_PROJECT ? self::PROJECT_KEYWORDS : self::KEYWORDS;
-        if (in_array($changeType, $allowed, true)) {
+        if (in_array($keyword, $allowed, true)) {
             return null;
         }
 
-        if ($changeType === 'SECURITY') {
+        if ($keyword === 'SECURITY') {
             return [
                 'level' => 'error',
                 'code' => 'security-keyword',
@@ -447,7 +447,7 @@ final class CommitMessage
             'code' => 'unknown-keyword',
             'message' => sprintf(
                 'Unknown keyword [%s]. Use %s.',
-                $changeType,
+                $keyword,
                 implode(', ', array_map(static fn(string $keyword): string => '[' . $keyword . ']', $allowed)),
             ),
         ];
@@ -501,7 +501,7 @@ final class CommitMessage
      *
      * @return array{level: string, code: string, message: string}|null
      */
-    private static function releaseLineCheck(string $release, string $changeType): ?array
+    private static function releaseLineCheck(string $release, string $keyword): ?array
     {
         $state = ReleaseLines::state($release);
         if ($state === ReleaseLines::DEVELOPMENT) {
@@ -511,7 +511,7 @@ final class CommitMessage
             $ordinary = ReleaseLines::ordinary();
             if (
                 in_array($release, $ordinary, true)
-                || !in_array($changeType, ['BUGFIX', 'TASK'], true)
+                || !in_array($keyword, ['BUGFIX', 'TASK'], true)
             ) {
                 return null;
             }
@@ -524,7 +524,7 @@ final class CommitMessage
                         . 'grave or security-relevant defect, so naming it claims the severity earns it — say so in '
                         . 'the body, or leave the line out.',
                     $release,
-                    $changeType,
+                    $keyword,
                     implode(', ', $ordinary),
                 ),
             ];
@@ -584,7 +584,7 @@ final class CommitMessage
      * @return array<int, array{level: string, code: string, message: string}>
      */
     private static function checks(
-        string $changeType,
+        string $keyword,
         string $subject,
         string $summary,
         string $body,
@@ -599,8 +599,8 @@ final class CommitMessage
         $checks = [];
         $isCore = $workflow === self::WORKFLOW_CORE;
 
-        if ($changeType !== '') {
-            $keywordCheck = self::keywordCheck($changeType, $workflow);
+        if ($keyword !== '') {
+            $keywordCheck = self::keywordCheck($keyword, $workflow);
             if ($keywordCheck !== null) {
                 $checks[] = $keywordCheck;
             }
@@ -643,7 +643,7 @@ final class CommitMessage
         }
 
         foreach ($isCore ? $releases : [] as $release) {
-            $releaseCheck = self::releaseLineCheck($release, $changeType);
+            $releaseCheck = self::releaseLineCheck($release, $keyword);
             if ($releaseCheck !== null) {
                 $checks[] = $releaseCheck;
             }
@@ -723,7 +723,7 @@ final class CommitMessage
             $checks[] = ['level' => 'error', 'code' => 'deprecation-breaking-prefix', 'message' => 'Deprecations must not use the [!!!] breaking prefix.'];
         }
 
-        if ($isDeprecation === true && !in_array($changeType, ['TASK', 'FEATURE'], true)) {
+        if ($isDeprecation === true && !in_array($keyword, ['TASK', 'FEATURE'], true)) {
             $checks[] = ['level' => 'error', 'code' => 'deprecation-keyword', 'message' => 'Deprecations may only use [TASK] or [FEATURE].'];
         }
 

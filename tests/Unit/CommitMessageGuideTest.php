@@ -62,7 +62,7 @@ final class CommitMessageGuideTest extends TestCase
     public function theProjectAnswerSaysTheIssueItWroteIsTheOneThatWasPassed(): void
     {
         $result = CommitMessageGuide::answer([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Update the frontend build to current dependencies',
             'issue' => '348',
         ]);
@@ -108,7 +108,7 @@ final class CommitMessageGuideTest extends TestCase
     public function theCoreAnswerNamesWhereTheHooksLengthBoundaryRuns(): void
     {
         $call = [
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Show hidden records in the import preview',
             'issue' => '106123',
             'releases' => ['main'],
@@ -137,7 +137,7 @@ final class CommitMessageGuideTest extends TestCase
     public function theOverlongLineCheckCarriesTheBoundaryItself(): void
     {
         $result = CommitMessageGuide::answer([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Document it',
             'issue' => '106123',
             'releases' => ['main'],
@@ -166,7 +166,7 @@ final class CommitMessageGuideTest extends TestCase
     public function theCoreAnswerNamesThePageItsRulesAreWrittenIn(): void
     {
         $call = [
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Show hidden records in the import preview',
             'issue' => '106123',
             'releases' => ['main'],
@@ -197,7 +197,7 @@ final class CommitMessageGuideTest extends TestCase
     public function theDraftNamesTheGuideThatOwnsTheWorkflowItWasAskedWith(): void
     {
         $call = [
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Show hidden records in the import preview',
             'issue' => '106123',
             'releases' => ['main'],
@@ -229,7 +229,7 @@ final class CommitMessageGuideTest extends TestCase
     public function theGuideTheDraftNamesIsInTheDataToo(): void
     {
         $data = CommitMessageGuide::answer([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Update the frontend build to current dependencies',
         ])->data;
 

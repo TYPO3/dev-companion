@@ -22,7 +22,7 @@ early is the valuable one.
 1. Work through [references/base.md](references/base.md), which fixes the order
    every task here starts in. It establishes the checkout you are standing in,
    which is what the verification below is against.
-2. `typo3_forge_lookup` with `open` to get the backlog rather than one issue.
+2. `typo3_forge_lookup` with `backlog` to get it rather than one issue.
    `oldest` and `stale` are two different questions and the second is usually
    the one being asked: filed long ago is about the report, untouched for years
    is about the attention it got, and an issue filed in 2009 with a comment from

@@ -10,7 +10,7 @@ patch. Three ways in, one per call. issue reads one issue whole: the report, the
 comments that decided it, the issues and review changes it names, and whether
 the code it cites is still shipped here. query finds the other issues describing
 the same thing, which the relations of one issue carry only where somebody
-linked them. open enumerates the core project's unresolved backlog without a
+linked them. backlog enumerates the core project's unresolved issues without a
 number or a wording: oldest filed, longest untouched or newest. Narrow it by
 tracker, area, date and person, widen it with status, and breakdown answers how
 a large set is distributed instead of a page of it. A miss is an answer. An
@@ -32,7 +32,7 @@ Takes
 
     # Forge issue number, with or without the leading #, for example "110348". Reads
     # that one issue whole, comments included — narrow those with notes when
-    # reading many. Not with query or open.
+    # reading many. Not with query or backlog.
     issue: string  # optional
     # Words to search the tracker for, for example "image cache busting". A
     # full-text search over subject, description and comments, which is how a
@@ -42,8 +42,8 @@ Takes
     # subject rather than every word you have; a miss counts what each word reaches
     # on its own, in terms. Nothing is ranked and one wording does not settle it:
     # ask again in the reporter's words as well as your own. A person's name matches
-    # only where somebody wrote it, so pass it as reportedBy or assignedTo with open
-    # instead. Not with issue or open.
+    # only where somebody wrote it, so pass it as reportedBy or assignedTo with
+    # backlog instead. Not with issue or backlog.
     query: string  # optional
     # One of: oldest, stale, newest. Enumerate the core project's unresolved issues
     # instead of reading one or matching words. "oldest" orders them by when they
@@ -60,7 +60,7 @@ Takes
     # category, createdBefore, createdSince, updatedBefore, reportedBy, assignedTo,
     # involving and breakdown narrow this way in and no other; status widens it. Not
     # with issue or query.
-    open: string  # optional
+    backlog: string  # optional
     # One of: all, people. Which comments come back with an issue. "all" is every
     # one of them, which is what reading a single issue wants. The comments are
     # where the decision is, and the one that settles it is regularly the last of
@@ -69,7 +69,7 @@ Takes
     # either way, so nothing is lost. Ask for it when reading candidates one issue
     # at a time, where the cost of ten such reads decides whether the comments get
     # read at all. How many were dropped is answered whichever you ask for. Narrows
-    # issue and is ignored by query and open.
+    # issue and is ignored by query and backlog.
     notes: string  # optional
     # One of: Bug, Feature, Major Feature, Support, Task, Story, Suggestion,
     # Impediment, Epic, Work Package, Topic. Only issues filed under this tracker,
@@ -144,7 +144,7 @@ Takes
     limit: integer  # optional
 
 The call carries exactly one of these sets of arguments: ``issue`` — or
-``query`` — or ``open``.
+``query`` — or ``backlog``.
 
 Answers with
 ------------
@@ -571,7 +571,7 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-08-27 by ``bin/cli tools:record``. Answered against
+Recorded on 2026-09-02 by ``bin/cli tools:record``. Answered against
 core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
@@ -1466,7 +1466,7 @@ Text:
 
     TYPO3 issue tracker: 3 issues match "cache busting"
     A full-text match over subject, description and comments, in the tracker's own order and unranked. Another wording finds another set, so this is which issues mention it rather than which one it duplicates. Read one whole by passing its number as issue.
-    Where those words are a person's name, this is the issues that mention them and not the issues that are theirs: pass the name as reportedBy or assignedTo with open for that, which is a different set and regularly two orders of magnitude larger.
+    Where those words are a person's name, this is the issues that mention them and not the issues that are theirs: pass the name as reportedBy or assignedTo with backlog for that, which is a different set and regularly two orders of magnitude larger.
 
     ## #107904 Cache-busting applied to folder paths
     Bug · Closed · Frontend · filed by Simon Praetorius · filed 2025-10-29 · last touched 2025-12-02 · https://forge.typo3.org/issues/107904
@@ -1567,9 +1567,9 @@ Text:
     Every word has to be in the same issue, so one word nobody wrote empties the answer whatever else is in it.
     Asked one word at a time: "quantumflux" reaches 0 · "transponder" reaches 0.
     No issue on the tracker carries "quantumflux" or "transponder". A query one of them is in is empty whatever else is in it, so drop them.
-    What no wording of the report reaches is enumerated instead: open "newest" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — "import export", "rte" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.
+    What no wording of the report reaches is enumerated instead: backlog "newest" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — "import export", "rte" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.
     Those subjects settle whether somebody already reported this where total and the rows agree, and are the recent end of a larger set where they do not — narrow the window until they do.
-    Where the words are a person, pass them as reportedBy or assignedTo with open.
+    Where the words are a person, pass them as reportedBy or assignedTo with backlog.
 
 Data:
 
@@ -1619,12 +1619,12 @@ Text:
     TYPO3 issue tracker: no issue matches "file renderer RendererRegistry FileRendererInterface" at https://forge.typo3.org.
     These words matched nothing, which is not that nobody reported it: an issue worded differently is invisible to a full-text search.
     Every word has to be in the same issue, so one word nobody wrote empties the answer whatever else is in it.
-    Asked one word at a time: "file" reaches 13946 · "renderer" reaches 1174 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
+    Asked one word at a time: "file" reaches 13953 · "renderer" reaches 1175 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
     No issue on the tracker carries "FileRendererInterface". A query it is in is empty whatever else is in it, so drop it.
     "RendererRegistry" is the narrowest of the rest and reaches something: ask it on its own, then read the subjects.
-    What no wording of the report reaches is enumerated instead: open "newest" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — "import export", "rte" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.
+    What no wording of the report reaches is enumerated instead: backlog "newest" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — "import export", "rte" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.
     Those subjects settle whether somebody already reported this where total and the rows agree, and are the recent end of a larger set where they do not — narrow the window until they do.
-    Where the words are a person, pass them as reportedBy or assignedTo with open.
+    Where the words are a person, pass them as reportedBy or assignedTo with backlog.
 
 Data:
 
@@ -1640,11 +1640,11 @@ Data:
         "terms": [
             {
                 "word": "file",
-                "total": 13946
+                "total": 13953
             },
             {
                 "word": "renderer",
-                "total": 1174
+                "total": 1175
             },
             {
                 "word": "RendererRegistry",
@@ -1672,7 +1672,7 @@ Called with:
 .. code-block:: json
 
     {
-        "open": "oldest",
+        "backlog": "oldest",
         "limit": 3
     }
 
@@ -1680,7 +1680,7 @@ Text:
 
 .. code-block:: text
 
-    TYPO3 issue tracker: 3 of 2480 open issues of the TYPO3 Core project, oldest filed first
+    TYPO3 issue tracker: 3 of 2434 open issues of the TYPO3 Core project, oldest filed first
     This is a page and not the set. What comes after it is reached by a narrower filter — an earlier date, one tracker — rather than by a larger limit, because the order is the tracker's own and more of it is more of the same end. breakdown answers how the whole of it is distributed.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
@@ -1729,7 +1729,7 @@ Data:
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
         "placedAgainst": "15.0.0-dev",
-        "total": 2480,
+        "total": 2434,
         "terms": [],
         "categories": [],
         "categoriesUsed": [],
@@ -1905,7 +1905,7 @@ Called with:
 .. code-block:: json
 
     {
-        "open": "stale",
+        "backlog": "stale",
         "category": "rte",
         "tracker": "Bug",
         "limit": 3
@@ -2121,7 +2121,7 @@ Called with:
 .. code-block:: json
 
     {
-        "open": "oldest",
+        "backlog": "oldest",
         "category": "quantumflux"
     }
 
@@ -2217,7 +2217,7 @@ Called with:
 .. code-block:: json
 
     {
-        "open": "oldest",
+        "backlog": "oldest",
         "reportedBy": "Frank Nägler",
         "status": "all",
         "limit": 3
@@ -2382,7 +2382,7 @@ Called with:
 .. code-block:: json
 
     {
-        "open": "oldest",
+        "backlog": "oldest",
         "assignedTo": "daniel"
     }
 
@@ -2438,7 +2438,7 @@ Called with:
 .. code-block:: json
 
     {
-        "open": "stale",
+        "backlog": "stale",
         "involving": "Frank Nägler",
         "limit": 3
     }
@@ -2632,7 +2632,7 @@ Called with:
 .. code-block:: json
 
     {
-        "open": "oldest",
+        "backlog": "oldest",
         "involving": "Frank Nägler",
         "status": "all",
         "breakdown": true

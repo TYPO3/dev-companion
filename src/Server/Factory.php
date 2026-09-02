@@ -91,13 +91,13 @@ final class Factory
         $builder->addPrompt(
             static function (
                 string $summary,
-                string $changeType = 'TASK',
+                string $keyword = 'TASK',
                 string $workflow = 'core',
                 string $issue = '',
             ): array {
                 $arguments = [
                     'summary' => $summary,
-                    'changeType' => $changeType,
+                    'keyword' => $keyword,
                     'workflow' => $workflow,
                 ];
                 if ($issue !== '') {

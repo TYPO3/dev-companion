@@ -587,7 +587,7 @@ final class Forge
      *
      * @return array{status: 'answered'|'empty'|'unavailable', url: string, total: int, categories: list<string>, categoriesUsed: list<string>, people: list<array{filter: string, asked: string, name: string, id: int, candidates: list<string>}>, breakdown: ?array<string, mixed>, results: list<array<string, mixed>>, cause: ?string}
      */
-    public function open(
+    public function backlog(
         string $order = 'oldest',
         string $tracker = '',
         string $category = '',

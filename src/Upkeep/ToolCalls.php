@@ -160,42 +160,42 @@ final class ToolCalls
                 'query' => 'file renderer RendererRegistry FileRendererInterface',
             ]],
             'forge: the oldest issues nobody has resolved' => ['typo3_forge_lookup', [
-                'open' => 'oldest',
+                'backlog' => 'oldest',
                 'limit' => 3,
             ]],
             'forge: what is known about one area' => ['typo3_forge_lookup', [
-                'open' => 'stale',
+                'backlog' => 'stale',
                 'category' => 'rte',
                 'tracker' => 'Bug',
                 'limit' => 3,
             ]],
             'forge: a word that names no area' => ['typo3_forge_lookup', [
-                'open' => 'oldest',
+                'backlog' => 'oldest',
                 'category' => 'quantumflux',
             ]],
             // The question the full-text search reads as nine issues and the
             // tracker answers with six hundred.
             'forge: what one person has filed' => ['typo3_forge_lookup', [
-                'open' => 'oldest',
+                'backlog' => 'oldest',
                 'reportedBy' => 'Frank Nägler',
                 'status' => 'all',
                 'limit' => 3,
             ]],
             'forge: a name naming more than one person' => ['typo3_forge_lookup', [
-                'open' => 'oldest',
+                'backlog' => 'oldest',
                 'assignedTo' => 'daniel',
             ]],
             // What somebody says out loud, which the tracker cannot be asked:
             // it ANDs its filters, so the union is two reads and a merge.
             'forge: everything one person has touched' => ['typo3_forge_lookup', [
-                'open' => 'stale',
+                'backlog' => 'stale',
                 'involving' => 'Frank Nägler',
                 'limit' => 3,
             ]],
             // The answer to a set of 621 that no page and no other word
             // reaches.
             'forge: the shape of one person\'s history' => ['typo3_forge_lookup', [
-                'open' => 'oldest',
+                'backlog' => 'oldest',
                 'involving' => 'Frank Nägler',
                 'status' => 'all',
                 'breakdown' => true,
@@ -315,7 +315,7 @@ final class ToolCalls
             // number ext_emconf.php names, held against what is published.
             'ter: is this version already out' => ['typo3_ter_lookup', [
                 'extension' => 'blog',
-                'version' => '14.0.1',
+                'extensionVersion' => '14.0.1',
                 'limit' => 3,
             ]],
             'ter: nothing is published under this key' => ['typo3_ter_lookup', [
@@ -330,7 +330,7 @@ final class ToolCalls
             'extension' => ['typo3_extension_describe', ['extension' => 'backend']],
             'catalog scope' => ['typo3_snapshot_scope', []],
             'commit: from parts' => ['typo3_commit_message_guide', [
-                'changeType' => 'BUGFIX',
+                'keyword' => 'BUGFIX',
                 'summary' => 'Show hidden records in the import preview',
                 'issue' => '106123',
             ]],

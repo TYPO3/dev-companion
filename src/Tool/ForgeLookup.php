@@ -23,7 +23,7 @@ use TYPO3\DevCompanion\Result\Unreachable;
  * number answers it, so `query` searches the tracker by words (`D-ANS-038`). Nor
  * is a wording — a triage starts before there is an issue in hand at all, and
  * the issue nobody has touched since 2015 is worded the way nobody thinks of, so
- * `open` is that way in. Both ends of it: the neglected one a triage reads, and
+ * `backlog` is that way in. Both ends of it: the neglected one a triage reads, and
  * the recent one a duplicate of a fresh defect is at (`D-ANS-116`).
  */
 final class ForgeLookup extends ReadOnlyTool
@@ -66,7 +66,7 @@ final class ForgeLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Reads the TYPO3 issue tracker at forge.typo3.org through the bot protection the core\'s own AGENTS.md warns a hand-written request about. It tells a tracker that did not answer from a search that matched nothing. Read it before writing a patch. Three ways in, one per call. issue reads one issue whole: the report, the comments that decided it, the issues and review changes it names, and whether the code it cites is still shipped here. query finds the other issues describing the same thing, which the relations of one issue carry only where somebody linked them. open enumerates the core project\'s unresolved backlog without a number or a wording: oldest filed, longest untouched or newest. Narrow it by tracker, area, date and person, widen it with status, and breakdown answers how a large set is distributed instead of a page of it. A miss is an answer. An issue that does not exist is answered as such, and words matching nothing are counted one word at a time — which is not that nobody reported it. The patch for an issue on review.typo3.org is typo3_gerrit_lookup. Reading only, and no credential: commenting, assigning and closing stay yours.';
+        return 'Reads the TYPO3 issue tracker at forge.typo3.org through the bot protection the core\'s own AGENTS.md warns a hand-written request about. It tells a tracker that did not answer from a search that matched nothing. Read it before writing a patch. Three ways in, one per call. issue reads one issue whole: the report, the comments that decided it, the issues and review changes it names, and whether the code it cites is still shipped here. query finds the other issues describing the same thing, which the relations of one issue carry only where somebody linked them. backlog enumerates the core project\'s unresolved issues without a number or a wording: oldest filed, longest untouched or newest. Narrow it by tracker, area, date and person, widen it with status, and breakdown answers how a large set is distributed instead of a page of it. A miss is an answer. An issue that does not exist is answered as such, and words matching nothing are counted one word at a time — which is not that nobody reported it. The patch for an issue on review.typo3.org is typo3_gerrit_lookup. Reading only, and no credential: commenting, assigning and closing stay yours.';
     }
 
     public static function inputSchema(): array
@@ -77,14 +77,14 @@ final class ForgeLookup extends ReadOnlyTool
                 'issue' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Forge issue number, with or without the leading #, for example "110348". Reads that one issue whole, comments included — narrow those with notes when reading many. Not with query or open.',
+                    'description' => 'Forge issue number, with or without the leading #, for example "110348". Reads that one issue whole, comments included — narrow those with notes when reading many. Not with query or backlog.',
                 ],
                 'query' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Words to search the tracker for, for example "image cache busting". A full-text search over subject, description and comments, which is how a duplicate nobody has linked is found at all. Every word has to be in the same issue. A term nobody would have written — a method name, a class — empties the answer whatever else is in it. Pass the two or three words that name the subject rather than every word you have; a miss counts what each word reaches on its own, in terms. Nothing is ranked and one wording does not settle it: ask again in the reporter\'s words as well as your own. A person\'s name matches only where somebody wrote it, so pass it as reportedBy or assignedTo with open instead. Not with issue or open.',
+                    'description' => 'Words to search the tracker for, for example "image cache busting". A full-text search over subject, description and comments, which is how a duplicate nobody has linked is found at all. Every word has to be in the same issue. A term nobody would have written — a method name, a class — empties the answer whatever else is in it. Pass the two or three words that name the subject rather than every word you have; a miss counts what each word reaches on its own, in terms. Nothing is ranked and one wording does not settle it: ask again in the reporter\'s words as well as your own. A person\'s name matches only where somebody wrote it, so pass it as reportedBy or assignedTo with backlog instead. Not with issue or backlog.',
                 ],
-                'open' => [
+                'backlog' => [
                     'type' => 'string',
                     'enum' => ['oldest', 'stale', 'newest'],
                     'description' => 'Enumerate the core project\'s unresolved issues instead of reading one or matching words. "oldest" orders them by when they were filed, "stale" by how long nobody has touched them, "newest" by what came in last. Filed long ago is about the report, untouched for years about the attention it got, and an issue that is both is the candidate a triage is looking for. "stale" with tracker and category is where a triage of the backlog starts. "newest" is where a duplicate of a defect somebody has just found is. A wording reaches only the issues worded that way, so reading the subjects filed since it could have been is what settles a negative. Pair it with createdSince, which turns that end into a set the count says you have seen the whole of. Unresolved is the tracker\'s own set of open statuses: New, Accepted, Under Review, Needs Feedback, On Hold and Postponed. tracker, category, createdBefore, createdSince, updatedBefore, reportedBy, assignedTo, involving and breakdown narrow this way in and no other; status widens it. Not with issue or query.',
@@ -93,7 +93,7 @@ final class ForgeLookup extends ReadOnlyTool
                     'type' => 'string',
                     'enum' => ['all', 'people'],
                     'default' => 'all',
-                    'description' => 'Which comments come back with an issue. "all" is every one of them, which is what reading a single issue wants. The comments are where the decision is, and the one that settles it is regularly the last of sixteen. "people" drops the patch-set pings a review bot wrote, which on some issues is half the volume. The change numbers in them are lifted into reviews either way, so nothing is lost. Ask for it when reading candidates one issue at a time, where the cost of ten such reads decides whether the comments get read at all. How many were dropped is answered whichever you ask for. Narrows issue and is ignored by query and open.',
+                    'description' => 'Which comments come back with an issue. "all" is every one of them, which is what reading a single issue wants. The comments are where the decision is, and the one that settles it is regularly the last of sixteen. "people" drops the patch-set pings a review bot wrote, which on some issues is half the volume. The change numbers in them are lifted into reviews either way, so nothing is lost. Ask for it when reading candidates one issue at a time, where the cost of ten such reads decides whether the comments get read at all. How many were dropped is answered whichever you ask for. Narrows issue and is ignored by query and backlog.',
                 ],
                 'tracker' => [
                     'type' => 'string',
@@ -157,7 +157,7 @@ final class ForgeLookup extends ReadOnlyTool
             'oneOf' => [
                 ['required' => ['issue']],
                 ['required' => ['query']],
-                ['required' => ['open']],
+                ['required' => ['backlog']],
             ],
         ];
     }
@@ -439,7 +439,7 @@ final class ForgeLookup extends ReadOnlyTool
     {
         $issue = is_string($args['issue'] ?? null) ? trim($args['issue']) : '';
         $query = is_string($args['query'] ?? null) ? trim($args['query']) : '';
-        $open = is_string($args['open'] ?? null) ? trim($args['open']) : '';
+        $backlog = is_string($args['backlog'] ?? null) ? trim($args['backlog']) : '';
         $limit = is_int($args['limit'] ?? null) ? $args['limit'] : 15;
         $reportedBy = is_string($args['reportedBy'] ?? null) ? trim($args['reportedBy']) : '';
         $assignedTo = is_string($args['assignedTo'] ?? null) ? trim($args['assignedTo']) : '';
@@ -449,12 +449,12 @@ final class ForgeLookup extends ReadOnlyTool
             return self::read($issue, is_string($args['notes'] ?? null) ? trim($args['notes']) : 'all');
         }
         // A person filter is a narrowing of the enumeration and the schema says
-        // so. Passing one without `open` is a call no schema allows, and what a
+        // so. Passing one without `backlog` is a call no schema allows, and what a
         // client that validates nothing would otherwise reach is a search for
         // the empty string rather than the question it plainly asked.
-        if ($open !== '' || $reportedBy !== '' || $assignedTo !== '' || $involving !== '') {
+        if ($backlog !== '' || $reportedBy !== '' || $assignedTo !== '' || $involving !== '') {
             return self::enumerated(
-                $open !== '' ? $open : 'oldest',
+                $backlog !== '' ? $backlog : 'oldest',
                 is_string($args['tracker'] ?? null) ? trim($args['tracker']) : '',
                 is_string($args['category'] ?? null) ? trim($args['category']) : '',
                 is_string($args['createdBefore'] ?? null) ? trim($args['createdBefore']) : '',
@@ -632,7 +632,7 @@ final class ForgeLookup extends ReadOnlyTool
      *
      * What it offers is the other way in and not another wording. A session
      * that read a rewording went round eight times and was settled by the
-     * enumeration on its ninth call, so `open` is named here as a call to
+     * enumeration on its ninth call, so `backlog` is named here as a call to
      * compose (`R-ANS-006`). Which end of it is `D-ANS-116`: a duplicate of a
      * defect somebody has just found is among the newest issues, and what
      * bounds that end to a set is a day to count from rather than an area,
@@ -679,13 +679,13 @@ final class ForgeLookup extends ReadOnlyTool
                 ],
                 self::reached($answer['terms']),
                 [
-                    'What no wording of the report reaches is enumerated instead: open "newest" with createdSince from '
+                    'What no wording of the report reaches is enumerated instead: backlog "newest" with createdSince from '
                         . 'the day the defect could first have been reported, and limit 50. Add category in your own '
                         . 'words — "import export", "rte" — only where the area is certain: thousands of the open bugs '
                         . 'carry no Category at all, and an area filter reaches none of them.',
                     'Those subjects settle whether somebody already reported this where total and the rows agree, and '
                         . 'are the recent end of a larger set where they do not — narrow the window until they do.',
-                    'Where the words are a person, pass them as reportedBy or assignedTo with open.',
+                    'Where the words are a person, pass them as reportedBy or assignedTo with backlog.',
                 ],
             )), $data);
         }
@@ -696,7 +696,7 @@ final class ForgeLookup extends ReadOnlyTool
                 . ' Another wording finds another set, so this is which issues mention it rather than which one it'
                 . ' duplicates. Read one whole by passing its number as issue.',
             'Where those words are a person\'s name, this is the issues that mention them and not the issues that are'
-                . ' theirs: pass the name as reportedBy or assignedTo with open for that, which is a different set and'
+                . ' theirs: pass the name as reportedBy or assignedTo with backlog for that, which is a different set and'
                 . ' regularly two orders of magnitude larger.',
         ];
         foreach ($answer['results'] as $hit) {
@@ -912,7 +912,7 @@ final class ForgeLookup extends ReadOnlyTool
         string $involving,
         bool $breakdown,
     ): ToolResult {
-        $answer = (new Forge())->open(
+        $answer = (new Forge())->backlog(
             order: $order,
             tracker: $tracker,
             category: $category,

@@ -6,7 +6,7 @@
 Draft and check a TYPO3 commit message. The message is read by a person who
 wants to know what the commit did, so write it in plain English and only as long
 as that answer needs: the diff carries the detail. Either assemble one from
-parts (changeType plus summary) or pass an existing message to check and correct
+parts (keyword plus summary) or pass an existing message to check and correct
 it. The returned draft is ready to commit: the body is wrapped at 72 characters,
 and the checks name every run of lines the wrapping joined and every line it
 could not bring under the width. Defaults to a repository of your own, where the
@@ -46,7 +46,7 @@ Takes
     # One of: BUGFIX, FEATURE, TASK, DOCS, SECURITY. TYPO3 commit message keyword.
     # [SECURITY] is reserved for the TYPO3 Security Team and is only accepted with
     # workflow="project".
-    changeType: string  # optional
+    keyword: string  # optional
     # Summary text without the TYPO3 keyword prefix. Say what the commit did, in
     # words a reader understands from the log alone.
     summary: string  # optional
@@ -123,7 +123,7 @@ Called with:
 .. code-block:: json
 
     {
-        "changeType": "BUGFIX",
+        "keyword": "BUGFIX",
         "summary": "Show hidden records in the import preview",
         "issue": "106123"
     }

@@ -45,7 +45,7 @@ final class TerLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Read what the TYPO3 Extension Repository has published under an extension key, live from extensions.typo3.org. Pass extension with the key — the one extra.typo3/cms.extension-key declares, not the Composer package name — and every published version comes back, highest number first: the number, the state, the day it was uploaded, the TYPO3 majors it declares and the constraints.depends.typo3 it was released with. This is the question a release audit cannot answer from the repository it is auditing: Tailor refuses to package unless ext_emconf.php names the version being released, so that file still names it after the upload and a checkout that has been published reads exactly like one that has not. Pass version as well to be told whether the registry already holds that number; it reports what is published and judges no version free, and comparing it against the working tree is yours. A key nothing is published under is answered as such, which is not a statement that no such package exists — an extension distributed through Composer alone is never registered here. What publishing requires of the extension itself is typo3_hint_lookup with id="extension-ter-release". Reading only, and no credential: registering a key, uploading a version and transferring an extension stay yours, through Tailor and the token it carries.';
+        return 'Read what the TYPO3 Extension Repository has published under an extension key, live from extensions.typo3.org. Pass extension with the key — the one extra.typo3/cms.extension-key declares, not the Composer package name — and every published version comes back, highest number first: the number, the state, the day it was uploaded, the TYPO3 majors it declares and the constraints.depends.typo3 it was released with. This is the question a release audit cannot answer from the repository it is auditing: Tailor refuses to package unless ext_emconf.php names the version being released, so that file still names it after the upload and a checkout that has been published reads exactly like one that has not. Pass extensionVersion as well to be told whether the registry already holds that number; it reports what is published and judges no version free, and comparing it against the working tree is yours. A key nothing is published under is answered as such, which is not a statement that no such package exists — an extension distributed through Composer alone is never registered here. What publishing requires of the extension itself is typo3_hint_lookup with id="extension-ter-release". Reading only, and no credential: registering a key, uploading a version and transferring an extension stay yours, through Tailor and the token it carries.';
     }
 
 
@@ -59,7 +59,7 @@ final class TerLookup extends ReadOnlyTool
                     'minLength' => 1,
                     'description' => 'The extension key, for example "news" or "bootstrap_package". That is the key extra.typo3/cms.extension-key declares in the package\'s composer.json, which every TYPO3 extension package has to carry to install at all — not the Composer package name, which the registry does not take: "georgringer/news" and "bootstrap-package" are the two shapes that reach it as a name of the wrong kind. Lowercase letters, digits and underscores, three to thirty characters.',
                 ],
-                'version' => [
+                'extensionVersion' => [
                     'type' => 'string',
                     'minLength' => 1,
                     'description' => 'One version number to be answered about, for example "14.0.1" — typically the one ext_emconf.php names. The answer says whether the registry holds it and, where it does, what that release declared. Compared as the registry writes it, which is exactly three numbers: a suffix of any kind belongs to no published version, because the upload route accepts none.',
@@ -84,7 +84,7 @@ final class TerLookup extends ReadOnlyTool
             'url' => Schema::string('What was read, so the same question can be asked again by hand. Empty where the key was answered without a read.'),
             'page' => Schema::string('Where a person reads the extension\'s own page in the registry. Empty where the key is not one the registry takes.'),
             'extension' => Schema::string('The key that was asked for, lowercased, as it was sent.'),
-            'version' => Schema::string('The version number the call asked about, as it was passed. Empty where none was.'),
+            'extensionVersion' => Schema::string('The version number the call asked about, as it was passed. Empty where none was.'),
             'held' => [
                 'type' => ['boolean', 'null'],
                 'description' => 'Whether the registry has published that exact number. Null where the call named no version, and null where nothing was read at all — a false here is the registry answering, never a question that failed. It is a fact about the registry and not a judgement that the number is free to release.',
@@ -101,7 +101,7 @@ final class TerLookup extends ReadOnlyTool
                 'source-not-answering' => 'the registry did not answer this time.',
                 'source-not-parseable' => 'something answered with a page rather than with the API.',
             ], 'Why nothing was answered, where status says unavailable. Null otherwise, and null on a key nothing is published under — that one is an answer.'),
-        ], ['status', 'source', 'url', 'page', 'extension', 'version', 'held', 'total', 'versions', 'unavailable']);
+        ], ['status', 'source', 'url', 'page', 'extension', 'extensionVersion', 'held', 'total', 'versions', 'unavailable']);
     }
 
     /** @param array<string, mixed> $args */
@@ -111,7 +111,7 @@ final class TerLookup extends ReadOnlyTool
         // this can turn no valid one into another, and what is left for the
         // check below is a name of the wrong kind.
         $key = mb_strtolower(is_string($args['extension'] ?? null) ? trim($args['extension']) : '');
-        $version = is_string($args['version'] ?? null) ? trim($args['version']) : '';
+        $version = is_string($args['extensionVersion'] ?? null) ? trim($args['extensionVersion']) : '';
         $limit = is_int($args['limit'] ?? null) ? max(1, min(50, $args['limit'])) : 10;
 
         if (preg_match(Ter::KEY, $key) !== 1) {
@@ -126,7 +126,7 @@ final class TerLookup extends ReadOnlyTool
             'url' => $answer['url'],
             'page' => Ter::HOST . '/extension/' . $key,
             'extension' => $key,
-            'version' => $version,
+            'extensionVersion' => $version,
             'held' => $held,
             'total' => count($answer['versions']),
             'versions' => array_slice($answer['versions'], 0, $limit),
@@ -174,7 +174,7 @@ final class TerLookup extends ReadOnlyTool
                 'url' => '',
                 'page' => '',
                 'extension' => $key,
-                'version' => $version,
+                'extensionVersion' => $version,
                 'held' => null,
                 'total' => 0,
                 'versions' => [],

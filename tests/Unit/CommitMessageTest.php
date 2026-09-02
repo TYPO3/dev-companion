@@ -18,7 +18,7 @@ final class CommitMessageTest extends TestCase
     public function theDraftCarriesKeywordIssueAndReleases(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Show hidden records in impexp import preview',
             'issue' => '106123',
             'releases' => ['main', '13.4'],
@@ -34,7 +34,7 @@ final class CommitMessageTest extends TestCase
     public function proseIsWrappedAtSeventyTwoCharacters(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Fix it',
             'issue' => '1',
             'body' => 'The import preview filtered hidden records because the query applied '
@@ -54,7 +54,7 @@ final class CommitMessageTest extends TestCase
         $url = 'https://docs.typo3.org/m/typo3/guide-contributionworkflow/main/en-us/Appendix/CommitMessage.html';
 
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Document it',
             'issue' => '1',
             'body' => 'See ' . $url . ' for details.',
@@ -74,7 +74,7 @@ final class CommitMessageTest extends TestCase
     public function aRunOfLinesTheWrappingJoinedIsNamed(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Hint at public URIs passed to f:image src',
             'issue' => '105403',
             'releases' => ['main'],
@@ -94,7 +94,7 @@ final class CommitMessageTest extends TestCase
     public function aBodyTheWrappingLeftAloneReportsNoReflow(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Keep structure',
             'issue' => '1',
             'releases' => ['main'],
@@ -120,7 +120,7 @@ final class CommitMessageTest extends TestCase
     public function eachJoinedRunIsReportedOnItsOwn(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Do a thing',
             'issue' => '1',
             'releases' => ['main'],
@@ -148,7 +148,7 @@ final class CommitMessageTest extends TestCase
             . 'typo3/sysext/fluid/Tests/Functional/ViewHelpers/ImageViewHelperTest.php';
 
         $core = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Fix it',
             'issue' => '1',
             'releases' => ['main'],
@@ -156,7 +156,7 @@ final class CommitMessageTest extends TestCase
             'workflow' => CommitMessage::WORKFLOW_CORE,
         ]);
         $project = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Fix it',
             'workflow' => CommitMessage::WORKFLOW_PROJECT,
             'body' => $body,
@@ -178,7 +178,7 @@ final class CommitMessageTest extends TestCase
         $body = "Explanation.\n\n```php\n\$queryBuilder->getRestrictions()->removeAll();\n```\n\n    indented output stays indented";
 
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Keep structure',
             'issue' => '1',
             'body' => $body,
@@ -193,7 +193,7 @@ final class CommitMessageTest extends TestCase
     public function aListItemKeepsItsMarkerAndGetsAHangingIndent(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Wrap lists',
             'issue' => '1',
             'body' => '- the first item is long enough that it has to be wrapped across two lines to fit',
@@ -208,7 +208,7 @@ final class CommitMessageTest extends TestCase
     #[Test]
     public function aMissingIssueIsAnError(): void
     {
-        $result = CommitMessage::create(['changeType' => 'TASK', 'summary' => 'Do a thing', 'workflow' => CommitMessage::WORKFLOW_CORE]);
+        $result = CommitMessage::create(['keyword' => 'TASK', 'summary' => 'Do a thing', 'workflow' => CommitMessage::WORKFLOW_CORE]);
 
         self::assertContains('missing-issue', array_column($result['checks'], 'code'));
         self::assertStringContainsString('Resolves: #ISSUE_NUMBER', $result['message']);
@@ -217,10 +217,10 @@ final class CommitMessageTest extends TestCase
     #[Test]
     public function summaryLengthIsCheckedAgainstBothLimits(): void
     {
-        $long = CommitMessage::create(['changeType' => 'TASK', 'summary' => str_repeat('a', 80), 'issue' => '1', 'workflow' => CommitMessage::WORKFLOW_CORE]);
+        $long = CommitMessage::create(['keyword' => 'TASK', 'summary' => str_repeat('a', 80), 'issue' => '1', 'workflow' => CommitMessage::WORKFLOW_CORE]);
         self::assertContains('summary-too-long', array_column($long['checks'], 'code'));
 
-        $preferred = CommitMessage::create(['changeType' => 'TASK', 'summary' => str_repeat('a', 60), 'issue' => '1', 'workflow' => CommitMessage::WORKFLOW_CORE]);
+        $preferred = CommitMessage::create(['keyword' => 'TASK', 'summary' => str_repeat('a', 60), 'issue' => '1', 'workflow' => CommitMessage::WORKFLOW_CORE]);
         self::assertContains('summary-length-preferred', array_column($preferred['checks'], 'code'));
     }
 
@@ -238,7 +238,7 @@ final class CommitMessageTest extends TestCase
     public function aBodyWritingItsArgumentAsBulletsIsReported(): void
     {
         $bulleted = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Rework the thing',
             'body' => "- moves the service into its own class\n"
                 . "- drops the singleton marker\n- adds a functional test for it",
@@ -248,7 +248,7 @@ final class CommitMessageTest extends TestCase
         self::assertContains('body-written-as-a-list', array_column($bulleted['checks'], 'code'));
 
         $enumerating = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Drop the marker from the classes that do not need it',
             'body' => "The tag makes every service shared, so the marker has no effect\n"
                 . "where the service is reachable without it. It is removed from:\n\n"
@@ -263,7 +263,7 @@ final class CommitMessageTest extends TestCase
     public function deprecationRulesAreEnforced(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Deprecate something',
             'issue' => '1',
             'isDeprecation' => true,
@@ -281,7 +281,7 @@ final class CommitMessageTest extends TestCase
     public function aCleanDraftReportsThatNothingIsWrong(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Do a thing',
             'issue' => '1',
             'releases' => ['main'],
@@ -299,7 +299,7 @@ final class CommitMessageTest extends TestCase
     #[Test]
     public function theDraftNeverCarriesAReleaseTheCallerDidNotName(): void
     {
-        $result = CommitMessage::create(['changeType' => 'TASK', 'summary' => 'Do a thing', 'issue' => '1', 'workflow' => CommitMessage::WORKFLOW_CORE]);
+        $result = CommitMessage::create(['keyword' => 'TASK', 'summary' => 'Do a thing', 'issue' => '1', 'workflow' => CommitMessage::WORKFLOW_CORE]);
 
         self::assertStringContainsString('Releases: RELEASE_TARGET', $result['message']);
         self::assertContains('missing-releases', array_column($result['checks'], 'code'));
@@ -309,7 +309,7 @@ final class CommitMessageTest extends TestCase
     #[Test]
     public function neitherPlaceholderCouldBeReadAsAnAnswer(): void
     {
-        $message = CommitMessage::create(['changeType' => 'TASK', 'summary' => 'Do a thing', 'workflow' => CommitMessage::WORKFLOW_CORE])['message'];
+        $message = CommitMessage::create(['keyword' => 'TASK', 'summary' => 'Do a thing', 'workflow' => CommitMessage::WORKFLOW_CORE])['message'];
 
         if (preg_match('/^Resolves: (.*)$/m', $message, $resolves) !== 1
             || preg_match('/^Releases: (.*)$/m', $message, $releases) !== 1
@@ -387,7 +387,7 @@ final class CommitMessageTest extends TestCase
     public function aClassificationTheCallerGaveIsNotAskedAboutAgain(array $answered): void
     {
         $result = CommitMessage::create(array_merge([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Do a thing',
             'issue' => '1',
             'releases' => ['main'],
@@ -402,7 +402,7 @@ final class CommitMessageTest extends TestCase
     public function theAssumedClassificationBindsWideningToTheSignature(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Do a thing',
             'issue' => '1',
             'releases' => ['main'],
@@ -443,7 +443,7 @@ final class CommitMessageTest extends TestCase
     #[Test]
     public function everyCheckCarriesALevelACodeAndAMessage(): void
     {
-        $result = CommitMessage::create(['changeType' => 'TASK', 'summary' => 'do a thing', 'workflow' => CommitMessage::WORKFLOW_CORE]);
+        $result = CommitMessage::create(['keyword' => 'TASK', 'summary' => 'do a thing', 'workflow' => CommitMessage::WORKFLOW_CORE]);
 
         foreach ($result['checks'] as $check) {
             self::assertContains($check['level'], ['error', 'warning', 'info']);
@@ -462,7 +462,7 @@ final class CommitMessageTest extends TestCase
     public function outsideTheCoreNoTrailerIsAddedAndNoneIsDemanded(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Add a sponsor logo field',
             'workflow' => CommitMessage::WORKFLOW_PROJECT,
         ]);
@@ -477,7 +477,7 @@ final class CommitMessageTest extends TestCase
     public function outsideTheCoreTheSubjectAndBodyRulesStillHold(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => str_repeat('a', 80),
             'workflow' => CommitMessage::WORKFLOW_PROJECT,
             'body' => 'The sponsor records need an additional logo field because the '
@@ -501,7 +501,7 @@ final class CommitMessageTest extends TestCase
     public function outsideTheCoreATrailerTheCallerWroteIsStillKept(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Add a sponsor logo field',
             'issue' => '66',
             'workflow' => CommitMessage::WORKFLOW_PROJECT,
@@ -519,7 +519,7 @@ final class CommitMessageTest extends TestCase
             CommitMessage::WORKFLOW_PROJECT
         );
 
-        self::assertSame('SECURITY', $parsed['input']['changeType']);
+        self::assertSame('SECURITY', $parsed['input']['keyword']);
         self::assertNotContains('security-keyword', array_column($parsed['checks'], 'code'));
     }
 
@@ -528,7 +528,7 @@ final class CommitMessageTest extends TestCase
     public function aSecurityCommitAssembledForTheCoreIsRefusedToo(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'SECURITY',
+            'keyword' => 'SECURITY',
             'summary' => 'Fix the thing',
             'issue' => '1',
             'releases' => ['main'],
@@ -555,7 +555,7 @@ final class CommitMessageTest extends TestCase
             . "Resolves: #1\nResolves: #2\nRelated: #3\nReleases: main, 13.4\nChange-Id: I1234\n"
         );
 
-        self::assertSame('FEATURE', $parsed['input']['changeType']);
+        self::assertSame('FEATURE', $parsed['input']['keyword']);
         self::assertTrue($parsed['input']['isBreaking']);
         self::assertSame('Add a thing', $parsed['input']['summary']);
         self::assertSame(['#1', '#2'], array_map(
@@ -590,7 +590,7 @@ final class CommitMessageTest extends TestCase
         $parsed = CommitMessage::parse("[SECURITY] Fix the thing\n\nResolves: #1\nReleases: main\n");
 
         self::assertContains('security-keyword', array_column($parsed['checks'], 'code'));
-        self::assertSame('', $parsed['input']['changeType']);
+        self::assertSame('', $parsed['input']['keyword']);
     }
 
     /**
@@ -605,7 +605,7 @@ final class CommitMessageTest extends TestCase
         $parsed = CommitMessage::parse("[WIP][BUGFIX] Parse User TSConfig\n\nBody.\n\nResolves: #1\nReleases: main\n");
         $result = CommitMessage::create($parsed['input']);
 
-        self::assertSame('BUGFIX', $parsed['input']['changeType']);
+        self::assertSame('BUGFIX', $parsed['input']['keyword']);
         self::assertSame(['WIP'], $parsed['input']['draftPrefixes']);
         self::assertNotContains('unknown-keyword', array_column($parsed['checks'], 'code'));
         self::assertContains('not-merge-ready', array_column($parsed['checks'], 'code'));
@@ -618,7 +618,7 @@ final class CommitMessageTest extends TestCase
         $parsed = CommitMessage::parse("[PoC][FEATURE] Bind a form to TCA\n\nResolves: #1\nReleases: main\n");
 
         self::assertSame(['POC'], $parsed['input']['draftPrefixes']);
-        self::assertSame('FEATURE', $parsed['input']['changeType']);
+        self::assertSame('FEATURE', $parsed['input']['keyword']);
     }
 
     /** The order is the subject's, and the breaking marker is read either way round. */
@@ -630,7 +630,7 @@ final class CommitMessageTest extends TestCase
 
         self::assertTrue($parsed['input']['isBreaking']);
         self::assertSame(['WIP'], $parsed['input']['draftPrefixes']);
-        self::assertSame('FEATURE', $parsed['input']['changeType']);
+        self::assertSame('FEATURE', $parsed['input']['keyword']);
     }
 
     /** @return array<string, array{0: string}> */
@@ -715,7 +715,7 @@ final class CommitMessageTest extends TestCase
     public function aCoreDraftAsksForTheSignOffItCannotWrite(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'TASK',
+            'keyword' => 'TASK',
             'summary' => 'Do a thing',
             'issue' => '1',
             'releases' => ['main'],
@@ -736,7 +736,7 @@ final class CommitMessageTest extends TestCase
         $rechecked = CommitMessage::create($parsed['input'] + ['workflow' => CommitMessage::WORKFLOW_CORE]);
         self::assertContains('missing-sign-off', array_column($rechecked['checks'], 'code'));
 
-        $project = CommitMessage::create(['changeType' => 'TASK', 'summary' => 'Do a thing', 'workflow' => CommitMessage::WORKFLOW_PROJECT]);
+        $project = CommitMessage::create(['keyword' => 'TASK', 'summary' => 'Do a thing', 'workflow' => CommitMessage::WORKFLOW_PROJECT]);
         self::assertStringNotContainsString('Signed-off-by', $project['message'], 'the certificate belongs to the core workflow');
     }
 
@@ -757,7 +757,7 @@ final class CommitMessageTest extends TestCase
     public function theLengthCheckSaysWhatMadeTheSubjectLong(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Implode array placeholder values on every recursion level',
             'issue' => '76536',
             'releases' => ['main'],
@@ -782,7 +782,7 @@ final class CommitMessageTest extends TestCase
     public function theLengthCheckNamesWhatToCutAndWhoCutsIt(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Make the git based CGL suites work in worktrees',
             'issue' => '110534',
             'releases' => ['main'],
@@ -810,7 +810,7 @@ final class CommitMessageTest extends TestCase
     public function aBranchOutOfSupportIsAnErrorNamingTheLinesThatTake(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Keep the line breaks',
             'issue' => '88556',
             'releases' => ['main', '9.5'],
@@ -838,7 +838,7 @@ final class CommitMessageTest extends TestCase
     public function aBranchTheListDoesNotCarryIsAWarningSayingWhenItWasRead(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Keep the line breaks',
             'issue' => '88556',
             'releases' => ['14.1'],
@@ -873,7 +873,7 @@ final class CommitMessageTest extends TestCase
         self::assertNotNull($older, 'the list carries no line beyond the ordinary reach to hold this against');
 
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Keep the line breaks',
             'issue' => '88556',
             'releases' => [...ReleaseLines::ordinary(), $older],
@@ -891,7 +891,7 @@ final class CommitMessageTest extends TestCase
 
         // A feature is the release managers' call and never this warning.
         $feature = CommitMessage::create([
-            'changeType' => 'FEATURE',
+            'keyword' => 'FEATURE',
             'summary' => 'Keep the line breaks',
             'issue' => '88556',
             'releases' => [$older],
@@ -910,7 +910,7 @@ final class CommitMessageTest extends TestCase
     public function theMissingTrailerNamesTheLinesThatTakeAPatch(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Keep the line breaks',
             'issue' => '88556',
             'workflow' => CommitMessage::WORKFLOW_CORE,
@@ -932,7 +932,7 @@ final class CommitMessageTest extends TestCase
     public function outsideTheCoreNoBranchIsHeldAgainstTheLines(): void
     {
         $result = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Keep the line breaks',
             'releases' => ['9.5', '14.1'],
             'workflow' => CommitMessage::WORKFLOW_PROJECT,

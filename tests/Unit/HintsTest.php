@@ -2942,7 +2942,7 @@ final class HintsTest extends TestCase
         // And the check that reached the reporting session last, now naming
         // the move it was silent about.
         $check = CommitMessage::create([
-            'changeType' => 'BUGFIX',
+            'keyword' => 'BUGFIX',
             'summary' => 'Do a thing',
             'issue' => '1',
             'releases' => ['main'],

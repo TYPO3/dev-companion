@@ -12,11 +12,11 @@ constraints.depends.typo3 it was released with. This is the question a release
 audit cannot answer from the repository it is auditing: Tailor refuses to
 package unless ext_emconf.php names the version being released, so that file
 still names it after the upload and a checkout that has been published reads
-exactly like one that has not. Pass version as well to be told whether the
-registry already holds that number; it reports what is published and judges no
-version free, and comparing it against the working tree is yours. A key nothing
-is published under is answered as such, which is not a statement that no such
-package exists — an extension distributed through Composer alone is never
+exactly like one that has not. Pass extensionVersion as well to be told whether
+the registry already holds that number; it reports what is published and judges
+no version free, and comparing it against the working tree is yours. A key
+nothing is published under is answered as such, which is not a statement that no
+such package exists — an extension distributed through Composer alone is never
 registered here. What publishing requires of the extension itself is
 typo3_hint_lookup with id="extension-ter-release". Reading only, and no
 credential: registering a key, uploading a version and transferring an extension
@@ -44,7 +44,7 @@ Takes
     # and, where it does, what that release declared. Compared as the registry
     # writes it, which is exactly three numbers: a suffix of any kind belongs to no
     # published version, because the upload route accepts none.
-    version: string  # optional
+    extensionVersion: string  # optional
     # How many versions come back, newest number first. The count of everything
     # published comes with them, so a cut list says so. A widely maintained
     # extension has a hundred, and what a release audit reads is the top of them.
@@ -69,7 +69,7 @@ Answers with
     extension: string
     # The version number the call asked about, as it was passed. Empty where none
     # was.
-    version: string
+    extensionVersion: string
     # Whether the registry has published that exact number. Null where the call
     # named no version, and null where nothing was read at all — a false here is
     # the registry answering, never a question that failed. It is a fact about the
@@ -111,7 +111,7 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Answered against
+Recorded on 2026-09-02 by ``bin/cli tools:record``. Answered against
 core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
@@ -154,7 +154,7 @@ Data:
         "url": "https://extensions.typo3.org/api/v1/extension/blog/versions",
         "page": "https://extensions.typo3.org/extension/blog",
         "extension": "blog",
-        "version": "",
+        "extensionVersion": "",
         "held": null,
         "total": 32,
         "versions": [
@@ -200,7 +200,7 @@ Called with:
 
     {
         "extension": "blog",
-        "version": "14.0.1",
+        "extensionVersion": "14.0.1",
         "limit": 3
     }
 
@@ -229,7 +229,7 @@ Data:
         "url": "https://extensions.typo3.org/api/v1/extension/blog/versions",
         "page": "https://extensions.typo3.org/extension/blog",
         "extension": "blog",
-        "version": "14.0.1",
+        "extensionVersion": "14.0.1",
         "held": true,
         "total": 32,
         "versions": [
@@ -294,7 +294,7 @@ Data:
         "url": "https://extensions.typo3.org/api/v1/extension/quantumflux_transponder/versions",
         "page": "https://extensions.typo3.org/extension/quantumflux_transponder",
         "extension": "quantumflux_transponder",
-        "version": "",
+        "extensionVersion": "",
         "held": null,
         "total": 0,
         "versions": [],
@@ -329,7 +329,7 @@ Data:
         "url": "",
         "page": "",
         "extension": "georgringer/news",
-        "version": "",
+        "extensionVersion": "",
         "held": null,
         "total": 0,
         "versions": [],

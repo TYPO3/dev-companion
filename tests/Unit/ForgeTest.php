@@ -785,7 +785,7 @@ final class ForgeTest extends TestCase
         $result = Registry::call('typo3_forge_lookup', ['query' => 'writePagesOrder importNewIdPids']);
 
         self::assertSame('empty', $result->data['status']);
-        self::assertStringContainsString('open "newest" with createdSince', $result->text);
+        self::assertStringContainsString('backlog "newest" with createdSince', $result->text);
         // What that call delivers and no more. The promise it replaces was
         // written from an area holding 26 open issues and overstates what a
         // page of 50 settles above the bound (`D-ANS-116`).
@@ -1040,7 +1040,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $answer = $forge->open('stale', 'Bug', createdBefore: '2015-01-01', updatedBefore: '2020-01-01', limit: 2);
+        $answer = $forge->backlog('stale', 'Bug', createdBefore: '2015-01-01', updatedBefore: '2020-01-01', limit: 2);
 
         $issues = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/issues.json')));
         self::assertStringContainsString('status_id=open', $issues[0]);
@@ -1076,7 +1076,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $results = $forge->open('stale', limit: 2)['results'];
+        $results = $forge->backlog('stale', limit: 2)['results'];
 
         self::assertStringContainsString('include=relations%2Cattachments', $asked[1]);
         self::assertSame([90676], array_column($results[0]['relations'], 'issue'));
@@ -1100,7 +1100,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $relation = $forge->open('stale', limit: 2)['results'][0]['relations'][0];
+        $relation = $forge->backlog('stale', limit: 2)['results'][0]['relations'][0];
 
         $filling = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, 'issue_id=')));
         self::assertCount(1, $filling);
@@ -1128,7 +1128,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $results = $forge->open('stale', limit: 2)['results'];
+        $results = $forge->backlog('stale', limit: 2)['results'];
 
         $review = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, 'review.typo3.org')));
         self::assertCount(1, $review);
@@ -1160,7 +1160,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $reviews = $forge->open('stale', limit: 2)['results'][0]['reviews'];
+        $reviews = $forge->backlog('stale', limit: 2)['results'][0]['reviews'];
 
         self::assertSame(['NEW', 'ABANDONED'], array_column($reviews, 'status'));
         // One query for the page, and the state came out of it rather than out
@@ -1182,7 +1182,7 @@ final class ForgeTest extends TestCase
             ? null
             : $tracker($url));
 
-        $answer = $forge->open('stale', limit: 2);
+        $answer = $forge->backlog('stale', limit: 2);
 
         self::assertSame('answered', $answer['status']);
         self::assertSame([14858, 23633], array_column($answer['results'], 'issue'));
@@ -1200,7 +1200,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $answer = $forge->open('oldest', limit: 2);
+        $answer = $forge->backlog('oldest', limit: 2);
 
         self::assertSame(479, $answer['total']);
         self::assertCount(2, $answer['results']);
@@ -1225,8 +1225,8 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $forge->open('oldest', limit: 2);
-        $forge->open('stale', limit: 2);
+        $forge->backlog('oldest', limit: 2);
+        $forge->backlog('stale', limit: 2);
 
         self::assertStringContainsString('sort=created_on%3Aasc', self::pageRead($asked)[0]);
         self::assertStringContainsString('sort=updated_on%3Aasc', self::pageRead($asked)[1]);
@@ -1244,7 +1244,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $forge->open('newest', limit: 2);
+        $forge->backlog('newest', limit: 2);
 
         self::assertStringContainsString('sort=created_on%3Adesc', self::pageRead($asked)[0]);
     }
@@ -1265,8 +1265,8 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $forge->open('newest', createdSince: '2026-08-01', limit: 2);
-        $forge->open('newest', createdBefore: '2026-08-20', createdSince: '2026-08-01', limit: 2);
+        $forge->backlog('newest', createdSince: '2026-08-01', limit: 2);
+        $forge->backlog('newest', createdBefore: '2026-08-20', createdSince: '2026-08-01', limit: 2);
 
         $reads = self::pageRead($asked);
         self::assertStringContainsString('created_on=%3E%3D2026-08-01', $reads[0]);
@@ -1286,7 +1286,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         Forge::useReader(self::tracker($asked));
 
-        $page = Registry::call('typo3_forge_lookup', ['open' => 'newest', 'limit' => 2]);
+        $page = Registry::call('typo3_forge_lookup', ['backlog' => 'newest', 'limit' => 2]);
 
         self::assertStringContainsString('2 of 479', $page->text);
         self::assertStringContainsString('newest filed first', $page->text);
@@ -1312,7 +1312,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         Forge::useReader(self::tracker($asked));
 
-        $narrowed = Registry::call('typo3_forge_lookup', ['open' => 'newest', 'category' => 'rte', 'limit' => 2]);
+        $narrowed = Registry::call('typo3_forge_lookup', ['backlog' => 'newest', 'category' => 'rte', 'limit' => 2]);
 
         self::assertStringContainsString('no Category at all is in no area', $narrowed->text);
         self::assertStringContainsString('ask again without category', $narrowed->text);
@@ -1406,8 +1406,8 @@ final class ForgeTest extends TestCase
         $asked = [];
         Forge::useReader(self::tracker($asked));
 
-        $page = Registry::call('typo3_forge_lookup', ['open' => 'oldest', 'limit' => 2]);
-        $shape = Registry::call('typo3_forge_lookup', ['open' => 'oldest', 'limit' => 2, 'breakdown' => true]);
+        $page = Registry::call('typo3_forge_lookup', ['backlog' => 'oldest', 'limit' => 2]);
+        $shape = Registry::call('typo3_forge_lookup', ['backlog' => 'oldest', 'limit' => 2, 'breakdown' => true]);
         $issue = Registry::call('typo3_forge_lookup', ['issue' => '14858']);
 
         self::assertStringContainsString('typo3-core-issue-triage', $page->text);
@@ -1448,7 +1448,7 @@ final class ForgeTest extends TestCase
         $notes = ForgeLookup::inputSchema()['properties']['notes']['description'];
 
         self::assertStringContainsString('one issue at a time', $notes);
-        self::assertStringContainsString('Narrows issue and is ignored by query and open.', $notes);
+        self::assertStringContainsString('Narrows issue and is ignored by query and backlog.', $notes);
     }
 
     /**
@@ -1462,7 +1462,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $forge->open('oldest', createdBefore: 'last year', limit: 2);
+        $forge->backlog('oldest', createdBefore: 'last year', limit: 2);
 
         $issues = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/issues.json')));
         self::assertStringNotContainsString('created_on=', $issues[0]);
@@ -1505,7 +1505,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $answer = $forge->open('oldest', category: 'backend', limit: 2);
+        $answer = $forge->backlog('oldest', category: 'backend', limit: 2);
 
         $issues = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/projects/typo3cms-core/issues.json')));
         self::assertCount(1, $issues);
@@ -1528,7 +1528,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $answer = $forge->open('oldest', category: '*', limit: 2);
+        $answer = $forge->backlog('oldest', category: '*', limit: 2);
 
         self::assertSame([], array_filter($asked, static fn(string $url): bool => str_contains($url, '/issues.json')));
         self::assertSame('answered', $answer['status']);
@@ -1547,7 +1547,7 @@ final class ForgeTest extends TestCase
     {
         $forge = new Forge(static fn(): ?string => null);
 
-        $answer = $forge->open('oldest', category: '*', limit: 2);
+        $answer = $forge->backlog('oldest', category: '*', limit: 2);
 
         self::assertSame('unavailable', $answer['status']);
         self::assertSame('source-not-answering', $answer['cause']);
@@ -1566,7 +1566,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $answer = $forge->open('oldest', category: 'quantumflux', limit: 2);
+        $answer = $forge->backlog('oldest', category: 'quantumflux', limit: 2);
 
         self::assertSame([], array_filter($asked, static fn(string $url): bool => str_contains($url, '/issues.json')));
         self::assertSame('empty', $answer['status']);
@@ -1625,7 +1625,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $answer = $forge->open(reportedBy: 'Frank Nägler', assignedTo: 'Benni Mack', limit: 2);
+        $answer = $forge->backlog(reportedBy: 'Frank Nägler', assignedTo: 'Benni Mack', limit: 2);
 
         $issues = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/projects/typo3cms-core/issues.json')));
         self::assertStringContainsString('author_id=52', $issues[0]);
@@ -1651,7 +1651,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $answer = $forge->open(reportedBy: 'daniel', limit: 2);
+        $answer = $forge->backlog(reportedBy: 'daniel', limit: 2);
 
         self::assertSame([], array_filter($asked, static fn(string $url): bool => str_contains($url, 'author_id=')));
         self::assertSame('empty', $answer['status']);
@@ -1683,7 +1683,7 @@ final class ForgeTest extends TestCase
             return (string) json_encode(self::PAGE);
         });
 
-        $answer = $forge->open(reportedBy: 'Nicole Zingg', limit: 2);
+        $answer = $forge->backlog(reportedBy: 'Nicole Zingg', limit: 2);
 
         self::assertSame('Nicole Zingg', $answer['people'][0]['name']);
         self::assertSame(2737, $answer['people'][0]['id']);
@@ -1727,7 +1727,7 @@ final class ForgeTest extends TestCase
             return (string) json_encode(self::PROJECT);
         });
 
-        $answer = $forge->open(reportedBy: 'Konrad Michalik', limit: 2);
+        $answer = $forge->backlog(reportedBy: 'Konrad Michalik', limit: 2);
 
         self::assertSame([], array_filter($asked, static fn(string $url): bool => str_contains($url, '/projects/typo3cms-core/issues.json')));
         self::assertSame('empty', $answer['status']);
@@ -1746,8 +1746,8 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $forge->open(status: 'all', reportedBy: 'Frank Nägler', limit: 2);
-        $forge->open(status: 'closed', reportedBy: 'Frank Nägler', limit: 2);
+        $forge->backlog(status: 'all', reportedBy: 'Frank Nägler', limit: 2);
+        $forge->backlog(status: 'closed', reportedBy: 'Frank Nägler', limit: 2);
 
         $issues = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/projects/typo3cms-core/issues.json')));
         self::assertStringContainsString('status_id=%2A', $issues[0]);
@@ -1765,7 +1765,7 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        $results = $forge->open('oldest', limit: 2)['results'];
+        $results = $forge->backlog('oldest', limit: 2)['results'];
 
         self::assertSame('Frank Nägler', $results[0]['reportedBy']);
         // A row the tracker named nobody on carries none, which is the answer
@@ -1840,7 +1840,7 @@ final class ForgeTest extends TestCase
             return (string) json_encode(str_contains($url, 'author_id=') ? self::FILED : self::HELD);
         });
 
-        $answer = $forge->open(involving: 'Frank Nägler', limit: 5);
+        $answer = $forge->backlog(involving: 'Frank Nägler', limit: 5);
 
         $reads = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/projects/typo3cms-core/issues.json')));
         self::assertCount(3, $reads, 'the union was not two reads and the count of what they share');
@@ -1870,8 +1870,8 @@ final class ForgeTest extends TestCase
             return (string) json_encode(str_contains($url, 'author_id=') ? self::FILED : self::HELD);
         });
 
-        $newest = $forge->open('newest', involving: 'Frank Nägler', limit: 2);
-        $oldest = $forge->open('oldest', involving: 'Frank Nägler', limit: 2);
+        $newest = $forge->backlog('newest', involving: 'Frank Nägler', limit: 2);
+        $oldest = $forge->backlog('oldest', involving: 'Frank Nägler', limit: 2);
 
         self::assertSame([89326, 23633], array_column($newest['results'], 'issue'));
         self::assertSame([14858, 23633], array_column($oldest['results'], 'issue'));
@@ -1917,7 +1917,7 @@ final class ForgeTest extends TestCase
             return (string) json_encode(self::COUNTED);
         });
 
-        $answer = $forge->open(status: 'all', reportedBy: 'Frank Nägler', breakdown: true);
+        $answer = $forge->backlog(status: 'all', reportedBy: 'Frank Nägler', breakdown: true);
 
         $reads = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/projects/typo3cms-core/issues.json')));
         // Nothing that decides which row to read, because no row comes back.
@@ -1985,7 +1985,7 @@ final class ForgeTest extends TestCase
             return (string) json_encode(self::PROJECT);
         });
 
-        $forge->open(breakdown: true);
+        $forge->backlog(breakdown: true);
 
         self::assertCount(2, $asked);
         self::assertStringContainsString('limit=100', $asked[0]);
@@ -2017,7 +2017,7 @@ final class ForgeTest extends TestCase
             ]);
         });
 
-        $answer = $forge->open(status: 'all', reportedBy: 'Frank Nägler', breakdown: true);
+        $answer = $forge->backlog(status: 'all', reportedBy: 'Frank Nägler', breakdown: true);
 
         self::assertSame(10, $reads, 'the read is not bounded');
         self::assertFalse($answer['breakdown']['complete']);
@@ -2046,7 +2046,7 @@ final class ForgeTest extends TestCase
             str_contains($url, '/issues.json') ? ['issues' => $issues, 'total_count' => 20] : self::PROJECT,
         ));
 
-        $areas = $forge->open(breakdown: true)['breakdown']['counts'][2];
+        $areas = $forge->backlog(breakdown: true)['breakdown']['counts'][2];
 
         self::assertCount(12, $areas['buckets']);
         self::assertSame(8, $areas['withheldBuckets']);
@@ -2065,12 +2065,12 @@ final class ForgeTest extends TestCase
         $asked = [];
         $forge = new Forge(self::tracker($asked));
 
-        self::assertSame([], $forge->open('oldest', limit: 2)['categories']);
-        self::assertSame([], $forge->open('oldest', category: 'rte', limit: 2)['categories'], 'a word that resolved to one area');
+        self::assertSame([], $forge->backlog('oldest', limit: 2)['categories']);
+        self::assertSame([], $forge->backlog('oldest', category: 'rte', limit: 2)['categories'], 'a word that resolved to one area');
         // The two it does the work on: a word naming none, and a word naming
         // several, where what to ask instead is what the list answers.
-        self::assertContains('Frontend', $forge->open('oldest', category: 'quantumflux', limit: 2)['categories']);
-        self::assertContains('Frontend', $forge->open('oldest', category: 'backend', limit: 2)['categories']);
+        self::assertContains('Frontend', $forge->backlog('oldest', category: 'quantumflux', limit: 2)['categories']);
+        self::assertContains('Frontend', $forge->backlog('oldest', category: 'backend', limit: 2)['categories']);
     }
 
     /**
@@ -2098,7 +2098,7 @@ final class ForgeTest extends TestCase
             str_contains($url, '/issues.json') ? $page : self::PROJECT,
         ));
 
-        $cites = $forge->open('stale', limit: 1)['results'][0]['cites'];
+        $cites = $forge->backlog('stale', limit: 1)['results'][0]['cites'];
 
         // The subject is read with the description, and its bare name is the
         // only handle five of the 25 stale Bugs of `D-ANS-122` give at all.

@@ -89,11 +89,11 @@ final class TerTest extends TestCase
     {
         Ter::useReader(static fn(): string => self::RESPONSE);
 
-        $held = Registry::call('typo3_ter_lookup', ['extension' => 'blog', 'version' => '14.0.1']);
+        $held = Registry::call('typo3_ter_lookup', ['extension' => 'blog', 'extensionVersion' => '14.0.1']);
         self::assertTrue($held->data['held']);
         self::assertStringContainsString('The registry holds 14.0.1 · stable', $held->text);
 
-        $free = Registry::call('typo3_ter_lookup', ['extension' => 'blog', 'version' => '14.0.2']);
+        $free = Registry::call('typo3_ter_lookup', ['extension' => 'blog', 'extensionVersion' => '14.0.2']);
         self::assertFalse($free->data['held']);
         self::assertStringContainsString('holds no version 14.0.2', $free->text);
         // What the answer may not turn into: the registry says what is out, and
@@ -143,7 +143,7 @@ final class TerTest extends TestCase
             return self::RESPONSE;
         });
 
-        $result = Registry::call('typo3_ter_lookup', ['extension' => $name, 'version' => '1.0.0']);
+        $result = Registry::call('typo3_ter_lookup', ['extension' => $name, 'extensionVersion' => '1.0.0']);
 
         self::assertSame(0, $asked, 'the registry was read for a name it does not take');
         self::assertSame('empty', $result->data['status']);
@@ -213,7 +213,7 @@ final class TerTest extends TestCase
     {
         Ter::useReader(static fn(): ?string => null);
 
-        $result = Registry::call('typo3_ter_lookup', ['extension' => 'blog', 'version' => '14.0.1']);
+        $result = Registry::call('typo3_ter_lookup', ['extension' => 'blog', 'extensionVersion' => '14.0.1']);
 
         self::assertSame('unavailable', $result->data['status']);
         self::assertNull($result->data['held']);

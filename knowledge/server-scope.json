@@ -507,15 +507,15 @@
     },
     {
       "when": "Going through the core's open issues — the oldest, the ones nobody has touched for years, or what stands open in one area such as the RTE or the backend UI",
-      "call": "typo3_forge_lookup with open=\"oldest\" or open=\"stale\", narrowed with category in the user's own words and with tracker, then typo3_forge_lookup with the number of the one being taken further"
+      "call": "typo3_forge_lookup with backlog=\"oldest\" or open=\"stale\", narrowed with category in the user's own words and with tracker, then typo3_forge_lookup with the number of the one being taken further"
     },
     {
       "when": "What one person has filed on the tracker, or what they still hold — one contributor's backlog, or what a core team member has open",
-      "call": "typo3_forge_lookup with open=\"oldest\" and involving in the person's name for both sides at once, or reportedBy or assignedTo for one of them, with status=\"all\" for the years and breakdown=true where the count is larger than a page; never query with the name, which matches the text of an issue rather than whose it is"
+      "call": "typo3_forge_lookup with backlog=\"oldest\" and involving in the person's name for both sides at once, or reportedBy or assignedTo for one of them, with status=\"all\" for the years and breakdown=true where the count is larger than a page; never query with the name, which matches the text of an issue rather than whose it is"
     },
     {
       "when": "Writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — including the issue a patch's Resolves: trailer will point at, which is written before the patch is pushed",
-      "call": "typo3_rule_lookup with documentId=\"core/contribution/reporting-an-issue\" for the fields and the Textile the description renders as, then typo3_forge_lookup with category=\"*\" for the areas the Category field takes, and for whether it is already reported typo3_forge_lookup with query in the words of the symptom and again with open=\"newest\", createdSince from the day the defect could first have been reported and limit=50 — a wording reaches only the issues worded that way, and reading the subjects of everything filed since is what settles a negative"
+      "call": "typo3_rule_lookup with documentId=\"core/contribution/reporting-an-issue\" for the fields and the Textile the description renders as, then typo3_forge_lookup with category=\"*\" for the areas the Category field takes, and for whether it is already reported typo3_forge_lookup with query in the words of the symptom and again with backlog=\"newest\", createdSince from the day the defect could first have been reported and limit=50 — a wording reaches only the issues worded that way, and reading the subjects of everything filed since is what settles a negative"
     },
     {
       "when": "Taking a Forge issue on, before believing what it describes — an issue can be stale, already fixed, or closed on a decision that is not in its description",

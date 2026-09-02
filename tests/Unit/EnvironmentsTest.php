@@ -11,6 +11,7 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Upkeep\Environments;
+use TYPO3\DevCompanion\Upkeep\SiteExtension;
 
 /**
  * What `bin/cli environment:create` would do, held without doing it.
@@ -437,6 +438,34 @@ final class EnvironmentsTest extends TestCase
         self::assertNotSame([], Environments::REQUIRED);
         foreach (Environments::REQUIRED as $package) {
             self::assertStringContainsString('require ' . $package . ':', $build, $package . ' is never required');
+        }
+    }
+
+    /**
+     * The project's own extension is required out of `packages/`, its table is
+     * created and then filled, in that order.
+     *
+     * A base distribution owns no package, so an installation made here
+     * answered nothing about what this project registers and the one call
+     * `typo3_record_lookup` exists for could be recorded nowhere —
+     * `D-EVI-010`.
+     */
+    #[Decision('D-EVI-010')]
+    #[Test]
+    public function theProjectsOwnExtensionIsRequiredThenSetUpThenFilled(): void
+    {
+        $steps = array_values(Environments::ownExtension());
+
+        self::assertCount(3, $steps, 'a step of the extension phase went missing or was added silently');
+        self::assertSame(
+            ['ddev', 'composer', 'require', SiteExtension::PACKAGE . ':*', '--no-interaction'],
+            $steps[0],
+        );
+        self::assertContains('extension:setup', $steps[1], 'the table is never created');
+        self::assertContains(SiteExtension::SEED, $steps[2], 'the table is never filled');
+        foreach (Environments::ownExtension() as $what => $command) {
+            self::assertNotSame('', trim((string) $what), 'a step says nothing about itself');
+            self::assertSame('ddev', $command[0] ?? '', $what . ' runs outside the project');
         }
     }
 

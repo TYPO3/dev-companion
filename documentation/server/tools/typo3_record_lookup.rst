@@ -157,7 +157,7 @@ The answer carries exactly one of these sets of fields: ``table``,
 Answered
 --------
 
-Recorded on 2026-09-01 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-02 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against composer-project, TYPO3
 14.3.5, the E-SITE-14.3 this repository makes below .environments/, whose
@@ -187,8 +187,33 @@ Text:
 
 .. code-block:: text
 
-    "tx_acme_events_event" is not read here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
-    No extension of this project registers a table of its own.
+    tx_acme_events_event holds 125 rows: 120 live, 3 hidden, 2 deleted.
+    The fullest page holds 125, which is 7 pages of the record list at 20 rows each. An editor maintaining that through the generic list has no filtering and no search over it, so this is where a backend module of its own is the question — typo3_backend_module_lookup reports what this installation already registers.
+    Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.
+
+    - pid 1: 125 rows (120 live, 3 hidden, 2 deleted)
+
+    The first 20 of them by uid, labelled by title:
+    - [1] Live event 001
+    - [2] Live event 002
+    - [3] Live event 003
+    - [4] Live event 004
+    - [5] Live event 005
+    - [6] Live event 006
+    - [7] Live event 007
+    - [8] Live event 008
+    - [9] Live event 009
+    - [10] Live event 010
+    - [11] Live event 011
+    - [12] Live event 012
+    - [13] Live event 013
+    - [14] Live event 014
+    - [15] Live event 015
+    - [16] Live event 016
+    - [17] Live event 017
+    - [18] Live event 018
+    - [19] Live event 019
+    - [20] Live event 020
 
 Data:
 
@@ -196,13 +221,212 @@ Data:
 
     {
         "table": "tx_acme_events_event",
-        "matchCount": 0,
+        "matchCount": 125,
         "answeredBy": "installation",
         "where": [],
-        "counts": null,
-        "pages": [],
-        "records": [],
-        "countable": [],
+        "counts": {
+            "total": 125,
+            "live": 120,
+            "hidden": 3,
+            "deleted": 2
+        },
+        "pages": [
+            {
+                "pid": 1,
+                "total": 125,
+                "live": 120,
+                "hidden": 3,
+                "deleted": 2
+            }
+        ],
+        "records": [
+            {
+                "uid": 1,
+                "pid": 1,
+                "label": "Live event 001",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 2,
+                "pid": 1,
+                "label": "Live event 002",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 3,
+                "pid": 1,
+                "label": "Live event 003",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 4,
+                "pid": 1,
+                "label": "Live event 004",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 5,
+                "pid": 1,
+                "label": "Live event 005",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 6,
+                "pid": 1,
+                "label": "Live event 006",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 7,
+                "pid": 1,
+                "label": "Live event 007",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 8,
+                "pid": 1,
+                "label": "Live event 008",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 9,
+                "pid": 1,
+                "label": "Live event 009",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 10,
+                "pid": 1,
+                "label": "Live event 010",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 11,
+                "pid": 1,
+                "label": "Live event 011",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 12,
+                "pid": 1,
+                "label": "Live event 012",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 13,
+                "pid": 1,
+                "label": "Live event 013",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 14,
+                "pid": 1,
+                "label": "Live event 014",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 15,
+                "pid": 1,
+                "label": "Live event 015",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 16,
+                "pid": 1,
+                "label": "Live event 016",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 17,
+                "pid": 1,
+                "label": "Live event 017",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 18,
+                "pid": 1,
+                "label": "Live event 018",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 19,
+                "pid": 1,
+                "label": "Live event 019",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            },
+            {
+                "uid": 20,
+                "pid": 1,
+                "label": "Live event 020",
+                "changed": 1788330520,
+                "created": 1788330520,
+                "deleted": false,
+                "hidden": false
+            }
+        ],
+        "countable": [
+            {
+                "table": "tx_acme_events_event",
+                "extension": "acme_events"
+            }
+        ],
         "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
     }
 
@@ -256,8 +480,11 @@ Text:
 
 .. code-block:: text
 
-    "tx_acme_events_event" is not read here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
-    No extension of this project registers a table of its own.
+    tx_acme_events_event holds 125 rows: 120 live, 3 hidden, 2 deleted.
+    The fullest page holds 125, which is 7 pages of the record list at 20 rows each. An editor maintaining that through the generic list has no filtering and no search over it, so this is where a backend module of its own is the question — typo3_backend_module_lookup reports what this installation already registers.
+    Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.
+
+    - pid 1: 125 rows (120 live, 3 hidden, 2 deleted)
 
 Data:
 
@@ -265,13 +492,31 @@ Data:
 
     {
         "table": "tx_acme_events_event",
-        "matchCount": 0,
+        "matchCount": 125,
         "answeredBy": "installation",
         "where": [],
-        "counts": null,
-        "pages": [],
+        "counts": {
+            "total": 125,
+            "live": 120,
+            "hidden": 3,
+            "deleted": 2
+        },
+        "pages": [
+            {
+                "pid": 1,
+                "total": 125,
+                "live": 120,
+                "hidden": 3,
+                "deleted": 2
+            }
+        ],
         "records": [],
-        "countable": [],
+        "countable": [
+            {
+                "table": "tx_acme_events_event",
+                "extension": "acme_events"
+            }
+        ],
         "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
     }
 
@@ -325,7 +570,7 @@ Text:
 .. code-block:: text
 
     "tt_content" is not read here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
-    No extension of this project registers a table of its own.
+    What it does read: tx_acme_events_event.
 
 Data:
 
@@ -339,7 +584,12 @@ Data:
         "counts": null,
         "pages": [],
         "records": [],
-        "countable": [],
+        "countable": [
+            {
+                "table": "tx_acme_events_event",
+                "extension": "acme_events"
+            }
+        ],
         "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
     }
 
@@ -390,21 +640,28 @@ Text:
 
 .. code-block:: text
 
-    No extension of this project registers a table of its own, so there is nothing here to read. A project whose content lives in pages and tt_content is that case.
+    This project's own extensions register 1 tables. Name one to read what is in it.
+
+    - tx_acme_events_event (acme_events)
 
 Data:
 
 .. code-block:: json
 
     {
-        "matchCount": 0,
+        "matchCount": 1,
         "table": null,
         "answeredBy": "installation",
         "where": [],
         "counts": null,
         "pages": [],
         "records": [],
-        "countable": [],
+        "countable": [
+            {
+                "table": "tx_acme_events_event",
+                "extension": "acme_events"
+            }
+        ],
         "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
     }
 

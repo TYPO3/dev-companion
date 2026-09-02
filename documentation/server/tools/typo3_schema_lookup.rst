@@ -136,7 +136,7 @@ The answer carries exactly one of these sets of fields: ``table``,
 Answered
 --------
 
-Recorded on 2026-09-01 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-02 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against composer-project, TYPO3
 14.3.5, the E-SITE-14.3 this repository makes below .environments/, whose
@@ -1320,7 +1320,7 @@ Text:
 
 .. code-block:: text
 
-    TYPO3 derives columns for 23 tables in this installation.
+    TYPO3 derives columns for 24 tables in this installation.
     Name one to see its columns. What is listed for it is what an ext_tables.sql may leave out.
 
     - be_groups: 25 columns
@@ -1345,6 +1345,7 @@ Text:
     - sys_reaction: 17 columns
     - sys_note: 11 columns
     - sys_webhook: 17 columns
+    - tx_acme_events_event: 9 columns
     - sys_category_record_mm: 6 columns (created for an MM relation; declare nothing for it)
 
 Data:
@@ -1353,7 +1354,7 @@ Data:
 
     {
         "table": null,
-        "matchCount": 23,
+        "matchCount": 24,
         "answeredBy": "installation",
         "columns": [],
         "tables": [
@@ -1465,6 +1466,11 @@ Data:
             {
                 "table": "sys_webhook",
                 "columnCount": 17,
+                "relationTable": false
+            },
+            {
+                "table": "tx_acme_events_event",
+                "columnCount": 9,
                 "relationTable": false
             },
             {

@@ -9,6 +9,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Environments;
+use TYPO3\DevCompanion\Upkeep\SiteExtension;
 
 /**
  * Makes the working directory a scenario names, where this repository makes it.
@@ -17,9 +18,11 @@ use TYPO3\DevCompanion\Upkeep\Environments;
  * directory in which `ddev exec vendor/bin/typo3 …` answers — the half of this
  * server no test reaches, and where `D-DIS-007` and `R-DIS-018` were both found
  * by a real run. One per covered line, with the version as the second argument
- * (`D-EVI-006`). What it is not is a repository to review, because a scaffold of
- * one would be this repository writing the defects it then measures itself on
- * finding (`D-EVI-001`). Every step is printed before it runs and quoted in full
+ * (`D-EVI-006`). It carries one extension of its own, because a base
+ * distribution registers nothing this project owns and half of what this server
+ * answers is about what it does (`D-EVI-010`). What it is not is a repository to
+ * review, because a scaffold of one would be this repository writing the defects
+ * it then measures itself on finding (`D-EVI-001`). Every step is printed before it runs and quoted in full
  * when it fails, because a build that dies on step four has to say which four.
  */
 #[AsCommand(
@@ -183,32 +186,27 @@ final class EnvironmentCreate
             return 2;
         }
 
-        foreach (Environments::build($branch, $driver) as $what => $command) {
-            $output->writeln($what);
-            $output->writeln('    ' . implode(' ', $command));
-            [$exitCode, $said] = Environments::run($command, $path);
-            if ($exitCode !== 0) {
-                Cli::errors($output)->writeln(rtrim($said));
-                Cli::errors($output)->writeln('');
-                Cli::errors($output)->writeln(sprintf(
-                    'Stopped at "%s". What is there stays, and this command carries on from it.',
-                    $what,
-                ));
-                // The one failure that never finishes by carrying on. `--force`
-                // covers the settings file, and no option of the setup gets
-                // past tables an earlier installation left in the database.
-                Cli::errors($output)->writeln(
-                    'A database an earlier installation populated is the exception: its tables',
-                );
-                Cli::errors($output)->writeln('are refused by the setup whatever is passed. Taking the project and the');
-                Cli::errors($output)->writeln('directory away is what clears it, on a file and on a service alike:');
-                Cli::errors($output)->writeln(sprintf(
-                    '    %s && rm -rf %s',
-                    implode(' ', Environments::discard($project)),
-                    $path,
-                ));
-                return 1;
-            }
+        $stopped = $this->steps($output, Environments::build($branch, $driver), $path);
+        if ($stopped !== null) {
+            Cli::errors($output)->writeln(sprintf(
+                'Stopped at "%s". What is there stays, and this command carries on from it.',
+                $stopped,
+            ));
+            // The one failure that never finishes by carrying on. `--force`
+            // covers the settings file, and no option of the setup gets
+            // past tables an earlier installation left in the database.
+            Cli::errors($output)->writeln(
+                'A database an earlier installation populated is the exception: its tables',
+            );
+            Cli::errors($output)->writeln('are refused by the setup whatever is passed. Taking the project and the');
+            Cli::errors($output)->writeln('directory away is what clears it, on a file and on a service alike:');
+            Cli::errors($output)->writeln(sprintf(
+                '    %s && rm -rf %s',
+                implode(' ', Environments::discard($project)),
+                $path,
+            ));
+
+            return 1;
         }
 
         // DDEV owns config/system/additional.php until this, and what it writes
@@ -218,6 +216,10 @@ final class EnvironmentCreate
         $takenOver = Environments::takeOverGeneratedSettings($path);
         if ($takenOver !== null) {
             $output->writeln($takenOver);
+        }
+
+        if (!$this->ownExtension($output, $path)) {
+            return 1;
         }
 
         $output->writeln('');
@@ -238,27 +240,81 @@ final class EnvironmentCreate
     {
         $path = Environments::path('E-SITE', $branch, $driver);
         $resume = Environments::resume($status);
-        if ($resume === null) {
-            $this->where($output, $branch, $driver);
+        if ($resume !== null) {
+            $output->writeln(sprintf('The installation is at %s, and its containers are %s.', $path, $status ?? 'not registered'));
+            $output->writeln('    ' . implode(' ', $resume));
+            [$exitCode, $said] = Environments::run($resume, $path);
+            if ($exitCode !== 0) {
+                Cli::errors($output)->writeln(rtrim($said));
+                Cli::errors($output)->writeln('');
+                Cli::errors($output)->writeln('The installation is there and its containers did not come up.');
 
-            return 0;
+                return 2;
+            }
+
+            $output->writeln('');
         }
 
-        $output->writeln(sprintf('The installation is at %s, and its containers are %s.', $path, $status ?? 'not registered'));
-        $output->writeln('    ' . implode(' ', $resume));
-        [$exitCode, $said] = Environments::run($resume, $path);
-        if ($exitCode !== 0) {
-            Cli::errors($output)->writeln(rtrim($said));
-            Cli::errors($output)->writeln('');
-            Cli::errors($output)->writeln('The installation is there and its containers did not come up.');
-
-            return 2;
+        if (!$this->ownExtension($output, $path)) {
+            return 1;
         }
 
-        $output->writeln('');
         $this->where($output, $branch, $driver);
 
         return 0;
+    }
+
+    /**
+     * Writes the project's own extension in and installs it.
+     *
+     * Here rather than in the build, because the distribution's
+     * `composer create-project` runs into this directory and refuses one that
+     * already holds `packages/`. What that costs is a second `extension:setup`
+     * after the build's own, which is seconds — `D-EVI-010`.
+     */
+    private function ownExtension(OutputInterface $output, string $path): bool
+    {
+        $output->writeln(sprintf('The extension of the project\'s own, written into %s/packages/', $path));
+        SiteExtension::write($path);
+
+        $stopped = $this->steps($output, Environments::ownExtension(), $path);
+        if ($stopped === null) {
+            return true;
+        }
+
+        Cli::errors($output)->writeln(sprintf(
+            'Stopped at "%s". The installation is there and has no table of this project in it, which is'
+            . ' what typo3_record_lookup answers for; asking for this environment again runs the step again.',
+            $stopped,
+        ));
+
+        return false;
+    }
+
+    /**
+     * Runs steps in the project, printing each one before it runs.
+     *
+     * A build that dies on step four has to say which four, so the name and
+     * the command are printed first and what the command said is quoted whole.
+     *
+     * @param array<string, list<string>> $steps
+     * @return string|null the step that stopped it, and null where none did
+     */
+    private function steps(OutputInterface $output, array $steps, string $path): ?string
+    {
+        foreach ($steps as $what => $command) {
+            $output->writeln($what);
+            $output->writeln('    ' . implode(' ', $command));
+            [$exitCode, $said] = Environments::run($command, $path);
+            if ($exitCode !== 0) {
+                Cli::errors($output)->writeln(rtrim($said));
+                Cli::errors($output)->writeln('');
+
+                return $what;
+            }
+        }
+
+        return null;
     }
 
     /** Where the environment is, and what it takes to open it. */

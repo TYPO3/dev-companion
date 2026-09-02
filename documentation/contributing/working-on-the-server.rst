@@ -87,18 +87,20 @@ the machine:
     bin/cli environment:create E-NONE      # a directory with no installation above it
 
 
-They land below ``.environments/``, which is gitignored. ``E-SITE`` is six
+They land below ``.environments/``, which is gitignored. ``E-SITE`` is a run of
 ``ddev`` commands: a TYPO3 project, its containers, TYPO3's own base
 distribution at the version asked for, the system extensions this server's
-console path asks for, and the setup that writes the database, the admin user
-and a site configuration. Minutes on a cold Composer cache, seconds on a warm
-one, and running it again finishes one that stopped halfway.
+console path asks for, the setup that writes the database, the admin user and a
+site configuration, and last the extension of the project's own — one table with
+rows in it, which a base distribution registers nothing of (``D-EVI-010``).
+Minutes on a cold Composer cache, seconds on a warm one, and running it again
+finishes one that stopped halfway.
 
 There is one installation per covered version, each its own directory and its
 own DDEV project, and the version named none is the covered stable one. Asked
-for one that is already installed the command starts its containers rather than
-building anything, so an environment is made once and kept — ``D-EVI-006``,
-which also has what one costs on disk.
+for one that is already installed the command starts its containers and puts
+that extension in rather than building anything, so an environment is made once
+and kept — ``D-EVI-006``, which also has what one costs on disk.
 
 The development line is one of them and is built differently: from the base
 distribution's ``dev-main`` at a dev stability, on PHP 8.5, because that is what

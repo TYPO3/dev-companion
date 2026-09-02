@@ -79,6 +79,12 @@ The development line is `bin/cli environment:create E-SITE main`, built from the
 base distribution's `dev-main` on PHP 8.5 because no release of either covers
 it.
 
+Each of them carries one extension of the project's own, `acme_events`, with a
+table and rows in it. A base distribution registers nothing this project owns,
+and half of what this server answers is about what it does — the rows of a table
+belonging to one of them could be recorded nowhere
+([`D-EVI-010`](../decisions/evidence/evi-010-a-made-installation-carries-an-extension-of-the-projects-own.md)).
+
 `E-EXT` is not made here: what a case needs from an extension repository is real
 infrastructure at a real revision, which no scaffold produces. `E-CORE` is
 `bin/cli checkouts:update`, and `E-STOPPED` is `E-SITE` with its project

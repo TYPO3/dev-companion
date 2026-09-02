@@ -1,14 +1,15 @@
 # EXT-02 — A new extension from nothing
 
 **Environment:** `E-SITE`, in a project where the new extension will live
-under `packages/` · **Contract:** `held` — `R-SCO-001`, `R-SCO-002`
+under `packages/`, beside the one that environment already carries ·
+**Contract:** `held` — `R-SCO-001`, `R-SCO-002`
 **Held by:** `ScopeTest::workOnAProjectExtensionIsRecognizedAsOutsideTheCore`,
 `CatalogTest::aDomainIsDerivedForAFileThatDoesNotExistYet`,
 `IconLookupTest::everyAnswerSaysTheIdentifiersAreTheBackendRegistrys`
 
-> I need a new extension `acme_events` in this project: a record type for events
-> with dates and a location, editable in the backend, listed in the frontend by a
-> plugin. Set it up from scratch.
+> I need a new extension `acme_seminars` in this project: a record type for
+> seminars with dates and a location, editable in the backend, listed in the
+> frontend by a plugin. Set it up from scratch.
 
 **What the agent needs from this server**
 

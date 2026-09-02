@@ -79,7 +79,11 @@ final class ToolRecord
         $output->writeln(sprintf('Answering from %s (TYPO3 %s)', $found, Instance::typo3Version() ?? 'unknown'));
 
         $installation = $this->consoleAnswering($output, $found);
-        $pages = ToolAnswers::rendered($today ?? ToolAnswers::day(), $found, $installation, $tools);
+        // Trimmed rather than defaulted on null alone: naming the tools means
+        // passing this argument, and the empty string that gets a caller past
+        // it wrote a page saying "Recorded on ".
+        $day = trim((string) $today) === '' ? ToolAnswers::day() : trim((string) $today);
+        $pages = ToolAnswers::rendered($day, $found, $installation, $tools);
         if (!is_dir(ToolSurface::directory())) {
             mkdir(ToolSurface::directory(), 0777, true);
         }

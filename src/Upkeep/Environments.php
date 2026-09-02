@@ -579,6 +579,33 @@ final class Environments
     }
 
     /**
+     * The steps that put this project's own extension into the installation.
+     *
+     * They run after the build and after a resume alike, so an environment
+     * made before this extension existed gains it by being asked for again.
+     * All three cost seconds and none of them is skipped on a state read from
+     * the directory: a require that is already satisfied, a setup that finds
+     * its table and a seed that finds rows each say so and change nothing,
+     * which is cheaper than a check that can be wrong — `D-EVI-010`.
+     *
+     * @return array<string, list<string>>
+     */
+    public static function ownExtension(): array
+    {
+        return [
+            'The extension of the project\'s own, out of packages/' => [
+                'ddev', 'composer', 'require', SiteExtension::PACKAGE . ':*', '--no-interaction',
+            ],
+            'Its table, which the extension setup creates' => [
+                'ddev', 'exec', 'vendor/bin/typo3', 'extension:setup',
+            ],
+            'The rows in it, where it has none yet' => [
+                'ddev', 'exec', 'php', SiteExtension::SEED,
+            ],
+        ];
+    }
+
+    /**
      * The build, as the commands in the order they are run.
      *
      * Every one of them is idempotent or forced, so a build that failed

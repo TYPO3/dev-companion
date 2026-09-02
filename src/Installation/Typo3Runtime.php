@@ -153,13 +153,14 @@ final class Typo3Runtime
      * @param int $limit rows to read, 0 for none and -1 for all of them
      * @return array{table: string, deleteField: string, hiddenField: string, labelField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>, rows: array<int, array{uid: int, pid: int, label: string, changed: int, created: int, deleted: bool, hidden: bool}>}|array{unavailable: string}|null
      */
-    public static function records(string $table, array $where, int $limit): ?array
+    public static function records(string $table, array $where, int $limit, string $groupBy = ''): ?array
     {
-        /** @var array{table: string, deleteField: string, hiddenField: string, labelField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>, rows: array<int, array{uid: int, pid: int, label: string, changed: int, created: int, deleted: bool, hidden: bool}>}|array{unavailable: string}|null $read */
+        /** @var array{table: string, deleteField: string, hiddenField: string, labelField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int, value?: mixed}>, rows: array<int, array{uid: int, pid: int, label: string, changed: int, created: int, deleted: bool, hidden: bool}>}|array{unavailable: string}|null $read */
         $read = self::asked('records', ['records' => [
             'table' => $table,
             'where' => $where,
             'limit' => $limit,
+            'groupBy' => $groupBy,
         ]]);
 
         return $read;

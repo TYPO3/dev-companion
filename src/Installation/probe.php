@@ -530,10 +530,14 @@ try {
                 return $builder;
             };
 
+            // A column the caller groups by: one call answers a distribution
+            // that was thirteen counted calls, one per value — `D-ANS-141`.
+            $groupBy = is_string($records['groupBy'] ?? null) ? $records['groupBy'] : '';
+
             $counting = $constrain($pool->getQueryBuilderForTable($wanted));
             $counting->getRestrictions()->removeAll();
             $grouped = ['pid'];
-            foreach ([$deleted, $hidden] as $flag) {
+            foreach ([$deleted, $hidden, $groupBy] as $flag) {
                 if ($flag !== '' && !in_array($flag, $grouped, true)) {
                     $grouped[] = $flag;
                 }
@@ -548,12 +552,16 @@ try {
             }
             $groups = [];
             foreach ($counting->executeQuery()->fetchAllAssociative() as $row) {
-                $groups[] = [
+                $group = [
                     'pid' => (int) ($row['pid'] ?? 0),
                     'deleted' => $deleted !== '' && (int) ($row[$deleted] ?? 0) !== 0,
                     'hidden' => $hidden !== '' && (int) ($row[$hidden] ?? 0) !== 0,
                     'rows' => (int) ($row['rowCount'] ?? 0),
                 ];
+                if ($groupBy !== '') {
+                    $group['value'] = $row[$groupBy] ?? null;
+                }
+                $groups[] = $group;
             }
 
             $rows = [];

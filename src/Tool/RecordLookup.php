@@ -75,6 +75,7 @@ final class RecordLookup extends ReadOnlyTool
                     'additionalProperties' => ['type' => ['string', 'number', 'boolean']],
                 ],
                 'count' => ['type' => 'boolean', 'description' => 'True to answer with the numbers alone and read no row. Use it where the question is how much is in there rather than what.', 'default' => false],
+                'groupBy' => ['type' => 'string', 'description' => 'One column to count per distinct value of, for example "status" or "sex". The answer then carries one line per value with how many rows carry it, which is the distribution a call per value asks thirteen times for. Combines with where, which narrows what is counted. A column the table does not have is an answer saying so.'],
                 'limit' => ['type' => 'integer', 'description' => 'How many rows to return, ordered by uid. The default is one page of the record list. Zero means every matching row, which on a full table is the whole table in one answer.', 'minimum' => 0, 'default' => self::ROWS],
             ],
         ];
@@ -96,6 +97,13 @@ final class RecordLookup extends ReadOnlyTool
                 'hidden' => Schema::integer('Rows the disable field hides. Zero where the table declares no such field.'),
                 'deleted' => Schema::integer('Rows the delete field marks. They are still in the table until the garbage collection runs.'),
             ], ['total', 'live', 'hidden', 'deleted'], 'Null where no table was read.'),
+            'groups' => Schema::listOf(Schema::object([
+                'value' => ['description' => 'The value of the grouped column, as the database stores it. Null is a row that has none, which on a select column is the empty string rather than null.'],
+                'total' => Schema::integer('Rows carrying that value, deleted and hidden included.'),
+                'live' => Schema::integer(),
+                'hidden' => Schema::integer(),
+                'deleted' => Schema::integer(),
+            ], ['value', 'total', 'live', 'hidden', 'deleted']), 'One entry per distinct value of the grouped column, the fullest first. A value with no rows is not here: the distribution is what the table holds, and a status nothing carries is read off its absence. Empty where groupBy was not passed.'),
             'pages' => Schema::listOf(Schema::object([
                 'pid' => Schema::integer('The page the rows sit on. Zero is the root, which is where records that belong to no page end up.'),
                 'total' => Schema::integer(),
@@ -117,7 +125,7 @@ final class RecordLookup extends ReadOnlyTool
                 'extension' => Schema::string('The project-owned extension whose TCA registers it.'),
             ], ['table', 'extension']), 'Every table this tool will read in this installation.'),
             'readWith' => Schema::string('What the reading was made with. Said on every answer that carries one, because a number or a row reported onwards is read as a backend user\'s view of the table unless it says otherwise.'),
-        ], ['table', 'matchCount', 'answeredBy', 'where', 'counts', 'pages', 'records', 'countable', 'readWith'], ['table']);
+        ], ['table', 'matchCount', 'answeredBy', 'where', 'counts', 'groups', 'pages', 'records', 'countable', 'readWith'], ['table']);
     }
 
     public static function answer(array $args): ToolResult
@@ -125,6 +133,7 @@ final class RecordLookup extends ReadOnlyTool
         $table = trim((string) ($args['table'] ?? ''));
         $where = is_array($args['where'] ?? null) ? $args['where'] : [];
         $counting = ($args['count'] ?? false) === true;
+        $groupBy = trim((string) ($args['groupBy'] ?? ''));
         $echoedFilter = [];
         foreach ($where as $column => $value) {
             $echoedFilter[] = ['column' => (string) $column, 'value' => $value];
@@ -150,6 +159,7 @@ final class RecordLookup extends ReadOnlyTool
             'answeredBy' => 'installation',
             'where' => $echoedFilter,
             'counts' => null,
+            'groups' => [],
             'pages' => [],
             'records' => [],
             'countable' => $countable,
@@ -193,7 +203,7 @@ final class RecordLookup extends ReadOnlyTool
             );
         }
 
-        $unknown = self::unknownColumns($table, $where);
+        $unknown = self::unknownColumns($table, $groupBy === '' ? $where : $where + [$groupBy => null]);
         if ($unknown !== []) {
             return ToolResult::create(
                 sprintf(
@@ -208,7 +218,7 @@ final class RecordLookup extends ReadOnlyTool
         }
 
         /** @var array<string, scalar> $where */
-        $read = Typo3Runtime::records($table, $where, $limit === 0 && !$counting ? -1 : $limit);
+        $read = Typo3Runtime::records($table, $where, $limit === 0 && !$counting ? -1 : $limit, $groupBy);
         if (!is_array($read) || isset($read['unavailable'])) {
             return Unsupported::because(
                 'the installation booted and could not read ' . $table . ': '
@@ -218,6 +228,7 @@ final class RecordLookup extends ReadOnlyTool
         }
 
         $pages = self::pages($read['groups']);
+        $groups = $groupBy === '' ? [] : self::grouped($read['groups']);
         $counts = [
             'total' => array_sum(array_column($pages, 'total')),
             'live' => array_sum(array_column($pages, 'live')),
@@ -248,6 +259,19 @@ final class RecordLookup extends ReadOnlyTool
                     $page['hidden'],
                     $page['deleted'],
                 ), $pages),
+                ...($groups === [] ? [] : [
+                    "\n" . sprintf('By %s, %d value(s):', $groupBy, count($groups)),
+                    ...array_map(static fn(array $group): string => sprintf(
+                        '- %s: %d rows (%d live, %d hidden, %d deleted)',
+                        is_scalar($group['value']) && (string) $group['value'] !== ''
+                            ? (string) $group['value']
+                            : '(empty)',
+                        $group['total'],
+                        $group['live'],
+                        $group['hidden'],
+                        $group['deleted'],
+                    ), $groups),
+                ]),
                 ...($read['rows'] === [] ? [] : [
                     "\n" . self::rowHeading(count($read['rows']), $counts['total'], $read),
                     ...array_map(static fn(array $row): string => sprintf(
@@ -263,6 +287,7 @@ final class RecordLookup extends ReadOnlyTool
                 'answeredBy' => 'installation',
                 'where' => $echoedFilter,
                 'counts' => $counts,
+                'groups' => $groups,
                 'pages' => $pages,
                 'records' => $read['rows'],
                 'countable' => $countable,
@@ -362,6 +387,33 @@ final class RecordLookup extends ReadOnlyTool
         usort($pages, static fn(array $one, array $other): int => [$other['total'], $one['pid']] <=> [$one['total'], $other['pid']]);
 
         return $pages;
+    }
+
+    /**
+     * The distribution of one column, out of the same grouped read.
+     *
+     * A session established one with thirteen counted calls, one per value,
+     * and said six of them would have been this — `D-ANS-141`. The probe
+     * already grouped by page and by the two state flags, so the column the
+     * caller names is a third one on the same query rather than a second read.
+     *
+     * @param array<int, array<string, mixed>> $groups
+     * @return array<int, array<string, mixed>>
+     */
+    private static function grouped(array $groups): array
+    {
+        $values = [];
+        foreach ($groups as $group) {
+            $value = $group['value'] ?? null;
+            $key = is_scalar($value) ? (string) $value : '';
+            $values[$key] ??= ['value' => $value, 'total' => 0, 'live' => 0, 'hidden' => 0, 'deleted' => 0];
+            $values[$key]['total'] += $group['rows'];
+            $state = $group['deleted'] ? 'deleted' : ($group['hidden'] ? 'hidden' : 'live');
+            $values[$key][$state] += $group['rows'];
+        }
+        usort($values, static fn(array $one, array $other): int => $other['total'] <=> $one['total']);
+
+        return $values;
     }
 
     /**

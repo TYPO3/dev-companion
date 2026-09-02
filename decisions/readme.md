@@ -98,6 +98,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-138`][D-ANS-138] — The hint corpus dilutes its outliers as it grows · 2026-09-02
 - [`D-ANS-139`][D-ANS-139] — Three tools hand over less than they read · 2026-09-02
 - [`D-ANS-140`][D-ANS-140] — A kind of work names the procedure it owes · 2026-09-02
+- [`D-ANS-141`][D-ANS-141] — A distribution is one call rather than one per value · 2026-09-02
 - [`D-ANS-127`][D-ANS-127] — Knowledge that yields a judgement is delivered where the work finishes · 2026-09-01
 - [`D-ANS-128`][D-ANS-128] — An answer's index buys recovery and its foot is read last · 2026-09-01
 - [`D-ANS-129`][D-ANS-129] — A list in an answer names the call it raises · 2026-09-01
@@ -234,6 +235,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-ANS-138]: answers/ans-138-the-hint-corpus-dilutes-its-outliers-as-it-grows.md
 [D-ANS-139]: answers/ans-139-three-tools-hand-over-less-than-they-read.md
 [D-ANS-140]: answers/ans-140-a-kind-of-work-names-the-procedure-it-owes.md
+[D-ANS-141]: answers/ans-141-a-distribution-is-one-call-rather-than-one-per-value.md
 [D-ANS-127]: answers/ans-127-knowledge-that-yields-a-judgement-is-delivered-where-the-work-finishes.md
 [D-ANS-128]: answers/ans-128-an-answers-index-buys-recovery-and-its-foot-is-read-last.md
 [D-ANS-129]: answers/ans-129-a-list-in-an-answer-names-the-call-it-raises.md

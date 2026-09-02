@@ -41,6 +41,12 @@ Takes
     # True to answer with the numbers alone and read no row. Use it where the
     # question is how much is in there rather than what.
     count: boolean  # optional
+    # One column to count per distinct value of, for example "status" or "sex". The
+    # answer then carries one line per value with how many rows carry it, which is
+    # the distribution a call per value asks thirteen times for. Combines with
+    # where, which narrows what is counted. A column the table does not have is an
+    # answer saying so.
+    groupBy: string  # optional
     # How many rows to return, ordered by uid. The default is one page of the record
     # list. Zero means every matching row, which on a full table is the whole table
     # in one answer.
@@ -79,6 +85,20 @@ Answers with
       # Rows the delete field marks. They are still in the table until the garbage
       # collection runs.
       deleted: integer
+    # One entry per distinct value of the grouped column, the fullest first. A value
+    # with no rows is not here: the distribution is what the table holds, and a
+    # status nothing carries is read off its absence. Empty where groupBy was not
+    # passed.
+    groups:  # optional
+      - # The value of the grouped column, as the database stores it. Null is a row
+        # that has none, which on a select column is the empty string rather than
+        # null.
+        value: object
+        # Rows carrying that value, deleted and hidden included.
+        total: integer
+        live: integer
+        hidden: integer
+        deleted: integer
     # One entry per page that holds a matching row, the fullest first. Empty where
     # no table was read.
     pages:  # optional
@@ -151,23 +171,25 @@ Answers with
         console: string
 
 The answer carries exactly one of these sets of fields: ``table``,
-``matchCount``, ``answeredBy``, ``where``, ``counts``, ``pages``, ``records``,
-``countable``, ``readWith`` — or ``table``, ``unsupported``.
+``matchCount``, ``answeredBy``, ``where``, ``counts``, ``groups``, ``pages``,
+``records``, ``countable``, ``readWith`` — or ``table``, ``unsupported``.
 
 Answered
 --------
 
 Recorded on 2026-09-02 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
-and neither fills the whole surface. Answered against composer-project, TYPO3
-14.3.5, the E-SITE-14.3 this repository makes below .environments/, whose
-console answers. Answered against composer-project, TYPO3 14.3.0, the
-installation this repository writes below .fixtures/, whose console answers.
-The tools that declare ``answeredBy`` carry an answer from each, under a
-heading naming which; every other answer is from the first alone, because
-nothing in it would differ. Nothing checks what is below this heading;
-everything above it is derived from the class that answers the call, and
-``bin/cli tools:check`` holds it.
+and neither fills the whole surface. Answered against core-checkout, TYPO3
+15.0.0-dev, the main core checkout below .checkouts/, whose console could not
+be reached: <installation> has no TYPO3 console — none of bin/typo3,
+vendor/bin/typo3 exists. Its dependencies are not installed —
+vendor/autoload.php is not there either, and composer install writes both.
+Answered against composer-project, TYPO3 14.3.0, the installation this
+repository writes below .fixtures/, whose console answers. The tools that
+declare ``answeredBy`` carry an answer from each, under a heading naming which;
+every other answer is from the first alone, because nothing in it would differ.
+Nothing checks what is below this heading; everything above it is derived from
+the class that answers the call, and ``bin/cli tools:check`` holds it.
 
 records: a table of this project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -180,40 +202,14 @@ Called with:
         "table": "tx_acme_events_event"
     }
 
-From the E-SITE-14.3 environment
-""""""""""""""""""""""""""""""""
+From the main core checkout
+"""""""""""""""""""""""""""
 
 Text:
 
 .. code-block:: text
 
-    tx_acme_events_event holds 125 rows: 120 live, 3 hidden, 2 deleted.
-    The fullest page holds 125, which is 7 pages of the record list at 20 rows each. An editor maintaining that through the generic list has no filtering and no search over it, so this is where a backend module of its own is the question — typo3_backend_module_lookup reports what this installation already registers.
-    Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.
-
-    - pid 1: 125 rows (120 live, 3 hidden, 2 deleted)
-
-    The first 20 of them by uid, labelled by title:
-    - [1] Live event 001
-    - [2] Live event 002
-    - [3] Live event 003
-    - [4] Live event 004
-    - [5] Live event 005
-    - [6] Live event 006
-    - [7] Live event 007
-    - [8] Live event 008
-    - [9] Live event 009
-    - [10] Live event 010
-    - [11] Live event 011
-    - [12] Live event 012
-    - [13] Live event 013
-    - [14] Live event 014
-    - [15] Live event 015
-    - [16] Live event 016
-    - [17] Live event 017
-    - [18] Live event 018
-    - [19] Live event 019
-    - [20] Live event 020
+    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
 Data:
 
@@ -221,213 +217,20 @@ Data:
 
     {
         "table": "tx_acme_events_event",
-        "matchCount": 125,
-        "answeredBy": "installation",
-        "where": [],
-        "counts": {
-            "total": 125,
-            "live": 120,
-            "hidden": 3,
-            "deleted": 2
-        },
-        "pages": [
-            {
-                "pid": 1,
-                "total": 125,
-                "live": 120,
-                "hidden": 3,
-                "deleted": 2
+        "unsupported": {
+            "cause": "installation-not-answering",
+            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+            "repositoryState": "installed",
+            "diagnosis": "",
+            "searched": [
+                "<installation>"
+            ],
+            "misconfiguration": null,
+            "settings": {
+                "root": "TYPO3_DEV_COMPANION_ROOT",
+                "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        ],
-        "records": [
-            {
-                "uid": 1,
-                "pid": 1,
-                "label": "Live event 001",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 2,
-                "pid": 1,
-                "label": "Live event 002",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 3,
-                "pid": 1,
-                "label": "Live event 003",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 4,
-                "pid": 1,
-                "label": "Live event 004",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 5,
-                "pid": 1,
-                "label": "Live event 005",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 6,
-                "pid": 1,
-                "label": "Live event 006",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 7,
-                "pid": 1,
-                "label": "Live event 007",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 8,
-                "pid": 1,
-                "label": "Live event 008",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 9,
-                "pid": 1,
-                "label": "Live event 009",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 10,
-                "pid": 1,
-                "label": "Live event 010",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 11,
-                "pid": 1,
-                "label": "Live event 011",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 12,
-                "pid": 1,
-                "label": "Live event 012",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 13,
-                "pid": 1,
-                "label": "Live event 013",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 14,
-                "pid": 1,
-                "label": "Live event 014",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 15,
-                "pid": 1,
-                "label": "Live event 015",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 16,
-                "pid": 1,
-                "label": "Live event 016",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 17,
-                "pid": 1,
-                "label": "Live event 017",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 18,
-                "pid": 1,
-                "label": "Live event 018",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 19,
-                "pid": 1,
-                "label": "Live event 019",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            },
-            {
-                "uid": 20,
-                "pid": 1,
-                "label": "Live event 020",
-                "changed": 1788330520,
-                "created": 1788330520,
-                "deleted": false,
-                "hidden": false
-            }
-        ],
-        "countable": [
-            {
-                "table": "tx_acme_events_event",
-                "extension": "acme_events"
-            }
-        ],
-        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+        }
     }
 
 From the fixture installation
@@ -473,18 +276,14 @@ Called with:
         "count": true
     }
 
-From the E-SITE-14.3 environment
-""""""""""""""""""""""""""""""""
+From the main core checkout
+"""""""""""""""""""""""""""
 
 Text:
 
 .. code-block:: text
 
-    tx_acme_events_event holds 125 rows: 120 live, 3 hidden, 2 deleted.
-    The fullest page holds 125, which is 7 pages of the record list at 20 rows each. An editor maintaining that through the generic list has no filtering and no search over it, so this is where a backend module of its own is the question — typo3_backend_module_lookup reports what this installation already registers.
-    Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.
-
-    - pid 1: 125 rows (120 live, 3 hidden, 2 deleted)
+    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
 Data:
 
@@ -492,32 +291,20 @@ Data:
 
     {
         "table": "tx_acme_events_event",
-        "matchCount": 125,
-        "answeredBy": "installation",
-        "where": [],
-        "counts": {
-            "total": 125,
-            "live": 120,
-            "hidden": 3,
-            "deleted": 2
-        },
-        "pages": [
-            {
-                "pid": 1,
-                "total": 125,
-                "live": 120,
-                "hidden": 3,
-                "deleted": 2
+        "unsupported": {
+            "cause": "installation-not-answering",
+            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+            "repositoryState": "installed",
+            "diagnosis": "",
+            "searched": [
+                "<installation>"
+            ],
+            "misconfiguration": null,
+            "settings": {
+                "root": "TYPO3_DEV_COMPANION_ROOT",
+                "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        ],
-        "records": [],
-        "countable": [
-            {
-                "table": "tx_acme_events_event",
-                "extension": "acme_events"
-            }
-        ],
-        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+        }
     }
 
 From the fixture installation
@@ -562,15 +349,14 @@ Called with:
         "table": "tt_content"
     }
 
-From the E-SITE-14.3 environment
-""""""""""""""""""""""""""""""""
+From the main core checkout
+"""""""""""""""""""""""""""
 
 Text:
 
 .. code-block:: text
 
-    "tt_content" is not read here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
-    What it does read: tx_acme_events_event.
+    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
 Data:
 
@@ -578,19 +364,20 @@ Data:
 
     {
         "table": "tt_content",
-        "matchCount": 0,
-        "answeredBy": "installation",
-        "where": [],
-        "counts": null,
-        "pages": [],
-        "records": [],
-        "countable": [
-            {
-                "table": "tx_acme_events_event",
-                "extension": "acme_events"
+        "unsupported": {
+            "cause": "installation-not-answering",
+            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+            "repositoryState": "installed",
+            "diagnosis": "",
+            "searched": [
+                "<installation>"
+            ],
+            "misconfiguration": null,
+            "settings": {
+                "root": "TYPO3_DEV_COMPANION_ROOT",
+                "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        ],
-        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+        }
     }
 
 From the fixture installation
@@ -613,6 +400,7 @@ Data:
         "answeredBy": "installation",
         "where": [],
         "counts": null,
+        "groups": [],
         "pages": [],
         "records": [],
         "countable": [
@@ -633,36 +421,35 @@ Called with:
 
     {}
 
-From the E-SITE-14.3 environment
-""""""""""""""""""""""""""""""""
+From the main core checkout
+"""""""""""""""""""""""""""
 
 Text:
 
 .. code-block:: text
 
-    This project's own extensions register 1 tables. Name one to read what is in it.
-
-    - tx_acme_events_event (acme_events)
+    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
 Data:
 
 .. code-block:: json
 
     {
-        "matchCount": 1,
         "table": null,
-        "answeredBy": "installation",
-        "where": [],
-        "counts": null,
-        "pages": [],
-        "records": [],
-        "countable": [
-            {
-                "table": "tx_acme_events_event",
-                "extension": "acme_events"
+        "unsupported": {
+            "cause": "installation-not-answering",
+            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+            "repositoryState": "installed",
+            "diagnosis": "",
+            "searched": [
+                "<installation>"
+            ],
+            "misconfiguration": null,
+            "settings": {
+                "root": "TYPO3_DEV_COMPANION_ROOT",
+                "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        ],
-        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+        }
     }
 
 From the fixture installation
@@ -686,6 +473,7 @@ Data:
         "answeredBy": "installation",
         "where": [],
         "counts": null,
+        "groups": [],
         "pages": [],
         "records": [],
         "countable": [

@@ -66,6 +66,47 @@ final class RecordLookupTest extends TestCase
         self::assertStringContainsString('typo3_backend_module_lookup', $result->text);
     }
 
+    /**
+     * A distribution in one call, where it was thirteen counted ones.
+     *
+     * A session established what 3,101 animals were by status and by which of
+     * three columns were empty with one counted call per value, and said six
+     * of the thirteen would have been this — `D-ANS-141`. The probe already
+     * grouped by page and by the two state flags, so the column the caller
+     * names is a third one on the same query.
+     */
+    #[Decision('D-ANS-141')]
+    #[Test]
+    public function oneColumnIsCountedPerValueInOneCall(): void
+    {
+        $this->reading([
+            ['pid' => 2, 'deleted' => false, 'hidden' => false, 'rows' => 2997, 'value' => 'adopted'],
+            ['pid' => 2, 'deleted' => false, 'hidden' => true, 'rows' => 3, 'value' => 'adopted'],
+            ['pid' => 2, 'deleted' => false, 'hidden' => false, 'rows' => 69, 'value' => 'adoption'],
+            ['pid' => 2, 'deleted' => false, 'hidden' => false, 'rows' => 1, 'value' => 'permanent'],
+        ]);
+
+        $result = Registry::call('typo3_record_lookup', [
+            'table' => 'tx_acme_thing',
+            'groupBy' => 'status',
+            'count' => true,
+        ]);
+
+        self::assertSame(
+            [
+                ['value' => 'adopted', 'total' => 3000, 'live' => 2997, 'hidden' => 3, 'deleted' => 0],
+                ['value' => 'adoption', 'total' => 69, 'live' => 69, 'hidden' => 0, 'deleted' => 0],
+                ['value' => 'permanent', 'total' => 1, 'live' => 1, 'hidden' => 0, 'deleted' => 0],
+            ],
+            $result->data['groups'],
+        );
+        self::assertStringContainsString('By status, 3 value(s):', $result->text);
+        self::assertStringContainsString('- adopted: 3000 rows', $result->text);
+
+        // The pages are the same read and are answered as well.
+        self::assertSame(3070, $result->data['counts']['total']);
+    }
+
     #[Decision('D-AUD-017')]
     #[Test]
     public function aTableOneScreenLongAsksForNothing(): void

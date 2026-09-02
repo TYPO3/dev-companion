@@ -8,14 +8,15 @@ namespace TYPO3\DevCompanion\Installation;
  * The globally registered Fluid namespaces, read from the packages that declare
  * them.
  *
- * `fluid:namespaces` is the better answer and stays the first one asked, because
- * it reports what the container actually assembled. But it needs a console that
+ * On TYPO3 v14 and later, `fluid:namespaces` is the better answer because it
+ * reports what the container actually assembled. But it needs a console that
  * boots, and the declaration itself is a file: every package may ship a
  * Configuration/Fluid/Namespaces.php returning prefix => list of PHP namespaces,
  * and the core merges them across all active packages.
  *
  * The files are parsed, never included — the same rule as for the icon registry.
- * They are ordinary PHP that would run in this process.
+ * They are ordinary PHP that would run in this process. Earlier TYPO3 versions
+ * register these namespaces in TYPO3_CONF_VARS and have no such file.
  */
 final class FluidNamespaces
 {

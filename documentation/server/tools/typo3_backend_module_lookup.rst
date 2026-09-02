@@ -25,6 +25,14 @@ Takes
     # Module identifier, label, route, navigation component, or extension name to
     # filter by. Omit to list every module.
     query: string  # optional
+    # A Configuration/Backend/Modules.php to check instead of listing the registry:
+    # which parent and which iconIdentifier it names that this installation does not
+    # have. Answered without a cache flush and without the file being saved into an
+    # installation, which is what the registry needs before it can say anything. The
+    # file is read as text and nothing in it is executed, so a value a variable or a
+    # constant computes is reported as unresolvable rather than followed. Not with
+    # query.
+    file: string  # optional
 
 Answers with
 ------------
@@ -35,6 +43,28 @@ Answers with
     matchCount: integer  # optional
     # One of: installation. installation: its assembled runtime state answered.
     answeredBy: string  # optional
+    # One entry per module the named file declares, in the order it declares them.
+    # Empty where no file was named.
+    checked:  # optional
+      - # The module the file declares, as its key spells it.
+        identifier: string
+        # The parent it names. Empty where it names none, which makes it a
+        # first-level module and registers no route unless it also declares
+        # standalone.
+        parent: string
+        # Whether this installation has a module under that identifier. Null where
+        # the entry names no parent, and null where the value was not a plain string
+        # in the file.
+        parentRegistered: boolean or null
+        # The icon it names. Empty where it names none.
+        iconIdentifier: string
+        # Whether that identifier is registered here. Null where the entry names no
+        # icon, and null where the value was not a plain string.
+        iconRegistered: boolean or null
+        # The translation domain or LLL reference it names, as written. Not
+        # resolved: a domain resolves once the module is registered, which is the
+        # state this call exists to precede.
+        labels: string
     modules:  # optional
       - identifier: string
         # The modules it sits under, outermost first.
@@ -104,12 +134,13 @@ Answers with
         console: string
 
 The answer carries exactly one of these sets of fields: ``query``,
-``matchCount``, ``answeredBy``, ``modules`` — or ``query``, ``unsupported``.
+``matchCount``, ``answeredBy``, ``modules``, ``checked`` — or ``query``,
+``unsupported``.
 
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-02 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
 15.0.0-dev, the main core checkout below .checkouts/, whose console could not
@@ -267,5 +298,6 @@ Data:
                 "routes": []
             }
         ],
+        "checked": [],
         "answeredBy": "installation"
     }

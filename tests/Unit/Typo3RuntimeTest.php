@@ -13,8 +13,10 @@ use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Installation\Typo3Runtime;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Process\CommandRunner;
+use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Directory;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
+use TYPO3\DevCompanion\Tool\Registry;
 use TYPO3\DevCompanion\Upkeep\Fixture;
 
 /**
@@ -216,6 +218,50 @@ final class Typo3RuntimeTest extends TestCase
         self::assertSame(['web_list', 'web_list.detail'], array_column($routes, 'identifier'));
         self::assertSame(['/module/web/list', '/module/web/list/detail'], array_column($routes, 'path'));
         self::assertSame([], $topic['modules'][0]['routes'], 'a first-level module registers none');
+    }
+
+    /**
+     * The half a registration file can be checked in without being installed.
+     *
+     * Five registration mistakes in one session were each caught by an
+     * installation that had already been rebuilt, and the cycle was: edit,
+     * flush the cache, ask the registry — `D-FBK-055`. Parent and icon fail
+     * when a user opens the module and never when the file is read.
+     */
+    #[Decision('D-FBK-055')]
+    #[Test]
+    public function aRegistrationFileIsCheckedBeforeItIsInstalled(): void
+    {
+        $root = $this->installationWithAConsole();
+        Fixture::bootsInto($root, modules: [
+            'content' => ['path' => '/module/content'],
+        ], icons: ['module-shelter' => 'EXT:animalshelter/Resources/Public/Icons/shelter.svg']);
+        $this->discover($root);
+
+        $file = $root . '/Modules.php';
+        file_put_contents($file, "<?php\n\nreturn [\n"
+            . "    'animalshelter_animals' => [\n"
+            . "        'parent' => 'content',\n"
+            . "        'iconIdentifier' => 'module-shelter',\n"
+            . "        'labels' => 'animalshelter.modules.animals',\n"
+            . "    ],\n"
+            . "    'animalshelter_stray' => [\n"
+            . "        'parent' => 'nothing_registers_this',\n"
+            . "        'iconIdentifier' => 'module-nothing-registers-this',\n"
+            . "    ],\n"
+            . "];\n");
+
+        $result = Registry::call('typo3_backend_module_lookup', ['file' => $file]);
+        $checked = array_column($result->data['checked'], null, 'identifier');
+
+        self::assertTrue($checked['animalshelter_animals']['parentRegistered']);
+        self::assertTrue($checked['animalshelter_animals']['iconRegistered']);
+        self::assertSame('animalshelter.modules.animals', $checked['animalshelter_animals']['labels']);
+
+        self::assertFalse($checked['animalshelter_stray']['parentRegistered']);
+        self::assertFalse($checked['animalshelter_stray']['iconRegistered']);
+        self::assertStringContainsString('NOT registered here', $result->text);
+        self::assertStringContainsString('nothing in the file was executed', $result->text);
     }
 
     #[Test]

@@ -3,6 +3,8 @@ id: D-FBK-055
 title: A registration file is checked after the cache flush or not at all
 date: 2026-09-02
 status: open
+coveredBy:
+  - Typo3RuntimeTest::aRegistrationFileIsCheckedBeforeItIsInstalled
 ---
 
 # D-FBK-055 — A registration file is checked after the cache flush or not at all

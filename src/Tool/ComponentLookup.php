@@ -224,13 +224,16 @@ final class ComponentLookup extends ReadOnlyTool
         if ($components === []) {
             return ToolResult::create(
                 sprintf(
-                    "%sNo TYPO3 component%s matched \"%s\". Try a component name (badge, card), a class (input-group), or a topic (search box). %s\n%s%s%s",
+                    "%sNo TYPO3 component%s matched \"%s\". Try a component name (badge, card), a class (input-group), or a topic (search box).%s\n%s%s%s",
                     $elementNote === '' ? '' : $elementNote . "\n\n",
                     $withheld === [] ? '' : sprintf(' verified on TYPO3 v%d', (int) $target),
                     (string) $query,
+                    // Nothing on the bundled side: the snapshot line below says
+                    // what the snapshot is, what a miss on it means and how to
+                    // check it — D-CAT-010.
                     $installed
-                        ? 'The installed packages were checked, but the searchable component index remains curated; inspect the installed backend CSS for an uncatalogued class.'
-                        : Provenance::MISS_NOTE,
+                        ? ' The installed packages were checked, but the searchable component index remains curated; inspect the installed backend CSS for an uncatalogued class.'
+                        : '',
                     $withheldNote === '' ? '' : $withheldNote . "\n",
                     $coveredNote === '' ? '' : "\n" . $coveredNote . "\n\n",
                     $sourceNote,

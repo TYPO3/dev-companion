@@ -468,6 +468,35 @@ final class CatalogTest extends TestCase
         self::assertNotSame([], Components::find('input-group'));
     }
 
+    /**
+     * A miss that says "not in this snapshot" says how to check the snapshot in
+     * the same breath, rather than naming a second call for it — `D-CAT-010`.
+     * The catalog scope keeps the questions no answer carries: what each
+     * catalog holds, how many entries it has, and the system extension catalog,
+     * which no component answer reports on at all.
+     */
+    #[Decision('D-CAT-010')]
+    #[Test]
+    public function aCatalogMissCarriesItsOwnRecheck(): void
+    {
+        $result = Registry::call('typo3_component_lookup', ['query' => 'a component nothing here is called']);
+
+        self::assertSame(0, $result->data['matchCount']);
+        self::assertNotSame('', $result->data['catalog']['verifyCommand']);
+        self::assertStringNotContainsString(
+            'typo3_snapshot_scope',
+            $result->text,
+            'the miss sends the caller on a round trip for what it carries',
+        );
+
+        // What the scope answers that no component answer does. The tool was
+        // proposed for retirement on the reading that it adds only a command
+        // and a count, which measured it against the component catalog alone.
+        $scope = Registry::call('typo3_snapshot_scope', []);
+        self::assertArrayHasKey('systemExtensions', $scope->data['scope']);
+        self::assertArrayHasKey('systemExtensions', $scope->data['counts']);
+    }
+
     #[Requirement('R-ANS-003')]
     #[Test]
     public function aStatedVersionSaysWhatItDidToTheAnswer(): void

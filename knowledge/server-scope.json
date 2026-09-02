@@ -446,7 +446,7 @@
     {
       "topic": "Whether an uncatalogued component or CSS class exists on your branch",
       "why": "The active installation supplies the contract for curated component entries, but the searchable index is deliberately a subset rather than every class in backend.css. Without an installation, even those entries fall back to one pinned core snapshot.",
-      "instead": "Call typo3_snapshot_scope to see which source answered, then inspect the installed backend CSS or the target checkout when the class is outside the curated index."
+      "instead": "The component answer already says which source supplied the contract, which core revision the bundled snapshot was taken from and the command that re-checks it. Inspect the installed backend CSS, or the target checkout, for a class outside the curated index."
     },
     {
       "topic": "Gerrit beyond what an anonymous read answers: the hunks of a patch set, a draft comment nobody published, what CI did beyond the line its bot posted, and anything a private change carries",

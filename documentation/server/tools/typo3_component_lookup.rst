@@ -186,6 +186,8 @@ Answers with
       # Core revision the catalogs were taken from.
       commit: string
       verifiedAt: string
+      # The command that re-checks the snapshot against a core checkout.
+      verifyCommand: string  # optional
       # TYPO3 version of the installation this server was started in, where there is
       # one. Null means there was nothing to compare the snapshot with.
       installedVersion: string or null  # optional

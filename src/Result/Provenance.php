@@ -18,9 +18,6 @@ use TYPO3\DevCompanion\Knowledge\Versions;
  */
 final class Provenance
 {
-    /** Appended when a catalog lookup finds nothing at all. */
-    public const MISS_NOTE = 'Call typo3_snapshot_scope for what this snapshot covers.';
-
     /** Which of the two sources supplied the class and custom-property contract. */
     public static function sourceNote(bool $installed): string
     {
@@ -161,6 +158,10 @@ final class Provenance
             'version' => $meta['source']['version'],
             'commit' => $meta['source']['commit'],
             'verifiedAt' => $meta['verifiedAt'],
+            // The one thing a miss sent the caller to typo3_snapshot_scope for.
+            // It travels with the pin instead, so an answer that says "not in
+            // this snapshot" says how to check the snapshot in the same breath.
+            'verifyCommand' => $meta['verifyCommand'],
             // Both numbers were known and never contrasted. They travel
             // together now, in every answer that carries the pin at all.
             'installedVersion' => Instance::typo3Version(),

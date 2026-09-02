@@ -450,6 +450,7 @@ final class Schema
             'version' => self::string('TYPO3 version of the snapshot.'),
             'commit' => self::string('Core revision the catalogs were taken from.'),
             'verifiedAt' => self::string(),
+            'verifyCommand' => self::string('The command that re-checks the snapshot against a core checkout.'),
             'installedVersion' => self::nullableString('TYPO3 version of the installation this server was started in, where there is one. Null means there was nothing to compare the snapshot with.'),
             'skew' => self::nullableString('Set when that installation and the snapshot are different TYPO3 majors, and what to do about it. Null when they agree or nothing is known.'),
         ], ['branch', 'version', 'commit', 'verifiedAt'], 'The core revision behind catalog answers, and how it relates to the installation being read. A miss means "not in this snapshot".');

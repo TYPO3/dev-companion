@@ -1043,7 +1043,7 @@ final class SkillTest extends TestCase
             'A changelog records change events, so a pattern nothing has touched for ten majors has no entry at all',
             self::flat($base),
         );
-        self::assertStringContainsString('"Does this still work in version N"', $base);
+        self::assertStringContainsString('"Does this still work in version N"', self::flat($base));
 
         // And the half that keeps the routing honest. The same review's second
         // instance — an ext_localconf.php content-rendering registration — is a

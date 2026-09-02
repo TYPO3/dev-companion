@@ -91,11 +91,11 @@ skip the ones that matter too.
    is opened, which is why it is a step of the order rather than something the
    reading stumbles into.
 
-   A changelog records change events, so a pattern nothing has touched for ten
-   majors has no entry at all. An empty sweep is therefore not an answer about
-   what still works. "Does this still work in version N" goes to
-   `typo3_documentation_lookup` at that version — here, and whenever the reading
-   raises it again.
+   **What its silence is worth.** A changelog records change events, so a
+   pattern nothing has touched for ten majors has no entry at all. An empty
+   sweep is therefore not an answer about what still works. "Does this still
+   work in version N" goes to `typo3_documentation_lookup` at that version —
+   here, and whenever the reading raises it again.
 
    That is a question for a documented surface — a ViewHelper, a TCA type, a
    TypoScript setting. The manual matches page titles and section paths, never
@@ -106,21 +106,21 @@ skip the ones that matter too.
    class below. Where the manual has no page for a surface either, that is a
    result and not an answer. Undocumented is not unsupported.
 
-   A package declaring more than one major asks a second question of every
-   deprecation the sweep returns: whether the replacement is on the lower one.
-   The entry's `issue` is a query of its own, and it reaches every entry filed
-   under that number. The Feature the core announced the replacement in is among
-   them, and the version it was released in is what settles that question. Where
-   the number reaches no sibling, nothing wrote an entry for the replacement,
-   and `typo3_rule_lookup` with
+   **A second declared major.** A package declaring more than one asks a second
+   question of every deprecation the sweep returns: whether the replacement is
+   on the lower one. The entry's `issue` is a query of its own, and it reaches
+   every entry filed under that number. The Feature the core announced the
+   replacement in is among them, and the version it was released in is what
+   settles that question. Where the number reaches no sibling, nothing wrote an
+   entry for the replacement, and `typo3_rule_lookup` with
    `documentId="extension/compatibility/a-declared-major-that-is-not-installed"`
    is the reading that closes it.
 
-   A task that produces no change does not reach this step at all. The property
-   is what the task produces, and a triage, a reproduction and a review are
-   illustrations of it rather than the list it is read off. The sweep asks what
-   a package will have to stop calling, and a task that writes nothing is not
-   going to call anything.
+   **Where the sweep is not owed.** A task that produces no change does not
+   reach this step at all. The property is what the task produces, and a triage,
+   a reproduction and a review are illustrations of it rather than the list it
+   is read off. The sweep asks what a package will have to stop calling, and a
+   task that writes nothing is not going to call anything.
 
    The exemption ends where the workflow produces a change. A review asked to
    make the change is that other workflow, and it starts this order again

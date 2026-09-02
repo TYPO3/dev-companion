@@ -10,12 +10,13 @@ arrival; that a session given a focused prompt actually writes the whole list
 and reads only part of it is **not guarded**, because no recorded run has ever
 been given a focused prompt. This case is what measures it.
 
-**Read 2026-08-19, and repaired the same day:** `review only` and
-`security review` are needles of the `audit` intent now, so the prompt below
-confirms it and the guide names the workflow this case is written about. What
-was measured before that: the prompt reached no skill at all, with `Classes/`
-and a template path, so the narrowing this case is written about is measured
-after a route that does not happen. `D-GUI-015` carries the measurement.
+**Read 2026-09-02:** the skill still writes the surface list before a file is
+opened, still marks what the request left out **not requested** on that same
+list, and still closes on it with assessed, unassessed and not requested kept
+apart and none of the three reading as clean. Repaired on 2026-08-19:
+`review only` and `security review` became needles of the `audit` intent,
+because the prompt below reached no skill at all and the narrowing was being
+measured after a route that does not happen — `D-GUI-015`.
 
 > Go over the security of this extension — anything an editor or a visitor
 > could reach that we have not thought about. Just security for now, with

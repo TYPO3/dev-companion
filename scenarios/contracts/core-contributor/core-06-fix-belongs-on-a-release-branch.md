@@ -1,16 +1,19 @@
 # CORE-06 — The fix belongs on a release branch
 
 **Environment:** `E-CORE`, checked out on a release branch · **Contract:**
-`open` — `R-AUD-004`
+`held` — `R-AUD-004`
 **Held by:** `VersionsTest::aStatedVersionWinsOverTheInstallationBeingRead`,
 `CatalogTest::aComponentNotVerifiedOnTheTargetIsDeclined`;
 that a release-branch patch changes trailer and refspec is not guarded
-(`R-AUD-004` open)
 
-**Read 2026-08-19:** `R-AUD-004` is `held` today, so the `open` beside it above
-is stale, and the push itself is answered by the corpus `R-KNW-057` holds. What
-stays unguarded is that a session changes trailer and refspec when the patch
-goes to the branch directly.
+**Read 2026-09-02, and repaired:** the state above said `open` because
+`R-AUD-004` was, and that requirement is `held`, so the state is `held` and the
+parenthesis behind it is gone. The push is answered by the corpus `R-KNW-057`
+holds: `core/contribution/gerrit-workflow` gives the refspec and the rule that a
+release branch is pushed to only where the bug is not on `main`, and
+`core/contribution/commit-messages` says `Releases:` names the branches a patch
+targets. What stays unguarded is that a session changes trailer and refspec when
+the patch goes to the branch directly.
 
 > This bug only exists on 13.4, on main the code was rewritten and the problem is
 > gone. Prepare the patch for 13.4 and tell me what is different about pushing it

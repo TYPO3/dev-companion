@@ -11,19 +11,15 @@ the prompt below to the intent it is about rather than to a brief that names it;
 that a session actually hands over at that point is not guarded, and this case
 read by hand is what stands in for it (`D-EVI-002`)
 
-**Read 2026-08-19, and repaired the same day:** the prompt below was answered
-with the audit workflow, because `audit` fired on `reviewing` inside the subject
-the module is built for. The gerund is three needles now — `reviewing the`,
-`reviewing this`, `reviewing my` — so the word reaches the intent only where the
-thing being reviewed follows it.
-
-**And the second half the same day:** "document the public workflow" reached no
-documentation intent, because the only intent naming
-`typo3-extension-documentation` was `changelog`, whose checklist is the core's
-release artifact. `documentation` is an intent of its own since `D-SKL-066`, so
-the prompt confirms `backend-module` and `documentation`, and the brief names
-both workflows in the order the catalog holds them rather than in the order the
-task does them.
+**Read 2026-09-02:** the backend-module workflow still stops itself where the
+documentation begins — it names `typo3-extension-documentation`, invokes it
+before a documentation file is edited, and carries the extension key, the target
+version and the verified public behaviour across. Repaired on 2026-08-19 in two
+halves: the gerund became three needles — `reviewing the`, `reviewing this`,
+`reviewing my` — so `audit` no longer fires on the subject the module is built
+for, and `documentation` became an intent of its own (`D-SKL-066`), because
+"document the public workflow" had reached only `changelog`, whose checklist is
+the core's release artifact.
 
 > Add a backend module for reviewing imported records, including the module
 > shell, status list and refresh action. Once it works, document the public

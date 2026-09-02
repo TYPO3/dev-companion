@@ -5,9 +5,11 @@
 `CommitMessageTest::deprecationRulesAreEnforced`; what an upgrade wizard looks
 like is the thin part `R-KNW-001` names and is not guarded
 
-**Read 2026-08-19:** `R-KNW-001` is `held` and the `upgrade-wizards` hint
-answers `hints:probe "upgrade wizard for a deprecated api"`, so the thin part
-has a hint to reach. That a session writes the wizard is unguarded as before.
+**Read 2026-09-02:** `R-KNW-001` is `held`, and
+`bin/cli hints:probe "upgrade wizard for a deprecated api"` still reaches
+`upgrade-wizards` through the curated vocabulary, behind `deprecated-apis` and
+`installation-upgrade`. So the thin part has a hint to reach. That a session
+writes the wizard is unguarded as before.
 
 > `\TYPO3\CMS\Core\Utility\GeneralUtility::getUrl()` should go away in favour of
 > the request factory. Deprecate it properly for the next major, including

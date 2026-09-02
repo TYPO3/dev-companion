@@ -13,10 +13,13 @@ asking for a cause and no change is answered with what finding one needs rather
 than with the workflow that writes a patch. That the session then reaches the
 cause is **not guarded**, because nothing short of a run on `E-SITE` reads it.
 
-**Read 2026-08-21:** the `diagnosis` intent and the brief behind it were built,
-so the request is recognized as the shape it is instead of by the subject it
-names. What is still owed is the run — `D-SKL-065`'s first **Wrong if** is a
-session that has the route and hand-reads its way past both owners anyway.
+**Read 2026-09-02:** the `diagnosis` intent still changes nothing and still
+opens on what the installation wrote down rather than on what it rendered, by
+`typo3_hint_lookup` with id=installation-exception-output. It was built on
+2026-08-21, so the request is recognized as the shape it is instead of by the
+subject it names. What is still owed is the run — `D-SKL-065`'s first **Wrong
+if** is a session that has the route and hand-reads its way past both owners
+anyway.
 
 > One page on our site answers with an error instead of rendering, and the rest
 > of it is fine. Work out what is causing it and where. Don't change anything

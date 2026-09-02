@@ -11,13 +11,13 @@ of the words below, which is what the two briefs above cannot. That a session
 checks the event is dispatched before writing a listener for it is **not
 guarded**, and this case measures it.
 
-**Read 2026-08-19, and repaired the same day:** the prompt below reached
-nothing. It detected no intent, and `typo3_task_guide` answered the events hint
-only where the caller already passed `Classes/EventListener/` — not with no
-path, not with `Classes/`, not with `ext_localconf.php`. The needles were the
-mechanism and the prompt names the goal, so the goal is three of them now —
-`without overriding`, `instead of overriding`, `do not want to override` — and
-the prompt confirms `event-listener`: `D-GUI-015`.
+**Read 2026-09-02:** the `event-listener` intent still opens on the check this
+case measures — find the event that is really dispatched before writing a
+listener for it, because one bound to an event nothing dispatches never runs and
+raises nothing. Repaired on 2026-08-19: the prompt below reached nothing, so the
+goal became three needles of its own — `without overriding`,
+`instead of overriding`, `do not want to override` — and the prompt confirms the
+intent since (`D-GUI-015`).
 
 > Our extension has to add a line to the mail that the core sends after a
 > registration. I do not want to override the class that sends it.

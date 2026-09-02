@@ -83,6 +83,11 @@ final class Components
                 'examples' => array_map('strval', $entry['examples'] ?? []),
                 'sassPath' => $sassPaths[0] ?? null,
                 'sassPaths' => $sassPaths,
+                // Which module drives the component is curated; what that
+                // module reads off the markup is derived from the installed
+                // file — `D-ANS-139`.
+                'jsModule' => isset($entry['jsModule']) ? (string) $entry['jsModule'] : null,
+                'dataAttributes' => [],
                 'demoPath' => isset($entry['demoPath']) ? (string) $entry['demoPath'] : null,
                 'demoSelector' => isset($entry['demoSelector']) ? (string) $entry['demoSelector'] : null,
                 // The entry's say that its demo shows the component nowhere

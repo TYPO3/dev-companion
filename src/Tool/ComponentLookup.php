@@ -62,6 +62,7 @@ final class ComponentLookup extends ReadOnlyTool
                 'modifiers' => Schema::listOf(Schema::string()),
                 'subComponents' => Schema::listOf(Schema::string()),
                 'customProperties' => Schema::listOf(Schema::string()),
+                'dataAttributes' => Schema::listOf(Schema::string(), 'The data attributes the component\'s own JavaScript module reads off its markup, derived from that module in the installed packages. The classes are what it is styled by and these are what it is driven by, and a wrong one fails silently in a browser rather than raising. Empty for a component no module drives, and empty for every component where the bundled catalog answered — the module is read from the installation or not at all.'),
                 'markup' => Schema::string('Canonical markup of the component.'),
                 'examples' => Schema::listOf(Schema::string()),
                 'sassPath' => Schema::nullableString('Primary Sass source in the core checkout; null for a web component that carries its own styles.'),
@@ -330,6 +331,7 @@ final class ComponentLookup extends ReadOnlyTool
             $appendList('Modifiers', $keep($c['modifiers']));
             $appendList('Sub-components', $keep($c['subComponents']));
             $appendList('Custom properties', $c['customProperties']);
+            $appendList('Data attributes its module reads', $c['dataAttributes'] ?? []);
             if (($c['_installed'] ?? false) === true) {
                 $cataloguedClasses = array_merge(
                     [$c['rootClass']],
@@ -425,6 +427,7 @@ final class ComponentLookup extends ReadOnlyTool
                     'modifiers' => $keep($c['modifiers']),
                     'subComponents' => $keep($c['subComponents']),
                     'customProperties' => $c['customProperties'],
+                    'dataAttributes' => $c['dataAttributes'] ?? [],
                     'markup' => $c['markup'],
                     'examples' => $c['examples'],
                     'sassPath' => $c['sassPath'],

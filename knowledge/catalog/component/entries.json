@@ -448,7 +448,8 @@
       "Build/Sources/Sass/component/_dropdown.scss"
     ],
     "since": 13,
-    "classesSince": 13
+    "classesSince": 13,
+    "jsModule": "EXT:backend/Resources/Public/JavaScript/dropdown.js"
   },
   {
     "name": "form",
@@ -804,7 +805,8 @@
       "Build/Sources/Sass/component/_modal.scss"
     ],
     "since": 14,
-    "classesSince": 14
+    "classesSince": 14,
+    "jsModule": "EXT:backend/Resources/Public/JavaScript/modal.js"
   },
   {
     "name": "nav",

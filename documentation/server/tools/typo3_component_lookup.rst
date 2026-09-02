@@ -66,6 +66,13 @@ Answers with
         modifiers: [string]  # optional
         subComponents: [string]  # optional
         customProperties: [string]  # optional
+        # The data attributes the component's own JavaScript module reads off its
+        # markup, derived from that module in the installed packages. The classes
+        # are what it is styled by and these are what it is driven by, and a wrong
+        # one fails silently in a browser rather than raising. Empty for a component
+        # no module drives, and empty for every component where the bundled catalog
+        # answered — the module is read from the installation or not at all.
+        dataAttributes: [string]  # optional
         # Canonical markup of the component.
         markup: string  # optional
         examples: [string]  # optional
@@ -198,7 +205,7 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Answered against
+Recorded on 2026-09-02 by ``bin/cli tools:record``. Answered against
 core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
@@ -565,6 +572,7 @@ Data:
                 ],
                 "sourceFiles": [
                     "EXT:backend/Resources/Public/Css/backend.css",
+                    "EXT:backend/Resources/Public/JavaScript/dropdown.js",
                     "Build/Sources/Sass/component/_dropdown.scss"
                 ],
                 "markupSource": "catalog",
@@ -909,6 +917,7 @@ Data:
                 ],
                 "sourceFiles": [
                     "EXT:backend/Resources/Public/Css/backend.css",
+                    "EXT:backend/Resources/Public/JavaScript/modal.js",
                     "Build/Sources/Sass/component/_modal.scss",
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Modal.fluid.html"
                 ],
@@ -1263,6 +1272,7 @@ Data:
             "version": "15.0",
             "commit": "4c8b38b2dd07856c3e2666fbdfd77beead87ffe0",
             "verifiedAt": "2026-07-28",
+            "verifyCommand": "bin/cli components:paths /path/to/typo3-core-checkout",
             "installedVersion": "15.0.0-dev",
             "skew": null
         }
@@ -1397,6 +1407,7 @@ Data:
                     "--typo3-badge-padding-x",
                     "--typo3-badge-padding-y"
                 ],
+                "dataAttributes": [],
                 "markup": "<span class=\"badge badge-default\">default badge</span>",
                 "examples": [
                     "<span class=\"badge badge-pill badge-default\">pill shaped badge</span>\n<span class=\"badge badge-pill badge-default\">1</span>",
@@ -1473,6 +1484,7 @@ Data:
             "version": "15.0",
             "commit": "4c8b38b2dd07856c3e2666fbdfd77beead87ffe0",
             "verifiedAt": "2026-07-28",
+            "verifyCommand": "bin/cli components:paths /path/to/typo3-core-checkout",
             "installedVersion": "15.0.0-dev",
             "skew": null
         }
@@ -1515,6 +1527,7 @@ Data:
             "version": "15.0",
             "commit": "4c8b38b2dd07856c3e2666fbdfd77beead87ffe0",
             "verifiedAt": "2026-07-28",
+            "verifyCommand": "bin/cli components:paths /path/to/typo3-core-checkout",
             "installedVersion": "15.0.0-dev",
             "skew": null
         }

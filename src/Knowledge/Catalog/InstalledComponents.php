@@ -65,10 +65,14 @@ final class InstalledComponents
                 ));
             }
             $component['customProperties'] = self::componentProperties($component, $customProperties);
+            $component['dataAttributes'] = self::dataAttributes($component, $packages);
 
             $sources = ['EXT:backend/Resources/Public/Css/backend.css'];
             if ($customElementSource !== null) {
                 $sources[] = $customElementSource;
+            }
+            if ($component['dataAttributes'] !== [] && $component['jsModule'] !== null) {
+                $sources[] = (string) $component['jsModule'];
             }
             foreach ($component['sassPaths'] as $path) {
                 if (Instance::describe()['kind'] === Instance::KIND_CORE_CHECKOUT
@@ -192,6 +196,51 @@ final class InstalledComponents
         ksort($tokens);
 
         return $tokens;
+    }
+
+    /**
+     * The data attributes a component's own module reads off its markup.
+     *
+     * The classes are the contract a component is styled by and these are the
+     * contract it is driven by, and only the first was answered: a session
+     * wrote `data-bs-content` on a modal that reads `data-content`, and copied
+     * a `data-on-change` that one extension's own module implements. Both
+     * failed silently in a browser — `D-ANS-139`.
+     *
+     * Which module belongs to the component is curated, because a file named
+     * after the component is the wrong rule: `pagination.js` in the search
+     * extension is not the backend's pagination. What it reads is derived from
+     * the installed file, so it moves with the version the way the classes do.
+     *
+     * @param array<string, mixed>  $component
+     * @param array<string, string> $packages
+     * @return array<int, string>
+     */
+    private static function dataAttributes(array $component, array $packages): array
+    {
+        $module = $component['jsModule'] ?? null;
+        if (!is_string($module) || preg_match('#^EXT:([^/]+)/(.+)$#', $module, $matches) !== 1) {
+            return [];
+        }
+        $package = $packages[$matches[1]] ?? null;
+        if ($package === null || !is_file($package . '/' . $matches[2])) {
+            return [];
+        }
+
+        preg_match_all(
+            '/dataset\.([a-zA-Z][a-zA-Z0-9]*)/',
+            (string) file_get_contents($package . '/' . $matches[2]),
+            $reads,
+        );
+        $attributes = [];
+        foreach (array_unique($reads[1]) as $property) {
+            // dataset.buttonOkText is data-button-ok-text: the DOM maps one to
+            // the other, and the attribute is what a template writes.
+            $attributes[] = 'data-' . mb_strtolower((string) preg_replace('/([A-Z])/', '-$1', $property));
+        }
+        sort($attributes);
+
+        return $attributes;
     }
 
     /**

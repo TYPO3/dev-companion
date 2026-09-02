@@ -17,6 +17,7 @@ use TYPO3\DevCompanion\Knowledge\Catalog\SystemExtensions;
 use TYPO3\DevCompanion\Knowledge\Catalog\TranslationDomain;
 use TYPO3\DevCompanion\Knowledge\Hints;
 use TYPO3\DevCompanion\Knowledge\Versions;
+use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
@@ -444,6 +445,36 @@ final class CatalogTest extends TestCase
                 self::assertContains($action, $listed, $entry['name'] . ' names ' . $action . ', which no styleguide lists');
             }
         }
+    }
+
+    /**
+     * The classes are what a component is styled by and the data attributes are
+     * what it is driven by, and only the first was answered.
+     *
+     * A session wrote `data-bs-content` on a modal that reads `data-content`
+     * and shipped a `data-on-change` that one extension's own module
+     * implements. Both failed silently in a browser — `D-ANS-139`.
+     */
+    #[Decision('D-ANS-139')]
+    #[Test]
+    public function aComponentCarriesTheAttributesItsOwnModuleReads(): void
+    {
+        Instance::discoverFrom(Paths::root() . '/.checkouts/14.3');
+
+        $modal = Registry::call('typo3_component_lookup', ['query' => 'modal', 'targetVersion' => '14.3']);
+        $entry = $modal->data['components'][0];
+
+        self::assertSame('modal', $entry['name']);
+        self::assertContains('data-content', $entry['dataAttributes']);
+        // The DOM maps dataset.buttonOkText to this, and the attribute is what
+        // a template writes.
+        self::assertContains('data-button-ok-text', $entry['dataAttributes']);
+        self::assertStringContainsString('data-content', $modal->text);
+
+        // A component no module drives carries none rather than the module's
+        // attributes under another name.
+        $badge = Registry::call('typo3_component_lookup', ['query' => 'badge', 'targetVersion' => '14.3']);
+        self::assertSame([], $badge->data['components'][0]['dataAttributes']);
     }
 
     #[Requirement('R-ANS-010')]

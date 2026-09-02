@@ -5,6 +5,7 @@ date: 2026-08-18
 status: open
 coveredBy:
   - KnowledgeTest::aBriefNamingOneKindOfWorkConfirmsThatKindAndNoOther
+  - KnowledgeTest::aChangeThatEndsInABackendUiIsNamedTheBrowserCheck
   - KnowledgeTest::everyKindOfWorkHasSuchABrief
   - SkillTest::aBriefThatNamesSeveralUnitsRoutesToTheSkillOfEach
 ---

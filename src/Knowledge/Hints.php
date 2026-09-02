@@ -581,11 +581,21 @@ final class Hints
         $spelled = [];
         foreach ($hint['appliesTo'] as $pattern) {
             $normalized = mb_strtolower((string) $pattern);
-            if (preg_match('/^[\p{L}\p{N}]+(?: [\p{L}\p{N}]+)+$/u', $normalized) !== 1) {
+            // A path is not a phrase somebody anticipated being asked: it
+            // carries its domain in its extension, which the gate already has.
+            if (str_contains($normalized, '/') || str_contains($normalized, '\\')) {
+                continue;
+            }
+            // And one word is what a hint is filed under rather than a
+            // phrasing: placing one is what the domain gate is for. Counted in
+            // terms rather than in spaces, so a quoted error message is the
+            // phrase it reads as — `D-KNW-145`.
+            $terms = TermSearch::terms($normalized);
+            if (count($terms) < 2) {
                 continue;
             }
             if (TermSearch::carriesWord($task, $normalized)) {
-                $spelled[] = implode(' ', TermSearch::terms($normalized)) ?: $normalized;
+                $spelled[] = implode(' ', $terms);
             }
         }
 

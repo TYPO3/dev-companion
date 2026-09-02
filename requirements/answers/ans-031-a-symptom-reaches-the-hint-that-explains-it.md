@@ -4,6 +4,7 @@ title: 'A symptom reaches the hint that explains it'
 status: held
 restsOn: [D-ANS-084]
 heldBy:
+  - HintsTest::aQuotedErrorMessageCrossesTheGateTheWayAPlainPhraseDoes
   - HintsTest::aSymptomReachesTheHintThatExplainsItFromAnotherDomain
   - HintsTest::aTypeScriptTestPathIsNotAnsweredWithPhpunit
   - HintsTest::theSweepTheMatcherWasMeasuredOnStillAnswersTheSameWay

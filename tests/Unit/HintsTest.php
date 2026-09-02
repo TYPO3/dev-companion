@@ -2566,6 +2566,32 @@ final class HintsTest extends TestCase
         );
     }
 
+    /**
+     * The phrase a caller quotes is an error message, and a message carries
+     * punctuation. Curated as `is of type "boolean"`, it read as no phrase at
+     * all while the shape test asked for letters and spaces, so the one hint
+     * that explains the symptom stayed behind the gate for the caller standing
+     * in the class that raised it — `D-KNW-145`.
+     */
+    #[Requirement('R-ANS-031')]
+    #[Decision('D-KNW-145')]
+    #[Test]
+    public function aQuotedErrorMessageCrossesTheGateTheWayAPlainPhraseDoes(): void
+    {
+        $result = Hints::find(
+            ['Classes/Domain/Model/Event.php'],
+            'my template broke: is of type "boolean"',
+            6,
+        );
+
+        self::assertContains('fluid-object-access', array_column($result['matchedHints'], 'id'));
+        self::assertNotContains(
+            Domains::FLUID,
+            $result['domains'],
+            'the query names the class the value came from, which is what puts the hint outside',
+        );
+    }
+
     #[Requirement('R-KNW-021')]
     #[Decision('D-ANS-084')]
     #[Test]

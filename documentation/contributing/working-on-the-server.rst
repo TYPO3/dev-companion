@@ -62,15 +62,16 @@ of a list rather than at whichever tool somebody noticed. It calls nothing and
 fails on nothing: a long answer can be the right one, and a counter that failed
 would be answered by splitting a tool in two.
 
-The same command keeps ``typo3/testing-framework`` there, because the harness a
-project extension tests in releases on its own cycle and the core repository
-does not contain it (``D-KNW-106``). Which release line belongs to which major
-is not recorded anywhere: each covered branch pins it in its own
-``require-dev``, and one worktree per pinned line is checked out at that line's
-newest tag. So a statement about the harness is verified in
-``.checkouts/testing-framework/<line>`` the way a statement about the core is
+The same command keeps the packages the core pins rather than contains:
+``typo3/testing-framework``, the harness a project extension tests in
+(``D-KNW-106``), and ``typo3fluid/fluid``, the engine a template is parsed by
+(``D-KNW-146``). Which release line belongs to which major is not recorded
+anywhere: each covered branch pins it in its own manifest — the harness in
+``require-dev``, the engine in ``require`` — and one worktree per pinned line is
+checked out at that line's newest tag. So a statement about either is verified
+in ``.checkouts/<package>/<line>`` the way a statement about the core is
 verified in ``.checkouts/<branch>``, and ``bin/cli checkouts:verify`` re-reads
-both.
+them.
 
 Scenario environments
 ---------------------

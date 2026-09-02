@@ -373,6 +373,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-143`][D-KNW-143] — Output a pipeline determines whole is asserted whole · 2026-09-02
 - [`D-KNW-144`][D-KNW-144] — The boundary of an authorised rework is stated where a change is made · 2026-09-02
 - [`D-KNW-145`][D-KNW-145] — A curated phrase crosses the gate whatever punctuation it carries · 2026-09-02
+- [`D-KNW-146`][D-KNW-146] — The Fluid engine is kept beside the core checkouts · 2026-09-02
 - [`D-KNW-137`][D-KNW-137] — A relaunch is a kind of work rather than a hint beside one · 2026-09-01
 - [`D-KNW-138`][D-KNW-138] — A hint names its next call in a statement · 2026-09-01
 - [`D-KNW-133`][D-KNW-133] — A guide's whenToUse names the answer it hands over · 2026-08-28
@@ -510,6 +511,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-KNW-143]: knowledge/knw-143-output-a-pipeline-determines-whole-is-asserted-whole.md
 [D-KNW-144]: knowledge/knw-144-the-boundary-of-an-authorised-rework-is-stated-where-a-change-is-made.md
 [D-KNW-145]: knowledge/knw-145-a-curated-phrase-crosses-the-gate-whatever-punctuation-it-carries.md
+[D-KNW-146]: knowledge/knw-146-the-fluid-engine-is-kept-beside-the-core-checkouts.md
 [D-KNW-137]: knowledge/knw-137-a-relaunch-is-a-kind-of-work-rather-than-a-hint-beside-one.md
 [D-KNW-138]: knowledge/knw-138-a-hint-names-its-next-call-in-a-statement.md
 [D-KNW-133]: knowledge/knw-133-a-guides-whentouse-names-the-answer-it-hands-over.md

@@ -4,8 +4,8 @@ title: A hint about typo3/testing-framework is read at the line the core pins
 date: 2026-08-23
 status: open
 coveredBy:
-  - TestingFrameworkTest::aPinThatNamesOneReleaseLineIsThatLine
-  - TestingFrameworkTest::aPinThatNamesTwoLinesNamesNone
+  - PinnedPackageTest::aPinThatNamesOneReleaseLineIsThatLine
+  - PinnedPackageTest::aPinThatNamesTwoLinesNamesNone
 ---
 
 # D-KNW-106 — A hint about typo3/testing-framework is read at the line the core pins

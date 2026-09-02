@@ -8,14 +8,14 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\TestingFramework;
+use TYPO3\DevCompanion\Upkeep\PinnedPackage;
 
 /**
  * What is below .checkouts/, and how old it is.
  *
- * typo3/testing-framework is reported beside the core branches, because a
- * statement about the harness a project extension tests in is verified against
- * a tag of that package rather than against a core branch (D-KNW-106).
+ * The packages the core pins are reported beside the core branches, because a
+ * statement about one of them is verified against a tag of that package rather
+ * than against a core branch (D-KNW-106).
  */
 #[AsCommand(
     name: 'checkouts:status',
@@ -36,15 +36,20 @@ final class CheckoutStatus
             ));
         }
 
-        $output->writeln('');
-        $output->writeln(sprintf('%s, one release line per pin', TestingFramework::PACKAGE));
-        foreach (TestingFramework::pairing($checkouts) as $pair) {
-            $output->writeln(sprintf(
-                '  %-6s %-9s %s',
-                $pair['branch'],
-                $pair['constraint'] === '' ? 'no pin' : $pair['constraint'],
-                is_dir($pair['path'] . '/Classes') ? Checkouts::revision($pair['path']) : 'missing — run bin/cli checkouts:update',
-            ));
+        foreach (PinnedPackage::all() as $package) {
+            $output->writeln('');
+            $output->writeln(sprintf('%s, one release line per pin', $package->package));
+            foreach ($package->pairing($checkouts) as $pair) {
+                $output->writeln(sprintf(
+                    '  %-6s %-9s %s',
+                    $pair['branch'],
+                    $pair['constraint'] === '' ? 'no pin' : $pair['constraint'],
+                    // A worktree that is not there answers nothing, which is
+                    // what says it is missing: the source directory a package
+                    // keeps its classes in is its own and says nothing here.
+                    Checkouts::revision($pair['path']) ?: 'missing — run bin/cli checkouts:update',
+                ));
+            }
         }
 
         return 0;

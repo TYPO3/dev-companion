@@ -12,8 +12,8 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Tool\TranslationDomainLookup;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
 use TYPO3\DevCompanion\Upkeep\Cli;
+use TYPO3\DevCompanion\Upkeep\PinnedPackage;
 use TYPO3\DevCompanion\Upkeep\RangeReport;
-use TYPO3\DevCompanion\Upkeep\TestingFramework;
 
 /**
  * Whether the version statements this repository binds still hold.
@@ -146,17 +146,18 @@ final class VersionCheck
      */
     private static function verifyTestingFramework(OutputInterface $output, string $checkouts): int
     {
-        $output->writeln('typo3/testing-framework');
-        $mirror = TestingFramework::mirror($checkouts);
+        $harness = PinnedPackage::testingFramework();
+        $output->writeln($harness->package);
+        $mirror = $harness->mirror($checkouts);
         if (!is_dir($mirror)) {
-            Cli::errors($output)->writeln(sprintf('No %s clone below %s — run bin/cli checkouts:update.', TestingFramework::PACKAGE, $checkouts));
+            Cli::errors($output)->writeln(sprintf('No %s clone below %s — run bin/cli checkouts:update.', $harness->package, $checkouts));
 
             return 2;
         }
 
         $problems = 0;
         $read = [];
-        foreach (TestingFramework::pairing($checkouts) as $pair) {
+        foreach ($harness->pairing($checkouts) as $pair) {
             $output->writeln(sprintf(
                 '  %-5s %-9s %s',
                 $pair['branch'],
@@ -200,13 +201,13 @@ final class VersionCheck
     private static function readTestingFramework(OutputInterface $output, string $mirror, array $pair): int
     {
         $ref = (string) $pair['ref'];
-        $checkedOut = TestingFramework::revision($pair['path'], 'HEAD');
+        $checkedOut = PinnedPackage::revision($pair['path'], 'HEAD');
         if ($checkedOut === '') {
             $output->writeln(sprintf('    %s is not checked out — run bin/cli checkouts:update', $ref));
 
             return 1;
         }
-        if ($checkedOut !== TestingFramework::revision($mirror, $ref)) {
+        if ($checkedOut !== PinnedPackage::revision($mirror, $ref)) {
             $output->writeln(sprintf('    %s is checked out at %s — run bin/cli checkouts:update', $ref, substr($checkedOut, 0, 12)));
 
             return 1;

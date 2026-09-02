@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
 use TYPO3\DevCompanion\Upkeep\Cli;
-use TYPO3\DevCompanion\Upkeep\TestingFramework;
+use TYPO3\DevCompanion\Upkeep\PinnedPackage;
 
 /**
  * Keeps one TYPO3 core checkout per covered version below .checkouts/, so that
@@ -20,10 +20,10 @@ use TYPO3\DevCompanion\Upkeep\TestingFramework;
  * treeless clone carries the history; each covered branch is a worktree of it,
  * so four lines cost one object store.
  *
- * typo3/testing-framework is kept here too, because a statement about the
- * harness a project extension tests in is verified against a tag of that
- * package rather than against a core branch — `D-KNW-106`, and
- * `Upkeep\TestingFramework` for which line pairs with which major.
+ * The packages the core pins rather than contains are kept here too, because a
+ * statement about one of them is verified against a tag of that package rather
+ * than against a core branch — `D-KNW-106`, and `Upkeep\PinnedPackage` for
+ * which line pairs with which major.
  */
 #[AsCommand(
     name: 'checkouts:update',
@@ -61,7 +61,9 @@ final class CheckoutUpdate
             $output->writeln(sprintf('    %s', Checkouts::revision($path)));
         }
 
-        $failed += self::updateTestingFramework($output, $checkouts);
+        foreach (PinnedPackage::all() as $package) {
+            $failed += self::updatePinned($output, $checkouts, $package);
+        }
 
         if ($failed > 0) {
             $output->writeln('');
@@ -77,25 +79,25 @@ final class CheckoutUpdate
     }
 
     /**
-     * One worktree per testing-framework release line the covered majors pin,
-     * checked out at that line's newest tag.
+     * One worktree per release line the covered majors pin, checked out at that
+     * line's newest tag.
      *
      * Two majors pinning the same line share one worktree — the core pins 9.x on
      * both 13.4 and 14.3 — so what is created follows the pins rather than the
      * version list.
      */
-    private static function updateTestingFramework(OutputInterface $output, string $checkouts): int
+    private static function updatePinned(OutputInterface $output, string $checkouts, PinnedPackage $package): int
     {
         $output->writeln('');
-        $output->writeln(sprintf('%s (the harness a project extension tests in)', TestingFramework::PACKAGE));
-        $mirror = TestingFramework::mirror($checkouts);
-        if (!self::mirror($output, $mirror, TestingFramework::REPOSITORY, true)) {
+        $output->writeln(sprintf('%s (%s)', $package->package, $package->subject));
+        $mirror = $package->mirror($checkouts);
+        if (!self::mirror($output, $mirror, $package->repository, true)) {
             return 1;
         }
 
         $failed = 0;
         $created = [];
-        foreach (TestingFramework::pairing($checkouts) as $pair) {
+        foreach ($package->pairing($checkouts) as $pair) {
             $output->writeln(sprintf(
                 '  %-6s %-9s %s',
                 $pair['branch'],

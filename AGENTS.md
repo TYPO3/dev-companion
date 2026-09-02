@@ -69,7 +69,7 @@ src/Upkeep/Links.php # every path this repository writes between its own files, 
 src/Upkeep/Rst.php   # the reStructuredText the generators write: the underline per level, the directive, the literal, the two roles
 src/Upkeep/Site.php  # documentation/ as the source a generator publishes: the links that leave it, rewritten
 src/Upkeep/Todo.php  # todo/ as data: what recurs, what is queued, what each todo serves
-src/Upkeep/TestingFramework.php  # which typo3/testing-framework release each covered major is read against
+src/Upkeep/PinnedPackage.php  # which release of a package the core pins each covered major is read against
 knowledge/         # the knowledge base (markdown + JSON), the data source
 knowledge/documents/  # the prose corpus: searched by typo3_rule_lookup, served as typo3://core resources
 feedback/          # feedback left by agents about this server (standalone checkout only)

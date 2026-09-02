@@ -86,6 +86,11 @@ only one this server points at.
   `documentation/records/judging.rst` keeps off the spot.
 - **At `normal`.** Two sessions in two checkouts report the same asymmetry, and
   the words that would have matched the work were already in the file.
+- **Against a running count.** The two reports of 2026-08-31 ask for the Nth
+  call and the time of the last brief in a late answer. That is session state
+  and a clock in a server whose every answer is a function of its arguments and
+  the installation, what it buys over the sentence is unmeasured, and it was
+  declined on 2026-09-02.
 - **Against the feedback's own suggestion.** Mid-task entry points written into
   the descriptions cost characters that are not there, and they would say in
   twelve installed files what one sentence here says once.
@@ -118,7 +123,7 @@ only one this server points at.
 
 The first **Wrong if** fired on 2026-08-31: a session held two briefs carrying
 the line and went on to a harness, a rename, an icon set and a README without
-asking again. `todo/waiting/T-260831-b75b.md` carries what follows from that.
+asking again. What that leaves is the activation `D-SKL-033` stops at.
 
 The placement is the brief rather than the instructions, which are full: the
 sentence is a `nextTools` entry, unconditional and in the list the commit

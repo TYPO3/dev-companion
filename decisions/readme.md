@@ -91,6 +91,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### answers
 
 - [`D-ANS-132`][D-ANS-132] — The domain answer carries the form a module imports · 2026-09-02
+- [`D-ANS-133`][D-ANS-133] — A describe field is a file's own declaration · 2026-09-02
 - [`D-ANS-127`][D-ANS-127] — Knowledge that yields a judgement is delivered where the work finishes · 2026-09-01
 - [`D-ANS-128`][D-ANS-128] — An answer's index buys recovery and its foot is read last · 2026-09-01
 - [`D-ANS-129`][D-ANS-129] — A list in an answer names the call it raises · 2026-09-01
@@ -219,6 +220,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-132]: answers/ans-132-the-domain-answer-carries-the-form-a-module-imports.md
+[D-ANS-133]: answers/ans-133-a-describe-field-is-a-files-own-declaration.md
 [D-ANS-127]: answers/ans-127-knowledge-that-yields-a-judgement-is-delivered-where-the-work-finishes.md
 [D-ANS-128]: answers/ans-128-an-answers-index-buys-recovery-and-its-foot-is-read-last.md
 [D-ANS-129]: answers/ans-129-a-list-in-an-answer-names-the-call-it-raises.md

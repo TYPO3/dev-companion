@@ -8,6 +8,7 @@ See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
 - [`D-ANS-132`][D-ANS-132] — The domain answer carries the form a module imports · 2026-09-02
+- [`D-ANS-133`][D-ANS-133] — A describe field is a file's own declaration · 2026-09-02
 - [`D-ANS-127`][D-ANS-127] — Knowledge that yields a judgement is delivered where the work finishes · 2026-09-01
 - [`D-ANS-128`][D-ANS-128] — An answer's index buys recovery and its foot is read last · 2026-09-01
 - [`D-ANS-129`][D-ANS-129] — A list in an answer names the call it raises · 2026-09-01
@@ -136,6 +137,7 @@ one is added.
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-132]: ans-132-the-domain-answer-carries-the-form-a-module-imports.md
+[D-ANS-133]: ans-133-a-describe-field-is-a-files-own-declaration.md
 [D-ANS-127]: ans-127-knowledge-that-yields-a-judgement-is-delivered-where-the-work-finishes.md
 [D-ANS-128]: ans-128-an-answers-index-buys-recovery-and-its-foot-is-read-last.md
 [D-ANS-129]: ans-129-a-list-in-an-answer-names-the-call-it-raises.md

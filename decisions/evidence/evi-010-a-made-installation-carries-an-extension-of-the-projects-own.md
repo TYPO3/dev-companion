@@ -12,8 +12,8 @@ coveredBy:
 
 # D-EVI-010 — A made installation carries an extension of the project's own
 
-**`bin/cli environment:create E-SITE` writes one extension into `packages/`, with
-a table and rows in it, and installs it after the distribution is up.**
+**`bin/cli environment:create E-SITE` writes one extension into `packages/`,
+with a table and rows in it, and installs it after the distribution is up.**
 
 An installation from TYPO3's base distribution owns no package, so every answer
 about what this project registers was empty in the one environment that could
@@ -49,14 +49,14 @@ answer at all.
   `src/Installation/probe.php` does and for the same reason, and it writes
   nothing where the table already holds a row.
 - **120 live rows on one page**, with 3 hidden and 2 deleted beside them. The
-  count is what makes the recorded answer the case the tool exists for: one
-  page of the record list would be the table that needs no tool, and the two
-  flags are the states the count separates.
+  count is what makes the recorded answer the case the tool exists for: one page
+  of the record list would be the table that needs no tool, and the two flags
+  are the states the count separates.
 - **The steps run after a resume as well as after a build.** An environment made
   before this gains the extension by being asked for again, and each of the
   three says so and changes nothing where it is already done — which is cheaper
-  than a state read off the directory that can be wrong about a run that
-  stopped halfway.
+  than a state read off the directory that can be wrong about a run that stopped
+  halfway.
 - **After the build rather than inside it**, because `composer create-project`
   runs into that directory and refuses one that already holds `packages/`. What
   it costs is a second `extension:setup`.
@@ -65,8 +65,8 @@ answer at all.
 
 - That an installation with one package of its own is closer to what a case
   meets than one with none. `D-EVI-001` is about not scaffolding the repository
-  a review then finds its defects in, and this environment is never that
-  subject — `D-EVI-004`.
+  a review then finds its defects in, and this environment is never that subject
+  — `D-EVI-004`.
 - That the root page the setup creates is uid 1, which is what the rows are
   written to.
 - That a table of one shape is enough. What it shows is a label, the two flags
@@ -76,10 +76,10 @@ answer at all.
 ## Wrong if
 
 - A case run in `E-SITE` reads `acme_events` as the project's real work and
-  reports about it, which would make the environment the subject rather than
-  the ground.
+  reports about it, which would make the environment the subject rather than the
+  ground.
 - The three steps turn out to cost more than seconds on a resume, which is what
   keeps asking for an environment again cheap.
 - A recorded answer somewhere else changes because this table is now in the
-  installation, and that change reads as a property of TYPO3 rather than of
-  what this repository put there.
+  installation, and that change reads as a property of TYPO3 rather than of what
+  this repository put there.

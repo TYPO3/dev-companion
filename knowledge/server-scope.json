@@ -28,8 +28,8 @@
         "call": "typo3_rule_lookup with a documentId typo3_project_describe lists"
       }
     ],
-    "note": "Guessed, a class, an icon or a label fails only at runtime.",
-    "then": "Answers are filtered by targetVersion or by the version read, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user: its matching is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what is covered, at which depth, by which tool, and which installation is read."
+    "note": "Where a typo3-* skill in your listing covers the task, activate it: it makes these calls.",
+    "then": "Answers are filtered by targetVersion or by the version read, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user: its matching is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what is covered, by which tool, and which installation is read."
   },
   "covers": [
     {

@@ -133,7 +133,7 @@ Answers with
       # was looked at: a named root that could not be used, or an entrypoint that
       # handed no directory in.
       repositoryState: string or null  # optional
-      # What the reason means where the message alone does not say it — a console
+      # What the reason means where the message alone does not say it. A console
       # that starts and then fails on a missing table has a database without a
       # schema, not a broken installation. Empty where nothing beyond the reason is
       # known.

@@ -78,7 +78,7 @@ final class Schema
                     . 'where nothing was looked at: a named root that could not be used, or an entrypoint that '
                     . 'handed no directory in.',
             ],
-            'diagnosis' => self::string('What the reason means where the message alone does not say it — a console that starts and then fails on a missing table has a database without a schema, not a broken installation. Empty where nothing beyond the reason is known.'),
+            'diagnosis' => self::string('What the reason means where the message alone does not say it. A console that starts and then fails on a missing table has a database without a schema, not a broken installation. Empty where nothing beyond the reason is known.'),
             'searched' => self::listOf(self::string(), 'Every directory the discovery walked, in order. "Nothing was found" and "the server was started somewhere else" wear one sentence, and only this tells them apart. Empty where discovery never ran.'),
             'misconfiguration' => self::nullableString('What was set and could not be used. Null where nothing was set.'),
             'settings' => self::object([

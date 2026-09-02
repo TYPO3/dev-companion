@@ -4,34 +4,21 @@
 ============================
 
 Describe what one installed extension registers: the tables its TCA defines and
-the ones it extends, the content elements it adds to tt_content with the Fluid
-template each renders through and the FlexForm each binds, its backend modules
-and routes, its icons, its site sets with the files each carries, the form
-configurations it registers and the form definitions they store, its service
-tags, middlewares, which of the three Fluid root directories it ships and the
-namespaces it registers globally, and the shape of its Classes/ directory — and
-beside all that: its manual, its README, its test layers, and its XLF files with
-the source language each declares. Those four are answered when they are absent
-too, which a file listing cannot show. A content element that is an Extbase
-plugin is marked as one and points at plugin.tx_<identifier>: it renders through
-the dispatcher and has no templateName to be missing. Tables, content elements
-and icons come from the booted installation where there is one, attributed to
-this extension by the EXT: reference each entry carries, so a list built in a
-loop or a table added by a PHP call is in the answer; everything else is parsed
-from that extension's own files, never executed, so it answers on a fresh clone
-and for a third-party extension as well as for the project's own. answeredBy
-says which of the two answered, and names what packages leaves out. A file it
-ships that core has stopped reading, or is stopping, is reported with what it
-costs, because that predicate is the file rather than anything the extension
-calls and no changelog search over its code reaches it: ext_tables.php,
-ext_emconf.php beside a composer.json declaring neither providesPackages nor a
-version, ext_icon.* where no Resources/Public/Icons/Extension.* stands to be
-read first, and an ext_typoscript_*.txt with no .typoscript file of the same
-name beside it. That is those four and nothing else, so it is not an upgrade
-check. It answers what the extension registers and never what is stored through
-it: how many rows one of its tables holds, on which page and what they are is
-typo3_record_lookup. typo3_project_describe names the extensions this can be
-called for. Answers from: installation, packages.
+extends; the content elements it adds to tt_content, with the template each
+renders through and the FlexForm each binds; its backend modules and routes; its
+icons; its site sets and the files each carries; its form configurations and the
+form definitions they store; its service tags, middlewares, Fluid roots and
+global Fluid namespaces; the shape of its Classes/ directory; the files it ships
+that core has stopped reading, with what each costs — four predicates, so not an
+upgrade check; and beside all that its manual, README, test layers and XLF
+files. Tables, content elements and icons come from the booted installation
+where there is one. Everything else is read from its own files and never
+executed, so it answers on a fresh clone and for a third-party extension too.
+Call it with a key typo3_project_describe lists. A key the installation does not
+have is answered with the keys it does have, and no installation at all with
+unsupported. It answers what the extension registers and never what is stored
+through it: how many rows one of its tables holds, on which page and what they
+are is typo3_record_lookup. Answers from: installation, packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -69,14 +56,20 @@ Answers with
     requires:  # optional
       - package: string
         constraint: string
-    # Tables its Configuration/TCA/ defines, by file name. typo3_schema_lookup takes
-    # one of these names and answers what columns the core derives for it.
+    # Tables its Configuration/TCA/ defines. Where the booted installation answered,
+    # attributed to this extension by the EXT: reference each entry carries, so a
+    # table added by a PHP call is among them. Otherwise by file name.
+    # typo3_schema_lookup takes one of these names and answers what columns the core
+    # derives for it.
     tcaTables: [string]  # optional
     # Tables it extends below Configuration/TCA/Overrides/. typo3_schema_lookup
     # answers these the same way.
     tcaOverrides: [string]  # optional
     # The content elements it adds to tt_content, where each renders, and what it
-    # configures through.
+    # configures through. Where the booted installation answered, the identifiers
+    # are what it registered, attributed to this extension by the EXT: reference
+    # each carries. So an element whose identifier came out of a variable is among
+    # them. Otherwise they are read from the override files, as identifier says.
     contentElements:  # optional
       - # The CType value, read from an addTcaSelectItem(), addRecordType() or
         # registerPlugin() call in one of those override files. An identifier
@@ -108,7 +101,7 @@ Answers with
     # FlexForm bindings read from the override files whose content type none of the
     # contentElements entries above carries. typo3_flexform_lookup resolves one to
     # its fields. Usually empty. An entry here is a registration this answer read
-    # and could not attribute: the identifier is real and the binding is real, and
+    # and could not attribute. The identifier is real and the binding is real, and
     # whatever else registers that element was not established.
     unlistedFlexForms:  # optional
       - # The content type the binding names.
@@ -119,8 +112,10 @@ Answers with
     backendModules: [string]  # optional
     # Route names from Configuration/Backend/Routes.php and AjaxRoutes.php.
     backendRoutes: [string]  # optional
-    # Identifiers from Configuration/Icons.php. typo3_icon_lookup searches every
-    # package at once.
+    # Identifiers from Configuration/Icons.php. Where the booted installation
+    # answered, every icon it registered below this extension's EXT: reference, a
+    # list built in a loop included. typo3_icon_lookup searches every package at
+    # once.
     icons: [string]  # optional
     siteSets:  # optional
       - # The composer-style set name a site depends on.
@@ -134,12 +129,12 @@ Answers with
         # the directory a set. route-enhancers.yaml is read from v14.1; on v13 a set
         # carrying one is loaded and that file ignored. The last four are the
         # defaults a set gets where its config.yaml declares no typoscript, pagets
-        # or labels path of its own — one that declares them reads from there
+        # or labels path of its own. One that declares them reads from there
         # instead, and this list does not say so.
         files: [string]
     # The form configurations it registers, both ways in. Empty where it registers
-    # none — an extension that ships a .form.yaml and registers no storage for it
-    # has a form nothing loads, which is what this list is read for.
+    # none. An extension that ships a .form.yaml and registers no storage for it has
+    # a form nothing loads, which is what this list is read for.
     formConfigurations:  # optional
       - # The YAML file, relative to the extension.
         path: string
@@ -192,14 +187,16 @@ Answers with
     # Initialisation/data.t3d.
     files: [string]  # optional
     # The files this extension ships that core has stopped reading, or is stopping,
-    # each with what shipping it costs. Four predicates are checked: ext_tables.php,
-    # ext_emconf.php, ext_icon.svg/.png/.gif and the two ext_typoscript_*.txt. Each
-    # is read from the extension's own tree — the file, whatever core reads before
-    # it, and for ext_emconf.php what composer.json declares — which is where
-    # every one of these predicates lives, so no changelog sweep over what its code
-    # calls reaches any of them. An empty list says none of the four holds here, not
-    # that the extension is ready for the next major: nothing else here is checked
-    # for a deprecation, and typo3_changelog_lookup is what answers that question.
+    # each with what shipping it costs. Four predicates are checked, each a file and
+    # what stands beside it. ext_tables.php. ext_emconf.php beside a composer.json
+    # declaring neither providesPackages nor a version. ext_icon.svg/.png/.gif where
+    # no Resources/Public/Icons/Extension.* stands to be read first. An
+    # ext_typoscript_*.txt with no .typoscript file of the same name beside it. Each
+    # is read from the extension's own tree, which is where every one of these
+    # predicates lives, so no changelog sweep over what its code calls reaches any
+    # of them. An empty list says none of the four holds here, not that the
+    # extension is ready for the next major. Nothing else here is checked for a
+    # deprecation, and typo3_changelog_lookup is what answers that question.
     deprecatedFiles:  # optional
       - # The file, relative to the extension. Not always a registration file:
         # ext_icon.* and ext_typoscript_*.txt are read by nothing now, so they are a
@@ -215,10 +212,10 @@ Answers with
         # What it raises, from which version, and what the removal does instead.
         cost: string
     # Declaration files that are there but whose entries do not stand in their own
-    # text: each assembles its list while it runs, so what it registers is missing
+    # text. Each assembles its list while it runs, so what it registers is missing
     # from the lists above rather than absent. The booted installation is what
     # answers for them. An empty list says each declaration file that exists stood
-    # in its own text, not that everything the extension ships was read:
+    # in its own text, not that everything the extension ships was read.
     # ext_localconf.php and ext_tables.php register by running and are read by
     # nothing here.
     notReadStatically: [string]  # optional

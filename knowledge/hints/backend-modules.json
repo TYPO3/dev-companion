@@ -21,12 +21,28 @@
       "moduleTemplateFactory",
       "module controller",
       "moduleData",
-      "renderResponse"
+      "renderResponse",
+      "parent",
+      "standalone",
+      "position",
+      "after",
+      "the module opens the wrong screen",
+      "the module is not where I put it",
+      "promotesSingleSubmoduleToStandalone",
+      "inheritNavigationComponentFromMainModule",
+      "page tree in a module that should not have one"
     ],
     "hints": [
       "A backend module is declared in the owning extension's Configuration/Backend/Modules.php, which returns an array keyed by module identifier. There is no registration call.",
       "The keys of an entry are parent (the identifier of the module it sits under), access (\"user\", \"admin\", ...), path (the backend route it answers on), iconIdentifier, labels, aliases (former identifiers kept working), routes, and moduleData for the module's persisted per-user state.",
       "routes maps a route name to a target of the form Controller::class . '::method'; the entry named _default is what the module opens with.",
+      "A module with no parent registers no route unless it declares standalone => true. ModuleRegistry passes over every first-level module that is not standalone when it builds the route collection, so nothing throws and nothing is logged: the path falls through to whatever else matches, and the backend renders another module. The core's own single top-level entry is the Dashboard, which carries that key.",
+      {
+        "text": "A parent can promote instead of the child declaring itself: appearance.promotesSingleSubmoduleToStandalone on a parent that has exactly one submodule makes that submodule the top-level entry and drops the parent. The core files Media that way. It is the parent-side form of the same thing, and standalone on the module itself is the one that holds on every covered major.",
+        "since": 14
+      },
+      "position => ['after' => '*'] reaches the end only where more than one module claims it. The modules claiming it are collected and populated first, and the block that then moves them behind everything else runs only where the first of them is not also the last — so one such module is left where it was populated, which is early. A module with no position at all keeps its registration order, and a project package is registered after the core's, which is what \"last\" was being asked for.",
+      "inheritNavigationComponentFromMainModule => false is how a submodule stops inheriting its parent's navigation component. Without it a module under a parent that carries the page tree gets the page tree, whatever it is about. EXT:form sets it.",
       {
         "text": "labels is a translation domain, not a file path. typo3_translation_domain_lookup computes it for the XLF file the module's labels live in.",
         "since": 14

@@ -12,6 +12,7 @@ one is added.
 - [`D-ANS-135`][D-ANS-135] — The reference scan is asked for the resources an answer names · 2026-09-02
 - [`D-ANS-136`][D-ANS-136] — The Fluid namespace source is chosen by the installed version · 2026-09-02
 - [`D-ANS-137`][D-ANS-137] — Three argument names meant two things each · 2026-09-02
+- [`D-ANS-138`][D-ANS-138] — The hint corpus dilutes its outliers as it grows · 2026-09-02
 - [`D-ANS-127`][D-ANS-127] — Knowledge that yields a judgement is delivered where the work finishes · 2026-09-01
 - [`D-ANS-128`][D-ANS-128] — An answer's index buys recovery and its foot is read last · 2026-09-01
 - [`D-ANS-129`][D-ANS-129] — A list in an answer names the call it raises · 2026-09-01
@@ -145,6 +146,7 @@ one is added.
 [D-ANS-135]: ans-135-the-reference-scan-is-asked-for-the-resources-an-answer-names.md
 [D-ANS-136]: ans-136-the-fluid-namespace-source-is-chosen-by-the-installed-version.md
 [D-ANS-137]: ans-137-three-argument-names-meant-two-things-each.md
+[D-ANS-138]: ans-138-the-hint-corpus-dilutes-its-outliers-as-it-grows.md
 [D-ANS-127]: ans-127-knowledge-that-yields-a-judgement-is-delivered-where-the-work-finishes.md
 [D-ANS-128]: ans-128-an-answers-index-buys-recovery-and-its-foot-is-read-last.md
 [D-ANS-129]: ans-129-a-list-in-an-answer-names-the-call-it-raises.md

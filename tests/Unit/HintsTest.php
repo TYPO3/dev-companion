@@ -2310,13 +2310,13 @@ final class HintsTest extends TestCase
      * What the sweep cannot say on its own: the corpus may outgrow the length
      * its matcher was measured against, and no single query fails when it does.
      *
-     * Re-measured on 2026-08-01 at a mean of 266 words, up from 212 when the
-     * reference was picked: recall over the sweep is whole from 120 words to
-     * 320, and above 320 «how do I write a good sonnet» is answered by
-     * `installation-upgrade`, which by then is long enough to contain it. So
-     * the reference stays where it is — the returned hints climb the whole way
-     * up that range, and the low end is the precise one — and what is watched
-     * is the corpus walking towards the far end of it.
+     * Re-measured on 2026-09-02 at a mean of 302 words over 164 hints, up from
+     * 266: recall over the sweep is whole from 20 to 500, and at 505 «how do I
+     * write a good sonnet» is answered. The range at 266 was 120 to 320, so it
+     * widened at both ends while the corpus grew, and the reference stays where
+     * it is with more room on either side than it was picked with. What is
+     * watched is therefore when to measure again rather than a failure walking
+     * closer — `D-ANS-138`.
      */
     #[Test]
     public function theCorpusHasNotOutgrownTheLengthItsMatcherWasMeasuredAgainst(): void

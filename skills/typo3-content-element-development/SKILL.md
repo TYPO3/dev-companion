@@ -160,7 +160,7 @@ it was called.
 
 `typo3_commit_message_guide` with `workflow="project"` drafts the message and
 checks it. The element lands in an extension or a sitepackage, which is the
-workflow that argument names; the default is the core's.
+workflow that argument names.
 
 ## Where this element ends and the package begins
 

@@ -21,6 +21,7 @@ use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Server\Installer;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
+use TYPO3\DevCompanion\Tool\CommitMessageGuide;
 use TYPO3\DevCompanion\Tool\Registry;
 use TYPO3\DevCompanion\Tool\TaskGuide;
 use TYPO3\DevCompanion\Upkeep\Fixture;
@@ -691,6 +692,7 @@ final class SkillTest extends TestCase
         // which is the fourth and worst of the channels `D-GUI-002` counted.
         // `D-SKL-014` is the placement; which bodies get it was read off each
         // one.
+        self::assertSame('project', CommitMessageGuide::inputSchema()['properties']['workflow']['default']);
         foreach (self::COMMITTING_SKILLS as $name) {
             $skill = (string) file_get_contents(Paths::root() . '/skills/' . $name . '/SKILL.md');
             self::assertStringContainsString(
@@ -702,6 +704,15 @@ final class SkillTest extends TestCase
                 'workflow="project"',
                 self::flat($skill),
                 $name . ' names the commit guide without the workflow it commits in',
+            );
+            // A skill that says which workflow the argument defaults to says
+            // what the schema declares. Two skills carried the opposite after
+            // the default turned in 0375c329, and a core patch reached through
+            // them omitted the argument and was checked against project rules.
+            self::assertDoesNotMatchRegularExpression(
+                '/default is the core|leaves the argument at its default/',
+                self::flat($skill),
+                $name . ' states the commit guide default the other way round from its schema',
             );
         }
 

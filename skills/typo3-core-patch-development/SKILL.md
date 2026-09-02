@@ -51,7 +51,11 @@ somebody else's checkout with nothing to report it.
      or each point it leaves is given an issue of its own here, before any code:
      a split part needs a number, and the `Resolves:` trailer and the changelog
      file name each take one. A point that is riskier to change is an argument
-     for giving it its own issue rather than for dropping it.
+     for giving it its own issue rather than for dropping it. What that issue
+     carries — the tracker, the fields, the markup its description renders as —
+     is `typo3_rule_lookup` with
+     `documentId="core/contribution/reporting-an-issue"`; filing it is the
+     user's, because it takes an account and this server holds none.
 
 4. `typo3_gerrit_lookup` with the same issue number, **before any code is
    written**. Its cheapest outcome is the one that cancels the work and it costs

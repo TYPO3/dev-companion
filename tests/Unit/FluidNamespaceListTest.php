@@ -12,6 +12,7 @@ use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Installation\Typo3Runtime;
 use TYPO3\DevCompanion\Process\CommandRunner;
+use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 use TYPO3\DevCompanion\Tool\Registry;
 
@@ -30,6 +31,7 @@ final class FluidNamespaceListTest extends TestCase
         Typo3Runtime::forget();
     }
 
+    #[Decision('D-ANS-136')]
     #[DataProvider('versionsBeforeFourteen')]
     #[Test]
     public function aVersionBeforeFourteenReadsTheRuntimeConfiguration(string $version): void
@@ -78,6 +80,38 @@ final class FluidNamespaceListTest extends TestCase
         );
     }
 
+
+    #[Decision('D-ANS-136')]
+    #[Test]
+    public function aVersionBeforeFourteenWithoutTheKeyIsUnsupportedRatherThanEmpty(): void
+    {
+        $root = $this->coreCheckout('13.4.22');
+        Instance::discoverFrom($root);
+        putenv(Typo3Cli::CONSOLE_VARIABLE . '=' . PHP_BINARY . ' ' . $root . '/bin/typo3');
+        Typo3Cli::forget();
+
+        $runner = self::createStub(CommandRunner::class);
+        $runner->method('run')->willReturn([
+            'ok' => true,
+            'exitCode' => 0,
+            'output' => json_encode([
+                'state' => Typo3Runtime::STATE_FULL,
+                'reason' => '',
+                'topics' => ['configuration' => ['found' => false, 'value' => null]],
+            ], JSON_THROW_ON_ERROR),
+            'error' => '',
+        ]);
+        Typo3Cli::useRunner($runner);
+
+        $result = Registry::call('typo3_fluid_namespace_list', []);
+
+        self::assertArrayNotHasKey('namespaces', $result->data);
+        self::assertStringContainsString(
+            'no SYS/fluid/namespaces',
+            (string) $result->data['unsupported']['reason'],
+        );
+    }
+
     /** @return iterable<string, array{string}> */
     public static function versionsBeforeFourteen(): iterable
     {
@@ -85,6 +119,7 @@ final class FluidNamespaceListTest extends TestCase
         yield 'TYPO3 v13' => ['13.4.22'];
     }
 
+    #[Decision('D-ANS-136')]
     #[Test]
     public function fourteenUsesTheFluidNamespaceCommand(): void
     {

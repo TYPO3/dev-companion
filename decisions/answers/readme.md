@@ -10,6 +10,7 @@ one is added.
 - [`D-ANS-132`][D-ANS-132] — The domain answer carries the form a module imports · 2026-09-02
 - [`D-ANS-133`][D-ANS-133] — A describe field is a file's own declaration · 2026-09-02
 - [`D-ANS-135`][D-ANS-135] — The reference scan is asked for the resources an answer names · 2026-09-02
+- [`D-ANS-136`][D-ANS-136] — The Fluid namespace source is chosen by the installed version · 2026-09-02
 - [`D-ANS-127`][D-ANS-127] — Knowledge that yields a judgement is delivered where the work finishes · 2026-09-01
 - [`D-ANS-128`][D-ANS-128] — An answer's index buys recovery and its foot is read last · 2026-09-01
 - [`D-ANS-129`][D-ANS-129] — A list in an answer names the call it raises · 2026-09-01
@@ -141,6 +142,7 @@ one is added.
 [D-ANS-132]: ans-132-the-domain-answer-carries-the-form-a-module-imports.md
 [D-ANS-133]: ans-133-a-describe-field-is-a-files-own-declaration.md
 [D-ANS-135]: ans-135-the-reference-scan-is-asked-for-the-resources-an-answer-names.md
+[D-ANS-136]: ans-136-the-fluid-namespace-source-is-chosen-by-the-installed-version.md
 [D-ANS-127]: ans-127-knowledge-that-yields-a-judgement-is-delivered-where-the-work-finishes.md
 [D-ANS-128]: ans-128-an-answers-index-buys-recovery-and-its-foot-is-read-last.md
 [D-ANS-129]: ans-129-a-list-in-an-answer-names-the-call-it-raises.md

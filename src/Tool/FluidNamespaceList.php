@@ -63,12 +63,14 @@ final class FluidNamespaceList extends ReadOnlyTool
                 // console that cannot boot does not have to end the question.
                 // What the files cannot say is what the container did with
                 // them.
+                $limitation = $answer['error'] !== ''
+                    ? $answer['error']
+                    : 'the console answered nothing this tool could read';
                 $declared = FluidNamespaces::all();
                 if ($declared === []) {
-                    return Unsupported::because($answer['error']);
+                    return Unsupported::because($limitation);
                 }
                 $answeredBy = 'packages';
-                $limitation = $answer['error'];
             }
         } else {
             // Before v14 there is no fluid:namespaces command and no
@@ -80,10 +82,21 @@ final class FluidNamespaceList extends ReadOnlyTool
                     is_array($read) ? (string) $read['unavailable'] : Typo3Runtime::reason(),
                 );
             }
-            if ($read['found'] === true && !is_array($read['value'])) {
+            // Every covered version below 14 carries the key in its own
+            // DefaultConfiguration, so an absent one is a reading that went
+            // wrong rather than an installation without namespaces. Answering
+            // it as none would tell a template author to declare `f:` per
+            // template — the same distinction `ConfigurationLookup` draws,
+            // where found is a statement about the installation.
+            if ($read['found'] !== true) {
+                return Unsupported::because(
+                    'this installation reports no SYS/fluid/namespaces, which every TYPO3 below 14 declares',
+                );
+            }
+            if (!is_array($read['value'])) {
                 return Unsupported::because('SYS/fluid/namespaces is not an array in this installation');
             }
-            $declared = $read['found'] === true ? $read['value'] : [];
+            $declared = $read['value'];
         }
 
         $namespaces = [];

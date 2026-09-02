@@ -23,7 +23,7 @@ The order
 1. **The console, where a command exists.** ``Typo3Cli::run()`` invokes the
    installation's own ``bin/typo3`` — through DDEV where the project runs there
    — for the registries TYPO3 exposes a command for: ``language:domain:search``
-   and ``fluid:namespaces``.
+   everywhere, and ``fluid:namespaces`` on TYPO3 14 and up, where it exists.
 2. **The container, where none does, or where the command answers less than the
    registry.** ``Typo3Runtime::ask()`` boots the installation in a subprocess
    and reads the registry itself. This is the only source that knows what a
@@ -33,7 +33,11 @@ The order
    answers for two lines below that — ``D-ANS-077``. The effective configuration
    is the third: ``configuration:show`` arrived in TYPO3 14.2, so a console
    answer would leave 12.4 and 13.4 holding the console's own "command is not
-   defined" — ``D-ANS-052``.
+   defined" — ``D-ANS-052``. The Fluid namespaces are the fourth:
+   ``fluid:namespaces`` arrived in TYPO3 14.2 and the files it would fall back
+   to arrived with it, so below that the container reads
+   ``SYS/fluid/namespaces``, which is where those versions keep the registry —
+   ``D-ANS-136``.
 
    Two topics are read only where a caller asked for them, because each costs
    what no other reading wants: the whole of ``TYPO3_CONF_VARS`` is around 50 kB

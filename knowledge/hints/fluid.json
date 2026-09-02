@@ -51,7 +51,15 @@
         "text": "Inside one root path the candidates are Foo.html and then a bare Foo. There is no .fluid.html candidate and no uppercase fallback in the file names here: the action name is capitalised before the lookup, so the file is spelled the way the caller spells it.",
         "until": 13
       },
-      "Only a few prefixes are available without declaring them; they are registered globally through the Configuration/Fluid/Namespaces.php of each package, so which ones depends on what is installed. typo3_fluid_namespace_list answers it for your installation.",
+      "Only a few prefixes are available without declaring them, and which ones depends on what is installed. typo3_fluid_namespace_list answers it for your installation.",
+      {
+        "text": "A package registers a global prefix through its Configuration/Fluid/Namespaces.php, which returns prefix => list of PHP namespaces and is merged across every active package.",
+        "since": 14
+      },
+      {
+        "text": "A package registers a global prefix by adding to $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces'] in its ext_localconf.php. There is no Configuration/Fluid/Namespaces.php on this major.",
+        "until": 13
+      },
       "Every other namespace is declared per template, including the backend one: xmlns:be=\"http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers\" on the root element, together with data-namespace-typo3-fluid=\"true\" so the declaration is stripped from the rendered output.",
       "Use typo3_component_lookup for the markup of a backend component and typo3_icon_lookup for an icon identifier, instead of writing either from memory.",
       "A core ViewHelper's argument list is in the manual rather than in this corpus. typo3_documentation_lookup answers a query like f:for each ViewHelper with that ViewHelper's page in the Fluid ViewHelper Reference, and passing that page back reads out its Arguments section: every argument with its type, its default, and whether it is required.",

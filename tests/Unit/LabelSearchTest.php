@@ -532,6 +532,92 @@ final class LabelSearchTest extends TestCase
         ];
     }
 
+    #[Requirement('R-ANS-038')]
+    #[Test]
+    public function aProjectSiteLabelFileIsReadBesideAnEmptyConsoleAnswer(): void
+    {
+        $this->consoleThatPrints("Labels in active extensions\n===\n\n [WARNING] No language resource files found.\n");
+        $this->projectLabelFile('config/sites/main/labels.xlf', ['site.title' => 'Site title']);
+
+        $result = Registry::call('typo3_label_lookup', ['query' => 'site title']);
+
+        self::assertSame('packages', $result->data['answeredBy']);
+        self::assertSame('LLL:config/sites/main/labels.xlf:site.title', $result->data['labels'][0]['ref']);
+        self::assertSame('project-site', $result->data['resourceDiagnostics'][0]['location']);
+        self::assertStringContainsString('does not register XLF files below config/sites automatically', $result->text);
+    }
+
+    #[Requirement('R-ANS-038')]
+    #[Test]
+    public function aNonStandardLabelFileIsWarned(): void
+    {
+        $this->consoleThatFails('The console cannot boot');
+        $this->labelFile('Resources/Private/Language/BackendLabels.xlf', ['button.save' => 'Save changes']);
+
+        $result = Registry::call('typo3_label_lookup', ['query' => 'save changes']);
+
+        self::assertFalse($result->data['resourceDiagnostics'][0]['conventionalName']);
+        self::assertStringContainsString(
+            'The conventional package language file name is locallang.xlf or locallang_<subject>.xlf.',
+            $result->text,
+        );
+    }
+
+    #[Decision('D-ANS-134')]
+    #[Requirement('R-ANS-038')]
+    #[Test]
+    public function aStaticReferenceIsNamed(): void
+    {
+        $this->consoleThatFails('The console cannot boot');
+        $this->labelFile('Resources/Private/Language/locallang_feature.xlf', ['feature.title' => 'Feature title']);
+        $reference = $this->installationRoot . '/typo3/sysext/core/Configuration/TCA/Overrides/pages.php';
+        mkdir(dirname($reference), 0o777, true);
+        file_put_contents($reference, "<?php return ['label' => 'core.feature:feature.title'];");
+
+        $result = Registry::call('typo3_label_lookup', ['query' => 'feature title']);
+
+        self::assertTrue($result->data['resourceDiagnostics'][0]['referenced']);
+        self::assertSame(
+            ['EXT:core/Configuration/TCA/Overrides/pages.php'],
+            $result->data['resourceDiagnostics'][0]['references'],
+        );
+        self::assertStringNotContainsString('No static reference', $result->text);
+    }
+
+    #[Decision('D-ANS-134')]
+    #[Requirement('R-ANS-038')]
+    #[Test]
+    public function anUnreferencedResourceStaysVisible(): void
+    {
+        $this->consoleThatFails('The console cannot boot');
+        $this->labelFile('Resources/Private/Language/locallang_orphan.xlf', ['orphan.title' => 'Orphan title']);
+
+        $result = Registry::call('typo3_label_lookup', ['query' => 'orphan title']);
+
+        self::assertSame(1, $result->data['matchCount']);
+        self::assertFalse($result->data['resourceDiagnostics'][0]['referenced']);
+        self::assertStringContainsString('references assembled at runtime are outside this scan', $result->text);
+    }
+
+    #[Requirement('R-ANS-038')]
+    #[Test]
+    public function aSiteSetLabelsFileCarriesItsImplicitReference(): void
+    {
+        $this->consoleThatFails('The console cannot boot');
+        $this->labelFile('Configuration/Sets/Feature/labels.xlf', ['feature.name' => 'Feature name']);
+        $configuration = $this->installationRoot . '/typo3/sysext/core/Configuration/Sets/Feature/config.yaml';
+        file_put_contents($configuration, "name: core/feature\n");
+
+        $result = Registry::call('typo3_label_lookup', ['query' => 'feature name']);
+
+        self::assertTrue($result->data['resourceDiagnostics'][0]['referenced']);
+        self::assertSame(
+            ['EXT:core/Configuration/Sets/Feature/config.yaml (implicit labels.xlf)'],
+            $result->data['resourceDiagnostics'][0]['references'],
+        );
+        self::assertSame([], $result->data['resourceDiagnostics'][0]['warnings']);
+    }
+
     #[Requirement('R-ANS-008')]
     #[Test]
     public function aConsoleThatCannotBootIsAnsweredFromTheFilesItWouldHaveRead(): void
@@ -575,7 +661,13 @@ final class LabelSearchTest extends TestCase
     /** @param array<string, string> $units */
     private function labelFile(string $path, array $units): void
     {
-        $file = $this->installationRoot . '/typo3/sysext/core/' . $path;
+        $this->projectLabelFile('typo3/sysext/core/' . $path, $units);
+    }
+
+    /** @param array<string, string> $units */
+    private function projectLabelFile(string $path, array $units): void
+    {
+        $file = $this->installationRoot . '/' . $path;
         mkdir(dirname($file), 0o777, true);
 
         $body = '';

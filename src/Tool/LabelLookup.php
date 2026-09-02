@@ -14,7 +14,7 @@ use TYPO3\DevCompanion\Result\Unsupported;
 use TYPO3\DevCompanion\Search\LabelSearch;
 
 /**
- * Labels registered in the installation, answered by the installation.
+ * Labels registered in the installation or kept in project site configuration.
  *
  * The console searches the packages it has active, which is what makes the
  * answer right: a project extension's labels are in it, and so are the resource
@@ -65,7 +65,7 @@ final class LabelLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Search the labels registered in the TYPO3 installation you are working in. Reuse is local to the translation resource already used at the consuming code: pass resource whenever it is known, and do not reference a match from another module or package merely because its text is identical. The console answers with the resource overrides the installation applies; where it cannot be reached — an installed TYPO3 whose database has no schema yet is the common case — the same packages\' XLF files are read instead. Every match comes back as a translation domain reference; computing that reference for a file this installation does not have, one a patch is about to add, is typo3_translation_domain_lookup.';
+        return 'Search the labels registered in the TYPO3 installation you are working in and the XLF files below project config/sites. Reuse is local to the translation resource already used at the consuming code: pass resource whenever it is known, and do not reference a match from another module or package merely because its text is identical. The console answers with the resource overrides the installation applies; the files supply an answer when it cannot be reached and report non-standard names or resources with no static reference. Every match comes back as a translation domain reference; computing that reference for a file this installation does not have, one a patch is about to add, is typo3_translation_domain_lookup.';
     }
 
     public static function inputSchema(): array
@@ -91,9 +91,17 @@ final class LabelLookup extends ReadOnlyTool
             'terms' => Schema::termCounts('How many labels each word of the query reaches on its own, inside the extension and the resource that were asked for — where to narrow when the query as a whole reaches none. A label answers the query only by carrying every word.'),
             'termCountsWithoutTheNarrowing' => Schema::termCounts('The same words counted outside the resource, inside the extension that was asked for or derived from it. Returned only where a word reaches there and nothing inside the resource, which makes the resource what emptied this answer rather than the words.'),
             'resources' => Schema::listOf(Schema::string(), 'The resources holding a label that carries every word of the query. Returned where a resource was asked for and no label at all in it reaches the query, so a path that was guessed can be replaced by one that exists. Empty means no resource holds such a label.'),
+            'resourceDiagnostics' => Schema::listOf(Schema::object([
+                'resource' => Schema::string('The XLF resource this diagnosis describes.'),
+                'location' => Schema::string('Where it was found: package, site-set, or project-site.'),
+                'conventionalName' => ['type' => 'boolean', 'description' => 'Whether the file follows the naming convention for its location.'],
+                'referenced' => ['type' => 'boolean', 'description' => 'Whether an implicit or static reference was found.'],
+                'references' => Schema::listOf(Schema::string(), 'Source files that name the resource. A conventional site-set labels.xlf names its adjacent config.yaml as an implicit reference.'),
+                'warnings' => Schema::listOf(Schema::string(), 'Naming, discovery, and static-reference warnings for this resource.'),
+            ], ['resource', 'location', 'conventionalName', 'referenced', 'references', 'warnings'])),
             'labels' => Schema::listOf(Schema::object([
-                'ref' => Schema::string('Translation domain reference (package.resource:key) — the canonical form.'),
-                'domain' => Schema::string(),
+                'ref' => Schema::string('The reusable label reference: a translation domain for package labels or an LLL file reference for project-site labels.'),
+                'domain' => Schema::string('The translation domain, empty for a project-site XLF that TYPO3 does not register as a package resource.'),
                 'key' => Schema::string('The trans-unit id.'),
                 'source' => Schema::string('The label text in the searched locale.'),
                 'resource' => Schema::string('The XLF file it lives in.'),
@@ -138,13 +146,19 @@ final class LabelLookup extends ReadOnlyTool
         $establishedNone = $answer['exitCode'] === 0
             && str_contains($answer['output'], self::NOTHING_MATCHED);
 
+        $fileCandidates = Labels::all($extension);
+        $fileResources = [];
+        foreach ($fileCandidates as $label) {
+            $fileResources[$label['resource']] = $label;
+        }
+
         $answeredBy = 'installation';
         $candidates = [];
         if (!is_array($answer['data']) && !$establishedNone) {
             // The labels are in the packages' files whether or not the console
             // boots, and it needs a migrated database to boot. A weaker answer
             // beats none, as long as it says which one it is.
-            $candidates = Labels::all($extension);
+            $candidates = $fileCandidates;
             if ($candidates === []) {
                 return Unsupported::because(
                     self::whyNothingWasEstablished($answer),
@@ -158,15 +172,34 @@ final class LabelLookup extends ReadOnlyTool
         $data = is_array($answer['data']) ? $answer['data'] : [];
         foreach ($data['items'] ?? [] as $item) {
             foreach ($item['labels'] ?? [] as $label) {
-                $candidates[] = [
+                $candidate = [
                     'ref' => (string) $label['domain'] . ':' . (string) $label['reference'],
                     'domain' => (string) $label['domain'],
                     'key' => (string) $label['reference'],
                     'source' => (string) $label['label'],
                     'resource' => (string) ($item['resource'] ?? ''),
+                    'origin' => 'installation',
                 ];
+                $metadata = $fileResources[$candidate['resource']] ?? null;
+                if (is_array($metadata)) {
+                    $candidate += [
+                        'conventionalName' => $metadata['conventionalName'],
+                        'references' => $metadata['references'],
+                        'location' => $metadata['location'],
+                    ];
+                }
+                $candidates[] = $candidate;
             }
         }
+        if (is_array($answer['data']) || $establishedNone) {
+            foreach ($fileCandidates as $label) {
+                if ($label['location'] === 'project-site') {
+                    $label['origin'] = 'packages';
+                    $candidates[] = $label;
+                }
+            }
+        }
+        $candidates = self::uniqueLabels($candidates);
 
         // Kept, because a miss cannot say whether the resource or the words
         // emptied it once the resource has taken the labels away — `D-ANS-016`.
@@ -185,15 +218,30 @@ final class LabelLookup extends ReadOnlyTool
 
         $total = count($labels);
         $shown = array_slice($labels, 0, $limit);
+        if ($shown !== [] && array_filter(
+            $shown,
+            static fn(array $label): bool => ($label['origin'] ?? 'packages') === 'installation',
+        ) === []) {
+            $answeredBy = 'packages';
+        }
+        $diagnostics = self::resourceDiagnostics($shown !== [] ? $shown : ($resource !== '' ? $candidates : []));
         $instance = Instance::describe();
 
         $fromFiles = $answeredBy === 'packages' ? sprintf(
-            "\n\nRead from the XLF files of the installed packages: %s (%s). "
+            "\n\nRead from the XLF files of the installed packages and project site configuration: %s (%s). "
             . 'What that leaves out is the assembled runtime state — a label an installation replaces through '
             . 'LANG/resourceOverrides is shown here as its package ships it.',
             $answer['exitCode'] !== 0 ? 'the console could not be asked' : 'the console settled nothing',
             self::whyNothingWasEstablished($answer),
         ) : '';
+        $fromProjectSites = $answeredBy === 'installation'
+            && array_filter(
+                $shown,
+                static fn(array $label): bool => ($label['location'] ?? '') === 'project-site',
+            ) !== []
+            ? "\n\nProject-site XLF files were read beside the console result because TYPO3 does not enumerate config/sites as package labels."
+            : '';
+        $diagnosticText = self::diagnosticText($diagnostics);
         $reuseBoundary = $resource === ''
             ? "\n\nA match is reusable only when its resource is the one already used at the consuming code. "
                 . 'A label from another module or package is not a shared vocabulary merely because its text matches; '
@@ -278,6 +326,7 @@ final class LabelLookup extends ReadOnlyTool
                 'matchCount' => 0,
                 'labels' => [],
                 'terms' => $termCounts,
+                'resourceDiagnostics' => $diagnostics,
                 'answeredBy' => $answeredBy,
             ];
             // Each field is present where it was computed and absent where
@@ -293,7 +342,8 @@ final class LabelLookup extends ReadOnlyTool
             }
 
             return ToolResult::create(
-                implode("\n", $lines) . $reuseBoundary . self::SOURCE_LANGUAGE . $fromFiles,
+                implode("\n", $lines) . $reuseBoundary . self::SOURCE_LANGUAGE . $fromFiles
+                    . $fromProjectSites . $diagnosticText,
                 $data,
             );
         }
@@ -311,17 +361,112 @@ final class LabelLookup extends ReadOnlyTool
             $lines[] = '  ' . $label['resource'];
         }
         $lines[] = '';
-        $lines[] = 'Reference a label by the domain form shown first (package.resource:key) — in TCA, in '
-            . 'LanguageService::sL(), and in f:translate as separate domain and key attributes.';
+        $lines[] = 'Reference a label by the ref shown first. Package resources use a translation domain; '
+            . 'project-site resources use the full LLL file reference.';
 
-        return ToolResult::create(implode("\n", $lines) . $reuseBoundary . self::SOURCE_LANGUAGE . $fromFiles, [
-            'query' => $query,
-            'resource' => $resource === '' ? null : $resource,
-            'matchCount' => $total,
-            'labels' => $shown,
-            'terms' => $termCounts,
-            'answeredBy' => $answeredBy,
-        ]);
+        return ToolResult::create(implode("\n", $lines) . $reuseBoundary . self::SOURCE_LANGUAGE . $fromFiles
+            . $fromProjectSites . $diagnosticText, [
+                'query' => $query,
+                'resource' => $resource === '' ? null : $resource,
+                'matchCount' => $total,
+                'labels' => array_map(self::publicLabel(...), $shown),
+                'terms' => $termCounts,
+                'resourceDiagnostics' => $diagnostics,
+                'answeredBy' => $answeredBy,
+            ]);
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $labels
+     * @return array<int, array<string, mixed>>
+     */
+    private static function uniqueLabels(array $labels): array
+    {
+        $unique = [];
+        foreach ($labels as $label) {
+            $identity = (string) ($label['resource'] ?? '') . "\0" . (string) ($label['key'] ?? '');
+            $unique[$identity] ??= $label;
+        }
+
+        return array_values($unique);
+    }
+
+    /**
+     * @param array<string, mixed> $label
+     * @return array{ref: string, domain: string, key: string, source: string, resource: string}
+     */
+    private static function publicLabel(array $label): array
+    {
+        return [
+            'ref' => (string) $label['ref'],
+            'domain' => (string) $label['domain'],
+            'key' => (string) $label['key'],
+            'source' => (string) $label['source'],
+            'resource' => (string) $label['resource'],
+        ];
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $labels
+     * @return array<int, array{
+     *     resource: string,
+     *     location: string,
+     *     conventionalName: bool,
+     *     referenced: bool,
+     *     references: array<int, string>,
+     *     warnings: array<int, string>
+     * }>
+     */
+    private static function resourceDiagnostics(array $labels): array
+    {
+        $diagnostics = [];
+        foreach ($labels as $label) {
+            if (!isset($label['conventionalName'], $label['references'], $label['location'])) {
+                continue;
+            }
+            $resource = (string) $label['resource'];
+            if (isset($diagnostics[$resource])) {
+                continue;
+            }
+            $references = array_values(array_map('strval', (array) $label['references']));
+            $location = (string) $label['location'];
+            $warnings = [];
+            if ($location === 'project-site') {
+                $warnings[] = 'TYPO3 does not register XLF files below config/sites automatically; keep an explicit LLL reference to this resource.';
+            }
+            if (!$label['conventionalName']) {
+                $warnings[] = $location === 'package'
+                    ? 'The conventional package language file name is locallang.xlf or locallang_<subject>.xlf.'
+                    : 'The conventional site label file name is labels.xlf.';
+            }
+            if ($references === []) {
+                $warnings[] = 'No static reference to this resource was found; references assembled at runtime are outside this scan.';
+            }
+            $diagnostics[$resource] = [
+                'resource' => $resource,
+                'location' => $location,
+                'conventionalName' => (bool) $label['conventionalName'],
+                'referenced' => $references !== [],
+                'references' => $references,
+                'warnings' => $warnings,
+            ];
+        }
+        ksort($diagnostics);
+
+        return array_values($diagnostics);
+    }
+
+    /** @param array<int, array{resource: string, warnings: array<int, string>}> $diagnostics */
+    private static function diagnosticText(array $diagnostics): string
+    {
+        $lines = [];
+        foreach ($diagnostics as $diagnostic) {
+            foreach ($diagnostic['warnings'] as $warning) {
+                $lines[] = '- ' . $diagnostic['resource'] . ': ' . $warning;
+            }
+        }
+
+        return $lines === [] ? '' : "\n\nResource warnings:\n" . implode("\n", $lines);
     }
 
     /**

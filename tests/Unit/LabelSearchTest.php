@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Installation\Instance;
+use TYPO3\DevCompanion\Installation\Labels;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Search\LabelSearch;
 use TYPO3\DevCompanion\Tests\Support\Decision;
@@ -584,6 +585,36 @@ final class LabelSearchTest extends TestCase
         self::assertStringNotContainsString('No static reference', $result->text);
     }
 
+    #[Decision('D-ANS-135')]
+    #[Test]
+    public function theFileReadingResolvesNoReference(): void
+    {
+        $this->consoleThatFails('The console cannot boot');
+        $this->labelFile('Resources/Private/Language/locallang_feature.xlf', ['feature.title' => 'Feature title']);
+
+        $labels = Labels::all();
+
+        self::assertNotSame([], $labels);
+        self::assertArrayNotHasKey('references', $labels[0]);
+        self::assertArrayHasKey('implicitReferences', $labels[0]);
+    }
+
+    #[Decision('D-ANS-135')]
+    #[Test]
+    public function onlyTheResourcesAnAnswerNamesAreScannedFor(): void
+    {
+        $this->consoleThatFails('The console cannot boot');
+        $this->labelFile('Resources/Private/Language/locallang_feature.xlf', ['feature.title' => 'Feature title']);
+        $this->labelFile('Resources/Private/Language/locallang_other.xlf', ['other.headline' => 'Other headline']);
+
+        $result = Registry::call('typo3_label_lookup', ['query' => 'feature title']);
+
+        self::assertSame(
+            ['EXT:core/Resources/Private/Language/locallang_feature.xlf'],
+            array_column($result->data['resourceDiagnostics'], 'resource'),
+        );
+    }
+
     #[Decision('D-ANS-134')]
     #[Requirement('R-ANS-038')]
     #[Test]
@@ -668,7 +699,9 @@ final class LabelSearchTest extends TestCase
     private function projectLabelFile(string $path, array $units): void
     {
         $file = $this->installationRoot . '/' . $path;
-        mkdir(dirname($file), 0o777, true);
+        if (!is_dir(dirname($file))) {
+            mkdir(dirname($file), 0o777, true);
+        }
 
         $body = '';
         foreach ($units as $id => $source) {

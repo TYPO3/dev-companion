@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tool;
 
 use TYPO3\DevCompanion\Installation\Instance;
+use TYPO3\DevCompanion\Installation\LabelReference;
 use TYPO3\DevCompanion\Installation\Labels;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Result\Miss;
@@ -184,7 +185,8 @@ final class LabelLookup extends ReadOnlyTool
                 if (is_array($metadata)) {
                     $candidate += [
                         'conventionalName' => $metadata['conventionalName'],
-                        'references' => $metadata['references'],
+                        'absolute' => $metadata['absolute'],
+                        'implicitReferences' => $metadata['implicitReferences'],
                         'location' => $metadata['location'],
                     ];
                 }
@@ -419,16 +421,38 @@ final class LabelLookup extends ReadOnlyTool
      */
     private static function resourceDiagnostics(array $labels): array
     {
+        // The scan reads every source file of every package, so it is asked
+        // for the resources this answer names and not for the hundreds the
+        // installation ships — `D-ANS-135`.
+        $wanted = [];
+        foreach ($labels as $label) {
+            if (!isset($label['conventionalName'], $label['implicitReferences'], $label['location'])) {
+                continue;
+            }
+            $resource = (string) $label['resource'];
+            $wanted[$resource] = [
+                'absolute' => (string) $label['absolute'],
+                'resource' => $resource,
+                'domain' => (string) $label['domain'],
+                'implicitReferences' => array_values(array_map('strval', (array) $label['implicitReferences'])),
+            ];
+        }
+
+        $instance = Instance::describe();
+        $found = $wanted === [] || $instance === null
+            ? []
+            : LabelReference::find(array_values($wanted), $instance['root'], Instance::packages());
+
         $diagnostics = [];
         foreach ($labels as $label) {
-            if (!isset($label['conventionalName'], $label['references'], $label['location'])) {
+            if (!isset($label['conventionalName'], $label['implicitReferences'], $label['location'])) {
                 continue;
             }
             $resource = (string) $label['resource'];
             if (isset($diagnostics[$resource])) {
                 continue;
             }
-            $references = array_values(array_map('strval', (array) $label['references']));
+            $references = $found[$resource] ?? [];
             $location = (string) $label['location'];
             $warnings = [];
             if ($location === 'project-site') {

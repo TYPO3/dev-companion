@@ -33,6 +33,11 @@ final class Labels
      * Every label of every installed package and project site, or of one
      * package where an extension key narrows the call.
      *
+     * The static references a resource carries are not resolved here: finding
+     * them means reading every source file of every package, and which
+     * resources an answer needs them for is only known once the query has
+     * matched — `D-ANS-135`. `LabelReference::find()` is asked there.
+     *
      * @return array<int, array{
      *     ref: string,
      *     domain: string,
@@ -40,7 +45,8 @@ final class Labels
      *     source: string,
      *     resource: string,
      *     conventionalName: bool,
-     *     references: array<int, string>,
+     *     absolute: string,
+     *     implicitReferences: array<int, string>,
      *     location: string
      * }>
      */
@@ -62,7 +68,6 @@ final class Labels
             array_push($files, ...self::siteFiles($instance['root']));
         }
 
-        $references = LabelReference::find($files, $instance['root'], $packages);
         $labels = [];
         foreach ($files as $file) {
             foreach (self::units($file['absolute']) as $id => $source) {
@@ -75,7 +80,8 @@ final class Labels
                     'source' => $source,
                     'resource' => $file['resource'],
                     'conventionalName' => $file['conventionalName'],
-                    'references' => $references[$file['resource']] ?? [],
+                    'absolute' => $file['absolute'],
+                    'implicitReferences' => $file['implicitReferences'],
                     'location' => $file['location'],
                 ];
             }

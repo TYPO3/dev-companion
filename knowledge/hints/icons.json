@@ -13,7 +13,12 @@
       "IconSize",
       "iconIdentifier",
       "Configuration/Icons.php",
-      "typo3-backend-icon"
+      "typo3-backend-icon",
+      "typeicon_classes",
+      "apps-pagetree-folder-contains",
+      "sysfolder icon",
+      "the folder keeps the default icon",
+      "pages.module"
     ],
     "hints": [
       "All of this is the backend's. The icon registry exists for modules, forms, lists and toolbars; a frontend template has no business in it and ships its own inline SVG or asset file. An identifier that looks like the shape a page needs is still a backend icon.",
@@ -25,7 +30,8 @@
       "In TypeScript there are two entry points, and they are easy to confuse. For markup, the custom element <typo3-backend-icon identifier=\"actions-open\" size=\"small\"> from @typo3/backend/element/icon-element. For fetching an icon programmatically, the default export of @typo3/backend/icons, imported as Icons.",
       "Identifiers follow <family>-<name> and spell the shape, not the intent: a warning is actions-exclamation-triangle, not actions-warning. Search the registry for the shape you want to see, not for the meaning you want to convey.",
       "Which identifiers exist is a property of the installation, not of TYPO3: IconRegistry is assembled from every installed package. Validate one with typo3_icon_lookup, which reads all three sources of your installation — the T3Icons set, the Configuration/Icons.php of every package, and the flag images. An unknown identifier renders an empty box and fails at runtime, not at build time.",
-      "T3Icons come from the npm package and are not hand-added to a system extension. An icon that belongs to one extension is registered in its Configuration/Icons.php, which returns an array keyed by identifier with a provider (SvgIconProvider or BitmapIconProvider) and an EXT: source path."
+      "T3Icons come from the npm package and are not hand-added to a system extension. An icon that belongs to one extension is registered in its Configuration/Icons.php, which returns an array keyed by identifier with a provider (SvgIconProvider or BitmapIconProvider) and an EXT: source path.",
+      "A folder that declares what it holds is drawn from pages.ctrl.typeicon_classes and not from the identifier's name. IconFactory builds the record type contains-<the value of the page's module field> and resolves that key there, so an identifier spelled apps-pagetree-folder-contains-<key> reaches the page tree only where typeicon_classes maps contains-<key> to it. The icon on the pages.module item is what the select field shows while the folder is being marked, and nothing else. Without the mapping the folder keeps the default icon, in the tree and in the breadcrumb, and nothing raises."
     ]
   }
 ]

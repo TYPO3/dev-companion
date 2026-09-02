@@ -30,12 +30,19 @@
       "the module is not where I put it",
       "promotesSingleSubmoduleToStandalone",
       "inheritNavigationComponentFromMainModule",
-      "page tree in a module that should not have one"
+      "page tree in a module that should not have one",
+      "sub-route",
+      "route path",
+      "methods",
+      "the route is registered twice",
+      "doubled path"
     ],
     "hints": [
       "A backend module is declared in the owning extension's Configuration/Backend/Modules.php, which returns an array keyed by module identifier. There is no registration call.",
       "The keys of an entry are parent (the identifier of the module it sits under), access (\"user\", \"admin\", ...), path (the backend route it answers on), iconIdentifier, labels, aliases (former identifiers kept working), routes, and moduleData for the module's persisted per-user state.",
       "routes maps a route name to a target of the form Controller::class . '::method'; the entry named _default is what the module opens with.",
+      "A route below _default is registered under the module's own path with its own appended, so a path stated on it is appended a second time and the route answers at the module path twice over. Nothing fails: buildUriFromRoute reads the same registration, so the link and the route agree with each other and a browser test passes against the doubled address. Where a route states no path, its name is what is appended, which is the form the core writes.",
+      "methods on a route restricts it to those HTTP methods, which is what makes a state-changing sub-route POST-only.",
       "A module with no parent registers no route unless it declares standalone => true. ModuleRegistry passes over every first-level module that is not standalone when it builds the route collection, so nothing throws and nothing is logged: the path falls through to whatever else matches, and the backend renders another module. The core's own single top-level entry is the Dashboard, which carries that key.",
       {
         "text": "A parent can promote instead of the child declaring itself: appearance.promotesSingleSubmoduleToStandalone on a parent that has exactly one submodule makes that submodule the top-level entry and drops the parent. The core files Media that way. It is the parent-side form of the same thing, and standalone on the module itself is the one that holds on every covered major.",

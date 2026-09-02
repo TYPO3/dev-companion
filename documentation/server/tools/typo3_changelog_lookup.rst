@@ -97,6 +97,13 @@ Answers with
         # deprecation whose entry states none, which is most of a major and is not
         # "no removal planned": removalRule is what answers it there.
         removal: string
+        # What to write instead, as the entry's own Migration section states it,
+        # code blocks included. Carried where the call reached one entry — an
+        # issue number, or a query that matched one — because a sweep of
+        # seventy-five is a list of titles and not seventy-five migrations. Empty on
+        # every entry of a longer answer, and on an entry whose file states no
+        # migration.
+        migration: string
         # Index tags. FullyScanned or PartiallyScanned means the extension scanner
         # has a matcher for it.
         tags: [string]
@@ -195,7 +202,7 @@ The answer carries exactly one of these sets of fields: ``query``,
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-02 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
 15.0.0-dev, the main core checkout below .checkouts/, whose console could not
@@ -231,7 +238,11 @@ Text:
     - 14.3 Deprecation: ext_tables.php in extensions (#109438) — removed in v15.0
       EXT:core/Documentation/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.rst — PHP-API, NotScanned, ext:core
 
-    Read the file for the description and the migration. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
+    Migration
+    Move all registration from :file:`ext_tables.php` to the appropriate
+    configuration files.
+
+    The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
     A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
 Data:
@@ -250,6 +261,7 @@ Data:
                 "issue": "109438",
                 "title": "ext_tables.php in extensions",
                 "removal": "15.0",
+                "migration": "Move all registration from :file:`ext_tables.php` to the appropriate\nconfiguration files.",
                 "tags": [
                     "PHP-API",
                     "NotScanned",
@@ -333,7 +345,7 @@ Text:
     - 14.3 Deprecation: ext_tables.php in the fixture extension (#900001) — removed in v15.0
       EXT:core/Documentation/Changelog/14.3/Deprecation-900001-ExtTablesPhpInTheFixtureExtension.rst — PHP-API, FullyScanned, ext:acme_events
 
-    Read the file for the description and the migration. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
+    The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
     A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
 Data:
@@ -352,6 +364,7 @@ Data:
                 "issue": "900001",
                 "title": "ext_tables.php in the fixture extension",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -485,7 +498,7 @@ Text:
     - 14.1 Deprecation: Deprecate CommandNameAlreadyInUseException (#108667)
       EXT:core/Documentation/Changelog/14.1/Deprecation-108667-DeprecateCommandNameAlreadyInUseException.rst — PHP-API, FullyScanned, ext:core
 
-    Read the file for the description and the migration. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
+    Read the file for the description and the migration, or ask again for the one entry by its issue number, which carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
     A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
 Data:
@@ -561,6 +574,7 @@ Data:
                 "issue": "110148",
                 "title": "Experimental backend ViewHelpers",
                 "removal": "16.0",
+                "migration": "",
                 "tags": [
                     "Fluid",
                     "FullyScanned",
@@ -575,6 +589,7 @@ Data:
                 "issue": "110202",
                 "title": "StringUtility::multibyteStringPad() method",
                 "removal": "16.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -589,6 +604,7 @@ Data:
                 "issue": "110285",
                 "title": "DataHandler->setCorrelationId()",
                 "removal": "16.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -603,6 +619,7 @@ Data:
                 "issue": "110334",
                 "title": "AbstractXmlSitemapDataProvider",
                 "removal": "16.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -617,6 +634,7 @@ Data:
                 "issue": "107931",
                 "title": "Lowlevel DatabaseIntegrityCheck class",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -631,6 +649,7 @@ Data:
                 "issue": "109519",
                 "title": "BackendUtility item list label methods",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -645,6 +664,7 @@ Data:
                 "issue": "109523",
                 "title": "GeneralUtility::isOnCurrentHost() without PSR-7 request",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -659,6 +679,7 @@ Data:
                 "issue": "109544",
                 "title": "GeneralUtility::sanitizeLocalUrl() needs PSR-7 request",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -673,6 +694,7 @@ Data:
                 "issue": "109548",
                 "title": "GeneralUtility::locationHeaderUrl() without PSR-7 request",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -687,6 +709,7 @@ Data:
                 "issue": "109551",
                 "title": "GeneralUtility::getIndpEnv()",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -701,6 +724,7 @@ Data:
                 "issue": "108568",
                 "title": "BackendUserAuthentication::recordEditAccessInternals() and $errorMsg",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -715,6 +739,7 @@ Data:
                 "issue": "108761",
                 "title": "BackendUtility TSconfig-related methods",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -729,6 +754,7 @@ Data:
                 "issue": "108810",
                 "title": "BackendUtility localization-related methods",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -743,6 +769,7 @@ Data:
                 "issue": "108843",
                 "title": "ExtensionManagementUtility::addFieldsToUserSettings",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -757,6 +784,7 @@ Data:
                 "issue": "108963",
                 "title": "Deprecate `PageRenderer->addInlineLanguageDomain()`",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "Backend",
                     "JavaScript",
@@ -772,6 +800,7 @@ Data:
                 "issue": "109027",
                 "title": "Move `language:update` command and events to `EXT:core`",
                 "removal": "15",
+                "migration": "",
                 "tags": [
                     "CLI",
                     "PHP-API",
@@ -787,6 +816,7 @@ Data:
                 "issue": "109230",
                 "title": "FormResultCompiler",
                 "removal": "15",
+                "migration": "",
                 "tags": [
                     "Backend",
                     "FullyScanned",
@@ -801,6 +831,7 @@ Data:
                 "issue": "109412",
                 "title": "TypoScript-based form YAML registration",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "YAML",
                     "Frontend",
@@ -817,6 +848,7 @@ Data:
                 "issue": "108524",
                 "title": "Fluid namespaces in TYPO3_CONF_VARS",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "Fluid",
                     "LocalConfiguration",
@@ -832,6 +864,7 @@ Data:
                 "issue": "108667",
                 "title": "Deprecate CommandNameAlreadyInUseException",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -910,7 +943,7 @@ Text:
 
 .. code-block:: text
 
-    383 of the 960 entries narrowed by version and type are tagged "FullyScanned" — showing the first 20:
+    385 of the 963 entries narrowed by version and type are tagged "FullyScanned" — showing the first 20:
     - 15.0 Deprecation: Experimental backend ViewHelpers (#110148) — removed in v16.0
       https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110148-ExperimentalBackendViewHelpers.html — Fluid, FullyScanned, ext:fluid
     - 15.0 Deprecation: StringUtility::multibyteStringPad() method (#110202) — removed in v16.0
@@ -919,6 +952,10 @@ Text:
       https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html — PHP-API, FullyScanned, ext:core
     - 15.0 Deprecation: AbstractXmlSitemapDataProvider (#110334) — removed in v16.0
       https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html — PHP-API, FullyScanned, ext:seo
+    - 15.0 Deprecation: LazyLoadingProxy and LazyObjectStorage (#110347) — removed in v16.0
+      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html — PHP-API, FullyScanned, ext:extbase
+    - 15.0 Deprecation: CommandRegistry->getSchedulableCommands() (#110477) — removed in v16.0
+      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html — CLI, FullyScanned, PHP-API, ext:core
     - 14.3 Deprecation: ext_tables.php in the fixture extension (#900001) — removed in v15.0
       EXT:core/Documentation/Changelog/14.3/Deprecation-900001-ExtTablesPhpInTheFixtureExtension.rst — PHP-API, FullyScanned, ext:acme_events
     - 14.2 Deprecation: BackendUserAuthentication::recordEditAccessInternals() and $errorMsg (#108568)
@@ -947,12 +984,8 @@ Text:
       https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Deprecation-106618-GeneralUtilityresolveBackPath.html — Backend, Frontend, JavaScript, TypoScript, FullyScanned, ext:core
     - 14.0 Deprecation: Move upgrade wizard related interfaces and attribute to `EXT:core` (#106947)
       https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Deprecation-106947-MoveUpgradeWizardRelatedInterfacesAndAttributeToEXTcore.html — PHP-API, FullyScanned, ext:install
-    - 14.0 Deprecation: ExtensionManagementUtility::addPiFlexFormValue() (#107047) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Deprecation-107047-ExtensionManagementUtilityAddPiFlexFormValue.html — Backend, FlexForm, TCA, FullyScanned, ext:core
-    - 14.0 Deprecation: Deprecate :php:`Annotation` namespace of Extbase attributes (#107229) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Deprecation-107229-DeprecatePhpAnnotationNamespaceOfExtbaseAttributes.html — PHP-API, FullyScanned, ext:extbase
 
-    Read the file for the description and the migration. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
+    Read the file for the description and the migration, or ask again for the one entry by its issue number, which carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
     Entries above 14.3 come from docs.typo3.org rather than from this installation: they are what the host publishes today, they are linked by URL instead of by EXT: path, and for a major that is not released yet they are still being written. An identifier search does not reach them — their text is not on disk, so they are searched by name and by the title the manual states.
     A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
@@ -962,7 +995,7 @@ Data:
 
     {
         "query": "",
-        "matchCount": 383,
+        "matchCount": 385,
         "matchedIn": "name",
         "tags": [
             "Backend",
@@ -1030,6 +1063,7 @@ Data:
                 "issue": "110148",
                 "title": "Experimental backend ViewHelpers",
                 "removal": "16.0",
+                "migration": "",
                 "tags": [
                     "Fluid",
                     "FullyScanned",
@@ -1044,6 +1078,7 @@ Data:
                 "issue": "110202",
                 "title": "StringUtility::multibyteStringPad() method",
                 "removal": "16.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -1058,6 +1093,7 @@ Data:
                 "issue": "110285",
                 "title": "DataHandler->setCorrelationId()",
                 "removal": "16.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -1072,6 +1108,7 @@ Data:
                 "issue": "110334",
                 "title": "AbstractXmlSitemapDataProvider",
                 "removal": "16.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -1082,10 +1119,42 @@ Data:
             },
             {
                 "type": "Deprecation",
+                "version": "15.0",
+                "issue": "110347",
+                "title": "LazyLoadingProxy and LazyObjectStorage",
+                "removal": "16.0",
+                "migration": "",
+                "tags": [
+                    "PHP-API",
+                    "FullyScanned",
+                    "ext:extbase"
+                ],
+                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
+                "publishedIn": "manual"
+            },
+            {
+                "type": "Deprecation",
+                "version": "15.0",
+                "issue": "110477",
+                "title": "CommandRegistry->getSchedulableCommands()",
+                "removal": "16.0",
+                "migration": "",
+                "tags": [
+                    "CLI",
+                    "FullyScanned",
+                    "PHP-API",
+                    "ext:core"
+                ],
+                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
+                "publishedIn": "manual"
+            },
+            {
+                "type": "Deprecation",
                 "version": "14.3",
                 "issue": "900001",
                 "title": "ext_tables.php in the fixture extension",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -1100,6 +1169,7 @@ Data:
                 "issue": "108568",
                 "title": "BackendUserAuthentication::recordEditAccessInternals() and $errorMsg",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -1114,6 +1184,7 @@ Data:
                 "issue": "108761",
                 "title": "BackendUtility TSconfig-related methods",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -1128,6 +1199,7 @@ Data:
                 "issue": "108810",
                 "title": "BackendUtility localization-related methods",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -1142,6 +1214,7 @@ Data:
                 "issue": "108843",
                 "title": "ExtensionManagementUtility::addFieldsToUserSettings",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -1156,6 +1229,7 @@ Data:
                 "issue": "108963",
                 "title": "Deprecate `PageRenderer->addInlineLanguageDomain()`",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "Backend",
                     "JavaScript",
@@ -1171,6 +1245,7 @@ Data:
                 "issue": "109027",
                 "title": "Move `language:update` command and events to `EXT:core`",
                 "removal": "15",
+                "migration": "",
                 "tags": [
                     "CLI",
                     "PHP-API",
@@ -1186,6 +1261,7 @@ Data:
                 "issue": "109230",
                 "title": "FormResultCompiler",
                 "removal": "15",
+                "migration": "",
                 "tags": [
                     "Backend",
                     "FullyScanned",
@@ -1200,6 +1276,7 @@ Data:
                 "issue": "109412",
                 "title": "TypoScript-based form YAML registration",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "YAML",
                     "Frontend",
@@ -1216,6 +1293,7 @@ Data:
                 "issue": "108524",
                 "title": "Fluid namespaces in TYPO3_CONF_VARS",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "Fluid",
                     "LocalConfiguration",
@@ -1231,6 +1309,7 @@ Data:
                 "issue": "108667",
                 "title": "Deprecate CommandNameAlreadyInUseException",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
@@ -1245,6 +1324,7 @@ Data:
                 "issue": "106393",
                 "title": "Various methods in BackendUtility",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "TCA",
                     "FullyScanned",
@@ -1259,6 +1339,7 @@ Data:
                 "issue": "106618",
                 "title": "GeneralUtility::resolveBackPath",
                 "removal": "15.0",
+                "migration": "",
                 "tags": [
                     "Backend",
                     "Frontend",
@@ -1276,42 +1357,13 @@ Data:
                 "issue": "106947",
                 "title": "Move upgrade wizard related interfaces and attribute to `EXT:core`",
                 "removal": "",
+                "migration": "",
                 "tags": [
                     "PHP-API",
                     "FullyScanned",
                     "ext:install"
                 ],
                 "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Deprecation-106947-MoveUpgradeWizardRelatedInterfacesAndAttributeToEXTcore.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.0",
-                "issue": "107047",
-                "title": "ExtensionManagementUtility::addPiFlexFormValue()",
-                "removal": "15.0",
-                "tags": [
-                    "Backend",
-                    "FlexForm",
-                    "TCA",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Deprecation-107047-ExtensionManagementUtilityAddPiFlexFormValue.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.0",
-                "issue": "107229",
-                "title": "Deprecate :php:`Annotation` namespace of Extbase attributes",
-                "removal": "15.0",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:extbase"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Deprecation-107229-DeprecatePhpAnnotationNamespaceOfExtbaseAttributes.html",
                 "publishedIn": "manual"
             }
         ],

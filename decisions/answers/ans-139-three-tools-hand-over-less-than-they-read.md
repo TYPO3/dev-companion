@@ -4,6 +4,7 @@ title: Three tools hand over less than they read
 date: 2026-09-02
 status: open
 coveredBy:
+  - ChangelogLookupTest::oneEntryCarriesItsMigrationAndASweepCarriesNone
   - IconLookupTest::aConceptQuerySaysWhichOfItsWordsReachedNothing
 ---
 

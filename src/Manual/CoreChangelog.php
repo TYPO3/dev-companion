@@ -140,14 +140,14 @@ final class CoreChangelog
      * the host publishes beside its page.
      *
      * @param array{path: string, version: string, type: string} $entry
-     * @return array{title: string, tags: array<int, string>, removal: string}
+     * @return array{title: string, tags: array<int, string>, removal: string, migration: string}
      */
     public function read(array $entry): array
     {
         $source = $this->reader->get(self::BASE . self::SOURCES . preg_replace('/\.html$/', '', $entry['path']) . '.rst.txt');
 
         return $source === null
-            ? ['title' => '', 'tags' => [], 'removal' => '']
+            ? ['title' => '', 'tags' => [], 'removal' => '', 'migration' => '']
             : Changelog::parse($source, $entry);
     }
 

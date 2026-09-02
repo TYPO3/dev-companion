@@ -125,7 +125,7 @@ final class Changelog
      * read from the file.
      *
      * @param array{file: string, version: string, type: string} $entry
-     * @return array{title: string, tags: array<int, string>, removal: string}
+     * @return array{title: string, tags: array<int, string>, removal: string, migration: string}
      */
     public static function read(array $entry): array
     {
@@ -140,7 +140,7 @@ final class Changelog
      * disk and there is one parser rather than two — `D-ANS-067`.
      *
      * @param array{version: string, type: string} $entry
-     * @return array{title: string, tags: array<int, string>, removal: string}
+     * @return array{title: string, tags: array<int, string>, removal: string, migration: string}
      */
     public static function parse(string $contents, array $entry): array
     {
@@ -159,7 +159,59 @@ final class Changelog
             }
         }
 
-        return ['title' => $title, 'tags' => $tags, 'removal' => self::removal($contents, $entry)];
+        return [
+            'title' => $title,
+            'tags' => $tags,
+            'removal' => self::removal($contents, $entry),
+            'migration' => self::section($contents, 'Migration'),
+        ];
+    }
+
+    /**
+     * One section of an entry's reStructuredText, whole.
+     *
+     * A title says what stopped working and the migration says what to write
+     * instead, and a session that got the first read the file for the second —
+     * `D-ANS-139`. The file is already open here, so what this costs is the
+     * lines between two headings.
+     *
+     * A heading is its own line with an underline of at least its length; the
+     * section runs to the next one or to the end.
+     */
+    public static function section(string $contents, string $heading): string
+    {
+        $lines = preg_split('/\R/', $contents) ?: [];
+        $section = [];
+        $inside = false;
+        $skipUnderline = false;
+        foreach ($lines as $index => $line) {
+            if ($skipUnderline) {
+                $skipUnderline = false;
+                continue;
+            }
+            $next = trim($lines[$index + 1] ?? '');
+            $underlined = trim($line) !== ''
+                && preg_match('/^[=\-~^"\x27`#*+]{3,}$/', $next) === 1
+                && mb_strlen($next) >= mb_strlen(trim($line));
+            if ($underlined) {
+                if ($inside) {
+                    break;
+                }
+                $inside = trim($line) === $heading;
+                $skipUnderline = true;
+                continue;
+            }
+            // The index directive closes the file rather than the section, and
+            // its tags are a field of their own.
+            if ($inside && preg_match('/^\.\.\s+index::/', trim($line)) === 1) {
+                break;
+            }
+            if ($inside) {
+                $section[] = $line;
+            }
+        }
+
+        return trim(implode("\n", $section));
     }
 
     /**

@@ -47,6 +47,37 @@ final class ChangelogLookupTest extends TestCase
         Instance::discoverFrom(null);
     }
 
+    /**
+     * A title says what stopped working; the migration says what to write.
+     *
+     * A sweep of 75 deprecations returned the two that stopped a session's
+     * work and neither said what to write instead, so it read the two files
+     * out of the installed package for their Migration sections and used both
+     * heavily — `D-ANS-139`. The file was already open here.
+     */
+    #[Decision('D-ANS-139')]
+    #[Test]
+    public function oneEntryCarriesItsMigrationAndASweepCarriesNone(): void
+    {
+        Instance::discoverFrom($this->installationWithAMigrationSection());
+
+        $one = Registry::call('typo3_changelog_lookup', ['query' => 'makeLinkButton']);
+        self::assertSame(1, $one->data['matchCount']);
+        self::assertStringContainsString('use the component factory instead', $one->data['entries'][0]['migration']);
+        // The index directive closes the file rather than the section.
+        self::assertStringNotContainsString('index::', $one->data['entries'][0]['migration']);
+        self::assertStringContainsString('Migration', $one->text);
+
+        $sweep = Registry::call('typo3_changelog_lookup', ['type' => 'deprecation']);
+        self::assertGreaterThan(1, $sweep->data['matchCount']);
+        self::assertSame(
+            [],
+            array_values(array_filter(array_column($sweep->data['entries'], 'migration'))),
+            'a sweep of seventy-five is a list of titles and not seventy-five migrations',
+        );
+        self::assertStringContainsString('ask again for the one entry by its issue number', $sweep->text);
+    }
+
     #[Decision('D-ANS-042')]
     #[Test]
     public function aRemovedMethodReachesTheEntriesNamingItInTheirBody(): void
@@ -317,6 +348,41 @@ final class ChangelogLookupTest extends TestCase
      * that entry writes: the `:php:` role of 13.0, the single backticks of 7.1,
      * and a feature that only mentions the class in passing.
      */
+    /**
+     * A project whose core ships the three entries around one removed method.
+     *
+     * Each is an excerpt of the entry it is named after, kept in the markup
+     * that entry writes: the `:php:` role of 13.0, the single backticks of 7.1,
+     * and a feature that only mentions the class in passing.
+     */
+    /**
+     * Two deprecations, so a sweep is a sweep, and one with a Migration.
+     */
+    private function installationWithAMigrationSection(): string
+    {
+        $root = $this->composerProject();
+        $changelog = $root . '/vendor/typo3/cms-core/Documentation/Changelog';
+        foreach ([
+            '14.0/Deprecation-107823-ButtonBarMakeMethods.rst' => "Deprecation: #107823 - ButtonBar make methods\n\n"
+                . "Description\n===========\n\nThe :php:`makeLinkButton()` family is deprecated.\n\n"
+                . "Impact\n======\n\nCalling one raises a deprecation.\n\n"
+                . "Migration\n=========\n\nInject the factory and use the component factory instead of the "
+                . "button bar's own makers.\n\n.. index:: Backend, PHP-API, ext:backend\n",
+            '14.0/Deprecation-109519-BackendUtilityItemListLabelMethods.rst' => 'Deprecation: #109519 - '
+                . "BackendUtility item list label methods\n\nDescription\n===========\n\n"
+                . "The label helpers on :php:`BackendUtility` are deprecated.\n",
+        ] as $path => $contents) {
+            if (!is_dir($changelog . '/' . dirname($path))) {
+                mkdir($changelog . '/' . dirname($path), 0o777, true);
+            }
+            file_put_contents($changelog . '/' . $path, $contents);
+        }
+
+        return $root;
+    }
+
+
+
     private function installationWithTheImageGenerationEntries(): string
     {
         $root = $this->composerProject();

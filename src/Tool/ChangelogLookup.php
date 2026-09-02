@@ -83,10 +83,11 @@ final class ChangelogLookup extends ReadOnlyTool
                 'issue' => Schema::string('Forge issue number.'),
                 'title' => Schema::string(),
                 'removal' => Schema::string('The version a Deprecation states the deprecated thing stops working in — what an upgrade decides on. Empty on the other three types, and on a deprecation whose entry states none, which is most of a major and is not "no removal planned": removalRule is what answers it there.'),
+                'migration' => Schema::string('What to write instead, as the entry\'s own Migration section states it, code blocks included. Carried where the call reached one entry — an issue number, or a query that matched one — because a sweep of seventy-five is a list of titles and not seventy-five migrations. Empty on every entry of a longer answer, and on an entry whose file states no migration.'),
                 'tags' => Schema::listOf(Schema::string(), 'Index tags. FullyScanned or PartiallyScanned means the extension scanner has a matcher for it.'),
                 'file' => Schema::string('Where to read the description and the migration: an EXT: reference where the installation ships the entry, and a docs.typo3.org URL where it does not.'),
                 'publishedIn' => Schema::string('Which side the entry came from. "installation" is the core package on disk, which is the version that installation runs. "manual" is docs.typo3.org, which is every version above the installed major — what an upgrade reads, and a moving target for a major that is not released yet.'),
-            ], ['type', 'version', 'issue', 'title', 'removal', 'tags', 'file', 'publishedIn'])),
+            ], ['type', 'version', 'issue', 'title', 'removal', 'migration', 'tags', 'file', 'publishedIn'])),
             'termCounts' => Schema::termCounts('What each word of the query reaches on its own, inside the version and the type that were asked for. A word at 0 is the one that emptied the answer — it is misspelled, or nothing here is named after it. Returned on a miss that carried words. These are counts and not a query: termSubsets is what can be asked outright.'),
             'termCountsWithoutTheNarrowing' => Schema::termCounts('The same words counted over the whole changelog rather than inside the version and the type. Returned only where a word reaches there and nothing inside the narrowing, which makes the filter what emptied this answer rather than the words: ask again without it.'),
             'termSubsets' => Schema::listOf(Schema::object([
@@ -279,7 +280,11 @@ final class ChangelogLookup extends ReadOnlyTool
             ?: strcmp($a['key'], $b['key']));
 
         $shown = array_slice($matching, 0, $limit);
-        $entries = array_map(static function (array $entry) use ($manual): array {
+        // The migration is the part a session went to the file for, and it is
+        // handed over where the answer is about one entry. On a sweep it is the
+        // volume the titles exist to keep down — `D-ANS-139`.
+        $whole = count($shown) === 1;
+        $entries = array_map(static function (array $entry) use ($manual, $whole): array {
             $read = self::body($entry, $manual);
 
             return [
@@ -288,6 +293,7 @@ final class ChangelogLookup extends ReadOnlyTool
                 'issue' => $entry['issue'],
                 'title' => $read['title'] === '' ? $entry['source'] : $read['title'],
                 'removal' => $read['removal'],
+                'migration' => $whole ? $read['migration'] : '',
                 'tags' => $read['tags'],
                 'file' => $entry['publishedIn'] === 'manual'
                     ? $entry['url']
@@ -480,11 +486,21 @@ final class ChangelogLookup extends ReadOnlyTool
                 $entry['removal'] === '' ? '' : sprintf(' — removed in v%s', $entry['removal']),
             );
             $lines[] = '  ' . $entry['file'] . ($entry['tags'] === [] ? '' : ' — ' . implode(', ', $entry['tags']));
+            if ($entry['migration'] !== '') {
+                $lines[] = '';
+                $lines[] = 'Migration';
+                $lines[] = $entry['migration'];
+            }
         }
         $lines[] = '';
-        $lines[] = 'Read the file for the description and the migration. A Deprecation or Breaking entry tagged '
-            . 'FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can '
-            . 'find the call sites for you.';
+        $lines[] = count($entries) === 1
+            ? 'The migration above is the entry\'s own section. Read the file for the rest of the description. A '
+                . 'Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner '
+                . 'matcher behind it, so the Install Tool can find the call sites for you.'
+            : 'Read the file for the description and the migration, or ask again for the one entry by its issue '
+                . 'number, which carries its migration section whole. A Deprecation or Breaking entry tagged '
+                . 'FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool '
+                . 'can find the call sites for you.';
         // A hit says nothing about what it could not see, and that is the one
         // silence this must not leave: entries came back, so the answer looks
         // complete, while the versions an upgrade is about were never read.
@@ -590,7 +606,7 @@ final class ChangelogLookup extends ReadOnlyTool
      * decides.
      *
      * @param array<string, mixed> $entry
-     * @return array{title: string, tags: array<int, string>, removal: string}
+     * @return array{title: string, tags: array<int, string>, removal: string, migration: string}
      */
     private static function body(array $entry, CoreChangelog $manual): array
     {

@@ -27,6 +27,11 @@ Then, for this workflow:
 - `typo3_component_lookup` with the target TYPO3 version before writing the
   backend preview's markup, its CSS classes or the custom properties it reads. A
   guessed custom property behind a CSS fallback renders and is wrong.
+- `typo3_rule_lookup` with `documentId="any/icons/drawing-a-content-icon"` where
+  the element needs an icon of its own — where the icon lookup above refused a
+  borrowed identifier, or where the element is one of a set. It is the box every
+  content icon shares, what the core's own set varies to tell one from another,
+  and the check that says a set works.
 - Read the nearby content elements, TCA files, TypoScript imports, templates,
   assets, schema and tests — the project's file organization is the thing a new
   element has to fit, and only the checkout has it.

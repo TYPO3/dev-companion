@@ -78,6 +78,11 @@ for a review-only request, report the defect without changing it.
 2. Take configuration and bootstrap templates from the installed dependency or
    the source named by `typo3_hint_lookup`. Copy and adapt templates that say
    they are examples; do not point extension suites into a core checkout.
+   `typo3_reference_list` says which extensions the core ships as worked
+   examples of its own conventions and what each one is a reference for — the
+   browser suite and the static analysis setup among them. One of those is the
+   currently-passing form of the harness being established here, which is what a
+   template copied out of a manual is not.
 3. Preserve working configuration, scripts, and CI. Extend them instead of
    creating a parallel harness.
 4. Give each selected layer one stable local command before adding CI. Derive

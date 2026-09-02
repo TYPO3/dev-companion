@@ -61,6 +61,13 @@ one that already exists:
   version where an official API or configuration detail decides the finding, and
   for every "does this still work here" a surface raises — the base says why the
   changelog cannot answer that one.
+- `typo3_ter_lookup` with the extension key, on the package surface. What the
+  Extension Repository has published is the one thing about this package the
+  package cannot answer: `ext_emconf.php` names the version being released and
+  goes on naming it afterwards, so a checkout that was published reads exactly
+  like one that was not. A key nothing is published under is an answer rather
+  than a finding — an extension distributed through Composer alone is registered
+  nowhere here.
 
 Read the checkout for what none of those can know: the files themselves, the
 registrations, the tests, the documentation, and the conventions the project has

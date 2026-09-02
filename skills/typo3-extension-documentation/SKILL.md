@@ -67,6 +67,11 @@ stable public API.
   explicit.
 - Validate internal links, referenced paths, configuration examples, and code
   identifiers against the checkout.
+- Validate every docs.typo3.org link the page carries with
+  `typo3_permalink_lookup`, which takes the identifiers and the URLs together
+  and answers what each one reaches. A link the host redirects still resolves in
+  a browser and points at another branch than the page claims, so reading the
+  page is not the check.
 - Run documentation, lint, and test commands only when the project declares them
   or the task establishes them.
 - Report the files updated, validation performed, and any behavior that could

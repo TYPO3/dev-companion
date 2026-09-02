@@ -56,8 +56,12 @@ final class SkillTest extends TestCase
             'typo3_rule_lookup',
             'typo3_commit_message_guide',
         ],
+        // The worked example the core ships stands where the harness is built,
+        // between the manual that describes one and the message the commit
+        // carries: it is the currently-passing form of what the manual states.
         'typo3-extension-testing' => [
             'typo3_documentation_lookup',
+            'typo3_reference_list',
             'typo3_commit_message_guide',
         ],
         // What the build's output owes the backend, in the order it is read:
@@ -130,6 +134,7 @@ final class SkillTest extends TestCase
         'typo3-extension-health' => [
             'typo3_hint_lookup',
             'typo3_documentation_lookup',
+            'typo3_ter_lookup',
             'typo3_rule_lookup',
             'typo3_commit_message_guide',
         ],
@@ -146,11 +151,15 @@ final class SkillTest extends TestCase
             'typo3_system_extension_lookup',
             'typo3_commit_message_guide',
         ],
+        // The permalink check stands late because it is a validation: the page
+        // is written from what the documentation lookup returned, and what it
+        // then carries as links is checked before the commit.
         'typo3-extension-documentation' => [
             'typo3_documentation_lookup',
             'typo3_label_lookup',
             'typo3_translation_domain_lookup',
             'typo3_rule_lookup',
+            'typo3_permalink_lookup',
             'typo3_commit_message_guide',
         ],
         'typo3-extension-upgrade' => [

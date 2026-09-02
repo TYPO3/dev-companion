@@ -152,6 +152,13 @@ Ask `typo3_hint_lookup` with the concrete paths for the conventions of each
 subsystem you touch, before writing rather than after. A convention fetched
 afterwards confirms what you already wrote.
 
+Where the change touches a source below `Build/Sources/`, the generated file
+beside it is part of the patch. `typo3_rule_lookup` with
+`documentId="core/contribution/committed-build-output"` is which source produces
+which committed file, how one is rebuilt without putting the rest of the working
+tree at risk, and what a backport that came back with conflict markers in it
+needs.
+
 Keep the patch one change. What else you noticed is another issue and another
 patch; a diff that fixes two things is a diff a reviewer has to accept or reject
 as one.

@@ -125,9 +125,11 @@ Answers with
     # one you are in. Empty means no published skill owns what was recognized, which
     # is not a statement that the work has no workflow.
     skills: [string]
-    # The whole procedures the recognized work is written up in, the same corpus
+    # The whole procedures this work is written up in or owes, the same corpus
     # typo3_project_describe lists at orientation and this server serves as
-    # typo3://guides resources. Named rather than carried: a brief is one call
+    # typo3://guides resources. Owes is the second half and the one a task text
+    # never asks for: a change that ends in a backend UI owes the browser check
+    # whether or not it says so. Named rather than carried: a brief is one call
     # inside a procedure, and the page is one typo3_rule_lookup call by documentId.
     # Empty means no page here is the write-up of what was recognized, which is not
     # a statement that none of them is worth reading — the whole list is in that
@@ -899,6 +901,8 @@ Text:
     Change type: unknown
     Domains: php
     Recognized as: Backend UI markup
+    Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
+    - any/testing/browser-check — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
 
     Hints:
     - No hint matched this task text. That means no convention was recognized, not that none applies: call typo3_hint_lookup again with the concrete file paths once they are known.
@@ -1003,7 +1007,14 @@ Data:
         ],
         "skills": [],
         "staleSkills": [],
-        "guides": [],
+        "guides": [
+            {
+                "id": "any/testing/browser-check",
+                "title": "Looking at a Change in a Real Browser",
+                "when": "When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.",
+                "tool": "typo3_rule_lookup"
+            }
+        ],
         "hints": [],
         "omittedHints": [],
         "rules": [

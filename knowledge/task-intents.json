@@ -214,6 +214,9 @@
       "typo3_backend_module_lookup, before choosing the identifier, the parent or the route: it reports what this installation already registers",
       "typo3_hint_lookup with id=backend-modules, for the registration file, what a module builds into its doc header, and what its own POST answers with",
       "typo3_translation_domain_lookup, for the XLF the module's labels are declared through"
+    ],
+    "owes": [
+      "any/testing/browser-check"
     ]
   },
   {
@@ -245,6 +248,9 @@
     ],
     "tools": [
       "typo3_component_lookup, before writing backend markup or CSS classes"
+    ],
+    "owes": [
+      "any/testing/browser-check"
     ]
   },
   {
@@ -913,6 +919,9 @@
       "typo3_hint_lookup with id=content-elements, for what the element owns and how the record type is registered, then with id=extbase and id=frontend-records for the two sides of the Extbase fork",
       "typo3_extension_describe, for the architecture this extension already has: each content element it registers with a kind of element or plugin, and the templates they render through",
       "typo3_record_lookup, where the installation already holds the records: how many rows the table has, on which page and what they are — the count that decides whether the record list is still the editing surface"
+    ],
+    "owes": [
+      "any/testing/browser-check"
     ]
   },
   {

@@ -32,7 +32,7 @@ final class TaskIntents
     ];
 
     /**
-     * @return array<int, array{id: string, title: string, skill: string, skillCore: string, guide: string, guideCore: string, changesNothing: bool, scope: ?Scope, match: array<int, string>, matchWeak: array<int, string>, condition: string, rulesQuery: string, checklist: array<int, string>, checks: array<int, string>, tools: array<int, string>}>
+     * @return array<int, array{id: string, title: string, skill: string, skillCore: string, guide: string, guideCore: string, owes: array<int, string>, changesNothing: bool, scope: ?Scope, match: array<int, string>, matchWeak: array<int, string>, condition: string, rulesQuery: string, checklist: array<int, string>, checks: array<int, string>, tools: array<int, string>}>
      */
     public static function load(): array
     {
@@ -61,6 +61,7 @@ final class TaskIntents
             // the rule sections in the same answer already do (`D-GUI-012`).
             'guide' => (string) ($entry['guide'] ?? ''),
             'guideCore' => (string) ($entry['guideCore'] ?? ''),
+            'owes' => array_map('strval', (array) ($entry['owes'] ?? [])),
             // Whether the work this intent describes produces no change of its
             // own: reviewing one, triaging a report, fetching somebody else's
             // patch, running an installation. It is what skills() reads to
@@ -248,7 +249,26 @@ final class TaskIntents
      */
     public static function guides(array $intents, bool $coreWork, bool $changesNothing): array
     {
-        return self::owned($intents, $coreWork ? 'guideCore' : 'guide', $changesNothing);
+        $named = self::owned($intents, $coreWork ? 'guideCore' : 'guide', $changesNothing);
+
+        // A procedure a kind of work owes is not the write-up of it, so it is
+        // named beside the intent rather than by confirming a second one. The
+        // browser check is the case: a backend module owes it and no task text
+        // says "browser", and widening the intent's own words to reach it put
+        // a second checklist and a second skill into the brief — which is what
+        // `D-SKL-051` measured and refused (`D-ANS-140`).
+        foreach (self::confirmed($intents) as $intent) {
+            if ($changesNothing && $intent['changesNothing'] !== true) {
+                continue;
+            }
+            foreach ($intent['owes'] as $owed) {
+                if (!in_array($owed, $named, true)) {
+                    $named[] = $owed;
+                }
+            }
+        }
+
+        return $named;
     }
 
     /**

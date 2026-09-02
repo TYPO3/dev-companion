@@ -778,6 +778,43 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
+     * A procedure a kind of work owes, named without a second intent firing.
+     *
+     * A session had `any/testing/browser-check` in the guides list its first
+     * call returned, never matched it against a task it did not have yet, and
+     * wrote its own throwaway spec fifteen times. Its own words never say
+     * "browser", and widening the intent to reach them is what `D-SKL-051`
+     * refuses: the second intent arrives with a checklist and a skill behind
+     * it — `D-ANS-140`.
+     */
+    #[Decision('D-ANS-140')]
+    #[Decision('D-SKL-051')]
+    #[Test]
+    public function aChangeThatEndsInABackendUiIsNamedTheBrowserCheck(): void
+    {
+        $task = 'Add a backend module for editing the newsletter records';
+        $confirmed = TaskIntents::confirmed(TaskIntents::detect($task . ' feature'));
+
+        // The brief still recognizes one kind of work.
+        self::assertSame(['backend-module'], array_column($confirmed, 'id'));
+        self::assertContains(
+            'any/testing/browser-check',
+            TaskIntents::guides($confirmed, false, false),
+            'the procedure a backend module owes',
+        );
+
+        // And a change that ends in nothing to look at owes it nowhere.
+        self::assertSame(
+            [],
+            TaskIntents::guides(
+                TaskIntents::confirmed(TaskIntents::detect('Fix a typo in a comment cleanup')),
+                false,
+                false,
+            ),
+        );
+    }
+
+    /**
      * And the set is every intent, so an intent added without a brief is caught
      * here rather than by the first widening that swallows it unmeasured —
      * `D-SKL-051`.

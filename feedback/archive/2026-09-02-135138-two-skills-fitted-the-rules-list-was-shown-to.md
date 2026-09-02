@@ -1,7 +1,8 @@
 ---
 date: 2026-09-02T13:51:38+00:00
 category: idea
-status: open
+status: closed
+closed: 2026-09-02
 model: claude-opus-5[1m]
 tool: typo3-backend-module-development, typo3-extension-documentation, typo3_rule_lookup, typo3_label_lookup, typo3_flexform_lookup, typo3_documentation_lookup, typo3_server_scope
 directory: /home/benji/projects/site-tierheim

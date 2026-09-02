@@ -562,6 +562,13 @@ final class ScopeTest extends TestCase
         // it on 2026-08-03.
         yield 'the tracker lookup names the review lookup' => ['typo3_forge_lookup', 'typo3_gerrit_lookup'];
         yield 'the review lookup names the tracker lookup' => ['typo3_gerrit_lookup', 'typo3_forge_lookup'];
+
+        // Both answer hints for a set of paths, and a brief that changed no
+        // decision beside a hint answer that would have is
+        // `feedback/2026-08-25-105324`: the guide adds the checklist, and a
+        // caller holding paths alone has the lookup.
+        yield 'the task guide names the convention lookup' => ['typo3_task_guide', 'typo3_hint_lookup'];
+        yield 'the convention lookup names the task guide' => ['typo3_hint_lookup', 'typo3_task_guide'];
     }
 
     /**

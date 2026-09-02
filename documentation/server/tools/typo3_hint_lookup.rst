@@ -8,11 +8,12 @@ a convention at the code itself — what to write at this path, which idiom a
 subsystem is written in, what a finding on it costs. A procedure carried out in
 steps is typo3_rule_lookup instead: the commit message conventions, the
 changelog entry a change owes, the Gerrit push and amend workflow, setting an
-extension manual up. Where the paths read as a project or third-party extension
-the hints still come back, because the conventions transfer. The "Backend CSS"
-and "Backend TypeScript and JavaScript" sections describe the TYPO3 backend
-interface and are withheld, with the reason, where the task names the frontend.
-Answers from: knowledge.
+extension manual up. The checklist a change owes, with the hints its paths match
+beside it, is typo3_task_guide. Where the paths read as a project or third-party
+extension the hints still come back, because the conventions transfer. The
+"Backend CSS" and "Backend TypeScript and JavaScript" sections describe the
+TYPO3 backend interface and are withheld, with the reason, where the task names
+the frontend. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

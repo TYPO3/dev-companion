@@ -17,10 +17,12 @@ than the steps a patch owes. Built from bundled conventions only: it does not
 read your checkout, so it also names what you have to establish there yourself,
 routes to the lookups that fit the task, and names the task skill that owns the
 work where a published one does, beside the guide the work is written up in
-where this server carries one. Work that reads as a project or third-party
-extension is answered with what transfers only — the core checks, checklist
-items and steps that name something only the core repository has are left out
-rather than handed over. Answers from: knowledge.
+where this server carries one. The hints for a set of paths without the
+checklist around them are typo3_hint_lookup, and a procedure read whole is
+typo3_rule_lookup. Work that reads as a project or third-party extension is
+answered with what transfers only — the core checks, checklist items and steps
+that name something only the core repository has are left out rather than handed
+over. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

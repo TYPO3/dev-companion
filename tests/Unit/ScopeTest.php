@@ -556,6 +556,12 @@ final class ScopeTest extends TestCase
         // lookup it reports on never named it.
         yield 'the component lookup names its scope' => ['typo3_component_lookup', 'typo3_snapshot_scope'];
         yield 'the snapshot scope names the component lookup' => ['typo3_snapshot_scope', 'typo3_component_lookup'];
+
+        // Both take a number, and the Forge issue and the Gerrit change are
+        // different numbers that swap without failing — `SkillTest` measured
+        // it on 2026-08-03.
+        yield 'the tracker lookup names the review lookup' => ['typo3_forge_lookup', 'typo3_gerrit_lookup'];
+        yield 'the review lookup names the tracker lookup' => ['typo3_gerrit_lookup', 'typo3_forge_lookup'];
     }
 
     /**

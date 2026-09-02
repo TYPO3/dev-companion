@@ -143,8 +143,8 @@ at all in the state the machine is in.
         :label: Lookup
         :action: Open reference
 
-        Find out whether a TYPO3 core patch already exists and what state its
-        review is in, from the review server at review.typo3.org.
+        Whether a TYPO3 core patch already exists and what state its review is
+        in, read from review.typo3.org.
 
     .. card:: :doc:`typo3_hint_lookup <typo3_hint_lookup>`
         :label: Lookup

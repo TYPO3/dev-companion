@@ -103,3 +103,7 @@ this codebase's idiom for X" goes to the hint lookup or the rule lookup, and
 read both descriptions after the fact. Neither names the other and both
 plausibly take the question, so **Decided** holds on the pair that carries most
 of the corpus.
+
+The Forge and Gerrit bullet is history since 2026-09-02: both descriptions were
+cut from six and ten hundred words to two, and each now names the other by tool
+name rather than by server, with the pair held by two rows.

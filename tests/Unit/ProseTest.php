@@ -45,7 +45,7 @@ final class ProseTest extends TestCase
 
         // The nested walk, not one level of it: a field inside items inside
         // properties is read by the same client as the one at the top.
-        self::assertContains('typo3_gerrit_lookup output changes.subject', $where);
+        self::assertContains('typo3_gerrit_lookup output changes.number', $where);
         self::assertContains('typo3_gerrit_lookup output indistinguishable', $where);
 
         self::assertGreaterThan(0, Prose::payloadWeight());

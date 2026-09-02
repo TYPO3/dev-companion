@@ -3,6 +3,8 @@ id: D-ANS-139
 title: Three tools hand over less than they read
 date: 2026-09-02
 status: open
+coveredBy:
+  - IconLookupTest::aConceptQuerySaysWhichOfItsWordsReachedNothing
 ---
 
 # D-ANS-139 — Three tools hand over less than they read

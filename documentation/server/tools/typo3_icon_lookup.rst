@@ -95,6 +95,16 @@ Answers with
         # Related identifiers, for a miss only. A registered identifier carries
         # none, because its neighbours are not an answer to it.
         suggestions: [string]
+    # What each word of the query reached on its own, so a list matched entirely on
+    # one of them is not read as an answer to all of them. Zero is a word no
+    # registered identifier carries, and a concept word that maps to no shape
+    # reaches nothing here even where the icon exists under another name. Answered
+    # for a concept query, and empty for an identifier validation and where no query
+    # was given.
+    terms:  # optional
+      - # The word, lowercased as it was searched for.
+        term: string
+        matchCount: integer
     # Returned when no query was given.
     categories: [string]  # optional
     # Concept words that map to a shape. Returned when no query was given.
@@ -146,7 +156,7 @@ or ``query``, ``unsupported``.
 Answered
 --------
 
-Recorded on 2026-09-01 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-02 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
 15.0.0-dev, the main core checkout below .checkouts/, whose console could not
@@ -255,6 +265,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 1004,
                 "why": [
                     "name part \"open\"",
@@ -267,6 +280,9 @@ Data:
                 "aliasOf": "actions-history",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -278,6 +294,9 @@ Data:
                 "aliasOf": "actions-document-edit",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -289,6 +308,9 @@ Data:
                 "aliasOf": "actions-document-readonly",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -300,6 +322,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -311,6 +336,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -322,6 +350,9 @@ Data:
                 "aliasOf": "actions-file-edit",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -333,6 +364,9 @@ Data:
                 "aliasOf": "actions-question",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -344,6 +378,9 @@ Data:
                 "aliasOf": "actions-list-alternative",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -355,6 +392,9 @@ Data:
                 "aliasOf": "actions-file-search",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -366,6 +406,9 @@ Data:
                 "aliasOf": "actions-filter",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -377,6 +420,9 @@ Data:
                 "aliasOf": "actions-notebook-typoscript",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -388,6 +434,9 @@ Data:
                 "aliasOf": "actions-file-edit",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -399,6 +448,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -410,6 +462,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -421,6 +476,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -432,6 +490,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -443,6 +504,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -454,6 +518,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -465,6 +532,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
@@ -476,6 +546,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 2,
                 "why": [
                     "substring \"open\""
@@ -487,6 +560,9 @@ Data:
                 "aliasOf": null,
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 2,
                 "why": [
                     "substring \"open\""
@@ -498,12 +574,16 @@ Data:
                 "aliasOf": "actions-file",
                 "source": "t3icons",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 2,
                 "why": [
                     "substring \"open\""
                 ]
             }
         ],
+        "terms": [],
         "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
         "answeredBy": "packages"
     }
@@ -541,6 +621,9 @@ Data:
                 "aliasOf": null,
                 "source": "EXT:backend/Configuration/Icons.php",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 1004,
                 "why": [
                     "name part \"open\"",
@@ -553,12 +636,16 @@ Data:
                 "aliasOf": null,
                 "source": "EXT:backend/Resources/Public/Icons/actions-document-open.svg",
                 "matched": 1,
+                "matchedTerms": [
+                    "open"
+                ],
                 "score": 4,
                 "why": [
                     "name part \"open\""
                 ]
             }
         ],
+        "terms": [],
         "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
         "answeredBy": "installation"
     }

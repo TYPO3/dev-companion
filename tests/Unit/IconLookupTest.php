@@ -76,6 +76,43 @@ final class IconLookupTest extends TestCase
         self::assertStringContainsString('backend', $entries[0]['when']);
     }
 
+    /**
+     * A ranked list matched on one word is not an answer to three of them.
+     *
+     * A concept query for "paw animal pet" came back as eleven icons the
+     * caller's own extensions register, every one of them on the substring
+     * "animal", and the session read that as the tool answering by substring
+     * and stopped asking it concept questions — `D-ANS-139`.
+     */
+    #[Decision('D-ANS-139')]
+    #[Test]
+    public function aConceptQuerySaysWhichOfItsWordsReachedNothing(): void
+    {
+        Instance::discoverFrom($this->installationWithItsOwnIcon());
+
+        $partly = Registry::call('typo3_icon_lookup', ['query' => 'paw edit pet']);
+        self::assertSame(
+            [
+                ['term' => 'paw', 'matchCount' => 0],
+                ['term' => 'edit', 'matchCount' => 1],
+                ['term' => 'pet', 'matchCount' => 0],
+            ],
+            $partly->data['terms'],
+        );
+        self::assertStringContainsString('No registered identifier carries "paw" or "pet"', $partly->text);
+
+        // A miss says it too: the words are the whole of what there was to say.
+        $nothing = Registry::call('typo3_icon_lookup', ['query' => 'paw pet']);
+        self::assertSame(0, $nothing->data['matchCount']);
+        self::assertSame(
+            [['term' => 'paw', 'matchCount' => 0], ['term' => 'pet', 'matchCount' => 0]],
+            $nothing->data['terms'],
+        );
+
+        // An identifier validation is a different question and carries none.
+        self::assertSame([], Registry::call('typo3_icon_lookup', ['query' => 'actions-open'])->data['terms']);
+    }
+
     #[Requirement('R-KNW-038')]
     #[Test]
     public function aMissingIdentifierHasNoMatchesEvenWhenRelatedIconsExist(): void

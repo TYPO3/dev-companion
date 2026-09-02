@@ -97,6 +97,7 @@ final class IconLookup extends ReadOnlyTool
                 'usedBy' => Schema::listOf(Schema::string(), 'What this identifier is already the icon of in this installation, as "tt_content.CType=<value>". Registered says the identifier resolves; this says whose picture it is, which is the question a caller borrowing one is actually asking. Empty means nothing binds it here — or that the installation did not answer, which answeredBy is what says.'),
                 'suggestions' => Schema::listOf(Schema::string(), 'Related identifiers, for a miss only. A registered identifier carries none, because its neighbours are not an answer to it.'),
             ], ['identifier', 'registered', 'category', 'aliasOf', 'source', 'usedBy', 'suggestions']), 'One entry per identifier passed in, in that order. Returned when identifiers were given.'),
+            'terms' => Schema::termCounts('What each word of the query reached on its own, so a list matched entirely on one of them is not read as an answer to all of them. Zero is a word no registered identifier carries, and a concept word that maps to no shape reaches nothing here even where the icon exists under another name. Answered for a concept query, and empty for an identifier validation and where no query was given.'),
             'categories' => Schema::listOf(Schema::string(), 'Returned when no query was given.'),
             'concepts' => Schema::listOf(Schema::string(), 'Concept words that map to a shape. Returned when no query was given.'),
             'scope' => Schema::string('Where these identifiers may be used: the backend registry, not frontend rendering. Carried by every answered lookup.'),
@@ -227,6 +228,7 @@ final class IconLookup extends ReadOnlyTool
                     'suggestionCount' => 0,
                     'exactMatch' => false,
                     'icons' => [],
+                    'terms' => $isIdentifier ? [] : self::reach($query, []),
                     'scope' => $scope,
                     'answeredBy' => Icons::answeredBy(),
                 ],
@@ -255,6 +257,7 @@ final class IconLookup extends ReadOnlyTool
             $header .= sprintf(' — showing the top %d', count($shown));
         }
 
+        $reach = $isIdentifier ? [] : self::reach($query, $matches);
         $lines = [$scope, '', $header . ':'];
         foreach ($shown as $icon) {
             $lines[] = '- ' . $icon['identifier'];
@@ -265,6 +268,18 @@ final class IconLookup extends ReadOnlyTool
                 $lines[] = '  registered in ' . $icon['source'];
             }
             $lines[] = '  matched: ' . implode(', ', $icon['why']);
+        }
+
+        $absent = array_column(array_filter(
+            $reach,
+            static fn(array $term): bool => $term['matchCount'] === 0,
+        ), 'term');
+        if ($absent !== []) {
+            $lines[] = '';
+            $lines[] = sprintf(
+                'No registered identifier carries %s, so the list above answers the rest of the query alone.',
+                implode(' or ', array_map(static fn(string $term): string => '"' . $term . '"', $absent)),
+            );
         }
 
         return ToolResult::create(implode("\n", $lines), [
@@ -278,6 +293,7 @@ final class IconLookup extends ReadOnlyTool
             'suggestionCount' => $suggestionCount,
             'exactMatch' => $exactMatch,
             'icons' => $shown,
+            'terms' => $reach,
             'scope' => $scope,
             'answeredBy' => Icons::answeredBy(),
         ]);
@@ -332,10 +348,7 @@ final class IconLookup extends ReadOnlyTool
      */
     private static function rank(string $query, array $concepts): array
     {
-        $terms = array_values(array_unique(array_filter(
-            preg_split('/[\s_-]+/', mb_strtolower(trim($query))) ?: [],
-            static fn(string $term): bool => $term !== ''
-        )));
+        $terms = self::terms($query);
         if ($terms === []) {
             return [];
         }
@@ -387,7 +400,7 @@ final class IconLookup extends ReadOnlyTool
                 $why[] = 'exact identifier';
             }
 
-            $scored[] = $icon + ['matched' => count($matched), 'score' => $score, 'why' => $why];
+            $scored[] = $icon + ['matched' => count($matched), 'matchedTerms' => $matched, 'score' => $score, 'why' => $why];
         }
 
         usort($scored, static function (array $a, array $b): int {
@@ -398,4 +411,51 @@ final class IconLookup extends ReadOnlyTool
 
         return $scored;
     }
+
+    /**
+     * What each word of the query reached on its own, in the shape every other
+     * miss statement on this server has — `D-ANS-139`.
+     *
+     * A ranked list of eleven icons all matched on one word reads as an answer
+     * to the concept; the two words that reached nothing are what says it is
+     * not. The session this was written for stopped asking after such a list.
+     *
+     * @param array<int, array<string, mixed>> $matches
+     * @return list<array{term: string, matchCount: int}>
+     */
+    private static function reach(string $query, array $matches): array
+    {
+        $counts = [];
+        foreach (self::terms($query) as $term) {
+            $counts[$term] = 0;
+        }
+        foreach ($matches as $icon) {
+            foreach ($icon['matchedTerms'] as $term) {
+                if (isset($counts[$term])) {
+                    ++$counts[$term];
+                }
+            }
+        }
+
+        $reach = [];
+        foreach ($counts as $term => $count) {
+            $reach[] = ['term' => (string) $term, 'matchCount' => $count];
+        }
+
+        return $reach;
+    }
+
+    /**
+     * The query as the words it is matched by.
+     *
+     * @return list<string>
+     */
+    private static function terms(string $query): array
+    {
+        return array_values(array_unique(array_filter(
+            preg_split('/[\s_-]+/', mb_strtolower(trim($query))) ?: [],
+            static fn(string $term): bool => $term !== ''
+        )));
+    }
+
 }

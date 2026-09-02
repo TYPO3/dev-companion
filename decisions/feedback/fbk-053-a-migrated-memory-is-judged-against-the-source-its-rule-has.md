@@ -3,6 +3,8 @@ id: D-FBK-053
 title: 'A migrated memory is judged against the source its rule has'
 date: 2026-09-01
 status: open
+readings:
+  - 2026-09-02
 ---
 
 # D-FBK-053 — A migrated memory is judged against the source its rule has

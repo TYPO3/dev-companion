@@ -48,6 +48,10 @@ in which the failure cannot arise.
   nothing about how a session is driven.
 - Against a sentence in `skills/base.md`. Every task would carry it for a case
   that arises only where a change is authorised on work somebody else decided.
+- Nothing holds this entry, because what it decided is that nothing was written.
+  The three surfaces that do carry the boundary are held where they stand —
+  `KnowledgeTest::theRulesSayWhatShapeAPatchIsLeftIn` for the contribution
+  rules, and the review skill's own tests for the crossing.
 
 ## Assumed
 

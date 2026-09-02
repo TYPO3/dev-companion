@@ -10,10 +10,11 @@ coveredBy: []
 
 **That an unrequested change to the author's decision is reported rather than
 made is stated in the workflows that change something, and not in the `audit`
-brief, which already opens by saying it changes nothing.**
+brief.**
 
 The card asked whether the audit checklist should carry the sentence in general.
-It is the one workflow in which the failure cannot arise.
+That brief already opens by saying it changes nothing, so it is the one workflow
+in which the failure cannot arise.
 
 ## Evidence
 

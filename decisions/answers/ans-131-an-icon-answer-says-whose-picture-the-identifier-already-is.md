@@ -3,6 +3,8 @@ id: D-ANS-131
 title: An icon answer says whose picture the identifier already is
 date: 2026-09-01
 status: open
+readings:
+  - 2026-09-02
 coveredBy: []
 ---
 

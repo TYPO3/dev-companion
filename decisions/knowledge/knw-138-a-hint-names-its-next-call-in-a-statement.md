@@ -3,6 +3,8 @@ id: D-KNW-138
 title: A hint names its next call in a statement
 date: 2026-09-01
 status: open
+readings:
+  - 2026-09-02
 coveredBy: []
 ---
 

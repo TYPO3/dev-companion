@@ -3,6 +3,8 @@ id: D-KNW-137
 title: A relaunch is a kind of work rather than a hint beside one
 date: 2026-09-01
 status: open
+readings:
+  - 2026-09-02
 coveredBy: []
 ---
 

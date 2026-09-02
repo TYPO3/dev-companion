@@ -3,6 +3,8 @@ id: D-ANS-127
 title: Knowledge that yields a judgement is delivered where the work finishes
 date: 2026-09-01
 status: open
+readings:
+  - 2026-09-02
 coveredBy: []
 ---
 

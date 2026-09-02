@@ -3,6 +3,8 @@ id: D-ANS-128
 title: An answer's index buys recovery and its foot is read last
 date: 2026-09-01
 status: open
+readings:
+  - 2026-09-02
 coveredBy: []
 ---
 

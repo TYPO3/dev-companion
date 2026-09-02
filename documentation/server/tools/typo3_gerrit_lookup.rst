@@ -150,6 +150,8 @@ Takes
     # change of theirs before reading a wide answer as "nothing of theirs is in
     # here".
     reviewableBy: string  # optional
+    # How many changes come back from a search or the backlog. A change read by name
+    # is one answer whatever this says.
     limit: integer  # optional
 
 The call carries exactly one of these sets of arguments: ``issue`` — or

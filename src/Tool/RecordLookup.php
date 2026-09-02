@@ -75,7 +75,7 @@ final class RecordLookup extends ReadOnlyTool
                     'additionalProperties' => ['type' => ['string', 'number', 'boolean']],
                 ],
                 'count' => ['type' => 'boolean', 'description' => 'True to answer with the numbers alone and read no row. Use it where the question is how much is in there rather than what.', 'default' => false],
-                'limit' => ['type' => 'integer', 'description' => 'How many rows to return, ordered by uid. Defaults to 20, which is one page of the record list. Zero means every matching row, which on a full table is the whole table in one answer.', 'minimum' => 0],
+                'limit' => ['type' => 'integer', 'description' => 'How many rows to return, ordered by uid. The default is one page of the record list. Zero means every matching row, which on a full table is the whole table in one answer.', 'minimum' => 0, 'default' => self::ROWS],
             ],
         ];
     }

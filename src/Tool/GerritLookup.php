@@ -145,7 +145,7 @@ final class GerritLookup extends ReadOnlyTool
                     'minLength' => 1,
                     'description' => 'Only changes this person neither pushed nor has voted on, named the same way as owner. That is "which of these could I review": everybody else\'s open work minus what I have already judged. The three filters above cannot be combined into it, since each of them selects. It reads no permissions: what is taken out is this person\'s own changes and votes. It composes with the three that select: owner with this one is what somebody else could review of a third person\'s queue. The same name here and on involving answers nothing. A name the review server cannot place takes nothing out and answers the whole backlog, the opposite of what a misspelling does to owner. Check it against a change of theirs before reading a wide answer as "nothing of theirs is in here".',
                 ],
-                'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 25, 'default' => 10],
+                'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 25, 'default' => 10, 'description' => 'How many changes come back from a search or the backlog. A change read by name is one answer whatever this says.'],
             ],
             // A search is one way in carrying two arguments, so the path branch
             // is the one that excludes rather than the one that is excluded: a

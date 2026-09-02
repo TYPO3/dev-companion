@@ -32,6 +32,7 @@ Takes
     # Covered TYPO3 version whose official manual must answer, for example "13.4" or
     # "14". There is no fallback to another release.
     targetVersion: string
+    # How many pages come back per query.
     limit: integer  # optional
 
 The call carries exactly one of these sets of arguments: ``queries`` — or

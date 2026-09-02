@@ -65,7 +65,7 @@ final class DocumentationLookup extends ReadOnlyTool
                     'description' => 'Canonical page URL returned by an earlier search, read as text. Pass it with the same targetVersion. A call carries queries or page, never both.',
                 ],
                 'targetVersion' => ['type' => 'string', 'minLength' => 1, 'description' => 'Covered TYPO3 version whose official manual must answer, for example "13.4" or "14". There is no fallback to another release.'],
-                'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 10, 'default' => 6],
+                'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 10, 'default' => 6, 'description' => 'How many pages come back per query.'],
             ],
             'required' => ['targetVersion'],
             // The one tool here whose search argument is a plural, against five

@@ -368,7 +368,7 @@ final class Forge
      * `issues=1` is what keeps wiki pages, forum posts and changesets out of an
      * answer whose entries are issue numbers.
      *
-     * @return array{status: 'answered'|'empty'|'unavailable', url: string, query: string, total: int, terms: list<array{word: string, total: int}>, results: list<array<string, mixed>>, cause: ?string}
+     * @return array{status: 'answered'|'empty'|'unavailable', url: string, query: string, total: int, terms: list<array{term: string, matchCount: int}>, results: list<array<string, mixed>>, cause: ?string}
      */
     public function search(string $query, int $limit = 15): array
     {
@@ -417,7 +417,7 @@ final class Forge
      * Asked on the miss alone, and each is held like any other read, so a
      * session rewording around one term pays for it once.
      *
-     * @return list<array{word: string, total: int}>
+     * @return list<array{term: string, matchCount: int}>
      */
     private function reach(string $query): array
     {
@@ -442,7 +442,7 @@ final class Forge
             if ($answer['part'] === null) {
                 return $reach;
             }
-            $reach[] = ['word' => $word, 'total' => $answer['total']];
+            $reach[] = ['term' => $word, 'matchCount' => $answer['total']];
         }
 
         return $reach;

@@ -829,9 +829,9 @@ final class ForgeTest extends TestCase
         self::assertSame('empty', $result->data['status']);
         self::assertSame(
             [
-                ['word' => 'renderer', 'total' => 1173],
-                ['word' => 'RendererRegistry', 'total' => 5],
-                ['word' => 'FileRendererInterface', 'total' => 0],
+                ['term' => 'renderer', 'matchCount' => 1173],
+                ['term' => 'RendererRegistry', 'matchCount' => 5],
+                ['term' => 'FileRendererInterface', 'matchCount' => 0],
             ],
             $result->data['terms'],
         );

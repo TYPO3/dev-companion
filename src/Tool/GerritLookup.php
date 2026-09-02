@@ -342,14 +342,10 @@ final class GerritLookup extends ReadOnlyTool
                         . 'between the patch and the tracker, and where a second issue nobody mentioned elsewhere '
                         . 'is seen. Empty means the message names none. Null means the message was not read: a '
                         . 'search asks for none of this, and reading one hit by name is what answers it.',
-                    'items' => Schema::object([
-                        'issue' => Schema::integer('The issue number, which reads it whole by passing it to typo3_forge_lookup as issue.'),
-                        'trailer' => Schema::string('resolves where the message carries Resolves:, related where it carries Related:. The two are different claims: what the patch closes, and what it touches.'),
-                        'subject' => Schema::string('What the issue is about, so it can be judged without being read. Empty where the tracker did not answer the one call that fills the whole set.'),
-                        'tracker' => Schema::string('Bug, Feature, Task.'),
-                        'status' => Schema::string('Where the issue stands, which is the tracker\'s own state and not the state of this change.'),
-                        'url' => Schema::string('Where a person reads it.'),
-                    ], ['issue', 'trailer', 'subject', 'tracker', 'status', 'url']),
+                    'items' => Schema::object(
+                        self::trailerIssue(),
+                        array_keys(self::trailerIssue()),
+                    ),
                 ],
                 'releases' => [
                     'type' => ['array', 'null'],
@@ -659,6 +655,23 @@ final class GerritLookup extends ReadOnlyTool
     }
 
     /** @param array<string, mixed> $args */
+    /**
+     * An issue a change's trailers name, in the shape every issue reference
+     * on this server has.
+     *
+     * The trailer is what this one carries beyond it: Resolves: and Related:
+     * are two claims — what the patch closes, and what it touches.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    private static function trailerIssue(): array
+    {
+        return Schema::issueReference(
+            'The issue number, which reads it whole by passing it to typo3_forge_lookup as issue.',
+            'Where the issue stands, which is the tracker\'s own state and not the state of this change.',
+        ) + ['trailer' => Schema::string('resolves where the message carries Resolves:, related where it carries Related:. The two are different claims: what the patch closes, and what it touches.')];
+    }
+
     public static function answer(array $args): ToolResult
     {
         $issue = is_string($args['issue'] ?? null) ? trim($args['issue']) : '';

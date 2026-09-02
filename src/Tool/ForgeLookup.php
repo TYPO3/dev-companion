@@ -171,10 +171,7 @@ final class ForgeLookup extends ReadOnlyTool
             'query' => Schema::string('The words the tracker was searched for, so a set that looks too narrow can be asked again in other words. Empty where an issue was read by number and where the open issues were enumerated.'),
             'placedAgainst' => Schema::string('The TYPO3 version of the installation the names in cites were placed against, so a verdict about a symbol is read at a version. Empty where no installation was found, and then every cited name is unplaced — a statement about this machine and not about the code.'),
             'total' => Schema::integer('How many issues matched in total, of which results carries at most limit. Where the two differ the answer is a page and not the set, and what reaches more of it is a narrower filter rather than a bigger limit. Zero where an issue was read by number.'),
-            'terms' => Schema::listOf(Schema::object([
-                'word' => Schema::string('One word of the query, as it was passed.'),
-                'total' => Schema::integer('How many issues that word reaches on its own. Zero is a word no issue on the tracker carries, which empties every query it is in whatever else is in it.'),
-            ], ['word', 'total']), 'What each word of the query reaches on its own, which says which of them emptied the answer. Two class names look alike from here and the tracker may know only one, so this is read rather than guessed at. Asked on a miss alone, one read per word, which is why a query holds more than one word and no more than a few. Empty otherwise, and short of the query where the tracker stopped answering partway through it.'),
+            'terms' => Schema::termCounts('What each word of the query reaches on its own, which says which of them emptied the answer. Two class names look alike from here and the tracker may know only one, so this is read rather than guessed at. Asked on a miss alone, one read per word, which is why a query holds more than one word and no more than a few. Empty otherwise, and short of the query where the tracker stopped answering partway through it.'),
             'categories' => Schema::listOf(Schema::string(), 'Every area the core files its issues under, read from the project itself. A category word matching none or several is corrected from the answer rather than from a second call. Answered where category was passed and did not resolve to exactly one area, and where it was passed as "*". Empty otherwise, which says nothing about the project: the project administers the vocabulary and a copy here would go stale.'),
             'categoriesUsed' => Schema::listOf(Schema::string(), 'The categories the category word resolved to, in the tracker\'s own spelling. Empty where none was asked for. Empty too where the word matched none, which is answered as no issues and is a statement about the word rather than about the backlog.'),
             'people' => Schema::listOf(Schema::object([
@@ -220,22 +217,14 @@ final class ForgeLookup extends ReadOnlyTool
                     'url' => Schema::string('Where a person reads it.'),
                     'description' => Schema::string('The report as it was written, which is what the reporter saw and not what was decided.'),
                     'relations' => Schema::listOf(self::relation(), 'Issues this one is filed against, which is where a duplicate, a blocker, and the issue a revert was filed under are named. Each carries its subject, so which of them is worth reading is decided from here rather than from one call each.'),
-                    'mentioned' => Schema::listOf(Schema::object([
-                        'issue' => Schema::integer('The issue the text cites.'),
-                        'subject' => Schema::string('What it is about, so the claim is weighed without a call per number.'),
-                        'tracker' => Schema::string('Bug, Feature, Task.'),
-                        'status' => Schema::string('Where the cited issue stands, which is what says whether the prior art was dealt with.'),
-                        'url' => Schema::string('Where a person reads it.'),
-                        'where' => ['type' => 'string', 'enum' => ['description', 'note'], 'description' => 'Which text cites it. A number both of them carry is a description, which is where the reporter framed the report.'],
-                    ], ['issue', 'subject', 'tracker', 'status', 'url', 'where']), 'The issues the description and the comments cite and no relation carries, written as #NNNN or as a URL. A relation is somebody\'s triage; this is the writer\'s own claim about prior art, which on an old report is regularly load-bearing and regularly wrong. Read it before a patch is framed against it, and never pass this issue over as a duplicate on its strength. Only a number the tracker answered for is here, which keeps a version out of it. Empty where the texts cite nothing and where every citation is already a relation.'),
-                    'reviews' => Schema::listOf(Schema::object([
-                        'change' => Schema::integer('The change number on review.typo3.org, which is what typo3_gerrit_lookup takes as change.'),
-                        'changeId' => Schema::string('The Change-Id the commit message carries, empty where no note named one. typo3_gerrit_lookup takes this too, and it is what survives a rebase onto another branch.'),
-                        'patchSet' => Schema::integer('The highest patch set a note mentioned, zero where none did. The review server may be further along.'),
-                        'on' => Schema::string('When the last note naming this change was written, which is how old the reference is and not when the change last moved.'),
-                        'url' => Schema::string('Where a person reads the change.'),
-                        'status' => Schema::string('NEW while the change is open, MERGED once it landed, ABANDONED when it was given up — where it stood when the review server was asked. Empty where it was not asked or named no state, which includes every change only the prose names.'),
-                    ], ['change', 'changeId', 'patchSet', 'on', 'url', 'status']), 'Every change on review.typo3.org this issue is known to have, joined from two sources. One is the handles the description and the journal name, lifted out of the prose. The other is the changes whose commit message names the issue number, asked of the review server. Neither half contains the other, so an empty list means neither source has one. A change the prose named carries the patch set and the date of that prose, while the state beside it is the review server\'s. What a reviewer objected to is the argument on the change, which is a typo3_gerrit_lookup call. An ABANDONED is grounds to read that argument rather than to pass the issue over.'),
+                    'mentioned' => Schema::listOf(Schema::object(
+                        self::cited(),
+                        array_keys(self::cited()),
+                    ), 'The issues the description and the comments cite and no relation carries, written as #NNNN or as a URL. A relation is somebody\'s triage; this is the writer\'s own claim about prior art, which on an old report is regularly load-bearing and regularly wrong. Read it before a patch is framed against it, and never pass this issue over as a duplicate on its strength. Only a number the tracker answered for is here, which keeps a version out of it. Empty where the texts cite nothing and where every citation is already a relation.'),
+                    'reviews' => Schema::listOf(Schema::object(
+                        self::knownReview(),
+                        array_keys(self::knownReview()),
+                    ), 'Every change on review.typo3.org this issue is known to have, joined from two sources. One is the handles the description and the journal name, lifted out of the prose. The other is the changes whose commit message names the issue number, asked of the review server. Neither half contains the other, so an empty list means neither source has one. A change the prose named carries the patch set and the date of that prose, while the state beside it is the review server\'s. What a reviewer objected to is the argument on the change, which is a typo3_gerrit_lookup call. An ABANDONED is grounds to read that argument rather than to pass the issue over.'),
                     'attachments' => Schema::listOf(self::attachment(), 'The files hanging off the issue. On a report about rendering these are usually screenshots and regularly where the evidence is: a comment made of !image.jpg! references reads as empty otherwise. Empty where the issue carries none.'),
                     'cites' => self::cites('Read from the subject, the description and every comment, which is where a reproduction regularly names the class the description never did.'),
                     'noteCount' => Schema::integer('How many comments the issue carries in total.'),
@@ -262,11 +251,10 @@ final class ForgeLookup extends ReadOnlyTool
                 'relations' => Schema::listOf(self::relation(), 'The issues this one is filed against, each with its subject, so a row that duplicates something already decided is seen without being read. Answered on an enumeration and empty on a search hit, where nothing asked for them.'),
                 'attachments' => Schema::listOf(self::attachment(), 'The files hanging off the issue, which on a report about rendering are usually where the evidence is. A report whose evidence is a screenshot is a different candidate to one whose evidence is prose. Answered on an enumeration and empty on a search hit, where nothing asked for them.'),
                 'cites' => self::cites('Read from the subject and the description, which is what the page carries. An enumerated row holds no comment, so a report that names its code only in one is answered here as citing nothing. Empty on a search hit, where it is not asked.'),
-                'reviews' => Schema::listOf(Schema::object([
-                    'change' => Schema::integer('The change number on review.typo3.org, which is what typo3_gerrit_lookup takes as change.'),
-                    'status' => Schema::string('NEW while the change is open, MERGED once it landed, ABANDONED when it was given up — where it stood when the page was read. Empty where the review server named no state.'),
-                    'url' => Schema::string('Where a person reads the change.'),
-                ], ['change', 'status', 'url']), 'The changes whose commit message names this issue, asked of the review server in one query for the whole page, each with the state it is in. A state and not a verdict: what a reviewer objected to is the argument on the change, which is a typo3_gerrit_lookup call. An ABANDONED is grounds to read that argument rather than to pass the issue over — the approach can be the rejected part while the defect is real. Empty where nothing on the review server names the issue and where the review server did not answer, which this does not separate. Empty on a search hit too, where it is not asked.'),
+                'reviews' => Schema::listOf(Schema::object(
+                    Schema::changeReference('NEW while the change is open, MERGED once it landed, ABANDONED when it was given up — where it stood when the page was read. Empty where the review server named no state.'),
+                    ['change', 'status', 'url'],
+                ), 'The changes whose commit message names this issue, asked of the review server in one query for the whole page, each with the state it is in. A state and not a verdict: what a reviewer objected to is the argument on the change, which is a typo3_gerrit_lookup call. An ABANDONED is grounds to read that argument rather than to pass the issue over — the approach can be the rejected part while the defect is real. Empty where nothing on the review server names the issue and where the review server did not answer, which this does not separate. Empty on a search hit too, where it is not asked.'),
             ], ['issue', 'subject', 'tracker', 'status', 'category', 'reportedBy', 'assignedTo', 'createdOn', 'updatedOn', 'url', 'relations', 'attachments', 'cites', 'reviews']), 'The issues the query matched or the enumeration selected, in the tracker\'s own order — nothing here ranks them. An enumerated row also carries its relations, its attachments and its reviews: the three that say it was answered elsewhere or already attempted, without reading it whole. Empty where an issue was read by number.'),
             'unavailable' => Schema::unavailable([
                 'source-not-answering' => 'the tracker did not answer this time.',
@@ -274,6 +262,40 @@ final class ForgeLookup extends ReadOnlyTool
                     . 'the bot protection in front of it looks like from here.',
             ]),
         ], ['status', 'source', 'url', 'query', 'placedAgainst', 'total', 'terms', 'categories', 'categoriesUsed', 'people', 'breakdown', 'issue', 'results', 'unavailable']);
+    }
+
+    /**
+     * An issue the prose cites, which a relation is not.
+     *
+     * A relation is somebody's triage and this is the writer's own claim about
+     * prior art, so the two carry the same five fields and one more each.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    private static function cited(): array
+    {
+        return Schema::issueReference(
+            'The issue the text cites.',
+            'Where the cited issue stands, which is what says whether the prior art was dealt with.',
+        ) + ['where' => ['type' => 'string', 'enum' => ['description', 'note'], 'description' => 'Which text cites it. A number both of them carry is a description, which is where the reporter framed the report.']];
+    }
+
+    /**
+     * A change this issue is known to have, with what the prose said about it.
+     *
+     * The row of an enumeration carries the reference alone; an issue read
+     * whole carries what the journal named beside it.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    private static function knownReview(): array
+    {
+        return Schema::changeReference('NEW while the change is open, MERGED once it landed, ABANDONED when it was given up — where it stood when the review server was asked. Empty where it was not asked or named no state, which includes every change only the prose names.')
+            + [
+                'changeId' => Schema::string('The Change-Id the commit message carries, empty where no note named one. typo3_gerrit_lookup takes this too, and it is what survives a rebase onto another branch.'),
+                'patchSet' => Schema::integer('The highest patch set a note mentioned, zero where none did. The review server may be further along.'),
+                'on' => Schema::string('When the last note naming this change was written, which is how old the reference is and not when the change last moved.'),
+            ];
     }
 
     /**
@@ -286,14 +308,10 @@ final class ForgeLookup extends ReadOnlyTool
      */
     private static function relation(): array
     {
-        return Schema::object([
-            'issue' => Schema::integer('The other issue.'),
-            'relation' => Schema::string('duplicates, relates, blocked, precedes.'),
-            'subject' => Schema::string('What the other issue is about, so it can be judged without being read. Empty where the tracker did not answer the one call that fills the whole set.'),
-            'tracker' => Schema::string('Bug, Feature, Task.'),
-            'status' => Schema::string('Where the other issue stands.'),
-            'url' => Schema::string('Where a person reads it.'),
-        ], ['issue', 'relation', 'subject', 'tracker', 'status', 'url']);
+        $properties = Schema::issueReference('The other issue.', 'Where the other issue stands.')
+            + ['relation' => Schema::string('duplicates, relates, blocked, precedes.')];
+
+        return Schema::object($properties, array_keys($properties));
     }
 
     /**
@@ -730,7 +748,7 @@ final class ForgeLookup extends ReadOnlyTool
      * reached five issues while the other reached none (`D-ANS-038`). So the
      * counts lead and the advice is what is left where none were read.
      *
-     * @param list<array{word: string, total: int}> $terms
+     * @param list<array{term: string, matchCount: int}> $terms
      * @return list<string>
      */
     private static function reached(array $terms): array
@@ -743,15 +761,15 @@ final class ForgeLookup extends ReadOnlyTool
         $absent = [];
         $narrowest = null;
         foreach ($terms as $term) {
-            if ($term['total'] === 0) {
-                $absent[] = '"' . $term['word'] . '"';
-            } elseif ($narrowest === null || $term['total'] < $narrowest['total']) {
+            if ($term['matchCount'] === 0) {
+                $absent[] = '"' . $term['term'] . '"';
+            } elseif ($narrowest === null || $term['matchCount'] < $narrowest['matchCount']) {
                 $narrowest = $term;
             }
         }
 
         $lines = [sprintf('Asked one word at a time: %s.', implode(' · ', array_map(
-            static fn(array $term): string => sprintf('"%s" reaches %d', $term['word'], $term['total']),
+            static fn(array $term): string => sprintf('"%s" reaches %d', $term['term'], $term['matchCount']),
             $terms,
         )))];
         if ($absent !== []) {
@@ -765,7 +783,7 @@ final class ForgeLookup extends ReadOnlyTool
         if ($narrowest !== null) {
             $lines[] = sprintf(
                 '"%s" is the narrowest of the rest and reaches something: ask it on its own, then read the subjects.',
-                $narrowest['word'],
+                $narrowest['term'],
             );
         }
 

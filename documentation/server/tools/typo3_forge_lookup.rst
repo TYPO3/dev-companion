@@ -179,12 +179,9 @@ Answers with
     # than a few. Empty otherwise, and short of the query where the tracker stopped
     # answering partway through it.
     terms:
-      - # One word of the query, as it was passed.
-        word: string
-        # How many issues that word reaches on its own. Zero is a word no issue on
-        # the tracker carries, which empties every query it is in whatever else is
-        # in it.
-        total: integer
+      - # The word, lowercased as it was searched for.
+        term: string
+        matchCount: integer
     # Every area the core files its issues under, read from the project itself. A
     # category word matching none or several is corrected from the answer rather
     # than from a second call. Answered where category was passed and did not
@@ -284,11 +281,8 @@ Answers with
       relations:
         - # The other issue.
           issue: integer
-          # duplicates, relates, blocked, precedes.
-          relation: string
-          # What the other issue is about, so it can be judged without being read.
-          # Empty where the tracker did not answer the one call that fills the whole
-          # set.
+          # What the issue is about, so it can be judged without being read. Empty
+          # where the tracker did not answer the one call that fills the whole set.
           subject: string
           # Bug, Feature, Task.
           tracker: string
@@ -296,6 +290,8 @@ Answers with
           status: string
           # Where a person reads it.
           url: string
+          # duplicates, relates, blocked, precedes.
+          relation: string
       # The issues the description and the comments cite and no relation carries,
       # written as #NNNN or as a URL. A relation is somebody's triage; this is the
       # writer's own claim about prior art, which on an old report is regularly
@@ -307,7 +303,8 @@ Answers with
       mentioned:
         - # The issue the text cites.
           issue: integer
-          # What it is about, so the claim is weighed without a call per number.
+          # What the issue is about, so it can be judged without being read. Empty
+          # where the tracker did not answer the one call that fills the whole set.
           subject: string
           # Bug, Feature, Task.
           tracker: string
@@ -332,6 +329,13 @@ Answers with
         - # The change number on review.typo3.org, which is what typo3_gerrit_lookup
           # takes as change.
           change: integer
+          # NEW while the change is open, MERGED once it landed, ABANDONED when it
+          # was given up — where it stood when the review server was asked. Empty
+          # where it was not asked or named no state, which includes every change
+          # only the prose names.
+          status: string
+          # Where a person reads the change.
+          url: string
           # The Change-Id the commit message carries, empty where no note named one.
           # typo3_gerrit_lookup takes this too, and it is what survives a rebase
           # onto another branch.
@@ -342,13 +346,6 @@ Answers with
           # When the last note naming this change was written, which is how old the
           # reference is and not when the change last moved.
           on: string
-          # Where a person reads the change.
-          url: string
-          # NEW while the change is open, MERGED once it landed, ABANDONED when it
-          # was given up — where it stood when the review server was asked. Empty
-          # where it was not asked or named no state, which includes every change
-          # only the prose names.
-          status: string
       # The files hanging off the issue. On a report about rendering these are
       # usually screenshots and regularly where the evidence is: a comment made of
       # !image.jpg! references reads as empty otherwise. Empty where the issue
@@ -463,11 +460,9 @@ Answers with
         relations:
           - # The other issue.
             issue: integer
-            # duplicates, relates, blocked, precedes.
-            relation: string
-            # What the other issue is about, so it can be judged without being read.
-            # Empty where the tracker did not answer the one call that fills the
-            # whole set.
+            # What the issue is about, so it can be judged without being read. Empty
+            # where the tracker did not answer the one call that fills the whole
+            # set.
             subject: string
             # Bug, Feature, Task.
             tracker: string
@@ -475,6 +470,8 @@ Answers with
             status: string
             # Where a person reads it.
             url: string
+            # duplicates, relates, blocked, precedes.
+            relation: string
         # The files hanging off the issue, which on a report about rendering are
         # usually where the evidence is. A report whose evidence is a screenshot is
         # a different candidate to one whose evidence is prose. Answered on an
@@ -1584,12 +1581,12 @@ Data:
         "total": 0,
         "terms": [
             {
-                "word": "quantumflux",
-                "total": 0
+                "term": "quantumflux",
+                "matchCount": 0
             },
             {
-                "word": "transponder",
-                "total": 0
+                "term": "transponder",
+                "matchCount": 0
             }
         ],
         "categories": [],
@@ -1639,20 +1636,20 @@ Data:
         "total": 0,
         "terms": [
             {
-                "word": "file",
-                "total": 13953
+                "term": "file",
+                "matchCount": 13953
             },
             {
-                "word": "renderer",
-                "total": 1175
+                "term": "renderer",
+                "matchCount": 1175
             },
             {
-                "word": "RendererRegistry",
-                "total": 5
+                "term": "RendererRegistry",
+                "matchCount": 5
             },
             {
-                "word": "FileRendererInterface",
-                "total": 0
+                "term": "FileRendererInterface",
+                "matchCount": 0
             }
         ],
         "categories": [],
@@ -1680,7 +1677,7 @@ Text:
 
 .. code-block:: text
 
-    TYPO3 issue tracker: 3 of 2434 open issues of the TYPO3 Core project, oldest filed first
+    TYPO3 issue tracker: 3 of 2432 open issues of the TYPO3 Core project, oldest filed first
     This is a page and not the set. What comes after it is reached by a narrower filter — an earlier date, one tracker — rather than by a larger limit, because the order is the tracker's own and more of it is more of the same end. breakdown answers how the whole of it is distributed.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
@@ -1729,7 +1726,7 @@ Data:
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
         "placedAgainst": "15.0.0-dev",
-        "total": 2434,
+        "total": 2432,
         "terms": [],
         "categories": [],
         "categoriesUsed": [],

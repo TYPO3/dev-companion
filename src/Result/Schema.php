@@ -416,6 +416,48 @@ final class Schema
     }
 
     /**
+     * A reference to a Forge issue, in the one shape every answer carries it in.
+     *
+     * Four sites named the same five fields: a relation, an issue the prose
+     * cites, and the issues a change's trailers name. A caller that reads two
+     * shapes for one thing reads the second one wrong.
+     *
+     * The two that take an argument are the two that genuinely differ — which
+     * issue this is and what its state says here — and the three that do not
+     * are the same sentence at every site.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public static function issueReference(string $issue, string $status): array
+    {
+        return [
+            'issue' => self::integer($issue),
+            'subject' => self::string('What the issue is about, so it can be judged without being read. Empty where the tracker did not answer the one call that fills the whole set.'),
+            'tracker' => self::string('Bug, Feature, Task.'),
+            'status' => self::string($status),
+            'url' => self::string('Where a person reads it.'),
+        ];
+    }
+
+    /**
+     * A reference to a change on the review server, in one shape.
+     *
+     * `typo3_gerrit_lookup`'s cherry-pick provenance is not this: it carries a
+     * patch set where this carries a state, which is a different claim about a
+     * different thing.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public static function changeReference(string $status): array
+    {
+        return [
+            'change' => self::integer('The change number on review.typo3.org, which is what typo3_gerrit_lookup takes as change.'),
+            'status' => self::string($status),
+            'url' => self::string('Where a person reads the change.'),
+        ];
+    }
+
+    /**
      * The majors a catalog entry was verified on — the same since/until the
      * hints carry, so a client reads one model rather than two.
      *

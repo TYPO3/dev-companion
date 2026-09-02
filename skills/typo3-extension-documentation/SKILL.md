@@ -40,7 +40,11 @@ Read [references/checklist.md](references/checklist.md) for audience and surface
 selection, secret hygiene, evidence conflicts, and the completion gate.
 
 - Extend existing `Documentation/` structure instead of creating a competing
-  manual layout.
+  manual layout. Where step 2 reported no manual, or one that predates
+  `guides.xml`, `typo3_rule_lookup` with
+  `documentId="extension/documentation/manual"` is the files that make a
+  directory a manual, whole, and the command that renders it before it is
+  published.
 - Keep README content concise: purpose, essential setup, and the canonical
   documentation link where one exists.
 - Separate administrator/developer setup from editor workflows.

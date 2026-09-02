@@ -150,6 +150,7 @@ final class SkillTest extends TestCase
             'typo3_documentation_lookup',
             'typo3_label_lookup',
             'typo3_translation_domain_lookup',
+            'typo3_rule_lookup',
             'typo3_commit_message_guide',
         ],
         'typo3-extension-upgrade' => [

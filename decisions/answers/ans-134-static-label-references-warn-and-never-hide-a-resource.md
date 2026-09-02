@@ -1,5 +1,5 @@
 ---
-id: D-ANS-127
+id: D-ANS-134
 title: Static label references warn and never hide a resource
 date: 2026-09-01
 status: open
@@ -8,7 +8,7 @@ coveredBy:
   - LabelSearchTest::anUnreferencedResourceStaysVisible
 ---
 
-# D-ANS-127 — Static label references warn and never hide a resource
+# D-ANS-134 — Static label references warn and never hide a resource
 
 **A label resource with no static reference stays in `typo3_label_lookup` and is
 marked with a warning.**

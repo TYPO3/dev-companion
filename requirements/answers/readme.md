@@ -45,6 +45,7 @@ when it is added.
 - [`R-ANS-035`][R-ANS-035] — An answer that names a target branch names the lines that take a patch · held
 - [`R-ANS-036`][R-ANS-036] — A suite list names the paths no suite covers · held
 - [`R-ANS-037`][R-ANS-037] — An answer says how to read the current version rather than naming one · not guarded
+- [`R-ANS-038`][R-ANS-038] — A file-read label names what makes its resource usable · held
 
 [R-ANS-001]: ans-001-could-not-ask-never-looks-like-does-not-exist.md
 [R-ANS-002]: ans-002-the-reason-is-in-the-data-not-only-in-the-text.md
@@ -84,3 +85,4 @@ when it is added.
 [R-ANS-035]: ans-035-an-answer-that-names-a-target-branch-names-the-lines-that-take-a-patch.md
 [R-ANS-036]: ans-036-a-suite-list-names-the-paths-no-suite-covers.md
 [R-ANS-037]: ans-037-an-answer-says-how-to-read-the-current-version-rather-than-naming-one.md
+[R-ANS-038]: ans-038-a-file-read-label-names-what-makes-its-resource-usable.md

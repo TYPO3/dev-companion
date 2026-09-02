@@ -563,7 +563,7 @@ final class LabelSearchTest extends TestCase
         );
     }
 
-    #[Decision('D-ANS-127')]
+    #[Decision('D-ANS-134')]
     #[Requirement('R-ANS-038')]
     #[Test]
     public function aStaticReferenceIsNamed(): void
@@ -584,7 +584,7 @@ final class LabelSearchTest extends TestCase
         self::assertStringNotContainsString('No static reference', $result->text);
     }
 
-    #[Decision('D-ANS-127')]
+    #[Decision('D-ANS-134')]
     #[Requirement('R-ANS-038')]
     #[Test]
     public function anUnreferencedResourceStaysVisible(): void

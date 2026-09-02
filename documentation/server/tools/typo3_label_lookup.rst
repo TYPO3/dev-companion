@@ -3,16 +3,16 @@
 ``typo3_label_lookup``
 ======================
 
-Search the labels registered in the TYPO3 installation you are working in. Reuse
-is local to the translation resource already used at the consuming code: pass
-resource whenever it is known, and do not reference a match from another module
-or package merely because its text is identical. The console answers with the
-resource overrides the installation applies; where it cannot be reached — an
-installed TYPO3 whose database has no schema yet is the common case — the same
-packages' XLF files are read instead. Every match comes back as a translation
-domain reference; computing that reference for a file this installation does not
-have, one a patch is about to add, is typo3_translation_domain_lookup. Answers
-from: installation, packages.
+Search the labels registered in the TYPO3 installation you are working in and
+the XLF files below project config/sites. Reuse is local to the translation
+resource already used at the consuming code: pass resource whenever it is known,
+and do not reference a match from another module or package merely because its
+text is identical. The console answers with the resource overrides the
+installation applies; the files supply an answer when it cannot be reached and
+report non-standard names or resources with no static reference. Every match
+comes back as a translation domain reference; computing that reference for a
+file this installation does not have, one a patch is about to add, is
+typo3_translation_domain_lookup. Answers from: installation, packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -75,10 +75,26 @@ Answers with
     # a path that was guessed can be replaced by one that exists. Empty means no
     # resource holds such a label.
     resources: [string]  # optional
+    resourceDiagnostics:  # optional
+      - # The XLF resource this diagnosis describes.
+        resource: string
+        # Where it was found: package, site-set, or project-site.
+        location: string
+        # Whether the file follows the naming convention for its location.
+        conventionalName: boolean
+        # Whether an implicit or static reference was found.
+        referenced: boolean
+        # Source files that name the resource. A conventional site-set labels.xlf
+        # names its adjacent config.yaml as an implicit reference.
+        references: [string]
+        # Naming, discovery, and static-reference warnings for this resource.
+        warnings: [string]
     labels:  # optional
-      - # Translation domain reference (package.resource:key) — the canonical
-        # form.
+      - # The reusable label reference: a translation domain for package labels or
+        # an LLL file reference for project-site labels.
         ref: string
+        # The translation domain, empty for a project-site XLF that TYPO3 does not
+        # register as a package resource.
         domain: string
         # The trans-unit id.
         key: string

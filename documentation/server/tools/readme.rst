@@ -163,8 +163,8 @@ at all in the state the machine is in.
         :label: Lookup
         :action: Open reference
 
-        Search the labels registered in the TYPO3 installation and the XLF files
-        below project config/sites.
+        Search the labels registered in the TYPO3 installation you are working
+        in and the XLF files below project config/sites.
 
     .. card:: :doc:`typo3_permalink_lookup <typo3_permalink_lookup>`
         :label: Lookup

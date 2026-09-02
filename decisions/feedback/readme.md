@@ -11,6 +11,7 @@ The requirements of the same name are in
 [the decisions readme](../readme.md) for how an entry is written and when it
 earns one.
 
+- [`D-FBK-054`][D-FBK-054] — The server answers what is registered and a person answers what it looks like · 2026-09-02
 - [`D-FBK-053`][D-FBK-053] — A migrated memory is judged against the source its rule has · 2026-09-01
 - [`D-FBK-052`][D-FBK-052] — A judgement that holds the evidence makes the change · 2026-08-24
 - [`D-FBK-051`][D-FBK-051] — What the TER already holds is a lookup of its own · 2026-08-21
@@ -51,6 +52,7 @@ earns one.
 - [`D-FBK-002`][D-FBK-002] — The order of the work is declared, not inferred · 2026-07-31 · confirmed
 - [`D-FBK-004`][D-FBK-004] — A feedback asks the caller which model is recording it · 2026-07-31 · confirmed
 
+[D-FBK-054]: fbk-054-the-server-answers-what-is-registered-and-a-person-answers-what-it-looks-like.md
 [D-FBK-053]: fbk-053-a-migrated-memory-is-judged-against-the-source-its-rule-has.md
 [D-FBK-052]: fbk-052-a-judgement-that-holds-the-evidence-makes-the-change.md
 [D-FBK-051]: fbk-051-what-the-ter-already-holds-is-a-lookup-of-its-own.md

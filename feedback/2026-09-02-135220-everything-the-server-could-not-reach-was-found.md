@@ -43,3 +43,7 @@ Whole session; no single call. The two code defects: Fluid `<f:if condition="{de
 ## Suggestion
 
 Nothing to change in a tool. If there is an appetite for it, a hint id like "fluid-conditions-and-arrays" (which typo3_hint_lookup's fluid-templates entry already names as a neighbour and I never fetched) carrying "a field name compared in a condition is written unquoted; a quoted one is a literal and never matches" would have caught the first defect. I did not fetch it because the task_guide answer listed it only as a see-also inside another hint's text, not as a hint I was owed.
+
+Trimmed on 2026-09-02: the boundary this reports is `D-FBK-054`, and the
+component-answer-arrives-early observation is recorded there as not yet
+evidence. What is left open is the Fluid condition claim alone.

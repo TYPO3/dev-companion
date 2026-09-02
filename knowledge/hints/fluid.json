@@ -131,11 +131,14 @@
       "condition attribute",
       "quoting in a condition",
       "falsy zero",
-      "the value is 0"
+      "the value is 0",
+      "the condition never matches",
+      "comparing two variables"
     ],
     "hints": [
       "Fluid escapes output by default. Do not work around it in the template; if a ViewHelper has to return markup, that decision belongs in the ViewHelper via escapeOutput.",
       "A comparison inside a condition attribute is written with single quotes: condition=\"{cell} != ''\". With double quotes, condition=\"{cell}!=\"\", the attribute value ends at the second double quote, what follows matches no ViewHelper tag, and the template stops at the closing tag with \"You closed a templating tag which you never opened!\", exception 1224485838. It is reported at the line of the </f:if> rather than at the condition's, so the line number in the message points away from the defect. The same holds for any attribute value carrying a string literal.",
+      "A variable compared in a condition is written unquoted — condition=\"{demand.orderField} === {field}\" — and quoting it makes it a literal that never matches. BooleanNode rewrites every non-text part of the expression as a {node<n>} placeholder and hands the values over beside it. BooleanParser resolves such a term only where it begins with a brace, so a quoted one is compared as the placeholder text itself. Quotes around a fixed string are right: condition=\"{demand.orderField} === 'title'\" compares against title.",
       "A bare condition=\"{value}\" is false for every spelling of zero, not only for empty and null: BooleanNode::convertToBoolean() sends anything is_numeric() accepts through (bool)(float), so 0, \"0\", a string of two zeros and a zero written with a decimal point all take the else branch. PHP's own casting does not — it reads the last two as true — so a value an editor legitimately typed disappears into whatever the else branch is, usually a placeholder. condition=\"{cell} != ''\" is what tells an empty value from a zero.",
       "Once an <f:if> carries an <f:else>, its then-branch has to be an explicit <f:then>. Without one the markup between <f:if> and <f:else> is no branch at all: with the condition true it renders nothing, a ViewHelper standing there is never called, no error is raised and nothing is logged — the else content is what appears. An <f:else if=\"...\"> child does the same. Only an <f:if> that has neither renders its inline body as the then-branch. The working shape is <f:if condition=\"{testimonial.data.link}\"><f:then><f:link.typolink parameter=\"{testimonial.data.link}\">{testimonial.data.company}</f:link.typolink></f:then><f:else>{testimonial.data.company}</f:else></f:if>.",
       "An array literal needs at least one key-value pair: there is no {} and it is not an empty array. It evaluates to null wherever it stands — an attribute value, an inline argument, the body of an f:variable — and a null argument is not one that was given, so the ViewHelper gets the default declared for it. additionalParams=\"{}\" therefore passes no array rather than an empty one, which is usually what was meant anyway.",

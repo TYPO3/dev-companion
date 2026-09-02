@@ -53,8 +53,8 @@ one that already exists:
   subsystem evidence. A surface the checkout has no files for is asked by its
   hint id instead, because that is the surface whose absence is the finding and
   the one whose paths cannot be passed.
-- The runtime lookup that owns the surface, where one exists. The base names the
-  five and what each adds after the extension answer; an audit makes that call
+- The runtime lookup that owns the surface, where one exists. The base names
+  them and what each adds after the extension answer; an audit makes that call
   per surface in scope, because a surface answered off what the package declares
   is answered about the package rather than about this installation.
 - `typo3_documentation_lookup` with several short English queries and the target

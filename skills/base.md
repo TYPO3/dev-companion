@@ -175,9 +175,9 @@ and an answer built on the reading names the version it holds for.
 
 ## What each runtime lookup adds after the extension answer
 
-`typo3_extension_describe` in step 2 says what one package registers. The five
-below say what the installation resolved, which is a different fact even where
-the words are the same, so step 2 has made none of these calls:
+`typo3_extension_describe` in step 2 says what one package registers. The
+lookups below say what the installation resolved, which is a different fact even
+where the words are the same, so step 2 has made none of these calls:
 
 - `typo3_backend_module_lookup` — the tree position, the labels, the access
   level, the routes and the navigation component the parent module supplies.
@@ -197,8 +197,21 @@ the words are the same, so step 2 has made none of these calls:
   extension has had its say, and for a form data group the order the providers
   really run in. Step 2 answers nothing about that surface at all, and what a
   registration declares is not what the installation resolves.
+- `typo3_service_lookup` — the class the container really injects for a service
+  id, an interface or a tag, decorations and overrides applied. Step 2 lists
+  what the package's own `Services.yaml` declares, never what won.
+- `typo3_schema_lookup` — the columns TYPO3 derives for a table from its TCA,
+  with the type, the nullability and the default each one gets. Step 2 lists the
+  tables the package registers and nothing about their shape.
+- `typo3_flexform_lookup` — the data structure the installation resolves a
+  `type=flex` field to, sheet by sheet, listeners and migrations applied. Step 2
+  lists the content elements a package registers, never the structure each one's
+  form builds.
+- `typo3_record_lookup` — how many rows a project-owned table holds and where
+  they sit, which is what decides whether a record list or a module of its own
+  maintains them. Step 2 has no row in its answer at all.
 
-None of the five says whether what it reports is right. `typo3_hint_lookup` and
+None of these says whether what it reports is right. `typo3_hint_lookup` and
 `typo3_documentation_lookup` do, and a subsystem confirmed by its own runtime
 lookup can still break every rule that governs it, so it is not established
 until both were asked.

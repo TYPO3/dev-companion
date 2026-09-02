@@ -1212,6 +1212,13 @@ final class SkillTest extends TestCase
             'typo3_label_lookup' => 'the labels as the installation resolves them',
             'typo3_fluid_namespace_list' => 'from every package at once',
             'typo3_configuration_lookup' => 'after every extension has had its say',
+            // The four the section left out until 2026-09-02, when an audit's
+            // persistence and services surfaces had no runtime owner to be
+            // handed to: each reads the installation as the five do.
+            'typo3_service_lookup' => 'the class the container really injects',
+            'typo3_schema_lookup' => 'the columns TYPO3 derives for a table',
+            'typo3_flexform_lookup' => 'the data structure the installation resolves',
+            'typo3_record_lookup' => 'how many rows a project-owned table holds',
         ];
 
         $lines = [];
@@ -1220,10 +1227,10 @@ final class SkillTest extends TestCase
             self::assertNotFalse($at, $tool . ' has no line of its own in the section that distinguishes it');
             $lines[] = $at;
         }
-        // The five were skipped together because one sentence covered all of
+        // They were skipped together because one sentence covered all of
         // them, so what each adds is held on its own line and not on the set.
         $ends = array_slice($lines, 1);
-        $ends[] = (int) mb_strpos($base, 'None of the five says whether', $section);
+        $ends[] = (int) mb_strpos($base, 'None of these says whether', $section);
 
         foreach (array_values($adds) as $index => $sentence) {
             $line = mb_substr($base, $lines[$index], $ends[$index] - $lines[$index]);
@@ -1243,7 +1250,7 @@ final class SkillTest extends TestCase
         // The half that survives the correction: what is registered is not a
         // verdict on it, whichever call established it.
         self::assertStringContainsString(
-            'None of the five says whether what it reports is right',
+            'None of these says whether what it reports is right',
             $base,
         );
 

@@ -273,19 +273,22 @@ branch it was carried on is deleted. "Restored" without those is the claim
 rather than the result.
 
 This skill owns getting a change under review into a checkout and back out of
-it: finding it, fetching the patch set, putting it on the branch it targets,
-into a worktree beside it, onto current code on a branch named for the change,
-or under work of your own where that change is being extended, resolving what
-the change itself decides, stopping where it does not, and leaving behind a
-clean branch current with its remote, no worktree of its own and no branch it
-made. It owns the undo as much as the do, and the undo is what runs whichever
-way the rest went — the one exception being the branch it hands over, which is
-the result. It does not own judging the patch — where the request is to say what
-is wrong with it, `typo3-core-patch-review` owns that, and it starts from the
-working copy this leaves the patch in, worktree, checkout or review branch,
-before the undo runs; carry across which commit the findings will be about. It
-does not own changing what is on the review server either: amending a change
-into a new patch set and pushing it belongs to `typo3-core-patch-development`,
-and carry over the change number, the patch set that was fetched, whether it had
-to be carried onto current code to apply, and what was decided on the author's
-behalf.
+it. What that covers, in order:
+
+- Finding it, and fetching the patch set.
+- Putting it somewhere: on the branch it targets, into a worktree beside it,
+  onto current code on a branch named for the change, or under work of your own
+  where that change is being extended.
+- Resolving what the change itself decides, and stopping where it does not.
+- Leaving behind a clean branch current with its remote, no worktree of its own
+  and no branch it made. It owns the undo as much as the do, and the undo is
+  what runs whichever way the rest went — the one exception being the branch it
+  hands over, which is the result. It does not own judging the patch — where the
+  request is to say what is wrong with it, `typo3-core-patch-review` owns that,
+  and it starts from the working copy this leaves the patch in, worktree,
+  checkout or review branch, before the undo runs; carry across which commit the
+  findings will be about. It does not own changing what is on the review server
+  either: amending a change into a new patch set and pushing it belongs to
+  `typo3-core-patch-development`, and carry over the change number, the patch
+  set that was fetched, whether it had to be carried onto current code to apply,
+  and what was decided on the author's behalf.

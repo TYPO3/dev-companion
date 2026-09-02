@@ -22,17 +22,22 @@ somebody else's checkout with nothing to report it.
 3. `typo3_forge_lookup` with the issue number, and read what comes back as a
    report rather than as a specification. An issue can be stale, half fixed, or
    right about the symptom and wrong about the cause, and the maintainers'
-   comments on it can be product judgement rather than an API fact. Three parts
-   of that answer are not in the description a session otherwise starts from:
-   the **status and target version as they stand today**, which is where a
-   closure or a reassignment shows without the report ever being rewritten; the
-   **relations**, which are one hop from the change that introduced the
-   behaviour being complained about, and reach it when a query on the wording
-   does not; and the **notes**, where a maintainer said why. Establish which of
-   those you have before writing code: what the reporter saw, what the branch
-   does today, and what the project intends the API to be for. Three of that
-   reading are acts, and what they produce goes into the assessment before any
-   code:
+   comments on it can be product judgement rather than an API fact.
+
+   Three parts of that answer are not in the description a session otherwise
+   starts from:
+
+   - The **status and target version as they stand today**. That is where a
+     closure or a reassignment shows without the report ever being rewritten.
+   - The **relations**. They are one hop from the change that introduced the
+     behaviour being complained about, and reach it where a query on the wording
+     does not.
+   - The **notes**, where a maintainer said why.
+
+   Establish which of those you have before writing code: what the reporter saw,
+   what the branch does today, and what the project intends the API to be for.
+   Three of that reading are acts, and what they produce goes into the
+   assessment before any code:
    - **Read the closure reason and the target version for what the conversation
      decided, and write that down rather than what the report is worth.** Closed
      for lack of feedback after a long silence is as consistent with an answer

@@ -2019,7 +2019,7 @@ final class SkillTest extends TestCase
         // What the description does not carry, which is the reason the call is
         // here rather than a reading of the report.
         self::assertStringContainsString('status and target version as they stand today', $skill);
-        self::assertStringContainsString('**relations**, which are one hop from the change that introduced', $skill);
+        self::assertStringContainsString('**relations**. They are one hop from the change that introduced', $skill);
         self::assertStringContainsString('**notes**, where a maintainer said why', $skill);
 
         // `typo3_gerrit_lookup` with issue 105403 answers empty from a checkout

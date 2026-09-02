@@ -22,12 +22,12 @@ early is the valuable one.
 1. Work through [references/base.md](references/base.md), which fixes the order
    every task here starts in. It establishes the checkout you are standing in,
    which is what the verification below is against.
-2. `typo3_forge_lookup` with `backlog` to get it rather than one issue.
-   `oldest` and `stale` are two different questions and the second is usually
-   the one being asked: filed long ago is about the report, untouched for years
-   is about the attention it got, and an issue filed in 2009 with a comment from
-   last month is being worked by somebody. Narrow with `category` in the user's
-   own words, and with `tracker`, because an old Bug and an old Feature are two
+2. `typo3_forge_lookup` with `backlog` to get it rather than one issue. `oldest`
+   and `stale` are two different questions and the second is usually the one
+   being asked: filed long ago is about the report, untouched for years is about
+   the attention it got, and an issue filed in 2009 with a comment from last
+   month is being worked by somebody. Narrow with `category` in the user's own
+   words, and with `tracker`, because an old Bug and an old Feature are two
    different findings — one claims something is broken today, the other that
    something was wanted once.
 
@@ -278,32 +278,32 @@ The trigger is in the issue answer rather than in the reading. A relation marked
 the journal mentions — so an issue whose history is a merged-then-reverted fix
 says so before the checkout is opened.
 
-6. Read the related issue the revert was filed under. The reason lives there and
-   nowhere else: the reverting commit says what was reverted, and the issue says
-   what it cost.
-7. Read the attempt itself, which is the one thing no lookup here returns. The
-   issue answer carries the change numbers and the Gerrit search by issue number
-   their state, so what is left is the diff: fetch the patch set into the
-   checkout and read it. The ref it is under, and the remote it is on rather
-   than the one a core checkout fetches from, are two sections of one page, so
-   where the fetch is the task read it whole: `typo3_rule_lookup` with
-   `documentId="core/contribution/gerrit-workflow"`, which also stands as
-   `typo3://guides/core/contribution/gerrit-workflow`. Abandoned is a verdict
-   somebody wrote down, and the diff under it is the cheapest description of
-   what a fix looks like against a modern core. The patch set is read and goes
-   onto no branch: rebasing an abandoned attempt is writing the patch rather
-   than judging the issue.
+- Read the related issue the revert was filed under. The reason lives there and
+  nowhere else: the reverting commit says what was reverted, and the issue says
+  what it cost.
+- Read the attempt itself, which is the one thing no lookup here returns. The
+  issue answer carries the change numbers and the Gerrit search by issue number
+  their state, so what is left is the diff: fetch the patch set into the
+  checkout and read it. The ref it is under, and the remote it is on rather than
+  the one a core checkout fetches from, are two sections of one page, so where
+  the fetch is the task read it whole: `typo3_rule_lookup` with
+  `documentId="core/contribution/gerrit-workflow"`, which also stands as
+  `typo3://guides/core/contribution/gerrit-workflow`. Abandoned is a verdict
+  somebody wrote down, and the diff under it is the cheapest description of what
+  a fix looks like against a modern core. The patch set is read and goes onto no
+  branch: rebasing an abandoned attempt is writing the patch rather than judging
+  the issue.
 
-   `typo3_gerrit_lookup` with a change number earns a call of its own for a
-   `reviews` entry the search by issue number did not answer with. That search
-   finds a change whose commit message names the issue, so an entry missing from
-   it is the one whose branch, patch set and status nothing else has stated.
-8. Find every production caller of the method the reverted patch touched, in the
-   checkout. A fix that scopes to one call site is a different proposition from
-   one that changes a path everything else goes through.
-9. Establish whether the path named in the revert still routes through that
-   method. A subsystem rebuilt since is what turns the old objection into
-   history.
+  `typo3_gerrit_lookup` with a change number earns a call of its own for a
+  `reviews` entry the search by issue number did not answer with. That search
+  finds a change whose commit message names the issue, so an entry missing from
+  it is the one whose branch, patch set and status nothing else has stated.
+- Find every production caller of the method the reverted patch touched, in the
+  checkout. A fix that scopes to one call site is a different proposition from
+  one that changes a path everything else goes through.
+- Establish whether the path named in the revert still routes through that
+  method. A subsystem rebuilt since is what turns the old objection into
+  history.
 
 **A reverted core fix becomes re-attemptable when the shared consumer that made
 it expensive has been rebuilt, or when the caller set has shrunk to the one site

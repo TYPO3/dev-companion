@@ -17,7 +17,6 @@ use TYPO3\DevCompanion\Knowledge\Catalog\SystemExtensions;
 use TYPO3\DevCompanion\Knowledge\Catalog\TranslationDomain;
 use TYPO3\DevCompanion\Knowledge\Hints;
 use TYPO3\DevCompanion\Knowledge\Versions;
-use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
@@ -454,12 +453,26 @@ final class CatalogTest extends TestCase
      * A session wrote `data-bs-content` on a modal that reads `data-content`
      * and shipped a `data-on-change` that one extension's own module
      * implements. Both failed silently in a browser — `D-ANS-139`.
+     *
+     * The module is laid out here rather than read out of `.checkouts/`, which
+     * is gitignored and on no machine but the one that created it — `R-COD-003`.
+     * That the core's own modal reads these two is the decision's evidence;
+     * what is held here is the derivation, on both the module and its absence.
      */
     #[Decision('D-ANS-139')]
     #[Test]
     public function aComponentCarriesTheAttributesItsOwnModuleReads(): void
     {
-        Instance::discoverFrom(Paths::root() . '/.checkouts/14.3');
+        $root = $this->coreCheckout('14.3.5');
+        $backend = $root . '/typo3/sysext/backend/Resources/Public';
+        mkdir($backend . '/Css', 0o777, true);
+        mkdir($backend . '/JavaScript', 0o777, true);
+        file_put_contents($backend . '/Css/backend.css', '.modal {} .badge {}');
+        file_put_contents(
+            $backend . '/JavaScript/modal.js',
+            'const c = element.dataset.content; const t = element.dataset.buttonOkText;',
+        );
+        Instance::discoverFrom($root);
 
         $modal = Registry::call('typo3_component_lookup', ['query' => 'modal', 'targetVersion' => '14.3']);
         $entry = $modal->data['components'][0];

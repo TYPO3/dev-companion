@@ -5,6 +5,7 @@ vendor/
 .phpunit.cache/
 .php-cs-fixer.cache
 .phpstan.cache/
+.vscode/
 /.checkouts
 /.environments
 /.fixtures

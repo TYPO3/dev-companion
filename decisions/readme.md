@@ -373,6 +373,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### knowledge
 
 - [`D-KNW-147`][D-KNW-147] — A list of what is supported says what an unsupported key does · 2026-09-04
+- [`D-KNW-148`][D-KNW-148] — What the schema of one record type holds is a subject this server owns · 2026-09-04
 - [`D-KNW-139`][D-KNW-139] — The corpus states where an annotation is written · 2026-09-02
 - [`D-KNW-140`][D-KNW-140] — The corpus states a check the core does not run · 2026-09-02
 - [`D-KNW-141`][D-KNW-141] — The shape of a patch is stated where a patch is judged · 2026-09-02
@@ -512,6 +513,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
 [D-KNW-147]: knowledge/knw-147-a-list-of-what-is-supported-says-what-an-unsupported-key-does.md
+[D-KNW-148]: knowledge/knw-148-what-the-schema-of-one-record-type-holds-is-a-subject-this-server-owns.md
 [D-KNW-139]: knowledge/knw-139-the-corpus-states-where-an-annotation-is-written.md
 [D-KNW-140]: knowledge/knw-140-the-corpus-states-a-check-the-core-does-not-run.md
 [D-KNW-141]: knowledge/knw-141-the-shape-of-a-patch-is-stated-where-a-patch-is-judged.md

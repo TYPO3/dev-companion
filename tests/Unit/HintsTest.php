@@ -3186,6 +3186,40 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * What a record type's schema holds, which core TCA hides.
+     *
+     * A core bugfix turned on the difference between the table schema and the
+     * sub-schema, and would have dropped every relation field an installation
+     * keeps out of its forms — with every core suite green, because core TCA
+     * shows its own (`D-KNW-148`).
+     */
+    #[Decision('D-KNW-148')]
+    #[Test]
+    public function whatASubSchemaHoldsIsStatedAgainstTheTableSchema(): void
+    {
+        foreach ([13, 14, 15] as $major) {
+            $text = implode("\n", array_column(Hints::byId('tca-sub-schema', $major)['hints'], 'text'));
+
+            self::assertStringContainsString('showitem names and nothing else', $text);
+            self::assertStringContainsString('findRelevantFieldsForSubSchema', $text);
+            // The silent half, which is why the statement is owed at all.
+            self::assertStringContainsString('passes every core suite', $text);
+            // What a type may change, and what it may not.
+            self::assertStringContainsString('array_replace_recursive', $text);
+            self::assertStringContainsString('relation map is built once for the table', $text);
+            // And the table whose type lives in another table's row.
+            self::assertStringContainsString('isPointerToForeignFieldInForeignSchema', $text);
+        }
+
+        // The hint about using the API at all names it and says what it
+        // prevents, because that is the one a schema question reaches first.
+        self::assertStringContainsString(
+            'tca-sub-schema',
+            implode("\n", array_column(Hints::byId('tca-schema-api', 14)['hints'], 'text')),
+        );
+    }
+
+    /**
      * `D-KNW-087`. The hint said an area the layout never declared "renders
      * empty with no error", and a session that skipped it got HTTP 500 on every
      * page instead. `ContentAreaViewHelper::render()` throws for anything that

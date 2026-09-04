@@ -81,6 +81,50 @@
       {
         "text": "The schema is cached per package set, so a change to how it is built is a functional-test change, not a unit-test one.",
         "since": 13
+      },
+      {
+        "text": "What the schema of one record type holds is a question of its own, and the answer is not \"the table's columns\": tca-sub-schema. A patch that swaps a table schema for a sub-schema without reading it drops every field the type's showitem does not name, and no core suite reports it.",
+        "since": 13
+      }
+    ]
+  },
+  {
+    "id": "tca-sub-schema",
+    "title": "What the Schema of One Record Type Holds",
+    "domains": [
+      "php"
+    ],
+    "appliesTo": [
+      "sub schema",
+      "subschema",
+      "getSubSchema",
+      "record type fields",
+      "columnsOverrides",
+      "Classes/Schema/",
+      "TcaSchemaBuilder",
+      "SchemaTypeInformation",
+      "RecordFactory"
+    ],
+    "hints": [
+      {
+        "text": "A sub-schema holds the columns that record type's showitem names and nothing else. TcaSchemaBuilder::findRelevantFieldsForSubSchema() walks the showitem string, unpacks each --palette-- into the columns its palette names, drops --div-- tabs, and takes only what the columns section also declares. So a column that exists on the table and stands in no type's showitem is in the table schema and in no sub-schema, and code that resolves a field through the sub-schema stops seeing it.",
+        "since": 13
+      },
+      {
+        "text": "That is the silent half. Core TCA puts its relation fields in showitem, so a change that resolves through the sub-schema instead of the table schema passes every core suite and drops the fields of any installation that does not. Where both are needed the two are unioned and each field resolved from the one that has it, rather than one replacing the other.",
+        "since": 13
+      },
+      {
+        "text": "What the type may change is the field configuration and not the relations. columnsOverrides is merged over each column with array_replace_recursive, label first among what it changes, while the relation map is built once for the table and handed to every sub-schema — the builder says so where it passes it, and there is no per-type relation to read.",
+        "since": 13
+      },
+      {
+        "text": "Whether a piece of core resolves through the sub-schema or through the table is a grep for getSubSchema over typo3/sysext/*/Classes/, and it is the reading that says whether a branch contradicts itself. DataHandler, FlexFormTools, RecordFactory, PageDoktypeRegistry and SearchableSchemaFieldsCollector are on the sub-schema side, and a class that writes or indexes records and is absent from that list is resolving fields the other way.",
+        "since": 13
+      },
+      {
+        "text": "A table whose type is a field of another table has no sub-schema resolved from its own row. sys_file_reference declares ctrl type uid_local:type, SchemaTypeInformation::isPointerToForeignFieldInForeignSchema() is what asks, and RecordFactory and DataHandler skip the resolution where it answers true — the divisor sits in the foreign record, so reading it means reading that record. Code walking such a table row by row inherits that: resolving the type per row is a read per row.",
+        "since": 13
       }
     ]
   },

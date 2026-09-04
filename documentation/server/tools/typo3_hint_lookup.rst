@@ -310,6 +310,7 @@ Text:
     - typoscript-conditions — What a TypoScript Condition Is Handed (TypoScript)
     - tca-inline-children — What an Inline Child Table Needs (PHP)
     - project-configuration-files — What the Installation Is Configured By (PHP)
+    - tca-sub-schema — What the Schema of One Record Type Holds (PHP)
     - installation-setup — What typo3 setup Takes and What It Refuses (PHP)
     - development-installation-page-object — Where a Development Installation Gets Its Page Object (TypoScript)
     - impexp-import-placement — Where an impexp Import Puts the Records It Writes (PHP)
@@ -909,6 +910,11 @@ Data:
             {
                 "id": "project-configuration-files",
                 "title": "What the Installation Is Configured By",
+                "category": "PHP"
+            },
+            {
+                "id": "tca-sub-schema",
+                "title": "What the Schema of One Record Type Holds",
                 "category": "PHP"
             },
             {
@@ -1653,6 +1659,7 @@ Text:
     - typoscript-conditions — What a TypoScript Condition Is Handed (TypoScript)
     - tca-inline-children — What an Inline Child Table Needs (PHP)
     - project-configuration-files — What the Installation Is Configured By (PHP)
+    - tca-sub-schema — What the Schema of One Record Type Holds (PHP)
     - installation-setup — What typo3 setup Takes and What It Refuses (PHP)
     - development-installation-page-object — Where a Development Installation Gets Its Page Object (TypoScript)
     - impexp-import-placement — Where an impexp Import Puts the Records It Writes (PHP)
@@ -2165,6 +2172,11 @@ Data:
             {
                 "id": "project-configuration-files",
                 "title": "What the Installation Is Configured By",
+                "category": "PHP"
+            },
+            {
+                "id": "tca-sub-schema",
+                "title": "What the Schema of One Record Type Holds",
                 "category": "PHP"
             },
             {

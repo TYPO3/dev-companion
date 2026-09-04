@@ -42,14 +42,20 @@ does not report is the one that is missing.
 - What is said is what is not covered, and never what to add. A recommendation
   would be this server deciding a project's standards, which `D-ANS-092`'s
   framing exists to refuse.
+- It stays on the line `D-ANS-133` draws. Both halves are readings of files —
+  the kinds the packages hold, and the checkers the declared bodies name — and
+  what is new is the subtraction rather than an inference about what the
+  repository meant.
 - Coverage is decided by the tool a declared line invokes, against a curated map
   of tool to the kinds it checks, and by nothing else. A line whose tool is not
   in that map is reported as covering nothing knowable rather than as covering
   nothing, because an unusual toolchain would otherwise produce a gap that is
   not one.
-- The kinds counted are the ones a checker exists for — `php`, `css`, `scss`,
-  `js`, `ts`, `xlf` — read off the project's own packages. A template or an
-  image is not a gap.
+- The kinds counted are the ones a checker exists for and a package ships as
+  source — PHP, CSS, Sass, TypeScript and XLIFF — read off the project's own
+  packages. A template or an image is not a gap, and JavaScript is not one
+  either: a shipped `.js` is as often build output or a vendored library as
+  source.
 - `low`, and said rather than left: one session reported it, the recovery was
   one question from the owner, and the map is maintenance that moves here
   permanently.

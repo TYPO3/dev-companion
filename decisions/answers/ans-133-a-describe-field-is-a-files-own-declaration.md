@@ -3,6 +3,8 @@ id: D-ANS-133
 title: A describe field is a file's own declaration
 date: 2026-09-02
 status: open
+readings:
+  - 2026-09-04
 coveredBy: []
 ---
 

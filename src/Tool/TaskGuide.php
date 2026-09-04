@@ -167,17 +167,17 @@ final class TaskGuide extends ReadOnlyTool
     /**
      * The change type of a task that changes nothing, and the id of the intent
      * that recognizes one described rather than classified. They are the same
-     * word because the type is fed to the intent matcher.
+     * word because a caller states one or writes the other.
      */
     private const AUDIT = 'audit';
 
     /**
      * The other change type that writes no file, and the intent it reaches.
      *
-     * The word is a needle of that intent for the same reason as above, and it
-     * is not its id: the intent stands beside `installation-setup` and
-     * `installation-upgrade` as the third thing that is done to an installation,
-     * rather than being what a caller states about the work (`D-GUI-008`).
+     * The two are spelled differently because the intent stands beside
+     * `installation-setup` and `installation-upgrade` as the third thing that is
+     * done to an installation, rather than being what a caller states about the
+     * work (`D-GUI-008`).
      */
     private const OPERATIONS = 'operations';
     private const OPERATIONS_INTENT = 'installation-operations';
@@ -218,6 +218,30 @@ final class TaskGuide extends ReadOnlyTool
      */
     private const PATCH = 'patch';
 
+    /**
+     * The intent a stated change type names, where it names one.
+     *
+     * A caller states the type instead of describing the work, and the four
+     * that write no file are only reachable that way. So the route is real and
+     * what it may not be is a word appended to the task text: that made every
+     * intent carrying the type as a needle a strong match, and `cleanup` names
+     * two different pieces of work — a mechanical patch, which is what the
+     * enum value means and what the arm below answers, and putting a whole
+     * repository right, which is the intent (`D-GUI-027`). `bugfix`, `feature`
+     * and `cleanup` name no intent: what those tasks are about is the sentence.
+     *
+     * @var array<string, string>
+     */
+    private const CHANGE_TYPE_INTENT = [
+        self::AUDIT => self::AUDIT,
+        self::TRIAGE => self::TRIAGE,
+        self::OPERATIONS => self::OPERATIONS_INTENT,
+        self::DIAGNOSIS => self::DIAGNOSIS,
+        'deprecation' => 'deprecation',
+        'documentation' => 'documentation',
+        'test' => 'tests',
+    ];
+
     /** @var array<string, array<int, string>> */
     private const CHANGE_TYPE_CHECKLIST = [
         'bugfix' => [
@@ -249,18 +273,18 @@ final class TaskGuide extends ReadOnlyTool
         'cleanup' => ['Keep the cleanup mechanical; avoid mixing behavioural changes into the same patch.'],
         'test' => ['Confirm the test fails without the fix and passes with it; avoid asserting on incidental output.'],
         'documentation' => ['Run ./Build/Scripts/runTests.sh -s checkRst to validate ReST syntax.'],
-        // The one type whose rules are stated elsewhere: the change type is fed
-        // to the intent matcher below, where `deprecation` already carries them
-        // for the caller who describes the work instead of classifying it. A
-        // block here would print every one of those items a second time.
+        // The one type whose rules are stated elsewhere: it names the
+        // `deprecation` intent above, which already carries them for the caller
+        // who describes the work instead of classifying it. A block here would
+        // print every one of those items a second time.
         'deprecation' => [],
         // The type that changes nothing. What a review owes is the audit
         // intent's, for the same reason, and what it does not owe is the
         // checklist this one is not assembled into at all — see answer().
         self::AUDIT => [],
         // The other one. What operating an installation owes is the intent's,
-        // which this value reaches through the matcher, and what it does not owe
-        // is the skeleton a review is composed into — see answer().
+        // which this value names above, and what it does not owe is the
+        // skeleton a review is composed into — see answer().
         self::OPERATIONS => [],
         // The third, and the same arrangement: the triage intent carries what a
         // triage owes, and this value is how a caller reaches it by classifying
@@ -421,8 +445,9 @@ final class TaskGuide extends ReadOnlyTool
         $outsideCore = Scope::everyPlacedPathIsOutsideTheCore($groups);
 
         $coreWork = Scope::isCoreWork($paths, $task);
+        $statedIntent = self::CHANGE_TYPE_INTENT[$changeType] ?? '';
         $intents = TaskIntents::scoped(
-            TaskIntents::detect($task . ' ' . $changeType),
+            TaskIntents::detect($task, $statedIntent === '' ? [] : [$statedIntent]),
             $scope,
             $coreWork
         );

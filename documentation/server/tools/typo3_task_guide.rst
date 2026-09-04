@@ -305,7 +305,7 @@ Text:
     Domains: php
     Paths:
     - typo3/sysext/core/Classes/Utility/GeneralUtility.php
-    Recognized as: Deprecation, Putting a repository right
+    Recognized as: Deprecation
     Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.
 
     Hints:
@@ -443,12 +443,6 @@ Text:
     - End the changelog file with .. index:: carrying at least one subject tag and exactly one of FullyScanned, PartiallyScanned or NotScanned. Build/Scripts/validateRstFiles.php rejects a Deprecation file without the scanner tag, so it is owed rather than considered.
     - Back a FullyScanned or PartiallyScanned tag with an extension scanner matcher: an entry below typo3/sysext/install/Configuration/ExtensionScanner/Php/, keyed by the deprecated symbol and naming the changelog file in its restFiles. NotScanned is for what no matcher can find, not for what nobody wrote.
     - Use [TASK] or [FEATURE] as the commit keyword. A deprecation must never use the [!!!] breaking prefix.
-    - Run the audit before writing the list, and let it own the findings: what a surface is, what evidence a finding rests on, what it is worth and who fixes it are the audit's answers. A list built from a reading of the checkout instead is an impression, and the items in it are not the ones the report would have given.
-    - Show the list whole and let the maintainer cut items, reorder them or stop, before a single file is changed. That agreement is the one step nothing downstream recovers, and a list arriving with the changes it produced is one nobody had the chance to disagree with.
-    - Keep the list in the reply rather than committing it into the repository. A worklist committed into somebody's history is a file nobody asked for that has to be taken out again; what the history keeps is the commits the items produced, each saying which item it closed.
-    - Work an item in the workflow that owns it, and stop before editing files another owner has. An item no workflow owns is worked here only where the project's own suite, linter or static analysis proves the change — anything else goes back unassigned, because a finding nobody owns and no check covers is a hole in the workflow map and quietly filling it hides the hole.
-    - Re-run the audit on the worked list rather than grading it off the diff. Work that declares its own findings gone has no evidence for it, and a file that reads correctly can still be rewritten by the environment that owns it.
-    - Report the items still open, the ones dropped with what dropped them, and the ones sent back unassigned. A finished list and an abandoned one read alike in a summary.
     - Write the commit message with typo3_commit_message_guide and workflow="core": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping.
 
     Establish in your checkout — this server cannot see it:
@@ -467,8 +461,6 @@ Text:
 
     Next lookups for this task:
     - typo3_commit_message_guide — with workflow="core" and isDeprecation=true, for the keyword and prefix rules a message pushed to Gerrit is held to
-    - typo3_project_describe — for what the repository is before anything in it is changed
-    - typo3_extension_describe — for what each extension in scope registers
     - typo3_changelog_lookup — for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact
     - typo3_hint_lookup — with the concrete file paths, once they are known
     - typo3_test_run_guide — for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few
@@ -505,12 +497,6 @@ Data:
                 "title": "Deprecation",
                 "confidence": "strong",
                 "condition": ""
-            },
-            {
-                "id": "cleanup",
-                "title": "Putting a repository right",
-                "confidence": "strong",
-                "condition": "only if the task asks for the repository as a whole to be changed rather than reviewed, or for the findings of a review to be worked off"
             }
         ],
         "skills": [
@@ -812,12 +798,6 @@ Data:
             "End the changelog file with .. index:: carrying at least one subject tag and exactly one of FullyScanned, PartiallyScanned or NotScanned. Build/Scripts/validateRstFiles.php rejects a Deprecation file without the scanner tag, so it is owed rather than considered.",
             "Back a FullyScanned or PartiallyScanned tag with an extension scanner matcher: an entry below typo3/sysext/install/Configuration/ExtensionScanner/Php/, keyed by the deprecated symbol and naming the changelog file in its restFiles. NotScanned is for what no matcher can find, not for what nobody wrote.",
             "Use [TASK] or [FEATURE] as the commit keyword. A deprecation must never use the [!!!] breaking prefix.",
-            "Run the audit before writing the list, and let it own the findings: what a surface is, what evidence a finding rests on, what it is worth and who fixes it are the audit's answers. A list built from a reading of the checkout instead is an impression, and the items in it are not the ones the report would have given.",
-            "Show the list whole and let the maintainer cut items, reorder them or stop, before a single file is changed. That agreement is the one step nothing downstream recovers, and a list arriving with the changes it produced is one nobody had the chance to disagree with.",
-            "Keep the list in the reply rather than committing it into the repository. A worklist committed into somebody's history is a file nobody asked for that has to be taken out again; what the history keeps is the commits the items produced, each saying which item it closed.",
-            "Work an item in the workflow that owns it, and stop before editing files another owner has. An item no workflow owns is worked here only where the project's own suite, linter or static analysis proves the change — anything else goes back unassigned, because a finding nobody owns and no check covers is a hole in the workflow map and quietly filling it hides the hole.",
-            "Re-run the audit on the worked list rather than grading it off the diff. Work that declares its own findings gone has no evidence for it, and a file that reads correctly can still be rewritten by the environment that owns it.",
-            "Report the items still open, the ones dropped with what dropped them, and the ones sent back unassigned. A finished list and an abandoned one read alike in a summary.",
             "Write the commit message with typo3_commit_message_guide and workflow=\"core\": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping."
         ],
         "checkoutDiscovery": [
@@ -850,14 +830,6 @@ Data:
             {
                 "tool": "typo3_commit_message_guide",
                 "when": "with workflow=\"core\" and isDeprecation=true, for the keyword and prefix rules a message pushed to Gerrit is held to"
-            },
-            {
-                "tool": "typo3_project_describe",
-                "when": "for what the repository is before anything in it is changed"
-            },
-            {
-                "tool": "typo3_extension_describe",
-                "when": "for what each extension in scope registers"
             },
             {
                 "tool": "typo3_changelog_lookup",

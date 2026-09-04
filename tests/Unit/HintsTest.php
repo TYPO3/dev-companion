@@ -2850,11 +2850,12 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('never the answer on its own', $written);
         self::assertStringContainsString('whether anything outside the core calls it', $written);
 
-        // And the brief for the change type says it before it says how to write
-        // the entry, because the entry is what a wrong answer produces.
+        // And the brief says it before it says how to write the entry, because
+        // the entry is what a wrong answer produces. Asked as the caller's own
+        // question rather than as a change type: breaking is a property of a
+        // change and none of the types a caller may state (`D-GUI-027`).
         $brief = Registry::call('typo3_task_guide', [
-            'task' => 'Remove an internal method from a public core class',
-            'changeType' => 'breaking',
+            'task' => 'Is removing this internal method from a public core class breaking',
         ])->text;
         self::assertStringContainsString('Settle first that the change is breaking at all', $brief);
     }
@@ -7193,7 +7194,7 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('typo3/sysext/install/Configuration/ExtensionScanner/Php/', $checklist);
 
         // The stated type keeps its skeleton and its own item, so the caller
-        // who was authoring after all loses nothing to the appended half.
+        // who was authoring after all loses nothing to the review half.
         self::assertContains('Keep the patch focused on the stated task.', $result->data['checklist']);
         self::assertStringContainsString('Keep the cleanup mechanical', $checklist);
 
@@ -7202,6 +7203,91 @@ final class HintsTest extends TestCase
         // the workflow for the push and the patch set.
         self::assertNotContains('submission', array_column($result->data['intents'], 'id'));
         self::assertStringNotContainsString('refs/for/', $checklist);
+    }
+
+    /**
+     * The route from a stated change type to the intent that owns it, which is
+     * a map rather than the type appended to the words the matcher reads.
+     *
+     * Appending it made every intent carrying the type as a needle a strong
+     * match, and `cleanup` is the one where that is a different piece of work:
+     * the enum value means a mechanical patch and the intent means putting a
+     * whole repository right (`D-GUI-027`).
+     */
+    #[Decision('D-GUI-027')]
+    #[DataProvider('statedChangeTypes')]
+    #[Test]
+    public function aStatedChangeTypeNamesTheIntentThatOwnsIt(string $changeType, ?string $intent): void
+    {
+        $result = Registry::call('typo3_task_guide', [
+            'task' => 'Do the thing the task describes',
+            'changeType' => $changeType,
+        ]);
+
+        $ids = array_column($result->data['intents'], 'id');
+        if ($intent === null) {
+            self::assertSame([], $ids);
+
+            return;
+        }
+        self::assertSame([$intent], $ids);
+    }
+
+    /** @return array<string, array{string, ?string}> */
+    public static function statedChangeTypes(): array
+    {
+        return [
+            'audit' => ['audit', 'audit'],
+            'triage' => ['triage', 'triage'],
+            'operations' => ['operations', 'installation-operations'],
+            'diagnosis' => ['diagnosis', 'diagnosis'],
+            'deprecation' => ['deprecation', 'deprecation'],
+            'documentation' => ['documentation', 'documentation'],
+            'test' => ['test', 'tests'],
+            // The three that name a kind of change and no kind of work: what
+            // the task is about is the sentence, and the type contributes its
+            // own checklist arm instead.
+            'bugfix' => ['bugfix', null],
+            'feature' => ['feature', null],
+            'cleanup' => ['cleanup', null],
+        ];
+    }
+
+    /**
+     * The call the feedback reported: one named file and a concrete edit,
+     * classified as a cleanup.
+     *
+     * Six items about auditing a repository arrived as recognized work beside
+     * the four that answered the task, over the condition the intent states for
+     * itself. The words still reach it weakly — "better" is one of its own —
+     * and that is the shape the caller can skip (`D-GUI-027`).
+     */
+    #[Decision('D-GUI-027')]
+    #[Test]
+    public function aCleanupOfOneNamedFileLeavesTheRepositoryItemsConditional(): void
+    {
+        $result = Registry::call('typo3_task_guide', [
+            'task' => 'Group the fields of this TCA file better',
+            'changeType' => 'cleanup',
+            'paths' => ['packages/animals/Configuration/TCA/tx_animals_domain_model_animal.php'],
+            'targetVersion' => '14',
+        ]);
+
+        $intents = array_column($result->data['intents'], 'confidence', 'id');
+        self::assertSame('strong', $intents['tca-field']);
+        self::assertSame('weak', $intents['cleanup']);
+
+        // The workflow for auditing a repository is not loaded on a one-file
+        // edit, and the audit items say what they hold under.
+        self::assertNotContains('typo3-extension-health', $result->data['skills']);
+        foreach ($result->data['checklist'] as $item) {
+            if (str_contains($item, 'Run the audit before writing the list')) {
+                self::assertStringStartsWith('Only if the task asks for the repository', $item);
+            }
+        }
+
+        // What the stated type does contribute is its own arm.
+        self::assertStringContainsString('Keep the cleanup mechanical', implode("\n", $result->data['checklist']));
     }
 
     #[Test]

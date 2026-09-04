@@ -3,7 +3,9 @@ id: D-GUI-027
 title: An intent's condition decides whether its checklist arrives
 date: 2026-09-04
 status: open
-coveredBy: []
+coveredBy:
+  - HintsTest::aCleanupOfOneNamedFileLeavesTheRepositoryItemsConditional
+  - HintsTest::aStatedChangeTypeNamesTheIntentThatOwnsIt
 ---
 
 # D-GUI-027 — An intent's condition decides whether its checklist arrives
@@ -61,3 +63,18 @@ prose beside a weak match and decides nothing.
   change type names.
 - The site-setting half turns out to need something else, so gating the change
   type answers one feedback and leaves the other where it was.
+
+## Since then
+
+The change-type half landed the same day. `TaskGuide::CHANGE_TYPE_INTENT` names
+the intent each stated type routes to — the four that write no file, plus
+`deprecation`, `documentation` and `test` — and `bugfix`, `feature` and
+`cleanup` name none. `TaskIntents::detect()` takes those ids as a parameter
+instead of reading them out of the task text, so a type is no longer a needle
+for every intent that carries the word.
+
+What the reported call gets now is the `tca-field` items as recognized work and
+the six audit ones as conditional, each prefixed with the condition, because
+"better" is one of the cleanup intent's weak needles. The bulk is the ordinary
+rendering of a weak match rather than this gap. The word half is still open, and
+it is `feedback/2026-09-03-235330` that carries it.

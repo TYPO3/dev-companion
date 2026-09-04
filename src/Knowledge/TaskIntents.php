@@ -92,19 +92,30 @@ final class TaskIntents
      * returned as conditional rather than as recognized — its checklist and
      * checks apply only if the change really does what the word suggests.
      *
+     * An id in $stated is recognized whatever the text says, which is how a
+     * caller who classifies the work reaches the intent that owns it. It is a
+     * parameter rather than a word appended to the text, because appending one
+     * makes every intent carrying that word as a needle a strong match: stating
+     * `cleanup` for a one-file edit confirmed *putting a repository right* and
+     * put its six audit items into the brief, over the condition that intent
+     * states for itself (`D-GUI-027`).
+     *
+     * @param array<int, string> $stated Intent ids the call names outright.
      * @return array<int, array<string, mixed>>
      */
-    public static function detect(string $text): array
+    public static function detect(string $text, array $stated = []): array
     {
         $haystack = mb_strtolower($text);
         $detected = [];
 
         foreach (self::load() as $intent) {
-            $confidence = null;
-            foreach ($intent['match'] as $needle) {
-                if (Text::containsWord($haystack, $needle)) {
-                    $confidence = 'strong';
-                    break;
+            $confidence = in_array($intent['id'], $stated, true) ? 'strong' : null;
+            if ($confidence === null) {
+                foreach ($intent['match'] as $needle) {
+                    if (Text::containsWord($haystack, $needle)) {
+                        $confidence = 'strong';
+                        break;
+                    }
                 }
             }
             if ($confidence === null) {

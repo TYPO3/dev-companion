@@ -57,7 +57,7 @@
         "since": 13
       },
       {
-        "text": "The routes key stays with the site and no set can carry one. A static route — robots.txt, a text file, an asset, a page rendered to a fixed path — is an entry under routes in config/sites/<identifier>/config.yaml, which the StaticRouteResolver middleware answers from before the page is resolved.",
+        "text": "The routes key stays with the site and no set can carry one. A static route — robots.txt, a text file, an asset, a page rendered to a fixed path — is an entry under routes in config/sites/<identifier>/config.yaml, which the StaticRouteResolver middleware answers from before the page is resolved. A local environment can answer it first: what DDEV's generated nginx does to /robots.txt is project-configuration-files.",
         "since": 13
       },
       {

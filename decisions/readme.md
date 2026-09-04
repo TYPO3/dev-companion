@@ -384,6 +384,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-150`][D-KNW-150] — What a site answers an error with is a subject this server owns · 2026-09-04
 - [`D-KNW-151`][D-KNW-151] — What an XML sitemap of a record table advertises is a subject this server owns · 2026-09-04
 - [`D-KNW-152`][D-KNW-152] — The showitem grammar of a record type is a subject this server owns · 2026-09-04
+- [`D-KNW-153`][D-KNW-153] — What the local webserver answers before TYPO3 is a subject this server owns · 2026-09-04
 - [`D-KNW-139`][D-KNW-139] — The corpus states where an annotation is written · 2026-09-02
 - [`D-KNW-140`][D-KNW-140] — The corpus states a check the core does not run · 2026-09-02
 - [`D-KNW-141`][D-KNW-141] — The shape of a patch is stated where a patch is judged · 2026-09-02
@@ -528,6 +529,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-KNW-150]: knowledge/knw-150-what-a-site-answers-an-error-with-is-a-subject-this-server-owns.md
 [D-KNW-151]: knowledge/knw-151-what-an-xml-sitemap-of-a-record-table-advertises-is-a-subject-this-server-owns.md
 [D-KNW-152]: knowledge/knw-152-the-showitem-grammar-of-a-record-type-is-a-subject-this-server-owns.md
+[D-KNW-153]: knowledge/knw-153-what-the-local-webserver-answers-before-typo3-is-a-subject-this-server-owns.md
 [D-KNW-139]: knowledge/knw-139-the-corpus-states-where-an-annotation-is-written.md
 [D-KNW-140]: knowledge/knw-140-the-corpus-states-a-check-the-core-does-not-run.md
 [D-KNW-141]: knowledge/knw-141-the-shape-of-a-patch-is-stated-where-a-patch-is-judged.md

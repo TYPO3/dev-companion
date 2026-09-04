@@ -3356,6 +3356,32 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The environment answering before TYPO3 does.
+     *
+     * A correct static route for robots.txt answered HTTP 404 from DDEV's own
+     * nginx, with nothing in any TYPO3 log and the same route working on the
+     * Apache it deploys to (`D-KNW-153`).
+     */
+    #[Decision('D-KNW-153')]
+    #[Test]
+    public function whatTheLocalWebserverAnswersFirstIsStatedWhereTheOwnershipIs(): void
+    {
+        $text = implode("\n", array_column(Hints::byId('project-configuration-files', 14)['hints'], 'text'));
+
+        self::assertStringContainsString('location = /robots.txt', $text);
+        // Why the same route works where it is deployed.
+        self::assertStringContainsString('public/.htaccess', $text);
+        // And the fix that does not fight DDEV for a generated file.
+        self::assertStringContainsString('webserver_type: apache-fpm', $text);
+
+        // Named where the failure is met.
+        self::assertStringContainsString(
+            'project-configuration-files',
+            implode("\n", array_column(Hints::byId('site-sets', 14)['hints'], 'text')),
+        );
+    }
+
+    /**
      * `D-KNW-087`. The hint said an area the layout never declared "renders
      * empty with no error", and a session that skipped it got HTTP 500 on every
      * page instead. `ContentAreaViewHelper::render()` throws for anything that

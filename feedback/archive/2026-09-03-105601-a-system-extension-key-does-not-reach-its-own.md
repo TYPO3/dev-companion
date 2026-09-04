@@ -1,7 +1,8 @@
 ---
 date: 2026-09-03T10:56:01+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-09-04
 model: claude-opus-5[1m]
 tool: typo3_forge_lookup
 directory: /home/benji/projects/typo3-cms

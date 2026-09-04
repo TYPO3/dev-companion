@@ -6,6 +6,7 @@ namespace TYPO3\DevCompanion\Contribution;
 
 use TYPO3\DevCompanion\Http\Fetch;
 use TYPO3\DevCompanion\Http\Recent;
+use TYPO3\DevCompanion\Knowledge\Catalog\SystemExtensions;
 use TYPO3\DevCompanion\Result\Unreachable;
 use TYPO3\DevCompanion\Search\Text;
 
@@ -621,6 +622,15 @@ final class Forge
             ];
         }
         $used = $category === '' ? [] : self::named($categories, $category);
+        // A word naming no area is regularly a system extension key, which is
+        // what a caller standing in a checkout holds and what half the areas
+        // are not named after. The catalog carries the area for those, so
+        // "impexp" reads the issues under "Import/Export (T3D)" and
+        // categoriesUsed says which area that was (`D-ANS-142`).
+        if ($used === [] && $category !== '') {
+            $filed = SystemExtensions::forgeCategory($category);
+            $used = isset($categories[$filed]) ? [$filed] : [];
+        }
 
         $filters = [
             // The tracker's own three: `open` is every status it has not marked

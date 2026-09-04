@@ -23,7 +23,7 @@ use TYPO3\DevCompanion\Paths;
 final class SystemExtensions
 {
     /**
-     * @return array<int, array{key: string, package: string, description: string, since: ?int, until: ?int}>
+     * @return array<int, array{key: string, package: string, description: string, forgeCategory: string, since: ?int, until: ?int}>
      */
     public static function load(): array
     {
@@ -36,6 +36,11 @@ final class SystemExtensions
             'key' => (string) $entry['key'],
             'package' => (string) $entry['package'],
             'description' => (string) ($entry['description'] ?? ''),
+            // The area the core files this extension's issues under, and
+            // only where the key does not reach it by its own spelling —
+            // `D-ANS-142`. Empty for an extension whose issues land in the
+            // general areas, which is most of them.
+            'forgeCategory' => (string) ($entry['forgeCategory'] ?? ''),
             'since' => isset($entry['since']) ? (int) $entry['since'] : null,
             'until' => isset($entry['until']) ? (int) $entry['until'] : null,
         ], $decoded);
@@ -50,7 +55,7 @@ final class SystemExtensions
      * the same thing therefore find it — the key with underscores and the
      * package with dashes.
      *
-     * @return array<int, array{key: string, package: string, description: string, since: ?int, until: ?int}>
+     * @return array<int, array{key: string, package: string, description: string, forgeCategory: string, since: ?int, until: ?int}>
      */
     public static function find(string $query, ?int $target = null): array
     {
@@ -80,5 +85,27 @@ final class SystemExtensions
             $entries,
             static fn(array $entry): bool => str_contains(mb_strtolower($entry['description']), $query),
         ));
+    }
+
+    /**
+     * The issue tracker area a word names by being an extension key.
+     *
+     * A caller standing in `typo3/sysext/impexp/` holds that key and nothing
+     * else, and half the keys reach no area of their own name — `D-ANS-142`.
+     * The key and the Composer package are both accepted, matched whole,
+     * because a substring here would answer "form" with the area of another
+     * extension. Empty where the word names no extension or the extension has
+     * no area of its own.
+     */
+    public static function forgeCategory(string $word): string
+    {
+        $word = trim(mb_strtolower($word));
+        foreach (self::load() as $entry) {
+            if ($word === $entry['key'] || $word === mb_strtolower($entry['package'])) {
+                return $entry['forgeCategory'];
+            }
+        }
+
+        return '';
     }
 }

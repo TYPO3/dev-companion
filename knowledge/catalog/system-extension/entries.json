@@ -37,7 +37,8 @@
   {
     "key": "extensionmanager",
     "package": "typo3/cms-extensionmanager",
-    "description": "Extension Manager - Backend module (System > Extensions) for viewing and managing extensions."
+    "description": "Extension Manager - Backend module (System > Extensions) for viewing and managing extensions.",
+    "forgeCategory": "Extension Manager"
   },
   {
     "key": "felogin",
@@ -77,7 +78,8 @@
   {
     "key": "impexp",
     "package": "typo3/cms-impexp",
-    "description": "Import/Export - Tool for importing and exporting records using XML or the custom T3D format."
+    "description": "Import/Export - Tool for importing and exporting records using XML or the custom T3D format.",
+    "forgeCategory": "Import/Export (T3D)"
   },
   {
     "key": "indexed_search",
@@ -122,7 +124,8 @@
   {
     "key": "redirects",
     "package": "typo3/cms-redirects",
-    "description": "Redirects - Create manual redirects, list existing redirects and automatically create\nredirects on slug changes."
+    "description": "Redirects - Create manual redirects, list existing redirects and automatically create\nredirects on slug changes.",
+    "forgeCategory": "Link Handling & Redirect Handling"
   },
   {
     "key": "reports",

@@ -82,10 +82,12 @@ Takes
     # naming several — "backend" — selects all of them and says which. It is the
     # way in for "are there known bugs in the RTE" and "the oldest issues in the
     # backend UI". It answers "has this already been reported" too: enumerate the
-    # area and read the subjects. A word naming none or several is answered with
-    # every area the project has. categoriesUsed carries the tracker's own spelling
-    # of the areas reached, which a report filed by hand has to carry. Pass "*" for
-    # the list of areas on its own, which reads no issues.
+    # area and read the subjects. A system extension key resolves to the area that
+    # extension's issues are filed under where the key does not name one itself —
+    # "impexp" reads "Import/Export (T3D)". A word naming none or several is
+    # answered with every area the project has. categoriesUsed carries the tracker's
+    # own spelling of the areas reached, which a report filed by hand has to carry.
+    # Pass "*" for the list of areas on its own, which reads no issues.
     category: string  # optional
     # Only issues filed before this day, as YYYY-MM-DD. With createdSince it is the
     # far end of one window rather than a second filter.

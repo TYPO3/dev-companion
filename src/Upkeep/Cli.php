@@ -26,6 +26,7 @@ use TYPO3\DevCompanion\Upkeep\Command\EnvironmentCreate;
 use TYPO3\DevCompanion\Upkeep\Command\EnvironmentStatus;
 use TYPO3\DevCompanion\Upkeep\Command\FeedbackArchive;
 use TYPO3\DevCompanion\Upkeep\Command\FeedbackList;
+use TYPO3\DevCompanion\Upkeep\Command\ForgeCategoryCheck;
 use TYPO3\DevCompanion\Upkeep\Command\HintCoverage;
 use TYPO3\DevCompanion\Upkeep\Command\HintProbe;
 use TYPO3\DevCompanion\Upkeep\Command\KnowledgeFormat;
@@ -148,6 +149,7 @@ final class Cli
         $application->addCommand(new ComponentDerive());
         $application->addCommand(new ComponentPaths());
         $application->addCommand(new ManualCheck());
+        $application->addCommand(new ForgeCategoryCheck());
         $application->addCommand(new ReferenceCheck());
         $application->addCommand(new SystemExtensionCheck());
         $application->addCommand(new VersionCheck());

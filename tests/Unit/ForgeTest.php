@@ -974,6 +974,9 @@ final class ForgeTest extends TestCase
                 ['id' => 972, 'name' => 'Backend User Interface'],
                 ['id' => 1001, 'name' => 'RTE (rtehtmlarea + ckeditor)'],
                 ['id' => 977, 'name' => 'Frontend'],
+                // Named after no extension key, which is what the catalog's
+                // forgeCategory is for.
+                ['id' => 1015, 'name' => 'Import/Export (T3D)'],
                 // Carries "rte" as a substring and not as a word, which is what
                 // separates the two matchers.
                 ['id' => 1005, 'name' => 'Performance Reporter'],
@@ -1511,6 +1514,37 @@ final class ForgeTest extends TestCase
         self::assertCount(1, $issues);
         self::assertStringContainsString('category_id=971%7C972', $issues[0]);
         self::assertSame(['Backend API', 'Backend User Interface'], $answer['categoriesUsed']);
+    }
+
+    /**
+     * The word a caller standing in a checkout holds.
+     *
+     * Half the system extension keys name no area, and `impexp` is one: the
+     * catalog says where that extension's issues are filed, so the call reads
+     * them instead of answering the vocabulary (`D-ANS-142`).
+     */
+    #[Decision('D-ANS-142')]
+    #[Test]
+    public function aSystemExtensionKeyReachesTheAreaItsIssuesAreFiledUnder(): void
+    {
+        $asked = [];
+        $forge = new Forge(self::tracker($asked));
+
+        $answer = $forge->backlog('oldest', category: 'impexp', limit: 2);
+
+        self::assertSame(['Import/Export (T3D)'], $answer['categoriesUsed']);
+        // Resolved, so the vocabulary is not enumerated beside it.
+        self::assertSame([], $answer['categories']);
+
+        // The Composer package is the other spelling of the same word.
+        $package = $forge->backlog('oldest', category: 'typo3/cms-impexp', limit: 2);
+        self::assertSame(['Import/Export (T3D)'], $package['categoriesUsed']);
+
+        // An extension whose issues land in the general areas carries none, and
+        // that word is answered with the vocabulary as before.
+        $unmapped = $forge->backlog('oldest', category: 'lowlevel', limit: 2);
+        self::assertSame([], $unmapped['categoriesUsed']);
+        self::assertContains('Frontend', $unmapped['categories']);
     }
 
     /**

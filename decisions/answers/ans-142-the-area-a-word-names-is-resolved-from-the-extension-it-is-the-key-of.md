@@ -3,7 +3,8 @@ id: D-ANS-142
 title: The area a word names is resolved from the extension it is the key of
 date: 2026-09-04
 status: open
-coveredBy: []
+coveredBy:
+  - ForgeTest::aSystemExtensionKeyReachesTheAreaItsIssuesAreFiledUnder
 ---
 
 # D-ANS-142 — The area a word names is resolved from the extension it is the key of
@@ -39,8 +40,6 @@ caller a call each time.
 
 - Step 1a: the mapping from a system extension to the area the core files its
   issues under is knowledge nothing here holds.
-- Queued rather than closed on the spot, because it is `src/` and because the
-  shape below is a judgement rather than a reading.
 - `low`. One session reported it, the recovery worked, and it cost one call.
 - The title derivation is not the shape to build. One in six of the entries it
   adds resolves to the wrong area, and an answer that reads a real area's issues
@@ -50,7 +49,6 @@ caller a call each time.
   `Forge::categories()` fetches — the arrangement `manuals:check` and
   `components:check` already have. A mapped area the tracker renames is then
   reported rather than silently unmatched.
-- Nothing holds it yet because nothing is built; the todo carries the test.
 
 ## Assumed
 
@@ -64,3 +62,17 @@ caller a call each time.
   the matcher is.
 - The core renames its areas often enough that the check is the maintenance
   rather than the guard.
+
+## Since then
+
+Built the same day. `knowledge/catalog/system-extension/entries.json` carries a
+`forgeCategory` on `impexp`, `redirects` and `extensionmanager`, `Forge` reads
+it where the caller's word matched no area, and `categoriesUsed` names the area
+it read — which is what the answer already promised to say.
+`bin/cli forge-categories:check` holds all three against the areas the project
+publishes.
+
+Three rows and not sixteen, because the derivation above is what says which
+extensions have an area of their own. The other thirteen file into
+`Backend User Interface` and `Code Cleanup`, and mapping a key onto an area that
+broad would answer a narrow question with somebody else's issues.

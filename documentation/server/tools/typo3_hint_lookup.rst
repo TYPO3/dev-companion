@@ -287,6 +287,7 @@ Text:
     - record-page-title — The Title of a Record Detail Page (PHP)
     - extbase-plugin-registration — The Two Calls That Register a Plugin (PHP)
     - fresh-instance-seeding — The Ways a Package Fills a Fresh Instance (PHP)
+    - tca-showitem — The showitem Grammar of a Record Type (PHP)
     - unit-test-doubles — Unit Tests, Test Doubles and Data Providers in PHPUnit (PHP)
     - upgrade-wizards — Upgrade Wizards (PHP)
     - installation-upgrade — Upgrading an Installation (PHP)
@@ -797,6 +798,11 @@ Data:
             {
                 "id": "fresh-instance-seeding",
                 "title": "The Ways a Package Fills a Fresh Instance",
+                "category": "PHP"
+            },
+            {
+                "id": "tca-showitem",
+                "title": "The showitem Grammar of a Record Type",
                 "category": "PHP"
             },
             {
@@ -1648,6 +1654,7 @@ Text:
     - record-page-title — The Title of a Record Detail Page (PHP)
     - extbase-plugin-registration — The Two Calls That Register a Plugin (PHP)
     - fresh-instance-seeding — The Ways a Package Fills a Fresh Instance (PHP)
+    - tca-showitem — The showitem Grammar of a Record Type (PHP)
     - unit-test-doubles — Unit Tests, Test Doubles and Data Providers in PHPUnit (PHP)
     - upgrade-wizards — Upgrade Wizards (PHP)
     - installation-upgrade — Upgrading an Installation (PHP)
@@ -2071,6 +2078,11 @@ Data:
             {
                 "id": "fresh-instance-seeding",
                 "title": "The Ways a Package Fills a Fresh Instance",
+                "category": "PHP"
+            },
+            {
+                "id": "tca-showitem",
+                "title": "The showitem Grammar of a Record Type",
                 "category": "PHP"
             },
             {

@@ -53,7 +53,34 @@
       {
         "text": "Appending to one of those strings works on this branch, which is what makes it the thing that breaks on the upgrade: core rewrites its own palette strings on the next major, and the field that disappears takes a core field with it.",
         "until": 13
-      }
+      },
+      "Writing the palettes and the showitem of a table of your own is the other direction, where no override applies and the whole string is yours: tca-showitem carries the grammar and the item that is skipped without a word."
+    ]
+  },
+  {
+    "id": "tca-showitem",
+    "title": "The showitem Grammar of a Record Type",
+    "domains": [
+      "php"
+    ],
+    "appliesTo": [
+      "showitem",
+      "field grouping",
+      "record type",
+      "tabs",
+      "--div--",
+      "--palette--",
+      "palettes section",
+      "regroup the fields",
+      "form layout"
+    ],
+    "hints": [
+      "A type's showitem is a comma-separated list, and each item of it is three segments separated by semicolons: the field name, its label, and a palette name. explodeSingleFieldShowItemConfiguration() reads them in that order, so \"header;;headers\" is a field, no label override, and the palette named headers.",
+      "Three of the names are not columns. \"--div--;<label>\" opens a tab and its label is not optional — TabsContainer throws \"A --div-- has no label\" without one. \"--palette--;;<name>\" inserts the palette of that name, and the empty middle segment is why it is written with two semicolons: it is the label slot, left empty so that palettes.<name>.label is used instead. \"--linebreak--\" belongs inside a palette's own showitem and starts the next row.",
+      "So a palette's label lives in the palettes section and not in showitem, and writing one into the item's middle segment overrides it for that type. palettes.<name>.description is the sentence rendered under the legend, and it has no place in showitem at all.",
+      "A palette is one row of fields, however wide they are. Nothing refuses a rich text field or any other full-width element inside one; what shapes the rows is --linebreak--, and a palette whose items do not fit is a layout decision rather than a configuration error.",
+      "An item naming a column the columns section does not have is skipped, in the type's own list and inside a palette alike, and nothing is logged: PaletteAndSingleContainer moves past a field name that is not an array in processedTca.columns. So a regrouping is exactly where a field goes missing, and what catches it is a test holding every item of every type against the columns — no name twice, every editable column reached — rather than a reading of the string.",
+      "This is the type's own form, where the whole string is yours. Appending to a palette a core table owns is the other direction and has rules of its own: tca-core-palette."
     ]
   },
   {

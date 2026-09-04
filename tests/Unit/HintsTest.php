@@ -3325,6 +3325,37 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The grammar a regrouping is written in, and the item that disappears.
+     *
+     * A session regrouping its own table into palettes and tabs got the hint
+     * about extending a core palette instead, wrote the strings from memory and
+     * invented the test that proves them (`D-KNW-152`).
+     */
+    #[Decision('D-KNW-152')]
+    #[Test]
+    public function theGrammarOfAShowitemItemIsStatedWithWhatItSkips(): void
+    {
+        foreach ([12, 13, 14, 15] as $major) {
+            $text = implode("\n", array_column(Hints::byId('tca-showitem', $major)['hints'], 'text'));
+
+            self::assertStringContainsString('three segments separated by semicolons', $text);
+            // Where the label of a palette lives, which is the empty middle
+            // segment's whole reason.
+            self::assertStringContainsString('palettes.<name>.label', $text);
+            self::assertStringContainsString('A --div-- has no label', $text);
+            // The silent skip, and the guard for it.
+            self::assertStringContainsString('nothing is logged', $text);
+            self::assertStringContainsString('every item of every type against the columns', $text);
+        }
+
+        // Writing your own form and extending somebody else's name each other.
+        self::assertStringContainsString(
+            'tca-showitem',
+            implode("\n", array_column(Hints::byId('tca-core-palette', 14)['hints'], 'text')),
+        );
+    }
+
+    /**
      * `D-KNW-087`. The hint said an area the layout never declared "renders
      * empty with no error", and a session that skipped it got HTTP 500 on every
      * page instead. `ContentAreaViewHelper::render()` throws for anything that

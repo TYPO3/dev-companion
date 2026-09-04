@@ -28,7 +28,8 @@
       "unknown key in a set",
       "Invalid properties",
       "InvalidSetException",
-      "route-enhancers.yaml"
+      "route-enhancers.yaml",
+      "Enhancer type cannot be empty"
     ],
     "hints": [
       {
@@ -41,6 +42,14 @@
       },
       {
         "text": "A route-enhancers.yaml beside them is read as well, and what it declares is merged into the routing of every site that depends on the set.",
+        "since": 14
+      },
+      {
+        "text": "Those enhancers merge rather than replace. SiteConfiguration folds each dependency's set into the last with ArrayUtility::replaceAndAppendScalarValuesRecursive(), in dependency order, and merges the site's own routeEnhancers over the result the same way. So a set adds one entry to an aspect's map inside an enhancer another set declared, and the identifier it declares under is a place in that tree rather than a name that wins.",
+        "since": 14
+      },
+      {
+        "text": "A fragment is therefore only whole while the set that declares the rest is a dependency. Drop that dependency and what reaches the router is the fragment alone: EnhancerFactory refuses it with exception 1537298284, \"Enhancer type cannot be empty\", and every request of the site answers HTTP 500. Nothing in the route-enhancers.yaml says which set it is completing, so the dependency is what carries that and the file cannot be read without it.",
         "since": 14
       },
       {

@@ -60,3 +60,17 @@ down.
   site, which makes the HTTP 500 half of the statement wrong.
 - A sweep of the corpus finds other allow-lists whose "and nothing else" is
   false. Then this was one instance of a sweep rather than one hint.
+
+## Since then
+
+2026-09-04, from `feedback/2026-09-03-235250` and the same reading. The v14
+`route-enhancers.yaml` statement gained the two facts that make the file usable:
+the enhancers of the dependencies are folded with
+`ArrayUtility::replaceAndAppendScalarValuesRecursive()` in dependency order and
+the site's own merged over them, so a set contributes a fragment into an
+enhancer another set declares — and that fragment is only whole while that
+dependency stands, or `EnhancerFactory` refuses it and every request answers
+HTTP 500.
+
+The report asked for both `since: 13`. They are `since: 14`, which is the same
+boundary this entry moved the file list to.

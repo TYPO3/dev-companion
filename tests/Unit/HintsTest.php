@@ -3183,6 +3183,13 @@ final class HintsTest extends TestCase
         // the list is bound where it changed rather than stated for all three.
         self::assertStringNotContainsString('route-enhancers.yaml', $texts(13));
         self::assertStringContainsString('route-enhancers.yaml', $texts(14));
+
+        // And what makes that file usable: the enhancers of the dependencies
+        // are merged rather than replaced, so a set completes another set's
+        // enhancer — and the dependency is what holds the fragment together.
+        self::assertStringContainsString('replaceAndAppendScalarValuesRecursive', $texts(14));
+        self::assertStringContainsString('Enhancer type cannot be empty', $texts(14));
+        self::assertStringNotContainsString('replaceAndAppendScalarValuesRecursive', $texts(13));
     }
 
     /**

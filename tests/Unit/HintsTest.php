@@ -3246,6 +3246,49 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * What answers a not-found, beside the hint that reads what one was.
+     *
+     * `page-not-found-within-a-site` named the site's `errorHandling` as the
+     * thing that changes the outcome and said nothing about it, so a repair was
+     * written from memory (`D-KNW-150`).
+     */
+    #[Decision('D-KNW-150')]
+    #[Test]
+    public function whatASiteAnswersAnErrorWithIsStatedBesideWhatANotFoundWas(): void
+    {
+        foreach ([12, 13, 14, 15] as $major) {
+            $text = implode("\n", array_column(Hints::byId('site-error-handling', $major)['hints'], 'text'));
+
+            self::assertStringContainsString('errorCode', $text);
+            self::assertStringContainsString('errorContentSource', $text);
+            // The fallback nothing reports, and the status the body does not
+            // change.
+            self::assertStringContainsString('errorCode 0 is the fallback', $text);
+            self::assertStringContainsString('the answer stays HTTP 404', $text);
+            // The word that keeps a page out of the menu, beside the one that
+            // takes it out of delivery.
+            self::assertStringContainsString('nav_hide', $text);
+        }
+
+        // The fourth handler and the Extbase route arrived together, and 12.4
+        // has neither.
+        self::assertStringNotContainsString(
+            'LoginRedirect',
+            implode("\n", array_column(Hints::byId('site-error-handling', 12)['hints'], 'text')),
+        );
+        self::assertStringContainsString(
+            'showPageNotFoundIfTargetNotFoundException',
+            implode("\n", array_column(Hints::byId('site-error-handling', 13)['hints'], 'text')),
+        );
+
+        // And the diagnostic hint sends the reader there.
+        self::assertStringContainsString(
+            'site-error-handling',
+            implode("\n", array_column(Hints::byId('page-not-found-within-a-site', 14)['hints'], 'text')),
+        );
+    }
+
+    /**
      * `D-KNW-087`. The hint said an area the layout never declared "renders
      * empty with no error", and a session that skipped it got HTTP 500 on every
      * page instead. `ContentAreaViewHelper::render()` throws for anything that

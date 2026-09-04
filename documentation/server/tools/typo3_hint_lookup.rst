@@ -222,6 +222,7 @@ Text:
     - di-service-not-found — A Service the Container Cannot Find at Runtime (PHP)
     - frontend-access-restriction — Access Restricted Pages and extendToSubpages in the Frontend (PHP)
     - tca-core-palette — Adding a Field to a Core Palette (PHP)
+    - site-error-handling — Answering a Not-Found With a Page of the Site (PHP)
     - extension-test-frontend-request — Asserting a Frontend Response in a Test (PHP)
     - authentication-permissions — Authentication and Permissions (PHP)
     - backend-modules — Backend Module and Route Registration (PHP)
@@ -470,6 +471,11 @@ Data:
             {
                 "id": "tca-core-palette",
                 "title": "Adding a Field to a Core Palette",
+                "category": "PHP"
+            },
+            {
+                "id": "site-error-handling",
+                "title": "Answering a Not-Found With a Page of the Site",
                 "category": "PHP"
             },
             {
@@ -1568,6 +1574,7 @@ Text:
     - di-service-not-found — A Service the Container Cannot Find at Runtime (PHP)
     - frontend-access-restriction — Access Restricted Pages and extendToSubpages in the Frontend (PHP)
     - tca-core-palette — Adding a Field to a Core Palette (PHP)
+    - site-error-handling — Answering a Not-Found With a Page of the Site (PHP)
     - extension-test-frontend-request — Asserting a Frontend Response in a Test (PHP)
     - authentication-permissions — Authentication and Permissions (PHP)
     - backend-modules — Backend Module and Route Registration (PHP)
@@ -1717,6 +1724,11 @@ Data:
             {
                 "id": "tca-core-palette",
                 "title": "Adding a Field to a Core Palette",
+                "category": "PHP"
+            },
+            {
+                "id": "site-error-handling",
+                "title": "Answering a Not-Found With a Page of the Site",
                 "category": "PHP"
             },
             {

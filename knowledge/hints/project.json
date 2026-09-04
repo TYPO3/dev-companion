@@ -168,7 +168,42 @@
       "The line is there while the site configures no errorHandling for the status code: the core renders an error page of its own and appends Reason: <the message> to it. Accept: application/json reduces that page to {\"reason\": \"...\"}, which is the discriminator without the document around it. A site that does configure a handler for the code answers with the configured page and drops the message, so the reading is done before that is set up or from the page record itself. None of these is thrown, so the empty log installation-exception-output describes is what they produce rather than a second failure.",
       "A hidden page is routed and then withheld, which is why its URL is right and its answer is a not-found. PageSlugCandidateProvider queries pages under the deleted and workspace restrictions alone, so the slug of a hidden page resolves like any other. The frontend then asks PageRepository::getPage() with the enable fields, gets nothing, reads the row again with getPage_noCheck(), and answers The requested page does not exist! where the disabled field is set. A logged-in backend user passes that check, so a page that renders in the browser you are logged into and answers not-found in a private window is hidden and nothing else.",
       "How far up the tree that reaches is the rootline's answer, and hidden and deleted are opposites in it. RootlineUtility applies the deleted restriction alone, so a hidden page is still a rootline entry: a hidden root page answers its own URL with a not-found and takes nothing below it with it, unless it carries extendToSubpages — the inherited restriction frontend-access-restriction owns, which answers Subsection was found and not accessible instead. A deleted root page breaks the rootline of every page under it, so SiteFinder::getSiteByPageId() finds no site for any of them and the router drops them all as candidates. The whole tree then answers the sentence without the exclamation mark, while the site itself is untouched and the backend still shows the pages.",
-      "A page that is visible and still refused is its doktype: a spacer and a folder answer The requested page does not exist! as well, so that sentence covers the hidden page and the page type the frontend does not render alike, and the record is what tells the two apart. A whole tree that is hidden rather than only its root was written that way, and datahandler-seeding is the mechanism: pages.hidden defaults to 1 in TCA against 0 in the schema, so a page tree seeded by a script without saying otherwise arrives hidden and an export ships it as it is. Which of two sites answered is the question before this one, and site-base-collision owns it."
+      "A page that is visible and still refused is its doktype: a spacer and a folder answer The requested page does not exist! as well, so that sentence covers the hidden page and the page type the frontend does not render alike, and the record is what tells the two apart. A whole tree that is hidden rather than only its root was written that way, and datahandler-seeding is the mechanism: pages.hidden defaults to 1 in TCA against 0 in the schema, so a page tree seeded by a script without saying otherwise arrives hidden and an export ships it as it is. Which of two sites answered is the question before this one, and site-base-collision owns it.",
+      "What makes the difference above is the site's errorHandling, and what that configuration takes is site-error-handling: without an entry for the status this site answers with the core's own bare document, whatever the page tree holds."
+    ]
+  },
+  {
+    "id": "site-error-handling",
+    "title": "Answering a Not-Found With a Page of the Site",
+    "domains": [
+      "php",
+      "typoscript"
+    ],
+    "appliesTo": [
+      "404 page",
+      "error handling",
+      "errorHandling",
+      "not found page",
+      "errorContentSource",
+      "custom error page",
+      "config/sites/",
+      "PropagateResponseException",
+      "ErrorController"
+    ],
+    "hints": [
+      "A site answers an error with a page of its own only where its config.yaml carries an errorHandling entry for that status. Each entry is a list item with an errorCode and an errorHandler, Site::getErrorHandler() keys them by that code, and an entry with errorCode 0 is the fallback for every status no entry names. An empty errorHandling list is what leaves the core's own bare document as the answer.",
+      "errorHandler takes one of a closed set of words. Page renders another page of the installation and takes errorContentSource; Fluid renders a template and takes errorFluidTemplate with the three optional errorFluidTemplatesRootPath, errorFluidLayoutsRootPath and errorFluidPartialsRootPath; PHP takes errorPhpClassFQCN and the class has to implement PageErrorHandlerInterface or the site throws. Anything else raises PageErrorHandlerNotConfiguredException for that status.",
+      {
+        "text": "LoginRedirect is the fourth, for an HTTP 403 that should send the visitor to a login form. It takes loginRedirectTarget as a link reference and loginRedirectParameter, which defaults to return_url.",
+        "since": 13
+      },
+      "errorContentSource is a link reference and not a path: t3://page?uid=<uid> is the form, and LinkService resolves it. PageContentErrorHandler fetches that page as an internal subrequest and copies its body into a response carrying the status code the entry declared, so the page renders and the answer stays HTTP 404. An external URL is fetched over HTTP instead, because a subrequest could never reach one.",
+      "So the error page has to be deliverable to an anonymous visitor. A subrequest answering HTTP 300 or above makes the handler throw, an error page whose own address is the address being handled answers \"The error page could not be resolved, as the error page itself is not accessible\", and a reference LinkService cannot resolve answers \"Invalid error handler configuration:\" with the value. Keeping it out of the menu is what nav_hide does; hidden takes the page out of delivery and breaks the handler.",
+      {
+        "text": "Answering not-found from inside the request is ErrorController::pageNotFoundAction(), whose response is thrown as PropagateResponseException — that is what runs the site's own handler rather than returning an empty page. Extbase does it for you where the TypoScript sets mvc.showPageNotFoundIfTargetNotFoundException or mvc.showPageNotFoundIfRequiredArgumentIsMissingException, so a detail action whose argument resolves to nothing answers the site's HTTP 404 without a line of PHP.",
+        "since": 13
+      },
+      "This is the answering side. Reading which of the two a not-found was — a page that does not exist, or one the site routed and withheld — is page-not-found-within-a-site."
     ]
   },
   {

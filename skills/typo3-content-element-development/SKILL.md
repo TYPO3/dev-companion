@@ -1,6 +1,6 @@
 ---
 name: typo3-content-element-development
-description: Build or refactor TYPO3 content elements on both sides — what an editor fills in and sees in the page module, and what a visitor gets rendered. Use for CType registration, TCA, inline child records, a custom backend preview, TypoScript, Fluid, assets, labels and tests.
+description: Build or refactor TYPO3 content elements and the shared frame they all render in, replacing that frame included where a package drops the extension supplying it. Both sides, what an editor fills in and sees in the page module and what a visitor gets. Use for CType registration, TCA, child records, backend previews, TypoScript, Fluid, labels and tests.
 compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
@@ -85,6 +85,36 @@ changing a content element.
   follow the CType-to-template naming convention.
 - Load element-only CSS and JavaScript from the template through the Fluid
   AssetCollector. Use global page inclusion only for assets required site-wide.
+
+## Settle the frame before the element that renders in it
+
+Every element on a site renders inside one shared object — the content element
+FLUIDTEMPLATE and the layout, partials and settings it resolves — and a site
+either owns that object or takes it from a system extension. Which of the two
+decides where an element's template may look for a partial, and what a change to
+the layout costs every other element on the site.
+
+- Read who owns the frame before writing into it. Step 2's answer reports the
+  content types a package renders and does not register, and the shared plugin
+  template it ships: a package owning rendering for an element it never
+  registered has taken the frame over, and one shipping neither is still
+  standing on the system extension.
+- Where the task is to stop depending on that extension — "remove it as a
+  dependency", "rebuild what it provided", "vendor it into the sitepackage" —
+  the work is an inventory before it is an edit: what the extension supplies,
+  which of that this installation actually reaches, and which of those the site
+  can do without. `typo3_record_lookup` answers the last two from the content
+  that exists rather than from what the templates allow, and its `groupBy` names
+  the rows departing from a column's default — the single record a branch
+  written for the default alone would break.
+- Two of the failures a removal causes are silent, and neither is in the element
+  you are working on. `typo3_hint_lookup` with
+  `id=sitepackage-fluid-styled-content` states what a removal owes; the shared
+  roots and the collision they cause are `id=page-content-element-rendering`.
+- Prove the frame by the markup rather than by the files. Render the pages that
+  carry each element before and after and diff the HTML: a frame that resolves
+  is not a frame that renders the same, and the element that changed is rarely
+  the one that was edited.
 
 ## Implement the full lifecycle
 

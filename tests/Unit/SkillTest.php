@@ -58,6 +58,9 @@ final class SkillTest extends TestCase
             'typo3_icon_lookup',
             'typo3_component_lookup',
             'typo3_rule_lookup',
+            // The frame section, which reads what the site's content actually
+            // carries before deciding which of it a replacement owes.
+            'typo3_record_lookup',
             'typo3_commit_message_guide',
         ],
         // The worked example the core ships stands where the harness is built,

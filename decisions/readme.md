@@ -826,6 +826,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### task-skills
 
+- [`D-SKL-091`][D-SKL-091] — The frame elements render in belongs to the skill that owns them · 2026-09-04
 - [`D-SKL-090`][D-SKL-090] — A review rates the patch and reads the chain for what a shape is for · 2026-09-02
 - [`D-SKL-087`][D-SKL-087] — Every skill in the directory is published · 2026-09-01
 - [`D-SKL-088`][D-SKL-088] — A paragraph three skills share stops being copied · 2026-09-01
@@ -912,6 +913,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-091]: task-skills/skl-091-the-frame-elements-render-in-belongs-to-the-skill-that-owns-them.md
 [D-SKL-090]: task-skills/skl-090-a-review-rates-the-patch-and-reads-the-chain-for-what-a-shape-is-for.md
 [D-SKL-087]: task-skills/skl-087-every-skill-in-the-directory-is-published.md
 [D-SKL-088]: task-skills/skl-088-a-paragraph-three-skills-share-stops-being-copied.md

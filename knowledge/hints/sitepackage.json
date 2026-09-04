@@ -110,7 +110,13 @@
       "depend on fluid styled content",
       "do I need fluid_styled_content",
       "own content element rendering",
-      "_CSS_DEFAULT_STYLE"
+      "_CSS_DEFAULT_STYLE",
+      "remove fluid_styled_content",
+      "drop fluid_styled_content",
+      "sitepackage without fluid_styled_content",
+      "templateName = Generic",
+      "tt_content.shortcut",
+      "styles.templates"
     ],
     "hints": [
       "The object a sitepackage takes the dependency for is lib.contentElement: a FLUIDTEMPLATE with templateName Default, the extension's own Templates, Partials and Layouts first and the styles.templates.* constants above them, and the settings the shipped templates read — the header type, the image lazy loading and decoding, the lightbox wrap. An element written as tt_content.<CType> =< lib.contentElement copies all of that and then overrides the template name.",
@@ -120,7 +126,16 @@
       },
       "lib.parseFunc and lib.parseFunc_RTE are not its. EXT:frontend declares both in its own ext_localconf.php, so rich text rendering is there whether or not this extension is required.",
       "The typo3/fluid-styled-content-css set adds one thing: plugin.tx_frontend._CSS_DEFAULT_STYLE with the .ce-* rules that style the elements this extension renders. A site whose page TSconfig removes every one of those elements from the selector is shipping stylesheet rules for markup it never emits.",
-      "Defining lib.contentElement in the sitepackage instead is a FLUIDTEMPLATE of a few lines and drops the dependency, and what goes with it is the rendering of the core's own elements — text, textmedia, header, table, the menus. That is the decision to make deliberately: a site that keeps a few of them keeps the dependency, and one that offers only its own elements is paying for a scaffold it overrode."
+      "Defining lib.contentElement in the sitepackage instead is a FLUIDTEMPLATE of a few lines and drops the dependency, and what goes with it is the rendering of the core's own elements — text, textmedia, header, table, the menus. That is the decision to make deliberately: a site that keeps a few of them keeps the dependency, and one that offers only its own elements is paying for a scaffold it overrode.",
+      "Every Extbase plugin renders through this extension as well. ExtensionUtility::configurePlugin() writes tt_content.<plugin signature> =< lib.contentElement with templateName = Generic, and Generic is one of the templates this extension ships: it renders {content} where the plugin assigned it and otherwise an f:cObject back onto the plugin's own tt_content path, which is where the same call put the EXTBASEPLUGIN. EXT:form, EXT:felogin and EXT:indexed_search each register a plugin that way.",
+      "Dropping the dependency without putting lib.contentElement back leaves every one of those plugins silent. tt_content is a CASE on the CType and the plugin's own key is still written, so the yellow \"has no rendering definition\" default never fires and the element renders as nothing. Putting lib.contentElement back without a Generic template beside it fails the other way, with InvalidTemplateResourceException out of FLUIDTEMPLATE naming the template it looked for and every root it checked.",
+      {
+        "text": "A plugin registered with the list subtype takes a second path through this extension: tt_content.list is one of its content element files and sets templateName = List.",
+        "until": 13
+      },
+      "The core's own elements are split across three extensions, and only the last part is this one's. EXT:frontend registers the CType and its TCA, EXT:backend draws the page module preview in StandardContentPreviewRenderer, and this extension holds the frontend rendering — Configuration/TypoScript/ContentElement/<Name>.typoscript and the template beside it. So dropping it leaves every core element still selectable and still previewed, and empty on the page. shortcut is the one to check first, because a site offering only its own elements tends to keep that one.",
+      "The Default layout renders Before, Header, Footer and After as optional sections whose fallback child is a partial — DropIn/Before/All, Header/All, Footer/All and DropIn/After/All. An element declaring none of those sections still renders those partials, so a layout written to replace this one owes the partials too or drops the sections deliberately.",
+      "The styles.templates.* and styles.content.* settings the shipped objects read are declared by this extension and by no other. A constant nothing declares is left as its own text — ConstantAwareTokenStream::__toString() falls back to the token — so a reference surviving the removal puts the literal {$styles...} into the value instead of emptying it."
     ]
   }
 ]

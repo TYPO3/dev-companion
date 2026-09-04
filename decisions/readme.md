@@ -96,6 +96,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-145`][D-ANS-145] — The answer that hands over a command carries what a run can take · 2026-09-04
 - [`D-ANS-146`][D-ANS-146] — What a brief still owes is said before the brief · 2026-09-04
 - [`D-ANS-147`][D-ANS-147] — What a session acts on is a fact the answer carried · 2026-09-04
+- [`D-ANS-148`][D-ANS-148] — The project answer names a kind of file no declared command checks · 2026-09-04
 - [`D-ANS-132`][D-ANS-132] — The domain answer carries the form a module imports · 2026-09-02
 - [`D-ANS-133`][D-ANS-133] — A describe field is a file's own declaration · 2026-09-02
 - [`D-ANS-135`][D-ANS-135] — The reference scan is asked for the resources an answer names · 2026-09-02
@@ -239,6 +240,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-ANS-145]: answers/ans-145-the-answer-that-hands-over-a-command-carries-what-a-run-can-take.md
 [D-ANS-146]: answers/ans-146-what-a-brief-still-owes-is-said-before-the-brief.md
 [D-ANS-147]: answers/ans-147-what-a-session-acts-on-is-a-fact-the-answer-carried.md
+[D-ANS-148]: answers/ans-148-the-project-answer-names-a-kind-of-file-no-declared-command-checks.md
 [D-ANS-132]: answers/ans-132-the-domain-answer-carries-the-form-a-module-imports.md
 [D-ANS-133]: answers/ans-133-a-describe-field-is-a-files-own-declaration.md
 [D-ANS-135]: answers/ans-135-the-reference-scan-is-asked-for-the-resources-an-answer-names.md

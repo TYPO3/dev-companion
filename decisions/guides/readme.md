@@ -7,7 +7,7 @@ caller for rather than guessing.
 See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
-- [`D-GUI-027`][D-GUI-027] — An intent's condition decides whether its checklist arrives · 2026-09-04
+- [`D-GUI-027`][D-GUI-027] — An intent's condition decides whether its checklist arrives · 2026-09-04 · confirmed
 - [`D-GUI-026`][D-GUI-026] — The commit body is prose, and the check says so · 2026-09-02
 - [`D-GUI-025`][D-GUI-025] — A checklist item says that it does not decide everything · 2026-09-01
 - [`D-GUI-024`][D-GUI-024] — The intent that states an obligation names the page discharging it · 2026-08-28

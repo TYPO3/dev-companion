@@ -2,7 +2,7 @@
 id: D-GUI-027
 title: An intent's condition decides whether its checklist arrives
 date: 2026-09-04
-status: open
+status: confirmed
 coveredBy:
   - HintsTest::aCleanupOfOneNamedFileLeavesTheRepositoryItemsConditional
   - HintsTest::aStatedChangeTypeNamesTheIntentThatOwnsIt
@@ -81,3 +81,18 @@ one that defines a setting.
 
 What the reported calls get now is the four items under the condition the entry
 states, beside the work each task actually named.
+
+## Confirmed on 2026-09-04
+
+A second report of the same gap, from a third task shape, and the fix answers
+it. `feedback/2026-09-04-053716` describes a scoped removal that came back with
+the four audit items, one of which is *stop and get agreement before a file is
+changed* — on a task whose user had said not to ask. Its own call, re-run today,
+confirms `backend-ui`, `content-element` and `tca-field` and no `cleanup`, so
+none of the four arrives. The feedback's second suggestion — mark the items the
+way the backend-UI ones are — is what a weak match already does.
+
+Two **Wrong if** were measured and neither holds: a repository-wide cleanup
+still carries the six items, and each reading change type still reaches its
+intent. What is left is a caller whose own words say *clean up* on a scoped
+task, which gets the items bare and correctly so.

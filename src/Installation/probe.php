@@ -533,6 +533,9 @@ try {
             // A column the caller groups by: one call answers a distribution
             // that was thirteen counted calls, one per value — `D-ANS-141`.
             $groupBy = is_string($records['groupBy'] ?? null) ? $records['groupBy'] : '';
+            $default = $groupBy === ''
+                ? null
+                : ($tca[$wanted]['columns'][$groupBy]['config']['default'] ?? null);
 
             $counting = $constrain($pool->getQueryBuilderForTable($wanted));
             $counting->getRestrictions()->removeAll();
@@ -564,13 +567,44 @@ try {
                 $groups[] = $group;
             }
 
+            // The rows that depart from the column's TCA default, which is what
+            // turns a distribution into a decision: a value one row in a
+            // hundred carries is invisible in the counts and is the row that
+            // breaks when the branch it needs is dropped — `D-AUD-018`.
+            $departing = [];
+            if ($groupBy !== '' && $default !== null) {
+                $departingFrom = $constrain($pool->getQueryBuilderForTable($wanted));
+                $departingFrom->getRestrictions()->removeAll();
+                $departingFrom
+                    ->select('uid', 'pid', $groupBy)
+                    ->from($wanted)
+                    ->andWhere($departingFrom->expr()->neq(
+                        $groupBy,
+                        $departingFrom->createNamedParameter($default),
+                    ))
+                    ->orderBy('uid', 'ASC')
+                    ->setMaxResults(max(1, (int) ($records['departing'] ?? 20)));
+                foreach ($departingFrom->executeQuery()->fetchAllAssociative() as $row) {
+                    $departing[] = [
+                        'uid' => (int) ($row['uid'] ?? 0),
+                        'pid' => (int) ($row['pid'] ?? 0),
+                        'value' => $row[$groupBy] ?? null,
+                    ];
+                }
+            }
+
             $rows = [];
             if ($limit !== 0) {
                 $selecting = $constrain($pool->getQueryBuilderForTable($wanted));
                 $selecting->getRestrictions()->removeAll();
                 $columns = ['uid', 'pid'];
-                foreach ([$label, $changed, $created, $deleted, $hidden] as $column) {
-                    if ($column !== '' && !in_array($column, $columns, true)) {
+                // The columns the caller named come off the same read. Each one
+                // was checked against what TYPO3 derives for the table before
+                // the call was made, which is what lets it go into the SQL as
+                // an identifier — `D-AUD-019`.
+                $wantedColumns = is_array($records['columns'] ?? null) ? array_values($records['columns']) : [];
+                foreach ([$label, $changed, $created, $deleted, $hidden, ...$wantedColumns] as $column) {
+                    if (is_string($column) && $column !== '' && !in_array($column, $columns, true)) {
                         $columns[] = $column;
                     }
                 }
@@ -579,6 +613,12 @@ try {
                     $selecting->setMaxResults($limit);
                 }
                 foreach ($selecting->executeQuery()->fetchAllAssociative() as $row) {
+                    $values = [];
+                    foreach ($wantedColumns as $column) {
+                        if (is_string($column) && $column !== '') {
+                            $values[] = ['column' => $column, 'value' => $row[$column] ?? null];
+                        }
+                    }
                     $rows[] = [
                         'uid' => (int) ($row['uid'] ?? 0),
                         'pid' => (int) ($row['pid'] ?? 0),
@@ -587,6 +627,7 @@ try {
                         'created' => $created === '' ? 0 : (int) ($row[$created] ?? 0),
                         'deleted' => $deleted !== '' && (int) ($row[$deleted] ?? 0) !== 0,
                         'hidden' => $hidden !== '' && (int) ($row[$hidden] ?? 0) !== 0,
+                        'values' => $values,
                     ];
                 }
             }
@@ -602,6 +643,11 @@ try {
                 'hiddenField' => $hidden,
                 'labelField' => $label,
                 'groups' => $groups,
+                // Null is a column whose TCA declares no default, which is a
+                // different answer from a default of zero: nothing departs from
+                // the first and every non-zero row departs from the second.
+                'groupDefault' => $default,
+                'departing' => $departing,
                 'rows' => $rows,
             ];
         } catch (Throwable $failure) {

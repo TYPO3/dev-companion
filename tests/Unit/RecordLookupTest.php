@@ -19,8 +19,9 @@ use TYPO3\DevCompanion\Tool\Registry;
  *
  * The count exists because a session held the number 3101 twice and drew
  * nothing from it, so the answer says what the number means for where the
- * records are edited. What it may be asked about is the other half: a table a
- * project-owned extension registers, and no other — `D-AUD-017`.
+ * records are edited. What it may be asked about is the other half: a table this
+ * installation has TCA for, and the columns of a row beyond its fixed shape
+ * are the caller's to name — `D-AUD-018`.
  */
 final class RecordLookupTest extends TestCase
 {
@@ -38,7 +39,7 @@ final class RecordLookupTest extends TestCase
         }
     }
 
-    #[Decision('D-AUD-017')]
+    #[Decision('D-AUD-018')]
     #[Test]
     public function aTableFullEnoughToLeaveTheRecordListIsSaidToBe(): void
     {
@@ -107,7 +108,7 @@ final class RecordLookupTest extends TestCase
         self::assertSame(3070, $result->data['counts']['total']);
     }
 
-    #[Decision('D-AUD-017')]
+    #[Decision('D-AUD-018')]
     #[Test]
     public function aTableOneScreenLongAsksForNothing(): void
     {
@@ -120,7 +121,7 @@ final class RecordLookupTest extends TestCase
         self::assertStringNotContainsString('backend module', $result->text);
     }
 
-    #[Decision('D-AUD-017')]
+    #[Decision('D-AUD-018')]
     #[Test]
     public function everyCountSaysItWasReadWithoutBackendPermissions(): void
     {
@@ -132,25 +133,46 @@ final class RecordLookupTest extends TestCase
         self::assertStringContainsString('shell user\'s database access', $result->data['readWith']);
     }
 
-    #[Decision('D-AUD-017')]
+    #[Decision('D-AUD-018')]
     #[Test]
-    public function aTableNoProjectExtensionRegistersIsRefusedRatherThanRead(): void
+    public function aTableTheInstallationHasNoTcaForIsRefusedRatherThanRead(): void
     {
         $this->reading([['pid' => 1, 'deleted' => false, 'hidden' => false, 'rows' => 4]]);
 
-        $result = Registry::call('typo3_record_lookup', ['table' => 'tt_content']);
+        $result = Registry::call('typo3_record_lookup', ['table' => 'cache_pages']);
 
         // Zero and no rows object, so nothing reads as an empty table.
         self::assertSame(0, $result->data['matchCount']);
         self::assertNull($result->data['counts']);
-        self::assertStringContainsString('is not read here', $result->text);
-        self::assertStringContainsString('vendor/bin/typo3', $result->text);
-        // And what it does count is in the same answer, so the refusal is not
+        self::assertStringContainsString('is not a table this installation has TCA for', $result->text);
+        // And what it does read is in the same answer, so the refusal is not
         // the end of the call.
-        self::assertSame(['tx_acme_thing'], array_column($result->data['countable'], 'table'));
+        self::assertSame(
+            ['be_users', 'tt_content', 'tx_acme_thing'],
+            array_column($result->data['countable'], 'table'),
+        );
     }
 
-    #[Decision('D-AUD-017')]
+    /**
+     * A table the core registers is read like a project's own.
+     *
+     * Six `ddev mysql` queries over `tt_content` and `pages` decided the markup
+     * of a replacement layout and the tool was never tried, because it refused
+     * both — `feedback/archive/2026-09-04-053618`, `D-AUD-018`.
+     */
+    #[Decision('D-AUD-018')]
+    #[Test]
+    public function aTableTheCoreRegistersIsReadLikeAProjectsOwn(): void
+    {
+        $this->reading([['pid' => 3, 'deleted' => false, 'hidden' => false, 'rows' => 137]]);
+
+        $result = Registry::call('typo3_record_lookup', ['table' => 'tt_content']);
+
+        self::assertSame(137, $result->data['matchCount']);
+        self::assertStringNotContainsString('is not a table', $result->text);
+    }
+
+    #[Decision('D-AUD-018')]
     #[Test]
     public function theTablesItWillReadAreListedWithoutOneBeingNamed(): void
     {
@@ -159,14 +181,128 @@ final class RecordLookupTest extends TestCase
         $result = Registry::call('typo3_record_lookup', []);
 
         self::assertNull($result->data['table']);
-        self::assertSame(1, $result->data['matchCount']);
+        self::assertSame(3, $result->data['matchCount']);
         self::assertSame(
-            [['table' => 'tx_acme_thing', 'extension' => 'acme_thing']],
+            [
+                ['table' => 'be_users', 'extension' => 'core'],
+                ['table' => 'tt_content', 'extension' => 'frontend'],
+                ['table' => 'tx_acme_thing', 'extension' => 'acme_thing'],
+            ],
             $result->data['countable'],
         );
     }
 
-    #[Decision('D-AUD-017')]
+    /**
+     * The columns a row carries beyond its fixed shape are the caller's.
+     *
+     * A session read ten `tt_content` columns out of the database by hand
+     * because nothing here would hand them over — `D-AUD-018`. Each name is
+     * checked against the table the way a filter's columns are, which is what
+     * lets it go into the SQL as an identifier.
+     */
+    #[Decision('D-AUD-018')]
+    #[Test]
+    public function theColumnsARowCarriesBeyondItsFixedShapeAreTheCallers(): void
+    {
+        $this->reading(
+            [['pid' => 3, 'deleted' => false, 'hidden' => false, 'rows' => 2]],
+            [
+                [
+                    'uid' => 12, 'pid' => 3, 'label' => 'Stage', 'changed' => 1, 'created' => 1,
+                    'deleted' => false, 'hidden' => false,
+                    'values' => [['column' => 'CType', 'value' => 'textmedia'], ['column' => 'header_layout', 'value' => 1]],
+                ],
+            ],
+        );
+
+        $result = Registry::call('typo3_record_lookup', [
+            'table' => 'tt_content',
+            'columns' => ['CType', 'header_layout'],
+        ]);
+
+        self::assertSame(
+            [['column' => 'CType', 'value' => 'textmedia'], ['column' => 'header_layout', 'value' => 1]],
+            $result->data['records'][0]['values'],
+        );
+        self::assertStringContainsString('- [12] Stage — CType = textmedia, header_layout = 1', $result->text);
+    }
+
+    #[Decision('D-AUD-018')]
+    #[Test]
+    public function aNamedColumnTheTableHasNotIsAnsweredRatherThanRead(): void
+    {
+        $this->reading([['pid' => 3, 'deleted' => false, 'hidden' => false, 'rows' => 2]]);
+
+        $result = Registry::call('typo3_record_lookup', [
+            'table' => 'tt_content',
+            'columns' => ['quantumflux'],
+        ]);
+
+        self::assertSame(0, $result->data['matchCount']);
+        self::assertStringContainsString('has no column quantumflux', $result->text);
+    }
+
+    /**
+     * The one row that departs from the default, beside the distribution.
+     *
+     * A distribution says what the table holds; which of it is the exception is
+     * what a cleanup turns on, and the reported session's one `header_layout`
+     * row out of 137 was the site's only h1 — `D-AUD-018`.
+     */
+    #[Decision('D-AUD-018')]
+    #[Test]
+    public function theRowsDepartingFromTheColumnsDefaultAreNamedBesideIt(): void
+    {
+        $this->reading(
+            [
+                ['pid' => 3, 'deleted' => false, 'hidden' => false, 'rows' => 136, 'value' => 0],
+                ['pid' => 3, 'deleted' => false, 'hidden' => false, 'rows' => 1, 'value' => 1],
+            ],
+            [],
+            0,
+            [['uid' => 412, 'pid' => 3, 'value' => 1]],
+        );
+
+        $result = Registry::call('typo3_record_lookup', [
+            'table' => 'tt_content',
+            'groupBy' => 'header_layout',
+            'count' => true,
+        ]);
+
+        self::assertSame(0, $result->data['groupDefault']);
+        self::assertSame([['uid' => 412, 'pid' => 3, 'value' => 1]], $result->data['departing']);
+        self::assertStringContainsString('The TCA default is 0. All 1 of them by uid depart from it', $result->text);
+        self::assertStringContainsString('- [412] on pid 3: 1', $result->text);
+    }
+
+    /**
+     * A column with no default has nothing to depart from, and says so.
+     *
+     * An empty departure list and a column TCA declares no default for read
+     * alike otherwise, and only one of them means every row is the convention.
+     */
+    #[Decision('D-AUD-018')]
+    #[Test]
+    public function aColumnDeclaringNoDefaultSaysSoRatherThanNamingNoRow(): void
+    {
+        $this->reading(
+            [['pid' => 3, 'deleted' => false, 'hidden' => false, 'rows' => 137, 'value' => 'text']],
+            [],
+            null,
+        );
+
+        $result = Registry::call('typo3_record_lookup', [
+            'table' => 'tt_content',
+            'groupBy' => 'CType',
+            'count' => true,
+        ]);
+
+        self::assertNull($result->data['groupDefault']);
+        self::assertSame([], $result->data['departing']);
+        self::assertStringContainsString('CType declares no default in TCA', $result->text);
+    }
+
+    #[Decision('D-AUD-018')]
     #[Test]
     public function theRowsComeBackBesideTheCountThatSaysHowManyThereAre(): void
     {
@@ -188,7 +324,7 @@ final class RecordLookupTest extends TestCase
         self::assertStringContainsString('- [2] Bella — hidden', $result->text);
     }
 
-    #[Decision('D-AUD-017')]
+    #[Decision('D-AUD-018')]
     #[Test]
     public function askingForTheCountLeavesTheRowsUnread(): void
     {
@@ -203,7 +339,7 @@ final class RecordLookupTest extends TestCase
         self::assertSame([], $result->data['records']);
     }
 
-    #[Decision('D-AUD-017')]
+    #[Decision('D-AUD-018')]
     #[Test]
     public function aFilterIsEchoedSoTheNumberSaysWhatItCounted(): void
     {
@@ -222,7 +358,7 @@ final class RecordLookupTest extends TestCase
         self::assertStringNotContainsString('backend module', $result->text);
     }
 
-    #[Decision('D-AUD-017')]
+    #[Decision('D-AUD-018')]
     #[Test]
     public function aFilterOnAColumnTheTableHasNotIsAnsweredRatherThanRun(): void
     {
@@ -244,14 +380,15 @@ final class RecordLookupTest extends TestCase
      * A project installation with one extension of its own, and one reading of
      * it.
      *
-     * `tt_content` stands in the TCA beside the project's table, which is what
-     * makes the refusal a reading of the boundary rather than of the table
-     * list: the installation has it and the tool will not count it.
+     * Three tables stand in the TCA and `cache_pages` stands in none, which is
+     * what makes the refusal a reading of the boundary: what TCA describes is
+     * read, and what it does not is the caches and the queues.
      *
      * @param array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}> $groups
      * @param array<int, array<string, mixed>> $rows
+     * @param array<int, array{uid: int, pid: int, value: mixed}> $departing
      */
-    private function reading(array $groups, array $rows = []): void
+    private function reading(array $groups, array $rows = [], mixed $default = null, array $departing = []): void
     {
         $this->root = sys_get_temp_dir() . '/typo3-dev-companion-records-' . bin2hex(random_bytes(6));
         mkdir($this->root . '/packages/acme_thing', 0o777, true);
@@ -282,21 +419,35 @@ final class RecordLookupTest extends TestCase
                     'tables' => [
                         'tx_acme_thing' => 'LLL:EXT:acme_thing/Resources/Private/Language/locallang_db.xlf:thing',
                         'tt_content' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:tt_content',
+                        'be_users' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:be_users',
                     ],
-                    'derivedColumns' => ['tables' => ['tx_acme_thing' => [
-                        'columns' => [
-                            ['name' => 'uid', 'type' => 'integer', 'notnull' => true],
-                            ['name' => 'pid', 'type' => 'integer', 'notnull' => true],
-                            ['name' => 'status', 'type' => 'string', 'notnull' => false],
+                    'derivedColumns' => ['tables' => [
+                        'tx_acme_thing' => [
+                            'columns' => [
+                                ['name' => 'uid', 'type' => 'integer', 'notnull' => true],
+                                ['name' => 'pid', 'type' => 'integer', 'notnull' => true],
+                                ['name' => 'status', 'type' => 'string', 'notnull' => false],
+                            ],
+                            'relationTable' => false,
                         ],
-                        'relationTable' => false,
-                    ]]],
+                        'tt_content' => [
+                            'columns' => [
+                                ['name' => 'uid', 'type' => 'integer', 'notnull' => true],
+                                ['name' => 'pid', 'type' => 'integer', 'notnull' => true],
+                                ['name' => 'CType', 'type' => 'string', 'notnull' => true],
+                                ['name' => 'header_layout', 'type' => 'string', 'notnull' => true],
+                            ],
+                            'relationTable' => false,
+                        ],
+                    ]],
                     'records' => [
                         'table' => 'tx_acme_thing',
                         'deleteField' => 'deleted',
                         'hiddenField' => 'hidden',
                         'labelField' => 'name',
                         'groups' => $groups,
+                        'groupDefault' => $default,
+                        'departing' => $departing,
                         'rows' => $rows,
                     ],
                 ],

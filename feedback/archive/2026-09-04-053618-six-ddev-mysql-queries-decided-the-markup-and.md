@@ -1,7 +1,8 @@
 ---
 date: 2026-09-04T05:36:18+00:00
 category: tool-gap
-status: open
+status: closed
+closed: 2026-09-04
 model: claude-opus-5[1m]
 tool: typo3_record_lookup
 directory: /home/benji/projects/site-tierheim

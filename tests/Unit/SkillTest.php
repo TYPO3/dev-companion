@@ -1233,7 +1233,7 @@ final class SkillTest extends TestCase
             'typo3_service_lookup' => 'the class the container really injects',
             'typo3_schema_lookup' => 'the columns TYPO3 derives for a table',
             'typo3_flexform_lookup' => 'the data structure the installation resolves',
-            'typo3_record_lookup' => 'how many rows a project-owned table holds',
+            'typo3_record_lookup' => 'the rows of any table the installation has TCA for',
         ];
 
         $lines = [];

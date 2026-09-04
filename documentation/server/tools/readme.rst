@@ -184,8 +184,7 @@ at all in the state the machine is in.
         :label: Lookup
         :action: Open reference
 
-        Read the rows of a table belonging to one of this project's own
-        extensions.
+        Read the rows of any table this installation has TCA for.
 
     .. card:: :doc:`typo3_reference_list <typo3_reference_list>`
         :label: List

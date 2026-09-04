@@ -281,15 +281,21 @@ final class ToolCalls
             'configuration' => ['typo3_configuration_lookup', ['path' => 'SYS/fluid']],
             'schema: one table' => ['typo3_schema_lookup', ['table' => 'tt_content']],
             'schema: every table' => ['typo3_schema_lookup', []],
-            // The four states: a table of this project's own, the same one
-            // counted rather than read, one the boundary refuses, and the list
-            // of what it will read.
+            // The five states: a table of this project's own, the same one
+            // counted rather than read, the distribution of one column with the
+            // rows departing from its default, one TCA does not describe, and
+            // the list of what it will read.
             'records: a table of this project' => ['typo3_record_lookup', ['table' => 'tx_acme_events_event']],
             'records: counted rather than read' => ['typo3_record_lookup', [
                 'table' => 'tx_acme_events_event',
                 'count' => true,
             ]],
-            'records: a table it will not read' => ['typo3_record_lookup', ['table' => 'tt_content']],
+            'records: what one column holds' => ['typo3_record_lookup', [
+                'table' => 'tx_acme_events_event',
+                'groupBy' => 'venue',
+                'count' => true,
+            ]],
+            'records: a table it will not read' => ['typo3_record_lookup', ['table' => 'cache_pages']],
             'records: what it reads' => ['typo3_record_lookup', []],
             'services: by class' => ['typo3_service_lookup', ['query' => 'PageRenderer']],
             'services: by tag' => ['typo3_service_lookup', ['tag' => 'event.listener', 'limit' => 3]],

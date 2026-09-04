@@ -500,7 +500,7 @@ final class ScopeTest extends TestCase
      * direction, and noticing one is a step of adding a tool.
      */
     #[Decision('D-ANS-072')]
-    #[Decision('D-AUD-017')]
+    #[Decision('D-AUD-018')]
     #[DataProvider('toolsACallerCannotChooseBetween')]
     #[Test]
     public function theToolsACallerCannotChooseBetweenNameEachOther(string $tool, string $other): void
@@ -528,7 +528,7 @@ final class ScopeTest extends TestCase
 
         // The third tool on that question, and where the sighted session was
         // standing: what an extension registers reads as "what is in this
-        // extension" (`D-AUD-017`).
+        // extension" (`D-AUD-018`).
         yield 'the extension answer names the record lookup' => ['typo3_extension_describe', 'typo3_record_lookup'];
 
         // The two describes: the project lists the extensions, and one of them
@@ -1569,10 +1569,10 @@ final class ScopeTest extends TestCase
      * two wordings the sighting itself was made of. Measured that day over
      * seven task shapes: not one reached it. What it decides is where records
      * are maintained, what renders them, and what default a new column takes on
-     * the rows already there — `D-AUD-017`,
+     * the rows already there — `D-AUD-018`,
      * `feedback/archive/2026-08-31-233952`.
      */
-    #[Decision('D-AUD-017')]
+    #[Decision('D-AUD-018')]
     #[Test]
     public function theBriefRoutesToTheCountWhereTheCountDecidesSomething(): void
     {

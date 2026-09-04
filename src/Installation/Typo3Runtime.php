@@ -146,21 +146,26 @@ final class Typo3Runtime
      * full reading to take them from.
      *
      * Asked for, because it is the only reading this server takes over rows and
-     * no reading taken for anything else wants it. What a row carries is the
-     * probe's to decide rather than the caller's — `D-AUD-017`.
+     * no reading taken for anything else wants it. What a row always carries is
+     * the probe's to decide (`D-AUD-017`); the columns beside it are the
+     * caller's, named and checked against the table first — `D-AUD-019`.
      *
      * @param array<string, scalar> $where exact matches, one per column
      * @param int $limit rows to read, 0 for none and -1 for all of them
-     * @return array{table: string, deleteField: string, hiddenField: string, labelField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>, rows: array<int, array{uid: int, pid: int, label: string, changed: int, created: int, deleted: bool, hidden: bool}>}|array{unavailable: string}|null
+     * @param int $departing rows departing from the grouped column's default to name
+     * @param array<int, string> $columns columns each row carries beside the ones it always has
+     * @return array{table: string, deleteField: string, hiddenField: string, labelField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}>, groupDefault?: mixed, departing?: array<int, array{uid: int, pid: int, value: mixed}>, rows: array<int, array{uid: int, pid: int, label: string, changed: int, created: int, deleted: bool, hidden: bool, values?: array<int, array{column: string, value: mixed}>}>}|array{unavailable: string}|null
      */
-    public static function records(string $table, array $where, int $limit, string $groupBy = ''): ?array
+    public static function records(string $table, array $where, int $limit, string $groupBy = '', int $departing = 20, array $columns = []): ?array
     {
-        /** @var array{table: string, deleteField: string, hiddenField: string, labelField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int, value?: mixed}>, rows: array<int, array{uid: int, pid: int, label: string, changed: int, created: int, deleted: bool, hidden: bool}>}|array{unavailable: string}|null $read */
+        /** @var array{table: string, deleteField: string, hiddenField: string, labelField: string, groups: array<int, array{pid: int, deleted: bool, hidden: bool, rows: int, value?: mixed}>, groupDefault?: mixed, departing?: array<int, array{uid: int, pid: int, value: mixed}>, rows: array<int, array{uid: int, pid: int, label: string, changed: int, created: int, deleted: bool, hidden: bool, values?: array<int, array{column: string, value: mixed}>}>}|array{unavailable: string}|null $read */
         $read = self::asked('records', ['records' => [
             'table' => $table,
             'where' => $where,
             'limit' => $limit,
             'groupBy' => $groupBy,
+            'departing' => $departing,
+            'columns' => $columns,
         ]]);
 
         return $read;

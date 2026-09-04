@@ -2,19 +2,9 @@
 id: D-AUD-017
 title: Records are read and the boundary is the table they are in
 date: 2026-09-01
-status: open
-coveredBy:
-  - RecordLookupTest::aFilterIsEchoedSoTheNumberSaysWhatItCounted
-  - RecordLookupTest::aFilterOnAColumnTheTableHasNotIsAnsweredRatherThanRun
-  - RecordLookupTest::aTableFullEnoughToLeaveTheRecordListIsSaidToBe
-  - RecordLookupTest::aTableNoProjectExtensionRegistersIsRefusedRatherThanRead
-  - RecordLookupTest::aTableOneScreenLongAsksForNothing
-  - RecordLookupTest::askingForTheCountLeavesTheRowsUnread
-  - RecordLookupTest::everyCountSaysItWasReadWithoutBackendPermissions
-  - RecordLookupTest::theRowsComeBackBesideTheCountThatSaysHowManyThereAre
-  - RecordLookupTest::theTablesItWillReadAreListedWithoutOneBeingNamed
-  - ScopeTest::theBriefRoutesToTheCountWhereTheCountDecidesSomething
-  - ScopeTest::theToolsACallerCannotChooseBetweenNameEachOther
+status: revoked
+revokedBy: D-AUD-018
+coveredBy: []
 ---
 
 # D-AUD-017 — Records are read and the boundary is the table they are in
@@ -92,3 +82,16 @@ its own.
 - The label column carries something an installation would not want in an
   answer, which is the case `D-AUD-016` was drawn to avoid and this entry
   accepts.
+
+## Revoked on 2026-09-04
+
+The statement's second half stopped describing this server. `pages`,
+`tt_content` and every other table TCA describes are read now, and what a row
+carries beside its fixed shape is the caller's to name —
+[`D-AUD-018`](aud-018-records-are-read-and-the-boundary-is-the-tca-the-installation-has.md),
+which carries everything decided here that still holds.
+
+What revoked it is `feedback/2026-09-04-053618`: a session decided a whole
+replacement layout from six `ddev mysql` queries over the two tables this entry
+kept out, and never called the tool. The first **Wrong if** is that one notch,
+read at the table rather than at the column.

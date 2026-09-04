@@ -210,9 +210,9 @@ where the words are the same, so step 2 has made none of these calls:
   `type=flex` field to, sheet by sheet, listeners and migrations applied. Step 2
   lists the content elements a package registers, never the structure each one's
   form builds.
-- `typo3_record_lookup` — how many rows a project-owned table holds and where
-  they sit, which is what decides whether a record list or a module of its own
-  maintains them. Step 2 has no row in its answer at all.
+- `typo3_record_lookup` — the rows of any table the installation has TCA for:
+  how many there are, where they sit, what one column holds across them and
+  which rows depart from its default. Step 2 has no row in its answer at all.
 
 None of these says whether what it reports is right. `typo3_hint_lookup` and
 `typo3_documentation_lookup` do, and a subsystem confirmed by its own runtime

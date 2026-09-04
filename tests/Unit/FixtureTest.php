@@ -87,14 +87,14 @@ final class FixtureTest extends TestCase
             if ($name === 'typo3_service_lookup') {
                 continue;
             }
-            // And the two calls that reach the database. The fixture is a
+            // And the three calls that reach the database. The fixture is a
             // shape of an installation and holds no rows to read, so what it
             // stands in for here is the boundary — the other two calls of this
-            // tool are answered from it — `D-AUD-017`.
+            // tool are answered from it — `D-AUD-018`.
             if (str_starts_with($label, 'records: ') && str_contains($label, 'table of this project')) {
                 continue;
             }
-            if ($label === 'records: counted rather than read') {
+            if ($label === 'records: counted rather than read' || $label === 'records: what one column holds') {
                 continue;
             }
             $data = Registry::call($name, $arguments)->data;

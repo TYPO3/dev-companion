@@ -470,8 +470,8 @@
     },
     {
       "topic": "The content of the installation's own tables: a record of pages, tt_content, a file reference, a workspace, a user",
-      "why": "The content model is answered here throughout, and the content only where the project owns the table it is in. typo3_schema_lookup returns any table as the installation's container assembles it; typo3_record_lookup reads the rows of the tables a project-owned extension registers, and refuses every other. The reason for that line is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and reading a record puts the shell user's database access where a backend user's permissions belong. A project's own table is what this server takes that responsibility for, and every answer says what it was read with.",
-      "instead": "Work the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for the rows of one of your own tables, how many there are and which page they sit on, typo3_record_lookup; for what may be written into a flex column, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup."
+      "why": "The content model is answered here throughout, and the content itself is read rather than written. typo3_schema_lookup returns any table as the installation's container assembles it; typo3_record_lookup reads the rows of any table this installation has TCA for, and refuses what TCA does not describe. What that reading is worth knowing about is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and a row comes back with the shell user's database access rather than a backend user's permissions. Every answer says so, and no answer is narrowed by a permission, a workspace or a language.",
+      "instead": "Write the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for the rows themselves, how many there are, which page they sit on and what one column holds across them, typo3_record_lookup; for what may be written into a flex column, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup."
     }
   ],
   "checkoutDiscovery": [
@@ -679,7 +679,7 @@
     },
     {
       "when": "Asking what is actually stored in one of this project's own tables, or how much of it there is",
-      "call": "typo3_record_lookup with the table, count where only the numbers are wanted, where to narrow it"
+      "call": "typo3_record_lookup with the table, columns for the fields the question needs, groupBy for what one column holds, count where only the numbers are wanted, where to narrow it"
     }
   ]
 }

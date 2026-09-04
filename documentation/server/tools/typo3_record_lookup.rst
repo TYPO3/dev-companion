@@ -3,22 +3,28 @@
 ``typo3_record_lookup``
 =======================
 
-Read the rows of a table belonging to one of this project's own extensions: how
+Read the rows of any table this installation has TCA for — pages, tt_content, a
+table of one of this project's own extensions, or one a dependency brings: how
 many there are, which page they sit on, whether they are live, hidden or
 deleted, and the rows themselves — uid, the label the table names in its own
-TCA, the timestamps and the two flags. That is what a backend visit would have
-told you and the one question typo3_schema_lookup cannot answer: it returns the
-shape of the table, this returns what is in it. It is also the fact that decides
-where records are maintained, because a table with a few dozen rows is edited in
-the generic record list and one with three thousand on a single storage folder
-needs a module with its own filtering and paging. Narrow it with where, which
-takes exact values for any column of the table, pid among them; pass count to
-get the numbers without the rows, and limit to say how many rows come back. It
-refuses every table a project-owned extension does not register: pages,
-tt_content, the user tables and everything a dependency brings are outside it,
-and reading those is the backend's or the installation's own console. Omit the
-table to see which ones it will read. It never writes. Answers from:
-installation.
+TCA, the timestamps, the two flags, and any column the call names in columns.
+That is what a backend visit would have told you and the one question
+typo3_schema_lookup cannot answer: it returns the shape of the table, this
+returns what is in it. It is also the fact that decides where records are
+maintained, because a table with a few dozen rows is edited in the generic
+record list and one with three thousand on a single storage folder needs a
+module with its own filtering and paging. Pass groupBy to get what values a
+column actually holds across the table, with the TCA default beside them and the
+uid of every row departing from it — that is the answer that decides whether a
+CType, a TCA default, a markup class or a template branch can be dropped, and
+the single row that departs is the one a cleanup breaks. Narrow it with where,
+which takes exact values for any column of the table, pid among them; pass count
+to get the numbers without the rows, and limit to say how many rows come back. A
+table TCA does not describe is refused, which is the caches, the queues and the
+session store. Omit the table to see which ones it will read. It reads with the
+shell user's database access rather than a backend user's, so no permission,
+workspace or language filter narrows what comes back. It never writes. Answers
+from: installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -29,8 +35,8 @@ Takes
 
 .. code-block:: yaml
 
-    # The table to read, for example "tx_myext_animal". Omit to list the tables this
-    # project's own extensions register, which are the ones that can be read.
+    # The table to read, for example "tt_content" or "tx_myext_animal". Omit to list
+    # the tables this installation has TCA for, which are the ones that can be read.
     table: string  # optional
     # Exact values to narrow by, one per column: {"pid": 2, "status": "adopted"}.
     # Every column of the table can be named, pid and uid among them, and a column
@@ -41,12 +47,20 @@ Takes
     # True to answer with the numbers alone and read no row. Use it where the
     # question is how much is in there rather than what.
     count: boolean  # optional
-    # One column to count per distinct value of, for example "status" or "sex". The
-    # answer then carries one line per value with how many rows carry it, which is
-    # the distribution a call per value asks thirteen times for. Combines with
-    # where, which narrows what is counted. A column the table does not have is an
-    # answer saying so.
+    # One column to count per distinct value of, for example "CType",
+    # "header_layout" or "status". The answer then carries one line per value with
+    # how many rows carry it, which is the distribution a call per value asks
+    # thirteen times for. It also carries the column's TCA default and the uid and
+    # pid of the rows departing from it, capped, which is what says whether a value
+    # is the site's convention or its one exception. Combines with where, which
+    # narrows what is counted. A column the table does not have is an answer saying
+    # so.
     groupBy: string  # optional
+    # Columns each row carries beside the ones it always has: ["CType",
+    # "frame_class", "header_layout"]. Name as many as the question needs, and
+    # typo3_schema_lookup lists what the table has. A column the table does not have
+    # is an answer saying so rather than an empty value.
+    columns: [string]  # optional
     # How many rows to return, ordered by uid. The default is one page of the record
     # list. Zero means every matching row, which on a full table is the whole table
     # in one answer.
@@ -99,6 +113,22 @@ Answers with
         live: integer
         hidden: integer
         deleted: integer
+    # What the grouped column's TCA declares as its default, so a value can be read
+    # as the convention or as a departure from it. Null where groupBy was not passed
+    # and where the column declares no default, which is not the same answer as a
+    # default of zero.
+    groupDefault: object  # optional
+    # The rows whose grouped column is not the TCA default, by uid, capped at one
+    # page of the record list. This is the half of a distribution that decides
+    # something: a value one row in a hundred carries is what a cleanup drops and
+    # then breaks. Empty where groupBy was not passed, where the column declares no
+    # default, and where every row carries it.
+    departing:  # optional
+      - # What the backend edits the row by.
+        uid: integer
+        pid: integer
+        # What that row carries instead of the default.
+        value: object
     # One entry per page that holds a matching row, the fullest first. Empty where
     # no table was read.
     pages:  # optional
@@ -124,10 +154,19 @@ Answers with
         created: integer
         deleted: boolean
         hidden: boolean
-    # Every table this tool will read in this installation.
+        # The columns the call named, in the order it named them. A list rather than
+        # a map keyed by column, for the reason where gives. Empty where none were
+        # named.
+        values:
+          - column: string
+            # What the row stores in that column, as the database has it.
+            value: object
+    # Every table this tool will read in this installation, which is every one TCA
+    # describes.
     countable:  # optional
       - table: string
-        # The project-owned extension whose TCA registers it.
+        # The extension whose TCA registers it, read from the EXT: reference in its
+        # ctrl title. Empty where the title names none.
         extension: string
     # What the reading was made with. Said on every answer that carries one, because
     # a number or a row reported onwards is read as a backend user's view of the
@@ -171,16 +210,17 @@ Answers with
         console: string
 
 The answer carries exactly one of these sets of fields: ``table``,
-``matchCount``, ``answeredBy``, ``where``, ``counts``, ``groups``, ``pages``,
-``records``, ``countable``, ``readWith`` — or ``table``, ``unsupported``.
+``matchCount``, ``answeredBy``, ``where``, ``counts``, ``groups``,
+``groupDefault``, ``departing``, ``pages``, ``records``, ``countable``,
+``readWith`` — or ``table``, ``unsupported``.
 
 Answered
 --------
 
-Recorded on 2026-09-02 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-04 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
-15.0.0-dev, the main core checkout below .checkouts/, whose console could not
+14.3.7-dev, the 14.3 core checkout below .checkouts/, whose console could not
 be reached: <installation> has no TYPO3 console — none of bin/typo3,
 vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -202,7 +242,7 @@ Called with:
         "table": "tx_acme_events_event"
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
@@ -276,7 +316,7 @@ Called with:
         "count": true
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
@@ -338,18 +378,20 @@ Data:
         }
     }
 
-records: a table it will not read
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+records: what one column holds
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Called with:
 
 .. code-block:: json
 
     {
-        "table": "tt_content"
+        "table": "tx_acme_events_event",
+        "groupBy": "venue",
+        "count": true
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
@@ -363,7 +405,7 @@ Data:
 .. code-block:: json
 
     {
-        "table": "tt_content",
+        "table": "tx_acme_events_event",
         "unsupported": {
             "cause": "installation-not-answering",
             "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
@@ -387,23 +429,116 @@ Text:
 
 .. code-block:: text
 
-    "tt_content" is not read here. This tool answers for the tables this project's own extensions register, and a row of any other table is the installation's own — the backend and vendor/bin/typo3 are where those are read, with the permissions that belong to them.
-    What it does read: tx_acme_events_event.
+    tx_acme_events_event has no column venue, so nothing was read. A filter names columns of the table it filters, and typo3_schema_lookup with table="tx_acme_events_event" lists the ones it has.
 
 Data:
 
 .. code-block:: json
 
     {
-        "table": "tt_content",
+        "table": "tx_acme_events_event",
         "matchCount": 0,
         "answeredBy": "installation",
         "where": [],
         "counts": null,
         "groups": [],
+        "groupDefault": null,
+        "departing": [],
         "pages": [],
         "records": [],
         "countable": [
+            {
+                "table": "pages",
+                "extension": "core"
+            },
+            {
+                "table": "tt_content",
+                "extension": "frontend"
+            },
+            {
+                "table": "tx_acme_events_event",
+                "extension": "acme_events"
+            }
+        ],
+        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see."
+    }
+
+records: a table it will not read
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Called with:
+
+.. code-block:: json
+
+    {
+        "table": "cache_pages"
+    }
+
+From the 14.3 core checkout
+"""""""""""""""""""""""""""
+
+Text:
+
+.. code-block:: text
+
+    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+
+Data:
+
+.. code-block:: json
+
+    {
+        "table": "cache_pages",
+        "unsupported": {
+            "cause": "installation-not-answering",
+            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+            "repositoryState": "installed",
+            "diagnosis": "",
+            "searched": [
+                "<installation>"
+            ],
+            "misconfiguration": null,
+            "settings": {
+                "root": "TYPO3_DEV_COMPANION_ROOT",
+                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+            }
+        }
+    }
+
+From the fixture installation
+"""""""""""""""""""""""""""""
+
+Text:
+
+.. code-block:: text
+
+    "cache_pages" is not a table this installation has TCA for, so nothing was read. What TCA does not describe is the caches, the queues and the session store, and none of those holds a record.
+    It has TCA for 3 tables, listed by the same call with no table named.
+
+Data:
+
+.. code-block:: json
+
+    {
+        "table": "cache_pages",
+        "matchCount": 0,
+        "answeredBy": "installation",
+        "where": [],
+        "counts": null,
+        "groups": [],
+        "groupDefault": null,
+        "departing": [],
+        "pages": [],
+        "records": [],
+        "countable": [
+            {
+                "table": "pages",
+                "extension": "core"
+            },
+            {
+                "table": "tt_content",
+                "extension": "frontend"
+            },
             {
                 "table": "tx_acme_events_event",
                 "extension": "acme_events"
@@ -421,7 +556,7 @@ Called with:
 
     {}
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
@@ -459,8 +594,10 @@ Text:
 
 .. code-block:: text
 
-    This project's own extensions register 1 tables. Name one to read what is in it.
+    This installation has TCA for 3 tables. Name one to read what is in it.
 
+    - pages (core)
+    - tt_content (frontend)
     - tx_acme_events_event (acme_events)
 
 Data:
@@ -468,15 +605,25 @@ Data:
 .. code-block:: json
 
     {
-        "matchCount": 1,
+        "matchCount": 3,
         "table": null,
         "answeredBy": "installation",
         "where": [],
         "counts": null,
         "groups": [],
+        "groupDefault": null,
+        "departing": [],
         "pages": [],
         "records": [],
         "countable": [
+            {
+                "table": "pages",
+                "extension": "core"
+            },
+            {
+                "table": "tt_content",
+                "extension": "frontend"
+            },
             {
                 "table": "tx_acme_events_event",
                 "extension": "acme_events"

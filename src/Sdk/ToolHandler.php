@@ -18,7 +18,6 @@ use TYPO3\DevCompanion\Tool\Registry;
  * stays in the tool that owns it and nothing about a tool is decided here. Both
  * halves of the answer are returned: the text as the tool's content, the same
  * answer as `structuredContent` matching the output schema that tool declares.
- * A thrown exception is turned into an MCP tool error by the SDK.
  */
 final class ToolHandler implements ToolHandlerInterface
 {
@@ -29,11 +28,40 @@ final class ToolHandler implements ToolHandlerInterface
      */
     public function execute(array $arguments, ClientGateway $gateway): CallToolResult
     {
-        $result = Registry::call($this->name, $arguments);
+        try {
+            $result = Registry::call($this->name, $arguments);
+        } catch (\Throwable $failure) {
+            // What a tool refuses is said in the refusal, and letting it out of
+            // this method loses it: the SDK answers a thrown exception with the
+            // JSON-RPC error -32603 "Error while executing tool" and nothing
+            // else, so a caller who can fix the argument is told only that
+            // something failed. A session that hit the one refusal on the
+            // feedback path spent five calls establishing which parameter it
+            // was — `D-ANS-143`. The protocol's own place for this is a result
+            // marked as an error, which reaches the model that made the call.
+            return new CallToolResult(
+                [new TextContent(self::said($failure))],
+                isError: true,
+            );
+        }
 
         return new CallToolResult(
             [new TextContent($result->text)],
             structuredContent: $result->data,
         );
+    }
+
+    /**
+     * What the caller is told a failure was.
+     *
+     * The message, because every refusal this server raises is written for the
+     * caller and says what to send instead. A failure carrying none is named by
+     * its class, so "nothing was said" is still an answer somebody can search.
+     */
+    private static function said(\Throwable $failure): string
+    {
+        $message = trim($failure->getMessage());
+
+        return $message === '' ? $failure::class : $message;
     }
 }

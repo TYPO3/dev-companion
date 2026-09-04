@@ -40,6 +40,13 @@ four hints it names all paid the same way.
   twice in this one session. That is the channel's own measure —
   [`D-FBK-027`](../feedback/fbk-027-the-server-builds-what-costs-its-caller-round-trips.md)
   — read from the other end.
+- `feedback/2026-09-03-235605`, a seeding run five weeks later, is the same
+  measurement on `datahandler-seeding`: `Bootstrap::init($classLoader)` with the
+  failsafe flag and the constructor error it produces, the three backend-user
+  calls in order, and `pages.hidden` defaulting to 1 in TCA against 0 in the
+  schema. The session set `hidden=0` because of the third and says the page
+  answered as the site's 404 target on the first run instead of becoming a
+  second not-found. All three are a mechanism and the failure it produces.
 - Two answer shapes carried the same weight. `typo3_changelog_lookup` returns
   the full tag list for the version and type, which let an eight-call
   deprecation sweep be written against real tags before a file was opened, and
@@ -84,3 +91,9 @@ hints since names condensing, and the corpus went the other way, with a mean
 body above the matcher's reference. Nothing reports the first either — the
 feedback naming any of those mechanisms is the session this entry was written
 from and its neighbours of the same days.
+
+The counter-case arrived with the seeding evidence above and is the same
+boundary from outside. `fal-writing` said attaching a file is a relation written
+through DataHandler and named no field, so the session stopped and left two
+images in a rich text field. What it needed was `uid_local` and where the
+`sys_file` uid comes from, which `datahandler-relations` now states.

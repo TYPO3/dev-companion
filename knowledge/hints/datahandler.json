@@ -64,11 +64,17 @@
       "uid_foreign",
       "relation not saved",
       "children not linked",
-      "counter stays 0"
+      "counter stays 0",
+      "file field",
+      "sys_file_reference",
+      "uid_local",
+      "attach a file to a record",
+      "image on a content element"
     ],
     "hints": [
       "A relation field takes a comma-separated list of the related uids on the parent's own field, \"NEW\" placeholders included; those resolve once the children have been created in the same run. Where the field declares foreign_field, DataHandler writes the parent uid onto every child, together with foreign_table_field, foreign_match_fields and a sorting value counted up in list order. The parent's own column then holds the number of children rather than the list, as an MM field's column does. Only a relation stored in the parent column itself keeps the list, so a child's pointer column and a parent's counter are never written by hand.",
       "A placeholder in that list may carry no underscore. DataHandler::processRemapStack() splits such a value on \"_\" as the <table>_<uid> notation, so NEW_card1 is looked up as \"card1\" and resolves to nothing, and RelationHandler::readList() then discards what is left. Nothing reports it: the run finishes clean, the error log stays empty, the children exist as rows, and the parent's counter stays 0 with uid_foreign never set on them. StringUtility::getUniqueId('NEW') produces an id that always conforms. The constraint is on what a relation field is handed rather than on the placeholder itself, so a datamap key, a -NEW... positioning pid and an MM parent id take an underscore.",
+      "A file on a record is such a relation, and it takes two datamap rows: a sys_file_reference row whose uid_local is the uid of the sys_file record, and the parent's own field naming that row's NEW id in its list. uid_foreign, tablenames and fieldname are DataHandler's to write — TCA type file prepares foreign_field, foreign_table_field and a foreign_match_fields pair from the table and the column, so setting them by hand is the child pointer column again. The uid_local value is a sys_file uid and never a path: $storage->getFile('/path/in/the/storage') indexes a file that is on disk and not in sys_file yet and hands it back with one, and putting a file into the storage in the first place is fal-writing.",
       "This is the write side. What the parent field and the child table have to declare before any of it is a child relation — the parent column, what orders the children, the page types the rows may sit on — is tca-inline-children."
     ]
   },
@@ -141,7 +147,8 @@
       "In one datamap the pages are processed before every other table, so a record whose pid is the NEW id of a page created in the same call still lands on it. Between two other tables the order of the datamap decides, and a NEW id that has not been substituted yet leaves that record unwritten — a log entry, no exception. Where the target is not a page, create it in a first process_datamap() call, read substNEWwithIDs, and pass real ids in the second.",
       "A NEW id carries no underscore. processRemapStack() splits one on the last underscore and reads what is in front of it as a table name, so a relation field naming NEWid_one substitutes nothing: the child is written, the parent field stays empty or counts zero, and nothing is logged. NEWidOne is the same id without the trap.",
       "A field that is not a relation substitutes nothing either, whatever it holds. A link written as t3://page?uid=NEWpage keeps that string, so a value that has to name a record created in the same script is written in a second call, from substNEWwithIDs.",
-      "A new record takes the default its TCA field declares, and that is not the default its column carries: pages.hidden is 1 in TCA against 0 in the schema, so a page tree seeded without saying otherwise is written hidden. Nothing reports it, the export ships it as it is, and the receiving installation answers not found on every page of that tree, its root included. page-not-found-within-a-site is the same fact from the failing request's end, where the exclamation mark on that message is what says the page was found and withheld."
+      "A new record takes the default its TCA field declares, and that is not the default its column carries: pages.hidden is 1 in TCA against 0 in the schema, so a page tree seeded without saying otherwise is written hidden. Nothing reports it, the export ships it as it is, and the receiving installation answers not found on every page of that tree, its root included. page-not-found-within-a-site is the same fact from the failing request's end, where the exclamation mark on that message is what says the page was found and withheld.",
+      "A file on a seeded record is a relation like any other, written in the same datamap and not by a second mechanism. What the two rows are and where the sys_file uid comes from is datahandler-relations."
     ]
   },
   {

@@ -21,8 +21,13 @@ Clone the repository and install the dependencies once:
 
 .. code-block:: bash
 
+    git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
+    cd typo3-dev-companion
     composer install
 
+
+The clone is named for the binary rather than for the repository, so the
+absolute path in every command below is the directory ``git clone`` just made.
 
 Then install the entrypoint into the current project's ``.mcp.json``:
 

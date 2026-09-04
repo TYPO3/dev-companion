@@ -27,6 +27,8 @@ standalone checkout and as a Composer dependency of another project.
 
 ```bash
 # standalone: clone, install once, then point a project at it
+git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
+cd typo3-dev-companion
 composer install
 /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
 

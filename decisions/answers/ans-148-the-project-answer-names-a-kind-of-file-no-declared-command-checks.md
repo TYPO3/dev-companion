@@ -3,7 +3,9 @@ id: D-ANS-148
 title: The project answer names a kind of file no declared command checks
 date: 2026-09-04
 status: open
-coveredBy: []
+coveredBy:
+  - ProjectTest::aDeclaredCheckerTakesItsKindOffTheList
+  - ProjectTest::aKindOfFileNoDeclaredCommandChecksIsNamed
 ---
 
 # D-ANS-148 — The project answer names a kind of file no declared command checks
@@ -64,3 +66,15 @@ does not report is the one that is missing.
   or a kind checked from a workflow file — and acts on it.
 - The map turns out to be the work rather than the feature, which is what
   `bin/cli` has commands for elsewhere and this would have none.
+
+## Since then
+
+Built the same day. `Project::CHECKERS` maps twelve tool names to the kinds each
+checks and `Project::KINDS` maps five kinds to the pattern each is found by;
+`uncheckedKinds` is what the project's own packages ship minus what the declared
+bodies name a checker for, and the answer says it in one sentence under the
+command list.
+
+JavaScript is not one of the five. A `.js` a package ships is as often build
+output or a vendored library as source, so an unchecked one would be a gap in
+most repositories and a finding in none.

@@ -1,7 +1,8 @@
 ---
 date: 2026-09-03T23:50:23+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-09-04
 model: claude-fable-5-1
 tool: typo3_task_guide, typo3_project_describe
 directory: /home/benji/projects/site-tierheim

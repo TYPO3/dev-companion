@@ -6,6 +6,7 @@ namespace TYPO3\DevCompanion\Installation;
 
 use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Knowledge\Versions;
+use TYPO3\DevCompanion\Search\Text;
 
 /**
  * What the repository the session is standing in consists of, read from its
@@ -111,6 +112,7 @@ final class Project
      *     extensions: array<int, array{key: string, path: string, origin: string, deprecatedFiles: array<int, array{file: string, changelog: string, predicate: string, cost: string}>}>,
      *     sites: array<int, array{identifier: string, base: string, rootPageId: ?int, sets: array<int, string>, languages: array<int, string>}>,
      *     commands: array<int, array{command: string, source: string, declares: string, runs: string}>,
+     *     uncheckedKinds: array<int, string>,
      *     patches: array<int, array{package: string, description: string, file: string}>
      * }|null
      */
@@ -127,6 +129,7 @@ final class Project
         $corePhp = self::corePhpConstraint();
         $bound = Instance::installedPhpBound($root);
         $environment = self::environment($root);
+        $commands = self::commands($root, $manifest, $environment);
 
         return [
             'root' => $root,
@@ -149,7 +152,8 @@ final class Project
             'environment' => $environment,
             'extensions' => self::extensions($root),
             'sites' => self::sites($root),
-            'commands' => self::commands($root, $manifest, $environment),
+            'commands' => $commands,
+            'uncheckedKinds' => self::uncheckedKinds($commands),
             'patches' => self::patches($manifest),
         ];
     }
@@ -548,6 +552,102 @@ final class Project
         }
 
         return $extensions;
+    }
+
+    /**
+     * The kinds of file this project's own packages ship, by the pattern each
+     * one is found with.
+     *
+     * JavaScript is not among them, and deliberately: a `.js` a package ships is
+     * as often build output or a vendored library as it is source, so an
+     * unchecked one says nothing — `D-ANS-148`.
+     *
+     * @var array<string, string>
+     */
+    private const KINDS = [
+        'PHP' => '*.php',
+        'CSS' => '*.css',
+        'Sass' => '*.scss',
+        'TypeScript' => '*.ts',
+        'XLIFF' => '*.xlf',
+    ];
+
+    /**
+     * The kinds a checker is known to check, by the name it is invoked under.
+     *
+     * A tool that is not here contributes no coverage, which is what keeps a
+     * gap this names to the ones it can see: a test runner checks no kind of
+     * file, and a checker nobody has listed is indistinguishable from one
+     * (`D-ANS-148`).
+     *
+     * @var array<string, array<int, string>>
+     */
+    private const CHECKERS = [
+        'php-cs-fixer' => ['PHP'],
+        'phpcs' => ['PHP'],
+        'phpcbf' => ['PHP'],
+        'phpstan' => ['PHP'],
+        'psalm' => ['PHP'],
+        'rector' => ['PHP'],
+        'stylelint' => ['CSS', 'Sass'],
+        'prettier' => ['CSS', 'Sass', 'TypeScript'],
+        'eslint' => ['TypeScript'],
+        'tsc' => ['TypeScript'],
+        'xliff-lint' => ['XLIFF'],
+        'xmllint' => ['XLIFF'],
+    ];
+
+    /**
+     * The kinds of file the project's own packages ship that no declared
+     * command names a checker for.
+     *
+     * What it does not say is what to add. A repository's standards are its
+     * own, and this answer's worth is that it reports what is declared rather
+     * than what is customary — the same reason a check that is not declared is
+     * not recommended (`D-ANS-148`).
+     *
+     * @param array<int, array<string, mixed>> $commands
+     * @return array<int, string>
+     */
+    private static function uncheckedKinds(array $commands): array
+    {
+        $declared = mb_strtolower(implode("\n", array_column($commands, 'declares')));
+        $checked = [];
+        foreach (self::CHECKERS as $tool => $kinds) {
+            if (Text::containsWord($declared, $tool)) {
+                $checked = [...$checked, ...$kinds];
+            }
+        }
+
+        $unchecked = [];
+        foreach (self::KINDS as $kind => $pattern) {
+            if (in_array($kind, $checked, true) || !self::shipped($pattern)) {
+                continue;
+            }
+            $unchecked[] = $kind;
+        }
+
+        return $unchecked;
+    }
+
+    /** Whether a package that is this project's own holds a file of that shape. */
+    private static function shipped(string $pattern): bool
+    {
+        foreach (Instance::packages() as $key => $path) {
+            if (Instance::isSystemExtension($key) === true || self::origin($path) !== self::ORIGIN_PROJECT) {
+                continue;
+            }
+            if (!is_dir($path)) {
+                continue;
+            }
+            $found = Finder::create()->files()->in($path)->name($pattern)
+                ->exclude(['node_modules', 'vendor'])->hasResults();
+            if ($found) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

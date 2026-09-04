@@ -188,6 +188,7 @@ final class ProjectDescribe extends ReadOnlyTool
                 'declares' => Schema::string('The body the manifest declares for it, lines joined with &&.'),
                 'runs' => ['type' => 'string', 'enum' => ['check', 'change', 'unknown'], 'description' => 'What running it does to the sources, read off the body rather than by running it. check: it reports and hands the code back as it was, so a task told not to change files can run it. It may still write a cache of its own. change: it rewrites something. unknown: the body does not say, which is what a test suite is, because it runs the project\'s own code.'],
             ], ['command', 'source', 'invocation', 'declares', 'runs']), 'What this repository declares. A check that is not here does not exist here.'),
+            'uncheckedKinds' => Schema::listOf(Schema::string(), 'Kinds of file this project\'s own packages ship that no declared command names a checker for — "CSS", "PHP", "Sass", "TypeScript", "XLIFF". It says what is not covered and never what to add: which standards a repository holds itself to are its own. Read off the checkers named in the declared bodies, so a tool this server does not know contributes no coverage and a kind may be listed that something unrecognised does check. JavaScript is never listed, because a .js a package ships is as often build output or a vendored library as source.'),
             'patches' => Schema::listOf(Schema::object([
                 'package' => Schema::string('The dependency being patched.'),
                 'description' => Schema::string('What the patch is for, where composer.json says.'),
@@ -195,7 +196,7 @@ final class ProjectDescribe extends ReadOnlyTool
             ], ['package', 'description', 'file']), 'Patches from extra.patches. A patched package does not behave as its version says.'),
             'guides' => Schema::listOf(Schema::guideReference(), 'The whole procedures this server carries, named here because this is the call every task starts with. They are also served as typo3://guides resources, and a client that lists no resources renders none of them — four sessions in one week finished without learning they exist. Each is one typo3_rule_lookup call by documentId, which needs no resource list; a search over sections answers a question and never hands one of these over whole.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
-        ], ['root', 'installed', 'installedAgainstLock', 'phpRelation', 'node', 'environment', 'extensions', 'sites', 'commands', 'patches', 'guides', 'answeredBy'], []);
+        ], ['root', 'installed', 'installedAgainstLock', 'phpRelation', 'node', 'environment', 'extensions', 'sites', 'commands', 'uncheckedKinds', 'patches', 'guides', 'answeredBy'], []);
     }
 
     public static function answer(array $args): ToolResult
@@ -278,6 +279,15 @@ final class ProjectDescribe extends ReadOnlyTool
                 . 'its own; what it does not do is hand the code back different.';
         if ($project['commands'] !== []) {
             $lines[] = self::whereTheyRun($project['environment'], $project['installedPhpBound']);
+        }
+        // The one thing the list cannot show: what is missing from it. A
+        // sitepackage with one stylesheet and no linter for it had to be told
+        // so by its owner (`D-ANS-148`).
+        if ($project['uncheckedKinds'] !== []) {
+            $lines[] = 'These packages ship ' . implode(' and ', $project['uncheckedKinds'])
+                . ' and no declared command names a checker for it. That is what is not covered rather than what '
+                . 'this repository should add, and it is read off the checkers named in the bodies above — a tool '
+                . 'this server does not know contributes no coverage.';
         }
         foreach ($project['commands'] as $command) {
             $lines[] = sprintf(

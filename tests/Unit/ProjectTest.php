@@ -2631,6 +2631,58 @@ final class ProjectTest extends TestCase
         return $split === false ? $text : $split;
     }
 
+    /**
+     * The kind of file a repository ships and checks nothing of.
+     *
+     * A sitepackage with one hand-written stylesheet and no linter for it had
+     * to be told so by its owner, and everything the finding needs was already
+     * in this answer — `D-ANS-148`.
+     */
+    #[Decision('D-ANS-148')]
+    #[Test]
+    public function aKindOfFileNoDeclaredCommandChecksIsNamed(): void
+    {
+        $root = $this->composerProject('vendor', '14.3.0');
+        $this->manifest($root, [
+            'require' => ['typo3/cms-core' => '^14.3'],
+            'scripts' => ['cs:check' => 'php-cs-fixer fix --dry-run', 'test' => 'phpunit'],
+        ]);
+        $package = $root . '/packages/my_sitepackage';
+        file_put_contents($package . '/ext_localconf.php', '<?php');
+        mkdir($package . '/Resources/Public/Css', 0o777, true);
+        file_put_contents($package . '/Resources/Public/Css/site.css', 'body { color: red; }');
+        Instance::discoverFrom($root);
+
+        $project = Project::describe();
+
+        // PHP is declared as checked and the stylesheet is not.
+        self::assertSame(['CSS'], $project['uncheckedKinds']);
+
+        $text = Registry::call('typo3_project_describe', [])->text;
+        self::assertStringContainsString('These packages ship CSS and no declared command names a checker', $text);
+        // What it does not do is say what to add.
+        self::assertStringNotContainsString('stylelint', $text);
+    }
+
+    /** A checker the repository does declare takes its kind off the list. */
+    #[Decision('D-ANS-148')]
+    #[Test]
+    public function aDeclaredCheckerTakesItsKindOffTheList(): void
+    {
+        $root = $this->composerProject('vendor', '14.3.0');
+        $this->manifest($root, [
+            'require' => ['typo3/cms-core' => '^14.3'],
+            'scripts' => ['lint:css' => 'npx stylelint "packages/**/*.css"'],
+        ]);
+        $package = $root . '/packages/my_sitepackage';
+        file_put_contents($package . '/ext_localconf.php', '<?php');
+        mkdir($package . '/Resources/Public/Css', 0o777, true);
+        file_put_contents($package . '/Resources/Public/Css/site.css', 'body { color: red; }');
+        Instance::discoverFrom($root);
+
+        self::assertSame(['PHP'], Project::describe()['uncheckedKinds']);
+    }
+
     /** @param array<string, mixed> $manifest */
     private function manifest(string $root, array $manifest): void
     {

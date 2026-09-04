@@ -376,6 +376,14 @@ Answers with
         # the body does not say, which is what a test suite is, because it runs the
         # project's own code.
         runs: string
+    # Kinds of file this project's own packages ship that no declared command names
+    # a checker for — "CSS", "PHP", "Sass", "TypeScript", "XLIFF". It says what is
+    # not covered and never what to add: which standards a repository holds itself
+    # to are its own. Read off the checkers named in the declared bodies, so a tool
+    # this server does not know contributes no coverage and a kind may be listed
+    # that something unrecognised does check. JavaScript is never listed, because a
+    # .js a package ships is as often build output or a vendored library as source.
+    uncheckedKinds: [string]  # optional
     # Patches from extra.patches. A patched package does not behave as its version
     # says.
     patches:  # optional
@@ -442,16 +450,16 @@ Answers with
 
 The answer carries exactly one of these sets of fields: ``root``, ``installed``,
 ``installedAgainstLock``, ``phpRelation``, ``node``, ``environment``,
-``extensions``, ``sites``, ``commands``, ``patches``, ``guides``, ``answeredBy``
-— or ``unsupported``.
+``extensions``, ``sites``, ``commands``, ``uncheckedKinds``, ``patches``,
+``guides``, ``answeredBy`` — or ``unsupported``.
 
 Answered
 --------
 
-Recorded on 2026-08-28 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-04 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
-15.0.0-dev, the main core checkout below .checkouts/, whose console could not
+14.3.7-dev, the 14.3 core checkout below .checkouts/, whose console could not
 be reached: <installation> has no TYPO3 console — none of bin/typo3,
 vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -471,18 +479,18 @@ Called with:
 
     {}
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
 
 .. code-block:: text
 
-    <installation> — core-checkout, TYPO3 15.0.0-dev, PHP ^8.5, and the installed core requires ^8.5 — the lowest a package here may declare
+    <installation> — core-checkout, TYPO3 14.3.7-dev, PHP ^8.2, and the installed core requires ^8.2 — the lowest a package here may declare
 
     There is a composer.lock here and no Composer metadata below the vendor directory it declares, so the packages it names are not on disk at all. Run "CI=true ./Build/Scripts/runTests.sh -s composerInstall" before any suite here. What a run reports otherwise is the absent install rather than the code.
 
-    Those PHP numbers, as they stand to each other. This project promises 8.5. The installed core requires 8.5 as well, so the two agree. No environment here states a PHP, so there is nothing to say which of the versions in that range gets run. Nothing here bounds the interpreter — there is no composer/platform_check.php below the vendor directory to read one out of — so no PHP version stops a command below from starting. All of it read from these files. Nothing was executed on any of these versions, and only the floors were compared — a version over what a constraint's own upper bound allows reads here like one inside it.
+    Those PHP numbers, as they stand to each other. This project promises 8.2. The installed core requires 8.2 as well, so the two agree. No environment here states a PHP, so there is nothing to say which of the versions in that range gets run. Nothing here bounds the interpreter — there is no composer/platform_check.php below the vendor directory to read one out of — so no PHP version stops a command below from starting. All of it read from these files. Nothing was executed on any of these versions, and only the floors were compared — a version over what a constraint's own upper bound allows reads here like one inside it.
 
     Extensions: none beyond TYPO3's own.
 
@@ -514,6 +522,7 @@ Text:
     Whole procedures this server carries, each one typo3_rule_lookup with that documentId — no resource list needed, and none of them is answered by a search over sections. Read the one whose sentence names the work you are about to do:
     - any/assets/how-an-asset-reaches-a-page — How a Package's Asset Reaches a Page. After a build wrote different files than it did before — renamed, split, hashed or moved — and before changing where a build writes. It names the route each output file takes and what proves the route still carries; a broken route raises nothing in PHP and shows as a page without its styles.
     - any/backend/using-the-styleguide — Using the Backend Styleguide. Before writing backend markup or borrowing a core backend class or icon into a package. It names what the styleguide settles and what it does not, so a demo is not read as a contract for the parts it happens to include.
+    - any/icons/drawing-a-content-icon — Drawing a Content Icon, and a Set of Them. When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier has been refused. Registering one and asking whether an identifier resolves is typo3_icon_lookup's.
     - any/security/reporting-a-vulnerability — Reporting a TYPO3 Vulnerability. When a finding in the TYPO3 core or in an extension is a security defect, before anything about it is written where the public can read it.
     - any/testing/browser-check — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
     - any/testing/proving-a-condition — Proving a TypoScript Condition Verdict. When a TypoScript condition has to be shown to have matched in the frontend, or to have stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition is handed at evaluation time and how an extension registers one are hints instead.
@@ -531,6 +540,7 @@ Text:
     - extension/documentation/manual — Setting Up an Extension Manual. When an extension has no manual yet, or has one that predates guides.xml. What a manual is for and where it lives is the hint below; this is what goes in the directory.
     - extension/testing/phpunit — Setting Up PHPUnit in a TYPO3 Extension. When a package has no test harness yet, or its configuration has to be repaired. The conventions the tests themselves are written by are the hints below.
     - project/installation/booting-a-clone — Booting a Clone Into a Running Installation. When a repository that declares its own environment has to be brought up locally and nothing is installed below it yet — a fresh clone, or one whose installation was torn down. A package that declares no procedure has an installation created for it instead, which starts a step earlier.
+    - project/refactoring/renaming-an-installed-extension — Renaming an Extension That Already Holds Content. When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.
     - project/testing/playwright — Setting Up Playwright in a TYPO3 Project. When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither; it runs no script and speaks no HTTP.
 
 Data:
@@ -545,14 +555,14 @@ Data:
             "state": "not-installed",
             "packages": []
         },
-        "typo3Version": "15.0.0-dev",
-        "phpConstraint": "^8.5",
+        "typo3Version": "14.3.7-dev",
+        "phpConstraint": "^8.2",
         "coreConstraint": null,
-        "corePhpConstraint": "^8.5",
+        "corePhpConstraint": "^8.2",
         "installedPhpBound": null,
         "phpRelation": {
-            "floor": "8.5",
-            "coreFloor": "8.5",
+            "floor": "8.2",
+            "coreFloor": "8.2",
             "againstCore": "same",
             "inEnvironment": null,
             "bound": null,
@@ -705,6 +715,7 @@ Data:
                 "runs": "unknown"
             }
         ],
+        "uncheckedKinds": [],
         "patches": [],
         "guides": [
             {
@@ -717,6 +728,12 @@ Data:
                 "id": "any/backend/using-the-styleguide",
                 "title": "Using the Backend Styleguide",
                 "when": "Before writing backend markup or borrowing a core backend class or icon into a package. It names what the styleguide settles and what it does not, so a demo is not read as a contract for the parts it happens to include.",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "any/icons/drawing-a-content-icon",
+                "title": "Drawing a Content Icon, and a Set of Them",
+                "when": "When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier has been refused. Registering one and asking whether an identifier resolves is typo3_icon_lookup's.",
                 "tool": "typo3_rule_lookup"
             },
             {
@@ -822,6 +839,12 @@ Data:
                 "tool": "typo3_rule_lookup"
             },
             {
+                "id": "project/refactoring/renaming-an-installed-extension",
+                "title": "Renaming an Extension That Already Holds Content",
+                "when": "When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.",
+                "tool": "typo3_rule_lookup"
+            },
+            {
                 "id": "project/testing/playwright",
                 "title": "Setting Up Playwright in a TYPO3 Project",
                 "when": "When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither; it runs no script and speaks no HTTP.",
@@ -856,6 +879,7 @@ Text:
 
     Commands this repository declares — these exist here, the core's testing suites do not. One of them runs PHPUnit, and its functional half stops before the first assertion where nothing gave it database credentials — an error that reads like a broken suite rather than like a missing setting. typo3_hint_lookup with id=project-extension-tests is what such a run needs: the variables, an account allowed to create one database per test class, and the interpreter it is run on. What each one does to the sources is read off its body, never by running it: a check reports and leaves them as they are, a change rewrites something, and unknown is a body that does not say — a test suite runs the project's own code, and no declaration covers that. A task told not to change files can run the checks and nothing else. A check may still write a cache of its own; what it does not do is hand the code back different.
     Nothing in this repository configures an environment of its own — .ddev/config.yaml and TYPO3_DEV_COMPANION_CONSOLE are what this reads — so these run wherever you run them.
+    These packages ship XLIFF and no declared command names a checker for it. That is what is not covered rather than what this repository should add, and it is read off the checkers named in the bodies above — a tool this server does not know contributes no coverage.
     - composer cgl (composer.json) — change: php-cs-fixer fix
     - composer cgl:ci (composer.json) — check: php-cs-fixer fix --dry-run --diff
     - composer test (composer.json) — unknown: phpunit -c Build/phpunit.xml
@@ -863,6 +887,7 @@ Text:
     Whole procedures this server carries, each one typo3_rule_lookup with that documentId — no resource list needed, and none of them is answered by a search over sections. Read the one whose sentence names the work you are about to do:
     - any/assets/how-an-asset-reaches-a-page — How a Package's Asset Reaches a Page. After a build wrote different files than it did before — renamed, split, hashed or moved — and before changing where a build writes. It names the route each output file takes and what proves the route still carries; a broken route raises nothing in PHP and shows as a page without its styles.
     - any/backend/using-the-styleguide — Using the Backend Styleguide. Before writing backend markup or borrowing a core backend class or icon into a package. It names what the styleguide settles and what it does not, so a demo is not read as a contract for the parts it happens to include.
+    - any/icons/drawing-a-content-icon — Drawing a Content Icon, and a Set of Them. When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier has been refused. Registering one and asking whether an identifier resolves is typo3_icon_lookup's.
     - any/security/reporting-a-vulnerability — Reporting a TYPO3 Vulnerability. When a finding in the TYPO3 core or in an extension is a security defect, before anything about it is written where the public can read it.
     - any/testing/browser-check — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
     - any/testing/proving-a-condition — Proving a TypoScript Condition Verdict. When a TypoScript condition has to be shown to have matched in the frontend, or to have stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition is handed at evaluation time and how an extension registers one are hints instead.
@@ -880,6 +905,7 @@ Text:
     - extension/documentation/manual — Setting Up an Extension Manual. When an extension has no manual yet, or has one that predates guides.xml. What a manual is for and where it lives is the hint below; this is what goes in the directory.
     - extension/testing/phpunit — Setting Up PHPUnit in a TYPO3 Extension. When a package has no test harness yet, or its configuration has to be repaired. The conventions the tests themselves are written by are the hints below.
     - project/installation/booting-a-clone — Booting a Clone Into a Running Installation. When a repository that declares its own environment has to be brought up locally and nothing is installed below it yet — a fresh clone, or one whose installation was torn down. A package that declares no procedure has an installation created for it instead, which starts a step earlier.
+    - project/refactoring/renaming-an-installed-extension — Renaming an Extension That Already Holds Content. When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.
     - project/testing/playwright — Setting Up Playwright in a TYPO3 Project. When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither; it runs no script and speaks no HTTP.
 
 Data:
@@ -961,6 +987,9 @@ Data:
                 "runs": "unknown"
             }
         ],
+        "uncheckedKinds": [
+            "XLIFF"
+        ],
         "patches": [],
         "guides": [
             {
@@ -973,6 +1002,12 @@ Data:
                 "id": "any/backend/using-the-styleguide",
                 "title": "Using the Backend Styleguide",
                 "when": "Before writing backend markup or borrowing a core backend class or icon into a package. It names what the styleguide settles and what it does not, so a demo is not read as a contract for the parts it happens to include.",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "any/icons/drawing-a-content-icon",
+                "title": "Drawing a Content Icon, and a Set of Them",
+                "when": "When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier has been refused. Registering one and asking whether an identifier resolves is typo3_icon_lookup's.",
                 "tool": "typo3_rule_lookup"
             },
             {
@@ -1075,6 +1110,12 @@ Data:
                 "id": "project/installation/booting-a-clone",
                 "title": "Booting a Clone Into a Running Installation",
                 "when": "When a repository that declares its own environment has to be brought up locally and nothing is installed below it yet — a fresh clone, or one whose installation was torn down. A package that declares no procedure has an installation created for it instead, which starts a step earlier.",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "project/refactoring/renaming-an-installed-extension",
+                "title": "Renaming an Extension That Already Holds Content",
+                "when": "When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.",
                 "tool": "typo3_rule_lookup"
             },
             {

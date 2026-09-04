@@ -403,13 +403,16 @@ final class TaskGuide extends ReadOnlyTool
                 . 'whole list these were ranked out of.',
                 self::SUITES_PER_BRIEF,
             )),
+            'beforeYouRun' => Schema::string('What a suite can take with it, and what to do before starting one. '
+                . 'Present where testSuites is, because this is the answer that hands over the command; empty '
+                . 'where no suite matched. typo3_test_run_guide carries the same sentence.'),
             'checklist' => Schema::listOf(Schema::string()),
             'checkoutDiscovery' => Schema::listOf(Schema::object([
                 'establish' => Schema::string(),
                 'how' => Schema::string(),
             ], ['establish', 'how']), 'What this server cannot see and the agent has to establish itself.'),
             'nextTools' => Schema::listOf(Schema::nextTool()),
-        ], ['task', 'changeType', 'domains', 'skills', 'staleSkills', 'guides', 'hints', 'omittedHints', 'checks', 'checklist', 'nextTools']);
+        ], ['task', 'changeType', 'domains', 'skills', 'staleSkills', 'guides', 'hints', 'omittedHints', 'checks', 'checklist', 'beforeYouRun', 'nextTools']);
     }
 
     public static function answer(array $args): ToolResult
@@ -720,6 +723,12 @@ final class TaskGuide extends ReadOnlyTool
                 $lines[] = '';
                 $lines[] = 'Suites that match this task, strongest first. Each is one to decide about rather than '
                     . 'one the list above left out, and typo3_test_run_guide holds the rest for these paths.';
+                // The one caveat that belongs to the answer handing over the
+                // command rather than to the one a session may never call: a
+                // suite can take untracked work with it, and this brief is
+                // step 3 of the order while the run guide is optional
+                // (`D-ANS-145`).
+                $lines[] = 'Before running one: ' . TestSuiteHints::invocation()['beforeYouRun'];
                 foreach ($testHints as $hint) {
                     $lines[] = '## ' . $hint['suite'];
                     $lines[] = '`' . $hint['command'] . '`';
@@ -920,6 +929,7 @@ final class TaskGuide extends ReadOnlyTool
             'checks' => $checks,
             'conditionalChecks' => $conditionalChecks,
             'testSuites' => TestSuiteHints::records($testHints),
+            'beforeYouRun' => $testHints === [] ? '' : TestSuiteHints::invocation()['beforeYouRun'],
             'checklist' => $checklist,
             'checkoutDiscovery' => $checkoutDiscovery,
             'nextTools' => $nextTools,

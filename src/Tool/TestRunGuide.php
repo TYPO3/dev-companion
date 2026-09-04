@@ -64,6 +64,9 @@ final class TestRunGuide extends ReadOnlyTool
                 . 'testSuites the strongest few against the task text.'),
             'invocation' => Schema::object([
                 'preconditions' => Schema::listOf(Schema::string(), 'What has to be true before any suite runs: the container the script starts, and the vendor/ and bin/ the checkout may not have. This is the question a caller holds at the moment it starts checking for vendor/bin/phpunit by hand, and the shell\'s PHP is not the interpreter the answer is about.'),
+                'beforeYouRun' => Schema::string('The one note that is about losing work rather than about running '
+                    . 'a suite: what a run can take with it, and what to do before starting one. Carried by '
+                    . 'typo3_task_guide as well, because that is the call that hands over a command first.'),
                 'notes' => Schema::listOf(Schema::string()),
                 'options' => Schema::listOf(Schema::object([
                     'option' => Schema::string(),
@@ -73,7 +76,7 @@ final class TestRunGuide extends ReadOnlyTool
                     'purpose' => Schema::string(),
                     'command' => Schema::string(),
                 ], ['purpose', 'command'])),
-            ], ['preconditions', 'notes', 'options', 'examples']),
+            ], ['preconditions', 'beforeYouRun', 'notes', 'options', 'examples']),
         ], ['scopes', 'uncoveredPaths', 'withheld', 'suites', 'invocation']);
     }
 
@@ -133,7 +136,7 @@ final class TestRunGuide extends ReadOnlyTool
                     'uncoveredPaths' => $uncovered,
                     'withheld' => TestSuiteHints::withheld($domains, $target),
                     'suites' => [],
-                    'invocation' => ['preconditions' => [], 'notes' => [], 'options' => [], 'examples' => []],
+                    'invocation' => ['preconditions' => [], 'beforeYouRun' => '', 'notes' => [], 'options' => [], 'examples' => []],
                 ],
             );
         }
@@ -371,6 +374,9 @@ final class TestRunGuide extends ReadOnlyTool
         $invocation = TestSuiteHints::invocation();
 
         $lines = ['## Invoking runTests.sh'];
+        // First, because it is the only one about work that can be lost rather
+        // than about a run that can fail — `D-ANS-145`.
+        $lines[] = '- ' . $invocation['beforeYouRun'];
         foreach ($invocation['notes'] as $note) {
             $lines[] = '- ' . $note;
         }

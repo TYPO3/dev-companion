@@ -6025,16 +6025,61 @@ final class HintsTest extends TestCase
      * established and the note does not claim one: every `rm -rf` in
      * Build/Scripts/runTests.sh sits in a `clean*` case on all four covered
      * majors. What is left is the act — `D-ANS-099`.
+     *
+     * It stands apart from the other notes and leads with the copy, because a
+     * second session ran nineteen suites over four untracked files and read
+     * the warning only afterwards, and committing is not open to a session
+     * working the core's own rules — `D-ANS-145`.
      */
     #[Decision('D-ANS-099')]
+    #[Decision('D-ANS-145')]
     #[Test]
     public function theNoteOnATestSuiteSaysToSecureUntrackedWorkFirst(): void
     {
-        $notes = implode("\n", TestSuiteHints::invocation()['notes']);
+        $note = TestSuiteHints::invocation()['beforeYouRun'];
 
-        self::assertStringContainsString('`runs: unknown`', $notes);
-        self::assertStringContainsString('commit or copy out untracked work', $notes);
-        self::assertStringContainsString('-s cleanTests', $notes, 'the suites that do remove files');
+        self::assertStringStartsWith('Copy untracked work aside', $note);
+        self::assertStringContainsString('`runs: unknown`', $note);
+        self::assertStringContainsString('-s cleanTests', $note, 'the suites that do remove files');
+        self::assertStringNotContainsString(
+            'runs: unknown',
+            implode("\n", TestSuiteHints::invocation()['notes']),
+            'the warning is said once',
+        );
+    }
+
+    /**
+     * The caveat travels with the command rather than with the tool a session
+     * may never call.
+     *
+     * `typo3_task_guide` is step 3 of the order every task starts in and it
+     * hands over runnable suite commands; `typo3_test_run_guide` is optional.
+     * A session ran nineteen suites off the first answer and met the warning
+     * only in the second, near the end — `D-ANS-145`.
+     */
+    #[Decision('D-ANS-145')]
+    #[Test]
+    public function theBriefThatHandsOverASuiteCommandCarriesWhatARunCanTake(): void
+    {
+        $result = Registry::call('typo3_task_guide', [
+            'task' => 'Fix impexp export ignoring relations declared in columnsOverrides',
+            'changeType' => 'bugfix',
+            'paths' => ['typo3/sysext/impexp/Classes/Export.php'],
+            'targetVersion' => '15',
+        ]);
+
+        self::assertNotSame([], $result->data['testSuites']);
+        self::assertSame(TestSuiteHints::invocation()['beforeYouRun'], $result->data['beforeYouRun']);
+        self::assertStringContainsString('Before running one: Copy untracked work aside', $result->text);
+
+        // And nothing is claimed where no suite was named.
+        $none = Registry::call('typo3_task_guide', [
+            'task' => 'Reword the readme of this sitepackage',
+            'changeType' => 'documentation',
+            'paths' => ['packages/sitepackage/README.md'],
+        ]);
+        self::assertSame([], $none->data['testSuites']);
+        self::assertSame('', $none->data['beforeYouRun']);
     }
 
     /**

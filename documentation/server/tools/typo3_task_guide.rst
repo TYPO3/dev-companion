@@ -261,6 +261,10 @@ Answers with
         # The TYPO3 majors whose runTests.sh has this suite, where that is not all
         # of them. Null means every covered version.
         versions: string or null
+    # What a suite can take with it, and what to do before starting one. Present
+    # where testSuites is, because this is the answer that hands over the command;
+    # empty where no suite matched. typo3_test_run_guide carries the same sentence.
+    beforeYouRun: string
     checklist: [string]
     # What this server cannot see and the agent has to establish itself.
     checkoutDiscovery:  # optional
@@ -422,6 +426,7 @@ Text:
     - `CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst`
 
     Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.
+    Before running one: Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
     ## checkIntegrityPhp
     `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
     Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
@@ -781,6 +786,7 @@ Data:
                 "versions": "TYPO3 v13 and newer"
             }
         ],
+        "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
         "checklist": [
             "Content changes, so what is delivered has to be the version that is current after the change — that is what the editor and the visitor are owed. A defect is judged by that outcome: the old version still being served is the defect, and the error it eventually throws is the symptom.",
             "Confirm the target TYPO3 core branch and issue context.",
@@ -905,6 +911,7 @@ Text:
     - `CI=true ./Build/Scripts/runTests.sh -s build`
 
     Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.
+    Before running one: Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
     ## listExceptionCodes
     `CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes`
     Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.
@@ -1048,6 +1055,7 @@ Data:
                 "versions": ""
             }
         ],
+        "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
         "checklist": [
             "Content changes, so what is delivered has to be the version that is current after the change — that is what the editor and the visitor are owed. A defect is judged by that outcome: the old version still being served is the defect, and the error it eventually throws is the symptom.",
             "Confirm the target TYPO3 core branch and issue context.",
@@ -1189,6 +1197,7 @@ Text:
     - `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
 
     Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.
+    Before running one: Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
     ## checkIntegrityPhp
     `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
     Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
@@ -1463,6 +1472,7 @@ Data:
                 "versions": ""
             }
         ],
+        "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
         "checklist": [
             "Content changes, so what is delivered has to be the version that is current after the change — that is what the editor and the visitor are owed. A defect is judged by that outcome: the old version still being served is the defect, and the error it eventually throws is the symptom.",
             "Confirm the target TYPO3 core branch and issue context.",

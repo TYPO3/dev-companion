@@ -93,6 +93,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-142`][D-ANS-142] — The area a word names is resolved from the extension it is the key of · 2026-09-04
 - [`D-ANS-143`][D-ANS-143] — What a tool refuses is said to the caller that sent it · 2026-09-04
 - [`D-ANS-144`][D-ANS-144] — A declared property is reached by its own name · 2026-09-04
+- [`D-ANS-145`][D-ANS-145] — The answer that hands over a command carries what a run can take · 2026-09-04
 - [`D-ANS-132`][D-ANS-132] — The domain answer carries the form a module imports · 2026-09-02
 - [`D-ANS-133`][D-ANS-133] — A describe field is a file's own declaration · 2026-09-02
 - [`D-ANS-135`][D-ANS-135] — The reference scan is asked for the resources an answer names · 2026-09-02
@@ -233,6 +234,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-ANS-142]: answers/ans-142-the-area-a-word-names-is-resolved-from-the-extension-it-is-the-key-of.md
 [D-ANS-143]: answers/ans-143-what-a-tool-refuses-is-said-to-the-caller-that-sent-it.md
 [D-ANS-144]: answers/ans-144-a-declared-property-is-reached-by-its-own-name.md
+[D-ANS-145]: answers/ans-145-the-answer-that-hands-over-a-command-carries-what-a-run-can-take.md
 [D-ANS-132]: answers/ans-132-the-domain-answer-carries-the-form-a-module-imports.md
 [D-ANS-133]: answers/ans-133-a-describe-field-is-a-files-own-declaration.md
 [D-ANS-135]: answers/ans-135-the-reference-scan-is-asked-for-the-resources-an-answer-names.md

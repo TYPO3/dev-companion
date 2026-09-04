@@ -23,7 +23,7 @@ final class TestSuiteHints
 
     /**
      * @return array{
-     *     invocation: array{preconditions: array<int, string>, notes: array<int, string>, options: array<int, array{option: string, description: string}>, examples: array<int, array{purpose: string, command: string}>},
+     *     invocation: array{preconditions: array<int, string>, beforeYouRun: string, notes: array<int, string>, options: array<int, array{option: string, description: string}>, examples: array<int, array{purpose: string, command: string}>},
      *     suites: array<int, Suite>
      * }
      */
@@ -44,6 +44,10 @@ final class TestSuiteHints
                 // `runTests.sh` with `ls` and `command -v` was holding exactly
                 // these two questions (`D-AUD-009`).
                 'preconditions' => array_map('strval', $invocation['preconditions'] ?? []),
+                // The one note that is about work being lost rather than about
+                // a run failing, kept apart so the brief handing over a command
+                // can carry it too — `D-ANS-145`.
+                'beforeYouRun' => (string) ($invocation['beforeYouRun'] ?? ''),
                 'notes' => array_map('strval', $invocation['notes'] ?? []),
                 'options' => array_map(static fn(array $o): array => [
                     'option' => (string) $o['option'],
@@ -187,7 +191,7 @@ final class TestSuiteHints
     /**
      * The invocation guidance that applies regardless of the chosen suite.
      *
-     * @return array{preconditions: array<int, string>, notes: array<int, string>, options: array<int, array{option: string, description: string}>, examples: array<int, array{purpose: string, command: string}>}
+     * @return array{preconditions: array<int, string>, beforeYouRun: string, notes: array<int, string>, options: array<int, array{option: string, description: string}>, examples: array<int, array{purpose: string, command: string}>}
      */
     public static function invocation(): array
     {

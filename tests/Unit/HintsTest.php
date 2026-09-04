@@ -3312,9 +3312,20 @@ final class HintsTest extends TestCase
             self::assertStringContainsString('additionalWhere', $text);
             // The silence that makes it a defect nobody sees.
             self::assertStringContainsString('never asks about', $text);
-            // And what the query does apply, which the report had backwards.
+            // And what the query does apply, which both reports had backwards.
             self::assertStringContainsString('frontend group restriction', $text);
+            self::assertStringContainsString('rather than replacing it', $text);
         }
+
+        // What brings the sitemap at all, and the routing that arrived with the
+        // set a major later.
+        $thirteen = implode("\n", array_column(Hints::byId('record-xml-sitemap', 13)['hints'], 'text'));
+        $fourteen = implode("\n", array_column(Hints::byId('record-xml-sitemap', 14)['hints'], 'text'));
+        self::assertStringContainsString('typo3/seo-sitemap', $thirteen);
+        self::assertStringNotContainsString('PageType enhancer', $thirteen);
+        self::assertStringContainsString('PageType enhancer', $fourteen);
+        // The null coalescing that makes a setting of zero a page id.
+        self::assertStringContainsString('?? the requested page', $fourteen);
 
         // Reaching the record and advertising it are two configurations, and
         // each names the other.
@@ -5793,6 +5804,11 @@ final class HintsTest extends TestCase
             // front on both ends of a range, "PHP 8.2 through PHP 8.6", which
             // is what keeps `^13.4` and a bare 8.2 out — `D-KNW-089`.
             //
+            // A page type is a doktype's counterpart on the other axis: a
+            // number the core registers once and a caller greps for, which is
+            // why it is written with its word in front like the rest. The seo
+            // extension's sitemap type is the one the corpus names.
+            //
             // The zero-date literals are the same argument with quotes doing
             // the work the word does above. `'0000-00-00 00:00:00'` is what a
             // non-nullable native datetime column stores instead of NULL; it is
@@ -5803,12 +5819,12 @@ final class HintsTest extends TestCase
             $text = (string) preg_replace(
                 [
                     '/\bPSR-\d+/i', '/\bXLIFF \d+\.\d+/i', '/\bHTTP \d{3}\b/i',
-                    '/\bexception \d{10}\b/i', '/\bdoktype \d{1,3}\b/i',
+                    '/\bexception \d{10}\b/i', '/\bdoktype \d{1,3}\b/i', '/\bpage type \d{4,}\b/i',
                     '/\bexit (status|code) (above )?\d{1,3}\b/i',
                     '/\bPHP \^?\d+\.\d+(\.\d+)?/i',
                     "/'0000-00-00 00:00:00'|'0000-00-00'|'00:00:00'/",
                 ],
-                ['PSR', 'XLIFF', 'HTTP', 'exception', 'doktype', 'exit status', 'PHP', 'zero-date'],
+                ['PSR', 'XLIFF', 'HTTP', 'exception', 'doktype', 'page type', 'exit status', 'PHP', 'zero-date'],
                 $hint['title'] . "\n" . implode("\n", array_column($hint['hints'], 'text'))
             );
 

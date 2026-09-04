@@ -46,9 +46,10 @@ record, and nothing raised anything.
   like the rest of that hint.
 - Nothing about the sitemap hint is bound. The provider, its keys and its
   restrictions are the same on all four covered branches.
-- The restriction statement says what is applied and then what is not, rather
-  than repeating the report. What the report had backwards is the part a session
-  would have acted on.
+- The restriction statement says what is applied and then what is not, and
+  refutes the reading both reports made: `ConnectionPool` hands out a builder
+  carrying `DefaultRestrictionContainer`, and `getRestrictions()->add()` adds to
+  it. Two sessions took that one line for the whole restriction set.
 
 ## Assumed
 
@@ -63,3 +64,13 @@ record, and nothing raised anything.
 - A session reports the frontend group restriction being applied after all,
   which is the one half of the query this reads off the container rather than
   off the provider.
+
+## Since then
+
+2026-09-04, from `feedback/2026-09-03-235315`, the second session of the same
+day on the same subject. It carries five facts beside the trap this entry was
+written from, all read against `.checkouts/13.4`, `14.3` and `main`: the sitemap
+arrives with the site set `typo3/seo-sitemap` rather than with the extension,
+that set brings the routing from 14, `url.pageId` is read with `??` so a setting
+defaulting to 0 is taken as page zero, the configuration is a plain array with
+no `stdWrap` anywhere, and a provider is built with positional arguments.

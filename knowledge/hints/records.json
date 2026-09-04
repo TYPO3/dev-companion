@@ -90,15 +90,30 @@
       "xmlSitemap",
       "sitemap for records",
       "additionalWhere",
-      "url.pageId"
+      "url.pageId",
+      "typo3/seo-sitemap",
+      "AbstractXmlSitemapDataProvider",
+      "sitemap 404"
     ],
     "hints": [
       "A record table is put into the XML sitemap under plugin.tx_seo.config.xmlSitemap.sitemaps.<key>, with provider RecordsXmlSitemapDataProvider and a config block naming the table. The rows come from pid, recursive and additionalWhere; the address of each comes from url.pageId and the url.additionalGetParameters or url.fieldToParameterMap that carry the record into it.",
       "Every address is built from that one pageId. RecordsXmlSitemapDataProvider::defineUrl() reads url.pageId once per row and falls back to the page the sitemap was requested on, so a records sitemap can only carry rows that this single page renders. Where the detail view sits on several filtered pages, the sitemap advertises all of them from one of them.",
       "Nothing verifies the pair. The provider builds the address out of a page id it never asks about, and a page handed an argument it has no plugin for renders its own content and answers HTTP 200 — so the whole sitemap can be green and carry no record at all. What proves it is one request per sample address, read for whether the record is in the body rather than for the status.",
       "additionalWhere is the only lever that narrows the rows, and it defaults to nothing. That means the selection is written twice — once here and once in the plugin that renders the page — and the two drift apart silently: a provider given hidden=0 alone lists every row the plugin's own filter leaves out.",
-      "What the query does apply is the deleted, hidden and start/stop restrictions the query builder carries by default, plus the workspace one the provider adds. What it does not apply is the frontend group restriction, and it selects the row of the current language rather than overlaying a translation — so a record only an fe_group may see is advertised to everybody.",
-      "This is the sitemap side of a detail view. How the record reaches the page at all is record-routing, and what the page is called once it is there is record-page-title."
+      "What the query does apply is the deleted, hidden and start/stop restrictions, because getRestrictions()->add() adds the workspace one to the default container rather than replacing it — two sessions read that line as the whole restriction set and restated the visibility rules in additionalWhere for nothing. What is absent is the frontend group restriction, and there is no translation overlay: the language field is constrained to -1 and the current language, so a record only an fe_group may see is advertised to everybody.",
+      "This is the sitemap side of a detail view. How the record reaches the page at all is record-routing, and what the page is called once it is there is record-page-title.",
+      {
+        "text": "The sitemap arrives with the site set typo3/seo-sitemap. Requiring typo3/cms-seo installs the extension and leaves /sitemap.xml answering HTTP 404 until a set of the site depends on that one, which is what brings the TypoScript declaring page type 1533906435.",
+        "since": 13
+      },
+      {
+        "text": "That set ships the routing with it: a PageType enhancer mapping sitemap.xml onto that type, and the Sitemap enhancer whose StaticValueMapper carries the sitemap name in the path. A table of your own is added as one entry to that map, which merges into the enhancer the set declares rather than replacing it.",
+        "since": 14
+      },
+      "url.pageId is read as config['url']['pageId'] ?? the requested page, so a value of 0 is not a fallback. A site setting whose default is 0 — the idiomatic \"nothing chosen\" — is taken as page zero and every address it builds is broken, and the null coalescing is what makes the two indistinguishable.",
+      "The configuration is read once as a plain array, with TypoScriptService::convertTypoScriptArrayToPlainArray and no stdWrap anywhere. So additionalWhere is a static string: a comparison against the current time cannot be expressed in it, and a selection that has to move with the clock is not something this provider can be configured into.",
+      "XmlSitemapRenderer builds a provider with makeInstance($class, $request, $sitemapName, $config) — positional arguments, so a provider of your own takes no constructor injection. A service it fetches for itself has to be declared public: true, or makeInstance builds it with no arguments and the request fails with an ArgumentCountError.",
+      "Which is what a table whose detail view is not one page needs. The shipped provider fits a table rendered by a single detail page; where several filtered list plugins each answer for part of the table, a provider of your own extending AbstractXmlSitemapDataProvider is what resolves the page per record, and the documentation names the extension point without saying when the shipped one is the wrong tool."
     ]
   },
   {

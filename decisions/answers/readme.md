@@ -7,6 +7,7 @@ measured on one afternoon's corpus, and the corpus can grow out of them.
 See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
+- [`D-ANS-142`][D-ANS-142] — The area a word names is resolved from the extension it is the key of · 2026-09-04
 - [`D-ANS-132`][D-ANS-132] — The domain answer carries the form a module imports · 2026-09-02
 - [`D-ANS-133`][D-ANS-133] — A describe field is a file's own declaration · 2026-09-02
 - [`D-ANS-135`][D-ANS-135] — The reference scan is asked for the resources an answer names · 2026-09-02
@@ -144,6 +145,7 @@ one is added.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-142]: ans-142-the-area-a-word-names-is-resolved-from-the-extension-it-is-the-key-of.md
 [D-ANS-132]: ans-132-the-domain-answer-carries-the-form-a-module-imports.md
 [D-ANS-133]: ans-133-a-describe-field-is-a-files-own-declaration.md
 [D-ANS-135]: ans-135-the-reference-scan-is-asked-for-the-resources-an-answer-names.md

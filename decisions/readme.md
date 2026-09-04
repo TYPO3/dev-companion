@@ -382,6 +382,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-148`][D-KNW-148] — What the schema of one record type holds is a subject this server owns · 2026-09-04
 - [`D-KNW-149`][D-KNW-149] — What a changelog type owes is not the shape its entries have · 2026-09-04
 - [`D-KNW-150`][D-KNW-150] — What a site answers an error with is a subject this server owns · 2026-09-04
+- [`D-KNW-151`][D-KNW-151] — What an XML sitemap of a record table advertises is a subject this server owns · 2026-09-04
 - [`D-KNW-139`][D-KNW-139] — The corpus states where an annotation is written · 2026-09-02
 - [`D-KNW-140`][D-KNW-140] — The corpus states a check the core does not run · 2026-09-02
 - [`D-KNW-141`][D-KNW-141] — The shape of a patch is stated where a patch is judged · 2026-09-02
@@ -524,6 +525,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-KNW-148]: knowledge/knw-148-what-the-schema-of-one-record-type-holds-is-a-subject-this-server-owns.md
 [D-KNW-149]: knowledge/knw-149-what-a-changelog-type-owes-is-not-the-shape-its-entries-have.md
 [D-KNW-150]: knowledge/knw-150-what-a-site-answers-an-error-with-is-a-subject-this-server-owns.md
+[D-KNW-151]: knowledge/knw-151-what-an-xml-sitemap-of-a-record-table-advertises-is-a-subject-this-server-owns.md
 [D-KNW-139]: knowledge/knw-139-the-corpus-states-where-an-annotation-is-written.md
 [D-KNW-140]: knowledge/knw-140-the-corpus-states-a-check-the-core-does-not-run.md
 [D-KNW-141]: knowledge/knw-141-the-shape-of-a-patch-is-stated-where-a-patch-is-judged.md

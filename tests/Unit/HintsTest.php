@@ -3296,6 +3296,35 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * What a records sitemap advertises, and what nothing checks.
+     *
+     * An audit crawled 3101 advertised addresses and found the page behind them
+     * rendering no record at all, with every response HTTP 200 (`D-KNW-151`).
+     */
+    #[Decision('D-KNW-151')]
+    #[Test]
+    public function whatARecordsSitemapAdvertisesIsStatedAgainstWhatThePageRenders(): void
+    {
+        foreach ([12, 13, 14, 15] as $major) {
+            $text = implode("\n", array_column(Hints::byId('record-xml-sitemap', $major)['hints'], 'text'));
+
+            self::assertStringContainsString('url.pageId', $text);
+            self::assertStringContainsString('additionalWhere', $text);
+            // The silence that makes it a defect nobody sees.
+            self::assertStringContainsString('never asks about', $text);
+            // And what the query does apply, which the report had backwards.
+            self::assertStringContainsString('frontend group restriction', $text);
+        }
+
+        // Reaching the record and advertising it are two configurations, and
+        // each names the other.
+        self::assertStringContainsString(
+            'record-xml-sitemap',
+            implode("\n", array_column(Hints::byId('record-routing', 14)['hints'], 'text')),
+        );
+    }
+
+    /**
      * `D-KNW-087`. The hint said an area the layout never declared "renders
      * empty with no error", and a session that skipped it got HTTP 500 on every
      * page instead. `ContentAreaViewHelper::render()` throws for anything that

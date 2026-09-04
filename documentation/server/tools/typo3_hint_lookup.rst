@@ -222,6 +222,7 @@ Text:
     - di-service-not-found — A Service the Container Cannot Find at Runtime (PHP)
     - frontend-access-restriction — Access Restricted Pages and extendToSubpages in the Frontend (PHP)
     - tca-core-palette — Adding a Field to a Core Palette (PHP)
+    - record-xml-sitemap — An XML Sitemap of a Record Table (TypoScript)
     - site-error-handling — Answering a Not-Found With a Page of the Site (PHP)
     - extension-test-frontend-request — Asserting a Frontend Response in a Test (PHP)
     - authentication-permissions — Authentication and Permissions (PHP)
@@ -472,6 +473,11 @@ Data:
                 "id": "tca-core-palette",
                 "title": "Adding a Field to a Core Palette",
                 "category": "PHP"
+            },
+            {
+                "id": "record-xml-sitemap",
+                "title": "An XML Sitemap of a Record Table",
+                "category": "TypoScript"
             },
             {
                 "id": "site-error-handling",
@@ -1574,6 +1580,7 @@ Text:
     - di-service-not-found — A Service the Container Cannot Find at Runtime (PHP)
     - frontend-access-restriction — Access Restricted Pages and extendToSubpages in the Frontend (PHP)
     - tca-core-palette — Adding a Field to a Core Palette (PHP)
+    - record-xml-sitemap — An XML Sitemap of a Record Table (TypoScript)
     - site-error-handling — Answering a Not-Found With a Page of the Site (PHP)
     - extension-test-frontend-request — Asserting a Frontend Response in a Test (PHP)
     - authentication-permissions — Authentication and Permissions (PHP)
@@ -1725,6 +1732,11 @@ Data:
                 "id": "tca-core-palette",
                 "title": "Adding a Field to a Core Palette",
                 "category": "PHP"
+            },
+            {
+                "id": "record-xml-sitemap",
+                "title": "An XML Sitemap of a Record Table",
+                "category": "TypoScript"
             },
             {
                 "id": "site-error-handling",

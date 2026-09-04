@@ -639,7 +639,13 @@ final class TaskGuide extends ReadOnlyTool
         if ($guides !== []) {
             $lines[] = self::GUIDES_OWNING;
             foreach ($guides as $guide) {
-                $lines[] = sprintf('- %s — %s. %s', $guide['id'], $guide['title'], $guide['when']);
+                $lines[] = sprintf(
+                    '- %s (%s) — %s. %s',
+                    $guide['id'],
+                    $guide['scope'],
+                    $guide['title'],
+                    $guide['when'],
+                );
             }
         }
 
@@ -954,7 +960,7 @@ final class TaskGuide extends ReadOnlyTool
      * the same mapping so nobody finds out here.
      *
      * @param array<int, string> $ids
-     * @return array<int, array{id: string, title: string, when: string}>
+     * @return array<int, array{id: string, title: string, when: string, scope: string, tool: string}>
      */
     private static function guideRecords(array $ids): array
     {

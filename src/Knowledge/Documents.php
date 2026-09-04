@@ -235,8 +235,13 @@ final class Documents
      * what a document declares to what an answer says lives here rather than
      * in each of them — `D-GUI-012`.
      *
+     * The scope is said rather than left in the id. A session filtered the
+     * listing on the prefix, read `core/` as "not mine" and worked out the
+     * procedure itself; it filtered correctly that time, and what it was doing
+     * is reading a path segment as data — `D-ANS-150`.
+     *
      * @param array{id: string, title: string, whenToUse: string, ...} $document
-     * @return array{id: string, title: string, when: string, tool: string}
+     * @return array{id: string, title: string, when: string, scope: string, tool: string}
      */
     public static function reference(array $document): array
     {
@@ -244,6 +249,7 @@ final class Documents
             'id' => $document['id'],
             'title' => $document['title'],
             'when' => $document['whenToUse'],
+            'scope' => self::scopeOf($document['id'])->value,
             'tool' => self::READ_BY,
         ];
     }

@@ -337,8 +337,16 @@ final class Schema
             'id' => self::string('What typo3_rule_lookup takes as documentId to return the whole document.'),
             'title' => self::string(),
             'when' => self::string('What the caller has to be doing for this page to be the one to read.'),
+            'scope' => [
+                'type' => 'string',
+                'enum' => array_map(static fn(Scope $scope): string => $scope->value, Scope::ofKnowledge()),
+                'description' => 'Which kind of work this page is written for: core, a patch to the TYPO3 core '
+                    . 'repository; project, the site repository around an installation; extension, a package in '
+                    . 'it; any, all three. Said here because it decides whether to open the page at all, and a '
+                    . 'caller reading it out of the id is parsing a path segment for it — D-ANS-150.',
+            ],
             'tool' => self::string('The tool that takes the id above and returns the page whole.'),
-        ], ['id', 'title', 'when', 'tool']);
+        ], ['id', 'title', 'when', 'scope', 'tool']);
     }
 
     /**

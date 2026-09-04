@@ -29,8 +29,14 @@ typo3_project_describe on a Composer project (kind: composer-project) returned a
 
 ## Suggestion
 
-Re-file core/testing/proving-a-rendering as any/testing/proving-a-rendering, or split it: the part about capturing and diffing a rendering is "any", the part about which core suite to run is "core". As it stands the prefix tells a project session to skip the one page written for what it is doing.
+*Trimmed on 2026-09-04. The re-filing was refused and the scope field was built
+— `D-ANS-150` carries both, and `todo/open/T-260904-f190.md` carries what is
+left.*
 
-If the prefix has to stay, make typo3_task_guide surface it for non-core work with the reason attached — this task had changeType "cleanup" on a project scope and a diff that changes emitted markup, which is the trigger condition stated in the guide's own "when". The guides array it returned for this task held one entry (any/testing/browser-check) and not this one.
-
-More generally: the "when" text is good and is what would have sold me on the page. The id is what I filtered on, because it is shorter and it looked like a scope. Consider putting the scope somewhere it is asserted rather than implied — a field saying whether a guide applies to core only, projects only, or both — so a caller is not reading it out of a path segment.
+What is still open is the procedure this session worked out from scratch, which
+nothing here carries: proving a rendering in an installation you can request
+over HTTP. Choose the URLs from the content that exists rather than from what
+the templates allow, capture them before the change, make the change, capture
+them again, and read the diff — the session inserted a newline between adjacent
+tags first and then grepped the union of every diff for a line none of the
+intended changes explains, which is what proved nothing else moved.

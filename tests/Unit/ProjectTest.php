@@ -306,6 +306,34 @@ final class ProjectTest extends TestCase
         }
     }
 
+    /**
+     * Which kind of work each guide is for, said rather than left in its id.
+     *
+     * A session read `core/` out of the prefix as "not mine" and worked the
+     * procedure out itself. It filtered correctly that time, and what it was
+     * doing is parsing a path segment for data — `D-ANS-150`.
+     */
+    #[Decision('D-ANS-150')]
+    #[Test]
+    public function everyGuideSaysWhichKindOfWorkItIsFor(): void
+    {
+        Instance::discoverFrom($this->composerProject('vendor', '14.3.5'));
+
+        $result = Registry::call('typo3_project_describe', []);
+
+        $scopes = array_column($result->data['guides'] ?? [], 'scope', 'id');
+        self::assertNotSame([], $scopes);
+        foreach ($scopes as $id => $scope) {
+            self::assertSame(Documents::scopeOf((string) $id)->value, $scope);
+            self::assertContains($scope, ['core', 'project', 'extension', 'any'], (string) $id);
+        }
+        self::assertSame('core', $scopes['core/testing/proving-a-rendering'] ?? null);
+        self::assertSame('any', $scopes['any/testing/browser-check'] ?? null);
+
+        // And in the listing, where the filtering actually happened.
+        self::assertStringContainsString('core/testing/proving-a-rendering (core)', $result->text);
+    }
+
     #[Decision('D-ANS-013')]
     #[Requirement('R-PRJ-008')]
     #[Decision('D-KNW-055')]

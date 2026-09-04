@@ -15,6 +15,7 @@ one is added.
 - [`D-ANS-147`][D-ANS-147] — What a session acts on is a fact the answer carried · 2026-09-04
 - [`D-ANS-148`][D-ANS-148] — The project answer names a kind of file no declared command checks · 2026-09-04
 - [`D-ANS-149`][D-ANS-149] — What an extension renders is a second question from what it registers · 2026-09-04
+- [`D-ANS-150`][D-ANS-150] — A guide says which kind of work it is for · 2026-09-04
 - [`D-ANS-132`][D-ANS-132] — The domain answer carries the form a module imports · 2026-09-02
 - [`D-ANS-133`][D-ANS-133] — A describe field is a file's own declaration · 2026-09-02
 - [`D-ANS-135`][D-ANS-135] — The reference scan is asked for the resources an answer names · 2026-09-02
@@ -160,6 +161,7 @@ one is added.
 [D-ANS-147]: ans-147-what-a-session-acts-on-is-a-fact-the-answer-carried.md
 [D-ANS-148]: ans-148-the-project-answer-names-a-kind-of-file-no-declared-command-checks.md
 [D-ANS-149]: ans-149-what-an-extension-renders-is-a-second-question-from-what-it-registers.md
+[D-ANS-150]: ans-150-a-guide-says-which-kind-of-work-it-is-for.md
 [D-ANS-132]: ans-132-the-domain-answer-carries-the-form-a-module-imports.md
 [D-ANS-133]: ans-133-a-describe-field-is-a-files-own-declaration.md
 [D-ANS-135]: ans-135-the-reference-scan-is-asked-for-the-resources-an-answer-names.md

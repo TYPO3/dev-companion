@@ -358,7 +358,13 @@ final class ProjectDescribe extends ReadOnlyTool
         foreach (Documents::documents() as $document) {
             $reference = Documents::reference($document);
             $records[] = $reference;
-            $lines[] = sprintf('- %s — %s. %s', $reference['id'], $reference['title'], $reference['when']);
+            $lines[] = sprintf(
+                '- %s (%s) — %s. %s',
+                $reference['id'],
+                $reference['scope'],
+                $reference['title'],
+                $reference['when'],
+            );
         }
 
         return ['lines' => $lines, 'records' => $records];

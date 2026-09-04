@@ -140,6 +140,13 @@ Answers with
         title: string
         # What the caller has to be doing for this page to be the one to read.
         when: string
+        # One of: core, project, extension, any. Which kind of work this page is
+        # written for: core, a patch to the TYPO3 core repository; project, the site
+        # repository around an installation; extension, a package in it; any, all
+        # three. Said here because it decides whether to open the page at all, and a
+        # caller reading it out of the id is parsing a path segment for it —
+        # D-ANS-150.
+        scope: string
         # The tool that takes the id above and returns the page whole.
         tool: string
     # What typo3_hint_lookup answers for these paths, quoted whole and carried here
@@ -880,7 +887,7 @@ Text:
     Domains: php
     Recognized as: Backend UI markup
     Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
-    - any/testing/browser-check — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
+    - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
 
     Hints:
     - No hint matched this task text. That means no convention was recognized, not that none applies: call typo3_hint_lookup again with the concrete file paths once they are known.
@@ -991,6 +998,7 @@ Data:
                 "id": "any/testing/browser-check",
                 "title": "Looking at a Change in a Real Browser",
                 "when": "When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.",
+                "scope": "any",
                 "tool": "typo3_rule_lookup"
             }
         ],

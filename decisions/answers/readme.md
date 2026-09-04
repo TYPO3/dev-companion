@@ -11,6 +11,7 @@ one is added.
 - [`D-ANS-143`][D-ANS-143] — What a tool refuses is said to the caller that sent it · 2026-09-04
 - [`D-ANS-144`][D-ANS-144] — A declared property is reached by its own name · 2026-09-04
 - [`D-ANS-145`][D-ANS-145] — The answer that hands over a command carries what a run can take · 2026-09-04
+- [`D-ANS-146`][D-ANS-146] — What a brief still owes is said before the brief · 2026-09-04
 - [`D-ANS-132`][D-ANS-132] — The domain answer carries the form a module imports · 2026-09-02
 - [`D-ANS-133`][D-ANS-133] — A describe field is a file's own declaration · 2026-09-02
 - [`D-ANS-135`][D-ANS-135] — The reference scan is asked for the resources an answer names · 2026-09-02
@@ -152,6 +153,7 @@ one is added.
 [D-ANS-143]: ans-143-what-a-tool-refuses-is-said-to-the-caller-that-sent-it.md
 [D-ANS-144]: ans-144-a-declared-property-is-reached-by-its-own-name.md
 [D-ANS-145]: ans-145-the-answer-that-hands-over-a-command-carries-what-a-run-can-take.md
+[D-ANS-146]: ans-146-what-a-brief-still-owes-is-said-before-the-brief.md
 [D-ANS-132]: ans-132-the-domain-answer-carries-the-form-a-module-imports.md
 [D-ANS-133]: ans-133-a-describe-field-is-a-files-own-declaration.md
 [D-ANS-135]: ans-135-the-reference-scan-is-asked-for-the-resources-an-answer-names.md

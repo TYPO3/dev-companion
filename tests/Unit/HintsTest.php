@@ -7709,6 +7709,7 @@ final class HintsTest extends TestCase
      */
     #[Requirement('R-GUI-012')]
     #[Decision('D-ANS-050')]
+    #[Decision('D-ANS-146')]
     #[Test]
     public function aBriefNamesTheHintsItLeftBehind(): void
     {
@@ -7748,6 +7749,14 @@ final class HintsTest extends TestCase
         // Named rather than quoted: the ids are in the copy a reader is looking
         // at, and each record is what the lookup takes back as an id.
         self::assertStringContainsString(sprintf(TaskGuide::HINTS_OMITTED, implode(', ', $left)), $brief->text);
+        // And above the brief rather than under its hints. A session read the
+        // four blocks, moved on to the code and made about a hundred further
+        // calls without the id coming back (`D-ANS-146`).
+        self::assertLessThan(
+            (int) strpos($brief->text, 'Task: '),
+            (int) strpos($brief->text, 'Owed after this brief'),
+            'the hints a brief left are named below what it did carry',
+        );
         foreach ($brief->data['omittedHints'] as $entry) {
             self::assertNotSame('', $entry['title']);
             self::assertNotSame('', $entry['category']);

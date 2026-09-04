@@ -87,17 +87,20 @@ final class TaskGuide extends ReadOnlyTool
         . 'it again by path adds nothing; a subject it holds under another path or id is still a call away.';
 
     /**
-     * Which hints the brief left, said where the count is (R-GUI-012).
+     * Which hints the brief left, said before the brief rather than inside it
+     * (`R-GUI-012`, `D-ANS-146`).
      *
-     * The sentence above states how many were carried and not which ones were
-     * not, so a subsystem the brief did not reach is invisible until the lookup
-     * is called. The review that lost `dependency-injection` on a patch
-     * injecting a new service read four hint bodies and established the rule by
-     * grepping three call sites out of the checkout instead
-     * (`feedback/2026-08-03-144410`).
+     * A subsystem the brief did not reach is invisible until the lookup is
+     * called. The review that lost `dependency-injection` on a patch injecting a
+     * new service read four hint bodies and established the rule by grepping
+     * three call sites out of the checkout instead
+     * (`feedback/2026-08-03-144410`). Saying it under the `Hints:` heading was
+     * not enough: a second session read the four blocks below it, moved on to
+     * the code, and made about a hundred further calls without the id coming
+     * back.
      */
-    public const HINTS_OMITTED = 'What it holds for these paths and this brief left: %s. Each is one call away '
-        . 'by id, and a subject named there and not below is one this brief did not reach.';
+    public const HINTS_OMITTED = 'Owed after this brief, and not carried below: %s. One typo3_hint_lookup '
+        . 'call by id each, and a subject named here and not below is one this brief did not reach.';
 
     /**
      * Where the task belongs, said in the answer that recognized it
@@ -571,6 +574,14 @@ final class TaskGuide extends ReadOnlyTool
             $lines[] = '';
         }
 
+        // Above the brief rather than under its `Hints:` heading: what a caller
+        // still owes is read while they are deciding what to do, and a line
+        // below a payload is read after they have decided (`D-ANS-146`).
+        if ($omitted !== []) {
+            $lines[] = sprintf(self::HINTS_OMITTED, implode(', ', array_column($omitted, 'id')));
+            $lines[] = '';
+        }
+
         $lines = array_merge($lines, [
             'Task: ' . $task,
             'Change type: ' . $changeType,
@@ -644,7 +655,6 @@ final class TaskGuide extends ReadOnlyTool
             // not spends the call the pointer promised on nothing.
             if ($omitted !== []) {
                 $lines[] = sprintf(self::HINTS_TRUNCATED, self::HINTS_PER_GROUP);
-                $lines[] = sprintf(self::HINTS_OMITTED, implode(', ', array_column($omitted, 'id')));
             } else {
                 $lines[] = self::HINTS_COMPLETE;
             }

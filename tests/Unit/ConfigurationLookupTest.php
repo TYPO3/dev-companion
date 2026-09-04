@@ -42,7 +42,7 @@ final class ConfigurationLookupTest extends TestCase
     {
         $this->discover(['SYS' => ['fluid' => ['namespaces' => ['acme' => ['Acme\\Site\\ViewHelpers']]]]]);
 
-        $result = Registry::call('typo3_configuration_lookup', ['path' => 'SYS/fluid/namespaces']);
+        $result = Registry::call('typo3_configuration_lookup', ['configurationPath' => 'SYS/fluid/namespaces']);
 
         self::assertTrue($result->data['found']);
         self::assertSame(['acme' => ['Acme\\Site\\ViewHelpers']], $result->data['value']);
@@ -54,7 +54,7 @@ final class ConfigurationLookupTest extends TestCase
     {
         $this->discover(['SYS' => ['fluid' => []]]);
 
-        $result = Registry::call('typo3_configuration_lookup', ['path' => 'SYS/thereIsNoSuchThing']);
+        $result = Registry::call('typo3_configuration_lookup', ['configurationPath' => 'SYS/thereIsNoSuchThing']);
 
         self::assertFalse($result->data['found']);
         self::assertNull($result->data['value']);
@@ -68,7 +68,7 @@ final class ConfigurationLookupTest extends TestCase
         // is a statement about an installation, and none was consulted.
         $this->discover(null);
 
-        $result = Registry::call('typo3_configuration_lookup', ['path' => 'SYS/fluid']);
+        $result = Registry::call('typo3_configuration_lookup', ['configurationPath' => 'SYS/fluid']);
 
         self::assertArrayNotHasKey('found', $result->data);
         self::assertStringNotContainsString('has no configuration at', $result->text);

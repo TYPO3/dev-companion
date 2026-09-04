@@ -617,7 +617,7 @@
     },
     {
       "when": "Needing a configuration value as it really is at runtime, not as the core ships it",
-      "call": "typo3_configuration_lookup with the TYPO3_CONF_VARS path"
+      "call": "typo3_configuration_lookup with the TYPO3_CONF_VARS path as configurationPath"
     },
     {
       "when": "Working on a backend module and needing its registration, its sub-routes, or whether the page tree navigates it",

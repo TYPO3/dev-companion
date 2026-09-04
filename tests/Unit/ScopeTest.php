@@ -2171,7 +2171,7 @@ final class ScopeTest extends TestCase
         Instance::discoverFrom(null);
         Typo3Cli::forget();
 
-        $result = Registry::call('typo3_configuration_lookup', ['path' => 'SYS/fluid']);
+        $result = Registry::call('typo3_configuration_lookup', ['configurationPath' => 'SYS/fluid']);
 
         // found: false says the installation has no value there, which is a
         // statement about an installation nothing asked.

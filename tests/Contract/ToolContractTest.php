@@ -202,7 +202,7 @@ final class ToolContractTest extends TestCase
     private const UNANSWERABLE_CALLS = [
         'typo3_icon_lookup' => ['query' => 'publish'],
         'typo3_label_lookup' => ['query' => 'Publish page'],
-        'typo3_configuration_lookup' => ['path' => 'SYS/fluid'],
+        'typo3_configuration_lookup' => ['configurationPath' => 'SYS/fluid'],
         'typo3_backend_module_lookup' => ['query' => 'page'],
         'typo3_changelog_lookup' => ['query' => 'deprecation'],
         'typo3_fluid_namespace_list' => [],

@@ -593,7 +593,7 @@
     "tools": [
       "typo3_project_describe, for the TYPO3 and PHP versions this repository supports and the commands it declares",
       "typo3_extension_describe, for what each extension in scope registers",
-      "typo3_configuration_lookup, where a finding turns on a configuration default: what this installation resolved after every extension has had its say, which the shipped DefaultConfiguration.php cannot state. A path names a subtree as readily as a leaf, so which writers LOG/writerConfiguration holds is one call."
+      "typo3_configuration_lookup, where a finding turns on a configuration default: what this installation resolved after every extension has had its say, which the shipped DefaultConfiguration.php cannot state. A configurationPath names a subtree as readily as a leaf, so which writers LOG/writerConfiguration holds is one call."
     ]
   },
   {

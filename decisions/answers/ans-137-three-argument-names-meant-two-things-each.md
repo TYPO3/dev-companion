@@ -80,14 +80,14 @@ covered two concepts; the rest of what looked uneven is a rule holding.**
 ## Since then
 
 The third **Wrong if** fired, and the way it said it would. The same pass over
-`Registry::definitions()`, re-run on 2026-09-04, finds a fourth name covering
-two concepts: `path` is a file path in a repository on `typo3_gerrit_lookup` and
-`typo3_translation_domain_lookup`, and a slash-separated path into
-`TYPO3_CONF_VARS` on `typo3_configuration_lookup`. `paths` is file paths on the
-three tools that take it, so unqualified `path` means a file everywhere but
-there — `version`'s shape exactly. `T-260904-c31f` takes the rename on.
+`Registry::definitions()`, re-run on 2026-09-04, found a fourth name covering
+two concepts: `path` was a file path on `typo3_gerrit_lookup` and
+`typo3_translation_domain_lookup` and a path into `TYPO3_CONF_VARS` on
+`typo3_configuration_lookup`, while `paths` is file paths on all three tools
+that take it. It is `configurationPath` now, echoed back under that name and
+with no alias — the maintainer settled it the same day.
 
-The three renames are in the surface, and neither of the other two **Wrong if**
-has a report behind it. `query` on `typo3_feedback_record` was looked at and
-left: it records rather than looks up, and `status`, `category` and `tag` are
-each one concept in two vocabularies, which this entry already settled.
+Neither of the other two **Wrong if** has a report behind it. `query` on
+`typo3_feedback_record` was looked at and left, since that tool records rather
+than looks up, and `status`, `category` and `tag` are each one concept in two
+vocabularies, which this entry already settled.

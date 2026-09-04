@@ -278,7 +278,7 @@ final class ToolCalls
             'icons: everything' => ['typo3_icon_lookup', []],
             'modules' => ['typo3_backend_module_lookup', []],
             'namespaces' => ['typo3_fluid_namespace_list', []],
-            'configuration' => ['typo3_configuration_lookup', ['path' => 'SYS/fluid']],
+            'configuration' => ['typo3_configuration_lookup', ['configurationPath' => 'SYS/fluid']],
             'schema: one table' => ['typo3_schema_lookup', ['table' => 'tt_content']],
             'schema: every table' => ['typo3_schema_lookup', []],
             // The five states: a table of this project's own, the same one

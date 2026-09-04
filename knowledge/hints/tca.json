@@ -172,7 +172,7 @@
       "form data provider"
     ],
     "hints": [
-      "FormEngine assembles its data through providers registered per form data group in $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']. The core declares the defaults in typo3/sysext/core/Configuration/DefaultConfiguration.php, but extensions add to them, so which groups and providers your installation really has is what typo3_configuration_lookup with path SYS/formEngine/formDataGroup answers.",
+      "FormEngine assembles its data through providers registered per form data group in $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']. The core declares the defaults in typo3/sysext/core/Configuration/DefaultConfiguration.php, but extensions add to them, so which groups and providers your installation really has is what typo3_configuration_lookup with configurationPath SYS/formEngine/formDataGroup answers.",
       "Each provider maps to an array with 'depends' and 'before', both listing other provider classes. That graph is what orders the run, not the order the entries are written in — so the fix for a provider that sees stale data is usually an added dependency, not a change inside the provider class.",
       "A provider that reads merged page TSconfig has to depend on PageTsConfigMerged, or it runs before the TSconfig it reads has been merged.",
       "DefaultConfiguration.php is the default of TYPO3_CONF_VARS: an edit there changes behaviour in every installation, so say what changed and why in the patch description.",

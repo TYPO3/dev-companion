@@ -325,7 +325,7 @@ final class FeedbackTest extends TestCase
         $redacted = [];
 
         $file = $this->recordFeedback([
-            'observation' => self::MARKER . ' called typo3_configuration_lookup with path SYS/encryptionKey. '
+            'observation' => self::MARKER . ' called typo3_configuration_lookup with configurationPath SYS/encryptionKey. '
                 . 'The key ' . $key . ' is the active value, hardcoded in config/system/settings.php.',
         ], $redacted);
 

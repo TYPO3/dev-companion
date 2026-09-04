@@ -26,8 +26,9 @@ Takes
 .. code-block:: yaml
 
     # Slash-separated path into TYPO3_CONF_VARS, for example "SYS/fluid" or
-    # "SYS/formEngine/formDataGroup".
-    path: string
+    # "SYS/formEngine/formDataGroup". Named apart from path, which is a file
+    # everywhere else on this server — D-ANS-137.
+    configurationPath: string
 
 Answers with
 ------------
@@ -35,7 +36,7 @@ Answers with
 .. code-block:: yaml
 
     # The TYPO3_CONF_VARS path that was read.
-    path: string
+    configurationPath: string
     # Whether the installation has a value at that path. Present only where one was
     # asked: false is a statement about an installation, and where there was none to
     # ask, unsupported stands in place of this answer.
@@ -94,16 +95,16 @@ Answers with
         # Environment variable that names the console command.
         console: string
 
-The answer carries exactly one of these sets of fields: ``path``, ``found``,
-``answeredBy`` — or ``path``, ``unsupported``.
+The answer carries exactly one of these sets of fields: ``configurationPath``,
+``found``, ``answeredBy`` — or ``configurationPath``, ``unsupported``.
 
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-04 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
-15.0.0-dev, the main core checkout below .checkouts/, whose console could not
+14.3.7-dev, the 14.3 core checkout below .checkouts/, whose console could not
 be reached: <installation> has no TYPO3 console — none of bin/typo3,
 vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -122,10 +123,10 @@ Called with:
 .. code-block:: json
 
     {
-        "path": "SYS/fluid"
+        "configurationPath": "SYS/fluid"
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
@@ -139,7 +140,7 @@ Data:
 .. code-block:: json
 
     {
-        "path": "SYS/fluid",
+        "configurationPath": "SYS/fluid",
         "unsupported": {
             "cause": "installation-not-answering",
             "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
@@ -170,7 +171,7 @@ Data:
 .. code-block:: json
 
     {
-        "path": "SYS/fluid",
+        "configurationPath": "SYS/fluid",
         "found": false,
         "value": null,
         "answeredBy": "installation"

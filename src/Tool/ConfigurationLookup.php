@@ -36,16 +36,16 @@ final class ConfigurationLookup extends ReadOnlyTool
         return [
             'type' => 'object',
             'properties' => [
-                'path' => ['type' => 'string', 'minLength' => 1, 'description' => 'Slash-separated path into TYPO3_CONF_VARS, for example "SYS/fluid" or "SYS/formEngine/formDataGroup".'],
+                'configurationPath' => ['type' => 'string', 'minLength' => 1, 'description' => 'Slash-separated path into TYPO3_CONF_VARS, for example "SYS/fluid" or "SYS/formEngine/formDataGroup". Named apart from path, which is a file everywhere else on this server — D-ANS-137.'],
             ],
-            'required' => ['path'],
+            'required' => ['configurationPath'],
         ];
     }
 
     public static function outputSchema(): array
     {
         return Schema::installationAnswer([
-            'path' => Schema::string('The TYPO3_CONF_VARS path that was read.'),
+            'configurationPath' => Schema::string('The TYPO3_CONF_VARS path that was read.'),
             'found' => ['type' => 'boolean', 'description' => 'Whether the installation has a value at that path. Present only where one was asked: false is a statement about an installation, and where there was none to ask, unsupported stands in place of this answer.'],
             'value' => ['description' => 'The effective runtime value, of whatever shape the configuration has.'],
             'resolvedOrder' => Schema::listOf(Schema::object([
@@ -57,15 +57,15 @@ final class ConfigurationLookup extends ReadOnlyTool
                 . 'where the path names one form data group and the installation answered. The registry under it is '
                 . 'a dependency graph, so this is what it resolves to rather than what it is written as.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
-        ], ['path', 'found', 'answeredBy'], ['path']);
+        ], ['configurationPath', 'found', 'answeredBy'], ['configurationPath']);
     }
 
     public static function answer(array $args): ToolResult
     {
-        $path = trim((string) ($args['path'] ?? ''), " \t/");
+        $path = trim((string) ($args['configurationPath'] ?? ''), " \t/");
 
         if ($path === '') {
-            return Unsupported::because('no path into TYPO3_CONF_VARS was named', ['path' => $path]);
+            return Unsupported::because('no path into TYPO3_CONF_VARS was named', ['configurationPath' => $path]);
         }
 
         // The booted container rather than `configuration:show`, which arrived
@@ -80,7 +80,7 @@ final class ConfigurationLookup extends ReadOnlyTool
             // consulted to make it.
             return Unsupported::because(
                 is_array($read) ? (string) $read['unavailable'] : Typo3Runtime::reason(),
-                ['path' => $path],
+                ['configurationPath' => $path],
             );
         }
 
@@ -88,7 +88,7 @@ final class ConfigurationLookup extends ReadOnlyTool
         if ($read['found'] !== true) {
             return ToolResult::create(
                 sprintf('The installation has no configuration at "%s".', $path),
-                ['path' => $path, 'found' => false, 'value' => null, 'answeredBy' => 'installation'],
+                ['configurationPath' => $path, 'found' => false, 'value' => null, 'answeredBy' => 'installation'],
             );
         }
 
@@ -102,7 +102,7 @@ final class ConfigurationLookup extends ReadOnlyTool
             json_encode($read['value'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)
         );
 
-        $data = ['path' => $path, 'found' => true, 'value' => $read['value'], 'answeredBy' => 'installation'];
+        $data = ['configurationPath' => $path, 'found' => true, 'value' => $read['value'], 'answeredBy' => 'installation'];
 
         $order = self::resolvedOrder($path);
         if ($order !== null) {

@@ -230,9 +230,27 @@ This is the setup to use when working on the knowledge base itself, since the
 As a dependency
 ---------------
 
-The package is not published on Packagist, so it is required from a local
-checkout (or a Git URL) through a ``repositories`` entry in the consuming
-project's ``composer.json``:
+The package is on Packagist as ``typo3/dev-companion``, so the consuming project
+requires it and nothing else:
+
+.. code-block:: bash
+
+    composer require "typo3/dev-companion:@dev"
+
+
+The constraint names a stability because no release is tagged: ``dev-main`` is
+the only version there is, and a plain require is refused against the default
+minimum stability. The experimental note in the `readme <../../readme.md>`_ is
+why — pin a commit where the project depends on it.
+
+To work against a checkout instead — changing the server and the project that
+uses it in one go — clone it and name it as a path repository, which Composer
+symlinks into ``vendor/`` so an edit is live in the project:
+
+.. code-block:: bash
+
+    git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
+
 
 .. code-block:: json
 
@@ -243,10 +261,7 @@ project's ``composer.json``:
     }
 
 
-.. code-block:: bash
-
-    composer require typo3/dev-companion
-
+The require is the same one and resolves against the checkout instead.
 
 Composer then exposes the stdio entrypoint as
 ``vendor/bin/typo3-dev-companion``. Install it from the consuming project's

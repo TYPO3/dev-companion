@@ -82,8 +82,10 @@ and never gives the separator a rule.
 The draft is also the first document to draw a line around what may present
 itself as TYPO3's MCP surface, which is where the package name meets it. This
 package declares ``typo3/dev-companion`` in its ``composer.json`` and is
-published nowhere. The ``typo3`` vendor on Packagist belongs to the TYPO3
-Association, and no claim is made on it here.
+published under that name on Packagist, in the ``typo3`` vendor the TYPO3
+Association owns, since 2026-08-14. So the name is allocated, and a policy on
+that vendor would be read against a package already carrying it rather than
+against a request.
 
 What adoption would cost
 ------------------------
@@ -100,9 +102,11 @@ What adoption would cost
   under any separator, or a conformance suite that rejects a non-contract tool
   whose name begins with it. Then all 26 tool names go.
 * **A policy on the ``typo3`` Packagist vendor for MCP packages.** Then
-  ``composer.json`` carries a name this package may not use.
+  ``composer.json`` carries a name this package may not use, and the published
+  package is renamed rather than merely declared differently.
 
-All four are cheap while this server is unpublished and stop being cheap
-afterwards, which is why ``D-SCO-010`` changes nothing yet: there is nothing to
-rename against until somebody allocates a scheme, and a rename made on a guess
-has to be made again.
+The first three are cheap while nothing depends on this server's names and stop
+being cheap afterwards, which is why ``D-SCO-010`` changes nothing yet: there is
+nothing to rename against until somebody allocates a scheme, and a rename made
+on a guess has to be made again. The fourth stopped being free on the day the
+package was published, since a Packagist name is one other lock files carry.

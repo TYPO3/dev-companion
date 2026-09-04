@@ -32,7 +32,8 @@ cd typo3-dev-companion
 composer install
 /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
 
-# as a dependency: from the consuming project's root
+# as a dependency: from the consuming project's root, straight from Packagist
+composer require "typo3/dev-companion:@dev"
 vendor/bin/typo3-dev-companion install
 ```
 

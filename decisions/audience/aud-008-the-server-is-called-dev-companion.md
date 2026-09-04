@@ -3,6 +3,8 @@ id: D-AUD-008
 title: 'The server is called dev-companion'
 date: 2026-08-06
 status: confirmed
+readings:
+  - 2026-09-04
 ---
 
 # D-AUD-008 — The server is called dev-companion
@@ -98,5 +100,7 @@ site links into, the GitHub button and the footer link, and the `compatibility`
 line each published skill carries into somebody else's project. The site is
 `typo3.github.io/dev-companion`.
 
-The other three **Wrong if** are unread. Nothing has been published to Packagist
-yet, so the hard cut is still ahead of the install base it was judged against.
+The other three **Wrong if** are unread. The package went to Packagist under
+that name the same day, carrying `dev-main` and no tagged release, so the
+install base a further rename would break starts there rather than being still
+ahead.

@@ -3220,6 +3220,32 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The sections a changelog type owes, and the shape its entries have.
+     *
+     * A session writing an `Important` entry found this corpus, the shipped
+     * template and the tree saying three different things, and the tree is what
+     * a reviewer compares against (`D-KNW-149`).
+     */
+    #[Decision('D-KNW-149')]
+    #[Test]
+    public function whatAChangelogTypeOwesIsSaidApartFromWhatItsEntriesCarry(): void
+    {
+        $hint = implode("\n", array_column(Hints::byId('documentation-changelog', 14)['hints'], 'text'));
+        $document = Documents::read('core/contribution/changelog');
+
+        foreach (['hint' => $hint, 'document' => $document] as $where => $text) {
+            // The obligation, which is what it always said.
+            self::assertStringContainsString('Description section', $text, $where);
+            // And the reading it was taken for.
+            self::assertStringContainsString('owes no Impact', $text, $where);
+            self::assertStringContainsString('plenty of them carry one', $text, $where);
+            // The template that describes the tree least well, named as such.
+            self::assertStringContainsString('template is the one that disagrees with the tree', $text, $where);
+            self::assertStringContainsString('neighbouring entry', $text, $where);
+        }
+    }
+
+    /**
      * `D-KNW-087`. The hint said an area the layout never declared "renders
      * empty with no error", and a session that skipped it got HTTP 500 on every
      * page instead. `ContentAreaViewHelper::render()` throws for anything that

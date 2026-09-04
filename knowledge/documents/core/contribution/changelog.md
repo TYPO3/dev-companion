@@ -84,9 +84,16 @@ list.
   from the template, asks for the type, the issue and the title, and renders it
   live while it is edited. It writes into the directory of the release the
   branch is developing, so a backport's file is moved afterwards.
-- Every type has a Description section, every type except `Important` has an
-  Impact section, and `Deprecation` and `Breaking` additionally have an Affected
-  installations and a Migration section.
+- Every type has a Description section. A `Feature`, a `Deprecation` and a
+  `Breaking` have an Impact section, and a `Deprecation` and a `Breaking`
+  additionally have a Migration section.
+- What a type owes is not what its entries carry. An `Important` owes no Impact
+  section and plenty of them carry one; the Affected installations section is in
+  the `Deprecation` and `Breaking` templates and in a minority of their entries.
+- The `Important` template is the one that disagrees with the tree: it ships
+  Affected installations and Migration, which few `Important` entries carry, and
+  no Impact, which many do. Read a neighbouring entry in the directory the file
+  is going into before copying it.
 - A `Deprecation` or `Breaking` entry also commits the patch to an extension
   scanner matcher, and which matcher file takes which kind of removal is
   `typo3_rule_lookup` with `documentId` `core/contribution/commit-messages`.

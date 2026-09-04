@@ -2610,6 +2610,74 @@ final class ProjectTest extends TestCase
         self::assertStringContainsString('my_sitepackage', $result->text);
     }
 
+    /**
+     * A package that took the rendering frame over renders what it registers
+     * and what it does not.
+     *
+     * The reported session rebuilt `tt_content.shortcut` and a `Generic`
+     * template and neither appeared anywhere in the answer, so a session
+     * inheriting the repository would read it as six elements and delete two
+     * files nothing points at — `D-ANS-149`.
+     */
+    #[Decision('D-ANS-149')]
+    #[Test]
+    public function whatAPackageRendersAndDoesNotRegisterIsItsOwnList(): void
+    {
+        $root = $this->composerProject();
+        $extension = $root . '/packages/my_sitepackage';
+        $this->declare($extension . '/composer.json', (string) json_encode([
+            'name' => 'acme/sitepackage',
+            'type' => 'typo3-cms-extension',
+            'extra' => ['typo3/cms' => ['extension-key' => 'my_sitepackage']],
+        ], JSON_THROW_ON_ERROR));
+        $this->declare(
+            $extension . '/Configuration/TCA/Overrides/tt_content.php',
+            "<?php
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addRecordType(['value' => 'acme_teaser']);
+",
+        );
+        $this->declare(
+            $extension . '/Configuration/Sets/Acme/TypoScript/ContentElement/Teaser.typoscript',
+            'tt_content.acme_teaser =< lib.contentElement
+tt_content.acme_teaser {
+    templateName = Teaser
+}
+',
+        );
+        $this->declare(
+            $extension . '/Configuration/Sets/Acme/TypoScript/ContentElement/Shortcut.typoscript',
+            'tt_content.shortcut =< lib.contentElement
+tt_content.shortcut {
+    templateName = Shortcut
+}
+',
+        );
+        $this->declare($extension . '/Resources/Private/Templates/Content/Generic.fluid.html', '');
+        Instance::discoverFrom($root);
+
+        $result = Registry::call('typo3_extension_describe', ['extension' => 'my_sitepackage']);
+
+        // What it registers stays where it was.
+        self::assertSame(['acme_teaser'], array_column($result->data['contentElements'], 'identifier'));
+
+        // What it renders and does not register is beside it, with the file a
+        // removal would have to keep.
+        self::assertSame(
+            [[
+                'identifier' => 'shortcut',
+                'templateName' => 'Shortcut',
+                'source' => 'Configuration/Sets/Acme/TypoScript/ContentElement/Shortcut.typoscript',
+                'registeredBy' => null,
+            ]],
+            $result->data['renderedContentTypes'],
+        );
+        self::assertStringContainsString('Content types it renders and does not register:', $result->text);
+
+        // And the one file nothing in the package points at.
+        self::assertSame('Resources/Private/Templates/Content/Generic.fluid.html', $result->data['pluginFrame']);
+        self::assertStringContainsString('every Extbase plugin renders through', $result->text);
+    }
+
     private function declare(string $file, string $content): void
     {
         if (!is_dir(dirname($file))) {

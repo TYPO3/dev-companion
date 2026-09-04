@@ -98,6 +98,33 @@ Answers with
         # itself. Null where it binds none, which is a different element to review
         # than one that does.
         flexForm: string or null
+    # Content types this extension renders and does not register, which is what a
+    # package taking the rendering frame over from fluid_styled_content ends up
+    # owning. Deleting one of these definitions leaves an element editors can still
+    # select with nothing to render it, and no other field of this answer names it.
+    # Empty where the extension renders only what it registers.
+    renderedContentTypes:  # optional
+      - # The CType this extension renders, from a tt_content.<identifier>
+        # assignment in its own TypoScript.
+        identifier: string
+        # The Fluid template it renders through, where the same TypoScript sets one.
+        # Null where the definition only copies lib.contentElement and leaves the
+        # name to what it copied.
+        templateName: string or null
+        # The TypoScript file that set it, relative to the extension.
+        source: string
+        # The extension whose TCA registers that CType, read off the EXT: reference
+        # in its label. Null where no installation answered, and on a booted one a
+        # rendering definition for an element nothing registers — an editor cannot
+        # select it and the file is dead.
+        registeredBy: string or null
+    # The Generic template this extension ships, relative to it, or null where it
+    # ships none. ExtensionUtility::configurePlugin() renders every Extbase plugin
+    # registered as a content type through templateName = Generic, so a package
+    # defining lib.contentElement itself owes this file. Nothing in the package
+    # points at it, which makes it the one most likely to be deleted as unused, and
+    # deleting it empties every plugin on the site.
+    pluginFrame: string or null  # optional
     # FlexForm bindings read from the override files whose content type none of the
     # contentElements entries above carries. typo3_flexform_lookup resolves one to
     # its fields. Usually empty. An entry here is a registration this answer read
@@ -285,18 +312,18 @@ Answers with
 
 The answer carries exactly one of these sets of fields: ``key``, ``path``,
 ``origin``, ``tcaTables``, ``tcaOverrides``, ``contentElements``,
-``unlistedFlexForms``, ``backendModules``, ``icons``, ``siteSets``,
-``formConfigurations``, ``serviceTags``, ``files``, ``deprecatedFiles``,
-``notReadStatically``, ``artifacts``, ``answeredBy`` — or ``key``,
-``unsupported``.
+``renderedContentTypes``, ``pluginFrame``, ``unlistedFlexForms``,
+``backendModules``, ``icons``, ``siteSets``, ``formConfigurations``,
+``serviceTags``, ``files``, ``deprecatedFiles``, ``notReadStatically``,
+``artifacts``, ``answeredBy`` — or ``key``, ``unsupported``.
 
 Answered
 --------
 
-Recorded on 2026-08-27 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-04 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
-15.0.0-dev, the main core checkout below .checkouts/, whose console could not
+14.3.7-dev, the 14.3 core checkout below .checkouts/, whose console could not
 be reached: <installation> has no TYPO3 console — none of bin/typo3,
 vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -318,7 +345,7 @@ Called with:
         "extension": "backend"
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
@@ -332,21 +359,22 @@ Text:
 
     Backend modules: web_layout, records, content_status, site_configuration, link_management, about, pagetsconfig, pagetsconfig_pages, pagetsconfig_active, pagetsconfig_includes, content_security_policy, user_setup
 
-    Backend routes: login, main, state-tracker, logout, password_forget, password_forget_initiate_reset, password_reset_validate, password_reset_finish, sudo_mode_module, sudo_mode_apply, sudo_mode_error, login_frameset, login_request_token, auth_mfa, setup_mfa, mfa, wizard_add, wizard_list, wizard_edit, wizard_element_browser, wizard_link, online_media, record_download, record_history, db_new, pages_sort, pages_new, new_content_element_wizard, move_page, move_element, show_item, dummy, tce_db, tce_file, record_edit, record_edit_contextual, image_processing, clipboard_process, resource_request_thumbnail, language_domain, resource_rename, resource_gather, resource_replace, link_resource, file_process, file_exists, file_reference_details, file_reference_create, file_reference_synchronizelocalize, file_reference_expandcollapse, record_inline_details, record_inline_create, record_inline_synchronizelocalize, record_inline_expandcollapse, site_configuration_inline_create, record_slug_suggest, site_configuration_inline_details, record_flex_container_add, record_suggest, record_tree_data, page_tree_data, page_tree_rootline, page_tree_filter, page_tree_configuration, page_tree_browser_configuration, page_tree_set_temporary_mount_point, filestorage_tree_data, filestorage_tree_rootline, filestorage_tree_filter, bookmark_list, bookmark_create, bookmark_update, bookmark_delete, bookmark_reorder, bookmark_delete_multiple, bookmark_move, bookmark_group_create, bookmark_group_update, bookmark_group_delete, bookmark_group_reorder, clearcache_group_pages, clearcache_group_all, clearcache_page, systeminformation_render, modulemenu, topbar, login, logout, login_preflight, login_refresh, login_timedout, switch_user, switch_user_exit, mfa, contextmenu, contextmenu_clipboard, record_process, usersettings_process, wizard_image_manipulation, livesearch, livesearch_form, online_media_create, icons, link_browser_encodetypolink, wizard_localization_get_record, wizard_localization_get_targets, wizard_localization_get_sources, wizard_localization_get_modes, wizard_localization_get_handlers, wizard_localization_get_content, wizard_localization_localize, show_columns, show_columns_selector, record_download_settings, record_toggle_visibility, password_generate, security_csp_control, sudo_mode_control, codeeditor_tsref, codeeditor_codecompletion_loadtemplates, color_scheme_update, qrcode_generator, qrcode_download, wizard_page_get_doktypes, wizard_page_get_page_detail, wizard_page_get_processed_value, wizard_config, wizard_submit
+    Backend routes: login, main, state-tracker, logout, password_forget, password_forget_initiate_reset, password_reset_validate, password_reset_finish, sudo_mode_module, sudo_mode_apply, sudo_mode_error, login_frameset, login_request_token, auth_mfa, setup_mfa, mfa, wizard_add, wizard_list, wizard_edit, wizard_element_browser, wizard_link, online_media, record_download, record_history, db_new, db_new_pages, pages_sort, pages_new, new_content_element_wizard, move_page, move_element, show_item, dummy, tce_db, tce_file, record_edit, record_edit_contextual, image_processing, clipboard_process, resource_request_thumbnail, language_domain, resource_rename, resource_gather, resource_replace, link_resource, file_process, file_exists, file_reference_details, file_reference_create, file_reference_synchronizelocalize, file_reference_expandcollapse, record_inline_details, record_inline_create, record_inline_synchronizelocalize, record_inline_expandcollapse, site_configuration_inline_create, record_slug_suggest, site_configuration_inline_details, record_flex_container_add, record_suggest, record_tree_data, page_tree_data, page_tree_rootline, page_tree_filter, page_tree_configuration, page_tree_browser_configuration, page_tree_set_temporary_mount_point, filestorage_tree_data, filestorage_tree_rootline, filestorage_tree_filter, bookmark_list, bookmark_create, bookmark_update, bookmark_delete, bookmark_reorder, bookmark_delete_multiple, bookmark_move, bookmark_group_create, bookmark_group_update, bookmark_group_delete, bookmark_group_reorder, clearcache_group_pages, clearcache_group_all, clearcache_page, systeminformation_render, modulemenu, topbar, login, logout, login_preflight, login_refresh, login_timedout, switch_user, switch_user_exit, mfa, contextmenu, contextmenu_clipboard, record_process, usersettings_process, wizard_image_manipulation, livesearch, livesearch_form, online_media_create, icons, link_browser_encodetypolink, wizard_localization_get_record, wizard_localization_get_targets, wizard_localization_get_sources, wizard_localization_get_modes, wizard_localization_get_handlers, wizard_localization_get_content, wizard_localization_localize, show_columns, show_columns_selector, record_download_settings, record_toggle_visibility, password_generate, security_csp_control, sudo_mode_control, codeeditor_tsref, codeeditor_codecompletion_loadtemplates, color_scheme_update, qrcode_generator, qrcode_download, wizard_page_get_doktypes, wizard_page_get_page_detail, wizard_page_get_processed_value, wizard_config, wizard_submit
 
     Middlewares: typo3/cms-core/normalized-params-attribute, typo3/cms-backend/locked-backend, typo3/cms-backend/https-redirector, typo3/cms-backend/csp-report, typo3/cms-backend/backend-routing, typo3/cms-core/request-token-middleware, typo3/cms-backend/authentication, typo3/cms-backend/backend-module-validator, typo3/cms-backend/sudo-mode-interceptor, typo3/cms-backend/site-resolver, typo3/cms-backend/page-context, typo3/cms-backend/csp-headers, typo3/cms-backend/js-label-importmap-resolver, typo3/cms-backend/response-headers, typo3/cms-core/response-propagation
 
     Registration files: ext_localconf.php, ext_tables.sql, Configuration/page.tsconfig, Configuration/user.tsconfig, Configuration/RequestMiddlewares.php, Configuration/Services.yaml, Configuration/JavaScriptModules.php
+    typo3_schema_lookup with one of those table names answers what columns the core derives for it, with the type, the default and the length of each. That is the resolved schema rather than what the TCA file declares, and two tables generated from one TCA do not have to agree on the order they come back in.
 
     Fluid root directories it ships: Resources/Private/Templates/, Resources/Private/Partials/, Resources/Private/Layouts/
     Each is a directory that is there rather than a root something declared. An Extbase controller of this extension falls back to these three; every other view is pointed at a root by TypoScript or by a call while the request runs, and neither of those is in this list.
 
-    Classes: Attribute (3), Authentication (4), Backend (22), Breadcrumb (6), Clipboard (2), CodeEditor (4), Command (8), Configuration (5), Context (2), ContextMenu (7), Controller (90), Date (3), DependencyInjection (3), Domain (5), Dto (9), ElementBrowser (6), Event (1), EventListener (4), Exception (8), Form (200), History (4), Hooks (2), Http (4), LinkHandler (9), Localization (11), LoginProvider (4), Middleware (12), Module (17), Preview (5), RecordList (10), Resource (2), Routing (15), Search (22), Security (18), Service (2), Sidebar (7), Template (40), Toolbar (4), Tree (20), Upgrades (3), User (1), UserFunctions (1), Utility (1), View (32), ViewHelpers (15), Wizard (8), 2 directly in Classes/ — 663 PHP files in total.
+    Classes: Attribute (3), Authentication (4), Backend (22), Breadcrumb (6), Clipboard (2), CodeEditor (6), Command (8), Configuration (5), Context (2), ContextMenu (7), Controller (90), Date (3), DependencyInjection (3), Domain (5), Dto (9), ElementBrowser (6), Event (1), EventListener (4), Exception (8), Form (203), History (4), Hooks (2), Http (4), LinkHandler (9), Localization (11), LoginProvider (4), Middleware (12), Module (17), Preview (5), RecordList (10), Resource (2), Routing (15), Search (22), Security (18), Service (2), Sidebar (7), Template (41), Toolbar (4), Tree (21), Upgrades (3), User (1), UserFunctions (1), Utility (1), View (36), ViewHelpers (15), Wizard (8), 2 directly in Classes/ — 674 PHP files in total.
     Every directory below Classes/ is named here, and each count is every PHP file below that directory, its own subdirectories included. The total is what `find Classes -name '*.php' | wc -l` gives.
 
-    Requires: ext-intl *, ext-libxml *, psr/event-dispatcher ^1.0, typo3/cms-core 15.0.*@dev
+    Requires: ext-intl *, ext-libxml *, psr/event-dispatcher ^1.0, typo3/cms-core 14.3.*@dev
 
-    Ships: manual none, readme README.rst, tests Functional+Unit, language files 45
+    Ships: manual none, readme README.rst, tests Functional+Unit, language files 49
     - Resources/Private/Language/Modules/about.xlf — source-language en, no translations beside it
     - Resources/Private/Language/Modules/content-security-policy.xlf — source-language en, no translations beside it
     - Resources/Private/Language/Modules/layout.xlf — source-language en, no translations beside it
@@ -377,6 +405,7 @@ Text:
     - Resources/Private/Language/locallang_layout.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_login.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_mfa.xlf — source-language en, no translations beside it
+    - Resources/Private/Language/locallang_mod.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_pages_new.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_pages_sort.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_pagetsconfig.xlf — source-language en, no translations beside it
@@ -385,9 +414,12 @@ Text:
     - Resources/Private/Language/locallang_settingseditor.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_show_rechis.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_siteconfiguration.xlf — source-language en, no translations beside it
+    - Resources/Private/Language/locallang_siteconfiguration_module.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_siteconfiguration_tca.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_sitesettings.xlf — source-language en, no translations beside it
+    - Resources/Private/Language/locallang_sitesettings_module.xlf — source-language en, no translations beside it
     - Resources/Private/Language/locallang_toolbar.xlf — source-language en, no translations beside it
+    - Resources/Private/Language/locallang_view_help.xlf — source-language en, no translations beside it
     - Resources/Private/Language/pages/messages.xlf — source-language not declared, no translations beside it
     - Resources/Private/Language/qrcode.xlf — source-language en, no translations beside it
     - Resources/Private/Language/siteconfiguration_fieldinformation.xlf — source-language en, no translations beside it
@@ -423,7 +455,7 @@ Data:
             },
             {
                 "package": "typo3/cms-core",
-                "constraint": "15.0.*@dev"
+                "constraint": "14.3.*@dev"
             }
         ],
         "tcaTables": [],
@@ -431,6 +463,8 @@ Data:
             "be_users"
         ],
         "contentElements": [],
+        "renderedContentTypes": [],
+        "pluginFrame": null,
         "unlistedFlexForms": [],
         "backendModules": [
             "web_layout",
@@ -472,6 +506,7 @@ Data:
             "record_download",
             "record_history",
             "db_new",
+            "db_new_pages",
             "pages_sort",
             "pages_new",
             "new_content_element_wizard",
@@ -628,7 +663,7 @@ Data:
                 },
                 {
                     "name": "CodeEditor",
-                    "files": 4
+                    "files": 6
                 },
                 {
                     "name": "Command",
@@ -684,7 +719,7 @@ Data:
                 },
                 {
                     "name": "Form",
-                    "files": 200
+                    "files": 203
                 },
                 {
                     "name": "History",
@@ -752,7 +787,7 @@ Data:
                 },
                 {
                     "name": "Template",
-                    "files": 40
+                    "files": 41
                 },
                 {
                     "name": "Toolbar",
@@ -760,7 +795,7 @@ Data:
                 },
                 {
                     "name": "Tree",
-                    "files": 20
+                    "files": 21
                 },
                 {
                     "name": "Upgrades",
@@ -780,7 +815,7 @@ Data:
                 },
                 {
                     "name": "View",
-                    "files": 32
+                    "files": 36
                 },
                 {
                     "name": "ViewHelpers",
@@ -792,7 +827,7 @@ Data:
                 }
             ],
             "looseFiles": 2,
-            "total": 663
+            "total": 674
         },
         "files": [
             "ext_localconf.php",
@@ -964,6 +999,11 @@ Data:
                     "translations": []
                 },
                 {
+                    "path": "Resources/Private/Language/locallang_mod.xlf",
+                    "sourceLanguage": "en",
+                    "translations": []
+                },
+                {
                     "path": "Resources/Private/Language/locallang_pages_new.xlf",
                     "sourceLanguage": "en",
                     "translations": []
@@ -1004,6 +1044,11 @@ Data:
                     "translations": []
                 },
                 {
+                    "path": "Resources/Private/Language/locallang_siteconfiguration_module.xlf",
+                    "sourceLanguage": "en",
+                    "translations": []
+                },
+                {
                     "path": "Resources/Private/Language/locallang_siteconfiguration_tca.xlf",
                     "sourceLanguage": "en",
                     "translations": []
@@ -1014,7 +1059,17 @@ Data:
                     "translations": []
                 },
                 {
+                    "path": "Resources/Private/Language/locallang_sitesettings_module.xlf",
+                    "sourceLanguage": "en",
+                    "translations": []
+                },
+                {
                     "path": "Resources/Private/Language/locallang_toolbar.xlf",
+                    "sourceLanguage": "en",
+                    "translations": []
+                },
+                {
+                    "path": "Resources/Private/Language/locallang_view_help.xlf",
                     "sourceLanguage": "en",
                     "translations": []
                 },
@@ -1088,6 +1143,8 @@ Data:
         "tcaTables": [],
         "tcaOverrides": [],
         "contentElements": [],
+        "renderedContentTypes": [],
+        "pluginFrame": null,
         "unlistedFlexForms": [],
         "backendModules": [
             "web_list",

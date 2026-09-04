@@ -64,6 +64,8 @@ final class Extension
      *     tcaTables: array<int, string>,
      *     tcaOverrides: array<int, string>,
      *     contentElements: array<int, array{identifier: string, kind: string, templateName: ?string, source: ?string, pluginSettings: ?string, flexForm: ?string}>,
+     *     renderedContentTypes: array<int, array{identifier: string, templateName: ?string, source: string, registeredBy: ?string}>,
+     *     pluginFrame: ?string,
      *     unlistedFlexForms: array<int, array{identifier: string, flexForm: string}>,
      *     backendModules: array<int, string>,
      *     backendRoutes: array<int, string>,
@@ -125,6 +127,11 @@ final class Extension
             'tcaTables' => self::tcaTables($key, $path),
             'tcaOverrides' => $overrides['tables'],
             'contentElements' => $elements,
+            'renderedContentTypes' => self::renderedContentTypes(
+                $typoScript,
+                array_column($elements, 'identifier'),
+            ),
+            'pluginFrame' => self::pluginFrame($path),
             'unlistedFlexForms' => self::unlistedFlexForms($overrides['flexForms'], $elements),
             'backendModules' => PhpArray::keys($path . '/Configuration/Backend/Modules.php'),
             'backendRoutes' => array_merge(
@@ -777,6 +784,83 @@ final class Extension
         }
 
         return $found;
+    }
+
+    /**
+     * The content types this extension renders and does not register.
+     *
+     * A sitepackage that takes the rendering frame over from
+     * `fluid_styled_content` ends up owning `tt_content.shortcut` while
+     * `EXT:frontend` still registers it, and the two questions — what does this
+     * package render, what does it register — stop having one answer. Deleting
+     * such a definition kills an element editors can still select, and nothing
+     * else in the package points at it (`D-ANS-149`).
+     *
+     * The evidence is the assignment itself: a `tt_content.<identifier>` line
+     * in this extension's own TypoScript whose identifier is none of the
+     * elements it registers. Who does register it is the installation's to say,
+     * read off the `EXT:` reference in the CType's label the way every other
+     * attribution here is; null is a foreign identifier nothing could be asked
+     * about, and on a booted installation it is a definition for an element
+     * nothing registers at all.
+     *
+     * @param array<string, array{value: string, file: string}> $typoScript
+     * @param array<int, string> $registered the identifiers this extension registers
+     * @return array<int, array{identifier: string, templateName: ?string, source: string, registeredBy: ?string}>
+     */
+    private static function renderedContentTypes(array $typoScript, array $registered): array
+    {
+        $registry = Typo3Runtime::topic('contentElements');
+        $found = [];
+        foreach ($typoScript as $key => $set) {
+            if (preg_match('/^tt_content\.([\w\-]+)(?:\.templateName)?$/', $key, $matches) !== 1) {
+                continue;
+            }
+            $identifier = $matches[1];
+            if (in_array($identifier, $registered, true) || isset($found[$identifier]['templateName'])) {
+                continue;
+            }
+            $label = is_array($registry) && is_string($registry[$identifier]['label'] ?? null)
+                ? $registry[$identifier]['label']
+                : '';
+            $found[$identifier] = [
+                'identifier' => $identifier,
+                'templateName' => str_ends_with($key, '.templateName') ? $set['value'] : null,
+                'source' => $set['file'],
+                'registeredBy' => $label === '' ? null : Typo3Runtime::extensionIn($label),
+            ];
+        }
+        ksort($found);
+
+        return array_values($found);
+    }
+
+    /**
+     * The template every Extbase plugin on the site renders through, where this
+     * extension ships one.
+     *
+     * `ExtensionUtility::configurePlugin()` writes
+     * `tt_content.<signature> =< lib.contentElement` with
+     * `templateName = Generic` for every plugin registered as a content type,
+     * so a package that defines `lib.contentElement` itself owes a `Generic`
+     * template beside it. Nothing in the package points at that file, which
+     * makes it the one most likely to be deleted as unused, and deleting it
+     * empties every plugin on the site — `EXT:form`'s content element included.
+     *
+     * Its own list rather than a row of the one above, because it is not a
+     * content type: it is the frame all of them share.
+     */
+    private static function pluginFrame(string $path): ?string
+    {
+        $directory = $path . '/Resources/Private/Templates';
+        if (!is_dir($directory)) {
+            return null;
+        }
+        foreach (Finder::create()->files()->in($directory)->name('Generic.*html')->sortByName() as $file) {
+            return substr($file->getPathname(), strlen($path) + 1);
+        }
+
+        return null;
     }
 
     /**

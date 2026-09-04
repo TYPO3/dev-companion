@@ -37,6 +37,8 @@ final class ExtensionDescribe extends ReadOnlyTool
         'tcaTables' => [],
         'tcaOverrides' => [],
         'contentElements' => [],
+        'renderedContentTypes' => [],
+        'pluginFrame' => null,
         'unlistedFlexForms' => [],
         'backendModules' => [],
         'backendRoutes' => [],
@@ -112,6 +114,13 @@ final class ExtensionDescribe extends ReadOnlyTool
                 'pluginSettings' => Schema::nullableString('On a plugin: the TypoScript file of this extension that configures plugin.tx_<identifier>, which is where its templateRootPaths and settings are. Null where its TypoScript configures nothing there, and on anything that is not a plugin.'),
                 'flexForm' => Schema::nullableString('The FlexForm data structure it binds, as the call declares it — a FILE:EXT: reference, or "inline" where the XML stands in the override file itself. Null where it binds none, which is a different element to review than one that does.'),
             ], ['identifier', 'kind', 'templateName', 'source', 'pluginSettings', 'flexForm']), 'The content elements it adds to tt_content, where each renders, and what it configures through. Where the booted installation answered, the identifiers are what it registered, attributed to this extension by the EXT: reference each carries. So an element whose identifier came out of a variable is among them. Otherwise they are read from the override files, as identifier says.'),
+            'renderedContentTypes' => Schema::listOf(Schema::object([
+                'identifier' => Schema::string('The CType this extension renders, from a tt_content.<identifier> assignment in its own TypoScript.'),
+                'templateName' => Schema::nullableString('The Fluid template it renders through, where the same TypoScript sets one. Null where the definition only copies lib.contentElement and leaves the name to what it copied.'),
+                'source' => Schema::string('The TypoScript file that set it, relative to the extension.'),
+                'registeredBy' => Schema::nullableString('The extension whose TCA registers that CType, read off the EXT: reference in its label. Null where no installation answered, and on a booted one a rendering definition for an element nothing registers — an editor cannot select it and the file is dead.'),
+            ], ['identifier', 'templateName', 'source', 'registeredBy']), 'Content types this extension renders and does not register, which is what a package taking the rendering frame over from fluid_styled_content ends up owning. Deleting one of these definitions leaves an element editors can still select with nothing to render it, and no other field of this answer names it. Empty where the extension renders only what it registers.'),
+            'pluginFrame' => Schema::nullableString('The Generic template this extension ships, relative to it, or null where it ships none. ExtensionUtility::configurePlugin() renders every Extbase plugin registered as a content type through templateName = Generic, so a package defining lib.contentElement itself owes this file. Nothing in the package points at it, which makes it the one most likely to be deleted as unused, and deleting it empties every plugin on the site.'),
             'unlistedFlexForms' => Schema::listOf(Schema::object([
                 'identifier' => Schema::string('The content type the binding names.'),
                 'flexForm' => Schema::string('The data structure, as above.'),
@@ -159,7 +168,7 @@ final class ExtensionDescribe extends ReadOnlyTool
             ], ['manual', 'readme', 'tests', 'languageFiles'], 'What it ships beside its registrations. Every key is present even when the artifact is not, because the absence of a manual, a test or a translation is the answer a file listing cannot give.'),
             'installed' => Schema::listOf(Schema::string(), 'On a miss: the extension keys this installation does have.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
-        ], ['key', 'path', 'origin', 'tcaTables', 'tcaOverrides', 'contentElements', 'unlistedFlexForms', 'backendModules', 'icons', 'siteSets', 'formConfigurations', 'serviceTags', 'files', 'deprecatedFiles', 'notReadStatically', 'artifacts', 'answeredBy'], ['key']);
+        ], ['key', 'path', 'origin', 'tcaTables', 'tcaOverrides', 'contentElements', 'renderedContentTypes', 'pluginFrame', 'unlistedFlexForms', 'backendModules', 'icons', 'siteSets', 'formConfigurations', 'serviceTags', 'files', 'deprecatedFiles', 'notReadStatically', 'artifacts', 'answeredBy'], ['key']);
     }
 
     public static function answer(array $args): ToolResult
@@ -278,6 +287,29 @@ final class ExtensionDescribe extends ReadOnlyTool
                     . 'instead. Before 14.0 configurePlugin() could register a plugin under list_type rather than as '
                     . 'its own CType, and that call is in ext_localconf.php, which nothing here reads.';
             }
+        }
+
+        if ($extension['renderedContentTypes'] !== []) {
+            $lines[] = '';
+            $lines[] = 'Content types it renders and does not register:';
+            foreach ($extension['renderedContentTypes'] as $rendered) {
+                $lines[] = '- ' . $rendered['identifier']
+                    . ($rendered['templateName'] === null ? '' : ' — templateName ' . $rendered['templateName'])
+                    . ' — ' . $rendered['source']
+                    . ($rendered['registeredBy'] === null ? '' : ', registered by ' . $rendered['registeredBy']);
+            }
+            $lines[] = 'Each is a tt_content.<identifier> assignment in this extension\'s own TypoScript for an '
+                . 'element it does not register. Deleting one leaves an element editors can still select with '
+                . 'nothing to render it, and nothing else in this package points at the file.';
+        }
+
+        if ($extension['pluginFrame'] !== null) {
+            $lines[] = '';
+            $lines[] = 'It ships the Generic template every Extbase plugin renders through: '
+                . $extension['pluginFrame'] . '. configurePlugin() writes templateName = Generic for every plugin '
+                . 'registered as a content type, so this one file carries every plugin on the site that resolves '
+                . 'through this extension\'s template root — EXT:form\'s content element included. Nothing points '
+                . 'at it, so it reads as unused.';
         }
 
         if ($extension['unlistedFlexForms'] !== []) {

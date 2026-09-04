@@ -7433,6 +7433,46 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * A task that includes a site set, which is not a task that defines one of
+     * its settings.
+     *
+     * "site set" was a needle that confirms the intent, so a sitemap task
+     * naming a set it wanted included spent four checklist items on defining a
+     * setting it never touched — over the condition that intent states for
+     * itself (`D-GUI-027`).
+     */
+    #[Decision('D-GUI-027')]
+    #[Test]
+    public function namingASiteSetIsNotNamingASettingItDefines(): void
+    {
+        $including = Registry::call('typo3_task_guide', [
+            'task' => 'Add an XML sitemap to a TYPO3 site: include the typo3/seo-sitemap site set and add a '
+                . 'robots.txt route to the site configuration',
+            'changeType' => 'feature',
+            'targetVersion' => '14',
+            'paths' => ['config/sites/main/config.yaml'],
+        ]);
+
+        $intents = array_column($including->data['intents'], 'confidence', 'id');
+        self::assertSame('weak', $intents['site-setting'] ?? null);
+        foreach ($including->data['checklist'] as $item) {
+            if (str_contains($item, 'Decide who the value is for')) {
+                self::assertStringStartsWith('Only if the task adds or changes a setting', $item);
+            }
+        }
+
+        // The words that do name the work still confirm it.
+        $defining = Registry::call('typo3_task_guide', [
+            'task' => 'Add a setting to the site set a sitepackage ships',
+            'changeType' => 'feature',
+        ]);
+        self::assertSame(
+            'strong',
+            array_column($defining->data['intents'], 'confidence', 'id')['site-setting'] ?? null,
+        );
+    }
+
+    /**
      * The call the feedback reported: one named file and a concrete edit,
      * classified as a cleanup.
      *

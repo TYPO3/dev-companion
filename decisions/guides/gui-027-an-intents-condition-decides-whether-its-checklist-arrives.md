@@ -6,6 +6,7 @@ status: open
 coveredBy:
   - HintsTest::aCleanupOfOneNamedFileLeavesTheRepositoryItemsConditional
   - HintsTest::aStatedChangeTypeNamesTheIntentThatOwnsIt
+  - HintsTest::namingASiteSetIsNotNamingASettingItDefines
 ---
 
 # D-GUI-027 — An intent's condition decides whether its checklist arrives
@@ -48,6 +49,10 @@ prose beside a weak match and decides nothing.
 - What the fix may not do is drop the change type out of detection and leave it
   there. `audit`, `triage`, `operations` and `diagnosis` reach their intents by
   the same appended word, and that route is deliberate.
+- No check reads a condition, and none is written. Both reports turned out to be
+  one needle in the wrong list — a change type appended to the text, and a word
+  naming the subject rather than the work — which is what `matchWeak` and the
+  explicit route already answer.
 
 ## Assumed
 
@@ -66,15 +71,13 @@ prose beside a weak match and decides nothing.
 
 ## Since then
 
-The change-type half landed the same day. `TaskGuide::CHANGE_TYPE_INTENT` names
-the intent each stated type routes to — the four that write no file, plus
-`deprecation`, `documentation` and `test` — and `bugfix`, `feature` and
-`cleanup` name none. `TaskIntents::detect()` takes those ids as a parameter
-instead of reading them out of the task text, so a type is no longer a needle
-for every intent that carries the word.
+Both halves landed the same day. `TaskGuide::CHANGE_TYPE_INTENT` names the
+intent each stated type routes to, and `TaskIntents::detect()` takes those ids
+as a parameter instead of reading them out of the task text — so a type is no
+longer a needle for every intent carrying the word. The word half is
+`feedback/2026-09-03-235330`'s: "site set" moved from the `site-setting`
+intent's `match` to its `matchWeak`, because a task that includes a set is not
+one that defines a setting.
 
-What the reported call gets now is the `tca-field` items as recognized work and
-the six audit ones as conditional, each prefixed with the condition, because
-"better" is one of the cleanup intent's weak needles. The bulk is the ordinary
-rendering of a weak match rather than this gap. The word half is still open, and
-it is `feedback/2026-09-03-235330` that carries it.
+What the reported calls get now is the four items under the condition the entry
+states, beside the work each task actually named.

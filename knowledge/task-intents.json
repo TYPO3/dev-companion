@@ -962,7 +962,6 @@
     "id": "site-setting",
     "title": "Adding a setting to a site set",
     "match": [
-      "site set",
       "settings.definitions.yaml",
       "site setting",
       "settings.yaml",
@@ -971,6 +970,7 @@
       "per site"
     ],
     "matchWeak": [
+      "site set",
       "setting",
       "typoscript constant",
       "constants"

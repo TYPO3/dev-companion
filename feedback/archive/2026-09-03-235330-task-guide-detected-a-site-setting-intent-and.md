@@ -1,7 +1,8 @@
 ---
 date: 2026-09-03T23:53:30+00:00
 category: wrong-answer
-status: open
+status: closed
+closed: 2026-09-04
 model: claude-opus-5[1m]
 tool: typo3_task_guide
 directory: /home/benji/projects/site-tierheim

@@ -1880,10 +1880,12 @@ final class KnowledgeTest extends TestCase
      * sections it was asking for — and the unrelated page is still a cut, which
      * is the floor doing its work rather than the corpus doing it.
      *
-     * Two of the three cuts are one page since `D-KNW-125` split the hook's own
-     * mechanics off the rule, and the page is still not handed over: the third
-     * match is another document, and a concentrated answer is every match
-     * coming from one.
+     * Two of the five cuts are one page since `D-KNW-125` split the hook's own
+     * mechanics off the rule, and the page is still not handed over: the other
+     * three are two more documents, and a concentrated answer is every match
+     * coming from one. Those three match on "signed" out of "signed-in", in a
+     * clause about requesting without a backend session — a thin match in three
+     * places rather than one, which is the floor doing exactly its work.
      *
      * `xdebug` is the thin match that stands for the second instance
      * `D-ANS-101` names in its evidence: one section, and a whole page handed
@@ -1907,7 +1909,13 @@ final class KnowledgeTest extends TestCase
 
         self::assertSame([], $reported->data['matchedHeadings'], 'a page is handed over on the reported query');
         self::assertSame(
-            ['The Trailers A Core Commit Carries', 'What The Commit Hook Writes', 'Which URL Is Requested'],
+            [
+                'The Trailers A Core Commit Carries',
+                'What It Does Not Prove',
+                'What The Commit Hook Writes',
+                'What to Capture, and Why Not the Templates',
+                'Which URL Is Requested',
+            ],
             array_column($reported->data['matches'], 'heading'),
         );
         self::assertStringNotContainsString(

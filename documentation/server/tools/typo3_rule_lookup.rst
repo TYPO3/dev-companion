@@ -309,7 +309,7 @@ Data:
                 "body": "- Deprecations must not use `[!!!]`.\n- Deprecations may only use `[TASK]` or `[FEATURE]`.\n- Deprecations must be documented with a changelog RST file.\n- Deprecations need migration guidance and may need extension scanner\n  considerations.\n- All of the above is the authoring side. Reading it — what a given version\n  deprecated, and what that means for code that uses it — works the other way\n  round: the changelog files below `Documentation/Changelog/` of the core\n  package and the matchers below the install package's\n  `Configuration/ExtensionScanner/Php/` are what an installation is checked\n  against, by the Extension Scanner in the Install Tool. Both directories ship\n  with a Composer installation.",
                 "versions": "",
                 "coverage": 1,
-                "score": 111,
+                "score": 112,
                 "truncated": false
             },
             {
@@ -407,6 +407,7 @@ Text:
     - Reporting a TYPO3 Vulnerability: Who Receives a Report, What the Report Carries, What Is Not Done With It, A Finding That Is Already Public
     - Looking at a Change in a Real Browser: Which Installation Shows It, Reaching a DDEV Site From a Container, Where the Harness and Its Output Go
     - Proving a TypoScript Condition Verdict: What Does Not Answer It, The Marker Only the Branch Produces, A Marker Put There on Purpose, Which URL Is Requested, The Negative Control, What Stands Between Two Runs
+    - Proving a Rendering Held Across a Change: What to Capture, and Why Not the Templates, Capture Twice Before Anything Is Edited, What Has to Run Between the Two Captures, Reading the Diff, What It Does Not Prove
     - The Changelog Entry a Core Patch Owes: Which Change Owes a Changelog File, Where a Changelog File Goes, What a Changelog File Is Called, What a Changelog File Carries, What Checks a Changelog File, Reading Changelog Entries Instead of Writing One
     - TYPO3 Core Commit Message Rules: Who Reads It, Summary Line, Work in Progress, Body, The Longest Line The Hook Accepts, Relationships, Release Targets, The Trailers A Core Commit Carries, What The Commit Hook Writes, Breaking Changes, Changed Signatures, Deprecations, The Changelog Entry a Message Announces
     - The Build Output the Core Commits: Where the Committed Build Output Comes From, Reading a Minified Diff Without Building, Rebuilding It Where Nothing of Yours Is at Risk, Output No Source Produces Any More, A Backport That Conflicts in a Generated File, The Same Module Built on Two Branches
@@ -504,6 +505,17 @@ Data:
                     "Which URL Is Requested",
                     "The Negative Control",
                     "What Stands Between Two Runs"
+                ]
+            },
+            {
+                "id": "any/testing/proving-a-rendering-held",
+                "title": "Proving a Rendering Held Across a Change",
+                "topics": [
+                    "What to Capture, and Why Not the Templates",
+                    "Capture Twice Before Anything Is Edited",
+                    "What Has to Run Between the Two Captures",
+                    "Reading the Diff",
+                    "What It Does Not Prove"
                 ]
             },
             {

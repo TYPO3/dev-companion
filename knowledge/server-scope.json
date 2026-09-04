@@ -249,6 +249,16 @@
       "scope": "any"
     },
     {
+      "topic": "Proving that a change to how a site renders changed only what it meant to",
+      "depth": "How the pages to capture are chosen from the content that exists rather than from what the templates allow, why the baseline is captured twice before anything is edited, which cache group leaves the compiled Fluid behind so the second capture is the old template, and how the union of the diffs is read for the line nothing explains. It requests nothing and flushes nothing.",
+      "tools": [
+        "typo3_rule_lookup",
+        "typo3_record_lookup"
+      ],
+      "source": "typo3://guides/any/testing/proving-a-rendering-held",
+      "scope": "any"
+    },
+    {
       "topic": "Reporting a security defect in TYPO3: who receives it, what the report carries, and what is not done with it in the meantime",
       "depth": "TYPO3's own published policy, as the core repository's SECURITY.md and the security team's pages state it. It holds for a defect in the core and for one in an extension alike. It carries no judgement of how bad a finding is: rating one is the team's work, and this says where it goes.",
       "tools": [

@@ -3155,6 +3155,37 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * `D-KNW-147`. The list of what a set directory may hold read as if a key
+     * outside it were ignored, and a session that tried one took every page of
+     * every site depending on that set down with an HTTP 500.
+     * `YamlSetDefinitionProvider::createDefinition()` spreads the parsed file
+     * into a readonly constructor, so the message names the properties rather
+     * than the mistake.
+     */
+    #[Decision('D-KNW-147')]
+    #[Test]
+    public function aKeyTheSetDefinitionHasNoParameterForIsSaidToBeFatal(): void
+    {
+        $texts = static fn(int $major): string => implode("\n", array_column(
+            Hints::byId('site-sets', $major)['hints'],
+            'text',
+        ));
+
+        foreach ([13, 14, 15] as $major) {
+            self::assertStringContainsString('Invalid properties', $texts($major));
+            self::assertStringContainsString('answers HTTP 500', $texts($major));
+            // The site keeps its own routing entry, which is the question the
+            // same session was asking when it tried the key.
+            self::assertStringContainsString('StaticRouteResolver', $texts($major));
+        }
+
+        // The file a set may hold arrived with the routing keys it declares, so
+        // the list is bound where it changed rather than stated for all three.
+        self::assertStringNotContainsString('route-enhancers.yaml', $texts(13));
+        self::assertStringContainsString('route-enhancers.yaml', $texts(14));
+    }
+
+    /**
      * `D-KNW-087`. The hint said an area the layout never declared "renders
      * empty with no error", and a session that skipped it got HTTP 500 on every
      * page instead. `ContentAreaViewHelper::render()` throws for anything that

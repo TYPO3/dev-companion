@@ -21,7 +21,14 @@
       "config/sites/",
       "site configuration",
       "typoscript root",
-      "getSets"
+      "getSets",
+      "routes",
+      "static route",
+      "robots.txt",
+      "unknown key in a set",
+      "Invalid properties",
+      "InvalidSetException",
+      "route-enhancers.yaml"
     ],
     "hints": [
       {
@@ -29,7 +36,19 @@
         "since": 13
       },
       {
-        "text": "Next to config.yaml the set may hold setup.typoscript, settings.definitions.yaml, settings.yaml, labels.xlf, page.tsconfig and route-enhancers.yaml. Only config.yaml is required.",
+        "text": "Next to config.yaml the set may hold setup.typoscript, settings.definitions.yaml, settings.yaml, labels.xlf and page.tsconfig. Only config.yaml is required.",
+        "since": 13
+      },
+      {
+        "text": "A route-enhancers.yaml beside them is read as well, and what it declares is merged into the routing of every site that depends on the set.",
+        "since": 14
+      },
+      {
+        "text": "A key config.yaml carries that SetDefinition has no parameter for is fatal rather than ignored. YamlSetDefinitionProvider::createDefinition() spreads the parsed file into that readonly constructor, so PHP's \\Error comes back as InvalidSetException whose message ends in \"Invalid properties: <key>\". The set is then dropped and every site depending on it answers HTTP 500, so one stray key in one set is a whole frontend down rather than one feature missing. SetDefinition's constructor is the list of what may be written, and the files above are how the longer values arrive.",
+        "since": 13
+      },
+      {
+        "text": "The routes key stays with the site and no set can carry one. A static route — robots.txt, a text file, an asset, a page rendered to a fixed path — is an entry under routes in config/sites/<identifier>/config.yaml, which the StaticRouteResolver middleware answers from before the page is resolved.",
         "since": 13
       },
       {

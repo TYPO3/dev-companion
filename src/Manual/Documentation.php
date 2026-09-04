@@ -37,6 +37,30 @@ final class Documentation
     private const PAGE = 'std:doc';
 
     /**
+     * The other role this searches: a configuration value the manual declares,
+     * with the anchor of the section documenting it.
+     *
+     * The TCA reference is a handful of large pages carrying hundreds of
+     * properties as sections, so nothing in its table of contents is called
+     * `columnsOverrides` and a query naming that property reached six pages
+     * that never mention it — `D-ANS-144`. `Manual\Permalink` reads the same
+     * objects for the other question asked of them.
+     */
+    private const PROPERTY = 'std:confval';
+
+    /**
+     * What a declared property has to look like before a query word may reach
+     * it: an inner capital, an underscore, or a dot.
+     *
+     * A property named like an English word is one every prose question carries
+     * by accident — `template`, `title`, `default` — and admitting those put
+     * three of the seven ranked questions of `D-ANS-032` behind sections nobody
+     * asked for. Written the way code is, it is the subject rather than a word
+     * of the sentence.
+     */
+    private const IDENTIFIER = '/\p{Ll}\p{Lu}|[_.]/u';
+
+    /**
      * What a page is searched by. The title is what it is called; the path is
      * the section it sits in, which is the other half of what a table of
      * contents knows — "Assets" says little, `ApiOverview/Assets/Index.html`
@@ -105,6 +129,8 @@ final class Documentation
         $pages = [];
         $indexed = [];
 
+        $named = self::identifiers($queries);
+
         foreach (Manuals::searched() as $document => $manual) {
             $base = self::base($document, $targetVersion);
             $index = $this->index($base);
@@ -113,7 +139,7 @@ final class Documentation
             }
             $indexed[$document] = true;
 
-            foreach ($index as $page) {
+            foreach ([...$index, ...$this->properties($base, $named)] as $page) {
                 $pages[$document . '|' . $page['url']] = [
                     'score' => 0,
                     'coverage' => 0.0,
@@ -198,7 +224,7 @@ final class Documentation
                 'documentTitle' => $candidate['documentTitle'],
                 'documentVersion' => $targetVersion,
                 'section' => $candidate['title'],
-                'excerpt' => $page === null ? '' : $this->excerpt($page),
+                'excerpt' => $page === null ? '' : $this->excerpt($page, (string) parse_url($candidate['url'], PHP_URL_FRAGMENT)),
                 'content' => '',
                 'coverage' => round($candidate['coverage'], 3),
                 'matched' => self::matched($candidate['matched']),
@@ -283,6 +309,73 @@ final class Documentation
     private static function base(string $document, string $targetVersion): string
     {
         return Manuals::base(Manuals::searched()[$document]['collection'], $document, $targetVersion);
+    }
+
+    /**
+     * The properties this manual declares that a question named, with the
+     * anchor of the section documenting each.
+     *
+     * @param list<string> $named the lowercased names a question may reach one by
+     * @return list<array{title: string, path: string, url: string}>
+     */
+    private function properties(string $base, array $named): array
+    {
+        $inventory = $named === [] ? null : $this->inventory->of($base);
+        if ($inventory === null) {
+            return [];
+        }
+
+        $properties = [];
+        $seen = [];
+        foreach ($inventory['objects'] as $object) {
+            if ($object['role'] !== self::PROPERTY) {
+                continue;
+            }
+            // `-` is what the writer puts where the display name is the
+            // object's own name, which is how a property with no label of its
+            // own arrives.
+            $title = in_array($object['display'], ['-', ''], true) ? $object['name'] : $object['display'];
+            $url = $base . $object['uri'];
+            if (!in_array(mb_strtolower($title), $named, true) || isset($seen[$url])) {
+                continue;
+            }
+            $seen[$url] = true;
+            // Placed under the path of the page it is a section of, so it sits
+            // in its chapter the way a page does and the anchor's own slug adds
+            // no words to match against.
+            $properties[] = ['title' => $title, 'path' => (string) strtok($object['uri'], '#'), 'url' => $url];
+        }
+
+        return $properties;
+    }
+
+    /**
+     * The names a declared property may be offered for, lowercased.
+     *
+     * Two ways in, and both keep the sections out of a question asked in prose.
+     * A word written the way code is names its subject wherever it stands, and
+     * a question that is one word is asking about that word whatever it is
+     * called — which is the only way `showitem` or `label` is reachable, since
+     * either of them inside a sentence is a word of the sentence.
+     *
+     * @param list<string> $queries
+     * @return list<string>
+     */
+    private static function identifiers(array $queries): array
+    {
+        $identifiers = [];
+        foreach ($queries as $query) {
+            if (preg_match('/\s/u', $query) !== 1) {
+                $identifiers[mb_strtolower($query)] = true;
+            }
+            foreach (preg_split('/[^\p{L}\p{N}_.]+/u', $query) ?: [] as $word) {
+                if ($word !== '' && preg_match(self::IDENTIFIER, $word) === 1) {
+                    $identifiers[mb_strtolower($word)] = true;
+                }
+            }
+        }
+
+        return array_keys($identifiers);
     }
 
     /**
@@ -384,7 +477,16 @@ final class Documentation
         return $terms;
     }
 
-    private function excerpt(string $html): string
+    /**
+     * The opening prose of what the URL names.
+     *
+     * An anchor names a section rather than the page, and the page's own
+     * introduction says nothing about it: every property of the TCA reference's
+     * Types page would come back with the same two sentences about record
+     * types. Where the anchor names nothing on the page, the article answers as
+     * before.
+     */
+    private function excerpt(string $html, string $anchor = ''): string
     {
         $document = new \DOMDocument();
         if (!@$document->loadHTML($html, LIBXML_NONET | LIBXML_NOWARNING | LIBXML_NOERROR)) {
@@ -392,8 +494,15 @@ final class Documentation
         }
 
         $xpath = new \DOMXPath($document);
+        $within = '//article[@role="main"]';
+        if (preg_match('/^[\w.:-]+$/u', $anchor) === 1
+            && self::first($xpath, sprintf('//*[@id="%s"]', $anchor)) !== null
+        ) {
+            $within = sprintf('//*[@id="%s"]', $anchor);
+        }
+
         $parts = [];
-        foreach (self::elements($xpath, '//article[@role="main"]//p') as $node) {
+        foreach (self::elements($xpath, $within . '//p') as $node) {
             $text = trim((string) preg_replace('/\s+/u', ' ', $node->textContent));
             if ($text === '') {
                 continue;

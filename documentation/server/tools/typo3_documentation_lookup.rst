@@ -53,8 +53,9 @@ Answers with
     source: string
     queries: [string]
     # Present on a miss where a query is shaped like a PHP identifier. This index is
-    # page titles and section paths, so a class or method name has no page to be
-    # titled after, while the property or ViewHelper it belongs to does.
+    # page titles, section paths and the property names each manual declares, so a
+    # class or method name has no page to be titled after, while the property or
+    # ViewHelper it belongs to does.
     insteadOf:  # optional
       - # The query that reads as a code identifier.
         query: string

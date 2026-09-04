@@ -98,8 +98,11 @@ skip the ones that matter too.
    here, and whenever the reading raises it again.
 
    That is a question for a documented surface — a ViewHelper, a TCA type, a
-   TypoScript setting. The manual matches page titles and section paths, never
-   the text of a page, so a PHP identifier has no page to be titled after.
+   TypoScript setting. The manual matches page titles, section paths and the
+   property names each manual declares, never the text of a page, so a PHP
+   identifier has no page to be titled after. A property is reached by its own
+   name where that name is written the way code is, or where the query is
+   nothing but the name.
 
    An identifier goes to `typo3_changelog_lookup` under its own name, which
    reaches the entries writing it however the change was titled, and then to the

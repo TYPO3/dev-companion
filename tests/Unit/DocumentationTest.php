@@ -316,6 +316,43 @@ final class DocumentationTest extends TestCase
         self::assertSame('Fluid ViewHelper Reference', $answer['results'][0]['documentTitle']);
     }
 
+    /**
+     * The property name a caller holds, which no table of contents carries.
+     *
+     * A session needed one sentence about `columnsOverrides` and spent three
+     * calls on it: the manual documenting that property is a handful of large
+     * pages, and the property is a section of one of them. The writer registers
+     * every such section, and this is what reads them — `D-ANS-144`.
+     */
+    #[Decision('D-ANS-144')]
+    #[Test]
+    public function aDeclaredPropertyIsReachedByItsOwnName(): void
+    {
+        $documentation = new Documentation($this->manuals());
+
+        $answer = $documentation->lookup(['columnsOverrides types record type field configuration'], '14.3', 3);
+
+        self::assertSame('columnsOverrides', $answer['results'][0]['title']);
+        self::assertStringEndsWith(
+            'Types/Index.html#confval-types-columnsoverrides',
+            $answer['results'][0]['url'],
+        );
+        // The section's own prose. The page opens on record types and says
+        // nothing about any one of the properties it documents.
+        self::assertStringContainsString(
+            'does not take columnsOverrides into account',
+            $answer['results'][0]['excerpt'],
+        );
+
+        // A property named like an English word is a word of the sentence
+        // wherever it stands in one, and is offered for nothing but itself.
+        $prose = $documentation->lookup(['the label of a record type in the backend'], '14.3', 3);
+        self::assertNotContains('label', array_column($prose['results'], 'title'));
+
+        $alone = $documentation->lookup(['showitem'], '14.3', 2);
+        self::assertSame('showitem', $alone['results'][0]['title']);
+    }
+
     #[Decision('D-ANS-065')]
     #[Test]
     public function anApiIdentifierReachesThePageThatIsNotNamedAfterIt(): void
@@ -519,6 +556,22 @@ final class DocumentationTest extends TestCase
      * is about: the ones that answer, and the ones that used to be answered
      * instead because they carry one of the words.
      */
+    /**
+     * What the TCA reference declares as configuration values, which is where
+     * its property names live: its table of contents carries none of them.
+     *
+     * @var array<string, array<string, string>>
+     */
+    private const PROPERTIES = [
+        'typo3/reference-tca' => [
+            'Types/Index.html#confval-types-columnsoverrides' => 'columnsOverrides',
+            'Types/Index.html#confval-types-showitem' => 'showitem',
+            // Named like an English word, which is what every prose question
+            // carries by accident.
+            'Types/Index.html#confval-types-label' => 'label',
+        ],
+    ];
+
     private function manuals(): \Closure
     {
         $manuals = [
@@ -543,6 +596,7 @@ final class DocumentationTest extends TestCase
             'typo3/reference-tca' => [
                 'ColumnsConfig/Type/Inline/Index.html' => 'IRRE / inline',
                 'ColumnsConfig/CommonProperties/FieldInformation/TcaDescription.html' => 'tcaDescription',
+                'Types/Index.html' => 'Record types',
             ],
             'typo3/view-helper-reference' => [
                 'Global/If.html' => 'If ViewHelper <f:if>',
@@ -560,8 +614,16 @@ final class DocumentationTest extends TestCase
                     continue;
                 }
 
-                return str_ends_with($url, 'objects.inv')
-                    ? $inventory($pages)
+                if (str_ends_with($url, 'objects.inv')) {
+                    return $inventory($pages, self::PROPERTIES[$manual] ?? []);
+                }
+
+                // The one page of the corpus that documents its properties as
+                // sections, which is the shape the TCA reference has.
+                return str_contains($url, 'Types/Index.html')
+                    ? '<html><article role="main"><p>Record types are what a table shows.</p>'
+                        . '<section id="confval-types-columnsoverrides"><p>The DataHandler does not take'
+                        . ' columnsOverrides into account.</p></section></article></html>'
                     : '<html><article role="main"><p>What this page says.</p></article></html>';
             }
 
@@ -574,13 +636,17 @@ final class DocumentationTest extends TestCase
      * publishes one: four comment lines and the objects behind them, compressed
      * with zlib.
      *
-     * @param array<string, string> $pages the path of each page, and its title
+     * @param array<string, string> $pages      the path of each page, and its title
+     * @param array<string, string> $properties  the anchored uri of each declared property, and its name
      */
-    private function inventory(array $pages): string
+    private function inventory(array $pages, array $properties = []): string
     {
         $objects = '';
         foreach ($pages as $path => $title) {
             $objects .= sprintf("%s std:doc -1 %s %s\n", substr($path, 0, -strlen('.html')), $path, $title);
+        }
+        foreach ($properties as $uri => $name) {
+            $objects .= sprintf("%s std:confval -1 %s %s\n", mb_strtolower($name), $uri, $name);
         }
 
         return "# Sphinx inventory version 2\n"

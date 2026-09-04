@@ -96,8 +96,8 @@ final class DocumentationLookup extends ReadOnlyTool
                 'query' => Schema::string('The query that reads as a code identifier.'),
                 'ask' => Schema::listOf(Schema::string(), 'The bare names to ask with instead, most specific first.'),
             ], ['query', 'ask']), 'Present on a miss where a query is shaped like a PHP identifier. This index is '
-                . 'page titles and section paths, so a class or method name has no page to be titled after, while '
-                . 'the property or ViewHelper it belongs to does.'),
+                . 'page titles, section paths and the property names each manual declares, so a class or method '
+                . 'name has no page to be titled after, while the property or ViewHelper it belongs to does.'),
             'results' => Schema::listOf(Schema::object([
                 'title' => Schema::string(),
                 'url' => Schema::string('Canonical URL of the matching documentation page.'),
@@ -181,8 +181,9 @@ final class DocumentationLookup extends ReadOnlyTool
             $insteadOf = $answer['mode'] === 'page' ? [] : self::insteadOf($answer['queries']);
             if ($insteadOf !== []) {
                 $answer['insteadOf'] = $insteadOf;
-                $lines[] = 'This index is page titles and section paths, so a class or method name has no page to '
-                    . 'be titled after — the property or ViewHelper it belongs to has one. Ask again with:';
+                $lines[] = 'This index is page titles, section paths and declared property names, so a class or '
+                    . 'method name has no page to be titled after — the property or ViewHelper it belongs to has '
+                    . 'one. Ask again with:';
                 foreach ($insteadOf as $instead) {
                     $lines[] = sprintf('- instead of "%s": %s', $instead['query'], implode(', ', $instead['ask']));
                 }
@@ -199,7 +200,9 @@ final class DocumentationLookup extends ReadOnlyTool
             // everything except the word naming the subject is one of these six
             // and not an answer. Said per result, because that is where the
             // caller reads it (`R-DOC-002`).
-            $lines[] = 'Matched against page titles and section paths, never the text of a page.';
+            $lines[] = 'Matched against page titles, section paths and the property names a manual declares, '
+                . 'never the text of a page. A property is offered for a query word written the way code is, or '
+                . 'for a query that is nothing but its name.';
             $covered = array_map(
                 static fn(array $result): float => (float) ($result['coverage'] ?? 0.0),
                 $answer['results'],

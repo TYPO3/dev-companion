@@ -1080,7 +1080,8 @@ final class SkillTest extends TestCase
         // is `D-ANS-042` — so the miss above is a result for a surface and the
         // wrong corpus for an identifier (`D-ANS-010`).
         self::assertStringContainsString(
-            'The manual matches page titles and section paths, never the text of a page',
+            'The manual matches page titles, section paths and the property names each manual declares, never the'
+            . ' text of a page',
             self::flat($base),
         );
         self::assertStringContainsString('a PHP identifier has no page to be titled after', self::flat($base));

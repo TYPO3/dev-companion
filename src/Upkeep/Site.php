@@ -105,6 +105,29 @@ final class Site
     }
 
     /**
+     * Every file the copy is made from, and when each was last written.
+     *
+     * Two of these compared is what a watch goes on: a file is named by the
+     * path this repository knows it by, and its value moves when it is saved
+     * and when it is saved to a different length, so two saves within one
+     * second still read as two. The skills are in it because the copy carries
+     * them.
+     *
+     * @return array<string, string>
+     */
+    public static function stamps(): array
+    {
+        $stamps = [];
+        $files = Finder::create()->files()->in([Paths::root() . '/' . self::SOURCE, Paths::root() . '/skills'])->sortByName();
+        foreach ($files as $file) {
+            $path = substr($file->getPathname(), strlen(Paths::root()) + 1);
+            $stamps[$path] = $file->getMTime() . '.' . $file->getSize();
+        }
+
+        return $stamps;
+    }
+
+    /**
      * One page as it is published: every link that leaves the tree turned into
      * the file on GitHub, and everything else left exactly as it stands.
      *

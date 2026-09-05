@@ -430,4 +430,16 @@ final class SiteTest extends TestCase
 
         return $pages;
     }
+
+    /** What a watch compares is every file the copy is made from, the skills included, and nothing it wrote. */
+    #[Test]
+    public function everyFileTheCopyIsMadeFromHasAStamp(): void
+    {
+        $stamps = Site::stamps();
+
+        self::assertArrayHasKey('documentation/readme.rst', $stamps);
+        self::assertArrayHasKey('skills/base.md', $stamps);
+        self::assertSame([], preg_grep('#^\.site/#', array_keys($stamps)));
+        self::assertMatchesRegularExpression('#^\d+\.\d+$#', $stamps['documentation/readme.rst']);
+    }
 }

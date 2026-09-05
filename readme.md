@@ -22,20 +22,20 @@ pointed at, and nothing on the machine is started as a side effect of a lookup.
 
 ## Quickstart
 
-Requirements: **PHP 8.2+** and Composer. The package works both ways — as a
-standalone checkout and as a Composer dependency of another project.
+Requirements: **PHP 8.2+** and Composer. One standalone checkout serves every
+project on the machine and stays out of each project's dependencies:
 
 ```bash
-# standalone: clone, install once, then point a project at it
 git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
-cd typo3-dev-companion
-composer install
+composer install --working-dir=typo3-dev-companion
+cd /path/to/your/project
 /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
-
-# as a dependency: from the consuming project's root, straight from Packagist
-composer require "typo3/dev-companion:@dev"
-vendor/bin/typo3-dev-companion install
 ```
+
+`install` writes into the directory it is run in, so the last two lines are run
+from the root of the project the agent works in. A project can require the
+package instead, `composer require "typo3/dev-companion:@dev"`, and run
+`vendor/bin/typo3-dev-companion install`; the manual has that case.
 
 `install` writes the `typo3-dev-companion` entry into the project's `.mcp.json`
 and publishes the task skills to `.agents/skills` — the two locations a client
@@ -52,9 +52,9 @@ The manual reads as a site at
 [typo3.github.io/dev-companion](https://typo3.github.io/dev-companion/),
 and as files in [documentation/](documentation/readme.rst):
 
-- [Usage](documentation/usage/readme.rst) — every client and layout the install
-  supports, the task workflows it publishes, and what you are agreeing to when
-  it runs.
+- [Usage](documentation/usage/readme.rst) — the path from the install to the
+  first answered question, and behind it every client the install supports and
+  the task workflows it publishes.
 - [Server](documentation/server/readme.rst) — what it can be asked, one page per
   tool, and where each answer comes from.
 - [Contributing](documentation/contributing/readme.rst) — working on this

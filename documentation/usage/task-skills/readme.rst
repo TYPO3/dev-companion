@@ -25,5 +25,9 @@ Each name opens one page containing the unchanged Markdown workflow and every
 reference it hands to the agent. The description after it is the skill's own
 selection description.
 
+The list stands in the published site only. Read as a file in the repository,
+this page ends here, and `skills/ <../../../skills/>`_ is where the same
+workflows are written.
+
 .. The list and its pages are written into the published copy by
    ``bin/cli documentation:prepare``.

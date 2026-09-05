@@ -57,13 +57,28 @@ installation's console — with the reason where it cannot.
 Read the project it names. A server started in the wrong directory is the other
 quiet failure: it finds *an* installation, answers about that one, and nothing
 in the answers is wrong except which site they are about. Where it guessed
-wrong, two lines in the ``env`` block of the client entry end the guessing —
-that block is the one part of the entry ``install`` and ``update`` leave alone:
+wrong, an ``env`` block in the client entry ends the guessing — that block is
+the one part of the entry ``install`` and ``update`` leave alone:
 
-.. code-block:: bash
+.. code-block:: json
 
-    TYPO3_DEV_COMPANION_ROOT=/absolute/path/to/the/installation
-    TYPO3_DEV_COMPANION_CONSOLE="ddev exec .build/bin/typo3"
+    {
+      "mcpServers": {
+        "typo3-dev-companion": {
+          "type": "stdio",
+          "command": "php",
+          "args": ["/absolute/path/to/project/vendor/bin/typo3-dev-companion"],
+          "env": {
+            "TYPO3_DEV_COMPANION_ROOT": "/absolute/path/to/the/installation",
+            "TYPO3_DEV_COMPANION_CONSOLE": "ddev exec .build/bin/typo3"
+          }
+        }
+      }
+    }
+
+The first names the installation, the second the command that runs its console
+where the server cannot work that out. The other two variables the block may
+carry are :ref:`in the install <installing-what-the-entry-may-carry>`.
 
 When the site is down
 ---------------------

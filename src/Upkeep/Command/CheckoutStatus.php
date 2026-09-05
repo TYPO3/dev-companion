@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
 use TYPO3\DevCompanion\Upkeep\PinnedPackage;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * What is below .checkouts/, and how old it is.
@@ -26,23 +27,22 @@ final class CheckoutStatus
     public function __invoke(OutputInterface $output): int
     {
         $checkouts = Checkouts::directory();
-        $output->writeln(sprintf('Core checkouts below %s', $checkouts));
+        Voice::heading($output, sprintf('Core checkouts below %s', $checkouts));
         foreach (Versions::covered() as $version) {
             $path = $checkouts . '/' . $version['branch'];
-            $output->writeln(sprintf(
-                '  %-6s %s',
-                $version['branch'],
+            Voice::row($output, sprintf(
+                '%s %s',
+                Voice::key($version['branch'], 6),
                 is_dir($path . '/typo3/sysext/core') ? Checkouts::revision($path) : 'missing — run bin/cli checkouts:update',
             ));
         }
 
         foreach (PinnedPackage::all() as $package) {
-            $output->writeln('');
-            $output->writeln(sprintf('%s, one release line per pin', $package->package));
+            Voice::heading($output, sprintf('%s, one release line per pin', $package->package));
             foreach ($package->pairing($checkouts) as $pair) {
-                $output->writeln(sprintf(
-                    '  %-6s %-9s %s',
-                    $pair['branch'],
+                Voice::row($output, sprintf(
+                    '%s %-9s %s',
+                    Voice::key($pair['branch'], 6),
                     $pair['constraint'] === '' ? 'no pin' : $pair['constraint'],
                     // A worktree that is not there answers nothing, which is
                     // what says it is missing: the source directory a package

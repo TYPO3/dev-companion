@@ -218,6 +218,7 @@ final class ToolAnswers
      * tool without dropping every answer this root cannot produce.
      *
      * @param list<string> $tools
+     * @param ?\Closure(string): void $each told the label of every call as it is answered, for a bar
      * @return array<string, string>
      */
     public static function rendered(
@@ -225,6 +226,7 @@ final class ToolAnswers
         string $primary,
         ?string $installation = null,
         array $tools = [],
+        ?\Closure $each = null,
     ): array {
         $backed = self::installationBacked();
         if ($tools !== []) {
@@ -232,14 +234,14 @@ final class ToolAnswers
         }
 
         $derived = self::derivedSections($tools);
-        $recordings = [self::recordAgainst($primary, $tools)];
+        $recordings = [self::recordAgainst($primary, $tools, $each)];
         // No second recording where the named tools have no installation-backed
         // one among them. An empty list means every tool to `recordAgainst`, so
         // narrowing to one that answers the same from any root would otherwise
         // record the whole surface a second time and head every page it touched
         // with a second provenance it does not have.
         if ($installation !== null && $backed !== []) {
-            $recordings[] = self::recordAgainst($installation, $backed);
+            $recordings[] = self::recordAgainst($installation, $backed, $each);
         }
         self::pointAt($primary);
 
@@ -262,9 +264,10 @@ final class ToolAnswers
      * for; empty means all of them.
      *
      * @param list<string> $only
+     * @param ?\Closure(string): void $each
      * @return array{against: string, shortly: string, answers: array<string, array<string, array{0: string, 1: string}>>}
      */
-    private static function recordAgainst(string $root, array $only = []): array
+    private static function recordAgainst(string $root, array $only = [], ?\Closure $each = null): array
     {
         self::pointAt($root);
 
@@ -279,6 +282,9 @@ final class ToolAnswers
                 continue;
             }
             $answers[$name][$label] = self::answer($name, $arguments);
+            if ($each !== null) {
+                $each($label);
+            }
         }
 
         return ['against' => self::against(), 'shortly' => self::shortly(), 'answers' => $answers];

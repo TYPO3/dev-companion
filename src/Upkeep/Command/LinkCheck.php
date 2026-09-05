@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Links;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Whether the paths this repository writes between its own files still resolve.
@@ -25,22 +26,14 @@ final class LinkCheck
     {
         $dead = Links::dead();
         $unrendered = Links::unrendered();
-        if ($dead === [] && $unrendered === []) {
-            $output->writeln('Every link resolves.');
-
-            return 0;
-        }
-
         $repairable = 0;
         foreach ($dead as $link) {
             if ($link['repair'] === null) {
-                $output->writeln(sprintf('%s:%d links to %s, which is not there', $link['file'], $link['line'], $link['link']));
-
+                Voice::problem($output, sprintf('%s:%d links to %s, which is not there', $link['file'], $link['line'], $link['link']));
                 continue;
             }
-
             ++$repairable;
-            $output->writeln(sprintf(
+            Voice::problem($output, sprintf(
                 '%s:%d links to %s, and that feedback was answered into %s',
                 $link['file'],
                 $link['line'],
@@ -48,17 +41,18 @@ final class LinkCheck
                 $link['repair'],
             ));
         }
-
         foreach ($unrendered as $link) {
-            $output->writeln(sprintf('%s:%d writes %s in markdown, which this page renders as itself', $link['file'], $link['line'], $link['link']));
+            Voice::problem($output, sprintf('%s:%d writes %s in markdown, which this page renders as itself', $link['file'], $link['line'], $link['link']));
         }
-
-        $output->writeln('');
-        $output->writeln(sprintf('%d dead links, %d written in the wrong markup.', count($dead), count($unrendered)));
         if ($repairable > 0) {
-            $output->writeln(sprintf('%d of them `bin/cli links:repair` repoints at the archive.', $repairable));
+            Voice::note($output, sprintf('%d of them `bin/cli links:repair` repoints at the archive.', $repairable));
         }
 
-        return 1;
+        return Voice::verdict(
+            $output,
+            count($dead) + count($unrendered),
+            'Every link resolves.',
+            sprintf('%s, %d written in the wrong markup.', Voice::count(count($dead), 'dead link'), count($unrendered)),
+        );
     }
 }

@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Todo;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * The questions nothing else will ask again.
@@ -31,15 +32,14 @@ final class TodoWaiting
             // A question of several paragraphs keeps the indent on all of
             // them: folded front matter answers with the breaks it was
             // written with.
-            $output->writeln(sprintf(
-                "%s\n  waiting on %s\n  %s\n",
-                $todo['title'],
-                str_replace("\n", "\n  ", $todo['waitingOn']),
-                $todo['path'],
-            ));
+            Voice::heading($output, $todo['title']);
+            Voice::row($output, 'waiting on ' . str_replace('
+', '
+  ', $todo['waitingOn']));
+            Voice::row($output, Voice::dim($todo['path']));
         }
         if ($waiting === []) {
-            $output->writeln('Nothing is waiting on an answer.');
+            Voice::ok($output, 'Nothing is waiting on an answer.');
         }
 
         return $waiting === [] ? 0 : 1;

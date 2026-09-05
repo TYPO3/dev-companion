@@ -7,8 +7,8 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Decisions;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * What was decided, newest first.
@@ -29,16 +29,17 @@ final class DecisionList
         string $group = '',
     ): int {
         if ($group !== '' && !in_array($group, Decisions::GROUPS, true)) {
-            Cli::errors($output)->writeln('No such group: ' . $group . "\nGroups: " . implode(', ', Decisions::GROUPS));
+            Voice::problem($output, 'No such group: ' . $group . '
+Groups: ' . implode(', ', Decisions::GROUPS));
 
             return 2;
         }
 
         foreach (Decisions::group($group) as $decision) {
             $output->writeln(sprintf(
-                '%s  %-10s %-12s %-10s %s',
-                $decision['date'],
-                $decision['id'],
+                '%s  %s %-12s %-10s %s',
+                Voice::dim($decision['date']),
+                Voice::key($decision['id'], 10),
                 $decision['group'],
                 $decision['status'],
                 $decision['title'],

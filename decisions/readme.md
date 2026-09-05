@@ -1090,6 +1090,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### documentation
 
+- [`D-DOC-067`][D-DOC-067] — Every command prints in one voice · 2026-09-05
 - [`D-DOC-066`][D-DOC-066] — A dated section says what the reading changed · 2026-08-28
 - [`D-DOC-059`][D-DOC-059] — The recording report reads both its days in UTC · 2026-08-27
 - [`D-DOC-060`][D-DOC-060] — The worktree says a todo is in hand · 2026-08-27
@@ -1150,6 +1151,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DOC-001`][D-DOC-001] — A table is written so it reads unrendered · 2026-08-01 · confirmed
 - [`D-DOC-002`][D-DOC-002] — The prose rule is measured, and only the lead fails on it · 2026-08-01
 
+[D-DOC-067]: documentation/doc-067-every-command-prints-in-one-voice.md
 [D-DOC-066]: documentation/doc-066-a-dated-section-says-what-the-reading-changed.md
 [D-DOC-059]: documentation/doc-059-the-recording-report-reads-both-its-days-in-utc.md
 [D-DOC-060]: documentation/doc-060-the-worktree-says-a-todo-is-in-hand.md

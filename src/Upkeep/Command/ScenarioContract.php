@@ -7,8 +7,9 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Scenarios;
+use TYPO3\DevCompanion\Upkeep\Voice;
+use TYPO3\DevCompanion\Upkeep\Wrap;
 
 /**
  * The targeted contract cases, which are read rather than run forward.
@@ -43,7 +44,7 @@ final class ScenarioContract extends ScenarioReport
         $id = strtoupper($id);
         $case = Scenarios::contracts()[$id] ?? null;
         if ($case === null) {
-            Cli::errors($output)->writeln(isset(Scenarios::load()[$id])
+            Voice::problem($output, isset(Scenarios::load()[$id])
                 ? sprintf('%s is an open forward review: bin/cli scenarios:show %s', $id, $id)
                 : sprintf('There is no contract case %s.', $id));
 
@@ -66,14 +67,9 @@ final class ScenarioContract extends ScenarioReport
     {
         $owed = array_filter(Scenarios::contracts(), static fn(array $case): bool => self::owed($case));
         foreach ($owed as $case) {
-            $output->writeln(sprintf('%-9s %s', $case['id'], str_replace('`', '', $case['heldBy'])));
-            $output->writeln('');
+            $output->writeln(Wrap::text(sprintf('%s %s', Voice::key($case['id'], 9), str_replace('`', '', $case['heldBy'])), str_repeat(' ', 10)));
         }
-        $output->writeln($owed === []
-            ? 'Every contract case is held by a test.'
-            : sprintf('%d of %d contract cases are owed a reading.', count($owed), count(Scenarios::contracts())));
-
-        return $owed === [] ? 0 : 1;
+        return Voice::verdict($output, count($owed), 'Every contract case is held by a test.', sprintf('%d of %d contract cases are owed a reading.', count($owed), count(Scenarios::contracts())));
     }
 
     /**

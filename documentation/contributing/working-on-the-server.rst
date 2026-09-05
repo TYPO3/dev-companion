@@ -31,6 +31,13 @@ supports:
 
 ``bin/typo3-dev-companion`` is the server itself and carries none of this.
 
+Every command prints in one voice, and ``Voice`` is the class it is: a heading
+in bold, rows under it, a verdict at the end with a green or a red mark before
+it, a problem on the error stream, and a note in grey for what is context rather
+than answer. A command that takes long draws a bar over its steps. The colour
+and the bar are for a terminal, so a pipe, a log and ``--no-ansi`` get the same
+words without them — ``D-DOC-067``.
+
 Core checkouts
 --------------
 
@@ -137,9 +144,10 @@ reuses it after:
 
 ``--watch`` keeps the first of those running: it renders again after every save
 below ``documentation/`` or ``skills/`` and says which file it saw, until
-Ctrl-C. A render that failed on a half-typed directive is rendered over by the
-save that finishes it. The server reads the pages from disk on every request,
-so a reload is all the browser needs.
+Ctrl-C. While it waits a line says so and when it last rendered, and a render
+draws a bar over its steps. A render that failed on a half-typed directive is
+rendered over by the save that finishes it. The server reads the pages from disk
+on every request, so a reload is all the browser needs.
 
 
 ``bin/cli documentation:prepare`` is the first of its steps on its own — the

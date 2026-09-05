@@ -8,6 +8,7 @@ use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Entries;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * What is written down about the code at a path, before it is changed.
@@ -32,36 +33,36 @@ final class EntryLookup
         string $path = '',
     ): int {
         if ($path === '') {
-            $output->writeln('Name a file or a directory: bin/cli entries:lookup src/Knowledge/Hints.php');
+            Voice::problem($output, 'Name a file or a directory: bin/cli entries:lookup src/Knowledge/Hints.php');
 
             return 1;
         }
 
         $classes = Entries::declaredBelow($path);
         if ($classes === []) {
-            $output->writeln($path . ' declares no class this repository reads.');
+            Voice::problem($output, $path . ' declares no class this repository reads.');
 
             return 1;
         }
 
-        $output->writeln(sprintf('%s — %s', $path, implode(', ', $classes)));
+        Voice::heading($output, sprintf('%s — %s', $path, implode(', ', $classes)));
         $entries = Entries::all();
 
         $naming = Entries::naming($classes);
-        $output->writeln('');
-        $output->writeln($naming === []
-            ? 'Nothing is written about it. What that means is that nothing was, not that anything is settled.'
-            : sprintf('%d entries name it', count($naming)));
+        if ($naming === []) {
+            Voice::note($output, 'Nothing is written about it. What that means is that nothing was, not that anything is settled.');
+        } else {
+            Voice::heading($output, sprintf('%d entries name it', count($naming)));
+        }
         foreach ($naming as $id => $named) {
             $entry = $entries[$id];
-            $output->writeln(sprintf('  %-11s %-11s %s', $id, $entry['status'], $entry['title']));
-            $output->writeln(sprintf('  %-23s %s — %s', '', $entry['file'], implode(', ', $named)));
+            Voice::row($output, sprintf('%s %-11s %s', Voice::key($id, 11), $entry['status'], $entry['title']));
+            Voice::row($output, sprintf('%-23s %s', '', Voice::dim($entry['file'] . ' — ' . implode(', ', $named))));
         }
 
         $tests = Entries::testsNaming($classes);
         if ($tests !== []) {
-            $output->writeln('');
-            $output->writeln(sprintf(
+            Voice::heading($output, sprintf(
                 '%d test classes name it, holding %d entries between them',
                 count($tests),
                 count(array_unique(array_merge(...array_values($tests)))),
@@ -71,9 +72,9 @@ final class EntryLookup
                 // hundred of them would be the whole answer's length. What a
                 // long one says is how much rides on the class, and the entries
                 // themselves are what the failure prints.
-                $output->writeln(sprintf(
-                    '  %-28s %s',
-                    $test,
+                Voice::row($output, sprintf(
+                    '%s %s',
+                    Voice::key($test, 28),
                     count($ids) > self::LISTED ? count($ids) . ' entries' : implode(', ', $ids),
                 ));
             }

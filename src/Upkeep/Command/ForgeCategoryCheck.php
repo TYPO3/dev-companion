@@ -8,7 +8,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Contribution\Forge;
 use TYPO3\DevCompanion\Knowledge\Catalog\SystemExtensions;
-use TYPO3\DevCompanion\Upkeep\Cli;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Whether the areas the system extension catalog names are areas the tracker
@@ -30,7 +30,7 @@ final class ForgeCategoryCheck
     {
         $areas = (new Forge())->categories();
         if ($areas === []) {
-            Cli::errors($output)->writeln('forge.typo3.org answered no areas, so nothing could be read against them.');
+            Voice::problem($output, 'forge.typo3.org answered no areas, so nothing could be read against them.');
 
             return 2;
         }
@@ -44,9 +44,9 @@ final class ForgeCategoryCheck
 
             ++$mapped;
             $stands = isset($areas[$entry['forgeCategory']]);
-            $output->writeln(sprintf(
-                '  %-20s %-40s %s',
-                $entry['key'],
+            Voice::row($output, sprintf(
+                '%s %-40s %s',
+                Voice::key($entry['key'], 20),
                 $entry['forgeCategory'],
                 $stands ? 'stands' : 'no such area',
             ));
@@ -55,26 +55,18 @@ final class ForgeCategoryCheck
             }
 
             ++$problems;
-            Cli::errors($output)->writeln(sprintf(
-                '    %s is filed under "%s" here, and the project has no area of that name.',
+            Voice::problem($output, sprintf(
+                '%s is filed under "%s" here, and the project has no area of that name.',
                 $entry['key'],
                 $entry['forgeCategory'],
             ));
         }
 
-        $output->writeln('');
-        if ($problems === 0) {
-            $output->writeln(sprintf(
-                '%d mapped extension(s) against the %d areas the project publishes.',
-                $mapped,
-                count($areas),
-            ));
-
-            return 0;
-        }
-
-        $output->writeln(sprintf('%d mapped extension(s) name an area the tracker no longer has.', $problems));
-
-        return 1;
+        return Voice::verdict(
+            $output,
+            $problems,
+            sprintf('%s against the %d areas the project publishes.', Voice::count($mapped, 'mapped extension'), count($areas)),
+            Voice::count($problems, 'mapped extension') . ' name an area the tracker no longer has.',
+        );
     }
 }

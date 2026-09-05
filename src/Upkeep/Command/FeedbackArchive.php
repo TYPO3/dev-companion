@@ -8,7 +8,7 @@ use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Feedback\Channel;
-use TYPO3\DevCompanion\Upkeep\Cli;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Closing a feedback, which is moving it.
@@ -33,9 +33,9 @@ final class FeedbackArchive
     ): int {
         foreach ($feedback as $one) {
             try {
-                $output->writeln(Channel::archive($one));
+                Voice::ok($output, Channel::archive($one));
             } catch (\InvalidArgumentException|\RuntimeException $exception) {
-                Cli::errors($output)->writeln($exception->getMessage());
+                Voice::problem($output, $exception->getMessage());
 
                 return 1;
             }

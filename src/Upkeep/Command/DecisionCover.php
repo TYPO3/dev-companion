@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Decisions;
 use TYPO3\DevCompanion\Upkeep\Entry;
 use TYPO3\DevCompanion\Upkeep\Sources;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Writes each entry's `coveredBy` from the `#[Decision]` attributes the tests
@@ -38,11 +39,11 @@ final class DecisionCover
                 continue;
             }
             file_put_contents($path, $covered);
-            $output->writeln(basename(dirname($path)) . '/' . basename($path));
+            Voice::row($output, basename(dirname($path)) . '/' . basename($path));
             $written++;
         }
 
-        $output->writeln(sprintf(
+        Voice::ok($output, sprintf(
             '%d entries rewritten, %d held by %d tests in all',
             $written,
             count($held),

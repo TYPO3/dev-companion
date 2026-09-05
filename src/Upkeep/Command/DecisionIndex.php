@@ -8,6 +8,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\Decisions;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Writes the listing of every group, and of all of them, back into the readmes.
@@ -41,7 +42,7 @@ final class DecisionIndex
             $contents = (string) file_get_contents($readme);
             $head = (string) preg_replace(self::LISTING_STARTS, '', $contents);
             file_put_contents($readme, $head . Decisions::listing($group));
-            $output->writeln(substr($readme, strlen(Paths::root()) + 1));
+            Voice::row($output, substr($readme, strlen(Paths::root()) + 1));
         }
 
         return 0;

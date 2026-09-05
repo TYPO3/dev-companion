@@ -67,6 +67,7 @@ src/Upkeep/Cli.php # the console application, and the only place a command is sw
 src/Upkeep/Command/  # one class per command, named `<subject>:<verb>` by its own #[AsCommand]
 src/Upkeep/Links.php # every path this repository writes between its own files, and whether it still resolves
 src/Upkeep/Rst.php   # the reStructuredText the generators write: the underline per level, the directive, the literal, the two roles
+src/Upkeep/Voice.php # what every command prints in: the heading, the row, the verdict, the problem, the note and the bar
 src/Upkeep/Site.php  # documentation/ as the source a generator publishes: the links that leave it, rewritten
 src/Upkeep/Todo.php  # todo/ as data: what recurs, what is queued, what each todo serves
 src/Upkeep/PinnedPackage.php  # which release of a package the core pins each covered major is read against

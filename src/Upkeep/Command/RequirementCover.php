@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Entry;
 use TYPO3\DevCompanion\Upkeep\Requirements;
 use TYPO3\DevCompanion\Upkeep\Sources;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Writes each entry's `heldBy` from the `#[Requirement]` attributes the tests
@@ -36,11 +37,11 @@ final class RequirementCover
                 continue;
             }
             file_put_contents($path, $covered);
-            $output->writeln(basename(dirname($path)) . '/' . basename($path));
+            Voice::row($output, basename(dirname($path)) . '/' . basename($path));
             $written++;
         }
 
-        $output->writeln(sprintf(
+        Voice::ok($output, sprintf(
             '%d entries rewritten, %d held by %d tests in all',
             $written,
             count($held),

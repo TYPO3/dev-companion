@@ -7,12 +7,14 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Process\CommandRunner;
 use TYPO3\DevCompanion\Process\SystemRunner;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Site;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * The whole site on this machine, in one call, to look at.
@@ -22,9 +24,14 @@ use TYPO3\DevCompanion\Upkeep\Site;
  * directory beside the build, renders, runs the theme's finish step and says
  * where to read the result. The renderer is fetched where it is missing and not
  * otherwise, because a preview is run again after every paragraph, and `.site/`
- * is deleted to resolve it fresh. Every step that leaves this process is
- * printed as the command a person could have typed, because a preview that dies
- * has to say which step.
+ * is deleted to resolve it fresh.
+ *
+ * What is printed is one row per step with what it produced, counted here
+ * rather than read out of what the step said, and a bar over the steps while
+ * one of them runs. What a step said is kept for `-v` and for the step that
+ * failed, with one exception: what a step wrote to its error stream is shown
+ * every time, because that is where the renderer puts its warnings and a
+ * warning is what an author is rendering to see.
  *
  * `--watch` is the same render, again after every save: the tree is looked at
  * once a second and a render is run when a file in it has moved. Polling
@@ -42,6 +49,9 @@ final class DocumentationPreview
 
     /** Where the renderer is fetched to, below the build directory it renders into. */
     private const RENDERER = 'renderer';
+
+    /** The width of the step column, so what a step produced lines up below the heading. */
+    private const STEP = 8;
 
     private readonly CommandRunner $runner;
 
@@ -71,11 +81,12 @@ final class DocumentationPreview
         #[Option('render again whenever a file below documentation/ or skills/ is saved, until Ctrl-C')]
         bool $watch = false,
     ): int {
+        Voice::heading($output, sprintf('Rendering %s/ into %s', Site::SOURCE, $into . '/html'));
         $rendered = $this->render($output, $into);
         if ($rendered) {
             // Over a server rather than by opening the file: the search fetches
             // its index beside the pages, which a browser refuses over `file://`.
-            $output->writeln(sprintf('read it: php -S localhost:8000 -t %s', $into . '/html'));
+            Voice::note($output, sprintf('read it: php -S localhost:8000 -t %s', $into . '/html'));
         }
         if (!$watch) {
             return $rendered ? 0 : 1;
@@ -83,38 +94,102 @@ final class DocumentationPreview
 
         // A render that failed does not end the watch: a directive saved half
         // typed fails, and the save that finishes it is what the watch is for.
-        $output->writeln(sprintf('watching %s/ and skills/', Site::SOURCE));
+        Voice::heading($output, sprintf('Watching %s/ and skills/ — Ctrl-C stops it', Site::SOURCE));
+        $idle = Voice::progress($output);
+        $idle->setMessage(sprintf('watching, rendered at %s', date('H:i:s')));
+        $idle->start();
         while (($changed = ($this->look)()) !== null) {
             if ($changed === []) {
+                $idle->advance();
                 continue;
             }
-            $output->writeln(sprintf('changed: %s', implode(', ', $changed)));
+            $idle->clear();
+            $output->writeln(sprintf('%s %s', Voice::dim(date('H:i:s')), implode(', ', $changed)));
             $this->render($output, $into);
+            $idle->setMessage(sprintf('watching, rendered at %s', date('H:i:s')));
+            $idle->display();
         }
+        $idle->clear();
 
         return 0;
     }
 
-    /** The copy, the renderer where there is none, the render and the finish, in that order. */
+    /**
+     * The copy, the renderer where there is none, the render and the finish,
+     * in that order, with the bar standing on the step that is running.
+     *
+     * The rendered pages are taken away before the renderer writes new ones:
+     * it removes nothing itself, and a page renamed since the last render is
+     * otherwise served on — and read by the finish step, which looped over
+     * three stale ones for two minutes before this was cleared.
+     */
     private function render(OutputInterface $output, string $into): bool
     {
-        if ((new DocumentationPrepare())($output, $into) !== 0) {
+        $started = microtime(true);
+        $renderer = $into . '/' . self::RENDERER;
+        $fetch = $this->fetch($renderer);
+        $bar = Voice::progress($output, 3 + ($fetch === [] ? 0 : 1));
+        $bar->setMessage(str_pad('copy', self::STEP));
+        $bar->start();
+
+        $built = Site::build($into . '/source');
+        $bar->clear();
+        foreach ($built['removed'] as $removed) {
+            Voice::row($output, sprintf('%s %s', Voice::key('removed', self::STEP), sprintf('%s, which %s/ no longer has', $removed, Site::SOURCE)));
+        }
+        self::step($output, 'copy', sprintf('%d files into %s', count($built['written']), $into . '/source'));
+        $bar->advance();
+
+        if ($fetch !== []) {
+            $bar->setMessage(str_pad('fetch', self::STEP));
+            $bar->display();
+            foreach ($fetch as $command) {
+                if (!$this->run($output, $bar, 'fetch', $command)) {
+                    return false;
+                }
+            }
+            $bar->clear();
+            self::step($output, 'fetch', sprintf('the renderer, once, into %s', $renderer));
+            $bar->advance();
+        }
+
+        $bar->setMessage(str_pad('render', self::STEP));
+        $bar->display();
+        Site::clear($into . '/html');
+        if (!$this->run($output, $bar, 'render', [$renderer . '/vendor/bin/guides', '--no-progress', '-c', Site::SOURCE])) {
             return false;
         }
+        $bar->clear();
+        self::step($output, 'render', sprintf('%d pages', self::pages($into . '/html')));
+        $bar->advance();
 
-        $renderer = $into . '/' . self::RENDERER;
-        $steps = [
-            ...$this->fetch($renderer),
-            [$renderer . '/vendor/bin/guides', '--no-progress', '-c', Site::SOURCE],
-            ['node', $renderer . '/vendor/typo3/soul-guides-theme/resources/dist/soul-finish.js', $into . '/html'],
-        ];
-        foreach ($steps as $step) {
-            if (!$this->step($output, $step)) {
-                return false;
-            }
+        $bar->setMessage(str_pad('finish', self::STEP));
+        $bar->display();
+        $finish = ['node', $renderer . '/vendor/typo3/soul-guides-theme/resources/dist/soul-finish.js', $into . '/html'];
+        if (!$this->run($output, $bar, 'finish', $finish)) {
+            return false;
         }
+        $bar->clear();
+        self::step($output, 'finish', 'the search index and the theme beside them');
+        $bar->finish();
+        $bar->clear();
+        Voice::ok($output, sprintf('rendered in %.1fs', microtime(true) - $started));
 
         return true;
+    }
+
+    /** One row: the step that ran, and what it produced. */
+    private static function step(OutputInterface $output, string $name, string $produced): void
+    {
+        Voice::row($output, sprintf('%s %s', Voice::key($name, self::STEP), $produced));
+    }
+
+    /** How many pages the renderer left, read off the directory rather than out of what it said. */
+    private static function pages(string $html): int
+    {
+        $where = str_starts_with($html, '/') ? $html : Paths::root() . '/' . $html;
+
+        return is_dir($where) ? count(Finder::create()->files()->in($where)->name('*.html')) : 0;
     }
 
     /**
@@ -170,31 +245,37 @@ final class DocumentationPreview
     }
 
     /**
-     * One step, with whatever it said either way.
+     * One command of a step: quiet where it succeeded, quoted whole where it
+     * failed.
      *
-     * A step that succeeded is not silent: the renderer's warnings and the
-     * finish step's tally are what a person reads to see the render was the one
-     * they meant.
+     * The command is printed under `-v`, as what a person could have typed, and
+     * a failure prints it whatever the verbosity, because a preview that dies
+     * has to say which step.
      *
      * @param list<string> $command
      */
-    private function step(OutputInterface $output, array $command): bool
+    private function run(OutputInterface $output, ProgressBar $bar, string $name, array $command): bool
     {
-        $output->writeln(implode(' ', $command));
+        $typed = implode(' ', $command);
+        if ($output->isVerbose()) {
+            $bar->clear();
+            Voice::row($output, Voice::dim($typed));
+            $bar->display();
+        }
         $result = $this->runner->run($command, Paths::root());
         if ($result['exitCode'] !== 0) {
-            Cli::errors($output)->writeln(sprintf(
-                "%s failed:\n%s",
-                implode(' ', $command),
-                trim($result['output'] . $result['error']),
-            ));
+            $bar->clear();
+            Voice::problem($output, sprintf('%s failed: %s', $name, $typed));
+            Voice::problem($output, trim($result['output'] . $result['error']));
 
             return false;
         }
 
-        $said = trim($result['output'] . $result['error']);
-        if ($said !== '') {
-            $output->writeln($said);
+        $said = $output->isVerbose() ? $result['output'] . $result['error'] : $result['error'];
+        if (trim($said) !== '') {
+            $bar->clear();
+            Voice::row($output, Voice::dim(str_replace("\n", "\n  ", trim($said))));
+            $bar->display();
         }
 
         return true;

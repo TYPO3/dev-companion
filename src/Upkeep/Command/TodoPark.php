@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Todo;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * The one move left in the queue: what waits, out of where it would be offered.
@@ -35,13 +36,15 @@ final class TodoPark
                 continue;
             }
 
-            $output->writeln(Todo::park($todo));
-            $output->writeln('    It waits on ' . str_replace("\n", "\n    ", $todo['waitingOn']));
+            Voice::ok($output, Todo::park($todo));
+            Voice::row($output, 'It waits on ' . str_replace('
+', '
+  ', $todo['waitingOn']));
             ++$parked;
         }
 
         if ($parked === 0) {
-            $output->writeln('Nothing queued names a question, so nothing moved.');
+            Voice::ok($output, 'Nothing queued names a question, so nothing moved.');
         }
 
         return 0;

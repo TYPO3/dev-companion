@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\OpenFeedback;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * The pile as a pile, for whoever wants to read it rather than work it.
@@ -30,7 +31,7 @@ final class FeedbackList
     {
         $open = OpenFeedback::all();
         if ($open === []) {
-            $output->writeln('No open feedback.');
+            Voice::ok($output, 'No open feedback.');
 
             return 0;
         }
@@ -45,16 +46,15 @@ final class FeedbackList
         uasort($groups, static fn(array $a, array $b): int => count($b) <=> count($a));
 
         $unjudged = count(array_filter($open, static fn(array $feedback): bool => !$feedback['judged']));
-        $output->writeln(sprintf('%d open, %d with no todo naming them, in %d directories.', count($open), $unjudged, count($groups)));
+        Voice::note($output, sprintf('%d open, %d with no todo naming them, in %d directories.', count($open), $unjudged, count($groups)));
 
         foreach ($groups as $directory => $feedback) {
-            $output->writeln('');
-            $output->writeln(sprintf('%s — %d, newest first', $directory, count($feedback)));
+            Voice::heading($output, sprintf('%s — %d, newest first', $directory, count($feedback)));
             foreach (array_reverse($feedback) as $entry) {
-                $output->writeln(sprintf(
-                    '  %s  %s%s',
+                Voice::row($output, sprintf(
+                    '%s  %s%s',
                     $entry['file'],
-                    $entry['model'],
+                    Voice::dim($entry['model']),
                     $entry['judged'] ? '' : ' — no todo names it',
                 ));
             }

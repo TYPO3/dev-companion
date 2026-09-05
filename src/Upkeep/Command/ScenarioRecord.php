@@ -9,8 +9,8 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Scenarios;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * The empty run, ready to be filled in after the session.
@@ -34,12 +34,11 @@ final class ScenarioRecord
         string $client,
     ): int {
         $id = strtoupper($id);
-        $errors = Cli::errors($output);
 
         if (isset(Scenarios::contracts()[$id])) {
             // Not an oversight to be worked around: a case that names its own task
             // shape cannot be evidence that an agent found it.
-            $errors->writeln(sprintf('%s is a targeted contract case and is not run forward.', $id));
+            Voice::problem($output, sprintf('%s is a targeted contract case and is not run forward.', $id));
 
             return 2;
         }
@@ -47,14 +46,14 @@ final class ScenarioRecord
         try {
             $run = Scenarios::skeleton($id, self::server(), $client, date('Y-m-d'));
         } catch (\InvalidArgumentException $exception) {
-            $errors->writeln($exception->getMessage());
+            Voice::problem($output, $exception->getMessage());
 
             return 2;
         }
 
         $directory = Scenarios::runsDirectory();
         if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory)) {
-            $errors->writeln(sprintf('Cannot create %s.', $directory));
+            Voice::problem($output, sprintf('Cannot create %s.', $directory));
 
             return 1;
         }
@@ -63,13 +62,13 @@ final class ScenarioRecord
         $existed = file_exists($file);
         file_put_contents($file, json_encode($run, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
 
-        $output->writeln(sprintf(
+        Voice::ok($output, sprintf(
             '%s the run of %s in scenarios/runs/%s.json',
             $existed ? 'Replaced' : 'Wrote',
             $run['scenario'],
             $run['scenario'],
         ));
-        $output->writeln(sprintf('Judge it against: bin/cli scenarios:show %s', $run['scenario']));
+        Voice::note($output, sprintf('Judge it against: bin/cli scenarios:show %s', $run['scenario']));
 
         return 0;
     }

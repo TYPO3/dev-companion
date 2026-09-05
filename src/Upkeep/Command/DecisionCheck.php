@@ -6,12 +6,12 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Decisions;
 use TYPO3\DevCompanion\Upkeep\DecisionStatus;
 use TYPO3\DevCompanion\Upkeep\Entry;
 use TYPO3\DevCompanion\Upkeep\Requirements;
 use TYPO3\DevCompanion\Upkeep\Sources;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Everything the format of decisions/ promises a reader, checked against the
@@ -202,31 +202,25 @@ final class DecisionCheck
         // only thing that fails when the behaviour an entry describes moves.
         $uncovered = Decisions::uncovered();
         if ($uncovered !== []) {
-            $output->writeln(sprintf(
+            Voice::heading($output, sprintf(
                 '%d entries point at this code and name no test that would catch it moving — '
-                . '%d open, %d confirmed, and each one for a reason in the entry (D-DOC-053):',
+                . '%d open, %d confirmed, and each one for a reason in the entry (D-DOC-053)',
                 count($uncovered),
                 count(array_filter($uncovered, static fn(array $e): bool => $e['status'] === 'open')),
                 count(array_filter($uncovered, static fn(array $e): bool => $e['status'] === 'confirmed')),
             ));
             foreach (array_slice($uncovered, 0, 3) as $entry) {
-                $output->writeln(sprintf(
-                    '  %-11s %-10s names %d of our classes',
-                    $entry['id'],
+                Voice::row($output, sprintf(
+                    '%s %-10s names %d of our classes',
+                    Voice::key($entry['id'], 11),
                     $entry['status'],
                     $entry['names'],
                 ));
             }
-            $output->writeln('');
         }
-
-
-        $errors = Cli::errors($output);
         foreach ($problems as $problem) {
-            $errors->writeln($problem);
+            Voice::problem($output, $problem);
         }
-        $output->writeln(sprintf('%d decisions, %d problems', count($seen), count($problems)));
-
-        return $problems === [] ? 0 : 1;
+        return Voice::verdict($output, count($problems), sprintf('%d decisions, %s', count($seen), Voice::count(count($problems), 'problem')));
     }
 }

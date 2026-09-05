@@ -11,9 +11,9 @@ use TYPO3\DevCompanion\Knowledge\TestSuiteHints;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Tool\TranslationDomainLookup;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\PinnedPackage;
 use TYPO3\DevCompanion\Upkeep\RangeReport;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Whether the version statements this repository binds still hold.
@@ -90,19 +90,19 @@ final class VersionCheck
      */
     private static function verifyFluidEngine(OutputInterface $output, string $checkouts): int
     {
-        $output->writeln('Fluid engine');
+        Voice::heading($output, 'Fluid engine');
         $problems = 0;
         foreach (Versions::covered() as $version) {
             $manifest = $checkouts . '/' . $version['branch'] . '/composer.json';
             if (!is_file($manifest)) {
-                Cli::errors($output)->writeln(sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
+                Voice::problem($output, sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
 
                 return 2;
             }
 
             $constraint = json_decode((string) file_get_contents($manifest), true)['require']['typo3fluid/fluid'] ?? null;
             if (!is_string($constraint)) {
-                $output->writeln(sprintf('  %-5s requires no typo3fluid/fluid', $version['branch']));
+                Voice::problem($output, sprintf('%s requires no typo3fluid/fluid', $version['branch']));
                 ++$problems;
                 continue;
             }
@@ -117,22 +117,13 @@ final class VersionCheck
                 static fn(int $major): bool => Versions::admits($constraint, $major),
             ));
 
-            $output->writeln(sprintf('  %-5s %-10s %s', $version['branch'], $constraint, $majors === [] ? 'unreadable' : 'Fluid v' . implode(', v', $majors)));
+            Voice::row($output, sprintf('%s %-10s %s', Voice::key($version['branch'], 5), $constraint, $majors === [] ? 'unreadable' : 'Fluid v' . implode(', v', $majors)));
             if (count($majors) !== 1) {
                 ++$problems;
             }
         }
-        $output->writeln('');
 
-        if ($problems === 0) {
-            $output->writeln('Every branch pins one Fluid engine major, so the TYPO3 major still carries it.');
-
-            return 0;
-        }
-
-        $output->writeln(sprintf('%d branch(es) no longer pin one Fluid engine major — D-VER-003 says the engine needs a field of its own.', $problems));
-
-        return 1;
+        return Voice::verdict($output, $problems, 'Every branch pins one Fluid engine major, so the TYPO3 major still carries it.', Voice::count($problems, 'branch', 'branches') . ' no longer pin one Fluid engine major — D-VER-003 says the engine needs a field of its own.');
     }
 
     /**
@@ -147,10 +138,10 @@ final class VersionCheck
     private static function verifyTestingFramework(OutputInterface $output, string $checkouts): int
     {
         $harness = PinnedPackage::testingFramework();
-        $output->writeln($harness->package);
+        Voice::heading($output, $harness->package);
         $mirror = $harness->mirror($checkouts);
         if (!is_dir($mirror)) {
-            Cli::errors($output)->writeln(sprintf('No %s clone below %s — run bin/cli checkouts:update.', $harness->package, $checkouts));
+            Voice::problem($output, sprintf('No %s clone below %s — run bin/cli checkouts:update.', $harness->package, $checkouts));
 
             return 2;
         }
@@ -158,9 +149,9 @@ final class VersionCheck
         $problems = 0;
         $read = [];
         foreach ($harness->pairing($checkouts) as $pair) {
-            $output->writeln(sprintf(
-                '  %-5s %-9s %s',
-                $pair['branch'],
+            Voice::row($output, sprintf(
+                '%s %-9s %s',
+                Voice::key($pair['branch'], 5),
                 $pair['constraint'] === '' ? 'no pin' : $pair['constraint'],
                 $pair['ref'] ?? 'names no single release line',
             ));
@@ -175,18 +166,9 @@ final class VersionCheck
             $read[$pair['ref']] = true;
             $problems += self::readTestingFramework($output, $mirror, $pair);
         }
-        $output->writeln(sprintf('  %d release line(s) against %s', count($read), implode(', ', array_column(Versions::covered(), 'branch'))));
-        $output->writeln('');
+        Voice::row($output, sprintf('%s against %s', Voice::count(count($read), 'release line'), implode(', ', array_column(Versions::covered(), 'branch'))));
 
-        if ($problems === 0) {
-            $output->writeln('Every statement about the harness still reads as project-extension-tests states it.');
-
-            return 0;
-        }
-
-        $output->writeln(sprintf('%d statement(s) about the harness no longer read as project-extension-tests states them.', $problems));
-
-        return 1;
+        return Voice::verdict($output, $problems, 'Every statement about the harness still reads as project-extension-tests states it.', Voice::count($problems, 'statement') . ' about the harness no longer read as project-extension-tests states them.');
     }
 
     /**
@@ -203,12 +185,12 @@ final class VersionCheck
         $ref = (string) $pair['ref'];
         $checkedOut = PinnedPackage::revision($pair['path'], 'HEAD');
         if ($checkedOut === '') {
-            $output->writeln(sprintf('    %s is not checked out — run bin/cli checkouts:update', $ref));
+            Voice::problem($output, sprintf('%s is not checked out — run bin/cli checkouts:update', $ref));
 
             return 1;
         }
         if ($checkedOut !== PinnedPackage::revision($mirror, $ref)) {
-            $output->writeln(sprintf('    %s is checked out at %s — run bin/cli checkouts:update', $ref, substr($checkedOut, 0, 12)));
+            Voice::problem($output, sprintf('%s is checked out at %s — run bin/cli checkouts:update', $ref, substr($checkedOut, 0, 12)));
 
             return 1;
         }
@@ -217,13 +199,13 @@ final class VersionCheck
         foreach (self::TESTING_FRAMEWORK_EVIDENCE as $file => $needles) {
             $source = is_file($pair['path'] . '/' . $file) ? (string) file_get_contents($pair['path'] . '/' . $file) : null;
             if ($source === null) {
-                $output->writeln(sprintf('    %s: %s is gone', $ref, $file));
+                Voice::problem($output, sprintf('%s: %s is gone', $ref, $file));
                 ++$problems;
                 continue;
             }
             foreach ($needles as $needle) {
                 if (!str_contains($source, $needle)) {
-                    $output->writeln(sprintf('    %s: %s no longer says %s', $ref, $file, $needle));
+                    Voice::problem($output, sprintf('%s: %s no longer says %s', $ref, $file, $needle));
                     ++$problems;
                 }
             }
@@ -245,13 +227,13 @@ final class VersionCheck
      */
     private static function verifyTestSuites(OutputInterface $output, string $checkouts, array $suites): int
     {
-        $output->writeln('Test suites');
+        Voice::heading($output, 'Test suites');
         $covered = Versions::covered();
         $offered = [];
         foreach ($covered as $version) {
             $script = $checkouts . '/' . $version['branch'] . '/Build/Scripts/runTests.sh';
             if (!is_file($script)) {
-                Cli::errors($output)->writeln(sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
+                Voice::problem($output, sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
 
                 return 2;
             }
@@ -269,8 +251,8 @@ final class VersionCheck
                 static fn(int $major): bool => in_array($suite, $offered[$major], true),
             ));
             if ($on === []) {
-                Cli::errors($output)->writeln(sprintf(
-                    '  %s runs -s %s, which no covered branch offers',
+                Voice::problem($output, sprintf(
+                    '%s runs -s %s, which no covered branch offers',
                     $entry['suite'],
                     $suite,
                 ));
@@ -283,8 +265,8 @@ final class VersionCheck
                 max($on) === max($majors) ? null : max($on),
             ];
             if ([$entry['since'], $entry['until']] !== $read) {
-                Cli::errors($output)->writeln(sprintf(
-                    '  %s declares %s and the script offers it on %s',
+                Voice::problem($output, sprintf(
+                    '%s declares %s and the script offers it on %s',
                     $entry['suite'],
                     Versions::label($entry['since'], $entry['until']) ?: 'every covered version',
                     implode(', ', $on),
@@ -301,30 +283,21 @@ final class VersionCheck
             array_keys($named),
         ));
         sort($uncurated);
-        $output->writeln(sprintf(
-            '  %d suites against %s, %d of them curated',
+        Voice::row($output, sprintf(
+            '%d suites against %s, %d of them curated',
             count(array_unique(array_merge(...array_values($offered)))),
             implode(', ', array_column($covered, 'branch')),
             count($named),
         ));
-        $output->writeln(sprintf(
-            '  no hint names: %s',
+        Voice::row($output, sprintf(
+            'no hint names: %s',
             $uncurated === []
                 ? 'nothing'
                 : implode(', ', array_slice($uncurated, 0, self::NAMED_UNCURATED))
                     . (count($uncurated) > self::NAMED_UNCURATED ? sprintf(' and %d more', count($uncurated) - self::NAMED_UNCURATED) : ''),
         ));
-        $output->writeln('');
 
-        if ($problems === 0) {
-            $output->writeln('Every suite hint holds on the versions runTests.sh offers it.');
-
-            return 0;
-        }
-
-        $output->writeln(sprintf('%d suite hint(s) no longer read as the script does.', $problems));
-
-        return 1;
+        return Voice::verdict($output, $problems, 'Every suite hint holds on the versions runTests.sh offers it.', Voice::count($problems, 'suite hint') . ' no longer read as the script does.');
     }
 
     /**
@@ -379,12 +352,12 @@ final class VersionCheck
      */
     private static function verifyTranslationDomains(OutputInterface $output, string $checkouts): int
     {
-        $output->writeln('Translation domains');
+        Voice::heading($output, 'Translation domains');
         $resolves = [];
         foreach (Versions::covered() as $version) {
             $directory = $checkouts . '/' . $version['branch'] . '/typo3/sysext/core/Classes/Localization';
             if (!is_dir($directory)) {
-                Cli::errors($output)->writeln(sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
+                Voice::problem($output, sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
 
                 return 2;
             }
@@ -394,33 +367,29 @@ final class VersionCheck
                 $classes[] = $file->getFilename();
             }
             $resolves[$version['major']] = $classes !== [];
-            $output->writeln(sprintf(
-                '  %-5s %s',
-                $version['branch'],
+            Voice::row($output, sprintf(
+                '%s %s',
+                Voice::key($version['branch'], 5),
                 $classes === [] ? 'no TranslationDomain* class' : implode(', ', $classes),
             ));
         }
 
         $found = RangeReport::since($resolves);
-        $output->writeln(sprintf(
-            '  withheld below v%d, resolved %s',
+        Voice::row($output, sprintf(
+            'withheld below v%d, resolved %s',
             TranslationDomainLookup::SINCE,
             $found === null ? 'on every covered version' : 'from v' . $found,
         ));
-        $output->writeln('');
 
-        if ($found === TranslationDomainLookup::SINCE) {
-            $output->writeln('Translation domains still arrive where TranslationDomainLookup withholds them.');
-
-            return 0;
-        }
-
-        $output->writeln(sprintf(
-            'TranslationDomainLookup::SINCE says v%d and the checkouts say %s — D-DIS-004 named this the release that makes it wrong.',
-            TranslationDomainLookup::SINCE,
-            $found === null ? 'every covered version resolves them' : 'v' . $found,
-        ));
-
-        return 1;
+        return Voice::verdict(
+            $output,
+            $found === TranslationDomainLookup::SINCE ? 0 : 1,
+            'Translation domains still arrive where TranslationDomainLookup withholds them.',
+            sprintf(
+                'TranslationDomainLookup::SINCE says v%d and the checkouts say %s — D-DIS-004 named this the release that makes it wrong.',
+                TranslationDomainLookup::SINCE,
+                $found === null ? 'every covered version resolves them' : 'v' . $found,
+            ),
+        );
     }
 }

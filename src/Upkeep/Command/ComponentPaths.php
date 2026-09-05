@@ -9,7 +9,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Catalogs;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Whether every path the component catalog names still exists in one checkout.
@@ -33,13 +33,13 @@ final class ComponentPaths
     ): int {
         $coreRoot = rtrim($checkout, '/');
         if (!is_dir($coreRoot . '/typo3/sysext/core')) {
-            Cli::errors($output)->writeln(sprintf('Not a TYPO3 core checkout: %s', $coreRoot));
+            Voice::problem($output, sprintf('Not a TYPO3 core checkout: %s', $coreRoot));
 
             return 2;
         }
 
         $components = Catalogs::read('component/entries');
-        $output->writeln('Components');
+        Voice::heading($output, 'Components');
         $problems = 0;
         foreach ($components as $component) {
             $paths = $component['sassPaths'] ?? [];
@@ -51,23 +51,22 @@ final class ComponentPaths
             }
             foreach (array_unique($paths) as $path) {
                 if (is_string($path) && $path !== '' && !file_exists($coreRoot . '/' . $path)) {
-                    $output->writeln('  path gone: ' . $component['name'] . ' → ' . $path);
+                    Voice::problem($output, $component['name'] . ' names ' . $path . ', which is gone');
                     ++$problems;
                 }
             }
         }
-        $output->writeln(sprintf('  %d components', count($components)));
-        $output->writeln('');
+        Voice::row($output, sprintf('%d components', count($components)));
 
         if ($problems === 0) {
             [$exitCode, $said] = Checkouts::run(['git', '-C', $coreRoot, 'rev-parse', 'HEAD']);
             $revision = $exitCode === 0 ? trim($said) : '';
-            $output->writeln(sprintf('No drift against %s%s', $coreRoot, $revision === '' ? '' : ' @ ' . substr($revision, 0, 12)));
+            Voice::ok($output, sprintf('No drift against %s%s', $coreRoot, $revision === '' ? '' : ' @ ' . substr($revision, 0, 12)));
 
             return 0;
         }
 
-        $output->writeln(sprintf('%d problem(s) found.', $problems));
+        Voice::wrong($output, Voice::count($problems, 'problem') . ' found.');
 
         return 1;
     }

@@ -12,10 +12,10 @@ use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Fixture;
 use TYPO3\DevCompanion\Upkeep\ToolAnswers;
 use TYPO3\DevCompanion\Upkeep\ToolSurface;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Calls every tool once and writes down what came back.
@@ -47,7 +47,7 @@ final class ToolRecord
     ): int {
         $root ??= self::newestCheckout();
         if (!is_dir($root)) {
-            Cli::errors($output)->writeln(sprintf('%s is not a directory — run bin/cli checkouts:update, or name an installation.', $root));
+            Voice::problem($output, sprintf('%s is not a directory — run bin/cli checkouts:update, or name an installation.', $root));
 
             return 2;
         }
@@ -56,15 +56,16 @@ final class ToolRecord
         Typo3Cli::forget();
         $found = Instance::root();
         if ($found === null) {
-            Cli::errors($output)->writeln(sprintf('No TYPO3 installation was found from %s, so there is nothing to record against.', $root));
+            Voice::problem($output, sprintf('No TYPO3 installation was found from %s, so there is nothing to record against.', $root));
 
             return 2;
         }
 
         $carried = self::carriedBeyondTheIndex($found);
         if ($carried !== []) {
-            Cli::errors($output)->writeln(sprintf(
-                "%s carries what bin/cli checkouts:update did not put there: %s.\n"
+            Voice::problem($output, sprintf(
+                '%s carries what bin/cli checkouts:update did not put there: %s.
+'
                 . 'A recording is evidence about the checkout that command makes, and this is no longer it — an '
                 . "installed console answers from a database nothing here creates.\n"
                 . 'Take it back with "git -C %s clean -xdff", or name an installation to record from.',
@@ -76,14 +77,20 @@ final class ToolRecord
             return 2;
         }
 
-        $output->writeln(sprintf('Answering from %s (TYPO3 %s)', $found, Instance::typo3Version() ?? 'unknown'));
+        Voice::heading($output, sprintf('Answering from %s (TYPO3 %s)', $found, Instance::typo3Version() ?? 'unknown'));
 
         $installation = $this->consoleAnswering($output, $found);
         // Trimmed rather than defaulted on null alone: naming the tools means
         // passing this argument, and the empty string that gets a caller past
         // it wrote a page saying "Recorded on ".
         $day = trim((string) $today) === '' ? ToolAnswers::day() : trim((string) $today);
-        $pages = ToolAnswers::rendered($day, $found, $installation, $tools);
+        $bar = Voice::progress($output);
+        $bar->start();
+        $pages = ToolAnswers::rendered($day, $found, $installation, $tools, static function (string $label) use ($bar): void {
+            $bar->setMessage($label);
+            $bar->advance();
+        });
+        $bar->clear();
         if (!is_dir(ToolSurface::directory())) {
             mkdir(ToolSurface::directory(), 0777, true);
         }
@@ -98,12 +105,12 @@ final class ToolRecord
             foreach (ToolSurface::written() as $written) {
                 if (!isset($pages[$written->getPathname()])) {
                     unlink($written->getPathname());
-                    $output->writeln(sprintf('removed %s, which the registry no longer offers', $written->getFilename()));
+                    Voice::row($output, sprintf('removed %s, which the registry no longer offers', $written->getFilename()));
                 }
             }
         }
 
-        $output->writeln(sprintf(
+        Voice::ok($output, sprintf(
             '%s — %d pages',
             substr(ToolSurface::directory(), strlen(Paths::root()) + 1),
             count($pages) - count(ToolSurface::standingPages()),
@@ -133,8 +140,9 @@ final class ToolRecord
         Instance::discoverFrom($path);
         Typo3Cli::forget();
         if (!Typo3Cli::isAvailable()) {
-            $output->writeln(sprintf(
-                "The fixture installation is written and its console does not answer here: %s\n"
+            Voice::note($output, sprintf(
+                'The fixture installation is written and its console does not answer here: %s
+'
                 . '    Nothing records what a booted TYPO3 answers, so those pages carry one answer per call.',
                 Typo3Cli::reason(),
             ));
@@ -142,7 +150,7 @@ final class ToolRecord
             return null;
         }
 
-        $output->writeln(sprintf('Answering the installation-backed tools a second time from %s', $path));
+        Voice::row($output, sprintf('the installation-backed tools a second time from %s', $path));
 
         return $path;
     }

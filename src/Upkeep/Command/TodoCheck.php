@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\OpenFeedback;
 use TYPO3\DevCompanion\Upkeep\Todo;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Holds todo/ to the shape `bin/cli todo:next` reads it in.
@@ -172,22 +173,18 @@ final class TodoCheck
                 . ', which is already served by ' . implode(' and ', $pair['judged'])
                 . ' — delete the card the judgement replaced';
         }
-
-        $errors = Cli::errors($output);
         foreach ($problems as $problem) {
-            $errors->writeln($problem);
+            Voice::problem($output, $problem);
         }
-        $output->writeln(sprintf(
-            '%d files, %d recurring, %d queued, %d of them in hand, %d waiting, %d problems',
+        return Voice::verdict($output, count($problems), sprintf(
+            '%d files: %d recurring, %d queued, %d of them in hand, %d waiting, %s',
             count(Todo::all()),
             count(Todo::recurring()),
             count(Todo::items()),
             count(Todo::held()),
             count(Todo::waiting()),
-            count($problems),
+            Voice::count(count($problems), 'problem'),
         ));
-
-        return $problems === [] ? 0 : 1;
     }
 
 }

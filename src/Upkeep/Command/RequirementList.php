@@ -7,8 +7,8 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Requirements;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * What must hold, and what state it is in.
@@ -29,7 +29,8 @@ final class RequirementList
         string $group = '',
     ): int {
         if ($group !== '' && !in_array($group, Requirements::GROUPS, true)) {
-            Cli::errors($output)->writeln('No such group: ' . $group . "\nGroups: " . implode(', ', Requirements::GROUPS));
+            Voice::problem($output, 'No such group: ' . $group . '
+Groups: ' . implode(', ', Requirements::GROUPS));
 
             return 2;
         }
@@ -40,8 +41,8 @@ final class RequirementList
             }
 
             $output->writeln(sprintf(
-                '%-10s %-13s %-14s %s',
-                $requirement['id'],
+                '%s %-13s %-14s %s',
+                Voice::key($requirement['id'], 10),
                 $requirement['group'],
                 Requirements::state($requirement)->value,
                 $requirement['title'],

@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\Decisions;
 use TYPO3\DevCompanion\Upkeep\Renumber;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Puts every decision where its title says, and rewrites what named it.
@@ -38,10 +39,10 @@ final class DecisionRename
 
             ++$moved;
             $references += $refiled['references'];
-            $output->writeln(sprintf('  %s → %s', $refiled['from'], $refiled['to']));
+            Voice::row($output, sprintf('%s → %s', $refiled['from'], $refiled['to']));
         }
 
-        $output->writeln(sprintf('%d decisions moved, %d references rewritten.', $moved, $references));
+        Voice::ok($output, sprintf('%s moved, %s rewritten.', Voice::count($moved, 'decision'), Voice::count($references, 'reference')));
 
         return 0;
     }

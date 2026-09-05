@@ -8,9 +8,9 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Tool\Registry;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\ToolAnswers;
 use TYPO3\DevCompanion\Upkeep\ToolSurface;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Whether the tool reference still says what the registry declares, and how far
@@ -44,12 +44,12 @@ final class ToolCheck
         }
 
         foreach ($stale as $file) {
-            Cli::errors($output)->writeln($file . ' is not what the registry declares — run bin/cli tools:index');
+            Voice::problem($output, $file . ' is not what the registry declares — run bin/cli tools:index');
         }
-        $output->writeln(sprintf('%d tools, %d problems', count(Registry::definitions()), count($stale)));
+        $verdict = Voice::verdict($output, count($stale), sprintf('%d tools, %s', count(Registry::definitions()), Voice::count(count($stale), 'problem')));
         self::howOldTheRecordingIs($output);
 
-        return $stale === [] ? 0 : 1;
+        return $verdict;
     }
 
     /**
@@ -72,7 +72,7 @@ final class ToolCheck
 
         $behind = array_filter($recorded, static fn(string $day): bool => $day < $moved);
         if ($behind === []) {
-            $output->writeln(sprintf(
+            Voice::note($output, sprintf(
                 '%d recorded pages, none of them older than knowledge/ and src/ on %s.',
                 count($recorded),
                 $moved,
@@ -81,13 +81,13 @@ final class ToolCheck
             return;
         }
 
-        $output->writeln(sprintf(
+        Voice::note($output, sprintf(
             '%d of %d recorded pages are older than knowledge/ and src/, which last moved on %s.',
             count($behind),
             count($recorded),
             $moved,
         ));
-        $output->writeln(sprintf(
+        Voice::note($output, sprintf(
             'The oldest is from %s, and bin/cli tools:record answers them again.',
             min($behind),
         ));

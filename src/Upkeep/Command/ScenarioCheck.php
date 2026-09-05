@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Scenarios;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Every recorded run against the scenario it claims to answer: judged in full,
@@ -32,15 +33,15 @@ final class ScenarioCheck
                 $state = 'open';
             }
             $output->writeln(sprintf(
-                '%-10s %-8s %-10s %s',
-                $id,
+                '%s %-8s %s %s',
+                Voice::key($id, 10),
                 $state === '' ? '—' : $state,
-                is_string($recorded['run']['date'] ?? null) ? $recorded['run']['date'] : '',
+                Voice::dim(str_pad(is_string($recorded['run']['date'] ?? null) ? $recorded['run']['date'] : '', 10)),
                 $recorded['problems'] === [] ? 'ok' : '',
             ));
             foreach ($recorded['problems'] as $problem) {
                 ++$problems;
-                $output->writeln(sprintf('  %s', $problem));
+                Voice::problem($output, $problem);
             }
             $quoted = Scenarios::unbackedTools($recorded['run']);
             if ($quoted !== []) {
@@ -49,19 +50,17 @@ final class ScenarioCheck
         }
 
         foreach ($unbacked as $id => $quoted) {
-            $output->writeln('');
-            $output->writeln(sprintf('%s quotes %s, and its trace carries no such call.', $id, implode(', ', $quoted)));
+            Voice::note($output, sprintf('%s quotes %s, and its trace carries no such call.', $id, implode(', ', $quoted)));
         }
 
         // Not a failure. Most scenarios have never been run forward, and a suite
         // that fails for that would be a suite nobody could add a scenario to.
         $unrun = array_values(array_diff(array_keys(Scenarios::load()), array_keys($runs)));
-        $output->writeln('');
-        $output->writeln(sprintf('%d of %d forward reviews have a recorded run.', count($runs), count($runs) + count($unrun)));
+        Voice::note($output, sprintf('%d of %d forward reviews have a recorded run.', count($runs), count($runs) + count($unrun)));
         if ($unrun !== []) {
-            $output->writeln(sprintf('Never run forward: %s', implode(', ', $unrun)));
+            Voice::note($output, sprintf('Never run forward: %s', implode(', ', $unrun)));
         }
 
-        return $problems === 0 ? 0 : 1;
+        return Voice::verdict($output, $problems, 'Every recorded run answers the scenario it claims to.', Voice::count($problems, 'recorded run') . ' no longer read as the scenario does.');
     }
 }

@@ -8,8 +8,8 @@ use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Json;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * `composer cgl` for the half of this repository that is not PHP.
@@ -39,7 +39,7 @@ final class KnowledgeFormat
     ): int {
         $files = self::targets($paths);
         if ($files === []) {
-            Cli::errors($output)->writeln($paths === []
+            Voice::problem($output, $paths === []
                 ? 'knowledge/ holds no JSON file.'
                 : sprintf('No JSON file below knowledge/ matches %s.', implode(', ', $paths)));
 
@@ -67,20 +67,17 @@ final class KnowledgeFormat
             }
         }
 
-        $output->writeln(sprintf('%d of %d files rewritten.', count($rewritten), count($files)));
+        Voice::ok($output, sprintf('%d of %d files rewritten.', count($rewritten), count($files)));
         foreach ($rewritten as $file) {
-            $output->writeln('  ' . $file);
+            Voice::row($output, $file);
         }
 
         if ($unreadable === []) {
             return 0;
         }
-
-        $errors = Cli::errors($output);
-        $errors->writeln('');
-        $errors->writeln(sprintf('%d are not JSON and were left alone:', count($unreadable)));
+        Voice::problem($output, sprintf('%d are not JSON and were left alone:', count($unreadable)));
         foreach ($unreadable as $file => $message) {
-            $errors->writeln(sprintf('  %s: %s', $file, $message));
+            Voice::row($output, sprintf('%s: %s', $file, $message));
         }
 
         return 1;

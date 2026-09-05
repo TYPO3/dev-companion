@@ -9,9 +9,9 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Decisions;
 use TYPO3\DevCompanion\Upkeep\Renumber;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Giving a decision another number, and handing over the references it cannot.
@@ -38,19 +38,18 @@ final class DecisionRenumber
         #[Argument('the number it takes, or nothing for the next one free in its group')]
         string $number = '',
     ): int {
-        $errors = Cli::errors($output);
         $root = Paths::root();
 
         $files = Renumber::files($root, $decision);
         if ($files === []) {
-            $errors->writeln($decision . ' names neither an id nor a decision file');
+            Voice::problem($output, $decision . ' names neither an id nor a decision file');
 
             return 1;
         }
         if (count($files) > 1) {
-            $errors->writeln($decision . ' is claimed by more than one file, and which of them moves is yours to say:');
+            Voice::problem($output, $decision . ' is claimed by more than one file, and which of them moves is yours to say:');
             foreach ($files as $path) {
-                $errors->writeln('    ' . self::relative($root, $path));
+                Voice::row($output, self::relative($root, $path));
             }
 
             return 1;
@@ -62,13 +61,13 @@ final class DecisionRenumber
             $to = $number === '' ? Renumber::next($root, substr($from, 2, 3)) : $this->target($from, $number);
             $report = Renumber::decision($root, $files[0], $to);
         } catch (\InvalidArgumentException|\RuntimeException $exception) {
-            $errors->writeln($exception->getMessage());
+            Voice::problem($output, $exception->getMessage());
 
             return 1;
         }
 
-        $output->writeln(sprintf('%s → %s', $report['from'], $report['to']));
-        $output->writeln('    ' . $report['file']);
+        Voice::ok($output, sprintf('%s → %s', $report['from'], $report['to']));
+        Voice::row($output, Voice::dim($report['file']));
 
         $output->writeln('');
         $output->writeln(sprintf(

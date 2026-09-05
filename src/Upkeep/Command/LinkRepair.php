@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Links;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * The other half of `links:check`: the dead link this repository moved the file
@@ -28,17 +29,15 @@ final class LinkRepair
     {
         $written = Links::repair();
         if ($written === []) {
-            $output->writeln('No link names a feedback that has been answered since.');
+            Voice::ok($output, 'No link names a feedback that has been answered since.');
 
             return 0;
         }
 
         foreach ($written as $link) {
-            $output->writeln(sprintf('%s: %s is now %s', $link['file'], $link['link'], $link['repair']));
+            Voice::row($output, sprintf('%s: %s is now %s', $link['file'], $link['link'], $link['repair']));
         }
-
-        $output->writeln('');
-        $output->writeln(sprintf('%d links repointed at the archive.', count($written)));
+        Voice::ok($output, Voice::count(count($written), 'link') . ' repointed at the archive.');
 
         return 0;
     }

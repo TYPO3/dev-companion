@@ -8,7 +8,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Http\Fetch;
 use TYPO3\DevCompanion\Manual\Manuals;
-use TYPO3\DevCompanion\Upkeep\Cli;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Whether each manual still declares the shortcode `knowledge/manuals.json`
@@ -40,24 +40,30 @@ final class ManualCheck
     {
         $reader = new Fetch(Manuals::reader());
         $problems = 0;
+        $bar = Voice::progress($output, count(Manuals::all()));
+        $bar->start();
         foreach (Manuals::all() as $manual) {
+            $bar->setMessage($manual['shortcode']);
+            $bar->display();
             $base = Manuals::base($manual['collection'], $manual['document'], self::BRANCH);
             $page = $reader->get($base . 'Index.html');
             $declared = $page !== null && preg_match(self::DECLARED, $page, $stated) === 1 ? $stated[1] : null;
 
-            $output->writeln(sprintf(
-                '  %-16s %-34s %s',
-                $manual['shortcode'],
+            $bar->clear();
+            Voice::row($output, sprintf(
+                '%s %-34s %s',
+                Voice::key($manual['shortcode'], 16),
                 $manual['collection'] . '/' . $manual['document'],
                 $declared ?? ($page === null ? 'did not answer' : 'declares no shortcode'),
             ));
+            $bar->advance();
             if ($declared === $manual['shortcode']) {
                 continue;
             }
 
             ++$problems;
-            Cli::errors($output)->writeln(sprintf(
-                '    %s is addressed as %s here and %s',
+            Voice::problem($output, sprintf(
+                '%s is addressed as %s here and %s',
                 $manual['title'],
                 $manual['shortcode'],
                 $declared === null
@@ -66,21 +72,13 @@ final class ManualCheck
             ));
         }
 
-        $output->writeln('');
-        if ($problems === 0) {
-            $output->writeln(sprintf(
-                'Every manual declares the shortcode it is addressed by, read at %s.',
-                self::BRANCH,
-            ));
+        $bar->clear();
 
-            return 0;
-        }
-
-        $output->writeln(sprintf(
-            '%d manual(s) no longer declare what knowledge/manuals.json says — D-ANS-120 named this the drift nothing else reports.',
+        return Voice::verdict(
+            $output,
             $problems,
-        ));
-
-        return 1;
+            sprintf('Every manual declares the shortcode it is addressed by, read at %s.', self::BRANCH),
+            Voice::count($problems, 'manual') . ' no longer declare what knowledge/manuals.json says — D-ANS-120 named this the drift nothing else reports.',
+        );
     }
 }

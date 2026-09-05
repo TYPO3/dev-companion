@@ -10,9 +10,9 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\BackendCss;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\ComponentDerivation;
 use TYPO3\DevCompanion\Upkeep\Json;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Where each of a component's classes sits, and which majors it holds on.
@@ -48,8 +48,8 @@ final class ComponentDerive
             $checkouts[$version['major']] = $checkout;
         }
         if ($missing !== []) {
-            Cli::errors($output)->writeln(sprintf(
-                'No compiled backend stylesheet below %s: run bin/cli checkouts:update.',
+            Voice::problem($output, sprintf(
+                'No compiled backend stylesheet below %s — run bin/cli checkouts:update.',
                 implode(', ', $missing),
             ));
 
@@ -62,7 +62,7 @@ final class ComponentDerive
         self::write(self::LISTING, $derived['listing']);
 
         $placed = count(array_filter($derived['classes'], static fn(array $c): bool => $c['positions'] !== []));
-        $output->writeln(sprintf(
+        Voice::ok($output, sprintf(
             '%d classes, %d of them placed, and %d custom elements, over %s',
             count($derived['classes']),
             $placed,
@@ -70,7 +70,7 @@ final class ComponentDerive
             implode(', ', array_column(Versions::covered(), 'branch')),
         ));
         $ships = ComponentDerivation::listing($checkouts);
-        $output->writeln(sprintf(
+        Voice::row($output, sprintf(
             '%d components listed by the styleguide, which %s ships',
             count($derived['listing']),
             $ships === [] ? 'no covered major' : 'major ' . implode(', ', $ships),

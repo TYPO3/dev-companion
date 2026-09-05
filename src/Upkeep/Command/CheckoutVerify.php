@@ -9,7 +9,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Everything this repository binds to a core version, against the checkouts.
@@ -37,16 +37,15 @@ final class CheckoutVerify
     {
         $directory = Checkouts::directory();
         if (!is_dir($directory)) {
-            Cli::errors($output)->writeln(sprintf('No checkouts below %s — run bin/cli checkouts:update.', $directory));
+            Voice::problem($output, sprintf('No checkouts below %s — run bin/cli checkouts:update.', $directory));
 
             return 2;
         }
 
         $worst = 0;
         foreach (self::VERIFIED as $subject) {
-            $output->writeln(sprintf('── %s', $subject));
+            Voice::heading($output, $subject);
             $worst = max($worst, $application->doRun(new StringInput($subject . ':check'), $output));
-            $output->writeln('');
         }
 
         return $worst;

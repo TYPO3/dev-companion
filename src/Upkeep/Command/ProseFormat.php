@@ -9,9 +9,9 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Prose;
 use TYPO3\DevCompanion\Upkeep\Todo;
+use TYPO3\DevCompanion\Upkeep\Voice;
 use TYPO3\DevCompanion\Upkeep\Wrap;
 
 /**
@@ -53,7 +53,7 @@ final class ProseFormat
         } else {
             $files = self::named($paths, $corpus);
             if ($files === []) {
-                Cli::errors($output)->writeln(sprintf(
+                Voice::problem($output, sprintf(
                     'No prose file this repository writes about itself matches %s.',
                     implode(', ', $paths),
                 ));
@@ -75,9 +75,9 @@ final class ProseFormat
             }
         }
 
-        $output->writeln(sprintf('%d of %d files rewrapped.', count($rewritten), count($files)));
+        Voice::ok($output, sprintf('%d of %d files rewrapped.', count($rewritten), count($files)));
         foreach ($rewritten as $file) {
-            $output->writeln('  ' . $file);
+            Voice::row($output, $file);
         }
 
         return 0;
@@ -136,7 +136,7 @@ final class ProseFormat
         $root = Paths::root();
         if (Todo::linked($root)) {
             $branch = Todo::standing($root);
-            $output->writeln(sprintf(
+            Voice::note($output, sprintf(
                 'A worktree rewraps what it changed, so this is %s and not the corpus.',
                 $branch === '' ? 'what is in hand here' : $branch . "'s own files",
             ));
@@ -151,7 +151,7 @@ final class ProseFormat
 
         $files = array_values(array_diff($corpus, $held));
         if ($files !== $corpus) {
-            $output->writeln(sprintf(
+            Voice::note($output, sprintf(
                 '%d files are in hand and left to the claims holding them.',
                 count($corpus) - count($files),
             ));

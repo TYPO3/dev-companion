@@ -14,6 +14,7 @@ use TYPO3\DevCompanion\Upkeep\Entry;
 use TYPO3\DevCompanion\Upkeep\Requirements;
 use TYPO3\DevCompanion\Upkeep\RequirementState;
 use TYPO3\DevCompanion\Upkeep\Sources;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Everything the format of requirements/ promises a reader, checked against the
@@ -154,14 +155,10 @@ final class RequirementCheck
                 $problems[] = $where . ' names ' . $id . ', which no requirement has';
             }
         }
-
-        $errors = Cli::errors($output);
         foreach ($problems as $problem) {
-            $errors->writeln($problem);
+            Voice::problem($output, $problem);
         }
-        $output->writeln(sprintf('%d requirements, %d problems', count($seen), count($problems)));
-
-        return $problems === [] ? 0 : 1;
+        return Voice::verdict($output, count($problems), sprintf('%d requirements, %s', count($seen), Voice::count(count($problems), 'problem')));
     }
 
 

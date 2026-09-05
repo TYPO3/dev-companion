@@ -28,7 +28,7 @@ final class RangeReport
     public static function of(OutputInterface $output, string $key, array $entry, array $majors, array $covered): int
     {
         if ($majors !== range((int) $majors[0], (int) end($majors))) {
-            $output->writeln(sprintf('  %s: shipped on v%s, which no range can express', $key, implode(', v', $majors)));
+            Voice::problem($output, sprintf('%s: shipped on v%s, which no range can express', $key, implode(', v', $majors)));
 
             return 1;
         }
@@ -41,8 +41,8 @@ final class RangeReport
             return 0;
         }
 
-        $output->writeln(sprintf(
-            '  %s: records %s, ships %s',
+        Voice::problem($output, sprintf(
+            '%s: records %s, ships %s',
             $key,
             self::label($recordedSince, $recordedUntil),
             self::label($since, $until),

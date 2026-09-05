@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Decisions;
 use TYPO3\DevCompanion\Upkeep\Todo;
 use TYPO3\DevCompanion\Upkeep\Unresolved;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Reads what requirements/ and decisions/ say is unfinished.
@@ -50,15 +51,15 @@ final class UnresolvedList
         $requirements = Unresolved::requirements();
         foreach ($requirements as $requirement) {
             $output->writeln(sprintf(
-                '%-10s %-12s %s%s',
-                $requirement['id'],
+                '%s %-12s %s%s',
+                Voice::key($requirement['id'], 10),
                 $requirement['state'],
                 $requirement['title'],
                 self::answer($requirement),
             ));
         }
         if ($requirements === []) {
-            $output->writeln('Every requirement is met and guarded.');
+            Voice::ok($output, 'Every requirement is met and guarded.');
         }
 
         // What is owed here is the judgement, not the work: a requirement some
@@ -76,7 +77,7 @@ final class UnresolvedList
         // not one of them: the reasoning under a held requirement is gone and
         // its test is still green, so nothing else in this report would say so.
         foreach (Unresolved::requirementsOnRevokedDecisions() as $resting) {
-            $output->writeln(sprintf(
+            Voice::problem($output, sprintf(
                 '%s rests on %s, which is revoked%s.',
                 $resting['id'],
                 $resting['decision'],
@@ -93,13 +94,14 @@ final class UnresolvedList
         // (`D-DOC-054`).
         $waiting = array_values(array_filter($unread, static fn(array $d): bool => !$d['held']));
         if ($unread === []) {
-            $output->writeln(sprintf('All %d decisions have been back-checked.', $total));
+            Voice::ok($output, sprintf('All %d decisions have been back-checked.', $total));
 
             return $unjudged === [] ? 0 : 1;
         }
 
-        $output->writeln(sprintf(
-            "%d of %d decisions are open, %d of those nobody has been back to, and %d of those are held by no test.\n"
+        Voice::note($output, sprintf(
+            '%d of %d decisions are open, %d of those nobody has been back to, and %d of those are held by no test.
+'
             . '%s bin/cli decisions:list has them all.',
             count($standing),
             $total,

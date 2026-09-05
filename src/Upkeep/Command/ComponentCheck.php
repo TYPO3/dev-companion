@@ -11,9 +11,9 @@ use TYPO3\DevCompanion\Knowledge\Catalog\DemoMarkup;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Upkeep\Catalogs;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\ComponentDerivation;
 use TYPO3\DevCompanion\Upkeep\RangeReport;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Whether the component catalog still says what the core checkouts say.
@@ -63,7 +63,7 @@ final class ComponentCheck
         foreach ($covered as $version) {
             $directory = $checkouts . '/' . $version['branch'] . '/Build/Sources';
             if (!is_dir($directory)) {
-                Cli::errors($output)->writeln(sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
+                Voice::problem($output, sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
 
                 return 2;
             }
@@ -77,7 +77,7 @@ final class ComponentCheck
         }
 
         $newest = end($covered)['major'];
-        $output->writeln('Component bindings');
+        Voice::heading($output, 'Component bindings');
         $problems = 0;
         foreach ($components as $component) {
             $holds = [];
@@ -92,18 +92,9 @@ final class ComponentCheck
             $problems += self::reportBinding($output, $component, 'since', RangeReport::since($holds));
             $problems += self::reportBinding($output, $component, 'classesSince', RangeReport::since($classesHold));
         }
-        $output->writeln(sprintf('  %d components against %s', count($components), implode(', ', array_column($covered, 'branch'))));
-        $output->writeln('');
+        Voice::row($output, sprintf('%d components against %s', count($components), implode(', ', array_column($covered, 'branch'))));
 
-        if ($problems === 0) {
-            $output->writeln('Every binding still says what the checkouts say.');
-
-            return 0;
-        }
-
-        $output->writeln(sprintf('%d binding(s) out of date.', $problems));
-
-        return 1;
+        return Voice::verdict($output, $problems, 'Every binding still says what the checkouts say.', Voice::count($problems, 'binding') . ' out of date.');
     }
 
 
@@ -119,8 +110,8 @@ final class ComponentCheck
             return 0;
         }
 
-        $output->writeln(sprintf(
-            '  %s: records %s%s, holds %s',
+        Voice::problem($output, sprintf(
+            '%s: records %s%s, holds %s',
             $component['name'],
             $recorded === null ? 'no binding' : 'since v' . $recorded,
             $field === 'since' ? '' : ' for its class list',
@@ -233,7 +224,7 @@ final class ComponentCheck
      */
     private static function verifyMarkup(OutputInterface $output, string $checkouts, array $components): int
     {
-        $output->writeln('Component markup');
+        Voice::heading($output, 'Component markup');
         $covered = Versions::covered();
         $problems = 0;
         $withoutDemo = 0;
@@ -255,7 +246,7 @@ final class ComponentCheck
             foreach ($covered as $version) {
                 $file = $checkouts . '/' . $version['branch'] . '/' . $demo;
                 if (!is_dir($checkouts . '/' . $version['branch'])) {
-                    Cli::errors($output)->writeln(sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
+                    Voice::problem($output, sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
 
                     return 2;
                 }
@@ -289,8 +280,8 @@ final class ComponentCheck
                 if ($was === $now) {
                     continue;
                 }
-                $output->writeln(sprintf(
-                    '  %s: v%d records %s, and %s',
+                Voice::problem($output, sprintf(
+                    '%s: v%d records %s, and %s',
                     $component['name'],
                     $major,
                     $was ?? 'no markup',
@@ -299,31 +290,22 @@ final class ComponentCheck
                 ++$problems;
             }
         }
-        $output->writeln(sprintf(
-            '  %d demos against %s',
+        Voice::row($output, sprintf(
+            '%d demos against %s',
             count($components) - $withoutDemo,
             implode(', ', array_column($covered, 'branch')),
         ));
-        $output->writeln(sprintf(
-            '  %d of them name the component nowhere and %d entries name no demo, so their markup is held by nothing',
+        Voice::row($output, sprintf(
+            '%d of them name the component nowhere and %d entries name no demo, so their markup is held by nothing',
             $unnamed,
             $withoutDemo,
         ));
-        $output->writeln(sprintf(
-            '  %d show it nowhere copyable and say so, so the whole file is what moves under them',
+        Voice::row($output, sprintf(
+            '%d show it nowhere copyable and say so, so the whole file is what moves under them',
             $suppressed,
         ));
-        $output->writeln('');
 
-        if ($problems === 0) {
-            $output->writeln('Every demo still reads as its entry recorded it.');
-
-            return 0;
-        }
-
-        $output->writeln(sprintf('%d demo(s) no longer read as the entry records — reread them and record what they show.', $problems));
-
-        return 1;
+        return Voice::verdict($output, $problems, 'Every demo still reads as its entry recorded it.', Voice::count($problems, 'demo') . ' no longer read as the entry records — reread them and record what they show.');
     }
 
     /**
@@ -376,7 +358,7 @@ final class ComponentCheck
      */
     private static function verifyDerived(OutputInterface $output, string $checkouts): int
     {
-        $output->writeln('Derived classes and elements');
+        Voice::heading($output, 'Derived classes and elements');
         $paths = [];
         foreach (Versions::covered() as $version) {
             $paths[$version['major']] = $checkouts . '/' . $version['branch'];
@@ -390,8 +372,8 @@ final class ComponentCheck
             }
         }
         if ($stale !== []) {
-            Cli::errors($output)->writeln(sprintf(
-                '  %s no longer says what the checkouts say — run bin/cli components:derive',
+            Voice::problem($output, sprintf(
+                '%s no longer says what the checkouts say — run bin/cli components:derive',
                 implode(', ', $stale),
             ));
 
@@ -399,14 +381,13 @@ final class ComponentCheck
         }
 
         $ships = ComponentDerivation::listing($paths);
-        $output->writeln(sprintf(
-            '  %d classes and %d elements read as they are recorded, and %d components are listed by the styleguide on major %s.',
+        Voice::ok($output, sprintf(
+            '%d classes and %d elements read as they are recorded, and %d components are listed by the styleguide on major %s.',
             count($derived['classes']),
             count($derived['elements']),
             count($derived['listing']),
             $ships === [] ? 'none' : implode(', ', $ships),
         ));
-        $output->writeln('');
 
         return 0;
     }

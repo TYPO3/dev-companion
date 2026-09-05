@@ -7,9 +7,9 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Environments;
 use TYPO3\DevCompanion\Upkeep\SiteExtension;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Makes the working directory a scenario names, where this repository makes it.
@@ -43,7 +43,7 @@ final class EnvironmentCreate
         $id = strtoupper(trim($environment));
         $sources = Environments::sources();
         if (!isset($sources[$id])) {
-            Cli::errors($output)->writeln(sprintf(
+            Voice::problem($output, sprintf(
                 "%s is no environment this repository knows. `scenarios/readme.md` names these:\n    %s",
                 $environment,
                 implode(', ', Environments::ids()),
@@ -53,9 +53,8 @@ final class EnvironmentCreate
         }
 
         if ($sources[$id] !== Environments::MADE) {
-            $output->writeln($id . ' is not made here.');
-            $output->writeln('');
-            $output->writeln(Environments::reason($id));
+            Voice::wrong($output, $id . ' is not made here.');
+            Voice::note($output, Environments::reason($id));
 
             return 1;
         }
@@ -66,7 +65,7 @@ final class EnvironmentCreate
 
         $driver = strtolower(trim($database));
         if (!in_array($driver, Environments::drivers(), true)) {
-            Cli::errors($output)->writeln(sprintf(
+            Voice::problem($output, sprintf(
                 "%s is no database an installation is made on. There is:\n    %s",
                 $database,
                 implode(', ', Environments::drivers()),
@@ -91,7 +90,7 @@ final class EnvironmentCreate
     {
         $path = Environments::path('E-NONE');
         if (!is_dir($path) && !mkdir($path, 0o777, true) && !is_dir($path)) {
-            Cli::errors($output)->writeln('Cannot create ' . $path);
+            Voice::problem($output, 'Cannot create ' . $path);
 
             return 2;
         }
@@ -109,12 +108,12 @@ final class EnvironmentCreate
 
             TEXT);
         if ($written === false) {
-            Cli::errors($output)->writeln('Cannot write the note in ' . $path);
+            Voice::problem($output, 'Cannot write the note in ' . $path);
 
             return 2;
         }
 
-        $output->writeln('E-NONE is ' . $path);
+        Voice::ok($output, 'E-NONE is ' . $path);
 
         return 0;
     }
@@ -124,7 +123,7 @@ final class EnvironmentCreate
     {
         $refusal = Environments::refusal($branch);
         if ($refusal !== '') {
-            Cli::errors($output)->writeln($refusal);
+            Voice::problem($output, $refusal);
 
             return 1;
         }
@@ -132,7 +131,8 @@ final class EnvironmentCreate
         $path = Environments::path('E-SITE', $branch, $driver);
         $project = Environments::project($branch, $driver);
         if (!Environments::ddev()) {
-            Cli::errors($output)->writeln(
+            Voice::problem(
+                $output,
                 "There is no `ddev` on this machine, and an E-SITE is a DDEV project.\n"
                 . 'https://ddev.com/get-started/ is where it comes from.',
             );
@@ -148,26 +148,25 @@ final class EnvironmentCreate
         // directory nobody can visit, and refusing in its name is a dead end.
         $registered = Environments::projects()[$project] ?? null;
         if ($registered !== null && Environments::abandoned($registered)) {
-            $output->writeln(sprintf(
+            Voice::note($output, sprintf(
                 'DDEV still holds %s for %s, which is not there any more.',
                 $project,
                 $registered['approot'] === '' ? 'a directory it no longer names' : $registered['approot'],
             ));
             $discard = Environments::discard($project);
-            $output->writeln('    ' . implode(' ', $discard));
+            Voice::row($output, Voice::dim(implode(' ', $discard)));
 
             [$exitCode, $said] = Environments::run($discard);
             if ($exitCode !== 0) {
-                Cli::errors($output)->writeln(rtrim($said));
-                Cli::errors($output)->writeln('');
-                Cli::errors($output)->writeln('That registration stands in the way and this could not clear it.');
+                Voice::problem($output, rtrim($said));
+                Voice::problem($output, 'That registration stands in the way and this could not clear it.');
 
                 return 2;
             }
 
             $output->writeln('');
         } elseif ($registered !== null && rtrim($registered['approot'], '/') !== rtrim($path, '/')) {
-            Cli::errors($output)->writeln(sprintf(
+            Voice::problem($output, sprintf(
                 "DDEV already knows %s, and it is the one in %s.\nThat checkout's environment would be taken over by making this one.",
                 $project,
                 $registered['approot'],
@@ -181,30 +180,27 @@ final class EnvironmentCreate
         }
 
         if (!is_dir($path) && !mkdir($path, 0o777, true) && !is_dir($path)) {
-            Cli::errors($output)->writeln('Cannot create ' . $path);
+            Voice::problem($output, 'Cannot create ' . $path);
 
             return 2;
         }
 
         $stopped = $this->steps($output, Environments::build($branch, $driver), $path);
         if ($stopped !== null) {
-            Cli::errors($output)->writeln(sprintf(
+            Voice::problem($output, sprintf(
                 'Stopped at "%s". What is there stays, and this command carries on from it.',
                 $stopped,
             ));
             // The one failure that never finishes by carrying on. `--force`
             // covers the settings file, and no option of the setup gets
             // past tables an earlier installation left in the database.
-            Cli::errors($output)->writeln(
-                'A database an earlier installation populated is the exception: its tables',
+            Voice::note(
+                $output,
+                "A database an earlier installation populated is the exception: its tables\n"
+                . "are refused by the setup whatever is passed. Taking the project and the\n"
+                . 'directory away is what clears it, on a file and on a service alike:',
             );
-            Cli::errors($output)->writeln('are refused by the setup whatever is passed. Taking the project and the');
-            Cli::errors($output)->writeln('directory away is what clears it, on a file and on a service alike:');
-            Cli::errors($output)->writeln(sprintf(
-                '    %s && rm -rf %s',
-                implode(' ', Environments::discard($project)),
-                $path,
-            ));
+            Voice::row($output, Voice::dim(sprintf('%s && rm -rf %s', implode(' ', Environments::discard($project)), $path)));
 
             return 1;
         }
@@ -215,7 +211,7 @@ final class EnvironmentCreate
         // running and the backend refuses every login without saying why.
         $takenOver = Environments::takeOverGeneratedSettings($path);
         if ($takenOver !== null) {
-            $output->writeln($takenOver);
+            Voice::note($output, $takenOver);
         }
 
         if (!$this->ownExtension($output, $path)) {
@@ -241,13 +237,12 @@ final class EnvironmentCreate
         $path = Environments::path('E-SITE', $branch, $driver);
         $resume = Environments::resume($status);
         if ($resume !== null) {
-            $output->writeln(sprintf('The installation is at %s, and its containers are %s.', $path, $status ?? 'not registered'));
-            $output->writeln('    ' . implode(' ', $resume));
+            Voice::note($output, sprintf('The installation is at %s, and its containers are %s.', $path, $status ?? 'not registered'));
+            Voice::row($output, Voice::dim(implode(' ', $resume)));
             [$exitCode, $said] = Environments::run($resume, $path);
             if ($exitCode !== 0) {
-                Cli::errors($output)->writeln(rtrim($said));
-                Cli::errors($output)->writeln('');
-                Cli::errors($output)->writeln('The installation is there and its containers did not come up.');
+                Voice::problem($output, rtrim($said));
+                Voice::problem($output, 'The installation is there and its containers did not come up.');
 
                 return 2;
             }
@@ -274,7 +269,7 @@ final class EnvironmentCreate
      */
     private function ownExtension(OutputInterface $output, string $path): bool
     {
-        $output->writeln(sprintf('The extension of the project\'s own, written into %s/packages/', $path));
+        Voice::heading($output, sprintf('The extension of the project\'s own, written into %s/packages/', $path));
         SiteExtension::write($path);
 
         $stopped = $this->steps($output, Environments::ownExtension(), $path);
@@ -282,7 +277,7 @@ final class EnvironmentCreate
             return true;
         }
 
-        Cli::errors($output)->writeln(sprintf(
+        Voice::problem($output, sprintf(
             'Stopped at "%s". The installation is there and has no table of this project in it, which is'
             . ' what typo3_record_lookup answers for; asking for this environment again runs the step again.',
             $stopped,
@@ -302,13 +297,20 @@ final class EnvironmentCreate
      */
     private function steps(OutputInterface $output, array $steps, string $path): ?string
     {
+        $bar = Voice::progress($output, count($steps));
+        $bar->start();
         foreach ($steps as $what => $command) {
-            $output->writeln($what);
-            $output->writeln('    ' . implode(' ', $command));
+            $bar->clear();
+            Voice::heading($output, $what);
+            Voice::row($output, Voice::dim(implode(' ', $command)));
+            $bar->setMessage('running');
+            $bar->display();
             [$exitCode, $said] = Environments::run($command, $path);
+            $bar->clear();
+            $bar->advance();
+            $bar->clear();
             if ($exitCode !== 0) {
-                Cli::errors($output)->writeln(rtrim($said));
-                Cli::errors($output)->writeln('');
+                Voice::problem($output, rtrim($said));
 
                 return $what;
             }
@@ -321,20 +323,20 @@ final class EnvironmentCreate
     private function where(OutputInterface $output, string $branch, string $driver): void
     {
         $project = Environments::project($branch, $driver);
-        $output->writeln(sprintf(
+        Voice::ok($output, sprintf(
             'E-SITE on TYPO3 %s, on %s, is %s, as DDEV project %s.',
             $branch,
             $driver,
             Environments::path('E-SITE', $branch, $driver),
             $project,
         ));
-        $output->writeln(sprintf('    https://%s.ddev.site/typo3 — admin / %s', $project, Environments::ADMIN_PASSWORD));
-        $output->writeln('Start an MCP client in that directory to run a case in it.');
-        $output->writeln(sprintf(
-            '    ddev delete --omit-snapshot -y %s && rm -rf %s',
+        Voice::row($output, sprintf('https://%s.ddev.site/typo3 — admin / %s', $project, Environments::ADMIN_PASSWORD));
+        Voice::note($output, 'Start an MCP client in that directory to run a case in it.');
+        Voice::row($output, sprintf(
+            'ddev delete --omit-snapshot -y %s && rm -rf %s',
             $project,
             Environments::path('E-SITE', $branch, $driver),
         ));
-        $output->writeln('is what takes it away, and this command then makes it again.');
+        Voice::note($output, 'is what takes it away, and this command then makes it again.');
     }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Upkeep\Environments;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Every environment a scenario names, and where this checkout stands on it.
@@ -26,16 +27,16 @@ final class EnvironmentStatus
 {
     public function __invoke(OutputInterface $output): int
     {
-        $output->writeln(sprintf('Environments below %s', Environments::directory()));
+        Voice::heading($output, sprintf('Environments below %s', Environments::directory()));
 
         $sources = Environments::sources();
         $projects = Environments::projects();
         foreach (Environments::ids() as $id) {
             if ($id === 'E-SITE') {
-                $output->writeln('  E-SITE     one installation per covered version');
+                Voice::row($output, Voice::key('E-SITE', 10) . ' one installation per covered version');
                 foreach (Versions::covered() as $version) {
                     $branch = $version['branch'];
-                    $output->writeln(sprintf('    %-8s %s', $branch, Environments::refusal($branch) === ''
+                    Voice::row($output, sprintf('  %s %s', Voice::key($branch, 8), Environments::refusal($branch) === ''
                         ? $this->site($branch, Environments::DEFAULT_DRIVER, $projects)
                         : 'not made here — `bin/cli environment:create E-SITE ' . $branch . '` says why'));
                     // One row per database that has actually been made. Every
@@ -47,23 +48,29 @@ final class EnvironmentStatus
                         if ($driver === Environments::DEFAULT_DRIVER || !Environments::installed($branch, $driver)) {
                             continue;
                         }
-                        $output->writeln(sprintf('    %-8s %s', '  ' . $driver, $this->site($branch, $driver, $projects)));
+                        Voice::row($output, sprintf('  %s %s', Voice::key('  ' . $driver, 8), $this->site($branch, $driver, $projects)));
                     }
                 }
 
                 continue;
             }
 
-            $output->writeln(sprintf('  %-10s %s', $id, $this->state($id, $sources[$id] ?? '')));
+            Voice::row($output, sprintf('%s %s', Voice::key($id, 10), $this->state($id, $sources[$id] ?? '')));
         }
 
         $output->writeln('');
-        $output->writeln('`bin/cli environment:create <id> [version] [database]` makes the ones this');
-        $output->writeln('repository makes, and says where the rest come from. The database defaults');
-        $output->writeln(sprintf('to %s; %s are the rest.', Environments::DEFAULT_DRIVER, implode(', ', array_filter(
-            Environments::drivers(),
-            static fn(string $driver): bool => $driver !== Environments::DEFAULT_DRIVER,
-        ))));
+        Voice::note($output, sprintf(
+            '`bin/cli environment:create <id> [version] [database]` makes the ones this
+'
+            . 'repository makes, and says where the rest come from. The database defaults
+'
+            . 'to %s; %s are the rest.',
+            Environments::DEFAULT_DRIVER,
+            implode(', ', array_filter(
+                Environments::drivers(),
+                static fn(string $driver): bool => $driver !== Environments::DEFAULT_DRIVER,
+            )),
+        ));
 
         return 0;
     }

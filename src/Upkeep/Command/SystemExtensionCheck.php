@@ -10,8 +10,8 @@ use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Upkeep\Catalogs;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\RangeReport;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Whether the recorded system extensions are the ones the checkouts ship.
@@ -45,13 +45,13 @@ final class SystemExtensionCheck
      */
     private static function verifySystemExtensions(OutputInterface $output, string $checkouts, array $recorded): int
     {
-        $output->writeln('System extensions');
+        Voice::heading($output, 'System extensions');
         $covered = Versions::covered();
         $shipped = [];
         foreach ($covered as $version) {
             $directory = $checkouts . '/' . $version['branch'] . '/typo3/sysext';
             if (!is_dir($directory)) {
-                Cli::errors($output)->writeln(sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
+                Voice::problem($output, sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
 
                 return 2;
             }
@@ -70,7 +70,7 @@ final class SystemExtensionCheck
             $majors = array_keys($packages);
             $entry = $byKey[$key] ?? null;
             if ($entry === null) {
-                $output->writeln(sprintf('  %s: shipped on v%s, not in the catalog', $key, implode(', v', $majors)));
+                Voice::problem($output, sprintf('%s: shipped on v%s, not in the catalog', $key, implode(', v', $majors)));
                 ++$problems;
                 continue;
             }
@@ -78,27 +78,18 @@ final class SystemExtensionCheck
 
             $package = end($packages);
             if (($entry['package'] ?? '') !== $package) {
-                $output->writeln(sprintf('  %s: records package %s, ships as %s', $key, (string) ($entry['package'] ?? ''), $package));
+                Voice::problem($output, sprintf('%s: records package %s, ships as %s', $key, (string) ($entry['package'] ?? ''), $package));
                 ++$problems;
             }
         }
         foreach ($byKey as $key => $entry) {
             if (!isset($shipped[$key])) {
-                $output->writeln(sprintf('  %s: in the catalog, shipped by no covered version', $key));
+                Voice::problem($output, sprintf('%s: in the catalog, shipped by no covered version', $key));
                 ++$problems;
             }
         }
-        $output->writeln(sprintf('  %d system extensions against %s', count($shipped), implode(', ', array_column($covered, 'branch'))));
-        $output->writeln('');
+        Voice::row($output, sprintf('%d system extensions against %s', count($shipped), implode(', ', array_column($covered, 'branch'))));
 
-        if ($problems === 0) {
-            $output->writeln('Every system extension is recorded as the checkouts ship it.');
-
-            return 0;
-        }
-
-        $output->writeln(sprintf('%d system extension(s) out of date.', $problems));
-
-        return 1;
+        return Voice::verdict($output, $problems, 'Every system extension is recorded as the checkouts ship it.', Voice::count($problems, 'system extension') . ' out of date.');
     }
 }

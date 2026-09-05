@@ -141,7 +141,8 @@ final class DocumentationPreviewTest extends TestCase
         self::assertSame(0, ($this->preview([[], ['documentation/readme.rst'], [], null]))($output, $this->into, true));
 
         self::assertSame(2, $this->renders());
-        self::assertStringContainsString('changed: documentation/readme.rst', $output->fetch());
+        self::assertStringContainsString("Ctrl-C stops it\n", $printed = $output->fetch());
+        self::assertMatchesRegularExpression('/^\d\d:\d\d:\d\d documentation\/readme\.rst$/m', $printed);
     }
 
     /** The save that finishes a half-typed directive is what a watch is for, so the failure before it ends nothing. */

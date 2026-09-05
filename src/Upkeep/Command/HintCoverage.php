@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Knowledge\Domains;
 use TYPO3\DevCompanion\Knowledge\Hints;
 use TYPO3\DevCompanion\Upkeep\Scenarios;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * What the hint corpus cannot be found by. It never writes.
@@ -29,7 +30,7 @@ final class HintCoverage
     {
         $hints = Hints::load();
 
-        $output->writeln('Hints their own title does not reach');
+        Voice::heading($output, 'Hints their own title does not reach');
         $unreachable = [];
         foreach ($hints as $hint) {
             if (!in_array($hint['id'], self::reaches($hint['title']), true)) {
@@ -37,16 +38,16 @@ final class HintCoverage
             }
         }
         if ($unreachable === []) {
-            $output->writeln('  none');
+            Voice::row($output, 'none');
         }
         foreach ($unreachable as $hint) {
             // Almost always the domain gate rather than the scoring: a title with
             // no signal in it falls back to PHP, and a hint in any other category
             // is then never a candidate. The hint is not badly written; it is
             // filed where the query cannot see it.
-            $output->writeln(sprintf(
-                '  %-34s %-16s (candidates: %s)',
-                $hint['id'],
+            Voice::row($output, sprintf(
+                '%s %-16s (candidates: %s)',
+                Voice::key($hint['id'], 34),
                 $hint['category'],
                 implode(', ', Domains::hintCategories(Domains::detect([], $hint['title']))),
             ));
@@ -75,21 +76,20 @@ final class HintCoverage
         // also has an environment, and a real session brings paths. This is the
         // prompt text alone, which is the weakest signal the matcher ever gets —
         // and the one a first question actually arrives with.
-        $output->writeln('');
-        $output->writeln(sprintf(
+        Voice::heading($output, sprintf(
             'Scenario prompts that reach nothing (%d of %d, from the prompt text alone)',
             count($silent),
             count($prompts),
         ));
-        $output->writeln($silent === [] ? '  none' : '  ' . implode(', ', $silent));
+        Voice::row($output, $silent === [] ? 'none' : implode(', ', $silent));
 
         $never = array_values(array_filter(
             array_column($hints, 'id'),
             static fn(string $id): bool => !isset($reached[$id]),
         ));
-        $output->writeln('');
-        $output->writeln(sprintf('Hints no scenario prompt reaches (%d of %d)', count($never), count($hints)));
-        $output->writeln($never === [] ? '  none' : '  ' . implode("\n  ", $never));
+        Voice::heading($output, sprintf('Hints no scenario prompt reaches (%d of %d)', count($never), count($hints)));
+        Voice::row($output, $never === [] ? 'none' : implode('
+  ', $never));
 
         // What D-KNW-001's second half asks for. `any` is the one domain no
         // query has to earn, so a hint tagged with it is reachable from every
@@ -116,10 +116,9 @@ final class HintCoverage
             $hints,
             static fn(array $hint): bool => $hint['category'] === 'General',
         ));
-        $output->writeln('');
-        $output->writeln(sprintf(
-            "What the always-selected domain supplies, over the scenario prompts\n"
-            . "  `any` is on %d of %d hints and supplies %d of %d matched (%.0f%%)\n"
+        Voice::heading($output, 'What the always-selected domain supplies, over the scenario prompts');
+        Voice::row($output, sprintf(
+            "`any` is on %d of %d hints and supplies %d of %d matched (%.0f%%)\n"
             . '  %d of %d answers are made of it alone%s',
             $general,
             count($hints),
@@ -142,12 +141,10 @@ final class HintCoverage
         sort($lengths);
         $mean = (int) round(array_sum($lengths) / max(1, count($lengths)));
         $reference = Hints::UNDILUTED_WORDS;
-        $output->writeln('');
-        $output->writeln(sprintf(
-            "Hint body length vs. the matcher's %d-word dilution reference\n"
-            . "  mean %d, median %d, longest %d, over the reference: %d of %d\n"
+        Voice::heading($output, sprintf("Hint body length vs. the matcher's %d-word dilution reference", $reference));
+        Voice::row($output, sprintf(
+            "mean %d, median %d, longest %d, over the reference: %d of %d\n"
             . '  %d words of headroom before the reference has to be measured again (ceiling %d)',
-            $reference,
             $mean,
             $lengths[intdiv(count($lengths), 2)] ?? 0,
             max([0, ...$lengths]),

@@ -9,8 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Upkeep\Catalogs;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\RangeReport;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Whether every worked example is still where the catalog records it.
@@ -46,7 +46,7 @@ final class ReferenceCheck
      */
     private static function verifyReferences(OutputInterface $output, string $checkouts, array $references): int
     {
-        $output->writeln('Core references');
+        Voice::heading($output, 'Core references');
         $covered = Versions::covered();
         $problems = 0;
         foreach ($references as $entry) {
@@ -56,7 +56,7 @@ final class ReferenceCheck
             foreach ($covered as $version) {
                 $branch = $checkouts . '/' . $version['branch'];
                 if (!is_dir($branch)) {
-                    Cli::errors($output)->writeln(sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
+                    Voice::problem($output, sprintf('No checkout for TYPO3 v%d below %s — run bin/cli checkouts:update.', $version['major'], $checkouts));
 
                     return 2;
                 }
@@ -68,12 +68,12 @@ final class ReferenceCheck
                 if ($missing !== $path) {
                     // The failure the range alone cannot name: the directory is
                     // where it was, and what the entry says is inside it is not.
-                    $inside[] = sprintf('    v%d has %s and not %s', $version['major'], $path, $missing);
+                    $inside[] = sprintf('v%d has %s and not %s', $version['major'], $path, $missing);
                 }
             }
 
             if ($majors === []) {
-                $output->writeln(sprintf('  %s: on no covered version', $path));
+                Voice::problem($output, sprintf('%s: on no covered version', $path));
                 self::writeAll($output, $inside);
                 ++$problems;
                 continue;
@@ -84,18 +84,9 @@ final class ReferenceCheck
             }
             $problems += $drift;
         }
-        $output->writeln(sprintf('  %d references against %s', count($references), implode(', ', array_column($covered, 'branch'))));
-        $output->writeln('');
+        Voice::row($output, sprintf('%d references against %s', count($references), implode(', ', array_column($covered, 'branch'))));
 
-        if ($problems === 0) {
-            $output->writeln('Every worked example is where it is recorded.');
-
-            return 0;
-        }
-
-        $output->writeln(sprintf('%d reference(s) out of date.', $problems));
-
-        return 1;
+        return Voice::verdict($output, $problems, 'Every worked example is where it is recorded.', Voice::count($problems, 'reference') . ' out of date.');
     }
 
     /**
@@ -126,7 +117,7 @@ final class ReferenceCheck
     private static function writeAll(OutputInterface $output, array $lines): void
     {
         foreach ($lines as $line) {
-            $output->writeln($line);
+            Voice::problem($output, $line);
         }
     }
 }

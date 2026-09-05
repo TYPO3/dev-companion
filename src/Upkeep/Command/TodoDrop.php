@@ -9,8 +9,8 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Todo;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Giving a todo back: the worktree down, and the todo offered again.
@@ -48,7 +48,8 @@ final class TodoDrop
     ): int {
         $root = Paths::root();
         if (Todo::linked()) {
-            Cli::errors($output)->writeln(
+            Voice::problem(
+                $output,
                 "This is a worktree, and one is taken down in the checkout it was cut from.\n"
                 . 'Nothing here can remove the directory it is standing in.',
             );
@@ -65,7 +66,7 @@ final class TodoDrop
         foreach ($todo as $one) {
             $name = Todo::worktreeNamed($one, $root);
             if ($name === null) {
-                Cli::errors($output)->writeln(sprintf(
+                Voice::problem($output, sprintf(
                     '%s is no todo anybody has in hand — `bin/cli todo:list` prints the ones that are.',
                     $one,
                 ));
@@ -82,15 +83,16 @@ final class TodoDrop
     /** One worktree down, and its branch kept or deleted by what it carries. */
     private static function drop(OutputInterface $output, string $root, string $name, string $branch): bool
     {
-        $output->writeln($name);
+        Voice::heading($output, $name);
 
         // The same refusal `todo:home` makes, for the same reason: what nobody
         // committed is on no branch, and removing the worktree is what throws
         // it away.
         [, $dirty] = Checkouts::run(['git', '-C', $root . '/.worktrees/' . $name, 'status', '--porcelain']);
         if (trim($dirty) !== '') {
-            Cli::errors($output)->writeln(
-                "    has changes nobody committed, and taking it down is what loses them:\n"
+            Voice::problem(
+                $output,
+                "has changes nobody committed, and taking it down is what loses them:\n"
                 . '    commit them on ' . ($branch === '' ? 'a branch' : $branch) . ' or throw them away, then ask again.',
             );
 
@@ -102,24 +104,24 @@ final class TodoDrop
 
         [$removed, $said] = Checkouts::run(['git', '-C', $root, 'worktree', 'remove', '.worktrees/' . $name]);
         if ($removed !== 0) {
-            Cli::errors($output)->writeln('    is still standing: ' . trim($said));
+            Voice::problem($output, 'is still standing: ' . trim($said));
 
             return false;
         }
-        $output->writeln('    worktree removed, and its todo is queued again');
+        Voice::row($output, 'worktree removed, and its todo is queued again');
 
         if ($commits !== 0) {
-            $output->writeln($commits < 0
-                ? '    ' . ($branch === '' ? 'it stood on no branch' : $branch . ' carries what nothing here could count') . ', so nothing was deleted'
-                : sprintf('    %s carries %d commits nothing else does, so it stays', $branch, $commits));
+            Voice::row($output, $commits < 0
+                ? ($branch === '' ? 'it stood on no branch' : $branch . ' carries what nothing here could count') . ', so nothing was deleted'
+                : sprintf('%s carries %d commits nothing else does, so it stays', $branch, $commits));
 
             return true;
         }
 
         [$deleted, $said] = Checkouts::run(['git', '-C', $root, 'branch', '-d', $branch]);
-        $output->writeln($deleted === 0
-            ? '    ' . $branch . ' carried nothing and is deleted'
-            : '    ' . $branch . ' carried nothing and is still there: ' . trim($said));
+        Voice::row($output, $deleted === 0
+            ? $branch . ' carried nothing and is deleted'
+            : $branch . ' carried nothing and is still there: ' . trim($said));
 
         return true;
     }
@@ -132,7 +134,7 @@ final class TodoDrop
     private static function report(OutputInterface $output, array $standing): int
     {
         if ($standing === []) {
-            $output->writeln('No worktree is standing, so no todo is in hand.');
+            Voice::ok($output, 'No worktree is standing, so no todo is in hand.');
 
             return 0;
         }
@@ -141,14 +143,15 @@ final class TodoDrop
         foreach ($standing as $name => $branch) {
             $todo = $held[$branch] ?? null;
             $output->writeln(sprintf(
-                '%-16s %s',
-                $todo === null ? '—' : Todo::identifier($todo),
+                '%s %s',
+                Voice::key($todo === null ? '—' : Todo::identifier($todo), 16),
                 $todo === null ? $name . ' stands on ' . ($branch === '' ? 'no branch' : $branch) . ' and holds no todo' : $todo['title'],
             ));
         }
 
         $output->writeln('');
-        $output->writeln("Name one to give it back: `bin/cli todo:drop <id>`.\n"
+        Voice::note($output, 'Name one to give it back: `bin/cli todo:drop <id>`.
+'
             . 'One whose work is finished comes home instead: `bin/cli todo:home <id>`.');
 
         return 0;

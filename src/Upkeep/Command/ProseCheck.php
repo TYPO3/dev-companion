@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Prose;
+use TYPO3\DevCompanion\Upkeep\Voice;
 use TYPO3\DevCompanion\Upkeep\Wrap;
 
 /**
@@ -44,8 +45,8 @@ final class ProseCheck
         $sentences = array_sum(array_column($measured, 'sentences'));
         $over = array_sum(array_map(static fn(array $file): int => count($file['over']), $measured));
 
-        $output->writeln(sprintf(
-            '%d of %d sentences run past %d words, in %d files.',
+        Voice::heading($output, sprintf(
+            '%d of %d sentences run past %d words, in %d files',
             $over,
             $sentences,
             Prose::MEASURE,
@@ -53,7 +54,7 @@ final class ProseCheck
         ));
 
         foreach (array_slice(array_filter($measured, static fn(array $file): bool => $file['over'] !== []), 0, self::NAMED) as $file) {
-            $output->writeln(sprintf('  %3d  %s (longest %d)', count($file['over']), $file['file'], $file['over'][0]['words']));
+            Voice::row($output, sprintf('%s  %s %s', Voice::key((string) count($file['over']), 3), $file['file'], Voice::dim(sprintf('(longest %d)', $file['over'][0]['words']))));
         }
 
         // The other half, and the one nothing counted: what a client is handed
@@ -62,15 +63,14 @@ final class ProseCheck
         // pays for all of it before it has asked anything — and not which of
         // 578 markdown files is worst.
         $payload = Prose::payloadOverTheMeasure();
-        $output->writeln('');
-        $output->writeln(sprintf(
-            'A client is handed %d characters of prose at connect. %d of those sentences run past %d words.',
+        Voice::heading($output, sprintf(
+            'A client is handed %d characters of prose at connect, and %d of those sentences run past %d words',
             Prose::payloadWeight(),
             count($payload),
             Prose::MEASURE,
         ));
         foreach (array_slice($payload, 0, self::NAMED) as $entry) {
-            $output->writeln(sprintf('  %3d  %s', $entry['words'], $entry['where']));
+            Voice::row($output, sprintf('%s  %s', Voice::key((string) $entry['words'], 3), $entry['where']));
         }
 
         // The third corpus, and the one the sentence measure cannot see: a
@@ -78,21 +78,20 @@ final class ProseCheck
         // measure on every sentence and is the duplicate the rule forbids.
         $weight = Prose::commentWeight();
         $retold = Prose::retellings();
-        $output->writeln('');
-        $output->writeln(sprintf(
-            '%d of %d lines of PHP are comment. %d comments name an entry and write past %d lines of prose.',
+        Voice::heading($output, sprintf(
+            '%d of %d lines of PHP are comment, and %d comments name an entry and write past %d lines of prose',
             $weight['comment'],
             $weight['lines'],
             count($retold),
             Prose::RETOLD,
         ));
         foreach (array_slice($retold, 0, self::NAMED) as $comment) {
-            $output->writeln(sprintf(
-                '  %3d  %s:%d (%s)',
-                $comment['prose'],
+            Voice::row($output, sprintf(
+                '%s  %s:%d %s',
+                Voice::key((string) $comment['prose'], 3),
                 $comment['file'],
                 $comment['line'],
-                implode(', ', $comment['names']),
+                Voice::dim('(' . implode(', ', $comment['names']) . ')'),
             ));
         }
 
@@ -105,21 +104,19 @@ final class ProseCheck
             $tables,
             static fn(array $table): bool => $table['cell'] > Wrap::COLUMN,
         ));
-        $output->writeln('');
-        $output->writeln(sprintf(
-            '%d of %d tables hold a cell no line of %d columns fits.',
+        Voice::heading($output, sprintf(
+            '%d of %d tables hold a cell no line of %d columns fits',
             count($wide),
             count($tables),
             Wrap::COLUMN,
         ));
         foreach (array_slice($wide, 0, self::NAMED) as $table) {
-            $output->writeln(sprintf(
-                '  %3d  %s:%d (%d rows, %d wide)',
-                $table['cell'],
+            Voice::row($output, sprintf(
+                '%s  %s:%d %s',
+                Voice::key((string) $table['cell'], 3),
                 $table['file'],
                 $table['line'],
-                $table['rows'],
-                $table['width'],
+                Voice::dim(sprintf('(%d rows, %d wide)', $table['rows'], $table['width'])),
             ));
         }
 
@@ -128,43 +125,39 @@ final class ProseCheck
         // — `D-DOC-046`.
         $titles = Prose::titles();
         $joined = array_values(array_filter($titles, static fn(array $title): bool => $title['joined']));
-        $output->writeln('');
-        $output->writeln(sprintf(
-            '%d titles carry more than one thing, %d of them joining two claims outright.',
+        Voice::heading($output, sprintf(
+            '%d titles carry more than one thing, %d of them joining two claims outright',
             count($titles),
             count($joined),
         ));
         foreach (array_slice([...$joined, ...array_filter($titles, static fn(array $title): bool => !$title['joined'])], 0, self::NAMED) as $title) {
-            $output->writeln(sprintf('  %3d  %-11s %s', $title['words'], $title['id'], $title['title']));
+            Voice::row($output, sprintf('%s  %s %s', Voice::key((string) $title['words'], 3), Voice::key($title['id'], 11), $title['title']));
         }
 
         $names = Prose::names();
         $joined = array_values(array_filter($names, static fn(array $name): bool => $name['joined'] !== ''));
-        $output->writeln('');
-        $output->writeln(sprintf(
-            '%d test names run past %d words, %d of them joining two claims outright.',
+        Voice::heading($output, sprintf(
+            '%d test names run past %d words, %d of them joining two claims outright',
             count($names),
             Prose::NAME_WORDS,
             count($joined),
         ));
         foreach (array_slice($names, 0, self::NAMED) as $name) {
-            $output->writeln(sprintf('  %3d  %-30s %s', $name['words'], $name['file'], $name['name']));
+            Voice::row($output, sprintf('%s  %s %s', Voice::key((string) $name['words'], 3), Voice::key($name['file'], 30), $name['name']));
         }
 
         $leads = Prose::leadsOverTheMeasure();
-        if ($leads === []) {
-            $output->writeln('');
-            $output->writeln('Every requirement and decision opens within the measure.');
-
-            return 0;
-        }
-
         $output->writeln('');
-        $output->writeln(sprintf('%d open with a sentence a reader cannot stop after:', count($leads)));
+        $verdict = Voice::verdict(
+            $output,
+            count($leads),
+            'Every requirement and decision opens within the measure.',
+            sprintf('%d open with a sentence a reader cannot stop after:', count($leads)),
+        );
         foreach ($leads as $lead) {
-            $output->writeln(sprintf('  %-10s %3d words  %s…', $lead['id'], $lead['words'], substr($lead['text'], 0, 60)));
+            Voice::row($output, sprintf('%s %3d words  %s…', Voice::key($lead['id'], 10), $lead['words'], substr($lead['text'], 0, 60)));
         }
 
-        return 1;
+        return $verdict;
     }
 }

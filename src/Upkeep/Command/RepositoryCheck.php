@@ -8,6 +8,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Every check this checkout can answer on its own, one after the other, and
@@ -38,12 +39,11 @@ final class RepositoryCheck
     {
         $worst = 0;
         foreach (self::CHECKED as $subject) {
-            $output->writeln(sprintf('── %s', $subject));
+            Voice::heading($output, $subject);
             $worst = max($worst, $application->doRun(new StringInput($subject . ':check'), $output));
-            $output->writeln('');
         }
 
-        $output->writeln('── unresolved');
+        Voice::heading($output, 'unresolved');
         $application->doRun(new StringInput('unresolved:list'), $output);
 
         return $worst;

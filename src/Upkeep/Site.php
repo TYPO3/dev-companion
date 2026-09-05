@@ -105,6 +105,22 @@ final class Site
     }
 
     /**
+     * Takes everything below a build directory away, and leaves the directory.
+     *
+     * The renderer writes over what is there and removes nothing, so a page
+     * renamed or deleted since the last render is served on, and the theme's
+     * finish step read those stale pages for two minutes at full tilt before
+     * this existed.
+     */
+    public static function clear(string $target): void
+    {
+        $target = str_starts_with($target, '/') ? $target : Paths::root() . '/' . $target;
+        if (is_dir($target)) {
+            self::sweep($target, []);
+        }
+    }
+
+    /**
      * Every file the copy is made from, and when each was last written.
      *
      * Two of these compared is what a watch goes on: a file is named by the

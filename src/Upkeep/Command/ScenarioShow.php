@@ -7,8 +7,8 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Scenarios;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * One open forward review, in the only sense a command can hand it over: what
@@ -30,7 +30,7 @@ final class ScenarioShow extends ScenarioReport
         $id = strtoupper($id);
         $scenario = Scenarios::load()[$id] ?? null;
         if ($scenario === null) {
-            Cli::errors($output)->writeln(isset(Scenarios::contracts()[$id])
+            Voice::problem($output, isset(Scenarios::contracts()[$id])
                 ? sprintf('%s is a targeted contract case: bin/cli scenarios:contract %s', $id, $id)
                 : sprintf('There is no forward review %s.', $id));
 

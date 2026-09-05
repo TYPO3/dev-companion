@@ -7,6 +7,8 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Todo;
+use TYPO3\DevCompanion\Upkeep\Voice;
+use TYPO3\DevCompanion\Upkeep\Wrap;
 
 /**
  * The overview `bin/cli todo:next` deliberately does not give, for whoever wants it.
@@ -25,10 +27,10 @@ final class TodoList
     {
         foreach (Todo::recurring() as $todo) {
             $output->writeln(sprintf(
-                '%-12s %s%s',
-                $todo['every'],
+                '%s %s%s',
+                Voice::key($todo['every'], 12),
                 $todo['title'],
-                Todo::due($todo['every'], $todo['checked']) ? '' : ' — not due, last ' . $todo['checked'],
+                Todo::due($todo['every'], $todo['checked']) ? '' : Voice::dim(' — not due, last ' . $todo['checked']),
             ));
         }
 
@@ -47,28 +49,26 @@ final class TodoList
         foreach ($items as $item) {
             $branch = $held[$item['path']] ?? '';
             $output->writeln(sprintf(
-                '%-12s %-16s %s',
+                '%-12s %s %s',
                 $branch === '' ? $item['priority'] : 'in hand',
-                Todo::identifier($item),
+                Voice::key(Todo::identifier($item), 16),
                 $item['title'],
             ));
         }
         if ($items === []) {
-            $output->writeln('The queue is empty.');
+            Voice::note($output, 'The queue is empty.');
         }
 
         foreach (Todo::waiting() as $todo) {
-            $output->writeln(sprintf(
-                '%-12s %-16s %s — %s',
-                'waiting',
-                Todo::identifier($todo),
-                $todo['title'],
-                $todo['waitingOn'],
-            ));
+            // The lead is the two columns every row has, and the question is
+            // wrapped under it rather than run off the screen.
+            $lead = sprintf('%-12s %s ', 'waiting', Voice::key(Todo::identifier($todo), 16));
+            $wrapped = Wrap::indented($todo['title'] . ' — ' . $todo['waitingOn'], str_repeat(' ', 30));
+            $output->writeln($lead . substr($wrapped, 30));
         }
 
         foreach (Todo::references() as $reference) {
-            $output->writeln(sprintf('%-12s %s', 'read only', $reference['title']));
+            $output->writeln(sprintf('%s %s', Voice::key('read only', 12), $reference['title']));
         }
 
         return 0;

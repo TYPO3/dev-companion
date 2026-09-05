@@ -8,6 +8,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\ToolSurface;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Writes the tool reference back from the registry.
@@ -39,11 +40,11 @@ final class ToolIndex
         foreach (ToolSurface::written() as $written) {
             if (!isset($pages[$written->getPathname()])) {
                 unlink($written->getPathname());
-                $output->writeln(sprintf('removed %s, which the registry no longer offers', $written->getFilename()));
+                Voice::row($output, sprintf('removed %s, which the registry no longer offers', $written->getFilename()));
             }
         }
 
-        $output->writeln(sprintf(
+        Voice::ok($output, sprintf(
             '%s — %d pages',
             substr(ToolSurface::index(), strlen(Paths::root()) + 1),
             count($pages) - count(ToolSurface::standingPages()),

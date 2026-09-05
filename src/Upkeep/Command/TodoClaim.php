@@ -12,6 +12,7 @@ use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
 use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Todo;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Taking the front of the queue on, and putting the sessions in front of it.
@@ -66,7 +67,8 @@ final class TodoClaim
         // Worktrees are cut where `main` is. Asked in a worktree, every one it
         // made would be cut from somebody's half-finished branch.
         if (Todo::linked()) {
-            Cli::errors($output)->writeln(
+            Voice::problem(
+                $output,
                 "This is a worktree, and claims are taken in the checkout it was cut from.\n"
                 . 'Everything cut here would stand on this branch, which is somebody else\'s work.',
             );
@@ -76,12 +78,12 @@ final class TodoClaim
 
         $items = Todo::items();
         if ($items === []) {
-            Cli::errors($output)->writeln('The queue is empty, so there is nothing to take on.');
+            Voice::problem($output, 'The queue is empty, so there is nothing to take on.');
 
             return 1;
         }
         if ($count < 1) {
-            Cli::errors($output)->writeln('A claim is for at least one session.');
+            Voice::problem($output, 'A claim is for at least one session.');
 
             return 1;
         }
@@ -89,12 +91,12 @@ final class TodoClaim
         $root = Paths::root();
         $free = self::untaken($output, $root, $items);
         if ($free === []) {
-            Cli::errors($output)->writeln('Every queued todo is in hand or has a branch standing, so there is none to take.');
+            Voice::problem($output, 'Every queued todo is in hand or has a branch standing, so there is none to take.');
 
             return 1;
         }
         if ($count > count($free)) {
-            $output->writeln(sprintf(
+            Voice::note($output, sprintf(
                 'There are %d nobody has, which is what %d sessions get.',
                 count($free),
                 count($free),
@@ -110,14 +112,14 @@ final class TodoClaim
                 'branch' => $branch,
                 'directory' => '.worktrees/' . basename($branch),
             ];
-            $output->writeln($todo['title']);
-            $output->writeln(sprintf('    %s · %s', $todo['path'], $branch));
+            Voice::heading($output, $todo['title']);
+            Voice::row($output, Voice::dim(sprintf('%s · %s', $todo['path'], $branch)));
         }
         $output->writeln('');
 
         foreach (self::overlapping($taken) as $saying => $shared) {
             foreach ($shared as $what => $titles) {
-                $output->writeln(sprintf('%s ' . $saying . '.', $what, implode(' and ', $titles)));
+                Voice::problem($output, sprintf('%s ' . $saying . '.', $what, implode(' and ', $titles)));
                 $output->writeln('');
             }
         }
@@ -161,7 +163,7 @@ final class TodoClaim
                 continue;
             }
             if (isset($branches[$branch])) {
-                $output->writeln(sprintf('%s is left on %s, which nothing here reuses or deletes.', $todo['title'], $branch));
+                Voice::note($output, sprintf('%s is left on %s, which nothing here reuses or deletes.', $todo['title'], $branch));
                 continue;
             }
 
@@ -199,13 +201,13 @@ final class TodoClaim
             $path = $root . '/' . $claim['directory'];
             [$cut, $said] = Checkouts::run(['git', '-C', $root, 'worktree', 'add', '--quiet', $claim['directory'], '-b', $claim['branch']]);
             if ($cut !== 0) {
-                Cli::errors($output)->writeln(sprintf('%s could not be made: %s', $claim['directory'], trim($said)));
+                Voice::problem($output, sprintf('%s could not be made: %s', $claim['directory'], trim($said)));
                 continue;
             }
 
             [$installed, $said] = Checkouts::run(['composer', 'install', '--no-interaction', '--quiet'], $path);
             if ($installed !== 0) {
-                Cli::errors($output)->writeln(sprintf(
+                Voice::problem($output, sprintf(
                     "%s has no `vendor/`, so `bin/cli` in it is nothing to start a session against:\n%s",
                     $claim['directory'],
                     trim($said),
@@ -217,7 +219,7 @@ final class TodoClaim
                 symlink('../../.checkouts', $path . '/.checkouts');
             }
 
-            $output->writeln('    ' . $claim['directory']);
+            Voice::row($output, $claim['directory']);
             $standing[] = $claim['directory'];
         }
 
@@ -263,7 +265,7 @@ final class TodoClaim
 
         $logs = $root . '/.worktrees/.sessions';
         if (!is_dir($logs) && !mkdir($logs, 0o777, true)) {
-            Cli::errors($output)->writeln($logs . ' could not be made, so no session has anywhere to report.');
+            Voice::problem($output, $logs . ' could not be made, so no session has anywhere to report.');
 
             return $standing;
         }
@@ -274,7 +276,7 @@ final class TodoClaim
         // for each, and 484 of them had accumulated by 2026-08-27.
         $message = $logs . '/briefing.message';
         if (file_put_contents($message, Todo::BRIEFING . "\n") === false) {
-            Cli::errors($output)->writeln($message . ' could not be written, so no session has anything to be sent.');
+            Voice::problem($output, $message . ' could not be written, so no session has anything to be sent.');
 
             return $standing;
         }
@@ -292,18 +294,19 @@ final class TodoClaim
                 array_merge(getenv(), ['TODO_SESSION_ID' => self::identifier()]),
             );
             if (!is_resource($started) || proc_close($started) !== 0) {
-                Cli::errors($output)->writeln($name . ' was not started, and this is the command that did not run: ' . $command);
+                Voice::problem($output, $name . ' was not started, and this is the command that did not run: ' . $command);
                 $byHand[] = $directory;
                 continue;
             }
 
-            $output->writeln(sprintf('    %s is working, and reports into %s', $name, $log));
+            Voice::ok($output, sprintf('%s is working, and reports into %s', $name, $log));
         }
 
         if ($byHand === []) {
             $output->writeln('');
-            $output->writeln(sprintf(
-                "Started from %s, one session per worktree, each in its own directory and each\n"
+            Voice::note($output, sprintf(
+                'Started from %s, one session per worktree, each in its own directory and each
+'
                 . "sent the same message. One that reports comes home with `bin/cli todo:home\n"
                 . '<id>`, whenever it reports and without waiting for the rest: %s.',
                 self::LAUNCH,

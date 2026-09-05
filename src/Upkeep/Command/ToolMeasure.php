@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\ToolAnswers;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * What one answer of each tool costs the caller who asked for it.
@@ -39,24 +40,25 @@ final class ToolMeasure
                 continue;
             }
             $output->writeln(sprintf(
-                '%7s  %-34s %s text, %s data, over %d call%s',
+                '%7s  %s %s text, %s data, over %s',
                 number_format($tool['total']),
-                $tool['tool'],
+                Voice::key($tool['tool'], 34),
                 number_format($tool['text']),
                 number_format($tool['data']),
-                $tool['calls'],
-                $tool['calls'] === 1 ? '' : 's',
+                Voice::count($tool['calls'], 'call'),
             ));
         }
 
-        $output->writeln(sprintf(
-            "\n%s bytes recorded across %d tools: %s text, %s data.",
+        $output->writeln('');
+        Voice::ok($output, sprintf(
+            '%s bytes recorded across %d tools: %s text, %s data.',
             number_format($text + $data),
             count(array_filter($measured, static fn(array $tool): bool => $tool['calls'] > 0)),
             number_format($text),
             number_format($data),
         ));
-        $output->writeln(
+        Voice::note(
+            $output,
             'Recorded by bin/cli tools:record and bin/cli tools:index, so nothing was called to count it. '
             . 'A tool answering several calls is the sum of them, not one answer.'
         );

@@ -9,6 +9,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Knowledge\Hints;
 use TYPO3\DevCompanion\Search\TermSearch;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * What one query reaches in the hint corpus, and why.
@@ -32,18 +33,17 @@ final class HintProbe
     ): int {
         $result = Hints::find([], $query, 10);
 
-        $output->writeln(sprintf('Query:    %s', $query));
-        $output->writeln(sprintf('Domains:  %s', implode(', ', $result['domains']) ?: '(none)'));
+        Voice::row($output, sprintf('%s %s', Voice::key('Query', 8), $query));
+        Voice::row($output, sprintf('%s %s', Voice::key('Domains', 8), implode(', ', $result['domains']) ?: '(none)'));
         if ($result['withheldCategories'] !== []) {
-            $output->writeln(sprintf('Withheld: %s — the query reads as frontend work', implode(', ', $result['withheldCategories'])));
+            Voice::row($output, sprintf('%s %s — the query reads as frontend work', Voice::key('Withheld', 8), implode(', ', $result['withheldCategories'])));
         }
 
         if ($result['matchedHints'] === []) {
             // Not a failure of this command, and not necessarily one of the
             // matcher: a miss is a legitimate answer, and what makes it one is that
             // the caller is told what there would have been to find.
-            $output->writeln('');
-            $output->writeln(sprintf('Nothing matched. %d hints were candidates, and are returned as the index.', count($result['availableHints'])));
+            Voice::note($output, sprintf('Nothing matched. %d hints were candidates, and are returned as the index.', count($result['availableHints'])));
 
             return 0;
         }
@@ -57,14 +57,12 @@ final class HintProbe
         if ($weights !== []) {
             arsort($weights);
             $words = TermSearch::words($query);
-            $output->writeln('');
-            $output->writeln('Terms:');
+            Voice::heading($output, 'Terms');
             foreach ($weights as $term => $weight) {
-                $output->writeln(sprintf('  %-12s %.2f  %s', $term, $weight, $words[$term] ?? $term));
+                Voice::row($output, sprintf('%s %.2f  %s', Voice::key($term, 12), $weight, $words[$term] ?? $term));
             }
         }
-
-        $output->writeln('');
+        Voice::heading($output, 'Hits');
         foreach ($result['matchedHints'] as $hint) {
             // Which way in earned it. A hit on the curated vocabulary means
             // somebody anticipated this phrasing; a hit on the text alone means
@@ -74,8 +72,8 @@ final class HintProbe
                 ? sprintf('appliesTo(%d) + text(%d)', $hint['matchedOn']['keywords'], $hint['matchedOn']['score'])
                 : sprintf('text only(%d)', $hint['matchedOn']['score']);
 
-            $output->writeln(sprintf('  %-34s %-16s %s', $hint['id'], $hint['category'], $how));
-            $output->writeln(sprintf('      %s', self::admission($hint['matchedOn'])));
+            Voice::row($output, sprintf('%s %-16s %s', Voice::key($hint['id'], 34), $hint['category'], $how));
+            Voice::row($output, '    ' . Voice::dim(self::admission($hint['matchedOn'])));
         }
 
         return 0;

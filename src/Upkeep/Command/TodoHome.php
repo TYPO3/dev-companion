@@ -11,8 +11,8 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Upkeep\Checkouts;
-use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Todo;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * The other end of `todo:claim`: one finished branch back onto `main`.
@@ -65,7 +65,8 @@ final class TodoHome
         // session reads what is in hand — would not move at all.
         $root = Paths::root();
         if (Todo::linked()) {
-            Cli::errors($output)->writeln(
+            Voice::problem(
+                $output,
                 "This is a worktree, and a branch comes home in the checkout it was cut from.\n"
                 . 'Nothing here fast-forwards `main`, because `main` is not what this stands on.',
             );
@@ -80,7 +81,7 @@ final class TodoHome
 
         $on = Todo::standing($root);
         if ($on !== 'main') {
-            Cli::errors($output)->writeln(sprintf(
+            Voice::problem($output, sprintf(
                 "This checkout stands on %s, and a claim comes home onto `main`.\n"
                 . 'Check `main` out first, or the merge below lands where nobody is looking for it.',
                 $on === '' ? 'no branch git can name' : $on,
@@ -93,7 +94,7 @@ final class TodoHome
         foreach ($todo as $one) {
             $name = Todo::worktreeNamed($one, $root);
             if ($name === null) {
-                Cli::errors($output)->writeln(sprintf(
+                Voice::problem($output, sprintf(
                     '%s is no todo anybody has in hand — `bin/cli todo:list` prints the ones that are.',
                     $one,
                 ));
@@ -112,7 +113,7 @@ final class TodoHome
             return 1;
         }
 
-        $output->writeln('── repository:check');
+        Voice::heading($output, 'repository:check');
         $worst = $application->doRun(new StringInput('repository:check'), $output);
 
         return count($home) === count($todo) ? $worst : max(1, $worst);
@@ -132,12 +133,12 @@ final class TodoHome
     private static function bring(OutputInterface $output, string $root, string $name): ?string
     {
         $path = $root . '/.worktrees/' . $name;
-        $output->writeln($name);
+        Voice::heading($output, $name);
 
         [$read, $branch] = Checkouts::run(['git', '-C', $path, 'rev-parse', '--abbrev-ref', 'HEAD']);
         $branch = trim($branch);
         if ($read !== 0 || $branch === '' || $branch === 'HEAD') {
-            Cli::errors($output)->writeln('    stands on no branch, so there is nothing here to merge.');
+            Voice::problem($output, 'stands on no branch, so there is nothing here to merge.');
 
             return null;
         }
@@ -148,8 +149,9 @@ final class TodoHome
         // arrangement exists to prevent.
         [, $dirty] = Checkouts::run(['git', '-C', $path, 'status', '--porcelain']);
         if (trim($dirty) !== '') {
-            Cli::errors($output)->writeln(
-                "    has changes nobody committed, and nothing below would carry them:\n"
+            Voice::problem(
+                $output,
+                "has changes nobody committed, and nothing below would carry them:\n"
                 . self::indent(trim($dirty)) . "\n"
                 . '    Commit them on ' . $branch . ' or throw them away, then ask again.',
             );
@@ -160,47 +162,50 @@ final class TodoHome
         [$rebased, $said] = Checkouts::run(['git', '-C', $path, 'rebase', 'main']);
         if ($rebased !== 0) {
             Checkouts::run(['git', '-C', $path, 'rebase', '--abort']);
-            Cli::errors($output)->writeln(
-                "    does not rebase onto main, and the rebase is put back where it was:\n" . self::indent(trim($said)),
+            Voice::problem(
+                $output,
+                "does not rebase onto main, and the rebase is put back where it was:\n" . self::indent(trim($said)),
             );
 
             return null;
         }
-        $output->writeln('    rebased onto main');
+        Voice::row($output, 'rebased onto main');
 
         self::owed($output, $path);
 
         [$green, $said] = Checkouts::run(['composer', 'ci'], $path);
         if ($green !== 0) {
-            Cli::errors($output)->writeln(
-                "    is rebased and red, so nothing merged and the worktree is still there:\n" . self::indent(self::tail($said)),
+            Voice::problem(
+                $output,
+                "is rebased and red, so nothing merged and the worktree is still there:\n" . self::indent(self::tail($said)),
             );
 
             return null;
         }
-        $output->writeln('    composer ci is green on what main has become');
+        Voice::row($output, 'composer ci is green on what main has become');
 
         [$merged, $said] = Checkouts::run(['git', '-C', $root, 'merge', '--ff-only', $branch]);
         if ($merged !== 0) {
-            Cli::errors($output)->writeln(
-                "    will not fast-forward, which is what this procedure stops for:\n" . self::indent(trim($said)),
+            Voice::problem(
+                $output,
+                "will not fast-forward, which is what this procedure stops for:\n" . self::indent(trim($said)),
             );
 
             return null;
         }
-        $output->writeln('    merged into main as a fast-forward');
+        Voice::row($output, 'merged into main as a fast-forward');
 
         [$removed, $said] = Checkouts::run(['git', '-C', $root, 'worktree', 'remove', '.worktrees/' . $name]);
         if ($removed !== 0) {
-            Cli::errors($output)->writeln('    is merged, and the worktree is still standing: ' . trim($said));
+            Voice::problem($output, 'is merged, and the worktree is still standing: ' . trim($said));
 
             return $branch;
         }
 
         [$deleted, $said] = Checkouts::run(['git', '-C', $root, 'branch', '-d', $branch]);
-        $output->writeln($deleted === 0
-            ? '    worktree removed, ' . $branch . ' deleted'
-            : '    worktree removed, and ' . $branch . ' is still there: ' . trim($said));
+        Voice::row($output, $deleted === 0
+            ? 'worktree removed, ' . $branch . ' deleted'
+            : 'worktree removed, and ' . $branch . ' is still there: ' . trim($said));
 
         return $branch;
     }
@@ -229,7 +234,7 @@ final class TodoHome
         foreach ($commands as $command) {
             [$ran, $said] = Checkouts::run(array_merge([PHP_BINARY, $path . '/bin/cli'], $command), $path);
             if ($ran !== 0) {
-                Cli::errors($output)->writeln(sprintf('    %s did not run: %s', $command[0], trim($said)));
+                Voice::problem($output, sprintf('%s did not run: %s', $command[0], trim($said)));
             }
         }
 
@@ -256,14 +261,14 @@ final class TodoHome
             ], $paths));
         }
         if ($done !== 0) {
-            Cli::errors($output)->writeln('    owes main a rewrite nothing amended onto the branch: ' . trim($said));
+            Voice::problem($output, 'owes main a rewrite nothing amended onto the branch: ' . trim($said));
 
             return;
         }
 
-        $output->writeln('    amended with what the branch owed main:');
+        Voice::row($output, 'amended with what the branch owed main:');
         foreach ($paths as $one) {
-            $output->writeln('        ' . $one);
+            Voice::row($output, '  ' . $one);
         }
     }
 
@@ -280,7 +285,7 @@ final class TodoHome
     private static function report(OutputInterface $output, string $root, array $standing): int
     {
         if ($standing === []) {
-            $output->writeln('Nobody has a todo in hand, so no work is waiting to come home.');
+            Voice::ok($output, 'Nobody has a todo in hand, so no work is waiting to come home.');
 
             return 0;
         }
@@ -291,13 +296,13 @@ final class TodoHome
             $todo = $held[$branches[$name] ?? ''] ?? null;
             [, $dirty] = Checkouts::run(['git', '-C', $root . '/.worktrees/' . $name, 'status', '--porcelain']);
             $output->writeln($todo === null
-                ? '—                ' . $name . ' holds no todo'
-                : sprintf('%-16s %s', Todo::identifier($todo), $todo['title']));
-            $output->writeln('    ' . (trim($dirty) === '' ? 'nothing uncommitted' : 'changes nobody committed'));
+                ? Voice::key('—', 16) . ' ' . $name . ' holds no todo'
+                : sprintf('%s %s', Voice::key(Todo::identifier($todo), 16), $todo['title']));
+            Voice::row($output, Voice::dim(trim($dirty) === '' ? 'nothing uncommitted' : 'changes nobody committed'));
         }
 
         $output->writeln('');
-        $output->writeln('One of them at a time: `bin/cli todo:home <id>`.');
+        Voice::note($output, 'One of them at a time: `bin/cli todo:home <id>`.');
 
         return 0;
     }

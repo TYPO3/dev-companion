@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Todo;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * The one thing to do now, for whoever is starting a session.
@@ -120,20 +121,20 @@ final class TodoNext
             }
         }
 
-        $output->writeln("Nothing is due and nothing is queued. What is waiting is in `bin/cli unresolved:list`,\n"
-            . 'and taking one on is a todo in todo/.');
+        Voice::ok($output, 'Nothing is due and nothing is queued.');
+        Voice::note($output, 'What is waiting is in `bin/cli unresolved:list`, and taking one on is a todo in todo/.');
         // An empty queue with todos in hand is not an empty repository, and the
         // difference matters here more than anywhere: this is the one branch
         // that invites a session to go find work of its own.
         $inHand = count($held);
         if ($inHand > 0) {
-            $output->writeln(sprintf(
+            Voice::note($output, sprintf(
                 '%d todos are in hand elsewhere and are nobody else\'s to start — `bin/cli todo:list`.',
                 $inHand,
             ));
         }
         if (Todo::waiting() !== []) {
-            $output->writeln(sprintf(
+            Voice::note($output, sprintf(
                 '%d todos are blocked on an answer nothing here can give — `bin/cli todo:list`.',
                 count(Todo::waiting()),
             ));
@@ -245,8 +246,8 @@ final class TodoNext
             $meta[] = $waiting . ' waiting on an answer';
         }
 
-        $output->writeln($todo['title']);
-        $output->writeln(implode(' · ', $meta));
+        Voice::heading($output, $todo['title']);
+        Voice::note($output, implode(' · ', $meta));
         if (trim($reading) !== '') {
             $output->writeln('');
             $output->write(self::indent($reading));
@@ -254,13 +255,14 @@ final class TodoNext
         $output->writeln('');
         $output->writeln($todo['body']);
         $output->writeln('');
-        $output->writeln(sprintf(
-            "Read what it serves and what the code does now before changing either; settle what\n"
+        Voice::note($output, sprintf(
+            'Read what it serves and what the code does now before changing either; settle what
+'
             . "the step turns on rather than recalling it, and ask where nothing here can answer:\n"
             . '%s.',
             Todo::PROCEDURE,
         ));
-        $output->writeln(match (true) {
+        Voice::note($output, match (true) {
             // The three rules a session working one of several claims cannot
             // read anywhere in time. They are printed with the claim rather
             // than put in the prompt because two of them name the branch, and

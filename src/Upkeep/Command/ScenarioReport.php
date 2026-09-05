@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Upkeep\Command;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * A scenario handed to whoever runs it: what has to be pasted, and what the
@@ -24,42 +25,38 @@ abstract class ScenarioReport
      */
     protected function report(OutputInterface $output, array $scenario, string $label): void
     {
-        $output->writeln(sprintf('%s — %s', $scenario['id'], $scenario['title']));
-        $output->writeln($scenario['file']);
-        $output->writeln('');
-        $output->writeln(sprintf('Environment  %s', $scenario['environment']));
-        $output->writeln(sprintf(
-            '%-12s %s%s',
-            $label,
+        Voice::heading($output, sprintf('%s — %s', $scenario['id'], $scenario['title']));
+        Voice::note($output, $scenario['file']);
+        Voice::row($output, sprintf('%s %s', Voice::key('Environment', 12), $scenario['environment']));
+        Voice::row($output, sprintf(
+            '%s %s%s',
+            Voice::key($label, 12),
             $scenario['status'],
             $scenario['requirements'] === [] ? '' : ' — ' . implode(', ', $scenario['requirements']),
         ));
         if ($scenario['heldBy'] !== '') {
             // A case nobody runs claims its state on the strength of this line.
-            $output->writeln(sprintf('Held by      %s', str_replace('`', '', $scenario['heldBy'])));
+            Voice::row($output, sprintf('%s %s', Voice::key('Held by', 12), str_replace('`', '', $scenario['heldBy'])));
         }
-        $output->writeln(sprintf('Criteria     %s', $scenario['criteria']));
+        Voice::row($output, sprintf('%s %s', Voice::key('Criteria', 12), $scenario['criteria']));
 
         // Verbatim, on its own, with nothing around it: a prompt read off a screen
         // that also explains what it is testing is no longer the prompt.
-        $output->writeln('');
-        $output->writeln('Paste this and add nothing:');
+        Voice::heading($output, 'Paste this and add nothing');
         $output->writeln('');
         $output->writeln($scenario['prompt']);
 
         if ($scenario['needs'] !== []) {
-            $output->writeln('');
-            $output->writeln('What the agent needs from this server');
+            Voice::heading($output, 'What the agent needs from this server');
             foreach ($scenario['needs'] as $need) {
-                $output->writeln(sprintf('  - %s', $need));
+                Voice::row($output, sprintf('- %s', $need));
             }
         }
 
         foreach ([['outcomes', 'What has to come out of it'], ['failures', 'How it fails']] as [$section, $heading]) {
-            $output->writeln('');
-            $output->writeln($heading);
+            Voice::heading($output, $heading);
             foreach ($scenario[$section] as $index => $criterion) {
-                $output->writeln(sprintf('  %s %d  %s', $section === 'outcomes' ? 'met' : 'avoided', $index + 1, $criterion));
+                Voice::row($output, sprintf('%s %s', Voice::key(sprintf('%s %d', $section === 'outcomes' ? 'met' : 'avoided', $index + 1), 9), $criterion));
             }
         }
     }

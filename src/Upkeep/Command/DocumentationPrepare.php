@@ -8,6 +8,7 @@ use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Site;
+use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
  * Writes the copy a renderer publishes, and nothing else.
@@ -32,9 +33,9 @@ final class DocumentationPrepare
     ): int {
         $built = Site::build($into . '/source');
         foreach ($built['removed'] as $removed) {
-            $output->writeln(sprintf('removed %s, which documentation/ no longer has', $removed));
+            Voice::row($output, sprintf('removed %s, which documentation/ no longer has', $removed));
         }
-        $output->writeln(sprintf('%s — %d files, %s', $into . '/source', count($built['written']), Site::repository()));
+        Voice::ok($output, sprintf('%s — %d files, %s', $into . '/source', count($built['written']), Site::repository()));
 
         return 0;
     }

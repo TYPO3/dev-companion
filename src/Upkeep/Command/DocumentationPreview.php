@@ -33,10 +33,12 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * every time, because that is where the renderer puts its warnings and a
  * warning is what an author is rendering to see.
  *
- * `--watch` is the same render, again after every save: the tree is looked at
- * once a second and a render is run when a file in it has moved. Polling
- * rather than inotify, because the extension is not on every PHP and a watcher
- * that needs one installed first is one more step in a recipe that was six.
+ * `--watch` serves the site and is the same render again after every save: the
+ * tree is looked at once a second and a render is run when a file in it has
+ * moved. Polling rather than inotify, because the extension is not on every
+ * PHP and a watcher that needs one installed first is one more step in a
+ * recipe that was six. The server is PHP's own, as a child that Ctrl-C takes
+ * down with the watch.
  */
 #[AsCommand(
     name: 'documentation:preview',
@@ -78,38 +80,53 @@ final class DocumentationPreview
         OutputInterface $output,
         #[Argument('where the site is built; `documentation/guides.xml` renders the default one')]
         string $into = Site::ROOT,
-        #[Option('render again whenever a file below documentation/ or skills/ is saved, until Ctrl-C')]
+        #[Option('serve the site and render again whenever a file below documentation/ or skills/ is saved, until Ctrl-C')]
         bool $watch = false,
+        #[Option('the port the watch serves on')]
+        int $port = 8000,
     ): int {
         Voice::heading($output, sprintf('Rendering %s/ into %s', Site::SOURCE, $into . '/html'));
         $rendered = $this->render($output, $into);
-        if ($rendered) {
+        if (!$watch) {
             // Over a server rather than by opening the file: the search fetches
             // its index beside the pages, which a browser refuses over `file://`.
-            Voice::note($output, sprintf('read it: php -S localhost:8000 -t %s', $into . '/html'));
-        }
-        if (!$watch) {
+            if ($rendered) {
+                Voice::note($output, sprintf('read it: php -S localhost:%d -t %s', $port, $into . '/html'));
+            }
+
             return $rendered ? 0 : 1;
+        }
+
+        $stop = $this->runner->start([PHP_BINARY, '-S', 'localhost:' . $port, '-t', $into . '/html'], Paths::root());
+        if (is_string($stop)) {
+            Voice::problem($output, sprintf('Nothing serves on port %d: %s', $port, $stop));
+
+            return 1;
+        }
+
+        // Ctrl-C reaches the server through the terminal's process group; a
+        // kill reaches this process alone, and the server would outlive it.
+        if (function_exists('pcntl_async_signals')) {
+            pcntl_async_signals(true);
+            $down = static function () use ($stop): void {
+                $stop();
+                exit(130);
+            };
+            pcntl_signal(SIGINT, $down);
+            pcntl_signal(SIGTERM, $down);
         }
 
         // A render that failed does not end the watch: a directive saved half
         // typed fails, and the save that finishes it is what the watch is for.
-        Voice::heading($output, sprintf('Watching %s/ and skills/ — Ctrl-C stops it', Site::SOURCE));
-        $idle = Voice::progress($output);
-        $idle->setMessage(sprintf('watching, rendered at %s', date('H:i:s')));
-        $idle->start();
+        Voice::heading($output, sprintf('Serving http://localhost:%d/ and watching %s/ and skills/ — Ctrl-C stops both', $port, Site::SOURCE));
         while (($changed = ($this->look)()) !== null) {
             if ($changed === []) {
-                $idle->advance();
                 continue;
             }
-            $idle->clear();
             $output->writeln(sprintf('%s %s', Voice::dim(date('H:i:s')), implode(', ', $changed)));
             $this->render($output, $into);
-            $idle->setMessage(sprintf('watching, rendered at %s', date('H:i:s')));
-            $idle->display();
         }
-        $idle->clear();
+        $stop();
 
         return 0;
     }

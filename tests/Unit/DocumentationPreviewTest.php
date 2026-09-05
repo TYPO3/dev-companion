@@ -36,11 +36,21 @@ final class DocumentationPreviewTest extends TestCase
     /** Which command the stub answers with a failure, or none. */
     private ?string $fails = null;
 
+    /** What the stub was asked to leave running, and whether it was stopped again. */
+    private string $served = '';
+    private bool $stopped = false;
+
+    /** What the stub says a server died with, or null for one that stays up. */
+    private ?string $refuses = null;
+
     protected function setUp(): void
     {
         $this->into = sys_get_temp_dir() . '/dev-companion-preview-' . getmypid();
         $this->ran = [];
         $this->fails = null;
+        $this->served = '';
+        $this->stopped = false;
+        $this->refuses = null;
     }
 
     protected function tearDown(): void
@@ -59,6 +69,14 @@ final class DocumentationPreviewTest extends TestCase
             $ok = $this->fails === null || !str_contains(implode(' ', $command), $this->fails);
 
             return ['ok' => $ok, 'exitCode' => $ok ? 0 : 1, 'output' => '', 'error' => $ok ? '' : 'what went wrong'];
+        });
+
+        $runner->method('start')->willReturnCallback(function (array $command): \Closure|string {
+            $this->served = implode(' ', $command);
+
+            return $this->refuses ?? function (): void {
+                $this->stopped = true;
+            };
         });
 
         return new DocumentationPreview($runner, static function () use (&$looks): ?array {
@@ -141,8 +159,34 @@ final class DocumentationPreviewTest extends TestCase
         self::assertSame(0, ($this->preview([[], ['documentation/readme.rst'], [], null]))($output, $this->into, true));
 
         self::assertSame(2, $this->renders());
-        self::assertStringContainsString("Ctrl-C stops it\n", $printed = $output->fetch());
+        self::assertStringContainsString("Ctrl-C stops both\n", $printed = $output->fetch());
         self::assertMatchesRegularExpression('/^\d\d:\d\d:\d\d documentation\/readme\.rst$/m', $printed);
+    }
+
+    /** The watch serves what it renders, on the port it was given, and takes the server down with it. */
+    #[Test]
+    public function aWatchServesTheSiteAndStopsTheServerWithIt(): void
+    {
+        $output = new BufferedOutput();
+
+        self::assertSame(0, ($this->preview([null]))($output, $this->into, true, 8123));
+
+        self::assertStringContainsString('-S localhost:8123 -t ' . $this->into . '/html', $this->served);
+        self::assertTrue($this->stopped, 'the server outlived the watch');
+        self::assertStringContainsString('http://localhost:8123/', $output->fetch());
+    }
+
+    /** A port that is taken ends the watch with what the server said, rather than watching for nobody. */
+    #[Test]
+    public function aPortThatIsTakenEndsTheWatchWithTheReason(): void
+    {
+        $this->refuses = 'Failed to listen on localhost:8000 (reason: Address already in use)';
+        $output = new BufferedOutput();
+
+        self::assertSame(1, ($this->preview([null]))($output, $this->into, true));
+
+        self::assertStringContainsString('Address already in use', $output->fetch());
+        self::assertSame(1, $this->renders(), 'the watch went on without a server');
     }
 
     /** The save that finishes a half-typed directive is what a watch is for, so the failure before it ends nothing. */

@@ -38,6 +38,20 @@ interface CommandRunner
     ): array;
 
     /**
+     * Starts one command and leaves it running.
+     *
+     * What comes back is the closure that stops it, or the sentence the
+     * command died with where it did not stay up — a server whose port is
+     * taken says so within its first moment, and that is what is read.
+     *
+     * @param list<string> $command the executable and its arguments, unquoted — no shell is involved
+     * @param ?string $workingDirectory where to run it, or null for this process's own
+     *
+     * @return (\Closure(): void)|string
+     */
+    public function start(array $command, ?string $workingDirectory = null): \Closure|string;
+
+    /**
      * Where an executable of this name is, or null where the machine has none.
      *
      * On the same seam as `run()` because it is the same boundary: asking

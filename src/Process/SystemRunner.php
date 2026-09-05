@@ -86,6 +86,38 @@ final class SystemRunner implements CommandRunner
     }
 
     /**
+     * The child is given a moment to die before it is called started: a server
+     * refusing its port exits at once, and what it said is the answer.
+     *
+     * @param list<string> $command
+     *
+     * @return (\Closure(): void)|string
+     */
+    public function start(array $command, ?string $workingDirectory = null): \Closure|string
+    {
+        $descriptors = [0 => ['file', '/dev/null', 'r'], 1 => ['file', '/dev/null', 'w'], 2 => ['pipe', 'w']];
+        $process = @proc_open($command, $descriptors, $pipes, $workingDirectory, null);
+        if (!is_resource($process)) {
+            return 'could not start ' . ($command[0] ?? '');
+        }
+        stream_set_blocking($pipes[2], false);
+        usleep(300_000);
+        if (!proc_get_status($process)['running']) {
+            $said = trim((string) stream_get_contents($pipes[2]));
+            fclose($pipes[2]);
+            proc_close($process);
+
+            return $said === '' ? ($command[0] ?? '') . ' ended at once' : $said;
+        }
+
+        return static function () use ($process, $pipes): void {
+            proc_terminate($process);
+            fclose($pipes[2]);
+            proc_close($process);
+        };
+    }
+
+    /**
      * Walks PATH rather than shelling out: "command -v" is a shell builtin and
      * `proc_open` runs no shell, so asking for it would always come back empty.
      */

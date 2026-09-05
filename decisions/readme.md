@@ -1128,7 +1128,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DOC-025`][D-DOC-025] — The documentation is four sections, and the bar carries those four · 2026-08-12
 - [`D-DOC-026`][D-DOC-026] — The site is the documentation, and the readme stays out of it · 2026-08-12
 - [`D-DOC-027`][D-DOC-027] — The renderer's configuration sits with the pages it renders · 2026-08-12
-- [`D-DOC-028`][D-DOC-028] — The renderer is a build tool this repository carries none of · 2026-08-12
+- [`D-DOC-028`][D-DOC-028] — The renderer is a build tool this repository carries none of · 2026-08-12 · confirmed
 - [`D-DOC-029`][D-DOC-029] — The documentation is reStructuredText, and the rest of the corpus is not · 2026-08-12
 - [`D-DOC-030`][D-DOC-030] — The front page is a landing page, in the theme's marketing layout · 2026-08-12
 - [`D-DOC-031`][D-DOC-031] — A page is railed under a label and headed by a sentence · 2026-08-12

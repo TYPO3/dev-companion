@@ -46,8 +46,8 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 )]
 final class DocumentationPreview
 {
-    /** The branch is named because the theme publishes no tagged release yet. */
-    private const THEME = 'typo3/soul-guides-theme:dev-main';
+    /** Named with no constraint, so a fetch takes the theme's newest release. */
+    private const THEME = 'typo3/soul-guides-theme';
 
     /** Where the renderer is fetched to, below the build directory it renders into. */
     private const RENDERER = 'renderer';

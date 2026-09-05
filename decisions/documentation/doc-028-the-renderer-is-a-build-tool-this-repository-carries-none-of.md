@@ -2,7 +2,7 @@
 id: D-DOC-028
 title: 'The renderer is a build tool this repository carries none of'
 date: 2026-08-12
-status: open
+status: confirmed
 coveredBy:
   - DocumentationPrepareTest::oneCallWritesTheCopyAndSaysWhereItWent
   - DocumentationPrepareTest::whatTheDocumentationNoLongerHasIsReported
@@ -76,3 +76,13 @@ vendor directory and four steps of a command.
   months old and nothing says so.
 - The site breaks and the checkout cannot say what changed, because there is no
   recorded commit of the theme to go back to.
+
+## Confirmed on 2026-09-05
+
+The theme carries tags now, `v0.3.1` the newest, so the fetch names it with no
+constraint and takes its newest release — in `documentation:preview` and in the
+workflow alike. A constraint would have to be raised by hand each release, and
+the day one was proposed the maintainer said to name none. What this changes:
+the third **Wrong if** is answered, because a release is a commit somebody can
+go back to, and `rm -rf .site/renderer` is still how a preview takes the newest
+one.

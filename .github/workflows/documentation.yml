@@ -58,7 +58,7 @@ jobs:
         run: |
           mkdir -p "$RENDERER"
           composer init --working-dir="$RENDERER" --no-interaction --name=typo3/dev-companion-render
-          composer require --working-dir="$RENDERER" --no-interaction --no-progress typo3/soul-guides-theme:dev-main
+          composer require --working-dir="$RENDERER" --no-interaction --no-progress typo3/soul-guides-theme
           "$RENDERER"/vendor/bin/guides --no-progress -c documentation
           node "$RENDERER"/vendor/typo3/soul-guides-theme/resources/dist/soul-finish.js .site/html
 

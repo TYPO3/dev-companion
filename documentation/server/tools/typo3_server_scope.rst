@@ -205,6 +205,10 @@ Text:
     The throwaway functional test that renders one page and prints what came out: the cObj that puts a snippet through parseFunc, the operator forms a value has to be written in, how output is got out of a test that would otherwise print nothing, one marker per region so the response says which part of it changed, printing what a service holds from inside the request, the targeted invocation, and where the RTE setup comes from per version. It says nothing about what parseFunc does to a snippet, which is what the probe is for.
     Tools: typo3_rule_lookup, typo3_hint_lookup
     Source: typo3://guides/core/testing/proving-a-rendering (core)
+    ## Exercising the system resource publisher from a functional test
+    Which of the three file system publishers a test instance actually runs and why the application context does not decide it, why publishing is a no-op for any package whose path lies under the public path, and which of three states at the publishing target raises a real failure rather than a silent success. From TYPO3 14, where the SystemResource namespace arrived. What a package registers as a public resource is a hint rather than this page.
+    Tools: typo3_rule_lookup, typo3_hint_lookup
+    Source: typo3://guides/core/testing/exercising-asset-publishing (core)
     ## The PHPUnit configuration an extension runs its own tests with
     The two files a package writes into Build/, whole and ready to write out, one variant per PHPUnit the paired typo3/testing-framework release admits. Beside them: which two attributes a copy has to correct and why the bootstrap is referenced rather than copied, the environment a functional run reads its connection from, and what a finished suite leaves behind. It does not set the harness up for you and it names no dependency constraint — which release resolves is the solver's answer, not this document's.
     Tools: typo3_rule_lookup, typo3_hint_lookup
@@ -543,6 +547,16 @@ Data:
                     "typo3_hint_lookup"
                 ],
                 "source": "typo3://guides/core/testing/proving-a-rendering",
+                "scope": "core"
+            },
+            {
+                "topic": "Exercising the system resource publisher from a functional test",
+                "depth": "Which of the three file system publishers a test instance actually runs and why the application context does not decide it, why publishing is a no-op for any package whose path lies under the public path, and which of three states at the publishing target raises a real failure rather than a silent success. From TYPO3 14, where the SystemResource namespace arrived. What a package registers as a public resource is a hint rather than this page.",
+                "tools": [
+                    "typo3_rule_lookup",
+                    "typo3_hint_lookup"
+                ],
+                "source": "typo3://guides/core/testing/exercising-asset-publishing",
                 "scope": "core"
             },
             {

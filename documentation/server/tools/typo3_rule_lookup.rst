@@ -309,7 +309,7 @@ Data:
                 "body": "- Deprecations must not use `[!!!]`.\n- Deprecations may only use `[TASK]` or `[FEATURE]`.\n- Deprecations must be documented with a changelog RST file.\n- Deprecations need migration guidance and may need extension scanner\n  considerations.\n- All of the above is the authoring side. Reading it — what a given version\n  deprecated, and what that means for code that uses it — works the other way\n  round: the changelog files below `Documentation/Changelog/` of the core\n  package and the matchers below the install package's\n  `Configuration/ExtensionScanner/Php/` are what an installation is checked\n  against, by the Extension Scanner in the Install Tool. Both directories ship\n  with a Composer installation.",
                 "versions": "",
                 "coverage": 1,
-                "score": 112,
+                "score": 113,
                 "truncated": false
             },
             {
@@ -415,6 +415,7 @@ Text:
     - Filing a TYPO3 Core Bug Report: Whether It Is Already Reported, What a Report Carries, The Area, The Target Version, The Markup, What the Description Says
     - TYPO3 Core Contribution Rules: Contribution Flow, Code Style, Testing, Documentation, Review Readiness
     - TYPO3 Contribution Sources: Core Contribution Guide, Local Policy
+    - Exercising Asset Publishing in a Functional Test: The Symlink Publisher Is Active, and Not Because of the Context, Publishing Is a No-Op for a Package Inside the Public Path, A Regular File at the Target Is What Fails, What the Test Instance Pins
     - Proving What a Rendering Change Renders: The Probe, Putting the Snippet Into TypoScript, Reading What It Rendered, Saying Which Part of the Response Changed, Printing What a Service Holds Mid-Request, Why the userFunc Carries an Attribute, Where lib.parseFunc_RTE Comes From, Running It, Removing the Probe
     - TYPO3 Core Script Help: Invoking runTests.sh, Common Commands, When a Suite Fails for the Install Rather Than the Code, The Pre-Commit Hook, Script Notes
     - Settling an API Question on a Declared Major That Is Not Installed: Which Majors the Question Is About, What the Changelog Settles and What It Does Not, Reading the Branch, What Reading Proves, and What It Does Not
@@ -607,6 +608,16 @@ Data:
                 "topics": [
                     "Core Contribution Guide",
                     "Local Policy"
+                ]
+            },
+            {
+                "id": "core/testing/exercising-asset-publishing",
+                "title": "Exercising Asset Publishing in a Functional Test",
+                "topics": [
+                    "The Symlink Publisher Is Active, and Not Because of the Context",
+                    "Publishing Is a No-Op for a Package Inside the Public Path",
+                    "A Regular File at the Target Is What Fails",
+                    "What the Test Instance Pins"
                 ]
             },
             {

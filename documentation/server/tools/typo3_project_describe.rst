@@ -549,6 +549,7 @@ Text:
     - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer will point at included.
     - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before writing or reviewing a patch to the TYPO3 core, to know what makes it merge-ready.
     - core/contribution/sources (core) — TYPO3 Contribution Sources. When a question goes past what the bundled documents answer and the official guide has to be read.
+    - core/testing/exercising-asset-publishing (core) — Exercising Asset Publishing in a Functional Test. When a functional test has to drive the system resource publisher rather than stub it — proving that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. Registering a package's public resources is a hint instead.
     - core/testing/proving-a-rendering (core) — Proving What a Rendering Change Renders. When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case, and a PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. Asserting a response whose expected value is already known is the frontend request hint instead.
     - core/testing/scripts (core) — TYPO3 Core Script Help. When running a suite inside a core checkout. Which suite a change actually needs is typo3_test_run_guide, which filters them by version.
     - extension/compatibility/a-declared-major-that-is-not-installed (extension) — Settling an API Question on a Declared Major That Is Not Installed. When the code has to run on more than one declared major and one of them is installed — before writing against an API the installed copy happens to have. It hands over the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. No per-version list of identifiers is bundled anywhere here, because the branch is what carries the shape.
@@ -851,6 +852,13 @@ Data:
                 "tool": "typo3_rule_lookup"
             },
             {
+                "id": "core/testing/exercising-asset-publishing",
+                "title": "Exercising Asset Publishing in a Functional Test",
+                "when": "When a functional test has to drive the system resource publisher rather than stub it — proving that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. Registering a package's public resources is a hint instead.",
+                "scope": "core",
+                "tool": "typo3_rule_lookup"
+            },
+            {
                 "id": "core/testing/proving-a-rendering",
                 "title": "Proving What a Rendering Change Renders",
                 "when": "When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case, and a PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. Asserting a response whose expected value is already known is the frontend request hint instead.",
@@ -962,6 +970,7 @@ Text:
     - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer will point at included.
     - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before writing or reviewing a patch to the TYPO3 core, to know what makes it merge-ready.
     - core/contribution/sources (core) — TYPO3 Contribution Sources. When a question goes past what the bundled documents answer and the official guide has to be read.
+    - core/testing/exercising-asset-publishing (core) — Exercising Asset Publishing in a Functional Test. When a functional test has to drive the system resource publisher rather than stub it — proving that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. Registering a package's public resources is a hint instead.
     - core/testing/proving-a-rendering (core) — Proving What a Rendering Change Renders. When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case, and a PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. Asserting a response whose expected value is already known is the frontend request hint instead.
     - core/testing/scripts (core) — TYPO3 Core Script Help. When running a suite inside a core checkout. Which suite a change actually needs is typo3_test_run_guide, which filters them by version.
     - extension/compatibility/a-declared-major-that-is-not-installed (extension) — Settling an API Question on a Declared Major That Is Not Installed. When the code has to run on more than one declared major and one of them is installed — before writing against an API the installed copy happens to have. It hands over the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. No per-version list of identifiers is bundled anywhere here, because the branch is what carries the shape.
@@ -1154,6 +1163,13 @@ Data:
                 "id": "core/contribution/sources",
                 "title": "TYPO3 Contribution Sources",
                 "when": "When a question goes past what the bundled documents answer and the official guide has to be read.",
+                "scope": "core",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "core/testing/exercising-asset-publishing",
+                "title": "Exercising Asset Publishing in a Functional Test",
+                "when": "When a functional test has to drive the system resource publisher rather than stub it — proving that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. Registering a package's public resources is a hint instead.",
                 "scope": "core",
                 "tool": "typo3_rule_lookup"
             },

@@ -19,7 +19,7 @@ and its mechanism was not.
 ## Evidence
 
 - **The report.**
-  [`feedback/2026-09-09-180725`](../../feedback/2026-09-09-180725-functional-test-instances-publish-assets-by.md),
+  [`feedback/2026-09-09-180725`](../../feedback/archive/2026-09-09-180725-functional-test-instances-publish-assets-by.md),
   `/home/benji/projects/typo3-cms`, `claude-opus-5[1m]`. Three rounds and two
   throwaway functional tests to learn one configuration value, in a task that
   had to raise a real publishing failure rather than stub one.
@@ -71,3 +71,13 @@ and its mechanism was not.
   context is back in the picture.
 - The default changes on a branch this server covers. Then the statement needs
   its own `since` inside the 14 boundary rather than resting on the namespace's.
+
+## Since then
+
+Written on 2026-09-09 as `core/testing/exercising-asset-publishing`, and it
+moved a ranking on the way in. The word "throwaway" is rare in this corpus and
+`core/testing/proving-a-rendering` owns it, so two uses of it here dropped that
+page's sections below the floor and a query that had handed the page over whole
+handed one section instead. The word came out. `D-ANS-002` names corpus length
+as one of the three things a rank is computed from, and this is the first
+recorded case of a new page changing another's answer.

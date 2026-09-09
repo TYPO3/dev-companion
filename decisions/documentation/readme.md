@@ -8,6 +8,7 @@ What was assumed about how they are written belongs here.
 See [the decisions readme](../readme.md) for how an entry is written and when it
 earns one.
 
+- [`D-DOC-068`][D-DOC-068] — The register this server writes in is copied into its callers' patches · 2026-09-09
 - [`D-DOC-067`][D-DOC-067] — Every command prints in one voice · 2026-09-05
 - [`D-DOC-066`][D-DOC-066] — A dated section says what the reading changed · 2026-08-28
 - [`D-DOC-059`][D-DOC-059] — The recording report reads both its days in UTC · 2026-08-27
@@ -69,6 +70,7 @@ earns one.
 - [`D-DOC-001`][D-DOC-001] — A table is written so it reads unrendered · 2026-08-01 · confirmed
 - [`D-DOC-002`][D-DOC-002] — The prose rule is measured, and only the lead fails on it · 2026-08-01
 
+[D-DOC-068]: doc-068-the-register-this-server-writes-in-is-copied-into-its-callers-patches.md
 [D-DOC-067]: doc-067-every-command-prints-in-one-voice.md
 [D-DOC-066]: doc-066-a-dated-section-says-what-the-reading-changed.md
 [D-DOC-059]: doc-059-the-recording-report-reads-both-its-days-in-utc.md

@@ -90,6 +90,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-151`][D-ANS-151] — The file list on a change answer is asked for rather than sent · 2026-09-09
 - [`D-ANS-142`][D-ANS-142] — The area a word names is resolved from the extension it is the key of · 2026-09-04
 - [`D-ANS-143`][D-ANS-143] — What a tool refuses is said to the caller that sent it · 2026-09-04
 - [`D-ANS-144`][D-ANS-144] — A declared property is reached by its own name · 2026-09-04
@@ -236,6 +237,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-151]: answers/ans-151-the-file-list-on-a-change-answer-is-asked-for-rather-than-sent.md
 [D-ANS-142]: answers/ans-142-the-area-a-word-names-is-resolved-from-the-extension-it-is-the-key-of.md
 [D-ANS-143]: answers/ans-143-what-a-tool-refuses-is-said-to-the-caller-that-sent-it.md
 [D-ANS-144]: answers/ans-144-a-declared-property-is-reached-by-its-own-name.md

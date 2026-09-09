@@ -35,7 +35,7 @@ answered, because a query reaches only text somebody wrote.
   `{101694, resolves, "Streamline top frame detection", Task, Rejected}` — the
   tracker's own state, without a tracker call.
 - **A second session names the same way in, from a different task.**
-  [`feedback/2026-09-09-184254`](../../feedback/2026-09-09-184254-six-answer-details-that-carried-this-session.md)
+  [`feedback/2026-09-09-184254`](../../feedback/archive/2026-09-09-184254-six-answer-details-that-carried-this-session.md)
   calls `typo3_gerrit_lookup path='Build/Sources/TypeScript/core/utility'` the
   cheapest and highest-value call of its session, and says it would not have
   guessed a repository path was a way in from the tool's name.

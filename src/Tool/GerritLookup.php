@@ -45,7 +45,7 @@ final class GerritLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. It is the surface a checkout cannot see: a clone carries what landed and says nothing about what is open. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its message and paths, votes, comments, relation chain, its Change-Id siblings, the Forge issues its trailers name and whether it carries conflict markers. An empty answer says whether it can be read as an absence, since a private change is invisible to an anonymous read. The issue itself is typo3_forge_lookup. Reading only: reviewing, voting and uploading stay yours.';
+        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. It is the surface a checkout cannot see: a clone carries what landed and says nothing about what is open. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its message and paths, votes, comments, relation chain, its Change-Id siblings, the Forge issues its trailers name and whether it carries conflict markers. Four of those decide what a session does and no checkout has them: chain, with chainedAt saying which patch set each link sits on; mergeable, which predicts the conflict before the fetch; fetch.ref, which git fetch takes as it stands; and the commit message body. path is the way in for "is somebody already working on this file" and for "has anybody attempted this before", the earlier attempt coming back whatever it was called. Reading the diff itself happens in a checkout: fetch.ref is what gets you there, and files says how much of the file list to carry. An empty answer says whether it can be read as an absence, since a private change is invisible to an anonymous read. The issue itself is typo3_forge_lookup. Reading only: reviewing, voting and uploading stay yours.';
     }
 
     public static function inputSchema(): array
@@ -82,6 +82,12 @@ final class GerritLookup extends ReadOnlyTool
                     'type' => 'boolean',
                     'default' => false,
                     'description' => 'Narrow a search to the changes still under review. False, the default, reaches every state, which "has anybody ever tried this" needs, since an abandoned or merged attempt answers it. True is "who is working on this now". Narrows query and path, and is ignored by issue, change and commit.',
+                ],
+                'files' => [
+                    'type' => 'string',
+                    'enum' => ['auto', 'none', 'stat', 'full'],
+                    'default' => 'auto',
+                    'description' => 'How much of the file list a change read by name carries. "auto", the default, prints a line per file up to 40 of them and a count with the top-level directories beyond that — 40 being the ninetieth percentile of an open core change, so an ordinary patch keeps its list and a refactoring of 137 files does not spend the answer on one. "stat" is that count whatever the size, "full" the whole list whatever the size, and "none" leaves it out, which is what a caller who has the fetch ref and is about to run git diff wants. The hunks are in none of them: reading content is what the ref is for. Narrows change and commit, and is ignored by every other way in.',
                 ],
                 'messages' => [
                     'type' => 'string',
@@ -682,6 +688,7 @@ final class GerritLookup extends ReadOnlyTool
         $open = (bool) ($args['open'] ?? false);
         $limit = is_int($args['limit'] ?? null) ? $args['limit'] : 10;
         $messages = is_string($args['messages'] ?? null) ? trim($args['messages']) : 'none';
+        $files = is_string($args['files'] ?? null) ? trim($args['files']) : 'auto';
         $backlog = is_string($args['backlog'] ?? null) ? trim($args['backlog']) : '';
         $owner = is_string($args['owner'] ?? null) ? trim($args['owner']) : '';
         $reviewedBy = is_string($args['reviewedBy'] ?? null) ? trim($args['reviewedBy']) : '';
@@ -827,7 +834,7 @@ final class GerritLookup extends ReadOnlyTool
                 $commented = $commented || ($entry['comments'] ?? []) !== [];
                 $stacked = $stacked || ($entry['chain'] ?? []) !== [];
                 $tracked = $tracked || ($entry['issues'] ?? []) !== [];
-                $touched = $touched || ($entry['files'] ?? []) !== [];
+                $touched = $touched || (self::listedFiles($entry, $files) !== []);
                 foreach ($entry['chain'] ?? [] as $related) {
                     $moved = $moved || self::behind($related);
                 }
@@ -837,7 +844,7 @@ final class GerritLookup extends ReadOnlyTool
                 $lines = [
                     ...$lines,
                     ...self::commitMessage($entry),
-                    ...self::touches($entry, $byName),
+                    ...self::touches($entry, $byName, $files),
                     ...self::issues($entry, $byName),
                     ...self::chain($entry, $byName),
                     ...self::comments($entry, $byName),
@@ -1266,31 +1273,98 @@ final class GerritLookup extends ReadOnlyTool
     }
 
     /**
+     * The most files a change carries before the list stops being printed.
+     *
+     * `D-ANS-112` measured the population it put the list on: a median of five
+     * files and a ninetieth percentile of forty. So forty is where the ordinary
+     * patch ends and the refactoring begins, and it is the boundary that
+     * measurement already drew rather than a number picked here.
+     */
+    private const FILES_LISTED_AT_MOST = 40;
+
+    /**
+     * The files to print one line each for, empty where the stat stands instead.
+     *
+     * @param array<string, mixed> $entry
+     * @return list<array<string, mixed>>
+     */
+    private static function listedFiles(array $entry, string $want): array
+    {
+        $files = is_array($entry['files'] ?? null) ? array_values($entry['files']) : [];
+        if ($want === 'none' || $want === 'stat') {
+            return [];
+        }
+
+        return $want === 'full' || count($files) <= self::FILES_LISTED_AT_MOST ? $files : [];
+    }
+
+    /**
+     * What a change touches said as a count and its top-level directories.
+     *
+     * What the reporting session wanted where it wanted paths at all — which
+     * system extension does this touch — in a fraction of the space, and it
+     * names the two ways to the list itself: `files="full"` here, and the
+     * `git diff --stat` a caller holding `fetch.ref` is one command away from.
+     *
+     * @param array<string, mixed> $entry
+     * @return list<string>
+     */
+    private static function fileStat(array $entry): array
+    {
+        $files = is_array($entry['files'] ?? null) ? $entry['files'] : [];
+        $areas = [];
+        foreach ($files as $file) {
+            $path = is_string($file['path'] ?? null) ? $file['path'] : '';
+            $parts = explode('/', $path);
+            $area = count($parts) > 3 ? implode('/', array_slice($parts, 0, 3)) : $parts[0];
+            $areas[$area] = ($areas[$area] ?? 0) + 1;
+        }
+        arsort($areas);
+
+        $said = [];
+        foreach ($areas as $area => $count) {
+            $said[] = $area . ' (' . $count . ')';
+        }
+
+        return [
+            '',
+            sprintf('### Files (%d)', count($files)),
+            'Listed as a count past ' . self::FILES_LISTED_AT_MOST . ' files, which is where the ordinary patch '
+                . 'ends. Where each one sits: ' . implode(', ', $said) . '. Pass files="full" for the paths, or '
+                . 'run git diff --stat against the fetch ref above, which is the only way to the hunks anyway.',
+        ];
+    }
+
+    /**
      * The paths this patch set touches, each with what it does to one.
      *
      * The first thing a review establishes and the one a session went to the
      * checkout for: eight open changes were fetched into the user's own working
      * tree to triage a shortlist none of them was reviewed from (`D-ANS-112`).
-     * The list is printed whole — the median open core change touched 5 files
-     * when this was measured, and a page of it would be a cap on the one thing
-     * the answer is here to carry. Separated from `answer()` so it can be held
-     * without a review server.
+     * How much of it is printed is `$want`, because a refactoring is not the
+     * median change: a session read two of 137 and 200 files in one task and
+     * used none of the list (`D-ANS-151`). Separated from `answer()` so it can
+     * be held without a review server.
      *
      * @param array<string, mixed> $entry
      * @param bool $read whether the paths were asked for, which only a change
      *                   read by name does
+     * @param string $want auto, none, stat or full
      * @return list<string>
      */
-    public static function touches(array $entry, bool $read): array
+    public static function touches(array $entry, bool $read, string $want = 'auto'): array
     {
         if ($entry['files'] === null) {
-            return $read
+            return $read && $want !== 'none'
                 ? ['', 'The paths this patch set touches could not be read: the review server answered the change '
                     . 'and not its files, so nothing here says what the patch is about.']
                 : [];
         }
-        if ($entry['files'] === []) {
+        if ($entry['files'] === [] || $want === 'none') {
             return [];
+        }
+        if (self::listedFiles($entry, $want) === []) {
+            return self::fileStat($entry);
         }
 
         $lines = ['', sprintf('### Files (%d)', count($entry['files']))];

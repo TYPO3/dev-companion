@@ -3,7 +3,9 @@ id: D-ANS-151
 title: The file list on a change answer is asked for rather than sent
 date: 2026-09-09
 status: open
-coveredBy: []
+coveredBy:
+  - GerritTest::pathsTheCallerDeclinedAreNotReportedAsUnreadable
+  - GerritTest::theFileListIsCarriedAsFarAsTheCallerAsked
 ---
 
 # D-ANS-151 — The file list on a change answer is asked for rather than sent
@@ -18,7 +20,7 @@ refactoring is made of.
 ## Evidence
 
 - **The report.**
-  [`feedback/2026-09-09-182544`](../../feedback/2026-09-09-182544-typo3-gerrit-lookup-inlines-the-whole-file-list.md),
+  [`feedback/2026-09-09-182544`](../../feedback/archive/2026-09-09-182544-typo3-gerrit-lookup-inlines-the-whole-file-list.md),
   `/home/benji/projects/typo3-cms`, `claude-opus-5[1m]`. Two reads by name in
   one session: roughly 140 file entries for change 93620 and roughly 200 for
   95425. Its own words are that this was by far the largest thing the server
@@ -36,7 +38,7 @@ refactoring is made of.
   is the same session's positive counterpart and names the same fields, filed so
   a later trim would not cut them.
 - **A third session names two more and says why they earned it.**
-  [`feedback/2026-09-09-184254`](../../feedback/2026-09-09-184254-six-answer-details-that-carried-this-session.md):
+  [`feedback/2026-09-09-184254`](../../feedback/archive/2026-09-09-184254-six-answer-details-that-carried-this-session.md):
   `releaseLines` and `issues[]` arrive unasked on answers that have nothing to
   do with either, and each decided a turn two steps after it was read. A caller
   that needs them is the one that does not know to ask.
@@ -46,7 +48,7 @@ refactoring is made of.
   on, and `chainedAt` against `patchSet` on the merged link is why that chain's
   base was not an ancestor of `main`. Nothing in a checkout says either.
 - **The boundary at the diff held.**
-  [`feedback/2026-09-09-184232`](../../feedback/2026-09-09-184232-reading-a-change-gives-its-file-list-and-line.md)
+  [`feedback/2026-09-09-184232`](../../feedback/archive/2026-09-09-184232-reading-a-change-gives-its-file-list-and-line.md)
   wanted content, fetched with the answer's own `fetch.ref` and read it in the
   checkout, and calls that a good route that is not written down.
 
@@ -92,3 +94,13 @@ refactoring is made of.
 - A session reports the two-step to content as the thing that cost it the task,
   with the sentence naming it in place. Then the boundary `D-ANS-112` drew is in
   the wrong place and a content parameter is what is left.
+
+## Since then
+
+Built on 2026-09-09, and the default is a size rather than a mode. `files` takes
+`auto`, `none`, `stat` and `full`; `auto` prints the list up to forty files and
+the count with the top-level directories past it. Forty is the ninetieth
+percentile `D-ANS-112` already measured, so the ordinary patch keeps the list
+the review workflow passes on and the refactoring does not. A cheap default of
+`stat` would have taken those paths off every review that never asks for
+anything, which is the case that entry was built for.

@@ -15,10 +15,17 @@ size, vote state, whether they still merge, branch, date and person. Every
 change carries its identity, status, current patch set, size, age and label
 state. One read by name adds its message and paths, votes, comments, relation
 chain, its Change-Id siblings, the Forge issues its trailers name and whether it
-carries conflict markers. An empty answer says whether it can be read as an
-absence, since a private change is invisible to an anonymous read. The issue
-itself is typo3_forge_lookup. Reading only: reviewing, voting and uploading stay
-yours. Answers from: network.
+carries conflict markers. Four of those decide what a session does and no
+checkout has them: chain, with chainedAt saying which patch set each link sits
+on; mergeable, which predicts the conflict before the fetch; fetch.ref, which
+git fetch takes as it stands; and the commit message body. path is the way in
+for "is somebody already working on this file" and for "has anybody attempted
+this before", the earlier attempt coming back whatever it was called. Reading
+the diff itself happens in a checkout: fetch.ref is what gets you there, and
+files says how much of the file list to carry. An empty answer says whether it
+can be read as an absence, since a private change is invisible to an anonymous
+read. The issue itself is typo3_forge_lookup. Reading only: reviewing, voting
+and uploading stay yours. Answers from: network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 
@@ -71,6 +78,16 @@ Takes
     # merged attempt answers it. True is "who is working on this now". Narrows query
     # and path, and is ignored by issue, change and commit.
     open: boolean  # optional
+    # One of: auto, none, stat, full. How much of the file list a change read by
+    # name carries. "auto", the default, prints a line per file up to 40 of them and
+    # a count with the top-level directories beyond that — 40 being the ninetieth
+    # percentile of an open core change, so an ordinary patch keeps its list and a
+    # refactoring of 137 files does not spend the answer on one. "stat" is that
+    # count whatever the size, "full" the whole list whatever the size, and "none"
+    # leaves it out, which is what a caller who has the fetch ref and is about to
+    # run git diff wants. The hunks are in none of them: reading content is what the
+    # ref is for. Narrows change and commit, and is ignored by every other way in.
+    files: string  # optional
     # One of: none, people, all. The review log of a change: every message its patch
     # sets and its reviewers left. Ask for it to find out why a vote is gone. Gerrit
     # writes "Outdated Votes: * Code-Review+1 (copy condition: ...)" into the

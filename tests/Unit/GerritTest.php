@@ -455,6 +455,68 @@ final class GerritTest extends TestCase
     }
 
     /**
+     * A refactoring is not the median change, and the list is what it spends
+     * the answer on.
+     *
+     * A session read two changes of 137 and 200 files in one task and used none
+     * of the list, which is `D-ANS-112`'s second **Wrong if** — `D-ANS-151`.
+     * Past forty files, the ninetieth percentile that entry measured, the count
+     * and the directories stand instead.
+     */
+    #[Decision('D-ANS-151')]
+    #[Test]
+    #[DataProvider('howMuchOfTheFileListIsAskedFor')]
+    public function theFileListIsCarriedAsFarAsTheCallerAsked(
+        int $count,
+        string $want,
+        bool $listed,
+    ): void {
+        $files = [];
+        for ($at = 0; $at < $count; $at++) {
+            $files[] = [
+                'path' => 'typo3/sysext/core/Classes/Imaging/Processor' . $at . '.php',
+                'action' => 'modified',
+                'insertions' => 1,
+                'deletions' => 1,
+                'binary' => false,
+                'movedFrom' => null,
+            ];
+        }
+
+        $said = implode("\n", GerritLookup::touches(['files' => $files], true, $want));
+
+        self::assertSame($listed, str_contains($said, 'Processor0.php'));
+        if ($want !== 'none') {
+            self::assertStringContainsString(sprintf('### Files (%d)', $count), $said);
+        }
+        if (!$listed && $want !== 'none') {
+            self::assertStringContainsString('typo3/sysext/core (' . $count . ')', $said);
+            self::assertStringContainsString('files="full"', $said);
+        }
+    }
+
+    /** @return array<string, array{0: int, 1: string, 2: bool}> */
+    public static function howMuchOfTheFileListIsAskedFor(): array
+    {
+        return [
+            'the ordinary patch keeps its list' => [5, 'auto', true],
+            'and so does one at the boundary' => [40, 'auto', true],
+            'the refactoring past it does not' => [41, 'auto', false],
+            'full asks for the list whatever the size' => [200, 'full', true],
+            'stat asks for the count whatever the size' => [5, 'stat', false],
+            'none leaves it out' => [5, 'none', false],
+        ];
+    }
+
+    /** A caller who asked for none is not told the paths could not be read. */
+    #[Decision('D-ANS-151')]
+    #[Test]
+    public function pathsTheCallerDeclinedAreNotReportedAsUnreadable(): void
+    {
+        self::assertSame([], GerritLookup::touches(['files' => null], true, 'none'));
+    }
+
+    /**
      * A search asks for no paths, so silence there is not a claim that they
      * could not be read — which the same silence on a change read by name is.
      */

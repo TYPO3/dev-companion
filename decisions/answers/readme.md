@@ -10,6 +10,7 @@ one is added.
 - [`D-ANS-151`][D-ANS-151] — The file list on a change answer is asked for rather than sent · 2026-09-09
 - [`D-ANS-152`][D-ANS-152] — The core answer's npm entries say which dispatcher owns them · 2026-09-09
 - [`D-ANS-153`][D-ANS-153] — The route to prior art runs through the review server · 2026-09-09
+- [`D-ANS-154`][D-ANS-154] — A worktree precondition is a check against the directory · 2026-09-09
 - [`D-ANS-142`][D-ANS-142] — The area a word names is resolved from the extension it is the key of · 2026-09-04
 - [`D-ANS-143`][D-ANS-143] — What a tool refuses is said to the caller that sent it · 2026-09-04
 - [`D-ANS-144`][D-ANS-144] — A declared property is reached by its own name · 2026-09-04
@@ -159,6 +160,7 @@ one is added.
 [D-ANS-151]: ans-151-the-file-list-on-a-change-answer-is-asked-for-rather-than-sent.md
 [D-ANS-152]: ans-152-the-core-answers-npm-entries-say-which-dispatcher-owns-them.md
 [D-ANS-153]: ans-153-the-route-to-prior-art-runs-through-the-review-server.md
+[D-ANS-154]: ans-154-a-worktree-precondition-is-a-check-against-the-directory.md
 [D-ANS-142]: ans-142-the-area-a-word-names-is-resolved-from-the-extension-it-is-the-key-of.md
 [D-ANS-143]: ans-143-what-a-tool-refuses-is-said-to-the-caller-that-sent-it.md
 [D-ANS-144]: ans-144-a-declared-property-is-reached-by-its-own-name.md

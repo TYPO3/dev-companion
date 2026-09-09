@@ -15,10 +15,15 @@ number or a wording: oldest filed, longest untouched or newest. Narrow it by
 tracker, area, date and person, widen it with status, and breakdown answers how
 a large set is distributed instead of a page of it. A miss is an answer. An
 issue that does not exist is answered as such, and words matching nothing are
-counted one word at a time — which is not that nobody reported it. The patch for
-an issue on review.typo3.org is typo3_gerrit_lookup. Reading only, and no
-credential: commenting, assigning and closing stay yours. Answers from: network,
-packages.
+counted one word at a time — which is not that nobody reported it. A query
+reaches only text somebody actually wrote, so an issue whose description is
+empty is reachable by its subject alone, and a wording the code never uses
+reaches it from nowhere. That is why "has anybody attempted this before" is
+asked of typo3_gerrit_lookup by repository path: the change comes back whatever
+it was called, and the issue with it, off the trailers its commit message
+carries. The patch for an issue on review.typo3.org is typo3_gerrit_lookup.
+Reading only, and no credential: commenting, assigning and closing stay yours.
+Answers from: network, packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 

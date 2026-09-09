@@ -1200,7 +1200,7 @@ final class GerritLookup extends ReadOnlyTool
                 : [];
         }
         if ($entry['issues'] === []) {
-            return [];
+            return self::noIssueNamed($entry);
         }
 
         $lines = ['', sprintf('### Issues named in the commit message (%d)', count($entry['issues']))];
@@ -1214,6 +1214,31 @@ final class GerritLookup extends ReadOnlyTool
         }
 
         return $lines;
+    }
+
+    /**
+     * An open change whose trailers name no issue, said as an absence.
+     *
+     * Both halves were in the answer already and neither pointed at the other:
+     * a session read the empty array as nothing to do and finished a patch
+     * still carrying `Resolves: #XXXXXX`, committed past the hook with
+     * `--no-verify` (`D-ANS-153`). A change its own subject marks as a draft is
+     * left alone — not being ready is what a draft says, and the trailer is
+     * what merging asks for.
+     *
+     * @param array<string, mixed> $entry
+     * @return list<string>
+     */
+    private static function noIssueNamed(array $entry): array
+    {
+        $subject = is_string($entry['subject'] ?? null) ? $entry['subject'] : '';
+        if (($entry['status'] ?? '') !== 'NEW' || preg_match('/^\[(WIP|POC)\]/i', $subject) === 1) {
+            return [];
+        }
+
+        return ['', 'No Forge issue: the trailers of this change name none. `Resolves: #<number>` is required '
+            . 'before it can be pushed, and typo3_forge_lookup is what says whether an issue for this work '
+            . 'already exists — by words, or by the area it would be filed under.'];
     }
 
     /**

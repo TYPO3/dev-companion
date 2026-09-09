@@ -3,7 +3,8 @@ id: D-ANS-153
 title: The route to prior art runs through the review server
 date: 2026-09-09
 status: open
-coveredBy: []
+coveredBy:
+  - GerritTest::anOpenChangeNamingNoIssueSaysSo
 ---
 
 # D-ANS-153 — The route to prior art runs through the review server
@@ -18,7 +19,7 @@ answered, because a query reaches only text somebody wrote.
 ## Evidence
 
 - **The report.**
-  [`feedback/2026-09-09-184148`](../../feedback/2026-09-09-184148-an-issue-with-an-empty-description-is.md),
+  [`feedback/2026-09-09-184148`](../../feedback/archive/2026-09-09-184148-an-issue-with-an-empty-description-is.md),
   `/home/benji/projects/typo3-cms/.worktrees/toplevel-access`,
   `claude-opus-5[1m]`. The decisive prior art was Forge #101694 "Streamline top
   frame detection", a rejected Task whose abandoned change had raised the
@@ -45,7 +46,7 @@ answered, because a query reaches only text somebody wrote.
   detection", which carries `top` out of the first and `frame` out of the second
   and none of the rest. Both stay empty under a subject-only AND.
 - **A third session reports the joining that is missing on the other end.**
-  [`feedback/2026-09-09-182704`](../../feedback/2026-09-09-182704-loaded-typo3-forge-lookup-s-schema-never-called.md):
+  [`feedback/2026-09-09-182704`](../../feedback/archive/2026-09-09-182704-loaded-typo3-forge-lookup-s-schema-never-called.md):
   change 93620 came back with `issues: []` and a commit message with no
   `Resolves:` trailer, the session read the empty array as nothing to do, and
   the patch it finished still carries `Resolves: #XXXXXX`, committed with

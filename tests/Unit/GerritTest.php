@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Contribution\Gerrit;
@@ -1337,6 +1338,44 @@ final class GerritTest extends TestCase
             'did not come back',
             implode("\n", GerritLookup::issues(['issues' => null], true)),
         );
+    }
+
+    /**
+     * An open change naming no issue says so, rather than answering an empty
+     * array beside a trailer requirement it never mentions.
+     *
+     * A session read that empty array as nothing to do and finished a patch
+     * still carrying `Resolves: #XXXXXX`, committed past the commit-msg hook
+     * with `--no-verify` — `D-ANS-153`.
+     */
+    #[Decision('D-ANS-153')]
+    #[Test]
+    #[DataProvider('changesThatNameNoIssue')]
+    public function anOpenChangeNamingNoIssueSaysSo(string $status, string $subject, bool $said): void
+    {
+        $lines = GerritLookup::issues(
+            ['issues' => [], 'status' => $status, 'subject' => $subject],
+            true,
+        );
+
+        self::assertSame($said, str_contains(implode("\n", $lines), 'No Forge issue'));
+        if ($said) {
+            self::assertStringContainsString('typo3_forge_lookup', implode("\n", $lines));
+        }
+    }
+
+    /** @return array<string, array{0: string, 1: string, 2: bool}> */
+    public static function changesThatNameNoIssue(): array
+    {
+        return [
+            'open, and offered for merge' => ['NEW', '[TASK] Unify the top level window access', true],
+            // Not being ready is what a draft says, and the trailer is what
+            // merging asks for — `D-ANS-153`.
+            'open, and marked work in progress' => ['NEW', '[WIP][TASK] ALLOW GD ONLY', false],
+            'open, and a proof of concept' => ['NEW', '[PoC][FEATURE] Bind a form to TCA', false],
+            'merged, so the trailer question is closed' => ['MERGED', '[TASK] Something landed', false],
+            'abandoned' => ['ABANDONED', '[TASK] Something did not', false],
+        ];
     }
 
     /**

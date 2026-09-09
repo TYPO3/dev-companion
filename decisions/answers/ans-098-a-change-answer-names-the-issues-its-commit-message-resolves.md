@@ -122,3 +122,9 @@ message names a second.
 - A walk still costs four calls because what it needed was the other direction —
   which changes name this issue — and that is `typo3_forge_lookup`'s `reviews`
   rather than this field.
+
+The third **Wrong if** is answered from the other side. A session called
+`typo3_forge_lookup` on an issue this field had already filled, reports that it
+added almost nothing, and names it as the one call of that session it would not
+make again — so the filled fields are what made the second call redundant rather
+than what buys nothing.

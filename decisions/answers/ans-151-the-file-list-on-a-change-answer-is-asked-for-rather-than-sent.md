@@ -8,9 +8,8 @@ coveredBy: []
 
 # D-ANS-151 — The file list on a change answer is asked for rather than sent
 
-**A change read by name carries its file list only where the caller asks for it,
-because on a large patch it is the biggest thing this server returns and the
-least used.**
+**A change read by name carries its file list only where the caller asks,
+because on a large patch it is the biggest thing returned and the least used.**
 
 `D-ANS-112` weighed the list against a median change of five files and put it on
 every named change. Its second **Wrong if** has fired on the changes a

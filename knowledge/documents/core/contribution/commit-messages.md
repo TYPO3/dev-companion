@@ -57,6 +57,9 @@ Guide.
 - Do not repeat full reproduction instructions from the Forge issue.
 - Wrap body lines manually at 72 characters.
 - Write the body as short, precise prose rather than as a list.
+- Name no count of what the change touched. "in 68 files", "in four spellings",
+  "12 occurrences" — the number is in the diff, and a body that states one is
+  what a reviewer asks to have taken out.
 
 ## The Longest Line The Hook Accepts
 

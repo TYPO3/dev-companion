@@ -88,3 +88,18 @@ person then reviews.
 - A reviewer is reported asking for the compressed form back. Then the two
   readers want different things and the caller-facing rule has to say which one
   it serves.
+
+## Since then
+
+The caller-facing half shipped on 2026-09-09 as
+`any/writing/the-prose-a-patch-carries`, named by every brief for a task that
+writes files. The sweep was measured rather than started: 143 checklist items in
+`knowledge/task-intents.json`, 725 hint lines and 1232 non-blank lines in the
+skills' reference files.
+
+Two of the rules do not run mechanically over it. A search for a sentence ending
+on a preposition returns 16 of the 143 and most are ordinary relative clauses —
+"the names the import looks for" is not the defect the report names. A search
+for a colon returns 50 and perhaps half carry the content the way the report
+objects to. So the sweep is a reading per line, which is what the entry decided
+and what the numbers now price.

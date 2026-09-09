@@ -33,13 +33,16 @@ session made it visible and named its cause.
   as a deferred name, so calling one costs a `ToolSearch` round trip before the
   call. The report states the consequence rather than infers it: the cheapest
   server call cost strictly more than the grep it would have replaced.
-- **What the same burst shows on the knowledge side.** Two of its reports name a
-  fact as missing that this server already carries and already delivers.
+- **What the same burst shows on the knowledge side.** Three of its reports name
+  a fact as missing that this server already carries and already delivers.
   `typo3_test_run_guide` emits the note that `runTests.sh` stops reading its own
   options at the first word that is not one, carrying the error string a caller
-  searches for, since 2026-08-24; and the checkout skill's step 3 routes to the
-  page saying the change refs sit on a remote a core clone does not fetch from.
-  Neither arrived. Neither tool was called.
+  searches for, since 2026-08-24; the checkout skill's step 3 routes to the page
+  saying the change refs sit on a remote a core clone does not fetch from; and
+  `bin/cli hints:probe` with the third report's own question answers, top hit,
+  the hint saying a change that alters what an installation renders is breaking
+  on `main` and takes an `Important` on a maintained line. None arrived. None of
+  the three tools was called.
 - **The answering side had already been tried twice.** `D-SKL-038` put the two
   patch workflows into the `change` answer and then the order itself, and three
   sessions of this burst read that answer and opened no skill.

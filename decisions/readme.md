@@ -393,6 +393,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### knowledge
 
 - [`D-KNW-155`][D-KNW-155] — A core commit body names no count and is not held to one paragraph · 2026-09-09
+- [`D-KNW-156`][D-KNW-156] — The symlink publisher is active on the shipped default, not on the context · 2026-09-09
 - [`D-KNW-147`][D-KNW-147] — A list of what is supported says what an unsupported key does · 2026-09-04
 - [`D-KNW-148`][D-KNW-148] — What the schema of one record type holds is a subject this server owns · 2026-09-04
 - [`D-KNW-149`][D-KNW-149] — What a changelog type owes is not the shape its entries have · 2026-09-04
@@ -540,6 +541,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
 [D-KNW-155]: knowledge/knw-155-a-core-commit-body-names-no-count-and-is-not-held-to-one-paragraph.md
+[D-KNW-156]: knowledge/knw-156-the-symlink-publisher-is-active-on-the-shipped-default-not-on-the-context.md
 [D-KNW-147]: knowledge/knw-147-a-list-of-what-is-supported-says-what-an-unsupported-key-does.md
 [D-KNW-148]: knowledge/knw-148-what-the-schema-of-one-record-type-holds-is-a-subject-this-server-owns.md
 [D-KNW-149]: knowledge/knw-149-what-a-changelog-type-owes-is-not-the-shape-its-entries-have.md

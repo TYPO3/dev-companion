@@ -1,0 +1,73 @@
+---
+id: D-KNW-156
+title: The symlink publisher is active on the shipped default, not on the context
+date: 2026-09-09
+status: open
+coveredBy: []
+---
+
+# D-KNW-156 — The symlink publisher is active on the shipped default, not on the context
+
+**`SYS/SystemResources/filesystemPublishingType` ships as `link`, so the `auto`
+resolution against the application context runs only where a configuration sets
+`auto` back.**
+
+A session reasoned from `auto` to the mirror publisher, provoked that
+publisher's failure path, and got no message at all. Its conclusion was right
+and its mechanism was not.
+
+## Evidence
+
+- **The report.**
+  [`feedback/2026-09-09-180725`](../../feedback/2026-09-09-180725-functional-test-instances-publish-assets-by.md),
+  `/home/benji/projects/typo3-cms`, `claude-opus-5[1m]`. Three rounds and two
+  throwaway functional tests to learn one configuration value, in a task that
+  had to raise a real publishing failure rather than stub one.
+- **Read in `.checkouts/` on 2026-09-09.**
+  `typo3/sysext/core/Configuration/DefaultConfiguration.php` carries
+  `'filesystemPublishingType' => 'link'` on `main` and on `14.3` alike.
+  `PublishingConfiguration::__construct()` falls back to `'auto'` only where
+  neither an argument nor that setting supplies a value, and resolves `'auto'`
+  to `link` under a development context and to `mirror` otherwise.
+- **So the report's mechanism is wrong and its conclusion holds.** It names the
+  functional test instance as what pins the value; what pins it is the core's
+  own shipped default, which a test instance inherits like any other
+  installation. The symlink publisher is active either way.
+- **The second fact it names is there.** `ResourcePublishingContext` sets
+  `isSourcePublic` from
+  `str_starts_with($packagePath . $relativePath, Environment::getPublicPath())`
+  and `DefaultSystemResourcePublisher` skips a resource where it is true. In an
+  instance whose project path is its public path, that is every resource under
+  it.
+- **The namespace is new.** `typo3/sysext/core/Classes/SystemResource/` exists
+  on `14.3` and `main` and on neither `13.4` nor `12.4`, so anything written
+  about it is bound from 14.
+
+## Decided
+
+- **Taken on as step 1a.** Nothing below `knowledge/` says which publisher a
+  functional test runs under or why publishing is a no-op for a package inside
+  the public path, and both are what the session spent its rounds on.
+- **The mechanism is written as the shipped default rather than as a
+  test-instance pin.** A page saying the test instance sets it sends the next
+  reader looking for a line that is not there, and leaves them believing the
+  value is different outside a test.
+- **Against writing the report's own account in.** Its first two rounds rest on
+  the `auto` resolution being in play, which the checkout says it is not, and
+  the judging run that reads a checkout is what keeps that out — the same rule
+  that kept the one-paragraph body rule out of `D-KNW-155`.
+- The card carries `normal`. One session, and what it cost was two throwaway
+  functional tests and a wrong first hypothesis rather than the task.
+
+## Assumed
+
+- That the shipped default has been `link` since the namespace arrived. Read at
+  the tip of `14.3` and of `main` and not along either branch's history.
+
+## Wrong if
+
+- An installation is reported where the publishing type resolves through `auto`
+  without anybody having set it. Then the default is not what decides and the
+  context is back in the picture.
+- The default changes on a branch this server covers. Then the statement needs
+  its own `since` inside the 14 boundary rather than resting on the namespace's.

@@ -8,8 +8,10 @@ call below is also the check.
 
 - A client may carry this server's name in each tool's —
   `mcp__<server>__typo3_project_describe` — so a search for the bare name comes
-  back empty where the server is connected. Look for the qualified form before
-  reading an empty result as an answer about the server.
+  back empty where the server is connected. That form is also what a search for
+  a tool's schema has to be passed: a `select:` on the bare names returns
+  nothing where the tools are there. Look for the qualified form before reading
+  an empty result as an answer about the server.
 - No `typo3_` tool in this session, or a first call that errors: stop, say this
   workflow needs the server and it is not there, and name what came back.
 - Do not fall back to general TYPO3 knowledge or start reading the checkout.
@@ -127,7 +129,10 @@ skip the ones that matter too.
 
    The exemption ends where the workflow produces a change. A review asked to
    make the change is that other workflow, and it starts this order again
-   holding the files it is about to write.
+   holding the files it is about to write. Carrying somebody else's patch onto
+   current code is on the same side: it writes commits, and the sweep is what
+   says whether the code that moved under the patch deprecated something the
+   patch calls.
 
    Skip the sweep only where the change touches no TYPO3 API — a code style
    fixer, a CI file, an `.editorconfig`. A deprecation is a statement about API

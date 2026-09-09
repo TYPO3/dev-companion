@@ -329,6 +329,14 @@ final class SkillTest extends TestCase
             'Look for the qualified form before reading an empty result as an answer about the server',
             self::flat($base),
         );
+        // The sentence above worked and stopped one word short: a second
+        // session did not read the empty search as an absence and paid the
+        // round trip anyway, because the bare name is no good as a search
+        // argument either (`D-SKL-084`).
+        self::assertStringContainsString(
+            'a `select:` on the bare names returns nothing where the tools are there',
+            self::flat($base),
+        );
 
         // Which side of the sweep's exemption a test file falls on. The session
         // that wrote one calling FunctionalTestCase and GeneralUtility::writeFile
@@ -336,6 +344,15 @@ final class SkillTest extends TestCase
         // decided against and no illustration said (`D-SKL-083`).
         self::assertStringContainsString(
             'A test file is one of those wherever it sits',
+            self::flat($base),
+        );
+
+        // And which side carrying somebody else's patch onto current code falls
+        // on. It writes commits, so it produces a change, and the session that
+        // read it as borderline skipped the one step that would have said
+        // whether the code it landed on had deprecated anything.
+        self::assertStringContainsString(
+            "Carrying somebody else's patch onto current code is on the same side",
             self::flat($base),
         );
         self::assertStringContainsString('What a finding rests on is part of the finding', $base);

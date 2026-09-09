@@ -20,7 +20,7 @@ fired: a session held the answer and reported the pointer as absent.
 ## Evidence
 
 - **The report.**
-  [`feedback/2026-09-09-182615`](../../feedback/2026-09-09-182615-on-a-core-checkout-commands-lists-the-npm.md),
+  [`feedback/2026-09-09-182615`](../../feedback/archive/2026-09-09-182615-on-a-core-checkout-commands-lists-the-npm.md),
   `/home/benji/projects/typo3-cms`, `claude-opus-5[1m]`. It quotes three npm
   entries out of `commands` and states that `runTests.sh` does not appear in the
   array at all, then names the five suites it actually ran, every one of them

@@ -6800,7 +6800,9 @@ final class HintsTest extends TestCase
         ]);
 
         self::assertSame(
-            ['extension/testing/phpunit'],
+            // The prose page rides on every writing brief rather than on an
+            // intent — `D-DOC-068`.
+            ['extension/testing/phpunit', 'any/writing/the-prose-a-patch-carries'],
             array_column($tests->data['guides'], 'id'),
         );
         // As the call rather than as the typo3://guides address, because the
@@ -6830,8 +6832,13 @@ final class HintsTest extends TestCase
             'changeType' => 'test',
         ]);
 
-        self::assertSame([], $core->data['guides']);
-        self::assertStringNotContainsString(TaskGuide::GUIDES_OWNING, $core->text);
+        self::assertSame(
+            // Bar the page every writing brief carries — `D-DOC-068`.
+            ['any/writing/the-prose-a-patch-carries'],
+            array_column($core->data['guides'], 'id'),
+        );
+        self::assertStringContainsString(TaskGuide::GUIDES_OWNING, $core->text);
+        self::assertStringNotContainsString('extension/testing/phpunit', $core->text);
 
         // A brief that changes nothing names only the pages of work that
         // changes nothing either, the rule `D-SKL-039` established for the
@@ -6842,6 +6849,7 @@ final class HintsTest extends TestCase
             'changeType' => 'audit',
         ]);
 
+        // The prose page is not among them: a review writes no file.
         self::assertSame([], $review->data['guides']);
 
         // And the obligation that had no page beside it. The patch-review
@@ -6936,7 +6944,10 @@ final class HintsTest extends TestCase
         ]);
 
         self::assertContains('browser-check', array_column($reported->data['intents'], 'id'));
-        self::assertSame(['any/testing/browser-check'], array_column($reported->data['guides'], 'id'));
+        self::assertSame(
+            ['any/testing/browser-check', 'any/writing/the-prose-a-patch-carries'],
+            array_column($reported->data['guides'], 'id'),
+        );
         // The page holds on both sides, so the core side names the same one:
         // the session that wanted to see a backend CSS patch and told its
         // reader five times that it could not was in a core checkout
@@ -6946,7 +6957,10 @@ final class HintsTest extends TestCase
             'paths' => ['typo3/sysext/frontend/Classes/ContentObject/ContentObjectRenderer.php'],
         ]);
 
-        self::assertSame(['any/testing/browser-check'], array_column($core->data['guides'], 'id'));
+        self::assertSame(
+            ['any/testing/browser-check', 'any/writing/the-prose-a-patch-carries'],
+            array_column($core->data['guides'], 'id'),
+        );
 
         // And a review is where that session was, so the intent changes nothing
         // and keeps the page in a brief that changes nothing either.

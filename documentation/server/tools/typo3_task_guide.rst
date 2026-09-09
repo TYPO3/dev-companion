@@ -318,6 +318,8 @@ Text:
     - typo3/sysext/core/Classes/Utility/GeneralUtility.php
     Recognized as: Deprecation
     Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.
+    Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
+    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
     Hints:
     The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
@@ -515,7 +517,15 @@ Data:
             "typo3-core-patch-development"
         ],
         "staleSkills": [],
-        "guides": [],
+        "guides": [
+            {
+                "id": "any/writing/the-prose-a-patch-carries",
+                "title": "The Prose a Patch Carries",
+                "when": "Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                "scope": "any",
+                "tool": "typo3_rule_lookup"
+            }
+        ],
         "hints": [
             {
                 "id": "system-extension-boundaries",
@@ -888,6 +898,7 @@ Text:
     Recognized as: Backend UI markup
     Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
     - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
+    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
     Hints:
     - No hint matched this task text. That means no convention was recognized, not that none applies: call typo3_hint_lookup again with the concrete file paths once they are known.
@@ -998,6 +1009,13 @@ Data:
                 "id": "any/testing/browser-check",
                 "title": "Looking at a Change in a Real Browser",
                 "when": "When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.",
+                "scope": "any",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "any/writing/the-prose-a-patch-carries",
+                "title": "The Prose a Patch Carries",
+                "when": "Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
                 "scope": "any",
                 "tool": "typo3_rule_lookup"
             }
@@ -1165,6 +1183,8 @@ Text:
     Recognized as: Writing the change
     Possibly also: Registering an event listener, only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this. Its checklist items are marked as conditional below and its checks are listed separately.
     Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.
+    Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
+    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
     Hints:
     The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
@@ -1307,7 +1327,15 @@ Data:
             "typo3-core-patch-development"
         ],
         "staleSkills": [],
-        "guides": [],
+        "guides": [
+            {
+                "id": "any/writing/the-prose-a-patch-carries",
+                "title": "The Prose a Patch Carries",
+                "when": "Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                "scope": "any",
+                "tool": "typo3_rule_lookup"
+            }
+        ],
         "hints": [
             {
                 "id": "persistence-reading",

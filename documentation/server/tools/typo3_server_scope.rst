@@ -193,6 +193,10 @@ Text:
     Rules plus a working draft and check, including 72-character body wrapping. The subject and body conventions are also served without the core workflow, for a commit in a repository that has no Forge issue and no release branches: workflow="project", where no trailer is demanded and the issues the call passed are written as Resolves: and Related: all the same. The same guide is exposed as the user-invoked prompt commit_message.
     Tools: typo3_commit_message_guide, typo3_rule_lookup
     Source: typo3://guides/core/contribution/commit-messages (core)
+    ## How the comments and docblocks a patch carries have to read
+    Ten rules with the rejected sentence and its replacement beside each: say what is, name who acts, one thought per sentence, end on the object, name the place instead of pointing at it, use the words the codebase uses, a longer correct sentence over a short broken one, one fact in one place, say why, and length as a ceiling. Whether a comment is owed at all is the codebase's own rule and this page does not restate it.
+    Tools: typo3_rule_lookup, typo3_task_guide
+    Source: typo3://guides/any/writing/the-prose-a-patch-carries (any)
     ## The changelog entry a core patch owes: which type, which directory a backport goes into, and what checks the file
     Curated prose, with the skeleton in the documentation-changelog hint. Which of the four types a change owes and which release directory the file belongs in, keyed on the branches the patch reaches rather than on the branch it is written on. The core ships the file's template and a command that writes it from there, and both are named. Whether the type chosen is the right one is what no check reports.
     Tools: typo3_rule_lookup, typo3_hint_lookup
@@ -522,6 +526,16 @@ Data:
                 ],
                 "source": "typo3://guides/core/contribution/commit-messages",
                 "scope": "core"
+            },
+            {
+                "topic": "How the comments and docblocks a patch carries have to read",
+                "depth": "Ten rules with the rejected sentence and its replacement beside each: say what is, name who acts, one thought per sentence, end on the object, name the place instead of pointing at it, use the words the codebase uses, a longer correct sentence over a short broken one, one fact in one place, say why, and length as a ceiling. Whether a comment is owed at all is the codebase's own rule and this page does not restate it.",
+                "tools": [
+                    "typo3_rule_lookup",
+                    "typo3_task_guide"
+                ],
+                "source": "typo3://guides/any/writing/the-prose-a-patch-carries",
+                "scope": "any"
             },
             {
                 "topic": "The changelog entry a core patch owes: which type, which directory a backport goes into, and what checks the file",

@@ -3,7 +3,8 @@ id: D-DOC-068
 title: The register this server writes in is copied into its callers' patches
 date: 2026-09-09
 status: open
-coveredBy: []
+coveredBy:
+  - KnowledgeTest::aTaskThatWritesFilesIsOwedThePageAboutItsProse
 ---
 
 # D-DOC-068 — The register this server writes in is copied into its callers' patches
@@ -20,9 +21,9 @@ person then reviews.
 - **Three reports from one session**, `/home/benji/projects/typo3-cms`,
   `claude-opus-5[1m]`, fixing Forge #107495 into a patch with a new class, tests
   and a `Breaking` entry.
-  [`225319`](../../feedback/2026-09-09-225319-no-rule-constrains-the-prose-an-agent-writes.md)
+  [`225319`](../../feedback/archive/2026-09-09-225319-no-rule-constrains-the-prose-an-agent-writes.md)
   reports that nothing constrains the prose a patch carries,
-  [`225815`](../../feedback/2026-09-09-225815-ruleset-the-server-should-hand-an-agent-for.md)
+  [`225815`](../../feedback/archive/2026-09-09-225815-ruleset-the-server-should-hand-an-agent-for.md)
   writes eleven rules off the sentences its reviewer rejected, and
   [`230509`](../../feedback/2026-09-09-230509-the-server-should-apply-its-own-comment-ruleset.md)
   names this server's own surfaces as where those sentences came from.

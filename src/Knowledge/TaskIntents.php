@@ -25,6 +25,15 @@ final class TaskIntents
      */
     private const PATCH = 'patch';
 
+    /**
+     * The page every task that writes files owes, whatever it is writing.
+     *
+     * Not an intent's `owes`, because no intent owns it: what it is about is a
+     * property of writing at all, and adding it to each writing intent would be
+     * the same line in a dozen places.
+     */
+    private const PROSE_A_PATCH_CARRIES = 'any/writing/the-prose-a-patch-carries';
+
     private const RULE_DOCUMENTS = [
         'core/contribution/rules',
         'core/contribution/commit-messages',
@@ -277,6 +286,16 @@ final class TaskIntents
                     $named[] = $owed;
                 }
             }
+        }
+
+        // A task that writes files hands its prose to a reviewer, and no intent
+        // owns that: the register a session reads is the one it writes its
+        // comments in, and three reports traced a patch's rejected comments
+        // back to this server's own surfaces (`D-DOC-068`). So it hangs off the
+        // one property every writing intent shares rather than off each of
+        // them.
+        if (!$changesNothing && !in_array(self::PROSE_A_PATCH_CARRIES, $named, true)) {
+            $named[] = self::PROSE_A_PATCH_CARRIES;
         }
 
         return $named;

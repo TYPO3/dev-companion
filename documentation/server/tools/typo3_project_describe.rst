@@ -542,6 +542,7 @@ Text:
     - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
     - any/testing/proving-a-condition (any) — Proving a TypoScript Condition Verdict. When a TypoScript condition has to be shown to have matched in the frontend, or to have stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition is handed at evaluation time and how an extension registers one are hints instead.
     - any/testing/proving-a-rendering-held (any) — Proving a Rendering Held Across a Change. When a change rewrites how pages are rendered rather than what one page contains — replacing a rendering frame, dropping a dependency the site renders through, moving a template root, rewriting a layout — and what has to be shown is that nothing else moved. Proving one unknown value a checkout does not produce is the core rendering probe instead, and proving that one TypoScript condition matched is the condition page.
+    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
     - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
     - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When writing or amending the message of a patch to the core, which is the only repository these rules describe.
     - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it, and the question is whether the committed file carries the source change, how to produce it after an edit, or what to do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole working tree on the way, so it is no way there from a checkout holding work of your own.
@@ -804,6 +805,13 @@ Data:
                 "tool": "typo3_rule_lookup"
             },
             {
+                "id": "any/writing/the-prose-a-patch-carries",
+                "title": "The Prose a Patch Carries",
+                "when": "Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                "scope": "any",
+                "tool": "typo3_rule_lookup"
+            },
+            {
                 "id": "core/contribution/changelog",
                 "title": "The Changelog Entry a Core Patch Owes",
                 "when": "When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.",
@@ -971,6 +979,7 @@ Text:
     - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
     - any/testing/proving-a-condition (any) — Proving a TypoScript Condition Verdict. When a TypoScript condition has to be shown to have matched in the frontend, or to have stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition is handed at evaluation time and how an extension registers one are hints instead.
     - any/testing/proving-a-rendering-held (any) — Proving a Rendering Held Across a Change. When a change rewrites how pages are rendered rather than what one page contains — replacing a rendering frame, dropping a dependency the site renders through, moving a template root, rewriting a layout — and what has to be shown is that nothing else moved. Proving one unknown value a checkout does not produce is the core rendering probe instead, and proving that one TypoScript condition matched is the condition page.
+    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
     - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
     - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When writing or amending the message of a patch to the core, which is the only repository these rules describe.
     - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it, and the question is whether the committed file carries the source change, how to produce it after an edit, or what to do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole working tree on the way, so it is no way there from a checkout holding work of your own.
@@ -1123,6 +1132,13 @@ Data:
                 "id": "any/testing/proving-a-rendering-held",
                 "title": "Proving a Rendering Held Across a Change",
                 "when": "When a change rewrites how pages are rendered rather than what one page contains — replacing a rendering frame, dropping a dependency the site renders through, moving a template root, rewriting a layout — and what has to be shown is that nothing else moved. Proving one unknown value a checkout does not produce is the core rendering probe instead, and proving that one TypoScript condition matched is the condition page.",
+                "scope": "any",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "any/writing/the-prose-a-patch-carries",
+                "title": "The Prose a Patch Carries",
+                "when": "Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
                 "scope": "any",
                 "tool": "typo3_rule_lookup"
             },

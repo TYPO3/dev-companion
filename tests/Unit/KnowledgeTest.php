@@ -703,6 +703,40 @@ final class KnowledgeTest extends TestCase
         );
     }
 
+    /**
+     * The page a task that writes files owes, and the one a task that writes
+     * none does not.
+     *
+     * A session writes its comments in the register it spent the task reading,
+     * and three reports traced a patch's twice-rejected comments back to this
+     * server's own surfaces — `D-DOC-068`. No intent owns the page, so it hangs
+     * off the property every writing intent shares.
+     */
+    #[Decision('D-DOC-068')]
+    #[Test]
+    public function aTaskThatWritesFilesIsOwedThePageAboutItsProse(): void
+    {
+        $writing = Registry::call('typo3_task_guide', [
+            'task' => 'Fix FormEngine client-side validation for TCA type=email fields',
+            'paths' => ['typo3/sysext/backend/Classes/Form/AbstractNode.php'],
+            'changeType' => 'bugfix',
+        ]);
+        self::assertContains(
+            'any/writing/the-prose-a-patch-carries',
+            array_column($writing->data['guides'], 'id'),
+        );
+
+        $reading = Registry::call('typo3_task_guide', [
+            'task' => 'Review the open changes touching the imaging subsystem',
+            'changeType' => 'audit',
+        ]);
+        self::assertNotContains(
+            'any/writing/the-prose-a-patch-carries',
+            array_column($reading->data['guides'], 'id'),
+            'a task that writes nothing hands a reviewer no prose',
+        );
+    }
+
     #[Decision('D-KNW-113')]
     #[Test]
     public function aReportBeingWrittenIsToldWhichMarkupTheDescriptionRenders(): void
@@ -803,9 +837,11 @@ final class KnowledgeTest extends TestCase
             'the procedure a backend module owes',
         );
 
-        // And a change that ends in nothing to look at owes it nowhere.
-        self::assertSame(
-            [],
+        // And a change that ends in nothing to look at owes it nowhere. It
+        // still owes the page every writing task does — `D-DOC-068` — so the
+        // assertion is about this procedure rather than about the list.
+        self::assertNotContains(
+            'any/testing/browser-check',
             TaskIntents::guides(
                 TaskIntents::confirmed(TaskIntents::detect('Fix a typo in a comment cleanup')),
                 false,

@@ -91,6 +91,15 @@ final class CommitMessage
     private const DRAFT_PREFIXES = ['WIP', 'POC'];
 
     /**
+     * A body counting what the change touched, which the core's own bodies do
+     * not — `D-KNW-155` measured how few.
+     *
+     * Numerals only: a body spelling "sixty-eight files" is outside what was
+     * measured and outside what this matches.
+     */
+    private const COUNTED_SCOPE = '/\b\d+\s+(files?|occurrences?|places?|spellings?|classes|methods|instances|usages|call sites)\b/i';
+
+    /**
      * @param array{
      *   keyword?: string,
      *   summary: string,
@@ -208,6 +217,7 @@ final class CommitMessage
                 $releases,
                 $workflow,
                 $signedOff,
+                $input['draftPrefixes'] ?? [],
             ),
         ];
     }
@@ -581,6 +591,7 @@ final class CommitMessage
      * @param array<int, array{first: int, last: int}> $joined
      * @param array<int, string> $issues
      * @param array<int, string> $releases
+     * @param array<int, string> $draftPrefixes
      * @return array<int, array{level: string, code: string, message: string}>
      */
     private static function checks(
@@ -594,10 +605,12 @@ final class CommitMessage
         ?bool $isDeprecation,
         array $releases,
         string $workflow,
-        bool $signedOff
+        bool $signedOff,
+        array $draftPrefixes = []
     ): array {
         $checks = [];
         $isCore = $workflow === self::WORKFLOW_CORE;
+        $isDraft = $draftPrefixes !== [];
 
         if ($keyword !== '') {
             $keywordCheck = self::keywordCheck($keyword, $workflow);
@@ -606,8 +619,41 @@ final class CommitMessage
             }
         }
 
-        if ($isCore && $issues === []) {
+        if ($isCore && $issues === [] && !$isDraft) {
             $checks[] = ['level' => 'error', 'code' => 'missing-issue', 'message' => 'A Forge issue is required. Add a Resolves: #12345 line.'];
+        }
+
+        // A change the subject marks as work in progress is not offered for
+        // merge, and the Forge issue is what merging requires. Demanding it of
+        // a draft is demanding a trailer of a message that is not asking for
+        // one: a session dropped it, kept "#xxxxxx" on its author's own
+        // instruction, and reported the error as false against the change in
+        // front of it. The sign-off stays an error whatever the state, that
+        // rule being the maintainer's — `R-KNW-075`.
+        if ($isCore && $issues === [] && $isDraft) {
+            $checks[] = [
+                'level' => 'info',
+                'code' => 'issue-owed-before-merge',
+                'message' => 'No Forge issue, which is what the draft prefix allows: the change is not offered '
+                    . 'for merge yet. Resolves: is required before it is, and the commit-msg hook refuses a '
+                    . 'message without one, so a placeholder is committed past the hook rather than through it.',
+            ];
+        }
+
+        // What a reviewer takes out by hand. Measured over the 3396 commits on
+        // main since 2025-01-01: twelve bodies name a count of what the change
+        // touched — `D-KNW-155`. Core only, which is where it was measured.
+        if ($isCore && $body !== '' && preg_match(self::COUNTED_SCOPE, $body, $counted) === 1) {
+            $checks[] = [
+                'level' => 'info',
+                'code' => 'body-counts-what-it-touched',
+                'message' => sprintf(
+                    'The body says "%s". A core commit body does not count what the change touched — the number '
+                        . 'is in the diff, and it is what a reviewer asks to have taken out. Say what changed and '
+                        . 'why instead.',
+                    trim($counted[0]),
+                ),
+            ];
         }
 
         if ($isCore && !$signedOff) {

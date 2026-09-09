@@ -75,7 +75,7 @@ final class CommitMessageGuide extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Draft and check a TYPO3 commit message. The message is read by a person who wants to know what the commit did, so write it in plain English and only as long as that answer needs: the diff carries the detail. Either assemble one from parts (keyword plus summary) or pass an existing message to check and correct it. The returned draft is ready to commit: the body is wrapped at 72 characters, and the checks name every run of lines the wrapping joined and every line it could not bring under the width. Defaults to a repository of your own, where the subject and body conventions apply and no Forge issue, Releases: trailer or changelog is demanded. The issues you pass are still written as Resolves: and Related: trailers there — the same form a TYPO3 repository on GitHub links a commit to what it closes by. Pass workflow="core" for a patch against the TYPO3 core, where the Forge issue and the Releases: trailer are required. The answer names the branches for that trailer where the call carries none: the lines taking a patch today, and the ones a change of this shape goes to.';
+        return 'Draft and check a TYPO3 commit message. The message is read by a person who wants to know what the commit did, so write it in plain English and only as long as that answer needs: the diff carries the detail. Either assemble one from parts (keyword plus summary) or pass an existing message to check and correct it. The returned draft is ready to commit: the body is wrapped at 72 characters, and the checks name every run of lines the wrapping joined and every line it could not bring under the width. Defaults to a repository of your own, where the subject and body conventions apply and no Forge issue, Releases: trailer or changelog is demanded. The issues you pass are still written as Resolves: and Related: trailers there — the same form a TYPO3 repository on GitHub links a commit to what it closes by. Pass workflow="core" for a patch against the TYPO3 core, where the Forge issue and the Releases: trailer are required. The answer names the branches for that trailer where the call carries none: the lines taking a patch today, and the ones a change of this shape goes to. A change still being worked on says so with workInProgress or with [WIP] in its own subject, and the Forge issue stops being an error there, since merging is what requires the trailer. A core body that counts what the change touched — so many files, so many spellings — is told so, because the core\'s own bodies do not.';
     }
 
     public static function inputSchema(): array
@@ -93,6 +93,7 @@ final class CommitMessageGuide extends ReadOnlyTool
                 'body' => ['type' => 'string', 'description' => 'Optional commit body, for what the diff does not say: why the change was made, what it rests on. It is wrapped at 72 characters in the draft: indent a block to keep the line breaks you wrote, and keep those lines under the width yourself.'],
                 'isBreaking' => ['type' => 'boolean', 'description' => 'Whether this is a breaking change requiring [!!!]. Left out, the checks say the classification was assumed: it is a property of the diff, which this tool never sees.'],
                 'isDeprecation' => ['type' => 'boolean', 'description' => 'Whether this is a deprecation. Left out, it is assumed the same way and the checks say so.'],
+                'workInProgress' => ['type' => 'boolean', 'description' => 'Whether the change is still being worked on and is not offered for merge. True writes [WIP] before the keyword, where [!!!] goes, and the Forge issue stops being an error: merging is what requires the trailer. The sign-off is required whatever the state. A message passed as message says this in its own subject and needs no argument — [WIP] and [PoC] there are read the same way.'],
             ],
             'anyOf' => [
                 ['required' => ['message']],
@@ -144,6 +145,13 @@ final class CommitMessageGuide extends ReadOnlyTool
             $input = $args;
         }
         $input['workflow'] = $workflow;
+        // A subject that says [WIP] itself needs no argument; the parse has
+        // already read it. The argument is for the caller composing a fresh
+        // message out of a keyword and a summary, which is the shape the
+        // session that reported this used.
+        if (($args['workInProgress'] ?? false) === true && ($input['draftPrefixes'] ?? []) === []) {
+            $input['draftPrefixes'] = ['WIP'];
+        }
 
         if (!isset($input['summary']) || trim((string) $input['summary']) === '') {
             throw new \InvalidArgumentException(

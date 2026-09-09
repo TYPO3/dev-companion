@@ -16,8 +16,12 @@ Related: trailers there — the same form a TYPO3 repository on GitHub links a
 commit to what it closes by. Pass workflow="core" for a patch against the TYPO3
 core, where the Forge issue and the Releases: trailer are required. The answer
 names the branches for that trailer where the call carries none: the lines
-taking a patch today, and the ones a change of this shape goes to. Answers from:
-knowledge.
+taking a patch today, and the ones a change of this shape goes to. A change
+still being worked on says so with workInProgress or with [WIP] in its own
+subject, and the Forge issue stops being an error there, since merging is what
+requires the trailer. A core body that counts what the change touched — so many
+files, so many spellings — is told so, because the core's own bodies do not.
+Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -78,6 +82,12 @@ Takes
     # Whether this is a deprecation. Left out, it is assumed the same way and the
     # checks say so.
     isDeprecation: boolean  # optional
+    # Whether the change is still being worked on and is not offered for merge. True
+    # writes [WIP] before the keyword, where [!!!] goes, and the Forge issue stops
+    # being an error: merging is what requires the trailer. The sign-off is required
+    # whatever the state. A message passed as message says this in its own subject
+    # and needs no argument — [WIP] and [PoC] there are read the same way.
+    workInProgress: boolean  # optional
 
 Answers with
 ------------

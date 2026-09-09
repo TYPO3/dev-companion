@@ -3,7 +3,8 @@ id: D-KNW-155
 title: A core commit body names no count and is not held to one paragraph
 date: 2026-09-09
 status: open
-coveredBy: []
+coveredBy:
+  - CommitMessageTest::aCoreBodyCountingWhatItTouchedIsToldSo
 ---
 
 # D-KNW-155 — A core commit body names no count and is not held to one paragraph
@@ -19,7 +20,7 @@ second.
 ## Evidence
 
 - **The report.**
-  [`feedback/2026-09-09-182524`](../../feedback/2026-09-09-182524-commit-message-guide-existed-was-listed-never.md),
+  [`feedback/2026-09-09-182524`](../../feedback/archive/2026-09-09-182524-commit-message-guide-existed-was-listed-never.md),
   `/home/benji/projects/typo3-cms`, `claude-opus-5[1m]`. Five amends of one
   message, every one on style. The last two corrections were "bitte kuerze
   soweit wie moeglich, nicht pauschal 3 absaetze" and, against "in 68 files" and

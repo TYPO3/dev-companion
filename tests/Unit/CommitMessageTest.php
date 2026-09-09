@@ -612,6 +612,81 @@ final class CommitMessageTest extends TestCase
         self::assertStringStartsWith('[WIP][BUGFIX] Parse User TSConfig', $result['message']);
     }
 
+    /**
+     * The Forge issue is what merging requires, and a draft is not offered for
+     * merge.
+     *
+     * A session was handed missing-issue as an error on a change whose author
+     * had told it to keep the placeholder while the change is work in progress,
+     * and reported the finding as false against the repository in front of it.
+     * The sign-off stays an error whatever the state — `R-KNW-075`.
+     */
+    #[Test]
+    public function aDraftIsNotHeldToTheTrailerMergingRequires(): void
+    {
+        $parsed = CommitMessage::parse("[WIP][TASK] Make GD the baseline\n\nReleases: main\n");
+        $result = CommitMessage::create(
+            $parsed['input'] + ['workflow' => CommitMessage::WORKFLOW_CORE],
+        );
+        $codes = array_column($result['checks'], 'code');
+
+        self::assertNotContains('missing-issue', $codes);
+        self::assertContains('issue-owed-before-merge', $codes);
+        self::assertContains('missing-sign-off', $codes);
+    }
+
+    /** Without the marker the same message owes the trailer as an error. */
+    #[Test]
+    public function aChangeOfferedForMergeStillOwesTheForgeIssue(): void
+    {
+        $parsed = CommitMessage::parse("[TASK] Make GD the baseline\n\nReleases: main\n");
+        $result = CommitMessage::create(
+            $parsed['input'] + ['workflow' => CommitMessage::WORKFLOW_CORE],
+        );
+        $codes = array_column($result['checks'], 'code');
+
+        self::assertContains('missing-issue', $codes);
+        self::assertNotContains('issue-owed-before-merge', $codes);
+    }
+
+    /**
+     * What a reviewer takes out by hand, and what a session was corrected on
+     * five times without any of it being written down — `D-KNW-155` measured
+     * the convention over the core's own bodies.
+     */
+    #[Decision('D-KNW-155')]
+    #[Test]
+    #[DataProvider('bodiesThatCountWhatTheChangeTouched')]
+    public function aCoreBodyCountingWhatItTouchedIsToldSo(string $body, bool $counted): void
+    {
+        $result = CommitMessage::create([
+            'keyword' => 'TASK',
+            'summary' => 'Unify the top level window access',
+            'body' => $body,
+            'issue' => '110666',
+            'releases' => ['main'],
+            'workflow' => CommitMessage::WORKFLOW_CORE,
+        ]);
+
+        self::assertSame(
+            $counted,
+            in_array('body-counts-what-it-touched', array_column($result['checks'], 'code'), true),
+        );
+    }
+
+    /** @return array<string, array{0: string, 1: bool}> */
+    public static function bodiesThatCountWhatTheChangeTouched(): array
+    {
+        return [
+            'a count of files' => ['The window was reached by hand in 68 files.', true],
+            'a count of spellings' => ['It was written in 4 spellings.', true],
+            'a count of call sites' => ['This removes 12 call sites.', true],
+            'a version number' => ['This holds from TYPO3 14 onwards.', false],
+            'a number that counts nothing here' => ['The timeout is 30 seconds.', false],
+            'a body saying what changed' => ['A utility module now provides the accessor.', false],
+        ];
+    }
+
     #[Test]
     public function aProofOfConceptIsTheSameMarkerHoweverItIsSpelled(): void
     {

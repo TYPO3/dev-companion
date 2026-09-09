@@ -85,6 +85,39 @@ change of yours. It uses the third's branch, started at the fetched patch set
 instead of at current code, and the section below is what it owes before
 anything is committed.
 
+## One change, or a chain of them
+
+`typo3_gerrit_lookup` answers a `chain` with every change read by name, and a
+chain longer than one open link changes the whole of what follows. A large
+refactoring arrives this way and the request says so — "rebase the chain" names
+it outright.
+
+Read the chain before the fetch and take four things off it.
+
+- **Which links are still open.** Those are what has to be carried, and their
+  number is how many commits the move is. The merged ones below them are already
+  on the branch, or are supposed to be.
+- **Whether the merged link below is actually an ancestor.** `chainedAt` against
+  `patchSet` on that link says it: a link showing `chainedAt` 18 and `patchSet`
+  23 merged as a revision the chain never sat on, so
+  `git merge-base --is-ancestor` answers no and a share of the conflicts below
+  follow from that one difference. Nothing in a checkout says it.
+- **The move is a range.** Where one change is `git cherry-pick FETCH_HEAD`, a
+  chain is `git cherry-pick BASE..TIP`, or
+  `git rebase --onto origin/main BASE TIP` for the same thing. The branch keeps
+  the `review/<change number>` convention and takes the number of the **tip**
+  change, which is the one the request named.
+- **Every later amend is two steps.** A conflict resolution or a fixer finding
+  that belongs to the lower commit is not amendable from the tip: detach to it,
+  amend, re-apply what sat on top, and move the branch. Budget for it rather
+  than discovering it at the end.
+
+The stopping rules below are written for somebody else's patch, and a chain is
+regularly the requester's own. Where the change owner is the person asking —
+which the answer's owner field settles — the rule that stops you authoring on an
+absent author's behalf has nothing left to protect, and resolving past a handful
+of hunks is the right call. Say in the result that you did, and on whose change.
+
 ## Before the checkout is changed
 
 Establish these three, in this order, and stop at the first that fails. The
@@ -131,13 +164,17 @@ read against the code it was written on is the patch its author wrote, and
 moving it is a step that can go wrong.
 
 A rebase of the fetched commit and a cherry-pick onto current code are one move
-under two names, because a core patch is exactly one commit. Either way what
-comes out is a commit made here that exists nowhere else, which is why it is on
-a branch named for the change and why the undo below deletes that branch. The
-command form belongs to the page the fetch is on.
+under two names, because a core patch is exactly one commit — a chain is the
+range above. Either way what comes out is a commit made here that exists nowhere
+else, which is why it is on a branch named for the change and why the undo below
+deletes that branch. The command form belongs to the page the fetch is on.
 
-Where it applies clean, say so. That is itself an answer about the change: it
-still applies.
+Where it applies clean, say so — and only that. A clean rebase is not a patch
+that still holds: where the change rewrites, moves or deletes a class rather
+than editing it, a fix `main` landed in that class is reverted with no conflict
+to show for it, the files being different ones. `typo3_rule_lookup` with
+`documentId="core/contribution/rebasing-a-stale-patch"` is the four steps that
+settle it, and it is owed before the result says the patch survived.
 
 Say which commit every result after this is about. The carried commit's hash is
 not the patch set's, and a finding quoting the local one without saying so is

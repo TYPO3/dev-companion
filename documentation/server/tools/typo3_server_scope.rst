@@ -177,6 +177,10 @@ Text:
     Curated prose, command level. Which source tree produces which committed file, how a minified one is diffed at all, and rebuilding one in a worktree branched off the target branch so the checkout you work in stays as it is. It carries the question that needs the generated files deleted first, and what resolves a backport that conflicted in one. Which suite builds a given branch is typo3_test_run_guide's answer rather than this page's.
     Tools: typo3_rule_lookup
     Source: typo3://guides/core/contribution/committed-build-output (core)
+    ## What a patch loses when the code moved under it, which no conflict reports
+    Four steps against a checkout: the commits main landed on the change's paths since its base, whether a fix carried into a file the change rewrites survives in the replacement, the public and protected members it removes that still have callers, and the suites covering the rewritten paths rather than only the changed ones. Plus the one git call that says whether a rebase left the committed JavaScript stale. Where to stop resolving a conflict is typo3-core-patch-checkout's.
+    Tools: typo3_rule_lookup, typo3_test_run_guide
+    Source: typo3://guides/core/contribution/rebasing-a-stale-patch (core)
     ## Forge issues: what one says and what was decided about it, which other issues describe the same thing, and what stands open in the core's backlog
     The tracker's own API, read live. By number: the report, the comments that decided it, its related and cited issues, files and review changes. By words: the issues whose text matches, unranked; a differently worded issue is invisible. As a backlog: the core's issues by age, neglect or recency, narrowed by tracker, area, date and person, or broken down per status, tracker, area and year. Each says whether the installed packages still ship the code the report cites — where a symbol stands, not whether the defect reproduces.
     Tools: typo3_forge_lookup
@@ -479,6 +483,16 @@ Data:
                     "typo3_rule_lookup"
                 ],
                 "source": "typo3://guides/core/contribution/committed-build-output",
+                "scope": "core"
+            },
+            {
+                "topic": "What a patch loses when the code moved under it, which no conflict reports",
+                "depth": "Four steps against a checkout: the commits main landed on the change's paths since its base, whether a fix carried into a file the change rewrites survives in the replacement, the public and protected members it removes that still have callers, and the suites covering the rewritten paths rather than only the changed ones. Plus the one git call that says whether a rebase left the committed JavaScript stale. Where to stop resolving a conflict is typo3-core-patch-checkout's.",
+                "tools": [
+                    "typo3_rule_lookup",
+                    "typo3_test_run_guide"
+                ],
+                "source": "typo3://guides/core/contribution/rebasing-a-stale-patch",
                 "scope": "core"
             },
             {

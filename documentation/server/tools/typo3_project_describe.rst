@@ -546,6 +546,7 @@ Text:
     - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When writing or amending the message of a patch to the core, which is the only repository these rules describe.
     - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it, and the question is whether the committed file carries the source change, how to produce it after an edit, or what to do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole working tree on the way, so it is no way there from a checkout holding work of your own.
     - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when a patch under review has to be read or tried out locally, or when a patch already under review has to be changed — your own or another author's.
+    - core/contribution/rebasing-a-stale-patch (core) — Rebasing a Stale Patch. Before reporting that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than editing it. What a conflicting hunk means and where to stop is typo3-core-patch-checkout's; this is what survives a rebase that raised no conflict at all.
     - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer will point at included.
     - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before writing or reviewing a patch to the TYPO3 core, to know what makes it merge-ready.
     - core/contribution/sources (core) — TYPO3 Contribution Sources. When a question goes past what the bundled documents answer and the official guide has to be read.
@@ -831,6 +832,13 @@ Data:
                 "tool": "typo3_rule_lookup"
             },
             {
+                "id": "core/contribution/rebasing-a-stale-patch",
+                "title": "Rebasing a Stale Patch",
+                "when": "Before reporting that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than editing it. What a conflicting hunk means and where to stop is typo3-core-patch-checkout's; this is what survives a rebase that raised no conflict at all.",
+                "scope": "core",
+                "tool": "typo3_rule_lookup"
+            },
+            {
                 "id": "core/contribution/reporting-an-issue",
                 "title": "Filing a TYPO3 Core Bug Report",
                 "when": "When writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer will point at included.",
@@ -967,6 +975,7 @@ Text:
     - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When writing or amending the message of a patch to the core, which is the only repository these rules describe.
     - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it, and the question is whether the committed file carries the source change, how to produce it after an edit, or what to do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole working tree on the way, so it is no way there from a checkout holding work of your own.
     - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when a patch under review has to be read or tried out locally, or when a patch already under review has to be changed — your own or another author's.
+    - core/contribution/rebasing-a-stale-patch (core) — Rebasing a Stale Patch. Before reporting that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than editing it. What a conflicting hunk means and where to stop is typo3-core-patch-checkout's; this is what survives a rebase that raised no conflict at all.
     - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer will point at included.
     - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before writing or reviewing a patch to the TYPO3 core, to know what makes it merge-ready.
     - core/contribution/sources (core) — TYPO3 Contribution Sources. When a question goes past what the bundled documents answer and the official guide has to be read.
@@ -1142,6 +1151,13 @@ Data:
                 "id": "core/contribution/gerrit-workflow",
                 "title": "TYPO3 Gerrit Workflow",
                 "when": "When a change is ready to leave the checkout, when a patch under review has to be read or tried out locally, or when a patch already under review has to be changed — your own or another author's.",
+                "scope": "core",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "core/contribution/rebasing-a-stale-patch",
+                "title": "Rebasing a Stale Patch",
+                "when": "Before reporting that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than editing it. What a conflicting hunk means and where to stop is typo3-core-patch-checkout's; this is what survives a rebase that raised no conflict at all.",
                 "scope": "core",
                 "tool": "typo3_rule_lookup"
             },

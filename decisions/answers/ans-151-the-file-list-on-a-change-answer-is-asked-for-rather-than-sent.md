@@ -43,7 +43,7 @@ refactoring is made of.
   do with either, and each decided a turn two steps after it was read. A caller
   that needs them is the one that does not know to ask.
 - **A fourth names the field a trim would reach for first and should not.**
-  [`feedback/2026-09-09-190227`](../../feedback/2026-09-09-190227-what-carried-this-session-the-chain-and.md):
+  [`feedback/2026-09-09-190227`](../../feedback/archive/2026-09-09-190227-what-carried-this-session-the-chain-and.md):
   `chain` turned a request naming one number into the three links it had to act
   on, and `chainedAt` against `patchSet` on the merged link is why that chain's
   base was not an ancestor of `main`. Nothing in a checkout says either.

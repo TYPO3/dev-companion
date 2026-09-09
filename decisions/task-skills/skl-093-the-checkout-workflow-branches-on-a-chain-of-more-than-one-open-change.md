@@ -18,7 +18,7 @@ puts commits on disk.
 ## Evidence
 
 - **The report.**
-  [`feedback/2026-09-09-190146`](../../feedback/2026-09-09-190146-the-patch-checkout-skill-has-no-branch-for-a.md),
+  [`feedback/2026-09-09-190146`](../../feedback/archive/2026-09-09-190146-the-patch-checkout-skill-has-no-branch-for-a.md),
   `/home/benji/projects/typo3-cms`, `claude-opus-5[1m]`. The request was "bitte
   rebase mir die chain auf main", the skill activated on it, and the session
   names five things it worked out unaided: which links are still open, that the
@@ -38,12 +38,12 @@ puts commits on disk.
   same field to both.
 - **The field the chain branch turns on is already answered.** The same
   session's positive report,
-  [`feedback/2026-09-09-190227`](../../feedback/2026-09-09-190227-what-carried-this-session-the-chain-and.md),
+  [`feedback/2026-09-09-190227`](../../feedback/archive/2026-09-09-190227-what-carried-this-session-the-chain-and.md),
   names `chainedAt` against `patchSet` on the merged link as why that chain's
   base was not an ancestor of `main` and why several of its conflicts existed.
   Nothing in a checkout says it.
 - **The hazard a chain rebase adds is a second report.**
-  [`feedback/2026-09-09-190119`](../../feedback/2026-09-09-190119-a-rebase-silently-reverts-a-merged-bugfix-when.md)
+  [`feedback/2026-09-09-190119`](../../feedback/archive/2026-09-09-190119-a-rebase-silently-reverts-a-merged-bugfix-when.md)
   from the same task: `main` had merged a one-line fix into a class the patch
   guts and moves, git reported no conflict because the files differ, and the
   rebased tree silently reverts it. The session reached it by accident, through

@@ -77,3 +77,9 @@ the workflow: a client may carry this server's name in each tool's, so an empty
 search for the bare name is looked at again under the qualified form before it
 is read as an answer about the server.
 `SkillTest::theBaseFixesTheOrderEveryTaskStartsIn` holds the sentence.
+
+The sentence works and stops one word short. A second session read it, did not
+take the empty search for an absence — which is what it is there for — and paid
+the round trip anyway, because the bare name is no good as a search argument
+either and the sentence speaks of a search coming back empty rather than of what
+to pass. One clause, queued the way this one was.

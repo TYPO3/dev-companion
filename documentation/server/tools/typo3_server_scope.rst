@@ -141,8 +141,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/,
+Recorded on 2026-09-09 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
 — vendor/autoload.php is not there either, and composer install writes both.
@@ -169,16 +169,20 @@ Text:
     Curated prose. The rules a patch is judged by, not a full style guide.
     Tools: typo3_rule_lookup, typo3_task_guide
     Source: typo3://guides/core/contribution/rules (core)
-    ## Gerrit workflow: setup, pushing, amending, backports
+    ## Gerrit workflow: setup, pushing, amending, opening a patch set on somebody else's change, backports
     Curated prose, command level. Covers the local git side; it cannot talk to the Gerrit server.
     Tools: typo3_rule_lookup
     Source: typo3://guides/core/contribution/gerrit-workflow (core)
-    ## What a Forge issue says and what was decided about it, which other issues describe the same thing, and what stands open in the core's backlog
-    The tracker's own API, read live. By number: subject, tracker, status, target version, who it is assigned to, the TYPO3 and PHP versions it was reported against, related issues, and the comments — the description is what the reporter saw, the comments are where a maintainer said what will happen. By words: the issues whose text matches them, each with its number, subject, tracker, status and URL, in the tracker's own order and unranked. An issue worded differently is invisible to a word search, so words that match nothing are an answer about the words and not about whether the thing was reported. As a backlog: the issues of the core project, ordered by when they were filed or by how long nobody has touched them, narrowed by tracker, by area in the caller's own words, by date and by person — what somebody filed, what they hold, or both at once — and reaching the closed ones where a status asks for them, each with who filed it, who holds it and both dates, and the count of everything that matched beside the page. As a shape: how a matched set is distributed over statuses, trackers, areas and years, which is what answers a set larger than the fifty rows a page carries. The areas are read from the project itself and a person is resolved from the project's members and from the issues carrying the name, so a word naming none of either is answered with the ones that exist rather than with the unfiltered backlog.
+    ## The JavaScript and CSS the core commits beside the sources they are built from
+    Curated prose, command level. Which source tree produces which committed file, how a minified one is diffed at all, and rebuilding one in a worktree branched off the target branch so the checkout you work in stays as it is. It carries the question that needs the generated files deleted first, and what resolves a backport that conflicted in one. Which suite builds a given branch is typo3_test_run_guide's answer rather than this page's.
+    Tools: typo3_rule_lookup
+    Source: typo3://guides/core/contribution/committed-build-output (core)
+    ## Forge issues: what one says and what was decided about it, which other issues describe the same thing, and what stands open in the core's backlog
+    The tracker's own API, read live. By number: the report, the comments that decided it, its related and cited issues, files and review changes. By words: the issues whose text matches, unranked; a differently worded issue is invisible. As a backlog: the core's issues by age, neglect or recency, narrowed by tracker, area, date and person, or broken down per status, tracker, area and year. Each says whether the installed packages still ship the code the report cites — where a symbol stands, not whether the defect reproduces.
     Tools: typo3_forge_lookup
     Source: https://forge.typo3.org (network) (core)
-    ## Whether a patch already exists on the review server, what state the review of it is in, and which changes touch a path or name a wording
-    The anonymous Gerrit REST API, read live: change number, Change-Id, subject, status, target branch, review URL, and the patch set that is current with the commit it is — which is what says whether a checkout is the revision under review. Three handles answer the same set — a change number, a Change-Id, and a commit hash out of a checkout: the change and the changes carrying its Change-Id, which is what a backport on a release branch keeps and all that links it to the original. Each of them names the branches its commit message's Releases: trailer claims, which is the author's claim about where the patch belongs beside the changes that were actually pushed. A change read by name also carries the value every voter holds per label, the comments left on it with their patch set, file, line and thread state, and on request the review log, where the copy condition that dropped a vote is written. The Forge issues its commit message names come with it, each with its subject, tracker and status, which is the join between the patch and the tracker. Words and a repository path are the third way in, composed into one query here: they answer the same fields for every change matching them, in any state or narrowed to what is still under review. The open backlog is the fourth: the core's unmerged changes enumerated without a handle or a wording, ordered here by when they were pushed or by how long nothing has touched them, and narrowed by size, by vote state, by whether they still merge, by branch, by date and by the person who pushed or voted on them — which the review server answers none of by itself, since it sorts by last activity and states no total. Every change carries its size, whether it still merges, when it was pushed, how many comment threads are unresolved and what the submit rule makes of each label. That is the surface a checkout cannot see, because a clone carries what landed and says nothing about what is open. The words are matched against the commit message rather than against the diff. A change pushed as private is not visible to it.
+    ## Gerrit changes: whether a patch already exists, what state its review is in, which changes touch a path or name a wording, and what stands open in the core's review backlog
+    The anonymous Gerrit REST API, read live. By change number, Change-Id or commit hash: the change and its Change-Id siblings, current patch set, message, paths, votes, comments, chain, the issues and branches its trailers name, and on request the review log. By words and path: every matching change, in any state or only under review; words match the commit message, not the diff. As a backlog: the open changes by age or neglect, narrowed by size, vote state, mergeability, branch, date and person. A private change is invisible to it.
     Tools: typo3_gerrit_lookup
     Source: https://review.typo3.org (network) (core)
     ## Commit messages
@@ -233,14 +237,26 @@ Text:
     The run in order, from a clone to a site that answers on both sides: what the clone does not carry, why the environment is started twice, where the data comes from when the repository declares no import, what makes the installation agree with the code in front of it, and what a login costs. It runs nothing and starts nothing. Creating an installation for a package that declares no procedure is the neighbouring task and begins a step earlier.
     Tools: typo3_rule_lookup, typo3_hint_lookup
     Source: typo3://guides/project/installation/booting-a-clone (project)
+    ## Renaming an extension key, its tables or its CTypes in an installation that holds records
+    What the rename touches on the data side and in which order: that extension:setup creates the new tables and drops nothing, why INSERT ... SELECT * between two tables of one TCA is positional, every column that stores a name as a value — CType, backend_layout, sys_file_reference, sys_refindex, the extensionDataImport registry key — and the command that composes an identifier rather than spelling it. It runs nothing, and the proof it names is a query rather than a suite.
+    Tools: typo3_rule_lookup, typo3_hint_lookup
+    Source: typo3://guides/project/refactoring/renaming-an-installed-extension (project)
     ## Looking at a change in a real browser, against the installation that has the content
     Which installation can show the case at all, how a browser running in a container reaches a DDEV site — the router's network and its hostname aliases, the certificate it does not carry, the wildcard hostname it cannot answer — and where a harness and its screenshots go so neither reaches a commit. It runs nothing and starts no installation.
     Tools: typo3_rule_lookup, typo3_hint_lookup
     Source: typo3://guides/any/testing/browser-check (any)
+    ## Drawing the icon a content element is picked by, and the set it belongs to
+    The 16-pixel box every icon in the core's own content set shares, what that set actually varies to tell one element from another — silhouette and palette rather than lines inside one frame, measured over its 115 files — and the check that says a set works, which is naming each icon at rendered size without its label. Whether an identifier resolves is typo3_icon_lookup's and is a different question.
+    Tools: typo3_rule_lookup, typo3_icon_lookup
+    Source: typo3://guides/any/icons/drawing-a-content-icon (any)
     ## Proving that a TypoScript condition matched against a running installation
     How a verdict nothing prints is established from the page: what the backend's condition list is and is not, how a marker is derived from what the guarded branch alone renders, the shared Fluid wrapper that is no marker, a marker put into the condition on purpose, the negative control, and which cache stands between two runs. It requests nothing and flushes nothing.
     Tools: typo3_rule_lookup, typo3_hint_lookup
     Source: typo3://guides/any/testing/proving-a-condition (any)
+    ## Proving that a change to how a site renders changed only what it meant to
+    How the pages to capture are chosen from the content that exists rather than from what the templates allow, why the baseline is captured twice before anything is edited, which cache group leaves the compiled Fluid behind so the second capture is the old template, and how the union of the diffs is read for the line nothing explains. It requests nothing and flushes nothing.
+    Tools: typo3_rule_lookup, typo3_record_lookup
+    Source: typo3://guides/any/testing/proving-a-rendering-held (any)
     ## Reporting a security defect in TYPO3: who receives it, what the report carries, and what is not done with it in the meantime
     TYPO3's own published policy, as the core repository's SECURITY.md and the security team's pages state it. It holds for a defect in the core and for one in an extension alike. It carries no judgement of how bad a finding is: rating one is the team's work, and this says where it goes.
     Tools: typo3_rule_lookup
@@ -265,6 +281,10 @@ Text:
     Live lookup in the public tables of contents of TYPO3 Explained, TypoScript Explained, the TCA Reference and the Fluid ViewHelper Reference, bound to one covered documentation release. Every result keeps its canonical URL, document, version and section; pass that URL back with the same target version to read the page as text, including headings and code examples. An unreachable service is not an empty search.
     Tools: typo3_documentation_lookup
     Source: https://docs.typo3.org (any)
+    ## Whether a documentation permalink resolves, what it lands on, and which identifier replaces an old docs.typo3.org URL
+    The Sphinx inventory every manual publishes, read for the names a permalink addresses rather than for the pages. Per identifier: the page and anchor it reaches, what the manual registers the name as, every other spelling reaching the same target, and which of them the manual declares rather than generates. Per URL: the identifiers pointing at it, or, where the page is gone, the names carrying the words of the URL as candidates a reader picks from. Many at a time, because one inventory answers every identifier of its manual. It says which branch answered, since the host serves main for a manual it has no branch for and says nothing about it. The named manuals are a maintained list and a system extension is addressed by its Composer package name; an extension manual outside the core is not answered for, because it is versioned on its own releases rather than on TYPO3's.
+    Tools: typo3_permalink_lookup
+    Source: https://docs.typo3.org (network), knowledge/manuals.json (any)
     ## Backend CSS architecture, design tokens, class naming
     Curated prose covering the Sass sources, the token contract, and the component structure.
     Tools: typo3_hint_lookup, typo3_rule_lookup
@@ -289,10 +309,14 @@ Text:
     Whether component contracts came from the active installation or the bundled fallback, plus the core revision, branch, and verification date behind that fallback.
     Tools: typo3_snapshot_scope
     Source: knowledge/catalog/meta.json (any)
-    ## What the installation you are working in supplies: backend component contracts, labels, icons, backend modules, Fluid namespaces, effective configuration, the columns TYPO3 derives for a table, and the data structure one of its flex fields resolves to
-    Answered by that installation rather than from a snapshot, across the packages it has active — project extensions included. Component presence, classes and custom properties come from the installed backend CSS and JavaScript, with installed styleguide markup where available. Label reuse is restricted to the XLF resource used at the consuming code; an instance-wide match from another resource is discovery, not a reuse candidate. Its console does the answering wherever a command exists, and where none does — the icon registry, and the effective configuration, whose command arrived in TYPO3 14.2 and would leave the two LTS lines holding "command is not defined" — or where the command carries less than the registry — the backend modules, whose navigation component is inherited and whose routes it does not export — TYPO3 is booted in a subprocess and its container asked; package files answer where neither can be reached, or where the installation has no configuration yet and boots into a core-only failsafe container. The columns a table gets from its TCA are read the same way and have no file to fall back on: they are what the core would create, so only the core can say them. A type=flex column is resolved through that installation's own FlexFormTools, from a record emulated out of values the caller passes, so what comes back is what the backend form would build rather than what the referenced file says. Every answer identifies its source, so a fallback stays visible.
-    Tools: typo3_component_lookup, typo3_label_lookup, typo3_icon_lookup, typo3_backend_module_lookup, typo3_fluid_namespace_list, typo3_configuration_lookup, typo3_schema_lookup, typo3_flexform_lookup
+    ## What the installation you are working in supplies: backend component contracts, labels, icons, backend modules, Fluid namespaces, effective configuration, the columns TYPO3 derives for a table beside what its database has, the services its container assembles, and the data structure one of its flex fields resolves to
+    Answered by that installation rather than from a snapshot, across the packages it has active — project extensions included. Component presence, classes and custom properties come from the installed backend CSS and JavaScript, with installed styleguide markup where available. Label reuse is restricted to the XLF resource used at the consuming code; an instance-wide match from another resource is discovery, not a reuse candidate. Its console does the answering wherever a command exists, and where none does — the icon registry, and the effective configuration, whose command arrived in TYPO3 14.2 and would leave the two LTS lines holding "command is not defined" — or where the command carries less than the registry — the backend modules, whose navigation component is inherited and whose routes it does not export — TYPO3 is booted in a subprocess and its container asked; package files answer where neither can be reached, or where the installation has no configuration yet and boots into a core-only failsafe container. The columns a table gets from its TCA are read the same way and have no file to fall back on: they are what the core would create, so only the core can say them. A type=flex column is resolved through that installation's own FlexFormTools, from a record emulated out of values the caller passes, so what comes back is what the backend form would build rather than what the referenced file says. Every answer identifies its source, so a fallback stays visible. A schema answer carries what the database has for the named table beside what TYPO3 derives, and what TYPO3 itself would change to make the two agree. The container is assembled a second time to be read, so a private service, a decoration and what each constructor is really handed are answered rather than what a Services.yaml says.
+    Tools: typo3_component_lookup, typo3_label_lookup, typo3_icon_lookup, typo3_backend_module_lookup, typo3_fluid_namespace_list, typo3_configuration_lookup, typo3_schema_lookup, typo3_service_lookup, typo3_flexform_lookup
     Source: the discovered TYPO3 installation — read from the installation being worked in, not from a bundled snapshot. (any)
+    ## What is in a table of one of this project's own extensions
+    The rows and the numbers over them: how many there are, which page they sit on, whether they are live, hidden or deleted, and the rows themselves with their uid, the label the table names in its own ctrl, the timestamps and the two flags. Narrowed by exact values for any column, pid among them. It is what says where the records are maintained — one page of the record list is a table nobody has to leave the list for — and what is actually stored, which no schema answer reaches. Every other table is refused, the user tables and the core's among them, and every answer says it was read with the shell user's database access rather than with a backend user's permissions.
+    Tools: typo3_record_lookup
+    Source: the discovered installation, booted, with one grouped count and one row read against its database. What a row carries is fixed here rather than composed by the caller. (project)
     ## The project around the installation: its extensions, its sites and their sets, its own commands, the environment it declares and what that environment runs by itself, and what one of those extensions registers
     Read from the repository's files — composer.json, package.json, config/sites, .github/workflows, and the .ddev configuration where there is one — so it answers on a fresh clone, before anything is installed or migrated. The declared commands are what a caller may run; a DDEV project also states the PHP its container runs, the hooks that fire at a stage of their own with the command each runs, and the pull recipes its database and files come from. Both interpreters those commands run on are stated and related: the PHP the manifest declares, the installed core requires, the install is bounded at and the environment runs; and for the npm half of the list the Node engines.node admits, an .nvmrc pins, an actions/setup-node step sets up and a DDEV nodejs_version states. A workflow is read for that one field rather than for what it asserts, and a version it leaves to a matrix or another file is handed back unresolved. It describes what is there and does not rate it; the one thing it volunteers is a core deprecation whose predicate is a registration file the extension ships, because nothing a caller would think to search for reaches that. Per extension: the tables its TCA defines and extends, the content elements it adds to tt_content with the Fluid template each renders through and the FlexForm each binds, its backend modules and routes, its icons, its site sets and the files core reads each set for, the form configurations it registers and the definitions they store, its service tags, its middlewares, which of the Fluid root directories it ships and the namespaces it registers globally, the shape of its Classes/ directory, and which of the registration files it ships a deprecation names. Its tables, content elements and icons come from the booted installation where there is one; the rest is read from files, and where the installation could not be booted the answer says what a file-read list leaves out.
     Tools: typo3_project_describe, typo3_extension_describe
@@ -330,10 +354,10 @@ Text:
     Instead: typo3_hint_lookup withholds the Backend CSS and Backend TypeScript and JavaScript hints where a task names the frontend, and returns what does transfer — Fluid, TypoScript, PHP, and the sitepackage layout. The styling itself is documented at https://docs.typo3.org.
     ## Whether an uncatalogued component or CSS class exists on your branch
     The active installation supplies the contract for curated component entries, but the searchable index is deliberately a subset rather than every class in backend.css. Without an installation, even those entries fall back to one pinned core snapshot.
-    Instead: Call typo3_snapshot_scope to see which source answered, then inspect the installed backend CSS or the target checkout when the class is outside the curated index.
+    Instead: The component answer already says which source supplied the contract, which core revision the bundled snapshot was taken from and the command that re-checks it. Inspect the installed backend CSS, or the target checkout, for a class outside the curated index.
     ## Gerrit beyond what an anonymous read answers: the hunks of a patch set, a draft comment nobody published, what CI did beyond the line its bot posted, and anything a private change carries
     The review API is read without a credential, so a draft and a private change are outside it. The diff itself is not read over the API — the answer carries the paths the patch set touches and the ref that fetches it, and the checkout is where the hunks are read. Nothing here writes to Gerrit.
-    Instead: typo3_gerrit_lookup answers whether a change exists, what it is called, which branch it targets, whether it is still open, which patch set is current with the commit it is, what every voter holds per label and what was commented on it — hold that commit against your own HEAD, and fetch the ref for the hunks. A change read by name also carries every path its current patch set touches and its commit message whole, which is what a review establishes first, so a shortlist is triaged without fetching anything into a checkout. It also answers the two relations a change stands in: the changes sharing its Change-Id, so a backport already pushed to a release branch is in the same answer, and the relation chain it sits in, so a change that is one part of a stacked feature is not read as the whole of it. Voting, commenting and uploading stay yours: the web UI and git, and typo3://guides/core/contribution/gerrit-workflow carries those.
+    Instead: typo3_gerrit_lookup answers what an anonymous read carries: the change, its current patch set and commit, the paths it touches, its votes and comments, and the ref that fetches it — hold that commit against your own HEAD, and fetch the ref for the hunks. Voting, commenting and uploading stay yours: the web UI and git, and typo3://guides/core/contribution/gerrit-workflow carries those.
     ## What someone else's extension does: the API, the options and the documentation of a package the core does not ship
     Writing an extension is covered — the extension author is one of the three audiences this exists for, and the registration files, the subsystem conventions, the sitepackage layout and the test suite are all here. What is not here is the inside of somebody else's package: it has its own API, its own release cycle and its own documentation, and none of them is read by this server. The registry's published record for a key is the exception and is answered: which versions are out, what each declares and when it was uploaded, which says nothing about what any of them contains. Whether a name belongs to the core at all is a different question, and typo3_system_extension_lookup answers it.
     Instead: Read that extension's own documentation. What an installed extension registers — yours or a third party's — is answered by typo3_extension_describe from the files it ships, and what the TYPO3 Extension Repository has published under its key by typo3_ter_lookup.
@@ -343,15 +367,15 @@ Text:
     ## Running an installation: server and container setup, deployment, backups, the editorial use of the backend
     The knowledge base is about what is written into a TYPO3 project — its extensions, its configuration, its templates and its tests. Operating the installation around it is a different subject with different sources. What a project's own environment file declares is the exception, because that file is written into the project.
     Instead: Use the TYPO3 documentation at https://docs.typo3.org/. typo3_project_describe reports what the environment file configures. Which interpreter to declare in it is typo3_hint_lookup with id=php-versions, asked before there is an installation to ask anything else.
-    ## The content itself: a record read or written — a page, a content element, a file reference, a workspace
-    The content model is answered here and the content is not. typo3_schema_lookup returns a table as the installation's container assembles it, and no tool touches a row of one. The reason is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and reading a record would put the shell user's database access where a backend user's permissions belong.
-    Instead: Work the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for what may be written into one of its flex columns, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup.
+    ## The content of the installation's own tables: a record of pages, tt_content, a file reference, a workspace, a user
+    The content model is answered here throughout, and the content itself is read rather than written. typo3_schema_lookup returns any table as the installation's container assembles it; typo3_record_lookup reads the rows of any table this installation has TCA for, and refuses what TCA does not describe. What that reading is worth knowing about is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and a row comes back with the shell user's database access rather than a backend user's permissions. Every answer says so, and no answer is narrowed by a permission, a workspace or a language.
+    Instead: Write the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for the rows themselves, how many there are, which page they sit on and what one column holds across them, typo3_record_lookup; for what may be written into a flex column, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup.
 
     Which tool to call when:
     - Asked to review, audit or assess a project, a site package or an extension — before opening the first file, because what a finding is worth depends on the version and the commands this repository has → typo3_project_describe, then typo3_task_guide for the workflow and typo3_extension_describe for each extension in scope
-    - Going through the core's open issues — the oldest, the ones nobody has touched for years, or what stands open in one area such as the RTE or the backend UI → typo3_forge_lookup with open="oldest" or open="stale", narrowed with category in the user's own words and with tracker, then typo3_forge_lookup with the number of the one being taken further
-    - What one person has filed on the tracker, or what they still hold — one contributor's backlog, or what a core team member has open → typo3_forge_lookup with open="oldest" and involving in the person's name for both sides at once, or reportedBy or assignedTo for one of them, with status="all" for the years and breakdown=true where the count is larger than a page; never query with the name, which matches the text of an issue rather than whose it is
-    - Writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — including the issue a patch's Resolves: trailer will point at, which is written before the patch is pushed → typo3_rule_lookup with documentId="core/contribution/reporting-an-issue" for the fields and the Textile the description renders as, then typo3_forge_lookup with category="*" for the areas the Category field takes and with query in the words of the symptom for whether it is already reported
+    - Going through the core's open issues — the oldest, the ones nobody has touched for years, or what stands open in one area such as the RTE or the backend UI → typo3_forge_lookup with backlog="oldest" or open="stale", narrowed with category in the user's own words and with tracker, then typo3_forge_lookup with the number of the one being taken further
+    - What one person has filed on the tracker, or what they still hold — one contributor's backlog, or what a core team member has open → typo3_forge_lookup with backlog="oldest" and involving in the person's name for both sides at once, or reportedBy or assignedTo for one of them, with status="all" for the years and breakdown=true where the count is larger than a page; never query with the name, which matches the text of an issue rather than whose it is
+    - Writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — including the issue a patch's Resolves: trailer will point at, which is written before the patch is pushed → typo3_rule_lookup with documentId="core/contribution/reporting-an-issue" for the fields and the Textile the description renders as, then typo3_forge_lookup with category="*" for the areas the Category field takes, and for whether it is already reported typo3_forge_lookup with query in the words of the symptom and again with backlog="newest", createdSince from the day the defect could first have been reported and limit=50 — a wording reaches only the issues worded that way, and reading the subjects of everything filed since is what settles a negative
     - Taking a Forge issue on, before believing what it describes — an issue can be stale, already fixed, or closed on a decision that is not in its description → typo3_forge_lookup for the issue and its comments, then typo3_forge_lookup again with query in the words the issue uses for the other issues describing the same thing — its relations carry only what somebody linked by hand — then typo3_gerrit_lookup with the same number for whether a patch exists already
     - Before writing a patch for a file, and when asking whether a fix has been attempted before — neither is answerable from a checkout, since a clone carries what landed and says nothing about what is open → typo3_gerrit_lookup with path for the changes touching it and open for the ones still under review, then again with query in the words a commit message would use
     - Starting a review session without a change in hand — which open reviews have been sitting a long time, which are small and almost voted through, which are mine and which have I already voted on. A checkout answers none of it and the review server sorts by last activity alone. → typo3_gerrit_lookup with backlog "oldest" or "stale", narrowed by maxSize, minCodeReview, negativeVotes, mergeable, branch, updatedBefore, owner, reviewedBy, involving or reviewableBy, then again with change on the number picked off the page for its votes, its comment threads and the patch set to fetch
@@ -363,16 +387,18 @@ Text:
     - About to invent a layout, a directory structure or a test harness — the core has probably worked one out already → typo3_reference_list
     - About to write backend markup or invent a CSS class name, the module chrome and other layout classes included. The index is a curated subset of what the core itself files as a component, so a miss means uncurated rather than outside the subject. → typo3_component_lookup
     - About to run tests or any other core check → typo3_test_run_guide
+    - Getting Build/Scripts/runTests.sh to run in the checkout in front of you — a suite that fails before it reads a file, a fresh clone or a git worktree, or the pre-commit hook's message → typo3_script_lookup with the task in your own words. Which suite a change needs, and what one does when it runs, is typo3_test_run_guide.
     - Working in a concrete file and unsure about the subsystem's conventions → typo3_hint_lookup
     - Debugging, where there is no subject yet — something renders, saves or builds wrong and which subsystem does it is the question → typo3_hint_lookup with task written as the symptom, in the words the failure showed in
     - Needing the official API, reference or tutorial documentation for a covered TYPO3 version → typo3_documentation_lookup with several short English queries and targetVersion, then with page and the same targetVersion to read a selected result
+    - Writing a documentation link, replacing a docs.typo3.org URL with a permalink, or checking that the permalinks a patch touches still resolve — a guessed identifier is a 404 nothing in a checkout reports → typo3_permalink_lookup with identifiers for the ones to validate and urls for the ones to replace, as many at a time as the change holds
     - Writing or amending the commit message → typo3_commit_message_guide, whose default is a repository of your own
-    - Pushing for review, amending a patch set, or backporting → typo3_rule_lookup with a Gerrit query
+    - Pushing for review, amending a patch set — your own or another author's — or backporting → typo3_rule_lookup with a Gerrit query
     - A catalog lookup found nothing that should exist → typo3_snapshot_scope, then typo3_feedback_record
     - Needing the translation domain an XLF file resolves to → typo3_translation_domain_lookup with the path
     - About to write user-facing text or invent a label key → typo3_label_lookup with words from the wording and the XLF resource used at the consuming code
     - About to reference an icon identifier in the backend — TCA, a module, a content element wizard, a backend template. The registry is the backend's; frontend rendering has no access to it. → typo3_icon_lookup
-    - Needing a configuration value as it really is at runtime, not as the core ships it → typo3_configuration_lookup with the TYPO3_CONF_VARS path
+    - Needing a configuration value as it really is at runtime, not as the core ships it → typo3_configuration_lookup with the TYPO3_CONF_VARS path as configurationPath
     - Working on a backend module and needing its registration, its sub-routes, or whether the page tree navigates it → typo3_backend_module_lookup
     - Unsure which Fluid namespace prefixes a template may use undeclared → typo3_fluid_namespace_list
     - Needing which arguments a Fluid ViewHelper registers, with the type, the default and whether it takes arbitrary ones beyond them → typo3_documentation_lookup with the tag name such as f:asset.css and the targetVersion
@@ -388,6 +414,9 @@ Text:
     - About to claim that an extension is (or is not) part of the core, or to require one → typo3_system_extension_lookup
     - About to write or review an ext_tables.sql, and needing to know which columns TYPO3 creates by itself → typo3_schema_lookup with the table
     - Writing or reading a FlexForm — a plugin's settings, a content element's own sheet, or the values a Fluid template reads out of one. The file the registration names is not what the backend resolves. → typo3_flexform_lookup with the table, the flex column and the record values that decide which structure applies, CType for a content element
+    - Asking which class stands behind an interface here, whether a service is public, what a constructor is handed, or what registers into an extension point → typo3_service_lookup with a substring of the id or the class, or with one exact tag
+    - Asking whether the database matches what the extensions and the TCA declare → typo3_schema_lookup with the table
+    - Asking what is actually stored in one of this project's own tables, or how much of it there is → typo3_record_lookup with the table, columns for the fields the question needs, groupBy for what one column holds, count where only the numbers are wanted, where to narrow it
 
     Found the TYPO3 installation at <installation> (core-checkout, found by walking up, from <installation>), which holds 36 packages. If that is not the installation you are working on, this server was started in the wrong directory — or set TYPO3_DEV_COMPANION_ROOT to the one you mean.
     Its console cannot be run right now, so questions that only the installation can answer — which labels exist, which backend modules are registered — have no answer here: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Where the command that would work is known, TYPO3_DEV_COMPANION_CONSOLE states it, for example "ddev exec .build/bin/typo3".
@@ -398,16 +427,16 @@ Text:
     Where the answers come from, which is what says whether a question can be asked at all right now. Every tool states the same thing at the foot of its own description.
     ## Answers from installation
     The installation this server was started in, booted or asked through its console: its assembled state after every extension has had its say, and nothing at all where it cannot be reached.
-    Tools: typo3_server_scope, typo3_label_lookup, typo3_fluid_namespace_list, typo3_configuration_lookup, typo3_schema_lookup, typo3_flexform_lookup, typo3_backend_module_lookup, typo3_icon_lookup, typo3_extension_describe
+    Tools: typo3_server_scope, typo3_label_lookup, typo3_fluid_namespace_list, typo3_configuration_lookup, typo3_schema_lookup, typo3_record_lookup, typo3_service_lookup, typo3_flexform_lookup, typo3_backend_module_lookup, typo3_icon_lookup, typo3_extension_describe
     ## Answers from packages
     The files the installed packages ship, read rather than executed. Answers on a fresh clone and with the containers down; what a package registers by running is not in it.
-    Tools: typo3_component_lookup, typo3_label_lookup, typo3_fluid_namespace_list, typo3_icon_lookup, typo3_changelog_lookup, typo3_project_describe, typo3_extension_describe, typo3_snapshot_scope
+    Tools: typo3_forge_lookup, typo3_component_lookup, typo3_label_lookup, typo3_fluid_namespace_list, typo3_icon_lookup, typo3_changelog_lookup, typo3_project_describe, typo3_extension_describe, typo3_snapshot_scope
     ## Answers from knowledge
     The knowledge base inside this package. Needs nothing running, and is bound to TYPO3 versions rather than to an installation.
     Tools: typo3_server_scope, typo3_rule_lookup, typo3_script_lookup, typo3_task_guide, typo3_test_run_guide, typo3_hint_lookup, typo3_component_lookup, typo3_system_extension_lookup, typo3_reference_list, typo3_translation_domain_lookup, typo3_snapshot_scope, typo3_commit_message_guide
     ## Answers from network
     A service outside this machine. An unreachable one is said out loud rather than answered as empty.
-    Tools: typo3_documentation_lookup, typo3_forge_lookup, typo3_gerrit_lookup, typo3_changelog_lookup, typo3_ter_lookup
+    Tools: typo3_documentation_lookup, typo3_permalink_lookup, typo3_forge_lookup, typo3_gerrit_lookup, typo3_changelog_lookup, typo3_ter_lookup
     ## Answers from checkout
     This server's own checkout, which is why the tool offering it exists only in a standalone one.
     Tools: typo3_feedback_record, typo3_feedback_list
@@ -418,7 +447,7 @@ Data:
 
     {
         "purpose": "A development companion for coding agents working with TYPO3, for the three audiences that do: the core contributor, the extension author, and the site developer. It establishes the project and installation the agent is working in, supplies current, version-bound TYPO3 knowledge, and hands task-specific workflows to the skills that own them so the agent can implement, review, and verify the work. Scope answers describe what is present without treating it as correct; the knowledge and skills supply the conventions that apply, so code found in one installation is not repeated as a pattern merely because it runs. They cover how TYPO3's subsystems are used, the core's own contribution process — the rules, the Gerrit workflow, the scripts and test suites — and a searchable index of backend UI components whose contract is read from the active installation where possible. The server also answers what is registered in the installation it was started in, which no bundled snapshot could get right. Where that installation does not boot, or does not exist yet, the bundled knowledge and the installed packages answer instead, and the answer says which of them it came from and what that leaves out. Every answer says which TYPO3 versions it holds for and which of the three kinds of work it belongs to.",
-        "instructions": "Start every task with typo3_project_describe: the installation's TYPO3 version, the extensions that are the project's own, the sites it configures, and the commands the repository actually declares — a check you recommend that the repository does not declare is a wrong answer however sensible it sounds. Then call typo3_task_guide for the workflow the task belongs to, and again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch: triaging the backlog, whether a report still reproduces, and what a fix would cost are answered here. What changed, which branch you are on, and whether a path still exists are yours to read in the checkout.\n\nWhat to call for what:\n- backend markup or a CSS class: typo3_component_lookup with the targetVersion\n- a backend icon identifier: typo3_icon_lookup\n- a label, added or reworded: typo3_label_lookup with the XLF resource the consuming code uses; a match in another is not reusable\n- what a version broke, deprecated or added, on a major you have not built on lately: typo3_changelog_lookup\n- the commit message, in your own repository as much as in the core: typo3_commit_message_guide\n- the whole procedure, not one fact out of it: typo3_rule_lookup with a documentId typo3_project_describe lists\nGuessed, a class, an icon or a label fails only at runtime.\n\nAnswers are filtered by targetVersion or by the version read, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user: its matching is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what is covered, at which depth, by which tool, and which installation is read.",
+        "instructions": "Start every task with typo3_project_describe: the installation's TYPO3 version, the extensions that are the project's own, the sites it configures, and the commands the repository actually declares — a check you recommend that the repository does not declare is a wrong answer however sensible it sounds. Then call typo3_task_guide for the workflow the task belongs to, and again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch: triaging the backlog, whether a report still reproduces, and what a fix would cost are answered here. What changed, which branch you are on, and whether a path still exists are yours to read in the checkout.\n\nWhat to call for what:\n- backend markup or a CSS class: typo3_component_lookup with the targetVersion\n- a backend icon identifier: typo3_icon_lookup\n- a label, added or reworded: typo3_label_lookup with the XLF resource the consuming code uses; a match in another is not reusable\n- what a version broke, deprecated or added, on a major you have not built on lately: typo3_changelog_lookup\n- the commit message, yours as much as the core's, and its branches: typo3_commit_message_guide\n- the whole procedure, not one fact out of it: typo3_rule_lookup with a documentId typo3_project_describe lists\nWhere a typo3-* skill in your listing covers the task, activate it: it makes these calls.\n\nAnswers are filtered by targetVersion or by the version read, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user: its matching is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what is covered, by which tool, and which installation is read.",
         "covers": [
             {
                 "topic": "Contribution rules and review readiness",
@@ -431,7 +460,7 @@ Data:
                 "scope": "core"
             },
             {
-                "topic": "Gerrit workflow: setup, pushing, amending, backports",
+                "topic": "Gerrit workflow: setup, pushing, amending, opening a patch set on somebody else's change, backports",
                 "depth": "Curated prose, command level. Covers the local git side; it cannot talk to the Gerrit server.",
                 "tools": [
                     "typo3_rule_lookup"
@@ -440,8 +469,17 @@ Data:
                 "scope": "core"
             },
             {
-                "topic": "What a Forge issue says and what was decided about it, which other issues describe the same thing, and what stands open in the core's backlog",
-                "depth": "The tracker's own API, read live. By number: subject, tracker, status, target version, who it is assigned to, the TYPO3 and PHP versions it was reported against, related issues, and the comments — the description is what the reporter saw, the comments are where a maintainer said what will happen. By words: the issues whose text matches them, each with its number, subject, tracker, status and URL, in the tracker's own order and unranked. An issue worded differently is invisible to a word search, so words that match nothing are an answer about the words and not about whether the thing was reported. As a backlog: the issues of the core project, ordered by when they were filed or by how long nobody has touched them, narrowed by tracker, by area in the caller's own words, by date and by person — what somebody filed, what they hold, or both at once — and reaching the closed ones where a status asks for them, each with who filed it, who holds it and both dates, and the count of everything that matched beside the page. As a shape: how a matched set is distributed over statuses, trackers, areas and years, which is what answers a set larger than the fifty rows a page carries. The areas are read from the project itself and a person is resolved from the project's members and from the issues carrying the name, so a word naming none of either is answered with the ones that exist rather than with the unfiltered backlog.",
+                "topic": "The JavaScript and CSS the core commits beside the sources they are built from",
+                "depth": "Curated prose, command level. Which source tree produces which committed file, how a minified one is diffed at all, and rebuilding one in a worktree branched off the target branch so the checkout you work in stays as it is. It carries the question that needs the generated files deleted first, and what resolves a backport that conflicted in one. Which suite builds a given branch is typo3_test_run_guide's answer rather than this page's.",
+                "tools": [
+                    "typo3_rule_lookup"
+                ],
+                "source": "typo3://guides/core/contribution/committed-build-output",
+                "scope": "core"
+            },
+            {
+                "topic": "Forge issues: what one says and what was decided about it, which other issues describe the same thing, and what stands open in the core's backlog",
+                "depth": "The tracker's own API, read live. By number: the report, the comments that decided it, its related and cited issues, files and review changes. By words: the issues whose text matches, unranked; a differently worded issue is invisible. As a backlog: the core's issues by age, neglect or recency, narrowed by tracker, area, date and person, or broken down per status, tracker, area and year. Each says whether the installed packages still ship the code the report cites — where a symbol stands, not whether the defect reproduces.",
                 "tools": [
                     "typo3_forge_lookup"
                 ],
@@ -449,8 +487,8 @@ Data:
                 "scope": "core"
             },
             {
-                "topic": "Whether a patch already exists on the review server, what state the review of it is in, and which changes touch a path or name a wording",
-                "depth": "The anonymous Gerrit REST API, read live: change number, Change-Id, subject, status, target branch, review URL, and the patch set that is current with the commit it is — which is what says whether a checkout is the revision under review. Three handles answer the same set — a change number, a Change-Id, and a commit hash out of a checkout: the change and the changes carrying its Change-Id, which is what a backport on a release branch keeps and all that links it to the original. Each of them names the branches its commit message's Releases: trailer claims, which is the author's claim about where the patch belongs beside the changes that were actually pushed. A change read by name also carries the value every voter holds per label, the comments left on it with their patch set, file, line and thread state, and on request the review log, where the copy condition that dropped a vote is written. The Forge issues its commit message names come with it, each with its subject, tracker and status, which is the join between the patch and the tracker. Words and a repository path are the third way in, composed into one query here: they answer the same fields for every change matching them, in any state or narrowed to what is still under review. The open backlog is the fourth: the core's unmerged changes enumerated without a handle or a wording, ordered here by when they were pushed or by how long nothing has touched them, and narrowed by size, by vote state, by whether they still merge, by branch, by date and by the person who pushed or voted on them — which the review server answers none of by itself, since it sorts by last activity and states no total. Every change carries its size, whether it still merges, when it was pushed, how many comment threads are unresolved and what the submit rule makes of each label. That is the surface a checkout cannot see, because a clone carries what landed and says nothing about what is open. The words are matched against the commit message rather than against the diff. A change pushed as private is not visible to it.",
+                "topic": "Gerrit changes: whether a patch already exists, what state its review is in, which changes touch a path or name a wording, and what stands open in the core's review backlog",
+                "depth": "The anonymous Gerrit REST API, read live. By change number, Change-Id or commit hash: the change and its Change-Id siblings, current patch set, message, paths, votes, comments, chain, the issues and branches its trailers name, and on request the review log. By words and path: every matching change, in any state or only under review; words match the commit message, not the diff. As a backlog: the open changes by age or neglect, narrowed by size, vote state, mergeability, branch, date and person. A private change is invisible to it.",
                 "tools": [
                     "typo3_gerrit_lookup"
                 ],
@@ -588,6 +626,16 @@ Data:
                 "scope": "project"
             },
             {
+                "topic": "Renaming an extension key, its tables or its CTypes in an installation that holds records",
+                "depth": "What the rename touches on the data side and in which order: that extension:setup creates the new tables and drops nothing, why INSERT ... SELECT * between two tables of one TCA is positional, every column that stores a name as a value — CType, backend_layout, sys_file_reference, sys_refindex, the extensionDataImport registry key — and the command that composes an identifier rather than spelling it. It runs nothing, and the proof it names is a query rather than a suite.",
+                "tools": [
+                    "typo3_rule_lookup",
+                    "typo3_hint_lookup"
+                ],
+                "source": "typo3://guides/project/refactoring/renaming-an-installed-extension",
+                "scope": "project"
+            },
+            {
                 "topic": "Looking at a change in a real browser, against the installation that has the content",
                 "depth": "Which installation can show the case at all, how a browser running in a container reaches a DDEV site — the router's network and its hostname aliases, the certificate it does not carry, the wildcard hostname it cannot answer — and where a harness and its screenshots go so neither reaches a commit. It runs nothing and starts no installation.",
                 "tools": [
@@ -598,6 +646,16 @@ Data:
                 "scope": "any"
             },
             {
+                "topic": "Drawing the icon a content element is picked by, and the set it belongs to",
+                "depth": "The 16-pixel box every icon in the core's own content set shares, what that set actually varies to tell one element from another — silhouette and palette rather than lines inside one frame, measured over its 115 files — and the check that says a set works, which is naming each icon at rendered size without its label. Whether an identifier resolves is typo3_icon_lookup's and is a different question.",
+                "tools": [
+                    "typo3_rule_lookup",
+                    "typo3_icon_lookup"
+                ],
+                "source": "typo3://guides/any/icons/drawing-a-content-icon",
+                "scope": "any"
+            },
+            {
                 "topic": "Proving that a TypoScript condition matched against a running installation",
                 "depth": "How a verdict nothing prints is established from the page: what the backend's condition list is and is not, how a marker is derived from what the guarded branch alone renders, the shared Fluid wrapper that is no marker, a marker put into the condition on purpose, the negative control, and which cache stands between two runs. It requests nothing and flushes nothing.",
                 "tools": [
@@ -605,6 +663,16 @@ Data:
                     "typo3_hint_lookup"
                 ],
                 "source": "typo3://guides/any/testing/proving-a-condition",
+                "scope": "any"
+            },
+            {
+                "topic": "Proving that a change to how a site renders changed only what it meant to",
+                "depth": "How the pages to capture are chosen from the content that exists rather than from what the templates allow, why the baseline is captured twice before anything is edited, which cache group leaves the compiled Fluid behind so the second capture is the old template, and how the union of the diffs is read for the line nothing explains. It requests nothing and flushes nothing.",
+                "tools": [
+                    "typo3_rule_lookup",
+                    "typo3_record_lookup"
+                ],
+                "source": "typo3://guides/any/testing/proving-a-rendering-held",
                 "scope": "any"
             },
             {
@@ -663,6 +731,15 @@ Data:
                 "scope": "any"
             },
             {
+                "topic": "Whether a documentation permalink resolves, what it lands on, and which identifier replaces an old docs.typo3.org URL",
+                "depth": "The Sphinx inventory every manual publishes, read for the names a permalink addresses rather than for the pages. Per identifier: the page and anchor it reaches, what the manual registers the name as, every other spelling reaching the same target, and which of them the manual declares rather than generates. Per URL: the identifiers pointing at it, or, where the page is gone, the names carrying the words of the URL as candidates a reader picks from. Many at a time, because one inventory answers every identifier of its manual. It says which branch answered, since the host serves main for a manual it has no branch for and says nothing about it. The named manuals are a maintained list and a system extension is addressed by its Composer package name; an extension manual outside the core is not answered for, because it is versioned on its own releases rather than on TYPO3's.",
+                "tools": [
+                    "typo3_permalink_lookup"
+                ],
+                "source": "https://docs.typo3.org (network), knowledge/manuals.json",
+                "scope": "any"
+            },
+            {
                 "topic": "Backend CSS architecture, design tokens, class naming",
                 "depth": "Curated prose covering the Sass sources, the token contract, and the component structure.",
                 "tools": [
@@ -718,8 +795,8 @@ Data:
                 "scope": "any"
             },
             {
-                "topic": "What the installation you are working in supplies: backend component contracts, labels, icons, backend modules, Fluid namespaces, effective configuration, the columns TYPO3 derives for a table, and the data structure one of its flex fields resolves to",
-                "depth": "Answered by that installation rather than from a snapshot, across the packages it has active — project extensions included. Component presence, classes and custom properties come from the installed backend CSS and JavaScript, with installed styleguide markup where available. Label reuse is restricted to the XLF resource used at the consuming code; an instance-wide match from another resource is discovery, not a reuse candidate. Its console does the answering wherever a command exists, and where none does — the icon registry, and the effective configuration, whose command arrived in TYPO3 14.2 and would leave the two LTS lines holding \"command is not defined\" — or where the command carries less than the registry — the backend modules, whose navigation component is inherited and whose routes it does not export — TYPO3 is booted in a subprocess and its container asked; package files answer where neither can be reached, or where the installation has no configuration yet and boots into a core-only failsafe container. The columns a table gets from its TCA are read the same way and have no file to fall back on: they are what the core would create, so only the core can say them. A type=flex column is resolved through that installation's own FlexFormTools, from a record emulated out of values the caller passes, so what comes back is what the backend form would build rather than what the referenced file says. Every answer identifies its source, so a fallback stays visible.",
+                "topic": "What the installation you are working in supplies: backend component contracts, labels, icons, backend modules, Fluid namespaces, effective configuration, the columns TYPO3 derives for a table beside what its database has, the services its container assembles, and the data structure one of its flex fields resolves to",
+                "depth": "Answered by that installation rather than from a snapshot, across the packages it has active — project extensions included. Component presence, classes and custom properties come from the installed backend CSS and JavaScript, with installed styleguide markup where available. Label reuse is restricted to the XLF resource used at the consuming code; an instance-wide match from another resource is discovery, not a reuse candidate. Its console does the answering wherever a command exists, and where none does — the icon registry, and the effective configuration, whose command arrived in TYPO3 14.2 and would leave the two LTS lines holding \"command is not defined\" — or where the command carries less than the registry — the backend modules, whose navigation component is inherited and whose routes it does not export — TYPO3 is booted in a subprocess and its container asked; package files answer where neither can be reached, or where the installation has no configuration yet and boots into a core-only failsafe container. The columns a table gets from its TCA are read the same way and have no file to fall back on: they are what the core would create, so only the core can say them. A type=flex column is resolved through that installation's own FlexFormTools, from a record emulated out of values the caller passes, so what comes back is what the backend form would build rather than what the referenced file says. Every answer identifies its source, so a fallback stays visible. A schema answer carries what the database has for the named table beside what TYPO3 derives, and what TYPO3 itself would change to make the two agree. The container is assembled a second time to be read, so a private service, a decoration and what each constructor is really handed are answered rather than what a Services.yaml says.",
                 "tools": [
                     "typo3_component_lookup",
                     "typo3_label_lookup",
@@ -728,10 +805,20 @@ Data:
                     "typo3_fluid_namespace_list",
                     "typo3_configuration_lookup",
                     "typo3_schema_lookup",
+                    "typo3_service_lookup",
                     "typo3_flexform_lookup"
                 ],
                 "source": "the discovered TYPO3 installation — read from the installation being worked in, not from a bundled snapshot.",
                 "scope": "any"
+            },
+            {
+                "topic": "What is in a table of one of this project's own extensions",
+                "depth": "The rows and the numbers over them: how many there are, which page they sit on, whether they are live, hidden or deleted, and the rows themselves with their uid, the label the table names in its own ctrl, the timestamps and the two flags. Narrowed by exact values for any column, pid among them. It is what says where the records are maintained — one page of the record list is a table nobody has to leave the list for — and what is actually stored, which no schema answer reaches. Every other table is refused, the user tables and the core's among them, and every answer says it was read with the shell user's database access rather than with a backend user's permissions.",
+                "tools": [
+                    "typo3_record_lookup"
+                ],
+                "source": "the discovered installation, booted, with one grouped count and one row read against its database. What a row carries is fixed here rather than composed by the caller.",
+                "scope": "project"
             },
             {
                 "topic": "The project around the installation: its extensions, its sites and their sets, its own commands, the environment it declares and what that environment runs by itself, and what one of those extensions registers",
@@ -786,12 +873,12 @@ Data:
             {
                 "topic": "Whether an uncatalogued component or CSS class exists on your branch",
                 "why": "The active installation supplies the contract for curated component entries, but the searchable index is deliberately a subset rather than every class in backend.css. Without an installation, even those entries fall back to one pinned core snapshot.",
-                "instead": "Call typo3_snapshot_scope to see which source answered, then inspect the installed backend CSS or the target checkout when the class is outside the curated index."
+                "instead": "The component answer already says which source supplied the contract, which core revision the bundled snapshot was taken from and the command that re-checks it. Inspect the installed backend CSS, or the target checkout, for a class outside the curated index."
             },
             {
                 "topic": "Gerrit beyond what an anonymous read answers: the hunks of a patch set, a draft comment nobody published, what CI did beyond the line its bot posted, and anything a private change carries",
                 "why": "The review API is read without a credential, so a draft and a private change are outside it. The diff itself is not read over the API — the answer carries the paths the patch set touches and the ref that fetches it, and the checkout is where the hunks are read. Nothing here writes to Gerrit.",
-                "instead": "typo3_gerrit_lookup answers whether a change exists, what it is called, which branch it targets, whether it is still open, which patch set is current with the commit it is, what every voter holds per label and what was commented on it — hold that commit against your own HEAD, and fetch the ref for the hunks. A change read by name also carries every path its current patch set touches and its commit message whole, which is what a review establishes first, so a shortlist is triaged without fetching anything into a checkout. It also answers the two relations a change stands in: the changes sharing its Change-Id, so a backport already pushed to a release branch is in the same answer, and the relation chain it sits in, so a change that is one part of a stacked feature is not read as the whole of it. Voting, commenting and uploading stay yours: the web UI and git, and typo3://guides/core/contribution/gerrit-workflow carries those."
+                "instead": "typo3_gerrit_lookup answers what an anonymous read carries: the change, its current patch set and commit, the paths it touches, its votes and comments, and the ref that fetches it — hold that commit against your own HEAD, and fetch the ref for the hunks. Voting, commenting and uploading stay yours: the web UI and git, and typo3://guides/core/contribution/gerrit-workflow carries those."
             },
             {
                 "topic": "What someone else's extension does: the API, the options and the documentation of a package the core does not ship",
@@ -809,9 +896,9 @@ Data:
                 "instead": "Use the TYPO3 documentation at https://docs.typo3.org/. typo3_project_describe reports what the environment file configures. Which interpreter to declare in it is typo3_hint_lookup with id=php-versions, asked before there is an installation to ask anything else."
             },
             {
-                "topic": "The content itself: a record read or written — a page, a content element, a file reference, a workspace",
-                "why": "The content model is answered here and the content is not. typo3_schema_lookup returns a table as the installation's container assembles it, and no tool touches a row of one. The reason is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and reading a record would put the shell user's database access where a backend user's permissions belong.",
-                "instead": "Work the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for what may be written into one of its flex columns, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup."
+                "topic": "The content of the installation's own tables: a record of pages, tt_content, a file reference, a workspace, a user",
+                "why": "The content model is answered here throughout, and the content itself is read rather than written. typo3_schema_lookup returns any table as the installation's container assembles it; typo3_record_lookup reads the rows of any table this installation has TCA for, and refuses what TCA does not describe. What that reading is worth knowing about is the trust model: your client launches this server as a stdio subprocess, so the process boundary is the whole of its security, and a row comes back with the shell user's database access rather than a backend user's permissions. Every answer says so, and no answer is narrowed by a permission, a workspace or a language.",
+                "instead": "Write the records where the permissions apply — the backend, or the installation's own console at vendor/bin/typo3. For what a table holds, its columns and their types, ask typo3_schema_lookup; for the rows themselves, how many there are, which page they sit on and what one column holds across them, typo3_record_lookup; for what may be written into a flex column, typo3_flexform_lookup, which emulates the record from values you pass rather than reading one; and for what the DataHandler expects of code you write, typo3_hint_lookup."
             }
         ],
         "checkoutDiscovery": [
@@ -847,15 +934,15 @@ Data:
             },
             {
                 "when": "Going through the core's open issues — the oldest, the ones nobody has touched for years, or what stands open in one area such as the RTE or the backend UI",
-                "call": "typo3_forge_lookup with open=\"oldest\" or open=\"stale\", narrowed with category in the user's own words and with tracker, then typo3_forge_lookup with the number of the one being taken further"
+                "call": "typo3_forge_lookup with backlog=\"oldest\" or open=\"stale\", narrowed with category in the user's own words and with tracker, then typo3_forge_lookup with the number of the one being taken further"
             },
             {
                 "when": "What one person has filed on the tracker, or what they still hold — one contributor's backlog, or what a core team member has open",
-                "call": "typo3_forge_lookup with open=\"oldest\" and involving in the person's name for both sides at once, or reportedBy or assignedTo for one of them, with status=\"all\" for the years and breakdown=true where the count is larger than a page; never query with the name, which matches the text of an issue rather than whose it is"
+                "call": "typo3_forge_lookup with backlog=\"oldest\" and involving in the person's name for both sides at once, or reportedBy or assignedTo for one of them, with status=\"all\" for the years and breakdown=true where the count is larger than a page; never query with the name, which matches the text of an issue rather than whose it is"
             },
             {
                 "when": "Writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — including the issue a patch's Resolves: trailer will point at, which is written before the patch is pushed",
-                "call": "typo3_rule_lookup with documentId=\"core/contribution/reporting-an-issue\" for the fields and the Textile the description renders as, then typo3_forge_lookup with category=\"*\" for the areas the Category field takes and with query in the words of the symptom for whether it is already reported"
+                "call": "typo3_rule_lookup with documentId=\"core/contribution/reporting-an-issue\" for the fields and the Textile the description renders as, then typo3_forge_lookup with category=\"*\" for the areas the Category field takes, and for whether it is already reported typo3_forge_lookup with query in the words of the symptom and again with backlog=\"newest\", createdSince from the day the defect could first have been reported and limit=50 — a wording reaches only the issues worded that way, and reading the subjects of everything filed since is what settles a negative"
             },
             {
                 "when": "Taking a Forge issue on, before believing what it describes — an issue can be stale, already fixed, or closed on a decision that is not in its description",
@@ -902,6 +989,10 @@ Data:
                 "call": "typo3_test_run_guide"
             },
             {
+                "when": "Getting Build/Scripts/runTests.sh to run in the checkout in front of you — a suite that fails before it reads a file, a fresh clone or a git worktree, or the pre-commit hook's message",
+                "call": "typo3_script_lookup with the task in your own words. Which suite a change needs, and what one does when it runs, is typo3_test_run_guide."
+            },
+            {
                 "when": "Working in a concrete file and unsure about the subsystem's conventions",
                 "call": "typo3_hint_lookup"
             },
@@ -914,11 +1005,15 @@ Data:
                 "call": "typo3_documentation_lookup with several short English queries and targetVersion, then with page and the same targetVersion to read a selected result"
             },
             {
+                "when": "Writing a documentation link, replacing a docs.typo3.org URL with a permalink, or checking that the permalinks a patch touches still resolve — a guessed identifier is a 404 nothing in a checkout reports",
+                "call": "typo3_permalink_lookup with identifiers for the ones to validate and urls for the ones to replace, as many at a time as the change holds"
+            },
+            {
                 "when": "Writing or amending the commit message",
                 "call": "typo3_commit_message_guide, whose default is a repository of your own"
             },
             {
-                "when": "Pushing for review, amending a patch set, or backporting",
+                "when": "Pushing for review, amending a patch set — your own or another author's — or backporting",
                 "call": "typo3_rule_lookup with a Gerrit query"
             },
             {
@@ -939,7 +1034,7 @@ Data:
             },
             {
                 "when": "Needing a configuration value as it really is at runtime, not as the core ships it",
-                "call": "typo3_configuration_lookup with the TYPO3_CONF_VARS path"
+                "call": "typo3_configuration_lookup with the TYPO3_CONF_VARS path as configurationPath"
             },
             {
                 "when": "Working on a backend module and needing its registration, its sub-routes, or whether the page tree navigates it",
@@ -1000,6 +1095,18 @@ Data:
             {
                 "when": "Writing or reading a FlexForm — a plugin's settings, a content element's own sheet, or the values a Fluid template reads out of one. The file the registration names is not what the backend resolves.",
                 "call": "typo3_flexform_lookup with the table, the flex column and the record values that decide which structure applies, CType for a content element"
+            },
+            {
+                "when": "Asking which class stands behind an interface here, whether a service is public, what a constructor is handed, or what registers into an extension point",
+                "call": "typo3_service_lookup with a substring of the id or the class, or with one exact tag"
+            },
+            {
+                "when": "Asking whether the database matches what the extensions and the TCA declare",
+                "call": "typo3_schema_lookup with the table"
+            },
+            {
+                "when": "Asking what is actually stored in one of this project's own tables, or how much of it there is",
+                "call": "typo3_record_lookup with the table, columns for the fields the question needs, groupBy for what one column holds, count where only the numbers are wanted, where to narrow it"
             }
         ],
         "versions": [
@@ -1039,6 +1146,8 @@ Data:
                     "typo3_fluid_namespace_list",
                     "typo3_configuration_lookup",
                     "typo3_schema_lookup",
+                    "typo3_record_lookup",
+                    "typo3_service_lookup",
                     "typo3_flexform_lookup",
                     "typo3_backend_module_lookup",
                     "typo3_icon_lookup",
@@ -1049,6 +1158,7 @@ Data:
                 "source": "packages",
                 "meaning": "The files the installed packages ship, read rather than executed. Answers on a fresh clone and with the containers down; what a package registers by running is not in it.",
                 "tools": [
+                    "typo3_forge_lookup",
                     "typo3_component_lookup",
                     "typo3_label_lookup",
                     "typo3_fluid_namespace_list",
@@ -1082,6 +1192,7 @@ Data:
                 "meaning": "A service outside this machine. An unreachable one is said out loud rather than answered as empty.",
                 "tools": [
                     "typo3_documentation_lookup",
+                    "typo3_permalink_lookup",
                     "typo3_forge_lookup",
                     "typo3_gerrit_lookup",
                     "typo3_changelog_lookup",
@@ -1159,7 +1270,7 @@ Data:
 
     {
         "purpose": "A development companion for coding agents working with TYPO3, for the three audiences that do: the core contributor, the extension author, and the site developer. It establishes the project and installation the agent is working in, supplies current, version-bound TYPO3 knowledge, and hands task-specific workflows to the skills that own them so the agent can implement, review, and verify the work. Scope answers describe what is present without treating it as correct; the knowledge and skills supply the conventions that apply, so code found in one installation is not repeated as a pattern merely because it runs. They cover how TYPO3's subsystems are used, the core's own contribution process — the rules, the Gerrit workflow, the scripts and test suites — and a searchable index of backend UI components whose contract is read from the active installation where possible. The server also answers what is registered in the installation it was started in, which no bundled snapshot could get right. Where that installation does not boot, or does not exist yet, the bundled knowledge and the installed packages answer instead, and the answer says which of them it came from and what that leaves out. Every answer says which TYPO3 versions it holds for and which of the three kinds of work it belongs to.",
-        "instructions": "Start every task with typo3_project_describe: the installation's TYPO3 version, the extensions that are the project's own, the sites it configures, and the commands the repository actually declares — a check you recommend that the repository does not declare is a wrong answer however sensible it sounds. Then call typo3_task_guide for the workflow the task belongs to, and again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch: triaging the backlog, whether a report still reproduces, and what a fix would cost are answered here. What changed, which branch you are on, and whether a path still exists are yours to read in the checkout.\n\nWhat to call for what:\n- backend markup or a CSS class: typo3_component_lookup with the targetVersion\n- a backend icon identifier: typo3_icon_lookup\n- a label, added or reworded: typo3_label_lookup with the XLF resource the consuming code uses; a match in another is not reusable\n- what a version broke, deprecated or added, on a major you have not built on lately: typo3_changelog_lookup\n- the commit message, in your own repository as much as in the core: typo3_commit_message_guide\n- the whole procedure, not one fact out of it: typo3_rule_lookup with a documentId typo3_project_describe lists\nGuessed, a class, an icon or a label fails only at runtime.\n\nAnswers are filtered by targetVersion or by the version read, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user: its matching is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what is covered, at which depth, by which tool, and which installation is read.",
+        "instructions": "Start every task with typo3_project_describe: the installation's TYPO3 version, the extensions that are the project's own, the sites it configures, and the commands the repository actually declares — a check you recommend that the repository does not declare is a wrong answer however sensible it sounds. Then call typo3_task_guide for the workflow the task belongs to, and again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch: triaging the backlog, whether a report still reproduces, and what a fix would cost are answered here. What changed, which branch you are on, and whether a path still exists are yours to read in the checkout.\n\nWhat to call for what:\n- backend markup or a CSS class: typo3_component_lookup with the targetVersion\n- a backend icon identifier: typo3_icon_lookup\n- a label, added or reworded: typo3_label_lookup with the XLF resource the consuming code uses; a match in another is not reusable\n- what a version broke, deprecated or added, on a major you have not built on lately: typo3_changelog_lookup\n- the commit message, yours as much as the core's, and its branches: typo3_commit_message_guide\n- the whole procedure, not one fact out of it: typo3_rule_lookup with a documentId typo3_project_describe lists\nWhere a typo3-* skill in your listing covers the task, activate it: it makes these calls.\n\nAnswers are filtered by targetVersion or by the version read, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user: its matching is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what is covered, by which tool, and which installation is read.",
         "excludedTools": {
             "names": [],
             "ignored": [],

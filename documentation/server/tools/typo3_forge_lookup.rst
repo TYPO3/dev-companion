@@ -570,8 +570,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-02 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/,
+Recorded on 2026-09-09 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
 — vendor/autoload.php is not there either, and composer install writes both.
@@ -629,7 +629,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/issues/110348.json?include=journals,relations,attachments",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 0,
         "terms": [],
         "categories": [],
@@ -1003,7 +1003,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/issues/88556.json?include=journals,relations,attachments",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 0,
         "terms": [],
         "categories": [],
@@ -1300,7 +1300,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/issues/14858.json?include=journals,relations,attachments",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 0,
         "terms": [],
         "categories": [],
@@ -1435,7 +1435,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/issues/99999999.json?include=journals,relations,attachments",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 0,
         "terms": [],
         "categories": [],
@@ -1618,7 +1618,7 @@ Text:
     TYPO3 issue tracker: no issue matches "file renderer RendererRegistry FileRendererInterface" at https://forge.typo3.org.
     These words matched nothing, which is not that nobody reported it: an issue worded differently is invisible to a full-text search.
     Every word has to be in the same issue, so one word nobody wrote empties the answer whatever else is in it.
-    Asked one word at a time: "file" reaches 13953 · "renderer" reaches 1175 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
+    Asked one word at a time: "file" reaches 13964 · "renderer" reaches 1175 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
     No issue on the tracker carries "FileRendererInterface". A query it is in is empty whatever else is in it, so drop it.
     "RendererRegistry" is the narrowest of the rest and reaches something: ask it on its own, then read the subjects.
     What no wording of the report reaches is enumerated instead: backlog "newest" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — "import export", "rte" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.
@@ -1639,7 +1639,7 @@ Data:
         "terms": [
             {
                 "term": "file",
-                "matchCount": 13953
+                "matchCount": 13964
             },
             {
                 "term": "renderer",
@@ -1679,7 +1679,7 @@ Text:
 
 .. code-block:: text
 
-    TYPO3 issue tracker: 3 of 2432 open issues of the TYPO3 Core project, oldest filed first
+    TYPO3 issue tracker: 3 of 2399 open issues of the TYPO3 Core project, oldest filed first
     This is a page and not the set. What comes after it is reached by a narrower filter — an earlier date, one tracker — rather than by a larger limit, because the order is the tracker's own and more of it is more of the same end. breakdown answers how the whole of it is distributed.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
@@ -1727,8 +1727,8 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
-        "total": 2432,
+        "placedAgainst": "14.3.7-dev",
+        "total": 2399,
         "terms": [],
         "categories": [],
         "categoriesUsed": [],
@@ -1918,7 +1918,7 @@ Text:
     This is a page and not the set. What comes after it is reached by a narrower filter — an earlier date, one tracker — rather than by a larger limit, because the order is the tracker's own and more of it is more of the same end. breakdown answers how the whole of it is distributed.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
-    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 15.0.0-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
+    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 14.3.7-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
     An area is where an issue was filed and not everything it is about. A report about this one regularly sits under another area, so what came back is a floor rather than the set — query the words as well where the question is about a subject. An issue carrying no Category at all is in no area, and thousands of the open bugs carry none, so no wording of this reaches one: ask again without category, narrowed by createdSince instead, where the question is whether it was reported.
 
     ## #87400 CKEditor: assign correct CSS class to tags with entryHTMLparser_db
@@ -1958,7 +1958,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=open&sort=updated_on%3Aasc&tracker_id=1&category_id=1001",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 22,
         "terms": [],
         "categories": [],
@@ -2140,7 +2140,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=15&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 0,
         "terms": [],
         "categories": [
@@ -2230,7 +2230,7 @@ Text:
     This is a page and not the set, and limit stops at 50. What reaches the rest is breakdown, which answers how the whole set is distributed — there are no other words to narrow a person by, and a tracker or a date answers a smaller question than the one asked.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
-    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 15.0.0-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
+    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 14.3.7-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
 
     ## #15488 miscellaneous extensions dont work
     Bug · Closed · filed by Frank Nägler · unassigned · filed 2006-01-23 · last touched 2006-01-24 · https://forge.typo3.org/issues/15488
@@ -2264,7 +2264,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=%2A&sort=created_on%3Aasc&author_id=52",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 621,
         "terms": [],
         "categories": [],
@@ -2401,7 +2401,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=15&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 0,
         "terms": [],
         "categories": [],
@@ -2487,7 +2487,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&author_id=52&status_id=open&sort=updated_on%3Aasc https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&assigned_to_id=52&status_id=open&sort=updated_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 5,
         "terms": [],
         "categories": [],
@@ -2644,7 +2644,7 @@ Text:
     TYPO3 issue tracker: 764 issues of the TYPO3 Core project whatever their status, filed by or assigned to Frank Nägler, oldest filed first
     Counted over all 764 of them, as the shape of the set rather than its rows.
     Ask again without breakdown, narrowed to the part this points at, for the issues themselves.
-    Status: Closed 725 · Rejected 34 · Accepted 3 · Needs Feedback 1 · Under Review 1
+    Status: Closed 725 · Rejected 34 · Accepted 3 · Needs Feedback 2
     Tracker: Task 401 · Bug 301 · Feature 54 · Epic 4 · Story 4
     Area: none 178 · Backend User Interface 163 · Backend API 126 · Backend JavaScript 109 · FormEngine aka TCEforms 29 · Install Tool 26 · Documentation 13 · Code Cleanup 12 · TypoScript 10 · Frontend 9 · Site Handling, Site Sets & Routing 8 · Fluid 7 · and 29 more holding 74
     Filed in: 2015 200 · 2014 124 · 2016 113 · 2018 104 · 2017 89 · 2019 62 · 2024 18 · 2022 12 · 2020 11 · 2023 5 · 2021 4 · 2006 3 · and 9 more holding 19
@@ -2658,7 +2658,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=100&author_id=52&status_id=%2A&sort=created_on%3Aasc https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=100&assigned_to_id=52&status_id=%2A&sort=created_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.7-dev",
         "total": 764,
         "terms": [],
         "categories": [],
@@ -2693,11 +2693,7 @@ Data:
                         },
                         {
                             "name": "Needs Feedback",
-                            "count": 1
-                        },
-                        {
-                            "name": "Under Review",
-                            "count": 1
+                            "count": 2
                         }
                     ],
                     "withheldBuckets": 0,

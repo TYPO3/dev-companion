@@ -70,8 +70,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/,
+Recorded on 2026-09-09 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
 — vendor/autoload.php is not there either, and composer install writes both.
@@ -98,7 +98,8 @@ Text:
       backend.alt_doc
 
     Reference a label in it as "backend.alt_doc:<trans-unit id>" — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
-    Composed for the installation here, TYPO3 15.0.0-dev. State targetVersion where the label is being written for another branch.
+    A backend JavaScript module writes the same value as an import: import labels from "~labels/backend.alt_doc", then labels.get("<trans-unit id>").
+    Composed for the installation here, TYPO3 14.3.7-dev. State targetVersion where the label is being written for another branch.
     Which trans-units the file actually holds is a property of your checkout: read the file, and remember that an installation can override it through LANG/resourceOverrides.
 
 Data:
@@ -107,9 +108,10 @@ Data:
 
     {
         "path": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf",
-        "targetVersion": 15,
+        "targetVersion": 14,
         "domain": "backend.alt_doc",
-        "domainOnNewerVersions": null
+        "domainOnNewerVersions": null,
+        "moduleImport": "~labels/backend.alt_doc"
     }
 
 domain: checkout path
@@ -132,7 +134,8 @@ Text:
       core.messages
 
     Reference a label in it as "core.messages:<trans-unit id>" — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
-    Composed for the installation here, TYPO3 15.0.0-dev. State targetVersion where the label is being written for another branch.
+    A backend JavaScript module writes the same value as an import: import labels from "~labels/core.messages", then labels.get("<trans-unit id>").
+    Composed for the installation here, TYPO3 14.3.7-dev. State targetVersion where the label is being written for another branch.
     Which trans-units the file actually holds is a property of your checkout: read the file, and remember that an installation can override it through LANG/resourceOverrides.
 
 Data:
@@ -141,9 +144,10 @@ Data:
 
     {
         "path": "typo3/sysext/core/Resources/Private/Language/locallang.xlf",
-        "targetVersion": 15,
+        "targetVersion": 14,
         "domain": "core.messages",
-        "domainOnNewerVersions": null
+        "domainOnNewerVersions": null,
+        "moduleImport": "~labels/core.messages"
     }
 
 domain: on an older target
@@ -203,6 +207,6 @@ Data:
 
     {
         "path": "somewhere/else.xlf",
-        "targetVersion": 15,
+        "targetVersion": 14,
         "domain": null
     }

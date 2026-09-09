@@ -202,10 +202,10 @@ The answer carries exactly one of these sets of fields: ``query``,
 Answered
 --------
 
-Recorded on 2026-09-02 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-09 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
-15.0.0-dev, the main core checkout below .checkouts/, whose console could not
+14.3.7-dev, the 14.3 core checkout below .checkouts/, whose console could not
 be reached: <installation> has no TYPO3 console — none of bin/typo3,
 vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -227,7 +227,7 @@ Called with:
         "query": "ext_tables.php"
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
@@ -272,7 +272,6 @@ Data:
             }
         ],
         "versions": [
-            "15.0",
             "14.3",
             "14.3.x",
             "14.2",
@@ -329,7 +328,9 @@ Data:
             "7.0"
         ],
         "answeredBy": "packages",
-        "versionsFromTheManual": [],
+        "versionsFromTheManual": [
+            "15.0"
+        ],
         "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned."
     }
 
@@ -449,22 +450,26 @@ Called with:
         "tag": "FullyScanned"
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
 
 .. code-block:: text
 
-    388 of the 969 entries narrowed by version and type are tagged "FullyScanned" — showing the first 20:
+    390 of the 972 entries narrowed by version and type are tagged "FullyScanned" — showing the first 20:
     - 15.0 Deprecation: Experimental backend ViewHelpers (#110148) — removed in v16.0
-      EXT:core/Documentation/Changelog/15.0/Deprecation-110148-ExperimentalBackendViewHelpers.rst — Fluid, FullyScanned, ext:fluid
+      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110148-ExperimentalBackendViewHelpers.html — Fluid, FullyScanned, ext:fluid
     - 15.0 Deprecation: StringUtility::multibyteStringPad() method (#110202) — removed in v16.0
-      EXT:core/Documentation/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.rst — PHP-API, FullyScanned, ext:core
+      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html — PHP-API, FullyScanned, ext:core
     - 15.0 Deprecation: DataHandler->setCorrelationId() (#110285) — removed in v16.0
-      EXT:core/Documentation/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.rst — PHP-API, FullyScanned, ext:core
+      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html — PHP-API, FullyScanned, ext:core
     - 15.0 Deprecation: AbstractXmlSitemapDataProvider (#110334) — removed in v16.0
-      EXT:core/Documentation/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.rst — PHP-API, FullyScanned, ext:seo
+      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html — PHP-API, FullyScanned, ext:seo
+    - 15.0 Deprecation: LazyLoadingProxy and LazyObjectStorage (#110347) — removed in v16.0
+      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html — PHP-API, FullyScanned, ext:extbase
+    - 15.0 Deprecation: CommandRegistry->getSchedulableCommands() (#110477) — removed in v16.0
+      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html — CLI, FullyScanned, PHP-API, ext:core
     - 14.3 Deprecation: Lowlevel DatabaseIntegrityCheck class (#107931) — removed in v15.0
       EXT:core/Documentation/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.rst — PHP-API, FullyScanned, ext:lowlevel
     - 14.3 Deprecation: BackendUtility item list label methods (#109519) — removed in v15.0
@@ -493,12 +498,9 @@ Text:
       EXT:core/Documentation/Changelog/14.2/Deprecation-109230-FormResultCompiler.rst — Backend, FullyScanned, ext:backend
     - 14.2 Deprecation: TypoScript-based form YAML registration (#109412) — removed in v15.0
       EXT:core/Documentation/Changelog/14.2/Deprecation-109412-FormYamlConfigurationRegistration.rst — YAML, Frontend, Backend, FullyScanned, ext:form
-    - 14.1 Deprecation: Fluid namespaces in TYPO3_CONF_VARS (#108524)
-      EXT:core/Documentation/Changelog/14.1/Deprecation-108524-FluidNamespacesInTYPO3_CONF_VARS.rst — Fluid, LocalConfiguration, FullyScanned, ext:fluid
-    - 14.1 Deprecation: Deprecate CommandNameAlreadyInUseException (#108667)
-      EXT:core/Documentation/Changelog/14.1/Deprecation-108667-DeprecateCommandNameAlreadyInUseException.rst — PHP-API, FullyScanned, ext:core
 
     Read the file for the description and the migration, or ask again for the one entry by its issue number, which carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
+    Entries above 14.3 come from docs.typo3.org rather than from this installation: they are what the host publishes today, they are linked by URL instead of by EXT: path, and for a major that is not released yet they are still being written. An identifier search does not reach them — their text is not on disk, so they are searched by name and by the title the manual states.
     A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
 Data:
@@ -507,7 +509,7 @@ Data:
 
     {
         "query": "",
-        "matchCount": 388,
+        "matchCount": 390,
         "matchedIn": "name",
         "tags": [
             "Backend",
@@ -580,8 +582,8 @@ Data:
                     "FullyScanned",
                     "ext:fluid"
                 ],
-                "file": "EXT:core/Documentation/Changelog/15.0/Deprecation-110148-ExperimentalBackendViewHelpers.rst",
-                "publishedIn": "installation"
+                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110148-ExperimentalBackendViewHelpers.html",
+                "publishedIn": "manual"
             },
             {
                 "type": "Deprecation",
@@ -595,8 +597,8 @@ Data:
                     "FullyScanned",
                     "ext:core"
                 ],
-                "file": "EXT:core/Documentation/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.rst",
-                "publishedIn": "installation"
+                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html",
+                "publishedIn": "manual"
             },
             {
                 "type": "Deprecation",
@@ -610,8 +612,8 @@ Data:
                     "FullyScanned",
                     "ext:core"
                 ],
-                "file": "EXT:core/Documentation/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.rst",
-                "publishedIn": "installation"
+                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html",
+                "publishedIn": "manual"
             },
             {
                 "type": "Deprecation",
@@ -625,8 +627,39 @@ Data:
                     "FullyScanned",
                     "ext:seo"
                 ],
-                "file": "EXT:core/Documentation/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.rst",
-                "publishedIn": "installation"
+                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html",
+                "publishedIn": "manual"
+            },
+            {
+                "type": "Deprecation",
+                "version": "15.0",
+                "issue": "110347",
+                "title": "LazyLoadingProxy and LazyObjectStorage",
+                "removal": "16.0",
+                "migration": "",
+                "tags": [
+                    "PHP-API",
+                    "FullyScanned",
+                    "ext:extbase"
+                ],
+                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
+                "publishedIn": "manual"
+            },
+            {
+                "type": "Deprecation",
+                "version": "15.0",
+                "issue": "110477",
+                "title": "CommandRegistry->getSchedulableCommands()",
+                "removal": "16.0",
+                "migration": "",
+                "tags": [
+                    "CLI",
+                    "FullyScanned",
+                    "PHP-API",
+                    "ext:core"
+                ],
+                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
+                "publishedIn": "manual"
             },
             {
                 "type": "Deprecation",
@@ -841,41 +874,9 @@ Data:
                 ],
                 "file": "EXT:core/Documentation/Changelog/14.2/Deprecation-109412-FormYamlConfigurationRegistration.rst",
                 "publishedIn": "installation"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.1",
-                "issue": "108524",
-                "title": "Fluid namespaces in TYPO3_CONF_VARS",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "Fluid",
-                    "LocalConfiguration",
-                    "FullyScanned",
-                    "ext:fluid"
-                ],
-                "file": "EXT:core/Documentation/Changelog/14.1/Deprecation-108524-FluidNamespacesInTYPO3_CONF_VARS.rst",
-                "publishedIn": "installation"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.1",
-                "issue": "108667",
-                "title": "Deprecate CommandNameAlreadyInUseException",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "EXT:core/Documentation/Changelog/14.1/Deprecation-108667-DeprecateCommandNameAlreadyInUseException.rst",
-                "publishedIn": "installation"
             }
         ],
         "versions": [
-            "15.0",
             "14.3",
             "14.3.x",
             "14.2",
@@ -932,7 +933,9 @@ Data:
             "7.0"
         ],
         "answeredBy": "packages",
-        "versionsFromTheManual": [],
+        "versionsFromTheManual": [
+            "15.0"
+        ],
         "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned."
     }
 
@@ -1437,7 +1440,7 @@ Called with:
         "query": "quantumflux"
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
@@ -1446,7 +1449,7 @@ Text:
 
     No changelog entry in this installation carries all of "quantumflux".
     A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId "core/contribution/changelog".
-    This installation ships 15.0, 14.3, 14.3.x, 14.2, 14.1, 14.0, 13.4, 13.4.x and older. Nothing above that is published yet.
+    This installation ships 14.3, 14.3.x, 14.2, 14.1, 14.0, 13.4, 13.4.x, 13.3 and older. Above that, 15.0 is read from docs.typo3.org — what the host publishes today, which for a major that is not released yet is still being written.
 
 Data:
 
@@ -1458,7 +1461,6 @@ Data:
         "tags": [],
         "entries": [],
         "versions": [
-            "15.0",
             "14.3",
             "14.3.x",
             "14.2",
@@ -1515,7 +1517,9 @@ Data:
             "7.0"
         ],
         "answeredBy": "packages",
-        "versionsFromTheManual": [],
+        "versionsFromTheManual": [
+            "15.0"
+        ],
         "termCounts": [
             {
                 "term": "quantumflux",

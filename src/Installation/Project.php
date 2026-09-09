@@ -111,7 +111,7 @@ final class Project
      *     environment: array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null,
      *     extensions: array<int, array{key: string, path: string, origin: string, deprecatedFiles: array<int, array{file: string, changelog: string, predicate: string, cost: string}>}>,
      *     sites: array<int, array{identifier: string, base: string, rootPageId: ?int, sets: array<int, string>, languages: array<int, string>}>,
-     *     commands: array<int, array{command: string, source: string, declares: string, runs: string}>,
+     *     commands: array<int, array{command: string, source: string, declares: string, runs: string, runThrough: string|null}>,
      *     uncheckedKinds: array<int, string>,
      *     patches: array<int, array{package: string, description: string, file: string}>
      * }|null
@@ -129,7 +129,7 @@ final class Project
         $corePhp = self::corePhpConstraint();
         $bound = Instance::installedPhpBound($root);
         $environment = self::environment($root);
-        $commands = self::commands($root, $manifest, $environment);
+        $commands = self::commands($root, $project['kind'], $manifest, $environment);
 
         return [
             'root' => $root,
@@ -716,9 +716,9 @@ final class Project
      *
      * @param array<string, mixed> $manifest
      * @param array{via: string, entered: bool}|null $environment
-     * @return array<int, array{command: string, source: string, invocation: string, declares: string, runs: string}>
+     * @return array<int, array{command: string, source: string, invocation: string, declares: string, runs: string, runThrough: string|null}>
      */
-    private static function commands(string $root, array $manifest, ?array $environment): array
+    private static function commands(string $root, string $kind, array $manifest, ?array $environment): array
     {
         $commands = [];
         $scripts = is_array($manifest['scripts'] ?? null) ? $manifest['scripts'] : [];
@@ -730,6 +730,7 @@ final class Project
                 'invocation' => self::invocation($command, $environment),
                 'declares' => self::declaration($declaration),
                 'runs' => self::runs($declaration, $scripts),
+                'runThrough' => null,
             ];
         }
 
@@ -743,11 +744,30 @@ final class Project
                     'invocation' => self::invocation($command, $environment),
                     'declares' => self::declaration($declaration),
                     'runs' => self::runs($declaration, []),
+                    'runThrough' => self::runThrough($kind),
                 ];
             }
         }
 
         return $commands;
+    }
+
+    /**
+     * The command the repository's own contract runs an npm script through.
+     *
+     * Only the core has one. Its `AGENTS.md` forbids invoking npm directly on
+     * `main`, `14.3` and `13.4`, `12.4` carries no such file, and all four ship
+     * the dispatcher — so the sentence names the dispatcher rather than the
+     * file (`D-ANS-152`). It rides on the entry because a session read the
+     * paragraph above the list and reported the pointer as absent.
+     */
+    private static function runThrough(string $kind): ?string
+    {
+        if ($kind !== Instance::KIND_CORE_CHECKOUT) {
+            return null;
+        }
+
+        return 'Build/Scripts/runTests.sh -s <suite>';
     }
 
     /**

@@ -380,8 +380,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-02 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/,
+Recorded on 2026-09-09 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
 — vendor/autoload.php is not there either, and composer install writes both.
@@ -1123,10 +1123,10 @@ Text:
     ## [WIP][FEATURE] Introduce Action API (NEW)
     Change 91563 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563
     Change-Id: I242eedc16bb7ca1e5c83adeaa0526a9e68f275e2
-    Patch set 47 · 3706a4b0bd418b07bfca5b16106f1f2aac464ad1
-    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/63/91563/47
-    Last moved: 2026-08-27 09:05:26.000000000
-    +1942 -152 · no longer merges · pushed 2025-11-11
+    Patch set 48 · 4cc7871372146821db78d3c77d5b3878f720a4ee
+    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/63/91563/48
+    Last moved: 2026-09-09 12:05:37.000000000
+    +1916 -152 · merges · pushed 2025-11-11
     Releases: main
     Verified: needs a vote · core-ci +1
     Code-Review: needs a vote · core-ci 0
@@ -1149,7 +1149,7 @@ Text:
       Change-Id: I242eedc16bb7ca1e5c83adeaa0526a9e68f275e2
 
     ### Files (30)
-    - added Build/Sources/TypeScript/core/action/request.ts · +52 -0
+    - added Build/Sources/TypeScript/core/action/request.ts · +26 -0
     - modified composer.json · +2 -0
     - modified composer.lock · +149 -149
     - modified typo3/sysext/backend/Classes/Controller/BackendController.php · +10 -2
@@ -1180,28 +1180,26 @@ Text:
     - added typo3/sysext/core/Tests/Functional/Fixtures/Extensions/test_action/composer.json · +23 -0
     - modified typo3/sysext/core/composer.json · +1 -0
 
-    ### Relation chain (21 changes, 15 stacked on this one and 5 under it)
-    - 92724 · ABANDONED · [WIP][FEATURE] Implement OAuth authorization server · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724
-    - 92323 · MERGED · [TASK] Avoid `json_encode()` workarounds in Settings API · chained at patch set 8, now at 10 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323
+    ### Relation chain (19 changes, 15 stacked on this one and 3 under it)
     - 92721 · ABANDONED · [WIP][BUGFIX] Fix referrer for login redirect · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92721
     - 88507 · NEW · [WIP][FEATURE] AI suggest demo using tools API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507
-    - 93527 · NEW · [WIP][BUGFIX] Avoid invalidly showing login form when opening a shared link · chained at patch set 3, now at 4 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527
     - 92197 · NEW · [WIP][FEATURE] Provide Record Actions · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92197
     - 92196 · NEW · [WIP][TASK] Add record serializer · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196
-    - 93599 · NEW · [WIP][TASK] Migrate resource endpoints to Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93599
-    - 92191 · NEW · [TASK] Migrate PageTree to Action API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92191
-    - 92322 · NEW · [TASK] Migrate dashboard to Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92322
     - 95448 · MERGED · [FEATURE] Add `patch()` to ajax-request · chained at patch set 1, now at 3 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448
+    - 92724 · ABANDONED · [WIP][FEATURE] Implement OAuth authorization server · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724
+    - 92323 · MERGED · [TASK] Avoid `json_encode()` workarounds in Settings API · chained at patch set 8, now at 10 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323
+    - 93599 · NEW · [WIP][TASK] Migrate resource endpoints to Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93599
     - 92224 · NEW · [WIP][FEATURE] Add MCP Server demo based on Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92224
     - 92223 · NEW · [WIP][FEATURE] Provide AI Tool provider based on Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92223
     - 91486 · NEW · [WIP][FEATURE] Implement API Hub · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91486
+    - 93423 · NEW · [WIP][TASK] Implement standalone redirect route option · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423
     - 91666 · NEW · [WIP][FEATURE] Provide OpenAPI spec w/ Swagger UI for Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91666
+    - 92191 · NEW · [TASK] Migrate PageTree to Action API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92191
+    - 92322 · NEW · [TASK] Migrate dashboard to Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92322
     - 91563 · NEW · [WIP][FEATURE] Introduce Action API · this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563
     - 93064 · NEW · [TASK] Introduce JSON SchemaBuilder and Schema based Hydrator · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93064
-    - 93423 · NEW · [TASK] Implement standalone redirect route option · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423
-    - 92722 · NEW · [BUGFIX] Preserve route target when MFA intercepts a route request · chained at patch set 10, now at 12 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92722
-    - 94838 · MERGED · [TASK] Improve dashboard DTO types · chained at patch set 2, now at 4 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/94838
-    - 94839 · MERGED · [TASK] Add search query data to `AfterPageTreeItemsPreparedEvent` · chained at patch set 2, now at 3 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/94839
+    - 93527 · NEW · [BUGFIX] Avoid invalidly showing login form when opening a shared link · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527
+    - 95713 · NEW · [BUGFIX] Use exact cookie parameters for cookie removal · https://review.typo3.org/c/Packages/TYPO3.CMS/+/95713
 
     The paths above are what the current patch set touches, and they are the argument the work after this takes: `typo3_hint_lookup` for the conventions of each subsystem in the list, `typo3_test_run_guide` for the suites that can fail on them. What is not here is the diff — the hunks are what a fetch is for, and a shortlist is triaged without fetching anything.
 
@@ -1244,7 +1242,7 @@ Data:
                     {
                         "path": "Build/Sources/TypeScript/core/action/request.ts",
                         "action": "added",
-                        "insertions": 52,
+                        "insertions": 26,
                         "deletions": 0,
                         "binary": false,
                         "movedFrom": null
@@ -1486,17 +1484,17 @@ Data:
                 "subject": "[WIP][FEATURE] Introduce Action API",
                 "status": "NEW",
                 "branch": "main",
-                "patchSet": 47,
-                "commit": "3706a4b0bd418b07bfca5b16106f1f2aac464ad1",
+                "patchSet": 48,
+                "commit": "4cc7871372146821db78d3c77d5b3878f720a4ee",
                 "project": "Packages/TYPO3.CMS",
-                "updated": "2026-08-27 09:05:26.000000000",
+                "updated": "2026-09-09 12:05:37.000000000",
                 "created": "2025-11-11 17:18:39.000000000",
-                "insertions": 1942,
+                "insertions": 1916,
                 "deletions": 152,
-                "mergeable": false,
+                "mergeable": true,
                 "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563",
                 "fetch": {
-                    "ref": "refs/changes/63/91563/47",
+                    "ref": "refs/changes/63/91563/48",
                     "remote": "https://review.typo3.org/Packages/TYPO3.CMS"
                 },
                 "labels": [
@@ -1508,7 +1506,7 @@ Data:
                             {
                                 "voter": "core-ci",
                                 "value": 1,
-                                "on": "2026-08-27 09:05:26.000000000"
+                                "on": "2026-09-09 12:05:37.000000000"
                             }
                         ]
                     },
@@ -1530,24 +1528,6 @@ Data:
                 "comments": [],
                 "chain": [
                     {
-                        "number": 92724,
-                        "status": "ABANDONED",
-                        "subject": "[WIP][FEATURE] Implement OAuth authorization server",
-                        "thisChange": false,
-                        "patchSet": 6,
-                        "chainedAt": 6,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724"
-                    },
-                    {
-                        "number": 92323,
-                        "status": "MERGED",
-                        "subject": "[TASK] Avoid `json_encode()` workarounds in Settings API",
-                        "thisChange": false,
-                        "patchSet": 10,
-                        "chainedAt": 8,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323"
-                    },
-                    {
                         "number": 92721,
                         "status": "ABANDONED",
                         "subject": "[WIP][BUGFIX] Fix referrer for login redirect",
@@ -1564,15 +1544,6 @@ Data:
                         "patchSet": 15,
                         "chainedAt": 15,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507"
-                    },
-                    {
-                        "number": 93527,
-                        "status": "NEW",
-                        "subject": "[WIP][BUGFIX] Avoid invalidly showing login form when opening a shared link",
-                        "thisChange": false,
-                        "patchSet": 4,
-                        "chainedAt": 3,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527"
                     },
                     {
                         "number": 92197,
@@ -1593,33 +1564,6 @@ Data:
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196"
                     },
                     {
-                        "number": 93599,
-                        "status": "NEW",
-                        "subject": "[WIP][TASK] Migrate resource endpoints to Actions API",
-                        "thisChange": false,
-                        "patchSet": 5,
-                        "chainedAt": 5,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93599"
-                    },
-                    {
-                        "number": 92191,
-                        "status": "NEW",
-                        "subject": "[TASK] Migrate PageTree to Action API",
-                        "thisChange": false,
-                        "patchSet": 22,
-                        "chainedAt": 22,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92191"
-                    },
-                    {
-                        "number": 92322,
-                        "status": "NEW",
-                        "subject": "[TASK] Migrate dashboard to Actions API",
-                        "thisChange": false,
-                        "patchSet": 13,
-                        "chainedAt": 13,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92322"
-                    },
-                    {
                         "number": 95448,
                         "status": "MERGED",
                         "subject": "[FEATURE] Add `patch()` to ajax-request",
@@ -1629,12 +1573,39 @@ Data:
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448"
                     },
                     {
+                        "number": 92724,
+                        "status": "ABANDONED",
+                        "subject": "[WIP][FEATURE] Implement OAuth authorization server",
+                        "thisChange": false,
+                        "patchSet": 6,
+                        "chainedAt": 6,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724"
+                    },
+                    {
+                        "number": 92323,
+                        "status": "MERGED",
+                        "subject": "[TASK] Avoid `json_encode()` workarounds in Settings API",
+                        "thisChange": false,
+                        "patchSet": 10,
+                        "chainedAt": 8,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323"
+                    },
+                    {
+                        "number": 93599,
+                        "status": "NEW",
+                        "subject": "[WIP][TASK] Migrate resource endpoints to Actions API",
+                        "thisChange": false,
+                        "patchSet": 6,
+                        "chainedAt": 6,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93599"
+                    },
+                    {
                         "number": 92224,
                         "status": "NEW",
                         "subject": "[WIP][FEATURE] Add MCP Server demo based on Actions API",
                         "thisChange": false,
-                        "patchSet": 20,
-                        "chainedAt": 20,
+                        "patchSet": 22,
+                        "chainedAt": 22,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92224"
                     },
                     {
@@ -1642,8 +1613,8 @@ Data:
                         "status": "NEW",
                         "subject": "[WIP][FEATURE] Provide AI Tool provider based on Actions API",
                         "thisChange": false,
-                        "patchSet": 17,
-                        "chainedAt": 17,
+                        "patchSet": 19,
+                        "chainedAt": 19,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92223"
                     },
                     {
@@ -1651,26 +1622,53 @@ Data:
                         "status": "NEW",
                         "subject": "[WIP][FEATURE] Implement API Hub",
                         "thisChange": false,
-                        "patchSet": 31,
-                        "chainedAt": 31,
+                        "patchSet": 33,
+                        "chainedAt": 33,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91486"
+                    },
+                    {
+                        "number": 93423,
+                        "status": "NEW",
+                        "subject": "[WIP][TASK] Implement standalone redirect route option",
+                        "thisChange": false,
+                        "patchSet": 9,
+                        "chainedAt": 9,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423"
                     },
                     {
                         "number": 91666,
                         "status": "NEW",
                         "subject": "[WIP][FEATURE] Provide OpenAPI spec w/ Swagger UI for Actions API",
                         "thisChange": false,
-                        "patchSet": 24,
-                        "chainedAt": 24,
+                        "patchSet": 25,
+                        "chainedAt": 25,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91666"
+                    },
+                    {
+                        "number": 92191,
+                        "status": "NEW",
+                        "subject": "[TASK] Migrate PageTree to Action API",
+                        "thisChange": false,
+                        "patchSet": 23,
+                        "chainedAt": 23,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92191"
+                    },
+                    {
+                        "number": 92322,
+                        "status": "NEW",
+                        "subject": "[TASK] Migrate dashboard to Actions API",
+                        "thisChange": false,
+                        "patchSet": 14,
+                        "chainedAt": 14,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92322"
                     },
                     {
                         "number": 91563,
                         "status": "NEW",
                         "subject": "[WIP][FEATURE] Introduce Action API",
                         "thisChange": true,
-                        "patchSet": 47,
-                        "chainedAt": 47,
+                        "patchSet": 48,
+                        "chainedAt": 48,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563"
                     },
                     {
@@ -1678,45 +1676,27 @@ Data:
                         "status": "NEW",
                         "subject": "[TASK] Introduce JSON SchemaBuilder and Schema based Hydrator",
                         "thisChange": false,
-                        "patchSet": 17,
-                        "chainedAt": 17,
+                        "patchSet": 18,
+                        "chainedAt": 18,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93064"
                     },
                     {
-                        "number": 93423,
+                        "number": 93527,
                         "status": "NEW",
-                        "subject": "[TASK] Implement standalone redirect route option",
+                        "subject": "[BUGFIX] Avoid invalidly showing login form when opening a shared link",
                         "thisChange": false,
-                        "patchSet": 8,
-                        "chainedAt": 8,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423"
+                        "patchSet": 7,
+                        "chainedAt": 7,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527"
                     },
                     {
-                        "number": 92722,
+                        "number": 95713,
                         "status": "NEW",
-                        "subject": "[BUGFIX] Preserve route target when MFA intercepts a route request",
-                        "thisChange": false,
-                        "patchSet": 12,
-                        "chainedAt": 10,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92722"
-                    },
-                    {
-                        "number": 94838,
-                        "status": "MERGED",
-                        "subject": "[TASK] Improve dashboard DTO types",
-                        "thisChange": false,
-                        "patchSet": 4,
-                        "chainedAt": 2,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/94838"
-                    },
-                    {
-                        "number": 94839,
-                        "status": "MERGED",
-                        "subject": "[TASK] Add search query data to `AfterPageTreeItemsPreparedEvent`",
+                        "subject": "[BUGFIX] Use exact cookie parameters for cookie removal",
                         "thisChange": false,
                         "patchSet": 3,
-                        "chainedAt": 2,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/94839"
+                        "chainedAt": 3,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/95713"
                     }
                 ],
                 "issues": [],
@@ -1724,7 +1704,7 @@ Data:
                     "main"
                 ],
                 "messages": null,
-                "botMessageCount": 48,
+                "botMessageCount": 49,
                 "conflicts": [],
                 "cherryPickOf": null
             }
@@ -1777,10 +1757,20 @@ Text:
 
     TYPO3 core review server: https://review.typo3.org
     Query: project:"Packages/TYPO3.CMS" status:open -is:wip delta:<=60 label:Code-Review>=1 -label:Code-Review<=-1 -label:Verified<=-1 is:mergeable
-    3 of 30 open core changes, oldest pushed first.
+    3 of 28 open core changes, oldest pushed first.
     This is a page and not the set, and limit stops at 25. What comes after it is reached by a narrower filter — a smaller maxSize, a branch, an earlier updatedBefore — rather than by a larger limit, because more of one order is more of the same end.
     Age is a candidate and never a finding. The oldest changes are regularly the largest and the ones that no longer merge, so maxSize and mergeable are what turn this order into a shortlist — and what a change is actually waiting on is read by passing its number back as change, which answers the votes with their voters and the comments with their threads.
     `typo3-core-patch-review` is the workflow a change picked off this page opens, and `typo3-core-patch-checkout` is what gets the patch set into a checkout. Open the one this task is before reading a diff.
+
+    ## [TASK] Improve page resolution performance (NEW)
+    Change 81309 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/81309
+    Change-Id: I8925a11688b50d34ae68a3861d437358bc3ab1b9
+    Patch set 3
+    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/09/81309/3
+    Last moved: 2026-09-08 15:39:39.000000000
+    +1 -1 · merges · 1 unresolved thread of 18 comments · pushed 2023-10-02
+    Verified: needs a vote
+    Code-Review: needs a vote
 
     ## [BUGFIX] Ensure invalid pages should not stop DataHandler (NEW)
     Change 90384 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/90384
@@ -1802,16 +1792,6 @@ Text:
     Verified: needs a vote
     Code-Review: needs a vote
 
-    ## [TASK] Change appearance and position of Install Tool login buttons (NEW)
-    Change 91606 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91606
-    Change-Id: Ifdb6cc9273a837a6cce72ce310ffcd05e800acf4
-    Patch set 4
-    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/06/91606/4
-    Last moved: 2026-08-06 16:20:31.000000000
-    +2 -2 · merges · pushed 2025-11-13
-    Verified: needs a vote
-    Code-Review: needs a vote
-
     The branches that take a patch today, whichever one the change above targets: main is the development line, which every core change is written against first; 14.3 is in regular support until 2029-06-30; 13.4 is in regular support until 2027-12-31. Read from https://get.typo3.org/api/v1/major/ on 2026-08-05; a core clone carries no such list, since "git branch -r" reaches back to TYPO3_3-6 and says nothing about which of those is still maintained. Which of these a change belongs on is the author's claim rather than a consequence of the list — `typo3_commit_message_guide` with `workflow="core"` is what reads a `Releases:` trailer against them.
 
     The fetch goes to the review server rather than to `origin`: a core clone fetches from the GitHub mirror, where `refs/changes/…` does not exist. `git switch --detach FETCH_HEAD` is what puts the checkout on the patch set afterwards.
@@ -1825,6 +1805,52 @@ Data:
         "source": "https://review.typo3.org",
         "query": "project:\"Packages/TYPO3.CMS\" status:open -is:wip delta:<=60 label:Code-Review>=1 -label:Code-Review<=-1 -label:Verified<=-1 is:mergeable",
         "changes": [
+            {
+                "number": 81309,
+                "message": null,
+                "files": null,
+                "changeId": "I8925a11688b50d34ae68a3861d437358bc3ab1b9",
+                "subject": "[TASK] Improve page resolution performance",
+                "status": "NEW",
+                "branch": "main",
+                "patchSet": 3,
+                "commit": "",
+                "project": "Packages/TYPO3.CMS",
+                "updated": "2026-09-08 15:39:39.000000000",
+                "created": "2023-10-02 10:51:12.000000000",
+                "insertions": 1,
+                "deletions": 1,
+                "mergeable": true,
+                "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/81309",
+                "fetch": {
+                    "ref": "refs/changes/09/81309/3",
+                    "remote": "https://review.typo3.org/Packages/TYPO3.CMS"
+                },
+                "labels": [
+                    {
+                        "label": "Verified",
+                        "state": "NEED",
+                        "satisfied": false,
+                        "votes": null
+                    },
+                    {
+                        "label": "Code-Review",
+                        "state": "NEED",
+                        "satisfied": false,
+                        "votes": null
+                    }
+                ],
+                "commentCount": 18,
+                "unresolvedCommentCount": 1,
+                "comments": null,
+                "chain": null,
+                "issues": null,
+                "releases": null,
+                "messages": null,
+                "botMessageCount": null,
+                "conflicts": null,
+                "cherryPickOf": null
+            },
             {
                 "number": 90384,
                 "message": null,
@@ -1916,57 +1942,11 @@ Data:
                 "botMessageCount": null,
                 "conflicts": null,
                 "cherryPickOf": null
-            },
-            {
-                "number": 91606,
-                "message": null,
-                "files": null,
-                "changeId": "Ifdb6cc9273a837a6cce72ce310ffcd05e800acf4",
-                "subject": "[TASK] Change appearance and position of Install Tool login buttons",
-                "status": "NEW",
-                "branch": "main",
-                "patchSet": 4,
-                "commit": "",
-                "project": "Packages/TYPO3.CMS",
-                "updated": "2026-08-06 16:20:31.000000000",
-                "created": "2025-11-13 09:18:48.000000000",
-                "insertions": 2,
-                "deletions": 2,
-                "mergeable": true,
-                "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91606",
-                "fetch": {
-                    "ref": "refs/changes/06/91606/4",
-                    "remote": "https://review.typo3.org/Packages/TYPO3.CMS"
-                },
-                "labels": [
-                    {
-                        "label": "Verified",
-                        "state": "NEED",
-                        "satisfied": false,
-                        "votes": null
-                    },
-                    {
-                        "label": "Code-Review",
-                        "state": "NEED",
-                        "satisfied": false,
-                        "votes": null
-                    }
-                ],
-                "commentCount": 2,
-                "unresolvedCommentCount": 0,
-                "comments": null,
-                "chain": null,
-                "issues": null,
-                "releases": null,
-                "messages": null,
-                "botMessageCount": null,
-                "conflicts": null,
-                "cherryPickOf": null
             }
         ],
         "backlog": {
             "order": "oldest",
-            "read": 30,
+            "read": 28,
             "complete": true
         },
         "releaseLines": {

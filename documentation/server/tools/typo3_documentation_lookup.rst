@@ -104,8 +104,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/,
+Recorded on 2026-09-09 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
 — vendor/autoload.php is not there either, and composer install writes both.
@@ -134,7 +134,7 @@ Text:
 
     Official TYPO3 documentation for 14.3.
     Source: https://docs.typo3.org
-    Matched against page titles and section paths, never the text of a page.
+    Matched against page titles, section paths and the property names a manual declares, never the text of a page. A property is offered for a query word written the way code is, or for a query that is nothing but its name.
 
     ## Page title API
     typo3/reference-coreapi · 14.3 · https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/ApiOverview/Seo/PageTitleApi.html

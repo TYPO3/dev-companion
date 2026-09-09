@@ -187,7 +187,8 @@ final class ProjectDescribe extends ReadOnlyTool
                 'invocation' => Schema::string('The same command as it is run from where you stand, which is what to paste. Where this repository configures a DDEV project and this server is not already inside it, it is the declared command with DDEV in front. That is "ddev composer <name>" for a composer script and "ddev exec <command>" for the rest. It is the declared command unchanged everywhere else, including under TYPO3_DEV_COMPANION_CONSOLE, which reaches this installation\'s console rather than an arbitrary script.'),
                 'declares' => Schema::string('The body the manifest declares for it, lines joined with &&.'),
                 'runs' => ['type' => 'string', 'enum' => ['check', 'change', 'unknown'], 'description' => 'What running it does to the sources, read off the body rather than by running it. check: it reports and hands the code back as it was, so a task told not to change files can run it. It may still write a cache of its own. change: it rewrites something. unknown: the body does not say, which is what a test suite is, because it runs the project\'s own code.'],
-            ], ['command', 'source', 'invocation', 'declares', 'runs']), 'What this repository declares. A check that is not here does not exist here.'),
+                'runThrough' => Schema::nullableString('The command this repository\'s own contract runs this one through instead, where it has one — the reason it is here rather than the declaration. A core checkout answers it on every npm script, because the core drives them through Build/Scripts/runTests.sh, which supplies the PHP version and the database service that invoking npm directly does not, and its own AGENTS.md forbids the direct route. Null everywhere else, which means the declared command is the supported route.'),
+            ], ['command', 'source', 'invocation', 'declares', 'runs', 'runThrough']), 'What this repository declares. A check that is not here does not exist here.'),
             'uncheckedKinds' => Schema::listOf(Schema::string(), 'Kinds of file this project\'s own packages ship that no declared command names a checker for — "CSS", "PHP", "Sass", "TypeScript", "XLIFF". It says what is not covered and never what to add: which standards a repository holds itself to are its own. Read off the checkers named in the declared bodies, so a tool this server does not know contributes no coverage and a kind may be listed that something unrecognised does check. JavaScript is never listed, because a .js a package ships is as often build output or a vendored library as source.'),
             'patches' => Schema::listOf(Schema::object([
                 'package' => Schema::string('The dependency being patched.'),
@@ -296,7 +297,7 @@ final class ProjectDescribe extends ReadOnlyTool
                 $command['source'],
                 $command['runs'],
                 $command['declares'],
-            );
+            ) . ($command['runThrough'] === null ? '' : ' Run it through ' . $command['runThrough'] . '.');
         }
 
         foreach (self::node($project['node'], $project['environment']) as $line) {
@@ -439,7 +440,7 @@ final class ProjectDescribe extends ReadOnlyTool
      * answer said nothing about running them while a session spent eight round
      * trips working it out by hand — `D-ANS-092`.
      *
-     * @param array<int, array{command: string, source: string, declares: string, runs: string}> $commands
+     * @param array<int, array{command: string, source: string, declares: string, runs: string, runThrough: string|null}> $commands
      */
     private static function suites(string $kind, array $commands): string
     {

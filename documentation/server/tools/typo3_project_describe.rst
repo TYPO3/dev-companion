@@ -376,6 +376,14 @@ Answers with
         # the body does not say, which is what a test suite is, because it runs the
         # project's own code.
         runs: string
+        # The command this repository's own contract runs this one through instead,
+        # where it has one — the reason it is here rather than the declaration. A
+        # core checkout answers it on every npm script, because the core drives them
+        # through Build/Scripts/runTests.sh, which supplies the PHP version and the
+        # database service that invoking npm directly does not, and its own
+        # AGENTS.md forbids the direct route. Null everywhere else, which means the
+        # declared command is the supported route.
+        runThrough: string or null
     # Kinds of file this project's own packages ship that no declared command names
     # a checker for — "CSS", "PHP", "Sass", "TypeScript", "XLIFF". It says what is
     # not covered and never what to add: which standards a repository holds itself
@@ -463,7 +471,7 @@ The answer carries exactly one of these sets of fields: ``root``, ``installed``,
 Answered
 --------
 
-Recorded on 2026-09-04 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-09 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
 14.3.7-dev, the 14.3 core checkout below .checkouts/, whose console could not
@@ -509,20 +517,20 @@ Text:
     - composer gerrit:setup:commitMessageHook:enable (composer.json) — unknown: TYPO3\CMS\Composer\Scripts\InstallerScripts::enableCommitMessageHook
     - composer gerrit:setup:preCommitHook:enable (composer.json) — unknown: TYPO3\CMS\Composer\Scripts\InstallerScripts::enablePreCommitHook
     - composer gerrit:setup:preCommitHook:disable (composer.json) — unknown: TYPO3\CMS\Composer\Scripts\InstallerScripts::disablePreCommitHook
-    - npm --prefix Build run build (Build/package.json) — change: ./node_modules/.bin/grunt
-    - npm --prefix Build run build-css (Build/package.json) — change: ./node_modules/.bin/grunt css
-    - npm --prefix Build run build-js (Build/package.json) — change: ./node_modules/.bin/grunt scripts
-    - npm --prefix Build run build-flags (Build/package.json) — change: ./node_modules/.bin/grunt flags-build
-    - npm --prefix Build run build-fonts (Build/package.json) — change: ./node_modules/.bin/grunt fonts
-    - npm --prefix Build run update (Build/package.json) — change: ./node_modules/.bin/grunt update
-    - npm --prefix Build run lint (Build/package.json) — change: ./node_modules/.bin/grunt lint
-    - npm --prefix Build run test (Build/package.json) — unknown: wtr
-    - npm --prefix Build run playwright:install (Build/package.json) — unknown: playwright install
-    - npm --prefix Build run playwright:open (Build/package.json) — unknown: playwright test --ui
-    - npm --prefix Build run playwright:run (Build/package.json) — unknown: playwright test
-    - npm --prefix Build run playwright:codegen (Build/package.json) — unknown: playwright codegen --ignore-https-errors
-    - npm --prefix Build run watch:build (Build/package.json) — change: grunt watch
-    - npm --prefix Build run watch:test (Build/package.json) — unknown: wtr --watch
+    - npm --prefix Build run build (Build/package.json) — change: ./node_modules/.bin/grunt Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run build-css (Build/package.json) — change: ./node_modules/.bin/grunt css Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run build-js (Build/package.json) — change: ./node_modules/.bin/grunt scripts Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run build-flags (Build/package.json) — change: ./node_modules/.bin/grunt flags-build Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run build-fonts (Build/package.json) — change: ./node_modules/.bin/grunt fonts Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run update (Build/package.json) — change: ./node_modules/.bin/grunt update Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run lint (Build/package.json) — change: ./node_modules/.bin/grunt lint Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run test (Build/package.json) — unknown: wtr Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run playwright:install (Build/package.json) — unknown: playwright install Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run playwright:open (Build/package.json) — unknown: playwright test --ui Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run playwright:run (Build/package.json) — unknown: playwright test Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run playwright:codegen (Build/package.json) — unknown: playwright codegen --ignore-https-errors Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run watch:build (Build/package.json) — change: grunt watch Run it through Build/Scripts/runTests.sh -s <suite>.
+    - npm --prefix Build run watch:test (Build/package.json) — unknown: wtr --watch Run it through Build/Scripts/runTests.sh -s <suite>.
 
     The Node those npm commands run on. This repository declares 24.14, in Build/.nvmrc. Its Build/package.json admits >=24.14.0 <25.0.0, which that pin is the lowest version of. No workflow below .github/workflows/ sets Node up, so nothing here says which one CI runs them on. All of it read from these files. Nothing was run to find it out, and the Node your own shell has is not among them.
 
@@ -533,6 +541,7 @@ Text:
     - any/security/reporting-a-vulnerability (any) — Reporting a TYPO3 Vulnerability. When a finding in the TYPO3 core or in an extension is a security defect, before anything about it is written where the public can read it.
     - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
     - any/testing/proving-a-condition (any) — Proving a TypoScript Condition Verdict. When a TypoScript condition has to be shown to have matched in the frontend, or to have stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition is handed at evaluation time and how an extension registers one are hints instead.
+    - any/testing/proving-a-rendering-held (any) — Proving a Rendering Held Across a Change. When a change rewrites how pages are rendered rather than what one page contains — replacing a rendering frame, dropping a dependency the site renders through, moving a template root, rewriting a layout — and what has to be shown is that nothing else moved. Proving one unknown value a checkout does not produce is the core rendering probe instead, and proving that one TypoScript condition matched is the condition page.
     - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
     - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When writing or amending the message of a patch to the core, which is the only repository these rules describe.
     - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it, and the question is whether the committed file carries the source change, how to produce it after an edit, or what to do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole working tree on the way, so it is no way there from a checkout holding work of your own.
@@ -600,126 +609,144 @@ Data:
                 "source": "composer.json",
                 "invocation": "composer gerrit:setup",
                 "declares": "@gerrit:setup:commitMessageHook:enable && @gerrit:setup:preCommitHook:enable",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": null
             },
             {
                 "command": "composer gerrit:setup:commitMessageHook:enable",
                 "source": "composer.json",
                 "invocation": "composer gerrit:setup:commitMessageHook:enable",
                 "declares": "TYPO3\\CMS\\Composer\\Scripts\\InstallerScripts::enableCommitMessageHook",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": null
             },
             {
                 "command": "composer gerrit:setup:preCommitHook:enable",
                 "source": "composer.json",
                 "invocation": "composer gerrit:setup:preCommitHook:enable",
                 "declares": "TYPO3\\CMS\\Composer\\Scripts\\InstallerScripts::enablePreCommitHook",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": null
             },
             {
                 "command": "composer gerrit:setup:preCommitHook:disable",
                 "source": "composer.json",
                 "invocation": "composer gerrit:setup:preCommitHook:disable",
                 "declares": "TYPO3\\CMS\\Composer\\Scripts\\InstallerScripts::disablePreCommitHook",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": null
             },
             {
                 "command": "npm --prefix Build run build",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run build",
                 "declares": "./node_modules/.bin/grunt",
-                "runs": "change"
+                "runs": "change",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run build-css",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run build-css",
                 "declares": "./node_modules/.bin/grunt css",
-                "runs": "change"
+                "runs": "change",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run build-js",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run build-js",
                 "declares": "./node_modules/.bin/grunt scripts",
-                "runs": "change"
+                "runs": "change",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run build-flags",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run build-flags",
                 "declares": "./node_modules/.bin/grunt flags-build",
-                "runs": "change"
+                "runs": "change",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run build-fonts",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run build-fonts",
                 "declares": "./node_modules/.bin/grunt fonts",
-                "runs": "change"
+                "runs": "change",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run update",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run update",
                 "declares": "./node_modules/.bin/grunt update",
-                "runs": "change"
+                "runs": "change",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run lint",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run lint",
                 "declares": "./node_modules/.bin/grunt lint",
-                "runs": "change"
+                "runs": "change",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run test",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run test",
                 "declares": "wtr",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run playwright:install",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run playwright:install",
                 "declares": "playwright install",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run playwright:open",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run playwright:open",
                 "declares": "playwright test --ui",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run playwright:run",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run playwright:run",
                 "declares": "playwright test",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run playwright:codegen",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run playwright:codegen",
                 "declares": "playwright codegen --ignore-https-errors",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run watch:build",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run watch:build",
                 "declares": "grunt watch",
-                "runs": "change"
+                "runs": "change",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             },
             {
                 "command": "npm --prefix Build run watch:test",
                 "source": "Build/package.json",
                 "invocation": "npm --prefix Build run watch:test",
                 "declares": "wtr --watch",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
             }
         ],
         "uncheckedKinds": [],
@@ -764,6 +791,13 @@ Data:
                 "id": "any/testing/proving-a-condition",
                 "title": "Proving a TypoScript Condition Verdict",
                 "when": "When a TypoScript condition has to be shown to have matched in the frontend, or to have stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition is handed at evaluation time and how an extension registers one are hints instead.",
+                "scope": "any",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "any/testing/proving-a-rendering-held",
+                "title": "Proving a Rendering Held Across a Change",
+                "when": "When a change rewrites how pages are rendered rather than what one page contains — replacing a rendering frame, dropping a dependency the site renders through, moving a template root, rewriting a layout — and what has to be shown is that nothing else moved. Proving one unknown value a checkout does not produce is the core rendering probe instead, and proving that one TypoScript condition matched is the condition page.",
                 "scope": "any",
                 "tool": "typo3_rule_lookup"
             },
@@ -920,6 +954,7 @@ Text:
     - any/security/reporting-a-vulnerability (any) — Reporting a TYPO3 Vulnerability. When a finding in the TYPO3 core or in an extension is a security defect, before anything about it is written where the public can read it.
     - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
     - any/testing/proving-a-condition (any) — Proving a TypoScript Condition Verdict. When a TypoScript condition has to be shown to have matched in the frontend, or to have stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition is handed at evaluation time and how an extension registers one are hints instead.
+    - any/testing/proving-a-rendering-held (any) — Proving a Rendering Held Across a Change. When a change rewrites how pages are rendered rather than what one page contains — replacing a rendering frame, dropping a dependency the site renders through, moving a template root, rewriting a layout — and what has to be shown is that nothing else moved. Proving one unknown value a checkout does not produce is the core rendering probe instead, and proving that one TypoScript condition matched is the condition page.
     - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
     - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When writing or amending the message of a patch to the core, which is the only repository these rules describe.
     - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it, and the question is whether the committed file carries the source change, how to produce it after an edit, or what to do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole working tree on the way, so it is no way there from a checkout holding work of your own.
@@ -999,21 +1034,24 @@ Data:
                 "source": "composer.json",
                 "invocation": "composer cgl",
                 "declares": "php-cs-fixer fix",
-                "runs": "change"
+                "runs": "change",
+                "runThrough": null
             },
             {
                 "command": "composer cgl:ci",
                 "source": "composer.json",
                 "invocation": "composer cgl:ci",
                 "declares": "php-cs-fixer fix --dry-run --diff",
-                "runs": "check"
+                "runs": "check",
+                "runThrough": null
             },
             {
                 "command": "composer test",
                 "source": "composer.json",
                 "invocation": "composer test",
                 "declares": "phpunit -c Build/phpunit.xml",
-                "runs": "unknown"
+                "runs": "unknown",
+                "runThrough": null
             }
         ],
         "uncheckedKinds": [
@@ -1060,6 +1098,13 @@ Data:
                 "id": "any/testing/proving-a-condition",
                 "title": "Proving a TypoScript Condition Verdict",
                 "when": "When a TypoScript condition has to be shown to have matched in the frontend, or to have stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition is handed at evaluation time and how an extension registers one are hints instead.",
+                "scope": "any",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "any/testing/proving-a-rendering-held",
+                "title": "Proving a Rendering Held Across a Change",
+                "when": "When a change rewrites how pages are rendered rather than what one page contains — replacing a rendering frame, dropping a dependency the site renders through, moving a template root, rewriting a layout — and what has to be shown is that nothing else moved. Proving one unknown value a checkout does not produce is the core rendering probe instead, and proving that one TypoScript condition matched is the condition page.",
                 "scope": "any",
                 "tool": "typo3_rule_lookup"
             },

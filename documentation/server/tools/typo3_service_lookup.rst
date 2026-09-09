@@ -132,17 +132,19 @@ The answer carries exactly one of these sets of fields: ``query``, ``tag``,
 Answered
 --------
 
-Recorded on 2026-09-01 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-09 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
-and neither fills the whole surface. Answered against composer-project, TYPO3
-14.3.5, the E-SITE-14.3 this repository makes below .environments/, whose
-console answers. Answered against composer-project, TYPO3 14.3.0, the
-installation this repository writes below .fixtures/, whose console answers.
-The tools that declare ``answeredBy`` carry an answer from each, under a
-heading naming which; every other answer is from the first alone, because
-nothing in it would differ. Nothing checks what is below this heading;
-everything above it is derived from the class that answers the call, and
-``bin/cli tools:check`` holds it.
+and neither fills the whole surface. Answered against core-checkout, TYPO3
+14.3.7-dev, the 14.3 core checkout below .checkouts/, whose console could not
+be reached: <installation> has no TYPO3 console — none of bin/typo3,
+vendor/bin/typo3 exists. Its dependencies are not installed —
+vendor/autoload.php is not there either, and composer install writes both.
+Answered against composer-project, TYPO3 14.3.0, the installation this
+repository writes below .fixtures/, whose console answers. The tools that
+declare ``answeredBy`` carry an answer from each, under a heading naming which;
+every other answer is from the first alone, because nothing in it would differ.
+Nothing checks what is below this heading; everything above it is derived from
+the class that answers the call, and ``bin/cli tools:check`` holds it.
 
 services: by class
 ~~~~~~~~~~~~~~~~~~
@@ -155,32 +157,14 @@ Called with:
         "query": "PageRenderer"
     }
 
-From the E-SITE-14.3 environment
-""""""""""""""""""""""""""""""""
+From the 14.3 core checkout
+"""""""""""""""""""""""""""
 
 Text:
 
 .. code-block:: text
 
-    2 of the 1212 services this installation assembles match. What a constructor is handed is the id that really lands there, after autowiring.
-
-    - TYPO3\CMS\Core\Page\PageRenderer (public) [typo3.singleton]
-        0: TYPO3\CMS\Core\Context\Context
-        1: cache.assets
-        2: TYPO3\CMS\Core\Service\MarkerBasedTemplateService
-        3: TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry
-        4: TYPO3\CMS\Core\Page\AssetRenderer
-        5: TYPO3\CMS\Core\Page\AssetCollector
-        6: value
-        7: TYPO3\CMS\Core\Localization\LanguageServiceFactory
-        8: Psr\Http\Message\ResponseFactoryInterface
-        9: Psr\Http\Message\StreamFactoryInterface
-        10: TYPO3\CMS\Core\Imaging\IconRegistry_decorated_1
-        11: TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface_decorated_1
-        12: TYPO3\CMS\Core\SystemResource\SystemResourceFactory_decorated_1
-        13: TYPO3\CMS\Core\Page\ResourceHashCollection
-        14: TYPO3\CMS\Core\Security\ContentSecurityPolicy\DirectiveHashCollection_decorated_1
-    - TYPO3\CMS\Fluid\ViewHelpers\Be\PageRendererViewHelper (public) [fluid.viewhelper]
+    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
 Data:
 
@@ -189,102 +173,20 @@ Data:
     {
         "query": "PageRenderer",
         "tag": null,
-        "matchCount": 2,
-        "answeredBy": "installation",
-        "definitionCount": 1212,
-        "aliasCount": 230,
-        "compilationFailure": "",
-        "services": [
-            {
-                "id": "TYPO3\\CMS\\Core\\Page\\PageRenderer",
-                "class": "TYPO3\\CMS\\Core\\Page\\PageRenderer",
-                "aliasFor": "",
-                "public": true,
-                "shared": true,
-                "autowired": true,
-                "abstract": false,
-                "synthetic": false,
-                "tags": [
-                    "typo3.singleton"
-                ],
-                "arguments": [
-                    {
-                        "position": 0,
-                        "resolves": "TYPO3\\CMS\\Core\\Context\\Context"
-                    },
-                    {
-                        "position": 1,
-                        "resolves": "cache.assets"
-                    },
-                    {
-                        "position": 2,
-                        "resolves": "TYPO3\\CMS\\Core\\Service\\MarkerBasedTemplateService"
-                    },
-                    {
-                        "position": 3,
-                        "resolves": "TYPO3\\CMS\\Core\\MetaTag\\MetaTagManagerRegistry"
-                    },
-                    {
-                        "position": 4,
-                        "resolves": "TYPO3\\CMS\\Core\\Page\\AssetRenderer"
-                    },
-                    {
-                        "position": 5,
-                        "resolves": "TYPO3\\CMS\\Core\\Page\\AssetCollector"
-                    },
-                    {
-                        "position": 6,
-                        "resolves": "value"
-                    },
-                    {
-                        "position": 7,
-                        "resolves": "TYPO3\\CMS\\Core\\Localization\\LanguageServiceFactory"
-                    },
-                    {
-                        "position": 8,
-                        "resolves": "Psr\\Http\\Message\\ResponseFactoryInterface"
-                    },
-                    {
-                        "position": 9,
-                        "resolves": "Psr\\Http\\Message\\StreamFactoryInterface"
-                    },
-                    {
-                        "position": 10,
-                        "resolves": "TYPO3\\CMS\\Core\\Imaging\\IconRegistry_decorated_1"
-                    },
-                    {
-                        "position": 11,
-                        "resolves": "TYPO3\\CMS\\Core\\SystemResource\\Publishing\\SystemResourcePublisherInterface_decorated_1"
-                    },
-                    {
-                        "position": 12,
-                        "resolves": "TYPO3\\CMS\\Core\\SystemResource\\SystemResourceFactory_decorated_1"
-                    },
-                    {
-                        "position": 13,
-                        "resolves": "TYPO3\\CMS\\Core\\Page\\ResourceHashCollection"
-                    },
-                    {
-                        "position": 14,
-                        "resolves": "TYPO3\\CMS\\Core\\Security\\ContentSecurityPolicy\\DirectiveHashCollection_decorated_1"
-                    }
-                ]
-            },
-            {
-                "id": "TYPO3\\CMS\\Fluid\\ViewHelpers\\Be\\PageRendererViewHelper",
-                "class": "TYPO3\\CMS\\Fluid\\ViewHelpers\\Be\\PageRendererViewHelper",
-                "aliasFor": "",
-                "public": true,
-                "shared": false,
-                "autowired": true,
-                "abstract": false,
-                "synthetic": false,
-                "tags": [
-                    "fluid.viewhelper"
-                ],
-                "arguments": []
+        "unsupported": {
+            "cause": "installation-not-answering",
+            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+            "repositoryState": "installed",
+            "diagnosis": "",
+            "searched": [
+                "<installation>"
+            ],
+            "misconfiguration": null,
+            "settings": {
+                "root": "TYPO3_DEV_COMPANION_ROOT",
+                "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        ]
+        }
     }
 
 From the fixture installation
@@ -331,23 +233,14 @@ Called with:
         "limit": 3
     }
 
-From the E-SITE-14.3 environment
-""""""""""""""""""""""""""""""""
+From the 14.3 core checkout
+"""""""""""""""""""""""""""
 
 Text:
 
 .. code-block:: text
 
-    65 of the 1212 services this installation assembles match, and the first 3 are here. What a constructor is handed is the id that really lands there, after autowiring.
-
-    - TYPO3\CMS\Backend\EventListener\AfterBackendPageRenderEventListener (public) [event.listener]
-        0: TYPO3\CMS\Core\Page\PageRenderer
-    - TYPO3\CMS\Backend\EventListener\FailedLoginAttemptNotification (public) [event.listener]
-        0: TYPO3\CMS\Core\Mail\TemplatedEmailFactory
-        1: TYPO3\CMS\Core\Mail\Mailer
-    - TYPO3\CMS\Backend\EventListener\FailedMfaAttemptNotification (public) [event.listener]
-        0: TYPO3\CMS\Core\Mail\TemplatedEmailFactory
-        1: TYPO3\CMS\Core\Mail\Mailer
+    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
 Data:
 
@@ -356,78 +249,20 @@ Data:
     {
         "query": null,
         "tag": "event.listener",
-        "matchCount": 65,
-        "answeredBy": "installation",
-        "definitionCount": 1212,
-        "aliasCount": 230,
-        "compilationFailure": "",
-        "services": [
-            {
-                "id": "TYPO3\\CMS\\Backend\\EventListener\\AfterBackendPageRenderEventListener",
-                "class": "TYPO3\\CMS\\Backend\\EventListener\\AfterBackendPageRenderEventListener",
-                "aliasFor": "",
-                "public": true,
-                "shared": true,
-                "autowired": true,
-                "abstract": false,
-                "synthetic": false,
-                "tags": [
-                    "event.listener"
-                ],
-                "arguments": [
-                    {
-                        "position": 0,
-                        "resolves": "TYPO3\\CMS\\Core\\Page\\PageRenderer"
-                    }
-                ]
-            },
-            {
-                "id": "TYPO3\\CMS\\Backend\\EventListener\\FailedLoginAttemptNotification",
-                "class": "TYPO3\\CMS\\Backend\\EventListener\\FailedLoginAttemptNotification",
-                "aliasFor": "",
-                "public": true,
-                "shared": true,
-                "autowired": true,
-                "abstract": false,
-                "synthetic": false,
-                "tags": [
-                    "event.listener"
-                ],
-                "arguments": [
-                    {
-                        "position": 0,
-                        "resolves": "TYPO3\\CMS\\Core\\Mail\\TemplatedEmailFactory"
-                    },
-                    {
-                        "position": 1,
-                        "resolves": "TYPO3\\CMS\\Core\\Mail\\Mailer"
-                    }
-                ]
-            },
-            {
-                "id": "TYPO3\\CMS\\Backend\\EventListener\\FailedMfaAttemptNotification",
-                "class": "TYPO3\\CMS\\Backend\\EventListener\\FailedMfaAttemptNotification",
-                "aliasFor": "",
-                "public": true,
-                "shared": true,
-                "autowired": true,
-                "abstract": false,
-                "synthetic": false,
-                "tags": [
-                    "event.listener"
-                ],
-                "arguments": [
-                    {
-                        "position": 0,
-                        "resolves": "TYPO3\\CMS\\Core\\Mail\\TemplatedEmailFactory"
-                    },
-                    {
-                        "position": 1,
-                        "resolves": "TYPO3\\CMS\\Core\\Mail\\Mailer"
-                    }
-                ]
+        "unsupported": {
+            "cause": "installation-not-answering",
+            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+            "repositoryState": "installed",
+            "diagnosis": "",
+            "searched": [
+                "<installation>"
+            ],
+            "misconfiguration": null,
+            "settings": {
+                "root": "TYPO3_DEV_COMPANION_ROOT",
+                "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        ]
+        }
     }
 
 From the fixture installation

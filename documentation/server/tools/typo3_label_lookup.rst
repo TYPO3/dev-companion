@@ -146,10 +146,10 @@ The answer carries exactly one of these sets of fields: ``query``, ``resource``,
 Answered
 --------
 
-Recorded on 2026-08-26 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-09 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
-15.0.0-dev, the main core checkout below .checkouts/, whose console could not
+14.3.7-dev, the 14.3 core checkout below .checkouts/, whose console could not
 be reached: <installation> has no TYPO3 console — none of bin/typo3,
 vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -171,14 +171,14 @@ Called with:
         "query": "save"
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
 
 .. code-block:: text
 
-    103 label(s) in <installation> match "save" — showing the first 25:
+    106 label(s) in <installation> match "save" — showing the first 25:
     - backend.alt_doc:buttons.confirm.duplicate_record_changed.yes
       "Yes, save and duplicate this record"
       EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
@@ -255,13 +255,13 @@ Text:
       "Could not update MFA provider %s. Please try again."
       EXT:backend/Resources/Private/Language/locallang_mfa.xlf
 
-    Reference a label by the domain form shown first (package.resource:key) — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
+    Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.
 
     A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
 
     Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
 
-    Read from the XLF files of the installed packages: the console could not be asked (<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both). What that leaves out is the assembled runtime state — a label an installation replaces through LANG/resourceOverrides is shown here as its package ships it.
+    Read from the XLF files of the installed packages and project site configuration: the console could not be asked (<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both). What that leaves out is the assembled runtime state — a label an installation replaces through LANG/resourceOverrides is shown here as its package ships it.
 
 Data:
 
@@ -270,7 +270,7 @@ Data:
     {
         "query": "save",
         "resource": null,
-        "matchCount": 103,
+        "matchCount": 106,
         "labels": [
             {
                 "ref": "backend.alt_doc:buttons.confirm.duplicate_record_changed.yes",
@@ -451,7 +451,75 @@ Data:
         "terms": [
             {
                 "term": "save",
-                "matchCount": 103
+                "matchCount": 106
+            }
+        ],
+        "resourceDiagnostics": [
+            {
+                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf",
+                "location": "package",
+                "conventionalName": true,
+                "referenced": true,
+                "references": [
+                    "Build/Sources/TypeScript/backend/contextual-record-edit.ts",
+                    "Build/Sources/TypeScript/backend/element/contextual-record-edit-trigger.ts",
+                    "Build/Sources/TypeScript/backend/form-engine-review.ts",
+                    "Build/Sources/TypeScript/backend/form-engine.ts",
+                    "Build/Sources/TypeScript/backend/form-engine/container/flex-form-container-container.ts",
+                    "Build/Sources/TypeScript/backend/form-engine/container/inline-control-container.ts",
+                    "Build/Sources/TypeScript/backend/form-engine/element/select-tree-toolbar.ts",
+                    "Build/Sources/TypeScript/backend/form-engine/element/suggest/result-container.ts",
+                    "Build/Sources/TypeScript/backend/grid-editor.ts",
+                    "Build/Sources/TypeScript/filelist/file-delete.ts",
+                    "EXT:backend/Classes/Controller/ContextualRecordEditController.php",
+                    "EXT:backend/Classes/Controller/EditDocumentController.php",
+                    "EXT:backend/Classes/Form/Element/BackendLayoutWizardElement.php",
+                    "EXT:backend/Classes/Form/Element/GroupElement.php",
+                    "EXT:backend/Classes/Form/FormResultCompiler.php",
+                    "EXT:backend/Classes/RecordList/DatabaseRecordList.php",
+                    "EXT:backend/Resources/Private/Partials/PageLayout/RecordDefault/Header.fluid.html",
+                    "EXT:backend/Resources/Private/Templates/Form/ContextualRecordEdit.fluid.html",
+                    "EXT:backend/Resources/Public/JavaScript/contextual-record-edit.js",
+                    "EXT:backend/Resources/Public/JavaScript/element/contextual-record-edit-trigger.js",
+                    "EXT:backend/Resources/Public/JavaScript/form-engine-review.js",
+                    "EXT:backend/Resources/Public/JavaScript/form-engine.js",
+                    "EXT:backend/Resources/Public/JavaScript/form-engine/container/flex-form-container-container.js",
+                    "EXT:backend/Resources/Public/JavaScript/form-engine/container/inline-control-container.js",
+                    "EXT:backend/Resources/Public/JavaScript/form-engine/element/select-tree-toolbar.js",
+                    "EXT:backend/Resources/Public/JavaScript/form-engine/element/suggest/result-container.js",
+                    "EXT:backend/Resources/Public/JavaScript/grid-editor.js",
+                    "EXT:beuser/Resources/Private/Partials/BackendUser/PaginatedList.fluid.html",
+                    "EXT:beuser/Resources/Private/Partials/BackendUserGroup/PaginatedList.fluid.html",
+                    "EXT:beuser/Resources/Private/Partials/Filemount/PaginatedList.fluid.html",
+                    "EXT:filelist/Classes/ContextMenu/ItemProviders/FileProvider.php",
+                    "EXT:filelist/Classes/Controller/FileListController.php",
+                    "EXT:filelist/Resources/Public/JavaScript/file-delete.js",
+                    "EXT:reactions/Resources/Private/Templates/Management/Overview.fluid.html",
+                    "EXT:redirects/Resources/Private/Templates/Management/Overview.fluid.html",
+                    "EXT:redirects/Resources/Private/Templates/QrCode/Overview.fluid.html",
+                    "EXT:redirects/Resources/Private/Templates/ShortUrl/Overview.fluid.html",
+                    "EXT:webhooks/Resources/Private/Templates/Management/Overview.fluid.html"
+                ],
+                "warnings": []
+            },
+            {
+                "resource": "EXT:backend/Resources/Private/Language/locallang_mfa.xlf",
+                "location": "package",
+                "conventionalName": true,
+                "referenced": true,
+                "references": [
+                    "EXT:backend/Classes/Controller/MfaAjaxController.php",
+                    "EXT:backend/Classes/Controller/MfaConfigurationController.php",
+                    "EXT:backend/Classes/Controller/MfaSetupController.php",
+                    "EXT:backend/Resources/Private/Partials/Mfa/SetupInstructions.fluid.html",
+                    "EXT:backend/Resources/Private/Templates/Mfa/Auth.fluid.html",
+                    "EXT:backend/Resources/Private/Templates/Mfa/Edit.fluid.html",
+                    "EXT:backend/Resources/Private/Templates/Mfa/Overview.fluid.html",
+                    "EXT:backend/Resources/Private/Templates/Mfa/Setup.fluid.html",
+                    "EXT:backend/Resources/Private/Templates/Mfa/Standalone/Selection.fluid.html",
+                    "EXT:backend/Resources/Private/Templates/Mfa/Standalone/Setup.fluid.html"
+                ],
+                "warnings": []
             }
         ],
         "answeredBy": "packages"
@@ -475,11 +543,15 @@ Text:
       "Save document"
       EXT:core/Resources/Private/Language/locallang_core.xlf
 
-    Reference a label by the domain form shown first (package.resource:key) — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
+    Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.
 
     A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
 
     Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
+
+    Resource warnings:
+    - EXT:backend/Resources/Private/Language/locallang.xlf: No static reference to this resource was found; references assembled at runtime are outside this scan.
+    - EXT:core/Resources/Private/Language/locallang_core.xlf: No static reference to this resource was found; references assembled at runtime are outside this scan.
 
 Data:
 
@@ -518,6 +590,28 @@ Data:
                 "matchCount": 3
             }
         ],
+        "resourceDiagnostics": [
+            {
+                "resource": "EXT:backend/Resources/Private/Language/locallang.xlf",
+                "location": "package",
+                "conventionalName": true,
+                "referenced": false,
+                "references": [],
+                "warnings": [
+                    "No static reference to this resource was found; references assembled at runtime are outside this scan."
+                ]
+            },
+            {
+                "resource": "EXT:core/Resources/Private/Language/locallang_core.xlf",
+                "location": "package",
+                "conventionalName": true,
+                "referenced": false,
+                "references": [],
+                "warnings": [
+                    "No static reference to this resource was found; references assembled at runtime are outside this scan."
+                ]
+            }
+        ],
         "answeredBy": "installation"
     }
 
@@ -532,7 +626,7 @@ Called with:
         "query": "quantumflux"
     }
 
-From the main core checkout
+From the 14.3 core checkout
 """""""""""""""""""""""""""
 
 Text:
@@ -545,7 +639,7 @@ Text:
 
     Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
 
-    Read from the XLF files of the installed packages: the console could not be asked (<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both). What that leaves out is the assembled runtime state — a label an installation replaces through LANG/resourceOverrides is shown here as its package ships it.
+    Read from the XLF files of the installed packages and project site configuration: the console could not be asked (<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both). What that leaves out is the assembled runtime state — a label an installation replaces through LANG/resourceOverrides is shown here as its package ships it.
 
 Data:
 
@@ -562,6 +656,7 @@ Data:
                 "matchCount": 0
             }
         ],
+        "resourceDiagnostics": [],
         "answeredBy": "packages"
     }
 
@@ -593,5 +688,6 @@ Data:
                 "matchCount": 0
             }
         ],
+        "resourceDiagnostics": [],
         "answeredBy": "installation"
     }

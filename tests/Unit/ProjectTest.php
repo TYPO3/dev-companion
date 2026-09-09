@@ -946,7 +946,8 @@ final class ProjectTest extends TestCase
         self::assertSame(
             [['command' => 'npm --prefix Build run build', 'source' => 'Build/package.json',
                 'invocation' => 'npm --prefix Build run build',
-                'declares' => 'grunt build', 'runs' => Project::RUNS_AS_CHANGE]],
+                'declares' => 'grunt build', 'runs' => Project::RUNS_AS_CHANGE,
+                'runThrough' => null]],
             $project['commands'],
         );
         self::assertSame('>=24.14.0 <25.0.0', $project['node']['engines']);
@@ -959,6 +960,52 @@ final class ProjectTest extends TestCase
         self::assertStringContainsString('- npm --prefix Build run build (Build/package.json)', $text);
         self::assertStringContainsString('This repository declares 24.14, in Build/.nvmrc.', $text);
         self::assertStringContainsString('Its Build/package.json admits >=24.14.0 <25.0.0', $text);
+    }
+
+    #[Decision('D-ANS-152')]
+    #[Test]
+    public function anNpmCommandOnACoreCheckoutNamesTheDispatcherThatOwnsIt(): void
+    {
+        // The pointer stood in the paragraph above the list since 2026-08-04
+        // and a session read past it to the list, then reported the dispatcher
+        // as absent. The entries are the half a caller parses, so the mark is
+        // on the entry — `D-ANS-152`.
+        $root = $this->coreCheckout('15.0.0-dev');
+        $this->declare($root . '/Build/package.json', json_encode([
+            'scripts' => ['build' => 'grunt', 'lint' => 'grunt lint'],
+        ], JSON_THROW_ON_ERROR));
+        Instance::discoverFrom($root);
+
+        $project = Project::describe();
+
+        foreach ($project['commands'] as $command) {
+            self::assertNotNull($command['runThrough'], $command['command'] . ' names no dispatcher');
+            self::assertStringContainsString('Build/Scripts/runTests.sh', $command['runThrough']);
+        }
+
+        $text = Registry::call('typo3_project_describe', [])->text;
+        self::assertStringContainsString(
+            '- npm --prefix Build run build (Build/package.json) — change: grunt '
+                . 'Run it through Build/Scripts/runTests.sh -s <suite>.',
+            $text,
+        );
+    }
+
+    #[Decision('D-ANS-152')]
+    #[Test]
+    public function anNpmCommandOutsideTheCoreNamesNoDispatcher(): void
+    {
+        // Only the core has a contract that overrides its own manifest. Reading
+        // one into every repository would be this server inventing it.
+        $root = $this->composerProject('vendor', '14.3.6');
+        $this->declare($root . '/package.json', json_encode([
+            'scripts' => ['build' => 'vite build'],
+        ], JSON_THROW_ON_ERROR));
+        Instance::discoverFrom($root);
+
+        $project = Project::describe();
+
+        self::assertSame([null], array_column($project['commands'], 'runThrough'));
     }
 
     #[Decision('D-SCO-014')]

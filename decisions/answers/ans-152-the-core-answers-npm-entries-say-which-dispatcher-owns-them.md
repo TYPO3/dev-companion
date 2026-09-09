@@ -3,7 +3,9 @@ id: D-ANS-152
 title: The core answer's npm entries say which dispatcher owns them
 date: 2026-09-09
 status: open
-coveredBy: []
+coveredBy:
+  - ProjectTest::anNpmCommandOnACoreCheckoutNamesTheDispatcherThatOwnsIt
+  - ProjectTest::anNpmCommandOutsideTheCoreNamesNoDispatcher
 ---
 
 # D-ANS-152 — The core answer's npm entries say which dispatcher owns them

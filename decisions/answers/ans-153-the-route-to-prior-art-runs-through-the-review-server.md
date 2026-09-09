@@ -8,9 +8,9 @@ coveredBy: []
 
 # D-ANS-153 — The route to prior art runs through the review server
 
-**"Has anybody attempted this before" is asked of `typo3_gerrit_lookup` by
-repository path, and the issue comes back off the change's trailers — so both
-descriptions say so where the question is asked.**
+**"Has anybody attempted this before" is answered by `typo3_gerrit_lookup` by
+repository path and by the issue on the change's trailers, so both descriptions
+say so.**
 
 The tracker is where a caller asks it and the tracker is where it cannot be
 answered, because a query reaches only text somebody wrote.

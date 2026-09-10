@@ -2857,7 +2857,7 @@ final class HintsTest extends TestCase
         $brief = Registry::call('typo3_task_guide', [
             'task' => 'Is removing this internal method from a public core class breaking',
         ])->text;
-        self::assertStringContainsString('Settle first that the change is breaking at all', $brief);
+        self::assertStringContainsString('Settle first whether the change is breaking at all', $brief);
     }
 
     /**
@@ -7072,7 +7072,7 @@ final class HintsTest extends TestCase
         // only the route is withheld.
         self::assertContains('breaking', array_column($review->data['intents'], 'id'));
         self::assertStringContainsString(
-            'Settle first that the change is breaking at all',
+            'Settle first whether the change is breaking at all',
             implode("\n", $review->data['checklist']),
         );
 
@@ -7459,7 +7459,7 @@ final class HintsTest extends TestCase
         // `.checkouts/main` for `D-ANS-035`, and not the feedback's: the marker
         // is not waived by `@internal`, because `@internal` does not decide
         // whether the removal is breaking at all.
-        self::assertStringContainsString('whether anything outside the core calls it', $checklist);
+        self::assertStringContainsString('whether anything outside the core calls the member', $checklist);
 
         // Outside the core the enumeration is still owed and the core's own
         // obligations are not: a sitepackage has no changelog and no scanner.

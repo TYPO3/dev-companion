@@ -28,8 +28,8 @@ Owes: what changed, named — the method that no longer exists, the branch that 
 no longer taken, the entry that says it was reworked. A reproduction that came
 out clean is not this verdict; it is the one below.
 
-The trap: fixed by accident is as final as fixed on purpose, but only where the
-mechanism is named. "It works for me now" is not a mechanism.
+Fixed by accident is as final as fixed on purpose, but only where the mechanism
+is named. "It works for me now" is not a mechanism.
 
 Ends the issue, so it also owes the comment that closes it — below.
 
@@ -101,7 +101,7 @@ rather than for the issue. A defect that still happens and is exploitable is not
 a "still happens" with a note attached: the note is the whole difference in who
 may read the answer.
 
-The trap: waiting to be sure. A finding that might be exploitable is one the
+Do not wait until you are sure. A finding that might be exploitable is one the
 team rates, and the cost of asking them is an email, while the cost of deciding
 it here and being wrong is a public exploit against installations with no fix
 available.

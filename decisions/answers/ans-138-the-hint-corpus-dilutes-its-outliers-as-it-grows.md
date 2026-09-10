@@ -3,6 +3,8 @@ id: D-ANS-138
 title: The hint corpus dilutes its outliers as it grows
 date: 2026-09-02
 status: open
+readings:
+  - 2026-09-10
 ---
 
 # D-ANS-138 — The hint corpus dilutes its outliers as it grows

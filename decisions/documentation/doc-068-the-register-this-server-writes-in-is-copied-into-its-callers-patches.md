@@ -25,7 +25,7 @@ person then reviews.
   reports that nothing constrains the prose a patch carries,
   [`225815`](../../feedback/archive/2026-09-09-225815-ruleset-the-server-should-hand-an-agent-for.md)
   writes eleven rules off the sentences its reviewer rejected, and
-  [`230509`](../../feedback/2026-09-09-230509-the-server-should-apply-its-own-comment-ruleset.md)
+  [`230509`](../../feedback/archive/2026-09-09-230509-the-server-should-apply-its-own-comment-ruleset.md)
   names this server's own surfaces as where those sentences came from.
 - **The patch cost one round; its comments cost three.** The reviewer rejected
   the prose twice. Among the rejected: a class docblock of 13 lines carrying six
@@ -91,15 +91,16 @@ person then reviews.
 
 ## Since then
 
-The caller-facing half shipped on 2026-09-09 as
-`any/writing/the-prose-a-patch-carries`, named by every brief for a task that
-writes files. The sweep was measured rather than started: 143 checklist items in
-`knowledge/task-intents.json`, 725 hint lines and 1232 non-blank lines in the
-skills' reference files.
+The caller-facing half shipped as `any/writing/the-prose-a-patch-carries`, named
+by every brief for a task that writes files. The sweep followed on the same day,
+across all four surfaces: 22 of the 143 checklist items, 8 of the 342 hint
+lines, the two "The trap:" labels in the triage checklist, and two of the three
+description lines the report quoted.
 
-Two of the rules do not run mechanically over it. A search for a sentence ending
-on a preposition returns 16 of the 143 and most are ordinary relative clauses —
-"the names the import looks for" is not the defect the report names. A search
-for a colon returns 50 and perhaps half carry the content the way the report
-objects to. So the sweep is a reading per line, which is what the entry decided
-and what the numbers now price.
+What the numbers say is that the corpus was better than the sample suggested. A
+mechanical pass is what would have been wrong: 16 sentences end on a preposition
+and most are ordinary relative clauses, 50 open on a colon and about half of
+those introduce a list or a definition. "A miss is an answer" was kept — the
+sentence under it explains it, which is the rule-then-reason shape this
+repository asks for, and the report's replacement was three times as long and
+opened on a negation.

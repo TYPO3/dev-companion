@@ -4,28 +4,28 @@
 =======================
 
 Whether a TYPO3 core patch already exists and what state its review is in, read
-from review.typo3.org. It is the surface a checkout cannot see: a clone carries
-what landed and says nothing about what is open. Six ways in, one per call.
-issue with a Forge number searches every commit message for it. change with a
-Change-Id or a change number, or commit with a hash out of a checkout, reads
-that one change. query and path search by words in the commit message and by
-repository path, and open narrows both to what is still under review. backlog
-enumerates the open changes, oldest pushed or longest untouched, narrowed by
-size, vote state, whether they still merge, branch, date and person. Every
-change carries its identity, status, current patch set, size, age and label
-state. One read by name adds its message and paths, votes, comments, relation
-chain, its Change-Id siblings, the Forge issues its trailers name and whether it
-carries conflict markers. Four of those decide what a session does and no
-checkout has them: chain, with chainedAt saying which patch set each link sits
-on; mergeable, which predicts the conflict before the fetch; fetch.ref, which
-git fetch takes as it stands; and the commit message body. path is the way in
-for "is somebody already working on this file" and for "has anybody attempted
-this before", the earlier attempt coming back whatever it was called. Reading
-the diff itself happens in a checkout: fetch.ref is what gets you there, and
-files says how much of the file list to carry. An empty answer says whether it
-can be read as an absence, since a private change is invisible to an anonymous
-read. The issue itself is typo3_forge_lookup. Reading only: reviewing, voting
-and uploading stay yours. Answers from: network.
+from review.typo3.org. A clone carries what landed and says nothing about what
+is open, which is why this is asked of the review server rather than of a
+checkout. Six ways in, one per call. issue with a Forge number searches every
+commit message for it. change with a Change-Id or a change number, or commit
+with a hash out of a checkout, reads that one change. query and path search by
+words in the commit message and by repository path, and open narrows both to
+what is still under review. backlog enumerates the open changes, oldest pushed
+or longest untouched, narrowed by size, vote state, whether they still merge,
+branch, date and person. Every change carries its identity, status, current
+patch set, size, age and label state. One read by name adds its message and
+paths, votes, comments, relation chain, its Change-Id siblings, the Forge issues
+its trailers name and whether it carries conflict markers. Four of those decide
+what a session does and no checkout has them: chain, with chainedAt saying which
+patch set each link sits on; mergeable, which predicts the conflict before the
+fetch; fetch.ref, which git fetch takes as it stands; and the commit message
+body. path is the way in for "is somebody already working on this file" and for
+"has anybody attempted this before", the earlier attempt coming back whatever it
+was called. Reading the diff itself happens in a checkout: fetch.ref is what
+gets you there, and files says how much of the file list to carry. An empty
+answer says whether it can be read as an absence, since a private change is
+invisible to an anonymous read. The issue itself is typo3_forge_lookup. Reading
+only: reviewing, voting and uploading stay yours. Answers from: network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 

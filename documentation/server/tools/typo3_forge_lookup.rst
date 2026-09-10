@@ -53,18 +53,18 @@ Takes
     # One of: oldest, stale, newest. Enumerate the core project's unresolved issues
     # instead of reading one or matching words. "oldest" orders them by when they
     # were filed, "stale" by how long nobody has touched them, "newest" by what came
-    # in last. Filed long ago is about the report, untouched for years about the
-    # attention it got, and an issue that is both is the candidate a triage is
-    # looking for. "stale" with tracker and category is where a triage of the
-    # backlog starts. "newest" is where a duplicate of a defect somebody has just
-    # found is. A wording reaches only the issues worded that way, so reading the
-    # subjects filed since it could have been is what settles a negative. Pair it
-    # with createdSince, which turns that end into a set the count says you have
-    # seen the whole of. Unresolved is the tracker's own set of open statuses: New,
-    # Accepted, Under Review, Needs Feedback, On Hold and Postponed. tracker,
-    # category, createdBefore, createdSince, updatedBefore, reportedBy, assignedTo,
-    # involving and breakdown narrow this way in and no other; status widens it. Not
-    # with issue or query.
+    # in last. The date it was filed describes the report, and how long it has gone
+    # untouched describes the attention it got. An issue that is both is the
+    # candidate a triage is looking for. "stale" with tracker and category is where
+    # a triage of the backlog starts. "newest" is where a duplicate of a defect
+    # somebody has just found is. A wording reaches only the issues worded that way,
+    # so reading the subjects filed since it could have been is what settles a
+    # negative. Pair it with createdSince, which turns that end into a set the count
+    # says you have seen the whole of. Unresolved is the tracker's own set of open
+    # statuses: New, Accepted, Under Review, Needs Feedback, On Hold and Postponed.
+    # tracker, category, createdBefore, createdSince, updatedBefore, reportedBy,
+    # assignedTo, involving and breakdown narrow this way in and no other; status
+    # widens it. Not with issue or query.
     backlog: string  # optional
     # One of: all, people. Which comments come back with an issue. "all" is every
     # one of them, which is what reading a single issue wants. The comments are

@@ -92,15 +92,16 @@ person then reviews.
 ## Since then
 
 The caller-facing half shipped as `any/writing/the-prose-a-patch-carries`, named
-by every brief for a task that writes files. The sweep followed on the same day,
-across all four surfaces: 22 of the 143 checklist items, 8 of the 342 hint
-lines, the two "The trap:" labels in the triage checklist, and two of the three
-description lines the report quoted.
+by every brief for a task that writes files. The sweep followed the same day
+across all four surfaces: 22 of 143 checklist items, 8 of 342 hint lines, the
+two "The trap:" labels in the triage checklist, and two of the three description
+lines the report quoted.
 
-What the numbers say is that the corpus was better than the sample suggested. A
-mechanical pass is what would have been wrong: 16 sentences end on a preposition
-and most are ordinary relative clauses, 50 open on a colon and about half of
-those introduce a list or a definition. "A miss is an answer" was kept — the
-sentence under it explains it, which is the rule-then-reason shape this
-repository asks for, and the report's replacement was three times as long and
-opened on a negation.
+The corpus was better than the sample suggested, and a mechanical pass would
+have been wrong: 16 sentences end on a preposition, most of them ordinary
+relative clauses, and half of the 50 that open on a colon introduce a list or a
+definition. "A miss is an answer" was kept, because the sentence under it
+explains it and the replacement was three times as long.
+
+`D-DOC-069` is the weighing this entry asked for. Three of the six hold here,
+one folded into the vocabulary rule, and two were declined.

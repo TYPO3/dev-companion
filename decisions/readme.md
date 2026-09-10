@@ -1106,6 +1106,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### documentation
 
+- [`D-DOC-069`][D-DOC-069] — AGENTS.md states the three patch rules this corpus breaks · 2026-09-10
 - [`D-DOC-068`][D-DOC-068] — The register this server writes in is copied into its callers' patches · 2026-09-09
 - [`D-DOC-067`][D-DOC-067] — Every command prints in one voice · 2026-09-05
 - [`D-DOC-066`][D-DOC-066] — A dated section says what the reading changed · 2026-08-28
@@ -1168,6 +1169,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DOC-001`][D-DOC-001] — A table is written so it reads unrendered · 2026-08-01 · confirmed
 - [`D-DOC-002`][D-DOC-002] — The prose rule is measured, and only the lead fails on it · 2026-08-01
 
+[D-DOC-069]: documentation/doc-069-agents-md-states-the-three-patch-rules-this-corpus-breaks.md
 [D-DOC-068]: documentation/doc-068-the-register-this-server-writes-in-is-copied-into-its-callers-patches.md
 [D-DOC-067]: documentation/doc-067-every-command-prints-in-one-voice.md
 [D-DOC-066]: documentation/doc-066-a-dated-section-says-what-the-reading-changed.md

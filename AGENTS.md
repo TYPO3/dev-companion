@@ -3,8 +3,8 @@
 ## What comes first
 
 **What a person cannot understand is a defect, and so is what a machine cannot
-read.** Not a style question and not a matter of taste: a defect, reported and
-fixed like any other.
+read.** Both are reported and fixed like any other defect, rather than argued as
+a matter of taste.
 
 Everything here has both readers, and where they pull apart both are served
 rather than one traded away — a name a person understands and a check can read,
@@ -182,7 +182,9 @@ source — in fewer calls, not from memory.
 One thing, one word. Where two compete, the one that wins is the one somebody
 outside this checkout can see — a tool name, a directory name, a CLI subject —
 because those are known by clients installed months ago and by paths people
-wrote down, while prose can be rewritten this afternoon.
+wrote down, while prose can be rewritten this afternoon. A metaphor invented for
+one sentence is a second word for something that already has one. It has to be
+decoded by everyone who reads it, and it names nothing anybody can search for.
 
 **A name carries one claim, and names its own subject.** It is read where
 nothing else is — a failure list, a directory of hundreds of entries, a listing
@@ -200,8 +202,8 @@ is meant. Three ways it stops doing that, and each is a defect:
   statement and none of it.
 - **A negation where the affirmative is what is meant.** "What the scope
   excludes is not what the server answers" is read twice; "A subject the
-  not-covered list omits is in scope" is read once. It is the prose rule below,
-  where it is read most.
+  not-covered list omits is in scope" is read once. It is [Prose](#prose)'s "say
+  what is, not what it is not", applied where it is read most.
 
 A directory below `src/` is named in the **singular**, for what one of the
 things in it is: `Tool/` holds one tool per class, `Command/` one command,
@@ -250,7 +252,7 @@ Short and precise, everywhere: `knowledge/`, the tool descriptions, this file,
 `documentation/`, a commit message. Every reader pays per token, and half of
 them are machines.
 
-The rules below hold whatever the markup. `documentation/` is reStructuredText
+These rules hold whatever the markup. `documentation/` is reStructuredText
 because it is published as the site and a reference into another page has to
 resolve; everything else here is markdown — `D-DOC-029`. Inside `documentation/`
 a name is a double-backtick literal, another page is `:doc:`, a place in one is
@@ -259,6 +261,9 @@ an embedded link `Site` rewrites to GitHub.
 
 - One point per sentence. A sentence that restates the previous one in other
   words is deleted, not shortened.
+- A colon introduces a list or a definition, never a punchline. Where the second
+  half of a sentence needs a colon, a dash or a semicolon to carry it, it is a
+  second sentence.
 - The rule first, the reason after it, and only where the reason is not obvious.
   A justification nobody would dispute is filler.
 - One example, where an example is needed at all. The second one rarely adds a
@@ -267,6 +272,11 @@ an embedded link `Site` rewrites to GitHub.
   the confusion actually happened.
 - Length is a symptom. A paragraph that will not come out short is usually two
   points, or one that is not yet understood.
+- A longer correct sentence beats a short broken one. Where the short form does
+  not parse, take the words back.
+- Name the place rather than point at it. "Above" and "below" describe a file
+  somebody has edited since, so name the section, the class or the file. "Below
+  `src/`" is a path rather than a pointer.
 - No count of something that grows. "34 files holding 120 hints" is true on the
   day it is written and wrong on the next commit, and nothing fails when it
   turns. Name the thing and the command that counts it — "one file per subject,
@@ -278,7 +288,7 @@ an embedded link `Site` rewrites to GitHub.
 
 A comment earns its lines by saying what the code cannot: why this and not the
 obvious alternative, what was measured, what breaks if somebody changes it back.
-Everything else is deleted, and the same rules apply as above.
+Everything else is deleted, and the prose rules hold for a comment too.
 
 - A comment that restates the line under it is noise. Where the code is unclear,
   the fix is the name, not a sentence explaining the name.

@@ -327,7 +327,7 @@
     "hints": [
       "Accessibility is checked from the same specs, with @axe-core/playwright: build an AxeBuilder over the page, scan, and assert the violation list is empty. This is the part no PHP test can stand in for, and the one that finds something on the first run.",
       "The core's own scan disables the color-contrast rule, because it scans the backend it also styles. A site suite must not copy that line: contrast is where a theme actually fails. A brand colour that carries a decorative surface fails as text and as a button background, and a disabled control styled with the border grey fails hardest of all — none of which any assertion on the markup can see, because the markup is correct.",
-      "The fix for that has a shape: split the palette rather than darken the brand. One custom property for the decorative use, a darker one of the same hue for anything a reader has to read, and the rule that everything textual takes the second — instead of a brand colour bent until it passes everywhere and looks right nowhere."
+      "The fix is to split the palette rather than darken the brand. One custom property for the decorative use, a darker one of the same hue for anything a reader has to read, and the rule that everything textual takes the second — instead of a brand colour bent until it passes everywhere and looks right nowhere."
     ]
   },
   {

@@ -1079,7 +1079,7 @@ Text:
     ## CSS Component Structure
     Hints:
     - The backend stylesheet is a set of bundles. Each top-level entry file under Build/Sources/Sass/ without a leading underscore — backend.scss, dashboard.scss, adminpanel.scss, form.scss, workspace.scss and a few more — compiles to one generated public CSS file. Everything else is a partial named _name.scss and reaches a bundle only through an @import.
-    - A partial is compiled only once something imports it: there is no glob and no index file. That is the step a new partial is forgotten at — the file exists, the Sass build passes, and none of it is in the output. Wire a foundational, reusable component into _minimal.scss and an app-specific one into backend.scss or whichever bundle owns the feature.
+    - A partial is compiled only once something imports it. There is no glob and no index file. That is the step a new partial is forgotten at — the file exists, the Sass build passes, and none of it is in the output. Wire a foundational, reusable component into _minimal.scss and an app-specific one into backend.scss or whichever bundle owns the feature.
     - The backend bundle has two layers. _minimal.scss is the base — the Bootstrap foundation plus TYPO3's own foundational partials, component/buttons, badges, panel, table, nav, modal and the scaffold/* layout. backend.scss is the application layer: it imports _minimal, then the backend-specific partials, the element/* custom-element styles and the typo3/* glue.
     - The folders under Build/Sources/Sass/ each own a concern: component/ holds one partial per component, component/forms/ the form controls, component/scaffold/ the topbar, toolbar, module menu and sidebar, element/ the custom elements named after their host element, dashboard/ and module/ the area styles, variables/ and mixins/ the tokens and helpers. libs/ and typo3/ are third-party and legacy glue — no new component styles go there.
     - Prefer focused component partials in the existing Sass structure.
@@ -1255,7 +1255,7 @@ Data:
                         "scope": null
                     },
                     {
-                        "text": "A partial is compiled only once something imports it: there is no glob and no index file. That is the step a new partial is forgotten at — the file exists, the Sass build passes, and none of it is in the output. Wire a foundational, reusable component into _minimal.scss and an app-specific one into backend.scss or whichever bundle owns the feature.",
+                        "text": "A partial is compiled only once something imports it. There is no glob and no index file. That is the step a new partial is forgotten at — the file exists, the Sass build passes, and none of it is in the output. Wire a foundational, reusable component into _minimal.scss and an app-specific one into backend.scss or whichever bundle owns the feature.",
                         "since": null,
                         "until": null,
                         "versions": "",

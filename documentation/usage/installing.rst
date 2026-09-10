@@ -382,6 +382,8 @@ section this package does not write, so a value continued on the next line is
 refused with the line number rather than rewritten around: keeping a line means
 knowing where it ends.
 
+.. _installing-when-they-go-stale:
+
 When they go stale
 ~~~~~~~~~~~~~~~~~~
 
@@ -457,9 +459,13 @@ which is the one part of it ``install`` and ``update`` leave alone:
 * ``TYPO3_DEV_COMPANION_CONSOLE`` — the command that runs that installation's
   console, such as ``ddev exec .build/bin/typo3`` — :doc:`checking-it-answers`.
 * ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` — tool names, comma-separated, the
-  client is not offered — the section below.
+  client is not offered —
+  :ref:`which tools are offered <installing-which-tools-are-offered>`.
 * ``TYPO3_DEV_COMPANION_SKILL_REFRESH`` — ``off`` reports stale skills instead
-  of putting them back — the section above.
+  of putting them back —
+  :ref:`when they go stale <installing-when-they-go-stale>`.
+
+.. _installing-which-tools-are-offered:
 
 Which tools are offered
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -518,8 +524,9 @@ Removing it
 Three things landed in the project, and no command takes them out again, so
 removing the server is deleting them by hand:
 
-* the ``typo3-dev-companion`` entry in the client file the table above names,
-  and only that entry — the file may carry other servers;
+* the ``typo3-dev-companion`` entry in the client file the table under
+  :ref:`naming the client <installing-clients>` names, and only that entry — the
+  file may carry other servers;
 * one directory per published skill in the skills directory the table names;
 * ``.typo3-dev-companion/``, where the record sits.
 
@@ -609,7 +616,8 @@ None of this reaches a standalone checkout. ``${workspaceFolder}`` names a path
 inside the project, and a server running from somewhere else has none: there the
 absolute path is the only one that exists, whatever the client resolves.
 
-The sources are the same as the section above, plus
+The sources are the same as
+:ref:`finishing in the client <installing-finishing-in-the-client>`, plus
 `the MCP transports specification <https://modelcontextprotocol.io/specification/2025-06-18/basic/transports>`_,
 `VS Code's configuration reference <https://code.visualstudio.com/docs/agents/reference/mcp-configuration>`_
 and `Cursor's MCP page <https://cursor.com/docs/context/mcp>`_.

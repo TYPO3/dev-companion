@@ -89,7 +89,7 @@ own, which is the rule-then-reason shape this file asks for. The rule now names
 the colon whose opening is only a setup.
 
 The pointer rule held. Of its 131 raw hits, 91 are the path idiom or a heading
-named rather than pointed at, and 23 named a position instead. 16 of those were
-rewritten and 7 read as correct. One is stale and nobody here can say what it
-meant, where `installing.rst` sends a reader to "the section above" for its
-sources and the section above it has none.
+named rather than pointed at, and 23 named a position instead. 19 of those were
+rewritten and 4 read as correct. One had already gone stale, and `git log -S` on
+the sentence is what settled it: `installing.rst` sent a reader to "the section
+above" for its sources, which two reorganisations had moved away.

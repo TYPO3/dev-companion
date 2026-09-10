@@ -261,9 +261,9 @@ an embedded link `Site` rewrites to GitHub.
 
 - One point per sentence. A sentence that restates the previous one in other
   words is deleted, not shortened.
-- A colon introduces a list or a definition, never a punchline. Where the second
-  half of a sentence needs a colon, a dash or a semicolon to carry it, it is a
-  second sentence.
+- The half before a colon stands on its own, and what follows is a list, a
+  definition or the reason for it. Where the opening is only a setup, the colon
+  is delivering the point and the sentence is two.
 - The rule first, the reason after it, and only where the reason is not obvious.
   A justification nobody would dispute is filler.
 - One example, where an example is needed at all. The second one rarely adds a

@@ -28,9 +28,9 @@ right:
 
 Half the feedback this server receives is a session criticising its own work —
 it did not consider Extbase, it never activated the testing skill. Read as
-self-criticism those are somebody else's laundry. Read as the question above
-they are a list of gaps this server could have closed and did not, which is the
-most valuable half of the corpus.
+self-criticism those are somebody else's laundry. Read as this section's
+question they are a list of gaps this server could have closed and did not,
+which is the most valuable half of the corpus.
 
 Whether the self-criticism is accurate is not assessed, and cannot be: the
 session was there and the reader was not. Only the lever is assessed.
@@ -58,9 +58,9 @@ report says and for how many sessions say it; never for the silence around it.
 Strengths
 ---------
 
-Some feedback report what worked. The ladder below has no rung for them: every
-step names something missing, misplaced or misworded. So the question is asked
-from the other side — what is the strength evidence of?
+Some feedback report what worked. The ladder has no rung for them: every step
+names something missing, misplaced or misworded. So the question is asked from
+the other side — what is the strength evidence of?
 
 Not that a decision holds: a decision is confirmed by a recorded run, not by an
 account of one. What a strength carries is where a boundary runs, and the costs
@@ -240,8 +240,8 @@ the rule cost: a core patch review that called this server nothing at all was
 first written up as *establish whether a core review earns a skill*, with the
 corpus that answers it sitting unread on the same board.
 
-The expensive half belongs to the todo anyway, so the outcomes below read as
-*what the work is* rather than *what the answer is*.
+The expensive half belongs to the todo anyway, so the outcomes read as *what the
+work is* rather than *what the answer is*.
 
 The answers
 -----------

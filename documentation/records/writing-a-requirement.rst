@@ -169,8 +169,8 @@ happening; ``bin/cli requirements:check`` holds the shape, and the date is what
 lets a reader see that the judgement is older than what it judged. Re-judging
 one is overwriting the date.
 
-``bin/cli requirements:check`` holds every file to the shape above, and
-``composer test`` runs the same check through ``RequirementsTest``, except the
-listing: that one is generated from every file in a group, so it is held by the
-command alone —
+``bin/cli requirements:check`` holds every file to the shape this page
+describes, and ``composer test`` runs the same check through
+``RequirementsTest``, except the listing: that one is generated from every file
+in a group, so it is held by the command alone —
 `D-FBK-011 <../../decisions/feedback/fbk-011-the-suite-holds-what-one-branch-can-be-right-about.md>`_.

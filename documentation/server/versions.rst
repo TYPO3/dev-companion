@@ -32,7 +32,8 @@ everywhere the knowledge base reaches, which is what most of them do.
 
 That is the whole mechanism, and it exists because the alternative is worse: a
 caller on an LTS given a ``main`` answer changes code that then fails at
-runtime, and the failure is silent. The rules below follow from it.
+runtime, and the failure is silent. Everything else on this page follows from
+it.
 
 * **Bind the statement, not the hint.** A subsystem does not change wholesale;
   one sentence in it does. Splitting a hint per version duplicates the six

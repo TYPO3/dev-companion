@@ -9,10 +9,10 @@ finished its task considers itself done.
 
 So it is asked, in a message of its own **after** the work is finished. Before
 or alongside it, the debrief becomes part of the task: an agent told it will be
-asked which tools helped calls tools to have an answer. The prompt below is
-generic on purpose — it names no scenario, no skill and no tool, so the same
-text works after a review, an implementation, or a question the server could not
-answer at all.
+asked which tools helped calls tools to have an answer. The prompt is generic on
+purpose — it names no scenario, no skill and no tool, so the same text works
+after a review, an implementation, or a question the server could not answer at
+all.
 
 What it asks for is the report, never the shape of the feedback. What each field
 wants — one feedback per subject, the task named in the first line, where to

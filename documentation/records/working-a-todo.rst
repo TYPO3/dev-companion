@@ -56,6 +56,8 @@ describes the repository, and leaves whoever queued the todo unable to disagree
 with the substitution — which is the only reason the file is prose in the first
 place.
 
+.. _working-a-todo-settled:
+
 Settled, not recalled
 ---------------------
 
@@ -100,12 +102,13 @@ Asked, not guessed
 ------------------
 
 Not every question has a source. A question about the code, the version, a
-tool's behaviour or the current practice does, and finding it is the work above.
-A question about what is **wanted** does not: which of two shapes the change
-should take when both hold, whether a step is worth what it costs, what the todo
-meant where its paragraph reads two ways, whether a finding is the one that was
-being asked for. Nothing in the repository answers those, so no amount of
-further reading will — and the person who queued the todo is one message away.
+tool's behaviour or the current practice does, and finding it is
+:ref:`settling it <working-a-todo-settled>`. A question about what is **wanted**
+does not: which of two shapes the change should take when both hold, whether a
+step is worth what it costs, what the todo meant where its paragraph reads two
+ways, whether a finding is the one that was being asked for. Nothing in the
+repository answers those, so no amount of further reading will — and the person
+who queued the todo is one message away.
 
 So where the research runs out and the choice would change what is built, ask,
 and ask **before** the change rather than in the commit that presents it. A

@@ -285,8 +285,8 @@ is a **Since then** saying what was looked at and what would still settle it.
 The entry stays ``open``, and it is no longer indistinguishable from one nobody
 has opened — which is the difference the listing counts.
 
-``bin/cli decisions:check`` holds every file to the shape above, and
-``composer test`` runs the same check through ``DecisionsTest``, except the
+``bin/cli decisions:check`` holds every file to the shape this page describes,
+and ``composer test`` runs the same check through ``DecisionsTest``, except the
 listing: that one is generated from every file in a group, so it can only be
 true on a checkout that has all of them, and ``DecisionsTest`` would fail every
 branch that adds an entry —

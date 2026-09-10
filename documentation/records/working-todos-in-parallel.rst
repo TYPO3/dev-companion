@@ -279,11 +279,11 @@ sequences of the same steps, started whenever their session ends.
     bin/cli todo:home <id>
 
 **That command is the whole of it**, the way ``todo:claim`` is the whole of the
-setup, and it is here for the reason that one is: the steps below have to happen
-in one order, and an order is the thing prose cannot hold anybody to. Asked with
-no name it reports what is standing and which of those has a tree nobody
-committed. It refuses in a worktree and it refuses off ``main``, because a
-fast-forward onto somebody's branch is the failure that looks like success.
+setup, and it is here for the reason that one is: the steps have to happen in
+one order, and an order is the thing prose cannot hold anybody to. Asked with no
+name it reports what is standing and which of those has a tree nobody committed.
+It refuses in a worktree and it refuses off ``main``, because a fast-forward
+onto somebody's branch is the failure that looks like success.
 
 Nothing here decides that a session has ended, and nothing can: the todos are
 the caller's to name. What the command carries out for each of them is this, in
@@ -362,7 +362,7 @@ reading it at once produce duplicates: the run of 2026-08-02 wrote ``D-ANS-009``
 twice and ``D-FBK-018`` twice. Nothing can prevent it and nothing needs to —
 ``composer ci`` in the second branch fails on *two decision files claim the same
 id* once the first is on ``main``, which is the rebase doing its job. That
-failure names both files and the command below, so it is read where it lands
+failure names both files and the renumber command, so it is read where it lands
 rather than here. Renumber the later one, fix what names it, amend, and the
 check goes quiet. Whichever branch merged first keeps the number, so the order
 is decided by the order the work came home rather than by anybody arbitrating

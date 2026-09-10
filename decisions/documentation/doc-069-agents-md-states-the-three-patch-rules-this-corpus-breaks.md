@@ -80,3 +80,16 @@ the rules would be stated in and the first one a session imitates.
   reaches further than this reading assumed.
 - The colon or the pointer shape comes back in the next sweep. Then the reread
   does not keep them, and something has to count them after all.
+
+## Since then
+
+Run against `documentation/` the same day, and the colon rule came back too
+broad. Of the 124 sentences it flagged, 113 open on a half that stands on its
+own, which is the rule-then-reason shape this file asks for. The rule now names
+the colon whose opening is only a setup.
+
+The pointer rule held. Of its 131 raw hits, 91 are the path idiom or a heading
+named rather than pointed at, and 23 named a position instead. 16 of those were
+rewritten and 7 read as correct. One is stale and nobody here can say what it
+meant, where `installing.rst` sends a reader to "the section above" for its
+sources and the section above it has none.

@@ -60,13 +60,13 @@ deciding whether it becomes work; the queue is the work that decision produced.
 
 Since 2026-08-02 the feedback are *in* the queue rather than behind it — one
 card each, written as the feedback arrives at ``low``, which is below everything
-somebody has judged to be worth more. The order above is unchanged and what
-enforces it has moved: the priority does it now, where a group boundary did it
-before. What is still behind the queue is the sighting of what nothing answers
-for, and it is reached when the queue runs dry — which now means that nothing
-decided is left *and* nothing has arrived unjudged. Leaving it standing in order
-to judge more feedback is deciding twice and doing nothing, and the pile it
-decides over grows faster than any session can read it.
+somebody has judged to be worth more. The order is unchanged and what enforces
+it has moved: the priority does it now, where a group boundary did it before.
+What is still behind the queue is the sighting of what nothing answers for, and
+it is reached when the queue runs dry — which now means that nothing decided is
+left *and* nothing has arrived unjudged. Leaving it standing in order to judge
+more feedback is deciding twice and doing nothing, and the pile it decides over
+grows faster than any session can read it.
 
 The second half of the same problem is the size of the reading, and the board is
 what solves it now. Every open feedback has one card, and ``bin/cli todo:next``

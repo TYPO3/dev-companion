@@ -60,11 +60,12 @@ when its author last happened to see it. Before the first line:
 * Read what the failing run actually did, call by call, rather than what its
   report concluded. The gap the skill is written around is in the calls.
 
-None of that research goes into the skill; the rule below still holds. It
-decides what the skill **asks**: which surfaces exist at all, which of them a
-tool already owns, and where the practice moves fast enough that only an
-instruction to check survives being written down. Written from recall, a skill
-invents surfaces that do not exist and misses the one that decides the case.
+None of that research goes into the skill, and
+:ref:`the rules <writing-a-skill-the-rules>` still hold. They decide what the
+skill **asks**: which surfaces exist at all, which of them a tool already owns,
+and where the practice moves fast enough that only an instruction to check
+survives being written down. Written from recall, a skill invents surfaces that
+do not exist and misses the one that decides the case.
 
 Review before publishing
 ------------------------
@@ -89,6 +90,8 @@ and the commit is what publishes —
 `D-SKL-087 <../../decisions/task-skills/skl-087-every-skill-in-the-directory-is-published.md>`_,
 which took out the declaration that used to do it and says what would bring one
 back.
+
+.. _writing-a-skill-the-rules:
 
 The rules
 ---------
@@ -200,8 +203,8 @@ session that searched that backlog six times opened nothing
 (`D-SKL-076 <../../decisions/task-skills/skl-076-a-description-names-both-jobs-a-skills-body-owns.md>`_,
 held by ``SkillTest::aBacklogSearchMatchesTheSkillThatOwnsTheCandidates``).
 Three trims took the clause out in stages, each reading it as a summary of the
-body, which is what the rule above asks for and what a job is the exception to.
-Which jobs a body owns is a reading of the body, so nothing holds this over the
+body, which is what this rule asks for and what a job is the exception to. Which
+jobs a body owns is a reading of the body, so nothing holds this over the
 directory either: ``typo3-extension-health`` is the other case, and the report
 it hands over before a file is changed stands in its description already
 (`D-SKL-064 <../../decisions/task-skills/skl-064-the-audit-and-the-work-that-answers-it-are-one-skill.md>`_).
@@ -260,8 +263,8 @@ that one is written for a session whose tools do not answer, not for one whose
 base never arrived. So the skill says it in ``compatibility``, the field the
 standard keeps for an environment requirement — one line, and the same line in
 every skill, because it is a fact about this package rather than about a
-workflow. That is also the one package name a skill may carry: the paragraph
-above is about what a *task* reaches for, and this is what the reader has to
+workflow. That is also the one package name a skill may carry: the package-name
+rule is about what a *task* reaches for, and this is what the reader has to
 install before any of it works. No version goes in it. The front matter it sits
 in is written so a reader of the standard can parse it, which an unquoted ``: ``
 in a description does not — three of them broke the whole block for everything
@@ -407,7 +410,7 @@ environment on this machine and how the installer is reached there.
 What nothing holds
 ------------------
 
-Three of the steps above are the author's and nothing reads them off a file:
+Three of this page's steps are the author's and nothing reads them off a file:
 that a domain earned a skill at all, that the practice was researched before it
 was written, and that the skill was shown and asked about. Each leaves the same
 trace as its absence — a skill written from recall is shaped exactly like one

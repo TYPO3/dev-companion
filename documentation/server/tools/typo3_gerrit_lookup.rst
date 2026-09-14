@@ -398,7 +398,7 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-10 by ``bin/cli tools:record``. Answered against
+Recorded on 2026-09-14 by ``bin/cli tools:record``. Answered against
 core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
@@ -1144,7 +1144,7 @@ Text:
     Patch set 48 · 4cc7871372146821db78d3c77d5b3878f720a4ee
     Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/63/91563/48
     Last moved: 2026-09-09 12:05:37.000000000
-    +1916 -152 · merges · pushed 2025-11-11
+    +1916 -152 · no longer merges · pushed 2025-11-11
     Releases: main
     Verified: needs a vote · core-ci +1
     Code-Review: needs a vote · core-ci 0
@@ -1217,7 +1217,7 @@ Text:
     - 91563 · NEW · [WIP][FEATURE] Introduce Action API · this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563
     - 93064 · NEW · [TASK] Introduce JSON SchemaBuilder and Schema based Hydrator · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93064
     - 93527 · NEW · [BUGFIX] Avoid invalidly showing login form when opening a shared link · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527
-    - 95713 · NEW · [BUGFIX] Use exact cookie parameters for cookie removal · https://review.typo3.org/c/Packages/TYPO3.CMS/+/95713
+    - 95713 · NEW · [BUGFIX] Use exact cookie parameters for cookie removal · chained at patch set 3, now at 5 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/95713
 
     The paths above are what the current patch set touches, and they are the argument the work after this takes: `typo3_hint_lookup` for the conventions of each subsystem in the list, `typo3_test_run_guide` for the suites that can fail on them. What is not here is the diff — the hunks are what a fetch is for, and a shortlist is triaged without fetching anything.
 
@@ -1509,7 +1509,7 @@ Data:
                 "created": "2025-11-11 17:18:39.000000000",
                 "insertions": 1916,
                 "deletions": 152,
-                "mergeable": true,
+                "mergeable": false,
                 "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563",
                 "fetch": {
                     "ref": "refs/changes/63/91563/48",
@@ -1712,7 +1712,7 @@ Data:
                         "status": "NEW",
                         "subject": "[BUGFIX] Use exact cookie parameters for cookie removal",
                         "thisChange": false,
-                        "patchSet": 3,
+                        "patchSet": 5,
                         "chainedAt": 3,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/95713"
                     }
@@ -1775,7 +1775,7 @@ Text:
 
     TYPO3 core review server: https://review.typo3.org
     Query: project:"Packages/TYPO3.CMS" status:open -is:wip delta:<=60 label:Code-Review>=1 -label:Code-Review<=-1 -label:Verified<=-1 is:mergeable
-    3 of 28 open core changes, oldest pushed first.
+    3 of 30 open core changes, oldest pushed first.
     This is a page and not the set, and limit stops at 25. What comes after it is reached by a narrower filter — a smaller maxSize, a branch, an earlier updatedBefore — rather than by a larger limit, because more of one order is more of the same end.
     Age is a candidate and never a finding. The oldest changes are regularly the largest and the ones that no longer merge, so maxSize and mergeable are what turn this order into a shortlist — and what a change is actually waiting on is read by passing its number back as change, which answers the votes with their voters and the comments with their threads.
     `typo3-core-patch-review` is the workflow a change picked off this page opens, and `typo3-core-patch-checkout` is what gets the patch set into a checkout. Open the one this task is before reading a diff.
@@ -1790,16 +1790,6 @@ Text:
     Verified: needs a vote
     Code-Review: needs a vote
 
-    ## [BUGFIX] Ensure invalid pages should not stop DataHandler (NEW)
-    Change 90384 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/90384
-    Change-Id: Idd97aba049114c733f3b5f3367ba7845a6b081db
-    Patch set 2
-    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/84/90384/2
-    Last moved: 2026-06-18 23:04:54.000000000
-    +7 -1 · merges · 2 unresolved threads of 5 comments · pushed 2025-08-13
-    Verified: needs a vote
-    Code-Review: needs a vote
-
     ## [FEATURE] Add H6 in header layouts (NEW)
     Change 91431 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91431
     Change-Id: Iefe08029a0dc95c061ce94d39ed7781d02640b20
@@ -1807,6 +1797,16 @@ Text:
     Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/31/91431/10
     Last moved: 2026-08-29 20:27:12.000000000
     +37 -0 · merges · pushed 2025-11-06
+    Verified: needs a vote
+    Code-Review: needs a vote
+
+    ## [TASK] Change appearance and position of Install Tool login buttons (NEW)
+    Change 91606 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91606
+    Change-Id: Ifdb6cc9273a837a6cce72ce310ffcd05e800acf4
+    Patch set 4
+    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/06/91606/4
+    Last moved: 2026-08-06 16:20:31.000000000
+    +2 -2 · merges · pushed 2025-11-13
     Verified: needs a vote
     Code-Review: needs a vote
 
@@ -1870,52 +1870,6 @@ Data:
                 "cherryPickOf": null
             },
             {
-                "number": 90384,
-                "message": null,
-                "files": null,
-                "changeId": "Idd97aba049114c733f3b5f3367ba7845a6b081db",
-                "subject": "[BUGFIX] Ensure invalid pages should not stop DataHandler",
-                "status": "NEW",
-                "branch": "main",
-                "patchSet": 2,
-                "commit": "",
-                "project": "Packages/TYPO3.CMS",
-                "updated": "2026-06-18 23:04:54.000000000",
-                "created": "2025-08-13 22:31:24.000000000",
-                "insertions": 7,
-                "deletions": 1,
-                "mergeable": true,
-                "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/90384",
-                "fetch": {
-                    "ref": "refs/changes/84/90384/2",
-                    "remote": "https://review.typo3.org/Packages/TYPO3.CMS"
-                },
-                "labels": [
-                    {
-                        "label": "Verified",
-                        "state": "NEED",
-                        "satisfied": false,
-                        "votes": null
-                    },
-                    {
-                        "label": "Code-Review",
-                        "state": "NEED",
-                        "satisfied": false,
-                        "votes": null
-                    }
-                ],
-                "commentCount": 5,
-                "unresolvedCommentCount": 2,
-                "comments": null,
-                "chain": null,
-                "issues": null,
-                "releases": null,
-                "messages": null,
-                "botMessageCount": null,
-                "conflicts": null,
-                "cherryPickOf": null
-            },
-            {
                 "number": 91431,
                 "message": null,
                 "files": null,
@@ -1960,11 +1914,57 @@ Data:
                 "botMessageCount": null,
                 "conflicts": null,
                 "cherryPickOf": null
+            },
+            {
+                "number": 91606,
+                "message": null,
+                "files": null,
+                "changeId": "Ifdb6cc9273a837a6cce72ce310ffcd05e800acf4",
+                "subject": "[TASK] Change appearance and position of Install Tool login buttons",
+                "status": "NEW",
+                "branch": "main",
+                "patchSet": 4,
+                "commit": "",
+                "project": "Packages/TYPO3.CMS",
+                "updated": "2026-08-06 16:20:31.000000000",
+                "created": "2025-11-13 09:18:48.000000000",
+                "insertions": 2,
+                "deletions": 2,
+                "mergeable": true,
+                "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91606",
+                "fetch": {
+                    "ref": "refs/changes/06/91606/4",
+                    "remote": "https://review.typo3.org/Packages/TYPO3.CMS"
+                },
+                "labels": [
+                    {
+                        "label": "Verified",
+                        "state": "NEED",
+                        "satisfied": false,
+                        "votes": null
+                    },
+                    {
+                        "label": "Code-Review",
+                        "state": "NEED",
+                        "satisfied": false,
+                        "votes": null
+                    }
+                ],
+                "commentCount": 2,
+                "unresolvedCommentCount": 0,
+                "comments": null,
+                "chain": null,
+                "issues": null,
+                "releases": null,
+                "messages": null,
+                "botMessageCount": null,
+                "conflicts": null,
+                "cherryPickOf": null
             }
         ],
         "backlog": {
             "order": "oldest",
-            "read": 28,
+            "read": 30,
             "complete": true
         },
         "releaseLines": {

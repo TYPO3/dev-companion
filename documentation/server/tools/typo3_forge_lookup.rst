@@ -578,7 +578,7 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-10 by ``bin/cli tools:record``. Answered against
+Recorded on 2026-09-14 by ``bin/cli tools:record``. Answered against
 core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/,
 whose console could not be reached: <installation> has no TYPO3 console —
 none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
@@ -1626,7 +1626,7 @@ Text:
     TYPO3 issue tracker: no issue matches "file renderer RendererRegistry FileRendererInterface" at https://forge.typo3.org.
     These words matched nothing, which is not that nobody reported it: an issue worded differently is invisible to a full-text search.
     Every word has to be in the same issue, so one word nobody wrote empties the answer whatever else is in it.
-    Asked one word at a time: "file" reaches 13964 · "renderer" reaches 1175 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
+    Asked one word at a time: "file" reaches 13974 · "renderer" reaches 1176 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
     No issue on the tracker carries "FileRendererInterface". A query it is in is empty whatever else is in it, so drop it.
     "RendererRegistry" is the narrowest of the rest and reaches something: ask it on its own, then read the subjects.
     What no wording of the report reaches is enumerated instead: backlog "newest" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — "import export", "rte" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.
@@ -1647,11 +1647,11 @@ Data:
         "terms": [
             {
                 "term": "file",
-                "matchCount": 13964
+                "matchCount": 13974
             },
             {
                 "term": "renderer",
-                "matchCount": 1175
+                "matchCount": 1176
             },
             {
                 "term": "RendererRegistry",
@@ -1687,7 +1687,7 @@ Text:
 
 .. code-block:: text
 
-    TYPO3 issue tracker: 3 of 2399 open issues of the TYPO3 Core project, oldest filed first
+    TYPO3 issue tracker: 3 of 2391 open issues of the TYPO3 Core project, oldest filed first
     This is a page and not the set. What comes after it is reached by a narrower filter — an earlier date, one tracker — rather than by a larger limit, because the order is the tracker's own and more of it is more of the same end. breakdown answers how the whole of it is distributed.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
@@ -1736,7 +1736,7 @@ Data:
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
         "placedAgainst": "14.3.7-dev",
-        "total": 2399,
+        "total": 2391,
         "terms": [],
         "categories": [],
         "categoriesUsed": [],

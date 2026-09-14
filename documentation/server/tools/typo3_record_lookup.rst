@@ -216,7 +216,7 @@ The answer carries exactly one of these sets of fields: ``table``,
 Answered
 --------
 
-Recorded on 2026-09-10 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-14 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on which one a client is standing in,
 and neither fills the whole surface. Answered against core-checkout, TYPO3
 14.3.7-dev, the 14.3 core checkout below .checkouts/, whose console could not

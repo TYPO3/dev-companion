@@ -9,9 +9,9 @@ coveredBy:
 
 # D-KNW-061 — The manual scaffold is a document and the hint keeps the policy
 
-**What an extension's `Documentation/` directory consists of, and the command
-that renders it, is written as a document in `knowledge/documents/`, while
-`extension-documentation` goes on stating the policy.**
+**A document in `knowledge/documents/` says what an extension's `Documentation/`
+directory consists of and which command renders it. `extension-documentation`
+goes on with the policy.**
 
 A session told an extension needs a manual read four installed packages to find
 out what to put in the directory.
@@ -20,9 +20,9 @@ out what to put in the directory.
 
 - `feedback/2026-08-04-175804`. The hint says a manual lives in `Documentation/`
   with `Index.rst` as entry point and `guides.xml` as renderer configuration,
-  and that it ships with the package. The official page says `Documentation/` is
-  recommended over a single README and why. Neither says what has to be in the
-  directory.
+  and that it ships with the package. The official page recommends
+  `Documentation/` over a single README and says why. Neither says what has to
+  be in the directory.
 - What the session read instead:
   `vendor/typo3fluid/fluid/Documentation/guides.xml` and
   `vendor/typo3/cms-dashboard/Documentation/guides.xml` for the file shape, plus
@@ -34,53 +34,52 @@ out what to put in the directory.
   all — `D-SKL-019`. Two sessions of one day arrived at the manual from
   different directions, and neither got a scaffold out of this server.
 - [`D-FBK-043`](../feedback/fbk-043-a-structure-is-answered-with-a-document-rather-than-with-a-rule.md)
-  is the shape: a session that found a *structure* unclear is answered with a
-  document, because a hint states one thing and a file inventory is not one
-  thing. `knowledge/documents/extension/testing/phpunit.md` is the neighbour it
-  is written beside.
+  is the shape. A session that found a *structure* unclear gets a document,
+  because a hint states one thing and a file inventory is not one thing.
+  `knowledge/documents/extension/testing/phpunit.md` is the neighbour it is
+  written beside.
 
 ## Decided
 
-- The judgement is **step 1a**, the knowledge is missing, and it is **taken
-  on**: a document below `knowledge/documents/extension/documentation/`,
-  declaring what it is and when to reach for it as
+- The judgement is **step 1a**, the knowledge is absent, and this entry **takes
+  it on**. That is a document below
+  `knowledge/documents/extension/documentation/` that declares what it is and
+  when to reach for it as
   [`D-KNW-057`](knw-057-a-document-declares-what-it-is-and-when-to-reach-for-it.md)
   requires.
-- The hint is not grown into the scaffold. It keeps the policy — where a manual
-  lives, that it ships with the package, what a breaking change owes its readers
-  — and the document names it in its own `hints:` front matter, which is how the
-  two are already tied.
+- The hint is not grown into the scaffold. It keeps the policy: where a manual
+  lives, that it ships with the package, what a break owes its readers. The
+  document names it in its own `hints:` front matter, which is how the two are
+  already tied.
 - Not closed on the spot. What a `guides.xml` has to contain is a fact about the
-  renderer, and it is read from the renderer's own documentation and from
-  packages that ship one, never copied out of the report.
+  renderer. The writer reads it from the renderer's own documentation and from
+  packages that ship one, never copies it out of the report.
 
 ## Assumed
 
-- That the scaffold is fixed enough to write down. Two packages agreed on it in
-  the session's reading, and the todo's first step is whether a third and the
+- That the scaffold is stable enough to write down. Two packages agreed on it in
+  the session's account, and the todo's first step is whether a third and the
   renderer's own documentation do.
 
 ## Wrong if
 
 - The file shape turns out to move with the docs theme or the TYPO3 major, and
-  the document carries no binding for it. Then this is a statement with a
-  `since` rather than a page.
+  the document carries no bound for it. Then this is a statement with a `since`
+  rather than a page.
 - A session that read the document still opens a vendor package to copy a file.
-  Then what was missing is a template the server hands over, not a description
-  of one.
+  Then the gap was a template the server hands over, not a description of one.
 
 ## Since then
 
-The scaffold was established and written. The minimal set is two files and the
-official reference says so; what the renderer needs of the configuration is
-three attributes, the rest producing the edit link and the header.
+A session established the scaffold and wrote it. The minimal set is two files
+and the official reference says so. What the renderer needs of the configuration
+is three attributes, and the rest produces the edit link and the header.
 
-Both were verified by rendering rather than by reading, and the measurement that
-made the page worth writing is the exit code: a tree whose entry point includes
-a missing file logs the failure, prints success and exits 0, while the same run
-with the strict flag exits 1. So the flag is what turns the renderer into a
-check, which neither the official page nor the README states.
+A render verified both rather than a read, and the measurement that made the
+page worth the write is the exit code. A tree whose entry point includes an
+absent file logs the failure, prints success and exits 0. The same run with the
+strict flag exits 1. So the flag is what turns the renderer into a check, which
+neither the official page nor the README states.
 
-Two files that look like the template are named as not being it, because a
-session copying from a real published extension can land on the replaced
-renderer.
+The page names two files that look like the template and are not it. A session
+that copies from a real published extension can land on the replaced renderer.

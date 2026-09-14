@@ -133,11 +133,13 @@ What an entry holds
   the file sees it where a heading belongs. ``bin/cli decisions:check`` holds
   the two to each other, so a rewrite of one is a rewrite of both.
 
-  It is the name the entry is read by in a listing of hundreds, and it is not
-  the statement: that is the bold sentence below it, which is held to thirty
-  words. A title says one thing, in twelve or so — where an ``and`` joins two
-  claims, the second one is the statement's and is usually already in it.
-  ``bin/cli prose:check`` counts the ones that carry more, worst first, and
+  It is the name a reader finds the entry by in a listing of hundreds, and it
+  is not the statement. The statement is the bold sentence below it, which
+  ``bin/cli prose:check`` holds to the STE measure `D-DOC-070
+  <../../decisions/documentation/doc-070-this-repository-writes-in-asd-ste100.md>`_
+  sets. A title says one thing, in twelve or so. Where an ``and`` joins two
+  claims, the second one is the statement's and usually stands in it already.
+  ``bin/cli prose:check`` counts the titles that carry more, worst first, and
   fails on none of them.
 
   It says what will be done, in the affirmative. Not the deficiency it corrects

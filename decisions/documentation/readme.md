@@ -8,6 +8,7 @@ What was assumed about how they are written belongs here.
 See [the decisions readme](../readme.md) for how an entry is written and when it
 earns one.
 
+- [`D-DOC-070`][D-DOC-070] — This repository writes in ASD-STE100 · 2026-09-14
 - [`D-DOC-069`][D-DOC-069] — AGENTS.md states the three patch rules this corpus breaks · 2026-09-10
 - [`D-DOC-068`][D-DOC-068] — The register this server writes in is copied into its callers' patches · 2026-09-09
 - [`D-DOC-067`][D-DOC-067] — Every command prints in one voice · 2026-09-05
@@ -69,8 +70,8 @@ earns one.
 - [`D-DOC-007`][D-DOC-007] — One page per tool, and the answer on it whole · 2026-08-02
 - [`D-DOC-008`][D-DOC-008] — The calls that reach outside stay in the shared table · 2026-08-02 · confirmed
 - [`D-DOC-001`][D-DOC-001] — A table is written so it reads unrendered · 2026-08-01 · confirmed
-- [`D-DOC-002`][D-DOC-002] — The prose rule is measured, and only the lead fails on it · 2026-08-01
 
+[D-DOC-070]: doc-070-this-repository-writes-in-asd-ste100.md
 [D-DOC-069]: doc-069-agents-md-states-the-three-patch-rules-this-corpus-breaks.md
 [D-DOC-068]: doc-068-the-register-this-server-writes-in-is-copied-into-its-callers-patches.md
 [D-DOC-067]: doc-067-every-command-prints-in-one-voice.md
@@ -132,7 +133,6 @@ earns one.
 [D-DOC-007]: doc-007-one-page-per-tool-and-the-answer-on-it-whole.md
 [D-DOC-008]: doc-008-the-calls-that-reach-outside-stay-in-the-shared-table.md
 [D-DOC-001]: doc-001-a-table-is-written-so-it-reads-unrendered.md
-[D-DOC-002]: doc-002-the-prose-rule-is-measured-and-only-the-lead-fails-on-it.md
 
 ### Revoked, and kept as the record
 
@@ -142,6 +142,7 @@ earns one.
 - [`D-DOC-020`][D-DOC-020] — The site is rendered by one command that installs what it needs · 2026-08-09 → D-DOC-028
 - [`D-DOC-021`][D-DOC-021] — The site is searched in a dialog opened with Ctrl-K · 2026-08-09 → D-DOC-024
 - [`D-DOC-023`][D-DOC-023] — The site is built to the TYPO3 Support App design system · 2026-08-09 → D-DOC-024
+- [`D-DOC-002`][D-DOC-002] — The prose rule is measured, and only the lead fails on it · 2026-08-01 → D-DOC-070
 
 [D-DOC-041]: doc-041-an-entry-outgrown-by-its-own-history-is-read-out.md
 [D-DOC-018]: doc-018-the-site-opens-on-the-readme.md
@@ -149,3 +150,4 @@ earns one.
 [D-DOC-020]: doc-020-the-site-is-rendered-by-one-command-that-installs-what-it-needs.md
 [D-DOC-021]: doc-021-the-site-is-searched-in-a-dialog-opened-with-ctrl-k.md
 [D-DOC-023]: doc-023-the-site-is-built-to-the-typo3-support-app-design-system.md
+[D-DOC-002]: doc-002-the-prose-rule-is-measured-and-only-the-lead-fails-on-it.md

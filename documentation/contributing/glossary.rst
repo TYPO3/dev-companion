@@ -20,6 +20,9 @@ Glossary
   subsystem, skill or expected finding.
 * **hint** — one statement in ``knowledge/hints/``, reached by
   ``bin/cli hints:probe``.
+* **hold** — two senses, told apart by the preposition. A statement *holds on* a
+  version or *for* a scope: it is true there. A test *holds* a rule and the rule
+  is *held by* it: the test fails when the rule breaks.
 * **installation** — the TYPO3 a calling agent is working in, whose own facts
   are read from it rather than bundled.
 * **judge** — to work out what should become of one open feedback, on evidence.

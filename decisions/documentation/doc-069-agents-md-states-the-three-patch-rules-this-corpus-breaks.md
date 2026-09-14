@@ -93,3 +93,7 @@ named rather than pointed at, and 23 named a position instead. 19 of those were
 rewritten and 4 read as correct. One had already gone stale, and `git log -S` on
 the sentence is what settled it: `installing.rst` sent a reader to "the section
 above" for its sources, which two reorganisations had moved away.
+
+`D-DOC-070` overturns the decline of "name who acts": on 2026-09-14 the
+maintainer adopted ASD-STE100 for the records too. The three rules this entry
+wrote into the Prose list stand.

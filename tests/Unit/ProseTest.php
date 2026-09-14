@@ -189,7 +189,9 @@ final class ProseTest extends TestCase
         self::assertNotEmpty($counted, 'the measure found nothing at all, which means it read nothing');
         foreach ($counted as $sentence) {
             self::assertStringStartsNotWith('|', $sentence);
-            self::assertStringStartsNotWith('#', $sentence);
+            // A heading opens with its marks and a space; "#110533 carries no
+            // Category" is a Forge issue in a sentence.
+            self::assertDoesNotMatchRegularExpression('/^#+\s/', $sentence);
             self::assertStringStartsNotWith('>', $sentence);
             self::assertStringNotContainsString('```', $sentence);
         }

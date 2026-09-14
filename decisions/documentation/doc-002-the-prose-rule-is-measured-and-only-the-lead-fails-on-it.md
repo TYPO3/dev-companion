@@ -2,7 +2,8 @@
 id: D-DOC-002
 title: The prose rule is measured, and only the lead fails on it
 date: 2026-08-01
-status: open
+status: revoked
+revokedBy: D-DOC-070
 ---
 
 # D-DOC-002 — The prose rule is measured, and only the lead fails on it
@@ -66,3 +67,11 @@ seven times the prose later. What the numbers also show is that the
 concentration went — the ten worst files carry 8% of the long sentences where
 six carried a fifth — so the count reads as a property of how this repository
 writes rather than as a backlog.
+
+## Revoked on 2026-09-14
+
+The maintainer adopted ASD-STE100 for the whole corpus, and STE sets the
+measure: 25 words in a descriptive sentence and 20 in a procedure. What this
+entry got right stays in `D-DOC-070`: the body is reported and the lead fails.
+The lead still fails at 30 until the sweep of the records lands, because 402 of
+the 924 lead sentences run past 25 today.

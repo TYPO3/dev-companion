@@ -11,17 +11,17 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 use TYPO3\DevCompanion\Upkeep\Wrap;
 
 /**
- * What the prose rule in AGENTS.md costs when nothing reads it.
+ * What the prose rules in AGENTS.md cost when nothing reads them.
  *
- * Every other rule that file states is held by something, and "one point per
- * sentence" was held by whoever reread the paragraph. This counts. It fails on
- * one thing only — the bold sentence a requirement or a decision opens with,
- * because that one has a job the rest of the file does not — and reports the
- * rest, over the three corpora `D-DOC-035` names.
+ * A test or a check holds every other rule that file states, and a reader who
+ * rereads the paragraph held "one point per sentence". This command counts. It
+ * fails on one thing only — the bold sentence a requirement or a decision opens
+ * with, because that one has a job the rest of the file does not — and reports
+ * the rest, over the three corpora `D-DOC-035` names.
  */
 #[AsCommand(
     name: 'prose:check',
-    description: 'the sentences over ' . Prose::MEASURE . ' words, what the comments cost, and the leads that may not be',
+    description: 'the sentences over the STE measure, the passive and -ing forms, what the comments cost, and the leads that may not be',
 )]
 final class ProseCheck
 {
@@ -29,13 +29,14 @@ final class ProseCheck
     private const NAMED = 10;
 
     /**
-     * The measure over the whole corpus, worst file first.
+     * The measures over the whole corpus, worst file first.
      *
-     * A long sentence in the body is reported and nothing else: it can be the
-     * right sentence, and a rewrite made to satisfy a counter produces two
-     * short ones saying what one said. What the number is for is the file that
-     * has twenty of them, which is a file nobody has reread since it was
-     * written.
+     * The command reports a long sentence in the body and does nothing else:
+     * it can be the right sentence, and a rewrite that satisfies a counter
+     * produces two short ones that say what one said. The number serves the
+     * file that has twenty of them, which nobody has reread since it was
+     * written — and, since `D-DOC-070`, the sweep that brings a directory to
+     * STE and needs a worklist.
      */
     public function __invoke(OutputInterface $output): int
     {
@@ -46,15 +47,32 @@ final class ProseCheck
         $over = array_sum(array_map(static fn(array $file): int => count($file['over']), $measured));
 
         Voice::heading($output, sprintf(
-            '%d of %d sentences run past %d words, in %d files',
+            '%d of %d sentences run past the STE measure (%d words, %d in a procedure), in %d files',
             $over,
             $sentences,
             Prose::MEASURE,
+            Prose::PROCEDURE,
             count(array_filter($measured, static fn(array $file): bool => $file['over'] !== [])),
         ));
 
         foreach (array_slice(array_filter($measured, static fn(array $file): bool => $file['over'] !== []), 0, self::NAMED) as $file) {
-            Voice::row($output, sprintf('%s  %s %s', Voice::key((string) count($file['over']), 3), $file['file'], Voice::dim(sprintf('(longest %d)', $file['over'][0]['words']))));
+            Voice::row($output, sprintf('%s  %s %s', Voice::key((string) count($file['over']), 3), $file['file'], Voice::dim(sprintf('(longest %d, measure %d)', $file['over'][0]['words'], $file['measure']))));
+        }
+
+        // STE's voice and verb rules, as upper bounds: "is read" can be an
+        // adjective, and a regex cannot tell. Per file, so a sweep has its
+        // worklist — `D-DOC-070`.
+        foreach (['passive' => 'carry a passive form', 'ing' => 'carry an -ing form of a verb'] as $key => $what) {
+            usort($measured, static fn(array $a, array $b): int => $b[$key] <=> $a[$key]);
+            Voice::heading($output, sprintf(
+                'At most %d of %d sentences %s',
+                array_sum(array_column($measured, $key)),
+                $sentences,
+                $what,
+            ));
+            foreach (array_slice(array_filter($measured, static fn(array $file): bool => $file[$key] > 0), 0, self::NAMED) as $file) {
+                Voice::row($output, sprintf('%s  %s', Voice::key((string) $file[$key], 3), $file['file']));
+            }
         }
 
         // The other half, and the one nothing counted: what a client is handed

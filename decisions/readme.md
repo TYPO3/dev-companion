@@ -1106,6 +1106,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### documentation
 
+- [`D-DOC-070`][D-DOC-070] — This repository writes in ASD-STE100 · 2026-09-14
 - [`D-DOC-069`][D-DOC-069] — AGENTS.md states the three patch rules this corpus breaks · 2026-09-10
 - [`D-DOC-068`][D-DOC-068] — The register this server writes in is copied into its callers' patches · 2026-09-09
 - [`D-DOC-067`][D-DOC-067] — Every command prints in one voice · 2026-09-05
@@ -1167,8 +1168,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DOC-007`][D-DOC-007] — One page per tool, and the answer on it whole · 2026-08-02
 - [`D-DOC-008`][D-DOC-008] — The calls that reach outside stay in the shared table · 2026-08-02 · confirmed
 - [`D-DOC-001`][D-DOC-001] — A table is written so it reads unrendered · 2026-08-01 · confirmed
-- [`D-DOC-002`][D-DOC-002] — The prose rule is measured, and only the lead fails on it · 2026-08-01
 
+[D-DOC-070]: documentation/doc-070-this-repository-writes-in-asd-ste100.md
 [D-DOC-069]: documentation/doc-069-agents-md-states-the-three-patch-rules-this-corpus-breaks.md
 [D-DOC-068]: documentation/doc-068-the-register-this-server-writes-in-is-copied-into-its-callers-patches.md
 [D-DOC-067]: documentation/doc-067-every-command-prints-in-one-voice.md
@@ -1230,7 +1231,6 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-DOC-007]: documentation/doc-007-one-page-per-tool-and-the-answer-on-it-whole.md
 [D-DOC-008]: documentation/doc-008-the-calls-that-reach-outside-stay-in-the-shared-table.md
 [D-DOC-001]: documentation/doc-001-a-table-is-written-so-it-reads-unrendered.md
-[D-DOC-002]: documentation/doc-002-the-prose-rule-is-measured-and-only-the-lead-fails-on-it.md
 
 ### code
 
@@ -1282,6 +1282,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-014`][D-KNW-014] — The record a v14 preview template is handed is a subject this server owns · 2026-08-02 → D-KNW-020
 - [`D-KNW-015`][D-KNW-015] — The corpus states what a Fluid preview template replaces · 2026-08-02 → D-KNW-021
 - [`D-KNW-025`][D-KNW-025] — What a backend preview owes the editor is a subject this server owns · 2026-08-02 → D-KNW-037
+- [`D-DOC-002`][D-DOC-002] — The prose rule is measured, and only the lead fails on it · 2026-08-01 → D-DOC-070
 - [`D-FBK-005`][D-FBK-005] — The queue is worked before the pile is sighted · 2026-08-01 → D-FBK-012
 - [`D-FBK-010`][D-FBK-010] — `main` carries the state and the branch carries the work · 2026-08-01
 - [`D-SCO-007`][D-SCO-007] — The signals are combined per call · 2026-08-01 → D-SCO-008
@@ -1328,6 +1329,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-KNW-014]: knowledge/knw-014-the-record-a-v14-preview-template-is-handed-is-a-subject-this-server-owns.md
 [D-KNW-015]: knowledge/knw-015-the-corpus-states-what-a-fluid-preview-template-replaces.md
 [D-KNW-025]: knowledge/knw-025-what-a-backend-preview-owes-the-editor-is-a-subject-this-server-owns.md
+[D-DOC-002]: documentation/doc-002-the-prose-rule-is-measured-and-only-the-lead-fails-on-it.md
 [D-FBK-005]: feedback/fbk-005-the-queue-is-worked-before-the-pile-is-sighted.md
 [D-FBK-010]: feedback/fbk-010-main-carries-the-state-and-the-branch-carries-the-work.md
 [D-SCO-007]: scope/sco-007-the-signals-are-combined-per-call.md

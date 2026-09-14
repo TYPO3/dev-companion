@@ -12,30 +12,48 @@ use TYPO3\DevCompanion\Tool\Registry;
 /**
  * The prose this repository writes about itself, measured.
  *
- * AGENTS.md asks for one point per sentence and says that length is a symptom.
- * Every other rule it states is held by something — the names by a test, the
- * shapes by a check — and that one was held by whoever happened to reread the
- * paragraph. What it costs when nothing measures is a lead sentence of 96
- * words, which is where this started.
+ * AGENTS.md writes in ASD-STE100 and asks for one point per sentence. A test or
+ * a check holds every other rule that file states; a reader who rereads the
+ * paragraph held this one. A lead sentence of 96 words is what that cost, and
+ * that is where this class started.
  *
- * A sentence over the measure is not an error, and this reports rather than
- * judges: a long sentence can be the right one, and a rewrite driven by a
- * counter produces two short sentences saying what one said. The one place it
- * is held is the bold opening of a requirement or a decision, because that
- * sentence has a job nothing else does — a reader who stops after it knows what
- * was settled — and a reader cannot stop after 96 words.
+ * This class reports and does not judge. A sentence over the measure can be
+ * the right sentence, and a rewrite that satisfies a counter produces two
+ * short sentences that say what one said. `bin/cli prose:check` fails on one
+ * thing: the bold opening of a requirement or a decision, because a reader who
+ * stops after it must know what was settled, and nobody stops after 96 words.
  */
 final class Prose
 {
     /**
-     * Where a sentence stops being one point.
-     *
-     * Not a style ceiling. It is the length at which the sentences in this
-     * repository reliably turned out to be two — measured over the 47 leads
-     * that ran past it, every one of which came apart into a rule and the
-     * enumeration behind it.
+     * The STE measure for a descriptive sentence — `D-DOC-070`.
      */
-    public const MEASURE = 30;
+    public const MEASURE = 25;
+
+    /**
+     * The STE measure for a sentence in a procedure. `skills/` and
+     * `knowledge/documents/` are the procedures a caller follows — `D-DOC-070`.
+     */
+    public const PROCEDURE = 20;
+
+    /**
+     * Where a lead still fails. 402 of 924 leads run past `MEASURE` on the day
+     * `D-DOC-070` set it, so the check fails at the old number until the sweep
+     * of the records lands and its todo moves this to `MEASURE`.
+     */
+    public const HELD = 30;
+
+    /**
+     * A passive form, as an upper bound. "is read" can be the passive or the
+     * adjective, and the count says so where it prints — `D-DOC-070`.
+     */
+    private const PASSIVE = '/\b(?:is|are|was|were|be|been|being)\s+(?:\w+ed|held|written|read|kept|taken|given|done|made|said|known|seen|left|put|set|run|built|found|shown|sent|met|split|cut|bound|thrown|begun|drawn|torn|worn)\b/i';
+
+    /**
+     * An -ing form of a verb, as an upper bound. The nouns that end the same
+     * way are named out, and a capitalised word is a name STE permits.
+     */
+    private const ING = '/\b(?!(?:nothing|something|anything|everything|thing|things|during|string|strings|bring|ring|sing|king|wing|sibling|siblings|ceiling|meaning|morning|evening|building|heading|headings|setting|settings|listing|listings|mapping|mappings|according|regarding|following)\b)[a-z]+ing\b/';
 
     /**
      * Where a comment has stopped naming its reason and started retelling it.
@@ -108,25 +126,39 @@ final class Prose
         return $files;
     }
 
+    /** The measure a file is read against: the procedure's or the description's. */
+    public static function measureOf(string $file): int
+    {
+        return str_starts_with($file, 'skills/') || str_starts_with($file, 'knowledge/documents/')
+            ? self::PROCEDURE
+            : self::MEASURE;
+    }
+
     /**
-     * What one file measures: how many sentences, and the ones over the measure.
+     * What one file measures: its sentences, the ones over its measure, and
+     * how many carry a passive or an -ing form.
      *
-     * @return array{file: string, sentences: int, over: list<array{words: int, text: string}>}
+     * @return array{file: string, measure: int, sentences: int, over: list<array{words: int, text: string}>, passive: int, ing: int}
      */
     public static function measure(string $file): array
     {
         $over = [];
+        $passive = 0;
+        $ing = 0;
+        $measure = self::measureOf($file);
         $sentences = self::sentences((string) file_get_contents(Paths::root() . '/' . $file));
         foreach ($sentences as $sentence) {
             $words = count(explode(' ', $sentence));
-            if ($words > self::MEASURE) {
+            if ($words > $measure) {
                 $over[] = ['words' => $words, 'text' => $sentence];
             }
+            $passive += preg_match(self::PASSIVE, $sentence);
+            $ing += preg_match(self::ING, $sentence);
         }
 
         usort($over, static fn(array $a, array $b): int => $b['words'] <=> $a['words']);
 
-        return ['file' => $file, 'sentences' => count($sentences), 'over' => $over];
+        return ['file' => $file, 'measure' => $measure, 'sentences' => count($sentences), 'over' => $over, 'passive' => $passive, 'ing' => $ing];
     }
 
     /**
@@ -285,8 +317,9 @@ final class Prose
      * The bold opening of every requirement and decision, split into sentences.
      *
      * Two sentences there are legitimate — a decision that removes something
-     * and says what replaced it is two points and reads as two. What is held is
-     * each of them, not their sum.
+     * and says what replaced it is two points and reads as two. The check holds
+     * each of them, not their sum, and holds them at `HELD` rather than at
+     * `MEASURE` until the records sweep lands.
      *
      * @return list<array{id: string, words: int, text: string}>
      */
@@ -297,7 +330,7 @@ final class Prose
         foreach ($entries as $entry) {
             foreach (self::sentences($entry['statement']) as $sentence) {
                 $words = count(explode(' ', $sentence));
-                if ($words > self::MEASURE) {
+                if ($words > self::HELD) {
                     $over[] = ['id' => $entry['id'], 'words' => $words, 'text' => $sentence];
                 }
             }
@@ -564,7 +597,9 @@ final class Prose
                 if ($line === '' || in_array($line[0], ['#', '|', '>'], true) || preg_match('/^\[[^\]]+\]:\s/', $line) === 1) {
                     continue;
                 }
-                foreach (preg_split('/(?<=[.!?])\s+/', $line) ?: [] as $sentence) {
+                // A bold sentence ends inside its markers, so `read.** A` is
+                // two sentences and not one of 33 words.
+                foreach (preg_split('/(?<=[.!?]|[.!?]\*\*)\s+/', $line) ?: [] as $sentence) {
                     $sentence = trim($sentence);
                     // Four words is a heading in disguise, a label line, or the
                     // remains of one that was split on an abbreviation.

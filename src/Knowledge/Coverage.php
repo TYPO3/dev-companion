@@ -224,7 +224,10 @@ final class Coverage
 
         $paragraphs = [(string) ($stored['start'] ?? '')];
         if ($index !== []) {
-            $paragraphs[] = implode("\n", ['What to call for what:', ...$index, (string) ($stored['note'] ?? '')]);
+            // The note is a paragraph of its own: a line under the last index
+            // entry reads as part of that entry, and measures as one sentence.
+            $paragraphs[] = implode("\n", ['What to call for what:', ...$index]);
+            $paragraphs[] = (string) ($stored['note'] ?? '');
         }
         $paragraphs[] = (string) ($stored['then'] ?? '');
 

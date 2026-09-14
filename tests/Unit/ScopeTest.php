@@ -664,7 +664,7 @@ final class ScopeTest extends TestCase
         $instructions = Coverage::instructions();
 
         self::assertStringContainsString(
-            'and again at the first test, check, commit or shipped file the task did not name',
+            'Call it again at the first test, check, commit or shipped file the task did not name',
             $instructions,
         );
     }

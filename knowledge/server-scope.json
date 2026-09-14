@@ -1,7 +1,7 @@
 {
   "purpose": "A development companion for coding agents working with TYPO3, for the three audiences that do: the core contributor, the extension author, and the site developer. It establishes the project and installation the agent is working in, supplies current, version-bound TYPO3 knowledge, and hands task-specific workflows to the skills that own them so the agent can implement, review, and verify the work. Scope answers describe what is present without treating it as correct; the knowledge and skills supply the conventions that apply, so code found in one installation is not repeated as a pattern merely because it runs. They cover how TYPO3's subsystems are used, the core's own contribution process — the rules, the Gerrit workflow, the scripts and test suites — and a searchable index of backend UI components whose contract is read from the active installation where possible. The server also answers what is registered in the installation it was started in, which no bundled snapshot could get right. Where that installation does not boot, or does not exist yet, the bundled knowledge and the installed packages answer instead, and the answer says which of them it came from and what that leaves out. Every answer says which TYPO3 versions it holds for and which of the three kinds of work it belongs to.",
   "instructions": {
-    "start": "Start every task with typo3_project_describe: the installation's TYPO3 version, the extensions that are the project's own, the sites it configures, and the commands the repository actually declares — a check you recommend that the repository does not declare is a wrong answer however sensible it sounds. Then call typo3_task_guide for the workflow the task belongs to, and again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch: triaging the backlog, whether a report still reproduces, and what a fix would cost are answered here. What changed, which branch you are on, and whether a path still exists are yours to read in the checkout.",
+    "start": "Start every task with typo3_project_describe. It answers the installation's TYPO3 version, the extensions that are the project's own, the sites it configures, and the commands the repository declares. A check you recommend that the repository does not declare is a wrong answer however sensible it sounds. Then call typo3_task_guide for the workflow the task belongs to. Call it again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch. It also answers a triage of the backlog, whether a report still reproduces, and what a fix costs. What changed, which branch you are on, and whether a path still exists are yours to read in the checkout.",
     "index": [
       {
         "question": "backend markup or a CSS class",
@@ -13,7 +13,7 @@
       },
       {
         "question": "a label, added or reworded",
-        "call": "typo3_label_lookup with the XLF resource the consuming code uses; a match in another is not reusable"
+        "call": "typo3_label_lookup with the XLF resource the code at hand uses; a match elsewhere is not reusable"
       },
       {
         "question": "what a version broke, deprecated or added, on a major you have not built on lately",
@@ -28,8 +28,8 @@
         "call": "typo3_rule_lookup with a documentId typo3_project_describe lists"
       }
     ],
-    "note": "Where a typo3-* skill in your listing covers the task, activate it: it makes these calls.",
-    "then": "Answers are filtered by targetVersion or by the version read, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user: its matching is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what is covered, by which tool, and which installation is read."
+    "note": "Activate the typo3-* skill in your listing that covers the task: it makes these calls.",
+    "then": "targetVersion or the version the server read filters the answers, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user. Its match is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what it covers, by which tool, and which installation it reads."
   },
   "covers": [
     {

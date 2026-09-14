@@ -6,17 +6,18 @@
 Validate docs.typo3.org permalink identifiers and turn old documentation URLs
 into the identifiers that replace them. Pass identifiers such as
 t3coreapi:extension-scanner, or a system extension by its Composer package name
-in either spelling the core writes, typo3/cms-felogin:start; and urls such as
-https://docs.typo3.org/m/typo3/reference-tca/11.5/en-us/Columns/Properties/OnChange.html,
-as many at a time as you hold — one manual inventory answers every identifier of
-that manual, so a sweep over a whole checkout costs a call per manual rather
-than a request per link. Each identifier comes back with the page and anchor it
-reaches, the other spellings that reach the same target, and which of them the
-manual declares; each URL with the identifiers pointing at it, or the near names
-where the page is gone. It says which branch actually answered, because the host
-redirects a manual it has no branch for to main without saying so. This answers
-where a link points and not what a manual says about a subject — for the prose,
-ask typo3_documentation_lookup. Answers from: network.
+in either form the core writes, typo3/cms-felogin:start. Pass urls such as
+https://docs.typo3.org/m/typo3/reference-tca/11.5/en-us/Columns/Properties/OnChange.html.
+Pass as many at a time as you hold. One manual inventory answers every
+identifier of that manual. So a sweep over a whole checkout costs a call per
+manual rather than a request per link. Each identifier comes back with the page
+and anchor it reaches. It comes with the other forms that reach the same target,
+and which of them the manual declares. Each URL comes back with the identifiers
+that point at it, or the near names where the page is gone. It says which branch
+answered, because the host redirects a manual it has no branch for to main and
+does not say so. This answers where a link points and not what a manual says
+about a subject — for the prose, ask typo3_documentation_lookup. Answers from:
+network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 
@@ -29,12 +30,12 @@ Takes
 
     # Permalink identifiers written <shortcode>:<name>, as they appear in code —
     # t3coreapi:extension-scanner, t3tca:columns-onchange, typo3/cms-felogin:start.
-    # A trailing @<branch> pins that identifier to a branch of its own and overrides
-    # targetVersion for it. A call carries identifiers, urls, or both.
+    # An @<branch> at the end pins that identifier to a branch of its own and
+    # overrides targetVersion for it. A call carries identifiers, urls, or both.
     identifiers: [string]  # optional
     # docs.typo3.org page URLs to read the other way, anchor included where there is
-    # one. They are resolved at targetVersion rather than at the branch they name,
-    # because what a link being replaced asks is what the identifier is now. A call
+    # one. They resolve at targetVersion rather than at the branch they name,
+    # because a link up for replacement asks what the identifier is now. A call
     # carries identifiers, urls, or both.
     urls: [string]  # optional
     # Covered TYPO3 version whose manuals answer, for example "13.4" or "14". There
@@ -48,22 +49,23 @@ Answers with
 
     # One of: answered, empty, unavailable.
     status: string
-    # The documentation release the manuals were read at.
+    # The documentation release the manuals answered at.
     targetVersion: string
     # The external documentation host.
     source: string
     identifiers:
-      - # The identifier as it was passed, @<branch> included.
+      - # The identifier as the call passed it, @<branch> included.
         identifier: string
-        # The manual it names, in the spelling that manual declares.
+        # The manual it names, in the form that manual declares.
         shortcode: string
-        # The name inside that manual, in the spelling its inventory carries.
+        # The name inside that manual, in the form its inventory carries.
         name: string
-        # The branch it was looked up on: its own @<branch>, else targetVersion.
+        # The branch the lookup ran on: its own @<branch>, else targetVersion.
         branch: string
         # Whether the manual registers this name. False is a legitimate answer and
-        # reason says which of the three it is: the identifier is not written as
-        # one, no manual is known for the shortcode, or the manual has no such name.
+        # reason says which of the three it is. The identifier is not written as
+        # one, this server knows no manual for the shortcode, or the manual has no
+        # such name.
         resolved: boolean
         # The manual on docs.typo3.org, as its path names it.
         manual: string or null
@@ -75,21 +77,21 @@ Answers with
         page: string or null
         # The fragment on that page, absent for a name that is the page.
         anchor: string or null
-        # What this name is in the manual, in Sphinx's own vocabulary: std:label for
-        # a section, std:confval for a configuration value, php:class and php:method
-        # for API, std:console:command for a command. std:doc is not among them —
-        # a page is not addressable as a permalink.
+        # What this name is in the manual, in Sphinx's own vocabulary. std:label is
+        # a section, std:confval a configuration value, php:class and php:method
+        # API, std:console:command a command. std:doc is not among them — a page
+        # is not addressable as a permalink.
         roles: [string]
-        # Every other name reaching the same target. A configuration value carries
-        # two: the std:confval the manual declares, and the std:label Sphinx
+        # Every other name that reaches the same target. A configuration value
+        # carries two: the std:confval the manual declares, and the std:label Sphinx
         # generates from its anchor with a confval- prefix. An old anchor survives
         # here beside the current one.
         alsoKnownAs:
           - name: string
             roles: [string]
-        # Which of the equivalent names to write: the std:confval one where the
-        # target has one, because that is what the manual declares and the rest is
-        # generated from it. Otherwise the name asked for.
+        # Which of the equivalent names to write. The std:confval one where the
+        # target has one, because that is what the manual declares and the rest
+        # derives from it. Otherwise the name asked for.
         preferred: string or null
         # The branch the manual that answered says it is, read off its inventory.
         # Different from branch means the host has no such branch and served main
@@ -99,13 +101,13 @@ Answers with
         # Why it did not resolve. Null on a hit.
         reason: string or null
     urls:
-      - # The URL as it was passed.
+      - # The URL as the call passed it.
         url: string
         # The manual it belongs to, as a permalink names it.
         shortcode: string or null
         # That manual on docs.typo3.org, as its path names it.
         manual: string or null
-        # The branch its manual was read at, which is targetVersion.
+        # The branch its manual answered at, which is targetVersion.
         branch: string
         # The branch the URL itself names, which is what a link left in code points
         # at.
@@ -114,12 +116,12 @@ Answers with
         page: string or null
         # The fragment the URL names, if any.
         anchor: string or null
-        # The names reaching this exact target, which is what replaces the URL.
+        # The names that reach this exact target, which is what replaces the URL.
         # Empty means the manual at this version has no such page or anchor.
         identifiers:
           - name: string
             roles: [string]
-        # Names carrying the words of the URL, best first, where nothing reaches it
+        # Names with the words of the URL, best first, where nothing reaches it
         # exactly. They are candidates a reader picks from, not the answer: a manual
         # that moved a subject leaves nothing behind that says where it went.
         nearest:
@@ -135,7 +137,7 @@ Answers with
     unavailable:
       # One of: version-not-covered, source-not-answering. version-not-covered: the
       # release asked about is outside the ones this server knows the manuals for,
-      # and asking again changes nothing. source-not-answering: docs.typo3.org did
+      # and a second call changes nothing. source-not-answering: docs.typo3.org did
       # not answer this time, and the same call may answer the next.
       cause: string
       reason: string

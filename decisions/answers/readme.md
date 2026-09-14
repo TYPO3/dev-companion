@@ -1,11 +1,8 @@
 # Answers — what a lookup returns, and what decides it
 
-What is retrieved, what is withheld, and what a caller may read into a result
-that carries nothing. The constants that rank a lookup live here too: they were
-measured on one afternoon's corpus, and the corpus can grow out of them.
+What a lookup retrieves, what it withholds, and what a caller may read into a result that carries nothing. The constants that rank a lookup live here too. They come from one afternoon's corpus, and the corpus can grow out of them.
 
-See [the decisions readme](../readme.md) for how an entry is written and when
-one is added.
+See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-ANS-151`][D-ANS-151] — The file list on a change answer is asked for rather than sent · 2026-09-09
 - [`D-ANS-152`][D-ANS-152] — The core answer's npm entries say which dispatcher owns them · 2026-09-09

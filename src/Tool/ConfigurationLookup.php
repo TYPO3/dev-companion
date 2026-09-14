@@ -28,7 +28,7 @@ final class ConfigurationLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Read an effective TYPO3_CONF_VARS value from the installation you are working in — the value as it is at runtime after every extension has had its say, not the shipped default. Use it for configuration whose assembled shape matters, such as SYS/formEngine/formDataGroup, SYS/caching/cacheConfigurations, or SYS/fluid. Ask it for one form data group — SYS/formEngine/formDataGroup/tcaDatabaseRecord — and the answer also carries the order the providers actually run in, resolved by the installation from the depends and before each declares, which is what decides whether one provider sees what another wrote. It answers for the installation as it stands, in the environment it is in: a value that has to be shown resolving under another environment — a variable set, a development-environment marker absent — is the project\'s own console, one run per environment.';
+        return 'Read an effective TYPO3_CONF_VARS value from the installation you work in. That is the value as it is at runtime after every extension has had its say, not the shipped default. Use it for configuration whose assembled shape matters, such as SYS/formEngine/formDataGroup, SYS/caching/cacheConfigurations, or SYS/fluid. Ask it for one form data group, SYS/formEngine/formDataGroup/tcaDatabaseRecord, and the answer also carries the order the providers run in. The installation resolves that order from the depends and before each declares, and it decides whether one provider sees what another wrote. It answers for the installation as it stands, in the environment it is in. A value that has to resolve under another environment is the project\'s own console, one run per environment. That is a variable set, or a development-environment marker absent.';
     }
 
     public static function inputSchema(): array
@@ -45,17 +45,17 @@ final class ConfigurationLookup extends ReadOnlyTool
     public static function outputSchema(): array
     {
         return Schema::installationAnswer([
-            'configurationPath' => Schema::string('The TYPO3_CONF_VARS path that was read.'),
-            'found' => ['type' => 'boolean', 'description' => 'Whether the installation has a value at that path. Present only where one was asked: false is a statement about an installation, and where there was none to ask, unsupported stands in place of this answer.'],
+            'configurationPath' => Schema::string('The TYPO3_CONF_VARS path the call read.'),
+            'found' => ['type' => 'boolean', 'description' => 'Whether the installation has a value at that path. Present only where the call asked one. False is a statement about an installation, and where there was none to ask, unsupported stands in place of this answer.'],
             'value' => ['description' => 'The effective runtime value, of whatever shape the configuration has.'],
             'resolvedOrder' => Schema::listOf(Schema::object([
-                'index' => ['type' => 'integer', 'description' => 'Position in the run, counting from zero.'],
+                'index' => ['type' => 'integer', 'description' => 'Position in the run, counted from zero.'],
                 'provider' => Schema::string('Fully qualified class name of the form data provider.'),
                 'depends' => Schema::listOf(Schema::string(), 'What it declares it runs after.'),
                 'before' => Schema::listOf(Schema::string(), 'What it declares it runs before.'),
             ], ['index', 'provider', 'depends', 'before']), 'The order the providers actually run in, present only '
                 . 'where the path names one form data group and the installation answered. The registry under it is '
-                . 'a dependency graph, so this is what it resolves to rather than what it is written as.'),
+                . 'a dependency graph, so this is what it resolves to rather than what the files write.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
         ], ['configurationPath', 'found', 'answeredBy'], ['configurationPath']);
     }

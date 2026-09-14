@@ -87,8 +87,8 @@ at all in the state the machine is in.
         :label: Lookup
         :action: Open reference
 
-        Read an effective TYPO3_CONF_VARS value from the installation you are
-        working in.
+        Read an effective TYPO3_CONF_VARS value from the installation you work
+        in.
 
     .. card:: :doc:`typo3_documentation_lookup <typo3_documentation_lookup>`
         :label: Lookup

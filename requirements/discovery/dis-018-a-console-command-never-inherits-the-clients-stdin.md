@@ -8,15 +8,15 @@ heldBy:
 
 # R-DIS-018 — A console command never inherits the client's stdin
 
-**Every subprocess this server starts is given an stdin of its own, because the
+**Every subprocess this server starts gets an stdin of its own, because the
 server's own stdin is the client's request stream.**
 
-A console command that reads stdin — `ddev exec` does — otherwise consumes the
-request the client wrote while the command was running. Nothing reports it: the
-server never saw the request, the client is waiting for an answer to it, and the
-session stops without an error on either side.
+A console command that reads stdin, and `ddev exec` does, otherwise consumes the
+request the client wrote while the command ran. Nothing reports it. The server
+never saw the request, the client waits for an answer to it, and the session
+stops without an error on either side.
 
 ## From
 
 Two runs of `REVIEW-02` that both stalled on the first pair of tool calls the
-client dispatched concurrently (2026-07-31).
+client dispatched at once (2026-07-31).

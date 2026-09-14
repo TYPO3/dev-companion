@@ -8,10 +8,10 @@ heldBy:
 
 # R-DIS-017 — An extension below Tests/ is the test setup's
 
-**An extension below a `Tests/` directory is reported as `fixture` rather than
-as the project's own, in the project scope and in the extension scope alike.**
+**The answer reports an extension below a `Tests/` directory as `fixture` rather
+than as the project's own, in the project and extension scope alike.**
 
-It stays in the answer: a package an installation loads and the answer omits is
+It stays in the answer. A package an installation loads and the answer omits is
 one nobody can account for.
 
 ## From

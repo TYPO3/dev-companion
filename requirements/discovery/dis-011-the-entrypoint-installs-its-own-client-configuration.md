@@ -12,11 +12,10 @@ heldBy:
 `.mcp.json` on an explicit `install` command.**
 
 It preserves every unrelated entry, is idempotent for its own command, and
-refuses to replace a `typo3-dev-companion` entry that points somewhere else.
-Serving requests remains read-only; no ordinary lookup writes client
-configuration.
+refuses to replace a `typo3-dev-companion` entry that points somewhere else. The
+request path stays read-only; no ordinary lookup writes client configuration.
 
 ## From
 
-The two manual absolute-path JSON snippets between discovering the package and
-being able to call it (2026-07-30).
+The two manual absolute-path JSON snippets between the discovery of the package
+and the first call to it (2026-07-30).

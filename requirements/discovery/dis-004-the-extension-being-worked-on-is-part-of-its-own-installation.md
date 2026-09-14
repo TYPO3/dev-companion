@@ -8,8 +8,8 @@ heldBy:
 
 # R-DIS-004 — The extension being worked on is part of its own installation
 
-**The extension being worked on is part of the answers about its own
-installation, although Composer lists dependencies rather than the root.**
+**The extension under work is part of the answers about its own installation,
+although Composer lists dependencies rather than the root.**
 
 ## From
 

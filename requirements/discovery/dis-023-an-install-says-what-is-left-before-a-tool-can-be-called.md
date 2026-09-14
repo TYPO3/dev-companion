@@ -9,35 +9,34 @@ heldBy:
 
 # R-DIS-023 — An install says what is left before a tool can be called
 
-**`install` and `update` say what the client still has to do before a tool in
-the entry they just wrote can be called, per client, in their own output.**
+**`install` and `update` say per client, in their own output, what the client
+still owes before a tool in the new entry can answer.**
 
-Writing `.mcp.json` puts the entry on disk. It does not register the server with
-anything: a client that scopes project servers behind an approval has not been
-asked yet, and a session that was already open when the file was written is
-running against the configuration it started with. Both end with a published
-skill naming eleven tools beside an entry that is entirely correct, and no tool
-in the session.
+A write of `.mcp.json` puts the entry on disk. It does not register the server
+with anything. A client that scopes project servers behind an approval has had
+no question yet. A session that was already open at the write runs against the
+configuration it started with. Both end with a published skill that names eleven
+tools beside an entry that is entirely correct, and no tool in the session.
 
-What the step is belongs to the client rather than to this package, so it is
-named per client — the same way `documentation/usage/installing.rst` already
-names `chat.useAgentSkills` for VS Code, and in the command's output rather than
-only in a manual, because the person who can finish the install is looking at a
-terminal at that moment.
+What the step is belongs to the client rather than to this package, so the
+output names it per client. That is the way `documentation/usage/installing.rst`
+already names `chat.useAgentSkills` for VS Code. It stands in the command's
+output rather than only in a manual. The person who can finish the install looks
+at a terminal at that moment.
 
 ## From
 
 Two sessions in `/home/benji/projects/site-new`, on 2026-07-29 and 2026-07-31,
-each with a valid `.mcp.json` written by this installer and no callable tool.
-Both reached the server in the end by driving the stdio binary by hand, the
-second only after it had already audited a site package without it.
+each with a valid `.mcp.json` from this installer and no callable tool. Both
+reached the server in the end when they drove the stdio binary by hand. The
+second did so only after it had already audited a site package without it.
 
 ## Held by
 
 What the output has to say is a property of each client rather than of this
-package, so that test holds that something is said — per client, on both
-commands, and on the line under the entry it is about — and not that it is true.
-What each line claims is sourced per client in
+package. So that test holds that the command says something, per client, on both
+commands, and on the line under the entry it is about. It does not hold that it
+is true. Each line's claim has its source per client in
 [installing.md](../../documentation/usage/installing.rst), from that client's
-own documentation, and a client whose documentation does not answer says so
-rather than being filled in.
+own documentation. A client whose documentation does not answer says so rather
+than gets a guess.

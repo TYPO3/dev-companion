@@ -8,5 +8,5 @@ heldBy:
 
 # R-DIS-006 — Nothing is started as a side effect of a lookup
 
-**Nothing on the caller's machine is started as a side effect of a lookup; a
-stopped DDEV project is reported with the command that would fix it.**
+**A lookup starts nothing on the caller's machine as a side effect; it reports a
+stopped DDEV project with the command that would fix it.**

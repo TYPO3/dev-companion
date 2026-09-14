@@ -10,10 +10,10 @@ heldBy:
 
 **When discovery fails, the answer names where it looked, in text and in data.**
 
-A layout that cannot be read is then distinguishable from a server started in
+A reader can then tell a layout the server cannot read from a server started in
 the wrong directory.
 
 ## From
 
-The same session; "no installation found" was indistinguishable from "started in
-the wrong directory".
+The same session; "no installation found" looked the same as "started in the
+wrong directory".

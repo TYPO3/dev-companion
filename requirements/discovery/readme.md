@@ -1,11 +1,8 @@
 # Discovery — which installation is read, and how
 
-What the server may conclude about the checkout it was started in, how it is
-found, and how a client is set up to reach it. A layout that cannot be read is
-a one-line fix for the user; five tools going quiet is not.
+What the server may conclude about the checkout it started in, how it finds it, and how a client gets set up to reach it. A layout the server cannot read is a one-line fix for the user; five tools that go quiet are not.
 
-See [the requirements readme](../readme.md) for how an entry is written and
-when it is added.
+See [the requirements readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`R-DIS-001`][R-DIS-001] — Discovery belongs to the stdio entrypoint alone · held
 - [`R-DIS-002`][R-DIS-002] — The packages are read from the declared vendor directory · held

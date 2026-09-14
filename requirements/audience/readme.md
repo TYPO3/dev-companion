@@ -1,10 +1,10 @@
 # Audience — who the answer has to be right for
 
 These govern the rest. Where a requirement anywhere else conflicts with one of
-them, this group wins and the other one is what needs rewriting.
+them, this group wins and the other one is what needs a rewrite.
 
-See [the requirements readme](../readme.md) for how an entry is written and
-when it is added.
+See [the requirements readme](../readme.md) for how a session writes an entry
+and when it adds one.
 
 - [`R-AUD-001`][R-AUD-001] — Core, extension and site work are each served · held
 - [`R-AUD-002`][R-AUD-002] — The audience is a property of the task · held

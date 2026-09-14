@@ -10,20 +10,20 @@ coveredBy:
 # D-SKL-043 — A rule query carries two subjects
 
 **A skill that tells a caller how many subjects one rule query carries states a
-count the corpus was measured to bear, and that count is two.**
+count a measure of the corpus bears. That count is two.**
 
 [`D-SKL-011`](skl-011-the-call-plan-a-skill-writes-down-is-measured.md)
-replaced a count with *length is the limit rather than the count*, and its
-second **Wrong if** described what would follow: a review asking four
-obligations in one query and reporting what came back missing. That happened on
-2026-08-13, and nothing came back at all.
+replaced a count with *length is the limit rather than the count*. Its second
+**Wrong if** described what would follow: a review that asks four obligations in
+one query and reports what came back absent. That happened on 2026-08-13, and
+nothing came back at all.
 
 ## Evidence
 
-- `feedback/2026-08-13-214857` reports a review of Gerrit change 93319 asking
-  `typo3_rule_lookup` for `changelog entry testing review readiness` at
-  `targetVersion "15.0"` and getting `matchCount: 0`. It names the skill's
-  bundling sentence as what it followed, and reading
+- `feedback/2026-08-13-214857` reports a review of Gerrit change 93319 that
+  asked `typo3_rule_lookup` for `changelog entry testing review readiness` at
+  `targetVersion "15.0"` and got `matchCount: 0`. It names the skill's bundle
+  sentence as what it followed, and a read of
   `documentId="core/contribution/rules"` as what it recovered with.
 - The miss reproduces whole, re-run on 2026-08-14 from this worktree through
   `Tool\RuleLookup::answer()` with the feedback's own arguments: *No knowledge
@@ -43,10 +43,10 @@ obligations in one query and reporting what came back missing. That happened on
   corpus carries, asked in the corpus's own words. All 1891 pairs: one empty. Of
   37,820 triples, 379 taken at a fixed stride: 102 empty, 27%. Of 557,845
   quadruples, 140 at the same stride: 80 empty, 57%.
-- Sharing a document does not save a third subject, which is what the sentence
-  being replaced promised. Exhaustively within one document: 351 triples of its
-  own headings return nothing 34 times and return all three 31 times; 500
-  quadruples return nothing 84 times and all four twice.
+- A shared document does not save a third subject, which is what the replaced
+  sentence promised. Exhaustive within one document: 351 triples of its own
+  headings return nothing 34 times and return all three 31 times. 500 quadruples
+  return nothing 84 times and all four twice.
   `documentation testing review readiness` — three headings of
   `core/contribution/rules`, the document the feedback's session went on to read
   whole — returns `## Testing` alone at coverage 0.532.
@@ -60,7 +60,8 @@ obligations in one query and reporting what came back missing. That happened on
   sections, which is
   [`D-ANS-016`](../answers/ans-016-a-miss-names-the-query-that-would-have-hit.md)'s
   computation on this corpus. The report names only the topic listing as what
-  the miss did right, and nothing records whether the subsets line was read.
+  the miss did right, and nothing records whether the session read the subsets
+  line.
 - The tool's own schema asks for one. `RuleLookup::inputSchema()` describes
   `query` as *Topic to look up, in English, for example testing, review,
   deprecation, or code style* — singular, and four single-word examples. The
@@ -68,44 +69,44 @@ obligations in one query and reporting what came back missing. That happened on
 
 ## Decided
 
-- **Step 4, wording, closed on the spot.** The rule was delivered, was followed
-  and was wrong about the corpus — the same diagnosis `D-SKL-011` made of the
-  sentence it replaced. The skill's contract is untouched: its `description` and
-  the ownership boundary it closes on are unchanged, and nothing about TYPO3 was
-  looked up.
-- The bound is stated as a count, because the count is what a caller can check
+- **Step 4, wording, closed on the spot.** The rule arrived, the session
+  followed it, and it was wrong about the corpus, the same diagnosis `D-SKL-011`
+  made of the sentence it replaced. The skill's contract stands. Its
+  `description` and the ownership boundary it closes on have not changed, and
+  nothing here looked up anything about TYPO3.
+- The bound stands as a count, because the count is what a caller can check
   before the call. *Length is the limit* named the mechanism accurately and
   asked the caller to estimate a coverage share against a corpus they cannot
   see.
-- Sharing a document is demoted from the rule to the reason a pair is worth
-  asking together, which is what the measurement supports.
+- A shared document moves down from the rule to the reason a pair is worth one
+  query, which is what the measurement supports.
 - The exception list goes. *A genuinely different subject — testing, code style,
   the Gerrit workflow — is a call of its own* is what a bound of two already
   says, and it was the half the reporting session read as exhaustive.
 - **The per-term fallback the feedback asks for is not built.** `D-ANS-037`'s
-  **Since then** measured it over 490 queries: admitting every section a query
-  term reaches returns the nearest unrelated section to 87 queries that reach
-  nothing today, 40 of the 41 scenario prompts among them. The subsets in the
-  miss are that fallback in the form the floor survives — the union is offered
-  as a query to ask rather than returned as an answer.
+  **Since then** measured it over 490 queries. Admission of every section a
+  query term reaches returns the nearest unrelated section to 87 queries that
+  reach nothing today. 40 of the 41 scenario prompts are among them. The subsets
+  in the miss are that fallback in the form the floor survives. The miss offers
+  the union as a query to ask rather than returns it as an answer.
 - **The tool description is not changed either.** The feedback asks it to state
-  a conjunction, and there is none: a section is kept at half the query's weight
-  rather than at all of it, which is why four words answer where five do not.
-  Writing a share into a description a client caches is the mistake this entry
-  is about, one file further out.
-- `D-SKL-011` is revoked rather than amended. Its statement carries *obligations
-  that share a document are one call* unbounded, which is what the sweep above
-  disproves at three, and a reader of the listing sees the headline and the
-  status alone.
+  a conjunction, and there is none. The search keeps a section at half the
+  query's weight rather than at all of it. That is why four words answer where
+  five do not. A share in a description a client caches is the mistake this
+  entry is about, one file further out.
+- This entry revokes `D-SKL-011` rather than amends it. Its statement carries
+  *obligations that share a document are one call* unbounded, which is what the
+  sweep above disproves at three. A reader of the listing sees the headline and
+  the status alone.
 
 ## Assumed
 
 - That the stride sample stands for the population at three and four subjects.
   It walks the lexicographic order of the combinations rather than a random
-  draw, so a run of headings that share a word is sampled as its share of that
-  order.
+  draw. So a run of headings that share a word enters the sample as its share of
+  that order.
 - That a caller writes what the sweep asked. Every query in it is the corpus's
-  own heading text, and a reviewer writes the subject in their own words, which
+  own heading text. A reviewer writes the subject in their own words, which
   reaches fewer sections rather than more.
 - That a reviewer reads a count as a bound where they read *length is the limit*
   as permission. Nothing measures what the next recorded review run asks for.
@@ -117,16 +118,16 @@ obligations in one query and reporting what came back missing. That happened on
 
 ## Wrong if
 
-- A review asks two subjects in one call and reports the second one missing.
-  Then two is over the bound as well, and what holds is the measured pair rather
-  than a count at all.
-- A later feedback reports a three-subject query answering whole and the split
-  as the cost. Then the corpus grew into the combination, and the count is
-  measured again rather than raised on one report.
+- A review asks two subjects in one call and reports the second one absent. Then
+  two is over the bound as well, and what holds is the measured pair rather than
+  a count at all.
+- A later feedback reports a three-subject query that answers whole and the
+  split as the cost. Then the corpus grew into the combination, and a session
+  measures the count again rather than raises it on one report.
 - A review reads the bound as a ceiling on words and splits
-  `breaking change changelog entry` back into two calls. Then *subject* is
-  carrying more than it can and the sentence needs the pair spelled out.
-- The next skill sentence stating a retrieval behaviour is found stale the same
-  way. `D-SKL-011`'s fourth **Wrong if** said this twice over: two entries have
-  now corrected one paragraph about the ranker, and the lesson would be that a
+  `breaking change changelog entry` back into two calls. Then *subject* carries
+  more than it can and the sentence needs the pair spelled out.
+- The next skill sentence that states a retrieval behaviour turns out stale the
+  same way. `D-SKL-011`'s fourth **Wrong if** said this twice over. Two entries
+  have now corrected one paragraph about the ranker. The lesson would be that a
   skill states the subject to ask in and no property of the search at all.

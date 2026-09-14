@@ -1,12 +1,8 @@
 # Versions — what a statement holds on
 
-The knowledge base covers four TYPO3 lines at once, and every one of these
-entries is about the same question: which of them a given sentence is true on,
-and who says so — the statement, the package, or the checkout the caller stands
-in.
+The knowledge base covers four TYPO3 lines at once, and every one of these entries is about the same question. Which of them a given sentence is true on, and who says so: the statement, the package, or the checkout the caller stands in.
 
-See [the decisions readme](../readme.md) for how an entry is written and when
-one is added.
+See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-VER-009`][D-VER-009] — A deprecation's migration target is asked for by its own issue number · 2026-08-21
 - [`D-VER-006`][D-VER-006] — A narrowed statement is split before it is bound · 2026-08-18 · confirmed

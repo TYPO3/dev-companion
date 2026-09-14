@@ -115,8 +115,8 @@ Answers with
       reason: string
       # One of: installed, not-installed, undeclared, null. The state of the
       # repository the caller stands in, which the cause does not say. installed:
-      # packages sit below the root the discovery found, so an install is not what
-      # is missing. not-installed: the repository declares TYPO3 and has no packages
+      # packages sit below the root the discovery found, so the caller lacks no
+      # install. not-installed: the repository declares TYPO3 and has no packages
       # below it yet, so this call answers once composer install has run.
       # undeclared: nothing in the directories the discovery walked declares TYPO3,
       # so an install here answers nothing. Null where the discovery looked at

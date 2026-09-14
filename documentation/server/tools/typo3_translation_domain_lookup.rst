@@ -5,19 +5,19 @@
 
 Compute the translation domain an XLF file resolves to, from its path. The
 domain is the canonical way to reference a label (backend.alt_doc:key) in TCA,
-LanguageService::sL() and f:translate, and it is registered nowhere: it follows
-from the path by the rules the core itself applies, in TranslationDomainMapper
-on one branch and TranslationDomainResolver on the next. Being computed, it also
-answers for a file outside the core and for one a patch is about to add. On a
-version older than translation domains it answers with the full LLL:EXT:
-reference instead, because the domain form renders nothing there and fails at
-runtime rather than at build time. That version is targetVersion, or the
-installation this server was started in where none is stated — state one when
-the work is on another branch than what is installed. It computes a reference
-from a path and reads no label: whether the installation already registers one
-to reuse, and under which id, is typo3_label_lookup. The answer also carries the
-specifier a backend JavaScript module imports that domain under, which is the
-same value in the form that module needs. Answers from: knowledge.
+LanguageService::sL() and f:translate, and nothing registers it. It follows from
+the path by the rules the core itself applies, in TranslationDomainMapper on one
+branch and TranslationDomainResolver on the next. Because the tool computes it,
+it also answers for a file outside the core and for one a patch is about to add.
+On a version older than translation domains it answers with the full LLL:EXT:
+reference instead. The domain form renders nothing there and fails at runtime
+rather than at build time. That version is targetVersion, or the installation
+this server started in where the call states none. State one when the work is on
+another branch than the installed one. It computes a reference from a path and
+reads no label: whether the installation already registers one to reuse, and
+under which id, is typo3_label_lookup. The answer also carries the specifier a
+backend JavaScript module imports that domain under, which is the same value in
+the form that module needs. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -33,12 +33,11 @@ Takes
     # to a core checkout
     # ("typo3/sysext/backend/Resources/Private/Language/locallang_alt_doc.xlf").
     path: string
-    # The TYPO3 version the label is being written for, for example "13.4" or "14".
-    # It decides one thing here and it decides it entirely: below the version that
-    # resolves domains the domain form renders nothing, so the answer is the
-    # LLL:EXT: reference instead. Defaults to the installation this server was
-    # started in, which is the wrong answer for a backport branch or a second
-    # checkout — state it there.
+    # The TYPO3 version the label is for, for example "13.4" or "14". It decides one
+    # thing here and it decides it entirely. Below the version that resolves domains
+    # the domain form renders nothing, so the answer is the LLL:EXT: reference
+    # instead. Defaults to the installation this server started in, which is the
+    # wrong answer for a backport branch or a second checkout; state it there.
     targetVersion: string  # optional
 
 Answers with
@@ -46,25 +45,24 @@ Answers with
 
 .. code-block:: yaml
 
-    # The XLF path the domain was computed from.
+    # The XLF path the domain comes from.
     path: string
-    # The TYPO3 major the answer was composed for — stated by the caller, or read
-    # from the installation. Null means neither said, and the domain comes back
-    # unqualified: it is the form from 14 onwards, and nothing placed this call on a
-    # version.
+    # The TYPO3 major the answer is for, stated by the caller or read from the
+    # installation. Null means neither said, and the domain comes back unqualified:
+    # it is the form from 14 onwards, and nothing placed this call on a version.
     targetVersion: integer or null  # optional
     # The translation domain it resolves to. Null when the path names no extension,
-    # and also when the version this was composed for is too old to resolve domains
-    # at all — there the full LLL:EXT: reference is the answer.
+    # and also when the version the answer is for is too old to resolve domains at
+    # all. There the full LLL:EXT: reference is the answer.
     domain: string or null
     # Set only in that second case: what the domain would be on a version that has
     # them. It is not usable on this installation.
     domainOnNewerVersions: string or null  # optional
     # The specifier a backend JavaScript module imports the same domain under:
     # import labels from '~labels/<domain>', read with labels.get(). Returned where
-    # a domain was handed over, and absent where none was — the import map prefix
-    # arrived with the domains themselves, so there is nothing to write on a version
-    # below them.
+    # the answer carries a domain, and absent where it carries none. The import map
+    # prefix arrived with the domains themselves, so there is nothing to write on a
+    # version below them.
     moduleImport: string or null  # optional
 
 Answered

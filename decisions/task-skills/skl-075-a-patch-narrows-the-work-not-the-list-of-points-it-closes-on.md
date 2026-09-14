@@ -101,17 +101,17 @@ Measured on 2026-08-25 in this branch, against `feedback/2026-08-24-162543`.
   Then the split rests on the read rather than on the issue. What the skill owes
   is how to make the list rather than what to do with it.
 - A session narrows a patch to a convenient subset with the wording in place.
-  Then it is not the wording, and what is missing is a gate — which is what
-  `feedback/2026-08-17-212218` reports for another skill, and the answer is
-  shared rather than this one.
+  Then it is not the wording, and the gap is a gate. That is what
+  `feedback/2026-08-17-212218` reports for another skill, and the answer is a
+  shared one rather than this one.
 
 ## Since then
 
-The placement is settled by the writing: both, one point each. The enumeration
-is a third act of the step where a session reads the list, because this entry
-refuses a fourth rung. The other direction is one paragraph where a session
-decides to narrow. That is the shape `D-SKL-002` settled once already: the
-instruction at the point of the decision outranks a permission stated earlier.
-The two reasons go one to a place rather than twice. `R-SKL-027` is a
-requirement rather than the change. The demand holds while somebody rewrites the
-file that states it. What stays unmeasured is the first **Wrong if**.
+The work settled the placement: both, one point each. The enumeration is a third
+act of the step where a session reads the list, because this entry refuses a
+fourth rung. The other direction is one paragraph where a session decides to
+narrow. That is the shape `D-SKL-002` settled once already: the instruction at
+the point of the decision outranks a permission stated earlier. The two reasons
+go one to a place rather than twice. `R-SKL-027` is a requirement rather than
+the change. The demand holds while somebody rewrites the file that states it.
+What stays unmeasured is the first **Wrong if**.

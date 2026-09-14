@@ -24,8 +24,8 @@ from three task shapes took the exemption and reported nothing.
   the position. The sentence is the last of nine paragraphs, after two other
   conditions. It is the only instruction of that step that has to survive into a
   document written half an hour later.
-- **The file it describes is today's.** `skills/base.md` is unchanged since
-  `04ffc96d` (2026-08-21), which rewrote what each runtime lookup adds; step 5's
+- **The file it describes is today's.** `skills/base.md` has not changed since
+  `04ffc96d` (2026-08-21), which rewrote what each runtime lookup adds. Step 5's
   closing sentence is `7f5657d9` (2026-08-14), the commit
   [`D-SKL-037`](skl-037-the-sweeps-exemption-names-what-a-task-produces.md)
   wrote. `skills/typo3-core-patch-review/SKILL.md` gained two paragraphs after
@@ -35,8 +35,8 @@ from three task shapes took the exemption and reported nothing.
   are `/home/benji/projects/blog` on 2026-08-18.
   `feedback/archive/2026-08-18-070611` reports the obligation "stated twice and
   complied with neither" on a DDEV boot and reads the failure as placement
-  rather than wording; `feedback/archive/2026-08-18-074327` reports steps 2, 4
-  and 5 skipped on a task that changed code, with nothing naming the skips.
+  rather than wording. `feedback/archive/2026-08-18-074327` reports steps 2, 4
+  and 5 skipped on a task that changed code, with nothing that names the skips.
   Three sessions, three task shapes — a boot, a change, a patch review.
 - **Both statements sit inside a step.** Step 2 says it of itself, that a reader
   cannot tell a step passed over in silence from one the session dropped. Step 5
@@ -63,10 +63,10 @@ from three task shapes took the exemption and reported nothing.
   says.** It arrived in the active skill, and the session read it whole and
   understood it, since it quotes both halves of the exemption. The ladder names
   "buried below the part that answers the common case" as step 4's own evidence.
-- **Queued rather than closed on the spot.** `skills/base.md` is published into
-  somebody else's project as `references/base.md`, where a wrong sentence is not
-  corrected by the next release of this server, and `R-SKL-005` and `SkillTest`
-  carry the same wording.
+- **Queued rather than closed on the spot.** `skills/base.md` goes into somebody
+  else's project as `references/base.md`, where the next release of this server
+  does not correct a wrong sentence. `R-SKL-005` and `SkillTest` carry the same
+  wording.
 - **It stays written once, in the base.** `R-SKL-005` already says a skill
   states what it adds to the order and never a second copy of it. The place the
   caller is when it takes the exemption is the end of the order rather than the
@@ -76,10 +76,10 @@ from three task shapes took the exemption and reported nothing.
   correct any of those copies. That is why `D-SKL-037` rejected a review-shaped
   sweep in the review skill.
 - **Rejected: the gate `D-SKL-049` weighs as its place.** That entry recommends
-  waiting because a fourth intervention against three unmet corrections could
-  not be attributed afterwards; this is one obligation already written moved to
-  where it is discharged, which is the kind of correction the same entry
-  credits, and its 2026-08-24 note carves
+  a wait because nobody could attribute a fourth intervention against three
+  unmet corrections afterwards. This is one obligation that exists, moved to
+  where a session discharges it, which is the kind of correction the same entry
+  credits. Its 2026-08-24 note carves
   [`D-SKL-072`](skl-072-a-workflow-handover-names-the-calls-the-next-order-restarts-with.md)
   out of the same corpus on that ground.
 - **The priority is `normal`**, set by three sessions from three task shapes,
@@ -114,11 +114,11 @@ from three task shapes took the exemption and reported nothing.
 
 ## Since then
 
-The two statements the entry left open were answered by writing it. Step 5's
-closing sentence is gone and step 2 keeps its "Say so.", so what a step asks
-locally stayed local and the obligation over the order did not stay in either.
-The sentence now stands last in *The order*, after **Then** read the checkout.
-It covers every step rather than the two exemptions it stood under. A report
-names a step an earlier answer discharged for the same reason it names a skipped
-one. `SkillTest::theReportNamesTheStepsOfTheOrderItDidNotReach` holds where it
+The work answered the two statements the entry left open. Step 5's closing
+sentence is gone and step 2 keeps its "Say so.". So what a step asks locally
+stayed local and the obligation over the order did not stay in either. The
+sentence now stands last in *The order*, after **Then** read the checkout. It
+covers every step rather than the two exemptions it stood under. A report names
+a step an earlier answer discharged for the same reason it names a skipped one.
+`SkillTest::theReportNamesTheStepsOfTheOrderItDidNotReach` holds where it
 stands, which is what the old assertion could not.

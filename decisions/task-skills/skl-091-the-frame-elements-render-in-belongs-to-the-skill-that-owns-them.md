@@ -18,16 +18,16 @@ rendering resolves into.
 ## Evidence
 
 - `feedback/2026-09-04-053744`. `typo3_task_guide` named two skills and the
-  session invoked neither. The session says what shut this one: the description
-  is framed around *a* content element, and its task was the frame every element
-  on the site shares — a `lib.contentElement` definition, a layout, a header
+  session invoked neither. The session says what shut this one. The description
+  frames *a* content element, and its task was the frame every element on the
+  site shares. That is a `lib.contentElement` definition, a layout, a header
   partial, a `Generic` template and one core element's rendering definition.
 - The read holds against the body. Its rendering items are *put one element's
   rendering in a dedicated TypoScript file* and *keep the Fluid template under
-  the project's content-element template root*, and its closing line is *this
-  skill owns content-element architecture and implementation*. The frame is in
-  none of it, so a wider description alone would have promised a section that is
-  not there.
+  the project's content-element template root*. Its closing line is *this skill
+  owns content-element architecture and implementation*. The frame is in none of
+  it, so a wider description alone would have promised a section that is not
+  there.
 - The failure shape is on record twice already. `D-SKL-061` is the clause a
   description opens on that narrows everything after it. `D-SKL-076` is a body
   that owns two jobs while the description names one. This is the first of
@@ -43,7 +43,7 @@ rendering resolves into.
 - **The frame is this skill's domain and not a new one.** The maintainer settled
   it on 2026-09-04 against a skill of its own and against a contract case alone.
   A skill that says where an element's rendering goes and is silent about what
-  it goes into has a hole in its own domain; a new skill would have cost a
+  it goes into has a hole in its own domain. A new skill would have cost a
   baseline run and a permanent contract in every project on one session's
   evidence.
 - **An edit rather than a new file, so no baseline run is bought** — `D-SKL-035`

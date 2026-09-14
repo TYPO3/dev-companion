@@ -9,8 +9,8 @@ coveredBy:
 
 # D-SKL-077 — The crossing out of a review is recognised on the first edit meant to survive
 
-**The crossing out of a core review names the act that begins the rework — the
-first edit meant to survive — beside the sentence that asks for it.**
+**The crossing out of a core review names the act that begins the rework beside
+the sentence that asks for it. The act is the first edit meant to survive.**
 
 The section asks for recognition in what the reader says. A session with it in
 hand reports that it noticed its own next act instead.
@@ -20,10 +20,10 @@ hand reports that it noticed its own next act instead.
 - **The sighting.**
   [`feedback/archive/2026-08-24-183420`](../../feedback/archive/2026-08-24-183420-the-review-skill-predicts-the-crossing-into.md),
   `/home/benji/projects/typo3-cms`: Gerrit change 91127 reviewed under
-  `typo3-core-patch-review`. The session quotes the crossing section, states
-  that it read it, and then removed three `markTestSkipped` calls from
+  `typo3-core-patch-review`. The session quotes the crossing section and states
+  that it read it. Then it removed three `markTestSkipped` calls from
   `SiteRequestTest.php`, added six body assertions and a fixture page, ran five
-  checks and drafted an amended commit message — never invoking
+  checks and drafted an amended commit message. It never invoked
   `typo3-core-patch-development`.
 - **What the session tracked instead is the register.** It names the question it
   asked at that moment, "does this belong in this commit", and says it answered
@@ -44,7 +44,7 @@ hand reports that it noticed its own next act instead.
   same directory and same pair of skills. "kannst du ihn fertigstellen das er
   backgeportet werden kann?", and the session reports that it invoked the patch
   skill rather than carried on. That is "finish it", in the reader's own words.
-- **The first sighting is the one the section is written from.**
+- **The first sighting is the one the section came from.**
   [`feedback/archive/2026-08-07-132559`](../../feedback/archive/2026-08-07-132559-the-review-skill-has-no-marker-for-the-point.md):
   `ColumnMap.php`, a fixture column, a functional test, seven suites and an
   amend, all under review rules. Its account is that the reader picked a scope
@@ -60,7 +60,7 @@ hand reports that it noticed its own next act instead.
   are readings of it.
 - **What the crossing carries could not arrive.**
   [`D-SKL-072`](skl-072-a-workflow-handover-names-the-calls-the-next-order-restarts-with.md)'s
-  three calls hang off the crossing, so the deprecation sweep the session names
+  three calls hang off the crossing. So the deprecation sweep the session names
   as its concrete cost was unreachable whether or not the published copy carried
   them. It states the exemption in that clause's own terms and did not run the
   sweep.
@@ -100,15 +100,15 @@ hand reports that it noticed its own next act instead.
   no diff left, against a change meant to survive. The discriminator is in the
   skill already, so the crossing names where it stands rather than carrying a
   second copy of it.
-- **The enumerated phrases stay.** One sighting has them firing on
-  "fertigstellen", and removing them would trade a trigger that works on the
+- **The enumerated phrases stay.** One sighting has them fire on
+  "fertigstellen". Their removal would trade a trigger that works on the
   sentences it names for one nothing has run.
 - **Queued rather than closed on the spot.** The change is a clause in a
   published skill, which [judging.rst](../../documentation/records/judging.rst)
   reviews rather than improvises. It needs no lookup about TYPO3.
 - **`normal` rather than `low`.** Two sessions seventeen days apart report this
-  crossing failing, the correction that landed between them was written for the
-  other direction, and the lever is one clause.
+  crossing failed. The correction that landed between them served the other
+  direction, and the lever is one clause.
 - **Trimmed: this entry refuses the ask to state the sweep's obligation in
   `typo3-core-patch-development`'s entry, and it comes off the feedback.**
   `base.md` step 5 answers it in the property a session reads a change by. That
@@ -133,9 +133,9 @@ hand reports that it noticed its own next act instead.
   The discriminator does not separate the two at the moment of the act, and what
   remains is a trigger on the sentence alone.
 - A session edits a file meant to survive with the act-shaped clause in front of
-  it and does not cross. The crossing cannot be held in this skill's prose, and
+  it and does not cross. This skill's prose cannot hold the crossing, and
   [`D-SKL-049`](skl-049-the-gate-at-the-end-of-a-workflow-waits-for-its-corrections.md)'s
-  gate is what is left.
+  gate is what remains.
 - A session crosses on the act and makes none of the three calls the crossing
   names. That is `D-SKL-072`'s own first **Wrong if**, which nothing could reach
   while the trigger was the thing that failed.

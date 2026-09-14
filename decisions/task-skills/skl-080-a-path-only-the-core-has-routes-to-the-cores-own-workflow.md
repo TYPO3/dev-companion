@@ -47,7 +47,7 @@ core-only, and a route to the workflow for extensions.
   three times and routes elsewhere once.
 - **The gate got wider once before, for the same failure one signal over.** The
   comment above `CORE_WORK` names
-  [`D-SKL-023`](skl-023-a-skill-no-intent-names-is-one-the-brief-cannot-route-to.md),
+  [`D-SKL-023`](skl-023-a-skill-no-intent-names-is-one-the-brief-cannot-route-to.md).
   There a triage in a checkout `typo3_project_describe` had just reported as
   `core-checkout` got the extension side of every intent it matched.
   `core issue`, `core bug`, `core checkout` and their neighbours are what that
@@ -56,7 +56,7 @@ core-only, and a route to the workflow for extensions.
   [`typo3-core-patch-development`](../../skills/typo3-core-patch-development/SKILL.md)
   routes `typo3_test_run_guide` and `typo3_script_lookup` for the suites and the
   scripts, and owns the commit message, the Forge issue and the push. A change
-  to the core's own build tooling is a core patch like any other, which is what
+  to the core's own build tooling is a core patch like any other. That is what
   the session's own commit turned out to be.
 - **The report's own suggestion is already decided against.** It proposes
   trigger words on the two core patch descriptions for a fix that is already in

@@ -39,10 +39,10 @@ instead of the work hears that no workflow owns it.
 - Core work that changes something names the patch workflow, from the declared
   `changeType` and the paths rather than from the sentence. What the intents
   name comes first and this is what remains when they name nothing.
-- The intent's own confidence stays as it is. Confirming `patch` from a
+- The intent's own confidence stays as it is. A `patch` confirmed from a
   `changeType` would pull its checklist and its checks into briefs that never
-  described that work, which is a wider claim than naming the workflow that owns
-  the file being changed.
+  described that work. That is a wider claim than the name of the workflow that
+  owns the changed file.
 - Nothing equivalent outside the core yet. Which workflow owns a change to a
   package depends on what the package is. No single skill answers for it the way
   `typo3-core-patch-development` answers for `typo3/sysext/`.
@@ -52,9 +52,9 @@ instead of the work hears that no workflow owns it.
 - One session, and its account of what it would have done with the name. It
   reports that it activated no skill and did the triage by hand. That the name
   alone would have changed it is its estimate.
-- A caller that passes `changeType` means it. The value is documented and the
-  schema enumerates it, and a caller guessing one is the failure `D-GUI-011`
-  measured from the other side.
+- A caller that passes `changeType` means it. The description documents the
+  value and the schema enumerates it. A caller that guesses one is the failure
+  `D-GUI-011` measured from the other side.
 
 ## Wrong if
 

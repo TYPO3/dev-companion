@@ -34,7 +34,7 @@ items, the commit message among them.
   found the issue, wrote the patch, the tests and the changelog entry, and
   opened no skill. `D-SKL-076` came from it and read the backlog half alone.
 - **The route does not reach the skill.** Measured in this worktree on
-  2026-08-27: `typo3_task_guide` with
+  2026-08-27. `typo3_task_guide` with
   `task="please find 1 old forge issue and fix it"` matches `reporting` and
   `triage` weakly and answers `skills: []`. "find an old forge issue and fix it"
   and "search forge issues in the asset renderer area" answer the same. What
@@ -65,8 +65,8 @@ items, the commit message among them.
   slot for it.
 - **The answer names both skills, in order.** Triage is the front half and the
   patch workflow is what the crossing hands over to
-  ([`D-SKL-022`](skl-022-a-handoff-between-skills-is-an-instruction-rather-than-a-closing-sentence.md)),
-  so the answer states the order rather than leaving the caller to pick one of
+  ([`D-SKL-022`](skl-022-a-handoff-between-skills-is-an-instruction-rather-than-a-closing-sentence.md)).
+  So the answer states the order rather than leaves the caller to pick one of
   two names.
 - **The patch skeleton stays.** A brief whose words name a change keeps the
   items that change owes, whatever else it recognized. That is the third **Wrong
@@ -82,8 +82,8 @@ items, the commit message among them.
   descriptions the same card carries are a tool's contract and a skill's.
 - The priority is `normal`: two sessions, and this is how people ask for core
   contribution work.
-- The two description halves are recorded where they belong — the triage
-  description's closing clause at `D-SKL-076`, `typo3_task_guide`'s opening at
+- The two description halves stand where they belong, the triage description's
+  closing clause at `D-SKL-076`, `typo3_task_guide`'s opening at
   [`D-AUD-014`](../audience/aud-014-a-description-opens-with-what-the-callers-own-route-cannot-do.md).
 
 ## Assumed
@@ -118,8 +118,8 @@ not move are the ones the entry predicted. The briefs that file keep their own
 intent, because the plural and the adjective separate an issue taken from one
 written. The review briefs answer exactly what they did.
 
-A third session then lost on a preposition — two of the four a session might
-write were in the strong list and two were not — so the list is the finding
+A third session then lost on a preposition. Two of the four a session might
+write were in the strong list and two were not. So the list is the finding
 rather than the fix. A measure beside it shows what the needles cannot reach. A
 brief that knows it is core work and declares a change type still names no
 workflow, because the guide reads only the sentence. `D-SKL-082` decides that

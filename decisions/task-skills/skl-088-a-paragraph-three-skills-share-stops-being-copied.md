@@ -9,8 +9,8 @@ coveredBy:
 
 # D-SKL-088 — A paragraph three skills share stops being copied
 
-**`skills/base.md` is the shared start of a task and nothing is the shared
-ending, so two skills may copy a paragraph and the third gives it a home.**
+**`skills/base.md` is the shared start of a task and nothing is the shared end.
+So two skills may copy a paragraph and the third gives it a home.**
 
 The base came from five hand-written copies of one order. The argument stops at
 the order because that is what the file's title names.
@@ -56,5 +56,5 @@ the order because that is what the file's title names.
 
 - Those 356 characters drift while they are two, which is the pair nobody
   watches.
-- The third copy arrives reworded, so the check stays silent and one ending is
-  written three times in three wordings.
+- The third copy arrives reworded, so the check stays silent and one end stands
+  three times in three wordings.

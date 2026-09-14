@@ -50,12 +50,12 @@ Measured on 2026-08-27 in this branch, against `feedback/2026-08-24-225243`.
   returns its 108 candidates as the index. That is right, since the gap is not a
   statement about TYPO3.
 - `D-SKL-062` is the lever next door and does not reach this. Its re-ask fires
-  where the work enters a subject the opening did not name and it routes to
+  where the work enters a subject the opening did not name. It routes to
   `typo3_task_guide`, which answers which workflow a task belongs to. Here the
   workflow was right throughout, and what moved was the change's own
   characterisation inside it.
 - Neither activation nor the crossing is at fault, and the report says so from
-  the inside: the review skill's three disciplines each caught something, and
+  the inside. The review skill's three disciplines each caught something, and
   the crossing into this skill fired on the user's own sentence.
 - `D-SKL-075` already names this feedback from the other side, the same
   paragraph "fired, but only for the first split". It left its card in place for
@@ -67,7 +67,7 @@ Measured on 2026-08-27 in this branch, against `feedback/2026-08-24-225243`.
   and what did not take is that both stand as one-time acts.
 - Queued rather than made on the spot. It rewrites a published `SKILL.md`, which
   `judging.rst` puts on the far side of what a judgement may change in its own
-  run, and it is the call `D-SKL-075` made on the same file.
+  run. It is the call `D-SKL-075` made on the same file.
 - At `normal`, set by what the wider request cost rather than by how many
   sessions reported it. One session reports it, and it counts the loss: two
   rounds of client-side work discarded, an entry written and deleted, four
@@ -77,9 +77,9 @@ Measured on 2026-08-27 in this branch, against `feedback/2026-08-24-225243`.
   where a session decides what this patch is. At the foot of "Make the change",
   where a session meets a wider request. The decision between them is a read of
   the body this run has not made.
-- The three things re-established are the skill's own vocabulary — the change
+- The three things re-established are the skill's own vocabulary. The change
   type from step 2, the branches from the blast-radius paragraph, the entry from
-  its own section — so the wording can point at them rather than restate them.
+  its own section. So the wording can point at them rather than restate them.
 - The feedback's second ask is not part of this. `D-KNW-127` answers it, and the
   report shrinks to this half in the same commit.
 - `coveredBy: []`, because nothing exists yet. What could hold this is a
@@ -92,9 +92,9 @@ Measured on 2026-08-27 in this branch, against `feedback/2026-08-24-225243`.
   moment the request widens. Nothing here measures that, and it is the
   assumption `D-SKL-062` records for the act list it moved into the
   `instructions`.
-- That a wider request is a moment the session notices itself in. The reporting
-  one did — it says the honest answer was a different one each time — and
-  nothing in this server sees a user turn arriving mid-tool-call.
+- That a wider request is a moment the session notices itself in. The one that
+  reported did, since it says the honest answer was a different one each time.
+  Nothing in this server sees a user turn that arrives mid-tool-call.
 
 ## Wrong if
 

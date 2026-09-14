@@ -25,9 +25,9 @@ it applies is minutes later in another workflow.
   sweep under the exemption and said so in its report. Asked for the fix, it
   re-entered through `typo3-extension-health`, crossed into two more workflows,
   committed, and never called `typo3_changelog_lookup` on either declared major.
-- **It names why**, and the reason is not the wording of the rule: `base.md` was
-  already in its context from the review, so re-entering did not re-read it, and
-  none of the step lists it then worked asks whether the sweep now owes.
+- **It names why**, and the reason is not the wording of the rule. `base.md` was
+  already in its context from the review, so the re-entry did not re-read it.
+  None of the step lists it then worked asks whether the sweep now owes.
 - **The rule was there and has not changed.** "The exemption ends where the
   workflow produces a change. A review asked to make the change is that other
   workflow, and it starts this order again holding the files it is about to
@@ -35,10 +35,11 @@ it applies is minutes later in another workflow.
 - **The skill marks the crossing itself.** Step 10 calls it the transition, and
   step 9 is where the work on the items starts, the last moment before the
   session writes anything.
-- **`D-SKL-049` carries the general form of this** and defers it: a closing gate
-  naming what a workflow still owes, asked of the maintainer on 2026-08-19 and
-  again on 2026-08-27, answered *wait* both times. Its three prior sightings
-  were each corrected at their own point of use instead, which is what this is.
+- **`D-SKL-049` carries the general form of this** and defers it. That is a
+  closing gate that names what a workflow still owes. Put to the maintainer on
+  2026-08-19 and again on 2026-08-27, it got *wait* both times. Its three prior
+  sightings were each corrected at their own point of use instead, which is what
+  this is.
 
 ## Decided
 
@@ -67,6 +68,6 @@ it applies is minutes later in another workflow.
   here, because the clause reads as unconditional. The condition is an exemption
   the session took, and a reader can miss it one clause away.
 - A review that took the exemption reaches the change through some other
-  workflow than this one — the maintainer asks the testing skill directly — and
-  the clause is in the wrong file. Then the gate `D-SKL-049` defers is what this
-  wanted after all.
+  workflow than this one, say the maintainer asks the testing skill directly.
+  Then the clause is in the wrong file. Then the gate `D-SKL-049` defers is what
+  this wanted after all.

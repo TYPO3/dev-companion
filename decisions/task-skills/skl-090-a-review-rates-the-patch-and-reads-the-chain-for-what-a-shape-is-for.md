@@ -39,8 +39,8 @@ above it in the same stack refuted all four.
   is in what a finding owes, which is the checklist's subject, and the body
   keeps its routing shape.
 - **The reviewer rates the patch on its own.** That is the maintainer's wording
-  on 2026-09-02, asked as one of two questions before the file was committed,
-  and it is what the first draft got wrong: the chain says whether a shape is
+  on 2026-09-02, asked as one of two questions before the commit of the file. It
+  is what the first draft got wrong. The chain says whether a shape is
   preparation, and it does not excuse the shape. What the follow-up explains
   goes into the report as a question to the author.
 - The `Tests` surface says what the follow-up decides there too. A test that

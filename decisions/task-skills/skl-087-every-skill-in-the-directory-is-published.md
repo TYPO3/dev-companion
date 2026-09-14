@@ -31,8 +31,9 @@ whole time.
   which is empty. So both of its loops over the published copies ran zero times
   and what remained was two reads of an absent key.
 - The review the mechanism served is a step of
-  `documentation/contributing/writing-a-skill.rst` and is carried out by reading
-  the file, which no flag delivers and nothing here holds either way.
+  `documentation/contributing/writing-a-skill.rst`. A reviewer carries it out
+  with a read of the file, which no flag delivers and nothing here holds either
+  way.
 
 ## Decided
 
@@ -48,8 +49,9 @@ whole time.
 - The record drops `drafts`. The installer reads past a state file that still
   carries the key rather than migrates it.
 - The sentences in `D-DIS-013`, `D-DIS-021`, `D-SKL-021` and `D-SKL-054` that
-  name the mechanism keep their finding and gain a pointer here; `R-DIS-025` and
-  the three documentation pages state what holds and are corrected in place.
+  name the mechanism keep their finding and gain a pointer here. `R-DIS-025` and
+  the three documentation pages state what holds and get their correction in
+  place.
 
 ## Assumed
 

@@ -24,9 +24,9 @@ past.
   `claude-opus-5[1m]`,
   [`feedback/2026-08-28-074142`](../../feedback/archive/2026-08-28-074142-the-stale-skills-notice-fires-before-the-task.md).
   It quotes the notice, names the four skills it then worked inside, and states
-  the cost as one it cannot measure: every finding it filed about skill
-  behaviour is unanchored, because it can name the text it read and not which
-  release that text belongs to.
+  the cost as one it cannot measure. Every finding it filed about skill
+  behaviour has no anchor. It can name the text it read and not which release
+  that text belongs to.
 - **The server computes the notice once and never again.** `Server\Entrypoint`
   calls `Installer::outdated()` with the directory the process started in,
   writes the line to stderr and prefixes it to the `instructions`. Nothing else
@@ -44,10 +44,10 @@ past.
 
 ## Decided
 
-- **The brief carries it**, because a skill is loaded by a call this server
-  cannot see: the answer naming the skill is the last moment it controls, and
-  the initialize block is the first. Both stay. The one reaches a session before
-  it has a task, the other one that has just got a workflow.
+- **The brief carries it**, because a call this server cannot see loads a skill.
+  The answer that names the skill is the last moment it controls, and the
+  initialize block is the first. Both stay. The one reaches a session before it
+  has a task, the other one that has just got a workflow.
 - **A field beside `skills` rather than objects in it.** `skills` is a list of
   strings a caller reads today, and `AGENTS.md` asks for added fields rather
   than renamed ones.
@@ -56,7 +56,7 @@ past.
   thing a reader can check. A date or a release number would be a second thing
   to keep true, and this package publishes no release number.
 - **Queued rather than made here.** The first half is a declared schema and the
-  second is what every published skill file carries, which are the two things
+  second is what every published skill file carries. Those are the two things
   `documentation/records/judging.rst` keeps off the spot.
 - **At `normal`.** One session, and the cost it reports is a report a maintainer
   cannot check rather than work that was lost.

@@ -10,8 +10,7 @@ coveredBy:
 # D-SKL-078 — The triage intent matches taking an issue off the tracker
 
 **`triage` takes "from forge" and "off forge" as strong needles rather than the
-bare name, because a brief naming one issue somebody already chose is patch
-work.**
+bare name. A brief that names one issue somebody already chose is patch work.**
 
 `forge` was a weak needle, and a weak match names no skill. So the brief the
 feedback asked for a re-run of, "fetch another old issue from Forge, create a
@@ -27,12 +26,12 @@ branch, work it off", got `skills: []`.
   forgot to run the tests before pushing" still does not.
 - Measured on 2026-08-25 over twenty-one briefs, with both options applied to
   the same list. Bare `forge` in `match` routed all six briefs that take work
-  off the tracker, and five more with it: "report a bug on Forge", "file an
-  issue in Forge" and "write a new forge issue" — `reporting`'s job, which no
-  published skill owns — were answered with `typo3-core-issue-triage`, and "fix
-  Forge 15984 in the FormEngine" and "implement what Forge 98765 asks for" were
-  composed as briefs that change nothing, without the deprecation sweep, the
-  test coverage or the commit message step.
+  off the tracker, and five more with it. "report a bug on Forge", "file an
+  issue in Forge" and "write a new forge issue" got `typo3-core-issue-triage`.
+  Those are `reporting`'s job, which no published skill owns. "fix Forge 15984
+  in the FormEngine" and "implement what Forge 98765 asks for" came out as
+  briefs that change nothing. They lacked the deprecation sweep, the test
+  coverage and the commit message step.
 - "from forge" and "off forge" moved the six and nothing else on that list. The
   three briefs that file kept `reporting` alone. The two patch briefs kept the
   checklist a patch owes while `forge` still matched them weakly. That is the

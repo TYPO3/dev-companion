@@ -25,10 +25,9 @@ bare name answers the same as a server that is not connected.
   `select:typo3_project_describe,…` returned "No matching deferred tools found".
   The same five with `mcp__typo3-dev-companion__` in front returned every
   schema. One round trip, and it guessed the prefix.
-- **The shape is this client's own**, and it is readable from the session
-  writing this entry: Claude Code lists a deferred tool as
-  `mcp__<server>__<tool>`, the server's name being the one the client's own
-  configuration gives it.
+- **The shape is this client's own**, and the session that writes this entry can
+  read it. Claude Code lists a deferred tool as `mcp__<server>__<tool>`, and the
+  server's name is the one the client's own configuration gives it.
 - **Three places name the bare form**: the `instructions` sent at initialize,
   the skills' reference files, and every answer's `nextTools`.
 - **One of them converts the empty result into an absence.** `skills/base.md`
@@ -62,8 +61,8 @@ bare name answers the same as a server that is not connected.
 
 ## Wrong if
 
-- A client is reported whose qualified form is not the server's name in front of
-  the tool's, so the shape named here sends a session looking for the wrong
+- A report names a client whose qualified form is not the server's name in front
+  of the tool's. So the shape named here sends a session in search of the wrong
   string.
 - A session reports that it stopped on the presence check with the initialize
   instructions in context. Then the instruction is not the lever and only the

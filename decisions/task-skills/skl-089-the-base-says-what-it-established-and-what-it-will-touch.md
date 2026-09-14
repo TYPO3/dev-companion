@@ -14,8 +14,8 @@ coveredBy:
 session opens the checkout, and which files a change will touch, before the
 first edit.**
 
-Both were taken on the maintainer's answer rather than on a sighting here, which
-is what this entry records.
+Both rest on the maintainer's answer rather than on a sighting here, which is
+what this entry records.
 
 ## Evidence
 

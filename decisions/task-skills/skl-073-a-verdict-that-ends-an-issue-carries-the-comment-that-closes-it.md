@@ -13,8 +13,8 @@ coveredBy:
 and the tracker boundary stops the act rather than the wording.**
 
 The skill stops one step earlier than that today. It says what a verdict owes as
-evidence and what form the answer takes, and the sentence closest to the moment
-tells the session that closing is somebody else's — which reads as a stop before
+evidence and what form the answer takes. The sentence closest to the moment
+tells the session that the close is somebody else's. That reads as a stop before
 the text as well as before the act.
 
 ## Evidence
@@ -32,8 +32,8 @@ the text as well as before the act.
 - The checklist's last bullet is what a session reads at that moment: "Whether
   anything here is a recommendation to close, reassign or reopen. That is the
   maintainer's act; the triage supplies what it rests on and stops." Two
-  readings of it are defensible, and the one that costs the deliverable is the
-  one the reporting session took.
+  readings of it are defensible. The one that costs the deliverable is the one
+  the session took.
 - A second session reported the same absent deliverable from another task shape.
   `feedback/2026-08-24-173131-which-releases-contain-a-given-fix-took-four.md`
   got a mid-task ask for "the list of already-fixed issues with justification so
@@ -52,26 +52,27 @@ the text as well as before the act.
   about the text.
 - The verdicts that end the issue owe the deliverable: **Gone**, **Superseded**
   and **Not a defect**. The two that ask the reporter something instead do not.
-  **A security defect** is untouched: it owes the tracker nothing, and a closing
-  comment is the public step that verdict exists to prevent.
+  **A security defect** stays as it is. It owes the tracker nothing, and a
+  closing comment is the public step that verdict exists to prevent.
 - The boundary does not move. This server holds no credential, comments on
   nothing and closes nothing, and the person who files the comment is still the
   one who acts.
-- The work is queued rather than made in the judging run, on both of the tests
-  `documentation/records/judging.rst` sets: it changes a skill's contract, which
-  lands in somebody else's project, and it needs a fact about TYPO3 that is not
-  in this repository.
+- The work goes to the queue rather than into the judgement run, on both of the
+  tests `documentation/records/judging.rst` sets. It changes a skill's contract,
+  which lands in somebody else's project, and it needs a fact about TYPO3 that
+  is not in this repository.
 - That fact is the todo's first step and is a step 1a of its own: what a closing
-  comment on forge.typo3.org owes — which status and resolution a fixed issue is
-  closed with, how the fixing change is named, and which markup the tracker
-  renders. Read from the core's own contribution documentation, not recalled.
+  comment on forge.typo3.org owes. That is which status and resolution close a
+  fixed issue, how to name the change that fixed it, and which markup the
+  tracker renders. Read from the core's own contribution documentation, not
+  recalled.
 - The card stays its own rather than folds into the one that serves
   `feedback/2026-08-24-173131-which-releases-contain-a-given-fix-took-four.md`.
-  That one is a tool gap about a fact nothing answers in one call, this one is
-  the skill's deliverable, and the wording will route to whatever answers the
-  fact by the time it is written.
-- The priority is `normal`, set by two sessions reporting the same gap from two
-  task shapes on one day and by the maintainer filing this one to be worked now.
+  That one is a tool gap about a fact nothing answers in one call, and this one
+  is the skill's deliverable. The wording will route to whatever answers the
+  fact by the time somebody writes it.
+- The priority is `normal`, set by two sessions that reported the same gap from
+  two task shapes on one day. The maintainer filed this one for work now.
 
 ## Assumed
 
@@ -84,14 +85,14 @@ the text as well as before the act.
 ## Wrong if
 
 - A triage under the rewritten skill hands over a closing a maintainer rewrites
-  before pasting it, which would make the deliverable the evidence and not the
+  before the paste. That would make the deliverable the evidence and not the
   text.
-- A maintainer reports a supplied closing as noise, on the ground that how an
-  issue is closed is the tracker's own voice.
+- A maintainer reports a supplied closing as noise, on the ground that the close
+  of an issue is the tracker's own voice.
 - A session writes a closing for a verdict that should have asked the reporter a
-  question. Writing "not reproducible as written" up as "gone" is the trap the
-  checklist already names, and a deliverable that only exists on the closing
-  side is a reason to reach for it.
+  question. "not reproducible as written" written up as "gone" is the trap the
+  checklist already names. A deliverable that only exists on the closing side is
+  a reason to reach for it.
 
 ## Since then
 

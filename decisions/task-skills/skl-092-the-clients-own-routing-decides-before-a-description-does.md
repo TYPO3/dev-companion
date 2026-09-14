@@ -9,8 +9,8 @@ coveredBy: []
 # D-SKL-092 — The client's own routing decides before a description does
 
 **A session that routes past its client's own loaded tools is out of reach of
-anything this server publishes, so a wording lever is bounded rather than
-untried.**
+anything this server publishes. So a wording lever has a bound rather than no
+trial.**
 
 `D-SKL-033` stopped at what arrived and said the choice was invisible. One
 session made it visible and named its cause.
@@ -39,10 +39,10 @@ session made it visible and named its cause.
   options at the first word that is not one. It carries the error string a
   caller searches for, since 2026-08-24. The checkout skill's step 3 routes to
   the page that says the change refs sit on a remote a core clone does not fetch
-  from. `bin/cli hints:probe` with the third report's own question answers, top
-  hit, the hint that says a change to what an installation renders is breaking
-  on `main` and takes an `Important` on a maintained line. None arrived. The
-  session called none of the three tools.
+  from. `bin/cli hints:probe` with the third report's own question answers with
+  the hint as top hit. It says a change to what an installation renders is
+  breaking on `main` and takes an `Important` on a maintained line. None
+  arrived. The session called none of the three tools.
 - **The answer side had already had two tries.** `D-SKL-038` put the two patch
   workflows into the `change` answer and then the order itself. Three sessions
   of this burst read that answer and opened no skill.

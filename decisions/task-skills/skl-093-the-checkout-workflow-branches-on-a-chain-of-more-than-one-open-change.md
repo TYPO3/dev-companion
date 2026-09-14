@@ -33,9 +33,9 @@ puts commits on disk.
 - **The word appears nowhere in it.** Read on 2026-09-09: `chain` occurs in
   neither `SKILL.md` nor `references/checklist.md` of this skill.
 - **It reached the workflow next door.** `D-SKL-090`, decided 2026-09-02, put
-  the chain into `typo3-core-patch-review`'s checklist so a structural finding
-  is checked against the change stacked above it. The same answer carries the
-  same field to both.
+  the chain into `typo3-core-patch-review`'s checklist so a reviewer checks a
+  structural finding against the change stacked above it. The same answer
+  carries the same field to both.
 - **The field the chain branch turns on is already answered.** The same
   session's positive report,
   [`feedback/2026-09-09-190227`](../../feedback/archive/2026-09-09-190227-what-carried-this-session-the-chain-and.md),

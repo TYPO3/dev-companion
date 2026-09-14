@@ -50,9 +50,9 @@ budget this repository has since given up.
 
 - The description names both jobs. What it costs is inside the cap this
   description sits 168 characters below.
-- The work is queued rather than made in the judging run. A description is the
-  skill's contract in somebody else's project, where no release of this server
-  corrects it.
+- The work goes to the queue rather than into the judgement run. A description
+  is the skill's contract in somebody else's project, where no release of this
+  server corrects it.
 - A test over the pair holds it, in the shape
   `SkillTest::aWorktreeTaskMatchesTheSkillThatOwnsTheCheckout` and
   `SkillTest::aDefectInsideTheDeclaredRangeMatchesTheRemovalSkill` already have.

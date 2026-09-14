@@ -12,11 +12,11 @@ middlewares, Fluid roots and global Fluid namespaces. The shape of its Classes/
 directory. The files it ships that the core no longer reads, with what each
 costs; four predicates, so not an upgrade check. And beside all that its manual,
 README, test layers and XLF files. Tables, content elements and icons come from
-the booted installation where there is one. Everything else is read from its own
-files and never executed, so it answers on a fresh clone and for a third-party
+the booted installation where there is one. Everything else comes from its own
+files and never executes, so it answers on a fresh clone and for a third-party
 extension too. Call it with a key typo3_project_describe lists. A key the
-installation does not have is answered with the keys it does have, and no
-installation at all with unsupported. It answers what the extension registers
+installation does not have gets the keys it does have as its answer, and no
+installation at all gets unsupported. It answers what the extension registers
 and never what editors store through it. How many rows one of its tables holds,
 on which page and what they are is typo3_record_lookup. Answers from:
 installation, packages.
@@ -40,7 +40,7 @@ Answers with
 
 .. code-block:: yaml
 
-    # The extension key that was asked for.
+    # The extension key the call named.
     key: string
     # Absolute path of the extension. Null when the installation does not have it.
     path: string or null  # optional
@@ -70,7 +70,7 @@ Answers with
     # configures through. Where the booted installation answered, the identifiers
     # are what it registered, attributed to this extension by the EXT: reference
     # each carries. So an element whose identifier came out of a variable is among
-    # them. Otherwise they are read from the override files, as identifier says.
+    # them. Otherwise they come from the override files, as identifier says.
     contentElements:  # optional
       - # The CType value, read from an addTcaSelectItem(), addRecordType() or
         # registerPlugin() call in one of those override files. An identifier
@@ -84,7 +84,7 @@ Answers with
         # tt_content.<identifier>.templateName in this extension's TypoScript. Null
         # where its TypoScript does not set one — another extension or the site
         # configuration may. On a plugin, one set here replaces the Generic wrapper
-        # configurePlugin() generates instead of naming the plugin's template, and
+        # configurePlugin() generates and does not name the plugin's template, and
         # null is the normal case.
         templateName: string or null
         # The TypoScript file that set it, relative to the extension.
@@ -100,8 +100,8 @@ Answers with
         # than one that does.
         flexForm: string or null
     # Content types this extension renders and does not register, which is what a
-    # package taking the rendering frame over from fluid_styled_content ends up
-    # owning. The deletion of one of these definitions leaves an element editors can
+    # package that takes the render frame over from fluid_styled_content ends up
+    # with. The deletion of one of these definitions leaves an element editors can
     # still select with nothing to render it. No other field of this answer names
     # it. Empty where the extension renders only what it registers.
     renderedContentTypes:  # optional
@@ -121,18 +121,18 @@ Answers with
         registeredBy: string or null
     # The Generic template this extension ships, relative to it, or null where it
     # ships none. ExtensionUtility::configurePlugin() renders every Extbase plugin
-    # registered as a content type through templateName = Generic, so a package
-    # defining lib.contentElement itself owes this file. Nothing in the package
+    # registered as a content type through templateName = Generic, so a package that
+    # defines lib.contentElement itself owes this file. Nothing in the package
     # points at it, which makes it the one a cleanup deletes as unused first. Its
     # deletion empties every plugin on the site.
     pluginFrame: string or null  # optional
     # FlexForm bindings read from the override files whose content type none of the
     # contentElements entries above carries. typo3_flexform_lookup resolves one to
     # its fields. Usually empty. An entry here is a registration this answer read
-    # and could not attribute. The identifier is real and the binding is real, and
-    # whatever else registers that element was not established.
+    # and could not attribute. The identifier is real and the bound structure is
+    # real, and the tool did not establish whatever else registers that element.
     unlistedFlexForms:  # optional
-      - # The content type the binding names.
+      - # The content type the bound structure names.
         identifier: string
         # The data structure, as above.
         flexForm: string
@@ -153,16 +153,16 @@ Answers with
         # Which of the files core reads a set directory for are in it:
         # settings.definitions.yaml, settings.yaml, route-enhancers.yaml,
         # labels.xlf, page.tsconfig, constants.typoscript, setup.typoscript and
-        # include_static_file.txt. config.yaml is not among them, being what makes
-        # the directory a set. route-enhancers.yaml is read from v14.1; on v13 a set
-        # carrying one is loaded and that file ignored. The last four are the
-        # defaults a set gets where its config.yaml declares no typoscript, pagets
-        # or labels path of its own. One that declares them reads from there
-        # instead, and this list does not say so.
+        # include_static_file.txt. config.yaml is not among them, because it is what
+        # makes the directory a set. The core reads route-enhancers.yaml from v14.1;
+        # on v13 it loads a set that carries one and ignores that file. The last
+        # four are the defaults a set gets where its config.yaml declares no
+        # typoscript, pagets or labels path of its own. One that declares them reads
+        # from there instead, and this list does not say so.
         files: [string]
     # The form configurations it registers, both ways in. Empty where it registers
     # none. An extension that ships a .form.yaml and registers no storage for it has
-    # a form nothing loads, which is what this list is read for.
+    # a form nothing loads, which is what you read this list for.
     formConfigurations:  # optional
       - # The YAML file, relative to the extension.
         path: string
@@ -170,10 +170,11 @@ Answers with
         # against. Null for a TypoScript-registered file, which has none.
         name: string or null
         # One of: set, typoscript. set: the directory convention
-        # Configuration/Form/<SetName>/config.yaml, collected from every active
-        # extension since v14.2 without being registered anywhere. typoscript:
-        # plugin.tx_form.settings.yamlConfigurations or the module. one beside it,
-        # which is the way before it, deprecated in v14.2 and removed in v15.0.
+        # Configuration/Form/<SetName>/config.yaml, which the core collects from
+        # every active extension since v14.2 without a registration anywhere.
+        # typoscript: plugin.tx_form.settings.yamlConfigurations or the module. one
+        # beside it, which is the way before it, deprecated in v14.2 and removed in
+        # v15.0.
         registeredBy: string
         # What it declares under persistenceManager.allowedExtensionPaths — where
         # the form definitions it stores live. A storage configured as a file mount
@@ -197,16 +198,16 @@ Answers with
     # The shape of its Classes/ directory, read off the file tree rather than off a
     # registration.
     classes:  # optional
-      # Every directory directly below Classes/, whatever it is named. Nothing is
-      # filtered, so a directory here is not a registration of any kind — it is
-      # what the extension calls it.
+      # Every directory directly below Classes/, whatever its name. Nothing filters
+      # them, so a directory here is not a registration of any kind; it is what the
+      # extension calls it.
       directories:
         - # The directory, directly below Classes/, for example EventListener or
           # Utility.
           name: string
           # PHP files anywhere below it, its own subdirectories included.
           files: integer
-      # PHP files lying directly in Classes/, under no directory of their own.
+      # PHP files directly in Classes/, under no directory of their own.
       looseFiles: integer
       # Every PHP file below Classes/, which is what `find Classes -name '*.php' |
       # wc -l` gives. The rows above and looseFiles add up to it.
@@ -214,17 +215,18 @@ Answers with
     # Registration files it ships, from ext_localconf.php to
     # Initialisation/data.t3d.
     files: [string]  # optional
-    # The files this extension ships that core has stopped reading, or is stopping,
-    # each with what shipping it costs. Four predicates are checked, each a file and
-    # what stands beside it. ext_tables.php. ext_emconf.php beside a composer.json
-    # declaring neither providesPackages nor a version. ext_icon.svg/.png/.gif where
-    # no Resources/Public/Icons/Extension.* stands to be read first. An
-    # ext_typoscript_*.txt with no .typoscript file of the same name beside it. The
-    # check reads each from the extension's own tree, which is where every one of
-    # these predicates lives. So no changelog sweep over what its code calls reaches
-    # any of them. An empty list says none of the four holds here, not that the
-    # extension is ready for the next major. Nothing else here is checked for a
-    # deprecation, and typo3_changelog_lookup is what answers that question.
+    # The files this extension ships that the core no longer reads, or stops to
+    # read, each with what the shipped file costs. The check reads four predicates,
+    # each a file and what stands beside it. ext_tables.php. ext_emconf.php beside a
+    # composer.json that declares neither providesPackages nor a version.
+    # ext_icon.svg/.png/.gif where no Resources/Public/Icons/Extension.* stands for
+    # the core to read first. An ext_typoscript_*.txt with no .typoscript file of
+    # the same name beside it. The check reads each from the extension's own tree,
+    # which is where every one of these predicates lives. So no changelog sweep over
+    # what its code calls reaches any of them. An empty list says none of the four
+    # holds here, not that the extension is ready for the next major. The check
+    # reads nothing else here for a deprecation, and typo3_changelog_lookup answers
+    # that question.
     deprecatedFiles:  # optional
       - # The file, relative to the extension. Not always a registration file:
         # nothing reads ext_icon.* and ext_typoscript_*.txt now, so they are a
@@ -240,12 +242,12 @@ Answers with
         # What it raises, from which version, and what the removal does instead.
         cost: string
     # Declaration files that are there but whose entries do not stand in their own
-    # text. Each assembles its list while it runs, so what it registers is missing
-    # from the lists above rather than absent. The booted installation is what
+    # text. Each assembles its list while it runs, so the lists above lack what it
+    # registers rather than say it is absent. The booted installation is what
     # answers for them. An empty list says each declaration file that exists stood
-    # in its own text, not that everything the extension ships was read.
-    # ext_localconf.php and ext_tables.php register by running and are read by
-    # nothing here.
+    # in its own text, not that the tool read everything the extension ships.
+    # ext_localconf.php and ext_tables.php register at run time, and nothing here
+    # reads them.
     notReadStatically: [string]  # optional
     # What it ships beside its registrations. Every key is present even when the
     # artifact is not. The absence of a manual, a test or a translation is the

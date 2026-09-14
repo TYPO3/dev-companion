@@ -1,11 +1,8 @@
 # Answers — what a caller may conclude from one
 
-The shape of an answer rather than its subject: what an empty one means, where
-the reason for it lives, and what a query has to do to reach the thing it is
-about.
+The shape of an answer rather than its subject. That is what an empty one means, where the reason for it lives, and what a query has to do to reach its subject.
 
-See [the requirements readme](../readme.md) for how an entry is written and
-when it is added.
+See [the requirements readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`R-ANS-001`][R-ANS-001] — "Could not ask" never looks like "does not exist" · held
 - [`R-ANS-002`][R-ANS-002] — The reason is in the data, not only in the text · held

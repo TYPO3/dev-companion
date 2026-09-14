@@ -36,7 +36,7 @@ final class ServerScope extends ReadOnlyTool
         'doesNotCover' => 'what this server deliberately does not answer, and what to do instead',
         'checkoutDiscovery' => 'what to establish in the checkout before the work, and how',
         'routing' => 'which tool to call when',
-        'versions' => 'the TYPO3 versions this knowledge is bound to',
+        'versions' => 'the TYPO3 versions this knowledge binds to',
         'answersFrom' => 'which source answers which tool, in the state this machine is in',
         'installation' => 'which installation is being read, and whether its console answers',
     ];
@@ -54,7 +54,7 @@ final class ServerScope extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Orientation for this server: what it covers and at which depth, what it deliberately does not cover, and which tool to call when. Start here when it is unclear whether this server can answer a question at all, or which of the lookups is the right one. It answers whole, which is the largest answer here. Where you know which part you need — whether an installation and its console can be reached, say — name it in sections.';
+        return 'Orientation for this server: what it covers and at which depth, what it deliberately does not cover, and which tool to call when. Start here when it is unclear whether this server can answer a question at all, or which of the lookups is the right one. It answers whole, which is the largest answer here. Where you know which part you need, say whether an installation and its console answer, name it in sections.';
     }
 
     public static function inputSchema(): array
@@ -72,8 +72,8 @@ final class ServerScope extends ReadOnlyTool
                     'minItems' => 1,
                     'description' => 'The parts of the answer to return, named by the fields they arrive in. '
                         . 'Omit it for all of them, which is the answer for a caller that does not yet know what '
-                        . 'this server can be asked. Whatever you name, the answer keeps the purpose, the '
-                        . 'instructions clients receive at initialize time, and the tools your list is missing. '
+                        . 'it can ask this server. Whatever you name, the answer keeps the purpose, the '
+                        . 'instructions clients receive at initialize time, and the tools your list lacks. '
                         . 'The withheld field says what each part left out would have held.',
                 ],
             ],
@@ -88,15 +88,15 @@ final class ServerScope extends ReadOnlyTool
             'instructions' => Schema::string('The boundary statement clients receive at initialize time.'),
             'covers' => Schema::listOf(Schema::object([
                 'topic' => Schema::string(),
-                'depth' => Schema::string('How deeply the topic is covered.'),
+                'depth' => Schema::string('How deep the coverage of the topic goes.'),
                 'tools' => Schema::listOf(Schema::string()),
                 'source' => Schema::string('Knowledge file or typo3:// resource behind the topic.'),
-                'scope' => ['type' => 'string', 'enum' => ['core', 'project', 'extension', 'any'], 'description' => 'Which kind of work the answers are for. core: the contribution process and the scripts of that repository. any: a convention that holds wherever TYPO3 is written.'],
+                'scope' => ['type' => 'string', 'enum' => ['core', 'project', 'extension', 'any'], 'description' => 'Which kind of work the answers are for. core: the contribution process and the scripts of that repository. any: a convention that holds wherever somebody writes TYPO3.'],
             ], ['topic', 'depth', 'tools', 'source', 'scope'])),
             'doesNotCover' => Schema::listOf(Schema::object([
                 'topic' => Schema::string(),
                 'why' => Schema::string(),
-                'instead' => Schema::string('What to do instead of asking this server.'),
+                'instead' => Schema::string('What to do instead of a call to this server.'),
             ], ['topic', 'why', 'instead'])),
             'checkoutDiscovery' => Schema::listOf(Schema::object([
                 'establish' => Schema::string(),
@@ -108,35 +108,35 @@ final class ServerScope extends ReadOnlyTool
             ], ['when', 'call'])),
             'versions' => Schema::listOf(Schema::object([
                 'major' => Schema::integer(),
-                'branch' => Schema::string('The branch that line is verified against.'),
+                'branch' => Schema::string('The branch this server verifies that line against.'),
                 'status' => Schema::string('lts, stable, or development.'),
-            ], ['major', 'branch', 'status']), 'The TYPO3 versions the knowledge is bound to. A statement outside a range is left out when a target version is known.'),
+            ], ['major', 'branch', 'status']), 'The TYPO3 versions the knowledge binds to. The answer leaves out a statement outside a range when it knows a target version.'),
             'answersFrom' => Schema::listOf(Schema::object([
                 'source' => Schema::string('installation, packages, knowledge, network or checkout.'),
                 'meaning' => Schema::string('What that source is, and what it cannot answer.'),
                 'tools' => Schema::listOf(Schema::string(), 'The offered tools it can answer. A tool with two sources stands under both.'),
-            ], ['source', 'meaning', 'tools']), 'Which tools are worth calling in the state this machine is in — nothing running answers from knowledge and packages alone. Every tool states its own sources at the foot of its description; this groups them the other way round.'),
+            ], ['source', 'meaning', 'tools']), 'Which tools are worth a call in the state this machine is in. Where nothing runs, the tools answer from knowledge and packages alone. Every tool states its own sources at the foot of its description; this groups them the other way round.'),
             'excludedTools' => Schema::object([
-                'names' => Schema::listOf(Schema::string(), 'The tools that are really gone, and the only reason the list is ever shorter than the documented one. Empty unless the variable is set.'),
-                'ignored' => Schema::listOf(Schema::string(), 'Names in the variable that took nothing away: no tool answers to the name, or it is one of the three this server offers whatever the variable says. Each of them is in the tool list. Absent means nothing to report, which is the ordinary case.'),
+                'names' => Schema::listOf(Schema::string(), 'The tools that are really gone, and the only reason the list is ever shorter than the documented one. Empty unless the variable has a value.'),
+                'ignored' => Schema::listOf(Schema::string(), 'Names in the variable that took nothing away. No tool answers to the name, or it is one of the three this server offers whatever the variable says. Each of them is in the tool list. Absent means nothing to report, which is the ordinary case.'),
                 'variable' => Schema::string('Environment variable that names them.'),
             ], ['names', 'variable']),
             'installation' => Schema::object([
                 'found' => ['type' => 'boolean', 'description' => 'Whether there is an installation to read at all.'],
                 'root' => Schema::nullableString('Absolute path of the installation.'),
                 'kind' => Schema::nullableString('core-checkout or composer-project.'),
-                'via' => Schema::nullableString('How it was determined: discovery (walked up from the start directory) or environment (named by TYPO3_DEV_COMPANION_ROOT).'),
+                'via' => Schema::nullableString('How the server found it: discovery (a walk up from the start directory) or environment (TYPO3_DEV_COMPANION_ROOT names it).'),
                 'startedFrom' => Schema::nullableString('Where the search started, or the configured value.'),
-                'searched' => Schema::listOf(Schema::string(), 'The directories the search walked. A failure here means a layout that cannot be read or a server started in the wrong place — this says which.'),
+                'searched' => Schema::listOf(Schema::string(), 'The directories the search walked. A failure here means a layout the server cannot read or a server started in the wrong place; this says which.'),
                 'packageCount' => Schema::integer('TYPO3 packages found in it.'),
-                'misconfiguration' => Schema::nullableString('Set when a configured value could not be followed. Nothing falls back to a discovered installation.'),
+                'misconfiguration' => Schema::nullableString('Set when the server could not follow a configured value. Nothing falls back to a discovered installation.'),
                 'console' => Schema::object([
                     'reachable' => ['type' => 'boolean', 'description' => 'False means every installation-backed tool answers with unsupported in place of its result.'],
                     'via' => Schema::nullableString('ddev, php, or override.'),
-                    'php' => Schema::nullableString('The PHP version it runs on, where that is known.'),
-                    'command' => Schema::nullableString('The invocation, as it is run.'),
-                    'reason' => Schema::nullableString('Why it cannot be run. Null when it can.'),
-                    'caveat' => Schema::nullableString('What limits the console that was found — a project whose containers are stopped is answered by an interpreter of this machine, which reaches what TYPO3 assembles from its own files and not the services the project\'s own runtime brings. Null when nothing limits it.'),
+                    'php' => Schema::nullableString('The PHP version it runs on, where the server knows it.'),
+                    'command' => Schema::nullableString('The invocation, as the server runs it.'),
+                    'reason' => Schema::nullableString('Why it cannot run. Null when it can.'),
+                    'caveat' => Schema::nullableString('What limits the console the server found. An interpreter of this machine answers for a project whose containers are stopped. That reaches what TYPO3 assembles from its own files and not the services the project\'s own runtime brings. Null when nothing limits it.'),
                 ], ['reachable']),
                 'settings' => Schema::object([
                     'root' => Schema::string('Environment variable that names the installation root.'),
@@ -146,7 +146,7 @@ final class ServerScope extends ReadOnlyTool
             'withheld' => Schema::listOf(Schema::object([
                 'section' => Schema::string(),
                 'holds' => Schema::string('What that part of the answer would have carried.'),
-            ], ['section', 'holds']), 'The parts this call did not ask for. A field named here is absent from this answer rather than empty, so a narrowed answer cannot be read as the whole one. Empty where sections was not passed, which is the whole orientation.'),
+            ], ['section', 'holds']), 'The parts this call did not ask for. A field named here is absent from this answer rather than empty, so a narrowed answer does not read as the whole one. Empty where sections was not passed, which is the whole orientation.'),
         ], ['purpose', 'excludedTools', 'withheld']);
     }
 
@@ -194,7 +194,7 @@ final class ServerScope extends ReadOnlyTool
 
         if (in_array('versions', $sections, true)) {
             $lines[] = '';
-            $lines[] = 'Versions this knowledge is bound to:';
+            $lines[] = 'Versions this knowledge binds to:';
             foreach (Versions::covered() as $version) {
                 $lines[] = '- TYPO3 v' . $version['major'] . ' (' . $version['branch'] . ', ' . $version['status'] . ')';
             }

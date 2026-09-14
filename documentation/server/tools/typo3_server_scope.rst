@@ -7,8 +7,8 @@ Orientation for this server: what it covers and at which depth, what it
 deliberately does not cover, and which tool to call when. Start here when it is
 unclear whether this server can answer a question at all, or which of the
 lookups is the right one. It answers whole, which is the largest answer here.
-Where you know which part you need — whether an installation and its console can
-be reached, say — name it in sections. Answers from: knowledge, installation.
+Where you know which part you need, say whether an installation and its console
+answer, name it in sections. Answers from: knowledge, installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -22,9 +22,9 @@ Takes
 
     # The parts of the answer to return, named by the fields they arrive in. Omit it
     # for all of them, which is the answer for a caller that does not yet know what
-    # this server can be asked. Whatever you name, the answer keeps the purpose, the
-    # instructions clients receive at initialize time, and the tools your list is
-    # missing. The withheld field says what each part left out would have held.
+    # it can ask this server. Whatever you name, the answer keeps the purpose, the
+    # instructions clients receive at initialize time, and the tools your list
+    # lacks. The withheld field says what each part left out would have held.
     sections: [string]  # optional
 
 Answers with
@@ -38,19 +38,19 @@ Answers with
     instructions: string  # optional
     covers:  # optional
       - topic: string
-        # How deeply the topic is covered.
+        # How deep the coverage of the topic goes.
         depth: string
         tools: [string]
         # Knowledge file or typo3:// resource behind the topic.
         source: string
         # One of: core, project, extension, any. Which kind of work the answers are
         # for. core: the contribution process and the scripts of that repository.
-        # any: a convention that holds wherever TYPO3 is written.
+        # any: a convention that holds wherever somebody writes TYPO3.
         scope: string
     doesNotCover:  # optional
       - topic: string
         why: string
-        # What to do instead of asking this server.
+        # What to do instead of a call to this server.
         instead: string
     checkoutDiscovery:  # optional
       - establish: string
@@ -58,17 +58,18 @@ Answers with
     routing:  # optional
       - when: string
         call: string
-    # The TYPO3 versions the knowledge is bound to. A statement outside a range is
-    # left out when a target version is known.
+    # The TYPO3 versions the knowledge binds to. The answer leaves out a statement
+    # outside a range when it knows a target version.
     versions:  # optional
       - major: integer
-        # The branch that line is verified against.
+        # The branch this server verifies that line against.
         branch: string
         # lts, stable, or development.
         status: string
-    # Which tools are worth calling in the state this machine is in — nothing
-    # running answers from knowledge and packages alone. Every tool states its own
-    # sources at the foot of its description; this groups them the other way round.
+    # Which tools are worth a call in the state this machine is in. Where nothing
+    # runs, the tools answer from knowledge and packages alone. Every tool states
+    # its own sources at the foot of its description; this groups them the other way
+    # round.
     answersFrom:  # optional
       - # installation, packages, knowledge, network or checkout.
         source: string
@@ -79,9 +80,9 @@ Answers with
         tools: [string]
     excludedTools:
       # The tools that are really gone, and the only reason the list is ever shorter
-      # than the documented one. Empty unless the variable is set.
+      # than the documented one. Empty unless the variable has a value.
       names: [string]
-      # Names in the variable that took nothing away: no tool answers to the name,
+      # Names in the variable that took nothing away. No tool answers to the name,
       # or it is one of the three this server offers whatever the variable says.
       # Each of them is in the tool list. Absent means nothing to report, which is
       # the ordinary case.
@@ -95,18 +96,18 @@ Answers with
       root: string or null  # optional
       # core-checkout or composer-project.
       kind: string or null  # optional
-      # How it was determined: discovery (walked up from the start directory) or
-      # environment (named by TYPO3_DEV_COMPANION_ROOT).
+      # How the server found it: discovery (a walk up from the start directory) or
+      # environment (TYPO3_DEV_COMPANION_ROOT names it).
       via: string or null  # optional
       # Where the search started, or the configured value.
       startedFrom: string or null  # optional
-      # The directories the search walked. A failure here means a layout that cannot
-      # be read or a server started in the wrong place — this says which.
+      # The directories the search walked. A failure here means a layout the server
+      # cannot read or a server started in the wrong place; this says which.
       searched: [string]
       # TYPO3 packages found in it.
       packageCount: integer
-      # Set when a configured value could not be followed. Nothing falls back to a
-      # discovered installation.
+      # Set when the server could not follow a configured value. Nothing falls back
+      # to a discovered installation.
       misconfiguration: string or null  # optional
       console:
         # False means every installation-backed tool answers with unsupported in
@@ -114,14 +115,14 @@ Answers with
         reachable: boolean
         # ddev, php, or override.
         via: string or null  # optional
-        # The PHP version it runs on, where that is known.
+        # The PHP version it runs on, where the server knows it.
         php: string or null  # optional
-        # The invocation, as it is run.
+        # The invocation, as the server runs it.
         command: string or null  # optional
-        # Why it cannot be run. Null when it can.
+        # Why it cannot run. Null when it can.
         reason: string or null  # optional
-        # What limits the console that was found — a project whose containers are
-        # stopped is answered by an interpreter of this machine, which reaches what
+        # What limits the console the server found. An interpreter of this machine
+        # answers for a project whose containers are stopped. That reaches what
         # TYPO3 assembles from its own files and not the services the project's own
         # runtime brings. Null when nothing limits it.
         caveat: string or null  # optional
@@ -131,8 +132,8 @@ Answers with
         # Environment variable that names the console command.
         console: string
     # The parts this call did not ask for. A field named here is absent from this
-    # answer rather than empty, so a narrowed answer cannot be read as the whole
-    # one. Empty where sections was not passed, which is the whole orientation.
+    # answer rather than empty, so a narrowed answer does not read as the whole one.
+    # Empty where sections was not passed, which is the whole orientation.
     withheld:
       - section: string
         # What that part of the answer would have carried.

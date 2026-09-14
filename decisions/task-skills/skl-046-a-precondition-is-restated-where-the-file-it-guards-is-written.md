@@ -38,8 +38,8 @@ rule stood.
   icon rule fired and the label rule did not. So a rule stated again where the
   task passes is what carried the icon call, and is not on its own what carries
   a call.
-- What the reporting session did instead is stated: it read *reuse is scoped to
-  the XLF resource used at the consuming code* as saying a new extension has
+- The session states what it did instead. It read *reuse is scoped to the XLF
+  resource used at the consuming code* as a statement that a new extension has
   nothing to ask about. That scope is the whole of what either channel says
   about labels. The `instructions` sentence ends *a match in another resource is
   not reusable there*. `LabelLookup::description()` opens *Reuse is local to the
@@ -52,8 +52,8 @@ rule stood.
   The exclusion prefix and the installer notice both go in front of them and are
   the caller's size rather than ours.
 - The `routing` block already carries all three preconditions, and it sits
-  behind `typo3_server_scope` — `D-AUD-003`'s own finding that a tool has to be
-  called to learn that tools should be called.
+  behind `typo3_server_scope`. That is `D-AUD-003`'s own finding, that a session
+  has to call a tool to learn that it should call tools.
 - `feedback/2026-08-17-212218`, from the same session and still unjudged,
   reports the same shape from another symptom. A prescription phrased as a
   section in the middle of a document supplies a caller no reason to stop. A
@@ -63,7 +63,7 @@ rule stood.
 
 - **Step 2, delivery, closed on the spot** for the component half. The rule
   exists and the workflow that writes backend preview markup and CSS did not
-  carry it; the bullet is placement, and its wording is the sibling skill's
+  carry it. The bullet is placement, and its wording is the sibling skill's
   because the two guard the same surface. `ROUTING_SKILLS` records it, which is
   what holds it.
 - **Step 4, wording** for the label half. The rule arrived in the same bullet as
@@ -78,8 +78,8 @@ rule stood.
   in a description a client caches is `D-SKL-043`'s mistake, one file further
   out.
 - Nothing here looked up anything about TYPO3 and no contract moved. The skill's
-  `description` and the ownership boundary it closes on are unchanged, which is
-  the test `D-SKL-043` set for closing a skill edit in the judging run.
+  `description` and the ownership boundary it closes on stand as they were. That
+  is the test `D-SKL-043` set for a skill edit closed in the judgement run.
 
 ## Assumed
 
@@ -106,9 +106,8 @@ rule stood.
   can use. Then the placement was right and the curated catalog is what does not
   carry the surface. That is a catalog question and not a skill one.
 - A session follows the label bullet and a copied reference still goes
-  unchecked. Then the trigger is the act of the copy rather than the wording,
-  and it belongs where the session writes the TCA rather than in the evidence
-  step.
+  unchecked. Then the trigger is the act of the copy rather than the wording. It
+  belongs where the session writes the TCA rather than in the evidence step.
 - A third published skill turns out to write backend markup without routing the
   lookup. Then this is not per-skill placement but something `skills/base.md`
   owes every workflow, and it stands once there instead.

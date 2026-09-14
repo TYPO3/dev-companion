@@ -80,7 +80,7 @@ page is one call away, and the patch makes its wording false.
   that the report has to answer the surface and does not have to answer the
   call.
 - That a book name means something to a caller with a subject in hand. A session
-  reading "TypoScript Explained" while holding `stdWrap_override` still has to
+  that reads "TypoScript Explained" with `stdWrap_override` in hand still has to
   make the reduction the tool's own `insteadOf` suggests on a miss.
 - That the manual half of the surface is worth a call on an ordinary patch. The
   measure is one patch where it was worth it.
@@ -124,5 +124,5 @@ bounds the second **Assumed**. A session that reads the surface takes a route at
 the surface. The description is not the lever the feedback asks for either. What
 it asks for landed two days before the session ran, and every tool arrived as a
 bare name with its schema deferred. Both questions re-run here return the page
-that carries both halves the session wanted, so its second finding is documented
-intent.
+that carries both halves the session wanted, so its second finding is intent the
+manual documents.

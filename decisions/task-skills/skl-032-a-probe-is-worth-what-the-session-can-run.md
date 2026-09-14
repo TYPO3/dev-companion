@@ -55,8 +55,8 @@ four failures.
   the same sentence and does not follow from it.
 - Where a suite cannot answer, what the session needs is a route rather than a
   permission, and the three entries above are that route. Whether the review
-  skill should carry the looking step as well as the running one is a question
-  for the run that has both — not a paragraph written from this reading.
+  skill should carry the look step as well as the run step is a question for the
+  run that has both. It is not a paragraph written from this read.
 
 ## Assumed
 
@@ -73,13 +73,12 @@ four failures.
 
 The route is still there and reachable.
 `bin/cli hints:probe "is this CSS feature inside the browser baseline"` returns
-`css-browser-target` at `appliesTo(26) + text(279)`, and the two hints that
-answer looking at a backend change — `browser-tests` and
-`browser-test-accessibility` — are in the corpus beside it. `D-KNW-066`,
-`D-KNW-068` and `D-KNW-069` all stand.
+`css-browser-target` at `appliesTo(26) + text(279)`. The two hints that answer a
+look at a backend change, `browser-tests` and `browser-test-accessibility`, are
+in the corpus beside it. `D-KNW-066`, `D-KNW-068` and `D-KNW-069` all stand.
 
 Nothing has tested the **Wrong if**. The only feedback since that names a probe
-or a positional finding is the pair this entry was written from, both stamped
-2026-08-10, so no session has had the route written down and asserted anyway.
+or a positional finding is the pair this entry came from, both stamped
+2026-08-10. So no session has had the route in front of it and asserted anyway.
 That is the run this entry is waiting for, and it is a review of a backend
 change rather than a reading here.

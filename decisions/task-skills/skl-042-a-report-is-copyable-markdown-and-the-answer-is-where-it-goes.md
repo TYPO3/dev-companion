@@ -25,9 +25,9 @@ issue, a chat. Rich rendering is what it does not survive.
   werden", then "damit es kopierbar ist". The second names the reason, and
   markdown is the fix it asks for. `D-SKL-040` read the file the session wrote
   afterwards as the requirement rather than as one way to meet it.
-- What that entry established holds unchanged: the three `## Report` sections
-  specify five bands, what each finding owes and the surfaces it closes on, and
-  none of them names a form.
+- What that entry established holds. The three `## Report` sections specify five
+  bands, what each finding owes and the surfaces it closes on, and none of them
+  names a form.
 - The skill is what makes the report long, and length is why the form matters. A
   hundred lines rendered as HTML is the case where a copy breaks; four lines is
   not.
@@ -40,12 +40,12 @@ issue, a chat. Rich rendering is what it does not survive.
 - The answer is where the report goes by default. Nothing goes to a path unless
   the caller asks for one. So nothing has to decide a name or a directory, and
   no accident dirties the assessed checkout.
-- A file stays available and is the caller's call. Where one is written, it goes
-  outside the checkout under review, because that skill's own checklist reports
-  what is untracked beside the patch as a finding.
+- A file stays available and is the caller's call. Where a session writes one,
+  it goes outside the checkout under review. That skill's own checklist reports
+  an untracked file beside the patch as a finding.
 - This entry revokes `D-SKL-040` rather than corrects it. Its statement named
-  the fix as the file, and its **Wrong if** were a list about paths and naming,
-  which is not what can go wrong here.
+  the fix as the file. Its **Wrong if** were a list about paths and names, which
+  is not what can go wrong here.
 
 ## Assumed
 

@@ -12,9 +12,9 @@ revokedBy: D-SKL-042
 name is and where it goes.**
 
 The answer then carries a short summary and that path. Three skills specify a
-report exhaustively — its bands, what each finding owes, the surfaces it closes
-on — and none of them says that what it specifies is a document, so the session
-does the one thing nothing told it not to and prints it into the chat.
+report exhaustively, its bands, what each finding owes, the surfaces it closes
+on. None of them says that what it specifies is a document. So the session does
+the one thing nothing told it not to and prints it into the chat.
 
 ## Evidence
 

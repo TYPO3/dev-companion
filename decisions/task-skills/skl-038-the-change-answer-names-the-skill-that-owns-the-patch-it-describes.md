@@ -34,10 +34,10 @@ begun.
   [`feedback/archive/2026-08-10-182404`](../../feedback/archive/2026-08-10-182404-a-review-request-quoting-the-skill-s-own.md)
   is the same request shape in the same checkout, judged as
   [`D-SKL-033`](skl-033-whether-a-skill-is-activated-is-the-clients-and-the-models.md).
-  That report named two things that plausibly kept the skill shut: the language,
-  and a request naming a local commit rather than a change on the review server.
-  This one named the change, by number and by URL, and the skill stayed shut. So
-  the second of the two is gone and the first is where it was.
+  That report named two things that plausibly kept the skill shut. The language,
+  and a request that names a local commit rather than a change on the review
+  server. This one named the change, by number and by URL, and the skill stayed
+  shut. So the second of the two is gone and the first is where it was.
 - **What the answer carries today.** Read in this checkout on 2026-08-14:
   `GerritLookup::answer()` ends on two sentences. One holds the commit against
   `git rev-parse HEAD`, and one says the fetch goes to the review server rather
@@ -71,9 +71,9 @@ begun.
   order opens on. A caller with one change in hand is about to review it or to
   fetch it, and those two workflows own it.
 - The `issue` form takes none of it. "Has somebody already fixed this" precedes
-  triage, patch development and review alike, and `D-SKL-013` already declines
-  to route the `submission` intent because it spans two skills. The same holds
-  for `typo3_forge_lookup`, which is that question one host over.
+  triage, patch development and review alike. `D-SKL-013` already declines to
+  route the `submission` intent because it spans two skills. The same holds for
+  `typo3_forge_lookup`, which is that question one host over.
 - Not `typo3_server_scope`. Two sessions finished a task without a call to it,
   for the same stated reason. A name of a tool nobody invokes is what
   `D-ANS-061` ruled out. What the tail names is a workflow and a call, and both
@@ -84,11 +84,11 @@ begun.
 - The descriptions stay as they are. `D-SKL-033` weighed the wording and the
   German trigger words, and this feedback adds a session to its evidence rather
   than reopening it.
-- **The route gets its repair too, and separately.** A review request naming a
-  change number reaching an upgrade or a development workflow is a defect in
-  `knowledge/task-intents.json` rather than in this answer, and which repair it
-  takes — widening `audit`, or `breaking` not routing where the brief is a
-  review — is a reading of the matcher that a card of its own carries.
+- **The route gets its repair too, and separately.** A review request that names
+  a change number and reaches an upgrade or a development workflow is a defect
+  in `knowledge/task-intents.json`. It is not one in this answer. Which repair
+  it takes is a read of the matcher that a card of its own carries. That is a
+  wider `audit`, or `breaking` that does not route where the brief is a review.
 
 ## Assumed
 

@@ -56,8 +56,8 @@ buys a decision rather than a reassurance.
 
 - An edit degrades a published workflow and nobody notices, which is precisely
   what this declines to guard.
-- The baseline run for a new skill is skipped, because nothing reads it off a
-  file either and the rule is one more sentence in `writing-a-skill.rst`.
+- Somebody skips the baseline run for a new skill, because nothing reads it off
+  a file either. The rule is one more sentence in `writing-a-skill.rst`.
 - A sample costs materially more than the price above, so a new skill is a
   decision about budget rather than about evidence.
 
@@ -66,6 +66,6 @@ buys a decision rather than a reassurance.
 Two skills went out on 2026-08-19 without one. `typo3-extension-patch-review`
 and `typo3-distribution-content` had the review `writing-a-skill.rst` requires
 and no run of any kind, and the maintainer published on the review alone —
-`D-SKL-064`. So what this entry decided has been overruled once, in the open,
-and the first thing that would show it right is a finding in either skill that a
-baseline run would have caught.
+`D-SKL-064`. So the maintainer has overruled what this entry decided once, in
+the open. The first thing that would show it right is a finding in either skill
+that a baseline run would have caught.

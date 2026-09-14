@@ -20,9 +20,9 @@ unverified. It called `typo3_rule_lookup` at no point in the session.
 
 - `feedback/2026-08-17-205945`, a v14 demo site built as a sitepackage and a
   distribution extension on 14.3.6. Its fourth case is the one this entry is
-  about: `any/testing/browser-check` and `project/testing/playwright` were both
-  named in the `guides` array, the session wanted to verify its previews in a
-  browser, and it stopped rather than opening either. Its own account of why is
+  about. The `guides` array named both `any/testing/browser-check` and
+  `project/testing/playwright`. The session wanted to verify its previews in a
+  browser, and it stopped rather than opened either. Its own account of why is
   that it stopped, not that it was impossible.
 - Both documents name that moment in their own front matter. `browser-check`
   says *when a screenshot or a browser session has to run against an
@@ -37,10 +37,10 @@ unverified. It called `typo3_rule_lookup` at no point in the session.
 - The route does not exist under another name either.
   `typo3-content-element-development` reaches the moment at *add browser
   coverage when JavaScript interaction, editor workflow or accessibility is part
-  of the feature*, which names no lookup; its closing handoff names
-  `typo3-extension-testing` for test infrastructure; and that skill carries its
-  own `references/playwright.md` and names neither guide. So the surface hands
-  on to a skill that has no route to the corpus either.
+  of the feature*, which names no lookup. Its closing handoff names
+  `typo3-extension-testing` for test infrastructure. That skill carries its own
+  `references/playwright.md` and names neither guide. So the surface hands on to
+  a skill that has no route to the corpus either.
 - `ProjectDescribe`'s `guides` field already records the cost from the other
   side: *four sessions in one week finished without learning they exist*. This
   is the fifth and the one that is different. The array was in its context and

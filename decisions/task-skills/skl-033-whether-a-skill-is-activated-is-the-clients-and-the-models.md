@@ -37,10 +37,10 @@ fire, so the wording is not what remains to suspect.
   and opens "Review a TYPO3 core patch". The German sentence's only content
   words are `review` and `patch`, which are two of those first four.
 - **The instructions arrived, whole.** The `mcp_instructions_delta` opens with
-  `Installer::NOTICE` — the project's published skills were stale — and then
-  with "Start every task with typo3_project_describe", naming `typo3_task_guide`
-  as what "hands the parts that have their own workflow to the skill that owns
-  them". The session called neither tool before call 14.
+  `Installer::NOTICE`, since the project's published skills were stale. Then it
+  opens with "Start every task with typo3_project_describe". It names
+  `typo3_task_guide` as what "hands the parts that have their own workflow to
+  the skill that owns them". The session called neither tool before call 14.
 - **What the twelve cost today.** 3537 characters of listing against the 3600
   `SkillTest::everyDescriptionIsWrittenToALengthOfItsOwn` allows, measured on
   2026-08-11.
@@ -75,10 +75,10 @@ fire, so the wording is not what remains to suspect.
   `D-SKL-026` computes for a 200k session on this model generation. So either
   the window was larger or that arithmetic has moved, and nothing established
   which.
-- That a model reading `- typo3-core-patch-review: Review a TYPO3 core patch …`
-  against "bitte review mir den patch" is choosing rather than failing to match.
-  Nothing here can see the choice, which is why this entry stops at what
-  arrived.
+- That a model that reads
+  `- typo3-core-patch-review: Review a TYPO3 core patch …` against "bitte review
+  mir den patch" chooses rather than fails to match. Nothing here can see the
+  choice, which is why this entry stops at what arrived.
 
 ## Wrong if
 

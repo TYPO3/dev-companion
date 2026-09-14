@@ -18,8 +18,8 @@ nothing.
 
 ## Evidence
 
-- Every `SKILL.md` carries a `compatibility` line naming the server it needs and
-  how it is installed, so a copy says what is missing. It does not put the base
+- Every `SKILL.md` carries a `compatibility` line that names the server it needs
+  and how to install it, so a copy says what it lacks. It does not put the base
   there.
 - The installer writes `Installer::BASE` at publication, one copy per skill.
   Each lands in another project alone, and a link out of its own directory would

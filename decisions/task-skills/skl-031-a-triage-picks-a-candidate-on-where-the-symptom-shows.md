@@ -12,7 +12,7 @@ much of the constellation the suite already models.** The triage skill says so
 where it hands the backlog over.
 
 [`D-ANS-069`](../answers/ans-069-a-backlog-row-carries-the-review-server-and-not-the-journal.md)
-widened the row and left the criterion open, because reading a row is this
+widened the row and left the criterion open. A read of a row is this
 repository's question and what makes core work cheap is not.
 
 ## Evidence
@@ -35,8 +35,8 @@ repository's question and what makes core work cheap is not.
 - The category reading is free and rare. Of the 55 categories the core project
   files under, `t3editor`, `RTE (rtehtmlarea + ckeditor)` and
   `Language Manager (backend)` name subsystems `.checkouts/main` no longer
-  ships; every category on the reporting session's own page of stale Bugs names
-  one it still does.
+  ships. Every category on the session's own page of stale Bugs names one it
+  still does.
 - "Browser-only" is not that no layer can hold it. Every covered branch has a
   browser layer: Codeception on 12.4, both on 13.4, Playwright alone on `main`.
   Each needs an installed instance and a browser before a session sees anything,
@@ -57,16 +57,16 @@ repository's question and what makes core work cheap is not.
   that change calls its keys.
 - The skill says nothing about the tracker's own difficulty fields.
   [`D-ANS-069`](../answers/ans-069-a-backlog-row-carries-the-review-server-and-not-the-journal.md)
-  measured them empty on exactly the backlog where the question arises, and a
-  skill that names a field nobody fills spends a session's reading on it.
+  measured them empty on exactly the backlog where the question arises. A skill
+  that names a field nobody fills spends a session's read on it.
 - The section ends with two asks. The answer names which reading decided, and
   says of the rows it passed over that it passed them over. A skip is not a
   triage, and the escape hatch above it already owes a "why".
 
 ## Assumed
 
-- One labelled set. Nine issues, one reporter, one page of stale Bugs, and the
-  settleability of the other twenty-one is nobody's reading yet.
+- One labelled set. Nine issues, one reporter, one page of stale Bugs, and
+  nobody has read whether the other twenty-one are settleable yet.
 - The fifth reading rests on what `.checkouts/main` models today. A suite
   reorganisation moves it, and the skill says to look rather than what to find.
 - The settled issue's patch was never read. Change 95182 answers `Not found` on
@@ -81,8 +81,8 @@ repository's question and what makes core work cheap is not.
   rather than off the report.
 - The category reading never fires again over a real backlog, which would make a
   free reading a paid one.
-- A candidate rejected as an interaction turns out to be one class after all,
-  which would say the fourth reading trusts a reporter who was guessing.
+- A candidate rejected as an interaction turns out to be one class after all.
+  That would say the fourth reading trusts a reporter who guessed.
 
 ## Since then
 

@@ -26,15 +26,15 @@ nothing came back at all.
   sentence as what it followed, and a read of
   `documentId="core/contribution/rules"` as what it recovered with.
 - The miss reproduces whole, re-run on 2026-08-14 from this worktree through
-  `Tool\RuleLookup::answer()` with the feedback's own arguments: *No knowledge
-  section matched "changelog entry testing review readiness"*, then *No section
-  carries more than 3 of the 5 words: "changelog entry review" reaches 3
-  sections, "changelog review readiness" reaches 3 sections — ask again with the
-  one that narrows best*, then the `documentation-changelog` hint and the topic
-  list.
+  `Tool\RuleLookup::answer()` with the feedback's own arguments. First *No
+  knowledge section matched "changelog entry testing review readiness"*. Then
+  *No section carries more than 3 of the 5 words: "changelog entry review"
+  reaches 3 sections, "changelog review readiness" reaches 3 sections — ask
+  again with the one that narrows best*. Then the `documentation-changelog` hint
+  and the topic list.
 - Every part of it answers on its own. `testing` returns `## Testing` of the
-  contribution rules at coverage 1.0 and score 107; `review readiness` returns
-  `## Review Readiness` at 1.0 and 148; `changelog entry` returns
+  contribution rules at coverage 1.0 and score 107. `review readiness` returns
+  `## Review Readiness` at 1.0 and 148. `changelog entry` returns
   `## Breaking Changes`, `## Changed Signatures` and `## Changelog Files` at
   1.0. Four of the five words still answer — `changelog entry review readiness`
   returns six sections, `## Review Readiness` first at 0.691. The fifth word is
@@ -47,9 +47,9 @@ nothing came back at all.
   sentence promised. Exhaustive within one document: 351 triples of its own
   headings return nothing 34 times and return all three 31 times. 500 quadruples
   return nothing 84 times and all four twice.
-  `documentation testing review readiness` — three headings of
-  `core/contribution/rules`, the document the feedback's session went on to read
-  whole — returns `## Testing` alone at coverage 0.532.
+  `documentation testing review readiness` returns `## Testing` alone at
+  coverage 0.532. Those are three headings of `core/contribution/rules`, the
+  document the feedback's session went on to read whole.
 - The pair holds where the sentence claimed it.
   `breaking change changelog entry`, the query `D-SKL-011` measured, still
   returns `## Breaking Changes`, `## Changed Signatures` and
@@ -82,7 +82,7 @@ nothing came back at all.
   query, which is what the measurement supports.
 - The exception list goes. *A genuinely different subject — testing, code style,
   the Gerrit workflow — is a call of its own* is what a bound of two already
-  says, and it was the half the reporting session read as exhaustive.
+  says. It was the half the session read as exhaustive.
 - **The per-term fallback the feedback asks for is not built.** `D-ANS-037`'s
   **Since then** measured it over 490 queries. Admission of every section a
   query term reaches returns the nearest unrelated section to 87 queries that

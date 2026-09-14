@@ -56,11 +56,11 @@ for it.
 - The findings say which commit they are about. A cherry-pick's hash is not the
   patch set's, and a review that quotes the local one without a word about it is
   unattributable.
-- Where the two halves land is fixed by rules already here: the command form and
-  the scope of the detach rationale go to
+- Rules already here fix where the two halves land. The command form and the
+  scope of the detach rationale go to
   `knowledge/documents/core/contribution/gerrit-workflow.md`, because a skill
-  carries no command the checkout has not been asked for, and the way in, the
-  naming and the undo go to the skill.
+  carries no command nobody asked the checkout for. The way in, the name and the
+  undo go to the skill.
 - Priority `normal`. The intents file promises the path. So a session that asks
   for it by name lands in a skill that steers it away from the answer.
 - Left to the read: the branch name, and whether the rebase path that exists
@@ -87,8 +87,7 @@ for it.
   it. That is the attributability this decision claims to improve, lost the way
   it came.
 - Sessions ask for the cherry-pick and the skill's rebase path already answers
-  them, which would say this was a wording fix to one paragraph and not a way
-  in.
+  them. That would say this was a wording fix to one paragraph and not a way in.
 
 ## Since then
 

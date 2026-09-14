@@ -14,31 +14,31 @@ coveredBy:
 the task skills whose own work writes no change.**
 
 A review request names the change it is about, and the words of that change are
-the words of writing one. `breaking` is an intent with a skill behind it, so
-"review core patch 95169 and say whether it is breaking" was routed into the
-workflow for authoring a breaking change.
+the words of writing one. `breaking` is an intent with a skill behind it. So
+"review core patch 95169 and say whether it is breaking" landed in the workflow
+that authors a breaking change.
 
 ## Evidence
 
 - **Measured on 2026-08-14, before the change.** "Review core patch 95169 and
   say whether it is breaking" matches `breaking` strongly and nothing else, and
-  names `typo3-core-patch-development`. The German brief of the same run —
-  "bitte review mir 95169 … und sag mir ob der breaking ist" — matches
-  `breaking` strongly and `patch-checkout` weakly. Neither reaches
+  names `typo3-core-patch-development`. The German brief of the same run, "bitte
+  review mir 95169 … und sag mir ob der breaking ist", matches `breaking`
+  strongly and `patch-checkout` weakly. Neither reaches
   `typo3-core-patch-review`, which only the `audit` intent carries.
 - **It takes both repairs, and neither alone is enough.** A withheld route needs
   a recognized review first. `audit`'s needles were "review the", "review this",
   "review of" and "reviewing", and a request that names its change by number
-  arrives in none of them. Adding the shapes alone leaves both skills named,
-  `breaking` first, which is the state `D-SKL-013`'s **Since then** already
-  ruled out for the `tests` intent: an assertion that the right name is among
-  them holds just as well while a whole workflow the task has nothing to do with
-  is loaded first.
+  arrives in none of them. The added shapes alone leave both skills named,
+  `breaking` first. That is the state `D-SKL-013`'s **Since then** already ruled
+  out for the `tests` intent. An assertion that the right name is among them
+  holds just as well. Meanwhile a client loads a whole workflow the task has
+  nothing to do with first.
 - **The checklist is the counter-example to a withhold of more than the route.**
-  The `breaking` intent's first item — "Settle first that the change is breaking
-  at all: `@internal` says the API is not public and does not decide it" — is
-  the answer to what that brief asked. Dropping the intent would take the answer
-  out with the route.
+  The `breaking` intent's first item is the answer to what that brief asked.
+  That is "Settle first that the change is breaking at all: `@internal` says the
+  API is not public and does not decide it". Dropping the intent would take the
+  answer out with the route.
 - **The three negatives are this repository's own prompts.** Three prompts match
   none of the added shapes. `CORE-03`'s "Review says my commit message is
   wrong", `SKILL-13`'s "Pull down that patch from review" and `CORE-07`'s
@@ -50,21 +50,23 @@ workflow for authoring a breaking change.
 
 - **The property is the intent's, in data.** `changesNothing` on an entry in
   `knowledge/task-intents.json`, true for `audit`, `triage`, `patch-checkout`
-  and `installation-operations` — the four whose work reads a change, a report
-  or an installation rather than writing one. Marking those four is the shorter
-  list, and it is the same fact `TaskGuide` already forks its skeleton on.
+  and `installation-operations`. Those are the four whose work reads a change, a
+  report or an installation rather than writes one. Marking those four is the
+  shorter list, and it is the same fact `TaskGuide` already forks its skeleton
+  on.
 - **Only the route is withheld.** The intent stays recognized, its title stays
   in `Recognized as:` and its checklist items stay in the brief. A skill is a
-  workflow the caller enters and a checklist item is a statement they read, so
+  workflow the caller enters and a checklist item is a statement they read. So
   what the intent knows about a breaking change still reaches the reviewer while
-  the workflow for making one does not.
+  the workflow that makes one does not.
 - **A stated `changeType` keeps its route**, because it keeps the skeleton. That
   is `D-GUI-009`. "review the patch that deprecates X" with
   `changeType="deprecation"` is author work described from the reviewer's side.
   The fork here is the one that decision already draws.
 - **`audit` gains three shapes and not the word.** `review patch`,
-  `review core patch` and `review change` are how a request naming its change
-  arrives; `review` on its own is what the three negatives above rule out.
+  `review core patch` and `review change` are how a request that names its
+  change arrives. `review` on its own is what the three negatives above rule
+  out.
 - **The German brief stays where the corpus leaves it.** Everything below
   `knowledge/` is English and every free-text parameter says so, so what matched
   there were the two loanwords in the sentence. It routes nothing now rather
@@ -84,14 +86,13 @@ workflow for authoring a breaking change.
 ## Wrong if
 
 - A session hands back a changelog file, a scanner matcher or a `[!!!]` prefixed
-  commit for a task that asked only whether a change is breaking. Then the
-  checklist does what the route did, and a withhold of the whole intent is the
-  next step.
+  commit. The task asked only whether a change is breaking. Then the checklist
+  does what the route did, and a withhold of the whole intent is the next step.
 - A review request that names a change is still routed to a workflow that writes
   one, in a shape the three needles do not carry. Then the shapes are an
   enumeration that will not close, and the gap is a rule about the sentence
   rather than more needles.
 - An author's brief loses its route because the words also read as a review.
   `remove the public method and make it a breaking change` still names
-  `typo3-core-patch-development`; a task that stops doing so is this decision
-  taking the route from the caller who was in the workflow.
+  `typo3-core-patch-development`. A task that no longer does is this decision as
+  it takes the route from the caller who was in the workflow.

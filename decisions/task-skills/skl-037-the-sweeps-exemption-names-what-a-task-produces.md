@@ -113,20 +113,21 @@ sessions from `/home/benji/projects/blog` reported the same on 2026-08-18, so
 the naming half is three sightings against and the property half none. All three
 name where the sentence stands rather than what it says, and the placement is
 [`D-SKL-074`](skl-074-a-skipped-step-is-named-where-the-report-is-written.md),
-queued. What is untested is the third **Wrong if**: no report has named a
-skipped step yet, so nothing has said whether naming it is legible to a reader.
+queued. What remains untested is the third **Wrong if**. No report has named a
+skipped step yet, so nothing has said whether a named step is legible to a
+reader.
 
 ## Since then
 
 **2026-08-25.** The second **Wrong if** is half met.
 [`feedback/archive/2026-08-24-183420`](../../feedback/archive/2026-08-24-183420-the-review-skill-predicts-the-crossing-into.md)
-is a core patch review asked to take three skipped tests back in: the session
+is a core patch review asked to take three skipped tests back in. The session
 carried on under `typo3-core-patch-review`, wrote what it measured as 154 lines
 of test code and a fixture page, and never ran the sweep. What the **Wrong if**
 also asks for is a deprecation that lands in the amend, and none did. The
 session says so itself, and names its own "probably nothing for a test file" as
 the reason the exemption stands against. So nothing touched the property this
 entry rests on. The handover it rests on has now failed twice, seventeen days
-apart. Where the trigger is judged is
+apart. The judgement of the trigger is
 [`D-SKL-077`](skl-077-the-crossing-out-of-a-review-is-recognised-on-the-first-edit-meant-to-survive.md),
 which carries the card.

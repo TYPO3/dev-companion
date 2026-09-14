@@ -38,11 +38,11 @@ stand measured against it and neither made the distinction, in either direction.
   step. It read the base whole and did not call the tool in 143 calls.
 - **Neither session reached for the condition.** Read in that transcript on
   2026-08-11: `typo3_task_guide` occurs in two assistant blocks in the whole
-  file — the `ToolSearch select:` batch that loaded its schema beside
+  file. One is the `ToolSearch select:` batch that loaded its schema beside
   `typo3_project_describe`, `typo3_hint_lookup`, `typo3_forge_lookup` and
-  `typo3_gerrit_lookup`, and the closing debrief. No turn before the written
-  review names `base.md`, the order or its steps. The session passed the step
-  over rather than decided against it.
+  `typo3_gerrit_lookup`. The other is the closing debrief. No turn before the
+  written review names `base.md`, the order or its steps. The session passed the
+  step over rather than decided against it.
 - **What the sweep's condition asks instead.** Which files a change touches,
   which the session holds when it reads the step. That is the difference between
   the two conditions, and it is why only one of them has fired.
@@ -88,14 +88,14 @@ stand measured against it and neither made the distinction, in either direction.
 ## Wrong if
 
 - A session with the unconditional step in front of it skips `typo3_task_guide`
-  anyway. Then the wording was never what decided it, the answer is outside this
-  file, and what is left to weigh is the channel `D-SKL-033` records as untried
-  — the project's own agent instruction file.
+  anyway. Then the wording was never what decided it, and the answer is outside
+  this file. What remains to weigh is the channel `D-SKL-033` records as
+  untried, the project's own agent instruction file.
 - The duplicate call is what a guide-routed session runs short on. It spends the
   call, gets the brief it already holds, and the work is worse for it. Then the
   condition paid for itself. What somebody has to find is a form of it the
   session can answer from what it holds.
-- The sweep is skipped by a session reading the condition off the skill it
+- A session skips the sweep because it reads the condition off the skill it
   activated rather than off the files the change touches. Then the line this
   entry draws between the two conditions is not the one that matters, and both
   come off.

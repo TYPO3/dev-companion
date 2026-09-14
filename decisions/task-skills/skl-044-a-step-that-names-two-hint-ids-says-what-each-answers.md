@@ -29,12 +29,12 @@ full, and read the step as discharged.
 - **The knowledge was there and is correct.**
   `bin/cli hints:probe "project build and scripts"` on 2026-08-18 returns
   `project-build-and-scripts` first. Read in `knowledge/hints/project.json` the
-  same day, it carries every line the feedback quotes — the Playwright
+  same day, it carries every line the feedback quotes. The Playwright
   configuration and its specs, the static analysis configuration, the one-off
-  seeding script and the keep-or-drop choice on it, that there is no
-  `runTests.sh` and the scripts are the only answer to how anything is run, and
-  naming them after what they do. So this is not step 1a, and the judgement
-  needed no lookup about TYPO3.
+  seed script and the keep-or-drop choice on it. That there is no `runTests.sh`
+  and the scripts are the only answer to how anything runs, and their names
+  after what they do. So this is not step 1a, and the judgement needed no lookup
+  about TYPO3.
 - **The shared clause described the wrong half.** It read *says which of them
   belong to the project and which are generated*, which is
   `project-configuration-files`'s subject. That is `settings.php` against
@@ -56,7 +56,7 @@ full, and read the step as discharged.
 - **The step closes on both answers**, since the ignore rules follow from both.
   So a caller with one in hand cannot read the step as satisfied.
 - **The clause names the question, never the answer.** Where the tooling and the
-  one-off scripts belong is what the id is for; `Build/` is a layout key the
+  one-off scripts belong is what the id is for. `Build/` is a layout key the
   hint owns, and this skill's own preamble refuses to retain one.
 - **Rejected: a second mention of `project-build-and-scripts` at the proof
   step.** What the session reports as the mechanism is the shared clause. Its
@@ -66,10 +66,10 @@ full, and read the step as discharged.
   every session that loads the file pays for it by the token. What would revive
   it is below rather than settled against.
 - **Closed on the spot rather than queued.** The change is one sentence of body
-  prose: no name, description, front matter, routing list, reference or
-  `This skill owns` moves, no tool is added or dropped, and both ids were
-  already named at this step. That is the ladder's step 4 — delivered and did
-  not take — and its cheapest fix.
+  prose. No name, description, front matter, routing list, reference or
+  `This skill owns` moves, no tool comes or goes, and this step already named
+  both ids. That is the ladder's step 4 — delivered and did not take — and its
+  cheapest fix.
 
 ## Assumed
 
@@ -86,18 +86,18 @@ full, and read the step as discharged.
 ## Wrong if
 
 - A session with the corrected step in front of it fetches one id and stops.
-  Then the wording was never what decided it, the answer is outside this file,
-  and what is left to weigh is a gate at the end of the workflow — which is what
-  `feedback/2026-08-17-212218` reports as a pattern across three steps rather
-  than as this one.
+  Then the wording was never what decided it, and the answer is outside this
+  file. What remains to weigh is a gate at the end of the workflow.
+  `feedback/2026-08-17-212218` reports that as a pattern across three steps
+  rather than as this one.
 - A session reads both ids at step 5 and still arrives at the proof step with no
   tooling and no suite. Then the placement is what has to move and the rejection
   above is what has to go. The answer landed at a moment the work it describes
   had not started.
 - The crossing is what actually failed. This skill hands tests and static checks
-  to `typo3-extension-testing`, that skill was never activated in the reported
-  session, and the missing suite is on the far side of a boundary this step does
-  not own. Then step 5's wording is a smaller finding sitting on top of one
+  to `typo3-extension-testing`, and that skill never activated in the reported
+  session. The absent suite is on the far side of a boundary this step does not
+  own. Then step 5's wording is a smaller finding sitting on top of one
   `R-SKL-003` already governs.
 
 ## Since then

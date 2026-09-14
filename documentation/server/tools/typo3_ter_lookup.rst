@@ -4,23 +4,23 @@
 ====================
 
 Read what the TYPO3 Extension Repository has published under an extension key,
-live from extensions.typo3.org. Pass extension with the key — the one
-extra.typo3/cms.extension-key declares, not the Composer package name — and
-every published version comes back, highest number first: the number, the state,
-the day it was uploaded, the TYPO3 majors it declares and the
-constraints.depends.typo3 it was released with. This is the question a release
-audit cannot answer from the repository it is auditing: Tailor refuses to
-package unless ext_emconf.php names the version being released, so that file
-still names it after the upload and a checkout that has been published reads
-exactly like one that has not. Pass extensionVersion as well to be told whether
-the registry already holds that number; it reports what is published and judges
-no version free, and comparing it against the working tree is yours. A key
-nothing is published under is answered as such, which is not a statement that no
-such package exists — an extension distributed through Composer alone is never
-registered here. What publishing requires of the extension itself is
-typo3_hint_lookup with id="extension-ter-release". Reading only, and no
-credential: registering a key, uploading a version and transferring an extension
-stay yours, through Tailor and the token it carries. Answers from: network.
+live from extensions.typo3.org. Pass extension with the key, the one
+extra.typo3/cms.extension-key declares and not the Composer package name. Every
+published version comes back, highest number first. That is the number, the
+state, the upload day, the TYPO3 majors it declares and the
+constraints.depends.typo3 of its release. This is the question a release audit
+cannot answer from the repository under audit. Tailor refuses to package unless
+ext_emconf.php names the version of the release. So that file still names it
+after the upload, and a published checkout reads exactly like one nobody has
+published. Pass extensionVersion as well to learn whether the registry already
+holds that number. It reports what the registry holds and judges no version
+free; the comparison against the working tree is yours. A key with nothing
+published under it gets that answer, which does not say that no such package
+exists. An extension that ships through Composer alone never registers here.
+What a release requires of the extension itself is typo3_hint_lookup with
+id="extension-ter-release". This tool reads only, with no credential. You
+register a key, upload a version and transfer an extension yourself, through
+Tailor and the token it carries. Answers from: network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 
@@ -33,17 +33,17 @@ Takes
 
     # The extension key, for example "news" or "bootstrap_package". That is the key
     # extra.typo3/cms.extension-key declares in the package's composer.json, which
-    # every TYPO3 extension package has to carry to install at all — not the
-    # Composer package name, which the registry does not take: "georgringer/news"
+    # every TYPO3 extension package has to carry to install at all. It is not the
+    # Composer package name, which the registry does not take. "georgringer/news"
     # and "bootstrap-package" are the two shapes that reach it as a name of the
     # wrong kind. Lowercase letters, digits and underscores, three to thirty
     # characters.
     extension: string
-    # One version number to be answered about, for example "14.0.1" — typically
-    # the one ext_emconf.php names. The answer says whether the registry holds it
-    # and, where it does, what that release declared. Compared as the registry
-    # writes it, which is exactly three numbers: a suffix of any kind belongs to no
-    # published version, because the upload route accepts none.
+    # One version number to ask about, for example "14.0.1", which is usually the
+    # one ext_emconf.php names. The answer says whether the registry holds it and,
+    # where it does, what that release declared. The comparison reads it as the
+    # registry writes it, which is exactly three numbers. A suffix of any kind
+    # belongs to no published version, because the upload route accepts none.
     extensionVersion: string  # optional
     # How many versions come back, newest number first. The count of everything
     # published comes with them, so a cut list says so. A widely maintained
@@ -59,48 +59,49 @@ Answers with
     status: string
     # The registry the answer came from.
     source: string
-    # What was read, so the same question can be asked again by hand. Empty where
-    # the key was answered without a read.
+    # What the call read, so you can ask the same question again by hand. Empty
+    # where the key got its answer without a read.
     url: string
     # Where a person reads the extension's own page in the registry. Empty where the
     # key is not one the registry takes.
     page: string
-    # The key that was asked for, lowercased, as it was sent.
+    # The key the call named, lowercased, as the call sent it.
     extension: string
-    # The version number the call asked about, as it was passed. Empty where none
-    # was.
+    # The version number the call asked about, as the call passed it. Empty where it
+    # passed none.
     extensionVersion: string
     # Whether the registry has published that exact number. Null where the call
-    # named no version, and null where nothing was read at all — a false here is
-    # the registry answering, never a question that failed. It is a fact about the
+    # named no version, and null where the call read nothing at all. A false here is
+    # the registry's answer, never a question that failed. It is a fact about the
     # registry and not a judgement that the number is free to release.
     held: boolean or null
-    # How many versions are published under the key in total, of which versions
-    # carries at most limit. Zero where none is.
+    # How many versions the registry holds under the key in total, of which versions
+    # carries at most limit. Zero where it holds none.
     total: integer
     # The published versions, highest number first. That is version order and not
-    # upload order: a maintenance release on an older line sits further down and may
-    # be the most recent upload of all, which is what the days beside the numbers
-    # say. Empty where nothing is published under the key.
+    # upload order. A maintenance release on an older line sits further down and may
+    # be the most recent upload of all. The days beside the numbers say so. Empty
+    # where the registry holds nothing under the key.
     versions:
-      - # The version as it was published.
+      - # The version as the registry has it.
         number: string
         # What the uploader declared it as: stable, beta, alpha, experimental, test,
         # obsolete.
         state: string
-        # The day it was uploaded, as YYYY-MM-DD in UTC. The registry writes the
-        # same moment in its own timezone, so a release made late in the day is
-        # dated one earlier here.
+        # The upload day, as YYYY-MM-DD in UTC. The registry writes the same moment
+        # in its own timezone, so a release made late in the day carries the day
+        # before here.
         uploaded: string
-        # The TYPO3 majors the release declares it runs on, ascending.
+        # The TYPO3 majors the release declares it runs on, lowest first.
         majors: [integer]
         # The constraints.depends.typo3 the release declared, as ext_emconf.php
         # wrote it — for example ">=13.4.15 <=14.3.99". Empty where the release
         # declared none, which the registry accepts on an upload made by a
         # controller.
         constraint: string
-    # Why nothing was answered, where status says unavailable. Null otherwise, and
-    # null on a key nothing is published under — that one is an answer.
+    # Why the registry answered nothing, where status says unavailable. Null
+    # otherwise, and null on a key with nothing published under it; that one is an
+    # answer.
     unavailable:
       # One of: source-not-answering, source-not-parseable. source-not-answering:
       # the registry did not answer this time. source-not-parseable: something

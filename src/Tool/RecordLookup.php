@@ -66,7 +66,7 @@ final class RecordLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Read the rows of any table this installation has TCA for. That is pages, tt_content, a table of one of this project\'s own extensions, or one a dependency brings. It answers how many there are, which page they sit on, and whether they are live, hidden or deleted. It answers the rows themselves. That is uid, the label the table names in its own TCA, the timestamps, the two flags, and any column named in columns. That is what a backend visit tells you and the one question typo3_schema_lookup cannot answer. That tool returns the shape of the table, and this one returns what is in it. It is also the fact that decides where editors maintain records. A table with a few dozen rows fits the generic record list. One with three thousand on a single storage folder needs a module with its own filter and pages. Pass groupBy to get what values a column holds across the table. The TCA default stands beside them, with the uid of every row that departs from it. That answer decides whether a CType, a TCA default, a markup class or a template branch can go. The single row that departs is the one a cleanup breaks. Narrow it with where, which takes exact values for any column of the table, pid among them. Pass count to get the numbers without the rows, and limit to say how many rows come back. A table TCA does not describe is refused, which is the caches, the queues and the session store. Omit the table to see which ones it will read. It reads with the shell user\'s database access rather than a backend user\'s, so no permission, workspace or language filter narrows what comes back. It never writes.';
+        return 'Read the rows of any table this installation has TCA for. That is pages, tt_content, a table of one of this project\'s own extensions, or one a dependency brings. It answers how many there are, which page they sit on, and whether they are live, hidden or deleted. It answers the rows themselves. That is uid, the label the table names in its own TCA, the timestamps, the two flags, and any column named in columns. That is what a backend visit tells you and the one question typo3_schema_lookup cannot answer. That tool returns the shape of the table, and this one returns what is in it. It is also the fact that decides where editors maintain records. A table with a few dozen rows fits the generic record list. One with three thousand on a single storage folder needs a module with its own filter and pages. Pass groupBy to get what values a column holds across the table. The TCA default stands beside them, with the uid of every row that departs from it. That answer decides whether a CType, a TCA default, a markup class or a template branch can go. The single row that departs is the one a cleanup breaks. Narrow it with where, which takes exact values for any column of the table, pid among them. Pass count to get the numbers without the rows, and limit to say how many rows come back. The tool refuses a table TCA does not describe, which is the caches, the queues and the session store. Omit the table to see which ones it will read. It reads with the shell user\'s database access rather than a backend user\'s, so no permission, workspace or language filter narrows what comes back. It never writes.';
     }
 
     public static function inputSchema(): array
@@ -74,20 +74,20 @@ final class RecordLookup extends ReadOnlyTool
         return [
             'type' => 'object',
             'properties' => [
-                'table' => ['type' => 'string', 'description' => 'The table to read, for example "tt_content" or "tx_myext_animal". Omit to list the tables this installation has TCA for, which are the ones that can be read.'],
+                'table' => ['type' => 'string', 'description' => 'The table to read, for example "tt_content" or "tx_myext_animal". Omit to list the tables this installation has TCA for, which are the ones the tool reads.'],
                 'where' => [
                     'type' => 'object',
                     'description' => 'Exact values to narrow by, one per column: {"pid": 2, "status": "adopted"}. You can name every column of the table, pid and uid among them. A column the table does not have gets an answer that says so rather than an empty result. Exact equality only — there is no operator, no wildcard and no range, which is what keeps this a lookup rather than a query language.',
                     'additionalProperties' => ['type' => ['string', 'number', 'boolean']],
                 ],
                 'count' => ['type' => 'boolean', 'description' => 'True to answer with the numbers alone and read no row. Use it where the question is how much is in there rather than what.', 'default' => false],
-                'groupBy' => ['type' => 'string', 'description' => 'One column to count per distinct value of, for example "CType", "header_layout" or "status". The answer then carries one line per value with how many rows carry it. That is the distribution a call per value asks thirteen times for. It also carries the column\'s TCA default and the uid and pid of the rows that depart from it, capped. That says whether a value is the site\'s convention or its one exception. Combines with where, which narrows what is counted. A column the table does not have is an answer saying so.'],
+                'groupBy' => ['type' => 'string', 'description' => 'One column to count per distinct value of, for example "CType", "header_layout" or "status". The answer then carries one line per value with how many rows carry it. That is the distribution a call per value asks thirteen times for. It also carries the column\'s TCA default and the uid and pid of the rows that depart from it, capped. That says whether a value is the site\'s convention or its one exception. Combines with where, which narrows the count. A column the table does not have gets an answer that says so.'],
                 'columns' => [
                     'type' => 'array',
                     'items' => ['type' => 'string'],
-                    'description' => 'Columns each row carries beside the ones it always has: ["CType", "frame_class", "header_layout"]. Name as many as the question needs, and typo3_schema_lookup lists what the table has. A column the table does not have is an answer saying so rather than an empty value.',
+                    'description' => 'Columns each row carries beside the ones it always has: ["CType", "frame_class", "header_layout"]. Name as many as the question needs, and typo3_schema_lookup lists what the table has. A column the table does not have gets an answer that says so rather than an empty value.',
                 ],
-                'limit' => ['type' => 'integer', 'description' => 'How many rows to return, ordered by uid. The default is one page of the record list. Zero means every matching row, which on a full table is the whole table in one answer.', 'minimum' => 0, 'default' => self::ROWS],
+                'limit' => ['type' => 'integer', 'description' => 'How many rows to return, ordered by uid. The default is one page of the record list. Zero means every row that matches, which on a full table is the whole table in one answer.', 'minimum' => 0, 'default' => self::ROWS],
             ],
         ];
     }
@@ -95,27 +95,27 @@ final class RecordLookup extends ReadOnlyTool
     public static function outputSchema(): array
     {
         return Schema::installationAnswer([
-            'table' => Schema::nullableString('The table asked about. Null where none was named and the answer is the list of readable ones.'),
-            'matchCount' => Schema::integer('Rows matching the filter, whatever the limit returned. Tables for a call that named none. Zero on a table that is refused as well as on one that is empty, and the text says which.'),
+            'table' => Schema::nullableString('The table asked about. Null where the call named none and the answer is the list of readable ones.'),
+            'matchCount' => Schema::integer('Rows that match the filter, whatever the limit returned. Tables for a call that named none. Zero on a table the tool refuses as well as on one that is empty, and the text says which.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
             'where' => Schema::listOf(Schema::object([
                 'column' => Schema::string(),
-                'value' => ['description' => 'The value the column was matched against, exactly as it was passed.'],
-            ], ['column', 'value']), 'The filter the answer was read under, echoed so a count reported onwards carries what it counted. A list rather than a map keyed by column, because an empty map is [] in JSON and a schema that says object refuses it. A client reads one shape either way. Empty where the whole table was read.'),
+                'value' => ['description' => 'The value the column matched against, exactly as the call passed it.'],
+            ], ['column', 'value']), 'The filter the read ran under, echoed so a count reported onwards carries what it counted. A list rather than a map keyed by column, because an empty map is [] in JSON and a schema that says object refuses it. A client reads one shape either way. Empty where the read covered the whole table.'),
             'counts' => ['type' => ['object', 'null']] + Schema::object([
-                'total' => Schema::integer('Every matching row, whatever state it is in.'),
+                'total' => Schema::integer('Every row that matches, whatever state it is in.'),
                 'live' => Schema::integer('Rows that are neither hidden nor deleted.'),
                 'hidden' => Schema::integer('Rows the disable field hides. Zero where the table declares no such field.'),
                 'deleted' => Schema::integer('Rows the delete field marks. They are still in the table until the garbage collection runs.'),
-            ], ['total', 'live', 'hidden', 'deleted'], 'Null where no table was read.'),
+            ], ['total', 'live', 'hidden', 'deleted'], 'Null where the call read no table.'),
             'groups' => Schema::listOf(Schema::object([
                 'value' => ['description' => 'The value of the grouped column, as the database stores it. Null is a row that has none, which on a select column is the empty string rather than null.'],
-                'total' => Schema::integer('Rows carrying that value, deleted and hidden included.'),
+                'total' => Schema::integer('Rows with that value, deleted and hidden included.'),
                 'live' => Schema::integer(),
                 'hidden' => Schema::integer(),
                 'deleted' => Schema::integer(),
-            ], ['value', 'total', 'live', 'hidden', 'deleted']), 'One entry per distinct value of the grouped column, the fullest first. A value with no rows is not here: the distribution is what the table holds, and a status nothing carries is read off its absence. Empty where groupBy was not passed.'),
-            'groupDefault' => ['description' => 'What the grouped column\'s TCA declares as its default, so a value can be read as the convention or as a departure from it. Null where groupBy was not passed and where the column declares no default, which is not the same answer as a default of zero.'],
+            ], ['value', 'total', 'live', 'hidden', 'deleted']), 'One entry per distinct value of the grouped column, the fullest first. A value with no rows is not here: the distribution is what the table holds, and you read a status nothing carries off its absence. Empty where groupBy was not passed.'),
+            'groupDefault' => ['description' => 'What the grouped column\'s TCA declares as its default, so you read a value as the convention or as a departure from it. Null where groupBy was not passed and where the column declares no default, which is not the same answer as a default of zero.'],
             'departing' => Schema::listOf(Schema::object([
                 'uid' => Schema::integer('What the backend edits the row by.'),
                 'pid' => Schema::integer(),
@@ -127,7 +127,7 @@ final class RecordLookup extends ReadOnlyTool
                 'live' => Schema::integer(),
                 'hidden' => Schema::integer(),
                 'deleted' => Schema::integer(),
-            ], ['pid', 'total', 'live', 'hidden', 'deleted']), 'One entry per page that holds a matching row, the fullest first. Empty where no table was read.'),
+            ], ['pid', 'total', 'live', 'hidden', 'deleted']), 'One entry per page that holds a matched row, the fullest first. Empty where the call read no table.'),
             'records' => Schema::listOf(Schema::object([
                 'uid' => Schema::integer('What the backend edits the record by, and what a URL into it carries.'),
                 'pid' => Schema::integer(),
@@ -139,13 +139,13 @@ final class RecordLookup extends ReadOnlyTool
                 'values' => Schema::listOf(Schema::object([
                     'column' => Schema::string(),
                     'value' => ['description' => 'What the row stores in that column, as the database has it.'],
-                ], ['column', 'value']), 'The columns the call named, in the order it named them. A list rather than a map keyed by column, for the reason where gives. Empty where none were named.'),
-            ], ['uid', 'pid', 'label', 'changed', 'created', 'deleted', 'hidden', 'values']), 'The rows read, ordered by uid. Empty where count was asked for, where no table was named, and where nothing matched.'),
+                ], ['column', 'value']), 'The columns the call named, in the order it named them. A list rather than a map keyed by column, for the reason where gives. Empty where the call named none.'),
+            ], ['uid', 'pid', 'label', 'changed', 'created', 'deleted', 'hidden', 'values']), 'The rows read, ordered by uid. Empty where count is true, where the call named no table, and where nothing matched.'),
             'countable' => Schema::listOf(Schema::object([
                 'table' => Schema::string(),
                 'extension' => Schema::string('The extension whose TCA registers it, read from the EXT: reference in its ctrl title. Empty where the title names none.'),
             ], ['table', 'extension']), 'Every table this tool will read in this installation, which is every one TCA describes.'),
-            'readWith' => Schema::string('What the reading was made with. Every answer that carries a number or a row says it. A reader takes what you report onwards as a backend user\'s view of the table unless it says otherwise.'),
+            'readWith' => Schema::string('What made the read. Every answer that carries a number or a row says it. A reader takes what you report onwards as a backend user\'s view of the table unless it says otherwise.'),
         ], ['table', 'matchCount', 'answeredBy', 'where', 'counts', 'groups', 'groupDefault', 'departing', 'pages', 'records', 'countable', 'readWith'], ['table']);
     }
 

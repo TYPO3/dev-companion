@@ -19,8 +19,8 @@ that departs from it. That answer decides whether a CType, a TCA default, a
 markup class or a template branch can go. The single row that departs is the one
 a cleanup breaks. Narrow it with where, which takes exact values for any column
 of the table, pid among them. Pass count to get the numbers without the rows,
-and limit to say how many rows come back. A table TCA does not describe is
-refused, which is the caches, the queues and the session store. Omit the table
+and limit to say how many rows come back. The tool refuses a table TCA does not
+describe, which is the caches, the queues and the session store. Omit the table
 to see which ones it will read. It reads with the shell user's database access
 rather than a backend user's, so no permission, workspace or language filter
 narrows what comes back. It never writes. Answers from: installation.
@@ -35,7 +35,7 @@ Takes
 .. code-block:: yaml
 
     # The table to read, for example "tt_content" or "tx_myext_animal". Omit to list
-    # the tables this installation has TCA for, which are the ones that can be read.
+    # the tables this installation has TCA for, which are the ones the tool reads.
     table: string  # optional
     # Exact values to narrow by, one per column: {"pid": 2, "status": "adopted"}.
     # You can name every column of the table, pid and uid among them. A column the
@@ -51,17 +51,17 @@ Takes
     # how many rows carry it. That is the distribution a call per value asks
     # thirteen times for. It also carries the column's TCA default and the uid and
     # pid of the rows that depart from it, capped. That says whether a value is the
-    # site's convention or its one exception. Combines with where, which narrows
-    # what is counted. A column the table does not have is an answer saying so.
+    # site's convention or its one exception. Combines with where, which narrows the
+    # count. A column the table does not have gets an answer that says so.
     groupBy: string  # optional
     # Columns each row carries beside the ones it always has: ["CType",
     # "frame_class", "header_layout"]. Name as many as the question needs, and
     # typo3_schema_lookup lists what the table has. A column the table does not have
-    # is an answer saying so rather than an empty value.
+    # gets an answer that says so rather than an empty value.
     columns: [string]  # optional
     # How many rows to return, ordered by uid. The default is one page of the record
-    # list. Zero means every matching row, which on a full table is the whole table
-    # in one answer.
+    # list. Zero means every row that matches, which on a full table is the whole
+    # table in one answer.
     limit: integer  # optional
 
 Answers with
@@ -69,26 +69,26 @@ Answers with
 
 .. code-block:: yaml
 
-    # The table asked about. Null where none was named and the answer is the list of
-    # readable ones.
+    # The table asked about. Null where the call named none and the answer is the
+    # list of readable ones.
     table: string or null
-    # Rows matching the filter, whatever the limit returned. Tables for a call that
-    # named none. Zero on a table that is refused as well as on one that is empty,
-    # and the text says which.
+    # Rows that match the filter, whatever the limit returned. Tables for a call
+    # that named none. Zero on a table the tool refuses as well as on one that is
+    # empty, and the text says which.
     matchCount: integer  # optional
     # One of: installation. installation: its assembled runtime state answered.
     answeredBy: string  # optional
-    # The filter the answer was read under, echoed so a count reported onwards
-    # carries what it counted. A list rather than a map keyed by column, because an
-    # empty map is [] in JSON and a schema that says object refuses it. A client
-    # reads one shape either way. Empty where the whole table was read.
+    # The filter the read ran under, echoed so a count reported onwards carries what
+    # it counted. A list rather than a map keyed by column, because an empty map is
+    # [] in JSON and a schema that says object refuses it. A client reads one shape
+    # either way. Empty where the read covered the whole table.
     where:  # optional
       - column: string
-        # The value the column was matched against, exactly as it was passed.
+        # The value the column matched against, exactly as the call passed it.
         value: object
-    # Null where no table was read.
+    # Null where the call read no table.
     counts:  # optional
-      # Every matching row, whatever state it is in.
+      # Every row that matches, whatever state it is in.
       total: integer
       # Rows that are neither hidden nor deleted.
       live: integer
@@ -98,21 +98,21 @@ Answers with
       # collection runs.
       deleted: integer
     # One entry per distinct value of the grouped column, the fullest first. A value
-    # with no rows is not here: the distribution is what the table holds, and a
-    # status nothing carries is read off its absence. Empty where groupBy was not
+    # with no rows is not here: the distribution is what the table holds, and you
+    # read a status nothing carries off its absence. Empty where groupBy was not
     # passed.
     groups:  # optional
       - # The value of the grouped column, as the database stores it. Null is a row
         # that has none, which on a select column is the empty string rather than
         # null.
         value: object
-        # Rows carrying that value, deleted and hidden included.
+        # Rows with that value, deleted and hidden included.
         total: integer
         live: integer
         hidden: integer
         deleted: integer
-    # What the grouped column's TCA declares as its default, so a value can be read
-    # as the convention or as a departure from it. Null where groupBy was not passed
+    # What the grouped column's TCA declares as its default, so you read a value as
+    # the convention or as a departure from it. Null where groupBy was not passed
     # and where the column declares no default, which is not the same answer as a
     # default of zero.
     groupDefault: object  # optional
@@ -127,8 +127,8 @@ Answers with
         pid: integer
         # What that row carries instead of the default.
         value: object
-    # One entry per page that holds a matching row, the fullest first. Empty where
-    # no table was read.
+    # One entry per page that holds a matched row, the fullest first. Empty where
+    # the call read no table.
     pages:  # optional
       - # The page the rows sit on. Zero is the root, which is where records that
         # belong to no page end up.
@@ -137,8 +137,8 @@ Answers with
         live: integer
         hidden: integer
         deleted: integer
-    # The rows read, ordered by uid. Empty where count was asked for, where no table
-    # was named, and where nothing matched.
+    # The rows read, ordered by uid. Empty where count is true, where the call named
+    # no table, and where nothing matched.
     records:  # optional
       - # What the backend edits the record by, and what a URL into it carries.
         uid: integer
@@ -153,8 +153,8 @@ Answers with
         deleted: boolean
         hidden: boolean
         # The columns the call named, in the order it named them. A list rather than
-        # a map keyed by column, for the reason where gives. Empty where none were
-        # named.
+        # a map keyed by column, for the reason where gives. Empty where the call
+        # named none.
         values:
           - column: string
             # What the row stores in that column, as the database has it.
@@ -166,9 +166,9 @@ Answers with
         # The extension whose TCA registers it, read from the EXT: reference in its
         # ctrl title. Empty where the title names none.
         extension: string
-    # What the reading was made with. Every answer that carries a number or a row
-    # says it. A reader takes what you report onwards as a backend user's view of
-    # the table unless it says otherwise.
+    # What made the read. Every answer that carries a number or a row says it. A
+    # reader takes what you report onwards as a backend user's view of the table
+    # unless it says otherwise.
     readWith: string  # optional
     unsupported:  # optional
       # One of: no-installation, misconfigured, installation-not-answering.

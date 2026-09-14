@@ -45,7 +45,7 @@ final class GerritLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. A clone carries what landed and says nothing about what is open, which is why this is asked of the review server rather than of a checkout. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its message and paths, votes, comments, relation chain, its Change-Id siblings, the Forge issues its trailers name and whether it carries conflict markers. Four of those decide what a session does and no checkout has them: chain, with chainedAt saying which patch set each link sits on; mergeable, which predicts the conflict before the fetch; fetch.ref, which git fetch takes as it stands; and the commit message body. path is the way in for "is somebody already working on this file" and for "has anybody attempted this before", the earlier attempt coming back whatever it was called. Reading the diff itself happens in a checkout: fetch.ref is what gets you there, and files says how much of the file list to carry. An empty answer says whether it can be read as an absence, since a private change is invisible to an anonymous read. The issue itself is typo3_forge_lookup. Reading only: reviewing, voting and uploading stay yours.';
+        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. A clone carries what landed and says nothing about what is open. So this tool asks the review server rather than a checkout. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its message and paths, votes, comments, relation chain and its Change-Id siblings. It adds the Forge issues its trailers name and whether it carries conflict markers. Four of those decide what a session does and no checkout has them. chain, with chainedAt for the patch set each link sits on. mergeable, which predicts the conflict before the fetch. fetch.ref, which git fetch takes as it stands. And the commit message body. path is the way in for "does somebody already work on this file" and for "has anybody attempted this before". The earlier attempt comes back whatever its name was. You read the diff itself in a checkout: fetch.ref gets you there, and files says how much of the file list to carry. An empty answer says whether it means an absence, since a private change is invisible to an anonymous read. The issue itself is typo3_forge_lookup. This tool reads only: you review, vote and upload yourself.';
     }
 
     public static function inputSchema(): array
@@ -56,49 +56,49 @@ final class GerritLookup extends ReadOnlyTool
                 'issue' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Forge issue number, with or without the leading #, for example "105403". Searches every change whose commit message names it, which is where Resolves: and Related: put it. Not with change, commit, query, path or backlog.',
+                    'description' => 'Forge issue number, with or without the # in front, for example "105403". Searches every change whose commit message names it, which is where Resolves: and Related: put it. Not with change, commit, query, path or backlog.',
                 ],
                 'change' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'One change to read, by the Change-Id its commit message carries, for example "I0f4c5b9a3e2d1c7b8a6f5e4d3c2b1a0f9e8d7c6b", or by the change number a review URL ends with, for example "89011". Prefer the Change-Id where the commit is in front of you. It is part of the patch, it survives an amend, and it cannot be mistaken for the Forge issue number the way a bare change number can. Not with issue, commit, query, path or backlog.',
+                    'description' => 'One change to read, by the Change-Id its commit message carries or by the change number a review URL ends with. For example "I0f4c5b9a3e2d1c7b8a6f5e4d3c2b1a0f9e8d7c6b" or "89011". Prefer the Change-Id where the commit is in front of you. It is part of the patch and it survives an amend. A bare change number looks like a Forge issue number, and a Change-Id cannot. Not with issue, commit, query, path or backlog.',
                 ],
                 'commit' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'A commit hash out of a checkout, abbreviated as git log prints it or whole, for example "cf227b18e20". Answers the change that commit is a patch set of, with the changes sharing its Change-Id. That is how a hash in your own history reaches the backports beside it and the branches each targets. Pass a hash here rather than as change: the review server answers "Invalid change format" to it there, which arrives as the server not answering at all. Not with issue, change, query, path or backlog.',
+                    'description' => 'A commit hash out of a checkout, abbreviated as git log prints it or whole, for example "cf227b18e20". Answers the change that commit is a patch set of, with the changes that share its Change-Id. That is how a hash in your own history reaches the backports beside it and the branches each targets. Pass a hash here rather than as change. There the review server answers "Invalid change format" to it, which arrives as a server that does not answer at all. Not with issue, change, query, path or backlog.',
                 ],
                 'query' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Words to search the review server for, for example "impexp translation". Every word has to appear, matched against the commit message — subject and body, so a change whose subject lacks the word is still found. They are not matched against the diff: change 89000 added writePagesOrder and a search for that name answers nothing, so a zero says no commit message names the word. Ask again in the words a commit message would use, or pass path for the changes touching a file whatever they are called. Combine with path to narrow one by the other, and with open for what is still under review. Not with issue, change, commit or backlog.',
+                    'description' => 'Words to search the review server for, for example "impexp translation". Every word has to appear. The search matches the commit message, subject and body, so it finds a change whose subject lacks the word. It does not match the diff: change 89000 added writePagesOrder and a search for that name answers nothing. So a zero says no commit message names the word. Ask again in the words a commit message uses, or pass path for the changes that touch a file, whatever their names. Combine with path to narrow one by the other, and with open for what is still under review. Not with issue, change, commit or backlog.',
                 ],
                 'path' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'A path in the repository, for example "typo3/sysext/impexp" or "typo3/sysext/impexp/Classes/Import.php". Answers the changes touching it, the path itself and everything under it. With open it asks whether somebody is working on a file now, before a patch is written for it. Without open it reaches the abandoned and merged changes too, where an earlier attempt at the same fix is found. Combine with query to narrow one by the other. Not with issue, change, commit or backlog.',
+                    'description' => 'A path in the repository, for example "typo3/sysext/impexp" or "typo3/sysext/impexp/Classes/Import.php". Answers the changes that touch it, the path itself and everything under it. With open it asks whether somebody works on a file now, before you write a patch for it. Without open it reaches the abandoned and merged changes too, where an earlier attempt at the same fix sits. Combine with query to narrow one by the other. Not with issue, change, commit or backlog.',
                 ],
                 'open' => [
                     'type' => 'boolean',
                     'default' => false,
-                    'description' => 'Narrow a search to the changes still under review. False, the default, reaches every state, which "has anybody ever tried this" needs, since an abandoned or merged attempt answers it. True is "who is working on this now". Narrows query and path, and is ignored by issue, change and commit.',
+                    'description' => 'Narrow a search to the changes still under review. False, the default, reaches every state, which "has anybody ever tried this" needs, since an abandoned or merged attempt answers it. True is "who works on this now". Narrows query and path; issue, change and commit ignore it.',
                 ],
                 'files' => [
                     'type' => 'string',
                     'enum' => ['auto', 'none', 'stat', 'full'],
                     'default' => 'auto',
-                    'description' => 'How much of the file list a change read by name carries. "auto", the default, prints a line per file up to 40 of them and a count with the top-level directories beyond that — 40 being the ninetieth percentile of an open core change, so an ordinary patch keeps its list and a refactoring of 137 files does not spend the answer on one. "stat" is that count whatever the size, "full" the whole list whatever the size, and "none" leaves it out, which is what a caller who has the fetch ref and is about to run git diff wants. The hunks are in none of them: reading content is what the ref is for. Narrows change and commit, and is ignored by every other way in.',
+                    'description' => 'How much of the file list a change read by name carries. "auto", the default, prints a line per file up to 40 of them, and beyond that a count with the top-level directories. 40 is the ninetieth percentile of an open core change. So an ordinary patch keeps its list, and a refactor of 137 files does not spend the answer on one. "stat" is that count whatever the size, and "full" the whole list whatever the size. "none" leaves it out, which is what a caller with the fetch ref in hand and git diff next wants. The hunks are in none of them: the ref is what reads content. Narrows change and commit; every other way in ignores it.',
                 ],
                 'messages' => [
                     'type' => 'string',
                     'enum' => ['none', 'people', 'all'],
                     'default' => 'none',
-                    'description' => 'The review log of a change: every message its patch sets and its reviewers left. Ask for it to find out why a vote is gone. Gerrit writes "Outdated Votes: * Code-Review+1 (copy condition: ...)" into the message of the upload that dropped it, and the labels afterwards look like a change nobody has voted on. "none" leaves it out and is the default, since it is 57.9 KB against 14.3 KB on a change with 21 patch sets. "people" drops what a service user wrote — 20 of 46 messages on that change, every one a CI pipeline report. "all" keeps them. How many were dropped, and whether the current patch set carries git conflict markers, is answered whichever you ask for. Narrows change and commit, and is ignored by every other way in.',
+                    'description' => 'The review log of a change: every message its patch sets and its reviewers left. Ask for it to find out why a vote is gone. Gerrit writes "Outdated Votes: * Code-Review+1 (copy condition: ...)" into the message of the upload that dropped it. The labels afterwards look like a change nobody has voted on. "none" leaves it out and is the default, since it is 57.9 KB against 14.3 KB on a change with 21 patch sets. "people" drops what a service user wrote — 20 of 46 messages on that change, every one a CI pipeline report. "all" keeps them. The answer says how many it dropped, and whether the current patch set carries git conflict markers, whichever you ask for. Narrows change and commit; every other way in ignores it.',
                 ],
                 'backlog' => [
                     'type' => 'string',
                     'enum' => ['oldest', 'stale'],
-                    'description' => 'Enumerate the open changes of the TYPO3 core instead of reading one or matching words. "oldest" orders them by when they were pushed, "stale" by how long nobody has touched them. Pushed long ago is about the patch, untouched for months about the attention it got, and a change that is both is what a review session is looking for. The filters beside it are what "small", "has votes" and "still applies" mean: maxSize, minCodeReview, negativeVotes and mergeable. The changes their own authors marked work in progress are left out, since a draft is not offered for review; query says so. maxSize, minCodeReview, negativeVotes, mergeable, branch, updatedBefore, owner, reviewedBy, involving and reviewableBy narrow this way in and no other. Not with issue, change, commit, query or path.',
+                    'description' => 'Enumerate the open changes of the TYPO3 core instead of a read of one or a match of words. "oldest" orders them by push date, "stale" by how long nobody has touched them. Pushed long ago is about the patch, untouched for months about the attention it got. A change that is both is what a review session looks for. The filters beside it are what "small", "has votes" and "still applies" mean: maxSize, minCodeReview, negativeVotes and mergeable. The answer leaves out the changes their own authors marked work in progress, since a draft is not up for review; query says so. maxSize, minCodeReview, negativeVotes, mergeable, branch, updatedBefore, owner, reviewedBy, involving and reviewableBy narrow this way in and no other. Not with issue, change, commit, query or path.',
                 ],
                 'maxSize' => [
                     'type' => 'integer',
@@ -109,47 +109,47 @@ final class GerritLookup extends ReadOnlyTool
                     'type' => 'integer',
                     'minimum' => 1,
                     'maximum' => 2,
-                    'description' => 'Only changes somebody holds at least this Code-Review vote on: 1 for a change a reviewer has been through once, 2 for one that is approved. With negativeVotes false this is "almost ready": somebody is for it and nobody against.',
+                    'description' => 'Only changes somebody holds at least this Code-Review vote on. 1 is a change a reviewer has been through once, 2 is one with approval. With negativeVotes false this is "almost ready": somebody is for it and nobody against.',
                 ],
                 'negativeVotes' => [
                     'type' => 'boolean',
                     'default' => true,
-                    'description' => 'Whether changes carrying a Code-Review-1 or a Verified-1 are in the answer. True, the default, keeps them. False drops both — a reviewer objecting and a pipeline failing, the two reasons a change is not one to pick up now.',
+                    'description' => 'Whether changes that carry a Code-Review-1 or a Verified-1 are in the answer. True, the default, keeps them. False drops both — a reviewer who objects and a pipeline that fails, the two reasons a change is not one to pick up now.',
                 ],
                 'mergeable' => [
                     'type' => 'boolean',
                     'default' => false,
-                    'description' => 'True answers only the changes that still merge into their target branch. It is the review server\'s own last computation and not a merge run now, so it says which changes are worth fetching rather than promising one will apply. False, the default, keeps every change; the ones that no longer merge are usually the oldest, which makes an unfiltered "oldest first" page a list of conflicts.',
+                    'description' => 'True answers only the changes that still merge into their target branch. It is the review server\'s own last computation and not a merge run now. So it says which changes are worth a fetch and promises nothing about whether one applies. False, the default, keeps every change. The ones that no longer merge are usually the oldest, which makes an unfiltered "oldest first" page a list of conflicts.',
                 ],
                 'branch' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only changes targeting this branch, spelled as the branch is: "main", "13.4". Worth setting when the checkout in front of you is on one line, since a patch for another branch is reviewed against code you do not have.',
+                    'description' => 'Only changes that target this branch, spelled as the branch is: "main", "13.4". Set it when the checkout in front of you is on one line. You read a patch for another branch against code you do not have.',
                 ],
                 'updatedBefore' => [
                     'type' => 'string',
                     'pattern' => '^\d{4}-\d{2}-\d{2}$',
-                    'description' => 'Only changes nobody has touched since this day, as YYYY-MM-DD. It finds the review everybody has walked past, which age alone does not: a change pushed in 2023 and commented on last week is being worked. It reads the last update and never the push date — the review server indexes no created date, which is also why backlog "oldest" is ordered here.',
+                    'description' => 'Only changes nobody has touched since this day, as YYYY-MM-DD. It finds the review everybody has walked past, which age alone does not. A change pushed in 2023 and commented on last week is in work. It reads the last update and never the push date. The review server indexes no created date, which is also why this server orders backlog "oldest" itself.',
                 ],
                 'owner' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only changes this person pushed, by name or e-mail address: "Benjamin Kott", "benjamin.kott@outlook.com", or part of either. This answers "which open changes are mine", which query cannot: it matches the commit message, and a name there is as often somebody else writing it. The review server resolves the name; a name it does not know answers no changes, which looks exactly like a person with none.',
+                    'description' => 'Only changes this person pushed, by name or e-mail address: "Benjamin Kott", "benjamin.kott@outlook.com", or part of either. This answers "which open changes are mine", which query cannot. query matches the commit message, and a name there is as often somebody else who wrote it. The review server resolves the name; a name it does not know answers no changes, which looks exactly like a person with none.',
                 ],
                 'reviewedBy' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only changes this person has voted on, resolved the same way as owner. The other half of a person and a different question: what somebody pushed is theirs to finish, what they voted on is theirs to have judged already.',
+                    'description' => 'Only changes this person has voted on, resolved the same way as owner. The other half of a person and a different question. What somebody pushed is theirs to finish; what they voted on is theirs to have judged already.',
                 ],
                 'involving' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only changes this person is on either side of — pushed or voted on, as one set. Passed instead of owner and reviewedBy, not beside them: those two together mean pushed AND voted on, a set nobody wants.',
+                    'description' => 'Only changes this person is on either side of — pushed or voted on, as one set. Pass it instead of owner and reviewedBy, not beside them: those two together mean pushed AND voted on, a set nobody wants.',
                 ],
                 'reviewableBy' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only changes this person neither pushed nor has voted on, named the same way as owner. That is "which of these could I review": everybody else\'s open work minus what I have already judged. The three filters above cannot be combined into it, since each of them selects. It reads no permissions: what is taken out is this person\'s own changes and votes. It composes with the three that select: owner with this one is what somebody else could review of a third person\'s queue. The same name here and on involving answers nothing. A name the review server cannot place takes nothing out and answers the whole backlog, the opposite of what a misspelling does to owner. Check it against a change of theirs before reading a wide answer as "nothing of theirs is in here".',
+                    'description' => 'Only changes this person neither pushed nor has voted on, named the same way as owner. That is "which of these could I review": everybody else\'s open work minus what I have already judged. You cannot combine the three filters above into it, since each of them selects. It reads no permissions: it takes out this person\'s own changes and votes. It composes with the three that select: owner with this one is what somebody else could review of a third person\'s queue. The same name here and on involving answers nothing. A name the review server cannot place takes nothing out and answers the whole backlog, the opposite of what a misspelt name does to owner. Check it against a change of theirs before you read a wide answer as "nothing of theirs is in here".',
                 ],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 25, 'default' => 10, 'description' => 'How many changes come back from a search or the backlog. A change read by name is one answer whatever this says.'],
             ],
@@ -173,84 +173,84 @@ final class GerritLookup extends ReadOnlyTool
         return Schema::object([
             'status' => Schema::answerStatus(),
             'source' => Schema::string('The review server the answer came from.'),
-            'query' => Schema::string('The Gerrit query this was answered with, so the same question can be asked again by hand.'),
+            'query' => Schema::string('The Gerrit query that answered this, so you can ask the same question again by hand.'),
             'changes' => Schema::listOf(Schema::object([
                 'number' => Schema::integer('Change number, the digits its review URL ends with.'),
-                'changeId' => Schema::string('The Change-Id its commit message carries, empty where the server named none. It survives an amend and a rebase onto another branch, so it is what to hold the commit in front of you against. Changes sharing one are the same patch on more than one branch, which passing it back as change reads all of.'),
+                'changeId' => Schema::string('The Change-Id its commit message carries, empty where the server named none. It survives an amend and a rebase onto another branch, so it is what to hold the commit in front of you against. Changes that share one are the same patch on more than one branch, and change with this id reads all of them.'),
                 'subject' => Schema::string(),
                 'message' => [
                     'type' => ['string', 'null'],
                     'description' => 'The commit message of the current patch set, whole: the subject, the body and every '
                         . 'trailer. It is the change\'s own account of itself and what typo3_commit_message_guide '
-                        . 'takes as its argument; holding the subject alone is what makes a trailer uncheckable. '
-                        . 'Null means it was not read, which is a search by words or by path. An issue search reads '
+                        . 'takes as its argument. A caller with the subject alone cannot check a trailer. '
+                        . 'Null means the call did not read it, which is a search by words or by path. An issue search reads '
                         . 'it to decide which hits name the issue and answers null all the same.',
                 ],
-                'status' => Schema::string('NEW while it is open, MERGED once it landed, ABANDONED when it was given up.'),
+                'status' => Schema::string('NEW while it is open, MERGED once it landed, ABANDONED once somebody gave it up.'),
                 'branch' => Schema::string('The branch the change targets.'),
-                'patchSet' => Schema::integer('The patch set that is current on the server, counting from 1. Zero where the server named none.'),
+                'patchSet' => Schema::integer('The patch set that is current on the server, counted from 1. Zero where the server named none.'),
                 'commit' => Schema::string('The commit the current patch set is. A checkout whose HEAD is another commit is not the revision under review.'),
-                'project' => Schema::string('The Gerrit project it was pushed to.'),
+                'project' => Schema::string('The Gerrit project the push went to.'),
                 'updated' => Schema::string('When the change last moved.'),
-                'created' => Schema::string('When it was pushed, which says how long it has been waiting. A change pushed years ago and touched last week is being worked on; one where the two dates are far apart is not.'),
+                'created' => Schema::string('The push date, which says how long the change has waited. A change pushed years ago and touched last week is in work; one where the two dates are far apart is not.'),
                 'insertions' => [
                     'type' => ['integer', 'null'],
                     'description' => 'Lines the current patch set adds. Null where the review server stated none. '
-                        . 'With deletions this is the size a reviewer picks a change by, and it is the diff of the '
-                        . 'whole change rather than of what is left to read.',
+                        . 'With deletions this is the size a reviewer picks a change by. It is the diff of the '
+                        . 'whole change rather than of what remains to read.',
                 ],
                 'deletions' => ['type' => ['integer', 'null'], 'description' => 'Lines the current patch set removes. Null where the review server stated none.'],
                 'files' => [
                     'type' => ['array', 'null'],
                     'description' => 'Every path the current patch set touches, sorted by path, with what the patch '
                         . 'does to each. It is the changed paths a review establishes first and the argument '
-                        . 'typo3_hint_lookup and typo3_test_run_guide take, so a change is triaged without being '
-                        . 'fetched. The diff is not here: the hunks are what a fetch is for. A path this list '
-                        . 'calls renamed can be one a reading of the hunks would call rewritten. Null means the '
-                        . 'paths were not read, which is a search and an issue search; an empty list would be a '
-                        . 'patch set touching nothing.',
+                        . 'typo3_hint_lookup and typo3_test_run_guide take, so you triage a change without a '
+                        . 'fetch. The diff is not here: the hunks are what a fetch is for. A path this list '
+                        . 'calls renamed can be one a read of the hunks calls rewritten. Null means the call did '
+                        . 'not read the paths, which is a search and an issue search. An empty list is a patch '
+                        . 'set that touches nothing.',
                     'items' => Schema::object([
                         'path' => Schema::string('The path as the review server spells it, from the repository root.'),
                         'action' => [
                             'type' => 'string',
                             'enum' => ['modified', 'added', 'deleted', 'renamed', 'copied', 'rewritten'],
                             'description' => 'What the patch set does to this file. renamed and copied name where '
-                                . 'the file came from in movedFrom; rewritten is a change large enough that the '
-                                . 'review server stopped relating the two versions.',
+                                . 'the file came from in movedFrom. rewritten is a change so large that the '
+                                . 'review server no longer relates the two versions.',
                         ],
                         'insertions' => Schema::integer('Lines added in this file. Zero on a binary, where there are no lines to count.'),
                         'deletions' => Schema::integer('Lines removed in this file.'),
                         'binary' => ['type' => 'boolean', 'description' => 'Whether the file is binary, which is what makes the two zero counts beside it mean nothing. An image or a fixture archive is not an untouched file.'],
-                        'movedFrom' => ['type' => ['string', 'null'], 'description' => 'The path this file was renamed or copied from, null on every other action.'],
+                        'movedFrom' => ['type' => ['string', 'null'], 'description' => 'The path the rename or the copy took this file from, null on every other action.'],
                     ], ['path', 'action', 'insertions', 'deletions', 'binary', 'movedFrom']),
                 ],
                 'mergeable' => [
                     'type' => ['boolean', 'null'],
                     'description' => 'Whether the current patch set still merges into its target branch. It is the '
-                        . 'review server\'s own last computation and not a merge run now, so false is grounds to '
-                        . 'expect a rebase rather than a finding. Null where it computed none, which is not "it '
+                        . 'review server\'s own last computation and not a merge run now. So false says to '
+                        . 'expect a rebase and proves nothing. Null where it computed none, which is not "it '
                         . 'does not merge".',
                 ],
                 'conflicts' => [
                     'type' => ['array', 'null'],
-                    'description' => 'The files Gerrit reported git conflicts in when the current patch set was '
-                        . 'created, so the markers are committed lines in them. The patch is broken rather than '
+                    'description' => 'The files Gerrit reported git conflicts in at the creation of the current patch '
+                        . 'set, so the markers sit in committed lines there. The patch is broken rather than '
                         . 'merely unreviewed, and nothing else in this answer says so. A change created with the '
                         . 'web Cherry pick action or rebased through it can land this way. Its status, votes, '
                         . 'comment count and subject all read as a fresh patch set. Empty means the current patch '
                         . 'set carries none; a report on an earlier one is history and is not here. Null means the '
-                        . 'review log was not read, which is a search and an enumeration.',
+                        . 'call did not read the review log, which is a search and an enumeration.',
                     'items' => Schema::string(),
                 ],
                 'cherryPickOf' => [
                     'type' => ['object', 'null'],
-                    'description' => 'The change and patch set this one was cherry-picked from, null where it was '
-                        . 'pushed rather than cherry-picked. It is provenance and not a warning: most backports are '
-                        . 'cherry-picks and almost none of them conflicted, so what says a patch set is broken is '
-                        . 'conflicts beside it.',
+                    'description' => 'The change and patch set this one is a cherry-pick of, null where somebody '
+                        . 'pushed it rather than cherry-picked it. It is provenance and no alarm. Most '
+                        . 'backports are cherry-picks and almost none of them conflicted, so conflicts beside '
+                        . 'it is what says a patch set is broken.',
                     'properties' => [
-                        'change' => Schema::integer('The change number it was picked from, which reads it by being passed back as change.'),
-                        'patchSet' => Schema::integer('The patch set of that change it was picked from, which is not necessarily the one that change stands at now.'),
+                        'change' => Schema::integer('The change number the pick came from; pass it back as change to read it.'),
+                        'patchSet' => Schema::integer('The patch set of that change the pick came from, which is not necessarily the one that change stands at now.'),
                         'url' => Schema::string('Where a person reads that change.'),
                     ],
                     'required' => ['change', 'patchSet', 'url'],
@@ -261,7 +261,7 @@ final class GerritLookup extends ReadOnlyTool
                     'description' => 'How to get this patch set into a checkout. Null where the server named no '
                         . 'patch set, since a ref names one.',
                     'properties' => [
-                        'ref' => Schema::string('The static ref this patch set is filed under. Every patch set keeps its own, so an earlier one stays fetchable after a newer is pushed.'),
+                        'ref' => Schema::string('The static ref that names this patch set. Every patch set keeps its own, so an earlier one stays fetchable after a newer push.'),
                         'remote' => Schema::string('What to fetch that ref from. It is the review server rather than origin: a core clone fetches from the GitHub mirror, and refs/changes is not there.'),
                     ],
                     'required' => ['ref', 'remote'],
@@ -269,75 +269,75 @@ final class GerritLookup extends ReadOnlyTool
                 'labels' => [
                     'type' => ['array', 'null'],
                     'description' => 'What the change stands at, one entry per label. The state of each label is on '
-                        . 'every row, since the review server states it unasked. The voters behind it are read '
+                        . 'every row, since the review server states it unasked. The call reads the voters behind it '
                         . 'for one change, so votes is null on a search and a list there.',
                     'items' => Schema::object([
                         'label' => Schema::string('Code-Review and Verified are the two the core project votes with.'),
-                        'state' => Schema::string('What the submit rule makes of this label. OK where it is met, NEED where it still wants a vote, REJECT where a vote is blocking it, IMPOSSIBLE where no vote available could satisfy it. NEED is not "nobody has voted": a change held at Code-Review+1 where the rule asks for +2 stands there too, and the votes beside it say which. The pair to tell apart is NEED against REJECT — a change waiting for a reviewer, and one somebody has already turned down. Empty where no rule names the label; where several rules name it, the most consequential of their states is here.'),
+                        'state' => Schema::string('What the submit rule makes of this label. OK where the rule holds, NEED where it still wants a vote. REJECT where a vote blocks it, IMPOSSIBLE where no available vote could satisfy it. NEED is not "nobody has voted". A change at Code-Review+1 where the rule asks for +2 stands there too, and the votes beside it say which. The pair to tell apart is NEED against REJECT — a change that waits for a reviewer, and one somebody has already turned down. Empty where no rule names the label; where several rules name it, the most consequential of their states is here.'),
                         'satisfied' => [
                             'type' => ['boolean', 'null'],
                             'description' => 'Whether the submit rule counts this label as met — the state beside it '
                                 . 'read as a boolean. False is the ordinary state of an open change, and null means '
-                                . 'no rule asks for it. What it stands at is in the votes: the range is the '
+                                . 'no rule asks for it. The votes say what it stands at. The range is the '
                                 . 'project\'s own, and Verified runs to +2 here, so a +1 is not the top of it.',
                         ],
                         'votes' => [
                             'type' => ['array', 'null'],
-                            'description' => 'Everyone on the label, those holding nothing included. Null where the '
-                                . 'voters were not read, which is every hit a search or an enumeration answers; a '
+                            'description' => 'Everyone on the label, those with no vote included. Null where the call did '
+                                . 'not read the voters, which is every hit a search or an enumeration answers. A '
                                 . 'list with zeros in it means nobody has voted, a different answer. Pass the '
                                 . 'change number back as change for them.',
                             'items' => Schema::object([
                                 'voter' => Schema::string(),
-                                'value' => Schema::integer('What this voter holds now. Zero is a reviewer who was added and has not voted. A vote a later patch set dropped is absent rather than zero, and only the review log says it was ever there.'),
-                                'on' => Schema::string('When it was cast, empty where nothing was.'),
+                                'value' => Schema::integer('What this voter holds now. Zero is a reviewer somebody added and who has not voted. A vote a later patch set dropped is absent rather than zero, and only the review log says it was ever there.'),
+                                'on' => Schema::string('When the vote came in, empty where none did.'),
                             ], ['voter', 'value', 'on']),
                         ],
                     ], ['label', 'state', 'satisfied', 'votes']),
                 ],
-                'commentCount' => Schema::integer('How many comments the change carries, which the review server states whether or not they were read.'),
-                'unresolvedCommentCount' => Schema::integer('How many of the threads those comments form are open, which the review server states whether or not the comments were read. It counts threads and not comments, so it is smaller than the number of comments carrying the flag wherever somebody replied. It is the flag as each thread\'s last writer left it rather than a count of unanswered questions. On a change to pick up it is the work still owed to the last reviewer.'),
+                'commentCount' => Schema::integer('How many comments the change carries, which the review server states whether or not the call read them.'),
+                'unresolvedCommentCount' => Schema::integer('How many of the threads those comments form are open, which the review server states whether or not the call read them. It counts threads and not comments, so it is smaller than the number of comments with the flag wherever somebody replied. It is the flag as each thread\'s last writer left it rather than a count of unanswered questions. On a change to pick up it is the work still owed to the last reviewer.'),
                 'comments' => [
                     'type' => ['array', 'null'],
-                    'description' => 'The comments left on the change, oldest first, each saying which thread it is '
-                        . 'in and what that thread stands at. Empty means it carries none. '
-                        . 'Null means they were not read: a search asks for none, and a change lookup whose '
-                        . 'comment call did not answer says so here rather than with an empty list. Hold it '
+                    'description' => 'The comments on the change, oldest first, each with the thread it is in and '
+                        . 'what that thread stands at. Empty means it carries none. Null means the call did not '
+                        . 'read them. A search asks for none, and a change lookup whose comment call did not '
+                        . 'answer says so here rather than with an empty list. Hold it '
                         . 'against commentCount.',
                     'items' => Schema::object([
                         'id' => Schema::string('What the inReplyTo of a reply names.'),
                         'author' => Schema::string(),
                         'on' => Schema::string(),
-                        'patchSet' => Schema::integer('The patch set it was left on. One older than the current patch set is a comment written about code that may since have changed, and it is still unanswered until somebody answers it.'),
+                        'patchSet' => Schema::integer('The patch set the comment sits on. One older than the current patch set is a comment about code that may since have changed. It is still open until somebody answers it.'),
                         'file' => Schema::string('The file it sits on. /PATCHSET_LEVEL is a comment on the change itself rather than on a place in it.'),
                         'line' => ['type' => ['integer', 'null'], 'description' => 'Null on a comment about the change rather than about a line.'],
-                        'unresolved' => ['type' => 'boolean', 'description' => 'The flag on this one comment, as its own writer left it. It is not what the thread stands at — that is threadUnresolved beside it — and the two differ on every comment somebody resolved by replying to it.'],
+                        'unresolved' => ['type' => 'boolean', 'description' => 'The flag on this one comment, as its own writer left it. It is not what the thread stands at; that is threadUnresolved beside it. The two differ on every comment somebody resolved with a reply.'],
                         'inReplyTo' => ['type' => ['string', 'null'], 'description' => 'The id of the comment this answers, null where it starts a thread.'],
-                        'thread' => Schema::string('The id of the comment this thread starts with, which is this comment\'s own id where it starts one. Comments carrying the same one are one thread, and they stand in the order they were written.'),
-                        'threadUnresolved' => ['type' => 'boolean', 'description' => 'Whether the thread this comment sits in is open: the unresolved flag on that thread\'s last comment. Gerrit stores a thread\'s state there and counts the open ones as unresolvedCommentCount, so every comment in a thread carries the same value here. It is a flag somebody set rather than a judgement that the question was answered.'],
-                        'message' => Schema::string('The comment as it was written.'),
+                        'thread' => Schema::string('The id of the comment this thread starts with, which is this comment\'s own id where it starts one. Comments with the same one are one thread, and they stand in the order their writers wrote them.'),
+                        'threadUnresolved' => ['type' => 'boolean', 'description' => 'Whether the thread this comment sits in is open: the unresolved flag on that thread\'s last comment. Gerrit stores a thread\'s state there and counts the open ones as unresolvedCommentCount, so every comment in a thread carries the same value here. It is a flag somebody set rather than a judgement that the question has an answer.'],
+                        'message' => Schema::string('The comment as its writer wrote it.'),
                     ], ['id', 'author', 'on', 'patchSet', 'file', 'line', 'unresolved', 'inReplyTo', 'thread', 'threadUnresolved', 'message']),
                 ],
                 'chain' => [
                     'type' => ['array', 'null'],
                     'description' => 'The relation chain this change sits in, child first: the changes stacked on '
-                        . 'it, then itself, then the changes it is built on. This is the other relation and not '
-                        . 'the Change-Id one. A chain is different changes built on one another, a shared '
-                        . 'Change-Id is one patch on several branches, and reading the two as one set overstates '
-                        . 'both. Empty means the change stands alone, the ordinary case. Null means the chain was '
-                        . 'not read: a search asks for none, and a change lookup whose call did not answer says so '
-                        . 'here rather than with an empty list.',
+                        . 'it, then itself, then the changes under it. This is the other relation and not '
+                        . 'the Change-Id one. A chain is different changes built on one another, and a shared '
+                        . 'Change-Id is one patch on several branches. A read of the two as one set overstates '
+                        . 'both. Empty means the change stands alone, the ordinary case. Null means the call did '
+                        . 'not read the chain. A search asks for none, and a change lookup whose call did not '
+                        . 'answer says so here rather than with an empty list.',
                     'items' => Schema::object([
-                        'number' => Schema::integer('The entry\'s change number, which reads it by passing it back as change.'),
+                        'number' => Schema::integer('The entry\'s change number; pass it back as change to read it.'),
                         'status' => Schema::string('NEW, MERGED or ABANDONED — the entry\'s own state, not the state of the change this answer is about. A MERGED entry says that part of the stack landed.'),
                         'subject' => Schema::string('The commit subject of the patch set the chain names.'),
                         'thisChange' => [
                             'type' => 'boolean',
                             'description' => 'Whether this entry is the change the answer is about. Its place in '
-                                . 'the list is what says how much is stacked on it and how much it is built on.',
+                                . 'the list says how much stands on it and how much it stands on.',
                         ],
                         'patchSet' => Schema::integer('The patch set the entry stands at now.'),
-                        'chainedAt' => Schema::integer('The patch set of the entry that the chain is built on. Lower than patchSet means the stack holds the older one and that change has moved on since. Act on the entry by its number rather than on the patch set named here.'),
+                        'chainedAt' => Schema::integer('The patch set of the entry that the chain stands on. Lower than patchSet means the stack holds the older one and that change has moved on since. Act on the entry by its number rather than on the patch set named here.'),
                         'url' => Schema::string('Where a person reads that change.'),
                     ], ['number', 'status', 'subject', 'thisChange', 'patchSet', 'chainedAt', 'url']),
                 ],
@@ -346,8 +346,8 @@ final class GerritLookup extends ReadOnlyTool
                     'description' => 'The Forge issues this change\'s commit message names in its Resolves: and '
                         . 'Related: trailers, each filled with what says whether to read it. That is the join '
                         . 'between the patch and the tracker, and where a second issue nobody mentioned elsewhere '
-                        . 'is seen. Empty means the message names none. Null means the message was not read: a '
-                        . 'search asks for none of this, and reading one hit by name is what answers it.',
+                        . 'shows. Empty means the message names none. Null means the call did not read the '
+                        . 'message. A search asks for none of this, and a read of one hit by name answers it.',
                     'items' => Schema::object(
                         self::trailerIssue(),
                         array_keys(self::trailerIssue()),
@@ -357,11 +357,11 @@ final class GerritLookup extends ReadOnlyTool
                     'type' => ['array', 'null'],
                     'description' => 'The branches this change\'s commit message names in its Releases: trailer, '
                         . 'spelled as the trailer spells them. It is the author\'s claim about which branches the '
-                        . 'patch belongs on, written before it went to any of them. What was pushed is the changes '
-                        . 'above sharing a Change-Id, one per branch and each with its own status. A branch named '
-                        . 'here with no change targeting it is a backport nobody has pushed. Empty means the '
-                        . 'message carries no such trailer, which every change outside the core project is. Null '
-                        . 'means the message was not read, which is a search by words or path.',
+                        . 'patch belongs on, written before it went to any of them. The pushed half is the changes '
+                        . 'above that share a Change-Id, one per branch and each with its own status. A branch '
+                        . 'named here with no change that targets it is a backport nobody has pushed. Empty means '
+                        . 'the message carries no such trailer, which every change outside the core project is. '
+                        . 'Null means the call did not read the message, which is a search by words or path.',
                     'items' => Schema::string(),
                 ],
                 'messages' => [
@@ -371,29 +371,29 @@ final class GerritLookup extends ReadOnlyTool
                     'items' => Schema::object([
                         'author' => Schema::string(),
                         'on' => Schema::string(),
-                        'patchSet' => Schema::integer('The patch set it was written about.'),
-                        'bot' => ['type' => 'boolean', 'description' => 'Whether a service user wrote it, read off the account rather than off its name. On the core project that is the CI reporting a pipeline.'],
-                        'message' => Schema::string('The message as it stands. The upload of a patch set carries the votes it dropped and the copy condition that dropped them, which is the one place that is written down.'),
+                        'patchSet' => Schema::integer('The patch set the message is about.'),
+                        'bot' => ['type' => 'boolean', 'description' => 'Whether a service user wrote it, read off the account rather than off its name. On the core project that is the CI with a pipeline report.'],
+                        'message' => Schema::string('The message as it stands. The upload of a patch set carries the votes it dropped and the copy condition that dropped them, and nothing else writes that down.'),
                     ], ['author', 'on', 'patchSet', 'bot', 'message']),
                 ],
                 'botMessageCount' => [
                     'type' => ['integer', 'null'],
                     'description' => 'How many of the log a service user wrote, which messages: "people" is what '
-                        . 'drops. Answered whichever way it was asked. A log full of pipeline reports answering '
-                        . 'zero here is Gerrit no longer tagging its service users rather than a change no bot '
-                        . 'has been near. Null where the log was not read.',
+                        . 'drops. Answered whichever value messages has. A log full of pipeline reports that answers '
+                        . 'zero here means Gerrit no longer tags its service users. It does not mean a change '
+                        . 'no bot has been near. Null where the call did not read the log.',
                 ],
-            ]), 'The changes that matched, newest activity first — oldest or longest untouched first where backlog asked for an enumeration. A change named by change or commit comes with the changes sharing its Change-Id, which is how a backport on a release branch is reached.'),
+            ]), 'The changes that matched, newest activity first — oldest or longest untouched first where backlog asked for an enumeration. A change named by change or commit comes with the changes that share its Change-Id. That is how you reach a backport on a release branch.'),
             'backlog' => [
                 'type' => ['object', 'null'],
                 'description' => 'What the enumeration read, where backlog asked for one; null on every other way '
                     . 'in. The review server states no total for a query and offers no created date to sort by. '
-                    . 'So the matched set is read whole and ordered here, which is what these two numbers are '
-                    . 'about.',
+                    . 'So this server reads the matched set whole and orders it, which is what these two numbers '
+                    . 'are about.',
                 'properties' => [
-                    'order' => ['type' => 'string', 'enum' => ['oldest', 'stale'], 'description' => 'oldest: by when the change was pushed. stale: by when it last moved.'],
+                    'order' => ['type' => 'string', 'enum' => ['oldest', 'stale'], 'description' => 'oldest: by push date. stale: by when the change last moved.'],
                     'read' => Schema::integer('How many changes the filters matched and this answer sorted, of which changes above carries at most limit. Where the two differ this is a page, and what reaches the rest of it is a narrower filter rather than a larger limit.'),
-                    'complete' => ['type' => 'boolean', 'description' => 'Whether read is the whole matched set. False where the read stopped at the bound, and then the ordering is over one end of the set rather than all of it. Narrow the filters before reading the page as the oldest changes there are.'],
+                    'complete' => ['type' => 'boolean', 'description' => 'Whether read is the whole matched set. False where the read stopped at the bound, and then the order covers one end of the set rather than all of it. Narrow the filters before you read the page as the oldest changes there are.'],
                 ],
                 'required' => ['order', 'read', 'complete'],
             ],
@@ -403,16 +403,16 @@ final class GerritLookup extends ReadOnlyTool
                     'state' => [
                         'type' => 'string',
                         'enum' => [ReleaseLines::DEVELOPMENT, ReleaseLines::MAINTAINED],
-                        'description' => 'development: the line every core change is written against first. '
-                            . 'maintained: in regular support, so a patch pushed here is released from this branch. '
-                            . 'A line out of regular support is not in this list at all — what it releases comes '
+                        'description' => 'development: the line every core change targets first. '
+                            . 'maintained: in regular support, so this branch releases a patch pushed here. '
+                            . 'A line out of regular support is not in this list at all. What it releases comes '
                             . 'from the ELTS partners rather than from the branch.',
                     ],
                     'maintainedUntil' => Schema::nullableString('The day regular support ends, as the release calendar states it. Null on the development line, which has no such date.'),
                 ], ['branch', 'state', 'maintainedUntil']), 'Newest first, the development line at the head.'),
-                'source' => Schema::string('Where the calendar was read, so it can be read again rather than trusted.'),
-                'readAt' => Schema::string('The day it was read. A branch released since is one this list could not carry, and a change above targeting a branch absent here is either that or a line out of regular support.'),
-            ], ['branches', 'source', 'readAt'], 'The branches that take a patch today, from a list this server ships rather than from the review server, so it is answered whatever the status above says. It is what a Releases: trailer may name, and a core clone supplies it nowhere. git branch -r reaches back to TYPO3_3-6 and says nothing about which of those is still maintained. Which of these lines a change belongs on is not here — that is the author\'s claim, and typo3_commit_message_guide with workflow="core" is what reads a trailer against them.'),
+                'source' => Schema::string('Where this server read the calendar, so you can read it again rather than trust it.'),
+                'readAt' => Schema::string('The day of that read. This list cannot carry a branch released since. A change above that targets a branch absent here is either that or a line out of regular support.'),
+            ], ['branches', 'source', 'readAt'], 'The branches that take a patch today, from a list this server ships rather than from the review server. So it answers whatever the status above says. It is what a Releases: trailer may name, and a core clone supplies it nowhere. git branch -r reaches back to TYPO3_3-6 and says nothing about which of those is still maintained. Which of these lines a change belongs on is not here; that is the author\'s claim. typo3_commit_message_guide with workflow="core" reads a trailer against them.'),
             'unavailable' => Schema::unavailable([
                 'source-not-answering' => 'review.typo3.org did not answer this time, and the same call may answer '
                     . 'the next.',
@@ -426,8 +426,8 @@ final class GerritLookup extends ReadOnlyTool
             // distinction was being got wrong one level down.
             'indistinguishable' => [
                 'type' => ['string', 'null'],
-                'description' => 'Why an empty answer cannot be read as an absence, or null where it can. This '
-                    . 'server reads the review server without credentials, so a change that is private or work in '
+                'description' => 'Why an empty answer does not mean an absence, or null where it does. This '
+                    . 'server reads the review server without credentials. So a change that is private or work in '
                     . 'progress is invisible to it and looks exactly like one nobody pushed. Null means empty '
                     . 'really does mean nothing matched.',
             ],
@@ -673,7 +673,7 @@ final class GerritLookup extends ReadOnlyTool
     private static function trailerIssue(): array
     {
         return Schema::issueReference(
-            'The issue number, which reads it whole by passing it to typo3_forge_lookup as issue.',
+            'The issue number; pass it to typo3_forge_lookup as issue to read it whole.',
             'Where the issue stands, which is the tracker\'s own state and not the state of this change.',
         ) + ['trailer' => Schema::string('resolves where the message carries Resolves:, related where it carries Related:. The two are different claims: what the patch closes, and what it touches.')];
     }

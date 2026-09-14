@@ -5,27 +5,27 @@
 
 Whether a TYPO3 core patch already exists and what state its review is in, read
 from review.typo3.org. A clone carries what landed and says nothing about what
-is open, which is why this is asked of the review server rather than of a
-checkout. Six ways in, one per call. issue with a Forge number searches every
-commit message for it. change with a Change-Id or a change number, or commit
-with a hash out of a checkout, reads that one change. query and path search by
-words in the commit message and by repository path, and open narrows both to
-what is still under review. backlog enumerates the open changes, oldest pushed
-or longest untouched, narrowed by size, vote state, whether they still merge,
-branch, date and person. Every change carries its identity, status, current
-patch set, size, age and label state. One read by name adds its message and
-paths, votes, comments, relation chain, its Change-Id siblings, the Forge issues
-its trailers name and whether it carries conflict markers. Four of those decide
-what a session does and no checkout has them: chain, with chainedAt saying which
-patch set each link sits on; mergeable, which predicts the conflict before the
-fetch; fetch.ref, which git fetch takes as it stands; and the commit message
-body. path is the way in for "is somebody already working on this file" and for
-"has anybody attempted this before", the earlier attempt coming back whatever it
-was called. Reading the diff itself happens in a checkout: fetch.ref is what
-gets you there, and files says how much of the file list to carry. An empty
-answer says whether it can be read as an absence, since a private change is
-invisible to an anonymous read. The issue itself is typo3_forge_lookup. Reading
-only: reviewing, voting and uploading stay yours. Answers from: network.
+is open. So this tool asks the review server rather than a checkout. Six ways
+in, one per call. issue with a Forge number searches every commit message for
+it. change with a Change-Id or a change number, or commit with a hash out of a
+checkout, reads that one change. query and path search by words in the commit
+message and by repository path, and open narrows both to what is still under
+review. backlog enumerates the open changes, oldest pushed or longest untouched,
+narrowed by size, vote state, whether they still merge, branch, date and person.
+Every change carries its identity, status, current patch set, size, age and
+label state. One read by name adds its message and paths, votes, comments,
+relation chain and its Change-Id siblings. It adds the Forge issues its trailers
+name and whether it carries conflict markers. Four of those decide what a
+session does and no checkout has them. chain, with chainedAt for the patch set
+each link sits on. mergeable, which predicts the conflict before the fetch.
+fetch.ref, which git fetch takes as it stands. And the commit message body. path
+is the way in for "does somebody already work on this file" and for "has anybody
+attempted this before". The earlier attempt comes back whatever its name was.
+You read the diff itself in a checkout: fetch.ref gets you there, and files says
+how much of the file list to carry. An empty answer says whether it means an
+absence, since a private change is invisible to an anonymous read. The issue
+itself is typo3_forge_lookup. This tool reads only: you review, vote and upload
+yourself. Answers from: network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 
@@ -36,136 +36,134 @@ Takes
 
 .. code-block:: yaml
 
-    # Forge issue number, with or without the leading #, for example "105403".
+    # Forge issue number, with or without the # in front, for example "105403".
     # Searches every change whose commit message names it, which is where Resolves:
     # and Related: put it. Not with change, commit, query, path or backlog.
     issue: string  # optional
-    # One change to read, by the Change-Id its commit message carries, for example
-    # "I0f4c5b9a3e2d1c7b8a6f5e4d3c2b1a0f9e8d7c6b", or by the change number a review
-    # URL ends with, for example "89011". Prefer the Change-Id where the commit is
-    # in front of you. It is part of the patch, it survives an amend, and it cannot
-    # be mistaken for the Forge issue number the way a bare change number can. Not
-    # with issue, commit, query, path or backlog.
+    # One change to read, by the Change-Id its commit message carries or by the
+    # change number a review URL ends with. For example
+    # "I0f4c5b9a3e2d1c7b8a6f5e4d3c2b1a0f9e8d7c6b" or "89011". Prefer the Change-Id
+    # where the commit is in front of you. It is part of the patch and it survives
+    # an amend. A bare change number looks like a Forge issue number, and a
+    # Change-Id cannot. Not with issue, commit, query, path or backlog.
     change: string  # optional
     # A commit hash out of a checkout, abbreviated as git log prints it or whole,
     # for example "cf227b18e20". Answers the change that commit is a patch set of,
-    # with the changes sharing its Change-Id. That is how a hash in your own history
-    # reaches the backports beside it and the branches each targets. Pass a hash
-    # here rather than as change: the review server answers "Invalid change format"
-    # to it there, which arrives as the server not answering at all. Not with issue,
-    # change, query, path or backlog.
+    # with the changes that share its Change-Id. That is how a hash in your own
+    # history reaches the backports beside it and the branches each targets. Pass a
+    # hash here rather than as change. There the review server answers "Invalid
+    # change format" to it, which arrives as a server that does not answer at all.
+    # Not with issue, change, query, path or backlog.
     commit: string  # optional
     # Words to search the review server for, for example "impexp translation". Every
-    # word has to appear, matched against the commit message — subject and body,
-    # so a change whose subject lacks the word is still found. They are not matched
-    # against the diff: change 89000 added writePagesOrder and a search for that
-    # name answers nothing, so a zero says no commit message names the word. Ask
-    # again in the words a commit message would use, or pass path for the changes
-    # touching a file whatever they are called. Combine with path to narrow one by
-    # the other, and with open for what is still under review. Not with issue,
-    # change, commit or backlog.
+    # word has to appear. The search matches the commit message, subject and body,
+    # so it finds a change whose subject lacks the word. It does not match the diff:
+    # change 89000 added writePagesOrder and a search for that name answers nothing.
+    # So a zero says no commit message names the word. Ask again in the words a
+    # commit message uses, or pass path for the changes that touch a file, whatever
+    # their names. Combine with path to narrow one by the other, and with open for
+    # what is still under review. Not with issue, change, commit or backlog.
     query: string  # optional
     # A path in the repository, for example "typo3/sysext/impexp" or
-    # "typo3/sysext/impexp/Classes/Import.php". Answers the changes touching it, the
-    # path itself and everything under it. With open it asks whether somebody is
-    # working on a file now, before a patch is written for it. Without open it
-    # reaches the abandoned and merged changes too, where an earlier attempt at the
-    # same fix is found. Combine with query to narrow one by the other. Not with
-    # issue, change, commit or backlog.
+    # "typo3/sysext/impexp/Classes/Import.php". Answers the changes that touch it,
+    # the path itself and everything under it. With open it asks whether somebody
+    # works on a file now, before you write a patch for it. Without open it reaches
+    # the abandoned and merged changes too, where an earlier attempt at the same fix
+    # sits. Combine with query to narrow one by the other. Not with issue, change,
+    # commit or backlog.
     path: string  # optional
     # Narrow a search to the changes still under review. False, the default, reaches
     # every state, which "has anybody ever tried this" needs, since an abandoned or
-    # merged attempt answers it. True is "who is working on this now". Narrows query
-    # and path, and is ignored by issue, change and commit.
+    # merged attempt answers it. True is "who works on this now". Narrows query and
+    # path; issue, change and commit ignore it.
     open: boolean  # optional
     # One of: auto, none, stat, full. How much of the file list a change read by
-    # name carries. "auto", the default, prints a line per file up to 40 of them and
-    # a count with the top-level directories beyond that — 40 being the ninetieth
-    # percentile of an open core change, so an ordinary patch keeps its list and a
-    # refactoring of 137 files does not spend the answer on one. "stat" is that
-    # count whatever the size, "full" the whole list whatever the size, and "none"
-    # leaves it out, which is what a caller who has the fetch ref and is about to
-    # run git diff wants. The hunks are in none of them: reading content is what the
-    # ref is for. Narrows change and commit, and is ignored by every other way in.
+    # name carries. "auto", the default, prints a line per file up to 40 of them,
+    # and beyond that a count with the top-level directories. 40 is the ninetieth
+    # percentile of an open core change. So an ordinary patch keeps its list, and a
+    # refactor of 137 files does not spend the answer on one. "stat" is that count
+    # whatever the size, and "full" the whole list whatever the size. "none" leaves
+    # it out, which is what a caller with the fetch ref in hand and git diff next
+    # wants. The hunks are in none of them: the ref is what reads content. Narrows
+    # change and commit; every other way in ignores it.
     files: string  # optional
     # One of: none, people, all. The review log of a change: every message its patch
     # sets and its reviewers left. Ask for it to find out why a vote is gone. Gerrit
     # writes "Outdated Votes: * Code-Review+1 (copy condition: ...)" into the
-    # message of the upload that dropped it, and the labels afterwards look like a
+    # message of the upload that dropped it. The labels afterwards look like a
     # change nobody has voted on. "none" leaves it out and is the default, since it
     # is 57.9 KB against 14.3 KB on a change with 21 patch sets. "people" drops what
     # a service user wrote — 20 of 46 messages on that change, every one a CI
-    # pipeline report. "all" keeps them. How many were dropped, and whether the
-    # current patch set carries git conflict markers, is answered whichever you ask
-    # for. Narrows change and commit, and is ignored by every other way in.
+    # pipeline report. "all" keeps them. The answer says how many it dropped, and
+    # whether the current patch set carries git conflict markers, whichever you ask
+    # for. Narrows change and commit; every other way in ignores it.
     messages: string  # optional
     # One of: oldest, stale. Enumerate the open changes of the TYPO3 core instead of
-    # reading one or matching words. "oldest" orders them by when they were pushed,
-    # "stale" by how long nobody has touched them. Pushed long ago is about the
-    # patch, untouched for months about the attention it got, and a change that is
-    # both is what a review session is looking for. The filters beside it are what
-    # "small", "has votes" and "still applies" mean: maxSize, minCodeReview,
-    # negativeVotes and mergeable. The changes their own authors marked work in
-    # progress are left out, since a draft is not offered for review; query says so.
-    # maxSize, minCodeReview, negativeVotes, mergeable, branch, updatedBefore,
-    # owner, reviewedBy, involving and reviewableBy narrow this way in and no other.
-    # Not with issue, change, commit, query or path.
+    # a read of one or a match of words. "oldest" orders them by push date, "stale"
+    # by how long nobody has touched them. Pushed long ago is about the patch,
+    # untouched for months about the attention it got. A change that is both is what
+    # a review session looks for. The filters beside it are what "small", "has
+    # votes" and "still applies" mean: maxSize, minCodeReview, negativeVotes and
+    # mergeable. The answer leaves out the changes their own authors marked work in
+    # progress, since a draft is not up for review; query says so. maxSize,
+    # minCodeReview, negativeVotes, mergeable, branch, updatedBefore, owner,
+    # reviewedBy, involving and reviewableBy narrow this way in and no other. Not
+    # with issue, change, commit, query or path.
     backlog: string  # optional
     # Only changes whose insertions and deletions add up to at most this, for
     # example 60. That is what "small in scope" comes to, and it decides whether a
     # review fits into a session at all.
     maxSize: integer  # optional
-    # Only changes somebody holds at least this Code-Review vote on: 1 for a change
-    # a reviewer has been through once, 2 for one that is approved. With
-    # negativeVotes false this is "almost ready": somebody is for it and nobody
-    # against.
+    # Only changes somebody holds at least this Code-Review vote on. 1 is a change a
+    # reviewer has been through once, 2 is one with approval. With negativeVotes
+    # false this is "almost ready": somebody is for it and nobody against.
     minCodeReview: integer  # optional
-    # Whether changes carrying a Code-Review-1 or a Verified-1 are in the answer.
-    # True, the default, keeps them. False drops both — a reviewer objecting and a
-    # pipeline failing, the two reasons a change is not one to pick up now.
+    # Whether changes that carry a Code-Review-1 or a Verified-1 are in the answer.
+    # True, the default, keeps them. False drops both — a reviewer who objects and
+    # a pipeline that fails, the two reasons a change is not one to pick up now.
     negativeVotes: boolean  # optional
     # True answers only the changes that still merge into their target branch. It is
-    # the review server's own last computation and not a merge run now, so it says
-    # which changes are worth fetching rather than promising one will apply. False,
-    # the default, keeps every change; the ones that no longer merge are usually the
-    # oldest, which makes an unfiltered "oldest first" page a list of conflicts.
+    # the review server's own last computation and not a merge run now. So it says
+    # which changes are worth a fetch and promises nothing about whether one
+    # applies. False, the default, keeps every change. The ones that no longer merge
+    # are usually the oldest, which makes an unfiltered "oldest first" page a list
+    # of conflicts.
     mergeable: boolean  # optional
-    # Only changes targeting this branch, spelled as the branch is: "main", "13.4".
-    # Worth setting when the checkout in front of you is on one line, since a patch
-    # for another branch is reviewed against code you do not have.
+    # Only changes that target this branch, spelled as the branch is: "main",
+    # "13.4". Set it when the checkout in front of you is on one line. You read a
+    # patch for another branch against code you do not have.
     branch: string  # optional
     # Only changes nobody has touched since this day, as YYYY-MM-DD. It finds the
-    # review everybody has walked past, which age alone does not: a change pushed in
-    # 2023 and commented on last week is being worked. It reads the last update and
-    # never the push date — the review server indexes no created date, which is
-    # also why backlog "oldest" is ordered here.
+    # review everybody has walked past, which age alone does not. A change pushed in
+    # 2023 and commented on last week is in work. It reads the last update and never
+    # the push date. The review server indexes no created date, which is also why
+    # this server orders backlog "oldest" itself.
     updatedBefore: string  # optional
     # Only changes this person pushed, by name or e-mail address: "Benjamin Kott",
     # "benjamin.kott@outlook.com", or part of either. This answers "which open
-    # changes are mine", which query cannot: it matches the commit message, and a
-    # name there is as often somebody else writing it. The review server resolves
+    # changes are mine", which query cannot. query matches the commit message, and a
+    # name there is as often somebody else who wrote it. The review server resolves
     # the name; a name it does not know answers no changes, which looks exactly like
     # a person with none.
     owner: string  # optional
     # Only changes this person has voted on, resolved the same way as owner. The
-    # other half of a person and a different question: what somebody pushed is
-    # theirs to finish, what they voted on is theirs to have judged already.
+    # other half of a person and a different question. What somebody pushed is
+    # theirs to finish; what they voted on is theirs to have judged already.
     reviewedBy: string  # optional
     # Only changes this person is on either side of — pushed or voted on, as one
-    # set. Passed instead of owner and reviewedBy, not beside them: those two
+    # set. Pass it instead of owner and reviewedBy, not beside them: those two
     # together mean pushed AND voted on, a set nobody wants.
     involving: string  # optional
     # Only changes this person neither pushed nor has voted on, named the same way
     # as owner. That is "which of these could I review": everybody else's open work
-    # minus what I have already judged. The three filters above cannot be combined
-    # into it, since each of them selects. It reads no permissions: what is taken
-    # out is this person's own changes and votes. It composes with the three that
-    # select: owner with this one is what somebody else could review of a third
-    # person's queue. The same name here and on involving answers nothing. A name
-    # the review server cannot place takes nothing out and answers the whole
-    # backlog, the opposite of what a misspelling does to owner. Check it against a
-    # change of theirs before reading a wide answer as "nothing of theirs is in
-    # here".
+    # minus what I have already judged. You cannot combine the three filters above
+    # into it, since each of them selects. It reads no permissions: it takes out
+    # this person's own changes and votes. It composes with the three that select:
+    # owner with this one is what somebody else could review of a third person's
+    # queue. The same name here and on involving answers nothing. A name the review
+    # server cannot place takes nothing out and answers the whole backlog, the
+    # opposite of what a misspelt name does to owner. Check it against a change of
+    # theirs before you read a wide answer as "nothing of theirs is in here".
     reviewableBy: string  # optional
     # How many changes come back from a search or the backlog. A change read by name
     # is one answer whatever this says.
@@ -183,88 +181,87 @@ Answers with
     status: string
     # The review server the answer came from.
     source: string
-    # The Gerrit query this was answered with, so the same question can be asked
-    # again by hand.
+    # The Gerrit query that answered this, so you can ask the same question again by
+    # hand.
     query: string
     # The changes that matched, newest activity first — oldest or longest
     # untouched first where backlog asked for an enumeration. A change named by
-    # change or commit comes with the changes sharing its Change-Id, which is how a
-    # backport on a release branch is reached.
+    # change or commit comes with the changes that share its Change-Id. That is how
+    # you reach a backport on a release branch.
     changes:
       - # Change number, the digits its review URL ends with.
         number: integer  # optional
         # The Change-Id its commit message carries, empty where the server named
         # none. It survives an amend and a rebase onto another branch, so it is what
-        # to hold the commit in front of you against. Changes sharing one are the
-        # same patch on more than one branch, which passing it back as change reads
-        # all of.
+        # to hold the commit in front of you against. Changes that share one are the
+        # same patch on more than one branch, and change with this id reads all of
+        # them.
         changeId: string  # optional
         subject: string  # optional
         # The commit message of the current patch set, whole: the subject, the body
         # and every trailer. It is the change's own account of itself and what
-        # typo3_commit_message_guide takes as its argument; holding the subject
-        # alone is what makes a trailer uncheckable. Null means it was not read,
+        # typo3_commit_message_guide takes as its argument. A caller with the
+        # subject alone cannot check a trailer. Null means the call did not read it,
         # which is a search by words or by path. An issue search reads it to decide
         # which hits name the issue and answers null all the same.
         message: string or null  # optional
-        # NEW while it is open, MERGED once it landed, ABANDONED when it was given
-        # up.
+        # NEW while it is open, MERGED once it landed, ABANDONED once somebody gave
+        # it up.
         status: string  # optional
         # The branch the change targets.
         branch: string  # optional
-        # The patch set that is current on the server, counting from 1. Zero where
+        # The patch set that is current on the server, counted from 1. Zero where
         # the server named none.
         patchSet: integer  # optional
         # The commit the current patch set is. A checkout whose HEAD is another
         # commit is not the revision under review.
         commit: string  # optional
-        # The Gerrit project it was pushed to.
+        # The Gerrit project the push went to.
         project: string  # optional
         # When the change last moved.
         updated: string  # optional
-        # When it was pushed, which says how long it has been waiting. A change
-        # pushed years ago and touched last week is being worked on; one where the
-        # two dates are far apart is not.
+        # The push date, which says how long the change has waited. A change pushed
+        # years ago and touched last week is in work; one where the two dates are
+        # far apart is not.
         created: string  # optional
         # Lines the current patch set adds. Null where the review server stated
-        # none. With deletions this is the size a reviewer picks a change by, and it
-        # is the diff of the whole change rather than of what is left to read.
+        # none. With deletions this is the size a reviewer picks a change by. It is
+        # the diff of the whole change rather than of what remains to read.
         insertions: integer or null  # optional
         # Lines the current patch set removes. Null where the review server stated
         # none.
         deletions: integer or null  # optional
         # Every path the current patch set touches, sorted by path, with what the
         # patch does to each. It is the changed paths a review establishes first and
-        # the argument typo3_hint_lookup and typo3_test_run_guide take, so a change
-        # is triaged without being fetched. The diff is not here: the hunks are what
-        # a fetch is for. A path this list calls renamed can be one a reading of the
-        # hunks would call rewritten. Null means the paths were not read, which is a
-        # search and an issue search; an empty list would be a patch set touching
+        # the argument typo3_hint_lookup and typo3_test_run_guide take, so you
+        # triage a change without a fetch. The diff is not here: the hunks are what
+        # a fetch is for. A path this list calls renamed can be one a read of the
+        # hunks calls rewritten. Null means the call did not read the paths, which
+        # is a search and an issue search. An empty list is a patch set that touches
         # nothing.
         files: array or null  # optional
         # Whether the current patch set still merges into its target branch. It is
-        # the review server's own last computation and not a merge run now, so false
-        # is grounds to expect a rebase rather than a finding. Null where it
-        # computed none, which is not "it does not merge".
+        # the review server's own last computation and not a merge run now. So false
+        # says to expect a rebase and proves nothing. Null where it computed none,
+        # which is not "it does not merge".
         mergeable: boolean or null  # optional
-        # The files Gerrit reported git conflicts in when the current patch set was
-        # created, so the markers are committed lines in them. The patch is broken
-        # rather than merely unreviewed, and nothing else in this answer says so. A
-        # change created with the web Cherry pick action or rebased through it can
-        # land this way. Its status, votes, comment count and subject all read as a
-        # fresh patch set. Empty means the current patch set carries none; a report
-        # on an earlier one is history and is not here. Null means the review log
-        # was not read, which is a search and an enumeration.
+        # The files Gerrit reported git conflicts in at the creation of the current
+        # patch set, so the markers sit in committed lines there. The patch is
+        # broken rather than merely unreviewed, and nothing else in this answer says
+        # so. A change created with the web Cherry pick action or rebased through it
+        # can land this way. Its status, votes, comment count and subject all read
+        # as a fresh patch set. Empty means the current patch set carries none; a
+        # report on an earlier one is history and is not here. Null means the call
+        # did not read the review log, which is a search and an enumeration.
         conflicts: array or null  # optional
-        # The change and patch set this one was cherry-picked from, null where it
-        # was pushed rather than cherry-picked. It is provenance and not a warning:
-        # most backports are cherry-picks and almost none of them conflicted, so
-        # what says a patch set is broken is conflicts beside it.
+        # The change and patch set this one is a cherry-pick of, null where somebody
+        # pushed it rather than cherry-picked it. It is provenance and no alarm.
+        # Most backports are cherry-picks and almost none of them conflicted, so
+        # conflicts beside it is what says a patch set is broken.
         cherryPickOf:  # optional
-          # The change number it was picked from, which reads it by being passed
-          # back as change.
+          # The change number the pick came from; pass it back as change to read it.
           change: integer
-          # The patch set of that change it was picked from, which is not
+          # The patch set of that change the pick came from, which is not
           # necessarily the one that change stands at now.
           patchSet: integer
           # Where a person reads that change.
@@ -274,73 +271,76 @@ Answers with
         # How to get this patch set into a checkout. Null where the server named no
         # patch set, since a ref names one.
         fetch:  # optional
-          # The static ref this patch set is filed under. Every patch set keeps its
-          # own, so an earlier one stays fetchable after a newer is pushed.
+          # The static ref that names this patch set. Every patch set keeps its own,
+          # so an earlier one stays fetchable after a newer push.
           ref: string
           # What to fetch that ref from. It is the review server rather than origin:
           # a core clone fetches from the GitHub mirror, and refs/changes is not
           # there.
           remote: string
         # What the change stands at, one entry per label. The state of each label is
-        # on every row, since the review server states it unasked. The voters behind
-        # it are read for one change, so votes is null on a search and a list there.
+        # on every row, since the review server states it unasked. The call reads
+        # the voters behind it for one change, so votes is null on a search and a
+        # list there.
         labels: array or null  # optional
         # How many comments the change carries, which the review server states
-        # whether or not they were read.
+        # whether or not the call read them.
         commentCount: integer  # optional
         # How many of the threads those comments form are open, which the review
-        # server states whether or not the comments were read. It counts threads and
-        # not comments, so it is smaller than the number of comments carrying the
-        # flag wherever somebody replied. It is the flag as each thread's last
-        # writer left it rather than a count of unanswered questions. On a change to
-        # pick up it is the work still owed to the last reviewer.
+        # server states whether or not the call read them. It counts threads and not
+        # comments, so it is smaller than the number of comments with the flag
+        # wherever somebody replied. It is the flag as each thread's last writer
+        # left it rather than a count of unanswered questions. On a change to pick
+        # up it is the work still owed to the last reviewer.
         unresolvedCommentCount: integer  # optional
-        # The comments left on the change, oldest first, each saying which thread it
-        # is in and what that thread stands at. Empty means it carries none. Null
-        # means they were not read: a search asks for none, and a change lookup
+        # The comments on the change, oldest first, each with the thread it is in
+        # and what that thread stands at. Empty means it carries none. Null means
+        # the call did not read them. A search asks for none, and a change lookup
         # whose comment call did not answer says so here rather than with an empty
         # list. Hold it against commentCount.
         comments: array or null  # optional
         # The relation chain this change sits in, child first: the changes stacked
-        # on it, then itself, then the changes it is built on. This is the other
-        # relation and not the Change-Id one. A chain is different changes built on
-        # one another, a shared Change-Id is one patch on several branches, and
-        # reading the two as one set overstates both. Empty means the change stands
-        # alone, the ordinary case. Null means the chain was not read: a search asks
-        # for none, and a change lookup whose call did not answer says so here
-        # rather than with an empty list.
+        # on it, then itself, then the changes under it. This is the other relation
+        # and not the Change-Id one. A chain is different changes built on one
+        # another, and a shared Change-Id is one patch on several branches. A read
+        # of the two as one set overstates both. Empty means the change stands
+        # alone, the ordinary case. Null means the call did not read the chain. A
+        # search asks for none, and a change lookup whose call did not answer says
+        # so here rather than with an empty list.
         chain: array or null  # optional
         # The Forge issues this change's commit message names in its Resolves: and
         # Related: trailers, each filled with what says whether to read it. That is
         # the join between the patch and the tracker, and where a second issue
-        # nobody mentioned elsewhere is seen. Empty means the message names none.
-        # Null means the message was not read: a search asks for none of this, and
-        # reading one hit by name is what answers it.
+        # nobody mentioned elsewhere shows. Empty means the message names none. Null
+        # means the call did not read the message. A search asks for none of this,
+        # and a read of one hit by name answers it.
         issues: array or null  # optional
         # The branches this change's commit message names in its Releases: trailer,
         # spelled as the trailer spells them. It is the author's claim about which
-        # branches the patch belongs on, written before it went to any of them. What
-        # was pushed is the changes above sharing a Change-Id, one per branch and
-        # each with its own status. A branch named here with no change targeting it
-        # is a backport nobody has pushed. Empty means the message carries no such
-        # trailer, which every change outside the core project is. Null means the
-        # message was not read, which is a search by words or path.
+        # branches the patch belongs on, written before it went to any of them. The
+        # pushed half is the changes above that share a Change-Id, one per branch
+        # and each with its own status. A branch named here with no change that
+        # targets it is a backport nobody has pushed. Empty means the message
+        # carries no such trailer, which every change outside the core project is.
+        # Null means the call did not read the message, which is a search by words
+        # or path.
         releases: array or null  # optional
         # The review log, oldest first, where messages asked for it. Null otherwise,
         # which is the default and every hit a search answers.
         messages: array or null  # optional
         # How many of the log a service user wrote, which messages: "people" is what
-        # drops. Answered whichever way it was asked. A log full of pipeline reports
-        # answering zero here is Gerrit no longer tagging its service users rather
-        # than a change no bot has been near. Null where the log was not read.
+        # drops. Answered whichever value messages has. A log full of pipeline
+        # reports that answers zero here means Gerrit no longer tags its service
+        # users. It does not mean a change no bot has been near. Null where the call
+        # did not read the log.
         botMessageCount: integer or null  # optional
     # What the enumeration read, where backlog asked for one; null on every other
     # way in. The review server states no total for a query and offers no created
-    # date to sort by. So the matched set is read whole and ordered here, which is
-    # what these two numbers are about.
+    # date to sort by. So this server reads the matched set whole and orders it,
+    # which is what these two numbers are about.
     backlog:
-      # One of: oldest, stale. oldest: by when the change was pushed. stale: by when
-      # it last moved.
+      # One of: oldest, stale. oldest: by push date. stale: by when the change last
+      # moved.
       order: string
       # How many changes the filters matched and this answer sorted, of which
       # changes above carries at most limit. Where the two differ this is a page,
@@ -348,17 +348,16 @@ Answers with
       # limit.
       read: integer
       # Whether read is the whole matched set. False where the read stopped at the
-      # bound, and then the ordering is over one end of the set rather than all of
-      # it. Narrow the filters before reading the page as the oldest changes there
-      # are.
+      # bound, and then the order covers one end of the set rather than all of it.
+      # Narrow the filters before you read the page as the oldest changes there are.
       complete: boolean
     # The branches that take a patch today, from a list this server ships rather
-    # than from the review server, so it is answered whatever the status above says.
-    # It is what a Releases: trailer may name, and a core clone supplies it nowhere.
+    # than from the review server. So it answers whatever the status above says. It
+    # is what a Releases: trailer may name, and a core clone supplies it nowhere.
     # git branch -r reaches back to TYPO3_3-6 and says nothing about which of those
-    # is still maintained. Which of these lines a change belongs on is not here —
-    # that is the author's claim, and typo3_commit_message_guide with
-    # workflow="core" is what reads a trailer against them.
+    # is still maintained. Which of these lines a change belongs on is not here;
+    # that is the author's claim. typo3_commit_message_guide with workflow="core"
+    # reads a trailer against them.
     releaseLines:
       # Newest first, the development line at the head.
       branches:
@@ -366,21 +365,23 @@ Answers with
           # field of a change above does.
           branch: string
           # One of: development, maintained. development: the line every core change
-          # is written against first. maintained: in regular support, so a patch
-          # pushed here is released from this branch. A line out of regular support
-          # is not in this list at all — what it releases comes from the ELTS
-          # partners rather than from the branch.
+          # targets first. maintained: in regular support, so this branch releases a
+          # patch pushed here. A line out of regular support is not in this list at
+          # all. What it releases comes from the ELTS partners rather than from the
+          # branch.
           state: string
           # The day regular support ends, as the release calendar states it. Null on
           # the development line, which has no such date.
           maintainedUntil: string or null
-      # Where the calendar was read, so it can be read again rather than trusted.
+      # Where this server read the calendar, so you can read it again rather than
+      # trust it.
       source: string
-      # The day it was read. A branch released since is one this list could not
-      # carry, and a change above targeting a branch absent here is either that or a
-      # line out of regular support.
+      # The day of that read. This list cannot carry a branch released since. A
+      # change above that targets a branch absent here is either that or a line out
+      # of regular support.
       readAt: string
-    # Why nothing was answered, where status says unavailable. Null otherwise.
+    # Why the source answered nothing, where status says unavailable. Null
+    # otherwise.
     unavailable:
       # One of: source-not-answering, source-not-parseable. source-not-answering:
       # review.typo3.org did not answer this time, and the same call may answer the
@@ -388,8 +389,8 @@ Answers with
       # API, which is what a proxy or a captive portal looks like from here.
       cause: string
       reason: string
-    # Why an empty answer cannot be read as an absence, or null where it can. This
-    # server reads the review server without credentials, so a change that is
+    # Why an empty answer does not mean an absence, or null where it does. This
+    # server reads the review server without credentials. So a change that is
     # private or work in progress is invisible to it and looks exactly like one
     # nobody pushed. Null means empty really does mean nothing matched.
     indistinguishable: string or null

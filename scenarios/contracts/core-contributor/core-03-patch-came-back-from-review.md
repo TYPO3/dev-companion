@@ -21,15 +21,16 @@
 
 - What each rule is: subject length, keyword, the capitalisation after it, the
   body, which trailers belong there and in which order.
-- That an existing `Change-Id` is kept, because this is an amend and not a new
+- That the `Change-Id` that exists stays, because this is an amend and not a new
   change.
 - The local Gerrit steps for a second patch set.
 
 **What has to come out of it**
 
-- Every defect in the message is named, corrected, and the corrected message is
-  ready to commit — the subject shortened, the body written to say what changed
-  and why rather than "this fixes the issue", the trailers in the right order.
+- The answer names and corrects every defect in the message, and the corrected
+  message is ready to commit. The subject is shorter, the body says what changed
+  and why rather than "this fixes the issue", the trailers are in the right
+  order.
 - The `Change-Id` survives.
 - `git commit --amend` and the push refspec are the steps offered, not a new
   commit.

@@ -15,10 +15,10 @@
 - The canonical markup of the component, its variants and its custom-property
   contract, instead of a class name invented from what the DOM looked like.
 - An icon identifier that is actually registered — the shape, not the intent.
-- Whether a label for that wording already exists before a new key is invented,
-  and the domain the XLF file resolves to.
-- The backend CSS rules: where the source lives, what may be written there, and
-  what the build does.
+- Whether a label for that wording already exists before the agent invents a new
+  key, and the domain the XLF file resolves to.
+- The backend CSS rules: where the source lives, what may go there, and what the
+  build does.
 - The suites that can fail on a Sass-and-Fluid change, which is not the PHP
   ones.
 
@@ -27,10 +27,10 @@
 - Markup and class names come from the component catalog, and where the catalog
   has no such component the answer says so instead of inventing one.
 - The icon identifier is one the installation has registered.
-- An existing label is reused where one exists; a new key follows the naming of
-  the file it goes into, and the domain reference is the computed one.
-- The revision the catalog answers for is stated where the caller works on
-  anything but that revision.
+- The agent reuses a label where one exists. A new key follows the naming of the
+  file it goes into, and the domain reference is the computed one.
+- The answer states the revision the catalog answers for where the caller works
+  on anything but that revision.
 
 **How it fails**
 

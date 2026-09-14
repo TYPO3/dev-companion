@@ -9,11 +9,11 @@
 > then take me through pushing it for review.
 
 This is the case `D-SCO-002` names as its own cost. The words that select the
-submission intent — "push", "review" — describe maintenance anywhere, so the
+submission intent, "push", "review", describe maintenance anywhere. So the
 intent needs positive evidence of core work and this text carries none. The
 contributor is in a core checkout all the same, and the submission rules reach
-them as a conditional match rather than as fact. What is held here is that the
-condition stays cheap to answer.
+them as a conditional match rather than as fact. What the test holds here is
+that the condition stays cheap to answer.
 
 **What the agent needs from this server**
 
@@ -27,8 +27,8 @@ condition stays cheap to answer.
 **What has to come out of it**
 
 - Both submission steps arrive whole — one commit amended rather than a second
-  one, and the `refs/for/` refspec with the `Change-Id` kept. Neither is dropped
-  for want of evidence.
+  one, and the `refs/for/` refspec with the `Change-Id` kept. Neither goes for
+  want of evidence.
 - The condition each carries is one the contributor settles from their own
   intent, without a lookup and without reading the rest of the answer.
 - The rest of the brief is the core's own: the target branch, the issue context,

@@ -8,8 +8,8 @@ like is the thin part `R-KNW-001` names and is not guarded
 **Read 2026-09-02:** `R-KNW-001` is `held`, and
 `bin/cli hints:probe "upgrade wizard for a deprecated api"` still reaches
 `upgrade-wizards` through the curated vocabulary, behind `deprecated-apis` and
-`installation-upgrade`. So the thin part has a hint to reach. That a session
-writes the wizard is unguarded as before.
+`installation-upgrade`. So the thin part has a hint to reach. Nothing guards
+that a session writes the wizard, as before.
 
 > `\TYPO3\CMS\Core\Utility\GeneralUtility::getUrl()` should go away in favour of
 > the request factory. Deprecate it properly for the next major, including
@@ -26,9 +26,8 @@ writes the wizard is unguarded as before.
 
 **What has to come out of it**
 
-- The deprecation checklist is complete, and the parts that are branch-specific
-  are given as a procedure to run in the checkout rather than a list from one
-  revision.
+- The deprecation checklist is complete. The branch-specific parts arrive as a
+  procedure to run in the checkout rather than a list from one revision.
 - The commit message carries the deprecation shape and the right release line.
 - Where the answer for `Classes/Updates/` is thin, the agent says so instead of
   inventing the conventions of an upgrade wizard.

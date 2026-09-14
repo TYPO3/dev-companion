@@ -12,8 +12,8 @@
 
 **What the agent needs from this server**
 
-- The conventions that apply to `typo3/sysext/core/Classes/DataHandling/` —
-  persistence, hooks and events, what a patch there is judged by.
+- The conventions that apply to `typo3/sysext/core/Classes/DataHandling/`:
+  persistence, hooks and events, what a reviewer judges a patch there by.
 - Which test suite can actually fail on that path, and the targeted invocation
   rather than the whole functional run.
 - The commit message, including the keyword, the issue trailer and the release
@@ -23,15 +23,15 @@
 
 **What has to come out of it**
 
-- The checklist it works off is a core checklist, and it says which parts the
-  agent has to establish in the checkout itself rather than pretending to know
-  them — the changed files, the covering test, the branch.
-- The recommended test command is targeted at the DataHandler tests, not four
-  full suites.
+- The checklist it works off is a core checklist. It says which parts the agent
+  has to establish in the checkout itself rather than pretend to know them: the
+  changed files, the test that covers, the branch.
+- The recommended test command targets the DataHandler tests, not four full
+  suites.
 - The commit message is a valid TYPO3 core message and the checks reported on it
-  describe the draft that was returned.
-- Backporting is described as the merging core team member's job for a patch
-  that targets `main`.
+  describe the draft that came back.
+- The answer describes a backport as the job of the core team member who merges,
+  for a patch that targets `main`.
 
 **How it fails**
 

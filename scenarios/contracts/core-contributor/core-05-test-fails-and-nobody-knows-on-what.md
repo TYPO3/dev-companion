@@ -21,8 +21,8 @@
 
 - Runnable commands, targeted at the failing test, with the option that pins the
   database vendor and the one that pins the PHP version.
-- The difference between the unit, functional and acceptance suites is stated
-  where it matters for the diagnosis.
+- The answer states the difference between the unit, functional and acceptance
+  suites where it matters for the diagnosis.
 
 **How it fails**
 

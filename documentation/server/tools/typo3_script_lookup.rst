@@ -50,7 +50,7 @@ Answers with
         uri: string
         # Heading of the matched section.
         heading: string
-        # The section as written, formatting included.
+        # The section as the file has it, format included.
         body: string
         # The TYPO3 majors this section holds for, in words. Empty means every
         # covered major, which is what a section that declares nothing says.

@@ -143,7 +143,7 @@ Answers with
     # unless the call asked for it, and availableHintsWithheld says how many were
     # left out.
     availableHints:
-      - # Ask for this hint outright by passing it as id.
+      - # Pass this as id to ask for the hint outright.
         id: string
         title: string
         # PHP, TypeScript, JavaScript, CSS, or General.

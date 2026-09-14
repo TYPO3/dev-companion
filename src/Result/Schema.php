@@ -242,7 +242,7 @@ final class Schema
             'title' => self::string('Title of the knowledge document.'),
             'uri' => self::string('The typo3://guides resource that holds the full document.'),
             'heading' => self::string('Heading of the matched section.'),
-            'body' => self::string('The section as written, formatting included.'),
+            'body' => self::string('The section as the file has it, format included.'),
             'versions' => self::string('The TYPO3 majors this section holds for, in words. Empty means every covered major, which is what a section that declares nothing says.'),
             'coverage' => ['type' => 'number', 'description' => 'Share of the query terms the section covers, 0 to 1. '
                 . 'Zero where no search ranked this record, which is a page the caller named by documentId.'],
@@ -301,7 +301,7 @@ final class Schema
     public static function hintReference(): array
     {
         return self::object([
-            'id' => self::string('Ask for this hint outright by passing it as id.'),
+            'id' => self::string('Pass this as id to ask for the hint outright.'),
             'title' => self::string(),
             'category' => self::string('PHP, TypeScript, JavaScript, CSS, or General.'),
         ], ['id', 'title', 'category']);

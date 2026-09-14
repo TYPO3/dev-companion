@@ -37,14 +37,14 @@ Takes
     # The files the task is about, as they are in the repository they belong to.
     # Pass them where the work touches more than one place. The answer places each
     # on its own, so a core path and an extension path in one call get two verdicts.
-    # An extension key counts as a path. A subsystem no path can be named for
-    # belongs in task, because every entry here is answered as a file.
+    # An extension key counts as a path. A subsystem with no path to name belongs in
+    # task, because the answer reads every entry here as a file.
     paths: [string]  # optional
-    # The TYPO3 version this task is for, for example "13.4" or "14". Conventions
-    # that do not hold there are left out, including those the repository needs for
-    # another major it declares. Defaults to every major this repository declares
-    # typo3/cms-core for, or to the installation this server was started in where
-    # there is no declaration.
+    # The TYPO3 version this task is for, for example "13.4" or "14". The answer
+    # leaves out conventions that do not hold there, those the repository needs for
+    # another major it declares included. Defaults to every major this repository
+    # declares typo3/cms-core for, or to the installation this server started in
+    # where there is no declaration.
     targetVersion: string  # optional
     # One of: bugfix, feature, cleanup, test, documentation, deprecation, audit,
     # triage, operations, diagnosis, unknown. What kind of change the task is. Four
@@ -58,7 +58,7 @@ Takes
     # reported defect needs, before anybody has agreed what to change. A review of a
     # report against code, a review of a diff and the reason something is broken are
     # three briefs and not one. A task that describes any of the four gets that
-    # shape without stating the type.
+    # shape without the type stated.
     changeType: string  # optional
 
 Answers with
@@ -67,11 +67,11 @@ Answers with
 .. code-block:: yaml
 
     task: string
-    # The paths this brief was composed for. Empty where the call named none.
+    # The paths this brief is for. Empty where the call named none.
     paths: [string]  # optional
     # Which kind of work each path is. Where every path is outside the core, the
-    # core checks, the core-only checklist items and the submission route are left
-    # out of the whole brief.
+    # whole brief leaves out the core checks, the core-only checklist items and the
+    # submission route.
     scopes:  # optional
       - path: string
         # One of: core, uncertain, project, extension. Which kind of work this
@@ -82,14 +82,14 @@ Answers with
         scope: string
     changeType: string
     # The TYPO3 major this repository runs — stated by the caller, or read from
-    # the installation. Null means nothing was filtered by version. Where the
+    # the installation. Null means no version filtered anything. Where the
     # repository serves several majors, targetVersions is what the answer holds for.
     targetVersion: integer or null  # optional
     # Every TYPO3 major the answer holds for. One entry is the ordinary case.
     # Several mean this repository declares typo3/cms-core for more than one of
     # them, so the answer keeps a statement that holds on any. Where two statements
     # about the same subject differ, the difference is the constraint the code lives
-    # under rather than drift. Empty when nothing was filtered by version.
+    # under rather than drift. Empty when no version filtered anything.
     targetVersions: [integer]  # optional
     domains: [string]
     # One of: core, uncertain, project, extension. Which kind of work the call as a
@@ -108,7 +108,7 @@ Answers with
         # When a weakly matched intent applies. Empty for a strong match.
         condition: string
     # Which of the skills above this project holds an older copy of, read from what
-    # is published there against what this server would write now. Empty where every
+    # stands published there against what this server writes now. Empty where every
     # named copy is current, where this server never installed into this project,
     # and where skills names none. So it is a subset of skills and never a statement
     # that one is missing. What to do about it is one command, typo3-dev-companion
@@ -117,14 +117,14 @@ Answers with
     # The task skills that own the recognized work, named so that a caller who
     # reached this server without one can load it. A skill is a file in your own
     # project rather than something this server can see. So a name here is not a
-    # promise that it is installed. A review, a triage, a boot and a diagnosis name
-    # only the workflows that change nothing either. intents still recognizes the
-    # kind of change under review, and the workflow that writes one is not the one
-    # you are in. Empty means no published skill owns what was recognized, which is
-    # not a statement that the work has no workflow.
+    # promise that the project holds it. A review, a triage, a boot and a diagnosis
+    # name only the workflows that change nothing either. intents still recognizes
+    # the kind of change under review, and the workflow that writes one is not the
+    # one you are in. Empty means no published skill owns what the brief recognized,
+    # which is not a statement that the work has no workflow.
     skills: [string]
-    # The whole procedures this work is written up in or owes, the same corpus
-    # typo3_project_describe lists at orientation and this server serves as
+    # The whole procedures that write this work up or that it owes. They are the
+    # corpus typo3_project_describe lists at orientation and this server serves as
     # typo3://guides resources. Owes is the second half and the one a task text
     # never asks for. A change that ends in a backend UI owes the browser check
     # whether or not it says so. Named rather than carried: a brief is one call
@@ -147,11 +147,11 @@ Answers with
         tool: string
     # What typo3_hint_lookup answers for these paths, quoted whole and carried here
     # — the strongest few per group of paths, not everything it holds on them. A
-    # hint declaring a different kind of repository from the paths given ranks below
-    # the ones that bind them. A rule taken from one of these belongs to that
+    # hint that declares a different kind of repository from the paths given ranks
+    # below the ones that bind them. A rule taken from one of these belongs to that
     # lookup. So a report that cites it names typo3_hint_lookup, and a caller who
-    # needs more of the subject calls it directly. What was left is named in
-    # omittedHints.
+    # needs more of the subject calls it directly. omittedHints names what the brief
+    # left out.
     hints:
       - id: string
         title: string
@@ -190,12 +190,12 @@ Answers with
             scope: string or null
     # What typo3_hint_lookup also holds for these paths and this brief did not
     # carry, named rather than counted. A hint declared for another kind of
-    # repository is here for that reason rather than for having matched weakly.
-    # Empty means what it carries is everything that matched. A subject listed here
-    # and not in hints is one the brief did not reach. It is the gap the pointer to
-    # that lookup stands for.
+    # repository is here for that reason rather than for a weak match. Empty means
+    # what it carries is everything that matched. A subject listed here and not in
+    # hints is one the brief did not reach. It is the gap the pointer to that lookup
+    # stands for.
     omittedHints:
-      - # Ask for this hint outright by passing it as id.
+      - # Pass this as id to ask for the hint outright.
         id: string
         title: string
         # PHP, TypeScript, JavaScript, CSS, or General.
@@ -209,7 +209,7 @@ Answers with
         uri: string
         # Heading of the matched section.
         heading: string
-        # The section as written, formatting included.
+        # The section as the file has it, format included.
         body: string
         # The TYPO3 majors this section holds for, in words. Empty means every
         # covered major, which is what a section that declares nothing says.
@@ -224,9 +224,9 @@ Answers with
         truncated: boolean
     # Commands to run, ready to execute from the core root. They are the base suites
     # of the domains above, which run whatever the task turns out to be, plus the
-    # ones the recognized work names. This is the list to run. testSuites is a
-    # second narrowing of the same corpus, and a suite named there and not here is
-    # one to decide about.
+    # ones the recognized work names. This is the list to run. testSuites narrows
+    # the same corpus a second way, and a suite named there and not here is one to
+    # decide about.
     checks: [string]
     # Checks that only apply if the task really is the kind of work a weakly matched
     # intent suggests.
@@ -238,7 +238,7 @@ Answers with
     # at most. A selection to pick a targeted run from rather than a list to run.
     # What the task owes in any case is checks above, and neither list holds the
     # other. typo3_test_run_guide called with these paths returns the whole list
-    # these were ranked out of.
+    # these come out of.
     testSuites:  # optional
       - suite: string
         # Full command, run from the core root.
@@ -265,7 +265,7 @@ Answers with
         # The TYPO3 majors whose runTests.sh has this suite, where that is not all
         # of them. Null means every covered version.
         versions: string or null
-    # What a suite can take with it, and what to do before starting one. Present
+    # What a suite can take with it, and what to do before you start one. Present
     # where testSuites is, because this is the answer that hands over the command;
     # empty where no suite matched. typo3_test_run_guide carries the same sentence.
     beforeYouRun: string

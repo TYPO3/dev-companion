@@ -1,11 +1,9 @@
 # Catalog — the curated indexes and where their contract comes from
 
 The component index, the worked examples and what `bin/cli catalog:check` derives
-from the covered checkouts. A curated index rots silently, so each entry says
-what is machine-checked and what is a judgement.
+from the covered checkouts. A curated index rots in silence, so each entry says what a machine checks and what is a judgement.
 
-See [the decisions readme](../readme.md) for how an entry is written and when
-one is added.
+See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-CAT-010`][D-CAT-010] — The catalog scope is kept and the miss carries its own re-check · 2026-09-02
 - [`D-CAT-008`][D-CAT-008] — A component entry's classes carry a derived position and range · 2026-08-24

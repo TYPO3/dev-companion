@@ -105,8 +105,8 @@ at all in the state the machine is in.
         :label: List
         :action: Open reference
 
-        List improvement feedback recorded via typo3_feedback_record, newest
-        first, so they can be worked off.
+        List the feedback typo3_feedback_record recorded, newest first, so a
+        session can work them off.
 
     .. card:: :doc:`typo3_feedback_record <typo3_feedback_record>`
         :label: Record

@@ -3,11 +3,11 @@
 ``typo3_feedback_list``
 =======================
 
-List improvement feedback recorded via typo3_feedback_record, newest first, so
-they can be worked off. Filter by status, by category, or by the tool a feedback
-is about. A feedback that was worked off is kept, not deleted, so
-status="closed" answers "what became of what I reported" — the feedback as it
-was recorded, plus the commit that closed it. Answers from: checkout.
+List the feedback typo3_feedback_record recorded, newest first, so a session can
+work them off. Filter by status, by category, or by the tool a feedback is
+about. The archive keeps a feedback a session worked off, so status="closed"
+answers "what became of what I reported". That is the feedback as it arrived,
+plus the commit that closed it. Answers from: checkout.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -19,15 +19,14 @@ Takes
 .. code-block:: yaml
 
     # One of: open, closed, all. open: the feedback nobody has worked off yet.
-    # closed: the ones already worked off, each with the commit subject saying what
-    # came of it. all: both. The category and tool filters apply to either.
+    # closed: the ones a session worked off, each with the commit subject that says
+    # what came of it. all: both. The category and tool filters apply to either.
     status: string  # optional
     # One of: missing-knowledge, wrong-answer, tool-gap, bug, idea. Restrict the
     # list to one category.
     category: string  # optional
     # Restrict the list to the feedback about one tool, for example
-    # typo3_label_lookup. A feedback naming several tools is matched by each of
-    # them.
+    # typo3_label_lookup. A feedback that names several tools matches each of them.
     tool: string  # optional
     # Maximum number of feedback to return.
     limit: integer  # optional
@@ -42,8 +41,8 @@ Answers with
       - file: string
         date: string
         category: string
-        # open while the feedback is still to be worked off, closed once it was
-        # moved to the archive.
+        # open while the feedback waits for a session, closed once a session moved
+        # it to the archive.
         status: string
         # The model that left the feedback. "unknown" where it named none or
         # predates the field.
@@ -51,7 +50,7 @@ Answers with
         # The tools the feedback is about, comma-separated. Empty when it names
         # none.
         tool: string
-        # The same names as a list, to filter or group by without parsing.
+        # The same names as a list, to filter or group by without a parse.
         tools: [string]
         title: string
         # The commit that worked the feedback off. Null while the feedback is open.

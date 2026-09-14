@@ -27,7 +27,7 @@ final class FeedbackList extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'List improvement feedback recorded via typo3_feedback_record, newest first, so they can be worked off. Filter by status, by category, or by the tool a feedback is about. A feedback that was worked off is kept, not deleted, so status="closed" answers "what became of what I reported" — the feedback as it was recorded, plus the commit that closed it.';
+        return 'List the feedback typo3_feedback_record recorded, newest first, so a session can work them off. Filter by status, by category, or by the tool a feedback is about. The archive keeps a feedback a session worked off, so status="closed" answers "what became of what I reported". That is the feedback as it arrived, plus the commit that closed it.';
     }
 
     public static function inputSchema(): array
@@ -35,9 +35,9 @@ final class FeedbackList extends ReadOnlyTool
         return [
             'type' => 'object',
             'properties' => [
-                'status' => ['type' => 'string', 'enum' => ['open', 'closed', 'all'], 'default' => 'open', 'description' => 'open: the feedback nobody has worked off yet. closed: the ones already worked off, each with the commit subject saying what came of it. all: both. The category and tool filters apply to either.'],
+                'status' => ['type' => 'string', 'enum' => ['open', 'closed', 'all'], 'default' => 'open', 'description' => 'open: the feedback nobody has worked off yet. closed: the ones a session worked off, each with the commit subject that says what came of it. all: both. The category and tool filters apply to either.'],
                 'category' => ['type' => 'string', 'enum' => Channel::CATEGORIES, 'description' => 'Restrict the list to one category.'],
-                'tool' => ['type' => 'string', 'description' => 'Restrict the list to the feedback about one tool, for example typo3_label_lookup. A feedback naming several tools is matched by each of them.'],
+                'tool' => ['type' => 'string', 'description' => 'Restrict the list to the feedback about one tool, for example typo3_label_lookup. A feedback that names several tools matches each of them.'],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 100, 'default' => 20, 'description' => 'Maximum number of feedback to return.'],
             ],
         ];
@@ -51,10 +51,10 @@ final class FeedbackList extends ReadOnlyTool
                 'file' => Schema::string(),
                 'date' => Schema::string(),
                 'category' => Schema::string(),
-                'status' => Schema::string('open while the feedback is still to be worked off, closed once it was moved to the archive.'),
+                'status' => Schema::string('open while the feedback waits for a session, closed once a session moved it to the archive.'),
                 'model' => Schema::string('The model that left the feedback. "unknown" where it named none or predates the field.'),
                 'tool' => Schema::string('The tools the feedback is about, comma-separated. Empty when it names none.'),
-                'tools' => Schema::listOf(Schema::string(), 'The same names as a list, to filter or group by without parsing.'),
+                'tools' => Schema::listOf(Schema::string(), 'The same names as a list, to filter or group by without a parse.'),
                 'title' => Schema::string(),
                 'closedBy' => [
                     'type' => ['object', 'null'],

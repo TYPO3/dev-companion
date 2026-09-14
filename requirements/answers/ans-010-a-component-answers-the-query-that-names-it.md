@@ -13,8 +13,8 @@ heldBy:
 of.**
 
 What a query only brushes past is a miss, and the miss says what a query that
-would land looks like: a summary is written in the words any question is written
-in, so a term found only there is not what makes an entry an answer.
+lands looks like. A summary uses the words any question uses, so a term found
+only there is not what makes an entry an answer.
 
 ## From
 

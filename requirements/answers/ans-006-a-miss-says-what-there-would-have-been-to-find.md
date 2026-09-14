@@ -22,14 +22,14 @@ heldBy:
 
 # R-ANS-006 — A miss says what there would have been to find
 
-**A lookup that returns nothing says what there would have been to find, and
-what it names can be asked for outright.**
+**A lookup that returns nothing says what there would have been to find, and a
+caller can ask for what it names outright.**
 
 `typo3_hint_lookup` lists the hint ids of the searched domains on every miss and
-accepts one as `id`, so "your words did not match" is distinguishable from
-"nobody wrote this down" without trying another phrasing.
+accepts one as `id`. So a caller can tell "your words did not match" from
+"nobody wrote this down" without a second phrase.
 
 ## From
 
-A query naming XLF, labels and language files returning the TCA hint and nothing
-else, with no way to see that a Language Files hint existed (2026-07-29).
+A query that named XLF, labels and language files returned the TCA hint and
+nothing else. Nothing showed that a Language Files hint existed (2026-07-29).

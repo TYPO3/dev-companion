@@ -34,20 +34,20 @@ Takes
     # than the one the failure showed in. Matching is lexical against English text,
     # so another language reaches only the loanwords.
     task: string  # optional
-    # Ask for one hint by its id, for example language-files, instead of matching.
+    # Ask for one hint by its id, for example language-files, instead of a match.
     # Every answer lists the ids it did not return. So you request a subject a query
     # missed by name rather than guess at it in other words.
     id: string  # optional
-    # The TYPO3 version the answer has to hold for, for example "13.4" or "14".
-    # Statements that do not hold there are left out, including those the repository
-    # needs for another major it declares. Defaults to every major this repository
-    # declares typo3/cms-core for, or to the installation this server started in
-    # where there is no declaration. Where there is neither, nothing filters and
-    # every statement carries the versions it holds for.
+    # The TYPO3 version the answer has to hold for, for example "13.4" or "14". The
+    # answer leaves out statements that do not hold there, those the repository
+    # needs for another major it declares included. Defaults to every major this
+    # repository declares typo3/cms-core for, or to the installation this server
+    # started in where there is no declaration. Where there is neither, nothing
+    # filters and every statement carries the versions it holds for.
     targetVersion: string  # optional
     # Maximum number of hints.
     limit: integer  # optional
-    # Ask for the index of neighbouring ids on a call that names an id. The answer
+    # Ask for the index of the ids beside it on a call that names an id. The answer
     # withholds it there by default. A caller who names an id has already chosen,
     # and the list was two thirds of what such an answer carried. A call that
     # matches by paths or task carries it either way, and so does an id that matched
@@ -61,8 +61,8 @@ Answers with
 
     task: string or null  # optional
     paths: [string]
-    # Which kind of work each path is. Paths of different scope are matched
-    # separately, so a hint that came back for one of them is about that path.
+    # Which kind of work each path is. Paths of different scope match separately, so
+    # a hint that came back for one of them is about that path.
     scopes:
       - path: string
         # One of: core, uncertain, project, extension. Which kind of work this
@@ -72,24 +72,24 @@ Answers with
         # the work, and the answer is the core's own.
         scope: string
     # The TYPO3 major this repository runs — stated by the caller, or read from
-    # the installation. Null means nothing was filtered and every statement carries
-    # its own range. Where the repository serves several majors, targetVersions is
-    # what the answer holds for.
+    # the installation. Null means no version filtered anything and every statement
+    # carries its own range. Where the repository serves several majors,
+    # targetVersions is what the answer holds for.
     targetVersion: integer or null  # optional
     # Every TYPO3 major the answer holds for. One entry is the ordinary case.
     # Several mean this repository declares typo3/cms-core for more than one of
     # them, so the answer keeps a statement that holds on any. Where two statements
     # about the same subject differ, the difference is the constraint the code lives
-    # under rather than drift. Empty when nothing was filtered by version.
+    # under rather than drift. Empty when no version filtered anything.
     targetVersions: [integer]  # optional
     # A hint outside these domains comes back only where the task spells out a
     # phrase in its index and no hint inside them claims it. That is how a symptom
     # reaches the layer that explains it.
     domains: [string]
-    # Categories that matched the domains but were left out because the task names
-    # the frontend. "Backend CSS" and "Backend TypeScript and JavaScript" describe
-    # the TYPO3 backend interface and are wrong advice for what a website renders.
-    # See docs.typo3.org for frontend theming.
+    # Categories that matched the domains and stay out because the task names the
+    # frontend. "Backend CSS" and "Backend TypeScript and JavaScript" describe the
+    # TYPO3 backend interface and are wrong advice for what a website renders. See
+    # docs.typo3.org for a frontend theme.
     withheldCategories: [string]
     hints:
       - id: string
@@ -137,24 +137,23 @@ Answers with
     bestCoverage: number or null
     # The hints that exist in the searched domains, minus the ones above, closest
     # first. What the limit cut stands before what matched too little to return.
-    # That order is the matcher's, so it holds where a query was matched — which
-    # is every call except one that names an id. An id that matched nothing lists
-    # every id there is, in corpus order. An id that matched carries this empty
-    # unless the call asked for it, and availableHintsWithheld says how many were
-    # left out.
+    # That order is the matcher's, so it holds where a query matched, which is every
+    # call except one that names an id. An id that matched nothing lists every id
+    # there is, in corpus order. An id that matched carries this empty unless the
+    # call asked for it, and availableHintsWithheld says how many stay out.
     availableHints:
       - # Pass this as id to ask for the hint outright.
         id: string
         title: string
         # PHP, TypeScript, JavaScript, CSS, or General.
         category: string
-    # How many neighbouring ids were left out of availableHints. Non-zero only on a
-    # call that named an id and matched one without asking for the index; pass
+    # How many ids beside it stay out of availableHints. Non-zero only on a call
+    # that named an id and matched one without a request for the index; pass
     # availableHints true to receive them.
     availableHintsWithheld: integer
-    # Knowledge documents declaring themselves the long form of a hint above. A hint
-    # is the convention in short and the document is the same subject at length.
-    # Where it hands over a file it is the file itself.
+    # Knowledge documents that declare themselves the long form of a hint above. A
+    # hint is the convention in short and the document is the same subject at
+    # length. Where it hands over a file it is the file itself.
     documents:
       - uri: string
         # The returned hint this document is the long form of.

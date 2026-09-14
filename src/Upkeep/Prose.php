@@ -37,13 +37,6 @@ final class Prose
     public const PROCEDURE = 20;
 
     /**
-     * Where a lead still fails. 402 of 924 leads run past `MEASURE` on the day
-     * `D-DOC-070` set it, so the check fails at the old number until the sweep
-     * of the records lands and its todo moves this to `MEASURE`.
-     */
-    public const HELD = 30;
-
-    /**
      * A passive form, as an upper bound. "is read" can be the passive or the
      * adjective, and the count says so where it prints — `D-DOC-070`.
      */
@@ -318,8 +311,7 @@ final class Prose
      *
      * Two sentences there are legitimate — a decision that removes something
      * and says what replaced it is two points and reads as two. The check holds
-     * each of them, not their sum, and holds them at `HELD` rather than at
-     * `MEASURE` until the records sweep lands.
+     * each of them, not their sum.
      *
      * @return list<array{id: string, words: int, text: string}>
      */
@@ -330,7 +322,7 @@ final class Prose
         foreach ($entries as $entry) {
             foreach (self::sentences($entry['statement']) as $sentence) {
                 $words = count(explode(' ', $sentence));
-                if ($words > self::HELD) {
+                if ($words > self::MEASURE) {
                     $over[] = ['id' => $entry['id'], 'words' => $words, 'text' => $sentence];
                 }
             }

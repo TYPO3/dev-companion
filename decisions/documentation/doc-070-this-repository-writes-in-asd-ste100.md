@@ -114,3 +114,13 @@ judgement and what the maintainer decided on it.
   procedure limit of 20 is the number to read again.
 - The lead check cannot move to 25 after the records sweep. Then some leads need
   more than 25 words, and the exception has to say so where the writer takes it.
+
+## Since then
+
+The records sweep landed on 2026-09-15 and the lead check moved to 25. Every
+requirement and decision now opens within the measure, so the held number of 30
+is gone and `Prose::leadsOverTheMeasure()` reads `Prose::MEASURE`. The third
+**Wrong if** did not fire: no lead needed more than 25 words. What the sweep
+found instead is a lesson about its own method. A first pass that hid sentences
+behind a filter for verb forms left long sentences in the bodies. A second pass
+over each group took them. Every quoted sentence stays as its source wrote it.

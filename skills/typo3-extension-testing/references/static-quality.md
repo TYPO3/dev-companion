@@ -8,11 +8,12 @@ configuration contents, and commands.
 
 ## Verify what is already there
 
-1. Inspect the package manifests, the lock file, the installed analysers and
-   fixers, their configuration and rule sets, the existing baselines, the
-   Composer scripts, the development environment, and CI before you change any
-   of them. Half an infrastructure is the ordinary case. That is a fixer without
-   an analyser, a lint step without either, a configuration nothing calls.
+1. Inspect what is there before you change any of it. That is the package
+   manifests, the lock file, the installed analysers and fixers, and their
+   configuration and rule sets. It is the existing baselines, the Composer
+   scripts, the development environment, and CI. Half an infrastructure is the
+   ordinary case. That is a fixer without an analyser, a lint step without
+   either, a configuration nothing calls.
 2. Run every check that already exists, unchanged, and record its output. You
    measure every later claim against that run. A first analyser report on a
    project that never ran one is a list of findings rather than a regression.
@@ -135,8 +136,8 @@ with what it costs and what it does not buy.
    framework asks for. So the same tool goes into one project and not into the
    next.
 
-   Where it cannot meet it, the tool gets an installation of its own: a second
-   manifest below the build directory with its own vendor directory, and the
+   Where it cannot meet it, the tool gets an installation of its own. That is a
+   second manifest below the build directory with its own vendor directory. The
    project-owned command calls that binary. The check exists either way. What
    moves is where the tool's own dependencies live.
 

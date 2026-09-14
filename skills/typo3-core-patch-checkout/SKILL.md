@@ -65,7 +65,7 @@ the current branch and everything uncommitted on it alone.
 
 A worktree does not save that work, it moves it. It starts without the installed
 dependencies, which git ignores and so does not bring. So no suite runs in it
-until they are installed there.
+until you install them there.
 
 `typo3_test_run_guide` states that precondition above its suites. Beside it
 stands the one check whose file list comes from git. In a worktree it reports

@@ -21,9 +21,9 @@ you read and of the target you aim at.
    from the result of that sweep rather than restating it.
 2. Widen the sweep, below, into the work list.
 3. Settle the range the package has to serve, below. Not before: what breaks
-   decides whether you can reach a range at all. Where nothing is being crossed,
-   that range is the declared one. This step reads it rather than resolves it.
-   It still decides what the two steps after it may do.
+   decides whether you can reach a range at all. Where you cross nothing, that
+   range is the declared one. This step reads it rather than resolves it. It
+   still decides what the two steps after it may do.
 4. Change what the list justifies, and nothing else.
 5. Prove it against every combination the package declares.
 
@@ -63,10 +63,11 @@ Once the installation is on the target, run the sweep again there. That second
 pass says whether the work is complete.
 
 Write the result down before you change a file. Write one entry per call site,
-with the identifier, the path and line in this package, which declared major
-deprecates or removes it, and which of the three established it. That list is
-the work, and the result closes on it. Include the entries that came back empty,
-with the majors they covered.
+with the identifier and the path and line in this package. Add which declared
+major deprecates or removes it, and which of the three established it.
+
+ That list is the work, and the result closes on it. Include the entries that
+ came back empty, with the majors they covered.
 
 ## Settle the range, rather than assert it
 
@@ -113,10 +114,12 @@ cleanup or a rewrite.
 
 **Where the change in front of you is not on the list, invoke the workflow that
 owns it.** Do not make it here. That is `typo3-extension-health` for what else
-is wrong with the package, `typo3-extension-testing` for coverage the upgrade
-wants but does not have, and `typo3-extension-documentation` for the manual that
-now describes a different range. That is a step at the moment the reading turns
-it up, not a note about ownership. Load the skill by name and work from it.
+is wrong with the package. It is `typo3-extension-testing` for coverage the
+upgrade wants but does not have. It is `typo3-extension-documentation` for the
+manual that now describes a different range.
+
+That is a step at the moment the reading turns it up, not a note about
+ownership. Load the skill by name and work from it.
 
 ## Prove it on every version it claims
 
@@ -128,10 +131,12 @@ it up, not a note about ownership. Load the skill by name and work from it.
 3. Run the repository's own commands per cell, the checks first. A step that
    runs in only one cell leaves the others unproven. That includes the ones the
    repository's CI declares. The installation supplies one cell. For every other
-   one, `typo3_rule_lookup` with
-   `documentId="extension/compatibility/running-on-a-declared-major-that-is-not-installed"`
-   says how you make that cell exist beside it, what it costs the installation,
-   and how you tell a cell that could have failed from one that could not.
+   one, ask `typo3_rule_lookup` with
+   `documentId="extension/compatibility/running-on-a-declared-major-that-is-not-installed"`.
+   It says how you make that cell exist beside it and what it costs the
+   installation.
+
+   It says how you tell a cell that could have failed from one that could not.
 4. Report the work list with every entry closed or explicitly left open. Report
    the resolutions with what the solver printed. Report what changed and what
    did not on purpose, and the matrix cell by cell. Name a cell nobody ran as

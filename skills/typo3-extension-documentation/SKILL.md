@@ -81,10 +81,10 @@ detail as stable public API.
 
 ## Where the page stops and the code begins
 
-**When a page would have to claim what the code does not do, invoke the skill
-that owns that code first.** That is a step, not a note about ownership. Load
-the skill by name and work from it. The finding at that moment is that the
-behaviour is missing, not the manual.
+**When a page would claim what the code does not do, invoke the skill that owns
+that code first.** That is a step, not a note about ownership. Load the skill by
+name and work from it. The finding at that moment is that the behaviour is
+missing, not the manual.
 
 If you write the page anyway, the manual outruns the package it ships with. What
 crosses over is the surface, the behaviour the page was going to claim, and its

@@ -2758,7 +2758,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('## Four ways in', $body);
         // What the worktree path costs and the branch path does not, which is
         // the half a trigger alone would route a task into a body without.
-        self::assertStringContainsString('no suite runs in it until they are installed there', $body);
+        self::assertStringContainsString('no suite runs in it until you install them there', $body);
     }
 
     /**
@@ -2824,7 +2824,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-extension-upgrade/SKILL.md',
         ));
         self::assertStringContainsString('A package is broken by what a major it already supports removed', $body);
-        self::assertStringContainsString('Where nothing is being crossed, that range is the declared one', $body);
+        self::assertStringContainsString('Where you cross nothing, that range is the declared one', $body);
     }
 
     /**

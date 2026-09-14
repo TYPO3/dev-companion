@@ -7,8 +7,8 @@ package versions, bootstrap APIs, configuration contents, and commands.
 ## Verify the harness
 
 1. Inspect the harness before you change it. That is `composer.json`, the lock
-   file, the installed PHPUnit and `typo3/testing-framework`, the PHPUnit
-   configuration, the bootstrap files, the Composer scripts, and CI.
+   file, the installed PHPUnit and `typo3/testing-framework`, and the PHPUnit
+   configuration. It is the bootstrap files, the Composer scripts, and CI.
 2. Run the narrowest declared PHPUnit discovery or suite command. Tell a missing
    executable, an invalid configuration, a bootstrap failure, and an unavailable
    functional database apart from a failed assertion.

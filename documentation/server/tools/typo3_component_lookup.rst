@@ -4,19 +4,19 @@
 ==========================
 
 Look up TYPO3 backend UI components by name or topic. The searchable index is a
-curated subset of what the core itself files as a component: the Sass partials
-under Build/Sources/Sass/component/ and the custom elements under element/. A
-miss therefore means uncurated rather than outside the subject — the module
-chrome and other layout classes are candidates as much as badges and cards.
-Where the target is the active installation, its backend CSS, JavaScript, and
-installed styleguide templates supply the component contract; the curated
+curated subset of what the core itself files as a component. That is the Sass
+partials under Build/Sources/Sass/component/ and the custom elements under
+element/. A miss therefore means uncurated rather than outside the subject. The
+module chrome and other layout classes are candidates as much as badges and
+cards. Where the target is the active installation, its backend CSS, JavaScript,
+and installed styleguide templates supply the component contract. The curated
 catalog supplies the searchable names and fallback markup. Without usable
 installed sources, the bundled version-bound snapshot answers. Returns markup,
 classes, custom properties, and every source used. Which of those answered, and
 which core revision the bundled one was taken from, is typo3_snapshot_scope. A
-class the query names outright is answered even where the entry it belongs to
-was withheld for the target version — as a name and the versions it holds on,
-never as markup. Answers from: packages, knowledge.
+class the query names outright gets an answer even where the answer withholds
+its entry for the target version. That answer is a name and the versions it
+holds on, never markup. Answers from: packages, knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -34,9 +34,9 @@ Takes
     # The TYPO3 version the markup has to hold for, for example "13.4" or "14".
     # Components not verified there are withheld, and a class the query names is
     # still answered where the class list alone was verified there. Defaults to the
-    # version of the installation this server was started in; where there is none,
-    # the whole catalog is returned and every entry carries the versions it was
-    # verified on.
+    # version of the installation this server started in. Where there is none, the
+    # whole catalog comes back and every entry carries the versions somebody
+    # verified it on.
     targetVersion: string  # optional
 
 Answers with
@@ -59,7 +59,7 @@ Answers with
         rootClass: string
         variants: [string]  # optional
         # Classes the core stylesheet writes on the element around this component on
-        # the target version, taken out of the three lists below because none of
+        # the target version. They are not in the three lists below, because none of
         # those names a wrapper. Attaching one to the component itself changes
         # nothing and fails nowhere.
         wrapping: [string]  # optional
@@ -68,10 +68,10 @@ Answers with
         customProperties: [string]  # optional
         # The data attributes the component's own JavaScript module reads off its
         # markup, derived from that module in the installed packages. The classes
-        # are what it is styled by and these are what it is driven by, and a wrong
-        # one fails silently in a browser rather than raising. Empty for a component
-        # no module drives, and empty for every component where the bundled catalog
-        # answered — the module is read from the installation or not at all.
+        # style it and these drive it, and a wrong one fails silently in a browser
+        # rather than throws. Empty for a component no module drives. Empty too for
+        # every component where the bundled catalog answered, because the tool reads
+        # the module from the installation or not at all.
         dataAttributes: [string]  # optional
         # Canonical markup of the component.
         markup: string  # optional
@@ -139,7 +139,7 @@ Answers with
         component: string
         title: string
         # One of: around, on, below, null. Where the class sits relative to the
-        # component root on this version, read off the core stylesheet: around wraps
+        # component root on this version, read off the core stylesheet. around wraps
         # it, on is the root element itself, below is an element inside it. Null
         # where no selector places it, which is not a licence to put it anywhere.
         position: string or null

@@ -32,7 +32,7 @@ final class ComponentLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Look up TYPO3 backend UI components by name or topic. The searchable index is a curated subset of what the core itself files as a component: the Sass partials under Build/Sources/Sass/component/ and the custom elements under element/. A miss therefore means uncurated rather than outside the subject — the module chrome and other layout classes are candidates as much as badges and cards. Where the target is the active installation, its backend CSS, JavaScript, and installed styleguide templates supply the component contract; the curated catalog supplies the searchable names and fallback markup. Without usable installed sources, the bundled version-bound snapshot answers. Returns markup, classes, custom properties, and every source used. Which of those answered, and which core revision the bundled one was taken from, is typo3_snapshot_scope. A class the query names outright is answered even where the entry it belongs to was withheld for the target version — as a name and the versions it holds on, never as markup.';
+        return 'Look up TYPO3 backend UI components by name or topic. The searchable index is a curated subset of what the core itself files as a component. That is the Sass partials under Build/Sources/Sass/component/ and the custom elements under element/. A miss therefore means uncurated rather than outside the subject. The module chrome and other layout classes are candidates as much as badges and cards. Where the target is the active installation, its backend CSS, JavaScript, and installed styleguide templates supply the component contract. The curated catalog supplies the searchable names and fallback markup. Without usable installed sources, the bundled version-bound snapshot answers. Returns markup, classes, custom properties, and every source used. Which of those answered, and which core revision the bundled one was taken from, is typo3_snapshot_scope. A class the query names outright gets an answer even where the answer withholds its entry for the target version. That answer is a name and the versions it holds on, never markup.';
     }
 
     public static function inputSchema(): array
@@ -41,7 +41,7 @@ final class ComponentLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'query' => ['type' => 'string', 'description' => 'Component name, class, or topic, for example badge, card, search box, or input-group. Omit to list the catalog.'],
-                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the markup has to hold for, for example "13.4" or "14". Components not verified there are withheld, and a class the query names is still answered where the class list alone was verified there. Defaults to the version of the installation this server was started in; where there is none, the whole catalog is returned and every entry carries the versions it was verified on.'],
+                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the markup has to hold for, for example "13.4" or "14". Components not verified there are withheld, and a class the query names is still answered where the class list alone was verified there. Defaults to the version of the installation this server started in. Where there is none, the whole catalog comes back and every entry carries the versions somebody verified it on.'],
             ],
         ];
     }
@@ -58,11 +58,11 @@ final class ComponentLookup extends ReadOnlyTool
                 'summary' => Schema::string(),
                 'rootClass' => Schema::string(),
                 'variants' => Schema::listOf(Schema::string()),
-                'wrapping' => Schema::listOf(Schema::string(), 'Classes the core stylesheet writes on the element around this component on the target version, taken out of the three lists below because none of those names a wrapper. Attaching one to the component itself changes nothing and fails nowhere.'),
+                'wrapping' => Schema::listOf(Schema::string(), 'Classes the core stylesheet writes on the element around this component on the target version. They are not in the three lists below, because none of those names a wrapper. Attaching one to the component itself changes nothing and fails nowhere.'),
                 'modifiers' => Schema::listOf(Schema::string()),
                 'subComponents' => Schema::listOf(Schema::string()),
                 'customProperties' => Schema::listOf(Schema::string()),
-                'dataAttributes' => Schema::listOf(Schema::string(), 'The data attributes the component\'s own JavaScript module reads off its markup, derived from that module in the installed packages. The classes are what it is styled by and these are what it is driven by, and a wrong one fails silently in a browser rather than raising. Empty for a component no module drives, and empty for every component where the bundled catalog answered — the module is read from the installation or not at all.'),
+                'dataAttributes' => Schema::listOf(Schema::string(), 'The data attributes the component\'s own JavaScript module reads off its markup, derived from that module in the installed packages. The classes style it and these drive it, and a wrong one fails silently in a browser rather than throws. Empty for a component no module drives. Empty too for every component where the bundled catalog answered, because the tool reads the module from the installation or not at all.'),
                 'markup' => Schema::string('Canonical markup of the component.'),
                 'examples' => Schema::listOf(Schema::string()),
                 'sassPath' => Schema::nullableString('Primary Sass source in the core checkout; null for a web component that carries its own styles.'),
@@ -80,7 +80,7 @@ final class ComponentLookup extends ReadOnlyTool
                 'class' => Schema::string('A class the query named outright.'),
                 'component' => Schema::string('The withheld entry it belongs to.'),
                 'title' => Schema::string(),
-                'position' => ['type' => ['string', 'null'], 'enum' => ['around', 'on', 'below', null], 'description' => 'Where the class sits relative to the component root on this version, read off the core stylesheet: around wraps it, on is the root element itself, below is an element inside it. Null where no selector places it, which is not a licence to put it anywhere.'],
+                'position' => ['type' => ['string', 'null'], 'enum' => ['around', 'on', 'below', null], 'description' => 'Where the class sits relative to the component root on this version, read off the core stylesheet. around wraps it, on is the root element itself, below is an element inside it. Null where no selector places it, which is not a licence to put it anywhere.'],
                 'stylesWithin' => Schema::listOf(Schema::string(), 'What the core styles inside this class on this version: what it may hold, never what it requires.'),
                 'sassPaths' => Schema::listOf(Schema::string(), 'Where the core writes it.'),
             ] + Schema::verifiedOn(), ['class', 'component', 'title', 'position', 'stylesWithin', 'sassPaths', 'verifiedOn']), 'Classes the query named that were verified on the target version although their entry was not, each with where it sits. No markup and no custom properties, because those are what withheld the entry.'),

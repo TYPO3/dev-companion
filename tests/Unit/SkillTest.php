@@ -1372,7 +1372,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
         ));
         self::assertStringContainsString(
-            'what was raised while reading and dropped, with what dropped it',
+            'what you raised while you read and dropped, with what dropped it',
             $skill,
         );
 
@@ -1508,7 +1508,7 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString(
-            '**Put the tree back to what the probe found, which is not always what is committed.**',
+            '**Put the tree back to what the probe found, which is not always the committed state.**',
             $skill,
         );
         // Where the restore lands, which is what makes the two routes under it
@@ -1566,7 +1566,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('holds more of a type than the default answer carries', $skill);
         self::assertStringContainsString('so raise `limit` there', $skill);
         self::assertStringContainsString(
-            '**Ask it in the words the entry is titled in, not in the identifier the diff removes.**',
+            '**Ask it in the words of the entry\'s title, not in the identifier the diff removes.**',
             $skill,
         );
         // Why the identifier is what the reviewer is holding, and where it
@@ -1576,7 +1576,7 @@ final class SkillTest extends TestCase
         // both the identifier and the version filter, and it is neither.
         self::assertStringContainsString('coming back empty has established nothing', $skill);
         self::assertStringContainsString(
-            'a precedent is filed under the version it landed in',
+            'A precedent sits under the version it landed in',
             $skill,
         );
         // And the source that answered when the lookup did not, which the server
@@ -1638,7 +1638,7 @@ final class SkillTest extends TestCase
         // Why the base's own step does not reach it, said where a reviewer who
         // has just read the base would otherwise apply it anyway.
         self::assertStringContainsString(
-            'starts at the class that implements a behaviour; this question has none',
+            'starts at the class that implements a behaviour. This question has none',
             $skill,
         );
         self::assertStringContainsString('PHP source as code is outside what this server reads', $skill);
@@ -1711,7 +1711,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('`typo3_gerrit_lookup` with the `Change-Id`', $skill);
         // The issue is where a series announces itself, which is what makes the
         // set rule reachable at all.
-        self::assertStringContainsString('an issue calling itself a part tells you the patch is not', $skill);
+        self::assertStringContainsString('An issue that calls itself a part tells you the patch is not', $skill);
         // An unanswered comment is the finding this step exists for.
         self::assertStringContainsString('nobody answered is a finding of its own', $skill);
         // The trap, measured on 2026-08-03 rather than assumed: the Forge issue
@@ -1735,7 +1735,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('an answer of nothing is a result', $skill);
         // Reading only: the server holds no credential and the review does not
         // vote on the caller's behalf.
-        self::assertStringContainsString('Voting, commenting and uploading stay with the person', $skill);
+        self::assertStringContainsString('Votes, comments and uploads stay with the person', $skill);
 
         $checklist = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-review/references/checklist.md',
@@ -2250,7 +2250,7 @@ final class SkillTest extends TestCase
             $checklist,
         );
         self::assertStringContainsString(
-            'A review said the wording lived elsewhere and concluded that no documentation change was owed',
+            'A review said the wording lived elsewhere and concluded that the patch owed no documentation change',
             $skill,
         );
         // The obligation itself stays with the document that owns it, so the
@@ -2283,7 +2283,7 @@ final class SkillTest extends TestCase
         $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
         ));
-        self::assertStringContainsString('read against the state at the end of the set', $skill);
+        self::assertStringContainsString('read a finding against the end of the set first', $skill);
         self::assertStringContainsString('rather than of what a message promises about it', $skill);
     }
 
@@ -4633,8 +4633,8 @@ final class SkillTest extends TestCase
         $crossing = self::flat($section);
 
         foreach ([
-            'typo3_task_guide' => 'change type about to be written',
-            'typo3_hint_lookup' => 'paths about to be edited',
+            'typo3_task_guide' => 'change type you are about to write',
+            'typo3_hint_lookup' => 'paths you will edit',
             'typo3_changelog_lookup' => 'deprecation sweep',
         ] as $tool => $argument) {
             self::assertStringContainsString(
@@ -4695,7 +4695,7 @@ final class SkillTest extends TestCase
         // Pointed at, not copied: what a probe owes is the verification
         // section's, and a second copy of it here is the one that goes stale.
         self::assertStringContainsString(
-            'the restoration is verified rather than assumed',
+            'you verify the restoration rather than assume it',
             self::flat(strstr($skill, '## Where the review ends and the rework begins', true) ?: ''),
             'the boundary the crossing points at has left the verification section',
         );

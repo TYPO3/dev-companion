@@ -43,11 +43,11 @@ say a lookup would answer beside the question.
 
 ## Decided
 
-- No API-stability lookup. `deprecated-apis` carries what `@internal` says, that
-  it sits on the class and on the member, and that it does not settle whether a
-  removal is breaking. It carries what does: whether anything outside the core
-  calls it, which is what a Breaking entry's Affected installations section
-  states.
+- No API-stability lookup. `deprecated-apis` carries what `@internal` says and
+  that it sits on the class and on the member. It carries that it does not
+  settle whether a removal is breaking. It carries what does: whether anything
+  outside the core calls it, which is what a Breaking entry's Affected
+  installations section states.
 - The `breaking` intent settles that question before it says how to write the
   entry, because a wrong answer to it produces the entry.
 - An absent annotation stands as no statement either way, because that is the

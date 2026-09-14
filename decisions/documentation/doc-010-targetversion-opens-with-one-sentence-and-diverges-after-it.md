@@ -52,7 +52,7 @@ because what one tool does without a version is not what another does.
   real behaviour, and only the tool's own code says which.
 - A feedback reports a caller that narrowed one tool and expected another's
   fallback. That would mean a reader cannot see the divergence in the sentence
-  meant to state it, and the wording does less than the payload it costs.
+  meant to state it. The wording then does less than the payload it costs.
 
 ## Confirmed on 2026-08-23
 

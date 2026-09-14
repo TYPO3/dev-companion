@@ -85,7 +85,7 @@ product's own.
   mode against it. Site::publishDrawings() puts the twin nobody named beside the
   one a page did.
 - A drawing goes inline into the page rather than as a link. An `<img>` is a
-  document of its own and cannot see this page's `@font-face` rules, so the type
+  document of its own and cannot see this page's `@font-face` rules. So the type
   inside every drawing was the reader's own fallback. Measured on a machine with
   neither family installed, the same file rendered 169px wider as an `<img>`
   than inline. A column layout against a face nobody has is what made the gaps
@@ -152,5 +152,5 @@ below `theme/` remains to vendor, so no part of the statement describes this
 site (`D-DOC-024`). The two tests are gone with the files they read, and what
 holds in their place is the package. Nobody can redeclare a token where there is
 no stylesheet. Three findings outlive it and go forward as open. A drawing has
-to appear at its drawn size, a truncated identifier is not the identifier, and a
+to appear at its drawn size, and a truncated identifier is not the identifier. A
 drawing that cannot tell which mode the page is in reads in the wrong ink.

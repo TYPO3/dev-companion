@@ -61,10 +61,10 @@ than part of its use.
   over `ExcludedTools::ALWAYS_OFFERED` had its weight. It would put both
   exceptions in one list and stop `typo3_server_scope` from the claim that a
   tool is gone which is on offer. The cost is a class in `src/Server/` that
-  knows two tool names which only exist in one checkout. What the report
-  actually costs a client is the in-band half of
-  [`D-AUD-005`](../audience/aud-005-an-exclusion-naming-no-tool-is-reported-and-the-server-starts.md),
-  which has a card and reaches every unknown name, not only these two.
+  knows two tool names which only exist in one checkout. What the report costs a
+  client is the in-band half of
+  [`D-AUD-005`](../audience/aud-005-an-exclusion-naming-no-tool-is-reported-and-the-server-starts.md).
+  That has a card and reaches every unknown name, not only these two.
 
 - Nothing covers the first **Wrong if**. `Channel::isAvailable()` reads
   `InstalledVersions::getRootPackage()` through no seam, and every test runs in

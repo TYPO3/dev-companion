@@ -63,7 +63,7 @@ touches its own file in `todo/` and no other, so the claims never conflict.
 
 - `progress/` grows a claim nobody has released in a fortnight. That would mean
   the state is cheap to enter and expensive to leave, the same failure a watch
-  covers `waiting/` for, and no recurrent todo asks after this one. Or a merge
+  covers `waiting/` for. No recurrent todo asks after this one. Or a merge
   conflicts inside `todo/`, which would mean the one file per todo does not hold
   what this asks it to hold. Or claims still go out two at a time on work that
   turns out to share a file. Then the overlap caveat reads the wrong signal: it

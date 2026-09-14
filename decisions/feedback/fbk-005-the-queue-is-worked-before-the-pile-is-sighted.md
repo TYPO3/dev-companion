@@ -57,7 +57,7 @@ outside it.
 
 - `feedback/` grows while the queue never empties, so the five never go out at
   all. Then the sighting needs a place of its own rather than a position behind
-  the queue, and the answer is probably a cadence in days like every other
+  the queue. The answer is probably a cadence in days like every other
   appointment. Or the five come round but nobody reads the judgements. Then the
   portion served a reader who does not exist and the number can be whatever a
   session can carry.

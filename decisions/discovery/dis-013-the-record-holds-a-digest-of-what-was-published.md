@@ -86,7 +86,7 @@ under the current name, and every listing on both sides agreed.
   of that at every start is the question to answer.
 - The instructions gain a sentence again and there is nowhere to put it. The
   budget goes either way. What this change establishes is that the notice fires
-  rarely and the routing is what pays for it, and the next session may read that
+  rarely and the routing is what pays for it. The next session may read that
   trade differently.
 
 ## Since then

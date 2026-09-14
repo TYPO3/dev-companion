@@ -36,8 +36,8 @@ prose beside a weak match and decides nothing.
   That was for a task that added none and whose own condition says the site
   configuration is not covered.
 - The change type had already contributed its own item, *keep the cleanup
-  mechanical; avoid mixing behavioural changes into the same patch*, and that
-  one was right for this call. The six are a second contribution on top of it.
+  mechanical; avoid mixing behavioural changes into the same patch*. That one
+  was right for this call. The six are a second contribution on top of it.
 
 ## Decided
 

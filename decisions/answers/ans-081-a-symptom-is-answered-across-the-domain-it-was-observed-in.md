@@ -52,8 +52,8 @@ where they part.
   its prose alone, `text only(339)`.
 - Nothing tells a caller that a symptom is a query `task` takes. The parameter
   reads "Short task description or topic". The `routing` block names this tool
-  for "Working in a concrete file and unsure about the subsystem's conventions",
-  and the session says it never tried the call it describes.
+  for "Working in a concrete file and unsure about the subsystem's conventions".
+  The session says it never tried the call it describes.
 - `feedback/2026-08-17-205945` is the same session on the same moment from the
   other side — which lookups it made after the first exception. Its card is in
   hand on another branch and reads the moment as routing. This entry reads what

@@ -100,10 +100,10 @@ directory nobody can visit.
 ## Wrong if
 
 - ~~A session loses a database it wanted to an approot that was only temporarily
-  absent. Then the clearing needs to ask, or to keep the snapshot `delete` would
-  otherwise take.~~ Priced out on 2026-08-22: the default driver is SQLite and
-  the build runs `omit_containers: [db]`, so the registration holds no database
-  to lose.
+  absent. Then the clear step needs to ask, or to keep the snapshot `delete`
+  would otherwise take.~~ Priced out on 2026-08-22. The default driver is SQLite
+  and the build runs `omit_containers: [db]`, so the registration holds no
+  database to lose.
 - `ddev delete` stops to work on a project whose directory is gone. That would
   put the two-command sequence back and leave the volume to the build.
 - TYPO3's setup gains a way past a populated database. Then the create has an

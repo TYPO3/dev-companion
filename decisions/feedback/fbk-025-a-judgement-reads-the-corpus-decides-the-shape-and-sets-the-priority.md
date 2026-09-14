@@ -45,8 +45,8 @@ that were also `low`.
   look at the siblings has to be one call or it will not happen.
   `Channel::all()` carries `directory` for it, which is a field added to a
   declared shape rather than a renamed one.
-- `judging.md` opens the ladder with that look, splits *the answer names the
-  gap, not the fix* by which step it is about, and says that the judgement sets
+- `judging.md` opens the ladder with that look and splits *the answer names the
+  gap, not the fix* by which step it is about. It says that the judgement sets
   the priority. `todo/readme.md` says the same from the other end: a judged card
   that is still `low` is somebody's decision, not an absence.
 - Where several cards are one gap, one carries the work and names the rest in

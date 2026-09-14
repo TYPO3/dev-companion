@@ -44,9 +44,9 @@ somebody thought through.
 ## Assumed
 
 - ~~That the counts move down. The report is a number nobody has to act on. That
-  is the same shape as the three states `bin/cli unresolved:list` names, and
-  those sat unread until something printed them.~~ Read on 2026-08-22: the share
-  held while the corpus grew sevenfold. So what the report moved is nothing.
+  is the same shape as the three states `bin/cli unresolved:list` names. Those
+  sat unread until something printed them.~~ Read on 2026-08-22: the share held
+  while the corpus grew sevenfold. So what the report moved is nothing.
 
 ## Wrong if
 

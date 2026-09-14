@@ -49,14 +49,14 @@ the order and looks like the least important thing in the repository.
 - That a session can tell the two cases apart at the commit. A question that
   merely awaits its ask goes last, one that nobody here can answer waits.
   Nothing checks it, and the cheap mistake is the wrong one. A todo parked in
-  `waiting/` is out of every session's way, which is exactly what a session that
+  `waiting/` is out of every session's way. That is exactly what a session that
   does not want to work it would choose.
 
 ## Wrong if
 
-- ~~`waiting/` grows past two or three, which would mean it has become where
+- ~~`waiting/` grows past two or three. That would mean it has become where
   todos go to rot rather than where questions live.~~ Fired on the number on
-  2026-08-22, at six, and not on what the number stands for; see the visit
+  2026-08-22, at six, and not on what the number stands for. See the visit
   below.
 - A todo sits there with its question answered in the conversation and nobody
   moved it back. That would mean the seven-day todo runs and nobody acts on it.

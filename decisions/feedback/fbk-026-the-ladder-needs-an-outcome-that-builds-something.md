@@ -11,8 +11,8 @@ status: open
 on* is the answer it gets.**
 
 The six answers a feedback could receive were these. Fix a sentence, move a
-rule, add a routing line, note that it already has an answer, trim it, queue it,
-or propose to leave it. None of them says *this gets built*, and the channel
+rule, add a routing line, or note that it already has an answer. Trim it, queue
+it, or propose to leave it. None of them says *this gets built*, and the channel
 exists to decide exactly that.
 
 ## Evidence

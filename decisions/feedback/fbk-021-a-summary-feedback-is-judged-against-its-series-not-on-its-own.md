@@ -81,11 +81,10 @@ preamble names: a gap with a fourth entry written next to three that exist.
 
 ## Wrong if
 
-- ~~A half turns out to have no sibling. The map is then wrong, the summary is
-  the only report of that subject, and the ladder applies after all.~~ Fired
-  from the fourth summary on. The map was right each time. An orphan half is
-  what the summary adds, and the ladder ran over that row rather than over the
-  file.
+- ~~A half turns out to have no sibling. The map is then wrong and the summary
+  is the only report of that subject. The ladder applies after all.~~ Fired from
+  the fourth summary on. The map was right each time. An orphan half is what the
+  summary adds, and the ladder ran over that row rather than over the file.
 - ~~Every sibling lands and the summary is still open, because each commit that
   closes archives only the feedback it worked off. The summary would then need
   an owner rather than a map.~~ Fired on 2026-08-03 on the first three

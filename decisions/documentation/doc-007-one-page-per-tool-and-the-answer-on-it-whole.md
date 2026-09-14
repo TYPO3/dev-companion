@@ -47,7 +47,7 @@ others nor `… 14 more` where the entries were is what they came for.
   answered, because it is the page somebody arrives on. `D-DOC-006` is why a
   recording without it is an assertion about nothing.
 - The answers stand whole. The cut was a property of one page with all of them
-  on it, and what it cut is the half a recording exists to show.
+  on it. What it cut is the half a recording exists to show.
 - A block's fence has more backticks than anything inside it, computed per block
   rather than fixed. So an answer that is itself markdown cannot end it.
 - `tools.md` links per tool rather than once in its head. A link in a head is

@@ -59,7 +59,7 @@ kinds of change as well. So a review fell through to the patch checklist.
 
 ## Wrong if
 
-- A brief comes back in the review shape for work that does change something;
+- A brief comes back in the review shape for work that does change something.
   "reviewing the failing test and fixing it" is the form it would take. The
   answer is then to move that needle to `matchWeak` with a condition, rather
   than to give up the shape.

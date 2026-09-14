@@ -50,7 +50,7 @@ The workflow and both pages were already here and no task text reached either.
   wizards, flush the caches. None of it is what a package owes a range it
   declares.
 - **The subject is in the needle.** `package runs on` and `extension runs on`,
-  with their tenses, rather than `runs on`. Measured before the write, a strong
+  with their tenses, rather than `runs on`. Measured before the write. A strong
   `runs on typo3` took "this site runs on TYPO3 12 and we need to be on 13
   before support ends". That is a text `installation-upgrade` matches on
   nothing. So the compatibility brief was the whole answer to a site upgrade

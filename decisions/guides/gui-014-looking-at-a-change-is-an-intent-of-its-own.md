@@ -13,7 +13,7 @@ coveredBy:
 # D-GUI-014 — Looking at a change is an intent of its own
 
 **`typo3_task_guide` recognizes a look at a change in a live installation as
-work of its own, and names `any/testing/browser-check` on both sides of the core
+work of its own. It names `any/testing/browser-check` on both sides of the core
 boundary.** Four filed sessions did that work with the page in an answer they
 had already read. The brief that knew what the task was saw nothing at all.
 

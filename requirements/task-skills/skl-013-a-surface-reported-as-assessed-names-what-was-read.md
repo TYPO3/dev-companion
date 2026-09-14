@@ -17,7 +17,7 @@ the third of the three ways a review disposes of a thing, and it was the one
 that certified itself. To report and to drop both cost a read somebody can
 check. Assessed costs one word, and a surface somebody glanced at reads exactly
 like one somebody worked through. Where the read did not happen the word is
-unassessed. That costs the same line and says something a reader can act on.
+*unassessed*. That costs the same line and says something a reader can act on.
 
 ## From
 

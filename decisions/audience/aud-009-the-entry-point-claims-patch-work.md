@@ -85,5 +85,5 @@ The first **Assumed** was then read from the other side. A session that lost a
 container cycle to an argument order reports the tool as a bare name. It sat in
 a deferred list whose schema the session never fetched. So the earlier session's
 "the wording did it" and this one's "I never saw the wording" bound the lever
-rather than the rewrite, which `D-AUD-003` already said. That feedback's
+rather than the rewrite. `D-AUD-003` already said that. That feedback's
 judgement rests on the corpus instead (`D-KNW-112`).

@@ -29,8 +29,8 @@ at two task shapes. The client lists the tools by name and defers their schemas.
 - `feedback/2026-08-18-080710`, a TypoScript condition repaired in `blog` across
   two majors. Zero calls, and it names the one line that would have caught it.
   That is the `routing` entry which sends a caller onto a major they have not
-  built on recently to `typo3_changelog_lookup`, the call the session says it
-  would make next time.
+  built on recently to `typo3_changelog_lookup`. That is the call the session
+  says it would make next time.
 - Step 2 of the ladder in
   [judging.rst](../../documentation/records/judging.rst). The line exists, has
   stood in `knowledge/server-scope.json` since 2026-07-29 and describes that

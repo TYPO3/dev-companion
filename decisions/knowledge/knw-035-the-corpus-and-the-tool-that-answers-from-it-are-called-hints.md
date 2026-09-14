@@ -14,8 +14,8 @@ coveredBy:
 **The corpus is `knowledge/hints/`, the class that loads it is
 `Knowledge\Hints`, and the tool that answers from it is `typo3_hint_lookup`.**
 
-`architecture` had stopped describing what the corpus holds, and it was the only
-place in the repository still using the word for it.
+`architecture` no longer described what the corpus holds, and it was the only
+place in the repository that still used the word for it.
 
 ## Evidence
 
@@ -23,44 +23,45 @@ place in the repository still using the word for it.
   browser tests and changelog conventions. None of those is architecture, and
   the outward `topic` in `knowledge/server-scope.json` listed them under "Core
   architecture conventions".
-- `hint` was already the word everywhere else: the glossary defines it, the
-  `hints:probe` and `hints:coverage` subjects use it, `HintsTest` is named for
-  it, and `knowledge/test-suite-hints.json` is a second corpus of them.
-- `typo3_rule_lookup` already answers the core contribution rules, so
-  typo3_convention_lookup — the alternative the owner was asked about — would
+- `hint` was already the word everywhere else. The glossary defines it, the
+  `hints:probe` and `hints:coverage` subjects use it, `HintsTest` carries it,
+  and `knowledge/test-suite-hints.json` is a second corpus of them.
+- `typo3_rule_lookup` already answers the core contribution rules. So
+  typo3_convention_lookup, the alternative the owner had on the table, would
   have put a synonym next to it in the registry.
 
 ## Decided
 
-- The directory, the class and the tool name change in one commit. Renaming one
-  of the three alone is the two-names-for-one-thing this repository spends
-  commits removing.
+- The directory, the class and the tool name change in one commit. A rename of
+  one of the three alone is the two-names-for-one-thing this repository spends
+  commits to remove.
 - `Result\Hints` became `Result\MatchedHints`, because the corpus takes the
   plain name and a file that uses both would otherwise need an alias.
 - `typo3_task_guide` answers with `hints` where it answered with
-  `architectureHints`. A client validating against the old field breaks, which
-  is accepted here: the tool the field is about was renamed in the same commit,
-  so a client reading the guide's brief was going to be corrected anyway.
-- What recorded a call under the former name keeps it and says so — the forward
+  `architectureHints`. A client that validates against the old field breaks,
+  which is the price here. The tool the field is about got its new name in the
+  same commit. So a client that reads the guide's brief needed a correction
+  anyway.
+- What recorded a call under the former name keeps it and says so. The forward
   runs in `scenarios/runs/`, the recorded answer under
   `documentation/clients/tool-answers/`, the archived feedback. A recording says
   what it is of (`D-DOC-006`).
-- The decisions that name `knowledge/architecture-hints/*.json` files are left
-  as they are. Those paths were already stale from the refiling that preceded
+- The decisions that name `knowledge/architecture-hints/*.json` files stay as
+  they are. Those paths were already stale from the move between files before
   this, and an entry is a dated record rather than a description of today.
 
 ## Assumed
 
-- A client that calls the old name gets an error it can read, rather than an
-  empty answer it mistakes for "nothing is written down about this".
+- A client that calls the old name gets an error it can read. It gets no empty
+  answer it mistakes for "nothing here says anything about this".
 - The installed skills reach their projects with the next release. Until then a
   copy installed earlier routes to a tool this server no longer offers.
 
 ## Wrong if
 
-- A session reports `typo3_hint_lookup` as unknown, which would mean a client is
-  holding a tool list from before the rename and nothing told it.
+- A session reports `typo3_hint_lookup` as unknown, which would mean a client
+  holds a tool list from before the rename and nothing told it.
 - A caller's brief comes back without hints because it reads `architectureHints`
   from the payload.
-- The word `architecture` returns for part of this corpus, which would mean the
-  subject it was dropped for is back and one of the two words is wrong.
+- The word `architecture` returns for part of this corpus. That would mean the
+  subject it fell for is back and one of the two words is wrong.

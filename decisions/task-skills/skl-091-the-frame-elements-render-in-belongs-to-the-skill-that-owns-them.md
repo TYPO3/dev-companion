@@ -20,8 +20,8 @@ rendering resolves into.
 - `feedback/2026-09-04-053744`. `typo3_task_guide` named two skills and neither
   was invoked. The session says what shut this one: the description is framed
   around *a* content element, and its task was the frame every element on the
-  site shares — a `lib.contentElement` definition, a layout, a header partial,
-  a `Generic` template and one core element's rendering definition.
+  site shares — a `lib.contentElement` definition, a layout, a header partial, a
+  `Generic` template and one core element's rendering definition.
 - The reading holds against the body. Its rendering items are *put one element's
   rendering in a dedicated TypoScript file* and *keep the Fluid template under
   the project's content-element template root*, and its closing line is *this
@@ -35,8 +35,8 @@ rendering resolves into.
 - The other half of the session's report is a strength and is read as a
   boundary: `typo3-extension-health` was ruled out in one read, on *the audit
   reports first; nothing is changed before the list is agreed*, against a user
-  who had said not to ask. A description precise enough to be declined
-  correctly is doing its whole job — `D-FBK-018`.
+  who had said not to ask. A description precise enough to be declined correctly
+  is doing its whole job — `D-FBK-018`.
 
 ## Decided
 

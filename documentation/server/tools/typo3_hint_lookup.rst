@@ -4,16 +4,16 @@
 =====================
 
 Return hints for TYPO3 core paths or task topics, grouped by section. A hint is
-a convention at the code itself — what to write at this path, which idiom a
-subsystem is written in, what a finding on it costs. A procedure carried out in
-steps is typo3_rule_lookup instead: the commit message conventions, the
-changelog entry a change owes, the Gerrit push and amend workflow, setting an
-extension manual up. The checklist a change owes, with the hints its paths match
-beside it, is typo3_task_guide. Where the paths read as a project or third-party
-extension the hints still come back, because the conventions transfer. The
-"Backend CSS" and "Backend TypeScript and JavaScript" sections describe the
-TYPO3 backend interface and are withheld, with the reason, where the task names
-the frontend. Answers from: knowledge.
+a convention at the code itself: what to write at a path, which idiom a
+subsystem uses, what a finding costs. A procedure in steps is typo3_rule_lookup
+instead. That is the commit message conventions, the changelog entry a change
+owes, the Gerrit push and amend workflow, the setup of an extension manual. The
+checklist a change owes, with the hints its paths match beside it, is
+typo3_task_guide. Where the paths read as a project or third-party extension the
+hints still come back, because the conventions transfer. The "Backend CSS" and
+"Backend TypeScript and JavaScript" sections describe the TYPO3 backend
+interface. The answer withholds them, with the reason, where the task names the
+frontend. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -25,33 +25,33 @@ Takes
 .. code-block:: yaml
 
     # File paths related to the task, as they are in the repository they belong to.
-    # Each is placed on its own, so a core path and an extension path in one call
-    # are matched separately, and a statement is labelled where it obliges the other
-    # one.
+    # The answer places each on its own, so a core path and an extension path in one
+    # call match separately. It labels a statement where it obliges the other one.
     paths: [string]  # optional
     # Short task description or topic, in English. A symptom is a query this takes
-    # as readily as a subject: a hint is searched by its own statements, and a
-    # phrase it was indexed under reaches it from the layer that explains the
-    # failure rather than the one the failure showed in. Matching is lexical against
-    # English text, so another language reaches only the loanwords.
+    # as readily as a subject. The search reads a hint by its own statements. A
+    # phrase in its index reaches it from the layer that explains the failure rather
+    # than the one the failure showed in. Matching is lexical against English text,
+    # so another language reaches only the loanwords.
     task: string  # optional
     # Ask for one hint by its id, for example language-files, instead of matching.
-    # Every answer lists the ids it did not return, so a subject a query missed can
-    # be requested by name rather than guessed at in other words.
+    # Every answer lists the ids it did not return. So you request a subject a query
+    # missed by name rather than guess at it in other words.
     id: string  # optional
     # The TYPO3 version the answer has to hold for, for example "13.4" or "14".
     # Statements that do not hold there are left out, including those the repository
     # needs for another major it declares. Defaults to every major this repository
-    # declares typo3/cms-core for, or to the installation this server was started in
-    # where there is no declaration; where there is neither, nothing is filtered and
+    # declares typo3/cms-core for, or to the installation this server started in
+    # where there is no declaration. Where there is neither, nothing filters and
     # every statement carries the versions it holds for.
     targetVersion: string  # optional
     # Maximum number of hints.
     limit: integer  # optional
-    # Ask for the index of neighbouring ids on a call that names an id. It is
-    # withheld there by default: a caller naming an id has already chosen, and the
-    # list was two thirds of what such an answer carried. A call that matches by
-    # paths or task carries it either way, and so does an id that matched nothing.
+    # Ask for the index of neighbouring ids on a call that names an id. The answer
+    # withholds it there by default. A caller who names an id has already chosen,
+    # and the list was two thirds of what such an answer carried. A call that
+    # matches by paths or task carries it either way, and so does an id that matched
+    # nothing.
     availableHints: boolean  # optional
 
 Answers with
@@ -78,19 +78,18 @@ Answers with
     targetVersion: integer or null  # optional
     # Every TYPO3 major the answer holds for. One entry is the ordinary case.
     # Several mean this repository declares typo3/cms-core for more than one of
-    # them, so a statement was kept when it holds on any — and where two
-    # statements about the same subject differ, the difference is the constraint the
-    # code lives under rather than drift. Empty when nothing was filtered by
-    # version.
+    # them, so the answer keeps a statement that holds on any. Where two statements
+    # about the same subject differ, the difference is the constraint the code lives
+    # under rather than drift. Empty when nothing was filtered by version.
     targetVersions: [integer]  # optional
-    # Hints outside these domains are returned only where the task spells out a
-    # phrase one of them was indexed under and no hint inside them claims it, which
-    # is how a symptom reaches the layer that explains it.
+    # A hint outside these domains comes back only where the task spells out a
+    # phrase in its index and no hint inside them claims it. That is how a symptom
+    # reaches the layer that explains it.
     domains: [string]
     # Categories that matched the domains but were left out because the task names
     # the frontend. "Backend CSS" and "Backend TypeScript and JavaScript" describe
-    # the TYPO3 backend interface and are wrong advice for what a website renders;
-    # see docs.typo3.org for frontend theming.
+    # the TYPO3 backend interface and are wrong advice for what a website renders.
+    # See docs.typo3.org for frontend theming.
     withheldCategories: [string]
     hints:
       - id: string
@@ -129,20 +128,20 @@ Answers with
             # sitepackage too.
             scope: string or null
     # How much of the task the closest hint above carries, between 0 and 1, where 1
-    # is every word of it. A hint answers on its own from 0.5; below that it was
-    # returned because it claims one of the paths you named or a phrase somebody
-    # anticipated, which is a different thing from being about the question. Six
-    # well-formed hints that all got in that way read exactly like six that answer
-    # you, and this is what tells them apart. Null on a call that named an id, which
-    # is not a guess at anybody's words.
+    # is every word of it. A hint answers on its own from 0.5. Below that it is here
+    # because it claims one of the paths you named or a phrase somebody anticipated.
+    # That is not the same as an answer to the question. Six well-formed hints that
+    # all got in that way read exactly like six that answer you, and this is what
+    # tells them apart. Null on a call that named an id, which is not a guess at
+    # anybody's words.
     bestCoverage: number or null
-    # The hints that exist in the searched domains, minus the ones returned above,
-    # closest first: what the limit cut stands before what matched too little to
-    # return. That order is the matcher's, so it holds where a query was matched —
-    # which is every call except one that names an id. An id that matched nothing
-    # lists every id there is, in corpus order. An id that matched carries this
-    # empty unless the call asked for it, and availableHintsWithheld says how many
-    # were left out.
+    # The hints that exist in the searched domains, minus the ones above, closest
+    # first. What the limit cut stands before what matched too little to return.
+    # That order is the matcher's, so it holds where a query was matched — which
+    # is every call except one that names an id. An id that matched nothing lists
+    # every id there is, in corpus order. An id that matched carries this empty
+    # unless the call asked for it, and availableHintsWithheld says how many were
+    # left out.
     availableHints:
       - # Ask for this hint outright by passing it as id.
         id: string
@@ -154,8 +153,8 @@ Answers with
     # availableHints true to receive them.
     availableHintsWithheld: integer
     # Knowledge documents declaring themselves the long form of a hint above. A hint
-    # is the convention in short; the document is the same subject at length, and
-    # where it hands over a file it is the file itself.
+    # is the convention in short and the document is the same subject at length.
+    # Where it hands over a file it is the file itself.
     documents:
       - uri: string
         # The returned hint this document is the long form of.

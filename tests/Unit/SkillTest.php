@@ -1917,7 +1917,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('Forge carries no resolution field', $checklist);
         self::assertStringContainsString('`git tag --contains <commit>`', $checklist);
         self::assertStringContainsString(
-            'The `Releases:` trailer names the branches the change was written for',
+            'The `Releases:` trailer names the branches the author wrote the change for',
             $checklist,
         );
         self::assertStringContainsString('**Resolved** where the merged patch was filed under this issue', $checklist);
@@ -1999,7 +1999,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-issue-triage/references/checklist.md',
         ));
         self::assertStringContainsString('## A security defect', $checklist);
-        self::assertStringContainsString('The seventh is asked before the other six', $checklist);
+        self::assertStringContainsString('Ask the seventh before the other six', $checklist);
         self::assertStringContainsString(
             'decides where the answer goes rather than what it says',
             $checklist,

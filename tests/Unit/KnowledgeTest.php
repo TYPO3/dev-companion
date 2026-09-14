@@ -414,7 +414,8 @@ final class KnowledgeTest extends TestCase
     #[Test]
     public function theRulesSayWhatShapeAPatchIsLeftIn(): void
     {
-        $rules = Documents::read('core/contribution/rules');
+        // Unwrapped, because the sentences asserted on cross a line break.
+        $rules = (string) preg_replace('/\s+/', ' ', Documents::read('core/contribution/rules'));
 
         self::assertStringContainsString('The diff is what a reviewer reads', $rules);
         self::assertStringContainsString('Edit the file that is there rather than rewrite it', $rules);

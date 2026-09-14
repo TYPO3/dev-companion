@@ -10,32 +10,31 @@ coveredBy:
 # D-KNW-064 — The disabled assertions a core checkout carries are a grep
 
 **A core checkout carries nine commented-out assertions marked as known
-failures, in four files of one subsystem.** That is not a corpus a tool can be
-searched over, and the step that finds them is one grep in the skill that needs
-them.
+failures, in four files of one subsystem.** That is not a corpus a tool can
+search over. The step that finds them is one grep in the skill that needs them.
 
 ## Evidence
 
 - `feedback/2026-08-07-233543`. The best outcome of a triage is "the project
-  already knows, here is the disabled assertion and here is the fixture", and
-  the session reached it for Forge 15984 in four steps of hand reading: three
-  data-provider rows in
+  already knows, here is the disabled assertion and here is the fixture". The
+  session reached it for Forge 15984 in four steps of hand research. It found
+  three data-provider rows in
   `typo3/sysext/frontend/Tests/Functional/SiteHandling/SlugLinkGeneratorTest.php`
-  commented out with `// @todo Fails, not expanded to sub-pages`, over a
-  `Fixtures/SlugScenario.yaml` that already models a restricted page with a
+  commented out with `// @todo Fails, not expanded to sub-pages`. They sit over
+  a `Fixtures/SlugScenario.yaml` that already models a restricted page with a
   subpage. No lookup pointed at it.
 - Counted in `.checkouts/main` on 2026-08-08. A commented-out assertion or data
-  row carrying a known-failure `@todo` is **nine lines**, all under
-  `typo3/sysext/frontend/Tests/Functional/SiteHandling/`: six are the 15984 case
-  across `SlugLinkGeneratorTest.php`, three are "Currently fails since cHash is
+  row with a known-failure `@todo` is **nine lines**, all under
+  `typo3/sysext/frontend/Tests/Functional/SiteHandling/`. Six are the 15984 case
+  across `SlugLinkGeneratorTest.php`. Three are "Currently fails since cHash is
   verified after(!) redirect to page 1100" across three files.
 - The wider sets do not hold what the tool would be for. `markTestSkipped` and
-  `markTestIncomplete` come to 50, and the reasons are overwhelmingly the
-  machine rather than a defect: no APCu, no Redis, no ImageMagick, Windows, a
-  case-sensitive filesystem, non-Composer mode. Two of the fifty are known
-  defects.
-- `@todo` inside `Tests/` comes to 208, and sampling says most are notes about
-  the fixture or the test — "It would be better to not re-use sys_file 1 here",
+  `markTestIncomplete` come to 50, and the reasons are nearly all the machine
+  rather than a defect. No APCu, no Redis, no ImageMagick, Windows, a
+  case-sensitive filesystem, non-Composer mode. Two of the fifty are defects the
+  project knows.
+- `@todo` inside `Tests/` comes to 208, and a sample says most are notes about
+  the fixture or the test. "It would be better to not re-use sys_file 1 here",
   "do we need to discard the references manually?", "wrong assertion". A search
   over them answers a report with test-writing caveats.
 - The text of the nine is specific enough to recognise once found and not
@@ -52,26 +51,26 @@ them.
   for the test the core already wrote and switched off before writing one, names
   the grep, and says which subsystem to narrow it to — the reason text is what
   identifies a hit, and the reader is already standing in the checkout.
-- **`markTestSkipped` is named as the thing it is not.** Fifty of them against
-  two that are about a defect is a ratio that sends a session reading the wrong
-  fifty, and the skill says so rather than leaving it to be discovered.
-- The one case measured is also written into the corpus:
-  `frontend-access-restriction` names the rows and the fixture, so a caller who
-  never opens the skill still reaches them from the subject.
+- **The skill names `markTestSkipped` as the thing it is not.** Fifty of them
+  against two that are about a defect is a ratio that sends a session into the
+  wrong fifty. The skill says so rather than leaves it to the session to
+  discover.
+- The one case measured also goes into the corpus. `frontend-access-restriction`
+  names the rows and the fixture, so a caller who never opens the skill still
+  reaches them from the subject.
 
 ## Assumed
 
 - One checkout stands for the branches. Counted on `main` only; a maintained
   branch carries the same tests and nobody has counted there.
-- The nine are the whole shape. A known failure parked some other way — a
-  provider case removed outright, an assertion loosened with a comment above it
-  — is not counted by any pattern here and would not be counted by the tool
-  either.
+- The nine are the whole shape. A known failure parked some other way, a
+  provider case removed outright or an assertion loosened with a comment above
+  it, matches no pattern here. The tool would not count it either.
 
 ## Wrong if
 
-- The count grows by an order of magnitude on a later branch, which would make
+- The count grows by an order of magnitude on a later branch. That would make
   the grep the thing that misses and put the index back on the table.
-- A session reports the grep answering with the two hundred `@todo` notes and
-  nothing usable, which would say narrowing to the subsystem is not enough and
-  the pattern has to name the shape rather than the marker.
+- A session reports that the grep answers with the two hundred `@todo` notes and
+  nothing usable. That would say the subsystem limit is not enough and the
+  pattern has to name the shape rather than the marker.

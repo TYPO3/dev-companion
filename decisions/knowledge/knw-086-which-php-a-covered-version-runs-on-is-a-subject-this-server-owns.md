@@ -42,7 +42,7 @@ moment every PHP answer this server has is unavailable, and nothing below
   answers "no installation" until the install has run.
   `feedback/2026-08-17-211157` wrote `php_version: 8.4` there. It reports that
   by the time the three PHP numbers were available the container had long stood
-  built and the number no longer looked like a decision.
+  built. The number no longer looked like a decision.
 
 ## Decided
 

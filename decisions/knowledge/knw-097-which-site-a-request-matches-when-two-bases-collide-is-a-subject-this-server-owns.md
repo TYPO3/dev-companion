@@ -15,8 +15,8 @@ without.**
 So a site on `base: /` loses every request the moment a second site names the
 host. The feedback goes to the queue at `normal`. The corpus carries the
 matcher's other direction, a base that names a host nobody is on matches
-nothing. It states the bare path as what "matches every host", which is the read
-a caller with two sites has to arrive at the opposite of.
+nothing. It states the bare path as what "matches every host". A caller with two
+sites has to arrive at the opposite of that read.
 
 ## Evidence
 

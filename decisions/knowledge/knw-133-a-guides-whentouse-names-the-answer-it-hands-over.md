@@ -36,7 +36,7 @@ solves the question elsewhere.
   about obtaining a branch, "and I had network and a single symbol".
 - **The page answers the single symbol.** Read here on 2026-08-28. It hands over
   `git cat-file -e <branch>:…`, `git grep -n "function <name>" <branch> …` and
-  `git show`, and says the diff is the one call where a whole subtree is the
+  `git show`. It says the diff is the one call where a whole subtree is the
   question. It says that where no checkout is at hand a session reads the file
   out of that major's released package. "where two or three symbols are the
   whole question, reading those files alone is the smaller step".

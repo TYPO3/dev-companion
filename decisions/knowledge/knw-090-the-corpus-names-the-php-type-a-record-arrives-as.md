@@ -58,8 +58,8 @@ the five relational TCA types. A session that declares the variable with
   [`D-FBK-027`](../feedback/fbk-027-the-server-builds-what-costs-its-caller-round-trips.md)
   weighs.
 - Not step 4. There is no sentence to reword. What the corpus states about a
-  read of a field off the record is right and complete, and what to declare it
-  as is a different question about the same variable.
+  read of a field off the record is right and complete. What to declare it as is
+  a different question about the same variable.
 - Not step 2 or 3. The session reached the hints that own the subject and read
   them, and named them in its report.
 - Not closed on the spot. Which TCA types transform into a value object is a

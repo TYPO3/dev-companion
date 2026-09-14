@@ -109,10 +109,10 @@ core for a CSS length out of the rendered markup.
 
 ## Wrong if
 
-- The read finds the `12.4` and `13.4` row does not reach a set, because of
-  `clear = 3` or because the core skips the row itself where the site carries
-  sets. Then the statement is `since: 14` rather than bound twice, and the LTS
-  half is a different subject.
+- The read finds the `12.4` and `13.4` row does not reach a set. The cause is
+  `clear = 3`, or the core skips the row itself where the site carries sets.
+  Then the statement is `since: 14` rather than bound twice, and the LTS half is
+  a different subject.
 - The statement lands and a session whose set does not render still reaches
   `site-sets` alone. The lever was that hint's curation, and this is step 4
   rather than step 1a.

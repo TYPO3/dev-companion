@@ -16,8 +16,8 @@ coveredBy:
 `$row['hidden']` on such a row is absent rather than false.**
 
 `record-system-properties` carries it beside `persistence-reading` rather than
-inside it. One hint is one question, and the two questions are which rows a
-query returns and what the object built from one of them looks like.
+inside it. One hint is one question. The two questions are which rows a query
+returns and what the object built from one of them looks like.
 
 ## Evidence
 

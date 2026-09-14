@@ -72,8 +72,8 @@ changelog.
   make the entry reachable from the symptom, has no entry to reach. The
   identifier search `D-ANS-042` already built would find one if it existed.
 - The card goes to `normal`. One session reported it, which does not lift a card
-  on its own. What lifts this one is that the changelog cannot answer it at all,
-  so a session that does the right thing still ends up in vendor source.
+  on its own. What lifts this one is that the changelog cannot answer it at all.
+  So a session that does the right thing still ends up in vendor source.
 - Recorded here rather than against `D-ANS-010`. That entry is about a silence
   the manual answers, and this silence belongs to neither corpus. The event
   happened and nobody wrote it down anywhere outside the commit.

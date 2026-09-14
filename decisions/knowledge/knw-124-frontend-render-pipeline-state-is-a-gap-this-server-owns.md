@@ -86,8 +86,8 @@ do not bear on the diff.
 - That a review session reaches this by path. The call that missed was
   path-scoped, so the `appliesTo` paths decide whether the hint arrives at all.
 - That the phase order is one hint rather than a document. It is a mechanism a
-  reviewer holds during a read of a diff, not a procedure step by step, which is
-  what the documents below `knowledge/documents/` are for.
+  reviewer holds during a read of a diff, not a procedure step by step. The
+  documents below `knowledge/documents/` are for the latter.
 - That the 12.4 shape is worth a statement. `reset()` never touches the property
   there, so the question a caller on that line asks has another answer rather
   than none.

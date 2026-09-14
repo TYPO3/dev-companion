@@ -27,7 +27,7 @@ imitate the neighbours in a codebase where two rules are off on purpose.
 - The server delivers half of it already. `knowledge/test-suite-hints.json`
   carries `lintTypescript` and `typo3_test_run_guide` hands it over. The session
   that reported ran it and it passed. What is nowhere in the corpus is where the
-  style is *decided*, so a question about a single rule has no cheaper answer
+  style is *decided*. So a question about a single rule has no cheaper answer
   than a read of the config.
 - The corpus already names a checker where the work passes rather than only in
   the test guide: `css-source-build-boundaries` says to use `lintScss`. The

@@ -66,11 +66,11 @@ sitepackage that trusted it would have named no template at all.
   `snake_case` CType is a requirement under the derivation and a habit without
   it.
 - Closed in this run rather than queued. `documentation/records/judging.rst`
-  puts a feedback that needs a TYPO3 lookup on the todo side of the line because
-  the judgement run has read nothing but this repository. The read that
-  disqualifies it is the one the ladder owes any feedback that claims something
-  about TYPO3. That read happened here, in `.checkouts/`, on all three covered
-  majors and named by file above.
+  puts a feedback that needs a TYPO3 lookup on the todo side of the line. The
+  judgement run has read nothing but this repository. The read that disqualifies
+  it is the one the ladder owes any feedback that claims something about TYPO3.
+  That read happened here, in `.checkouts/`, on all three covered majors and
+  named by file above.
 - The ladder has no rung for a statement the server delivered, the session took,
   and that was wrong. This is step 1a by the gap, since the corpus never said
   what `fluid_styled_content` does, and step 4 by what the repair costs. One

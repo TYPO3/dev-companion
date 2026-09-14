@@ -58,7 +58,7 @@ a hidden record renders and nothing throws.
   `frontend-records`.
 - The hint stands around the silent failure rather than around the accessor
   list. A caller who hears the accessors exist still has no reason to stop with
-  `$row['hidden']`, because that read returns a value and the value looks right.
+  `$row['hidden']`. That read returns a value and the value looks right.
 - The card goes to `normal`. One session reported it, which is not the weight
   that lifts a card on its own. What lifts this one is that the failure reads as
   a correct answer. A session pays a gap whose cost is a wrong lookup once, and

@@ -74,10 +74,10 @@ step that asks with nothing to say.
   declarable is there has been told where to read next, and
   `typo3_extension_describe` already reports where the manual is. That is what
   the session that reported established by hand out of `.rst` files.
-- **One card for both halves of the feedback.** The closing item it asks for,
-  establish how this package expects a fresh instance to fill before the report
-  of a done boot, is that knowledge delivered at the step that needs it. Its
-  wording depends on what the read finds.
+- **One card for both halves of the feedback.** The closing item it asks for is
+  that knowledge delivered at the step that needs it. That item is: establish
+  how this package expects a fresh instance to fill before the report of a done
+  boot. Its wording depends on what the read finds.
 - **Priority `normal`, set by the counted cost rather than by arrival.** One
   session on one extension is not what raises it. Five calls with two of them
   that answer nothing is the measure `D-FBK-027` names. The gap is the corpus's

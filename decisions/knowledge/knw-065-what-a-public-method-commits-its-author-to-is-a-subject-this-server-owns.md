@@ -71,7 +71,7 @@ wrote the diff, the tests and the changelog entry.
 
 - Step 1a on the hint half and step 4 on the two wordings, queued rather than
   closed on the spot. Both tests for the spot fail. The wording sits in `src/`
-  and in a skill's contract, and what the hint states is a claim about TYPO3 a
+  and in a skill's contract. What the hint states is a claim about TYPO3 a
   session has to read across `.checkouts/`.
 - `normal` rather than the `low` the card arrived at. It is one session, so not
   more than that. But what the silence let through was a break with a `[BUGFIX]`

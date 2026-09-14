@@ -45,8 +45,8 @@ search over. The step that finds them is one grep in the skill that needs them.
 
 - **No tool.** The todo asked for the price before the build, and the price is
   the finding. Nine lines is what `grep -rn "@todo" <sysext>/Tests` answers in
-  one call. An index over them would be a surface, a schema and a contract test
-  that stand on a corpus smaller than one of its own answers.
+  one call. An index over them would be a surface, a schema and a contract test.
+  All three would stand on a corpus smaller than one of its own answers.
 - **The step goes where the work is.** `typo3-core-issue-triage` says to look
   for the test the core already wrote and switched off before the session writes
   one. It names the grep, and says which subsystem to narrow it to. The reason

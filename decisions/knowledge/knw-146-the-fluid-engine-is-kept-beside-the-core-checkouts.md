@@ -43,9 +43,9 @@ line the core's own `require` pins.**
   `.checkouts/`. They differ in nothing else. So the harness class became one of
   two instances rather than a copy.
 - The read it exists for happened in it. `BooleanNode` and `BooleanParser` say a
-  quoted operand is a literal, in `.checkouts/fluid/2` at 2.15.0, `4` at 4.6.1
-  and `5` at 5.3.2, which is every covered major. The statement stands unbound
-  on `fluid-conditions-and-arrays`.
+  quoted operand is a literal. That holds in `.checkouts/fluid/2` at 2.15.0, `4`
+  at 4.6.1 and `5` at 5.3.2, which is every covered major. The statement stands
+  unbound on `fluid-conditions-and-arrays`.
 
 ## Assumed
 

@@ -110,6 +110,6 @@ may simply print. So the first **Wrong if** did not hold. The third did not
 either, and one section pair carries what differs between the majors.
 
 The second **Wrong if** held. A review had the document installed, read the
-paragraph that names it, skipped it because the diff was PHP, and spent six
+paragraph that names it, and skipped it because the diff was PHP. It spent six
 container rounds on the harness. So the gap was the route, which `D-KNW-122`
 reads.

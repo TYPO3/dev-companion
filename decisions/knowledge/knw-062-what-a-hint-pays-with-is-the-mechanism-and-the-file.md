@@ -42,11 +42,11 @@ four hints it names all paid the same way.
   — read from the other end.
 - `feedback/2026-09-03-235605`, a seed run five weeks later, is the same
   measurement on `datahandler-seeding`. `Bootstrap::init($classLoader)` with the
-  failsafe flag and the constructor error it produces, the three backend-user
-  calls in order, and `pages.hidden` with a default of 1 in TCA against 0 in the
-  schema. The session set `hidden=0` because of the third. It says the page
-  answered as the site's 404 target on the first run instead of as a second
-  not-found. All three are a mechanism and the failure it produces.
+  failsafe flag and the constructor error it produces, and the three
+  backend-user calls in order. Then `pages.hidden` with a default of 1 in TCA
+  against 0 in the schema. The session set `hidden=0` because of the third. It
+  says the page answered as the site's 404 target on the first run instead of as
+  a second not-found. All three are a mechanism and the failure it produces.
 - Two answer shapes carried the same weight. `typo3_changelog_lookup` returns
   the full tag list for the version and type. That let the session write an
   eight-call deprecation sweep against real tags before it opened a file. Three

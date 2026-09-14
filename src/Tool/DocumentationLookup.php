@@ -44,7 +44,7 @@ final class DocumentationLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Search or read the official live TYPO3 documentation for a covered TYPO3 line. Four manuals are searched: TYPO3 Explained, TypoScript Explained, the TCA Reference and the Fluid ViewHelper Reference. Search with several short English queries; every result carries a canonical URL. Pass one of those URLs back as page with the same targetVersion to receive that page as text, including headings and code examples. A query naming a Fluid tag such as f:if is answered from the ViewHelper reference alone; ask without the prefix for the other manuals\' Fluid chapters. This reaches docs.typo3.org, unlike the bundled convention lookups.';
+        return 'Search or read the official live TYPO3 documentation for a covered TYPO3 line. It searches four manuals: TYPO3 Explained, TypoScript Explained, the TCA Reference and the Fluid ViewHelper Reference. Search with several short English queries; every result carries a canonical URL. Pass one of those URLs back as page with the same targetVersion to receive that page as text, headings and code examples included. A query that names a Fluid tag such as f:if gets its answer from the ViewHelper reference alone. Ask without the prefix for the other manuals\' Fluid chapters. This reaches docs.typo3.org, unlike the bundled convention lookups.';
     }
 
 
@@ -95,34 +95,34 @@ final class DocumentationLookup extends ReadOnlyTool
             'insteadOf' => Schema::listOf(Schema::object([
                 'query' => Schema::string('The query that reads as a code identifier.'),
                 'ask' => Schema::listOf(Schema::string(), 'The bare names to ask with instead, most specific first.'),
-            ], ['query', 'ask']), 'Present on a miss where a query is shaped like a PHP identifier. This index is '
-                . 'page titles, section paths and the property names each manual declares, so a class or method '
-                . 'name has no page to be titled after, while the property or ViewHelper it belongs to does.'),
+            ], ['query', 'ask']), 'Present on a miss where a query has the shape of a PHP identifier. This index is '
+                . 'page titles, section paths and the property names each manual declares. So a class or method '
+                . 'name has no page with its title, while the property or ViewHelper it belongs to does.'),
             'results' => Schema::listOf(Schema::object([
                 'title' => Schema::string(),
-                'url' => Schema::string('Canonical URL of the matching documentation page.'),
+                'url' => Schema::string('Canonical URL of the documentation page that matched.'),
                 'document' => Schema::string('Official document identifier.'),
                 'documentTitle' => Schema::string(),
                 'documentVersion' => Schema::string(),
                 'section' => Schema::string(),
-                'excerpt' => Schema::string('Short route into the source, empty only when the result page could not be read after its index matched.'),
+                'excerpt' => Schema::string('Short route into the source, empty only when the tool could not read the result page after its index matched.'),
                 'content' => Schema::string('The selected page as text in page mode; empty in search mode.'),
                 'coverage' => [
                     'type' => ['number', 'null'],
-                    'description' => 'Share of the query\'s weight this page carries, 0 to 1, for the query it is '
-                        . 'returned for. Below 0.5 the page carries some words of the question and not its subject, '
-                        . 'and the answer says so above the results — it is returned anyway, because over a table of '
+                    'description' => 'Share of the query\'s weight this page carries, 0 to 1, for the query it '
+                        . 'answers. Below 0.5 the page carries some words of the question and not its subject, '
+                        . 'and the answer says so above the results. The page comes back anyway. Over a table of '
                         . 'contents the page that answers a three-word question covers about a third of it. Null in '
-                        . 'page mode, where nothing was searched for.',
+                        . 'page mode, where the call searched for nothing.',
                 ],
                 'matched' => Schema::listOf(Schema::object([
-                    'term' => Schema::string('The query word, reduced to the stem that was searched for.'),
-                    'field' => ['type' => 'string', 'enum' => ['title', 'path', 'manual'], 'description' => 'Where it was found: the page title, the section path it sits in, or the name of the manual.'],
-                ], ['term', 'field']), 'What this page was matched on. Every query word missing from it reached this page nowhere, so a result whose match is made of the words around the subject is an aimed answer rather than one about the subject; ask again with the subject alone. Empty in page mode.'),
+                    'term' => Schema::string('The query word, reduced to the stem the search used.'),
+                    'field' => ['type' => 'string', 'enum' => ['title', 'path', 'manual'], 'description' => 'Where the word matched: the page title, the section path it sits in, or the name of the manual.'],
+                ], ['term', 'field']), 'What this page matched on. Every query word absent from it reached this page nowhere. So a result whose match consists of the words around the subject is an aimed answer rather than one about the subject. Ask again with the subject alone. Empty in page mode.'),
             ], ['title', 'url', 'document', 'documentTitle', 'documentVersion', 'section', 'excerpt', 'content', 'coverage', 'matched'])),
             'unavailable' => Schema::unavailable([
                 'version-not-covered' => 'the release asked about is outside the ones this server knows the manuals '
-                    . 'for, and asking again changes nothing.',
+                    . 'for, and a second call changes nothing.',
                 'source-not-answering' => 'docs.typo3.org did not answer this time, and the same call may answer '
                     . 'the next.',
             ]),

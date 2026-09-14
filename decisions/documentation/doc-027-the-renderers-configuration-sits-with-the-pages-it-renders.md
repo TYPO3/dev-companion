@@ -25,29 +25,29 @@ the corpus was a directory plus one file above it. Neither is true since
   documentation directory first.
 - The renderer's binary resolves the file in three places: beside its own
   `vendor/`, then under `--working-dir`, then under `-c`, which defaults to the
-  working directory. Only the last one was in use.
-- `input` and `output` are resolved against the working directory rather than
-  against the configuration, so the file moves and `.site/source` and
-  `.site/html` stay as they were. That is what makes the move one flag.
+  work directory. Only the last one was in use.
+- `input` and `output` resolve against the work directory rather than against
+  the configuration. So the file moves and `.site/source` and `.site/html` stay
+  as they were. That is what makes the move one flag.
 - The corpus is one directory now, so there is no page above the file it
   configures.
 
 ## Decided
 
 - Site::RENDER carries `-c` and `Site::SOURCE`, so the flag names the same
-  constant the copy is read from and the two cannot be moved apart.
+  constant the copy comes from and the two cannot move apart.
 - `Site::sources()` skips it by name. The copy is the pages published, and a
   renderer's configuration is not one — published it would sit in the input
   directory it declares.
-- The working directory stays the root of the checkout. Everything the two steps
+- The work directory stays the root of the checkout. Everything the two steps
   name is relative to it, and the configuration is now the only thing that is
   not.
 
 ## Assumed
 
-- That the renderer goes on reading `-c` as a directory rather than a file. The
-  binary appends `/guides.xml` to what it is given, which is its own contract
-  and not one this repository can hold.
+- That the renderer still reads `-c` as a directory rather than a file. The
+  binary appends `/guides.xml` to what it gets, which is its own contract and
+  not one this repository can hold.
 
 ## Wrong if
 

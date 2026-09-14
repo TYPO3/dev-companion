@@ -1680,12 +1680,12 @@ final class KnowledgeTest extends TestCase
             'the rule names no source, which is what sends a session to the checkout instead',
         );
         self::assertStringContainsString(
-            '`Co-Authored-By:` is not set',
+            'Nobody sets `Co-Authored-By:`',
             $body,
             'the trailer an agent writes about itself is left out of the rule',
         );
         self::assertStringContainsString(
-            "Changing any of this is the maintainer's call",
+            "A change to any of this is the maintainer's call",
             $body,
             'nothing says who the rule belongs to, which is what sends a session to the checkout instead',
         );

@@ -2,15 +2,15 @@
 description: >-
   Where the upstream contribution documentation lives, as links to it.
 whenToUse: >-
-  When a question goes past what the bundled documents answer and the official guide has to be read.
+  When a question goes past what the bundled documents answer and you have to read the official guide.
 hints: []
 ---
 
 # TYPO3 Contribution Sources
 
-Official upstream documentation behind this knowledge base. The guide itself is
-not bundled — link to these URLs when a question goes past what the local
-documents cover.
+The official upstream documentation behind this knowledge base. This package
+does not bundle the guide. Link to these URLs when a question goes past what the
+local documents cover.
 
 ## Core Contribution Guide
 
@@ -39,10 +39,9 @@ https://forge.typo3.org/projects/typo3cms-core
 
 ## Local Policy
 
-- Prefer official TYPO3 documentation for workflow rules.
-- Prefer the local TYPO3 core checkout for available scripts, current branch
-  state, and changed files.
-- Keep derived rules short and link back to the source when a recommendation
-  depends on official process.
-- Re-check upstream documentation when a workflow rule is likely to have
-  changed.
+- Prefer the official TYPO3 documentation for workflow rules.
+- Prefer the local TYPO3 core checkout for the scripts it has, the current
+  branch state, and the changed files.
+- Keep a derived rule short. Link back to the source when a recommendation
+  depends on the official process.
+- Read the upstream documentation again when a workflow rule may have changed.

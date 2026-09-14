@@ -15,11 +15,11 @@ environment carries join the three PHP numbers `typo3_project_describe` already
 states.**
 
 A sitepackage maintenance session reported that five sixths of it were Node, npm
-and GitHub Actions work with no TYPO3 surface at all, and asked whether that
+and GitHub Actions work with no TYPO3 surface at all. It asked whether that
 surface is meant to be in scope. Its defect was a Node major difference between
-the machine and CI. That is the one thing about the surface this server was
-already built to say for the other interpreter, and the npm half of its own
-command list says none of it.
+the machine and CI. That is the one thing about the surface this server already
+says for the other interpreter. The npm half of its own command list says none
+of it.
 
 ## Evidence
 
@@ -27,86 +27,88 @@ command list says none of it.
   no `engines`, no `.nvmrc` beside it. `node` occurs once in `src/`, in
   `DocumentationPreview`, where it runs this repository's own renderer.
 - The same answer carries `phpConstraint`, `corePhpConstraint`,
-  `environment.php` and the `phpRelation` between them, and
+  `environment.php` and the `phpRelation` between them.
   [`D-ANS-082`](../answers/ans-082-the-project-answer-states-how-its-three-php-numbers-relate.md)
   is why: the line stated the numbers and the relation was the defect.
   `inEnvironment: above` reads "nothing configured here ever executes the
   version this project promises". The npm half of the same command list has no
   such sentence and no numbers to build one from.
-- The reported bug was fantasticon's EOT generator writing 65536 bytes instead
-  of 5828, because Node 24.19 raised `Buffer.poolSize` from 8 KiB to 64 KiB and
+- The reported bug was fantasticon's EOT generator, which wrote 65536 bytes
+  instead of 5828. Node 24.19 raised `Buffer.poolSize` from 8 KiB to 64 KiB and
   the generator copies the pool rather than the view. Local Node was 24.16.
   Nothing here would ever state that; what it could have stated is that the two
   Nodes are different majors of each other's minor.
 - Two tools send the caller to a CI configuration that nothing here reads.
-  `TaskGuide` outside the core: "the scripts in its composer.json, its
-  package.json, and its CI configuration are where its own suites are declared."
-  `ScriptLookup` says the same in its own words.
+  `ScriptLookup` says so in its own words. `TaskGuide` outside the core says:
+  "the scripts in its composer.json, its package.json, and its CI configuration
+  are where its own suites are declared."
 - Three sessions read `.github/` by hand. `2026-07-29-094156` established the
   project's real checks from `.github/workflows/ci.yml` after the guide offered
-  it `runTests.sh`; `2026-08-18-070333` listed `.github/` among four Bash calls
-  it made over the files this tool reads; and this one.
+  it `runTests.sh`. `2026-08-18-070333` listed `.github/` among four Bash calls
+  it made over the files this tool reads. The third is this one.
 - The `extension-asset-build` hint already carries the rule the feedback's
-  second half asks for — "Decide whether generated assets are committed … The
-  extension's package.json and CI are the executable record of that decision" —
-  and `bin/cli hints:probe` returns it first for the feedback's own query. The
-  rule is there and it is reachable. What nothing answers is the fact about the
-  repository in front of the caller.
+  second half asks for. It reads "Decide whether generated assets are committed
+  … The extension's package.json and CI are the executable record of that
+  decision". `bin/cli hints:probe` returns it first for the feedback's own
+  query. The rule is there and a caller can reach it. What nothing answers is
+  the fact about the repository in front of the caller.
 
 ## Decided
 
-- The boundary was never TYPO3's API surface. DDEV's hooks, its pull recipes,
-  the Composer scripts and the PHP an environment runs are all covered because
-  they are what the repository declares about how it runs itself, which is the
-  exception the scope's own operations entry already names. A sitepackage's
-  build is declared in those same files, so it is inside that boundary and
-  reading it needs no new principle.
-- What is built is the interpreter and not the pipeline: `engines.node` and
-  `.nvmrc` as the repository declares them, the Node an `actions/setup-node`
-  step sets up, and `nodejs_version` where a DDEV project states one — with the
-  relation between them said out loud, in the shape `phpRelation` already has.
-- Reading `.github/workflows/*.yml` is the one new source, and it is read for
-  that field rather than for the workflow. What CI asserts as a whole is
-  declined: a workflow file is one `Read` for the caller with no trap in it, so
+- The boundary was never TYPO3's API surface. The server covers DDEV's hooks,
+  its pull recipes, the Composer scripts and the PHP an environment runs. They
+  are what the repository declares about how it runs itself, which is the
+  exception the scope's own operations entry already names. A sitepackage
+  declares its build in those same files, so it is inside that boundary and a
+  read of it needs no new principle.
+- The server builds the interpreter and not the pipeline. That is `engines.node`
+  and `.nvmrc` as the repository declares them, the Node an `actions/setup-node`
+  step sets up, and `nodejs_version` where a DDEV project states one. The answer
+  says the relation between them out loud, in the shape `phpRelation` already
+  has.
+- `.github/workflows/*.yml` is the one new source, and the server reads it for
+  that field rather than for the workflow. This entry declines what CI asserts
+  as a whole. A workflow file is one `Read` for the caller with no trap in it,
+  so
   [`D-FBK-027`](../feedback/fbk-027-the-server-builds-what-costs-its-caller-round-trips.md)'s
   measure does not clear it.
-- Which of the build's outputs are committed artifacts is declined as well. That
-  is tracked files held against `.gitignore`, which is git state and the first
-  entry of the scope's `doesNotCover`, and the hint above already tells the
-  caller to settle it in the repository.
+- This entry also declines the question which of the build's outputs the
+  repository commits. That is the files git tracks held against `.gitignore`,
+  which is git state and the first entry of the scope's `doesNotCover`. The hint
+  above already tells the caller to settle it in the repository.
 
 ## Assumed
 
 - That the interpreter is where the cost sits and the rest of the pipeline is
-  not. One session lost most of itself to one version difference; nothing in the
-  corpus reports a session losing time to not knowing which bundler a repository
-  builds with.
+  not. One session lost most of itself to one version difference. Nothing in the
+  corpus reports a session that lost time because it did not know which bundler
+  a repository builds with.
 - That a workflow states its Node readably often enough to be worth the source.
   `actions/setup-node` takes `node-version` inline, `node-version-file`, or a
   matrix expression, and only the first is a lookup rather than a resolution.
 
 ## Wrong if
 
-- The numbers agree in every repository this is run in, so the relation never
+- The numbers agree in every repository this runs in. Then the relation never
   tells a caller something the one number it already had did not.
-- A session reports reading a workflow file by hand for something other than the
-  interpreter — what a job installs, what it caches, which matrix it runs —
-  which would say the field was cut one short rather than that the surface is
-  out.
-- The Node is resolved out of a matrix or a variable and stated as the one CI
-  runs. A wrong number carries this server's authority, which is worse than the
-  silence it replaced:
+- A session reports that it read a workflow file by hand for something other
+  than the interpreter. That is what a job installs, what it caches, which
+  matrix it runs. That would say the field stopped one short rather than that
+  the surface is out.
+- The server resolves the Node out of a matrix or a variable and states it as
+  the one CI runs. A wrong number carries this server's authority, which is
+  worse than the silence it replaced.
   [`D-FBK-050`](../feedback/fbk-050-a-packages-release-policy-is-asked-rather-than-derived.md)
   declined a field for that reason on the same board.
 
 ## Since then
 
 Built on 2026-08-19 as `R-PRJ-013`, with the two open questions settled in the
-building. **Nothing a workflow leaves to something else is resolved**: a version
-named outright is read, and an expression, a matrix entry, an `lts` alias or a
-`node-version-file` is handed back as written, which the third **Wrong if**
+build. **The server resolves nothing a workflow leaves to something else.** It
+reads a version named outright. It hands an expression, a matrix entry, an `lts`
+alias or a `node-version-file` back as written, which the third **Wrong if**
 decided. **The numbers stand in a `node` object of their own**, null where the
-repository has no npm surface at all, because `phpRelation` is null on a
-different condition and one object would have made each read as the other's.
-Only the segments both sides spell are compared, so the difference that cost the
-reporting session — a minor against a minor — is one no file states.
+repository has no npm surface at all. `phpRelation` is null on a different
+condition, and one object would have made each read as the other's. The server
+compares only the segments both sides spell. So the difference that cost the
+session which reported it, a minor against a minor, is one no file states.

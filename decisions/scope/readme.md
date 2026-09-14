@@ -1,12 +1,10 @@
 # Scope — core conventions where they apply, and nowhere else
 
-How work outside the core is recognised, what is dropped when it is, and why the
-claim that project work is out of scope kept coming back. These sit under
+How the server recognises work outside the core and what it drops then. Also why the claim that project work is out of scope came back each time. These sit under
 [`R-SCO-001`](../../requirements/scope/readme.md) and the audience requirements
 above it.
 
-See [the decisions readme](../readme.md) for how an entry is written and when
-one is added.
+See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-SCO-015`][D-SCO-015] — An intent's routing line names the core artifact it needs · 2026-08-28
 - [`D-SCO-016`][D-SCO-016] — A path placed outside the core decides a call nothing places in it · 2026-08-28

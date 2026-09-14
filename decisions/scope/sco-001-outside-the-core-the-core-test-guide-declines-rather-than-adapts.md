@@ -15,9 +15,9 @@ whether it should adapt its answer to the checkout it finds itself in.
 
 ## Decided
 
-- The difference between the two is what the payload is made of. A hint is a
-  convention and travels; a suite is a command against a script that lives in
-  the core repository and does not.
+- The two payloads consist of different things. A hint is a convention and
+  travels; a suite is a command against a script that lives in the core
+  repository and does not.
 
 ## Wrong if
 
@@ -27,23 +27,23 @@ whether it should adapt its answer to the checkout it finds itself in.
 
 ## Revoked on 2026-07-29
 
-It was assumed that nothing in `knowledge/` described how an extension runs its
-tests, so anything the guide offered instead would have been invented.
+The entry assumed that nothing in `knowledge/` described how an extension runs
+its tests. So anything the guide offered instead would have been an invention.
 `project-extension-tests` now carries that harness, verified against the
-matching `typo3/testing-framework` tags. The `typo3_test_run_guide` still
-declines because its answer shape is a core suite invocation; the
-`typo3-extension-testing` skill takes the other branch, verifies the checkout's
-harness, and routes setup or repair through the extension-test hint and
-versioned documentation before adding coverage.
+`typo3/testing-framework` tags that match. The `typo3_test_run_guide` still
+declines because its answer shape is a core suite invocation. The
+`typo3-extension-testing` skill takes the other branch: it verifies the
+checkout's harness and routes setup or repair through the extension-test hint
+and versioned documentation. Only then does it add coverage.
 
 ## Since then
 
-The half that still holds is carried by a requirement rather than by a decision,
-and no successor is owed. `R-SCO-002` is what says a scope outside the core
-changes the payload entry by entry, and
+A requirement carries the half that still holds, and nobody owes a successor
+decision. `R-SCO-002` says that a scope outside the core changes the payload
+entry by entry.
 `ScopeTest::noRunTestsCommandIsHandedToARepositoryThatHasNoRunTests` calls this
-guide from a site package and asserts that no suite and no `CI=true` come back —
-its own comment is the reason above, that every suite here is a
+guide from a site package and asserts that no suite and no `CI=true` come back.
+Its own comment gives the reason above: every suite here is a
 `Build/Scripts/runTests.sh` invocation and looks copy-pasteable where the script
-is not. What the decline hands over instead is named in it:
-`project-extension-tests`, `browser-tests` and `extension-static-analysis`.
+is not. The decline names what it hands over instead: `project-extension-tests`,
+`browser-tests` and `extension-static-analysis`.

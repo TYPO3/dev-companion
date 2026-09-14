@@ -66,7 +66,7 @@ final class LabelLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Search the labels registered in the TYPO3 installation you are working in and the XLF files below project config/sites. Reuse is local to the translation resource already used at the consuming code: pass resource whenever it is known, and do not reference a match from another module or package merely because its text is identical. The console answers with the resource overrides the installation applies; the files supply an answer when it cannot be reached and report non-standard names or resources with no static reference. Every match comes back as a translation domain reference; computing that reference for a file this installation does not have, one a patch is about to add, is typo3_translation_domain_lookup.';
+        return 'Search the labels registered in the TYPO3 installation you work in and the XLF files below project config/sites. Reuse is local to the translation resource the code at hand already uses. Pass resource whenever you know it, and do not reference a match from another module or package merely because its text is identical. The console answers with the resource overrides the installation applies. The files supply an answer when the console does not answer, and they report non-standard names or resources with no static reference. Every match comes back as a translation domain reference. That reference for a file this installation does not have, one a patch is about to add, is typo3_translation_domain_lookup.';
     }
 
     public static function inputSchema(): array
@@ -74,9 +74,9 @@ final class LabelLookup extends ReadOnlyTool
         return [
             'type' => 'object',
             'properties' => [
-                'query' => ['type' => 'string', 'minLength' => 1, 'description' => 'Words from the label text or its trans-unit id, for example "save document" or "labels.title". Several words are matched independently, ignoring case and order: a label has to carry every one of them, in its text or in its id. When none carries all of them, the answer says how far each word reaches on its own.'],
-                'extension' => ['type' => 'string', 'description' => 'Restrict the search to the extension that owns the consuming code.'],
-                'resource' => ['type' => 'string', 'description' => 'Restrict the search to the exact XLF resource already used at the consuming code, for example "EXT:my_sitepackage/Resources/Private/Language/Backend/Import.xlf". A match from another resource is not a reuse candidate. Where no label in it reaches the query, the answer names the resources that do hold one, so a path that was guessed can be replaced by one that exists.'],
+                'query' => ['type' => 'string', 'minLength' => 1, 'description' => 'Words from the label text or its trans-unit id, for example "save document" or "labels.title". Several words match on their own, whatever their case and order. A label has to carry every one of them, in its text or in its id. When none carries all of them, the answer says how far each word reaches on its own.'],
+                'extension' => ['type' => 'string', 'description' => 'Restrict the search to the extension that owns the code at hand.'],
+                'resource' => ['type' => 'string', 'description' => 'Restrict the search to the exact XLF resource the code at hand already uses, for example "EXT:my_sitepackage/Resources/Private/Language/Backend/Import.xlf". A match from another resource is not a reuse candidate. Where no label in it reaches the query, the answer names the resources that do hold one. So you replace a guessed path with one that exists.'],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 200, 'default' => 25, 'description' => 'Maximum number of labels to return.'],
             ],
             'required' => ['query'],
@@ -89,14 +89,14 @@ final class LabelLookup extends ReadOnlyTool
             'query' => Schema::string(),
             'matchCount' => Schema::integer(),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
-            'terms' => Schema::termCounts('How many labels each word of the query reaches on its own, inside the extension and the resource that were asked for — where to narrow when the query as a whole reaches none. A label answers the query only by carrying every word.'),
-            'termCountsWithoutTheNarrowing' => Schema::termCounts('The same words counted outside the resource, inside the extension that was asked for or derived from it. Returned only where a word reaches there and nothing inside the resource, which makes the resource what emptied this answer rather than the words.'),
-            'resources' => Schema::listOf(Schema::string(), 'The resources holding a label that carries every word of the query. Returned where a resource was asked for and no label at all in it reaches the query, so a path that was guessed can be replaced by one that exists. Empty means no resource holds such a label.'),
+            'terms' => Schema::termCounts('How many labels each word of the query reaches on its own, inside the extension and the resource the call named. That says where to narrow when the query as a whole reaches none. A label answers the query only where it carries every word.'),
+            'termCountsWithoutTheNarrowing' => Schema::termCounts('The same words counted outside the resource, inside the extension the call named or the resource implies. Returned only where a word reaches there and nothing inside the resource, which makes the resource what emptied this answer rather than the words.'),
+            'resources' => Schema::listOf(Schema::string(), 'The resources that hold a label with every word of the query. Returned where the call named a resource and no label at all in it reaches the query. So you replace a guessed path with one that exists. Empty means no resource holds such a label.'),
             'resourceDiagnostics' => Schema::listOf(Schema::object([
                 'resource' => Schema::string('The XLF resource this diagnosis describes.'),
-                'location' => Schema::string('Where it was found: package, site-set, or project-site.'),
-                'conventionalName' => ['type' => 'boolean', 'description' => 'Whether the file follows the naming convention for its location.'],
-                'referenced' => ['type' => 'boolean', 'description' => 'Whether an implicit or static reference was found.'],
+                'location' => Schema::string('Where the file sits: package, site-set, or project-site.'),
+                'conventionalName' => ['type' => 'boolean', 'description' => 'Whether the file name follows the convention for its location.'],
+                'referenced' => ['type' => 'boolean', 'description' => 'Whether the search found an implicit or static reference.'],
                 'references' => Schema::listOf(Schema::string(), 'Source files that name the resource. A conventional site-set labels.xlf names its adjacent config.yaml as an implicit reference.'),
                 'warnings' => Schema::listOf(Schema::string(), 'Naming, discovery, and static-reference warnings for this resource.'),
             ], ['resource', 'location', 'conventionalName', 'referenced', 'references', 'warnings'])),

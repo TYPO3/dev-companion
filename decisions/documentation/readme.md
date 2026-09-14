@@ -1,12 +1,9 @@
 # Documentation — how what is written here is written
 
-Everything below `documentation/`, `AGENTS.md`, the readmes and the generated
-listings share one property: they are read as often unrendered as rendered — in
-a diff, in an editor, in a terminal, by a model that receives the file as text.
-What was assumed about how they are written belongs here.
+Everything below `documentation/`, `AGENTS.md`, the readmes and the generated listings share one property. Readers meet them as often unrendered as rendered: in a diff, in an editor, in a terminal, as text a model receives.
+What a writer assumed about their form belongs here.
 
-See [the decisions readme](../readme.md) for how an entry is written and when it
-earns one.
+See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-DOC-070`][D-DOC-070] — This repository writes in ASD-STE100 · 2026-09-14
 - [`D-DOC-069`][D-DOC-069] — AGENTS.md states the three patch rules this corpus breaks · 2026-09-10

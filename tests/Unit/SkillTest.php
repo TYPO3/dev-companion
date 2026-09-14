@@ -2049,8 +2049,8 @@ final class SkillTest extends TestCase
         // about the world (`D-ANS-033`), and the order that reads it otherwise
         // has been misled by a true statement.
         self::assertStringContainsString('`typo3_gerrit_lookup` with the same issue number', $skill);
-        self::assertStringContainsString('**before any code is written**', $skill);
-        self::assertStringContainsString('nothing public names the issue rather than that nobody has fixed it', $skill);
+        self::assertStringContainsString('**before any code exists**', $skill);
+        self::assertStringContainsString('nothing public names the issue, not that nobody has fixed it', $skill);
         // Before the code, because the outcome that cancels the work is worth
         // nothing once the work is done.
         self::assertLessThan(
@@ -2060,12 +2060,12 @@ final class SkillTest extends TestCase
 
         // The three rungs. Each one changed what the filing session concluded,
         // and none is carried by the order the skill had before.
-        self::assertStringContainsString('check that blocker against what the branch has today', $skill);
+        self::assertStringContainsString('Check that blocker against what the branch has today', $skill);
         self::assertStringContainsString(
             'The argument that carries a bugfix is the same inconsistency inside one version',
             $skill,
         );
-        self::assertStringContainsString('Establish the blast radius here rather than meeting it while working', $skill);
+        self::assertStringContainsString('Establish the blast radius here rather than meet it while you work', $skill);
         // It is an assessment step because it decides the change type, which
         // everything downstream is built on.
         self::assertStringContainsString('a change that has to announce itself, or a breaking one', $skill);
@@ -2103,7 +2103,7 @@ final class SkillTest extends TestCase
         );
         // Both outcomes, because only one of the two was the failure.
         self::assertStringContainsString(
-            'One patch covers all of them, or each point it leaves is given an issue of its own here, '
+            'One patch covers all of them, or each point it leaves gets its own issue here, '
             . 'before any code',
             $skill,
         );
@@ -2111,12 +2111,12 @@ final class SkillTest extends TestCase
         // a number, and `core/contribution/commit-messages` and
         // `core/contribution/changelog` each demand one.
         self::assertStringContainsString(
-            'the `Resolves:` trailer and the changelog file name each take one',
+            'The `Resolves:` trailer and the changelog file name each take one',
             $skill,
         );
         // Risk is what the filing session dropped the third point for.
         self::assertStringContainsString(
-            'riskier to change is an argument for giving it its own issue rather than for dropping it',
+            'riskier to change is an argument for an issue of its own, not for a drop',
             $skill,
         );
         self::assertLessThan(
@@ -2132,7 +2132,7 @@ final class SkillTest extends TestCase
         self::assertGreaterThan((int) strpos($skill, 'Keep the patch one change'), $narrowing);
         // What a silent narrowing costs, which nothing outside the session sees.
         self::assertStringContainsString(
-            'closes the issue on every point it names and nobody reopens a closed one',
+            'closes the issue on every point it names, and nobody reopens a closed one',
             $skill,
         );
     }
@@ -2158,13 +2158,13 @@ final class SkillTest extends TestCase
 
         // The three, in the skill's own vocabulary rather than restated.
         self::assertStringContainsString(
-            're-establish three things: what kind of change this is now, which branches it reaches, '
+            're-establish three things. That is what kind of change this is now, which branches it reaches, '
             . 'and what it owes',
             $skill,
         );
         // Before the widened part, because the cost is work already written.
         self::assertStringContainsString(
-            'Do it before writing the widened part, and say which of the three moved',
+            'Do it before you write the widened part, and say which of the three moved',
             $skill,
         );
         // Pointers to where each was settled the first time: step 2, the
@@ -2173,7 +2173,7 @@ final class SkillTest extends TestCase
             'Step 2 settled the first, the blast radius the second and the changelog section the third',
             $skill,
         );
-        self::assertStringContainsString('Carrying on re-derives none of them', $skill);
+        self::assertStringContainsString('To carry on derives none of them again', $skill);
         // What a widening costs where it gains a subsystem, which is the two
         // discarded rounds in one sentence.
         self::assertStringContainsString(
@@ -2190,7 +2190,7 @@ final class SkillTest extends TestCase
             (int) strpos($skill, 'That narrows the work and never the points the issue lists'),
             $widening,
         );
-        self::assertLessThan((int) strpos($skill, 'Find out whether the area is moving'), $widening);
+        self::assertLessThan((int) strpos($skill, 'Find out whether the area moves'), $widening);
     }
 
     #[Requirement('R-SKL-013')]
@@ -2322,7 +2322,7 @@ final class SkillTest extends TestCase
         // Before the reproduction: a rule read as a prohibition ends the
         // assessment before anything is reproduced, which is what happened.
         self::assertLessThan(
-            strpos($skill, '**Reproduce against the branch you are fixing**'),
+            strpos($skill, '**Reproduce against the branch you fix**'),
             strpos($skill, '**Verify in the checkout every rule the issue quotes.**'),
         );
     }
@@ -2348,17 +2348,17 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString(
-            '**Read the closure reason and the target version for what the conversation decided, '
-            . 'and write that down rather than what the report is worth.**',
+            '**Read the closure reason and the target version for what the conversation decided. '
+            . 'Write that down rather than what the report is worth.**',
             $skill,
         );
         // The reading that was actually available in the report: silence is
         // evidence about the answer as much as about the reporter.
         self::assertStringContainsString(
-            'as consistent with an answer the reporter could not use as with the reporter giving up',
+            'The reporter could not use the answer, or the reporter gave up',
             $skill,
         );
-        self::assertStringContainsString('a closed issue is not a finding that the need is absent', $skill);
+        self::assertStringContainsString('A closed issue is not a finding that the need is absent', $skill);
 
         self::assertStringContainsString(
             '**Where a comment names an alternative, write out what the alternative drops '
@@ -2378,7 +2378,7 @@ final class SkillTest extends TestCase
         // ahead of the reproduction.
         $establish = strpos($skill, '## Establish the issue before you believe it');
         $closure = strpos($skill, '**Read the closure reason and the target version');
-        $reproduce = strpos($skill, '**Reproduce against the branch you are fixing**');
+        $reproduce = strpos($skill, '**Reproduce against the branch you fix**');
         self::assertNotFalse($establish);
         self::assertNotFalse($closure);
         self::assertNotFalse($reproduce);

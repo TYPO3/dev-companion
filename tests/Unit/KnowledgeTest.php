@@ -1929,6 +1929,9 @@ final class KnowledgeTest extends TestCase
      * document about drawing one made that word reach six sections — which is
      * the corpus taking a thin match away rather than the floor failing.
      *
+     * The STE rewrite of the condition page (`D-DOC-070`) took "signed-in" out
+     * of it, so that thin match is gone and the cut spans two documents.
+     *
      * What the floor costs, measured over `Documents::topics()` on 2026-08-24
      * at `targetVersion=15.0`: of the corpus's 103 subjects, 25 reach one page
      * and 12 of those reach exactly one section. So a ninth of the subjects is
@@ -1950,7 +1953,6 @@ final class KnowledgeTest extends TestCase
                 'What It Does Not Prove',
                 'What The Commit Hook Writes',
                 'What to Capture, and Why Not the Templates',
-                'Which URL Is Requested',
             ],
             array_column($reported->data['matches'], 'heading'),
         );

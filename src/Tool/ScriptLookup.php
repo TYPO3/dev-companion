@@ -32,7 +32,7 @@ final class ScriptLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Find notes for TYPO3 core scripts and commands: how Build/Scripts/runTests.sh is started and what it needs first, what an argument after -- reaches and which options one run takes, the commands per subject, and what the pre-commit hook does to a commit. They are the core checkout\'s own: a query that reads as a project or third-party extension is answered with the boundary instead of with commands that do not exist there. Which suite a change actually needs, and what one of them does when it runs — what it provisions, what it passes through, which environment variables change it — is typo3_test_run_guide, which filters the suites by version.';
+        return 'Find notes for TYPO3 core scripts and commands. That is how you start Build/Scripts/runTests.sh and what it needs first, what an argument after -- reaches and which options one run takes. It is the commands per subject, and what the pre-commit hook does to a commit. They are the core checkout\'s own. A query that reads as a project or third-party extension gets the boundary as its answer instead of commands that do not exist there. Which suite a change needs, and what one of them does when it runs, is typo3_test_run_guide, which filters the suites by version. That is what it provisions, what it passes through, and which environment variables change it.';
     }
 
     public static function inputSchema(): array
@@ -41,7 +41,7 @@ final class ScriptLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'task' => ['type' => 'string', 'minLength' => 1, 'description' => 'The TYPO3 core task, in English, for example unit tests, functional tests, CGL, npm, or dependency install.'],
-                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the answer has to hold on, for example "13.4" or "14". A section bound to another major is left out. Defaults to every major this repository declares typo3/cms-core for, or to the installation this server was started in; where there is neither, every section comes back with the range it holds for.'],
+                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the answer has to hold on, for example "13.4" or "14". The answer leaves out a section bound to another major. Defaults to every major this repository declares typo3/cms-core for, or to the installation this server started in. Where there is neither, every section comes back with the range it holds for.'],
             ],
             'required' => ['task'],
         ];

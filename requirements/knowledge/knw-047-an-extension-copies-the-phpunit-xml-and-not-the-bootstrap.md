@@ -9,13 +9,13 @@ heldBy:
 # R-KNW-047 — An extension copies the phpunit XML and not the bootstrap
 
 **The test-setup answer says to copy `UnitTests.xml` and `FunctionalTests.xml`
-into the extension and to reference the testing framework's bootstraps from the
-vendor directory rather than copying them.**
+into the extension. It says to reference the framework's bootstraps from the
+vendor directory rather than copy them.**
 
-The XML has to be copied because its testsuite directory points into the core
-mono repository. The bootstrap holds nothing an extension configures — a
-`Testbase`, `ORIGINAL_ROOT` and two directories below `typo3temp/var/` — so a
-copy is a file nobody updates afterwards.
+The XML needs a copy because its testsuite directory points into the core mono
+repository. The bootstrap holds nothing an extension configures, a `Testbase`,
+`ORIGINAL_ROOT` and two directories below `typo3temp/var/`. So a copy is a file
+nobody updates afterwards.
 
 ## From
 

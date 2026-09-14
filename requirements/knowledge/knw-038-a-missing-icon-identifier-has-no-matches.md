@@ -8,15 +8,16 @@ heldBy:
 
 # R-KNW-038 — A missing icon identifier has no matches
 
-**A complete backend icon identifier is validated exactly.**
+**The validation of a complete backend icon identifier is exact.**
 
-A missing identifier has `matchCount: 0` in structured data even when related
-identifiers are offered, and those carry a separate `suggestionCount`. Leading
-categories such as `actions-` and `content-` describe the icon's usage and do
-not by themselves make every icon in that category a match or a suggestion.
+An absent identifier has `matchCount: 0` in structured data even when the answer
+offers related identifiers, and those carry a separate `suggestionCount`.
+Categories in front such as `actions-` and `content-` describe the icon's use.
+They do not by themselves make every icon in that category a match or a
+suggestion.
 
 ## From
 
-`actions-definitely-does-not-exist` correctly described as missing in text while
+`actions-definitely-does-not-exist` correctly described as absent in text while
 its structured answer claimed 556 matches from the `actions-` prefix
 (2026-07-30).

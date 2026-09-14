@@ -9,12 +9,12 @@ heldBy:
 
 # R-KNW-036 — Label reuse stays at the usage context
 
-**Label reuse is local to the translation resource and semantic context already
-used at the consuming code.**
+**Label reuse is local to the translation resource and semantic context the code
+at hand already uses.**
 
 An identical string elsewhere in the installation is not a cross-module
-vocabulary, and a new unit id names its concrete use within the local resource
-rather than using a context-free word such as `new`.
+vocabulary. A new unit id names its concrete use within the local resource
+rather than a context-free word such as `new`.
 
 ## From
 

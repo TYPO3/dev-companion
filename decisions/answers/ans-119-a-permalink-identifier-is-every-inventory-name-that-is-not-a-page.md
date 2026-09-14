@@ -21,9 +21,9 @@ the two tools take one artefact apart along one line.
 
 - Read against `docs.typo3.org` on 2026-08-27, over the inventory of TYPO3
   Explained at `main`: 14292 objects in fifteen roles, of which 975 are
-  `std:doc`. One name of each of the other fourteen roles was put to
+  `std:doc`. One name of each of the other fourteen roles went to
   `/permalink/t3coreapi:<name>` and every one answered 307 with the URI the
-  inventory gives it — `std:label`, `std:title`, `std:confval`,
+  inventory gives it. Those are `std:label`, `std:title`, `std:confval`,
   `std:confval-menu`, `std:option`, `std:accordion`, `std:console:command`,
   `std:console:command-list`, `typo3:file`, `php:class`, `php:interface`,
   `php:method`, `php:property`, `php:const`.
@@ -34,12 +34,12 @@ the two tools take one artefact apart along one line.
 - The route is case-insensitive on both halves.
   `T3COREAPI:OPCACHE-SAVE-COMMENTS` and `t3coreapi:OpCache-Save-Comments` answer
   307 with the same URI as the lowercase spelling. `t3coreapi:About` looks like
-  a page resolving and is not: it answers `About.html#about`, which is the
+  a page that resolves and is not: it answers `About.html#about`, which is the
   `std:label` named `about`.
 - A `std:confval` and its generated label are both listed and both resolve.
-  `columns-onchange` is the `std:confval` the TCA reference declares,
-  `confval-columns-onchange` is a `std:label` of the same anchor, and each is a
-  line of the inventory rather than a prefix somebody strips.
+  `columns-onchange` is the `std:confval` the TCA reference declares, and
+  `confval-columns-onchange` is a `std:label` of the same anchor. Each is a line
+  of the inventory rather than a prefix somebody strips.
 - One name may carry more than one role at one target.
   `typo3-cms-core-page-assetcollector` is `std:label` and `php:class` on
   `ApiOverview/Assets/Index.html`, which is one identifier and not two.
@@ -50,34 +50,33 @@ the two tools take one artefact apart along one line.
 ## Decided
 
 - The parse is shared. `Manual\Inventory` fetches, revalidates under the `ETag`
-  and takes an inventory apart; `Documentation` filters it to `std:doc` and
-  `Permalink` to everything else, so the format is read in one place.
-- The `$` abbreviation is not expanded, on the same grounds `D-ANS-065` left it
-  alone: nothing in the corpus uses it, and a branch nothing takes is one
+  and takes an inventory apart. `Documentation` filters it to `std:doc` and
+  `Permalink` to everything else, so one place reads the format.
+- The `$` abbreviation stays as it is, on the same grounds `D-ANS-065` left it
+  alone. Nothing in the corpus uses it, and a branch nothing takes is one
   nothing checks either.
-- An answer carries the roles rather than hiding them. What a name is registered
-  as is what says whether writing it links to a section, to a configuration
-  value or to API, and a caller choosing between two spellings has nothing else
-  to choose on.
+- An answer carries the roles rather than hides them. A name's registered role
+  says whether a link to it lands on a section, on a configuration value or on
+  API. A caller who chooses between two spellings has nothing else to choose on.
 - Where a target has a `std:confval`, that name is the one the answer prefers.
   The manual declares it and Sphinx generates the rest from its anchor.
-- A name is matched case-insensitively, because the route is.
+- The match ignores case, because the route does.
 
 ## Assumed
 
-- That the permalink route accepts exactly what the inventory lists. Fourteen
-  roles were checked in both directions and no manual was read exhaustively
+- That the permalink route accepts exactly what the inventory lists. The check
+  covered fourteen roles in both directions, and no manual had a full read
   against the route.
 - That `std:doc` stays outside the identifier space. It is what the route does
   today and nothing on the host states it as a rule.
 
 ## Wrong if
 
-- A page name starts resolving. Then the two tools no longer split the inventory
-  along one line, and a caller asking `typo3_permalink_lookup` for a page is
-  told it does not exist.
+- A page name starts to resolve. Then the two tools no longer split the
+  inventory along one line. A caller who asks `typo3_permalink_lookup` for a
+  page hears it does not exist.
 - A role arrives that the route does not accept. Then the answer reports an
-  identifier as resolving that answers 404, which is the failure this tool
-  exists to prevent.
+  identifier as resolved that answers 404, which is the failure this tool exists
+  to prevent.
 - A manual publishes a URI abbreviated with `$`. Then the URL handed back is
   short by the object's own name and lands on the page rather than the anchor.

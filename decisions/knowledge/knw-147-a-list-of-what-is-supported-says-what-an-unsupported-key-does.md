@@ -9,8 +9,8 @@ coveredBy:
 
 # D-KNW-147 — A list of what is supported says what an unsupported key does
 
-**A hint listing what a configuration file may hold says what a key outside the
-list does, because a bare list reads as "and the rest is ignored".**
+**A hint that lists what a configuration file may hold says what a key outside
+the list does. A bare list reads as "and the rest is ignored".**
 
 The reader who takes that reading writes one key and takes a whole frontend
 down.
@@ -20,12 +20,12 @@ down.
 - `feedback/2026-09-03-235234`. `site-sets` listed the six files a set directory
   may hold and said nothing about a key `config.yaml` may not carry. The session
   put `routes:` into a project set to find out, and every page of every site
-  depending on that set answered HTTP 500.
-- Read in `.checkouts/13.4`, `.checkouts/14.3` and `.checkouts/main`:
+  that depends on that set answered HTTP 500.
+- Read in `.checkouts/13.4`, `.checkouts/14.3` and `.checkouts/main`.
   `YamlSetDefinitionProvider::createDefinition()` builds
-  `new SetDefinition(...$setData)`, `SetDefinition` is readonly with a fixed
-  parameter list, and `getObjectConstructionErrors()` turns the resulting
-  `\Error` into an `InvalidSetException` whose message ends in
+  `new SetDefinition(...$setData)`, and `SetDefinition` is readonly with a fixed
+  parameter list. `getObjectConstructionErrors()` turns the `\Error` that
+  results into an `InvalidSetException` whose message ends in
   `Invalid properties: <key>`.
 - The same reading found a second defect the feedback did not report. That list
   carried `route-enhancers.yaml` bound `since: 13`, and `routeEnhancers` is a
@@ -43,7 +43,7 @@ down.
 - Four statements rather than one — the file list split at its version boundary,
   the v14 file, the fatal key, and the `routes` boundary — because the report
   and the reading it triggered are two findings.
-- The parameters are named by their class rather than enumerated. The
+- The hint names the parameters by their class rather than enumerates them. The
   enumeration is version-bound and grew between 13 and 14, and a list that grows
   is what `AGENTS.md` says to name rather than to count.
 
@@ -56,7 +56,7 @@ down.
 
 - A session reads the new statement and still treats an unlisted key as ignored.
   Then the sentence is not what carries it and the placement is the question.
-- A later major validates a set's keys and reports them instead of failing the
+- A later major validates a set's keys and reports them instead of fails the
   site, which makes the HTTP 500 half of the statement wrong.
 - A sweep of the corpus finds other allow-lists whose "and nothing else" is
   false. Then this was one instance of a sweep rather than one hint.
@@ -64,13 +64,12 @@ down.
 ## Since then
 
 2026-09-04, from `feedback/2026-09-03-235250` and the same reading. The v14
-`route-enhancers.yaml` statement gained the two facts that make the file usable:
-the enhancers of the dependencies are folded with
+`route-enhancers.yaml` statement gained the two facts that make the file usable.
+The core folds the enhancers of the dependencies with
 `ArrayUtility::replaceAndAppendScalarValuesRecursive()` in dependency order and
-the site's own merged over them, so a set contributes a fragment into an
-enhancer another set declares — and that fragment is only whole while that
-dependency stands, or `EnhancerFactory` refuses it and every request answers
-HTTP 500.
+merges the site's own over them. So a set contributes a fragment into an
+enhancer another set declares. That fragment is only whole while that dependency
+stands, or `EnhancerFactory` refuses it and every request answers HTTP 500.
 
 The report asked for both `since: 13`. They are `since: 14`, which is the same
 boundary this entry moved the file list to.

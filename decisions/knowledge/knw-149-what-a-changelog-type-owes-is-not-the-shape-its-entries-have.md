@@ -9,12 +9,12 @@ coveredBy:
 
 # D-KNW-149 — What a changelog type owes is not the shape its entries have
 
-**The corpus states the sections each changelog type owes and, separately, that
-the entries in the tree carry more and fewer than that — the `Important`
+**The corpus states the sections each changelog type owes. It states apart from
+that the entries in the tree carry more and fewer than that, the `Important`
 template most of all.**
 
-One sentence about obligation was read as a description of the files, and the
-shipped template describes them least well of the three sources.
+A session read one sentence about obligation as a description of the files, and
+the shipped template describes them least well of the three sources.
 
 ## Evidence
 
@@ -26,8 +26,8 @@ shipped template describes them least well of the three sources.
 - Counted in `.checkouts/main` over
   `typo3/sysext/core/Documentation/Changelog/`, on 2026-09-04. Of 349
   `Important` entries, 55 carry an Impact section, 25 a Migration and 13 an
-  Affected installations. The share is the same on 12.4 and 13.4 — 32 of 271 and
-  38 of 310 — and higher in the recent directories: 6 of the 10 in `14.3.x`.
+  Affected installations. The share is the same on 12.4 and 13.4, 32 of 271 and
+  38 of 310. It is higher in the recent directories, 6 of the 10 in `14.3.x`.
 - So the feedback's own claim is wrong as stated. Impact is common in
   `Important` entries and far from universal, which is what makes the obligation
   sentence right and the reading of it wrong.
@@ -35,38 +35,38 @@ shipped template describes them least well of the three sources.
   entries 951 carry a Migration and 284 an Affected installations; of 1057
   `Breaking` ones, 994 and 368. Affected installations is in both templates and
   in under a third of the entries.
-- The templates on `main`: Breaking and Deprecation offer Description, Impact,
-  Affected installations, Migration; Feature offers Description and Impact;
-  Important offers Description, Affected installations, Migration — the only one
+- The templates on `main`. Breaking and Deprecation offer Description, Impact,
+  Affected installations, Migration. Feature offers Description and Impact.
+  Important offers Description, Affected installations, Migration, the only one
   whose sections are the ones its entries mostly do not have.
 - `Build/Scripts/validateRstFiles.php` reads the include, the anchor, the title
   block and the index line, so none of this fails a check.
 
 ## Decided
 
-- Step 4, wording. The rule was delivered and read, and the sentence stated an
-  obligation in a form that reads as a description.
+- Step 4, wording. The server delivered the rule and the session read it, and
+  the sentence stated an obligation in a form that reads as a description.
 - The document and `documentation-changelog` both say the obligation and then
   say that the entries differ, rather than one of the two.
-- No share is written into either. The numbers move with every release, and what
-  a session needs is that the tree disagrees with the template — the counts are
-  here, on the day they were taken.
-- The reader is sent to a neighbouring entry in the target directory, which is
-  where that session settled it and where the fence and the index tags are read
-  from anyway.
-- Nothing is said about correcting the template. It is the core's file, and this
-  server describes what is there.
+- Neither carries a share. The numbers move with every release, and what a
+  session needs is that the tree disagrees with the template. The counts are
+  here, on the day of the count.
+- The statement sends the reader to a neighbour entry in the target directory.
+  That is where that session settled it and where a session reads the fence and
+  the index tags from anyway.
+- Nothing says a word about a correction of the template. It is the core's file,
+  and this server describes what is there.
 
 ## Assumed
 
-- That an entry carrying an Impact section is not a defect nobody has reported.
-  Nothing in `Howto.rst` or the validator forbids one, and the share is rising
-  rather than being cleaned up.
+- That an entry with an Impact section is not a defect nobody has reported.
+  Nothing in `Howto.rst` or the validator forbids one, and the share rises
+  rather than shrinks.
 
 ## Wrong if
 
-- The core adds a check that fails an `Important` entry carrying an Impact
-  section, which would make the practice the defect and the template right.
+- The core adds a check that fails an `Important` entry with an Impact section,
+  which would make the practice the defect and the template right.
 - A session reports writing the wrong shape after reading the corrected
   sentence, which would mean the obligation and the practice cannot be said in
   one place.

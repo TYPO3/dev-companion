@@ -13,10 +13,10 @@ and installed styleguide templates supply the component contract. The curated
 catalog supplies the searchable names and fallback markup. Without usable
 installed sources, the bundled version-bound snapshot answers. Returns markup,
 classes, custom properties, and every source used. Which of those answered, and
-which core revision the bundled one was taken from, is typo3_snapshot_scope. A
-class the query names outright gets an answer even where the answer withholds
-its entry for the target version. That answer is a name and the versions it
-holds on, never markup. Answers from: packages, knowledge.
+which core revision the bundled one comes from, is typo3_snapshot_scope. A class
+the query names outright gets an answer even where the answer withholds its
+entry for the target version. That answer is a name and the versions it holds
+on, never markup. Answers from: packages, knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -31,12 +31,12 @@ Takes
     # Component name, class, or topic, for example badge, card, search box, or
     # input-group. Omit to list the catalog.
     query: string  # optional
-    # The TYPO3 version the markup has to hold for, for example "13.4" or "14".
-    # Components not verified there are withheld, and a class the query names is
-    # still answered where the class list alone was verified there. Defaults to the
-    # version of the installation this server started in. Where there is none, the
-    # whole catalog comes back and every entry carries the versions somebody
-    # verified it on.
+    # The TYPO3 version the markup has to hold for, for example "13.4" or "14". The
+    # answer withholds components nobody verified there. A class the query names
+    # still gets an answer where somebody verified the class list alone there.
+    # Defaults to the version of the installation this server started in. Where
+    # there is none, the whole catalog comes back and every entry carries the
+    # versions somebody verified it on.
     targetVersion: string  # optional
 
 Answers with
@@ -45,9 +45,9 @@ Answers with
 .. code-block:: yaml
 
     query: string or null  # optional
-    # The TYPO3 major the answer was composed for — stated by the caller, or read
-    # from the installation. Null means nothing was withheld and every entry carries
-    # the versions it was verified on.
+    # The TYPO3 major the answer is for, stated by the caller or read from the
+    # installation. Null means the answer withheld nothing and every entry carries
+    # the versions somebody verified it on.
     targetVersion: integer or null  # optional
     # How many components hold on the target version. Ones withheld for it are in
     # withheld, not here.
@@ -79,7 +79,7 @@ Answers with
         # Primary Sass source in the core checkout; null for a web component that
         # carries its own styles.
         sassPath: string or null
-        # Every Sass source the component spans. A component can be split across
+        # Every Sass source the component spans. A component can spread across
         # several files.
         sassPaths: [string]  # optional
         # Styleguide demo in the core checkout, if there is one.
@@ -99,8 +99,8 @@ Answers with
         # TYPO3 version whose classes and custom properties this entry describes.
         contractVersion: string
         # TYPO3 version whose markup this entry describes. It can differ from
-        # contractVersion when the installed styleguide has no matching example and
-        # bundled markup is the fallback.
+        # contractVersion when the installed styleguide has no example that matches
+        # and bundled markup is the fallback.
         describesVersion: string
         # The first TYPO3 major this entry holds on, or null when it holds on every
         # covered version.
@@ -129,9 +129,9 @@ Answers with
         # The same range as a sentence, empty when the entry holds on every covered
         # version.
         verifiedOn: string
-    # Classes the query named that were verified on the target version although
-    # their entry was not, each with where it sits. No markup and no custom
-    # properties, because those are what withheld the entry.
+    # Classes the query named that somebody verified on the target version although
+    # not their entry, each with where it sits. No markup and no custom properties,
+    # because those are what withheld the entry.
     coveredClasses:
       - # A class the query named outright.
         class: string
@@ -159,8 +159,8 @@ Answers with
         verifiedOn: string
     # Custom elements the query named that a styleguide demo writes on the target
     # version. An element carries its own position, so where one exists it is the
-    # way in and a class is the way round it. Only what a demo writes is offered:
-    # the core declares many more and the rest are the backend's own.
+    # way in and a class is the way round it. Only what a demo writes is here: the
+    # core declares many more and the rest are the backend's own.
     elements:
       - # The custom element the query named.
         tag: string
@@ -180,7 +180,7 @@ Answers with
       intro: string  # optional
       items: [string]
     # One of: installation, catalog. installation when the class and custom-property
-    # contract was read from the active TYPO3 packages; catalog when the bundled
+    # contract came from the active TYPO3 packages; catalog when the bundled
     # snapshot answered.
     componentSource: string
     # The core revision behind catalog answers, and how it relates to the

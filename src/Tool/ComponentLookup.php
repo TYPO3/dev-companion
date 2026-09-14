@@ -32,7 +32,7 @@ final class ComponentLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Look up TYPO3 backend UI components by name or topic. The searchable index is a curated subset of what the core itself files as a component. That is the Sass partials under Build/Sources/Sass/component/ and the custom elements under element/. A miss therefore means uncurated rather than outside the subject. The module chrome and other layout classes are candidates as much as badges and cards. Where the target is the active installation, its backend CSS, JavaScript, and installed styleguide templates supply the component contract. The curated catalog supplies the searchable names and fallback markup. Without usable installed sources, the bundled version-bound snapshot answers. Returns markup, classes, custom properties, and every source used. Which of those answered, and which core revision the bundled one was taken from, is typo3_snapshot_scope. A class the query names outright gets an answer even where the answer withholds its entry for the target version. That answer is a name and the versions it holds on, never markup.';
+        return 'Look up TYPO3 backend UI components by name or topic. The searchable index is a curated subset of what the core itself files as a component. That is the Sass partials under Build/Sources/Sass/component/ and the custom elements under element/. A miss therefore means uncurated rather than outside the subject. The module chrome and other layout classes are candidates as much as badges and cards. Where the target is the active installation, its backend CSS, JavaScript, and installed styleguide templates supply the component contract. The curated catalog supplies the searchable names and fallback markup. Without usable installed sources, the bundled version-bound snapshot answers. Returns markup, classes, custom properties, and every source used. Which of those answered, and which core revision the bundled one comes from, is typo3_snapshot_scope. A class the query names outright gets an answer even where the answer withholds its entry for the target version. That answer is a name and the versions it holds on, never markup.';
     }
 
     public static function inputSchema(): array
@@ -41,7 +41,7 @@ final class ComponentLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'query' => ['type' => 'string', 'description' => 'Component name, class, or topic, for example badge, card, search box, or input-group. Omit to list the catalog.'],
-                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the markup has to hold for, for example "13.4" or "14". Components not verified there are withheld, and a class the query names is still answered where the class list alone was verified there. Defaults to the version of the installation this server started in. Where there is none, the whole catalog comes back and every entry carries the versions somebody verified it on.'],
+                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the markup has to hold for, for example "13.4" or "14". The answer withholds components nobody verified there. A class the query names still gets an answer where somebody verified the class list alone there. Defaults to the version of the installation this server started in. Where there is none, the whole catalog comes back and every entry carries the versions somebody verified it on.'],
             ],
         ];
     }
@@ -50,7 +50,7 @@ final class ComponentLookup extends ReadOnlyTool
     {
         return Schema::object([
             'query' => Schema::nullableString(),
-            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the answer was composed for — stated by the caller, or read from the installation. Null means nothing was withheld and every entry carries the versions it was verified on.'],
+            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the answer is for, stated by the caller or read from the installation. Null means the answer withheld nothing and every entry carries the versions somebody verified it on.'],
             'matchCount' => Schema::integer('How many components hold on the target version. Ones withheld for it are in withheld, not here.'),
             'components' => Schema::listOf(Schema::object([
                 'name' => Schema::string(),
@@ -66,14 +66,14 @@ final class ComponentLookup extends ReadOnlyTool
                 'markup' => Schema::string('Canonical markup of the component.'),
                 'examples' => Schema::listOf(Schema::string()),
                 'sassPath' => Schema::nullableString('Primary Sass source in the core checkout; null for a web component that carries its own styles.'),
-                'sassPaths' => Schema::listOf(Schema::string(), 'Every Sass source the component spans. A component can be split across several files.'),
+                'sassPaths' => Schema::listOf(Schema::string(), 'Every Sass source the component spans. A component can spread across several files.'),
                 'demoPath' => Schema::nullableString('Styleguide demo in the core checkout, if there is one.'),
                 'matchedIn' => Schema::listOf(Schema::string(), 'Where the query matched: name, keywords, sub-component classes, description.'),
                 'classes' => Schema::listOf(Schema::string(), 'Every class of this component found in the installed backend CSS. Empty for a bundled fallback or a custom element without external CSS.'),
                 'sourceFiles' => Schema::listOf(Schema::string(), 'Installed package files consulted for the component contract. Empty for the bundled fallback.'),
                 'markupSource' => ['type' => 'string', 'enum' => ['installation', 'catalog'], 'description' => 'Whether markup came from an installed styleguide example or the bundled curated fallback.'],
                 'contractVersion' => Schema::string('TYPO3 version whose classes and custom properties this entry describes.'),
-                'describesVersion' => Schema::string('TYPO3 version whose markup this entry describes. It can differ from contractVersion when the installed styleguide has no matching example and bundled markup is the fallback.'),
+                'describesVersion' => Schema::string('TYPO3 version whose markup this entry describes. It can differ from contractVersion when the installed styleguide has no example that matches and bundled markup is the fallback.'),
             ] + Schema::verifiedOn(), ['name', 'title', 'rootClass', 'sassPath', 'demoPath', 'classes', 'sourceFiles', 'markupSource', 'contractVersion', 'describesVersion', 'verifiedOn'])),
             'withheld' => Schema::withheldComponents(),
             'coveredClasses' => Schema::listOf(Schema::object([
@@ -83,17 +83,17 @@ final class ComponentLookup extends ReadOnlyTool
                 'position' => ['type' => ['string', 'null'], 'enum' => ['around', 'on', 'below', null], 'description' => 'Where the class sits relative to the component root on this version, read off the core stylesheet. around wraps it, on is the root element itself, below is an element inside it. Null where no selector places it, which is not a licence to put it anywhere.'],
                 'stylesWithin' => Schema::listOf(Schema::string(), 'What the core styles inside this class on this version: what it may hold, never what it requires.'),
                 'sassPaths' => Schema::listOf(Schema::string(), 'Where the core writes it.'),
-            ] + Schema::verifiedOn(), ['class', 'component', 'title', 'position', 'stylesWithin', 'sassPaths', 'verifiedOn']), 'Classes the query named that were verified on the target version although their entry was not, each with where it sits. No markup and no custom properties, because those are what withheld the entry.'),
+            ] + Schema::verifiedOn(), ['class', 'component', 'title', 'position', 'stylesWithin', 'sassPaths', 'verifiedOn']), 'Classes the query named that somebody verified on the target version although not their entry, each with where it sits. No markup and no custom properties, because those are what withheld the entry.'),
             'elements' => Schema::listOf(Schema::object([
                 'tag' => Schema::string('The custom element the query named.'),
                 'source' => Schema::string('The TypeScript file that declares it in the core.'),
-            ] + Schema::verifiedOn(), ['tag', 'source', 'verifiedOn']), 'Custom elements the query named that a styleguide demo writes on the target version. An element carries its own position, so where one exists it is the way in and a class is the way round it. Only what a demo writes is offered: the core declares many more and the rest are the backend\'s own.'),
+            ] + Schema::verifiedOn(), ['tag', 'source', 'verifiedOn']), 'Custom elements the query named that a styleguide demo writes on the target version. An element carries its own position, so where one exists it is the way in and a class is the way round it. Only what a demo writes is here: the core declares many more and the rest are the backend\'s own.'),
             'checklist' => Schema::object([
                 'title' => Schema::string(),
                 'intro' => Schema::string(),
                 'items' => Schema::listOf(Schema::string()),
             ], ['title', 'items']),
-            'componentSource' => ['type' => 'string', 'enum' => ['installation', 'catalog'], 'description' => 'installation when the class and custom-property contract was read from the active TYPO3 packages; catalog when the bundled snapshot answered.'],
+            'componentSource' => ['type' => 'string', 'enum' => ['installation', 'catalog'], 'description' => 'installation when the class and custom-property contract came from the active TYPO3 packages; catalog when the bundled snapshot answered.'],
             'catalog' => Schema::catalogProvenance(),
         ], ['matchCount', 'components', 'withheld', 'coveredClasses', 'elements', 'componentSource', 'catalog']);
     }

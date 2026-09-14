@@ -13,46 +13,47 @@ coveredBy:
 project's hostname as a network alias.**
 
 The other half of
-[`D-KNW-068`](knw-068-looking-at-a-backend-change-is-a-suite-the-core-already-carries.md):
-the prepared instance is a styleguide, and the defect that needs the developer's
-own content still had nowhere to be seen.
+[`D-KNW-068`](knw-068-looking-at-a-backend-change-is-a-suite-the-core-already-carries.md).
+The prepared instance is a styleguide, and the defect that needs the developer's
+own content still had no place to show.
 
 ## Evidence
 
-Measured against the DDEV project running on this machine, which is the same
-installation the report was written in.
+Measured against the DDEV project that runs on this machine, which is the same
+installation the report came from.
 
 - `docker port ddev-router` publishes 80 and 443 on `127.0.0.1` alone. A
   container started with `--add-host host.docker.internal:host-gateway`
-  therefore reaches the host's gateway address and nothing answers: curl exits
+  therefore reaches the host's gateway address and nothing answers. curl exits
   7, which is the connection refused the session reported.
 - `--network ddev_default` alone answers 200 over HTTP for the project's own
   hostname, with no `--add-host` at all. The router's aliases on that network
   are its container name and every project hostname it serves, which is what
-  resolves the name inside the container. The session's route — reading the
-  router's address in that network and mapping the hostname onto it — also
-  answers 200 and is what a hostname the resolver cannot answer still needs.
-- HTTPS from a plain container fails verification: the certificate authority is
-  installed on the host and not in the image. `ddev describe -j` carries
-  `httpurl` beside `primary_url`, which is the way around it that changes no
+  resolves the name inside the container. The session's route, a read of the
+  router's address in that network and a map of the hostname onto it, also
+  answers 200. It is what a hostname the resolver cannot answer still needs.
+- HTTPS from a plain container fails verification. The certificate authority
+  sits on the host and not in the image. `ddev describe -j` carries `httpurl`
+  beside `primary_url`, which is the way around it that changes no
   configuration.
-- Node's resolution was checked directly: `require.resolve('@playwright/test')`
-  from a directory outside the one holding `node_modules` throws, and resolves
-  once a `node_modules` symlink sits beside it.
-- The core checkout ignores `/typo3temp/*` and none of `Build/typo3temp/`, so an
-  output path relative to the working directory the run started in lands in a
-  committed directory.
+- This run checked Node's resolution directly.
+  `require.resolve('@playwright/test')` from a directory outside the one that
+  holds `node_modules` throws, and resolves once a `node_modules` symlink sits
+  beside it.
+- The core checkout ignores `/typo3temp/*` and none of `Build/typo3temp/`. So an
+  output path relative to the directory the run started in lands in a committed
+  directory.
 
 ## Decided
 
-- It is a document rather than hints: what was missing is a procedure with an
-  order to it, which is what
+- It is a document rather than hints. The gap was a procedure with an order to
+  it, which is what
   [`D-FBK-043`](../feedback/fbk-043-a-structure-is-answered-with-a-document-rather-than-with-a-rule.md)
   answers with a document. `any/testing/browser-check`, because a DDEV site is
   reached the same way whoever is working on it.
-- It carries the simple route first and the feedback's own as the case it is
-  needed for. A wildcard additional hostname is not an alias Docker can answer,
-  and that is the one place the router's address has to be read.
+- It carries the simple route first and the feedback's own as the case that
+  needs it. A wildcard additional hostname is not an alias Docker can answer,
+  and that is the one place a session has to read the router's address.
 - `browser-tests` gains the words a reviewer actually uses — visual check,
   screenshot, render correctly, reproduce in the backend — because the session
   had that hint listed under `omittedHints` and skipped it: its own vocabulary
@@ -63,11 +64,11 @@ installation the report was written in.
 ## Assumed
 
 - That the router's aliases are DDEV's behaviour rather than this machine's
-  configuration. It was read from the running router and matches what the
-  network is for; nothing here tried a second DDEV version.
-- That the `Build` working directory is what a container run inherits. It is
-  where the core's own npm scripts run and where the session saw its screenshots
-  land, and this run started no browser container of its own.
+  configuration. This run read it from the router that runs and it matches what
+  the network is for. Nothing here tried a second DDEV version.
+- That the `Build` directory is what a container run inherits. It is where the
+  core's own npm scripts run and where the session saw its screenshots land.
+  This run started no browser container of its own.
 
 ## Wrong if
 
@@ -80,15 +81,15 @@ installation the report was written in.
 
 ## Since then
 
-The session six hours after this document was written held the page's id and
-never opened it, telling its reader five times that it could not judge the
-change visually. Re-run from its own paths, the suite guide names no page beside
-the two suites and the hint lookup selects a domain where this one is neither
-returned nor listed — the page is named where the query already says a browser
-is involved. So it delivers to a caller who has decided that, and the reviewer
-of a visual patch is the caller who has not: the second step of the ladder
+The session six hours after this document landed held the page's id and never
+opened it. It told its reader five times that it could not judge the change
+visually. Re-run from its own paths, the suite guide names no page beside the
+two suites. The hint lookup selects a domain where this one is neither returned
+nor listed. The answer names the page where the query already says a browser is
+in play. So it delivers to a caller who has decided that, and the reviewer of a
+visual patch is the caller who has not. That is the second step of the ladder
 rather than the first.
 
-Two other placements were measured and not taken, and the answer the session
-already read is the cheaper place. **Built on 2026-08-11**: the suite guide
-names the page under its blocks wherever one is an e2e suite.
+A session measured two other placements and took neither, and the answer the
+session already read is the cheaper place. **Built on 2026-08-11**: the suite
+guide names the page under its blocks wherever one is an e2e suite.

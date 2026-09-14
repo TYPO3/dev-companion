@@ -76,7 +76,7 @@ installed packages gates the whole answer.
 - **That** the file-only half answers wherever the tool finds a project root,
   and the boundary is the three fields above. What comes out of the installed
   tree stays withheld; the answer owes what comes from the root whether or not
-  anything is installed.
+  the tree holds anything.
 - Not the feedback's own shape. It asks for the packages half beside an
   `unsupported` block that covers the keys derived from the installation.
   `D-ANS-005` decided that the unsupported answer replaces the result rather

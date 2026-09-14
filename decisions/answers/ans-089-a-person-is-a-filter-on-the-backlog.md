@@ -42,7 +42,7 @@ question with the same shape.
   issues, measured on 2026-08-19. A map of the members alone would answer "no
   such person" about a quarter of the reporters.
 - A full-text search for a name resolves some of those and not others. On the
-  same day "Andreas Kießling" reached 5 issues, one of them his, and "Konrad
+  same day "Andreas Kießling" reached 5 issues, one of them his. "Konrad
   Michalik" reached none although he had filed two of the last hundred.
 
 ## Decided

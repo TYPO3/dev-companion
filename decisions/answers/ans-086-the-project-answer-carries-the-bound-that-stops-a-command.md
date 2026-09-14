@@ -84,9 +84,9 @@ nothing a caller could read for it.
   invokes. It does where that tool sits in the tree the project declares, which
   is what both reports had.
   `skills/typo3-extension-testing/references/static-quality.md` names the other
-  layout: a second manifest below the build directory with a vendor directory of
-  its own, where the solver refuses a check tool. That tree has a bound this
-  does not read.
+  layout. That is a second manifest below the build directory with a vendor
+  directory of its own, where the solver refuses a check tool. That tree has a
+  bound this does not read.
 - That Composer writes the file at all. It leaves it out where nothing requires
   a PHP version, and deletes it where `platform-check` is off or the install
   ignored the platform requirements. Absent has to read as no bound rather than

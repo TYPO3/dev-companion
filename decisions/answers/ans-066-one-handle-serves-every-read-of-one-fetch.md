@@ -50,7 +50,7 @@ PHP's curl does the same thing, which is what this settles.
   and makes all ten reads through it, which is the whole of what the card asked
   for. A static handle would reach across lookups. It would decide, for the
   tracker and the review server too, that this server holds a connection open to
-  a host it does not read right now.
+  a host. That host is one it does not read right now.
 
 - Nothing runs over it. The transport seam returns before the code reaches curl,
   so no unit test in this repository crosses the handle at all. That is the same

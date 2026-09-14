@@ -46,9 +46,9 @@ URL. It answered it with about sixty `curl` round trips against docs.typo3.org.
   at
   `ExtensionArchitecture/HowTo/UpdateExtensions/ExtensionScanner.html#extension-scanner`.
   That is the exact target `/permalink/t3coreapi:extension-scanner` answers 307
-  with. So the resolution of an identifier, its validation and the way back from
-  a URL to one are three reads of a table already in hand. They are not three
-  network questions.
+  with. So the resolution of an identifier and its validation are two reads of a
+  table already in hand. The way back from a URL to one is a third. They are not
+  three network questions.
 - The TCA reference at `main` lists 2919 names across five roles, of which 1669
   are `std:label` and 748 `std:confval`. `t3tca:columns-onchange` and
   `t3tca:confval-columns-onchange` both answer 307 with the same anchor. So the

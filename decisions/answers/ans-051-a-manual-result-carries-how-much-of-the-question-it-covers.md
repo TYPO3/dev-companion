@@ -42,7 +42,7 @@ all.
 - The three that price the floor. `login screen layout` returns *LoginProvider*
   fifth at 0.344 and tops out at 0.386. `login form template` returns it seventh
   at 0.37 and tops out at 0.422. `login provider` returns it first at 1.00. So a
-  floor that returns the first two is at 0.34 or under, and one that empties
+  floor that returns the first two is at 0.34 or under. One that empties
   `Fluid template file naming convention v14` is above 0.40.
 - Two queries `DocumentationTest` already holds go the same way.
   `TCA inline foreign_field foreign_sortby localization children` returns *IRRE

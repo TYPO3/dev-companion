@@ -38,9 +38,10 @@ apply it.
   `Global/If.html` **8 and 4**. `f:if f:then f:else condition ViewHelper` →
   `Global/If.html` **10 and 4**. Not one of them is worse at 3.
 - The same sum of ranks across the range, which is flat above the corpus and
-  falls into it. 63 at 24, 16 and 12; 62 at 10; 61 at 8; 59 at 5; 51 at 4; **41
-  at 3**; 32 at 2; 33 at 1. 12 is already dilution switched off. 14, 16, 20 and
-  30 move 3 of the 43 queries between them and nothing above 16 moves anything.
+  falls into it. 63 at 24, 16 and 12; 62 at 10; 61 at 8; 59 at 5. Then 51 at 4;
+  **41 at 3**; 32 at 2; 33 at 1. 12 is already dilution switched off. 14, 16, 20
+  and 30 move 3 of the 43 queries between them and nothing above 16 moves
+  anything.
 - What it costs on the 41 scenario prompts, the only corpus of real wordings
   this repository has, each asked alone at 14.3 for six results. **All 43
   queries change their six, 20 change their first hit**, and 104 entries leave a

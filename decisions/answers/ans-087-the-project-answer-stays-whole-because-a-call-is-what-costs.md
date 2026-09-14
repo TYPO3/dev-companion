@@ -35,8 +35,8 @@ recorded answers `bin/cli tools:measure` reads.
 
 - **No selection parameter.** This is the first call of a session, so a caller
   who chooses sections chooses them in its least informed moment. That is the
-  failure `D-GUI-015` measured four times the same day, where the wording that
-  reaches an answer is the wording somebody already has the answer for.
+  failure `D-GUI-015` measured four times the same day. The wording that reaches
+  an answer is the wording somebody already has the answer for.
 - **The guides listing stays, though it is the largest single part.**
   `D-ANS-061` put it here because three core sessions had a resource list in
   hand and read none of it. `D-AUD-011`'s index entry now routes to this answer

@@ -110,9 +110,9 @@ a task sentence is not one.
   *text* and left the prose corpus alone; this is dilution by the length of the
   *query*.
 - **What replaces the floor is not named here.** Three different answers exist.
-  A gate that yields to the score, a rank over the largest subset that covers
+  A gate that yields to the score. A rank over the largest subset that covers
   the way [`D-ANS-016`](ans-016-a-miss-names-the-query-that-would-have-hit.md)
-  does, and the document title weighed into the searched fields. They have three
+  does. The document title weighed into the searched fields. They have three
   different costs over the whole corpus, and the run that judged this read one
   tool. The card carries the measurement.
 - Recorded against the answer rather than against the search. `D-ANS-003` keeps
@@ -122,8 +122,8 @@ a task sentence is not one.
 
 - That a caller writes `commit message summary line length` or something like
   it. The feedback reports the shape and records no query. So the wording is
-  this run's reconstruction from what the session did: a review of a commit
-  message it had just heard was 68 characters long.
+  this run's reconstruction from what the session did. That was a review of a
+  commit message it had just heard was 68 characters long.
 - That the two Gerrit sections are not the better answer. They carry three of
   five query words and nothing about how long a summary line may be. That comes
   off the sections rather than from a measurement against a caller.

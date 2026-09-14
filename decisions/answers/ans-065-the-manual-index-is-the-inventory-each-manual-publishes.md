@@ -84,7 +84,7 @@ named CSS or JavaScript reached it.
   document. So it is in every inventory, in no navigation tree, and its two-word
   title is ordinary enough for a query to reach.
 - `UNDILUTED_WORDS` stays 3. Swept over the new corpus on the same seven
-  queries, the sum of ranks is 31 at 1, 35 at 2, 36 at 3 and 35 at 4. It is 36
+  queries. The sum of ranks is 31 at 1, 35 at 2, 36 at 3 and 35 at 4. It is 36
   at 5 and 6, 39 at 8 and 49 at 12. That is flat where the corpus is, and the
   reason for 3 stands: a book name is two or three words and must not dilute.
 

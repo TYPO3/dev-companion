@@ -105,8 +105,8 @@ three.
 
 ## Since then
 
-Built the same day the card came up. The commit hash is the fourth way in, the
-trailer is a field on every change whose message came back, and the routing that
+Built the same day the card came up. The commit hash is the fourth way in, and
+the trailer is a field on every change whose message came back. The routing that
 says the handle is there is in three places. A second read of the query and the
 trailer against the review server came with the tests. The fixtures are that
 read: one change, its two backports, and the trailer all three carry.

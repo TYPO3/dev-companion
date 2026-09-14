@@ -38,7 +38,7 @@ other tool had already answered. It grepped a 1400-line script instead.
   it needs first, the passthrough and the options, the commands per subject, the
   pre-commit hook. It names `typo3_test_run_guide` for the question this session
   had. Two tools side by side whose names both read as "about the scripts" is
-  what the routing has to survive, and only the descriptions can do it.
+  what the routing has to survive. Only the descriptions can do it.
 - No section on the browser suites in the document. A prose document may only
   name a suite every covered major carries, which `KnowledgeTest` holds, and the
   browser suites are not on every one. That is exactly why the suite list is

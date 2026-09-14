@@ -75,8 +75,8 @@ to settle the instruction with a read of the script.
   improvisation.
 - Priority `normal`, off the `low` the card arrived at. The harm sets it rather
   than a second report. Three suites run git against the caller's working tree,
-  two of them discard uncommitted edits to `composer.json` and `composer.lock`,
-  and `skills/base.md` sends every task to run the checks it gets.
+  and two of them discard uncommitted edits to `composer.json` and
+  `composer.lock`. `skills/base.md` sends every task to run the checks it gets.
 - The values are `typo3_project_describe`'s, so that a caller who reads both
   answers reads one model. That is `check`, `change` and `unknown`, in the
   senses `R-PRJ-007` gives them.

@@ -55,9 +55,9 @@ Read as a boundary rather than as a confirmation
 
 - The boundary these three describe runs between a fact the checkout holds and a
   fact only the project holds. Four things are on the second side. Which
-  branches take a patch today, which container runtime is the fallback, which
-  databases a suite can point at, and what a subject line may weigh. The reports
-  name all four as what changed what the session did.
+  branches take a patch today, and which container runtime is the fallback.
+  Which databases a suite can point at, and what a subject line may weigh. The
+  reports name all four as what changed what the session did.
 - The second kind is the option list. `-d postgres` and `-b docker` are not
   answers to what the caller asked; they are what the caller did not know to
   ask. The review session says plainly that its strongest finding exists because

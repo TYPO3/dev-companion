@@ -137,7 +137,7 @@ only date the server indexes.
 
 **The report this entry's last evidence bullet names proposed a different test
 for the same question, and the data refutes it.** It asks for a field that names
-the commit a patch set sits on and whether that commit is still an ancestor of
+the commit a patch set sits on. And whether that commit is still an ancestor of
 the target branch. It established that by hand.
 
 The purpose is the field decided here and shipped under two hours after the

@@ -28,9 +28,9 @@ this server nothing at all. The corpus behind it had said the same thing since
 - The nearest skill matches the shape and excludes the checkout.
   `typo3-extension-conformance` is "Review, audit, or improve a TYPO3 project,
   sitepackage, or extension … and report what is wrong with it in priority
-  order", against a prompt reading "Review the current changes in this TYPO3
-  core checkout … in priority order". It did not fire, and it was right not to.
-  The other six are extension or site work by their own descriptions.
+  order". The prompt read "Review the current changes in this TYPO3 core
+  checkout … in priority order". It did not fire, and it was right not to. The
+  other six are extension or site work by their own descriptions.
 - 35 open feedback carry `directory: /home/benji/projects/typo3-cms`, in two
   clusters. Fifteen are patch **review**, from 2026-08-01, across three clients
   and four models. The GD/SVG placeholder patch, `7175fcaf7fe`, and the
@@ -43,9 +43,9 @@ this server nothing at all. The corpus behind it had said the same thing since
 - One of them asks for it outright. `feedback/2026-08-01-115220`, GPT-5 mini:
   "Proposal: Add a dedicated MCP skill `typo3-patch-review` to support automated
   patch reviews." That is the third signal in
-  [judging.md](../../documentation/records/judging.rst) — a domain reached
-  independently by more than one session — and it sat in the queue while
-  `REVIEW-03` reported the same gap again.
+  [judging.md](../../documentation/records/judging.rst), a domain more than one
+  session reached on its own. It sat in the queue while `REVIEW-03` reported the
+  same gap again.
 - The content is here and the order is not.
   `knowledge/documents/typo3-core-scripts.md` holds the core scripts,
   `typo3-commit-messages.md` the commit rules, and `typo3_script_lookup`,
@@ -69,9 +69,9 @@ this server nothing at all. The corpus behind it had said the same thing since
   that the domain earned them and where the boundary runs. What they say is open
   and nobody can guess it from this repository.
 - Not decided here: the names, the order each holds, and what each states. That
-  is the reading
+  is the read
   [writing-a-skill.md](../../documentation/contributing/writing-a-skill.rst)
-  demands before a line is written, and it is the todo this entry leaves. A name
+  demands before the first line, and it is the todo this entry leaves. A name
   has to say core — `extension-conformance` for a site project is the mistake
   `D-AUD-003` spent four runs on.
 
@@ -87,8 +87,8 @@ this server nothing at all. The corpus behind it had said the same thing since
 
 ## Wrong if
 
-- The reading finds one order that covers both clusters. Then this is one skill
-  and the entry split a domain by its verbs, which is what `R-SKL-010` exists to
+- The read finds one order that covers both clusters. Then this is one skill and
+  the entry split a domain by its verbs, which is what `R-SKL-010` exists to
   prevent.
 - A second `REVIEW-03` run in the same client and model calls this server with
   neither skill published. Then the absent skill was not the obstacle, and what
@@ -99,19 +99,18 @@ this server nothing at all. The corpus behind it had said the same thing since
 
 ## Since then
 
-Both clusters were read the same day, which settles the second assumption: they
-contain the two orders rather than merely reporting a gap. The review order is
-written down twice by sessions that arrived at it independently, one from the
-chain that worked and one from finding no entry point at all, and what it has to
-force — enumerate what the diff removes, and require a matcher and an `.rst` per
-removal — is in two more, where two findings were under-stated for want of that
-step. The creation order is one session's whole task filed in nineteen parts and
-offered as a skill body.
+A read of both clusters the same day settles the second assumption. They contain
+the two orders rather than merely report a gap. The review order stands twice,
+from sessions that arrived at it on their own. One came from the chain that
+worked and one from no entry point at all. What it has to force, enumerate what
+the diff removes, and require a matcher and an `.rst` per removal, is in two
+more. There two findings came out under-stated for want of that step. The
+creation order is one session's whole task filed in nineteen parts and offered
+as a skill body.
 
-What the reading also shows is that the two share their middle and not their
-ends: both establish the change and run the same three tools, the review stops
-before anything is written, and the creation half is mostly what happens after
-the code is right.
+What the read also shows is that the two share their middle and not their ends.
+Both establish the change and run the same three tools. The review stops before
+any write, and the creation half is mostly what happens after the code is right.
 
 ## Since then
 
@@ -132,10 +131,10 @@ answer.
 
 Six readings held this decision and changed nothing in it, each judging one
 feedback of the creation cluster. What they settled sits in the skill, the
-requirement or the document each named: the precedent step that forbids reading
-an empty changelog answer as "no precedent exists"; the four delivery questions,
-written into the Gerrit document under `R-KNW-057` with one left partly open
-because the tracker answers a fetch with 403; the assessment guidance, which
-went to the patch skill rather than the guide; a rule quoted at the issue being
-a claim to verify in the checkout; and the read direction of the same task,
-which is routing rather than a gap.
+requirement or the document each named. The precedent step that forbids a read
+of an empty changelog answer as "no precedent exists". The four delivery
+questions, in the Gerrit document under `R-KNW-057`, with one left partly open
+because the tracker answers a fetch with 403. The assessment guidance, which
+went to the patch skill rather than the guide. A rule quoted at the issue as a
+claim to verify in the checkout. The read direction of the same task, which is
+routing rather than a gap.

@@ -33,10 +33,10 @@ neither call returns.
   names the issue, and drops the one whose own number is the issue number
   (`D-ANS-055`). A `reviews` entry the issue answer did not carry is exactly the
   entry worth naming.
-- What settled the triage was the diff. The reporting session fetched
-  `refs/changes/19/53819/3` and read it: the 2017 proposal reinterpreted `width`
-  plus `height` as a fit-into-box, which is what the `m` modifier already does,
-  so the report asked for existing behaviour under another spelling.
+- What settled the triage was the diff. The session that reported fetched
+  `refs/changes/19/53819/3` and read it. The 2017 proposal reinterpreted `width`
+  plus `height` as a fit-into-box, which is what the `m` modifier already does.
+  So the report asked for behaviour that exists under another form.
 - The session built the refspec by hand from the shard rule.
   `feedback/2026-08-08-224354` reports the same reconstruction from a different
   task, a review of change 95179 in a checkout. So two sessions built one string
@@ -83,8 +83,8 @@ neither call returns.
 - A session follows the changed step, fetches the attempt and reports the diff
   as not worth the fetch. That would say the lookup was the right instrument
   after all.
-- A triage misses an attempt because the step no longer enumerates `reviews`,
-  visible as a verdict naming no previous patch on an issue whose journal
+- A triage misses an attempt because the step no longer enumerates `reviews`.
+  That shows as a verdict that names no previous patch on an issue whose journal
   carries one.
 - Sessions that reach that step start to rebase or push the patch set they
   fetched. That would say the routing merged two workflows rather than named a

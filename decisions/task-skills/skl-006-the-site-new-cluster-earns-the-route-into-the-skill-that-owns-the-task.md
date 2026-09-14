@@ -18,11 +18,11 @@ judgements of which not one reached the rung where a session builds a skill.
 
 ## Evidence
 
-- **The corpus is larger than the card that asked for this reading.** 89
-  feedback carry `directory: /home/benji/projects/site-new` — 72 archived and 17
-  open. Seventeen rather than the eighteen the todo names, and nothing went to
-  the archive on 2026-08-03. So the count was already wrong on the day of its
-  write. By day: 37 on 07-29, 5 on 07-30, 24 on 07-31, 23 on 08-01.
+- **The corpus is larger than the card that asked for this read.** 89 feedback
+  carry `directory: /home/benji/projects/site-new` — 72 archived and 17 open.
+  Seventeen rather than the eighteen the todo names, and nothing went to the
+  archive on 2026-08-03. So the count was already wrong on the day of its write.
+  By day: 37 on 07-29, 5 on 07-30, 24 on 07-31, 23 on 08-01.
 - **The seventeen are two sessions, and they ran opposite ways.** Three are a
   conformance audit of `printworks_sitepackage` on 2026-07-31 between 19:29 and
   19:48. It loaded `typo3-extension-conformance`, and its own account is that
@@ -75,15 +75,15 @@ judgements of which not one reached the rung where a session builds a skill.
 - **What the cluster names is one question, and two cards ask it.**
   `todo/waiting/2026-07-31-192945` asks it from inside a skill and
   `2026-08-01-003356` from outside one: does `typo3_task_guide` name the skill
-  that owns the task? Both now name this entry, so the reading behind them is
-  not made a third time. The third card the todo expected, `193005`, asks a
+  that owns the task? Both now name this entry, so nobody makes the read behind
+  them a third time. The third card the todo expected, `193005`, asks a
   neighbour question about a self-reported call log and stays as it is.
 - **The judgement sets an order rather than a number.** The eight queued cards
-  keep the `low` their own judgements gave them; each is a fact whose home a
-  decision already fixed, and this reading adds no rung to any of them. The
-  route outranks all eight, because a session that reaches no skill reaches none
-  of the eight corpora either. The route is not in the queue at all, it waits on
-  a person.
+  keep the `low` their own judgements gave them. Each is a fact whose home a
+  decision already fixed, and this read adds no rung to any of them. The route
+  outranks all eight, because a session that reaches no skill reaches none of
+  the eight corpora either. The route is not in the queue at all, it waits on a
+  person.
 - **Nothing goes to the archive and no card arrives.** Every one of the
   seventeen still has exactly one todo that serves it, so
   [`D-FBK-017`](../feedback/fbk-017-a-judgement-turns-a-feedback-into-work-and-the-work-closes-it.md)'s

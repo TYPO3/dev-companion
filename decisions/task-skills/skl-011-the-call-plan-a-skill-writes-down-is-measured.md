@@ -25,17 +25,18 @@ moved under it on the day a session followed it.
   both in its `toolTrace`, in that order, so the split was the skill's and not
   the session's invention.
 - The report reproduces. Re-run on 2026-08-03 through `bin/typo3-dev-companion`
-  from this worktree: `changelog entry` returns `## Breaking Changes`,
-  `## Changelog Files`, `## Core Contribution Guide` and `## Common Commands`;
+  from this worktree. `changelog entry` returns `## Breaking Changes`,
+  `## Changelog Files`, `## Core Contribution Guide` and `## Common Commands`.
   `breaking change` returns `## Breaking Changes`, `## Changelog Files`,
   `## Review Readiness` and `## Summary Line`. The first two are the same
   sections at 100% of the query terms in both answers.
 - The advice is what cost the round trip. `breaking change changelog entry`, one
   call, returns all five sections the two calls between them returned that are
-  about an obligation — both shared sections at 100%, and
+  about an obligation. Those are both shared sections at 100%, and
   `## Core Contribution Guide`, `## Review Readiness` and `## Summary Line` at
-  53%. So the sentence is false for the pair it was followed on: a query naming
-  two reaches both, and reaches what the sibling query would have added.
+  53%. So the sentence is false for the pair the session followed it on. A query
+  that names two reaches both, and reaches what the sibling query would have
+  added.
 - It is not simply inverted, and the limit is length.
   `breaking change deprecation changelog entry review readiness` returns three
   sections and drops `## Deprecations`, which `deprecation` alone returns first
@@ -49,10 +50,10 @@ moved under it on the day a session followed it.
   sentence about what a compound query reaches is therefore a statement about
   `src/` that no test under `skills/` can hold true.
 - The claim lived in one place — `skills/typo3-core-patch-review/SKILL.md` — and
-  nothing established it. No decision states it, no test asserted it, and
+  nothing established it. No decision states it and no test asserted it.
   `knowledge/server-scope.json`'s routing line says only *`typo3_rule_lookup`
-  per obligation the diff raises*, which names no ranking behaviour and is left
-  alone.
+  per obligation the diff raises*, which names no ranking behaviour and stays as
+  it is.
 - The session's own conclusion was the measurement's: *if I ran this review
   again I would make one call for the pair*.
 
@@ -81,7 +82,7 @@ moved under it on the day a session followed it.
 ## Assumed
 
 - That the pair generalises to the obligation cluster of
-  `typo3-commit-messages`. It was measured on breaking, changelog, deprecation
+  `typo3-commit-messages`. The measure covered breaking, changelog, deprecation
   and review readiness, and no sweep put every pair of that document through the
   search.
 - That no other skill carries the same assertion. `per obligation` reaches only
@@ -104,14 +105,14 @@ moved under it on the day a session followed it.
   subject words. Then this is one document's property written as a rule.
 - The next skill sentence that states a retrieval behaviour turns out stale the
   same way. Then the lesson is not this wording but that a skill may not state
-  one at all, and what belongs in the file is the subject to ask in.
+  one at all. What belongs in the file is the subject to ask in.
 
 ## Revoked on 2026-08-14
 
-By its own second **Wrong if**: a review asked one query and got nothing back,
-reading *length is the limit rather than the count* as permission — the sentence
-this entry put in place of a count. The revoked half is the second clause,
-*obligations that share a document are one call*, which has no bound. A sweep of
-every triple of headings inside one document empties 34 of 351. The first clause
-goes into `D-SKL-043`, which states a count of two and what the measure ran
-over. The evidence stays, and so do the two proposals it rejected.
+By its own second **Wrong if**. A review asked one query and got nothing back,
+and read *length is the limit rather than the count* as permission. That is the
+sentence this entry put in place of a count. The revoked half is the second
+clause, *obligations that share a document are one call*, which has no bound. A
+sweep of every triple of headings inside one document empties 34 of 351. The
+first clause goes into `D-SKL-043`, which states a count of two and what the
+measure ran over. The evidence stays, and so do the two proposals it rejected.

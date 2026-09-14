@@ -29,18 +29,18 @@ returns nothing and the silence reads as a clean bill for the next major.
   nothing, and the per-word reach line says why. "form" reaches 63 entries,
   "deprecated" 87, "yaml" 2, and no entry carries all five.
 - The same call bounded by the changelog's own axes answers it.
-  `type: deprecation` with `version: 14` and no query at all returns 75 entries;
-  adding `tag: ext:form` returns 6, among them
-  `14.2 Deprecation: TypoScript-based form YAML registration (#109412)` — the
-  entry the word queries missed, tagged `FullyScanned`.
+  `type: deprecation` with `version: 14` and no query at all returns 75 entries.
+  With `tag: ext:form` it returns 6, among them
+  `14.2 Deprecation: TypoScript-based form YAML registration (#109412)`. That is
+  the entry the word queries missed, tagged `FullyScanned`.
 - Neither bound is in `skills/base.md`. Step 5 names `type: deprecation` and
   then fixes the rest to "the symbols and registration shapes step 2 reported".
   `SkillTest::theDeprecationSweepRunsFromTheExtensionsSurface` asserts the
   sentence "the query set is derived from the extension's own surface" verbatim.
 - The tool says both. Its description calls the `tag` field "what a sweep is
   bounded by where words are not". The `query` field says "omit to list a
-  version or a type as a whole". `D-ANS-006` established that reading when it
-  added the field.
+  version or a type as a whole". `D-ANS-006` established that read when it added
+  the field.
 - A test of the feedback's own proposal shows it does not hold.
   `typo3_hint_lookup` for the sitepackage's YAML path on 14 returns the
   site-set, page-rendering and layout hints and no statement about `#109412`.
@@ -84,14 +84,14 @@ returns nothing and the silence reads as a clean bill for the next major.
 
 ## Wrong if
 
-- A conformance review bounds the sweep by version and type, gets the 75 entries
-  of one major back, and reports a finding for a deprecation the checkout never
-  calls. Then the query set did work the step did not credit it with, and the
-  fix traded a silent miss for a false positive.
+- A conformance review bounds the sweep by version and type and gets the 75
+  entries of one major back. It reports a finding for a deprecation the checkout
+  never calls. Then the query set did work the step did not credit it with, and
+  the fix traded a silent miss for a false positive.
 - A later feedback reports the enumeration as unusable at the caller's end. Too
   many entries to verify against the checkout, at every major the package
   declares. Then the bound is a filter this server owes rather than one the
-  caller composes, and `D-ANS-006`'s reading of the tag needs revisiting.
+  caller composes, and `D-ANS-006`'s read of the tag needs a second look.
 - The wording lands and the same "the sweep returned nothing" ending recurs.
   Then the query shape was not what cost it, and the base is not where the
   answer lives.

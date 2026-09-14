@@ -17,10 +17,10 @@ which is the file that work is for.
 ## Evidence
 
 - `feedback/2026-08-04-180052`. The skill says "After selecting a layer, read
-  only its implementation guide" and lists the three in one sentence.
-  `references/static-quality.md` was read because the check-layer half of the
-  task named it first; the browser half arrived several layers into a nested
-  activation — cleanup, then conformance, then testing — with the checklist
+  only its implementation guide" and lists the three in one sentence. The
+  session read `references/static-quality.md` because the check-layer half of
+  the task named it first. The browser half arrived several layers into a nested
+  activation, cleanup, then conformance, then testing, with the checklist
   already in hand.
 - What it cost is on the record. The storage-state constant placed in the login
   setup spec, and refactored after one run. The runner rejected it with
@@ -60,7 +60,7 @@ which is the file that work is for.
 ## Wrong if
 
 - The brief names the guide and the next browser-test session still works from
-  the checklist. Then what competes is the reading order of a nested activation,
+  the checklist. Then what competes is the read order of a nested activation,
   and the pointer was never the lever.
 - The intent matches tasks that are not browser work, and briefs start to carry
   a guide nobody needs. Then the layer is not readable off a task's words.
@@ -69,11 +69,11 @@ which is the file that work is for.
 
 The intent landed and the brief ran. It recognizes a browser task beside the
 element one and returns the guide as its first checklist line. That took data
-and no code, since a brief already renders an intent's checklist, so the
-narrower reading — a field beside `skill` — was not built. The match list
-deliberately avoids the bare word the other intent carries: a browser task
-matches both, which is correct, because what the layer adds is a guide and a
-served site rather than a different way of testing.
+and no code, since a brief already renders an intent's checklist. So the
+narrower read, a field beside `skill`, stayed unbuilt. The match list
+deliberately avoids the bare word the other intent carries. A browser task
+matches both, which is correct. What the layer adds is a guide and a served site
+rather than a different way to test.
 
-Whether a brief naming a skill should withhold the hints that skill fetches was
-asked as an amendment here and is not one; `D-GUI-016` settled it.
+Whether a brief that names a skill should withhold the hints that skill fetches
+came up as an amendment here and is not one. `D-GUI-016` settled it.

@@ -55,17 +55,16 @@ answers the task with a core patch checklist.
   hints as candidates. That is `R-AUD-006` at work rather than a miss, so the
   English call above is what carries the evidence.
 - **No skill owns it.** This entry read the nine descriptions under `skills/` on
-  2026-08-03. `typo3-extension-testing` is the nearest and names the harness —
-  "when a project has no working test harness yet" — which is what runs against
-  an installation. The other eight are patch work, patch review, conformance,
+  2026-08-03. `typo3-extension-testing` is the nearest and names the harness,
+  "when a project has no working test harness yet". That is what runs against an
+  installation. The other eight are patch work, patch review, conformance,
   documentation, release, upgrade, backend modules and content elements.
 - **All three signals of an absent skill are present.** A session invented the
   order itself: `162745` numbers five steps in the sequence their dependencies
   force. A session went in an order that cost it the task: four debug cycles,
-  one feedback each. And the domain was reached independently from a second
-  project, which is the signal
-  [judging.md](../../documentation/records/judging.rst) calls the strongest and
-  which `D-SKL-005` was decided on.
+  one feedback each. And a second project reached the domain on its own, which
+  is the signal [judging.md](../../documentation/records/judging.rst) calls the
+  strongest and which `D-SKL-005` rests on.
 - **An earlier entry read the boundary once already.** `doesNotCover` excludes
   "Running an installation: server and container setup, deployment, backups, the
   editorial use of the backend".
@@ -99,8 +98,8 @@ answers the task with a core patch checklist.
   the order, which is a different rung. `154508`'s change-type gap is a tool's
   schema and stays on its own card.
 - **Priority `normal`, and what sets it is order rather than weight.** Seven
-  feedback from two projects is not `low`. It is not `high` either: a skill
-  routing to lookups that answer nothing ships a promise into somebody else's
+  feedback from two projects is not `low`. It is not `high` either. A skill that
+  routes to lookups that answer nothing ships a promise into somebody else's
   project, which is the `%private` case recorded in `D-SKL-005`. The four
   knowledge cards land first.
 - **`feedback/2026-08-03-162745` stays open** behind the card, which is what
@@ -125,9 +124,9 @@ answers the task with a core patch checklist.
 
 ## Wrong if
 
-- The reading finds the order is five checklist items rather than a session's
-  working order. Then it belongs on the `installation-setup` intent, and this
-  entry built a skill for a checklist.
+- The read finds the order is five checklist items rather than a session's work
+  order. Then it belongs on the `installation-setup` intent, and this entry
+  built a skill for a checklist.
 - `154508`'s change-type value lands, `typo3_task_guide` is re-run with it, and
   the answer already orders this task. Then the route was the obstacle and
   `D-SKL-006`'s answer was the right one here too.

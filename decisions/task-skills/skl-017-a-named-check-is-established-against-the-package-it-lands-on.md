@@ -40,7 +40,7 @@ at all. Each of the three worked the answer out from the tool's own source.
   parse and nothing more — say so". A linter reporting nothing on the only file
   it guards is the same claim about a different check.
 - [writing-a-skill.md](../../documentation/contributing/writing-a-skill.rst) is
-  why the three measurements do not become sentences in the page: no dependency
+  why the three measurements do not become sentences in the page. No dependency
   constraint and no API signature stands in a published skill, because no
   release of this server corrects the copy in somebody else's project.
 
@@ -83,12 +83,12 @@ at all. Each of the three worked the answer out from the tool's own source.
 
 ## Since then
 
-The two measurements that decide the wording were made and the third was
-dropped. The linter installs on the covered line, and the core requires the
-package of the reported conflict nowhere. So the page says what a tool has to
-meet is what the project resolved, never that it fails on a TYPO3 version. A run
-of the XLIFF linter over a locale-prefixed file exits 1 by default and 0 with
-strict file names off. That is in the hint rather than the page.
+The two measurements that decide the wording happened and the third did not. The
+linter installs on the covered line, and the core requires the package of the
+reported conflict nowhere. So the page says what a tool has to meet is what the
+project resolved, never that it fails on a TYPO3 version. A run of the XLIFF
+linter over a locale-prefixed file exits 1 by default and 0 with strict file
+names off. That is in the hint rather than the page.
 
 Two of the feedback's own claims did not survive. Only one of the two rules
 advises an extraction of a repeated value. What the page carries instead is that

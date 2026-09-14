@@ -20,14 +20,14 @@ a reason to reopen it.
 
 - The feedback of 2026-07-31 18:36 asks for "a quick-start mode that skips the
   full surface list for focused reviews (e.g. security-only or
-  configuration-only audits)", from a session that had just used the skill for a
-  full audit and reported the order, the severity rubric and the finding gate as
-  what made the review work. It is the cost of a design reported by a session
-  that also reported its benefit.
+  configuration-only audits)". It came from a session that had just used the
+  skill for a full audit. That session reported the order, the severity rubric
+  and the finding gate as what made the review work. It is the cost of a design
+  reported by a session that also reported its benefit.
 - The permission it asks for already exists and is one clause deep in a
-  reference. `references/checklist.md` line 3, "Read the relevant sections for a
-  scoped review; read all sections for a full extension audit." No other place
-  in `skills/` or `scenarios/` names a scoped review at all.
+  reference. `references/checklist.md` line 3 says "Read the relevant sections
+  for a scoped review; read all sections for a full extension audit." No other
+  place in `skills/` or `scenarios/` names a scoped review at all.
 - The two operative steps in `SKILL.md` never mention the request. Line 20
   builds the work list from "the checklist's surfaces narrowed to the ones this
   kind of checkout can have". The kind of checkout narrows it and the request
@@ -41,11 +41,11 @@ a reason to reopen it.
   to carry this: how much of a task to do is a skill's job.
 - Against it, `R-SKL-004` rests on runs that went narrow. A run that read three
   XLF files and never asked what governs them. A run that filed translations as
-  "assessed and clean" with `source-language="de"` on screen. Two runs that
-  produced no finding about static analysis in a repository with no analyser,
-  and one whose absent `Documentation/` appeared neither as a finding nor as
-  unassessed. In every one of them the cheap review and the thorough one
-  produced the same-looking report.
+  "assessed and clean" with `source-language="de"` on screen. Two runs produced
+  no finding about static analysis in a repository with no analyser. One had an
+  absent `Documentation/` that appeared neither as a finding nor as unassessed.
+  In every one of them the cheap review and the thorough one produced the
+  same-looking report.
 
 ## Decided
 
@@ -53,8 +53,8 @@ a reason to reopen it.
   since `SKILL.md` orders the checklist read. It did not take. The sentence that
   permits a scope sits in a reference, while the sentences that build and close
   the work list do not know about it.
-- The work is queued rather than done in the judging run. It rewrites the two
-  operative steps of a published `SKILL.md`, and
+- The work goes to the queue rather than into the judgement run. It rewrites the
+  two operative steps of a published `SKILL.md`, and
   `SkillTest::theBaseIsEstablishedBeforeTheCheckoutIsOpened` asserts one of them
   as a literal string in an ordered block. That is a skill's contract, and
   `judging.md` puts it on the far side of what a judgement may change on the
@@ -77,9 +77,9 @@ a reason to reopen it.
 
 - That the two halves come apart. That a review can cut what it *reads* to the
   requested surfaces while what it *lists* stays whole. The cost is one line per
-  surface in the report. Nothing has measured that. If the reading is what the
-  list drags along, then a focused mode is not a rewording and the honest answer
-  is that this skill has one mode.
+  surface in the report. Nothing has measured that. If the read is what the list
+  drags along, then a focused mode is not a rewording. The honest answer is then
+  that this skill has one mode.
 - That a focused request is legible to the session at all. "Security-only" was
   the feedback's example, and a request that names no surface leaves the cut to
   a judgement the skill would then have to describe.
@@ -90,23 +90,22 @@ a reason to reopen it.
   clean. So a reader cannot tell an unrequested surface from an unexamined one.
   Then the cut reached the list after all and the clause has to go rather than
   grow.
-- Or the reverse: runs given a focused prompt keep writing the full list
-  unprompted, in which case nothing was outranked, the cost the feedback reports
-  is the reading and not the list, and a paragraph was spent in a file that is
-  load-bearing because it is short.
+- Or the reverse: runs given a focused prompt keep on with the full list
+  unprompted. In which case nothing outranked anything, the cost the feedback
+  reports is the read and not the list. A paragraph then went into a file that
+  carries the load because it is short.
 
 ## Since then
 
 The wording landed on 2026-08-02, and what settled the assumption first is two
-runs the decision had not read for it. Both halves come apart in them: one
+runs the decision had not read for it. Both halves come apart in them. One
 report already keeps four kinds of "no finding here" apart, so a fifth is the
-cheaper one to write, and the other closes three surfaces off the scope call
-without opening the checkout. So listing without reading is what the runs
-already do.
+cheaper one to write. The other closes three surfaces off the scope call without
+a look into the checkout. So a list without a read is what the runs already do.
 
 What neither measures is the cut this is about. Both had an open prompt, so
 every cheap closure was an absent surface rather than a request that left it
 out. Whether a session told "security only" writes the whole list has no
-measure. One thing the wording decides that the entry did not: the state is
-**not requested** rather than "out of scope", because two neighbouring phrases
+measure. One thing the wording decides that the entry did not. The state is
+**not requested** rather than "out of scope", because two phrases next to it
 already mean other things.

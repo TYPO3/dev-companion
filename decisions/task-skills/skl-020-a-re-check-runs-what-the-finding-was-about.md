@@ -8,7 +8,7 @@ status: open
 # D-SKL-020 — A re-check runs what the finding was about
 
 **The re-check that closes a cleanup finding re-runs the thing the finding was
-about; re-reading the changed file is what let a reverting fix be reported as
+about. A second read of the changed file is what let a fix that reverts pass as
 closed.**
 
 The report names the step that hands the worked list back as the half that
@@ -17,18 +17,18 @@ regression.
 
 ## Evidence
 
-- `feedback/2026-08-04-180010`. The finding was that
-  `config/system/additional.php` was owned by DDEV, which decides ownership by
-  searching the whole file for its generated-file signature. The fix removed the
-  marker and quoted the literal signature in the comment that explains why. So
-  DDEV still owned the file. The suite was green, the commit was made, the
-  finding was reported closed.
+- `feedback/2026-08-04-180010`. The finding was that DDEV owned
+  `config/system/additional.php`, and DDEV decides ownership by a search of the
+  whole file for its generated-file signature. The fix removed the marker and
+  quoted the literal signature in the comment that explains why. So DDEV still
+  owned the file. The suite was green, the commit landed, the report called the
+  finding closed.
 - Reading the file showed a correct 131-line file. What showed the defect was
   `ddev restart` and a checksum comparison. The file came back as the 45-line
   stock template with the environment contract gone, no error and no prompt.
 - The same pass caught a second regression with a run rather than a read. A
   Playwright project whose dependency skipped left backend specs red instead of
-  skipped. So `npm run test:e2e` was red on a fresh clone for something that is
+  skipped. So `npm run test:e2e` failed on a fresh clone for something that is
   not a defect.
 - The report says the rest of the step paid for itself, and it stays as it is.
   "What a dropped candidate owes" made the session write down 13 candidates it
@@ -58,10 +58,11 @@ regression.
 ## Wrong if
 
 - A re-check re-runs everything and the cost is a cleanup nobody finishes. Then
-  what a finding was "about" has to be narrowed to the environment that owns the
-  file rather than left to the reader.
-- A finding of this shape is missed again with the sentence in place. Then the
-  lever is the audit's evidence rule rather than the re-check's wording.
+  what a finding was "about" has to name the environment that owns the file
+  rather than leave that to the reader.
+- A session misses a finding of this shape again with the sentence in place.
+  Then the lever is the audit's evidence rule rather than the re-check's
+  wording.
 
 ## Since then
 

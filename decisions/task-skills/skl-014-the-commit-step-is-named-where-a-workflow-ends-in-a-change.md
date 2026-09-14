@@ -10,8 +10,8 @@ coveredBy:
 # D-SKL-014 — The commit step is named where a workflow ends in a change
 
 **A published skill whose workflow ends in a change to the repository names
-`typo3_commit_message_guide` with `workflow="project"`, and the routing entry
-for the commit message names that argument.**
+`typo3_commit_message_guide` with `workflow="project"`. The routing entry for
+the commit message names that argument.**
 
 Three of the four channels that could carry the step already do, and the fourth
 is the one an extension author arrives through. A session that fixes a bug in
@@ -39,16 +39,16 @@ no credit for a message that conforms out of those habits.
   `Configuration/Sets/Base/setup.typoscript` names the guide twice. Once in the
   checklist and again under "Next lookups for this task", both times with
   `workflow="project"` and with the reason the default is wrong there. The
-  default itself is unchanged: `changeType` and `summary` without `workflow`
-  answer `Resolves: #ISSUE_NUMBER`, `Releases: RELEASE_TARGET` and
-  `ERROR: A Forge issue is required`, and close with the sentence naming
+  default itself stays. `changeType` and `summary` without `workflow` answer
+  `Resolves: #ISSUE_NUMBER`, `Releases: RELEASE_TARGET` and
+  `ERROR: A Forge issue is required`, and close with the sentence that names
   `workflow="project"`. `knowledge/server-scope.json` names the argument in the
   covered topic "Commit messages" and not in its routing entry "Writing or
   amending the commit message".
 - **The ladder stops at step 2.** `bin/cli hints:probe` on the feedback's own
-  query reaches `backend-typescript`, `backend-ui` and `language-files` — the
-  domains its words happen to spell, since the ordering of two Prism plugins is
-  not a TYPO3 subject. Nothing about the commit step is absent from
+  query reaches `backend-typescript`, `backend-ui` and `language-files`. Those
+  are the domains its words happen to spell, since the order of two Prism
+  plugins is not a TYPO3 subject. Nothing about the commit step is absent from
   `knowledge/`. It is in a tool the session never called, which is delivery.
 - **One report, and no sibling.** `bin/cli feedback:list` on 2026-08-04: 10 open
   across three directories, eight of them from `ext-guidedtour` and one from
@@ -67,10 +67,10 @@ no credit for a message that conforms out of those habits.
   a `knowledge/` entry.
 - **In the skill body, not in `skills/base.md`.** That file is the order every
   task *starts* in and all nine skills carry a copy of it. So a commit line
-  there would repeat in the two core skills what their own "Commit and push" and
-  "Commit shape and target branch" sections state. `D-SKL-013` settled the same
-  fork the same way. The side that reaches a caller who arrived without a skill
-  is the tool's answer, and that side already carries the step.
+  there would repeat in the two core skills what their own sections state. Those
+  are "Commit and push" and "Commit shape and target branch". `D-SKL-013`
+  settled the same fork the same way. The side that reaches a caller who arrived
+  without a skill is the tool's answer, and that side already carries the step.
 - **The routing entry gains the argument**, so the one place outside a skill
   that names the step says which workflow the caller is in.
 - **A read decides which of the seven get it, not this entry.** A workflow that
@@ -80,11 +80,11 @@ no credit for a message that conforms out of those habits.
 ## Assumed
 
 - That a session which loads one of those skills reads the closing step. Nothing
-  measures how far into a skill a session gets, and `D-AUD-003`'s **Confirmed
-  on** is the one reading there is: a run that activated the skill and followed
-  it to step 2 of five.
-- That naming a tool at the end of a body is routing rather than a second copy
-  of what the tool owns, which is what the two core skills already do.
+  measures how far into a skill a session gets. `D-AUD-003`'s **Confirmed on**
+  is the one read there is, a run that activated the skill and followed it to
+  step 2 of five.
+- That a tool named at the end of a body is routing rather than a second copy of
+  what the tool owns. That is what the two core skills already do.
 
 ## Wrong if
 

@@ -71,8 +71,8 @@ spends comes off the skill that the listing names alone.
 - How many skills this server publishes is **not** decided here. Twelve fit a 1M
   session whole and cannot all carry a description in a 200k one on the current
   model generation, whatever they say. So the question is which of them a
-  session on 200k should be able to see. It needs a reading of which skills
-  actually get activated, which nothing here has.
+  session on 200k should be able to see. It needs a read of which skills get
+  activated, which nothing here has.
 
 ## Assumed
 
@@ -90,7 +90,7 @@ spends comes off the skill that the listing names alone.
 
 - A recorded run reaches a session where the twelve arrived described and the
   work was still done without them. Then the budget was never the obstacle for
-  that task, and what is left to suspect is the wording rather than its length.
+  that task, and what remains to suspect is the wording rather than its length.
 - A client whose bundled listing is well under the budget still drops one of the
   twelve. Then the arithmetic above is a misread, and the entry cost is the
   first thing to measure again.
@@ -104,8 +104,8 @@ spends comes off the skill that the listing names alone.
 The third **Wrong if** happened on one skill. The trim took out the requests a
 user's own words reach and put back the step clause cut the same day. A session
 then read the result as a branch-switch workflow. The ratchet holds a total and
-not a wording, so what a trim leaves behind is read against `R-SKL-010` and
-`D-SKL-024` by whoever writes it.
+not a wording, so whoever writes a trim reads what it leaves behind against
+`R-SKL-010` and `D-SKL-024`.
 
 The first **Wrong if** fired on a transcript rather than a recorded run. A
 session received every description in full, byte-identical to this checkout's

@@ -29,8 +29,8 @@ resolves past them, which is how a session produces a patch nobody wrote.
   input.
 - The tracker offers no way to reach that backlog until `D-ANS-054`, so no skill
   could have routed to it.
-- The Gerrit workflow document carried the push side whole and the reading side
-  as one bullet pointing at a menu in a browser. Measured on 2026-08-05, nobody
+- The Gerrit workflow document carried the push side whole and the read side as
+  one bullet that points at a menu in a browser. Measured on 2026-08-05, nobody
   can guess the fetch from it. `refs/changes/02/95102/2` resolves over the
   review server's URL and returns nothing over the GitHub URL the same checkout
   fetches from. So `git fetch origin refs/changes/…` fails in a checkout whose

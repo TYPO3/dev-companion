@@ -22,25 +22,24 @@ the convention that says an extension has one.
   manual lives in `Documentation/` with `Index.rst` and `guides.xml`.
 - The skill prescribes the query form nobody could compose here: "with the
   subsystem's concrete paths and a short English description". A surface with no
-  files has no path, which is exactly the surface whose absence is the finding —
-  the same page says so three paragraphs earlier, about deriving the list from
+  files has no path, which is exactly the surface whose absence is the finding.
+  The same page says so three paragraphs earlier, about the list derived from
   the checklist rather than from `find`.
 - The surfaces whose convention did get a question are the ones whose id stands
   where the session worked. `static-quality.md` names
-  `extension-static-analysis` and `extension-coding-standards` inline and both
-  were called; the Quality row named documentation as a bare noun.
+  `extension-static-analysis` and `extension-coding-standards` inline and the
+  session called both. The Quality row named documentation as a bare noun.
 
 ## Decided
 
-- The judgement is **step 3**, routing, and it is **closed on the spot**: a
-  routing line onto a hint that exists, with nothing about TYPO3 looked up.
+- The judgement is **step 3**, routing, and it is **closed on the spot**. That
+  is a routing line onto a hint that exists, with no lookup about TYPO3.
 - Both halves are written. The Quality row carries `id=extension-documentation`.
   The method bullet says that a session asks a surface with no files by its id
   rather than by its paths.
 - The other bare nouns in that row stay as they are. Which hint owns "the test
-  suite" or "upgrade readiness" for an extension audit is a reading of the
-  corpus rather than a rename, and one wrong id in a published skill is worse
-  than a noun.
+  suite" or "upgrade readiness" for an extension audit is a read of the corpus
+  rather than a rename. One wrong id in a published skill is worse than a noun.
 
 ## Assumed
 
@@ -51,8 +50,7 @@ the convention that says an extension has one.
 ## Wrong if
 
 - Another bare noun in that row produces the same miss. Then the row needs every
-  id rather than the one that failed, and the reading above was deferred too
-  long.
+  id rather than the one that failed, and the read above waited too long.
 - A session asks the hint by id, gets the convention, and still reports absence
   as clean. Then the lever is the skill's "absence is not a defect" sentence
   rather than the lookup.

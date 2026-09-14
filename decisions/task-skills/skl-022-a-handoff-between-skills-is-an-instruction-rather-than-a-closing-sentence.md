@@ -10,7 +10,7 @@ coveredBy:
 # D-SKL-022 — A handoff between skills is an instruction rather than a closing sentence
 
 **Three sessions crossed from one core workflow into the next and none of them
-opened the skill that owns the second, although two had read the sentence naming
+opened the skill that owns the second. Two had read the sentence that names
 it.**
 
 ## Evidence
@@ -32,7 +32,7 @@ it.**
   since its description carries "rebase it where the branch has moved under it".
   But every noun around that phrase is about a change fetched from
   review.typo3.org. The session read it as somebody else's patch and did not
-  open it, and on that description that reading is correct.
+  open it, and on that description that read is correct.
 - The three are two different failures with one consequence. Two skills name
   their successor in prose that a model reads and does not act on. One skill's
   description does not describe the task that reached it.
@@ -83,7 +83,7 @@ it.**
 - A session reports that it switched on a sentence that reaffirmed a finding,
   after the counter-case is in the skill. That would say nobody can draw the
   boundary in prose at all. The crossing has to be a question the session asks
-  rather than a trigger it recognises. Written on 2026-08-11, from the reading
+  rather than a trigger it recognises. Written on 2026-08-11, from the read
   below.
 
 ## Confirmed on 2026-08-09
@@ -94,8 +94,8 @@ finished a push-ready patch and never invoked the review, whose crossing stands
 as ownership. That settles the second **Assumed** — the two forms were
 distinguishable in one session, on one task.
 
-The crossing it did not fire on is the one the requirement never covered, and
-across the skills it is the only sentence of its kind. It also narrows the proxy
+The crossing it did not fire on is the one the requirement never covered. Across
+the skills it is the only sentence of its kind. It also narrows the proxy
 `D-EVI-002` accepts. A named successor is not what holds a crossing, since a
 paragraph the session held named this one. What an assertion has to read is the
 imperative.
@@ -112,8 +112,8 @@ apart. The triage crossing names the instruction and has never fired early.
 
 So the crossing names the instruction that fires it and the remark that does
 not. Where the sentence could be either, the session asks rather than switches.
-Nothing holds that half, because which sentences a trigger excludes is a reading
-of the workflow.
+Nothing holds that half, because which sentences a trigger excludes is a read of
+the workflow.
 
 ## Since then
 
@@ -127,10 +127,10 @@ ownership sentence above it.
 
 ## Since then
 
-The imperative was read and nothing crossed: a session followed a skill to
-completion, quoted its closing sentence naming three successors, and none of the
-three fired — no test written, three READMEs by hand, and ten defects the user
-listed himself. That is what the 2026-08-09 reading got wrong. It counted
+A session read the imperative and nothing crossed. It followed a skill to
+completion and quoted its closing sentence that names three successors, and none
+of the three fired. No test written, three READMEs by hand, and ten defects the
+user listed himself. That is what the 2026-08-09 read got wrong. It counted
 `Activate <skill>` as already an act, so the requirement covered three core
 crossings and none of the extension ones. What the two that fired carry beside
 the imperative is the moment. The sentence that failed names three successors,
@@ -141,27 +141,27 @@ judgement.
 
 Two visits held this decision and changed nothing, both of them a build of the
 crossing. The two skills that end at the patch say to invoke it at the point the
-crossing happens, with the moment named and the ownership paragraph kept. The
+crossing happens. The moment has a name and the ownership paragraph stays. The
 question the third **Decided** bullet left open got the answer *both, with a
 pointer*. That is where the rebase-before-push step and its two parts came from.
-And the crossing in the other direction landed, which is why the test reads a
+And the crossing in the other direction landed. That is why the test reads a
 successor per skill rather than one name for all of them.
 
 ## Since then
 
 An extension-side crossing fired, the first since the three that did not. A
-session loaded the testing skill before it wrote a functional test, and named
-the section that opens with the imperative and the moment beside it. That is
-what the three-successor closing sentence lacked. Nobody asked it about the
-crossing, so it is evidence about the boundary rather than a confirmation. What
-it places is which of the two ways into a skill worked. The crossing inside an
-active one fired. The client's own listing reached the same session with four
-descriptions that match and opened none.
+session loaded the testing skill before it wrote a functional test. It named the
+section that opens with the imperative and the moment beside it. That is what
+the three-successor closing sentence lacked. Nobody asked it about the crossing,
+so it is evidence about the boundary rather than a confirmation. What it places
+is which of the two ways into a skill worked. The crossing inside an active one
+fired. The client's own listing reached the same session with four descriptions
+that match and opened none.
 
 ## Since then
 
 A session met the crossing *into* the checkout skill three times and crossed it
-never, with one of the other two core skills in hand for two of them. So the
+never. It had one of the other two core skills in hand for two of them. So the
 tool was in reach and what stayed shut was the third. Neither of the two tells a
 session to open it. One names it in a sentence about who owns what, the other
 not at all. The session quotes that sentence as read and attributes it to the

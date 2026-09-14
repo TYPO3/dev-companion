@@ -21,9 +21,9 @@ instead.**
   workflow to review an extension or sitepackage repository. That came in a
   checkout `typo3_project_describe` had reported one call earlier as
   `core-checkout` with `extensions: []`.
-- Re-run on 2026-08-08 with the session's own arguments: same answer, and the
-  checklist that comes with it is patch-review content — "enumerate what it
-  removes or renames before judging it", extension-scanner matchers, `[!!!]`
+- Re-run on 2026-08-08 with the session's own arguments: same answer. The
+  checklist that comes with it is patch-review content. That is "enumerate what
+  it removes or renames before judging it", extension-scanner matchers, `[!!!]`
   prefixes, `checkRst` over a core diff. A triage writes no diff. The session
   used none of it.
 - The cause is not a bad choice by the `audit` intent. No intent at all names
@@ -50,7 +50,7 @@ instead.**
 - What each of the three needs is not decided here. Triage is a task shape with
   its own vocabulary: tracker, Forge number, backlog, "is this still a thing".
   It is a candidate for an intent of its own. The other two may belong on
-  entries that exist. That is the todo's reading.
+  entries that exist. That is the todo's read.
 - The checklist is a second finding on the same call and is not the same fix.
   `audit` returns removal, extension-scanner and changelog-file items to a task
   that produces no diff, which the domain withhold rule already does for hints.

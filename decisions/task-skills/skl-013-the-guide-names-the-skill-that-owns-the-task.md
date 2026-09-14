@@ -14,9 +14,8 @@ coveredBy:
 
 Two of the four things that describe this server outward had said so for three
 days while the answer named nothing. Which of the two to correct is the question
-`todo/waiting/2026-07-31-192945` and `2026-08-01-003356` carried, and it was
-answered by the person who queued them on 2026-08-03. This entry closes both
-cards.
+`todo/waiting/2026-07-31-192945` and `2026-08-01-003356` carried. The person who
+queued them answered it on 2026-08-03. This entry closes both cards.
 
 ## Evidence
 
@@ -31,9 +30,9 @@ cards.
   a content element with a custom backend preview in `site-new`, loaded no
   skill, and guessed at facts `typo3-content-element-development` covers in its
   own description. Re-run from there on 2026-08-02, the guide matched the
-  content-element and test intents, answered with the two hints that session
-  spent its evening guessing at, and named seven next lookups of which none was
-  a skill — `D-SKL-001`.
+  content-element and test intents. It answered with the two hints that session
+  spent its evening on guesses at. It named seven next lookups of which none was
+  a skill (`D-SKL-001`).
 - **The claim was already published twice.** `skills/base.md` has said since
   `66813e3` that step 3 returns "the workflow this task belongs to". `18a371a`
   put "hands the parts that have their own workflow to the skill that owns them"
@@ -65,9 +64,9 @@ cards.
   So a path in an extension settles the side that the word "core" in a task text
   would otherwise claim.
 - **Only a confirmed intent routes.** A weak match is a word that named the
-  subject without naming the work, and a whole workflow loaded on one of those
-  is the wrong answer rather than a partly wrong one — the same reason its
-  checklist items carry their condition instead of being stated.
+  subject and not the work. A whole workflow loaded on one of those is the wrong
+  answer rather than a partly wrong one. That is the same reason its checklist
+  items carry their condition instead of a flat statement.
 - **Five of the thirteen intents route, and that is the finished state rather
   than a first pass.** `labels`, `icons` and `backend-ui` name subsystems that
   no workflow owns, and `changelog` spans three skills. `submission` matches
@@ -77,8 +76,8 @@ cards.
   server answers with before that is one nobody can load. So the route is the
   second half of its publication and stands in that card.
 - **Publication is public and is what holds a name.** A skill exists for its
-  readers once it is published —
-  [writing-a-skill.md](../../documentation/contributing/writing-a-skill.rst) —
+  readers once it is out
+  ([writing-a-skill.md](../../documentation/contributing/writing-a-skill.rst)),
   and `SkillTest::everySkillNamedInKnowledgeIsPublished` holds every name in
   `knowledge/` to it. It was the Installer::SKILLS list at the time of this
   decision and is `Installer::skills()` since 2026-08-04. That is the same
@@ -109,7 +108,7 @@ cards.
   remains to suspect is the channel. `D-SKL-006` wrote this one before the route
   existed.
 - A brief names a skill for work it does not own and a session loads it. One
-  such collision is already visible: the matcher matches a needle at a word
+  such collision is already visible. The matcher matches a needle at a word
   boundary rather than whole, so "testimonials" matches the `tests` intent's
   `test` and that task names `typo3-extension-testing` first. It has a todo of
   its own in the queue, and it was a false intent before it was a false route.
@@ -120,12 +119,12 @@ cards.
 
 ## Since then
 
-The second **Wrong if** happened again by the other route: a needle naming a
-subject without naming the work routed a review to the workflow for writing the
-change. The first fired in another project under the same client, where the
-brief named the skill and the session went on without it. The third gained a row
-that was not invented — an intent of its own routing to a workflow already
-published, which is the opposite of a name in search of one.
+The second **Wrong if** happened again by the other route. A needle that names a
+subject and not the work routed a review to the workflow that writes the change.
+The first fired in another project under the same client, where the brief named
+the skill and the session went on without it. The third gained a row nobody
+invented, an intent of its own that routes to a workflow already out. That is
+the opposite of a name in search of one.
 
-The published list is gone with the same reading: `Installer::skills()` is the
+The published list is gone with the same read. `Installer::skills()` is the
 directory minus every draft, where a list beside it was one fact in two places.

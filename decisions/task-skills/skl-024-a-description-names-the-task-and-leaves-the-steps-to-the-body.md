@@ -41,9 +41,9 @@ as the workflow itself.
   and clicked through".
 - The other six name their domain and then list nouns a user types, CType
   registration, TCA, Fluid, PHPStan, `Tests/`, or situations they arrive in. The
-  upgrade skill's em-dash clause reads like the four but is not one: adding a
-  major, dropping a major and replacing what one removed are three shapes of the
-  request, which is what `R-SKL-010` asks for.
+  upgrade skill's em-dash clause reads like the four but is not one. A major
+  added, a major dropped and a replacement of what one removed are three shapes
+  of the request, which is what `R-SKL-010` asks for.
 
 ## Decided
 
@@ -98,9 +98,9 @@ so the next trim cannot make the trade unseen.
 
 ## Since then
 
-The second **Wrong if** fired on the clause cut from triage: a session searched
+The second **Wrong if** fired on the clause cut from triage. A session searched
 the backlog six times, read four candidates, and never opened the skill whose
-description had stopped naming that step. What fired is narrower than the
+description no longer named that step. What fired is narrower than the
 statement. "find the candidates" was not a step of the task the description
 names but a deliverable of its own. `D-SKL-031` settled that the day after the
 cut. So a cut that reads a job as a step removes what nothing else says, and

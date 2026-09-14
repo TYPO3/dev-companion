@@ -40,8 +40,8 @@ Its removal left the work with no owner at all.
 - **Conformance already names who takes each finding onward, and that is not
   what is missing.** Read on 2026-08-04. The skill owns "assessment and
   prioritization, and saying who takes each finding onward". It names the
-  workflow per finding whether or not the user asked for fixes, hands over for
-  the changes and keeps itself responsible for the re-check. So the routing
+  workflow per finding whether or not the user asked for fixes. It hands over
+  for the changes and keeps itself responsible for the re-check. So the routing
   exists finding by finding. What no skill owns is the entry point for a request
   worded as a change, and the follow-through. One list across many findings, in
   an order, that survives across sessions.
@@ -70,10 +70,10 @@ Its removal left the work with no owner at all.
   2026-08-04, see **Since then**. The session writes it down and agrees it
   before it works any of it, and does not commit it.
 - **What it adds is the entry point, the order and the follow-through.** Which
-  workflow owns a finding is already conformance's answer and is not restated
-  here; what this skill contributes is being reachable from a change-worded
-  request, turning a report into a list somebody can work off, and staying with
-  that list until it is empty.
+  workflow owns a finding is already conformance's answer and does not stand
+  here a second time. What this skill contributes is a route from a
+  change-worded request. It turns a report into a list somebody can work off,
+  and stays with that list until it is empty.
 - **Each item crosses into the skill that owns it** rather than stays here,
   which is
   [`R-SKL-003`](../../requirements/task-skills/skl-003-crossing-into-another-skills-work-is-an-explicit-transition.md).
@@ -87,7 +87,7 @@ Its removal left the work with no owner at all.
 ## Assumed
 
 - **That the wording arrives at all.** No filed session has brought it, which is
-  why the card is `normal`, and
+  why the card is `normal`.
   [writing-a-skill.md](../../documentation/contributing/writing-a-skill.rst)
   settles a domain with a scenario case or a recorded run rather than with a
   shape. Standing in for one is a hole this repository's own decision made: the
@@ -111,7 +111,7 @@ Its removal left the work with no owner at all.
   list from. Then the precondition is a boundary rather than a hand-over, and
   what has to change is what the audit returns.
 - The skill is out and no session loads it, because nobody words the request
-  this way. Then the shape was hypothesised, and the bar `writing-a-skill.md`
+  this way. Then the shape was a hypothesis, and the bar `writing-a-skill.md`
   sets was the thing to wait for.
 
 ## Revoked on 2026-08-23

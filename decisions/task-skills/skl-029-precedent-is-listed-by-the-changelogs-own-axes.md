@@ -56,7 +56,7 @@ at all.
   `/home/benji/projects/typo3-cms` is
   `[BUGFIX] Treat 0 as a defined value for nullable datetime fields`.
 - What a listing costs depends on the line. On 13.4 the four types hold 0
-  breaking, 7 deprecations, 1 feature and 20 important entries; on 14 the same
+  breaking, 7 deprecations, 1 feature and 20 important entries. On 14 the same
   two types hold 36 and 99, against a `limit` that defaults to 20 and caps at
   50.
 
@@ -74,10 +74,10 @@ at all.
   of what the core did of that kind. An open major is not, and there the tag is
   the bound `D-SKL-003` already established.
 - **Indexing the changelog by the commit keyword is not the route.** The source
-  the tool reads carries no commit, so the keyword would have to come from a
-  checkout most callers do not have or from a Forge round trip per entry, and a
-  reviewer needs it for the handful of entries its reading picked rather than
-  for all of them.
+  the tool reads carries no commit. So the keyword would have to come from a
+  checkout most callers do not have or from a Forge round trip per entry. A
+  reviewer needs it for the handful of entries its read picked rather than for
+  all of them.
 - **`skills/base.md` is not where the answer lives.** Generalising step 5 would
   put a listing every task pays for into a sweep that step already conditions
   and bounds.
@@ -100,7 +100,7 @@ at all.
   the words were not what cost the first two, and the skill is not where the
   answer lives.
 - The tracker turns out not to state what the commit keyword says. Then the
-  change kind is a reading of the commit, the checkout is what holds it, and the
+  change kind is a read of the commit, the checkout is what holds it, and the
   step routes there for that half.
 
 ## Since then

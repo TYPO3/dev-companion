@@ -40,9 +40,10 @@ the checkout the feedback came from.
   The skill's step 3 says to read the issue and names nothing to read it with.
 - `typo3_forge_lookup` with `issue: 105403` answers what the report cannot.
   Status `Under Review` and target `next-patchlevel` today, against the closure
-  the session read in the notes — "closing as lack of feedback and alternatives
-  possible", Georg Ringer, 2026-03-10. Six notes, of which two are the Gerrit
-  bot's announcement of patch sets 1 and 2 of the session's own change.
+  the session read in the notes. That was "closing as lack of feedback and
+  alternatives possible", Georg Ringer, 2026-03-10. Six notes, of which two are
+  the Gerrit bot's announcement of patch sets 1 and 2 of the session's own
+  change.
 - **The relations reach the change that introduced the behaviour, in that same
   call.** They are #99203 and #105953. `Feature-99203` under `13.2/` in
   `.checkouts/13.4` — "Streamline FE/versionNumberInFilename to 'EXT:'
@@ -98,8 +99,8 @@ the checkout the feedback came from.
 ## Wrong if
 
 - A session with the skill active reads a stale issue as current anyway. Then
-  the step is placed where the reading has already formed, which is what step 3
-  of the order exists to prevent.
+  the step sits where the read has already formed, which is what step 3 of the
+  order exists to prevent.
 - `typo3_gerrit_lookup` answers `empty` on every issue a session takes on,
   because a core issue worth a fix is usually one nobody has pushed for. Then
   the call buys nothing and `D-FBK-027` refuses it.
@@ -111,10 +112,10 @@ the checkout the feedback came from.
 
 ## Since then
 
-Written into the patch development skill the same day, and the open question is
-settled by the writing: the two calls are steps of the section that establishes
-the issue, and the three rungs are paragraphs closing it rather than a reference
-beside it — a reference is read once and this is read in sequence.
+Written into the patch development skill the same day, and the work settled the
+open question. The two calls are steps of the section that establishes the
+issue. The three rungs are paragraphs that close it rather than a reference
+beside it. A session reads a reference once and reads this in sequence.
 
 Two of the seven steps in the feedback are not in the change and neither is a
 slip. One was already carried in the skill's own words. The other is no fourth

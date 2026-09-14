@@ -17,7 +17,7 @@ names the installed TYPO3 source as the step after it.**
 contract and changed the markup until the user corrected it. Its sibling
 `003356`, from the same session three minutes earlier, reports that the same
 session read vendor source directly. It calls that the reverse of the workflow.
-Both are costs, and the boundary between them is where the reading sits in the
+Both are costs, and the boundary between them is where the read sits in the
 order. Nothing here states that boundary.
 
 ## Evidence
@@ -31,38 +31,37 @@ order. Nothing here states that boundary.
   wrote the statement and
   [`D-KNW-024`](../knowledge/knw-024-the-fluid-namespace-prefix-is-what-a-template-question-is-written-in.md)
   is what makes a query written in Fluid tags reach it. `003448` is archived. So
-  the source reading this feedback holds up as the example would not be needed
-  today.
+  nobody would need the source read this feedback holds up as the example today.
 - What remains reaches nothing that answers it. This feedback's own query —
   *reading viewhelper source (IfViewHelper) when unable to determine expected
   behavior* — reaches `fluid-viewhelpers` at `appliesTo(10) + text(68)`, alone.
   That entry says what a ViewHelper class looks like and what the check holds
   its arguments against. It does not say where a behaviour question goes after
   the lookups.
-- `skills/base.md` names reading three times, and every one of them is about the
+- `skills/base.md` names a read three times, and every one of them is about the
   project's own checkout or is a prohibition. "Do not fall back to general TYPO3
   knowledge or start reading the checkout" is the answer for a server that is
   not there. "**Then** read the checkout. Not before" orders the project's files
   against the lookups. Step 5 adds that "the installed core shows what one
-  version implements rather than what it supports", which is a limit on a
-  reading rather than an instruction to take one.
+  version implements rather than what it supports". That is a limit on a read
+  rather than an instruction to take one.
 - The one sentence for the exhausted case addresses a review. "Where the manual
   has no page for it either, the finding says the question could not be
-  settled." The session that filed this was building a content element in
-  `site-new`. It had no finding to write and a template that had to render, so
-  the sentence is not addressed to it.
+  settled." The session that filed this built a content element in `site-new`.
+  It had no finding to write and a template that had to render, so the sentence
+  is not addressed to it.
 - The skill this session names, `typo3contentelementdevelopment`, points the
-  same way. Its reading bullet is "Read the nearby content elements, TCA files,
+  same way. Its read bullet is "Read the nearby content elements, TCA files,
   TypoScript imports, templates, assets, schema and tests — the project's file
   organization is the thing a new element has to fit, and only the checkout has
   it." The installed TYPO3 is not among them.
 - [`D-ANS-010`](../answers/ans-010-does-it-still-work-is-a-question-for-the-manual-not-the-changelog.md)
-  is the only entry that decides anything about this reading, and it decides
-  against it: a miss in the manual "is a finding rather than a licence to
+  is the only entry that decides anything about this read, and it decides
+  against it. A miss in the manual "is a finding rather than a licence to
   reconstruct the contract from the installed core". Its first **Wrong if** did
   not fire here. That one asks for a session that follows the routing, calls
   `typo3_documentation_lookup` at the target version and still reads the core by
-  hand; this session called neither before the user asked it to.
+  hand. This session called neither before the user asked it to.
 
 ## Decided
 
@@ -91,9 +90,9 @@ order. Nothing here states that boundary.
 
 - That `skills/base.md` can carry another sentence at all.
   [`D-SKL-001`](skl-001-the-order-a-task-starts-in-is-one-file.md) watches its
-  growth — 496 words when it was written, 960 after the sweep, 1099 now — and
-  every sentence added is one the reading can swallow. Where the sentence
-  displaces rather than adds is the card's first step, not this run's.
+  growth, 496 words on its first day, 960 after the sweep, 1099 now. Every
+  sentence added is one the read can swallow. Where the sentence displaces
+  rather than adds is the card's first step, not this run's.
 - That a sentence there would have reached this session. It would not have:
   `003356` records that no skill activated in that run at all. The activation
   half is that sibling's, held in `todo/waiting/` behind its own question, and
@@ -110,18 +109,18 @@ order. Nothing here states that boundary.
   implements into an answer as though it were what TYPO3 supports. Then the
   distinction did not survive the wording.
 - The same task shape files again with a skill active and the Fluid statement in
-  reach, and still names source reading. Then it is the activation rather than
+  reach, and still names a source read. Then it is the activation rather than
   the order, and the lever is `003356`'s.
 
 ## Since then
 
 The step landed as a section of its own after "**Then** read the checkout". It
 says what answers the question, what the read replaces and what a session may
-not carry it into. Step 5 was the other candidate and is where the reading would
-not have been found: its paragraph asks what still works in a version, and the
+not carry it into. Step 5 was the other candidate and is where nobody would have
+found the read. Its paragraph asks what still works in a version, and the
 session held a question about what an unaltered ViewHelper does. What step 5
-gave up instead is the review-only sentence and the limit that stood beside it,
-which moved to the section that orders the reading.
+gave up instead is the review-only sentence and the limit that stood beside it.
+Both moved to the section that orders the read.
 
 A measure of the **Assumed** found its arithmetic two commits stale. What the
 wording says about the installed source comes from a read rather than from

@@ -33,7 +33,7 @@ ever produced it.
   `typo3_hint_lookup`, which the run before it did. Between the two, `SKILL.md`
   grew from 1165 to 1562 words. The paragraph added directly beside that call,
   that the diff's content routes as well as its paths, had no run behind it. It
-  came out of a reading of somebody else's review pipeline, not out of a session
+  came out of a read of somebody else's review pipeline, not out of a session
   here.
 
 ## Decided
@@ -46,29 +46,29 @@ ever produced it.
 - The checklist's `Tests` surface says both halves answer it. So the demand is
   where the review closes the report against the surfaces and not only where it
   chooses the suites.
-- The content-routing paragraph is removed. It was written from a reading rather
-  than from a run, it sits beside the one call the next run stopped making, and
-  nothing here can say it ever helped.
+- The content-routing paragraph goes. It came from a read rather than from a
+  run. It sits beside the one call the next run no longer made, and nothing here
+  can say it ever helped.
 - The identifier paragraph in the Gerrit step shrinks from ten lines to seven.
   Every part of it that bears load survives. What goes is the restatement.
-- What stays is what a run used: the two lookups and the `Change-Id`, the series
-  reading, the dropped-candidate section, the three dispositions and the surface
-  the review server answers. Each of those is visible in the fourth run's
-  answer.
+- What stays is what a run used. That is the two lookups and the `Change-Id`,
+  the series read, the dropped-candidate section, the three dispositions and the
+  surface the review server answers. Each of those is visible in the fourth
+  run's answer.
 
 ## Assumed
 
 - That the wording is what failed rather than the placement. The sentence is the
   last one of the last paragraph of its section, and this change does not move
-  it, so a fifth run that still omits the suites leaves placement as the reading
-  that was not tried.
+  it. So a fifth run that still omits the suites leaves placement as the untried
+  read.
 - That one dropped call is a signal rather than variance between two sessions of
   the same model.
 
 ## Wrong if
 
 - The next run still reports its suites without naming the rest. The wording
-  would then have been the wrong hypothesis twice, and what is left is where the
+  would then have been the wrong hypothesis twice. What remains is where the
   sentence sits and how much stands in front of it.
 - The next run no longer makes a call the fourth one made. That would say the
   section is over its budget whatever the sentences say, and the answer is
@@ -97,6 +97,6 @@ strongest of `typo3_hint_lookup`'s hints for those paths, quoted statement for
 statement. The lookup answers with three more. So the citation was right and the
 gap is a sentence in the brief that says whose the hints are, which
 [`D-GUI-007`](../guides/gui-007-the-brief-carries-a-selection-of-the-hints-and-says-whose-they-are.md)
-adds. The reading above holds for this task and does not generalise: the four
-that came back were the ones the findings rested on, and the three the call
-would have added are the reason it stays in the skill.
+adds. The read above holds for this task and does not generalise. The four that
+came back were the ones the findings rested on. The three the call would have
+added are the reason it stays in the skill.

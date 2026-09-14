@@ -46,8 +46,8 @@ The line that held it back was the reason.
   project where other tools write the same map. A generic `status` there is the
   conflict the standard names.
 - The reader is `Yaml::parse` over the block rather than a second pattern, so
-  what the installer sees and what a client sees are one reading. `symfony/yaml`
-  is already a production dependency.
+  what the installer sees and what a client sees are one read. `symfony/yaml` is
+  already a production dependency.
 - Front matter no parser can read is not a declaration. `draft()` returns false
   rather than throws, because the publication decision is not the place to raise
   a parse error, and `everyFrontMatterFieldIsOneTheStandardDefines` is.

@@ -23,9 +23,9 @@ what the maintainer wants, and the maintainer answered it on 2026-08-04.
   2026-08-04, a German request for a php-cs-fixer setup in a TYPO3 14.3
   extension with no test or static-quality infrastructure. It activated
   `typo3-extension-testing`, read `references/static-quality.md`, and skipped
-  steps 3 and 5 of the base that skill carries. Its own warning is why this was
-  asked at all: "a prescription that gets skipped teaches the next reader to
-  skip the ones that matter too."
+  steps 3 and 5 of the base that skill carries. Its own warning is why the
+  question came up at all. "a prescription that gets skipped teaches the next
+  reader to skip the ones that matter too."
 - **Two ways into a skill, and only one of them has already made the call.**
   `D-SKL-013` gave `typo3_task_guide` the name of the task skill that owns the
   work. So a session can arrive here from the guide's own answer or from the
@@ -56,8 +56,8 @@ what the maintainer wants, and the maintainer answered it on 2026-08-04.
 - **Step 3's condition is the route, not the coverage.** The guide's own answer
   named the skill, so the call already happened and the base asks for it a
   second time. That is the redundancy the feedback hit.
-- **The broad reading is rejected: "skip it whenever a skill covers the task end
-  to end".** It costs the path-specific half of the brief, which no skill
+- **This entry rejects the broad read: "skip it whenever a skill covers the task
+  end to end".** It costs the path-specific half of the brief, which no skill
   carries, and it costs the commit step until `D-SKL-014` is in the skill
   bodies. A session that matched the skill on its `description` has had neither.
 - **Step 5's condition is that a deprecation is a statement about API the
@@ -98,7 +98,7 @@ what the maintainer wants, and the maintainer answered it on 2026-08-04.
 - A session reads either condition as a licence. Step 3 skipped by a session
   that activated the skill from its `description`, or the sweep skipped on a
   change that touches TYPO3 API. Then narrow wording did not survive
-  publication, and what is left is to take the conditions out again.
+  publication, and what remains is to take the conditions out again.
 - `D-SKL-014` lands in the skill bodies and step 3 still names the commit step
   as a cost of a skip. That half is no longer true on that commit. The
   path-specific brief is what carries the condition afterwards.
@@ -115,15 +115,15 @@ The third **Wrong if** has since fired too. A session that activated a skill
 from its own description read the base whole. It loaded the guide's schema in
 the same batch as four tools it went on to use. It never called it, in 143
 calls, with no word that it had passed the step over. So the narrow wording did
-not survive publication, and the reading that weighs taking the condition off is
-queued rather than made, because the base is installed in somebody else's
+not survive publication. The read that weighs the removal of the condition goes
+to the queue rather than into this run. The base sits in somebody else's
 project.
 
 ## Revoked on 2026-08-11
 
-The reading was made and the condition came off step 3, so half the statement is
-no longer what the file says — and an entry a reader may build on has to be one
-whose statement is true when they read it.
+The read happened and the condition came off step 3, so half the statement is no
+longer what the file says. An entry a reader may build on has to be one whose
+statement is true when they read it.
 
 What the two sightings show is not the third **Wrong if**'s wording problem:
 neither session cited the condition, weighed it or reported a skip. What failed

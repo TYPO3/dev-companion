@@ -22,16 +22,17 @@ checkout and nobody can derive it from it.
   the statement that it had not fetched Forge #110359 and the match against the
   issue's scope was therefore unverified. It named the gap and had no
   instruction that would close it.
-- Both calls were made while judging that run and both answered at once. Forge
-  gives the issue as "Avoid calling ImageService methods - part 2", status
+- Both calls came during the judgement of that run and both answered at once.
+  Forge gives the issue as "Avoid calling ImageService methods - part 2", status
   `Under Review`, target 15.0, **description empty**. One note, and that note is
   the Gerrit bot. Gerrit gives change 95070, `NEW`, branch `main`, patch set 1.
 - The patch under review is therefore part of a series. Its part 1,
   `0ba69a4a841 [TASK] Use FAL API directly in image ViewHelpers`, is already in
-  `origin/main`. The run judged it as a change on its own. Its finding (i) —
-  that `ImageService` is now referenced nowhere in core and a reviewer will ask
-  whether `getImage()` gets deprecated — is the question the next part of the
-  series answers, and the run had no way to know a next part was intended.
+  `origin/main`. The run judged it as a change on its own. Its finding (i) is
+  that nothing in core references `ImageService` now and a reviewer will ask
+  whether `getImage()` gets deprecated. That is the question the next part of
+  the series answers. The run had no way to know that a next part was on its
+  way.
 - The empty description is a review-readiness finding the run could not make.
   The checklist's own surface asks whether the patch can be understood from the
   issue and the message alone, and nothing said to open the issue.
@@ -52,7 +53,7 @@ checkout and nobody can derive it from it.
 ## Decided
 
 - The two calls go into the review skill as their own step, placed where the one
-  reading of the patch has just produced their arguments.
+  read of the patch has just produced their arguments.
 - The checklist gains a surface for it, so a review that did not ask reports the
   surface as unassessed rather than leaves it absent.
 - The skill states which number belongs to which lookup, that a swap answers
@@ -73,11 +74,11 @@ checkout and nobody can derive it from it.
 
 ## Assumed
 
-- That a core patch under review usually has an issue worth reading. The corpus
+- That a core patch under review usually has an issue worth a read. The corpus
   says the message names one, since `Resolves:` is a must. It does not say that
   the issue carries more than its subject, and #110359's description is empty.
-- That reading an unanswered reviewer comment is worth a round trip on most
-  patches, where the run this came from found a change nobody had commented on.
+- That a read of an unanswered reviewer comment is worth a round trip on most
+  patches. The run this came from found a change nobody had commented on.
 
 ## Wrong if
 

@@ -30,7 +30,7 @@ checkout sat relative to everything else.
   asked `typo3_translation_domain_lookup` and taken a runtime answer for a
   verdict. A comparison of the other four skills then showed the arrangement was
   everywhere. "inspect the checkout" stood at step 2 of 6 in content-element, 3
-  of 6 in documentation, 3 of 7 in testing, each with the conventions lookup
+  of 6 in documentation, 3 of 7 in testing. Each had the conventions lookup
   behind it. Run 4, against one base file, walked the order and produced both
   findings three runs had missed.
 
@@ -51,13 +51,13 @@ checkout sat relative to everything else.
 ## Wrong if
 
 - ~~`REVIEW-02` in an extension repository shows a session that outruns the base
-  again. That would mean the order holds only where a checklist reinforces it
-  and the conformance skill carried it rather than the base.~~ Fired on
-  2026-08-02 in a self-reported call log rather than in a recorded run. The
-  checklist is what did not help. The maintainer declined the `REVIEW-02` that
-  would settle it.
+  again. That would mean the order holds only where a checklist reinforces it.
+  The conformance skill carried it rather than the base.~~ Fired on 2026-08-02
+  in a self-reported call log rather than in a recorded run. The checklist is
+  what did not help. The maintainer declined the `REVIEW-02` that would settle
+  it.
 - ~~Or the base grows. It bears the load because it is short enough for a read
-  before the first call, and every sentence added to it is one the read can
+  before the first call. Every sentence added to it is one the read can
   swallow.~~ Fired six times, from 496 words to 1531. What each growth bought is
   the ledger below.
 - It is also unproven for four of the five skills. Their order got its
@@ -140,9 +140,9 @@ What it cost instead was five intent entries and thirty lines in `src/`.
 ## Confirmed on 2026-08-22
 
 Seven readings held the rule and changed nothing in it. Five are the growth this
-**Wrong if** watches, and each bought one thing: what a finding rests on, the
-deprecation sweep, the precondition above the order, the changelog's own axes in
-place of a query set, and the manual stopping being where a PHP identifier is
-sent. One is a strength from a model nothing here has measured, and one ran step
-3 and reported no gain. Two of the fifteen published skills carry a recorded
-forward run, which is what the third **Wrong if** bears on.
+**Wrong if** watches, and each bought one thing. Those are what a finding rests
+on, the deprecation sweep, and the precondition above the order. Then the
+changelog's own axes in place of a query set, and the end of the manual as where
+a PHP identifier goes. One is a strength from a model nothing here has measured,
+and one ran step 3 and reported no gain. Two of the fifteen published skills
+carry a recorded forward run, which is what the third **Wrong if** bears on.

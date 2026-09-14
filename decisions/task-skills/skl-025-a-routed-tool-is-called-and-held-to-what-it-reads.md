@@ -26,10 +26,9 @@ while the behaviour goes.
   3's condition on step 4 is a sentence in the brief rather than the `hints`
   key, which has content either way.
 - `ROUTING_SKILLS` in `SkillTest` records which tools each skill routes through
-  and in what order, and nothing calls one of them. So a tool that stops
-  reporting one of those keys fails nothing: the skill still names it, the
-  routing assertion still passes, and the session is sent to a key that is not
-  there.
+  and in what order, and nothing calls one of them. So a tool that no longer
+  reports one of those keys fails nothing. The skill still names it, the routing
+  assertion still passes, and the session goes to a key that is not there.
 - Mutated on 2026-08-08 against green assertions, one at a time. `guides`
   dropped from the project answer, the `change` mark renamed to `rewrite`, and
   the sentence a brief that carried every matched hint prints reworded. Each

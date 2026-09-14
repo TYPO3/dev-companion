@@ -30,7 +30,7 @@ final class FluidNamespaceList extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'List the Fluid ViewHelper namespaces that are globally available in the TYPO3 installation you are working in, so a template knows which prefixes it may use without declaring them. Every other namespace has to be declared per template with an xmlns attribute. On TYPO3 v14 and later, the fluid:namespaces console command answers; where it cannot be reached, the Configuration/Fluid/Namespaces.php files introduced in that version are read instead. Earlier versions are booted and answered from SYS/fluid/namespaces in TYPO3_CONF_VARS.';
+        return 'List the Fluid ViewHelper namespaces that are global in the TYPO3 installation you work in. So a template knows which prefixes it may use without a declaration. A template has to declare every other namespace with an xmlns attribute. On TYPO3 v14 and later, the fluid:namespaces console command answers. Where the console does not answer, the tool reads the Configuration/Fluid/Namespaces.php files that version introduced instead. Earlier versions boot and answer from SYS/fluid/namespaces in TYPO3_CONF_VARS.';
     }
 
     public static function inputSchema(): array
@@ -44,7 +44,7 @@ final class FluidNamespaceList extends ReadOnlyTool
             'matchCount' => Schema::integer(),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
             'namespaces' => Schema::listOf(Schema::object([
-                'prefix' => Schema::string('The prefix usable in a template without declaring it, for example "core".'),
+                'prefix' => Schema::string('The prefix a template can use without a declaration, for example "core".'),
                 'phpNamespaces' => Schema::listOf(Schema::string(), 'The PHP namespaces it resolves ViewHelpers from.'),
             ], ['prefix', 'phpNamespaces'])),
         ], ['matchCount', 'answeredBy', 'namespaces'], []);

@@ -126,9 +126,8 @@ at all in the state the machine is in.
         :label: List
         :action: Open reference
 
-        List the Fluid ViewHelper namespaces that are globally available in the
-        TYPO3 installation you are working in, so a template knows which
-        prefixes it may use without declaring them.
+        List the Fluid ViewHelper namespaces that are global in the TYPO3
+        installation you work in.
 
     .. card:: :doc:`typo3_forge_lookup <typo3_forge_lookup>`
         :label: Lookup

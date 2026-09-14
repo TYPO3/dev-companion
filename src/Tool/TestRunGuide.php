@@ -29,7 +29,7 @@ final class TestRunGuide extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Say what this core checkout needs before a test can run at all, and which Build/Scripts/runTests.sh commands to run once it can. Ask it before checking for vendor/bin/phpunit by hand: the suites run in containers, so the shell\'s PHP is not the interpreter they run under and a missing vendor directory means considerably less than it looks like. Pass the changed paths and the answer is narrowed to the suites that can actually fail on them — a Sass-only change gets the CSS suites, not the PHP ones. Every suite comes back marked by what running it does to the checkout: a check that hands it back as it was, a change that rewrites files, git where the suite runs `git add *` over the working tree, or unknown where the body does not say. A task told not to change files reads that before it pastes a command, and the frontend build is a change rather than a check. Which suites the script offers changes between majors, so a suite that branch does not have is left out rather than handed over as a command. The script belongs to the core repository, so paths that read as a project or third-party extension get no suite at all rather than commands that cannot run there. The script\'s own notes are typo3_script_lookup: the commands it offers per subject, and what the pre-commit hook does to a commit.';
+        return 'Say what this core checkout needs before a test can run at all, and which Build/Scripts/runTests.sh commands to run once it can. Ask it before you check for vendor/bin/phpunit by hand. The suites run in containers, so the shell\'s PHP is not their interpreter, and a missing vendor directory means far less than it looks like. Pass the changed paths and the answer narrows to the suites that can fail on them. A Sass-only change gets the CSS suites, not the PHP ones. Every suite comes back marked by what a run does to the checkout. check hands it back as it was, and change rewrites files. git runs `git add *` over the working tree, and unknown means the body does not say. A task told not to change files reads that before it pastes a command, and the frontend build is a change rather than a check. Which suites the script offers changes between majors, so the answer leaves out a suite that branch does not have. The script belongs to the core repository. So paths that read as a project or third-party extension get no suite at all rather than commands that cannot run there. The script\'s own notes are typo3_script_lookup: the commands it offers per subject, and what the pre-commit hook does to a commit.';
     }
 
     public static function inputSchema(): array
@@ -38,7 +38,7 @@ final class TestRunGuide extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'query' => ['type' => 'string', 'description' => 'Test or script topic, for example functional, phpstan, TypeScript, composer, or CGL.'],
-                'paths' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'The changed file paths, as they are in the repository they belong to. Given, only suites touching their domains are returned. Each path is placed on its own: one outside the core narrows nothing and is named in the answer, because runTests.sh is not in its repository. One no suite covers is named too, so a path nothing checks is read off the answer rather than out of its silence.'],
+                'paths' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'The changed file paths, as they are in the repository they belong to. Given, only suites touching their domains are returned. The answer places each path on its own. One outside the core narrows nothing, and the answer names it, because runTests.sh is not in its repository. One no suite covers is named too, so a path nothing checks is read off the answer rather than out of its silence.'],
                 'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the commands have to run on, for example "13.4" or "14". Suites that branch\'s runTests.sh does not have are left out. Defaults to the version of the installation this server was started in; where there is none, every suite is listed.'],
             ],
         ];
@@ -49,10 +49,10 @@ final class TestRunGuide extends ReadOnlyTool
         return Schema::object([
             'query' => Schema::nullableString(),
             'paths' => Schema::listOf(Schema::string(), 'The paths the answer was narrowed by, given ones and ones named in the query.'),
-            'scopes' => Schema::scopes('Which kind of work each path is. Only core paths can run a suite: runTests.sh is not in a project or an extension repository, so the others are named in the answer and narrow nothing.'),
+            'scopes' => Schema::scopes('Which kind of work each path is. Only core paths can run a suite. runTests.sh is not in a project or an extension repository, so the answer names the others and they narrow nothing.'),
             'domains' => Schema::listOf(Schema::string(), 'Domains those paths touch. Empty means nothing was narrowed.'),
-            'uncoveredPaths' => Schema::listOf(Schema::string(), 'Given paths no suite covers. A suite is reached '
-                . 'through the domain of a path, and these reach none, so nothing in suites is about them and '
+            'uncoveredPaths' => Schema::listOf(Schema::string(), 'Given paths no suite covers. A path reaches a suite '
+                . 'through its domain, and these reach none. So nothing in suites is about them and '
                 . 'nothing in it fails on them.'),
             'withheld' => Schema::object([
                 'domains' => Schema::listOf(Schema::string(), 'Domains no given path reached. A path landing in one of them means calling again, because this answer holds for the path set it was given.'),
@@ -60,12 +60,12 @@ final class TestRunGuide extends ReadOnlyTool
             ], ['domains', 'suites'], 'What the narrowing left out. Both empty where nothing was narrowed.'),
             'suites' => Schema::listOf(Schema::testSuiteRecord(), 'Every suite of the domains above, and where query '
                 . 'scores on some of them, those alone, strongest first. This is the list typo3_task_guide narrows '
-                . 'two ways: its checks is what a task in these domains runs whatever it turns out to be, and its '
-                . 'testSuites the strongest few against the task text.'),
+                . 'two ways. Its checks is what a task in these domains runs whatever it turns out to be. Its '
+                . 'testSuites is the strongest few against the task text.'),
             'invocation' => Schema::object([
-                'preconditions' => Schema::listOf(Schema::string(), 'What has to be true before any suite runs: the container the script starts, and the vendor/ and bin/ the checkout may not have. This is the question a caller holds at the moment it starts checking for vendor/bin/phpunit by hand, and the shell\'s PHP is not the interpreter the answer is about.'),
-                'beforeYouRun' => Schema::string('The one note that is about losing work rather than about running '
-                    . 'a suite: what a run can take with it, and what to do before starting one. Carried by '
+                'preconditions' => Schema::listOf(Schema::string(), 'What has to be true before any suite runs: the container the script starts, and the vendor/ and bin/ the checkout may not have. This is the question a caller holds at the moment it starts to check for vendor/bin/phpunit by hand. The shell\'s PHP is not the interpreter the answer is about.'),
+                'beforeYouRun' => Schema::string('The one note about lost work rather than about a suite. '
+                    . 'It says what a run can take with it, and what to do before you start one. Carried by '
                     . 'typo3_task_guide as well, because that is the call that hands over a command first.'),
                 'notes' => Schema::listOf(Schema::string()),
                 'options' => Schema::listOf(Schema::object([

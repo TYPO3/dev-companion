@@ -12,22 +12,22 @@ coveredBy:
 # D-KNW-124 — Frontend render pipeline state is a gap this server owns
 
 **Where the frontend request pipeline fills and empties `PageRenderer`, and what
-`reset()` leaves standing, is inside this server's boundary and missing from
+`reset()` leaves in place, is inside this server's boundary and absent from
 it.**
 
 The corpus answers what a page template is handed and how a rendering is proved,
-and nothing about the state the renderer holds between the two. A session
-reviewing a change to the pipeline itself is handed the middleware conventions,
-which do not bear on the diff.
+and nothing about the state the renderer holds between the two. A session that
+reviews a change to the pipeline itself gets the middleware conventions, which
+do not bear on the diff.
 
 ## Evidence
 
 - Re-run on 2026-08-25 against the corpus as it is now. `bin/cli hints:probe`
-  with the feedback's own questions — "when is PageRenderer bodyContent
-  populated and cleared during a frontend request" and "does
-  config.disableAllHeaderCode skip PageRenderer head assembly" — matches nothing
-  and returns the whole index. The third, "which PageRenderer properties does
-  reset() not reset", reaches `persistence-reading` on text alone.
+  with the feedback's own questions matches nothing and returns the whole index.
+  Those are "when is PageRenderer bodyContent populated and cleared during a
+  frontend request" and "does config.disableAllHeaderCode skip PageRenderer head
+  assembly". The third, "which PageRenderer properties does reset() not reset",
+  reaches `persistence-reading` on text alone.
 - The vocabulary is absent. `bodyContent`, `renderPageWithUncachedObjects`,
   `disableAllHeaderCode`, `metaTagRegistry`, `jsLibs` and `JsonRenderer` occur
   nowhere below `knowledge/` or `skills/`.
@@ -41,10 +41,10 @@ which do not bear on the diff.
   answers which template renders the page, `page-cache-flushing` which cache
   serves a stale one, and `proving-a-rendering` how a throwaway functional test
   is built.
-- `knowledge/server-scope.json` puts this on the answering side. Its
-  `doesNotCover` entry for PHP source as code excludes a signature and an
-  `@internal` annotation and says what is answered instead: "typo3_hint_lookup
-  says what the subsystem is built to."
+- `knowledge/server-scope.json` puts this on the answer side. Its `doesNotCover`
+  entry for PHP source as code excludes a signature and an `@internal`
+  annotation and says what the server answers instead. "typo3_hint_lookup says
+  what the subsystem is built to."
 - The session read it out of the checkout instead, in ten methods across
   `RequestHandler.php` and `PageRenderer.php`, and it cost about a third of the
   session. What it found changed the commit message of the patch under review.
@@ -52,16 +52,16 @@ which do not bear on the diff.
 ## Decided
 
 - Built, as a hint of its own rather than more sentences on
-  `frontend-page-rendering`. One hint is one question (`D-KNW-030`): that one
+  `frontend-page-rendering`. One hint is one question (`D-KNW-030`). That one
   answers which template renders a page, this one what the request does to the
-  renderer while it runs, and they are reached by different paths —
-  `Classes/Page/`, `frontend/Classes/Http/` and the callers of both, against
-  `PAGEVIEW` and a backend layout.
-- The boundary is the state the renderer holds across the phases of one request:
-  which phase fills `bodyContent`, that `renderPageWithUncachedObjects()`
-  empties it and deliberately does not `reset()`, that the uncached content
-  objects run with the rest of the state still populated, and what `reset()`
-  clears against what it leaves standing. How a rendering is proved stays with
+  renderer while it runs. Different paths reach them: `Classes/Page/`,
+  `frontend/Classes/Http/` and the callers of both, against `PAGEVIEW` and a
+  backend layout.
+- The boundary is the state the renderer holds across the phases of one request.
+  Which phase fills `bodyContent`, and that `renderPageWithUncachedObjects()`
+  empties it and on purpose does not `reset()`. That the uncached content
+  objects run with the rest of the state still full, and what `reset()` clears
+  against what it leaves in place. How a rendering is proved stays with
   `proving-a-rendering`, and how an asset reaches a page with
   `how-an-asset-reaches-a-page`.
 - Bound per major rather than written flat, because the reading already shows a
@@ -72,14 +72,14 @@ which do not bear on the diff.
   stands on 13.4.
 - `reset()` on `main` clears `bodyContent`, `jsFiles`, `jsInline`, `jsLibs`,
   `cssFiles`, `cssInline`, `inlineComments`, `headerData`, `footerData` and the
-  JavaScript renderer, and touches neither `cssLibs` nor the meta tag registry.
+  JavaScript renderer. It touches neither `cssLibs` nor the meta tag registry.
   The asymmetry is real and the enumeration per major is the reading.
 - The test fixture trap goes to `core-tests`, where the same silence already
   cost a session (`D-KNW-070`). What sets `disableAllHeaderCode = 1` is
   `EXT:core/Tests/Functional/Fixtures/Frontend/JsonRenderer.typoscript`, the
-  shared base, and not the `SiteHandling/Fixtures/JsonRenderer.typoscript`
-  layered on it that the feedback names — so no test loading that base can fail
-  on anything the renderer assembles into `<head>`.
+  shared base. It is not the `SiteHandling/Fixtures/JsonRenderer.typoscript`
+  layered on it that the feedback names. So no test that loads that base can
+  fail on anything the renderer assembles into `<head>`.
 
 ## Assumed
 
@@ -99,19 +99,19 @@ which do not bear on the diff.
 - The enumeration turns out to differ on every covered line, so the hint is a
   table of versions rather than statements a reviewer can hold.
 - `proving-a-rendering` turns out to be where sessions arrive anyway, which
-  would make this a section of that document rather than a hint — its "Printing
+  would make this a section of that document rather than a hint. Its "Printing
   What a Service Holds Mid-Request" section already carries one sentence of the
-  lifecycle, as the caveat that a `bodyContent` of length 0 is the probe
-  standing in the wrong moment.
+  lifecycle. That is the caveat that a `bodyContent` of length 0 is the probe at
+  the wrong moment.
 
 ## Since then
 
-The hint was written and the fixture trap stated beside it. Writing it corrected
-one reading above: the oldest major does have the property, and what is absent
-there is its line in the reset — so on that line every render starts from what
-the one before it left.
+The hint stands and the fixture trap stands beside it. Writing it corrected one
+reading above: the oldest major does have the property, and what is absent there
+is its line in the reset — so on that line every render starts from what the one
+before it left.
 
-Two further readings the entry did not have, both unbound: the reset also
-restores three more things and leaves one standing, and what carries the
-serialised state across the uncached pass moved class between the majors. The
-**Wrong if** are untouched, being a forward run's.
+Two further findings the entry did not have, both unbound. The reset also
+restores three more things and leaves one in place. What carries the serialised
+state across the uncached pass moved class between the majors. The **Wrong if**
+stay as they are, since they are a forward run's.

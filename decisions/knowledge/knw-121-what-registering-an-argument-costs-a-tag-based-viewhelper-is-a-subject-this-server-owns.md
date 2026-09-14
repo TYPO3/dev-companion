@@ -10,12 +10,11 @@ coveredBy: []
 
 # D-KNW-121 — What registering an argument costs a tag-based ViewHelper is a subject this server owns
 
-**Registering an argument on a tag-based ViewHelper takes the value off the tag
-it was arriving on, and the corpus states that where the ViewHelper rules
-already are.**
+**A registered argument on a tag-based ViewHelper takes the value off the tag it
+arrived on. The corpus states that where the ViewHelper rules already are.**
 
-A session patching `f:asset.css`, `f:asset.script` and `f:image` for Forge
-#106584 read five files of `typo3fluid/fluid` to establish it, and reports that
+A session at work on `f:asset.css`, `f:asset.script` and `f:image` for Forge
+#106584 read five files of `typo3fluid/fluid` to establish it. It reports that
 the mechanism is what made the patch a behaviour change rather than a
 declaration.
 
@@ -28,25 +27,27 @@ declaration.
   whose statements stop at what `registerArgument()` checks a value against.
 - Nothing below `knowledge/` or `skills/` carried `additionalArguments`,
   `TagBuilder` or `AbstractTagBasedViewHelper` before this change.
-- The statements alone did not fix the miss. With them written and `appliesTo`
-  untouched, the feedback's own query still reached the same four entries, and
-  `fluid-viewhelpers` ranked below two Fluid entries matching on text. Widening
-  `appliesTo` by `registered arguments` and `tag attribute` puts it first among
-  them at `text only(215)`. The two Fluid queries asked afterwards keep the
-  entries they had: `fluid layout section rendering` answers
+- The statements alone did not fix the miss. With them in place and `appliesTo`
+  as it was, the feedback's own query still reached the same four entries.
+  `fluid-viewhelpers` ranked below two Fluid entries that match on text.
+  Widening `appliesTo` by `registered arguments` and `tag attribute` puts it
+  first among them at `text only(215)`. The two Fluid queries asked afterwards
+  keep the entries they had: `fluid layout section rendering` answers
   `fluid-layouts-sections` first and `fluid condition f:if empty array literal`
   answers `fluid-conditions-and-arrays` alone.
-- The other half of the question is answered. `typo3_documentation_lookup` over
-  stdio at `14.3`, with the queries `f:asset.css` and `asset css ViewHelper`,
-  returns `Global/Asset/Css.html` first — the argument table, and the sentence
-  "This ViewHelper allows you to pass arbitrary arguments not defined below
-  directly to the HTML tag created". That is the book
+- The other half of the question has its answer. `typo3_documentation_lookup`
+  over stdio at `14.3`, with the queries `f:asset.css` and
+  `asset css ViewHelper`, returns `Global/Asset/Css.html` first. That is the
+  argument table, and the sentence "This ViewHelper allows you to pass arbitrary
+  arguments not defined below directly to the HTML tag created". That is the
+  book
   [`D-ANS-026`](../answers/ans-026-the-viewhelper-reference-is-indexed.md)
   indexed and
   [`R-DOC-003`](../../requirements/documentation/doc-003-a-viewhelper-question-is-answered-from-the-manual-that-documents-viewhelpers.md)
   keeps.
 - The claim about TYPO3 holds, read on the three engines the covered branches
-  pin — 2.15.0, 4.6.1 and 5.3.1 — by the throwaway-directory procedure of
+  pin, 2.15.0, 4.6.1 and 5.3.1. The read used the throwaway-directory procedure
+  of
   [`D-VER-003`](../versions/ver-003-the-fluid-engine-gets-no-version-axis-of-its-own.md),
   because `.checkouts/` has no `vendor/`.
 - `ViewHelperInvoker::invoke()` hands `handleAdditionalArguments()` only what no
@@ -57,15 +58,16 @@ declaration.
   TagBuilder on all three, and `initializeArgumentsAndRender()` calls
   `initialize()` before `render()`.
 - `TagBuilder::render()` walks `$this->attributes` with a plain `foreach` on all
-  three, so the emitted order is the order the attributes were added in.
+  three, so the emitted order is the order the attributes arrived in.
 - The core side is in the checkouts. `Asset/CssViewHelper.php` reads
   `$this->tag->getAttributes()` on `.checkouts/13.4` and `.checkouts/14.3`, and
   `ImageViewHelper.php` reads `$this->additionalArguments['alt']` on
   `.checkouts/main`. On `.checkouts/12.4` that same `CssViewHelper` declares
   `href`, `media` and the rest through `registerTagAttribute()`.
-- `registerTagAttribute()` and `registerUniversalTagAttributes()` are deprecated
-  on 2.15.0 and 4.6.1 and absent from 5.3.1, so the route that registers an
-  argument and still emits it exists on 12.4 and 13.4 and not above.
+- `registerTagAttribute()` and `registerUniversalTagAttributes()` carry a
+  deprecation on 2.15.0 and 4.6.1 and are absent from 5.3.1. So the route that
+  registers an argument and still emits it exists on 12.4 and 13.4 and not
+  above.
 
 ## Decided
 
@@ -74,10 +76,10 @@ declaration.
   [`D-FBK-052`](../feedback/fbk-052-a-judgement-that-holds-the-evidence-makes-the-change.md).
   Nothing in `src/`, no declared schema and no skill contract moves.
 - Three statements on `fluid-viewhelpers`, beside the argument rules they
-  qualify: what reaches `$this->additionalArguments` and what registering takes
-  off the tag, the insertion order the attribute moves in, and
+  qualify. What reaches `$this->additionalArguments` and what a registration
+  takes off the tag. The insertion order the attribute moves in, and
   `registerTagAttribute()` at `until: 13` as the older route.
-- The pass-through statement is unbound and the route out is bound. The
+- The pass-through statement is unbound and the route out carries a bound. The
   mechanism is the same on all three engines; what changed with Fluid 5 is only
   whether a registered attribute can still be emitted without the render adding
   it.
@@ -88,27 +90,27 @@ declaration.
   the `routing` block named Fluid for namespaces alone. The line sends the
   argument list of a named tag to `typo3_documentation_lookup`.
 - The feedback's own suggestion is **declined**. Rejected:
-  typo3_fluid_viewhelper_lookup, keyed by tag name and target version — the
+  typo3_fluid_viewhelper_lookup, keyed by tag name and target version. The
   reference answers that in one call, and what it would add beyond it is the
   statement now in the corpus.
 - Not a rename of `typo3_fluid_namespace_list`. It lists namespaces and says so,
-  the name is known outside this checkout, and what was missing was a route to
-  the manual rather than a second reading of that name.
+  and callers outside this checkout know the name. The gap was a route to the
+  manual rather than a second reading of that name.
 - `coveredBy: []` because nothing runs over a hint's wording. `HintsTest` holds
-  the corpus's shape and the version binding, not that this subject is in it.
+  the corpus's shape and the version bound, not that this subject is in it.
 
 ## Assumed
 
 - That the two phrases added to `appliesTo` earn their place across the corpus.
-  They were measured on the query that missed and on no other.
-- That the manual's argument table is enough for the half it answers. It was
-  read as a search excerpt here, not as a page.
+  The measure was on the query that missed and on no other.
+- That the manual's argument table is enough for the half it answers. This run
+  read it as a search excerpt, not as a page.
 
 ## Wrong if
 
 - A session registers an argument on a tag-based ViewHelper with the statement
-  in reach and still ships the silent loss. Then it is placed where the task
-  does not pass, and the lever is delivery rather than the corpus.
+  in reach and still ships the silent loss. Then it sits where the task does not
+  pass, and the lever is delivery rather than the corpus.
 - The widened `appliesTo` pulls `fluid-viewhelpers` into answers about something
   else. `registered arguments` is close to what any ViewHelper question says, so
   a query about layouts or conditions ranking it first is the cost.

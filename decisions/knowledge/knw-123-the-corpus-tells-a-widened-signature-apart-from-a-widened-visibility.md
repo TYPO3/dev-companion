@@ -20,7 +20,7 @@ reviewer holding a visibility change reads a legitimate patch as unsubmittable.
 ## Evidence
 
 - Re-run on 2026-08-25 against the server as it is now, through
-  `bin/typo3-dev-companion` over JSON-RPC: `typo3_commit_message_guide` with
+  `bin/typo3-dev-companion` over JSON-RPC. `typo3_commit_message_guide` with
   `workflow="core"` and the message of Gerrit change 91127, `isBreaking`
   omitted. `breaking-not-assessed` comes back with the text the feedback quotes,
   unchanged.
@@ -32,21 +32,22 @@ reviewer holding a visibility change reads a legitimate patch as unsubmittable.
   parameter is one". It names the parameter and never the visibility. The check
   compresses that into a bare "widened … member", and the reporting session read
   the compression rather than the gloss behind it.
-- Nothing states what a visibility widening does owe.
+- Nothing states what a wider visibility does owe.
   `bin/cli hints:probe "widening a protected member to public in a core patch"`
-  matches nothing and returns 105 hints as the index; the same probe worded as a
+  matches nothing and returns 105 hints as the index. The same probe worded as a
   breaking change reaches `deprecated-apis` and
   `breaking-without-a-moved-member` on `appliesTo` alone, with `text(0)` on the
   second.
 - The core widens visibility in plain commits and files no entry. Read in
-  `.checkouts/main` at `3cbdea24dd`, sweeping the 1515 commits since 2025-01-01
-  over the `Classes/` of `core`, `backend` and `frontend` for a diff that drops
-  a `protected function` and adds the same name as `public function`: 17
-  commits. The five that promote visibility and nothing else — `343e93a978`,
-  `309bbf5e7a`, `a4ad6ad408`, `341826fc3c`, `f083c99e4a` — carry no file below
-  `Documentation/Changelog/` at all. The three carrying `[!!!]` carry one for a
-  different move in the same patch: `5d637429cf` introduces the System Resource
-  API, `c698eab881` a new interface, `16c2bf661e` native types across FAL.
+  `.checkouts/main` at `3cbdea24dd`, a sweep of the 1515 commits since
+  2025-01-01 over the `Classes/` of `core`, `backend` and `frontend`. The sweep
+  looked for a diff that drops a `protected function` and adds the same name as
+  `public function`: 17 commits. The five that promote visibility and nothing
+  else — `343e93a978`, `309bbf5e7a`, `a4ad6ad408`, `341826fc3c`, `f083c99e4a` —
+  carry no file below `Documentation/Changelog/` at all. The three with `[!!!]`
+  carry one for a different move in the same patch. `5d637429cf` introduces the
+  System Resource API, `c698eab881` a new interface, `16c2bf661e` native types
+  across FAL.
 - Three of them reach a maintained line, which a breaking change cannot.
   `343e93a978` is `Releases: main, 14.3, 13.4`, and `309bbf5e7a` and
   `f083c99e4a` are `Releases: main, 13.4`. That the maintained lines take no
@@ -55,7 +56,7 @@ reviewer holding a visibility change reads a legitimate patch as unsubmittable.
 - The asymmetry is in the changelog and only in one direction. A search of the
   whole `Documentation/Changelog/` tree for a visibility move finds
   `Breaking-110277`, `Deprecation-86047` and six more, every one of them public
-  becoming protected; `from protected to public`, `protected to public` and
+  to protected. `from protected to public`, `protected to public` and
   `now public` match no file.
 - `D-KNW-065` established the parameter half and stopped there. Its **Confirmed
   on 2026-08-09** reads the core on a *changed parameter* — `Breaking-101133`,
@@ -86,25 +87,25 @@ reviewer holding a visibility change reads a legitimate patch as unsubmittable.
   to do so.
 - Not `high`. Nothing is blocked, and the reviewer's own reading came out right.
 - The sweep is not owed again. `D-FBK-052` is why it is here rather than in the
-  card: this run read the checkout and holds the evidence, and queueing the
-  reading would send the next session to the same 1515 commits.
+  card. This run read the checkout and holds the evidence, and a queued read
+  would send the next session to the same 1515 commits.
 - The feedback's second half is folded into the same wording rather than trimmed
   off. Half of it is already true — the check names
   `typo3_rule_lookup(query "breaking change")` today — and the rest, keeping the
   check to which member kinds to enumerate, is a rewrite of the one sentence
-  this entry is about. `R-GUI-011` demands that the classification be named and
-  demands no paragraph of obligations, so shortening it holds that requirement.
-- Not the feedback's own wording. Its author was guessing about this repository
-  as much as a judging run guesses about TYPO3, and naming one commit in an
-  answer would date the moment the core moves on.
+  this entry is about. `R-GUI-011` demands a named classification and demands no
+  paragraph of obligations, so a shorter check holds that requirement.
+- Not the feedback's own wording. Its author guessed about this repository as
+  much as a judging run guesses about TYPO3. One commit named in an answer would
+  date the moment the core moves on.
 
 ## Assumed
 
 - That `core`, `backend` and `frontend` stand for the tree. They are where the
   reporting session swept and where the overridable classes are, and the other
   sysexts were not read.
-- That the merged history is the practice. A patch rejected on review for
-  widening a visibility leaves no commit, so a sweep of `main` cannot see one.
+- That the merged history is the practice. A patch rejected on review for a
+  wider visibility leaves no commit, so a sweep of `main` cannot see one.
 - That the wording produced the misreading, rather than the reviewer arriving
   with it. Nothing here separates the two, and the lever is the same either way.
 
@@ -130,31 +131,31 @@ patch rather than reviewing one.** `feedback/2026-08-27-145413` added an
 optional `?int $language` to a protected method and read the corrected sentence
 correctly: a widened signature is in scope. What it had no branch for is that
 `TYPO3\CMS\Workspaces\Service\WorkspaceService` carries `@internal` on the
-class. The session settled that with `sed` over the docblock, calls it "the
-highest-leverage fact in the session", and concluded no `[!!!]`, no Breaking
+class. The session settled that with `sed` over the docblock and calls it "the
+highest-leverage fact in the session". It concluded no `[!!!]`, no Breaking
 entry and no changelog entry at all.
 
 The last of those three is wrong by this repository's own corpus, which is what
 makes it a delivery failure rather than a preference. `## Changed Signatures` of
 the commit-message document says a member marked `@internal` takes an
-`Important` instead, names `Important-107342` as the precedent that reached
+`Important` instead. It names `Important-107342` as the precedent that reached
 `13.4.x` on that ground, and says an entry is still owed with only its type
-changing. `typo3_rule_lookup(query "breaking change")` returns that section
+changed. `typo3_rule_lookup(query "breaking change")` returns that section
 second, re-run on 2026-08-27, and the check already named that call.
 
 So the answer is the branch in the check rather than the placement this entry's
 fourth **Wrong if** predicted. What the paragraph gains is one clause naming a
 classification, which is what `R-GUI-011` asks the check to do; the obligations
 stay behind the call, which is what that requirement keeps out. A caller with no
-reason to suspect an unstated branch does not make a call to look for one, and
-that is what both sessions demonstrate from opposite routes.
+reason to suspect an unstated branch does not make a call to look for one. That
+is what both sessions demonstrate from opposite routes.
 
 **The lookup the feedback asks for is not built.** Its first suggestion is a
-tool answering a core class's API classification — `@internal`, `@deprecated`,
+tool that answers a core class's API classification: `@internal`, `@deprecated`,
 the scanner configuration, `final`. The session got the fact from one `sed` in
-the checkout it was already standing in, which is the case `D-FBK-027` and
-`AGENTS.md` name as not earning a tool: what earns one is round trips, and this
-is a local read of a docblock. Its third point needs nothing either —
+the checkout it already stood in. That is the case `D-FBK-027` and `AGENTS.md`
+name as one that earns no tool. What earns one is round trips, and this is a
+local read of a docblock. Its third point needs nothing either.
 `typo3_component_lookup` answers backend components and not PHP API
 classification, checked on 2026-08-27, so the description that steered the
 session away from it was right.

@@ -18,13 +18,12 @@ dependency carries beside `lib.contentElement`.
 
 - `feedback/2026-09-04-053551`. The reporting session names the hint as the most
   useful answer of its run and lists four statements it acted on directly. It
-  then names what it had to establish by reading
-  `fluid_styled_content`'s own `setup.typoscript` and `Layouts/Default`.
+  then names what it had to establish by reading `fluid_styled_content`'s own
+  `setup.typoscript` and `Layouts/Default`.
 - Routing and delivery are not where it failed.
-  `bin/cli hints:probe "Remove the fluid_styled_content system extension
-  dependency from a TYPO3 project sitepackage and reimplement everything it
-  provided"` ranks the hint first, and `typo3_task_guide` returned it without
-  being asked for it. That is ladder step 1a: the answer is not there.
+  `bin/cli hints:probe "Remove the fluid_styled_content system extension dependency from a TYPO3 project sitepackage and reimplement everything it provided"`
+  ranks the hint first, and `typo3_task_guide` returned it without being asked
+  for it. That is ladder step 1a: the answer is not there.
 - The plugin path holds on every covered branch.
   `extbase/Classes/Utility/ExtensionUtility.php` writes
   `tt_content.<signature> =< lib.contentElement` with `templateName = Generic`
@@ -45,8 +44,8 @@ dependency carries beside `lib.contentElement`.
   `ContentElement/Shortcut.typoscript` and the template beside it are this
   extension's.
 - `Layouts/Default` renders `Before`, `Header`, `Footer` and `After` as optional
-  sections whose fallback child is a partial, byte-identical in `.checkouts/12.4`
-  and `main`.
+  sections whose fallback child is a partial, byte-identical in
+  `.checkouts/12.4` and `main`.
 - `styles.templates.*` and `styles.content.*` are declared by
   `fluid_styled_content` and by no other system extension, and
   `ConstantAwareTokenStream::__toString()` falls back to the token where nothing

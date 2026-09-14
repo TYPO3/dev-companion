@@ -14,7 +14,7 @@ and attributes the `uppercamelcase` derivation to `theme_camino`, which
 configures it.**
 
 `sitepackage-templates` carried the derivation as a property of
-`lib.contentElement`, which is a package a project may not have installed, and a
+`lib.contentElement`, which is a package a project may not have installed. A
 sitepackage that trusted it would have named no template at all.
 
 ## Evidence
@@ -25,20 +25,20 @@ sitepackage that trusted it would have named no template at all.
   have configured nothing.
 - The claim holds, read in `.checkouts/14.3` at `627949e9dd`.
   `typo3/sysext/fluid_styled_content/Configuration/TypoScript/Helper/ContentElement.typoscript`
-  sets `templateName = Default` as a plain value, and
+  sets `templateName = Default` as a plain value.
   `Configuration/TypoScript/ContentElement/Text.typoscript` is
-  `tt_content.text =< lib.contentElement` followed by `templateName = Text` —
-  one such file per element, each imported by `setup.typoscript`.
-- It holds on the branches below as well: both files are the same in
+  `tt_content.text =< lib.contentElement` followed by `templateName = Text`.
+  There is one such file per element, and `setup.typoscript` imports each.
+- It holds on the branches below as well. Both files are the same in
   `.checkouts/12.4` and `.checkouts/13.4`, so that half of the statement carries
   no version boundary.
 - The derivation is `theme_camino`'s and nothing else's.
   `Configuration/Sets/camino/TypoScript/content.typoscript` unsets
   `templateName >` and sets `templateName.ifEmpty.cObject` to a `TEXT` with
-  `field = CType` and `case = uppercamelcase`; the theme's own
+  `field = CType` and `case = uppercamelcase`. The theme's own
   `camino_textmedia_teaser_grid`, registered in
-  `Configuration/TCA/Overrides/20_tt_content_textmedia_teaser_grid.php`, is
-  rendered by
+  `Configuration/TCA/Overrides/20_tt_content_textmedia_teaser_grid.php`, renders
+  through
   `Resources/Private/Templates/Content/CaminoTextmediaTeaserGrid.fluid.html`.
   The set declares no dependency on `fluid_styled_content`.
 - The same file is where `tt_content = CASE` gets a `default` of
@@ -47,16 +47,16 @@ sitepackage that trusted it would have named no template at all.
   definition" `TEXT`, so under the theme the derivation answers for every CType
   and under `fluid_styled_content` alone an unnamed one is a visible error.
 - What the feedback expects of the failure is not what the tree says.
-  `fluid_styled_content` ships no `Default` template on any covered branch —
+  `fluid_styled_content` ships no `Default` template on any covered branch.
   `Resources/Private/Templates/` holds `Text`, `Textmedia`, `Generic` and the
-  rest, and `Default` is a *layout*, `Resources/Private/Layouts/Default.html` on
+  rest. `Default` is a *layout*, `Resources/Private/Layouts/Default.html` on
   12.4 and 13.4, `Default.fluid.html` on 14.3. So the copied `Default` resolves
-  to no file rather than to a frame, and the statement says what was read rather
-  than what was predicted.
+  to no file rather than to a frame. The statement says what this run read
+  rather than what the feedback predicted.
 - Nothing else in the corpus rested on the derivation. `templateName`,
   `lib.contentElement` and `uppercamelcase` across `knowledge/` and `skills/`
   reach `content-element-preview`, which pointed at this statement for how the
-  name follows from the CType, and four statements that only name
+  name follows from the CType. They reach four statements that only name
   `lib.contentElement` as the object content elements render on.
 
 ## Decided
@@ -71,38 +71,38 @@ sitepackage that trusted it would have named no template at all.
   disqualifies it is the one the ladder owes any feedback claiming something
   about TYPO3, and it was done here, in `.checkouts/`, on all three covered
   majors and named by file above.
-- The ladder has no rung for a statement that was delivered, taken and wrong.
-  This is step 1a by what was missing — the corpus never said what
-  `fluid_styled_content` does — and step 4 by what the repair costs. One
-  feedback is not evidence for adding a rung, so the ladder is left as it is.
-- The feedback's second ask, which of the two configurations a sitepackage
-  should choose, is answered by stating both and by naming what inheriting the
-  theme's convention costs: reproducing that block. Which one a project wants is
-  its own decision, and a recommendation here would be one this run has no
-  evidence for.
-- The pointer in `content-element-preview` is corrected in the same commit. It
-  said the template name follows from the CType, which is the same error one
-  hint further on.
+- The ladder has no rung for a statement the server delivered, the session took,
+  and that was wrong. This is step 1a by the gap, since the corpus never said
+  what `fluid_styled_content` does, and step 4 by what the repair costs. One
+  feedback is not evidence for a new rung, so the ladder stays as it is.
+- The feedback's second ask is which of the two configurations a sitepackage
+  should choose. The hint answers it with both stated and with the cost of the
+  theme's convention named. That cost is a copy of that block. Which one a
+  project wants is its own decision, and a recommendation here would be one this
+  run has no evidence for.
+- The same commit corrects the pointer in `content-element-preview`. It said the
+  template name follows from the CType, which is the same error one hint further
+  on.
 
 ## Assumed
 
 - That a project sitepackage is the reader of both halves. The hint's other
-  statements are written for one, and the reporting session was building one.
-- That the derivation is worth stating at all now that it is somebody else's. It
-  is the convention the core's own theme is read for, and the sitepackage layout
-  hint already sends a reader there.
+  statements are for one, and the session that reported built one.
+- That the derivation is worth a statement at all now that it is somebody
+  else's. It is the convention a reader opens the core's own theme for, and the
+  sitepackage layout hint already sends a reader there.
 
 ## Wrong if
 
-- A session reports reproducing the theme's block where per-element
-  `templateName` was what its project wanted, or the other way round. Then
-  naming both configurations without saying which fits what is the gap, and the
-  choice is what the statement owes.
+- A session reports a copy of the theme's block where per-element `templateName`
+  was what its project wanted, or the other way round. Then naming both
+  configurations without saying which fits what is the gap, and the choice is
+  what the statement owes.
 - `fluid_styled_content` ships a `Default` template on a later branch. Then an
-  element copied off `lib.contentElement` renders a frame instead of failing,
+  element copied off `lib.contentElement` renders a frame instead of a failure,
   and the trap named here is the wrong one.
-- `theme_camino` moves out of the core, which `sitepackage-layout` says is
-  announced. The path named in the statement stops resolving in a checkout, and
-  the sentence has to say where the theme lives instead.
+- `theme_camino` moves out of the core, which `sitepackage-layout` says the core
+  has announced. The path named in the statement no longer resolves in a
+  checkout, and the sentence has to say where the theme lives instead.
 - A judging run cites this entry to close a false statement without reading the
   checkout. The exception is the reading, not the closing.

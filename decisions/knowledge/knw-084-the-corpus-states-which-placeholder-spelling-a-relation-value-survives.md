@@ -9,14 +9,13 @@ coveredBy:
 
 # D-KNW-084 — The corpus states which placeholder spelling a relation value survives
 
-**A NEW placeholder handed to a relation field may carry no underscore, and
-`datahandler-relations` says so beside the sentence about placeholders resolving
-in the same run.**
+**A NEW placeholder in a relation field may carry no underscore, and
+`datahandler-relations` says so beside the sentence that placeholders resolve in
+the same run.**
 
 That sentence is what a reader checks when a relation does not resolve, and it
-sent the reporting session looking at datamap ordering instead. The statement
-names the symptom as well as the rule, because the rule is invisible at the call
-site.
+sent the session that reported to the datamap order instead. The statement names
+the symptom as well as the rule, because the rule is invisible at the call site.
 
 ## Evidence
 
@@ -32,15 +31,16 @@ site.
 ## Decided
 
 - One statement in `datahandler-relations`, as `D-KNW-081` placed it.
-- It says where the constraint does not reach — the datamap key, a `-NEW...`
-  positioning pid, an MM parent id — because a reader who has just lost a
-  relation would otherwise rename every placeholder in the script.
-- `StringUtility::getUniqueId('NEW')` is named as the id that always conforms,
-  rather than a rule about which characters are allowed. One call is cheaper to
-  follow than a spelling rule, and it is what the core uses itself.
-- The `appliesTo` gains the words the symptom is asked in — `uid_foreign`,
-  `relation not saved`, `children not linked`, `counter stays 0` — because the
-  session that needs this has the symptom and not the subject.
+- It says where the constraint does not reach: the datamap key, a `-NEW...`
+  position pid, an MM parent id. A reader who has just lost a relation would
+  otherwise rename every placeholder in the script.
+- The statement names `StringUtility::getUniqueId('NEW')` as the id that always
+  conforms, rather than a rule about which characters the value permits. One
+  call is cheaper to follow than a character rule, and it is what the core uses
+  itself.
+- The `appliesTo` gains the words a caller asks the symptom in: `uid_foreign`,
+  `relation not saved`, `children not linked`, `counter stays 0`. The session
+  that needs this has the symptom and not the subject.
 - Not stated in `datahandler-seeding` as well, though the feedback asked for it.
   `D-KNW-081` decided one statement, and a second copy of a rule is the thing
   that goes stale on one side.
@@ -57,8 +57,8 @@ site.
 - A placeholder from `getUniqueId('NEW')` is lost the same way, so the
   constraint is not the underscore alone.
 - A core change resolves the value before the split, or logs the drop. The
-  symptom half then describes a version nobody is on, and the statement is bound
-  rather than corrected.
+  symptom half then describes a version nobody is on, and the statement gets a
+  bound rather than a correction.
 - A second feedback arrives from a session that named its datamap keys and never
-  reached the relation hint. The rule then belongs where the placeholder is
-  coined as well, which is `D-KNW-081`'s remaining **Wrong if**.
+  reached the relation hint. The rule then belongs where a session coins the
+  placeholder as well, which is `D-KNW-081`'s open **Wrong if**.

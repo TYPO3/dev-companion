@@ -69,9 +69,9 @@ activated by hand.
   project on another task.
 - **The order exists only as neighbour sentences.**
   `sitepackage-initial-content` closes by naming the other three hints and what
-  each one adds. `feedback/2026-08-17-211306`, archived, is the same session
-  reporting that such a closing sentence is read where the appetite for another
-  lookup is lowest.
+  each one adds. `feedback/2026-08-17-211306`, archived, is the same session's
+  report that a session reads such a closing sentence where the appetite for
+  another lookup is lowest.
 - **The corpus is one session on this half.** `bin/cli feedback:list` on
   2026-08-18 reports 13 open, all in `/home/benji/projects/site-demo`, all
   `claude-opus-5`, all recorded between 20:59 and 21:30 on 2026-08-17. The
@@ -89,13 +89,13 @@ activated by hand.
 - **One skill rather than the two the feedback proposes.** The other skills pay
   for a description and not its own (`D-SKL-026`), so a thirteenth costs the
   twelve. The second one would buy a workflow step 5 already carries.
-- **Where the boundary runs.** Inside: seeding the content with DataHandler
-  because nothing exists to export yet, the export and the table and relation
-  flags it takes, where the artifact and its files directory are placed in the
-  package, the site configuration shipped through `Initialisation/Site/`, and
-  the clean install that proves the result. Outside, unchanged: what the import
-  does on the installation that receives it, which is the installation skill's
-  step 4.
+- **Where the boundary runs.** Inside: the seed of the content with DataHandler
+  because nothing exists to export yet, and the export with the table and
+  relation flags it takes. Also where the artifact and its files directory go in
+  the package, and the site configuration shipped through
+  `Initialisation/Site/`. Also the clean install that proves the result.
+  Outside, unchanged: what the import does on the installation that receives it,
+  which is the installation skill's step 4.
 - **The compound brief is its own card.** The guide named one skill for a brief
   naming three units, and `installation-setup` matched none of it. That is step
   3 on an intent and a skill that both exist. A check of it needs no read about
@@ -113,9 +113,9 @@ activated by hand.
 ## Assumed
 
 - **That the project half is delivery rather than ownership.** Step 5 sequences
-  the two project hints, and whether a session that reaches it writes the ignore
-  rules from those answers instead of from memory is not established here — this
-  session never reached the skill through routing at all.
+  the two project hints. Whether a session that reaches it writes the ignore
+  rules from those answers instead of from memory stands open here. This session
+  never reached the skill through routing at all.
 - **That the production and the consumption of a distribution are two
   workflows.** Read as one, the work is four steps added to the installation
   skill's step 4 and no new description is spent.

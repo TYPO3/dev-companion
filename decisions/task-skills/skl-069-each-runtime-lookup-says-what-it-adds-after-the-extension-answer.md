@@ -27,9 +27,9 @@ right to skip five tools.
   `typo3_hint_lookup` five times, `typo3_changelog_lookup` twelve times,
   `typo3_rule_lookup` once and `typo3_commit_message_guide` five times. That is
   against six named tools it read and passed over.
-- **The wording is in `skills/base.md`, not in the skill that was asked.** The
-  section *Two kinds of lookup, and neither stands in for the other* names the
-  five and pairs them against `typo3_hint_lookup` and
+- **The wording is in `skills/base.md`, not in the skill the feedback names.**
+  The section *Two kinds of lookup, and neither stands in for the other* names
+  the five and pairs them against `typo3_hint_lookup` and
   `typo3_documentation_lookup`. Step 2 of the same file is
   `typo3_extension_describe`. The installer copies that file into every
   published skill as `references/base.md`, so the collision is in each of them.
@@ -85,10 +85,10 @@ right to skip five tools.
   call something already in the session answers, and step 2 answers none of
   these five questions whole. The text is per lookup and says what it adds.
 - Priority `normal`. What sets it is that the wording sits in the file every
-  published skill carries and that the failure is silent — five surfaces
-  reported assessed off a static registration list is what `R-SKL-013` exists to
-  prevent. What keeps it off `high` is one session, whose own account is that
-  the audit did not visibly suffer for it.
+  published skill carries and that the failure is silent. Five surfaces reported
+  assessed off a static registration list is what `R-SKL-013` exists to prevent.
+  What keeps it off `high` is one session, whose own account is that the audit
+  did not visibly suffer for it.
 - The wording itself is not decided here, nor whether the section stays one
   paragraph or becomes a line per lookup. Both are the todo's, and both come off
   the tool declarations rather than off anything about TYPO3.
@@ -108,12 +108,12 @@ right to skip five tools.
   already had. Then the surfaces really do overlap and the base owed a discharge
   rather than a distinction.
 - The extra calls change no finding in a recorded run. Then the rule costs five
-  round trips per audit for nothing, and it belongs at the surfaces where a
-  finding turned on it rather than on every surface in scope.
+  round trips per audit for nothing. It belongs at the surfaces where a finding
+  turned on it rather than on every surface in scope.
 - The next report of the same skip comes out of a skill whose base carries the
-  correction. Then the wording was not what lost, and the cause is the schema a
-  deferring client has to load before it may call anything — judged in
-  `D-SKL-060` and `D-AUD-011`, whose card waits in `todo/waiting/`.
+  correction. Then the wording was not what lost. The cause is the schema a
+  client that defers has to load before it may call anything. `D-SKL-060` and
+  `D-AUD-011` judged that, and its card waits in `todo/waiting/`.
 
 ## Since then
 

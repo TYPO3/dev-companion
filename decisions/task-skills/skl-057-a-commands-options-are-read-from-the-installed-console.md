@@ -71,7 +71,7 @@ differ by a package, and no version-bound page can carry the difference.
   are one call, so nothing comes off the caller, and the surface would be
   Symfony's help output for every command an installation registers.
 - **Rejected: replacing the lookup.** Two of the three things the step tells the
-  caller to check are not in `--help`, so a routing that moved the whole
+  caller to check are not in `--help`. So a routing that moved the whole
   question would take them with it.
 - **The step names `--distribution` rather than states a rule.** The sweep above
   found one option of this kind, so a general sentence would generalise a single
@@ -119,5 +119,5 @@ not in its help.
 
 That is also why the bound survives the author contract's ban on a version
 number in a skill body. What the ban keeps out is the version a step assumes
-about the installation, which is re-asked; a boundary in the past is the
-opposite, and `writing-a-skill.rst` now says so.
+about the installation, which a session asks again. A boundary in the past is
+the opposite, and `writing-a-skill.rst` now says so.

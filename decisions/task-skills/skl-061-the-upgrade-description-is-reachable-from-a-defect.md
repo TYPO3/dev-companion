@@ -45,11 +45,11 @@ that carries the activation states a premise the task does not meet.
   `Changelog/14.0/`. The package declares `^13.4.15 || ^14.3` and a removal
   inside that range breaks it. So the request arrives as a defect rather than as
   an upgrade.
-- **The other route is shut too.** The two intents naming this skill in
+- **The other route is shut too.** The two intents that name this skill in
   `knowledge/task-intents.json` match on `deprecat`, `breaking`,
-  `remove public`, `drop support`, `@internal` and `public api`, none of which a
-  symptom report carries, and both checklists are the core author's — a
-  changelog file, an extension scanner matcher — rather than the consumer's. The
+  `remove public`, `drop support`, `@internal` and `public api`. A symptom
+  report carries none of those. Both checklists are the core author's, a
+  changelog file, an extension scanner matcher, rather than the consumer's. The
   `routing` entry of the same shape in `knowledge/server-scope.json` fires on
   starting work on a major or planning an upgrade, and routes to
   `typo3_changelog_lookup`.
@@ -65,11 +65,11 @@ that carries the activation states a premise the task does not meet.
 ## Decided
 
 - The ladder's step 3, on the skill's own trigger. It is the second sighting of
-  the mechanism `D-SKL-024` was confirmed by on 2026-08-09: a clause that reads
-  as one way of doing the job **narrows** what the description names, and the
-  task that does it another way reads as actively not its case. There the clause
-  was a list of steps and the excluded shape was a worktree. Here it is the
-  premise the shapes stand under.
+  the mechanism that confirmed `D-SKL-024` on 2026-08-09. A clause that reads as
+  one way to do the job **narrows** what the description names. The task that
+  does it another way reads as actively not its case. There the clause was a
+  list of steps and the excluded shape was a worktree. Here it is the premise
+  the shapes stand under.
 - Queued rather than rewritten in this run. A description lands in somebody
   else's project, which is why `D-AUD-003` queued the backend preview rewrite
   rather than made it. The body moves in the same commit.
@@ -109,9 +109,9 @@ that carries the activation states a premise the task does not meet.
   steps, and the session reports them as noise. Then the case belongs to an
   owner that does not exist yet, and the trigger was the smaller half of the
   gap.
-- The premise can only be widened by adding characters. Then this is a budget
-  question rather than a wording one, and which of the twelve descriptions pays
-  is what has to be decided first.
+- Only added characters can widen the premise. Then this is a budget question
+  rather than a wording one, and which of the twelve descriptions pays is what
+  somebody decides first.
 
 ## Since then
 

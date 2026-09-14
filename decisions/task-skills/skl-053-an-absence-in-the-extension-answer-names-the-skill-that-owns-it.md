@@ -14,8 +14,8 @@ absent.**
 
 A session read `manual: null`, `readme: null` and `tests: []` twice. It wrote
 three README files by hand, shipped no test at all and handed the package over
-unaudited. The three skills that own those absences were named in the closing
-sentence of the skill it was following, and it says it read that sentence.
+unaudited. The closing sentence of the skill it followed named the three skills
+that own those absences, and it says it read that sentence.
 
 ## Evidence
 
@@ -37,9 +37,9 @@ sentence of the skill it was following, and it says it read that sentence.
   `manual none, readme none, tests none, language files none` where an extension
   has none of them, and it names no skill. Below `src/Tool/` only `GerritLookup`
   and `FeedbackRecord` name one at all.
-- **No extension-side crossing is written at its moment.** Read across `skills/`
-  on 2026-08-18: every crossing out of the seven extension workflows stands in
-  the closing ownership paragraph. Three of them carry a trigger clause:
+- **No extension-side crossing stands at its moment.** Read across `skills/` on
+  2026-08-18: every crossing out of the seven extension workflows stands in the
+  closing ownership paragraph. Three of them carry a trigger clause:
   `typo3-backend-module-development`'s "before editing documentation" and
   "before changing test infrastructure", `typo3-extension-cleanup`'s numbered
   step 2. None is a step at the point the crossing happens, which is the form
@@ -58,12 +58,12 @@ sentence of the skill it was following, and it says it read that sentence.
   every name below `src/Tool/` to what the installer publishes.
 - **The corpus is one build.** `bin/cli feedback:list` on 2026-08-18 reports 8
   open, all from `/home/benji/projects/site-demo` and all from that session.
-  Three siblings of the same debrief are already judged: `D-SKL-050` names this
-  card as what failed to deliver `typo3-development-installation`, `D-KNW-087`
-  is the same mechanism one layer down in a hint's closing neighbour, and
-  `D-SKL-049` is the terminal gate — proposed, and waiting on the maintainer in
-  `todo/waiting/2026-08-17-212218`.
-- **The testing skill has been missed before, from another project.**
+  Three siblings of the same debrief already have their judgement. `D-SKL-050`
+  names this card as what failed to deliver `typo3-development-installation`.
+  `D-KNW-087` is the same mechanism one layer down in a hint's closing
+  neighbour. `D-SKL-049` is the terminal gate, proposed, and it waits on the
+  maintainer in `todo/waiting/2026-08-17-212218`.
+- **Another project missed the testing skill before.**
   `feedback/archive/2026-08-01-003533`, `/home/benji/projects/site-new`, another
   model: rendered output verified by a curl of the HTML, no browser test, a
   Playwright harness in place and unused. That session had no skill active to
@@ -72,14 +72,14 @@ sentence of the skill it was following, and it says it read that sentence.
 
 ## Decided
 
-- **Step 2 for the answer and step 4 for the crossing, and both are queued.** A
-  rendered answer and a published skill body are contracts, and
+- **Step 2 for the answer and step 4 for the crossing, and both go to the
+  queue.** A rendered answer and a published skill body are contracts, and
   `documentation/records/judging.rst` puts either on the todo side of the spot.
 - **The three absences name their owner: `typo3-extension-documentation` where
   `manual` or `readme` is null, `typo3-extension-testing` where `tests` is
   empty.** Only where the artifact is absent, so an extension that ships all
-  three reads as it does today, and the name arrives on the object the caller is
-  already looking at rather than in a sentence it is leaving.
+  three reads as it does today. The name arrives on the object the caller
+  already looks at rather than in a sentence it leaves behind.
 - **Not conformance.** No field of this answer reports that nobody audited the
   package, so there is no absence for it to hang on. That crossing stays with
   the skills half.
@@ -87,13 +87,13 @@ sentence of the skill it was following, and it says it read that sentence.
   second named moment with its own report, and the row nobody asked for is still
   what a route invented for symmetry costs.
 - **The crossing half is `R-SKL-018` applied where it never was, and bounded to
-  one crossing at its own moment.** What may not be written from here is a list
-  of everything the workflow still owes: that is `D-SKL-049`'s gate, which is
-  proposed rather than decided, and a card writing one now would answer the
-  maintainer's question by building it.
+  one crossing at its own moment.** What may not come from here is a list of
+  everything the workflow still owes. That is `D-SKL-049`'s gate, a proposal
+  rather than a decision, and a card that writes one now would answer the
+  maintainer's question with a build.
 - **Nothing about the descriptions or the routing.** The listing arrived and one
   of these skills was active when the crossing failed, so this is a crossing and
-  not a selection — `D-SKL-033` weighed the wording and this adds no session to
+  not a selection. `D-SKL-033` weighed the wording and this adds no session to
   that side.
 - **Priority `normal` on both cards.** The cost has a measure and it is large:
   no test written, three manuals by hand, an unaudited delivery. It is one
@@ -125,8 +125,7 @@ sentence of the skill it was following, and it says it read that sentence.
   if** by way of this entry.
 - The extension crossings are rewritten at their moments and a session crosses
   none of them anyway. Then prose does not hold a crossing at all, and
-  `D-SKL-022`'s third **Wrong if** — the lever is in the tools — is what is
-  left.
+  `D-SKL-022`'s third **Wrong if**, the lever is in the tools, is what remains.
 - A session activates one of the three owners off the closing paragraph as it
   stands. Then this run read one session's momentum as a property of the
   sentence.

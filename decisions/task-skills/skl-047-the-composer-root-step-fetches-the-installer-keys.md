@@ -43,12 +43,11 @@ the manifest under construction is there to install.
   same file name `php-versions`, `project-configuration-files` and
   `project-build-and-scripts`.
 - **The step keeps a paraphrase where the id would go.** Its "three properties
-  of that step survive any version" are three statements of that hint: a layout
-  key that warns rather than errors is `app-dir`'s message, the package the core
-  requires itself is `typo3/cms-cli`, and the empty extension directory below
-  the document root is the hint's closing statement. The skill opens with a ban
-  on retained keys and package names, and this is the one step that retains
-  both.
+  of that step survive any version" are three statements of that hint. A layout
+  key that warns rather than errors is `app-dir`'s message. The package the core
+  requires itself is `typo3/cms-cli`. The empty extension directory below the
+  document root is the hint's closing statement. The skill opens with a ban on
+  retained keys and package names, and this is the one step that retains both.
 - **The other two facts the report names have landed.** `D-KNW-086` put the
   interpreter into `php-versions` and into step 2. `D-KNW-088` put what a
   Composer installation generates onto `project-build-and-scripts` and
@@ -62,8 +61,8 @@ the manifest under construction is there to install.
 - **Step 3 of the ladder, routing.** The right answer exists, is reachable by
   the query the moment produces, and the step that asks the question points
   somewhere else.
-- **Queued rather than closed on the spot.** A skill is installed into somebody
-  else's project, so its contract is reviewed rather than improvised, and
+- **Queued rather than closed on the spot.** A skill lands in somebody else's
+  project, so its contract gets a review rather than an improvisation.
   `documentation/records/judging.rst` puts it on the todo side of that line.
 - **The feedback shrinks to this half.** The interpreter and the generated paths
   have their answer, and the report says the second got a card of its own.
@@ -71,8 +70,8 @@ the manifest under construction is there to install.
   ask.** `Result\Unsupported` is one class for every tool that reads an
   installation. So a route there attaches to every unanswerable answer rather
   than to the moment before an install. `D-ANS-083` took the one pointer that
-  answer carried back out, and `D-ANS-061` decided on three sessions that naming
-  a tool in an answer is not the lever. What owns the moment is the workflow
+  answer carried back out. `D-ANS-061` decided on three sessions that a tool
+  named in an answer is not the lever. What owns the moment is the workflow
   step, which is where `R-KNW-072` put the interpreter and where this puts the
   keys.
 - **Not a new hint, and not a document.** The gap was a route to one statement,

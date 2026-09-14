@@ -11,12 +11,12 @@ coveredBy:
 
 # D-SKL-055 — A call named in order not to make it is a discharge
 
-**A tool a skill names in order not to call it is written as a discharge, and a
+**A tool a skill names in order not to call it stands as a discharge, and a
 routing is the first mention outside one.** The construct is the tool's name,
 `is discharged by`, and what answers it instead.
 
-`everySkillRoutesThroughTheOwnersOfItsOwnFactsInOrder` asserts a routing by
-finding the tool's name anywhere in the body, so the sentence telling a caller
+`everySkillRoutesThroughTheOwnersOfItsOwnFactsInOrder` asserts a routing when it
+finds the tool's name anywhere in the body. So the sentence that tells a caller
 to skip the call satisfies the assertion for it. Nobody can read which of the
 two a mention is off free prose. So the disowned half gets a form and the routed
 half is everything else.
@@ -27,8 +27,8 @@ half is everything else.
   `typo3_project_describe` discharges `typo3_server_scope` (`D-ANS-083`).
   `ROUTING_SKILLS` went on to list the tool first for that skill. Nothing
   failed. `everySkillStartsFromTheBaseBeforeItsOwnEvidence` took the same
-  sentence as the skill's first routing, so it asserted that the base is
-  established before a call the body says is not made.
+  sentence as the skill's first routing. So it asserted that the base stands
+  established before a call the body says nobody makes.
 - The mentions are not uniform enough for the opposite rule. Read over `skills/`
   on 2026-08-18. Its 116 backticked tool mentions continue with `with`, `for`,
   `before`, `says`, `answers`, `owns`, `carries`, `names`, `states`, `reports`,
@@ -48,8 +48,8 @@ half is everything else.
 - `DISCHARGED_TOOLS` records which tool each skill discharges, beside the
   routings and exclusive with them.
 - The routing helper in `SkillTest` is what both order assertions read a
-  position from: the first mention outside a discharge, and `false` where every
-  mention is one.
+  position from. That is the first mention outside a discharge, and `false`
+  where every mention is one.
 - `everyDischargedCallIsWrittenAsOneAndRoutedNowhere` runs over the directory
   and holds both directions: a discharge nobody recorded, and a recorded one
   nobody wrote. So it holds the next skill that discharges a call whether or not
@@ -57,9 +57,9 @@ half is everything else.
 - The test reads the bodies flat. The construct is a sentence, and a rewrap at
   80 columns moves its line break through the middle of it.
 - Rejected: a vocabulary of discharge words, "skip", "already answered", "no
-  need", matched against the sentence the routing stands in. It bans the
-  phrasings that have happened and lets the next one through, and it misreads a
-  routing whose own sentence carries one of the words.
+  need", matched against the sentence the routing stands in. It bans the phrases
+  that have happened and lets the next one through. It misreads a routing whose
+  own sentence carries one of the words.
 - Rejected: a hold on every mention of a tool as either a routing or a
   discharge. Bodies that do not route to the four calls the base fixes name
   them, deliberately, so most mentions are neither.
@@ -75,9 +75,9 @@ half is everything else.
 
 - A skill disowns a call in prose that carries no discharge, keeps the tool in
   its routing list, and passes. The construct would then be documentation rather
-  than a discriminator, and what separates the two would have to be read off the
-  routing side instead — the mention written as a call, which the corpus does
-  not support today.
+  than a discriminator. What separates the two would then have to come off the
+  routing side instead. That is the mention written as a call, which the corpus
+  does not support today.
 - A second skill discharges a call and the sentence reads worse in these forced
   words. The construct would then cost prose to buy an assertion, and the
   assertion is worth less than one readable step.

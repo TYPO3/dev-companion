@@ -44,11 +44,11 @@ gives half of it away in its closing sentence.
   it as "a second task shape out of that directory reaching the same edge from
   the other end" and left its card in place for this question.
 - **The answers are here and nothing orders them.** `bin/cli hints:probe` on the
-  verbs this feedback lists — flushing caches after a code change, resetting the
-  backend password, importing a colleague's dump — returns `installation-boot`,
-  `page-cache-flushing` and `caching` on 2026-08-18. `installation-boot` and
-  `installation-exception-output` are the two the skill already routes to, both
-  from its create-and-boot half.
+  verbs this feedback lists returns `installation-boot`, `page-cache-flushing`
+  and `caching` on 2026-08-18. Those verbs are a cache flush after a code
+  change, a reset of the backend password, an import of a colleague's dump.
+  `installation-boot` and `installation-exception-output` are the two the skill
+  already routes to, both from its create-and-boot half.
 - **A fourteenth description has 25 characters to fit into.** The twelve
   published descriptions cost 3575 of the 3600
   `SkillTest::everyDescriptionIsWrittenToALengthOfItsOwn` allows, counted from
@@ -98,9 +98,10 @@ gives half of it away in its closing sentence.
   deprecation log. Once the run half is that skill's own, only the conformance
   crossing is a hand-over. What form a crossing takes is
   `feedback/2026-08-18-074245`'s card.
-- **The 1a facts keep their own cards.** This section would route to `074200`,
-  which of two site bases that collide wins, and to `074545`, the site the core
-  auto-creates for a new root page. Each gets its judgement on its own card.
+- **The 1a facts keep their own cards.** This section would route to `074200`
+  and `074545`. The first is which of two site bases that collide wins, the
+  second the site the core auto-creates for a new root page. Each gets its
+  judgement on its own card.
 - **Priority `normal`, set by arrival rather than by weight.** Two task shapes
   in one directory reached the domain, which is not `low`. One repository, one
   session series and two finished tasks are not `high`.
@@ -139,7 +140,7 @@ The section landed as **The installation that already answers**, and the fork
 above it names the shape that enters there. The description was not touched: it
 already offered to boot and repair, and the characters the listing has left
 would not have paid for more. Two things it does not carry, because nothing here
-answers them yet: what a request that matched a site and then answered not-found
-means, and what form one crossing takes beyond naming it. The second **Wrong
-if** is what a session that arrives with an installation that runs will answer,
-and nothing has yet.
+answers them yet. What a request that matched a site and then answered not-found
+means, and what form one crossing takes beyond its name. The second **Wrong if**
+is what a session that arrives with an installation that runs will answer, and
+nothing has yet.

@@ -28,14 +28,15 @@ question.
   absent. That branch also carried two v14 defects the audit had not found.
 - What the skill says today. Steps 5 to 7 write the list, show it and keep it in
   the session; steps 8 to 12 work it off. `pull request` appears in step 11,
-  which asks the maintainer where the commits land, and in the closing boundary
-  paragraph, which sends one proposed change to `typo3-extension-patch-review`.
-  Neither is the question, and no step between 5 and 6 asks it.
+  which asks the maintainer where the commits land. It appears in the closing
+  boundary paragraph, which sends one proposed change to
+  `typo3-extension-patch-review`. Neither is the question, and no step between 5
+  and 6 asks it.
 - The audit brief is silent too. The `audit` intent in
-  `knowledge/task-intents.json` carries six checklist items — what a change
-  removes, what a core removal owes, the two `runTests.sh` checks, the finding
-  gate, the declared checks, and handing each finding over with its consequence.
-  None of them names work that exists.
+  `knowledge/task-intents.json` carries six checklist items. What a change
+  removes, what a core removal owes, the two `runTests.sh` checks. Then the
+  finding gate, the declared checks, and each finding handed over with its
+  consequence. None of them names work that exists.
 - **The same failure got its decision once already, one audience over.**
   `D-SKL-008` and `R-SKL-014` put the issue and the review server into the core
   patch review. The third recorded `REVIEW-03` run had judged a patch as a
@@ -106,8 +107,8 @@ the branch is behind on dominates an unrestricted two-dot diff. The diff
 restricted to the files the branch touches answers both correctly.
 
 **What the run did not report is that only its empty answer settles anything.**
-The restricted diff is symmetric. So a branch whose fix is already in the base,
-and one of whose files the base edited afterwards, produces exactly the diff an
-outstanding branch produces. So the skill states the empty answer as the
-mechanical half and sends the non-empty one back to the finding. `gh` is not
+The restricted diff is symmetric. So a branch whose fix is already in the base
+produces exactly the diff an outstanding branch produces. That happens once the
+base edited one of its files afterwards. So the skill states the empty answer as
+the mechanical half and sends the non-empty one back to the finding. `gh` is not
 assumed, so the git half is the floor.

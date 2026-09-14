@@ -85,7 +85,7 @@ commits. Nothing between them takes a single incoming diff as its object.
   Nothing here has measured a second one, which is why the research
   `writing-a-skill.rst` asks for is the todo's first step and not a formality.
 - That one session's report plus the asymmetry above carries the bar
-  `writing-a-skill.rst` sets. The corpus holds no second sighting: what stands
+  `writing-a-skill.rst` sets. The corpus holds no second sighting. What stands
   in for it is that the core side has this workflow and the extension side has
   every other one.
 
@@ -94,9 +94,9 @@ commits. Nothing between them takes a single incoming diff as its object.
 - The research finds the five checks are already what conformance's checklist
   covers once a diff may derive its surface list. Then this is step 4 on that
   skill, and one paragraph rather than a thirteenth file.
-- A draft is written and no session loads it, because a pull request review is
-  worded "look over this change to my sitepackage" as often as it names the pull
-  request — which is wording conformance already reaches.
+- A draft exists and no session loads it. A pull request review reads "look over
+  this change to my sitepackage" as often as it names the pull request. That is
+  wording conformance already reaches.
 - The baseline run `D-SKL-035` buys shows a session without the skill that
   establishes the same five things anyway. The feedback's own session did
   exactly that, and if it repeats, the skill sells an order nobody lacked.

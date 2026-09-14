@@ -32,10 +32,10 @@ nothing carries a word either session typed, so nothing fired.
   reaches nothing at all, and returns 100 hints as the index. Read on
   2026-08-21.
 - `bin/cli hints:probe "package.json webpack build"` reaches
-  `project-build-and-scripts` alone. `extension-asset-build` exists, is titled
-  "Building Assets in a Project Extension", and its `appliesTo` carried none of
-  `npm`, `package.json`, `webpack` or `vite` — it was reachable by text score
-  only, on a query naming all four.
+  `project-build-and-scripts` alone. `extension-asset-build` exists, its title
+  is "Building Assets in a Project Extension", and its `appliesTo` carried none
+  of `npm`, `package.json`, `webpack` or `vite`. Only the text score reached it,
+  on a query that named all four.
 - No entry in `knowledge/task-intents.json` matches any of those words. The
   nearest, `installation-upgrade`, names no skill.
 - No skill description names the build. The only mention anywhere below
@@ -108,9 +108,9 @@ A read of the borrowed class on 2026-08-21 showed the session's unverified
 assumption was right. What **Decided** gives the workflow includes a
 verification of such a class against the declared majors, and on this example
 that verification does not answer. The catalog withholds the entry at the older
-major because one custom property in it arrived later and an entry has one bound
-as a whole. So the instruction has a miss behind it on the case that produced
-it, and what a withheld entry means is part of the work.
+major. One custom property in it arrived later and an entry has one bound as a
+whole. So the instruction has a miss behind it on the case that produced it, and
+what a withheld entry means is part of the work.
 
 Read against the session call by call, the order reaches two of the three
 decisions it shipped unverified. The class bullet predates `D-CAT-006` and this

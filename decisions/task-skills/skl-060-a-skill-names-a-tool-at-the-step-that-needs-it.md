@@ -41,7 +41,7 @@ the names arrived, in order, before the calls that needed them.
   the commit guide where a workflow ends in a change.
   [`writing-a-skill.rst`](../../documentation/contributing/writing-a-skill.rst)
   states the same rule for the call that reads a whole procedure: name it once,
-  where it is needed, and not at every mention.
+  where the need is, and not at every mention.
 - A second mention is already read as something else. The installation workflow
   discharges `typo3_server_scope`, and
   `SkillTest::everyDischargedCallIsWrittenAsOneAndRoutedNowhere` fails on a
@@ -69,13 +69,13 @@ the names arrived, in order, before the calls that needed them.
 - **Step 5 of the ladder in
   [judging.rst](../../documentation/records/judging.rst).** The answer was here,
   in the file the session worked from, in the right skill, and in the form of a
-  step of an order. What the feedback measures is what naming a tool where it is
-  used costs a client that fetches a schema per first call.
+  step of an order. What the feedback measures is what a tool named where the
+  use is costs a client that fetches a schema per first call.
 - **No skill gains a fetch line.** It is a second copy of the routing at the top
-  of a file no release of this server corrects, in a project where a step that
-  later routes elsewhere leaves the list saying the old thing; it is a mention
-  the discharge rule already gives another meaning; and it states a property of
-  one client in a file the other clients read too.
+  of a file no release of this server corrects. In a project where a step later
+  routes elsewhere, the list still says the old thing. It is a mention the
+  discharge rule already gives another meaning. It states a property of one
+  client in a file the other clients read too.
 - **Proposed, and the question goes up.** Whether to pay that anyway is not
   something this process may decide on its own. The card carries the question
   with what the build would cost.
@@ -108,9 +108,8 @@ the names arrived, in order, before the calls that needed them.
   skill. Then the list is delivery after all, and the cost this entry weighs it
   against is what has to be paid for it.
 - The count comes back much larger than three. A client that defers charges per
-  first use, so a workflow whose steps name ten tools pays ten, and a session
-  reporting that is reporting a different order of cost than the one judged
-  here.
+  first use, so a workflow whose steps name ten tools pays ten. A session that
+  reports that reports a different order of cost than the one judged here.
 
 ## Since then
 

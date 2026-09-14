@@ -39,12 +39,13 @@ it is a rule, and a guard holds that rule on two of the four kinds it names.
   `73cff0ab` removed a step. Today the two are 11,604 and 6,469 characters,
   1,949 more than at the report and about 5,020 tokens.
 - The sentence the report quotes is in `typo3-development-installation`
-  verbatim: keep the skill as routing and workflow,
+  verbatim. Keep the skill as routing and workflow,
   `never retain layout keys, environment defaults, command options or package names`.
   What held it was the phrase `Keep this skill as routing`, a `TYPO3 v\d+` regex
-  and a `<core:` regex, so of the four kinds it enumerates, none was asserted.
+  and a `<core:` regex. So of the four kinds it enumerates, none had an
+  assertion.
 - Two of the four have a shape a test can hold a file to, and both already hold.
-  No `SKILL.md` names an environment variable, and none names a package —
+  No `SKILL.md` names an environment variable, and none names a package.
   `typo3/testing-framework` and `typo3/coding-standards` stand in
   `typo3-extension-testing`'s references, which is where `writing-a-skill.rst`
   says a package name belongs. Nothing asserted either.
@@ -75,8 +76,8 @@ it is a rule, and a guard holds that rule on two of the four kinds it names.
   which is what an earlier install looks like. This run did not read that
   project.
 - That one day of edits says what the rule does. Six commits from one debrief is
-  the widest window this observation has, and a workflow can grow on routing for
-  a long time before anybody reads it as too long.
+  the widest window this observation has. A workflow can grow on routing for a
+  long time before anybody reads it as too long.
 
 ## Wrong if
 
@@ -86,9 +87,9 @@ it is a rule, and a guard holds that rule on two of the four kinds it names.
 - A routed pointer goes stale the way a retained fact does. A `documentId` or a
   hint id that no longer resolves is a fact in another coat. The rule would then
   have moved the staleness rather than removed it.
-- Either regex fires on a sentence that should stay. A skill naming the one
-  variable a reader exports before anything else works would be refused by a
-  guard written for the set of them.
+- Either regex fires on a sentence that should stay. A guard written for the set
+  of them would refuse a skill that names the one variable a reader exports
+  before anything else works.
 - The drift arrives after all. A domain wide enough for its own skill folds into
   one that exists, because a section is cheaper than a published file.
   `D-SKL-050` is the counter-example today and one case is not the rule.
@@ -97,12 +98,12 @@ it is a rule, and a guard holds that rule on two of the four kinds it names.
 
 Measured on 2026-09-01 against `typo3-development-installation`: the three
 branches its dispatch chooses between are 11,638 of its 21,280 characters, and a
-task takes one. None of it is retained fact, so the rule above holds and what
-the size is made of is routing that forked.
+task takes one. None of it is a retained fact, so the rule above holds and the
+size consists of routing that forked.
 
-Taking a branch into a reference is blocked by a rule rather than by the
-writing. `typo3_documentation_lookup` stands only in the create branch. So a
-reference with it takes a routed call out of `SKILL.md` and
+A rule rather than the text blocks a move of a branch into a reference.
+`typo3_documentation_lookup` stands only in the create branch. So a reference
+with it takes a routed call out of `SKILL.md` and
 `SkillTest::everySkillRoutesThroughTheOwnersOfItsOwnFactsInOrder` fails. A move
 of that branch out and a run showed that. What somebody settles first is whether
 a routed call may stand in a reference.

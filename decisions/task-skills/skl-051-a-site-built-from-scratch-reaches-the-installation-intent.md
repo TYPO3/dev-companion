@@ -57,7 +57,7 @@ them.
   installation yet. So one to make is the first unit of that work rather than a
   possibility to qualify.
 - **`development installation` matches weakly.** The adjective says which
-  installation, not that one has to be made — "fix the routing bug in my
+  installation, not that somebody has to make one. "fix the routing bug in my
   development installation" names where the work is. That is what separates it
   from `fresh installation`, which is strong and says the installation does not
   exist yet.

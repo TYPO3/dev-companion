@@ -7,9 +7,9 @@ status: open
 
 # D-SKL-049 — The gate at the end of a workflow waits for its corrections
 
-**A closing gate naming what a build workflow still owes waits on the three
-corrections its own sightings produced, and whether it is written is the
-maintainer's answer.**
+**A closing gate that names what a build workflow still owes waits on the three
+corrections its own sightings produced. Whether to write it is the maintainer's
+answer.**
 
 One session reported three prescriptions partly executed and named the pattern
 as the finding. Each of the three got its correction at the point of use the
@@ -54,11 +54,11 @@ next day, and no session has met any of the corrections yet.
   what a gate may not cost.
 - The repository already carries both halves of the question.
   [writing-a-skill.rst](../../documentation/contributing/writing-a-skill.rst)
-  says judgment keeps a checklist and construction does not;
+  says judgment keeps a checklist and construction does not.
   [`D-SKL-010`](skl-010-the-assessment-before-a-core-patch-reads-the-issue.md)
   carries *the rungs read as a checklist and are skipped as one* as its own
-  **Wrong if**; and `R-SKL-020` is a terminal stop written into a workflow
-  already, for the step that publishes. The skill in question also ships
+  **Wrong if**. `R-SKL-020` is a terminal stop already in a workflow, for the
+  step that publishes. The skill in question also ships
   `references/checklist.md`, read before writing code, which
   `feedback/2026-08-17-212600` calls the most useful document of the build.
 
@@ -81,12 +81,12 @@ next day, and no session has met any of the corrections yet.
   session past the step. The credit for the cheap corrections would go to the
   expensive one or the other way round.
 - **Rejected: an archive on the three corrections.** The pattern claim is the
-  half only this file reports, and closing it would tell the reporting session
-  its finding was worked off when what landed answers its three examples.
+  half only this file reports. An archive would tell the session that its
+  finding is done when what landed answers its three examples.
 - **What the work would open with is a placement, not a text.** The skill
-  already gates before the code is written, so the question is whether the
-  closing step re-reads that reference or states its own list — and that is the
-  todo's first question rather than this entry's answer.
+  already gates before the code. So the question is whether the closing step
+  re-reads that reference or states its own list. That is the todo's first
+  question rather than this entry's answer.
 
 ## Assumed
 
@@ -104,13 +104,13 @@ next day, and no session has met any of the corrections yet.
 
 - A session with all three corrections in front of it reports a prescription
   partly executed a fourth time. The corrections were then not the lever, the
-  gate is what is left, and the waiting cost that session its step.
+  gate is what remains, and the wait cost that session its step.
 - A second session, from another task shape, reports the same pattern. The
   corpus is then more than one build and weight rather than an ask answers the
   question.
-- The answer comes back that the gate is wanted and it lands as one closing
-  sentence pointing at the reference the skill already ships. What waited was
-  then cheaper than the weight this entry gives it.
+- The answer comes back that the maintainer wants the gate. It lands as one
+  closing sentence that points at the reference the skill already ships. What
+  waited was then cheaper than the weight this entry gives it.
 - A gate lands later and a session reports that it skipped it as a list. That is
   `D-SKL-010`'s **Wrong if** by way of this entry, and it would make the
   deferral right for a reason this entry does not give.
@@ -121,6 +121,6 @@ The second **Wrong if** has fired four times, each from a task shape this entry
 did not have in view. The fourth is the first where the skipped prescription is
 `skills/base.md`'s deprecation sweep rather than a build step. Each got its
 correction at its own point of use, as the three corrections before them did,
-and `D-SKL-085` is the latest. So the corpus is more than one build, and the
+and `D-SKL-085` is the latest. So the corpus is more than one build. The
 question the entry defers is still the closing gate itself, which the maintainer
 answered *wait* to on 2026-08-19 and again on 2026-08-27.

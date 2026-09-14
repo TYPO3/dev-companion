@@ -21,9 +21,9 @@ branch reads which question it answers and rules it out by where it stands.
 
 - The feedback, read against the skill as it is now. Step 1 of
   `## Create one where none is declared` still names the id with the description
-  the report quotes, closing on "why the extension directory below the document
-  root is empty rather than broken" — which is the question the session hit, on
-  the branch it was not in.
+  the report quotes. It closes on "why the extension directory below the
+  document root is empty rather than broken". That is the question the session
+  hit, on the branch it was not in.
 - The session ran `ls .build/public/typo3conf`, got no such directory, and
   settled it from what `typo3 extension:setup` had printed. The hint's fourth
   statement is the answer. TYPO3 loads the root package from the Composer root
@@ -33,8 +33,8 @@ branch reads which question it answers and rules it out by where it stands.
   and put the reported shape, an environment declared and no procedure, into
   both branches. "run what it declares, take every step after that from the
   create branch, and change nothing that is declared". Steps 1 and 2 are what
-  the repository already declares, so the sentence that sends the session into
-  the create branch is also the one that skips the step naming the id.
+  the repository already declares. So the sentence that sends the session into
+  the create branch is also the one that skips the step with the id.
 - **The document the boot branch reads first does not carry it either.**
   `knowledge/documents/project/installation/booting-a-clone.md` is `D-KNW-095`'s
   and is the branch's opening bullet. Its eight steps are the environment, the
@@ -57,12 +57,12 @@ branch reads which question it answers and rules it out by where it stands.
   Composer keys and the two that fail quietly. It does not for the layout a
   session looks at a booted repository through.
 - **One id rather than a class of them.** The other create-branch ids are about
-  the act: `php-versions` is the interpreter a boot finds declared,
-  `environment-runtime-readers` and the seeding ids are the install and the
-  import, which the document covers from the boot side, and
-  `project-configuration-files` is named again in the shared section on the
-  environment's generated settings. `extension-repository-installation` is the
-  only one whose subject is the repository.
+  the act. `php-versions` is the interpreter a boot finds declared.
+  `environment-runtime-readers` and the seed ids are the install and the import,
+  which the document covers from the boot side. The shared section on the
+  environment's generated settings names `project-configuration-files` again.
+  `extension-repository-installation` is the only one whose subject is the
+  repository.
 - The statements are settled. `D-KNW-053` read all four off a built root package
   and `R-KNW-064` is what keeps them answered, so nothing about TYPO3 is open
   here.
@@ -79,26 +79,26 @@ branch reads which question it answers and rules it out by where it stands.
   not exist.
 - **Queued rather than closed on the spot.** The change is a published skill's
   contract, which `documentation/records/judging.rst` puts on the todo side of
-  that line, and `SkillTest` asserts the branch headings the bullet lands under.
+  that line. `SkillTest` asserts the branch headings the bullet lands under.
 - **The condition is what the repository is.** The bullet reads "where the
-  repository is an extension with TYPO3 installed beneath it", so it fires on
-  the layout the caller is looking at rather than on who created it.
+  repository is an extension with TYPO3 installed beneath it". So it fires on
+  the layout the caller looks at rather than on who created it.
 - **Rejected: a statement in `booting-a-clone` instead.** That document is the
   order a session brings a project clone up in. Where the extension's own
   manifest is the Composer root is not one of its steps. The session also did
   find the id. It found it and read where it belongs, and only the file that
   told it can say otherwise.
-- **Rejected: splitting the hint.** Three of its four statements are about
-  writing the manifest and the fourth is about reading the result, but they are
-  one subject: `D-KNW-047` put them here rather than into
-  `project-build-and-scripts`, and `D-KNW-053` verified them together. A hint is
-  fetched whole, so a boot caller reads three statements about a manifest it is
-  not writing — cheaper than a second entry to keep true.
+- **Rejected: splitting the hint.** Three of its four statements are about the
+  write of the manifest and the fourth is about the read of the result. They are
+  one subject. `D-KNW-047` put them here rather than into
+  `project-build-and-scripts`, and `D-KNW-053` verified them together. A caller
+  fetches a hint whole, so a boot caller reads three statements about a manifest
+  it does not write. That is cheaper than a second entry to keep true.
 - **Rejected: a line above the fork.** What a skill costs is paid by every
   session that loads it — `D-SKL-052` — and the create branch already carries
   the id. Only the boot branch lacks it.
 - **Priority `normal`.** The file is a copy no release of this server corrects,
-  and this is the second finding against the same fork; not `high`, because one
+  and this is the second finding against the same fork. Not `high`, because one
   session series reported it and its task finished.
 
 ## Assumed
@@ -114,8 +114,8 @@ branch reads which question it answers and rules it out by where it stands.
 ## Wrong if
 
 - A boot session with the bullet in front of it still probes the layout by hand.
-  The id would then be delivered and unread, which is wording rather than
-  placement, and what the branch owes is the statement instead of the route.
+  The id would then have arrived unread, which is wording rather than placement.
+  What the branch owes is the statement instead of the route.
 - The bullet sends a repository that declares a full procedure and is not an
   extension to the hint anyway. The condition would then catch more than it
   exists for.

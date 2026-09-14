@@ -58,9 +58,9 @@ save.
 - The ceiling moves from 3600 to 3970, which is what the thirteen cost with room
   for a rename. It stays a ratchet. What it holds is a drift of the description
   mass, and it still does not decide how many skills this server publishes.
-- Both waiting skills are published in the same commit —
-  `typo3-extension-patch-review` and `typo3-distribution-content` — each with
-  its intent in `knowledge/task-intents.json` and its workflow in
+- Both skills in wait go out in the same commit, `typo3-extension-patch-review`
+  and `typo3-distribution-content`. Each has its intent in
+  `knowledge/task-intents.json` and its workflow in
   `knowledge/server-scope.json`.
 - **The baseline run `D-SKL-035` asks of a new skill was not bought.** The
   maintainer published on the review alone, and neither run exists.

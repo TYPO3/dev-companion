@@ -31,21 +31,22 @@ environment and nothing else falls on the wrong side of each.
   declared order", "the finding is which declared step failed". One trace is
   enough to enter a branch that then has nothing to run.
 - The closing section splits on authorship and asks a session that wrote the
-  sequence for three more things: a re-run from a clone with "no installed
+  sequence for three more things. A re-run from a clone with "no installed
   dependencies, no installation, no container", a second start, and a commit
-  message drafted with `typo3_commit_message_guide`. The reporting session wrote
-  the sequence and committed nothing — `git status --short` was empty, because
-  `.build/`, `config/` and `var/` are ignored — so the message had no subject
-  and the re-run would have destroyed the installation that had just been asked
-  for. The boot branch states that case two paragraphs above: "an installation
-  that was asked for and then destroyed is a change nobody asked for".
+  message drafted with `typo3_commit_message_guide`. The session that reported
+  wrote the sequence and committed nothing. `git status --short` was empty,
+  because `.build/`, `config/` and `var/` are in the ignore rules. So the
+  message had no subject and the re-run would have destroyed the installation
+  the user had just asked for. The boot branch states that case two paragraphs
+  above: "an installation that was asked for and then destroyed is a change
+  nobody asked for".
 - The rung is not the corpus. `bin/cli hints:probe` on 2026-08-18, asked in the
   reported repository's own terms, returns `installation-setup`,
   `project-build-and-scripts`, `project-configuration-files`,
   `installation-boot` and `environment-variables`. The session reached the skill
   on its description alone, and every hint id it names inline was fetchable and
-  correct, which the feedback states first. Delivery and routing worked; the
-  wording is what is left.
+  correct, which the feedback states first. Delivery and routing worked. The
+  wording is what remains.
 - `bin/cli feedback:list` on 2026-08-18 reports 35 open in two directories, 32
   of them in `/home/benji/projects/blog`. `074606` is a second task shape out of
   that directory that reaches the same edge from the other end. That is an
@@ -56,7 +57,7 @@ environment and nothing else falls on the wrong side of each.
   of one repository in both.
 - `SkillTest::anInstallationIsBuiltInDependencyOrder` asserts both branch
   headings and `## Prove it, and how far depends on who wrote the sequence`
-  verbatim, so the wording and its guard move together.
+  verbatim. So the wording and its guard move together.
 
 ## Decided
 
@@ -83,7 +84,7 @@ environment and nothing else falls on the wrong side of each.
 ## Assumed
 
 - That the repository is as reported. Nothing here reads that checkout, so its
-  shape rests on the account and only the skill's own wording was read.
+  shape rests on the account and this entry read only the skill's own wording.
 - That a declared environment and no procedure is a shape rather than one
   repository's peculiarity. One report says so.
 

@@ -51,11 +51,12 @@ the right workflow behind four items about
   chosen for a reader. Wider needles would have handed the first to whoever
   asked for the second, which is the cost `D-SKL-051` measures a wider net
   against.
-- **The third warning in `D-SKL-013` is answered by the skill being older than
-  the row.** What it warns against is a name invented to fill the table.
-  `typo3-extension-documentation` is out, describes this work in its own front
-  matter, and is what two written contract cases ask for. The row is the route
-  to a workflow that already exists rather than a workflow invented for a route.
+- **The skill's age answers the third warning in `D-SKL-013`, since the skill is
+  older than the row.** What it warns against is a name invented to fill the
+  table. `typo3-extension-documentation` is out, describes this work in its own
+  front matter, and is what two written contract cases ask for. The row is the
+  route to a workflow that already exists rather than a workflow invented for a
+  route.
 - **The `documentation` needle moves, and the verb comes with its object.**
   `document the`, `document our`, `document this`, `document how`,
   `documenting the`, `documenting our`. That is the treatment `audit`'s

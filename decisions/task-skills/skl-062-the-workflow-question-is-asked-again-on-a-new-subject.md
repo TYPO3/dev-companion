@@ -31,9 +31,9 @@ is the only one this server points at.
   ([`feedback/2026-08-18-080710`](../../feedback/archive/2026-08-18-080710-a-whole-session-ran-with-zero-calls-because-a.md)).
 - **The brief answers the sub-step and not the opening.** Measured in this
   worktree on 2026-08-18, through `TaskGuide::answer()`. "Add unit tests for a
-  TypoScript condition provider in an extension" with the test path is
-  recognized as `tests`, names `typo3-extension-testing` and the guide
-  `extension/testing/phpunit`; so is "run the declared quality checks of this
+  TypoScript condition provider in an extension" with the test path gets
+  `tests`, and names `typo3-extension-testing` and the guide
+  `extension/testing/phpunit`. So does "run the declared quality checks of this
   extension: phplint, phpstan, php-cs-fixer, unit and functional tests", which
   adds `coding-standards`. The session's own opening, "fix TypoScript conditions
   broken on TYPO3 v14 while keeping them working on v13", with the provider
@@ -75,14 +75,14 @@ is the only one this server points at.
   can say which.
 - **This entry weighs the placement across three channels and the shape is the
   todo's first step.** The `instructions` are the one that reaches a session
-  which calls nothing, which is what this one was (`D-AUD-003`); a `routing`
-  entry reaches a session that read the scope; and the brief's own answer
-  reaches one that called once, where `D-GUI-012` already put the guide pointer.
-  One sentence in one place, because three that each say it differently are
-  three things to keep true.
+  which calls nothing, which is what this one was (`D-AUD-003`). A `routing`
+  entry reaches a session that read the scope. The brief's own answer reaches
+  one that called once, where `D-GUI-012` already put the guide pointer. One
+  sentence in one place, because three that each say it differently are three
+  things to keep true.
 - **Queued rather than made on the spot.** The strongest placement is the
   brief's own answer, which is `src/`, and what the `instructions` say is what
-  every client receives at initialize — both are what
+  every client receives at initialize. Both are what
   `documentation/records/judging.rst` keeps off the spot.
 - **At `normal`.** Two sessions in two checkouts report the same asymmetry, and
   the words that would have matched the work were already in the file.

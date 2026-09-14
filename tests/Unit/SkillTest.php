@@ -1134,7 +1134,7 @@ final class SkillTest extends TestCase
         // sentence closing the exemption is in the paragraph granting it
         // (`D-SKL-085`).
         self::assertStringContainsString(
-            'was exempt while nothing was being written and is owed now',
+            'was exempt while you wrote nothing. You owe it now',
             self::flat($skill),
         );
         self::assertStringNotContainsString('A changelog records change events', $skill);
@@ -1406,7 +1406,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-extension-health/SKILL.md',
         ));
         self::assertStringContainsString(
-            'what was raised while reading and dropped, with what dropped it',
+            'what you raised while you read and dropped, with what dropped it',
             $auditSkill,
         );
     }
@@ -4196,7 +4196,7 @@ final class SkillTest extends TestCase
         $base = [
             'references/base.md',
             'references/checklist.md',
-            'Write the surface list down before opening a single file',
+            'Write the surface list down before you open a single file',
         ];
 
         $position = -1;
@@ -4236,7 +4236,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-extension-health/SKILL.md',
         );
 
-        $ask = strpos($skill, 'asked for **before** a view of the subsystem is formed');
+        $ask = strpos($skill, 'Ask for it **before** you form a view of the subsystem');
         $lookup = strpos($skill, 'typo3_hint_lookup');
         self::assertNotFalse($ask, 'the conformance skill does not say when the conventions are asked for');
         self::assertNotFalse($lookup);
@@ -4245,7 +4245,7 @@ final class SkillTest extends TestCase
         // Read in both directions: the rule judges the checkout that exists,
         // not only the code about to be written.
         self::assertMatchesRegularExpression(
-            '/settled into the opposite of a rule is a finding, not a local style/',
+            '/settled into\s+the opposite of a rule is a finding, not a local style/',
             $skill,
         );
 
@@ -4273,7 +4273,7 @@ final class SkillTest extends TestCase
             $skill,
         );
         self::assertStringContainsString(
-            'marks as checks hand the code back as it was, and an audit told not to change files runs them',
+            'marks as checks hand the code back as it was. So an audit told not to change files runs them',
             self::flat($skill),
         );
     }
@@ -4306,7 +4306,7 @@ final class SkillTest extends TestCase
         // What the list is narrowed by stays the kind of checkout, and the
         // entries the request left out stay on it under a state of their own.
         self::assertStringContainsString('narrowed to the ones this kind of checkout can have', $skill);
-        self::assertStringContainsString('mark the rest **not', $skill);
+        self::assertStringContainsString('Mark the rest **not', $skill);
         self::assertStringContainsString(
             'A request that names no surface is not a focused one',
             self::flat($skill),
@@ -4315,9 +4315,9 @@ final class SkillTest extends TestCase
         // The report is where the two states are told apart, and the number is
         // read off the step that writes the list: it said step 5 for two days
         // after the block was renumbered to three.
-        self::assertStringContainsString('the surface list written in step 3', $skill);
+        self::assertStringContainsString('the surface list written in step 3', self::flat($skill));
         self::assertStringContainsString(
-            'Unassessed and not requested both mean nothing was established there, and they are not the same thing',
+            'Unassessed and not requested both mean that you established nothing there, and they are not the same thing',
             self::flat($skill),
         );
         self::assertStringContainsString('let neither read as clean', $skill);
@@ -4384,7 +4384,7 @@ final class SkillTest extends TestCase
         // for it: a pull request from a fork is in no branch listing.
         self::assertStringContainsString('reachable only through the forge', $flat);
         self::assertStringContainsString('Assume none of the three', $flat);
-        self::assertStringContainsString('say the pull requests were not read and ask the maintainer', $flat);
+        self::assertStringContainsString('say that you did not read the pull requests and ask the maintainer', $flat);
 
         // And an item a branch claims is not thereby off the list.
         self::assertStringContainsString('An unmerged branch holds a claim about the finding rather than the fix', $flat);

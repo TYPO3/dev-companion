@@ -15,7 +15,7 @@ coveredBy:
 `reset()` leaves in place, is inside this server's boundary and absent from
 it.**
 
-The corpus answers what a page template is handed and how a rendering is proved,
+The corpus answers what a page template receives and how to prove a rendering,
 and nothing about the state the renderer holds between the two. A session that
 reviews a change to the pipeline itself gets the middleware conventions, which
 do not bear on the diff.
@@ -39,8 +39,8 @@ do not bear on the diff.
   `/Http/`, and it states PSR-7, middleware registration and request scope.
 - The neighbours are each about something else. `frontend-page-rendering`
   answers which template renders the page, `page-cache-flushing` which cache
-  serves a stale one, and `proving-a-rendering` how a throwaway functional test
-  is built.
+  serves a stale one, and `proving-a-rendering` how to build a throwaway
+  functional test.
 - `knowledge/server-scope.json` puts this on the answer side. Its `doesNotCover`
   entry for PHP source as code excludes a signature and an `@internal`
   annotation and says what the server answers instead. "typo3_hint_lookup says
@@ -61,7 +61,7 @@ do not bear on the diff.
   Which phase fills `bodyContent`, and that `renderPageWithUncachedObjects()`
   empties it and on purpose does not `reset()`. That the uncached content
   objects run with the rest of the state still full, and what `reset()` clears
-  against what it leaves in place. How a rendering is proved stays with
+  against what it leaves in place. How to prove a rendering stays with
   `proving-a-rendering`, and how an asset reaches a page with
   `how-an-asset-reaches-a-page`.
 - Bound per major rather than written flat, because the reading already shows a
@@ -86,8 +86,8 @@ do not bear on the diff.
 - That a review session reaches this by path. The call that missed was
   path-scoped, so the `appliesTo` paths decide whether the hint arrives at all.
 - That the phase order is one hint rather than a document. It is a mechanism a
-  reviewer holds while reading a diff, not a procedure carried out step by step,
-  which is what the documents below `knowledge/documents/` are for.
+  reviewer holds during a read of a diff, not a procedure step by step, which is
+  what the documents below `knowledge/documents/` are for.
 - That the 12.4 shape is worth a statement. `reset()` never touches the property
   there, so the question a caller on that line asks has another answer rather
   than none.
@@ -106,9 +106,9 @@ do not bear on the diff.
 
 ## Since then
 
-The hint stands and the fixture trap stands beside it. Writing it corrected one
-reading above: the oldest major does have the property, and what is absent there
-is its line in the reset — so on that line every render starts from what the one
+The hint stands and the fixture trap stands beside it. The work corrected one
+read above. The oldest major does have the property, and what is absent there is
+its line in the reset. So on that line every render starts from what the one
 before it left.
 
 Two further findings the entry did not have, both unbound. The reset also

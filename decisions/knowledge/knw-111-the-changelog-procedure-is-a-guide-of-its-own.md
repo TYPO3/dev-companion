@@ -112,5 +112,5 @@ nobody copied either. A third session spent a round on that same length, which
 is what the hint now tells a caller not to do.
 
 The content half has its answer too. The session's six calls now land in one.
-The brief is unchanged either way: the changelog prose never won a slot there,
-and adding the page to the rule documents leaves that unchanged.
+The brief stays the same either way. The changelog prose never won a slot there,
+and the page among the rule documents leaves that as it is.

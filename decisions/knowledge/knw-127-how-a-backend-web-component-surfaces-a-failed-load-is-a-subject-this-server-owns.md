@@ -39,18 +39,18 @@ write an error path had nothing to read.
 - No binding is owed. `@lit/task` is `^1.0.1` in `Build/package.json` on every
   covered line. The number of modules that import it grows from two on the
   oldest to fifteen on the development line.
-- The reporting session paid for the gap twice: it built a wizard teardown, then
-  a faked Close button, and removed both once the screenshots showed the wizard
-  chrome disappearing. What it wrote was a second error surface beside one the
-  core declares and switches off.
+- The session paid for the gap twice. It built a wizard teardown, then a faked
+  Close button, and removed both once the screenshots showed the wizard chrome
+  gone. What it wrote was a second error surface beside one the core declares
+  and switches off.
 
 ## Decided
 
 - A hint of its own rather than a statement on `backend-ui`. That one answers
   what to keep a custom element to. This answers how one loads data and what a
   failed load looks like, and `D-KNW-030` puts one question in one hint.
-- Closed on the spot rather than queued. The checkout reading was made in this
-  run and the change touches no code, no schema and no skill — `D-FBK-052`.
+- Closed on the spot rather than queued. The checkout read happened in this run
+  and the change touches no code, no schema and no skill (`D-FBK-052`).
 - The feedback's own wording is not copied. It names the localization wizard,
   which is the file its session changed. The hint states the mechanism and names
   no path, so it survives the fix that report came on the way to.
@@ -58,8 +58,8 @@ write an error path had nothing to read.
   `write an error path in backend typescript` answers `backend-lit-task` alone.
   The symptom query, the error branch never renders because the task returns an
   empty list, answers it first. A query about a wizard step reaches nothing, and
-  `wizard` is left out of `appliesTo` deliberately: routing a rule about `Task`
-  off one wizard's vocabulary is what `D-KNW-030` measured as crowding.
+  `wizard` stays out of `appliesTo` deliberately. A rule about `Task` routed off
+  one wizard's vocabulary is what `D-KNW-030` measured as a crowd.
 - `coveredBy: []`. What the entry settles is that a statement exists and what it
   says, and no assertion tells that from the same words in another file.
 

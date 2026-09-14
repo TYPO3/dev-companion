@@ -34,10 +34,10 @@ dependency carries beside `lib.contentElement`.
   assumed. `tt_content` is a `CASE` on the CType with a `default` that prints
   "has no rendering definition", registered in `frontend/ext_localconf.php`. The
   plugin's own key stands whether or not the extension is there, so the default
-  never fires and the element renders as nothing. Where `lib.contentElement` is
-  redefined without a `Generic` template beside it, `FluidTemplateContentObject`
-  rethrows `InvalidTemplateResourceException` naming the template and every root
-  it checked.
+  never fires and the element renders as nothing. Where somebody redefines
+  `lib.contentElement` without a `Generic` template beside it,
+  `FluidTemplateContentObject` rethrows `InvalidTemplateResourceException` with
+  the template and every root it checked.
 - The split across three extensions is real. `shortcut`'s TCA is
   `EXT:frontend`'s, its page module preview is
   `backend/Classes/Preview/StandardContentPreviewRenderer.php`, and only
@@ -54,8 +54,8 @@ dependency carries beside `lib.contentElement`.
 ## Decided
 
 - **Closed on the spot**, not queued. The change is six statements in
-  `knowledge/`, no schema and no skill contract moves, and the reading against
-  `.checkouts/` was made by this run —
+  `knowledge/`, no schema and no skill contract moves, and this run made the
+  read against `.checkouts/`,
   [`D-FBK-052`](../feedback/fbk-052-a-judgement-that-holds-the-evidence-makes-the-change.md).
 - The statements go into `sitepackage-fluid-styled-content` rather than a
   sibling hint. A caller who asks what the dependency is worth and one who asks
@@ -88,5 +88,5 @@ dependency carries beside `lib.contentElement`.
 - A session reports the `Generic` statement and looks for a file the branch does
   not spell that way. That would make the template name too little to go on.
 - The core moves a core element's frontend rendering out of this extension, or
-  registers `lib.contentElement` somewhere else, which would make the split
+  registers `lib.contentElement` somewhere else. That would make the split
   across three extensions a snapshot rather than a rule.

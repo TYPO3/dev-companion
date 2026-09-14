@@ -104,8 +104,8 @@ correction has two places to be wrong.
   name passes the check, and only the sentence in the document says it does not
   belong.
 - That the board's recommendation stays. It is a recommendation, so the core
-  could adopt something else and this rule would then be the maintainer's alone
-  rather than the maintainer's on the board's reading.
+  could adopt something else. This rule would then be the maintainer's alone
+  rather than the maintainer's on the board's read.
 - That the placeholder is not committed. Nothing here can see whether a caller
   replaced it. A patch with `YOUR_NAME` is a worse failure than a patch with no
   trailer at all, because it looks like an attestation.

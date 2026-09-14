@@ -13,8 +13,8 @@ readings:
 boundary and absent from it. The feedback goes to the queue at `normal`.**
 
 The corpus is not silent on impexp. It answers a query about the import route
-with the hint about writing the export, which is the neighbour the reporting
-session read and put down again.
+with the hint about the export. That is the neighbour the session read and put
+down again.
 
 ## Evidence
 
@@ -108,9 +108,9 @@ session read and put down again.
 
 ## Wrong if
 
-- The import gains an ordering pass, so that a page no longer depends on when
-  its parent was added. The statement would then hold on the majors below that
-  release and the bound would be the sentence worth the write.
+- The import gains an order pass, so that a page no longer depends on when its
+  parent arrived. The statement would then hold on the majors below that release
+  and the bound would be the sentence worth the write.
 - The core fixes the defect the session verified with an end to the double use
   of `header.pagetree`. The statement would then describe the LTS lines and not
   `main`, which is a bound rather than a deletion.

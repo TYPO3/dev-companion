@@ -52,9 +52,9 @@ three sources that answer disagree with each other.
   `AGENTS.md` demands it, the hook checks it against nothing, and the merged
   history barely carries it. All three hold at once, and a caller with only the
   first emits a trailer a maintainer strikes.
-- `git commit -s` and `format.signOff` are named with the hook's own treatment
-  of the `Change-Id`, because that is the fear that keeps a contributor from
-  adding the trailer to an amend.
+- The section names `git commit -s` and `format.signOff` with the hook's own
+  treatment of the `Change-Id`. That is the fear that keeps a contributor from
+  the trailer on an amend.
 - The reading above is the section's evidence, so the work verifies rather than
   establishes. What is still owed is the official Contribution Guide, which was
   not read here.
@@ -67,7 +67,7 @@ three sources that answer disagree with each other.
 - That the core's `AGENTS.md` stays. It was days old at this reading, and a
   statement about it is a statement about a file one commit removes.
 - That the share stays low. One in a hundred over 500 commits is what makes "not
-  enforced" the honest reading, and a project that starts enforcing it turns the
+  enforced" the honest read. A project that starts to enforce it turns the
   section round.
 
 ## Wrong if
@@ -107,6 +107,6 @@ it. `D-KNW-110` is what a reader builds on, and the evidence here is what it
 rests on.
 
 The first **Wrong if** fired in the direction it did not name. It watched for a
-section written from `AGENTS.md` alone; what happened is that naming every
+section written from `AGENTS.md` alone. What happened is that a list of every
 source left the caller to choose, and the choice is what the two struck drafts
 were.

@@ -46,8 +46,8 @@ relation field an installation keeps out of a form.
 - Step 1a. `bin/cli hints:probe` for the subject reached `tca-schema-api`, which
   says to use the API and nothing about what it answers for one type.
 - A hint of its own, `tca-sub-schema`, rather than four statements on
-  `tca-schema-api`: "should I read `$GLOBALS['TCA']`" and "what does this type's
-  schema hold" are two questions, and the first hint closes by naming the second
+  `tca-schema-api`. "should I read `$GLOBALS['TCA']`" and "what does this type's
+  schema hold" are two questions, and the first hint closes on the second's name
   and what it prevents.
 - The Forge number stays out of the hint. `HintsTest` reads a bare number as a
   snapshot, and what the corpus owes a caller is the mechanism; the report is

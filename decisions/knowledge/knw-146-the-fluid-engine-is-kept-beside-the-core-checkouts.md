@@ -20,8 +20,8 @@ line the core's own `require` pins.**
   property of the parser, and nothing in this repository could answer it.
 - What the core does is not what Fluid does. `beuser`'s Online template and
   `backend`'s SiteConfiguration overview both write the unquoted form, and no
-  core template was found writing the other — a convention, and the question is
-  the engine's.
+  core template turned up with the other. That is a convention, and the question
+  is the engine's.
 - `typo3_documentation_lookup`, asked on 2026-09-02. The `f:if` reference says
   the engine evaluates the condition as a PHP expression and sends the reader to
   TYPO3 Explained for complex ones.
@@ -42,10 +42,10 @@ line the core's own `require` pins.**
   repository, the manifest section the core pins them in and the directory below
   `.checkouts/`. They differ in nothing else. So the harness class became one of
   two instances rather than a copy.
-- The reading it was created for was done in it: `BooleanNode` and
-  `BooleanParser` say a quoted operand is a literal, in `.checkouts/fluid/2` at
-  2.15.0, `4` at 4.6.1 and `5` at 5.3.2, which is every covered major. The
-  statement stands unbound on `fluid-conditions-and-arrays`.
+- The read it exists for happened in it. `BooleanNode` and `BooleanParser` say a
+  quoted operand is a literal, in `.checkouts/fluid/2` at 2.15.0, `4` at 4.6.1
+  and `5` at 5.3.2, which is every covered major. The statement stands unbound
+  on `fluid-conditions-and-arrays`.
 
 ## Assumed
 
@@ -57,7 +57,7 @@ line the core's own `require` pins.**
 
 - A covered branch pins a Fluid constraint that spans two majors. The line then
   names no single release, `bin/cli versions:check` reports it already, and a
-  statement bound to that TYPO3 major stops naming an engine — `D-VER-003`.
-- Nothing further is ever read there. One claim was settled in it; a second
-  package in `.checkouts/` that answers one question is a clone per machine for
-  a reading that could have been a link.
+  statement bound to that TYPO3 major names no engine (`D-VER-003`).
+- Nothing further is ever read there. It settled one claim. A second package in
+  `.checkouts/` that answers one question is a clone per machine for a read that
+  could have been a link.

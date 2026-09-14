@@ -34,12 +34,12 @@ solves the question elsewhere.
 - **It says why, and the reason is the line.** It read "It names the reading
   that settles the question; the shape itself is read from the branch" as a page
   about obtaining a branch, "and I had network and a single symbol".
-- **The page answers the single symbol.** Read here on 2026-08-28: it hands over
+- **The page answers the single symbol.** Read here on 2026-08-28. It hands over
   `git cat-file -e <branch>:…`, `git grep -n "function <name>" <branch> …` and
-  `git show`, says the diff is the one call where a whole subtree is the
-  question, and says that where no checkout is at hand the file is read out of
-  that major's released package — "where two or three symbols are the whole
-  question, reading those files alone is the smaller step".
+  `git show`, and says the diff is the one call where a whole subtree is the
+  question. It says that where no checkout is at hand a session reads the file
+  out of that major's released package. "where two or three symbols are the
+  whole question, reading those files alone is the smaller step".
 - **So the page was one rung cheaper than the route taken**, and the declaration
   is what hid it.
 
@@ -67,5 +67,5 @@ solves the question elsewhere.
   and got three git invocations where it needed the shape of a subtree. Then the
   line now oversells the page in the other direction.
 - A session reports another `whenToUse` the same way. Then the finding is the
-  field across the corpus rather than this one line, and what is owed is a sweep
-  of all of them.
+  field across the corpus rather than this one line, and the debt is a sweep of
+  all of them.

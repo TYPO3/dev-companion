@@ -9,8 +9,8 @@ readings:
 
 # D-KNW-136 — A fixture's sys_template row discards what the site's sets built
 
-**`project-extension-tests` says that a functional test naming its sets in the
-site configuration renders as if it named none, because the row
+**`project-extension-tests` says that a functional test that names its sets in
+the site configuration renders as if it named none. The row
 `setUpFrontendRootPage()` writes clears them.**
 
 The session that reported this took the failure for a site set the frontend
@@ -21,15 +21,15 @@ never resolved. It is one the frontend resolved and then threw away.
 - **The session.** `/home/benji/projects/bootstrap_package` on 2026-08-28,
   `claude-opus-5[1m]`,
   [`feedback/2026-08-28-074036`](../../feedback/archive/2026-08-28-074036-nothing-says-how-to-assert-a-content-element-s.md).
-  It wrote a site configuration naming the element's set, seeded a fixture
-  through `setUpFrontendRootPage`, and got "Content Element with uid 1 and type
-  table has no rendering definition!" over two runs of about eight seconds. It
-  says outright that it did not root-cause whether the frontend resolved the set
-  at all.
+  It wrote a site configuration that names the element's set and seeded a
+  fixture through `setUpFrontendRootPage`. It got "Content Element with uid 1
+  and type table has no rendering definition!" over two runs of about eight
+  seconds. It says outright that it did not root-cause whether the frontend
+  resolved the set at all.
 - **The three calls that decide it, read in `.checkouts/13.4`, `14.3` and `main`
   on 2026-08-28.** `SysTemplateTreeBuilder::getTreeBySysTemplateRowsAndSite()`
   adds the site's own include as the first child wherever the site entity's own
-  `isTypoScriptRoot()` answers true — which is a site naming any set — and
+  `isTypoScriptRoot()` answers true. That is a site that names any set. It
   appends every `sys_template` row after it.
   `IncludeTreeAstBuilderVisitor::visitBeforeChildren()` replaces the whole AST
   for the first row with the clear flag on. And
@@ -46,9 +46,9 @@ never resolved. It is one the frontend resolved and then threw away.
 - One statement on `project-extension-tests`, beside what the harness already
   does around a test. The row, the reset, the message, and the import of the
   element's own TypoScript file instead.
-- **Made in this run.** The reading is `.checkouts/` and
+- **Made in this run.** The read is `.checkouts/` and
   `.checkouts/testing-framework`, which this judgement did, and `D-FBK-052`
-  bounds the queueing rule to a lookup still to be made.
+  bounds the queue rule to a lookup still open.
 - The route that works is the session's own and stands as it ran it, the
   element's file and the helper it copies from. It is no rule about which files
   a fixture imports.

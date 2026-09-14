@@ -106,10 +106,10 @@ The resolved `SYS/trustedHostsPattern` was its open question, and it read
 
 ## Wrong if
 
-- A session with this hint reads `additional.php` anyway. Then naming a call in
-  a hint is not the lever, and what is left is
+- A session with this hint reads `additional.php` anyway. Then a call named in a
+  hint is not the lever. What remains is
   [`D-GUI-012`](../guides/gui-012-the-brief-names-the-guide-the-recognized-work-belongs-to.md)'s
-  standing question about handing an answer over rather than naming it.
+  open question about an answer handed over rather than named.
 - The added sentence pulls `project-configuration-files` onto queries about a
   configuration value that has nothing to do with the two files. Its `appliesTo`
   stays as it was, so that would be the body's terms rather than its patterns.

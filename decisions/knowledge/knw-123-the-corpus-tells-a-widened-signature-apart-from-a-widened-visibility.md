@@ -14,8 +14,9 @@ coveredBy:
 from protected to public owes nothing the core files as breaking.**
 
 `breaking-not-assessed` says "a removed, narrowed or widened public or protected
-member makes the change breaking" and glosses widening for parameters only, so a
-reviewer holding a visibility change reads a legitimate patch as unsubmittable.
+member makes the change breaking" and glosses a wider member for parameters
+only. So a reviewer with a visibility change in hand reads a legitimate patch as
+unsubmittable.
 
 ## Evidence
 
@@ -26,8 +27,8 @@ reviewer holding a visibility change reads a legitimate patch as unsubmittable.
   unchanged.
 - The check is one word wider than the source it points at.
   `## Changed Signatures` of
-  `knowledge/documents/core/contribution/commit-messages.md` — what
-  `typo3_rule_lookup(query "breaking change")` returns — opens "A signature
+  `knowledge/documents/core/contribution/commit-messages.md` is what
+  `typo3_rule_lookup(query "breaking change")` returns. It opens "A signature
   change is the third breaking move beside removing and narrowing, and adding a
   parameter is one". It names the parameter and never the visibility. The check
   compresses that into a bare "widened … member", and the reporting session read
@@ -61,13 +62,13 @@ reviewer holding a visibility change reads a legitimate patch as unsubmittable.
 - `D-KNW-065` established the parameter half and stopped there. Its **Confirmed
   on 2026-08-09** reads the core on a *changed parameter* — `Breaking-101133`,
   `Breaking-107777`, `Important-107342` — and on PHP's own override rule. The
-  word "widened" entered `breaking-not-assessed` from that reading, where it
-  meant the parameter, and it carries the visibility with it in a way nothing
-  there was read against.
-- The hazard the check reaches for is real and is a different claim. The
-  reporting session verified that a subclass overriding with the narrower
-  visibility fatals with "Access level … must be public", and `PageRenderer` is
-  neither final nor `@internal`. What the core does about it is nothing.
+  word "widened" entered `breaking-not-assessed` from that read, where it meant
+  the parameter. It carries the visibility with it in a way nobody read it
+  against.
+- The hazard the check reaches for is real and is a different claim. The session
+  verified that a subclass which overrides with the narrower visibility fatals
+  with "Access level … must be public". `PageRenderer` is neither final nor
+  `@internal`. What the core does about it is nothing.
 - One report, and the third in this family. `bin/cli feedback:list` on
   2026-08-25 holds 49 open feedback, 45 of them from
   `/home/benji/projects/typo3-cms`. `D-KNW-065` and `D-KNW-072` took the same
@@ -77,24 +78,25 @@ reviewer holding a visibility change reads a legitimate patch as unsubmittable.
 ## Decided
 
 - Step 4 on the wording of `breaking-not-assessed`, step 1a on the statement
-  that nothing makes. Queued rather than closed on the spot: the wording is in
-  `src/Knowledge/CommitMessage.php`, which is reviewed rather than improvised.
+  that nothing makes. Queued rather than closed on the spot. The wording is in
+  `src/Knowledge/CommitMessage.php`, which gets a review rather than an
+  improvisation.
 - `normal` rather than the `low` the card arrived at, on the grounds `D-KNW-065`
   and `D-KNW-072` set. One session, so not more than that — and what this
   wording produces is the mirror of what those two produced. Theirs let a
-  breaking change through wearing a `[BUGFIX]`; this one calls a submittable
-  patch unsubmittable, and the session that caught it paid a 1405-commit sweep
-  to do so.
-- Not `high`. Nothing is blocked, and the reviewer's own reading came out right.
+  breaking change through in a `[BUGFIX]`. This one calls a submittable patch
+  unsubmittable, and the session that caught it paid a 1405-commit sweep to do
+  so.
+- Not `high`. Nothing blocks, and the reviewer's own read came out right.
 - The sweep is not owed again. `D-FBK-052` is why it is here rather than in the
   card. This run read the checkout and holds the evidence, and a queued read
   would send the next session to the same 1515 commits.
-- The feedback's second half is folded into the same wording rather than trimmed
-  off. Half of it is already true — the check names
-  `typo3_rule_lookup(query "breaking change")` today — and the rest, keeping the
-  check to which member kinds to enumerate, is a rewrite of the one sentence
-  this entry is about. `R-GUI-011` demands a named classification and demands no
-  paragraph of obligations, so a shorter check holds that requirement.
+- The feedback's second half folds into the same wording rather than comes off.
+  Half of it is already true, since the check names
+  `typo3_rule_lookup(query "breaking change")` today. The rest, a check held to
+  which member kinds to enumerate, is a rewrite of the one sentence this entry
+  is about. `R-GUI-011` demands a named classification and demands no paragraph
+  of obligations, so a shorter check holds that requirement.
 - Not the feedback's own wording. Its author guessed about this repository as
   much as a judging run guesses about TYPO3. One commit named in an answer would
   date the moment the core moves on.
@@ -144,11 +146,11 @@ changed. `typo3_rule_lookup(query "breaking change")` returns that section
 second, re-run on 2026-08-27, and the check already named that call.
 
 So the answer is the branch in the check rather than the placement this entry's
-fourth **Wrong if** predicted. What the paragraph gains is one clause naming a
-classification, which is what `R-GUI-011` asks the check to do; the obligations
-stay behind the call, which is what that requirement keeps out. A caller with no
-reason to suspect an unstated branch does not make a call to look for one. That
-is what both sessions demonstrate from opposite routes.
+fourth **Wrong if** predicted. What the paragraph gains is one clause that names
+a classification, which is what `R-GUI-011` asks the check to do. The
+obligations stay behind the call, which is what that requirement keeps out. A
+caller with no reason to suspect an unstated branch does not make a call to look
+for one. That is what both sessions demonstrate from opposite routes.
 
 **The lookup the feedback asks for is not built.** Its first suggestion is a
 tool that answers a core class's API classification: `@internal`, `@deprecated`,

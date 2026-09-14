@@ -66,9 +66,9 @@ no rule about what to write.
 
 - A session reads it and still repeats a narrowed type, which would make the
   lever the review rather than the corpus.
-- The unpinned `args` form spreads rather than the pinned one, which would make
+- The unpinned `args` form spreads rather than the pinned one. That would make
   this the maintainer's preference against the core's practice rather than a
-  reading of it.
+  read of it.
 - A statement of the general rule turns out to belong outside a TYPO3 corpus at
   all. That is what `D-FBK-053`'s first **Wrong if** watches for across the
   cards beside this one.

@@ -22,10 +22,10 @@ files gets the asset pipeline.
 - Re-run on 2026-08-24 against the corpus as it is now. `bin/cli hints:probe`
   with the feedback's own two paths reaches `backend-typescript`,
   `javascript-unit-tests`, `system-extension-boundaries`,
-  `routing-request-handling` and five more — the pipeline, the test layer and
-  the hints every core file matches. The same probe on the words the session
-  needed, "what backend TypeScript may hold and what belongs in PHP", reaches
-  `icon-usage` and `console-commands`.
+  `routing-request-handling` and five more. Those are the pipeline, the test
+  layer and the hints every core file matches. The same probe on the words the
+  session needed, "what backend TypeScript may hold and what belongs in PHP",
+  reaches `icon-usage` and `console-commands`.
 - The vocabulary is absent. A search of `knowledge/` and `skills/` for
   `typescript` reaches `backend-typescript`, `backend-ui` and three hint files
   that mention it in one line. It reaches two extension skill references about
@@ -63,18 +63,18 @@ files gets the asset pipeline.
   what the asset may decide, and different paths reach them. This one has to
   match a `Classes/` path as well, or it never fires for the half of the task
   that is PHP.
-- The feedback's suggestion is evidence, not copy. Its rule — backend TypeScript
-  must not hold `EXT:` resource paths — is what the reading has to correct: a
-  value the server handed the client and validates on return is carried, and a
-  value the client *derives* is the one resolved on the side that validates it.
-  A suffix match like `endsWith('BlankForm.yaml')` is the second kind, and a
-  path delivered in the module's initial data is the first.
+- The feedback's suggestion is evidence, not copy. Its rule, backend TypeScript
+  must not hold `EXT:` resource paths, is what the read has to correct. The
+  client carries a value the server handed it and validates on return. A value
+  the client *derives* is the one the side that validates it resolves. A suffix
+  match like `endsWith('BlankForm.yaml')` is the second kind, and a path
+  delivered in the module's initial data is the first.
 - The priority is `normal` rather than `low`. One session reported it, and what
   it counted is three complete reworks of a patch. The user's same question
   again turned each, rather than any lookup.
-- What the hint says about TYPO3 waits for the reading, which is the todo's
-  first step: whether this holds beyond `ext:form` is what decides between a
-  boundary rule and a fact about one wizard.
+- What the hint says about TYPO3 waits for the read, which is the todo's first
+  step. Whether this holds beyond `ext:form` is what decides between a boundary
+  rule and a fact about one wizard.
 
 ## Assumed
 

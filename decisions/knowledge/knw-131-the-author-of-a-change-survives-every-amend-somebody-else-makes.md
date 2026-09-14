@@ -49,5 +49,5 @@ line already says correctly.
 
 ## Confirmed on 2026-08-27
 
-The maintainer settled it the day the route was written, before the branch that
-carries it was merged, so nothing shipped under the reading it replaced.
+The maintainer settled it the day the route came, before the merge of the branch
+that carries it. So nothing shipped under the read it replaced.

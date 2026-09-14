@@ -70,9 +70,8 @@ which core ViewHelper renders such a link.
 
 ## Decided
 
-- **Step 1a, closed on the spot.** The reading was made in this run against all
-  four checkouts, and queueing it would send the next session to the same files
-  —
+- **Step 1a, closed on the spot.** The read happened in this run against all
+  four checkouts, and a card would send the next session to the same files,
   [`D-FBK-052`](../feedback/fbk-052-a-judgement-that-holds-the-evidence-makes-the-change.md).
   Nothing in `src/`, no declared schema and no skill contract moves.
 - One entry rather than two, `documentation-links` in

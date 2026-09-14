@@ -38,11 +38,11 @@ down.
 
 - Step 1a of the ladder. `bin/cli hints:probe` reaches `site-sets`, and the
   statement the session needed is not in it.
-- Closed on the spot rather than queued: the reading against the checkouts was
-  made by the judging run, which is what `D-FBK-052` distinguishes.
-- Four statements rather than one — the file list split at its version boundary,
-  the v14 file, the fatal key, and the `routes` boundary — because the report
-  and the reading it triggered are two findings.
+- Closed on the spot rather than queued. The judgement run made the read against
+  the checkouts, which is what `D-FBK-052` distinguishes.
+- Four statements rather than one, the file list split at its version boundary,
+  the v14 file, the fatal key, and the `routes` boundary. The report and the
+  read it triggered are two findings.
 - The hint names the parameters by their class rather than enumerates them. The
   enumeration is version-bound and grew between 13 and 14, and a list that grows
   is what `AGENTS.md` says to name rather than to count.

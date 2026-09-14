@@ -32,7 +32,7 @@ declaration.
   `fluid-viewhelpers` ranked below two Fluid entries that match on text.
   Widening `appliesTo` by `registered arguments` and `tag attribute` puts it
   first among them at `text only(215)`. The two Fluid queries asked afterwards
-  keep the entries they had: `fluid layout section rendering` answers
+  keep the entries they had. `fluid layout section rendering` answers
   `fluid-layouts-sections` first and `fluid condition f:if empty array literal`
   answers `fluid-conditions-and-arrays` alone.
 - The other half of the question has its answer. `typo3_documentation_lookup`
@@ -71,8 +71,8 @@ declaration.
 
 ## Decided
 
-- **Step 1a, closed on the spot.** The reading was made in this run against all
-  three engines, and queueing it would send the next session to the same files —
+- **Step 1a, closed on the spot.** The read happened in this run against all
+  three engines, and a card would send the next session to the same files,
   [`D-FBK-052`](../feedback/fbk-052-a-judgement-that-holds-the-evidence-makes-the-change.md).
   Nothing in `src/`, no declared schema and no skill contract moves.
 - Three statements on `fluid-viewhelpers`, beside the argument rules they
@@ -80,9 +80,9 @@ declaration.
   takes off the tag. The insertion order the attribute moves in, and
   `registerTagAttribute()` at `until: 13` as the older route.
 - The pass-through statement is unbound and the route out carries a bound. The
-  mechanism is the same on all three engines; what changed with Fluid 5 is only
-  whether a registered attribute can still be emitted without the render adding
-  it.
+  mechanism is the same on all three engines. What changed with Fluid 5 is only
+  whether a registered attribute still comes out without the render's addition
+  of it.
 - Two phrases on the entry's `appliesTo`, because the statements alone left the
   feedback's own query where it was. What the query says is `registered` and
   `arguments`, and the entry said `viewhelper`.
@@ -117,6 +117,6 @@ declaration.
 - A Fluid minor inside one of the pinned majors changes what reaches
   `$this->additionalArguments`. Then the unbound statement needs a boundary, and
   that is `D-VER-003`'s second **Wrong if** seen from this subject.
-- A ViewHelper's arguments turn out to be listed incompletely in the reference —
-  registered by a trait or by a parent and absent from the page — so the routing
-  line sends the question somewhere thinner than the class.
+- The reference turns out to list a ViewHelper's arguments in part, with the
+  ones a trait or a parent registers absent from the page. So the routing line
+  sends the question somewhere thinner than the class.

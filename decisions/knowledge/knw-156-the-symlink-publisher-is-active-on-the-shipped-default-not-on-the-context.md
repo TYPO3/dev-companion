@@ -76,8 +76,8 @@ and its mechanism was not.
 
 Written on 2026-09-09 as `core/testing/exercising-asset-publishing`, and it
 moved a ranking on the way in. The word "throwaway" is rare in this corpus and
-`core/testing/proving-a-rendering` owns it, so two uses of it here dropped that
-page's sections below the floor and a query that had handed the page over whole
+`core/testing/proving-a-rendering` owns it. So two uses of it here dropped that
+page's sections below the floor, and a query that had handed the page over whole
 handed one section instead. The word came out. `D-ANS-002` names corpus length
 as one of the three things the matcher computes a rank from. This is the first
 recorded case of a new page that changes another's answer.

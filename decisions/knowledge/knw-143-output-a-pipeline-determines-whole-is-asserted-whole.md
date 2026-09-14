@@ -58,5 +58,5 @@ settled it: this is about how a test asserts, which is `core-tests`.
 
 - A session pins a whole string that carries the asset hash anyway. That would
   make the boundary a sentence nobody reads rather than one nobody needs.
-- The sanitiser suite is rewritten to assert whole strings, which would make the
-  statement a description of the core again and the warning beside it wrong.
+- The core rewrites the sanitiser suite to assert whole strings. That would make
+  the statement a description of the core again and the warning beside it wrong.

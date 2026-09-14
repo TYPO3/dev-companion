@@ -27,11 +27,11 @@ architecture reversals.
   alone. No `appliesTo` entry in the corpus is about a page object somebody has
   to supply.
 - **The three mechanisms are here, spread over three hints.** `site-sets` states
-  that a site naming a set, or holding a `setup.typoscript` beside its
-  `config.yaml`, renders without a `sys_template` row and that a site with
-  neither errors out. `installation-setup` states what `--create-site` writes on
-  each major. `fresh-instance-seeding` states that a set fills nothing until a
-  site names it under `dependencies`. Each answers its own question and this one
+  that a site that names a set, or holds a `setup.typoscript` beside its
+  `config.yaml`, renders without a `sys_template` row. A site with neither
+  errors out. `installation-setup` states what `--create-site` writes on each
+  major. `fresh-instance-seeding` states that a set fills nothing until a site
+  names it under `dependencies`. Each answers its own question and this one
   reaches none.
 - **Where the demo page object lives is nowhere.** `export-ignore` occurs below
   `knowledge/` twice: in `extension-ter-release`, about the artefact, and in
@@ -70,8 +70,8 @@ architecture reversals.
 - **One session on this subject.** `bin/cli feedback:list` on 2026-08-25 reads
   34 open across four checkouts, six of them from
   `/home/benji/projects/ext-usercentrics`. This is the only one that asks where
-  a page object comes from. Its sibling `2026-08-24-140130` asked what was
-  already rendering and is archived.
+  a page object comes from. Its sibling `2026-08-24-140130` asked what already
+  rendered and sits in the archive.
 
 ## Decided
 
@@ -83,9 +83,9 @@ architecture reversals.
   and the session never reached it. Here three hints carry three answers to
   three other questions, so a move of any one of them is not the need.
 - **The statement starts from `D-KNW-116` rather than beside it.** That entry
-  says what is rendering the page after the install; this one says what renders
-  the package instead, and the first sentence of it is that the installation
-  already has an object to replace.
+  says what renders the page after the install. This one says what renders the
+  package instead, and the first sentence of it is that the installation already
+  has an object to replace.
 - **Where the boundary runs.** Inside: which ways a development installation can
   get a page object that renders the package. Which of them survives what
   `--create-site` left on each covered major. And which package path drops the
@@ -115,9 +115,8 @@ architecture reversals.
   it. That is what puts the lever at step 4 of the skill and makes the hint what
   that step routes to.
 - That the three ways the corpus names are the whole list. Whether core lets a
-  development installation be given a page object some fourth way is what the
-  reading settles, and `D-KNW-096` is the entry whose list grew that way once
-  already.
+  development installation get a page object some fourth way is what the read
+  settles. `D-KNW-096` is the entry whose list grew that way once already.
 - That the shape is worth a statement at all. One session arrived at a
   development-only extension under `Build/`, and its user's rejections shaped
   that as much as TYPO3 did.
@@ -131,18 +130,18 @@ architecture reversals.
 - A session given the statement at step 4 still writes the demo page object into
   the released package. Then the gap is where it lives rather than that the
   installation needs it, and the package half was the whole lever.
-- The reading finds nothing to state about the directory an extension is
-  developed in, because a development-only package is loaded through a Composer
-  path repository that names the package and not the folder. Then that half of
-  the feedback is one project's correction and no statement follows from it.
+- The read finds nothing to state about the directory a developer works an
+  extension in. A Composer path repository that names the package and not the
+  folder loads a development-only package. Then that half of the feedback is one
+  project's correction and no statement follows from it.
 - A second session hits this and reaches for a `sys_template` row by hand
   anyway. Then the gap is which of the three ways to take rather than that there
   are three.
 
 ## Since then
 
-The statement landed and the reading settled the first **Wrong if** as a step
-rather than a subject: a set does supply the page object, and only once what the
+The statement landed and the read settled the first **Wrong if** as a step
+rather than a subject. A set does supply the page object, and only once what the
 setup left is gone. The list of ways stayed at three and the reading added what
 each costs.
 

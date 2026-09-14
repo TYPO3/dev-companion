@@ -10,13 +10,13 @@ coveredBy:
 
 # D-KNW-106 — A hint about typo3/testing-framework is read at the line the core pins
 
-**Which release a hint about `typo3/testing-framework` is verified against is
-derived from the covered branch's own `require-dev` pin, at the newest tag of
-the line it names.**
+**The covered branch's own `require-dev` pin decides which release a hint about
+`typo3/testing-framework` stands verified against. That is the newest tag of the
+line it names.**
 
 `D-KNW-002` wrote the pair down and it was off by one line. It read v12 against
-7.1.1, a release that answers for a major nobody covers. What replaced it is
-written nowhere, and the class that holds it says so by naming a revoked entry.
+7.1.1, a release that answers for a major nobody covers. What replaced it stands
+nowhere, and the class that holds it says so with the name of a revoked entry.
 
 ## Evidence
 
@@ -55,8 +55,8 @@ written nowhere, and the class that holds it says so by naming a revoked entry.
   which is `D-KNW-002`'s assumption and comes down as it stands rather than
   re-measured.
 - That the core's own `require-dev` is what a project resolves to as well. A
-  line admits the major it was cut for and the one before it, so an extension on
-  v12 installs 8.x, which is where that reading came from.
+  line admits the major it serves and the one before it, so an extension on v12
+  installs 8.x. That is where that read came from.
 
 ## Wrong if
 

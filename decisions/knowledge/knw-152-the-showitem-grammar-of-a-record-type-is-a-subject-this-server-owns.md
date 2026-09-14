@@ -9,8 +9,9 @@ coveredBy:
 
 # D-KNW-152 — The showitem grammar of a record type is a subject this server owns
 
-**The corpus states how a `showitem` item is read, where a palette's label
-lives, and that an item naming no column is skipped without a word.**
+**The corpus states how the core reads a `showitem` item, where a palette's
+label lives, and that the core skips an item that names no column without a
+word.**
 
 Regrouping a form is exactly where a field disappears, and nothing reports one.
 

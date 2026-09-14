@@ -36,7 +36,7 @@ that says nothing will raise it for you.
 - A hint of its own in the PHP conventions, `php-value-checks`, rather than a
   sentence in `core-static-analysis`. That hint answers what the core's analysis
   rejects, and this is the opposite case.
-- The substitution is stated per expected type and said to be a reading rather
+- The hint states the substitution per expected type and calls it a read rather
   than a rewrite, because `($x ?? false)`, `$x !== []` and `$x !== ''` are
   different answers to the same call and only the value says which.
 - The hint states the tension rather than leaves it to the reader. A session

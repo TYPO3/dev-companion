@@ -14,8 +14,8 @@ exception, so the corpus says what that surface hides.**
 [`D-KNW-094`](knw-094-how-a-variable-reaches-a-console-command-is-a-subject-this-server-owns.md)
 owns how a variable reaches the command inside the container, and its reading
 measured the forms its own feedback named. The session judged here met a form
-nobody had asked about, and it reported three failures rather than one because
-all three came back looking like an argument error.
+nobody had asked about. It reported three failures rather than one because all
+three came back in the shape of an argument error.
 
 ## Evidence
 
@@ -61,8 +61,8 @@ all three came back looking like an argument error.
 - The measurement is an `E-SITE` made here rather than the reporting session's
   project, which is `D-EVI-004`.
 - The feedback's account is the observation and not the statement. That the
-  command failed with the synopsis is what the session saw; what `ddev exec`
-  does with a newline is what the reading has to establish.
+  command failed with the synopsis is what the session saw. What `ddev exec`
+  does with a newline is what the read has to establish.
 - `normal` rather than `low`. The output names the arguments and none of them
   causes it. So the caller's next move is a rewrite of a command that was
   already right.

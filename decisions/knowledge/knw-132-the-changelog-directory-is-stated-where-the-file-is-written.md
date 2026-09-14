@@ -42,9 +42,10 @@ directory. That is a question a session asks after it has picked one.
 
 ## Decided
 
-- Three surfaces state it, because a session writing the file reads one of the
-  three and not the page: the section's own first bullet, the skill's changelog
-  step, and the `bugfix` item of `TaskGuide::CHANGE_TYPE_CHECKLIST`.
+- Three surfaces state it, because a session that writes the file reads one of
+  the three and not the page. Those are the section's own first bullet, the
+  skill's changelog step, and the `bugfix` item of
+  `TaskGuide::CHANGE_TYPE_CHECKLIST`.
 - Each states the directory alone — the `<lts>.x` one of the oldest branch the
   `Releases:` trailer names, both where two maintained lines take the change.
   The four types, the file name and what checks it stay the page's, and the two
@@ -60,8 +61,8 @@ directory. That is a question a session asks after it has picked one.
 ## Assumed
 
 - That a session reads the checklist item and the skill step it stands on. The
-  report says the directory was wrong, not that the sentence naming it was read
-  past.
+  report says the directory was wrong, not that the session read past the
+  sentence that names it.
 - That the wording holds the two queries. Nothing here scores a rewrite, so a
   later edit of the section can drop the words that reach it.
   `KnowledgeTest::theChangelogDirectoryArrivesWhereTheFileIsWritten` is what
@@ -73,7 +74,7 @@ directory. That is a question a session asks after it has picked one.
   into the release under development. Then the session reads past the step, and
   the lever is where it stands rather than what it says.
 - A feedback reports the directory as noise in a brief for a change that reaches
-  `main` alone, which is the common case and the one the rule is silent about by
-  naming `main`'s own directory second.
+  `main` alone. That is the common case and the one the rule is silent about,
+  since it names `main`'s own directory second.
 - The core moves the rule. It is one sentence of `Howto.rst`, and three copies
   of it here go stale at once.

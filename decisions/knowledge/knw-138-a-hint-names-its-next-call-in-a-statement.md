@@ -56,8 +56,8 @@ already answers them as prose in a quarter of its entries.
 
 ## Wrong if
 
-- A sweep finds hints whose subject plainly implies a call and which name none,
-  often enough that writing it per entry is what a field would have forced. The
-  count above is the baseline: 26 of 160.
+- A sweep finds hints whose subject plainly implies a call and which name none.
+  That happens often enough that a per-entry statement is what a field would
+  have forced. The count above is the baseline: 26 of 160.
 - A rename needs a correction in twenty statements, which is the cost a derived
   field would not have.

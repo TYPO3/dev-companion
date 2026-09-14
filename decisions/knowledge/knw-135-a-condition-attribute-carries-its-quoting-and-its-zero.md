@@ -12,9 +12,9 @@ readings:
 **`fluid-conditions-and-arrays` states which quotes a comparison inside a
 condition attribute takes, and what a bare condition does to a zero.**
 
-The hint is titled after Fluid conditions and said nothing about writing one.
-Its four statements were the escape rule, the `<f:then>` an `<f:else>` demands,
-and two about array literals.
+The hint's title names Fluid conditions and it said nothing about how to write
+one. Its four statements were the escape rule, the `<f:then>` an `<f:else>`
+demands, and two about array literals.
 
 ## Evidence
 
@@ -31,7 +31,7 @@ and two about array literals.
 - **The double-quoted form does not parse.**
   `You closed a templating tag which you never opened!`, exception 1224485838.
   With the condition on line 2 and the closing tag on line 4, every version
-  reports line 4: the message points at the `</f:if>` and not at the condition.
+  reports line 4. The message points at the `</f:if>` and not at the condition.
 - **The single-quoted comparison works**: `condition="{cell} != ''"` renders the
   then-branch for `"0"` and the else-branch for the empty string.
 - **The report's explanation of the zero is wrong**, and the observation is

@@ -15,7 +15,7 @@ and says nothing about the page that would not come.**
 
 So the corpus routes a session with a request the right site answered through
 four site configurations, none of which is wrong. The fact that would settle it
-was written down once, in a hint about writing a seeding script.
+stood once, in a hint about a seed script.
 
 ## Evidence
 

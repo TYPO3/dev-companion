@@ -27,8 +27,8 @@ core for a CSS length out of the rendered markup.
 - The file the session paid for is nowhere below `knowledge/` or `skills/`.
   `setup.typoscript` occurs in `site-sets`, where it is one of the files a set
   may hold, and in `content-rendering-templates`, where it is an extension's own
-  file — never as `config/sites/<identifier>/setup.typoscript`, and never as a
-  layer the sets are read before.
+  file. It never occurs as `config/sites/<identifier>/setup.typoscript`, and
+  never as a layer the core reads before the sets.
 - Re-run against the corpus as it is now, on 2026-08-24. `bin/cli hints:probe`
   on the install task reaches `installation-setup` first, which is the hint the
   session read. On the symptom, "site set is applied but the page renders TYPO3
@@ -63,17 +63,17 @@ core for a CSS length out of the rendered markup.
 ## Decided
 
 - **Step 1a, and queued.** The session reached the hint that owns the subject,
-  so nothing about delivery or routing would have helped; what is missing is a
-  statement, and what it says about TYPO3 has to be read on the checkouts the
-  judging run did not open.
+  so nothing about delivery or routing would have helped. The gap is a
+  statement, and what it says about TYPO3 needs a read on the checkouts the
+  judgement run did not open.
 - The statement goes on `installation-setup`, beside the `--create-site` line it
   continues. The caller is on an install task, and
   [`D-KNW-046`](knw-046-the-non-interactive-install-path-is-a-subject-this-server-owns.md)
   is the entry that made that hint the place the install mechanics live.
 - **The two majors are one statement bound twice, not one flat claim.** What a
-  caller has to do is the same on both — find what the command left rendering
-  the page and take it out — and the file to look in differs, so the reading
-  establishes the boundary rather than assuming the `14` form.
+  caller has to do is the same on both, find what the command left to render the
+  page and take it out. The file to look in differs, so the read establishes the
+  boundary rather than assumes the `14` form.
 - `site-sets` owes a neighbour line. A session whose set does not render arrives
   on the symptom words, which the probe answers with that hint. A statement only
   the install hint carries is in reach for the caller who already knows the
@@ -109,26 +109,26 @@ core for a CSS length out of the rendered markup.
 
 ## Wrong if
 
-- The reading finds the `12.4` and `13.4` row does not reach a set — because
-  `clear = 3` or the row itself is skipped where the site carries sets. Then the
-  statement is `since: 14` rather than bound twice, and the LTS half is a
-  different subject.
+- The read finds the `12.4` and `13.4` row does not reach a set, because of
+  `clear = 3` or because the core skips the row itself where the site carries
+  sets. Then the statement is `since: 14` rather than bound twice, and the LTS
+  half is a different subject.
 - The statement lands and a session whose set does not render still reaches
   `site-sets` alone. The lever was that hint's curation, and this is step 4
   rather than step 1a.
 - A caller removes the file, the set still renders nothing, and the gap was
   where a page object comes from. Then `2026-08-24-140317` is the gap and this
   is one paragraph of it.
-- A second `typo3 setup` run behind `--force` rewrites the file over a site
-  whose rendering was corrected. The statement would owe the re-run as well as
-  the first install, and what it says about the file's removal is not enough.
+- A second `typo3 setup` run behind `--force` rewrites the file over a site with
+  a corrected rendering. The statement would owe the re-run as well as the first
+  install, and what it says about the file's removal is not enough.
 
 ## Since then
 
-The statement was written, bound twice as decided, and the reading settled the
-first **Wrong if**: the row does reach a set, and the oldest major has no sets
-to reach. The sets hang below the site's own include node, and the parser reads
-a node's children before its own lines. It resets the AST for that include and
+The statement landed, bound twice as decided, and the read settled the first
+**Wrong if**. The row does reach a set, and the oldest major has no sets to
+reach. The sets hang below the site's own include node, and the parser reads a
+node's children before its own lines. It resets the AST for that include and
 nothing else. So the row discards what the sets built and the newer file
 replaces only the paths it assigns.
 

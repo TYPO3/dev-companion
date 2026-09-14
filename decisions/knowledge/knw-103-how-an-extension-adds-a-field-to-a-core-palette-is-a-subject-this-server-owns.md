@@ -69,8 +69,8 @@ queue at `normal`.
 
 ## Decided
 
-- Step 1a, taken on, and a todo rather than the spot. What holds about TYPO3 was
-  read here as evidence; writing the statement, binding it and testing it is the
+- Step 1a, taken on, and a todo rather than the spot. This entry read what holds
+  about TYPO3 as evidence. The statement, its bound and its test are the
   curation, which [`judging.rst`](../../documentation/records/judging.rst) puts
   on the todo's side whatever its size.
 - `normal` rather than the `low` the card arrived at. Nothing in the corpus
@@ -115,9 +115,9 @@ queue at `normal`.
 - `addFieldsToPalette()` turns out to behave differently on a covered version —
   a position argument that moved, an insertion that deduplicates where another
   does not. A statement written unbound would then be wrong on one of the four.
-- Core reshapes palettes again inside a major. A statement naming what `14`
-  looks like would go stale between two minors, and the hint would have to state
-  the rule and never the string.
+- Core reshapes palettes again inside a major. A statement that names what `14`
+  looks like would go stale between two minors. The hint would have to state the
+  rule and never the string.
 - A query naming a content element or the TCA conventions stops reaching
   `content-elements` or `tca-formengine` once the statement lands. The boundary
   between the three would be wrong.
@@ -127,12 +127,12 @@ queue at `normal`.
 The first **Assumed** was the open one, and the sweep it asked for settles it in
 the statement's favour. A session read every shipped core palette on all four
 checkouts, not only `tt_content`'s `frames`. The per-field labels went from 38
-of 73 palettes on `12.4` and 35 of 97 on `13.4` to 5 of 110 on `14.3` and on
-`main`. All five are the short form. The end comma did not move with them. Six
-palettes carried one on both older branches and five do on both newer ones.
-`tt_content`'s two lost theirs and `tx_scheduler_task`'s `execution` gained one.
-So a statement that names the comma as a property of a major would have been
-wrong on the day of its write.
+of 73 palettes on `12.4` and 35 of 97 on `13.4` to 5 of 110 on `14.3`. `main`
+has the same 5 of 110. All five are the short form. The end comma did not move
+with them. Six palettes carried one on both older branches and five do on both
+newer ones. `tt_content`'s two lost theirs and `tx_scheduler_task`'s `execution`
+gained one. So a statement that names the comma as a property of a major would
+have been wrong on the day of its write.
 
 The second **Wrong if** does not hold. `addFieldsToPalette()` and the two
 functions under it are byte for byte identical on `12.4`, `13.4`, `14.3` and

@@ -18,11 +18,11 @@ the shipped template describes them least well of the three sources.
 
 ## Evidence
 
-- `feedback/2026-09-03-105549`. A session writing an `Important` entry found
-  three accounts disagreeing: this corpus said `Important` has no Impact
-  section, `Build/rstTemplates/rstTemplateImportant.rst` offers Affected
-  installations and Migration and no Impact, and the neighbouring entries it
-  opened carry Description and Impact. It followed the neighbours.
+- `feedback/2026-09-03-105549`. A session that wrote an `Important` entry found
+  three accounts at odds. This corpus said `Important` has no Impact section.
+  `Build/rstTemplates/rstTemplateImportant.rst` offers Affected installations
+  and Migration and no Impact. The entries next to it that the session opened
+  carry Description and Impact. It followed the neighbours.
 - Counted in `.checkouts/main` over
   `typo3/sysext/core/Documentation/Changelog/`, on 2026-09-04. Of 349
   `Important` entries, 55 carry an Impact section, 25 a Migration and 13 an
@@ -67,6 +67,6 @@ the shipped template describes them least well of the three sources.
 
 - The core adds a check that fails an `Important` entry with an Impact section,
   which would make the practice the defect and the template right.
-- A session reports writing the wrong shape after reading the corrected
-  sentence, which would mean the obligation and the practice cannot be said in
-  one place.
+- A session reports that it wrote the wrong shape after a read of the corrected
+  sentence. That would mean one place cannot state the obligation and the
+  practice.

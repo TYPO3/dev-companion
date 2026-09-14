@@ -67,8 +67,8 @@ queue at `normal`.
 
 ## Decided
 
-- Step 1a, taken on, and a todo rather than the spot. What the statement says
-  about TYPO3 was read here as evidence; writing it is the curation, the version
+- Step 1a, taken on, and a todo rather than the spot. This entry read what the
+  statement says about TYPO3 as evidence. The write is the curation, the version
   bindings and the test, which
   [`judging.rst`](../../documentation/records/judging.rst) puts on the todo's
   side whatever its size.
@@ -114,8 +114,8 @@ queue at `normal`.
   what it needed was which event feeds the variable object. The gap would have
   been the evaluation-time half, and the registration statement would not have
   closed it.
-- A query naming `makeInstance` and a public service stops reaching
-  `di-service-not-found` once this hint is written. The boundary between the two
+- A query that names `makeInstance` and a public service no longer reaches
+  `di-service-not-found` once this hint exists. The boundary between the two
   would be wrong, and the public-service half belongs where it already is.
 - The public-service requirement turns out not to bite an extension. Its own
   `Services.yaml` already registers its classes as public, or it ships none at

@@ -10,8 +10,8 @@ coveredBy:
 
 # D-KNW-115 — The key a site names its sets under is stated with the sets
 
-**That a site's own `config.yaml` names its sets under `dependencies` is stated
-in `fresh-instance-seeding`, a hint about packages that seed, and it belongs in
+**That a site's own `config.yaml` names its sets under `dependencies` stands in
+`fresh-instance-seeding`, a hint about packages that seed. It belongs in
 `site-sets`, where a site-configuration query lands.**
 
 The session that reported names that key as the one thing it could not have
@@ -45,8 +45,8 @@ other file of that name. So a reader who gets that far is one file off.
   sets under. One word, two files, and the corpus carries it for the one the
   caller did not ask about.
 - The direction the session needed is in neither hint. A search of `knowledge/`
-  for `dependencies` returns those two statements and nothing naming the site
-  entity's `getSets()`, so no answer here crosses from the YAML key to the
+  for `dependencies` returns those two statements and nothing that names the
+  site entity's `getSets()`. So no answer here crosses from the YAML key to the
   accessor.
 - The claims about TYPO3 hold.
   `$this->sets = $configuration['dependencies'] ?? []` reads the same on
@@ -64,21 +64,21 @@ other file of that name. So a reader who gets that far is one file off.
   the session read the name right and skipped the tool right.
 - There is no destination for the question. The `routing` block of
   `knowledge/server-scope.json` carries no entry for a site-configuration
-  question, and the `doesNotCover` entry that names one — "Deciding one site's
-  configuration" — hands the format to https://docs.typo3.org/ and is read
-  through `typo3_server_scope`, a call this session did not make.
+  question. The `doesNotCover` entry that names one, "Deciding one site's
+  configuration", hands the format to https://docs.typo3.org/. A session reads
+  it through `typo3_server_scope`, a call this session did not make.
 
 ## Decided
 
 - Step 2 of the ladder with a step 1a remainder, and queued rather than closed
-  on the spot. A statement about TYPO3 is written, which
+  on the spot. The work writes a statement about TYPO3, which
   [`judging.rst`](../../documentation/records/judging.rst) puts on the todo's
   side of the line whatever its size.
 - The site's key goes into `site-sets`, curated on the site's own file rather
-  than on the set's. `fresh-instance-seeding` keeps its sentence — a package
-  that ships sets alone seeds nothing, and the site's key is what makes that
-  point — and whether it owes a pointer at the new statement is the todo's to
-  decide against `D-KNW-087`.
+  than on the set's. `fresh-instance-seeding` keeps its sentence. A package that
+  ships sets alone seeds nothing, and the site's key is what makes that point.
+  Whether it owes a pointer at the new statement is the todo's to decide against
+  `D-KNW-087`.
 - The key-to-accessor direction goes with it. `dependencies` reaches the site
   entity's `getSets()` and `settings` reaches its `getSettings()`. The entity's
   own TypoScript and page TSconfig come from the files beside `config.yaml`
@@ -86,12 +86,12 @@ other file of that name. So a reader who gets that far is one file off.
   direction. It is what makes a lexical search on "sets" reach the file that
   spells it "dependencies".
 - `isTypoScriptRoot()` is not decided here. It is `@internal` on every covered
-  line, and how far the corpus follows internal API is a reading the todo does
-  rather than a judgement this run can make.
+  line. How far the corpus follows internal API is a read the todo does rather
+  than a judgement this run can make.
 - The description clause the feedback asks for gets a refusal in the form it
   asks for it. What the session lacked was somewhere to go, not a disclaimer in
-  a tool it had already skipped, and a sentence naming site configuration inside
-  a `TYPO3_CONF_VARS` tool is read by nobody who read the name and moved on.
+  a tool it had already skipped. Nobody who read the name and moved on reads a
+  sentence about site configuration inside a `TYPO3_CONF_VARS` tool.
 - No new `routing` entry either. The `doesNotCover` entry already sends a
   site-configuration question to `typo3_hint_lookup` with `id=site-sets`. The
   placement above is what makes that pointer land on the answer instead of one
@@ -130,23 +130,23 @@ other file of that name. So a reader who gets that far is one file off.
   answer. The gap is a route to it rather than a statement.
 - A resolver turns out to read the sets off a site rather than the entity the
   caller holds. The mapping would rest on an accessor read out of its call path.
-- The next session needs the key while writing a core functional test, as this
-  one did, and does not reach a hint about site sets from that task at all. The
+- The next session needs the key while it writes a core functional test, as this
+  one did. It does not reach a hint about site sets from that task at all. The
   gap would be in the core testing documents rather than in the corpus.
 
 ## Since then
 
 The statement is in, with the direction the corpus stated in neither half. A
 site names its sets in its own configuration. Its TypoScript comes from the
-files beside that one rather than from a key in it. The entity reads the same on
-both covered lines and the oldest has neither the key nor the accessor, so the
+files beside that one, not from a key in it. The entity reads the same on both
+covered lines and the oldest has neither the key nor the accessor, so the
 statements carry a bound. The fourth **Wrong if** did not happen.
 
-What the internal marker buys is the consequence rather than the method: a site
-naming a set renders without a template record, and one with neither errors out.
+What the internal marker buys is the consequence rather than the method. A site
+that names a set renders without a template record. One with neither errors out.
 
-The placement alone did not bring the question in reach and the domain is what
-did. A hint filed under one language is no candidate for a query in another
-unless the task spells out a curated phrase. What that risks is a query answered
-with this hint in place of the one that was about it. That is why the key is a
-curated phrase rather than the bare word.
+The placement alone did not bring the question in reach. The domain did. A hint
+filed under one language is no candidate for a query in another unless the task
+spells out a curated phrase. What that risks is a query answered with this hint
+in place of the one that was about it. That is why the key is a curated phrase
+rather than the bare word.

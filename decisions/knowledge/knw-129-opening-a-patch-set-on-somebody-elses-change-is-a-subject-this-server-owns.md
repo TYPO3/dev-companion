@@ -58,9 +58,8 @@ case out, and worked the mechanics and the etiquette out on its own.
 ## Decided
 
 - **Step 1a, taken on.** The answer is not here in any form, and the sentence
-  nearest to it forbids the task. What the section says is a reading of TYPO3's
-  own process rather than of this repository, so the reading is the card's first
-  step —
+  nearest to it forbids the task. What the section says is a read of TYPO3's own
+  process rather than of this repository, so the read is the card's first step.
   [`D-FBK-052`](../feedback/fbk-052-a-judgement-that-holds-the-evidence-makes-the-change.md)
   does not reach it, because this run made no such lookup.
 - The mechanics land in
@@ -97,8 +96,8 @@ case out, and worked the mechanics and the etiquette out on its own.
   with a patch set. Then what the corpus owes is the etiquette and a stop rule,
   and the checklist's clause was right for the wrong reason.
 - A session reads the new section and opens a second change anyway. Then the
-  `Change-Id` half was delivered and did not take, and the lever is wording
-  rather than the corpus.
+  `Change-Id` half arrived and did not take, and the lever is wording rather
+  than the corpus.
 - The route arrives and the clean work tree rule stops the next session all the
   same. Then the obstacle was the skill's precondition and the section behind it
   changed nothing.

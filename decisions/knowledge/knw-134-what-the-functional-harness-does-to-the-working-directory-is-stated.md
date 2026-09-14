@@ -46,11 +46,11 @@ thing it did not carry, and it is the one a path-resolution test turns on.
 ## Decided
 
 - One statement, beside the instance-directory statements the hint already
-  carries, naming `Testbase::setUpInstanceCoreLinks()` and `chdir` so the
-  symptom is greppable — which is how the reporting session eventually found it.
-- **Made in this run rather than queued.** The reading is
+  carries. It names `Testbase::setUpInstanceCoreLinks()` and `chdir` so a grep
+  finds the symptom, which is how the session found it in the end.
+- **Made in this run rather than queued.** The read is
   `.checkouts/testing-framework`, which this judgement did, and `D-FBK-052`
-  bounds the queueing rule to a lookup still to be made.
+  bounds the queue rule to a lookup still open.
 - Written from the checkout rather than from the report's proposed sentence.
   That sentence claims the work directory equals the public path and does not
   say that two different calls set the two.

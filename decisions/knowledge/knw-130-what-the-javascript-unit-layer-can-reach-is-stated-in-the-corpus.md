@@ -18,7 +18,7 @@ Two tools told a review of a core patch to
 `Build/Sources/TypeScript/form/backend/form-editor/view-model.ts` that
 `unitJavascript` was its suite. It had to establish in four checkout reads that
 the layer cannot hold that module at all. The hint it received said where a test
-goes and what discovers a group; neither half of what decides the finding was
+goes and what discovers a group. Neither half of what decides the finding was
 anywhere in the corpus.
 
 ## Evidence
@@ -67,8 +67,8 @@ anywhere in the corpus.
   rather than a list to trust.
 - No `since` or `until` applies. All four covered branches agree on the
   discovery, the set and the module shape.
-- Nothing about delivery changes. The reporting session reached the hint through
-  `typo3_task_guide` and the probe still ranks it first for the question, so the
+- Nothing about delivery changes. The session reached the hint through
+  `typo3_task_guide` and the probe still ranks it first for the question. So the
   gap was the content and not the route.
 - `coveredBy: []`, because every **Wrong if** here is a fact about a move of the
   core. A test that asserts the three names would read this repository's own
@@ -83,10 +83,10 @@ anywhere in the corpus.
 
 ## Wrong if
 
-- A fourth package gains a `tests/` directory and the hint keeps naming three,
-  so a caller is told the group does not exist where it does.
+- A fourth package gains a `tests/` directory and the hint still names three. So
+  a caller hears the group does not exist where it does.
 - A session reports that it read the hint, found its package absent from the
-  list, and still could not price the finding — which would mean the module
-  shape was the whole question and the package list is noise beside it.
+  list, and still could not price the finding. That would mean the module shape
+  was the whole question and the package list is noise beside it.
 - The runner gains a module-mock plugin, at which point a bootstrap-wired module
   comes in reach and the second statement is what goes stale.

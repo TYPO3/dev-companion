@@ -62,7 +62,7 @@ about what a wrong path in that list costs.
   `Tests/Functional`, and leaves the enumeration to the checkout.
 - The statement is unbound. The resolve loop is the same on every phpunit the
   covered branches pin, so no `since` and no `until`.
-- The note is held by a test naming this entry, as the notes beside it are.
+- A test that names this entry holds the note, as with the notes beside it.
   Nothing sweeps the wording, so what a test holds is that the mechanism, the
   all-or-nothing and the cost are still stated.
 

@@ -28,9 +28,9 @@ says which one the field renders.
   Category value, the `next-patchlevel` target version, and whether the
   description renders Textile or Markdown.
 - Nothing here answers the question it says it would have asked.
-  `bin/cli hints:probe` on the feedback's own wording matched no hint;
+  `bin/cli hints:probe` on the feedback's own wording matched no hint.
   `typo3_rule_lookup` for "report a bug on forge new issue fields category
-  target version" matched no section; `typo3_task_guide` for "write the title
+  target version" matched no section. `typo3_task_guide` for "write the title
   and description for a new Forge issue reporting a core bug" answered the
   patch-development brief, down to the `runTests.sh` suites. Run on 2026-08-24.
 - The markup is here once, and not as a property of the field.
@@ -49,8 +49,8 @@ says which one the field renders.
   a question". It does not. A call of `typo3_server_scope` on 2026-08-24 carries
   none of `Workspaces`, `Link Handling`, `Pagetree` or `Linkvalidator`.
 - One session, not a domain. `bin/cli feedback:list` on 2026-08-24 read 37 open
-  feedback across four checkouts, ten of them naming Forge, and this is the only
-  one about writing an issue rather than reading one.
+  feedback across four checkouts, ten of them with Forge in them. This is the
+  only one about a written issue rather than a read one.
 
 ## Decided
 
@@ -80,8 +80,8 @@ says which one the field renders.
 - Whether the triage checklist's Textile sentence becomes a reference to the
   page is the todo's, under the skill rules. A skill lands in somebody else's
   project and cannot dereference what it does not carry.
-- The priority is `normal`, set by one session and by how small the reading is:
-  the areas are answered already, and what is left is the form and the markup.
+- The priority is `normal`, set by one session and by how small the read is. The
+  areas have their answer already, and what remains is the form and the markup.
 - Nothing holds this yet. The test declares the id in the commit that writes the
   page.
 
@@ -89,9 +89,9 @@ says which one the field renders.
 
 - That anybody can read the new-issue form with no account. The area enumeration
   is anonymous, and the required fields and their defaults may not be.
-- That the field set is stable enough to be prose. Redmine's fields are
-  administered per project, so a page naming them goes stale without anything
-  failing.
+- That the field set is stable enough to be prose. An administrator sets
+  Redmine's fields per project, so a page that names them goes stale without a
+  failure.
 
 ## Wrong if
 
@@ -114,9 +114,9 @@ set and the trackers come back from the API. The filter settled what is
 mandatory rather than the form. One field is unset on nothing filed in over a
 decade and every other on the majority.
 
-The markup was settled by rendering rather than by a setting, a reporter's
-fences coming back as literal backticks and their pasted diff read as markup.
-The target version is not the reporter's, so the page says to leave it empty.
+The rendered result settled the markup rather than a setting. A reporter's
+fences came back as literal backticks and their pasted diff read as markup. The
+target version is not the reporter's, so the page says to leave it empty.
 
 The route to the areas is the wildcard rather than a wider default: it is the
 tracker's own idiom and reads no issue at all. The triage skill keeps its own

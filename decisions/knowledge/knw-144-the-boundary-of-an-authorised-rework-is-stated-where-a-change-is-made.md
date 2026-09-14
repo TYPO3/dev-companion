@@ -57,8 +57,9 @@ the one workflow in which the failure cannot arise.
 ## Assumed
 
 - That a session that reworks somebody's patch reads "what else you noticed is
-  another issue and another patch" as a decision as much as a defect. A session
-  notices a class left non-final the same way it notices an absent guard.
+  another issue and another patch" as a decision. It reads it as much as a
+  defect. A session notices a class left non-final the same way it notices an
+  absent guard.
 - That the report of one session, which was reading its own transcript, is what
   this rests on. No second session has reported the same boundary line.
 

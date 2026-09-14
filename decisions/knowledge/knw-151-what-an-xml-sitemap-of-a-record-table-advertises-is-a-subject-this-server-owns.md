@@ -39,17 +39,17 @@ record, and nothing raised anything.
 
 ## Decided
 
-- Step 1a, and a hint of its own — `record-xml-sitemap` — rather than statements
-  on `record-routing`: reaching a record and advertising it are two
+- Step 1a, and a hint of its own, `record-xml-sitemap`, rather than statements
+  on `record-routing`. The route to a record and its advertisement are two
   configurations with two selections, and the drift between them is the subject.
 - `record-routing` closes by naming it and what it prevents, bound `since: 14`
   like the rest of that hint.
 - Nothing about the sitemap hint carries a bound. The provider, its keys and its
   restrictions are the same on all four covered branches.
-- The restriction statement says what is applied and then what is not, and
-  refutes the reading both reports made: `ConnectionPool` hands out a builder
-  carrying `DefaultRestrictionContainer`, and `getRestrictions()->add()` adds to
-  it. Two sessions took that one line for the whole restriction set.
+- The restriction statement says what applies and then what does not, and
+  refutes the read both reports made. `ConnectionPool` hands out a builder with
+  `DefaultRestrictionContainer`, and `getRestrictions()->add()` adds to it. Two
+  sessions took that one line for the whole restriction set.
 
 ## Assumed
 
@@ -68,9 +68,10 @@ record, and nothing raised anything.
 ## Since then
 
 2026-09-04, from `feedback/2026-09-03-235315`, the second session of the same
-day on the same subject. It carries five facts beside the trap this entry was
-written from, all read against `.checkouts/13.4`, `14.3` and `main`: the sitemap
-arrives with the site set `typo3/seo-sitemap` rather than with the extension,
-that set brings the routing from 14, `url.pageId` is read with `??` so a setting
-defaulting to 0 is taken as page zero, the configuration is a plain array with
-no `stdWrap` anywhere, and a provider is built with positional arguments.
+day on the same subject. It carries five facts beside the trap this entry came
+from, all read against `.checkouts/13.4`, `14.3` and `main`. The sitemap arrives
+with the site set `typo3/seo-sitemap` rather than with the extension, and that
+set brings the routing from 14. The core reads `url.pageId` with `??`, so a
+setting with a default of 0 counts as page zero. The configuration is a plain
+array with no `stdWrap` anywhere, and the core builds a provider with positional
+arguments.

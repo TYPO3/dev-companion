@@ -89,8 +89,7 @@ page off the request, has no request to read it from where a condition runs.
 ## Assumed
 
 - That the session's account of its own installation holds. Nothing here started
-  a frontend or evaluated a condition; the ordering was read out of the
-  checkouts.
+  a frontend or evaluated a condition. The order comes out of the checkouts.
 - That this is one statement rather than two. What a condition gets, and what an
   extension does to get a page record into one, may turn out to be a hint each.
 
@@ -109,9 +108,9 @@ page off the request, has no request to read it from where a condition runs.
 ## Confirmed on 2026-08-18
 
 Written as a hint of its own, and both probe queries that reached nothing now
-reach it. The reading the entry left open came out the other way from the
-**Wrong if**: the event is dispatched ahead of condition matching on every
-covered major, so the recommendation is not bound. What binds is the accessor a
+reach it. The read the entry left open came out the other way from the **Wrong
+if**. The core dispatches the event ahead of the condition match on every
+covered major, so the recommendation has no bound. What binds is the accessor a
 listener takes the record off, since the event carries different objects across
 the boundary. Both globals have a value before the match on the oldest major
 too, so that statement binds a major later than the entry had it.

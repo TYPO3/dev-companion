@@ -60,8 +60,8 @@ trailer commits a change to. So the caller had to join them.
   answer different questions. Which interpreter a line requires, and which
   syntax a change may use. `D-KNW-030` puts one question in one hint.
 - Closed on the spot rather than queued. The lookups this needed were the four
-  checkouts and one `php -l`, all made in the judging run, and the change
-  touches no code, no schema and no skill — `D-FBK-052`.
+  checkouts and one `php -l`, all made in the judgement run. The change touches
+  no code, no schema and no skill (`D-FBK-052`).
 - The feature list the feedback offered is not carried. Asymmetric visibility
   and property hooks named would state a prohibition on syntax the core never
   writes. The hint states the rule and the one form that occurs, and names the

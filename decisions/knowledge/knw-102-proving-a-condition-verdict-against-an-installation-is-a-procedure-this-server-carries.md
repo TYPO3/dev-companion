@@ -29,9 +29,9 @@ carry, a false positive it held for two round trips.
 - The two near documents have another boundary and each says so in its own
   `whenToUse`. `core/testing/proving-a-rendering` is a throwaway functional test
   below `typo3/sysext/frontend/Tests/Functional/Rendering/` run with
-  `Build/Scripts/runTests.sh`, for what a snippet renders;
+  `Build/Scripts/runTests.sh`, for what a snippet renders.
   `any/testing/browser-check` is how a browser in a container reaches a DDEV
-  site, for a defect that has to be seen. Neither establishes that a branch ran.
+  site, for a defect somebody has to see. Neither establishes that a branch ran.
 - The trap that cost the round trips is absent from the corpus in every wording.
   `discriminator` occurs once below `knowledge/`, about the exclamation mark in
   a 404 message. Nothing says that two Fluid templates a condition switches
@@ -46,7 +46,7 @@ carry, a false positive it held for two round trips.
   expression mapped to its verdict. So a page whose verdict flips lands on
   another identifier and the cache does not serve the old entry. What still
   needs a flush is the TypoScript itself, which the `caching` hint already
-  states: an `@import` target or an `include_static_file` set is keyed on the
+  states. The key of an `@import` target or an `include_static_file` set is the
   file name alone, so an edited `.typoscript` file keeps its parsed include
   tree.
 - `D-KNW-101`, judged in this directory on the same day, records that it carries
@@ -75,12 +75,12 @@ carry, a false positive it held for two round trips.
   branch renders against what it replaces. The trap that shared wrapper markup
   is what the obvious grep finds. And the negative control, a page the condition
   must not match, which is what turns one green result into evidence.
-- What has to be flushed between runs is the reading's first question rather
-  than the feedback's answer, because the identifier already carries the
-  verdict. The document says which change needs which flush; it does not copy
-  the report's reason.
+- What needs a flush between runs is the read's first question rather than the
+  feedback's answer, because the identifier already carries the verdict. The
+  document says which change needs which flush; it does not copy the report's
+  reason.
 - Routed from `typoscript-conditions`, where a caller who asks about a condition
-  already lands. A document nobody is routed to is the same gap one step further
+  already lands. A document nothing routes to is the same gap one step further
   in, which is `D-KNW-071`'s own finding.
 - `normal`, not the `low` the card arrived at. What the gap produces is a wrong
   verdict believed rather than a slow answer, and the session reports it nearly

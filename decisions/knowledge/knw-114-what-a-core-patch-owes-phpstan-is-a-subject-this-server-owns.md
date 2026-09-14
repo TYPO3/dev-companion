@@ -27,7 +27,7 @@ reaches answers how to configure the tool rather than how to satisfy it.
   baseline is for and that both packages analyse at level 5. None of them is
   about the code under analysis.
 - Nothing else in the corpus is. `knowledge/` names PHPStan in four files, and
-  the other three are the run rather than the code: the suite entry in
+  the other three are the run rather than the code. The suite entry in
   `knowledge/test-suite-hints.json`, the "Run PHPStan" command in
   `knowledge/documents/core/testing/scripts.md`, and a `reference` catalog
   entry.
@@ -57,7 +57,7 @@ reaches answers how to configure the tool rather than how to satisfy it.
   which is the measure `D-FBK-027` sets.
 - `feedback/2026-08-24-133515` is the same session and reports that the whole
   patch ran with zero calls to this server. That is the wider finding and it has
-  its own card; what is decided here is the answer that was missing when the
+  its own card. What this entry decides is the answer that was absent when the
   session did look.
 
 ## Decided

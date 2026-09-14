@@ -60,23 +60,22 @@ not read. It had nothing to search on once phpunit had refused.
   comes first. It is the rule rather than the symptom. So it covers the option
   written after a path as well as the path written before the separator.
 - Not a description line, which is what the feedback asks for. The session that
-  lost the container run never loaded the description, the name is spoken for by
-  [`D-AUD-011`](../audience/aud-011-the-instructions-index-the-question-each-tool-answers.md),
-  and `D-AUD-009` already rewrote this tool's first sentence for the same
-  reading — a third question claimed by one description is paid for by the two
-  already there.
+  lost the container run never loaded the description.
+  [`D-AUD-011`](../audience/aud-011-the-instructions-index-the-question-each-tool-answers.md)
+  speaks for the name, and `D-AUD-009` already rewrote this tool's first
+  sentence for the same read. The two questions already there pay for a third
+  one description claims.
 - Queued rather than closed on the spot. The note states what the core's own
-  script does, and [judging.rst](../../documentation/records/judging.rst) puts
-  anything that has to be looked up in TYPO3 into a todo however small. The
-  reading above is that lookup and the card carries it, so what is left is the
-  wording.
+  script does. [judging.rst](../../documentation/records/judging.rst) puts
+  anything that needs a lookup in TYPO3 into a todo however small. The read
+  above is that lookup and the card carries it, so what remains is the wording.
 - The statement is unbound. The parser is the same on all four covered branches,
   so no `since` and no `until`.
-- The note is held by a test naming this entry, as the two notes beside it are.
+- A test that names this entry holds the note, as with the two notes beside it.
   Nothing sweeps the wording of a note, so what a test can hold is that this one
-  is still there: the parsing rule, `shift $((OPTIND - 1))`, and the line the
-  failing run prints. Whether the wording lands is what the **Wrong if** below
-  is about, and no test reaches that.
+  is still there. That is the parse rule, `shift $((OPTIND - 1))`, and the line
+  the failed run prints. Whether the wording lands is what the **Wrong if**
+  below is about, and no test reaches that.
 
 ## Assumed
 

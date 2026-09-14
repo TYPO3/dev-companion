@@ -3707,7 +3707,7 @@ final class SkillTest extends TestCase
         // release of this server corrects.
         self::assertStringContainsString(
             '`typo3_hint_lookup` with `id=extension-static-analysis`',
-            $guidance,
+            self::flat($guidance),
         );
         self::assertStringNotContainsString('phpstan-baseline.neon', $guidance);
         self::assertStringNotContainsString('tmpDir', $guidance);
@@ -3716,7 +3716,7 @@ final class SkillTest extends TestCase
             'the skill defers to an id the corpus does not have',
         );
 
-        self::assertStringContainsString('Keep checking and fixing apart', $guidance);
+        self::assertStringContainsString('Keep the check and the fix apart', $guidance);
         self::assertStringContainsString('never receives an error the change in hand introduced', $guidance);
         self::assertStringContainsString('first-party paths the project intends it', $guidance);
 
@@ -3726,10 +3726,10 @@ final class SkillTest extends TestCase
         // still held tabs, so the session inverted the split and ran the checks
         // at the new HEAD.
         self::assertStringContainsString(
-            'the conformance commits come first and the commit that adds the check comes last, so no commit fails the check it introduces',
+            'the conformance commits come first. The commit that adds the check comes last. Then no commit fails the check it introduces',
             self::flat($guidance),
         );
-        self::assertStringContainsString('running the check at the new HEAD', self::flat($guidance));
+        self::assertStringContainsString('run the check at the new HEAD', self::flat($guidance));
 
         // The core's own build script is named once, in the skill, where the
         // harness step it belongs to is. Repeating it in an extension-facing

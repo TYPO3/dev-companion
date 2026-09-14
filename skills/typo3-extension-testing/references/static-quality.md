@@ -50,13 +50,13 @@ is absent for a reason rather than missing.
   project already runs it.
 
   Which packages to require is the whole of what this page decides about the
-  analyser. What goes into its configuration is not. `typo3_hint_lookup` with
-  `id=extension-static-analysis` answers where the file belongs, which include
-  it carries, and the constants an extension's analysis never sees. It answers
-  which manifest you exclude rather than fix, the cache directory, the level,
-  and what a baseline is for. It reads that off the packages that configure
-  themselves this way. So ask it rather than recall a configuration from another
-  project.
+  analyser. What goes into its configuration is not. Ask `typo3_hint_lookup`
+  with `id=extension-static-analysis`. It answers where the file belongs, which
+  include it carries, and the constants an extension's analysis never sees. It
+  answers which manifest you exclude rather than fix, the cache directory, the
+  level, and what a baseline is for. It reads that off the packages that
+  configure themselves this way. So ask it rather than recall a configuration
+  from another project.
 - **Coding standards** — the TYPO3 coding guidelines as the project applies
   them. Run `friendsofphp/php-cs-fixer` with the `typo3/coding-standards` rule
   set, which also owns the file header the guidelines require. Run

@@ -1,14 +1,8 @@
 # Scope — core conventions where they apply, and nowhere else
 
-These are how [`R-AUD-001`](../audience/aud-001-core-extension-and-site-work-are-each-served.md) and
-[`R-AUD-002`](../audience/aud-002-the-audience-is-a-property-of-the-task.md) are met
-in the tools that exist today. One vocabulary carries it: the `Scope` enum —
-`core`, `project`, `extension`, `any`, `uncertain` — which replaced the
-`outsideCore` boolean, the `binding` of a hint and the `provenance` of a covered
-topic on 2026-08-02.
+These are how the tools that exist today meet [`R-AUD-001`](../audience/aud-001-core-extension-and-site-work-are-each-served.md) and [`R-AUD-002`](../audience/aud-002-the-audience-is-a-property-of-the-task.md). One vocabulary carries it: the `Scope` enum with `core`, `project`, `extension`, `any` and `uncertain`. It replaced the `outsideCore` boolean, the `binding` of a hint and the `provenance` of a covered topic on 2026-08-02.
 
-See [the requirements readme](../readme.md) for how an entry is written and
-when it is added.
+See [the requirements readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`R-SCO-001`][R-SCO-001] — Outside the core is recognised from structure, not wording · held
 - [`R-SCO-002`][R-SCO-002] — A scope outside the core changes the payload, entry by entry · held

@@ -20,12 +20,12 @@ heldBy:
 
 **A scope of `project` or `extension` changes the payload.**
 
-Core-only commands, checklist items and checkout discovery are dropped;
-conventions that transfer stay and are marked as such. The line is drawn per
-entry, not per section, because a checklist mixes both — and in a call whose
-paths have different scopes it is drawn per path as well: the suites and the
-checks come back for the paths that can run them, and the ones that cannot are
-named beside them.
+The answer drops core-only commands, checklist items and checkout discovery.
+Conventions that transfer stay, with a mark that says so. The line runs per
+entry, not per section, because a checklist mixes both. In a call whose paths
+have different scopes it runs per path as well. The suites and the checks come
+back for the paths that can run them, and the answer names the ones that cannot
+beside them.
 
 ## From
 

@@ -18,39 +18,38 @@ heldBy:
 
 # R-SCO-001 — Outside the core is recognised from structure, not wording
 
-**Work outside the core is recognised from structural evidence rather than from
-wording.**
+**The server recognises work outside the core from structural evidence rather
+than from wording.**
 
 That evidence is the kind of repository the session stands in, the shape of the
-paths, and a path known as somebody's extension — to the installation, or to the
-root manifest, which declares it before anything is installed under it.
+paths, and a path known as somebody's extension. The installation knows it, or
+the root manifest, which declares it before anything sits installed under it.
 
-Evidence of core work wins over the weaker signals, in this order: a
-`typo3/sysext/` path or the contribution workflow named outright, then an
-extension or project marker, then the package that path is known as, then the
-path shape, then the contribution workflow named in prose, and last what the
-repository the session sits in is. A `typo3/sysext/` path is the only marker
-that ends the question outright: prose that names the core in order to rule it
-out reads to a substring search exactly like claiming it.
+Evidence of core work wins over the weaker signals, in this order. First a
+`typo3/sysext/` path or the contribution workflow named outright. Then an
+extension or project marker, then the package the installation knows the path
+as, then the path shape. Then the contribution workflow named in prose, and last
+what the repository the session sits in is. A `typo3/sysext/` path is the only
+marker that ends the question outright. Prose that names the core in order to
+rule it out reads to a substring search exactly like a claim of it.
 
-That last signal is the repository the session is **standing in**, not the
+That last signal is the repository the session **stands in**, not the
 installation `TYPO3_DEV_COMPANION_ROOT` names. The variable says which registry
-the icons and labels are read from and moves nothing else; only where the
-walk-up reaches no installation is it the sole evidence there is, and then it
-answers.
+the icons and labels come from and moves nothing else. Only where the walk-up
+reaches no installation is it the sole evidence there is, and then it answers.
 
-What a path carries is read before anything said about the call, which is what
+The server reads what a path carries before anything said about the call, which
 keeps two paths of one call apart
 ([`R-AUD-002`](../audience/aud-002-the-audience-is-a-property-of-the-task.md)).
 A path shape is evidence only where it can be, and that holds in both
-directions: `Build/Scripts/` and `Build/Sources/` are the core's own, a bare
-`Build/` is any repository that compiles something, and neither is core evidence
+directions. `Build/Scripts/` and `Build/Sources/` are the core's own, and a bare
+`Build/` is any repository that compiles something. Neither is core evidence
 where the manifest at the root already says this checkout is not the core.
-`Classes/`, `Configuration/` and `Resources/` are the mirror — the shape of a
-package, and no evidence of one inside a core checkout, where they are what a
-path relative to a system extension directory looks like.
+`Classes/`, `Configuration/` and `Resources/` are the mirror. They are the shape
+of a package, and no evidence of one inside a core checkout. There they are the
+shape of a path relative to a system extension directory.
 
 ## From
 
-`outsideCore` flipping only after the caller spelled out "not TYPO3 core" in
+`outsideCore` that flipped only after the caller spelled out "not TYPO3 core" in
 prose (2026-07-29).

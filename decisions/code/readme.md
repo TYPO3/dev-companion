@@ -1,11 +1,8 @@
 # Code — how the source is laid out
 
-What was assumed about the shape of `src/` rather than about what any class in
-it does: how files map to classes, what a name has to carry, where something is
-allowed to live.
+What a session assumed about the shape of `src/` rather than about what any class in it does. That is how files map to classes, what a name has to carry, where something may live.
 
-See [the decisions readme](../readme.md) for how an entry is written and when it
-earns one.
+See [the decisions readme](../readme.md) for how a session writes an entry and when a change earns one.
 - [`D-COD-007`][D-COD-007] — A pin goes to the newest version the declared PHP floor allows · 2026-08-29
 - [`D-COD-008`][D-COD-008] — Each PHP the matrix runs resolves the dependencies it can take · 2026-08-29
 - [`D-COD-006`][D-COD-006] — A test writes below a temporary path that names its own process · 2026-08-24

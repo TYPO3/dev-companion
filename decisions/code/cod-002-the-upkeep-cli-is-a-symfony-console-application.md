@@ -11,32 +11,32 @@ coveredBy:
 # D-COD-002 — The upkeep CLI is a Symfony Console application
 
 **`bin/cli` is a `symfony/console` application, one invokable class per command
-below `src/Upkeep/Command/`, and a command is named `<subject>:<verb>`.**
+below `src/Upkeep/Command/`, and a command's name is `<subject>:<verb>`.**
 
-What it replaces is a dispatcher of its own: a `Subject` interface whose
-`commands()` declared a usage string, a description and a callable, a `help()`
-that rendered them, and a `usage()` each command reached for by hand when an
-argument was missing. It worked. What it could not do is bind an argument — a
-command read `$arguments[0] ?? ''` and decided for itself what a caller who
-passed nothing should be told.
+What it replaces is a dispatcher of its own. A `Subject` interface whose
+`commands()` declared a usage string, a description and a callable, and a
+`help()` that rendered them. A `usage()` each command reached for by hand when
+an argument was absent. It worked. What it could not do is bind an argument. A
+command read `$arguments[0] ?? ''` and decided for itself what to tell a caller
+who passed nothing.
 
 ## Evidence
 
-- Written on 2026-08-01, converting all 24 commands at once. The console was
+- Written on 2026-08-01, with all 24 commands converted at once. The console was
   already in the tree as a dev dependency of php-cs-fixer, so the cost was a
-  `require-dev` entry rather than a new dependency. Every reading command's
-  output was captured before the change and compared after it: the only
-  differences are the command names and what a missing argument reports.
+  `require-dev` entry rather than a new dependency. The session captured every
+  read command's output before the change and compared it after. The only
+  differences are the command names and what an absent argument reports.
 
 ## Decided
 
 - `symfony/console` in `require-dev`, because `bin/cli` is the upkeep of this
-  checkout and Composer exports it as no `bin` — what it needs is not what an
-  installation of this package needs. Commands are invokable classes carrying
+  checkout and Composer exports it as no `bin`. What it needs is not what an
+  installation of this package needs. Commands are invokable classes with
   `#[AsCommand]`, with their arguments on the parameters of `__invoke` under
-  `#[Argument]`, which is the only arrangement where what a command takes is
-  declared where it is used. `Upkeep\Cli` registers every one of them and is the
-  only place a command is switched on.
+  `#[Argument]`. That is the only arrangement where a command declares what it
+  takes where it uses it. `Upkeep\Cli` registers every one of them and is the
+  only place that switches a command on.
 
 ## Assumed
 
@@ -47,20 +47,20 @@ passed nothing should be told.
 
 ## Wrong if
 
-- The console stops reading `#[Argument]` off a command's parameters at the
-  moment it does now — it reads them once, before anything merges the
-  application definition in, and a command it stops asking keeps every argument
-  in its signature while refusing the caller who passes one.
+- The console stops to read `#[Argument]` off a command's parameters at the
+  moment it does now. It reads them once, before anything merges the application
+  definition in. A command it stops to ask keeps every argument in its signature
+  while it refuses the caller who passes one.
   `UpkeepCommandTest::everyArgumentOfACommandIsOneTheConsoleBinds` is what
-  notices; the fallback is `addArgument()` on each command's definition, which
+  notices. The fallback is `addArgument()` on each command's definition, which
   is the older API and does not depend on that moment.
 
 ## Since then
 
 `feedback/2026-07-31-183652` asked for a `feedback:record` command so an agent
-could report without invoking a PHP class. The question went up on 2026-08-02
-and came back no. Composer exports `bin/cli` as no `bin`, so a project requiring
-this package has no such command to call, and a command would be gated on
-`Channel::isAvailable()` exactly as `typo3_feedback_record` already is. What
-that session actually hit is that none of this server's tools were callable in
-its client at all.
+could report without a call to a PHP class. The question went up on 2026-08-02
+and came back no. Composer exports `bin/cli` as no `bin`, so a project that
+requires this package has no such command to call. A command would sit behind
+`Channel::isAvailable()` exactly as `typo3_feedback_record` already does. What
+that session hit is that its client could call none of this server's tools at
+all.

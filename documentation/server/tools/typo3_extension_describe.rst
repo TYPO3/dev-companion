@@ -3,22 +3,23 @@
 ``typo3_extension_describe``
 ============================
 
-Describe what one installed extension registers: the tables its TCA defines and
-extends; the content elements it adds to tt_content, with the template each
-renders through and the FlexForm each binds; its backend modules and routes; its
-icons; its site sets and the files each carries; its form configurations and the
-form definitions they store; its service tags, middlewares, Fluid roots and
-global Fluid namespaces; the shape of its Classes/ directory; the files it ships
-that core has stopped reading, with what each costs — four predicates, so not an
-upgrade check; and beside all that its manual, README, test layers and XLF
-files. Tables, content elements and icons come from the booted installation
-where there is one. Everything else is read from its own files and never
-executed, so it answers on a fresh clone and for a third-party extension too.
-Call it with a key typo3_project_describe lists. A key the installation does not
-have is answered with the keys it does have, and no installation at all with
-unsupported. It answers what the extension registers and never what is stored
-through it: how many rows one of its tables holds, on which page and what they
-are is typo3_record_lookup. Answers from: installation, packages.
+Describe what one installed extension registers. That is the tables its TCA
+defines and extends. The content elements it adds to tt_content, with the
+template each renders through and the FlexForm each binds. Its backend modules
+and routes, and its icons. Its site sets and the files each carries. Its form
+configurations and the form definitions they store. Its service tags,
+middlewares, Fluid roots and global Fluid namespaces. The shape of its Classes/
+directory. The files it ships that the core no longer reads, with what each
+costs; four predicates, so not an upgrade check. And beside all that its manual,
+README, test layers and XLF files. Tables, content elements and icons come from
+the booted installation where there is one. Everything else is read from its own
+files and never executed, so it answers on a fresh clone and for a third-party
+extension too. Call it with a key typo3_project_describe lists. A key the
+installation does not have is answered with the keys it does have, and no
+installation at all with unsupported. It answers what the extension registers
+and never what editors store through it. How many rows one of its tables holds,
+on which page and what they are is typo3_record_lookup. Answers from:
+installation, packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -57,7 +58,7 @@ Answers with
       - package: string
         constraint: string
     # Tables its Configuration/TCA/ defines. Where the booted installation answered,
-    # attributed to this extension by the EXT: reference each entry carries, so a
+    # the EXT: reference each entry carries attributes it to this extension. So a
     # table added by a PHP call is among them. Otherwise by file name.
     # typo3_schema_lookup takes one of these names and answers what columns the core
     # derives for it.
@@ -93,16 +94,16 @@ Answers with
         # are. Null where its TypoScript configures nothing there, and on anything
         # that is not a plugin.
         pluginSettings: string or null
-        # The FlexForm data structure it binds, as the call declares it — a
+        # The FlexForm data structure it binds, as the call declares it. That is a
         # FILE:EXT: reference, or "inline" where the XML stands in the override file
         # itself. Null where it binds none, which is a different element to review
         # than one that does.
         flexForm: string or null
     # Content types this extension renders and does not register, which is what a
     # package taking the rendering frame over from fluid_styled_content ends up
-    # owning. Deleting one of these definitions leaves an element editors can still
-    # select with nothing to render it, and no other field of this answer names it.
-    # Empty where the extension renders only what it registers.
+    # owning. The deletion of one of these definitions leaves an element editors can
+    # still select with nothing to render it. No other field of this answer names
+    # it. Empty where the extension renders only what it registers.
     renderedContentTypes:  # optional
       - # The CType this extension renders, from a tt_content.<identifier>
         # assignment in its own TypoScript.
@@ -114,16 +115,16 @@ Answers with
         # The TypoScript file that set it, relative to the extension.
         source: string
         # The extension whose TCA registers that CType, read off the EXT: reference
-        # in its label. Null where no installation answered, and on a booted one a
-        # rendering definition for an element nothing registers — an editor cannot
-        # select it and the file is dead.
+        # in its label. Null where no installation answered. On a booted one, null
+        # is a definition for an element nothing registers: an editor cannot select
+        # it and the file is dead.
         registeredBy: string or null
     # The Generic template this extension ships, relative to it, or null where it
     # ships none. ExtensionUtility::configurePlugin() renders every Extbase plugin
     # registered as a content type through templateName = Generic, so a package
     # defining lib.contentElement itself owes this file. Nothing in the package
-    # points at it, which makes it the one most likely to be deleted as unused, and
-    # deleting it empties every plugin on the site.
+    # points at it, which makes it the one a cleanup deletes as unused first. Its
+    # deletion empties every plugin on the site.
     pluginFrame: string or null  # optional
     # FlexForm bindings read from the override files whose content type none of the
     # contentElements entries above carries. typo3_flexform_lookup resolves one to
@@ -218,10 +219,10 @@ Answers with
     # what stands beside it. ext_tables.php. ext_emconf.php beside a composer.json
     # declaring neither providesPackages nor a version. ext_icon.svg/.png/.gif where
     # no Resources/Public/Icons/Extension.* stands to be read first. An
-    # ext_typoscript_*.txt with no .typoscript file of the same name beside it. Each
-    # is read from the extension's own tree, which is where every one of these
-    # predicates lives, so no changelog sweep over what its code calls reaches any
-    # of them. An empty list says none of the four holds here, not that the
+    # ext_typoscript_*.txt with no .typoscript file of the same name beside it. The
+    # check reads each from the extension's own tree, which is where every one of
+    # these predicates lives. So no changelog sweep over what its code calls reaches
+    # any of them. An empty list says none of the four holds here, not that the
     # extension is ready for the next major. Nothing else here is checked for a
     # deprecation, and typo3_changelog_lookup is what answers that question.
     deprecatedFiles:  # optional
@@ -247,8 +248,8 @@ Answers with
     # nothing here.
     notReadStatically: [string]  # optional
     # What it ships beside its registrations. Every key is present even when the
-    # artifact is not, because the absence of a manual, a test or a translation is
-    # the answer a file listing cannot give.
+    # artifact is not. The absence of a manual, a test or a translation is the
+    # answer a file listing cannot give.
     artifacts:  # optional
       # Its manual entry point, "Documentation/" where the directory exists without
       # one, null where the extension ships no manual at all.

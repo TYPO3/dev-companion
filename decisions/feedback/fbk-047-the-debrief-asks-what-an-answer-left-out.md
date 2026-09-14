@@ -8,50 +8,51 @@ status: open
 # D-FBK-047 — The debrief asks what an answer left out
 
 **The debrief prompt asks what an answer stopped short of, what the session
-wished for and what the run cost, beside the calls it already asked about.**
+wished for and what the run cost. That is beside the calls it already asked
+about.**
 
 A session reports what it did, and what it did is call tools. A list weighted
-towards the surface comes back describing the surface, and the corpus the task
-actually turned on goes unmentioned.
+towards the surface comes back with the surface, and the corpus the task
+actually turned on gets no mention.
 
 ## Evidence
 
-- Of the ten bullets the prompt carried, six asked about the surface — skills
-  twice, calls, resources, names, errors — and one asked what the session had to
-  establish elsewhere. That one ended "that this server should have answered",
-  which hands the scope judgement to a session that has read `doesNotCover` and
-  will drop exactly the findings that say the boundary is wrong.
+- Of the ten bullets the prompt carried, six asked about the surface: skills
+  twice, calls, resources, names, errors. One asked what the session had to
+  establish elsewhere. That one ended "that this server should have answered".
+  That hands the scope judgement to a session that has read `doesNotCover` and
+  will drop exactly the results that say the boundary is wrong.
 - The 29 open feedback on 2026-08-18: 17 `idea`, 6 `missing-knowledge`, 5
   `tool-gap`, 1 `bug`. The 404 in the archive: 140 `missing-knowledge`, 122
   `idea`, 64 `tool-gap`, 43 `bug`, 35 `wrong-answer`.
-- No bullet asked whether a statement held on the TYPO3 version the session was
-  working against, though `since` and `until` are what the corpus binds with.
-- What a session costs is measured in `D-FBK-020` from this repository's own
-  worktree sessions. For a session using the server as a caller — the ones this
-  prompt is handed to — there is no figure at all.
+- No bullet asked whether a statement held on the TYPO3 version the session
+  worked against, though `since` and `until` are what the corpus binds with.
+- What a session costs has its measure in `D-FBK-020` from this repository's own
+  worktree sessions. For a session that uses the server as a caller, the ones
+  this prompt goes to, there is no figure at all.
 
 ## Decided
 
-- Two bullets added: the answer that was right and stopped one step short, which
-  is what the corpus fails at rather than absence; and what the session would
+- Two new bullets. The answer that was right and stopped one step short, which
+  is what the corpus fails at rather than absence. And what the session would
   have wanted, asked without the scope test it would otherwise apply.
 - Three widened. The round-trip bullet asks which single call would have settled
-  a question several went into. The name bullet extends from what a tool is
-  called to what it answered, because knowledge under a term nobody tried reads
-  as knowledge that is not there. The error bullet names a statement that did
-  not hold on the version in front of the session.
+  a question several went into. The name bullet extends from a tool's name to
+  what it answered. Knowledge under a term nobody tried reads as knowledge that
+  is not there. The error bullet names a statement that did not hold on the
+  version in front of the session.
 - The scope clause is gone from "what you had to establish elsewhere": all of
   it, sorted here rather than there.
-- The cost is asked in the closing, after the findings, and reaches no file. It
-  is information for whoever pasted the prompt.
+- The cost question stands at the end, after the results, and reaches no file.
+  It is information for whoever pasted the prompt.
 - Rejected: a cost field on `typo3_feedback_record`. One figure establishes
-  nothing, the series is what would, and keeping it is the maintainer's job
+  nothing, the series is what would, and the series is the maintainer's job
   rather than a schema's.
-- Rejected: merging the two skill bullets to hold the list at ten. The
+- Rejected: a merge of the two skill bullets to hold the list at ten. The
   counterfactual half is what the page defends, and no reader asked for a
   shorter list.
 - The prompt moved out of `documentation/records/readme.rst` into a page of its
-  own, so what a person pastes has somewhere to be pointed at.
+  own, so what a person pastes has a place to point at.
 
 ## Assumed
 
@@ -62,25 +63,25 @@ actually turned on goes unmentioned.
 
 ## Wrong if
 
-- The next twenty feedback are as thin on the corpus as the last twenty:
+- The next twenty feedback are as thin on the corpus as the last twenty.
   `missing-knowledge` and `wrong-answer` together stay under a quarter of what
   arrives.
-- The wish bullet comes back with wishes the server already answers, which would
+- The wish bullet comes back with wishes the server already answers. That would
   mean the session dropped its knowledge of the tools along with the scope test.
 - The answers thin out towards the end of the list, or stop before it.
 
 ## Since then
 
-The first measurement of this list from inside a session names which question
-produced which finding: five of the twelve bullets produced one, so the list
-works where it was already read.
+The first measure of this list from inside a session names which question
+produced which result. Five of the twelve bullets produced one, so the list
+works where somebody already read it.
 
-Two things it names are folded into bullets rather than added as new ones,
-because what this entry rejected was the list growing. The round-trip bullet now
-asks for the walk and says what memory drops, a session re-walking its own calls
-having found five where two were remembered. And the bullet about an answer that
-stopped one step short now carries reading the answers a second time, because
-the session read past a strong-confidence answer while it was on the screen.
+Two things it names fold into bullets rather than join as new ones, because what
+this entry rejected was a longer list. The round-trip bullet now asks for the
+walk and says what memory drops. A session that walked its own calls again found
+five where it remembered two. And the bullet about an answer that stopped one
+step short now carries a second read of the answers. The session read past a
+strong-confidence answer while it was on the screen.
 
-What the feedback also shows is the boundary of a written list: three findings
-were left on the floor until the user asked three plain questions of their own.
+What the feedback also shows is the boundary of a written list. Three results
+stayed on the floor until the user asked three plain questions of their own.

@@ -1,15 +1,10 @@
 # Feedback — what the feedback channel has to stay usable for
 
 Feedback, scenarios, recorded runs, and the two directories that outlive them.
-These hold what was assumed about how this repository keeps track of itself —
-which is the one subject where being wrong shows up as nothing happening, and
-nothing happening is what every other kind of mistake looks like from a
-distance.
+These hold the assumptions about how this repository keeps track of itself. That is the one subject where a mistake shows up as nothing that happens. Nothing that happens is what every other kind of mistake looks like from a distance.
 
 The requirements of the same name are in
-[requirements/feedback/](../../requirements/feedback/readme.md). See
-[the decisions readme](../readme.md) for how an entry is written and when it
-earns one.
+[requirements/feedback/](../../requirements/feedback/readme.md). See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-FBK-054`][D-FBK-054] — The server answers what is registered and a person answers what it looks like · 2026-09-02
 - [`D-FBK-055`][D-FBK-055] — A registration file is checked after the cache flush or not at all · 2026-09-02

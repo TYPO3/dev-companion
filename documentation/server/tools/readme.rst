@@ -226,8 +226,7 @@ at all in the state the machine is in.
         :action: Open reference
 
         Report whether component contracts come from the active installation or
-        the bundled fallback, which TYPO3 core revision the fallback catalogs
-        were taken from, what they cover, and how to re-check them.
+        the bundled fallback.
 
     .. card:: :doc:`typo3_system_extension_lookup <typo3_system_extension_lookup>`
         :label: Lookup

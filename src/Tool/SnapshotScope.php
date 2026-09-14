@@ -31,7 +31,7 @@ final class SnapshotScope extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Report whether component contracts come from the active installation or the bundled fallback, which TYPO3 core revision the fallback catalogs were taken from, what they cover, and how to re-check them. Call this to judge whether a typo3_component_lookup miss is authoritative: even with installed sources, component names remain a curated index rather than every backend class.';
+        return 'Report whether component contracts come from the active installation or the bundled fallback. It says which TYPO3 core revision the fallback catalogs come from, what they cover, and how to re-check them. Call this to judge whether a typo3_component_lookup miss is authoritative: even with installed sources, component names remain a curated index rather than every backend class.';
     }
 
     public static function inputSchema(): array
@@ -39,7 +39,7 @@ final class SnapshotScope extends ReadOnlyTool
         return [
             'type' => 'object',
             'properties' => [
-                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version to report the catalog\'s coverage for, for example "13.4" or "14". Defaults to the version of the installation this server was started in.'],
+                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version to report the catalog\'s coverage for, for example "13.4" or "14". Defaults to the version of the installation this server started in.'],
             ],
         ];
     }
@@ -49,10 +49,10 @@ final class SnapshotScope extends ReadOnlyTool
         return Schema::object([
             'catalog' => Schema::catalogProvenance(),
             'verifyCommand' => Schema::string(),
-            'scope' => Schema::object([], [], 'One entry per catalog describing what it contains.'),
+            'scope' => Schema::object([], [], 'One entry per catalog that says what it contains.'),
             'counts' => Schema::object([], [], 'One entry per catalog with its number of entries.'),
-            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the coverage was reported for — stated by the caller, or read from the installation. Null means the whole catalog answers.'],
-            'verifiedCount' => Schema::integer('How many components were verified on that version.'),
+            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the coverage report is for, stated by the caller or read from the installation. Null means the whole catalog answers.'],
+            'verifiedCount' => Schema::integer('How many components somebody verified on that version.'),
             'componentSource' => ['type' => 'string', 'enum' => ['installation', 'catalog']],
             'withheld' => Schema::withheldComponents(),
         ], ['catalog', 'verifyCommand', 'scope', 'counts', 'verifiedCount', 'componentSource', 'withheld']);

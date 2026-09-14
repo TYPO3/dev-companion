@@ -35,7 +35,7 @@ final class BackendModuleLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'List the backend modules registered in the TYPO3 installation you are working in, with the extension that declares each one, its place in the module tree, its labels, its access level, the route each one answers on and every sub-route it registers. It carries the navigation component as the module tree resolves it, which is the value a Configuration/Backend/Modules.php cannot give you: it is inherited from the parent module, so reading the registration files says a module is not page-tree navigated when it is. A project extension\'s modules are in it, because the installation is booted and asked rather than a snapshot read.';
+        return 'List the backend modules registered in the TYPO3 installation you work in. Each comes with the extension that declares it, its place in the module tree, its labels and its access level. Each comes with the route it answers on and every sub-route it registers. It carries the navigation component as the module tree resolves it, which is the value a Configuration/Backend/Modules.php cannot give you. A module inherits it from its parent, so a read of the registration files says a module has no page tree when it has one. A project extension\'s modules are in it, because the tool boots and asks the installation rather than reads a snapshot.';
     }
 
     public static function inputSchema(): array
@@ -44,7 +44,7 @@ final class BackendModuleLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'query' => ['type' => 'string', 'description' => 'Module identifier, label, route, navigation component, or extension name to filter by. Omit to list every module.'],
-                'file' => ['type' => 'string', 'description' => 'A Configuration/Backend/Modules.php to check instead of listing the registry: which parent, which iconIdentifier and which labels it names that this installation does not have. Answered without a cache flush and without the file being saved into an installation, which is what the registry needs before it can say anything. The file is read as text and nothing in it is executed, so a value a variable or a constant computes is reported as unresolvable rather than followed. Not with query.'],
+                'file' => ['type' => 'string', 'description' => 'A Configuration/Backend/Modules.php to check instead of listing the registry: which parent, which iconIdentifier and which labels it names that this installation does not have. Answered without a cache flush and without a save of the file into an installation. The registry needs both before it can say anything. The tool reads the file as text and executes nothing in it. So it reports a value a variable or a constant computes as unresolvable rather than follows it. Not with query.'],
             ],
         ];
     }
@@ -60,11 +60,11 @@ final class BackendModuleLookup extends ReadOnlyTool
                 'parent' => Schema::string('The parent it names. Empty where it names none, which makes it a first-level module and registers no route unless it also declares standalone.'),
                 'parentRegistered' => ['type' => ['boolean', 'null'], 'description' => 'Whether this installation has a module under that identifier. Null where the entry names no parent, and null where the value was not a plain string in the file.'],
                 'iconIdentifier' => Schema::string('The icon it names. Empty where it names none.'),
-                'iconRegistered' => ['type' => ['boolean', 'null'], 'description' => 'Whether that identifier is registered here. Null where the entry names no icon, and null where the value was not a plain string.'],
+                'iconRegistered' => ['type' => ['boolean', 'null'], 'description' => 'Whether the registry here holds that identifier. Null where the entry names no icon, and null where the value is not a plain string.'],
                 'labels' => Schema::string('The translation domain or LLL reference it names, as written. Empty where it names none, and empty where the value was not a plain string.'),
                 'labelsResource' => Schema::string('The XLF file this installation has behind that reference. Empty where none does, which for a domain means no label file here derives it.'),
-                'labelsRegistered' => ['type' => ['boolean', 'null'], 'description' => 'Whether the trans-unit the module title is read from is in that file — mlang_tabs_tab behind an LLL reference, title behind a domain. False with no labelsResource means nothing here resolves the reference at all, and false with one means the file is here and the unit is not; either way the module renders an empty title. Null where the entry names no labels, and null where the value was not a plain string.'],
-            ], ['identifier', 'parent', 'parentRegistered', 'iconIdentifier', 'iconRegistered', 'labels', 'labelsResource', 'labelsRegistered']), 'One entry per module the named file declares, in the order it declares them. Empty where no file was named.'),
+                'labelsRegistered' => ['type' => ['boolean', 'null'], 'description' => 'Whether the trans-unit the module title comes from is in that file: mlang_tabs_tab behind an LLL reference, title behind a domain. False with no labelsResource means nothing here resolves the reference at all. False with one means the file is here and the unit is not. Either way the module renders an empty title. Null where the entry names no labels, and null where the value is not a plain string.'],
+            ], ['identifier', 'parent', 'parentRegistered', 'iconIdentifier', 'iconRegistered', 'labels', 'labelsResource', 'labelsRegistered']), 'One entry per module the named file declares, in the order it declares them. Empty where the call named no file.'),
             'modules' => Schema::listOf(Schema::object([
                 'identifier' => Schema::string(),
                 'parents' => Schema::listOf(Schema::string(), 'The modules it sits under, outermost first.'),
@@ -72,11 +72,11 @@ final class BackendModuleLookup extends ReadOnlyTool
                 'labels' => Schema::string('Its label, with the translation domain reference behind it.'),
                 'path' => Schema::string('The backend route it answers on.'),
                 'position' => Schema::string('Its declared before/after position, if any.'),
-                'navigationComponent' => Schema::string('The navigation component as resolved, inheritance included — "@typo3/backend/tree/page-tree-element" is the page tree. Empty where the module has none. The value differs between TYPO3 versions, which is why it is read from the installation.'),
+                'navigationComponent' => Schema::string('The navigation component as resolved, inheritance included — "@typo3/backend/tree/page-tree-element" is the page tree. Empty where the module has none. The value differs between TYPO3 versions, which is why it comes from the installation.'),
                 'access' => Schema::string('Who may call it: "user", "admin", "systemMaintainer".'),
                 'routes' => Schema::listOf(Schema::object([
                     'name' => Schema::string('The name the registration gives it; "_default" is what the module opens with.'),
-                    'identifier' => Schema::string('The route identifier it is registered under: the module identifier for "_default", "<module>.<name>" for every other one.'),
+                    'identifier' => Schema::string('The route identifier the registry holds it under: the module identifier for "_default", "<module>.<name>" for every other one.'),
                     'path' => Schema::string(),
                     'target' => Schema::string('Controller::method it dispatches to.'),
                 ], ['name', 'identifier', 'path', 'target']), 'Every route the module registers. Empty for a first-level module that is not standalone, which registers none.'),

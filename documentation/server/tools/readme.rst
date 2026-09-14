@@ -60,10 +60,8 @@ at all in the state the machine is in.
         :label: Lookup
         :action: Open reference
 
-        List the backend modules registered in the TYPO3 installation you are
-        working in, with the extension that declares each one, its place in the
-        module tree, its labels, its access level, the route each one answers on
-        and every sub-route it registers.
+        List the backend modules registered in the TYPO3 installation you work
+        in.
 
     .. card:: :doc:`typo3_changelog_lookup <typo3_changelog_lookup>`
         :label: Lookup

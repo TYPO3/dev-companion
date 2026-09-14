@@ -9,13 +9,13 @@ coveredBy: []
 
 # D-SKL-011 — The call plan a skill writes down is measured
 
-**A skill that tells a caller how many calls a subject takes states what the
-corpus was measured to do, and obligations that share a document are one call.**
+**A skill that tells a caller how many calls a subject takes states what a
+measure of the corpus showed. Obligations that share a document are one call.**
 
 `typo3-core-patch-review` told a reviewer to ask `typo3_rule_lookup` per
 obligation, on the grounds that *a query that names two reaches neither*. That
-is a claim about the ranker written into a file the ranker does not touch, and
-the ranker moved under it on the day it was followed.
+is a claim about the ranker in a file the ranker does not touch. The ranker
+moved under it on the day a session followed it.
 
 ## Evidence
 
@@ -43,7 +43,7 @@ the ranker moved under it on the day it was followed.
   section covers below `Documents::MIN_COVERAGE`, which is
   [`D-ANS-037`](../answers/ans-037-a-compound-rule-query-is-owed-the-section-its-score-prefers.md)'s
   mechanism reached from the query's side rather than the document's.
-- The ground moved the same day the feedback was written. `D-ANS-037`'s **Since
+- The ground moved the same day the feedback arrived. `D-ANS-037`'s **Since
   then** put the document title into `Documents::FIELD_WEIGHTS` at weight 2 on
   2026-08-03, and gave a compound miss the subsets to re-ask with. A skill
   sentence about what a compound query reaches is therefore a statement about
@@ -58,20 +58,21 @@ the ranker moved under it on the day it was followed.
 
 ## Decided
 
-- **Step 4, wording, closed on the spot.** The rule was delivered, was followed
-  and was wrong about the corpus. Nothing about TYPO3 had to be looked up, and
-  the skill's contract — its `description`, the ownership boundary it closes on
-  — is untouched, so the rewrite lands in the commit that judges it.
-- The rewrite says what was measured rather than what was assumed: the sections
-  are named by subject, obligations sharing a document are one call, and length
-  rather than count is what drops a section. `SkillTest` holds it, so a
-  reorganisation cannot take it out silently.
+- **Step 4, wording, closed on the spot.** The skill delivered the rule, the
+  session followed it, and it was wrong about the corpus. Nothing about TYPO3
+  needed a lookup. The skill's contract, its `description` and the ownership
+  boundary it closes on, stays as it is. So the rewrite lands in the commit that
+  judges it.
+- The rewrite says what the measure showed rather than what the writer assumed.
+  The sections have names by subject, obligations that share a document are one
+  call, and length rather than count is what drops a section. `SkillTest` holds
+  it, so a reorganisation cannot take it out silently.
 - **The session-level suppression the feedback offers is not built.** It would
   make `typo3_rule_lookup` remember a caller between calls, and
   [`D-FBK-020`](../feedback/fbk-020-a-session-is-charged-per-call-so-the-calls-are-what-is-budgeted.md)
-  says what a session is charged: the round trip. Returning *already returned
-  for query X* keeps the round trip and saves the tokens, which is the half that
-  was not the cost.
+  says what a session pays: the round trip. Returning *already returned for
+  query X* keeps the round trip and saves the tokens, which is the half that was
+  not the cost.
 - **Naming the sibling sections in the answer is not built either.** One call
   already returns them, and the answer already carries the hint footer that
   points sideways. What the feedback asked the tool to compensate for was the
@@ -94,14 +95,14 @@ the ranker moved under it on the day it was followed.
 
 - A later run asks `breaking change changelog entry` in one call and gets one of
   the two sections. Then the floor moved again and the pair is no longer one
-  call — which is `D-ANS-037`'s first **Wrong if** arriving here.
+  call, which is `D-ANS-037`'s first **Wrong if** here.
 - A review follows the rewrite, asks four obligations in one query and reports
-  the deprecation rules missing. Then *length is the limit* was read as
+  the deprecation rules absent. Then the review read *length is the limit* as
   permission rather than as a bound, and the sentence needs the count back.
 - A sweep of the prose corpus finds the shared-document pair is peculiar to
-  `typo3-commit-messages`, because its sections are short and its headings carry
-  the subject words. Then this is one document's property written as a rule.
-- The next skill sentence that states a retrieval behaviour is found stale the
+  `typo3-commit-messages`. Its sections are short and its headings carry the
+  subject words. Then this is one document's property written as a rule.
+- The next skill sentence that states a retrieval behaviour turns out stale the
   same way. Then the lesson is not this wording but that a skill may not state
   one at all, and what belongs in the file is the subject to ask in.
 
@@ -109,8 +110,8 @@ the ranker moved under it on the day it was followed.
 
 By its own second **Wrong if**: a review asked one query and got nothing back,
 reading *length is the limit rather than the count* as permission — the sentence
-this entry put in place of a count. What is revoked is the second clause,
-*obligations that share a document are one call*, which is unbounded: a sweep of
+this entry put in place of a count. The revoked half is the second clause,
+*obligations that share a document are one call*, which has no bound. A sweep of
 every triple of headings inside one document empties 34 of 351. The first clause
-is carried into `D-SKL-043`, which states a count of two and what it was
-measured over. The evidence stays, and so do the two proposals it rejected.
+goes into `D-SKL-043`, which states a count of two and what the measure ran
+over. The evidence stays, and so do the two proposals it rejected.

@@ -1,12 +1,8 @@
 # Audience — who the server answers for, and how it says so
 
-Three audiences are claimed in [`R-AUD-001`](../../requirements/audience/readme.md)
-and what the server contains is core knowledge. These are the decisions about
-that gap: what it says about itself, which half a client is offered, and where a
-client is told to start.
+[`R-AUD-001`](../../requirements/audience/readme.md) claims three audiences and what the server contains is core knowledge. These are the decisions about that gap: what it says about itself, which half a client gets, and where a client starts.
 
-See [the decisions readme](../readme.md) for how an entry is written and when
-one is added.
+See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-AUD-018`][D-AUD-018] — Records are read and the boundary is the TCA the installation has · 2026-09-04
 - [`D-AUD-014`][D-AUD-014] — A description opens with what the caller's own route cannot do · 2026-08-27

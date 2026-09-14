@@ -11,103 +11,102 @@ coveredBy:
 
 # D-AUD-005 — An exclusion naming no tool is reported and the server starts
 
-**An excluded name that no tool answers to is written to stderr at startup, and
-the server starts with the rest of the list.**
+**The server writes an excluded name that no tool answers to onto stderr at
+startup, and starts with the rest of the list.**
 
-`TYPO3_DEV_COMPANION_EXCLUDE_TOOLS` was read out of the caller's environment and
-compared to nothing, so a name that matched no tool took nothing away and said
-so nowhere.
+The server read `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS` out of the caller's
+environment and compared it to nothing. So a name that matched no tool took
+nothing away and said so nowhere.
 
 ## Evidence
 
 - `a4470ee` renamed typo3_project_scope to `typo3_project_describe` and
   typo3_extension_scope to `typo3_extension_describe`. Started on 2026-08-04
   with `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS=typo3_project_scope`, the server
-  offered 25 tools including `typo3_project_describe`, and neither side said the
-  exclusion had stopped applying. The same hole swallows every typo in that
+  offered 25 tools, `typo3_project_describe` among them. Neither side said the
+  exclusion no longer applied. The same hole swallows every typo in that
   variable.
-- stdout is the protocol: the transport writes one JSON-RPC line per response
-  and the client parses each line, so anything else printed there is a
+- stdout is the protocol. The transport writes one JSON-RPC line per response
+  and the client parses each line. So anything else printed there is a
   corruption the client reports as a broken server. stderr is the other stream a
-  started server has, and it is where
-  [`src/bootstrap.php`](../../src/bootstrap.php) already puts the one startup
-  failure this binary has, and where
+  started server has. It is where [`src/bootstrap.php`](../../src/bootstrap.php)
+  already puts the one startup failure this binary has, and where
   [driving-a-session.md](../../documentation/contributing/driving-a-session.rst)
   reads a stalled session off.
 - An MCP log notification is not a channel here. There is no session until the
-  client has sent `initialize`, the list is read before that, and a client that
-  never sets a logging level is sent nothing.
+  client has sent `initialize`, and the server reads the list before that. A
+  client that never sets a log level gets nothing.
 - What an exclusion that fails to apply costs is context. Every tool the list
-  can take away is read-only; the one tool that writes, `typo3_feedback_record`,
-  is appended past the filter in `Registry::offered()` and cannot be excluded at
-  all today.
+  can take away is read-only. The one tool that writes, `typo3_feedback_record`,
+  joins past the filter in `Registry::offered()`, and no exclusion can reach it
+  today.
 - The same silence had a second route, measured on 2026-08-04 in a fixture
-  project: `install` and `update` replaced the whole server entry, so an `env`
-  block a caller had written into `.mcp.json` — the only place a client
-  configuration can carry `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS` — was gone after
-  the next run, and the tools came back. Nothing this package writes ever names
-  the variable, so the installer was not writing exclusions; it was deleting
+  project. `install` and `update` replaced the whole server entry. So an `env`
+  block a caller had written into `.mcp.json` was gone after the next run, and
+  the tools came back. That block is the only place a client configuration can
+  carry `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`. Nothing this package writes ever
+  names the variable, so the installer did not write exclusions; it deleted
   them.
 
 ## Decided
 
-- The unknown names are written once, before the transport starts, naming the
-  variable that carried them and the tool that lists what is offered.
-- A warning rather than a refusal. Exiting on a stale variable trades one wrong
-  word for every tool, and a client launches this process without the person who
-  wrote that word being there to read the exit code.
-- No alias: the old names do not keep excluding the renamed tools. `7553cb3` and
-  `a4470ee` both renamed without one, an alias is a second name for one thing
-  that has to be carried forever, and what it would buy is a configuration the
-  caller now has to correct exactly once.
-- No suggested spelling beside the unknown name. A nearest match computed by
-  edit distance is a guess, and a guess in a startup diagnostic is acted on by
-  somebody who cannot check it — the reason `Installer::REMAINING` says a
-  client's documentation is silent rather than what the answer probably is.
-- The setup commands own the command in an entry and nothing else: what a JSON
-  entry already carries beside `type`, `command`, `args` and `enabled` is
-  written back, so an exclusion in `env` survives an `install` or an `update`.
-  The TOML section the two `.toml` clients get is still rewritten whole, which
-  is a card rather than a second half-fix, because that path replaces text it
-  never parsed.
-- `ExcludedTools::all()` stays what the caller wrote. Trimming it to the names
-  that are real would also change what `typo3_server_scope` reports and what the
-  initialize instructions claim, which is the in-band half of this and belongs
-  to whoever owns those answers.
+- The unknown names appear once, before the transport starts, with the variable
+  that carried them and the tool that lists the offer.
+- A caveat rather than a refusal. An exit on a stale variable trades one wrong
+  word for every tool. A client launches this process, and the person who wrote
+  that word is not there to read the exit code.
+- No alias: the old names no longer exclude the renamed tools. `7553cb3` and
+  `a4470ee` both renamed without one. An alias is a second name for one thing
+  that stays forever. What it would buy is a configuration the caller now has to
+  correct exactly once.
+- No suggested name beside the unknown one. A nearest match by edit distance is
+  a guess, and somebody who cannot check it acts on a guess in a startup
+  diagnostic. That is the reason `Installer::REMAINING` says a client's
+  documentation is silent rather than what the answer probably is.
+- The setup commands own the command in an entry and nothing else. What a JSON
+  entry already carries beside `type`, `command`, `args` and `enabled` goes back
+  as it was. So an exclusion in `env` survives an `install` or an `update`. The
+  TOML section the two `.toml` clients get still comes back whole, which is a
+  card rather than a second half repair. That path replaces text it never
+  parsed.
+- `ExcludedTools::all()` stays what the caller wrote. A cut to the names that
+  are real would also change what `typo3_server_scope` reports and what the
+  initialize instructions claim. That is the in-band half of this and belongs to
+  whoever owns those answers.
 
 ## Assumed
 
 - A client's stderr reaches somebody. The clients the recorded runs use capture
-  it into a session log, which is what makes it the channel a stalled call is
-  read off; a client that discards it leaves this warning unread.
+  it into a session log, which is what makes it the channel a stalled call comes
+  off. A client that discards it leaves this caveat unread.
 - The registry, asked while the list answers empty, is every tool this server
-  has. It is the offered list, so in a checkout without the feedback channel an
-  excluded `typo3_feedback_record` is reported too — which is why the sentence
+  has. It is the offered list, so in a checkout without the feedback channel the
+  report names an excluded `typo3_feedback_record` too. That is why the sentence
   says the server does not offer the name rather than that no such tool exists.
 
 ## Wrong if
 
-- The warning names a tool that is real. That would mean the registry was asked
-  in a state where a tool is missing for a reason of its own, and the caller is
-  being told their correct configuration is wrong.
+- The caveat names a tool that is real. That would mean the registry answered in
+  a state where a tool is absent for a reason of its own. The caller hears their
+  correct configuration is wrong.
 - An exclusion ever guards something other than context — a tool that writes, or
   one that reaches outside on its own. Then a list that silently matched nothing
-  is a refusal rather than a warning, and this entry is the wrong default.
-- A session turns up where the renamed tool came back and nobody saw the line,
-  because the client captured stderr and showed it to no one. The report then
-  has to be in-band, where the agent reads it.
+  is a refusal rather than a caveat, and this entry is the wrong default.
+- A session turns up where the renamed tool came back and nobody saw the line.
+  The client captured stderr and showed it to no one. The report then has to be
+  in-band, where the agent reads it.
 
 ## Since then
 
-"The one tool that writes" meant two things and this entry was read as if it
-meant one: `typo3_feedback_record` writes into this checkout and never into the
-caller's installation, so its being appended past the filter is a named
-exception (`R-SCO-009`) rather than the hole that sentence describes. Read with
-the installation meaning, the **Wrong if** stands.
+"The one tool that writes" meant two things and this entry read as if it meant
+one. `typo3_feedback_record` writes into this checkout and never into the
+caller's installation. So its place past the filter is a named exception
+(`R-SCO-009`) rather than the hole that sentence describes. Read with the
+installation meaning, the **Wrong if** stands.
 
-What is left is this entry's open half, and it reached further than the renamed
-tools: a name that is real but unexcludable tells the client the same falsehood
-an unknown one does. `D-AUD-006` closed it the same day by trimming `all()` to
-what the offered list is actually missing, which supersedes two bullets of
-**Decided** and puts the report in-band. The statement stands: the warning is a
-warning and the server starts.
+What remains is this entry's open half, and it reached further than the renamed
+tools. A name that is real and that no exclusion reaches tells the client the
+same falsehood an unknown one does. `D-AUD-006` closed it the same day with a
+cut of `all()` to what the offered list lacks. That supersedes two bullets of
+**Decided** and puts the report in-band. The statement stands: the caveat is a
+caveat and the server starts.

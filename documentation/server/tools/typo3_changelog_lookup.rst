@@ -8,20 +8,19 @@ and important note, in the version it was released in. This reads the entries;
 writing one for a core patch of your own is the other direction and is
 typo3_rule_lookup with documentId "core/contribution/changelog". Answers "what
 did this version deprecate", "what changed about X", "which release introduced
-Y". This is the first stop when building on a major you have not built on
-recently: what separates a current answer from a two-major-old one is written
-down here and almost nowhere else. A deprecation carries the version it stops
-working in where the entry states one, and the rule that answers the rest beside
-it. The versions the installation ships are read from the core package on disk;
-the ones above its own major are read from docs.typo3.org, which is what an
-upgrade to a version you have not installed is asking for. Every word of the
-query has to be carried by an entry; narrow further with type and version. A
-version and a type with the query omitted list whole under a raised limit, which
-is the deprecation sweep of one major in a single call. A method or class you
-found in the code is a query of its own: an identifier reaches the entries
-naming it, whether or not the change was titled after it — inside the installed
-versions, which are the ones whose text is on disk. Answers from: packages,
-network.
+Y". This is the first stop when you build on a major you have not built on
+recently. What separates a current answer from a two-major-old one stands here
+and almost nowhere else. A deprecation carries the version it stops working in
+where the entry states one, and the rule that answers the rest beside it. The
+tool reads the versions the installation ships from the core package on disk. It
+reads the ones above its own major from docs.typo3.org, which is what an upgrade
+to a version you have not installed asks for. Every word of the query has to be
+carried by an entry; narrow further with type and version. A version and a type
+with the query omitted list whole under a raised limit. That is the deprecation
+sweep of one major in a single call. A method or class you found in the code is
+a query of its own. An identifier reaches the entries that name it, whether or
+not the change has its title. That holds inside the installed versions, which
+are the ones whose text is on disk. Answers from: packages, network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 
@@ -34,17 +33,16 @@ Takes
 .. code-block:: yaml
 
     # Words the entry has to carry, matched against its file name and the words that
-    # name spells. Where no entry carries all of them by name, the title stated
-    # inside the file is searched as well, which reaches a method name the file name
-    # leaves out; and a class, method or constant name reaches the entries that
-    # write it in their text, so a removed API can be asked for by the identifier
-    # you have, in any spelling of it: bare, qualified by its class, or fully
-    # qualified. The issue number is among the words a file name carries, so a
-    # deprecation's own number reaches every entry filed under it — the Feature
-    # the replacement was announced in, with the version it was released in. When
-    # nothing carries all of them there either, the answer names the largest part of
-    # the query that does reach entries, which is what to ask again with. Omit to
-    # list a version or a type as a whole.
+    # name spells. Where no entry carries all of them by name, the search reads the
+    # title inside the file as well. That reaches a method name the file name leaves
+    # out. A class, method or constant name reaches the entries that write it in
+    # their text. So you ask for a removed API by the identifier you have, in any
+    # spelling: bare, qualified by its class, or fully qualified. The issue number
+    # is among the words a file name carries. So a deprecation's own number reaches
+    # every entry filed under it, the Feature that announced the replacement with
+    # its release version among them. When nothing carries all of them there either,
+    # the answer names the largest part of the query that does reach entries. That
+    # is what to ask again with. Omit to list a version or a type as a whole.
     query: string  # optional
     # One of: breaking, deprecation, feature, important. Restrict to one kind of
     # change. Breaking and deprecation are what affects existing code.
@@ -52,16 +50,16 @@ Takes
     # Restrict to a version, by prefix: "14" covers 14.0 through 14.3.x, "13.4"
     # covers 13.4 and 13.4.x.
     version: string  # optional
-    # Restrict to entries carrying this index tag: "ext:form" for the system
-    # extension a change is in, "FullyScanned" or "NotScanned" for what the
-    # Extension Scanner has a matcher for, "PHP-API", "TCA", "Backend", "Frontend"
-    # for the surface. This bounds one question inside a version and a type. The
-    # sweep of a major does not need it: that version and type come back whole under
-    # a raised limit, and every entry carries its own tags to be read by. The
-    # changelog says nothing about which third-party extension a change affects, so
-    # an extension key of your own matches no tag.
+    # Restrict to entries with this index tag. "ext:form" is the system extension a
+    # change is in. "FullyScanned" or "NotScanned" is what the Extension Scanner has
+    # a matcher for. "PHP-API", "TCA", "Backend" and "Frontend" are the surface.
+    # This bounds one question inside a version and a type. The sweep of a major
+    # does not need it. That version and type come back whole under a raised limit,
+    # and every entry carries its own tags to read by. The changelog says nothing
+    # about which third-party extension a change affects, so an extension key of
+    # your own matches no tag.
     tag: string  # optional
-    # Maximum number of entries. Raise it to list a version and a type whole: the
+    # Maximum number of entries. Raise it to list a version and a type whole. The
     # largest covered major holds 128 deprecations, and that sweep is one call
     # rather than one per tag.
     limit: integer  # optional
@@ -74,11 +72,11 @@ Answers with
     query: string
     # Entries carrying every word of the query and the tag, before the limit.
     matchCount: integer  # optional
-    # Where the query was carried: "name" for the entry names, "body" where no name
-    # carried it and the inside of the file did — the title as it is stated, or an
-    # identifier the text writes. A body match can name the identifier without being
-    # about it, so read the title of each. Returned where the answer carries
-    # entries.
+    # Where the query matched. "name" is the entry names. "body" is where no name
+    # carried it and the inside of the file did. That is the title as the file
+    # states it, or an identifier the text writes. A body match can name the
+    # identifier and not be about it, so read the title of each. Returned where the
+    # answer carries entries.
     matchedIn: string  # optional
     # Every index tag the entries of this version and type carry, with the ones
     # already filtered by among them. Returned where a tag was asked for, so a tag
@@ -94,15 +92,14 @@ Answers with
         title: string
         # The version a Deprecation states the deprecated thing stops working in —
         # what an upgrade decides on. Empty on the other three types, and on a
-        # deprecation whose entry states none, which is most of a major and is not
-        # "no removal planned": removalRule is what answers it there.
+        # deprecation whose entry states none. That is most of a major and does not
+        # mean "no removal planned"; removalRule answers it there.
         removal: string
         # What to write instead, as the entry's own Migration section states it,
-        # code blocks included. Carried where the call reached one entry — an
-        # issue number, or a query that matched one — because a sweep of
-        # seventy-five is a list of titles and not seventy-five migrations. Empty on
-        # every entry of a longer answer, and on an entry whose file states no
-        # migration.
+        # code blocks included. Carried where the call reached one entry, by an
+        # issue number or a query that matched one. A sweep of seventy-five is a
+        # list of titles and not seventy-five migrations. Empty on every entry of a
+        # longer answer, and on an entry whose file states no migration.
         migration: string
         # Index tags. FullyScanned or PartiallyScanned means the extension scanner
         # has a matcher for it.
@@ -113,9 +110,8 @@ Answers with
         file: string
         # Which side the entry came from. "installation" is the core package on
         # disk, which is the version that installation runs. "manual" is
-        # docs.typo3.org, which is every version above the installed major — what
-        # an upgrade reads, and a moving target for a major that is not released
-        # yet.
+        # docs.typo3.org, which is every version above the installed major. That is
+        # what an upgrade reads, and it moves for a major without a release yet.
         publishedIn: string
     # What each word of the query reaches on its own, inside the version and the
     # type that were asked for. A word at 0 is the one that emptied the answer —
@@ -128,17 +124,17 @@ Answers with
         matchCount: integer
     # The same words counted over the whole changelog rather than inside the version
     # and the type. Returned only where a word reaches there and nothing inside the
-    # narrowing, which makes the filter what emptied this answer rather than the
-    # words: ask again without it.
+    # narrowed set. Then the filter emptied this answer rather than the words: ask
+    # again without it.
     termCountsWithoutTheNarrowing:  # optional
       - # The word, lowercased as the search used it.
         term: string
         matchCount: integer
-    # The largest parts of the query that do reach entries, narrowest first —
-    # every one of them, because the one a tie-break puts first is not always the
-    # one being looked for. Withheld where a tag was asked for: these are counted
-    # off the entry names and a tag is read inside the file, so a subset offered
-    # there would promise entries the same call does not return.
+    # The largest parts of the query that do reach entries, narrowest first. Every
+    # one of them, because the one a tie-break puts first is not always the one you
+    # look for. Withheld where the call names a tag. The count runs off the entry
+    # names and a tag sits inside the file. So a subset offered there promises
+    # entries the same call does not return.
     termSubsets:  # optional
       - # Words of the query, as a query to ask again with.
         terms: [string]

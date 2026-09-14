@@ -3543,7 +3543,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-content-element-development/SKILL.md',
         ));
 
-        self::assertStringContainsString('A symptom is a lookup trigger, and not only a task is.', $skill);
+        self::assertStringContainsString('A symptom triggers a lookup, and not only a task does.', $skill);
         self::assertStringContainsString('`typo3_hint_lookup` takes the observation as its `task`', $skill);
         // Before the installed source, which is the order the session inverted:
         // the base fixes that reading as the step after the lookups.
@@ -3589,7 +3589,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('a repository that has no browser suite yet', $skill);
         // Only the second crosses a boundary, and the skill that owns the
         // infrastructure is named where the crossing is — `R-SKL-003`.
-        self::assertStringContainsString('Establishing that suite is `typo3-extension-testing`', $skill);
+        self::assertStringContainsString('`typo3-extension-testing` establishes that suite', $skill);
 
         // A named id that stopped resolving is a step routing to nothing.
         foreach (['any/testing/browser-check', 'project/testing/playwright'] as $id) {

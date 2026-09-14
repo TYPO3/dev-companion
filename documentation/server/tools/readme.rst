@@ -122,7 +122,7 @@ at all in the state the machine is in.
         :action: Open reference
 
         Resolve one TCA field of type=flex to the data structure the
-        installation would actually use.
+        installation uses.
 
     .. card:: :doc:`typo3_fluid_namespace_list <typo3_fluid_namespace_list>`
         :label: List

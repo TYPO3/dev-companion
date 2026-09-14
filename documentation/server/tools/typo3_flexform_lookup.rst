@@ -3,20 +3,20 @@
 ``typo3_flexform_lookup``
 =========================
 
-Resolve one TCA field of type=flex to the data structure the installation would
-actually use: the identifier TYPO3 produces for it, that identifier decoded, and
-every sheet and field of the parsed structure with its label, type and items.
-This is what the backend form builds, not what the referenced FlexForm file says
-— the installation resolves it through its own FlexFormTools, so a data
-structure a listener replaced, a sheet held in a file of its own, the default
-sDEF sheet a structure without sheets gets, and the TCA migration and
-preparation each field goes through are all in the answer. Which structure
-applies can depend on the record, so pass the values that decide it in record:
-CType for a content element or a plugin, list_type beside it on TYPO3 12 and 13.
-Nothing loads a row — the record is emulated from exactly those values. Where
-the resolution throws, that is the answer: an empty ds, a column that is not
-type=flex, a record type no structure is registered for, and the exception comes
-back with the keys and the record fields that would have resolved. For the
+Resolve one TCA field of type=flex to the data structure the installation uses.
+That is the identifier TYPO3 produces for it, that identifier decoded, and every
+sheet and field of the structure with label, type and items. This is what the
+backend form builds, not what the referenced FlexForm file says. The
+installation resolves it through its own FlexFormTools. So a data structure a
+listener replaced and a sheet in a file of its own are in the answer. So are the
+default sDEF sheet a structure without sheets gets, and the TCA migration and
+preparation each field goes through. Which structure applies can depend on the
+record, so pass the values that decide it in record. That is CType for a content
+element or a plugin, and list_type beside it on TYPO3 12 and 13. Nothing loads a
+row; the tool emulates the record from exactly those values. Where the
+resolution throws, that is the answer. An empty ds, a column that is not
+type=flex, and a record type with no structure are that case. The exception
+comes back with the keys and the record fields that would have resolved. For the
 columns the table itself gets, ask typo3_schema_lookup; for what a content
 element registers, typo3_extension_describe. Answers from: installation.
 
@@ -33,8 +33,8 @@ Takes
     table: string
     # The type=flex column to resolve, for example "pi_flexform".
     field: string
-    # Column values the emulated record carries, as column => value. Only what
-    # decides which data structure applies is needed: "CType" for a content element,
+    # Column values the emulated record carries, as column => value. Pass only what
+    # decides which data structure applies. That is "CType" for a content element,
     # and "list_type" beside it for a plugin on TYPO3 12 and 13. Omit it for a
     # column that declares one structure and no record type.
     record: object  # optional
@@ -61,14 +61,14 @@ Answers with
     decoded: object or null  # optional
     # Every sheet of the parsed structure, in the order it declares them.
     sheets:  # optional
-      - # The sheet key values are stored under. A structure that declares no sheets
+      - # The sheet key the values sit under. A structure that declares no sheets
         # gets sDEF here, which the parse adds.
         sheet: string
         title: string
         description: string  # optional
         fields:
-          - # The name the value is stored under, which is what a Fluid template and
-            # a settings array read it by.
+          - # The name the value sits under, which is what a Fluid template and a
+            # settings array read it by.
             field: string
             # As the structure declares it, an LLL: reference included.
             label: string  # optional
@@ -92,8 +92,8 @@ Answers with
                 container: string
                 title: string  # optional
                 fields:
-                  - # The name the value is stored under, which is what a Fluid
-                    # template and a settings array read it by.
+                  - # The name the value sits under, which is what a Fluid template
+                    # and a settings array read it by.
                     field: string
                     # As the structure declares it, an LLL: reference included.
                     label: string  # optional
@@ -112,12 +112,12 @@ Answers with
                       - value: string
                         label: string
     # The exception the resolution threw, with its class and code. Empty where it
-    # did not throw. It is an answer rather than a breakage: an empty ds, a column
-    # that is not type=flex and a record type nothing is registered for all report
+    # did not throw. It is an answer rather than a breakage. An empty ds, a column
+    # that is not type=flex and a record type with no structure all report
     # themselves this way.
     failure: string  # optional
-    # What the TCA declares about this column, which is what a call that resolved
-    # nothing is retried with.
+    # What the TCA declares about this column, which is what you retry a call that
+    # resolved nothing with.
     declaration:  # optional
       # The TCA type of the column, empty where the table has no such column.
       type: string
@@ -125,12 +125,11 @@ Answers with
       # record types.
       recordTypeField: string
       # The data structure keys this column declares. Where the TCA holds an array
-      # of structures they are its keys; where it holds one they are "default" plus
+      # of structures they are its keys. Where it holds one they are "default" plus
       # every record type that overrides it.
       keys: [string]
-      # The columns ds_pointerField names, which is what the keys above are looked
-      # up by. Empty on TYPO3 14 and up, where the mechanism was replaced by
-      # columnsOverrides.
+      # The columns ds_pointerField names, which is what the keys above resolve by.
+      # Empty on TYPO3 14 and up, where columnsOverrides replaced the mechanism.
       pointerFields: [string]
       # Every type=flex column this table has, which is what to ask for instead
       # where the named one is not one.

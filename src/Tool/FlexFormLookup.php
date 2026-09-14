@@ -34,7 +34,7 @@ final class FlexFormLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Resolve one TCA field of type=flex to the data structure the installation would actually use: the identifier TYPO3 produces for it, that identifier decoded, and every sheet and field of the parsed structure with its label, type and items. This is what the backend form builds, not what the referenced FlexForm file says — the installation resolves it through its own FlexFormTools, so a data structure a listener replaced, a sheet held in a file of its own, the default sDEF sheet a structure without sheets gets, and the TCA migration and preparation each field goes through are all in the answer. Which structure applies can depend on the record, so pass the values that decide it in record: CType for a content element or a plugin, list_type beside it on TYPO3 12 and 13. Nothing loads a row — the record is emulated from exactly those values. Where the resolution throws, that is the answer: an empty ds, a column that is not type=flex, a record type no structure is registered for, and the exception comes back with the keys and the record fields that would have resolved. For the columns the table itself gets, ask typo3_schema_lookup; for what a content element registers, typo3_extension_describe.';
+        return 'Resolve one TCA field of type=flex to the data structure the installation uses. That is the identifier TYPO3 produces for it, that identifier decoded, and every sheet and field of the structure with label, type and items. This is what the backend form builds, not what the referenced FlexForm file says. The installation resolves it through its own FlexFormTools. So a data structure a listener replaced and a sheet in a file of its own are in the answer. So are the default sDEF sheet a structure without sheets gets, and the TCA migration and preparation each field goes through. Which structure applies can depend on the record, so pass the values that decide it in record. That is CType for a content element or a plugin, and list_type beside it on TYPO3 12 and 13. Nothing loads a row; the tool emulates the record from exactly those values. Where the resolution throws, that is the answer. An empty ds, a column that is not type=flex, and a record type with no structure are that case. The exception comes back with the keys and the record fields that would have resolved. For the columns the table itself gets, ask typo3_schema_lookup; for what a content element registers, typo3_extension_describe.';
     }
 
     public static function inputSchema(): array
@@ -47,7 +47,7 @@ final class FlexFormLookup extends ReadOnlyTool
                 'record' => [
                     'type' => 'object',
                     'additionalProperties' => ['type' => 'string'],
-                    'description' => 'Column values the emulated record carries, as column => value. Only what decides which data structure applies is needed: "CType" for a content element, and "list_type" beside it for a plugin on TYPO3 12 and 13. Omit it for a column that declares one structure and no record type.',
+                    'description' => 'Column values the emulated record carries, as column => value. Pass only what decides which data structure applies. That is "CType" for a content element, and "list_type" beside it for a plugin on TYPO3 12 and 13. Omit it for a column that declares one structure and no record type.',
                 ],
             ],
             'required' => ['table', 'field'],
@@ -57,7 +57,7 @@ final class FlexFormLookup extends ReadOnlyTool
     public static function outputSchema(): array
     {
         $field = [
-            'field' => Schema::string('The name the value is stored under, which is what a Fluid template and a settings array read it by.'),
+            'field' => Schema::string('The name the value sits under, which is what a Fluid template and a settings array read it by.'),
             'label' => Schema::string('As the structure declares it, an LLL: reference included.'),
             'description' => Schema::string(),
             'type' => Schema::string('The TCA type of this field, or "section" for a repeatable section.'),
@@ -77,7 +77,7 @@ final class FlexFormLookup extends ReadOnlyTool
             'identifier' => Schema::string('The data structure identifier as TYPO3 produced it: the JSON string that resolves to this structure without the record again. Empty where nothing resolved.'),
             'decoded' => ['type' => ['object', 'null'], 'description' => 'The same identifier as an object. The default carries type, tableName, fieldName and dataStructureKey; a listener may return another shape entirely.'],
             'sheets' => Schema::listOf(Schema::object([
-                'sheet' => Schema::string('The sheet key values are stored under. A structure that declares no sheets gets sDEF here, which the parse adds.'),
+                'sheet' => Schema::string('The sheet key the values sit under. A structure that declares no sheets gets sDEF here, which the parse adds.'),
                 'title' => Schema::string(),
                 'description' => Schema::string(),
                 'fields' => Schema::listOf(Schema::object($field + [
@@ -88,14 +88,14 @@ final class FlexFormLookup extends ReadOnlyTool
                     ], ['container', 'fields']), 'The container types of a section, empty for every other field.'),
                 ], ['field', 'type', 'containers'])),
             ], ['sheet', 'title', 'fields']), 'Every sheet of the parsed structure, in the order it declares them.'),
-            'failure' => Schema::string('The exception the resolution threw, with its class and code. Empty where it did not throw. It is an answer rather than a breakage: an empty ds, a column that is not type=flex and a record type nothing is registered for all report themselves this way.'),
+            'failure' => Schema::string('The exception the resolution threw, with its class and code. Empty where it did not throw. It is an answer rather than a breakage. An empty ds, a column that is not type=flex and a record type with no structure all report themselves this way.'),
             'declaration' => Schema::object([
                 'type' => Schema::string('The TCA type of the column, empty where the table has no such column.'),
                 'recordTypeField' => Schema::string('The column TYPO3 reads the record type from, empty where the table has no record types.'),
-                'keys' => Schema::listOf(Schema::string(), 'The data structure keys this column declares. Where the TCA holds an array of structures they are its keys; where it holds one they are "default" plus every record type that overrides it.'),
-                'pointerFields' => Schema::listOf(Schema::string(), 'The columns ds_pointerField names, which is what the keys above are looked up by. Empty on TYPO3 14 and up, where the mechanism was replaced by columnsOverrides.'),
+                'keys' => Schema::listOf(Schema::string(), 'The data structure keys this column declares. Where the TCA holds an array of structures they are its keys. Where it holds one they are "default" plus every record type that overrides it.'),
+                'pointerFields' => Schema::listOf(Schema::string(), 'The columns ds_pointerField names, which is what the keys above resolve by. Empty on TYPO3 14 and up, where columnsOverrides replaced the mechanism.'),
                 'flexFields' => Schema::listOf(Schema::string(), 'Every type=flex column this table has, which is what to ask for instead where the named one is not one.'),
-            ], ['type', 'recordTypeField', 'keys', 'pointerFields', 'flexFields'], 'What the TCA declares about this column, which is what a call that resolved nothing is retried with.'),
+            ], ['type', 'recordTypeField', 'keys', 'pointerFields', 'flexFields'], 'What the TCA declares about this column, which is what you retry a call that resolved nothing with.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
         ], ['table', 'field', 'resolved', 'identifier', 'sheets', 'failure', 'declaration', 'answeredBy'], ['table', 'field']);
     }

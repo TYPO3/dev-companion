@@ -8,14 +8,14 @@ heldBy:
 
 # R-PRJ-004 — An upgrade is answered as an order of operations
 
-**Upgrading an installation is answered as an order of operations rather than as
-a list of commands.**
+**An upgrade of an installation gets an order of operations as its answer rather
+than a list of commands.**
 
 The code, then the schema, then the wizards, then the caches, with what is
 irreversible named before the first step that is.
 
-The knowledge carries it and the guide composes it with what the project scope
-and the changelog lookup already know.
+The knowledge carries it. The guide composes it with what the project scope and
+the changelog lookup already know.
 
 ## From
 

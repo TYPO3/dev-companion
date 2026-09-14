@@ -1,10 +1,8 @@
 # Project — the repository the caller is standing in
 
-What is answerable from the files of a project and its extensions, without a
-console and without a database, so it still answers on a fresh clone.
+What the files of a project and its extensions answer, without a console and without a database, so it still answers on a fresh clone.
 
-See [the requirements readme](../readme.md) for how an entry is written and
-when it is added.
+See [the requirements readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`R-PRJ-001`][R-PRJ-001] — The project is describable from its files alone · held
 - [`R-PRJ-002`][R-PRJ-002] — One unreadable site configuration costs that site and no other · held

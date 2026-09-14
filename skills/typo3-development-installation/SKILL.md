@@ -23,13 +23,13 @@ for either of those, and say which of the three came back.
 
 Then, before anything is created:
 
-- `typo3_server_scope` is discharged by the base's `typo3_project_describe`,
-  whatever it answered. What this step asks — whether an installation and a
-  console can be reached at all — is what that answer already states: whether
-  anything is installed below the repository it describes, and where it could
-  describe none, the cause it gives instead. The orientation tool is for a
-  caller who does not know whether this server can answer at all, which is not
-  this workflow's question.
+- The base's `typo3_project_describe` discharges `typo3_server_scope`, whatever
+  it answered. What this step asks — whether an installation and a console can
+  be reached at all — is what that answer already states: whether anything is
+  installed below the repository it describes, and where it could describe none,
+  the cause it gives instead. The orientation tool is for a caller who does not
+  know whether this server can answer at all, which is not this workflow's
+  question.
 - The calls in the base that read the installation are asked again once it
   exists. Asked before, they are unanswerable; asked after, they are what says
   the work succeeded.

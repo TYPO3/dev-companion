@@ -191,7 +191,7 @@ final class SkillTest extends TestCase
      * construct rather than a wording, and why a routing is the first mention
      * outside one (`D-SKL-055`).
      */
-    private const DISCHARGE = '` is discharged by';
+    private const DISCHARGE = ' discharges `';
 
     /**
      * Which tool each skill discharges, kept beside the routings because that
@@ -3452,7 +3452,8 @@ final class SkillTest extends TestCase
      * has what the orientation would add, while `ROUTING_SKILLS` went on naming
      * the tool and was satisfied by the very sentence telling the caller to skip
      * it. What separates the two is the construct and not the prose around it: a
-     * discharge names what answers instead, in the words `DISCHARGE` carries,
+     * discharge names what answers instead, in the words `DISCHARGE` carries
+     * — the active form since `D-DOC-070`, "X discharges `Y`" —
      * and a routing is any other mention — `D-SKL-055`.
      */
     #[Decision('D-ANS-083')]
@@ -3468,7 +3469,7 @@ final class SkillTest extends TestCase
             // discharge nobody recorded is one the routing assertion can still
             // be satisfied by, and a recorded one nobody wrote is a routing
             // this test would then hold out of the skill for no reason.
-            preg_match_all('/`(typo3_\w+)' . preg_quote(self::DISCHARGE, '/') . '/', $body, $matches);
+            preg_match_all('/' . preg_quote(self::DISCHARGE, '/') . '(typo3_\w+)`/', $body, $matches);
             self::assertSame(
                 $discharged,
                 array_values(array_unique($matches[1])),
@@ -4162,9 +4163,9 @@ final class SkillTest extends TestCase
         );
 
         $flat = self::flat($skill);
-        $verified = strpos($flat, 'implementation is verified');
+        $verified = strpos($flat, 'you have verified the implementation');
         $stop = strpos($flat, 'stop this workflow');
-        $activate = strpos($flat, 'invoke `typo3-extension-documentation` before editing documentation');
+        $activate = strpos($flat, 'Invoke `typo3-extension-documentation` before you edit documentation');
         self::assertNotFalse($verified);
         self::assertNotFalse($stop);
         self::assertNotFalse($activate);
@@ -4771,7 +4772,7 @@ final class SkillTest extends TestCase
     {
         $at = strpos($body, $tool);
         while ($at !== false) {
-            if (!str_starts_with(substr($body, $at + strlen($tool)), self::DISCHARGE)) {
+            if (!str_ends_with(substr($body, 0, $at), self::DISCHARGE)) {
                 return $at;
             }
             $at = strpos($body, $tool, $at + 1);

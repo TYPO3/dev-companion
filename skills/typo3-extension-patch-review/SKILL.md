@@ -31,9 +31,9 @@ of them here is one that cannot be corrected.
 
 The constraint the package declares for the core is the axis every answer below
 turns on: the installation the review runs against supplies one point in it, and
-a finding established there is established for that point.
-`typo3_project_describe` is discharged by the base's first step, whose answer
-already carries that constraint and the commands this repository declares.
+a finding established there is established for that point. The base's first step
+discharges `typo3_project_describe`, because its answer already carries that
+constraint and the commands this repository declares.
 
 ## Whether the change is right where it lands
 

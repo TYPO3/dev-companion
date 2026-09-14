@@ -27,15 +27,14 @@ property of the repository in front of you and of the majors it declares.
    frontend below.
 6. Commit the rebuilt artefacts together with the source that produced them.
 
-`typo3_project_describe` is discharged by the first step: it reports the
-manifests this repository keeps — at the root, and one directory down where the
-build sits there — the commands each of them declares with the manifest they
-came from, whether a command reports or changes, and the Node that the manifest,
-the pinned version, the CI workflow and the container each state, with the
-disagreements between them named. Run the commands as it reported them. An
-invocation rewritten from habit runs the build in the wrong directory or on a
-Node that CI does not use, and both of those surface as a diff nobody can
-explain.
+The first step discharges `typo3_project_describe`: it reports the manifests
+this repository keeps — at the root, and one directory down where the build sits
+there — the commands each of them declares with the manifest they came from,
+whether a command reports or changes, and the Node that the manifest, the pinned
+version, the CI workflow and the container each state, with the disagreements
+between them named. Run the commands as it reported them. An invocation
+rewritten from habit runs the build in the wrong directory or on a Node that CI
+does not use, and both of those surface as a diff nobody can explain.
 
 **A pin is read against the release current on the day.** That step reports what
 each source states and none of them says whether it is still current, so

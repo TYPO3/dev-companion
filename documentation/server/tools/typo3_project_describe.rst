@@ -4,22 +4,23 @@
 ==========================
 
 Describe the repository this server was started in and the TYPO3 installation it
-has made. It answers: the TYPO3 and PHP constraints, with the floor the
-installed core requires and how the PHP numbers stand to each other; whether the
-install is what composer.lock names; the extensions that are its own rather than
-TYPO3's; the sites it configures and the sets each depends on; the commands
-composer.json and every package.json declare, each marked check, change or
-unknown, and whether their interpreter clears the PHP bound the install wrote;
-the environment it runs in, with its PHP, hooks and pull recipes; which Node its
-npm commands run on; its patched dependencies; and the guides this server
-carries. Read from files alone — no console, no database — so it answers on a
-fresh clone as well. Before composer install has run, installed says so and four
-fields wait for it: typo3Version, corePhpConstraint, installedPhpBound and
-extensions. Call it first, before booting the project and before recommending or
-running a check. A check this repository does not declare does not exist here,
-and the ones marked check are what a task told not to change files may run. What
-one of the extensions it lists registers — its tables, content elements, backend
-modules and icons — is typo3_extension_describe. Answers from: packages.
+has made. It answers the TYPO3 and PHP constraints, with the floor the installed
+core requires and how the PHP numbers stand to each other. It says whether the
+install is what composer.lock names. It lists the extensions that are its own
+rather than TYPO3's, and the sites it configures with the sets each depends on.
+It lists the commands composer.json and every package.json declare, each marked
+check, change or unknown. It says whether their interpreter clears the PHP bound
+the install wrote. It describes the environment it runs in, with its PHP, hooks
+and pull recipes, and which Node its npm commands run on. It lists its patched
+dependencies and the guides this server carries. Read from files alone — no
+console, no database — so it answers on a fresh clone as well. Before composer
+install has run, installed says so and four fields wait for it: typo3Version,
+corePhpConstraint, installedPhpBound and extensions. Call it first, before
+booting the project and before recommending or running a check. A check this
+repository does not declare does not exist here. The ones marked check are what
+a task told not to change files may run. What one of the extensions it lists
+registers — its tables, content elements, backend modules and icons — is
+typo3_extension_describe. Answers from: packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -64,7 +65,7 @@ Answers with
       # composer.lock names is installed at that version, so a failure here is not a
       # stale install. differs: packages says which of them are not, and the install
       # is behind or ahead of the lock. not-installed: there is a lock and no
-      # Composer metadata below the vendor directory to hold it against, so the
+      # Composer metadata below the vendor directory to hold it against. So the
       # packages it names are not on disk. no-lock: this root has no composer.lock,
       # so nothing states which versions it fixed.
       state: string
@@ -96,8 +97,8 @@ Answers with
     # composer/platform_check.php below the vendor directory this project declares.
     # The one number here that is not a declaration: composer install writes it over
     # every package it installed, and the autoloader includes it. So an interpreter
-    # under it aborts there before any command's own tool starts, which the commands
-    # list, marking what each one does to the sources, says nothing about. No
+    # under it aborts there before any command's own tool starts. The commands list
+    # marks what each one does to the sources and says nothing about that. No
     # manifest field carries it, and a fixer required for development alone raises
     # it above everything this project itself declares. Null means no bound:
     # Composer leaves the file out where nothing requires a PHP version and deletes
@@ -139,9 +140,9 @@ Answers with
       # its own version at. Null where the install bounds nothing.
       bound: string or null
       # One of: below, same, above, null. Where the PHP environment.php states sits
-      # against bound — the only one of these three that says whether a command
-      # runs at all rather than what it would run on. below: every command in the
-      # list below aborts in Composer's platform check before its own tool starts,
+      # against bound. It is the only one of these three that says whether a command
+      # runs at all rather than what it runs on. below: every command in the list
+      # below aborts in Composer's platform check before its own tool starts,
       # whatever runs says about it. The check then has to be run somewhere else.
       # same or above: nothing in that file stops them. Null where there is no bound
       # to clear, or no environment stating the version that would clear it. Where
@@ -178,15 +179,15 @@ Answers with
       # Build/.nvmrc beside the manifest there. Null where nvmrc is.
       nvmrcIn: string or null
       # The Node the environment states, which for DDEV is nodejs_version. Null is
-      # not "none": a project that states none gets the default of the installed
-      # DDEV, which is not in these files and changes from one release to the next.
-      # Also null where the environment is not DDEV, or where there is no
+      # not "none". A project that states none gets the default of the installed
+      # DDEV. That default is not in these files and changes from one release to the
+      # next. Also null where the environment is not DDEV, or where there is no
       # environment at all.
       environment: string or null
       # Every actions/setup-node step below .github/workflows/, one entry per
-      # distinct statement rather than per job — a matrix of five jobs setting up
-      # the same version is one fact. Empty means no workflow here sets Node up, so
-      # nothing states which Node CI runs these commands on.
+      # distinct statement rather than per job. A matrix of five jobs on the same
+      # version is one fact. Empty means no workflow here sets Node up, so nothing
+      # states which Node CI runs these commands on.
       ci:
         - # The workflow file, relative to the project root.
           workflow: string
@@ -196,10 +197,10 @@ Answers with
           from: string
           # The value as the workflow writes it, empty where from is none.
           states: string
-          # The version that value names outright. Null where it does not: a ${{ }}
-          # expression, a matrix entry, a file to read it from, an lts alias, or a
-          # range that installs whatever is newest. Not resolved — the workflow is
-          # one file for you to read, and a resolved wrong number would carry this
+          # The version that value names outright. Null where it does not. That is a
+          # ${{ }} expression, a matrix entry, a file that names it, an lts alias,
+          # or a range that takes the newest. Not resolved — the workflow is one
+          # file for you to read, and a resolved wrong number would carry this
           # answer's authority.
           version: string or null
       # How those numbers stand to each other, in the same three words phpRelation
@@ -224,7 +225,7 @@ Answers with
         # sits against declared. Null where no environment states one.
         inEnvironment: string or null
         # The Node the workflows set up, where they all state the same one. Null
-        # where none states a version outright, or where they disagree — which of
+        # where none states a version outright, or where they disagree. Which of
         # them applies is then the workflow's own condition, and ci above carries
         # each statement.
         ci: string or null
@@ -235,8 +236,8 @@ Answers with
         inCi: string or null
     # The environment this repository configures to run itself in, read from that
     # environment's own files. Null means nothing here configures one that this
-    # server reads — .ddev/config.yaml and TYPO3_DEV_COMPANION_CONSOLE are what it
-    # reads — so the commands below run wherever the caller runs them.
+    # server reads, and it reads .ddev/config.yaml and TYPO3_DEV_COMPANION_CONSOLE.
+    # So the commands below run wherever the caller runs them.
     environment:  # optional
       # One of: ddev, override. ddev: the repository carries a .ddev/config.yaml.
       # override: nothing in the files says so, and TYPO3_DEV_COMPANION_CONSOLE
@@ -269,9 +270,8 @@ Answers with
       # its address on the container network are not in these files, and `ddev
       # describe -j` is what carries them. Empty where the environment is not DDEV.
       hostnames: [string]
-      # True when this server is already running inside that environment, so its
-      # shell is that environment and a declared command needs nothing in front of
-      # it.
+      # True when this server already runs inside that environment. Then its shell
+      # is that environment and a declared command needs nothing in front of it.
       entered: boolean
       # What this environment runs without being asked, from .ddev/config.yaml and
       # every .ddev/config.*.yaml beside it. The commands list is what a caller may
@@ -292,9 +292,9 @@ Answers with
           service: string or null
       # The pull and push recipes below .ddev/providers/ that this repository wrote,
       # which is where its database and files come from. DDEV writes its own recipes
-      # into every project and marks them #ddev-generated; those are left out,
-      # because they say what DDEV puts everywhere rather than what this project
-      # decided.
+      # into every project and marks them #ddev-generated. The list leaves those
+      # out, because they say what DDEV puts everywhere rather than what this
+      # project decided.
       providers:
         - # What to pass: "ddev pull <name>".
           name: string
@@ -379,18 +379,19 @@ Answers with
         # The command this repository's own contract runs this one through instead,
         # where it has one — the reason it is here rather than the declaration. A
         # core checkout answers it on every npm script, because the core drives them
-        # through Build/Scripts/runTests.sh, which supplies the PHP version and the
-        # database service that invoking npm directly does not, and its own
+        # through Build/Scripts/runTests.sh. That script supplies the PHP version
+        # and the database service a direct npm call does not, and the core's own
         # AGENTS.md forbids the direct route. Null everywhere else, which means the
         # declared command is the supported route.
         runThrough: string or null
     # Kinds of file this project's own packages ship that no declared command names
     # a checker for — "CSS", "PHP", "Sass", "TypeScript", "XLIFF". It says what is
     # not covered and never what to add: which standards a repository holds itself
-    # to are its own. Read off the checkers named in the declared bodies, so a tool
-    # this server does not know contributes no coverage and a kind may be listed
-    # that something unrecognised does check. JavaScript is never listed, because a
-    # .js a package ships is as often build output or a vendored library as source.
+    # to are its own. Read off the checkers named in the declared bodies. So a tool
+    # this server does not know contributes no coverage, and the list may name a
+    # kind that something unrecognised does check. JavaScript is never listed,
+    # because a .js a package ships is as often build output or a vendored library
+    # as source.
     uncheckedKinds: [string]  # optional
     # Patches from extra.patches. A patched package does not behave as its version
     # says.
@@ -402,11 +403,12 @@ Answers with
         # The patch file, relative to the project root.
         file: string
     # The whole procedures this server carries, named here because this is the call
-    # every task starts with. They are also served as typo3://guides resources, and
-    # a client that lists no resources renders none of them — four sessions in one
-    # week finished without learning they exist. Each is one typo3_rule_lookup call
-    # by documentId, which needs no resource list; a search over sections answers a
-    # question and never hands one of these over whole.
+    # every task starts with. This server also serves them as typo3://guides
+    # resources, and a client that lists no resources renders none of them. Four
+    # sessions in one week finished without any knowledge that they exist. Each is
+    # one typo3_rule_lookup call by documentId, which needs no resource list. A
+    # search over sections answers a question and never hands one of these over
+    # whole.
     guides:  # optional
       - # What typo3_rule_lookup takes as documentId to return the whole document.
         id: string

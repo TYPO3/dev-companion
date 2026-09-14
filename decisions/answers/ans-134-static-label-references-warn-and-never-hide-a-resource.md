@@ -10,8 +10,8 @@ coveredBy:
 
 # D-ANS-134 — Static label references warn and never hide a resource
 
-**A label resource with no static reference stays in `typo3_label_lookup` and is
-marked with a warning.**
+**A label resource with no static reference stays in `typo3_label_lookup` and
+carries a caveat.**
 
 ## Evidence
 
@@ -25,21 +25,21 @@ marked with a warning.**
   static scan can establish a reference it found and cannot establish that no
   runtime reference exists.
 
-Both core classes were read on TYPO3 main on 2026-09-01. The official Site
+A read covered both core classes on TYPO3 main on 2026-09-01. The official Site
 folder reference lists the supported files below `config/sites/<identifier>/`
-and names no XLF resource there, so a project-site XLF is reported as requiring
-an explicit reference.
+and names no XLF resource there. So the answer reports a project-site XLF as one
+that needs an explicit reference.
 
 ## Decided
 
 - Search PHP, YAML, TypoScript, TSconfig, Fluid, JavaScript, TypeScript, JSON
-  and XML files in the project and its installed TYPO3 packages for the exact
-  file reference or its translation domain.
+  and XML files in the project and its installed TYPO3 packages. Look for the
+  exact file reference or its translation domain.
 - Count the conventional site-set `labels.xlf` beside `config.yaml` as an
   implicit reference.
 - Report the paths that carry a reference and warn where the list is empty.
-- Keep an unreferenced resource in the results. Excluding it would turn an
-  incomplete static reading into a runtime claim.
+- Keep an unreferenced resource in the results. An exclusion would turn an
+  incomplete static read into a runtime claim.
 
 ## Assumed
 
@@ -50,7 +50,7 @@ an explicit reference.
 ## Wrong if
 
 - TYPO3 exposes a complete runtime usage graph for translation resources. Then
-  that graph should replace the static warning.
-- A reference can be established only by parsing each supported source language.
+  that graph should replace the static caveat.
+- Only a parser for each supported source language can establish a reference.
   Then plain containment produces enough false positives to mislead callers and
   the scan needs language-specific readers.

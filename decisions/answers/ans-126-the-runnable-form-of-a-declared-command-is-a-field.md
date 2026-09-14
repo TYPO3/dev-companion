@@ -9,12 +9,12 @@ coveredBy:
 
 # D-ANS-126 — The runnable form of a declared command is a field
 
-**`typo3_project_describe` says how each declared command is run from where the
-caller stands as data, rather than only in the prose above the list.**
+**`typo3_project_describe` says as data how to run each declared command from
+where the caller stands, rather than only in the prose above the list.**
 
 The prose has said it since 2026-08-04 and a session read past it, because the
-half it was reading was the payload. What the payload carries is the command as
-the manifest declares it, and the environment as a separate object.
+half it read was the payload. What the payload carries is the command as the
+manifest declares it, and the environment as a separate object.
 
 ## Evidence
 
@@ -26,39 +26,39 @@ the manifest declares it, and the environment as a separate object.
 - **The text already answers it.** `ProjectDescribe::whereTheyRun()` prints,
   directly above the command list, "They are run in the DDEV project this
   repository configures, not in the shell you have: `ddev composer <name>` for a
-  composer script, `ddev exec <command>` for the rest", and
-  `ProjectDescribe::startable()` warns where the caller's PHP is below the bound
-  — which is `D-ANS-086`, written for this same failure. Both are asserted by
-  `ProjectTest::theAnswerSaysWhatRunsTheProject`, and both landed before this
-  session ran.
+  composer script, `ddev exec <command>` for the rest".
+  `ProjectDescribe::startable()` warns where the caller's PHP is below the
+  bound, which is `D-ANS-086`, for this same failure.
+  `ProjectTest::theAnswerSaysWhatRunsTheProject` asserts both, and both landed
+  before this session ran.
 - **The report reads the payload.** It enumerates `commands`, `environment`,
-  `installedPhpBound` and `phpRelation` as fields and says the answer "never
+  `installedPhpBound` and `phpRelation` as fields. It says the answer "never
   said" what the prose says three lines above the list it quotes.
 - **In the payload the rule is in a description.** `commands[].command` declares
   "Where environment is not null, it is run inside that environment rather than
-  in the caller's shell" — which tells a reader of the schema what the value
-  means and leaves the value itself unrunnable.
-- **`AGENTS.md` decided this shape generally**: what is read as data lives where
-  data lives, and what is parsed out of prose is a regex somebody has to write
-  again.
+  in the caller's shell". That tells a reader of the schema what the value means
+  and leaves the value itself one nobody can run.
+- **`AGENTS.md` decided this shape in general.** What a reader takes as data
+  lives where data lives. What a reader parses out of prose is a regex somebody
+  has to write again.
 
 ## Decided
 
-- **One field per command**, carrying the command as it is run from where the
-  caller stands. `environment.entered` decides whether it is prefixed at all,
-  and the declaring manifest decides the prefix — `ddev composer <name>` for a
-  composer script, `ddev exec` for the rest, which are the two forms the prose
-  already names.
+- **One field per command**, with the command as the caller runs it from where
+  they stand. `environment.entered` decides whether it gets a prefix at all, and
+  the manifest that declares it decides the prefix. That is
+  `ddev composer <name>` for a composer script, `ddev exec` for the rest, which
+  are the two forms the prose already names.
 - **Queued.** It is a tool's declared schema, which the ladder keeps off the
-  spot whatever the judging run holds.
-- **The prose stays.** It carries why, and the field carries what to run; a
+  spot whatever the judgement run holds.
+- **The prose stays.** It carries why, and the field carries what to run. A
   field that replaced the sentence would leave the caller who runs it on the
   host with no reason for the failure.
-- **The report's second half is a separate step**, and it is a reading rather
-  than a shape: whether `ddev composer <script>` passes the stdout of a tool the
-  script wraps. Nothing here can establish it — it needs a DDEV project — and
-  writing it from the report would be a knowledge entry with a guess's
-  substance.
+- **The report's second half is a separate step**, and it is a read rather than
+  a shape. That is whether `ddev composer <script>` passes the stdout of a tool
+  the script wraps. Nothing here can establish it, because it needs a DDEV
+  project. An entry from the report alone would be a knowledge entry with a
+  guess's substance.
 
 ## Assumed
 
@@ -68,23 +68,22 @@ the manifest declares it, and the environment as a separate object.
 
 ## Wrong if
 
-- A repository declares a command that has to run on the host — one that calls
-  `ddev` itself, or a git hook — and the field prefixes it into something that
-  cannot work. Then the composition needs a condition, and the sentence was
-  carrying that ambiguity by being a sentence.
-- A client is reported acting on the prose, which would say the field pays for
-  what was already delivered.
+- A repository declares a command that has to run on the host, one that calls
+  `ddev` itself, or a git hook. The field's prefix turns it into something that
+  cannot work. Then the composition needs a condition, and the sentence carried
+  that ambiguity because it was a sentence.
+- A report shows a client that acts on the prose, which would say the field pays
+  for what already arrived.
 
 ## Since then
 
 Built the same day as the field, composed from the two things the answer already
-held. It is the declared command unchanged where nothing can be put in front of
-it, and both sides of the flag are asserted where the prose half was already
-held.
+held. It is the declared command as it is where nothing can go in front of it.
+Tests assert both sides of the flag where the prose half already had one.
 
-The report's second half was measured rather than left to the card: on a failing
-script the wrapper hands the caller exit code 1 and no stdout at all, folding
-stderr into its own error line, while the exec form passes both streams and the
+The report's second half got a measurement rather than a place on the card. On a
+script that fails the wrapper hands the caller exit code 1 and no stdout at all,
+with stderr in its own error line. The exec form passes both streams and the
 script's own code through. So the wrapper loses exactly the run whose output is
-the finding, and the field keeps it all the same, because it is what a script
-writing the manifest needs.
+the finding. The field keeps it all the same, because it is what a script that
+writes the manifest needs.

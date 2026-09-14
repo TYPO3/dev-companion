@@ -17,8 +17,8 @@ checkout, which is the authority on all of this.
 
 This is the changelog obligation per change type. It says which change types owe
 a changelog entry and which owe none. It says what the entry a review asks for
-has to be. A `BUGFIX` owes none, a `TASK` owes none, and the four types below
-are the whole list.
+has to be, which is the changelog half of review readiness. A `BUGFIX` owes
+none, a `TASK` owes none, and the four types below are the whole list.
 
 - The type is the first of four that describes the change. `Breaking` moves or
   removes core functionality that may break or affect third-party code.

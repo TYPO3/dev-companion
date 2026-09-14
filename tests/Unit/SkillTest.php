@@ -1798,8 +1798,8 @@ final class SkillTest extends TestCase
 
         // The general form, which is the part that transfers off this issue.
         self::assertStringContainsString(
-            'A reverted core fix becomes re-attemptable when the shared consumer that made it expensive has been '
-                . 'rebuilt, or when the caller set has shrunk to the one site the fix needs',
+            'A reverted core fix becomes re-attemptable when somebody has rebuilt the shared consumer that made it '
+                . 'expensive. It also does when the caller set has shrunk to the one site the fix needs',
             $skill,
         );
         // The trigger, read off the answer rather than out of the reading.
@@ -1849,14 +1849,14 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-issue-triage/SKILL.md',
         ));
 
-        self::assertStringContainsString('It has to be seen failing before it is believed', $skill);
+        self::assertStringContainsString('Watch it fail before you believe it', $skill);
         self::assertStringContainsString('A green that ran over no files is not a green.', $skill);
         self::assertStringContainsString(
             'confirm it inspected something — the count of tests or files it names',
             $skill,
             'the green is refused without what makes one real',
         );
-        self::assertStringContainsString('Once the change is committed, `git stash` measures nothing.', $skill);
+        self::assertStringContainsString('Once you commit the change, `git stash` measures nothing.', $skill);
     }
 
     /**
@@ -1883,7 +1883,7 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString(
-            '**A verdict that ends the issue carries the comment it is closed with.**',
+            '**A verdict that ends the issue carries the comment that closes it.**',
             $skill,
         );
         // The markup, because the answer's own form is markdown and the block

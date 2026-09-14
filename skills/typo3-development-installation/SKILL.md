@@ -73,7 +73,7 @@ answers** below.
   environment runs them whether or not they were read.
 - The versions that file pins — the container's own, the database, the Node —
   are read against the release current on the day, from where it is published,
-  and one behind it is a finding carrying the raise rather than a raise made
+  and one behind it is a finding that carries the raise rather than a raise made
   here. Booting is not upgrading, and what the installed TYPO3 requires is what
   speaks against one.
 - Read the repository's own instructions beside it. A project that ships a boot

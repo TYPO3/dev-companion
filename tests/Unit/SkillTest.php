@@ -2612,7 +2612,7 @@ final class SkillTest extends TestCase
             );
             // The raise is offered rather than taken, and the project's own
             // bound is what can refuse it.
-            self::assertStringContainsString('a finding carrying the raise', $body, $skill . ' raises rather than reports');
+            self::assertStringContainsString('a finding that carries the raise', $body, $skill . ' raises rather than reports');
             self::assertStringContainsString('speaks against', $body, $skill . ' names nothing that can refuse the raise');
         }
     }

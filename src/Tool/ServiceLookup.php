@@ -35,7 +35,7 @@ final class ServiceLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Find what the dependency injection container of the TYPO3 installation you are working in assembles: which class stands behind a service id or an interface, whether it is public, shared and autowired, the tags it carries, and what each of its constructor arguments is handed — as the service id that lands there, per position and after autowiring. Search by a substring of the id or the class, or ask for one exact tag to enumerate what registers into an extension point: event.listener, fluid.viewhelper, typo3.singleton, and the tags a package declares itself. It answers what this installation resolved rather than what a Services.yaml says, so a decoration, an override or an alias shows up as the class that is really injected. Nothing is instantiated to answer it.';
+        return 'Find what the dependency injection container of the TYPO3 installation you work in assembles. That is which class stands behind a service id or an interface, whether it is public, shared and autowired, and the tags it carries. It is what each of its constructor arguments gets: the service id that lands there, per position and after autowiring. Search by a part of the id or the class, or ask for one exact tag to enumerate what registers into an extension point. That is event.listener, fluid.viewhelper, typo3.singleton, and the tags a package declares itself. It answers what this installation resolved rather than what a Services.yaml says. So a decoration, an override or an alias shows up as the class the container injects. It instantiates nothing to answer.';
     }
 
     public static function inputSchema(): array
@@ -43,7 +43,7 @@ final class ServiceLookup extends ReadOnlyTool
         return [
             'type' => 'object',
             'properties' => [
-                'query' => ['type' => 'string', 'description' => 'A case-insensitive substring matched against the service id and the class, for example "PageRenderer" or "Imaging". Omit to ask by tag alone.'],
+                'query' => ['type' => 'string', 'description' => 'A case-insensitive part of the service id or the class, for example "PageRenderer" or "Imaging". Omit to ask by tag alone.'],
                 'tag' => ['type' => 'string', 'description' => 'One exact service tag, for example "event.listener". Omit to search by query alone.'],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => self::MAX_SERVICES, 'default' => 10, 'description' => 'Maximum services to return.'],
             ],
@@ -53,12 +53,12 @@ final class ServiceLookup extends ReadOnlyTool
     public static function outputSchema(): array
     {
         return Schema::installationAnswer([
-            'query' => Schema::nullableString('The substring asked for, null where none was.'),
+            'query' => Schema::nullableString('The part asked for, null where the call passed none.'),
             'tag' => Schema::nullableString('The tag asked for, null where none was.'),
-            'matchCount' => Schema::integer('Services matching before the limit. Zero is an answer: nothing this installation assembles carries that id, class or tag.'),
+            'matchCount' => Schema::integer('Services that match before the limit. Zero is an answer: nothing this installation assembles carries that id, class or tag.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
-            'definitionCount' => Schema::integer('Every service definition the container holds, which is what the match was made against.'),
-            'aliasCount' => Schema::integer('The aliases beside them, which are matched too.'),
+            'definitionCount' => Schema::integer('Every service definition the container holds, which is what the match ran against.'),
+            'aliasCount' => Schema::integer('The aliases beside them, which the match reads too.'),
             'compilationFailure' => Schema::string('Why the container did not assemble, empty where it did. A container that will not compile is the finding rather than the absence of one, and the message names the service and the argument.'),
             'services' => Schema::listOf(Schema::object([
                 'id' => Schema::string('The service id, which is the class name for nearly all of them.'),
@@ -68,12 +68,12 @@ final class ServiceLookup extends ReadOnlyTool
                 'shared' => ['type' => 'boolean', 'description' => 'True where every caller gets the same instance.'],
                 'autowired' => ['type' => 'boolean'],
                 'abstract' => ['type' => 'boolean'],
-                'synthetic' => ['type' => 'boolean', 'description' => 'True where the instance is set into the container at boot rather than built by it.'],
+                'synthetic' => ['type' => 'boolean', 'description' => 'True where the boot sets the instance into the container rather than the container builds it.'],
                 'tags' => Schema::listOf(Schema::string(), 'The tags it carries, which is what an extension point enumerates by.'),
                 'arguments' => Schema::listOf(Schema::object([
                     'position' => Schema::integer('The constructor position, counted from zero.'),
-                    'resolves' => Schema::string('The service id handed to it, or "value" where a configured value is passed instead of a service.'),
-                ], ['position', 'resolves']), 'What the constructor is handed, after autowiring. Empty where it takes nothing.'),
+                    'resolves' => Schema::string('The service id it gets, or "value" where it gets a configured value instead of a service.'),
+                ], ['position', 'resolves']), 'What the constructor gets, after autowiring. Empty where it takes nothing.'),
             ], ['id', 'class', 'aliasFor', 'public', 'shared', 'autowired', 'abstract', 'synthetic', 'tags', 'arguments'])),
         ], ['query', 'tag', 'matchCount', 'answeredBy', 'definitionCount', 'aliasCount', 'compilationFailure', 'services'], ['query', 'tag']);
     }

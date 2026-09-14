@@ -3,17 +3,17 @@
 ``typo3_service_lookup``
 ========================
 
-Find what the dependency injection container of the TYPO3 installation you are
-working in assembles: which class stands behind a service id or an interface,
-whether it is public, shared and autowired, the tags it carries, and what each
-of its constructor arguments is handed — as the service id that lands there, per
-position and after autowiring. Search by a substring of the id or the class, or
-ask for one exact tag to enumerate what registers into an extension point:
+Find what the dependency injection container of the TYPO3 installation you work
+in assembles. That is which class stands behind a service id or an interface,
+whether it is public, shared and autowired, and the tags it carries. It is what
+each of its constructor arguments gets: the service id that lands there, per
+position and after autowiring. Search by a part of the id or the class, or ask
+for one exact tag to enumerate what registers into an extension point. That is
 event.listener, fluid.viewhelper, typo3.singleton, and the tags a package
 declares itself. It answers what this installation resolved rather than what a
-Services.yaml says, so a decoration, an override or an alias shows up as the
-class that is really injected. Nothing is instantiated to answer it. Answers
-from: installation.
+Services.yaml says. So a decoration, an override or an alias shows up as the
+class the container injects. It instantiates nothing to answer. Answers from:
+installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -24,8 +24,8 @@ Takes
 
 .. code-block:: yaml
 
-    # A case-insensitive substring matched against the service id and the class, for
-    # example "PageRenderer" or "Imaging". Omit to ask by tag alone.
+    # A case-insensitive part of the service id or the class, for example
+    # "PageRenderer" or "Imaging". Omit to ask by tag alone.
     query: string  # optional
     # One exact service tag, for example "event.listener". Omit to search by query
     # alone.
@@ -38,19 +38,19 @@ Answers with
 
 .. code-block:: yaml
 
-    # The substring asked for, null where none was.
+    # The part asked for, null where the call passed none.
     query: string or null
     # The tag asked for, null where none was.
     tag: string or null
-    # Services matching before the limit. Zero is an answer: nothing this
+    # Services that match before the limit. Zero is an answer: nothing this
     # installation assembles carries that id, class or tag.
     matchCount: integer  # optional
     # One of: installation. installation: its assembled runtime state answered.
     answeredBy: string  # optional
-    # Every service definition the container holds, which is what the match was made
+    # Every service definition the container holds, which is what the match ran
     # against.
     definitionCount: integer  # optional
-    # The aliases beside them, which are matched too.
+    # The aliases beside them, which the match reads too.
     aliasCount: integer  # optional
     # Why the container did not assemble, empty where it did. A container that will
     # not compile is the finding rather than the absence of one, and the message
@@ -75,18 +75,17 @@ Answers with
         shared: boolean
         autowired: boolean
         abstract: boolean
-        # True where the instance is set into the container at boot rather than
-        # built by it.
+        # True where the boot sets the instance into the container rather than the
+        # container builds it.
         synthetic: boolean
         # The tags it carries, which is what an extension point enumerates by.
         tags: [string]
-        # What the constructor is handed, after autowiring. Empty where it takes
-        # nothing.
+        # What the constructor gets, after autowiring. Empty where it takes nothing.
         arguments:
           - # The constructor position, counted from zero.
             position: integer
-            # The service id handed to it, or "value" where a configured value is
-            # passed instead of a service.
+            # The service id it gets, or "value" where it gets a configured value
+            # instead of a service.
             resolves: string
     unsupported:  # optional
       # One of: no-installation, misconfigured, installation-not-answering.

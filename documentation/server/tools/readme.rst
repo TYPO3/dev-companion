@@ -220,7 +220,7 @@ at all in the state the machine is in.
         :action: Open reference
 
         Find what the dependency injection container of the TYPO3 installation
-        you are working in assembles.
+        you work in assembles.
 
     .. card:: :doc:`typo3_snapshot_scope <typo3_snapshot_scope>`
         :label: Scope

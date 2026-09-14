@@ -157,7 +157,7 @@ at all in the state the machine is in.
         :action: Open reference
 
         Validate or find icon identifiers in the TYPO3 backend icon registry of
-        the installation you are working in.
+        the installation you work in.
 
     .. card:: :doc:`typo3_label_lookup <typo3_label_lookup>`
         :label: Lookup

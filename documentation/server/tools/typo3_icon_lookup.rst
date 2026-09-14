@@ -4,19 +4,19 @@
 =====================
 
 Validate or find icon identifiers in the TYPO3 backend icon registry of the
-installation you are working in. Pass identifiers to confirm several at once —
-each comes back registered or not, in one call, which is what to use when you
-already read them out of a template; pass query to search for one by name or by
-what it means. It is read from the running installation, so what a package
-registers in a loop or from ext_localconf.php is in the answer as well as what
-its Configuration/Icons.php declares; where the installation cannot be booted —
-no console, or a checkout with no configuration yet — the T3Icons set, the
-package registration files and the flag images are read instead, answeredBy says
-'packages', and the answer states what that leaves out. Identifiers spell shapes
-rather than intents, so concept words are mapped: "warning" finds
-actions-exclamation-triangle. Backend only: the identifiers are resolved by
-IconFactory and rendered by <core:icon>, and a frontend template can use
-neither. Answers from: installation, packages.
+installation you work in. Pass identifiers to confirm several at once. Each
+comes back registered or not, in one call, which is what to use when you already
+read them out of a template. Pass query to search for one by name or by what it
+means. The answer comes from the booted installation. So what a package
+registers in a loop or from ext_localconf.php is in it, as well as what its
+Configuration/Icons.php declares. Where the installation cannot boot, with no
+console or no configuration yet, the tool reads the T3Icons set, the package
+registration files and the flag images instead. Then answeredBy says 'packages',
+and the answer states what that leaves out. Identifiers spell shapes rather than
+intents, so the search maps concept words: "warning" finds
+actions-exclamation-triangle. Backend only: IconFactory resolves the identifiers
+and <core:icon> renders them, and a frontend template can use neither. Answers
+from: installation, packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -32,8 +32,8 @@ Takes
     # "delete", or "warning". Omit to list the categories and concept words.
     query: string  # optional
     # Complete identifiers to check in one call, for example ["actions-open",
-    # "actions-cog"]. Each is answered registered or not on its own, with no ranking
-    # behind the ones that are — that is what to pass when you already read the
+    # "actions-cog"]. Each gets registered or not as its own answer, with no rank
+    # behind the ones that are. That is what to pass when you already read the
     # identifiers out of a template and only need them confirmed. A miss still
     # carries suggestions.
     identifiers: [string]  # optional
@@ -46,8 +46,9 @@ Answers with
 .. code-block:: yaml
 
     query: string
-    # For a complete identifier, 1 only when that exact identifier is registered and
-    # otherwise 0. For a concept search, the number of matching icons.
+    # For a complete identifier, 1 only when the registry holds that exact
+    # identifier and otherwise 0. For a concept search, the number of icons that
+    # match.
     matchCount: integer  # optional
     # Related identifiers returned beside an identifier validation. The
     # actions-/content- usage prefix alone never makes an icon a suggestion.
@@ -66,20 +67,20 @@ Answers with
         category: string
         # The identifier this one is an alias of.
         aliasOf: string or null
-        # Where it is registered: t3icons, flags, or the
+        # What registers it: t3icons, flags, or the
         # EXT:<key>/Configuration/Icons.php that declares it.
         source: string
         # Query terms it matched.
         matched: integer  # optional
         score: integer  # optional
         why: [string]  # optional
-    # One entry per identifier passed in, in that order. Returned when identifiers
-    # were given.
+    # One entry per identifier passed in, in that order. Returned when the call
+    # passed identifiers.
     validated:  # optional
       - # As it was passed.
         identifier: string
-        # Whether this exact identifier is registered. False is the answer, not an
-        # empty result.
+        # Whether the registry holds this exact identifier. False is the answer, not
+        # an empty result.
         registered: boolean
         category: string
         # The identifier this one is an alias of.
@@ -88,29 +89,29 @@ Answers with
         source: string
         # What this identifier is already the icon of in this installation, as
         # "tt_content.CType=<value>". Registered says the identifier resolves; this
-        # says whose picture it is, which is the question a caller borrowing one is
-        # actually asking. Empty means nothing binds it here — or that the
-        # installation did not answer, which answeredBy is what says.
+        # says whose picture it is, which is the question a caller who borrows one
+        # asks. Empty means nothing binds it here — or that the installation did
+        # not answer, which answeredBy is what says.
         usedBy: [string]
         # Related identifiers, for a miss only. A registered identifier carries
         # none, because its neighbours are not an answer to it.
         suggestions: [string]
-    # What each word of the query reached on its own, so a list matched entirely on
-    # one of them is not read as an answer to all of them. Zero is a word no
-    # registered identifier carries, and a concept word that maps to no shape
-    # reaches nothing here even where the icon exists under another name. Answered
-    # for a concept query, and empty for an identifier validation and where no query
-    # was given.
+    # What each word of the query reached on its own. So a list that matched on one
+    # of them does not read as an answer to all of them. Zero is a word no
+    # registered identifier carries. A concept word that maps to no shape reaches
+    # nothing here even where the icon exists under another name. Answered for a
+    # concept query, and empty for an identifier validation and where the call
+    # passed no query.
     terms:  # optional
       - # The word, lowercased as the search used it.
         term: string
         matchCount: integer
-    # Returned when no query was given.
+    # Returned when the call passed no query.
     categories: [string]  # optional
-    # Concept words that map to a shape. Returned when no query was given.
+    # Concept words that map to a shape. Returned when the call passed no query.
     concepts: [string]  # optional
-    # Where these identifiers may be used: the backend registry, not frontend
-    # rendering. Carried by every answered lookup.
+    # Where these identifiers work: the backend registry, not the frontend render.
+    # Carried by every answered lookup.
     scope: string  # optional
     unsupported:  # optional
       # One of: no-installation, misconfigured, installation-not-answering.

@@ -56,7 +56,7 @@ final class IconLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Validate or find icon identifiers in the TYPO3 backend icon registry of the installation you are working in. Pass identifiers to confirm several at once — each comes back registered or not, in one call, which is what to use when you already read them out of a template; pass query to search for one by name or by what it means. It is read from the running installation, so what a package registers in a loop or from ext_localconf.php is in the answer as well as what its Configuration/Icons.php declares; where the installation cannot be booted — no console, or a checkout with no configuration yet — the T3Icons set, the package registration files and the flag images are read instead, answeredBy says \'packages\', and the answer states what that leaves out. Identifiers spell shapes rather than intents, so concept words are mapped: "warning" finds actions-exclamation-triangle. Backend only: the identifiers are resolved by IconFactory and rendered by <core:icon>, and a frontend template can use neither.';
+        return 'Validate or find icon identifiers in the TYPO3 backend icon registry of the installation you work in. Pass identifiers to confirm several at once. Each comes back registered or not, in one call, which is what to use when you already read them out of a template. Pass query to search for one by name or by what it means. The answer comes from the booted installation. So what a package registers in a loop or from ext_localconf.php is in it, as well as what its Configuration/Icons.php declares. Where the installation cannot boot, with no console or no configuration yet, the tool reads the T3Icons set, the package registration files and the flag images instead. Then answeredBy says \'packages\', and the answer states what that leaves out. Identifiers spell shapes rather than intents, so the search maps concept words: "warning" finds actions-exclamation-triangle. Backend only: IconFactory resolves the identifiers and <core:icon> renders them, and a frontend template can use neither.';
     }
 
     public static function inputSchema(): array
@@ -65,7 +65,7 @@ final class IconLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'query' => ['type' => 'string', 'description' => 'Identifier, identifier fragment, or concept, for example "actions-open", "delete", or "warning". Omit to list the categories and concept words.'],
-                'identifiers' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Complete identifiers to check in one call, for example ["actions-open", "actions-cog"]. Each is answered registered or not on its own, with no ranking behind the ones that are — that is what to pass when you already read the identifiers out of a template and only need them confirmed. A miss still carries suggestions.'],
+                'identifiers' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Complete identifiers to check in one call, for example ["actions-open", "actions-cog"]. Each gets registered or not as its own answer, with no rank behind the ones that are. That is what to pass when you already read the identifiers out of a template and only need them confirmed. A miss still carries suggestions.'],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 100, 'default' => 40, 'description' => 'Maximum number of identifiers to return.'],
             ],
         ];
@@ -75,7 +75,7 @@ final class IconLookup extends ReadOnlyTool
     {
         return Schema::installationAnswer([
             'query' => Schema::string(),
-            'matchCount' => Schema::integer('For a complete identifier, 1 only when that exact identifier is registered and otherwise 0. For a concept search, the number of matching icons.'),
+            'matchCount' => Schema::integer('For a complete identifier, 1 only when the registry holds that exact identifier and otherwise 0. For a concept search, the number of icons that match.'),
             'suggestionCount' => Schema::integer('Related identifiers returned beside an identifier validation. The actions-/content- usage prefix alone never makes an icon a suggestion.'),
             'exactMatch' => ['type' => 'boolean', 'description' => 'Whether the query was a registered identifier. False for a query shaped like one that is not registered — the listed icons are then suggestions, not the answer.'],
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
@@ -83,24 +83,24 @@ final class IconLookup extends ReadOnlyTool
                 'identifier' => Schema::string(),
                 'category' => Schema::string(),
                 'aliasOf' => Schema::nullableString('The identifier this one is an alias of.'),
-                'source' => Schema::string('Where it is registered: t3icons, flags, or the EXT:<key>/Configuration/Icons.php that declares it.'),
+                'source' => Schema::string('What registers it: t3icons, flags, or the EXT:<key>/Configuration/Icons.php that declares it.'),
                 'matched' => Schema::integer('Query terms it matched.'),
                 'score' => Schema::integer(),
                 'why' => Schema::listOf(Schema::string()),
             ], ['identifier', 'category', 'aliasOf', 'source'])),
             'validated' => Schema::listOf(Schema::object([
                 'identifier' => Schema::string('As it was passed.'),
-                'registered' => ['type' => 'boolean', 'description' => 'Whether this exact identifier is registered. False is the answer, not an empty result.'],
+                'registered' => ['type' => 'boolean', 'description' => 'Whether the registry holds this exact identifier. False is the answer, not an empty result.'],
                 'category' => Schema::string(),
                 'aliasOf' => Schema::nullableString('The identifier this one is an alias of.'),
                 'source' => Schema::string('Where it is registered. Empty where it is not.'),
-                'usedBy' => Schema::listOf(Schema::string(), 'What this identifier is already the icon of in this installation, as "tt_content.CType=<value>". Registered says the identifier resolves; this says whose picture it is, which is the question a caller borrowing one is actually asking. Empty means nothing binds it here — or that the installation did not answer, which answeredBy is what says.'),
+                'usedBy' => Schema::listOf(Schema::string(), 'What this identifier is already the icon of in this installation, as "tt_content.CType=<value>". Registered says the identifier resolves; this says whose picture it is, which is the question a caller who borrows one asks. Empty means nothing binds it here — or that the installation did not answer, which answeredBy is what says.'),
                 'suggestions' => Schema::listOf(Schema::string(), 'Related identifiers, for a miss only. A registered identifier carries none, because its neighbours are not an answer to it.'),
-            ], ['identifier', 'registered', 'category', 'aliasOf', 'source', 'usedBy', 'suggestions']), 'One entry per identifier passed in, in that order. Returned when identifiers were given.'),
-            'terms' => Schema::termCounts('What each word of the query reached on its own, so a list matched entirely on one of them is not read as an answer to all of them. Zero is a word no registered identifier carries, and a concept word that maps to no shape reaches nothing here even where the icon exists under another name. Answered for a concept query, and empty for an identifier validation and where no query was given.'),
-            'categories' => Schema::listOf(Schema::string(), 'Returned when no query was given.'),
-            'concepts' => Schema::listOf(Schema::string(), 'Concept words that map to a shape. Returned when no query was given.'),
-            'scope' => Schema::string('Where these identifiers may be used: the backend registry, not frontend rendering. Carried by every answered lookup.'),
+            ], ['identifier', 'registered', 'category', 'aliasOf', 'source', 'usedBy', 'suggestions']), 'One entry per identifier passed in, in that order. Returned when the call passed identifiers.'),
+            'terms' => Schema::termCounts('What each word of the query reached on its own. So a list that matched on one of them does not read as an answer to all of them. Zero is a word no registered identifier carries. A concept word that maps to no shape reaches nothing here even where the icon exists under another name. Answered for a concept query, and empty for an identifier validation and where the call passed no query.'),
+            'categories' => Schema::listOf(Schema::string(), 'Returned when the call passed no query.'),
+            'concepts' => Schema::listOf(Schema::string(), 'Concept words that map to a shape. Returned when the call passed no query.'),
+            'scope' => Schema::string('Where these identifiers work: the backend registry, not the frontend render. Carried by every answered lookup.'),
         ], ['query', 'matchCount', 'suggestionCount', 'exactMatch', 'answeredBy', 'icons'], ['query']);
     }
 

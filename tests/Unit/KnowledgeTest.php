@@ -1522,7 +1522,7 @@ final class KnowledgeTest extends TestCase
             $body,
         );
         self::assertStringContainsString(
-            'Demanding one of a `BUGFIX` that changes none of the three is a review defect of its own',
+            'A review that demands one of a `BUGFIX` that changes none of the three has a defect of its own',
             $body,
         );
         // The condition the refusal used to carry was `removes nothing public`,
@@ -1590,7 +1590,7 @@ final class KnowledgeTest extends TestCase
         $changelog = (string) preg_replace('/\s+/', ' ', Documents::read('core/contribution/changelog'));
 
         self::assertStringContainsString(
-            'Demanding one of a `BUGFIX` that changes none of the three is a',
+            'A review that demands one of a `BUGFIX` that changes none of the three has a',
             $changelog,
             'the changelog page states the obligation without the demand it refuses',
         );
@@ -1649,10 +1649,8 @@ final class KnowledgeTest extends TestCase
             'targetVersion' => '15.0',
         ]);
 
-        self::assertSame(
-            ['core/contribution/commit-messages', 'The Trailers A Core Commit Carries'],
-            [$result->data['matches'][0]['documentId'] ?? null, $result->data['matches'][0]['heading'] ?? null],
-        );
+        self::assertSame('core/contribution/commit-messages', $result->data['matches'][0]['documentId'] ?? null);
+        self::assertContains('The Trailers A Core Commit Carries', $result->data['matchedHeadings']);
 
         // Unwrapped, since each of them crosses a line break.
         $body = (string) preg_replace('/\s+/', ' ', Documents::read('core/contribution/commit-messages'));
@@ -1929,8 +1927,10 @@ final class KnowledgeTest extends TestCase
      * document about drawing one made that word reach six sections — which is
      * the corpus taking a thin match away rather than the floor failing.
      *
-     * The STE rewrite of the condition page (`D-DOC-070`) took "signed-in" out
-     * of it, so that thin match is gone and the cut spans two documents.
+     * The STE rewrite (`D-DOC-070`) took "signed-in" out of the two testing
+     * pages, so the thin matches are gone and the reported query concentrates
+     * on the commit-messages page: two sections, one page, handed over. The
+     * cut this test holds is now `xdebug` alone.
      *
      * What the floor costs, measured over `Documents::topics()` on 2026-08-24
      * at `targetVersion=15.0`: of the corpus's 103 subjects, 25 reach one page
@@ -1946,21 +1946,12 @@ final class KnowledgeTest extends TestCase
             'targetVersion' => '15.0',
         ]);
 
-        self::assertSame([], $reported->data['matchedHeadings'], 'a page is handed over on the reported query');
         self::assertSame(
-            [
-                'The Trailers A Core Commit Carries',
-                'What It Does Not Prove',
-                'What The Commit Hook Writes',
-                'What to Capture, and Why Not the Templates',
-            ],
-            array_column($reported->data['matches'], 'heading'),
+            ['The Trailers A Core Commit Carries', 'What The Commit Hook Writes'],
+            $reported->data['matchedHeadings'],
+            'two sections of one page match, so the page is handed over',
         );
-        self::assertStringNotContainsString(
-            Documents::read('any/testing/proving-a-condition'),
-            $reported->text,
-            'a page is pushed on the evidence of one word',
-        );
+        self::assertStringContainsString(Documents::read('core/contribution/commit-messages'), $reported->text);
 
         $thin = Registry::call('typo3_rule_lookup', [
             'query' => 'xdebug',

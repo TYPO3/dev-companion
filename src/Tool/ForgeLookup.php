@@ -66,7 +66,7 @@ final class ForgeLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Reads the TYPO3 issue tracker at forge.typo3.org through the bot protection the core\'s own AGENTS.md warns a hand-written request about. It tells a tracker that did not answer from a search that matched nothing. Read it before writing a patch. Three ways in, one per call. issue reads one issue whole: the report, the comments that decided it, the issues and review changes it names, and whether the code it cites is still shipped here. query finds the other issues describing the same thing, which the relations of one issue carry only where somebody linked them. backlog enumerates the core project\'s unresolved issues without a number or a wording: oldest filed, longest untouched or newest. Narrow it by tracker, area, date and person, widen it with status, and breakdown answers how a large set is distributed instead of a page of it. A miss is an answer. An issue that does not exist is answered as such, and words matching nothing are counted one word at a time — which is not that nobody reported it. A query reaches only text somebody actually wrote, so an issue whose description is empty is reachable by its subject alone, and a wording the code never uses reaches it from nowhere. That is why "has anybody attempted this before" is asked of typo3_gerrit_lookup by repository path: the change comes back whatever it was called, and the issue with it, off the trailers its commit message carries. The patch for an issue on review.typo3.org is typo3_gerrit_lookup. Reading only, and no credential: commenting, assigning and closing stay yours.';
+        return 'Reads the TYPO3 issue tracker at forge.typo3.org through the bot protection the core\'s own AGENTS.md warns a hand-written request about. It tells a tracker that did not answer from a search that matched nothing. Read it before you write a patch. Three ways in, one per call. issue reads one issue whole: the report, the comments that decided it, and the issues and review changes it names. It says whether an installed package still ships the code the report cites. query finds the other issues that describe the same thing, which the relations of one issue carry only where somebody linked them. backlog enumerates the core project\'s unresolved issues without a number or a wording: oldest filed, longest untouched or newest. Narrow it by tracker, area, date and person, and widen it with status. breakdown answers how a large set spreads instead of a page of it. A miss is an answer. An issue that does not exist gets that answer. Words that match nothing get a count one word at a time, which does not say that nobody reported it. A query reaches only text somebody wrote. So an issue whose description is empty is reachable by its subject alone, and a wording the code never uses reaches it from nowhere. That is why "has anybody attempted this before" goes to typo3_gerrit_lookup by repository path. The change comes back whatever its name, and the issue with it, off the trailers its commit message carries. The patch for an issue on review.typo3.org is typo3_gerrit_lookup. This tool reads only, with no credential: you comment, assign and close yourself.';
     }
 
     public static function inputSchema(): array
@@ -77,33 +77,33 @@ final class ForgeLookup extends ReadOnlyTool
                 'issue' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Forge issue number, with or without the leading #, for example "110348". Reads that one issue whole, comments included — narrow those with notes when reading many. Not with query or backlog.',
+                    'description' => 'Forge issue number, with or without the # in front, for example "110348". Reads that one issue whole, comments included; narrow those with notes when you read many. Not with query or backlog.',
                 ],
                 'query' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Words to search the tracker for, for example "image cache busting". A full-text search over subject, description and comments, which is how a duplicate nobody has linked is found at all. Every word has to be in the same issue. A term nobody would have written — a method name, a class — empties the answer whatever else is in it. Pass the two or three words that name the subject rather than every word you have; a miss counts what each word reaches on its own, in terms. Nothing is ranked and one wording does not settle it: ask again in the reporter\'s words as well as your own. A person\'s name matches only where somebody wrote it, so pass it as reportedBy or assignedTo with backlog instead. Not with issue or backlog.',
+                    'description' => 'Words to search the tracker for, for example "image cache busting". A full-text search over subject, description and comments, which is the one way to find a duplicate nobody has linked. Every word has to be in the same issue. A term nobody would have written — a method name, a class — empties the answer whatever else is in it. Pass the two or three words that name the subject rather than every word you have. A miss counts what each word reaches on its own, in terms. Nothing ranks the hits, and one wording does not settle it: ask again in the reporter\'s words as well as your own. A person\'s name matches only where somebody wrote it, so pass it as reportedBy or assignedTo with backlog instead. Not with issue or backlog.',
                 ],
                 'backlog' => [
                     'type' => 'string',
                     'enum' => ['oldest', 'stale', 'newest'],
-                    'description' => 'Enumerate the core project\'s unresolved issues instead of reading one or matching words. "oldest" orders them by when they were filed, "stale" by how long nobody has touched them, "newest" by what came in last. The date it was filed describes the report, and how long it has gone untouched describes the attention it got. An issue that is both is the candidate a triage is looking for. "stale" with tracker and category is where a triage of the backlog starts. "newest" is where a duplicate of a defect somebody has just found is. A wording reaches only the issues worded that way, so reading the subjects filed since it could have been is what settles a negative. Pair it with createdSince, which turns that end into a set the count says you have seen the whole of. Unresolved is the tracker\'s own set of open statuses: New, Accepted, Under Review, Needs Feedback, On Hold and Postponed. tracker, category, createdBefore, createdSince, updatedBefore, reportedBy, assignedTo, involving and breakdown narrow this way in and no other; status widens it. Not with issue or query.',
+                    'description' => 'Enumerate the core project\'s unresolved issues instead of a read of one or a match of words. "oldest" orders them by filing date, "stale" by how long nobody has touched them, "newest" by what came in last. The filing date describes the report, and how long it has gone untouched describes the attention it got. An issue that is both is the candidate a triage looks for. "stale" with tracker and category is where a triage of the backlog starts. "newest" is where a duplicate of a defect somebody has just found is. A wording reaches only the issues with that wording. So a read of the subjects filed since the defect could have appeared is what settles a negative. Pair it with createdSince, which turns that end into a set the count says you have seen the whole of. Unresolved is the tracker\'s own set of open statuses: New, Accepted, Under Review, Needs Feedback, On Hold and Postponed. tracker, category, createdBefore, createdSince, updatedBefore, reportedBy, assignedTo, involving and breakdown narrow this way in and no other; status widens it. Not with issue or query.',
                 ],
                 'notes' => [
                     'type' => 'string',
                     'enum' => ['all', 'people'],
                     'default' => 'all',
-                    'description' => 'Which comments come back with an issue. "all" is every one of them, which is what reading a single issue wants. The comments are where the decision is, and the one that settles it is regularly the last of sixteen. "people" drops the patch-set pings a review bot wrote, which on some issues is half the volume. The change numbers in them are lifted into reviews either way, so nothing is lost. Ask for it when reading candidates one issue at a time, where the cost of ten such reads decides whether the comments get read at all. How many were dropped is answered whichever you ask for. Narrows issue and is ignored by query and backlog.',
+                    'description' => 'Which comments come back with an issue. "all" is every one of them, which is what a read of a single issue wants. The comments are where the decision is, and the one that settles it is regularly the last of sixteen. "people" drops the patch-set pings a review bot wrote, which on some issues is half the volume. reviews carries the change numbers in them either way, so nothing is lost. Ask for it when you read candidates one issue at a time. There the cost of ten such reads decides whether you read the comments at all. The answer says how many it dropped whichever you ask for. Narrows issue; query and backlog ignore it.',
                 ],
                 'tracker' => [
                     'type' => 'string',
                     'enum' => ['Bug', 'Feature', 'Major Feature', 'Support', 'Task', 'Story', 'Suggestion', 'Impediment', 'Epic', 'Work Package', 'Topic'],
-                    'description' => 'Only issues filed under this tracker, for example "Bug". Worth setting before reading a set: an old Bug claims something is broken today, an old Feature that something was wanted once.',
+                    'description' => 'Only issues filed under this tracker, for example "Bug". Set it before you read a set: an old Bug claims something is broken today, an old Feature that somebody wanted something once.',
                 ],
                 'category' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only issues the core files under this area, in your own words: "rte", "backend ui", "workspaces", "fluid". Matched against the project\'s own category names one word at a time, so a half-remembered name reaches the right area. A word naming several — "backend" — selects all of them and says which. It is the way in for "are there known bugs in the RTE" and "the oldest issues in the backend UI". It answers "has this already been reported" too: enumerate the area and read the subjects. A system extension key resolves to the area that extension\'s issues are filed under where the key does not name one itself — "impexp" reads "Import/Export (T3D)". A word naming none or several is answered with every area the project has. categoriesUsed carries the tracker\'s own spelling of the areas reached, which a report filed by hand has to carry. Pass "*" for the list of areas on its own, which reads no issues.',
+                    'description' => 'Only issues the core files under this area, in your own words: "rte", "backend ui", "workspaces", "fluid". Matched against the project\'s own category names one word at a time, so a half-remembered name reaches the right area. A word that names several — "backend" — selects all of them and says which. It is the way in for "are there known bugs in the RTE" and "the oldest issues in the backend UI". It answers "has somebody already reported this" too: enumerate the area and read the subjects. Where a system extension key names no area itself, it resolves to the area that holds that extension\'s issues. "impexp" reads "Import/Export (T3D)". A word that names none or several gets every area the project has as its answer. categoriesUsed carries the tracker\'s own spelling of the areas reached, which a report filed by hand has to carry. Pass "*" for the list of areas on its own, which reads no issues.',
                 ],
                 'createdBefore' => [
                     'type' => 'string',
@@ -113,45 +113,45 @@ final class ForgeLookup extends ReadOnlyTool
                 'createdSince' => [
                     'type' => 'string',
                     'pattern' => '^\d{4}-\d{2}-\d{2}$',
-                    'description' => 'Only issues filed on or after this day, as YYYY-MM-DD. It is what makes the recent end a set instead of a page. limit stops at 50 against thousands of open issues, so a day to count from brings the page and the set together; total says whether it did. It also reaches where category cannot: an issue filed under no Category is in no area at all, and the report you are looking for is regularly one of those.',
+                    'description' => 'Only issues filed on or after this day, as YYYY-MM-DD. It is what makes the recent end a set instead of a page. limit stops at 50 against thousands of open issues, so a day to count from brings the page and the set together. total says whether it did. It also reaches where category cannot. An issue filed under no Category is in no area at all, and the report you look for is regularly one of those.',
                 ],
                 'updatedBefore' => [
                     'type' => 'string',
                     'pattern' => '^\d{4}-\d{2}-\d{2}$',
-                    'description' => 'Only issues nobody has touched since this day, as YYYY-MM-DD. It finds the report everybody has walked past, which age alone does not: an issue filed in 2009 and commented on last month is being worked.',
+                    'description' => 'Only issues nobody has touched since this day, as YYYY-MM-DD. It finds the report everybody has walked past, which age alone does not. An issue filed in 2009 and commented on last month is in work.',
                 ],
                 'reportedBy' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only issues this person filed, by their name rather than a tracker id: "Frank Nägler", or "nägler". This answers "what has this person reported", which query cannot: it matches text, and a name in the text is as often somebody else writing it. The name is resolved against the core project\'s members and, where they hold no membership, against the people the issues carrying that name were filed by or handed to. A name reaching several people resolves to none of them and the answer says which they were. Pair it with status "all" for everything somebody has ever filed, and with breakdown for the shape of it rather than the first page. involving is the union of this and assignedTo.',
+                    'description' => 'Only issues this person filed, by their name rather than a tracker id: "Frank Nägler", or "nägler". This answers "what has this person reported", which query cannot. query matches text, and a name in the text is as often somebody else who wrote it. The tool resolves the name against the core project\'s members. Where they hold no membership, it resolves it against the reporters and assignees of the issues that carry the name. A name that reaches several people resolves to none of them, and the answer says which they were. Pair it with status "all" for everything somebody has ever filed, and with breakdown for the shape of it rather than the first page. involving is the union of this and assignedTo.',
                 ],
                 'assignedTo' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only issues this person holds, by their name, resolved the same way as reportedBy. What somebody reported is their history; what they are assigned is what they are on the hook for. An assignee on an old issue is usually who last touched it rather than who is working on it. Passing both of these is the issues somebody filed and holds; involving is their union.',
+                    'description' => 'Only issues this person holds, by their name, resolved the same way as reportedBy. What somebody reported is their history; what they hold is what they are on the hook for. An assignee on an old issue is usually who last touched it rather than who works on it. Both of these together are the issues somebody filed and holds; involving is their union.',
                 ],
                 'involving' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only issues this person is on either side of — what they filed and what they hold, as one set. The tracker cannot be asked this: it ANDs its filters, so reportedBy and assignedTo together mean filed AND holds, a set nobody wants. Passed instead of those two, not beside them. Every row says which side it came in on.',
+                    'description' => 'Only issues this person is on either side of — what they filed and what they hold, as one set. The tracker cannot answer this: it ANDs its filters, so reportedBy and assignedTo together mean filed AND holds, a set nobody wants. Pass it instead of those two, not beside them. Every row says which side it came in on.',
                 ],
                 'breakdown' => [
                     'type' => 'boolean',
                     'default' => false,
-                    'description' => 'Answer how the matched set is distributed instead of the rows of it: how many issues per status, per tracker, per area and per year. For a person this is the answer rather than a summary of it. "621 filed, 617 closed, 4 open, concentrated 2014-2016, mostly Backend User Interface" says what a page of 50 out of 621 cannot. Ask for it whenever the question is what somebody or some area has been about, and for the rows once it is which issue to read. It costs a read per hundred issues and stops at a thousand, saying so where it did.',
+                    'description' => 'Answer how the matched set spreads instead of the rows of it: how many issues per status, per tracker, per area and per year. For a person this is the answer rather than a summary of it. "621 filed, 617 closed, 4 open, concentrated 2014-2016, mostly Backend User Interface" says what a page of 50 out of 621 cannot. Ask for it whenever the question is what somebody or some area has been about. Ask for the rows once the question is which issue to read. It costs a read per hundred issues and stops at a thousand, and it says so where it did.',
                 ],
                 'status' => [
                     'type' => 'string',
                     'enum' => ['open', 'closed', 'all'],
                     'default' => 'open',
-                    'description' => 'Which statuses the enumeration covers. "open", the default, is the tracker\'s own unresolved set; "closed" is what it has marked closed, Rejected included; "all" is both. A question about a person needs "all": what somebody has filed over the years is mostly closed, and an enumeration hiding those answers 4 where the number is 621.',
+                    'description' => 'Which statuses the enumeration covers. "open", the default, is the tracker\'s own unresolved set; "closed" is what it has marked closed, Rejected included; "all" is both. A question about a person needs "all". What somebody has filed over the years is mostly closed, and an enumeration that hides those answers 4 where the number is 621.',
                 ],
                 'limit' => [
                     'type' => 'integer',
                     'minimum' => 1,
                     'maximum' => 50,
                     'default' => 15,
-                    'description' => 'How many entries come back. A search answers with at most 25 whatever is asked for: a set that has to be paged through is answered by other words rather than by more of these. Nothing reaches past 50 and there is no offset; a matched set larger than that is answered by breakdown.',
+                    'description' => 'How many entries come back. A search answers with at most 25 whatever you ask for. Other words reach a set that needs a page, and more of these do not. Nothing reaches past 50 and there is no offset; breakdown answers a matched set larger than that.',
                 ],
             ],
             'oneOf' => [
@@ -167,33 +167,33 @@ final class ForgeLookup extends ReadOnlyTool
         return Schema::object([
             'status' => Schema::answerStatus(),
             'source' => Schema::string('The tracker the answer came from.'),
-            'url' => Schema::string('What was read, so the same question can be asked again by hand. A union is two reads and both are named, separated by a space.'),
-            'query' => Schema::string('The words the tracker was searched for, so a set that looks too narrow can be asked again in other words. Empty where an issue was read by number and where the open issues were enumerated.'),
-            'placedAgainst' => Schema::string('The TYPO3 version of the installation the names in cites were placed against, so a verdict about a symbol is read at a version. Empty where no installation was found, and then every cited name is unplaced — a statement about this machine and not about the code.'),
-            'total' => Schema::integer('How many issues matched in total, of which results carries at most limit. Where the two differ the answer is a page and not the set, and what reaches more of it is a narrower filter rather than a bigger limit. Zero where an issue was read by number.'),
-            'terms' => Schema::termCounts('What each word of the query reaches on its own, which says which of them emptied the answer. Two class names look alike from here and the tracker may know only one, so this is read rather than guessed at. Asked on a miss alone, one read per word, which is why a query holds more than one word and no more than a few. Empty otherwise, and short of the query where the tracker stopped answering partway through it.'),
-            'categories' => Schema::listOf(Schema::string(), 'Every area the core files its issues under, read from the project itself. A category word matching none or several is corrected from the answer rather than from a second call. Answered where category was passed and did not resolve to exactly one area, and where it was passed as "*". Empty otherwise, which says nothing about the project: the project administers the vocabulary and a copy here would go stale.'),
-            'categoriesUsed' => Schema::listOf(Schema::string(), 'The categories the category word resolved to, in the tracker\'s own spelling. Empty where none was asked for. Empty too where the word matched none, which is answered as no issues and is a statement about the word rather than about the backlog.'),
+            'url' => Schema::string('What the call read, so you can ask the same question again by hand. A union is two reads, and both stand here with a space between them.'),
+            'query' => Schema::string('The words the search sent to the tracker, so you can ask a set that looks too narrow again in other words. Empty on a read by number and on an enumeration.'),
+            'placedAgainst' => Schema::string('The TYPO3 version of the installation the tool placed the names in cites against, so a verdict about a symbol has a version. Empty where the tool found no installation, and then every cited name is unplaced: a statement about this machine and not about the code.'),
+            'total' => Schema::integer('How many issues matched in total, of which results carries at most limit. Where the two differ the answer is a page and not the set. A narrower filter reaches more of it, and a bigger limit does not. Zero on a read by number.'),
+            'terms' => Schema::termCounts('What each word of the query reaches on its own, which says which of them emptied the answer. Two class names look alike from here and the tracker may know only one, so the tool reads this rather than guesses. It asks on a miss alone, one read per word. That is why a query holds more than one word and no more than a few. Empty otherwise, and short of the query where the tracker stopped its answers partway through it.'),
+            'categories' => Schema::listOf(Schema::string(), 'Every area the core files its issues under, read from the project itself. You correct a category word that matches none or several from the answer rather than from a second call. Answered where category did not resolve to exactly one area, and where it is "*". Empty otherwise, which says nothing about the project: the project administers the vocabulary and a copy here goes stale.'),
+            'categoriesUsed' => Schema::listOf(Schema::string(), 'The categories the category word resolved to, in the tracker\'s own spelling. Empty where the call named none. Empty too where the word matched none, which answers no issues and is a statement about the word rather than about the backlog.'),
             'people' => Schema::listOf(Schema::object([
                 'filter' => ['type' => 'string', 'enum' => ['reportedBy', 'assignedTo', 'involving'], 'description' => 'Which argument the entry answers for.'],
-                'asked' => Schema::string('The name that was passed, as it was passed.'),
-                'name' => Schema::string('The person it resolved to, in the tracker\'s own spelling. Empty where it resolved to nobody, which is answered as no issues and is a statement about the name rather than about the backlog.'),
+                'asked' => Schema::string('The name the call passed, as it passed it.'),
+                'name' => Schema::string('The person it resolved to, in the tracker\'s own spelling. Empty where it resolved to nobody, which answers no issues and is a statement about the name rather than about the backlog.'),
                 'id' => Schema::integer('The tracker\'s own user id, which is what it filters by and the only thing it takes. Zero where the name resolved to nobody.'),
-                'candidates' => Schema::listOf(Schema::string(), 'The people the name could have meant, where it reached more than one. A name reaching two resolves to neither and nothing is read, because merging two people into one backlog is a wrong answer nothing says is wrong. Ask again with one of these. Empty where the name resolved, and where nothing here carries it — a name this server cannot place rather than a person who has filed nothing.'),
-            ], ['filter', 'asked', 'name', 'id', 'candidates']), 'What reportedBy, assignedTo and involving resolved to, one entry per name the call carried, in that order. A name is resolved against the core project\'s members and, where they hold no membership, against the people the issues carrying that name were filed by or handed to. Empty where no name was passed.'),
+                'candidates' => Schema::listOf(Schema::string(), 'The people the name could have meant, where it reached more than one. A name that reaches two resolves to neither and the tool reads nothing. Two people merged into one backlog is a wrong answer nothing says is wrong. Ask again with one of these. Empty where the name resolved, and where nothing here carries it. That is a name this server cannot place rather than a person who has filed nothing.'),
+            ], ['filter', 'asked', 'name', 'id', 'candidates']), 'What reportedBy, assignedTo and involving resolved to, one entry per name the call carried, in that order. The tool resolves a name against the core project\'s members. Where they hold no membership, it resolves it against the reporters and assignees of the issues that carry the name. Empty where the call passed no name.'),
             'breakdown' => [
                 'type' => ['object', 'null'],
-                'description' => 'How the matched set is distributed, where breakdown was asked for. Null otherwise, and null where nothing matched.',
+                'description' => 'How the matched set spreads, where breakdown is true. Null otherwise, and null where nothing matched.',
                 'properties' => [
-                    'read' => Schema::integer('How many issues the counts are over. Equal to total where the whole set was read.'),
+                    'read' => Schema::integer('How many issues the counts are over. Equal to total where the read covered the whole set.'),
                     'complete' => ['type' => 'boolean', 'description' => 'Whether that is the whole matched set. False where the bound cut the read. Then the counts are over the first issues read in the order asked for, the oldest or the longest untouched. That is a shape of that end and not of the set. Narrow the filters for the whole one.'],
                     'counts' => Schema::listOf(Schema::object([
-                        'dimension' => ['type' => 'string', 'enum' => ['status', 'tracker', 'category', 'year'], 'description' => 'What the issues are counted by. year is the year they were filed in.'],
+                        'dimension' => ['type' => 'string', 'enum' => ['status', 'tracker', 'category', 'year'], 'description' => 'The dimension the count runs over. year is the filing year.'],
                         'buckets' => Schema::listOf(Schema::object([
                             'name' => Schema::string('The value, or "none" for the issues that carry none. An issue filed under no area is a bucket rather than a row left out, so the buckets add up to read.'),
                             'count' => Schema::integer(),
                         ], ['name', 'count']), 'The largest buckets first, and by name where two are the same size.'),
-                        'withheldBuckets' => Schema::integer('How many further buckets this dimension has, zero where it has none. The tail of an area count is subsystems holding one issue each.'),
+                        'withheldBuckets' => Schema::integer('How many further buckets this dimension has, zero where it has none. The tail of an area count is subsystems with one issue each.'),
                         'withheldCount' => Schema::integer('How many issues those hold together, so the listed buckets and this add up to read.'),
                     ], ['dimension', 'buckets', 'withheldBuckets', 'withheldCount']), 'One entry per dimension, always the four.'),
                 ],
@@ -201,34 +201,34 @@ final class ForgeLookup extends ReadOnlyTool
             ],
             'issue' => [
                 'type' => ['object', 'null'],
-                'description' => 'The issue, where status says answered and a number was asked for. Null otherwise.',
+                'description' => 'The issue, where status says answered and the call named a number. Null otherwise.',
                 'properties' => [
                     'id' => Schema::integer(),
                     'subject' => Schema::string(),
                     'status' => Schema::string('New, Accepted, Resolved, Closed, Rejected — the tracker\'s own word.'),
                     'tracker' => Schema::string('Bug, Feature, Task, Epic.'),
                     'priority' => Schema::string(),
-                    'assignedTo' => Schema::string('Who the tracker says holds this, empty where nobody does. An assignee is not a promise that somebody is working on it — on an issue nothing has moved on for years it is usually who last did.'),
-                    'targetVersion' => Schema::string('The release it is scheduled for, empty where none is set.'),
-                    'typo3Version' => Schema::string('The TYPO3 version it was reported against, which is not the version it still reproduces on.'),
+                    'assignedTo' => Schema::string('Who the tracker says holds this, empty where nobody does. An assignee is not a promise that somebody works on it. On an issue nothing has moved on for years it is usually who last did.'),
+                    'targetVersion' => Schema::string('The release the tracker schedules it for, empty where it names none.'),
+                    'typo3Version' => Schema::string('The TYPO3 version the report names, which is not the version it still reproduces on.'),
                     'phpVersion' => Schema::string(),
                     'createdOn' => Schema::string(),
                     'updatedOn' => Schema::string(),
                     'url' => Schema::string('Where a person reads it.'),
-                    'description' => Schema::string('The report as it was written, which is what the reporter saw and not what was decided.'),
-                    'relations' => Schema::listOf(self::relation(), 'Issues this one is filed against, which is where a duplicate, a blocker, and the issue a revert was filed under are named. Each carries its subject, so which of them is worth reading is decided from here rather than from one call each.'),
+                    'description' => Schema::string('The report as the reporter wrote it, which is what the reporter saw and not what the triage decided.'),
+                    'relations' => Schema::listOf(self::relation(), 'Issues the tracker relates this one to, which is where it names a duplicate, a blocker, and the issue of a revert. Each carries its subject, so you decide from here which of them is worth a read, rather than from one call each.'),
                     'mentioned' => Schema::listOf(Schema::object(
                         self::cited(),
                         array_keys(self::cited()),
-                    ), 'The issues the description and the comments cite and no relation carries, written as #NNNN or as a URL. A relation is somebody\'s triage; this is the writer\'s own claim about prior art, which on an old report is regularly load-bearing and regularly wrong. Read it before a patch is framed against it, and never pass this issue over as a duplicate on its strength. Only a number the tracker answered for is here, which keeps a version out of it. Empty where the texts cite nothing and where every citation is already a relation.'),
+                    ), 'The issues the description and the comments cite and no relation carries, written as #NNNN or as a URL. A relation is somebody\'s triage; this is the writer\'s own claim about prior art. On an old report that claim regularly carries the case and is regularly wrong. Read it before you frame a patch against it, and never pass this issue over as a duplicate on its strength. Only a number the tracker answered for is here, which keeps a version out of it. Empty where the texts cite nothing and where every citation is already a relation.'),
                     'reviews' => Schema::listOf(Schema::object(
                         self::knownReview(),
                         array_keys(self::knownReview()),
-                    ), 'Every change on review.typo3.org this issue is known to have, joined from two sources. One is the handles the description and the journal name, lifted out of the prose. The other is the changes whose commit message names the issue number, asked of the review server. Neither half contains the other, so an empty list means neither source has one. A change the prose named carries the patch set and the date of that prose, while the state beside it is the review server\'s. What a reviewer objected to is the argument on the change, which is a typo3_gerrit_lookup call. An ABANDONED is grounds to read that argument rather than to pass the issue over.'),
-                    'attachments' => Schema::listOf(self::attachment(), 'The files hanging off the issue. On a report about rendering these are usually screenshots and regularly where the evidence is: a comment made of !image.jpg! references reads as empty otherwise. Empty where the issue carries none.'),
+                    ), 'Every change on review.typo3.org the tool knows this issue to have, joined from two sources. One is the handles the description and the journal name, lifted out of the prose. The other is the changes whose commit message names the issue number, asked of the review server. Neither half contains the other, so an empty list means neither source has one. A change the prose named carries the patch set and the date of that prose, while the state beside it is the review server\'s. What a reviewer objected to is the argument on the change, which is a typo3_gerrit_lookup call. An ABANDONED is grounds to read that argument rather than to pass the issue over.'),
+                    'attachments' => Schema::listOf(self::attachment(), 'The files on the issue. On a report about a render these are usually screenshots and regularly where the evidence is. A comment made of !image.jpg! references reads as empty otherwise. Empty where the issue carries none.'),
                     'cites' => self::cites('Read from the subject, the description and every comment, which is where a reproduction regularly names the class the description never did.'),
                     'noteCount' => Schema::integer('How many comments the issue carries in total.'),
-                    'botNoteCount' => Schema::integer('How many of those a review bot wrote, which notes: "people" is what drops. Answered whichever way notes was asked. A journal full of patch-set pings answering zero here is the list of bot names gone stale, not an issue nobody pushed a patch for.'),
+                    'botNoteCount' => Schema::integer('How many of those a review bot wrote, which notes: "people" is what drops. Answered whichever value notes has. A journal full of patch-set pings that answers zero here means the list of bot names has gone stale, not that nobody pushed a patch.'),
                     'notes' => Schema::listOf(Schema::object([
                         'author' => Schema::string(),
                         'on' => Schema::string(),
@@ -242,20 +242,20 @@ final class ForgeLookup extends ReadOnlyTool
                 'subject' => Schema::string(),
                 'tracker' => Schema::string('Bug, Feature, Task, Epic.'),
                 'status' => Schema::string('Where it stands: New, Accepted, Under Review, Resolved, Closed, Rejected.'),
-                'category' => Schema::string('The area the core files it under, empty where none is set. A search hit is a title and carries none of the five fields below, so they are read for the whole page in one further call. Empty here can mean that call did not reach the tracker rather than that the issue has no area.'),
-                'reportedBy' => Schema::string('Who filed it. This is the dimension reportedBy selects on, and reading it off a set answers who a backlog is being reported by without a call per row.'),
+                'category' => Schema::string('The area the core files it under, empty where it names none. A search hit is a title and carries none of the five fields below, so one further call reads them for the whole page. Empty here can mean that call did not reach the tracker rather than that the issue has no area.'),
+                'reportedBy' => Schema::string('Who filed it. This is the dimension reportedBy selects on, and a read of it off a set answers who reports a backlog without a call per row.'),
                 'assignedTo' => Schema::string('Who the tracker says holds this, empty where nobody does. What it decides for a triage is whether the issue is free to take. On an old one it is usually who last touched it rather than who is on it.'),
                 'createdOn' => Schema::string('When it was filed.'),
                 'updatedOn' => Schema::string('When anything last moved on it, which is the measure of neglect rather than of age.'),
                 'url' => Schema::string('Where a person reads it.'),
-                'relations' => Schema::listOf(self::relation(), 'The issues this one is filed against, each with its subject, so a row that duplicates something already decided is seen without being read. Answered on an enumeration and empty on a search hit, where nothing asked for them.'),
-                'attachments' => Schema::listOf(self::attachment(), 'The files hanging off the issue, which on a report about rendering are usually where the evidence is. A report whose evidence is a screenshot is a different candidate to one whose evidence is prose. Answered on an enumeration and empty on a search hit, where nothing asked for them.'),
-                'cites' => self::cites('Read from the subject and the description, which is what the page carries. An enumerated row holds no comment, so a report that names its code only in one is answered here as citing nothing. Empty on a search hit, where it is not asked.'),
+                'relations' => Schema::listOf(self::relation(), 'The issues the tracker relates this one to, each with its subject, so a row that duplicates something already decided shows without a read. Answered on an enumeration and empty on a search hit, where nothing asked for them.'),
+                'attachments' => Schema::listOf(self::attachment(), 'The files on the issue, which on a report about a render are usually where the evidence is. A report whose evidence is a screenshot is a different candidate to one whose evidence is prose. Answered on an enumeration and empty on a search hit, where nothing asked for them.'),
+                'cites' => self::cites('Read from the subject and the description, which is what the page carries. An enumerated row holds no comment, so a report that names its code only in one cites nothing here. Empty on a search hit, where nothing asks for it.'),
                 'reviews' => Schema::listOf(Schema::object(
-                    Schema::changeReference('NEW while the change is open, MERGED once it landed, ABANDONED when it was given up — where it stood when the page was read. Empty where the review server named no state.'),
+                    Schema::changeReference('NEW while the change is open, MERGED once it landed, ABANDONED once somebody gave it up: where it stood at the read of the page. Empty where the review server named no state.'),
                     ['change', 'status', 'url'],
-                ), 'The changes whose commit message names this issue, asked of the review server in one query for the whole page, each with the state it is in. A state and not a verdict: what a reviewer objected to is the argument on the change, which is a typo3_gerrit_lookup call. An ABANDONED is grounds to read that argument rather than to pass the issue over — the approach can be the rejected part while the defect is real. Empty where nothing on the review server names the issue and where the review server did not answer, which this does not separate. Empty on a search hit too, where it is not asked.'),
-            ], ['issue', 'subject', 'tracker', 'status', 'category', 'reportedBy', 'assignedTo', 'createdOn', 'updatedOn', 'url', 'relations', 'attachments', 'cites', 'reviews']), 'The issues the query matched or the enumeration selected, in the tracker\'s own order — nothing here ranks them. An enumerated row also carries its relations, its attachments and its reviews: the three that say it was answered elsewhere or already attempted, without reading it whole. Empty where an issue was read by number.'),
+                ), 'The changes whose commit message names this issue, each with the state it is in. One query to the review server reads them for the whole page. A state and not a verdict: what a reviewer objected to is the argument on the change, which is a typo3_gerrit_lookup call. An ABANDONED says to read that argument rather than pass the issue over. The approach can be the rejected part while the defect is real. Empty where nothing on the review server names the issue and where the review server did not answer, which this does not separate. Empty on a search hit too, where nothing asks for it.'),
+            ], ['issue', 'subject', 'tracker', 'status', 'category', 'reportedBy', 'assignedTo', 'createdOn', 'updatedOn', 'url', 'relations', 'attachments', 'cites', 'reviews']), 'The issues the query matched or the enumeration selected, in the tracker\'s own order — nothing here ranks them. An enumerated row also carries its relations, its attachments and its reviews. Those three say whether somebody answered it elsewhere or already attempted it, without a read of the whole row. Empty on a read by number.'),
             'unavailable' => Schema::unavailable([
                 'source-not-answering' => 'the tracker did not answer this time.',
                 'source-not-parseable' => 'something answered with a page rather than with the API, which is what '
@@ -290,11 +290,11 @@ final class ForgeLookup extends ReadOnlyTool
      */
     private static function knownReview(): array
     {
-        return Schema::changeReference('NEW while the change is open, MERGED once it landed, ABANDONED when it was given up — where it stood when the review server was asked. Empty where it was not asked or named no state, which includes every change only the prose names.')
+        return Schema::changeReference('NEW while the change is open, MERGED once it landed, ABANDONED once somebody gave it up. That is where it stood at the call to the review server. Empty where the tool did not ask or the server named no state, which includes every change only the prose names.')
             + [
                 'changeId' => Schema::string('The Change-Id the commit message carries, empty where no note named one. typo3_gerrit_lookup takes this too, and it is what survives a rebase onto another branch.'),
                 'patchSet' => Schema::integer('The highest patch set a note mentioned, zero where none did. The review server may be further along.'),
-                'on' => Schema::string('When the last note naming this change was written, which is how old the reference is and not when the change last moved.'),
+                'on' => Schema::string('The date of the last note that names this change, which is how old the reference is and not when the change last moved.'),
             ];
     }
 
@@ -417,23 +417,23 @@ final class ForgeLookup extends ReadOnlyTool
     private static function cites(string $read): array
     {
         return Schema::listOf(Schema::object([
-            'name' => Schema::string('The class, or the path of the file, as the report names it: a namespace without its leading backslash, and a path from typo3/sysext/.'),
+            'name' => Schema::string('The class, or the path of the file, as the report names it: a namespace without the backslash in front, and a path from typo3/sysext/.'),
             'kind' => [
                 'type' => 'string',
                 'enum' => [CitedCode::QUALIFIED, CitedCode::UNQUALIFIED, CitedCode::FILE],
-                'description' => 'How the report named it. "qualified" is a class with its namespace, which places it without guessing. "unqualified" is a bare class name, placed by the name of its file. It can land on a package the report was never about, and one matching two packages names both. A bare name is taken only where the report marks it as code or an installed package ships one under it. A capitalised word is as often the label of a button. "file" is a path in the core tree, as a pasted stack trace writes it.',
+                'description' => 'How the report named it. "qualified" is a class with its namespace, which places it without a guess. "unqualified" is a bare class name, placed by the name of its file. It can land on a package the report was never about, and one that matches two packages names both. The tool takes a bare name only where the report marks it as code or an installed package ships one under it. A capitalised word is as often the label of a button. "file" is a path in the core tree, as a pasted stack trace writes it.',
             ],
-            'method' => Schema::string('The method the report names on that class, empty where it names none. A ::class and a ::CONSTANT are not one and are answered as the class alone.'),
+            'method' => Schema::string('The method the report names on that class, empty where it names none. A ::class and a ::CONSTANT are not one, and the answer carries the class alone.'),
             'state' => [
                 'type' => 'string',
                 'enum' => [CitedCode::SHIPPED, CitedCode::NOT_SHIPPED, CitedCode::UNPLACED],
-                'description' => '"shipped" is a name an installed package carries, the method included where one was named. "notShipped" is a name nothing installed carries: core having removed it and an extension you never installed look the same, and the report does not tell the two apart. Where in is filled it means the class stands and the method named on it does not. "unplaced" is a name this could not place at all: no installed package owns the namespace, or there is no installation to read here. Never read unplaced as gone.',
+                'description' => '"shipped" is a name an installed package carries, the method included where the report named one. "notShipped" is a name nothing installed carries. A name the core removed and one from an extension you never installed look the same, and the report does not tell the two apart. Where in has entries, the class stands and the method named on it does not. "unplaced" is a name the tool could not place at all: no installed package owns the namespace, or there is no installation to read here. Never read unplaced as gone.',
             ],
             'in' => Schema::listOf(Schema::object([
                 'extension' => Schema::string('The extension key of the package that carries it.'),
-                'path' => Schema::string('Where the file sits, from the installation root, so it is opened without being searched for.'),
-            ], ['extension', 'path']), 'Where it was found, one entry per package carrying it — several where a bare name matches more than one, and picking one of those is the caller\'s. Empty where it was not found and where nothing could place it.'),
-        ], ['name', 'kind', 'method', 'state', 'in']), 'The classes, methods and core files this report names, each with where it stands in the packages this installation ships. A stale issue\'s status is untouched by definition, so this is what says a 2015 report is about code rewritten since. Read it before opening the checkout, as where a symbol is rather than whether the defect reproduces. ' . $read . ' Empty where the text names none, which is the ordinary case for a report about a TCA key, a TypoScript path or a table column.');
+                'path' => Schema::string('Where the file sits, from the installation root, so you open it without a search.'),
+            ], ['extension', 'path']), 'Where the tool found it, one entry per package that carries it. Several where a bare name matches more than one, and the choice between those is the caller\'s. Empty where the tool found nothing and where nothing could place it.'),
+        ], ['name', 'kind', 'method', 'state', 'in']), 'The classes, methods and core files this report names, each with where it stands in the packages this installation ships. A stale issue\'s status has not moved by definition, so this is what says a 2015 report is about code rewritten since. Read it before you open the checkout, as where a symbol is rather than whether the defect reproduces. ' . $read . ' Empty where the text names none, which is the ordinary case for a report about a TCA key, a TypoScript path or a table column.');
     }
 
     /**
@@ -444,11 +444,11 @@ final class ForgeLookup extends ReadOnlyTool
     private static function attachment(): array
     {
         return Schema::object([
-            'filename' => Schema::string('The name the file was uploaded under, which is also how a comment refers to it: Redmine writes an inline image as !name.png! and says nothing else about it.'),
+            'filename' => Schema::string('The file name of the upload, which is also how a comment refers to it: Redmine writes an inline image as !name.png! and says nothing else about it.'),
             'contentType' => Schema::string('image/png, image/jpeg, text/plain.'),
             'size' => Schema::integer('Bytes.'),
-            'on' => Schema::string('When it was uploaded, which is what says which comment it belongs to.'),
-            'url' => Schema::string('Where the file itself is. It answers without a credential, and reading it is the caller\'s: nothing here fetches or transcribes one.'),
+            'on' => Schema::string('The date of the upload, which says which comment it belongs to.'),
+            'url' => Schema::string('Where the file itself is. It answers without a credential, and the read is the caller\'s: nothing here fetches or transcribes one.'),
         ], ['filename', 'contentType', 'size', 'on', 'url']);
     }
 

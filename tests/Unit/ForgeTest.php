@@ -1451,7 +1451,7 @@ final class ForgeTest extends TestCase
         $notes = ForgeLookup::inputSchema()['properties']['notes']['description'];
 
         self::assertStringContainsString('one issue at a time', $notes);
-        self::assertStringContainsString('Narrows issue and is ignored by query and backlog.', $notes);
+        self::assertStringContainsString('Narrows issue; query and backlog ignore it.', $notes);
     }
 
     /**

@@ -1,11 +1,8 @@
 # Guides — what a returned draft is worth
 
-A guide composes an answer that always exists, so what it may claim about that
-answer, and where it sends the caller next, is the whole of what makes it
-trustworthy.
+A guide composes an answer that always exists. So what it may claim about that answer, and where it sends the caller next, is the whole of what makes it trustworthy.
 
-See [the requirements readme](../readme.md) for how an entry is written and
-when it is added.
+See [the requirements readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`R-GUI-001`][R-GUI-001] — A guide's checks describe the draft it returned · held
 - [`R-GUI-002`][R-GUI-002] — The commit rules are available without the Gerrit trailers · held

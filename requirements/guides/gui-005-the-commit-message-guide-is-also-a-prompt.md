@@ -8,13 +8,13 @@ heldBy:
 
 # R-GUI-005 — The commit-message guide is also a prompt
 
-**The existing commit-message guide is also exposed as an MCP prompt, so a user
-can invoke it without first discovering the corresponding tool.**
+**The server exposes the commit-message guide as an MCP prompt too, so a user
+can invoke it without a search for the tool first.**
 
-The prompt delegates to the guide and does not maintain a second set of
-commit-message rules.
+The prompt delegates to the guide and keeps no second set of commit-message
+rules.
 
 ## From
 
-The SDK prompt primitive being unused while the most naturally user-invoked
-guide already existed (2026-07-30).
+The SDK prompt primitive stood unused while the guide a user invokes most
+readily already existed (2026-07-30).

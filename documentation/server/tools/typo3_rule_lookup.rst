@@ -4,19 +4,19 @@
 =====================
 
 Search the TYPO3 rules and procedures this server carries, by topic. The core
-contribution process is most of it: the commit message conventions, which
-branches take a patch today, the changelog entry each change type owes, the
-Gerrit push and amend workflow with both refspecs, and the notes beside
-runTests.sh. It answers outside a core checkout too — setting up an extension
-manual, PHPUnit in an extension, Playwright in a project — and there the
-core-only documents are withheld and named rather than dropped in silence. What
-comes back is the sections that matched, each naming the document it was cut
-from — or, where more than one of them is in one document, that document whole,
-because the rest of the page regularly answers the next thing. What the code
-itself has to look like — the convention at a path being changed, the idiom a
-subsystem is written in — is typo3_hint_lookup instead. Pass a documentId back
-instead of a query to read any page whole; it needs no resource list. Answers
-from: knowledge.
+contribution process is most of it. That is the commit message conventions,
+which branches take a patch today, and the changelog entry each change type
+owes. It is the Gerrit push and amend workflow with both refspecs, and the notes
+beside runTests.sh. It answers outside a core checkout too: the setup of an
+extension manual, PHPUnit in an extension, Playwright in a project. There the
+answer withholds the core-only documents and names them rather than drops them
+in silence. What comes back is the sections that matched, each with the document
+it comes from. Where more than one of them is in one document, that document
+comes back whole. The rest of the page regularly answers the next thing. What
+the code itself has to look like is typo3_hint_lookup instead: the convention at
+a path you change, the idiom a subsystem uses. Pass a documentId back instead of
+a query to read any page whole; it needs no resource list. Answers from:
+knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -27,20 +27,21 @@ Takes
 
 .. code-block:: yaml
 
-    # Topic to look up, in English, for example testing, review, deprecation, or
-    # code style. A call carries query or documentId, never both.
+    # Topic to look up, in English, for example tests, review, deprecation, or code
+    # style. A call carries query or documentId, never both.
     query: string  # optional
-    # One document to read whole instead of searching, named by the documentId a
-    # match carries — for example "core/contribution/commit-messages". Use it when
-    # a matched section came out of a document whose other sections may answer what
-    # the query did not: the whole page comes back, no search, no version filter. A
+    # One document to read whole instead of a search, named by the documentId a
+    # match carries, for example "core/contribution/commit-messages". Use it when a
+    # matched section came out of a document whose other sections may answer what
+    # the query did not. The whole page comes back, no search, no version filter. A
     # call carries query or documentId, never both.
     documentId: string  # optional
-    # The TYPO3 version the answer has to hold on, for example "13.4" or "14". A
-    # section bound to another major is left out. Defaults to every major this
-    # repository declares typo3/cms-core for, or to the installation this server was
-    # started in; where there is neither, every section comes back with the range it
-    # holds for. Ignored for documentId, which returns the document as written.
+    # The TYPO3 version the answer has to hold on, for example "13.4" or "14". The
+    # answer leaves out a section bound to another major. Defaults to every major
+    # this repository declares typo3/cms-core for, or to the installation this
+    # server started in. Where there is neither, every section comes back with the
+    # range it holds for. Ignored for documentId, which returns the document as
+    # written.
     targetVersion: string  # optional
 
 The call carries exactly one of these sets of arguments: ``query`` — or
@@ -99,10 +100,10 @@ Answers with
     # The headings the query matched, where more than one match was in one document
     # and the answer is that document whole rather than the excerpts. Empty on every
     # other answer, whose matches carry their own heading each. The text above a
-    # page's first heading is no heading and is not one of them; where it is one of
+    # page's first heading is no heading and is not one of them. Where it is one of
     # the matches, the answer names it in words.
     matchedHeadings: [string]
-    # Documents that matched and were left out because they answer for the core
+    # Documents that matched and stay out because they answer for the core
     # repository alone. Empty inside the core. Each is still readable in full as its
     # typo3://guides resource, which is the way to get one deliberately rather than
     # by accident.

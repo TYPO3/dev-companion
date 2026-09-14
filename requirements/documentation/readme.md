@@ -1,11 +1,8 @@
 # Documentation — what the live manuals answer
 
-The half of the corpus this server does not bundle. It is read from
-`docs.typo3.org` for the version the caller asked for, and it augments the
-bundled conventions rather than replacing them.
+The half of the corpus this server does not bundle. The server reads it from `docs.typo3.org` for the version the caller asked for, and it adds to the bundled conventions rather than replaces them.
 
-See [the requirements readme](../readme.md) for how an entry is written and
-when it is added.
+See [the requirements readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`R-DOC-001`][R-DOC-001] — The live manuals answer for the version they were asked for · held
 - [`R-DOC-002`][R-DOC-002] — A manual search says what it matched on · held

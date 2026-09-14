@@ -10,19 +10,19 @@ heldBy:
 
 # R-COD-001 — Every entrypoint is driven by a test that goes through it
 
-**Each binary in `bin/` is run as a subprocess by a test, and a new one is not
+**A test runs each binary in `bin/` as a subprocess, and a new one is not
 finished until it has one.**
 
 A unit test reaches a class at a time, and that is the half of a command it
-cannot see: which arguments dispatch to it, which autoloader finds it, and what
-it resolves the paths it reads from. A command can be held to every rule it has
-and still be unreachable.
+cannot see. That is which arguments dispatch to it, which autoloader finds it,
+and what it resolves the paths it reads from. A test can hold a command to every
+rule it has while nobody can reach the command.
 
 ## From
 
-Moving the upkeep into `src/Upkeep/` put its subjects one directory deeper, five
-of them resolved the repository root as `dirname(__DIR__, 2)` from their own
-file, and `bin/cli requirements:check` died on a path that no longer existed.
-All 483 tests stayed green, because none of them went through `bin/cli` — a
-smoke layer existed and covered the other binary alone. It was found by running
-the command by hand, one commit late (2026-08-01).
+The move of the upkeep into `src/Upkeep/` put its subjects one directory deeper.
+Five of them resolved the repository root as `dirname(__DIR__, 2)` from their
+own file, and `bin/cli requirements:check` died on a path that no longer
+existed. All 483 tests stayed green, because none of them went through
+`bin/cli`. A smoke layer existed and covered the other binary alone. A run of
+the command by hand found it, one commit late (2026-08-01).

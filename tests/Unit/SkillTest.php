@@ -3777,7 +3777,7 @@ final class SkillTest extends TestCase
 
         // It starts from the base's sweep and states only what it adds, so the
         // two scope calls that order already fixes appear nowhere here.
-        self::assertStringContainsString('starts from the result of that sweep rather than restating it', $skill);
+        self::assertStringContainsString('starts from the result of that sweep rather than restating it', self::flat($skill));
         self::assertStringNotContainsString('typo3_project_describe', $skill);
         self::assertStringNotContainsString('typo3_extension_describe', $skill);
 
@@ -3799,7 +3799,7 @@ final class SkillTest extends TestCase
         // is installed, so the target's own changes are documentation until the
         // installation is on it.
         self::assertStringContainsString(
-            'they do not know what the target major changed until the installation is on it',
+            'They do not know what the target major changed until the installation is on it',
             self::flat($skill),
         );
         self::assertStringContainsString('never from memory', $skill);
@@ -3813,8 +3813,8 @@ final class SkillTest extends TestCase
         // A range is resolved by the solver, and a matrix cell that nobody ran
         // or that will not resolve is a result rather than a gap in the report.
         self::assertMatchesRegularExpression('/Let the dependency solver answer, and quote what it printed/', $skill);
-        self::assertStringContainsString('as a result — it is the finding', $skill);
-        self::assertStringContainsString('named as unrun', $skill);
+        self::assertStringContainsString('as a result — it is the finding', self::flat($skill));
+        self::assertStringContainsString('as unrun', self::flat($skill));
 
         // What it does not own, and the skill that hands it the sweep whole.
         self::assertStringContainsString('This skill owns what a package owes the TYPO3 majors', $skill);

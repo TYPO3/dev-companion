@@ -11,87 +11,84 @@ coveredBy:
 # D-FBK-012 — The queue comes first, and the sighting hands over one
 
 **`bin/cli todo:next` asks what has a clock, then the queue, then what recurs
-every session — and that sighting hands over one feedback.**
+every session. That sighting hands over one feedback.**
 
-The sightings are reached only with the queue empty, and `bin/cli feedback:next`
-hands over the oldest one no todo has judged.
+The sightings come only with the queue empty, and `bin/cli feedback:next` hands
+over the oldest one no todo has judged.
 
 This is what survived `D-FBK-005` and what replaced the rest of it. The order is
 that entry's, untouched, and the evidence below is the evidence that bought it.
-The portion is not. Five was cut for a reader who was then sent to look for the
-judgements in a commit, and what replaces it is where a judgement is written
-rather than how many are made at once.
+The portion is not. Five was the cut for a reader who then had to look for the
+judgements in a commit. What replaces it is where a judgement goes rather than
+how many happen at once.
 
 ## Evidence
 
 - 56 open feedback against 38 queued items on 2026-08-01, 55 of them named by no
   todo. `bin/cli feedback:list` exited nonzero on the first of those 55, so the
-  sighting was due in every session, printed 57 lines of filenames before its
-  own paragraph, and no queued item had been reached by `next` since the queue
-  was written. Two of the three recurring todos are sightings. Measured and
-  recorded in
+  sighting was due in every session. It printed 57 lines of filenames before its
+  own paragraph, and `next` had reached no queued item since the queue's first
+  day. Two of the three recurrent todos are sightings. Measured and recorded in
   [`D-FBK-005`](fbk-005-the-queue-is-worked-before-the-pile-is-sighted.md),
   which is where it is still read.
 - The second **Wrong if** of that entry, on 2026-08-02. The five came round and
-  the judgements were read by nobody, because the only place they were written
-  was the commit that made them — which is the one place nothing searches. The
-  portion had been cut for a reader who could not have existed.
+  nobody read the judgements, because the only place they stood was the commit
+  that made them. That is the one place nothing searches. The portion served a
+  reader who could not have existed.
 
 ## Decided
 
 - Three groups in a fixed order. A cadence in days is an appointment and keeps
-  its place at the front, because missing it is missing a day. The queue is
-  next, because judging a feedback is what puts an item into it: a queue with
-  entries is a queue of decisions already taken, and sighting more instead is
-  deciding twice and doing nothing. The sightings come last, when the queue is
-  empty and their whole output is what is needed.
+  its place at the front, because a miss is a lost day. The queue is next,
+  because a judgement of a feedback is what puts an item into it. A queue with
+  entries is a queue of decisions already taken, and a sighting of more instead
+  is two decisions and no work. The sightings come last, when the queue is empty
+  and their whole output is the need.
 - One feedback rather than a handful. `bin/cli feedback:next` hands over the
-  oldest one no todo has judged and exits nonzero while any remain, so a run is
-  one judgement and the loop ends when nothing is unjudged rather than after a
-  fixed number. It prints the category, the model and the first line, because a
-  filename alone cannot be disagreed with.
-- The judgement is written into `decisions/`. The entry it was made against is
-  updated, and where the judgement establishes something no entry says yet, a
-  new one is created — so the reading survives the run instead of being a window
-  onto five files. There is no journal beside the archive: a second list of the
-  same judgements is a second thing to keep true.
+  oldest one no todo has judged and exits nonzero while any remain. So a run is
+  one judgement and the loop ends when nothing awaits one rather than after a
+  fixed number. It prints the category, the model and the first line, because
+  nobody can disagree with a filename alone.
+- The judgement goes into `decisions/`. The entry it stands against gets the
+  update, and where the judgement establishes something no entry says yet, a new
+  one arrives. So the judgement survives the run instead of stays a window onto
+  five files. There is no journal beside the archive: a second list of the same
+  judgements is a second thing to keep true.
 - `bin/cli feedback:list` stays the whole of it, newest first, and reads rather
   than works.
 
 ## Assumed
 
-- That the queue empties. Carried over from `D-FBK-005` unmeasured, and it is
-  the mirror image of what the order corrects: a queue that never runs dry
+- That the queue empties. Carried over from `D-FBK-005` with no measure, and it
+  is the mirror image of what the order corrects. A queue that never runs dry
   starves the feedback exactly as the feedback starved the queue.
 - That oldest-first is the right end to take one from. A feedback that waited
-  while fresher ones arrived in front of it is the one at risk of never being
-  read, and the newest is the one about the server as it is now — which is what
-  re-running the query is for.
+  while fresher ones arrived in front of it is the one at risk of no read at
+  all. The newest is the one about the server as it is now, which is what a
+  second run of the query is for.
 
 ## Wrong if
 
-- `feedback/` keeps growing while the queue never empties, so the one is never
-  handed over at all. Then the sighting needs a place of its own rather than a
-  position behind the queue, most likely a cadence in days like every other
-  appointment.
-- The judgements stop arriving in `decisions/`. A run that judges a feedback and
-  writes nothing anywhere is the failure five was cut against, reached by the
-  other road: nothing fails on an entry nobody wrote, and the only trace is a
-  feedback marked judged by a todo that says less than the judgement did.
-- What stands between feedback goes unsaid. One feedback correcting three
-  earlier ones, or the same gap reported by four sessions, is what a portion of
-  several could see and one cannot. `decisions/` is where that has to become
-  visible now, and a directory that only ever restates single feedback would
-  mean it has not.
+- `feedback/` grows while the queue never empties, so the one never goes out at
+  all. Then the sighting needs a place of its own rather than a position behind
+  the queue. Most likely a cadence in days like every other appointment.
+- The judgements no longer arrive in `decisions/`. A run that judges a feedback
+  and writes nothing anywhere is the failure five stood against, reached by the
+  other road. Nothing fails on an entry nobody wrote. The only trace is a
+  feedback a todo marks as judged while it says less than the judgement did.
+- What stands between feedback goes unsaid. One feedback that corrects three
+  earlier ones, or the same gap from four sessions, is what a portion of several
+  could see and one cannot. `decisions/` is where that has to become visible
+  now, and a directory that only ever restates single feedback would mean it has
+  not.
 
 ## Since then
 
-The second half of the statement is gone with the command it names: every open
+The second half of the statement is gone with the command it names. Every open
 feedback got a card in the queue instead, and what writes that card became
-`typo3_feedback_record` itself. So a feedback is queued when it arrives and
-judged in the order the queue has, and the first **Wrong if** was answered by
-being made moot.
+`typo3_feedback_record` itself. So a feedback joins the queue when it arrives
+and gets its judgement in the order the queue has. The first **Wrong if** got
+its answer as a moot point.
 
-The first half stands and is what this entry is still read for: `todo:next` asks
-the three groups in that order, and the sightings are reached with the queue
-empty.
+The first half stands and is what this entry still serves. `todo:next` asks the
+three groups in that order, and the sightings come with the queue empty.

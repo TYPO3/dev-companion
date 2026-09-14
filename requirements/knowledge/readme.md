@@ -1,12 +1,9 @@
 # Knowledge — what is covered
 
 Subjects the knowledge base has to have an answer for, and the shape that answer
-takes. A subject nobody can phrase their way to is a subject the server does not
-have, so how a statement is filed and reached belongs here as much as what it
-says.
+takes. A subject nobody can phrase their way to is a subject the server does not have. So how a session files a statement and how a query reaches it belong here as much as what it says.
 
-See [the requirements readme](../readme.md) for how an entry is written and
-when it is added.
+See [the requirements readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`R-KNW-001`][R-KNW-001] — Upgrade wizards and DataProcessors have hints of their own · held
 - [`R-KNW-002`][R-KNW-002] — A hint carries the words its subject is asked about in · held

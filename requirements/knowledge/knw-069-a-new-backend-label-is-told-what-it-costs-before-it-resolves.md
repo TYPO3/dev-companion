@@ -10,20 +10,20 @@ heldBy:
 
 # R-KNW-069 — A new backend label is told what it costs before it resolves
 
-**A new label for a backend JavaScript module is owed a cache flush and a
-browser hard reload, and no check before runtime says so.**
+**A new label for a backend JavaScript module owes a cache flush and a browser
+hard reload, and no check before runtime says so.**
 
-Both halves are needed and either alone leaves the caller where the report found
-them. The `l10n` cache keys the parsed file on the domain and the locale and on
-nothing about the file, so the bundle is rebuilt only after group `system` is
-flushed. The response carries a year of `max-age` at a URL whose
-`cacheBustInfix` is the package list rather than the label files, so the page
-keeps importing what it already has — a flush without the reload changes nothing
+Both halves are necessary, and either alone leaves the caller where the report
+found them. The `l10n` cache keys the parsed file on the domain and the locale
+and on nothing about the file. So the bundle rebuilds only after a flush of
+group `system`. The response carries a year of `max-age` at a URL whose
+`cacheBustInfix` is the package list rather than the label files. So the page
+keeps the import it already has. A flush without the reload changes nothing
 visible and reads as a flush that did not work.
 
 The third demand is the symptom, in the words somebody arrives with. The runtime
-throw is `Label is not defined: <key>`, and it is the only signal there is: the
-type stub is regenerated from the same XLF, so the key type-checks, the editor
+throw is `Label is not defined: <key>`, and it is the only signal there is. The
+type stub regenerates from the same XLF, so the key type-checks, the editor
 completes it and the build passes. A caller who trusts the green build looks for
 the defect in the module.
 

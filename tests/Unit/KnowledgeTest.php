@@ -1625,7 +1625,7 @@ final class KnowledgeTest extends TestCase
         );
         // Unwrapped, since the sentence crosses a line break.
         self::assertStringContainsString(
-            'A casual bug fix carries none, because the commit message is what informs the reader',
+            'A casual bug fix carries none, because the commit message informs the reader',
             (string) preg_replace('/\s+/', ' ', $result->data['matches'][0]['body']),
         );
     }
@@ -1655,7 +1655,7 @@ final class KnowledgeTest extends TestCase
         // Unwrapped, since each of them crosses a line break.
         $body = (string) preg_replace('/\s+/', ' ', Documents::read('core/contribution/commit-messages'));
         self::assertStringContainsString(
-            '`Signed-off-by:` is set on every TYPO3 core patch',
+            '`Signed-off-by:` is on every TYPO3 core patch',
             $body,
             'the rule the maintainer settled is not stated',
         );
@@ -1665,7 +1665,7 @@ final class KnowledgeTest extends TestCase
             'the rule stands without the command that carries it out',
         );
         self::assertStringContainsString(
-            'published under GPL v2',
+            'publish the contribution under GPL v2',
             $body,
             'nothing says what signing the certificate claims',
         );

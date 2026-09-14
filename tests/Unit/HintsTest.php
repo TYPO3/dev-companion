@@ -2936,7 +2936,7 @@ final class HintsTest extends TestCase
 
         // The rules behind it, which carry the entries the hint may not date.
         $bodies = implode("\n", array_column(Documents::search('breaking change'), 'body'));
-        self::assertStringContainsString('adding a parameter is one', $bodies);
+        self::assertStringContainsString('An added parameter is one', $bodies);
         self::assertStringContainsString('Important-107342', $bodies);
         self::assertStringContainsString('FullyScanned', $bodies, 'the section it stands beside was cut to fit it');
 

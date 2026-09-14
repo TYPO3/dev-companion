@@ -1,11 +1,9 @@
 # Discovery — which installation is read, and how
 
-Everything the server reads from a working installation rests on finding it
-first: the packages, the console, the version. A wrong answer here is invisible,
+Everything the server reads from an installation that works rests on the search for it first: the packages, the console, the version. A wrong answer here is invisible,
 because it looks exactly like an installation that has nothing to say.
 
-See [the decisions readme](../readme.md) for how an entry is written and when
-one is added.
+See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-DIS-022`][D-DIS-022] — The schema the database has is answered and the rows are not · 2026-09-01
 - [`D-DIS-023`][D-DIS-023] — The container is assembled a second time to be read · 2026-09-01

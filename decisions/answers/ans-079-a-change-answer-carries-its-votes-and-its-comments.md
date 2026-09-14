@@ -15,7 +15,8 @@ coveredBy:
 # D-ANS-079 — A change answer carries its votes and its comments
 
 **`typo3_gerrit_lookup` answers a named change with the current vote per label
-and the comments left on it, read over the same anonymous API it already uses.**
+and the comments on it. It reads them over the same anonymous API it already
+uses.**
 
 A review skill routes its unanswered-comment surface to this tool, and the tool
 answered ten fields with nothing about the review in them. The session read the
@@ -29,9 +30,9 @@ NoteDB meta ref as git history instead.
   surface is worth the most.
 - The session's fallback was `git fetch <gerrit> refs/changes/19/93319/meta` and
   `git log FETCH_HEAD`: two calls and a hand-written filter, arrived at by
-  itself. Two facts came out of it that it reports as having changed its report
-  and its ranking — that no Code-Review vote is current, and that four of the 21
-  patch sets took a Verified-1.
+  itself. Two facts came out of it that it reports as what changed its report
+  and its rank. No Code-Review vote is current, and four of the 21 patch sets
+  took a Verified-1.
 - `skills/typo3-core-patch-review/SKILL.md` names this tool at the surface: "A
   comment somebody left on an earlier patch set and nobody answered is a finding
   of its own". `references/checklist.md` repeats it under **The review this
@@ -39,71 +40,73 @@ NoteDB meta ref as git history instead.
   can answer it, and this one names a lookup that cannot.
 - `Gerrit::search()` asks for `o=CURRENT_REVISION`, and `o=CURRENT_COMMIT` on
   the issue path. `Gerrit::change_()` builds the answer out of that entry, so no
-  vote, comment or label is dropped on the way — none is ever fetched.
+  vote, comment or label drops out on the way; the tool never fetches one.
 - Measured against `review.typo3.org` on 2026-08-14, anonymously and over the
-  same path everything else here reads (`D-ANS-033`): `o=DETAILED_LABELS` with
+  same path everything else here reads (`D-ANS-033`). `o=DETAILED_LABELS` with
   `o=DETAILED_ACCOUNTS` answers change 93319's labels with a value and a voter
-  each — Verified `recommended`, held by Oliver Klee and core-ci at +1;
-  Code-Review with no `recommended` and all three voters at 0. The single fact
-  the feedback calls the most useful one is readable from the labels.
+  each. Verified `recommended`, with Oliver Klee and core-ci at +1; Code-Review
+  with no `recommended` and all three voters at 0. The single fact the feedback
+  calls the most useful one is readable from the labels.
 - `o=MESSAGES` answers the same change's review log, 46 entries, including
   "Patch Set 21: Patch Set 20 was rebased. Outdated Votes: * Code-Review+1 (copy
-  condition: …)". That is what the meta ref was fetched for, in a query option.
+  condition: …)". That is what the session fetched the meta ref for, in a query
+  option.
 - `/changes/93319/comments` answers 200 and an empty object: the change has no
   comment at all, and its review history is entirely in the messages. The same
   endpoint on change 95179 answers three comments on `/PATCHSET_LEVEL`, each
   with an author, a patch set and a body.
 - Those three carry `unresolved` and `in_reply_to`. One is unresolved with a
-  reply, which is a comment somebody answered without settling — so the two
+  reply, which is a comment somebody answered and did not settle. So the two
   fields are not one fact, and neither of them alone is "nobody answered".
 - What each option costs on change 93319: 1.9 KB plain, 14.3 KB with the labels
   and the accounts, 50.2 KB with the messages. The comments are 3.0 KB on 95179.
-  One call carrying every option answered in 0.09 seconds.
+  One call with every option answered in 0.09 seconds.
 - The same payload carries `change_id`, which `Gerrit::change_()` does not read.
   The skill tells a reviewer to hold what came back against the commit in front
-  of it, and the field that identifies the change across patch sets is the one
+  of it. The field that identifies the change across patch sets is the one
   absent from the answer.
 
 ## Decided
 
 - Built, as fields on the change answer rather than as a second tool. The
-  subject, the source and the verb are unchanged: a caller names a change and
-  gets what is known about it.
+  subject, the source and the verb stay: a caller names a change and gets what
+  the server knows about it.
 - **The votes come with a change answer, unasked.** They are what the surface
-  turns on, they cost this server one option on a call it already makes, and a
-  vote state nobody asked for is what a reviewer needs before deciding anything.
-- **The comments come with it too**, from the second endpoint, tagged with the
-  patch set they were left on. That is one call on this side and none on the
-  caller's, which is the trade `D-FBK-027` names.
-- **The message log is asked for.** It is 50 KB against 14 KB on one change, and
-  it is where the reason a vote is gone sits rather than the vote state itself.
-- The bot half is separated the way `typo3_forge_lookup` separates it, and the
-  answer says how many it dropped. Gerrit tags what it generates —
-  `autogenerated:gerrit:newPatchSet` and its siblings, 23 of 93319's 46 messages
-  — so the split is read off the data rather than guessed from an author name.
-- **This server does not judge whether a comment was answered.** It hands over
+  turns on, and they cost this server one option on a call it already makes. A
+  vote state nobody asked for is what a reviewer needs before they decide
+  anything.
+- **The comments come with it too**, from the second endpoint, with the patch
+  set each stood on. That is one call on this side and none on the caller's,
+  which is the trade `D-FBK-027` names.
+- **The message log is a parameter.** It is 50 KB against 14 KB on one change.
+  It is where the reason a vote is gone sits, rather than the vote state itself.
+- The answer separates the bot half the way `typo3_forge_lookup` separates it,
+  and says how many it dropped. Gerrit tags what it generates,
+  `autogenerated:gerrit:newPatchSet` and its siblings, 23 of 93319's 46
+  messages. So the split comes off the data rather than from a guess at an
+  author name.
+- **This server does not judge whether a comment got an answer.** It hands over
   `unresolved`, the reply relation and the patch set, and the reviewer reads
-  them. 95179 is why: a reply exists and the thread is unresolved, and either
+  them. 95179 is why. A reply exists and the thread is unresolved, and either
   field alone answers the surface wrongly.
 - Only a caller that named one change gets any of it. An issue search answers up
-  to 25 changes and the comments are a call per change, so the search stays what
-  it is — whether a patch exists — and the review is read from the change.
+  to 25 changes and the comments are a call per change. So the search stays what
+  it is, whether a patch exists, and the review comes from the change.
 - The change answer carries its own `changeId`.
-- **The feedback's fallback is rejected.** The tool description will not point
-  at the meta ref: the REST API answers the same question in the call this tool
-  already makes, and a documented git detour would cost every caller two calls
-  for what one option carries.
-  `knowledge/documents/core/contribution/gerrit-workflow.md` keeps its sentence
-  — `meta` is a review history and not a commit anybody builds on — which is
-  true and is not a route to recommend.
-- What is left to the todo is the schema: what the vote, comment and message
-  records are called and which fields they hold, and whether the label answer
-  names the copy condition that dropped a vote or leaves that to the messages.
+- **The feedback's fallback fails.** The tool description will not point at the
+  meta ref. The REST API answers the same question in the call this tool already
+  makes. A documented git detour would cost every caller two calls for what one
+  option carries. `knowledge/documents/core/contribution/gerrit-workflow.md`
+  keeps its sentence, that `meta` is a review history and not a commit anybody
+  builds on. That is true and is not a route to recommend.
+- The todo owns the schema. That is the names of the vote, comment and message
+  records and which fields they hold. And whether the label answer names the
+  copy condition that dropped a vote or leaves that to the messages.
 
 ## Assumed
 
-- That a review reads the change it is on more often than it searches an issue,
-  which is what makes answering only the change path cheap. Both core skills
+- That a review reads the change it is on more often than it searches an issue.
+  That is what makes an answer on the change path alone cheap. Both core skills
   route the change path, and nothing counts the calls.
 - That the comment endpoint is worth its call on an ordinary patch. 93319 had
   none and 95179 had three, which is two data points either way.
@@ -112,51 +115,51 @@ NoteDB meta ref as git history instead.
 
 ## Wrong if
 
-- Reviews start deferring to the votes instead of reading the diff. `D-SKL-008`
+- Reviews start to defer to the votes instead of read the diff. `D-SKL-008`
   already names that failure for the comments, and a vote is easier to borrow
   than a comment.
-- The comments come back empty on most reviewed changes, which would say the
-  call belongs behind a parameter beside the messages rather than in the answer.
+- The comments come back empty on most reviewed changes. That would say the call
+  belongs behind a parameter beside the messages rather than in the answer.
 - ~~A caller reads `unresolved` as "unanswered" anyway and reports a comment
   somebody replied to. Then the fields are not enough and the answer owes the
   thread rather than the comment.~~ Fired on 2026-08-25, in the section at the
   foot.
-- The vote state turns out to be unreadable without the copy conditions, so
+- The vote state turns out to make no sense without the copy conditions. So
   every caller asks for the messages as well and the split bought nothing.
 
 ## Since then
 
-A session reviewed the change the comments above were measured on and reported
-the answer as having settled the whole review question in one call. The third
-**Wrong if** watches for a caller reading the flag as "nobody answered" and
-reporting a comment somebody replied to; that caller did not — it separated an
-unresolved request from one resolved by its own author, and read the owner's own
-reply as still open. The reply that stays unresolved is the case **Decided**
-refuses to judge, and handing over both fields was enough.
+A session reviewed the change the comments above come from and reported that the
+answer settled the whole review question in one call. The third **Wrong if**
+watches for a caller who reads the flag as "nobody answered" and reports a
+comment somebody replied to. That caller did not. It separated an unresolved
+request from one its own author resolved, and read the owner's own reply as
+still open. The reply that stays unresolved is the case **Decided** refuses to
+judge, and both fields handed over was enough.
 
-The first did not fire either: the same session used the labels to see that the
-owner held a negative vote on their own change, which is a procedural reading
-rather than a verdict borrowed from a vote.
+The first did not fire either. The same session used the labels to see that the
+owner held a negative vote on their own change. That is a procedural read rather
+than a verdict borrowed from a vote.
 
 ## Confirmed on 2026-08-25
 
 **The third Wrong if fired, and this answer's own two counts of one thing are
-what settle it.** A review reports ranking the comment threads itself and asks
-that the answer mark the threads that are unresolved and top-level. That is the
-reading **Decided** refuses to make, made by the caller instead, and it is wrong
-on both changes the report names: on the first, the one comment carrying the
+what settle it.** A review reports that it ranked the comment threads itself and
+asks that the answer mark the threads that are unresolved and top-level. That is
+the judgement **Decided** refuses to make, made by the caller instead, and it is
+wrong on both changes the report names. On the first, the one comment with the
 flag is the one it ranked, its answer closed it, and the review server states
 none outstanding. On the second the answer prints both numbers eight lines
 apart, one the review server's and one its own count of the flag.
 
 ## Since then
 
-The card was worked and the derivation is the review server's own rule rather
-than this side's reading: its documentation states both halves — the count is of
-unresolved threads across all patch sets, and a thread's state is the state of
-its last comment. Reading the threads that way reproduces the server's count on
-the forty open core changes carrying one.
+The card closed, and the derivation is the review server's own rule rather than
+this side's interpretation. Its documentation states both halves. The count is
+of unresolved threads across all patch sets, and a thread's state is the state
+of its last comment. The threads read that way reproduce the server's count on
+the forty open core changes that carry one.
 
-What came of it is `D-ANS-111`: every comment says which thread it is in and
+What came of it is `D-ANS-111`. Every comment says which thread it is in and
 what that thread stands at, and the count in the heading is threads rather than
 flags.

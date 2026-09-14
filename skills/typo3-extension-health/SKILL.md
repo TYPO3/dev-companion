@@ -142,9 +142,9 @@ entry, and let neither read as clean.
 **The report is markdown the reader can copy, and the answer is where it goes.**
 The findings and the coverage list together are what make it long, and length is
 what makes the form matter: an audit is carried into an issue, into a ticket or
-into a chat, and rendered output is what does not survive being moved. Write it
-to a file only where the caller asks for one, at a path outside the checkout
-being assessed.
+into a chat, and rendered output does not survive the move. Write it to a file
+only where the caller asks for one, at a path outside the checkout being
+assessed.
 
 **A request that asked for a review ends here.** Report, name the owning
 workflow per finding as step 10 says, and stop. What asks for the rest is an

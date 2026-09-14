@@ -251,10 +251,10 @@ apart from one that looked at less.
 **The report is markdown the reader can copy, and the answer is where it goes.**
 Everything this section asks for is what makes it long, and length is what makes
 the form matter: a review is carried into the change, into the issue or into a
-chat, and rendered output is what does not survive being moved. Write it to a
-file only where the caller asks for one, at a path outside the checkout under
-review — what is modified or untracked beside the patch is a surface this review
-reports on.
+chat, and rendered output does not survive the move. Write it to a file only
+where the caller asks for one, at a path outside the checkout under review —
+what is modified or untracked beside the patch is a surface this review reports
+on.
 
 ## Where the review ends and the rework begins
 

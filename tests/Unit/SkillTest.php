@@ -1433,7 +1433,7 @@ final class SkillTest extends TestCase
             // without it: a form is what a long report has to survive being
             // moved in.
             self::assertStringContainsString(
-                'rendered output is what does not survive being moved',
+                'rendered output does not survive the move',
                 $skill,
                 $name . ' states the form without what makes it the form',
             );

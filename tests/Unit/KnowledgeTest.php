@@ -1822,6 +1822,10 @@ final class KnowledgeTest extends TestCase
      * carried "entries", and `Release Branches and Backports` came back up
      * through the same floor. The cut now spans three pages, which is the same
      * half this holds.
+     *
+     * A fifth time with `D-DOC-070`, whose sweep rewrites every page and moves
+     * every weight with each commit. So the test holds the half it always
+     * held: the cut spans more than one page and the changelog page is in it.
      */
     #[Decision('D-ANS-076')]
     #[Decision('D-KNW-111')]
@@ -1835,14 +1839,9 @@ final class KnowledgeTest extends TestCase
             'targetVersion' => '15.0',
         ]);
 
-        self::assertSame(
-            [
-                'core/contribution/changelog',
-                'core/contribution/commit-messages',
-                'core/contribution/gerrit-workflow',
-            ],
-            array_values(array_unique(array_column($first->data['matches'], 'documentId'))),
-        );
+        $pages = array_values(array_unique(array_column($first->data['matches'], 'documentId')));
+        self::assertContains('core/contribution/changelog', $pages);
+        self::assertGreaterThan(1, count($pages), 'the cut spans one page, so the second call has nothing to remove');
         // What the second call goes for is on a page this one excerpts and
         // hands over whole.
         self::assertStringContainsString('## Which Change Owes a Changelog File', $first->text);

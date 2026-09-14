@@ -1,20 +1,14 @@
 # What this server has to do
 
-The working directory: one file per requirement, in the group its id names. The
-listing below and the one at the foot of each group's own `readme.md` are
-written by `bin/cli requirements:index`.
+The work directory: one file per requirement, in the group its id names. `bin/cli requirements:index` writes the listing below and the one at the foot of each group's own `readme.md`.
 
 What a requirement is and what its states mean:
 [documentation/records/requirements.rst](../documentation/records/requirements.rst).
-Where an entry goes and how one is written:
-[documentation/records/writing-a-requirement.rst](../documentation/records/writing-a-requirement.rst),
-which `bin/cli requirements:check` holds every file to.
+Where an entry goes and how a session writes one: [documentation/records/writing-a-requirement.rst](../documentation/records/writing-a-requirement.rst), which `bin/cli requirements:check` holds every file to.
 
 ## Every requirement, by group
 
-**open** is accepted and not built yet, `not guarded` is built and named by no
-test. Both are legitimate, nothing fails on either, and
-`bin/cli unresolved:list` is what reads them out.
+**open** is an accepted requirement nobody has built yet, and `not guarded` is a built one no test names. Both are legitimate, nothing fails on either, and `bin/cli unresolved:list` reads them out.
 
 ### audience
 

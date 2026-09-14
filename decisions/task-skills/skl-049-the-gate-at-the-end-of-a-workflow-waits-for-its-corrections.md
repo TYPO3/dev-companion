@@ -82,7 +82,7 @@ next day, and no session has met any of the corrections yet.
   expensive one or the other way round.
 - **Rejected: an archive on the three corrections.** The pattern claim is the
   half only this file reports. An archive would tell the session that its
-  finding is done when what landed answers its three examples.
+  finding has its answer when what landed answers its three examples.
 - **What the work would open with is a placement, not a text.** The skill
   already gates before the code. So the question is whether the closing step
   re-reads that reference or states its own list. That is the todo's first

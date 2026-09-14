@@ -49,8 +49,8 @@ Measured on 2026-08-25 in this branch, against `feedback/2026-08-24-162543`.
   "fired — but only for the first split", where the request widened after the
   patch was under way. One paragraph, two sessions, two directions.
 - [`D-SKL-002`](skl-002-a-focused-audit-narrows-what-is-assessed-not-the-list-it-closes-on.md)
-  settled this principle for the sibling skill — a focused audit narrows what is
-  assessed, never the surface list its report closes on. The failure here is the
+  settled this principle for the sibling skill. A focused audit narrows what it
+  assesses, never the surface list its report closes on. The failure here is the
   same one in the other workflow. The session had the right to cut the work and
   cut the list instead.
 - [`D-SKL-010`](skl-010-the-assessment-before-a-core-patch-reads-the-issue.md)

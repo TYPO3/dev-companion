@@ -19,13 +19,13 @@ booted container on every covered version below it.**
 Read in `.checkouts/` on 2026-09-02:
 
 - `fluid:namespaces` exists in 14.3 and main, as
-  `fluid/Classes/Command/NamespacesCommand.php`, and is announced by the 14.2
-  changelog. 12.4 and 13.4 have no such command, so asking it there returns the
+  `fluid/Classes/Command/NamespacesCommand.php`, and the 14.2 changelog
+  announces it. 12.4 and 13.4 have no such command, so a call there returns the
   console's own "command is not defined".
 - `Configuration/Fluid/Namespaces.php` exists six times in 14.3 and main and not
   once in 12.4 or 13.4, so the file fallback has nothing to read below 14.
-- `SYS/fluid/namespaces` is populated in the `DefaultConfiguration.php` of 12.4
-  and 13.4 and empty in 14.3, where the registration moved into those files.
+- `SYS/fluid/namespaces` has entries in the `DefaultConfiguration.php` of 12.4
+  and 13.4 and is empty in 14.3, where the registration moved into those files.
 - 14.3 still merges the `TYPO3_CONF_VARS` value in
   `ViewHelperResolverFactory::create()`, marked
   `@deprecated remove ... in TYPO3 v15.0`. Routing 14 and up to the command
@@ -40,16 +40,16 @@ console command that arrived above the lines this server covers.
   that says what it leaves out.
 - Below it the container answers, because no command and no file carries the
   registry there.
-- An absent `SYS/fluid/namespaces` is unsupported rather than none. Every
-  covered version below 14 declares the key, so a reading without it went wrong,
-  and an empty list would tell a template author that `f:` needs declaring per
+- An absent `SYS/fluid/namespaces` means unsupported rather than none. Every
+  covered version below 14 declares the key, so a read without it went wrong. An
+  empty list would tell a template author that `f:` needs a declaration per
   template.
 
 ## Assumed
 
-- `Instance::typo3Major()` answers wherever an installation was found at all: it
-  reads the core package's own `Typo3Version.php`, and a root without that
-  package has no console and no container either.
+- `Instance::typo3Major()` answers wherever discovery found an installation at
+  all. It reads the core package's own `Typo3Version.php`, and a root without
+  that package has no console and no container either.
 
 ## Wrong if
 

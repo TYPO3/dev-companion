@@ -9,22 +9,22 @@ coveredBy:
 
 # D-ANS-140 — A kind of work names the procedure it owes
 
-**A procedure a task owes is not the write-up of it, so it is named beside the
-intent rather than by widening the intent's own words to reach it.**
+**A procedure a task owes is not the write-up of it. So it stands named beside
+the intent rather than reached through wider words in the intent itself.**
 
 ## Evidence
 
 - `feedback/2026-09-02-135138`. A session had `any/testing/browser-check` in the
-  guides list its first call returned, called `typo3_rule_lookup` zero times,
+  guides list its first call returned. It called `typo3_rule_lookup` zero times,
   and wrote its own throwaway browser spec roughly fifteen times. Its brief for
   the backend module returned `guides: []`.
 - The document is in `knowledge/task-intents.json` as the `browser-check`
-  intent's own guide, and that intent matches on fifteen phrases about looking:
-  "in the browser", "screenshot", "renders correctly". A backend module task
-  says none of them, which is the whole of why it did not fire.
-- Widening those phrases to reach it was tried and measured here: adding
-  "backend module", "content element", "page module" and two more confirms the
-  browser-check intent on a backend module brief, and
+  intent's own guide. That intent matches on fifteen phrases about a look: "in
+  the browser", "screenshot", "renders correctly". A backend module task says
+  none of them, which is the whole of why it did not fire.
+- Wider phrases to reach it had a trial and a measurement here. "backend
+  module", "content element", "page module" and two more confirm the
+  browser-check intent on a backend module brief.
   `KnowledgeTest::aBriefNamingOneKindOfWorkConfirmsThatKindAndNoOther` fails on
   two of its cases. `D-SKL-051` is what that test holds: a second confirmed
   intent arrives stated as fact, with a checklist, a skill and its own tools.
@@ -32,31 +32,31 @@ intent rather than by widening the intent's own words to reach it.**
 ## Decided
 
 - An intent may declare `owes`: the procedures that kind of work owes, whatever
-  the task text says. They are named among the guides and confirm nothing — no
+  the task text says. They stand among the guides and confirm nothing: no
   checklist, no skill, no tool line.
 - `backend-module`, `backend-ui` and `content-element` owe
   `any/testing/browser-check`. Each ends in something an editor looks at, and
-  none of them says so in the words a task is written in.
-- The two halves are kept apart in the field's own description, because a caller
-  reading a guide list has to know whether it is the write-up of the work or a
-  thing the work owes.
-- Nothing else is given an `owes` yet. Three intents is what the evidence
-  reaches, and a fourth is added when a session reports the same shape rather
-  than by sweeping the catalogue.
+  none of them says so in the words of a task.
+- The field's own description keeps the two halves apart. A caller who reads a
+  guide list has to know whether it is the write-up of the work or a thing the
+  work owes.
+- Nothing else gets an `owes` yet. Three intents is what the evidence reaches. A
+  fourth joins when a session reports the same shape rather than through a sweep
+  of the catalogue.
 
 ## Assumed
 
-- That a guide named without a confirmed intent is read. The list is rendered
-  the same way either half arrives, and one session's silence about the
-  orientation list is what says the placement matters rather than the wording.
-- That the three intents are the ones that end in something to look at. A
-  frontend rendering change is answered by the same procedure and is not one of
-  the three, because no intent names that work today.
+- That a session reads a guide named without a confirmed intent. The list
+  renders the same way either half arrives. One session's silence about the
+  orientation list says the placement matters rather than the wording.
+- That the three intents are the ones that end in something to look at. The same
+  procedure answers a frontend render change, and it is not one of the three,
+  because no intent names that work today.
 
 ## Wrong if
 
-- A session reports the browser check arriving on a brief where nothing was
-  rendered. The `owes` would then be attached to the kind of work rather than to
-  what the work produces, and the distinction is finer than an intent.
-- The same session skips it again. What is left then is the delivery of a named
-  guide rather than the naming, and `D-FBK-054` is where that reading sits.
+- A session reports that the browser check arrived on a brief where nothing
+  rendered. The `owes` would then hang on the kind of work rather than on what
+  the work produces, and the distinction is finer than an intent.
+- The same session skips it again. What remains then is the delivery of a named
+  guide rather than the name, and `D-FBK-054` is where that read sits.

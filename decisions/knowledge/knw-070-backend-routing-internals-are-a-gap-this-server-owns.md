@@ -8,8 +8,8 @@ status: open
 # D-KNW-070 — Backend routing internals are a gap this server owns
 
 **How a backend route carries its module, the shape of a sub-route identifier,
-and that a module inherits `navigationComponent` are inside this server's
-boundary and absent from it.**
+and that a module inherits `navigationComponent` are facts this server owns. The
+corpus lacks them.**
 
 The corpus answers how an extension registers a module and how the core handles
 an HTTP request, and nothing in between. A session that reviews a change to the
@@ -36,10 +36,10 @@ routing itself gets the registration conventions, which do not bear on the diff.
   applies to every core file.
 - The session read the four facts out of the checkout instead, and names where:
   `ModuleRegistry.php`, `Module.php`, `ExtbaseModule.php` and
-  `BaseModule.php:96-104`. The fourth — two `Route` classes with different
-  constructors, so a route identifier passed where `$defaults` goes makes
-  `getOption('_identifier')` return null — it found by writing a probe, and two
-  functional tests had never reached the branch they were named after.
+  `BaseModule.php:96-104`. The fourth it found with a probe. Two `Route` classes
+  have different constructors, so a route identifier passed where `$defaults`
+  goes makes `getOption('_identifier')` return null. Two functional tests had
+  never reached the branch their names came from.
 
 ## Decided
 

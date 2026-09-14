@@ -99,7 +99,7 @@ stays above it,
 Both todos rewrite the one preview statement on the `content-elements` hint, so
 whichever lands second rewrites in place rather than adds beside. The two
 statements differ in what binds them. What `{record}` is moved in 14 and needs a
-`since`, while the header/content split reads the same on 13.4 and 14.3.
+`since`. The header/content split reads the same on 13.4 and 14.3.
 
 ## Revoked on 2026-08-02
 

@@ -98,13 +98,13 @@ read the two producers out of the checkout itself.
 
 ## Confirmed on 2026-08-14
 
-The gap is filled. Neither **Wrong if** fired, and that is the finding: both of
-the report's steps are owed. The parsed-label cache keys on nothing that changes
-when a unit arrives. The asset identifier composes from the version, the project
-path and the package identifier. So no label file reaches either, and the URL
-under a year of `max-age` stays the one the page fetched. That is where this
-reading differs from `D-KNW-027`, whose cache keyed on the file's modification
-time.
+The gap is filled. Neither **Wrong if** fired, and that is the finding. The
+session owes both of the report's steps. The parsed-label cache keys on nothing
+that changes when a unit arrives. The asset identifier composes from the
+version, the project path and the package identifier. So no label file reaches
+either, and the URL under a year of `max-age` stays the one the page fetched.
+That is where this reading differs from `D-KNW-027`, whose cache keyed on the
+file's modification time.
 
 Both **Assumed** resolved, and the answer is one statement per half because
 different people clear the two caches. Two findings the entry did not

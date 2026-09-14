@@ -38,7 +38,7 @@ developer found it broken in Firefox.
   from the build directory. It therefore decides the prefixes and gates nothing.
   A feature no engine implements passes the build unchanged.
 - The policy itself came from the maintainer of this repository during the
-  judging run: the target is the browser versions that were current on the day
+  judgement run. The target is the browser versions that were current on the day
   the release in question appeared, per release line rather than per LTS. The
   hint said "on the day of the corresponding TYPO3 LTS release" and "of that
   target release year". Both are the same rule read coarsely.
@@ -52,7 +52,7 @@ developer found it broken in Firefox.
   six the feedback listed.
 - No per-feature table. Which of anchor positioning, `@starting-style`,
   `popover`, `:has`, container queries and `light-dark()` is inside a given
-  release day is a fact this repository cannot verify from `.checkouts/`. It
+  release day is a fact. This repository cannot verify it from `.checkouts/`. It
   would be a copy of support tables nobody here reads again, and it turns while
   nothing fails. The prose rule against a snapshot that reads as a fact long
   after it stopped to be one is
@@ -97,10 +97,10 @@ first **Wrong if** with the sign reversed.
 **A policy hint has to be reachable by the vocabulary of the thing it governs,
 and this one was reachable by its own.** Both sessions reached it by id, and the
 session's own task text returned five other CSS hints and not this one. Worse, a
-query naming a feature reached a second copy of the policy in the coarse wording
-this entry sharpened out of the first, reading as permission. So the duplicate
-defers, and the vocabulary gains the feature words a session types when it is
-about to adopt one.
+query that names a feature reached a second copy of the policy in the coarse
+wording this entry sharpened out of the first. That read as permission. So the
+duplicate defers, and the vocabulary gains the feature words a session types
+when it is about to adopt one.
 
 The press gets a refusal. This hint is core-scoped where every caller reads the
 instructions.

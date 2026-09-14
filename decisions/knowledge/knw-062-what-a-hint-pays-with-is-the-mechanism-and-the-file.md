@@ -40,10 +40,10 @@ four hints it names all paid the same way.
   twice in this one session. That is the channel's own measure —
   [`D-FBK-027`](../feedback/fbk-027-the-server-builds-what-costs-its-caller-round-trips.md)
   — read from the other end.
-- `feedback/2026-09-03-235605`, a seeding run five weeks later, is the same
-  measurement on `datahandler-seeding`: `Bootstrap::init($classLoader)` with the
+- `feedback/2026-09-03-235605`, a seed run five weeks later, is the same
+  measurement on `datahandler-seeding`. `Bootstrap::init($classLoader)` with the
   failsafe flag and the constructor error it produces, the three backend-user
-  calls in order, and `pages.hidden` defaulting to 1 in TCA against 0 in the
+  calls in order, and `pages.hidden` with a default of 1 in TCA against 0 in the
   schema. The session set `hidden=0` because of the third. It says the page
   answered as the site's 404 target on the first run instead of as a second
   not-found. All three are a mechanism and the failure it produces.
@@ -94,6 +94,6 @@ neighbours of the same days.
 
 The counter-case arrived with the seeding evidence above and is the same
 boundary from outside. `fal-writing` said a file attachment is a relation
-DataHandler writes and named no field, so the session stopped and left two
+DataHandler writes and named no field. So the session stopped and left two
 images in a rich text field. What it needed was `uid_local` and where the
 `sys_file` uid comes from, which `datahandler-relations` now states.

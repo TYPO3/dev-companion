@@ -43,13 +43,13 @@ changelog.
   term occurs nowhere below `knowledge/` or `skills/`.
 - The two hints a caller does reach are each about something else.
   `page-content-element-rendering` is the template, partial and layout roots of
-  `lib.contentElement` and says nothing about its data processing;
+  `lib.contentElement` and says nothing about its data processing.
   `frontend-records` names `record-transformation` as a nested processor under
   `database-query` and never as something `lib.contentElement` runs by itself.
-- Those words reach the manual neither. It is matched against page titles and
-  section paths, so a PHP identifier has no page to be titled after — the
-  reading `D-ANS-010` was narrowed by, which is why this is a statement to write
-  rather than a routing to fix.
+- Those words reach the manual neither. It matches against page titles and
+  section paths, so no page has a PHP identifier as its title. That is the read
+  that narrowed `D-ANS-010`, which is why this is a statement to write rather
+  than a routing to fix.
 - The mechanism is three guards rather than one, which is what made the session
   that reported iterate. `RecordFactory` throws `1726046917` for a
   language-aware table without a language field, and `1726046918` for a
@@ -72,8 +72,8 @@ changelog.
   make the entry reachable from the symptom, has no entry to reach. The
   identifier search `D-ANS-042` already built would find one if it existed.
 - The card goes to `normal`. One session reported it, which does not lift a card
-  on its own; what lifts this one is that the changelog cannot answer it at all,
-  so a session that does the right thing still ends up reading vendor source.
+  on its own. What lifts this one is that the changelog cannot answer it at all,
+  so a session that does the right thing still ends up in vendor source.
 - Recorded here rather than against `D-ANS-010`. That entry is about a silence
   the manual answers, and this silence belongs to neither corpus. The event
   happened and nobody wrote it down anywhere outside the commit.
@@ -92,9 +92,9 @@ changelog.
 
 ## Wrong if
 
-- The reading finds `lib.contentElement` runs the processor on 13.4 as well
-  through some other route, which would make this a statement without a version
-  boundary and the feedback's account of what changed wrong.
+- The read finds `lib.contentElement` runs the processor on 13.4 as well through
+  some other route. That would make this a statement without a version boundary
+  and the feedback's account of what changed wrong.
 - A row without those fields turns out to render anyway on a `tt_content` whose
   TCA a project has trimmed. That would make the guard a property of the schema
   rather than something a hint can tell a caller.

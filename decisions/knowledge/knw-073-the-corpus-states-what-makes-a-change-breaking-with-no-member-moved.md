@@ -10,12 +10,12 @@ coveredBy:
 
 # D-KNW-073 — The corpus states what makes a change breaking with no member moved
 
-**A change that moves no PHP member is breaking on what it renders, and the
-target branch decides between `Breaking` and `Important` where the effect is the
+**A change that moves no PHP member is breaking on what it renders. The target
+branch decides between `Breaking` and `Important` where the effect is the
 same.**
 
 `breaking-without-a-moved-member` carries both halves, beside
-`public-api-surface` rather than inside it: one hint is one question, and the
+`public-api-surface` rather than inside it. One hint is one question, and the
 two questions are a member that moved and a member that did not.
 
 ## Evidence
@@ -46,14 +46,14 @@ two questions are a member that moved and a member that did not.
   beside the one it splits from.
 - The commit corrects the four-type definition in `## Changelog Files` rather
   than extends it. It dropped `affect` from its source, which is the word the
-  whole reading turns on, and it gains one bullet naming the hint instead of
-  restating it.
+  whole read turns on. It gains one bullet that names the hint instead of a
+  restatement.
 - The `breaking` intent's first checklist step names the second test and routes
   to the hint. It settled the question on whether anything outside the core
   calls the member, which is the wrong test for a change that calls nothing.
 - The new hint carries the exemption and `public-api-surface` keeps its flat
   rule. A maintained line takes a breaking entry "only in rare exemptions",
-  which is `Howto.rst`'s own wording, and the flat sentence beside it is about a
+  which is `Howto.rst`'s own wording. The flat sentence beside it is about a
   signature change, where no exemption is on record at all.
 - No count of the sweep reaches the corpus. A hint may state no version, no
   changelog file and no count taken from a checkout, and `HintsTest` holds it.
@@ -65,11 +65,11 @@ two questions are a member that moved and a member that did not.
   line that takes one again makes the hint's "rare exemption" the right shape
   but its emphasis wrong.
 - That a reviewer arrives with the vocabulary of the effect — markup, rendered,
-  default TypoScript. The hint is reached by its own words rather than by a
-  path, because a rendering change has no directory of its own.
+  default TypoScript. Its own words rather than a path reach the hint, because a
+  rendering change has no directory of its own.
 - That the correction to `## Changelog Files` is where a rule lookup for this
-  lands. Its document is declared for writing a commit message, and the
-  classification question is asked from a review.
+  lands. Its document declares itself for a commit message, and a review asks
+  the classification question.
 
 ## Wrong if
 
@@ -96,8 +96,8 @@ configuration option. So what failed is the assumption that a reviewer arrives
 with the vocabulary of the effect. This one arrived with the vocabulary of the
 obligation, and its case was configuration rather than markup.
 
- The casual-bugfix bullet refused the demand on "removes nothing public", which
- a fix that stops reading a configured option passes while owing an entry; it
- names what such a fix has to change nothing of now, with the hint one line
- above it. The section has a cap, and a first draft with both tests in full came
- back truncated, one delivery failure traded for another.
+ The casual-bugfix bullet refused the demand on "removes nothing public". A fix
+ that no longer reads a configured option passes that while it owes an entry.
+ The bullet names what such a fix has to change nothing of now, with the hint
+ one line above it. The section has a cap, and a first draft with both tests in
+ full came back truncated, one delivery failure traded for another.

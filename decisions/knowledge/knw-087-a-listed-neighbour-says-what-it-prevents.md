@@ -25,8 +25,8 @@ dropped. That is five review findings and an HTTP 500 on every page.
   held the answer to five of a reviewer's ten findings. An answer named
   `page-content-areas`, the session skipped it, and fetched it three calls later
   to diagnose the HTTP 500 it would have prevented.
-- The corpus today: 139 hints, of which 37 close by naming another hint's id,
-  and 6 of those open with the bare formula — `sitepackage-initial-content`,
+- The corpus today: 139 hints, of which 37 close on another hint's id, and 6 of
+  those open with the bare formula. Those are `sitepackage-initial-content`,
   `extension-repository-layout`, `frontend-page-rendering`, `installation-boot`,
   `site-sets`, `browser-tests`. Three of the six are ones the feedback names as
   skipped.
@@ -61,9 +61,9 @@ dropped. That is five review findings and an HTTP 500 on every page.
   reason fails, and `content-element-preview` is a case against a rewrite of
   them all.
 - `page-content-areas` gets its correction in the same work and before the
-  pointer at it. A pointer naming a consequence the pointed-at hint denies is
-  worse than the list it replaced, because the reader who follows it arrives at
-  the contradiction.
+  pointer at it. A pointer that names a consequence the pointed-at hint denies
+  is worse than the list it replaced. The reader who follows it arrives at the
+  contradiction.
 - No requirement yet. What must hold from now on is what the counter-case leaves
   open. Does a neighbour reference owe a consequence at all, or only where the
   neighbour guards a failure. A requirement that asserts it today would be one

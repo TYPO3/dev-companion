@@ -55,14 +55,14 @@ followed it subdivided `Layouts/` and put its own
 - Step 1a of the ladder, and stated where the layout half already is. The
   partial half was absent rather than misplaced. One sentence in the same hint
   is what the reader who followed the layout advice would have read.
-- Closed in this run rather than queued, on `D-KNW-082`'s reading of the same
-  line: the checkout reading the ladder owes a feedback claiming something about
-  TYPO3 was done here, on all four branches and named by file above, and nothing
-  in `src/`, in a schema or in a skill moves.
+- Closed in this run rather than queued, on `D-KNW-082`'s read of the same line.
+  The checkout read the ladder owes a feedback that claims something about TYPO3
+  happened here, on all four branches and named by file above. Nothing in
+  `src/`, in a schema or in a skill moves.
 - This is the second judgement to take that exception in two days, both on this
-  hint. It is recorded rather than acted on — a third would be evidence that the
-  line `documentation/records/judging.rst` draws is in the wrong place, and one
-  more case is not.
+  hint. This entry records it rather than acts on it. A third would be evidence
+  that the line `documentation/records/judging.rst` draws is in the wrong place,
+  and one more case is not.
 - The statement carries no version boundary. What differs across the majors is
   the file name extension. A template addresses a partial by name, so the
   collision is the same on all of them.

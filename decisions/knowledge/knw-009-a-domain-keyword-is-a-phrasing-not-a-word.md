@@ -65,7 +65,7 @@ in `php.json` fell to the filter before any score.
 ## Since then
 
 The sixth phrase arrived out of this repository's own text. A checklist wrote
-its audit surface down as the bare word this entry rejected, so an audit that
+its audit surface down as the bare word this entry rejected. So an audit that
 asks in that wording reaches no PHP hint at all. What it cost is on the record —
 a recommendation to use a package no covered line ships, where the corpus
 already held the answer.

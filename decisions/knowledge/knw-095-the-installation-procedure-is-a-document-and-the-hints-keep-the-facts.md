@@ -94,9 +94,9 @@ hint ids.
 
 - That a caller reading the guides list and finding no installation entry
   concludes there is none. This session did, and said so.
-- That the boot branch and the create branch can be judged in one reading.
-  Whether they are one document or two is the todo's first step, and the skill's
-  fork on them is the reason to expect two.
+- That one read can judge the boot branch and the create branch. Whether they
+  are one document or two is the todo's first step, and the skill's fork on them
+  is the reason to expect two.
 - That the move of the order out of `installation-boot` costs its callers
   nothing. The hint keeps its facts and the document names it in its own
   `hints:` front matter, which is the link `D-KNW-057` declares.
@@ -117,9 +117,9 @@ hint ids.
 ## Since then
 
 Written as one document rather than two, and what settled that is which branch
-the corpus carries as a run: one hint opened with the four steps in order and
-was the only entry that did, while the other branch's order exists in a skill
-and nowhere else — writing it out would have been the second **Wrong if**. The
+the corpus carries as a run. One hint opened with the four steps in order and
+was the only entry that did. The other branch's order exists in a skill and
+nowhere else, and a copy of it would have been the second **Wrong if**. The
 third shape that skill forks on is the other half. A repository that declares an
 environment and no procedure runs both, so a document per branch would leave it
 with both to read.

@@ -69,15 +69,15 @@ hosts pattern rather than the file that carries it.
   corpus asserts the opposite rather than stays silent. The cost is a 500
   diagnosed against TYPO3's exception while the cause is the environment's write
   order.
-- Not step 5. The report satisfies no **Wrong if** of `D-KNW-049` — those are
-  about the `DB` section, a generator reading the driver, and a session that
+- Not step 5. The report satisfies no **Wrong if** of `D-KNW-049`. Those are
+  about the `DB` section, a generator that reads the driver, and a session that
   never asked about `config/system/`. What it disputes is a sentence in that
   entry's confirmation, and that entry records it.
 - Nobody owes `skills/typo3-development-installation` anything, which is what
   the feedback also asks for. That skill keeps routing and workflow and holds no
-  environment defaults, and its proving step is what surfaced the failure by
-  asking that the sequence run unattended from a clone. The gap is the answer
-  the session looks for at that point, and the hint owns it.
+  environment defaults. Its proof step is what surfaced the failure, since it
+  asks that the sequence run unattended from a clone. The gap is the answer the
+  session looks for at that point, and the hint owns it.
 
 ## Assumed
 
@@ -90,8 +90,8 @@ hosts pattern rather than the file that carries it.
 
 ## Wrong if
 
-- The reading finds no condition beyond `disable_settings_management`, and what
-  the session met was its own project's history — a `.ddev/config.yaml` written
+- The read finds no condition beyond `disable_settings_management`, and what the
+  session met was its own project's history. A `.ddev/config.yaml` written
   between the two starts, a docroot that did not exist yet. The corpus is then
   right and there is nothing to state.
 - The condition turns out to be the document root rather than an installation.
@@ -122,8 +122,8 @@ order a second start ends.
 
 ## Since then
 
-The ordering did not land in the wording, and the next session read the pair
-flat: both surfaces carry a semicolon and an "or", neither an order nor what the
+The order did not land in the wording, and the next session read the pair flat.
+Both surfaces carry a semicolon and an "or", neither an order nor what the
 second costs. It took that for the route to a single-command start and committed
 the file with all four sections. A reference repository that leaves it generated
 rejected the commit.

@@ -57,8 +57,8 @@ to every client under a prefix that says the opposite.
   second caller.
 - One topic under two scopes is the ordinary case rather than a collision.
   `core/testing` and `extension/testing` are the row and the column `D-KNW-008`
-  describes, and the namespace is where the crossing becomes visible instead of
-  being carried by prose.
+  describes. The namespace is where the crossing becomes visible instead of a
+  burden on prose.
 - The prefix is `typo3://guides/`. `core` cannot stay: it names one of the
   scopes below it now, and a prefix that repeats a segment says nothing.
 - A rule replaces `depth(0)` rather than drops it. A file publishes itself only
@@ -70,10 +70,10 @@ to every client under a prefix that says the opposite.
 - The resource name is the id with its separators flattened, because the
   protocol will not take the path there. The URI keeps its segments, and that is
   the identifier anything outside this checkout addresses a document by.
-- Withholding a core document outside the core now leaves a hole where that
-  document used to transfer, and the hole is filled by naming the tool that owns
-  the subject rather than by a shortened copy of the page. `D-DOC-013` already
-  settled that the commit conventions are one measure and it is
+- A core document withheld outside the core now leaves a hole where that
+  document used to transfer. The name of the tool that owns the subject fills
+  the hole rather than a shortened copy of the page. `D-DOC-013` already settled
+  that the commit conventions are one measure and it is
   `typo3_commit_message_guide`.
 
 ## Assumed

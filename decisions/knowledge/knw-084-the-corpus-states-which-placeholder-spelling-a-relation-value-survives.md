@@ -48,9 +48,9 @@ the symptom as well as the rule, because the rule is invisible at the call site.
 ## Assumed
 
 - The four field types that consume a remapped value array are one rule to the
-  caller. The statement says "a relation field" rather than naming `inline`,
-  `file`, `group`, `select` and `category`, which is the vocabulary a session
-  writing a datamap already has.
+  caller. The statement says "a relation field" rather than names `inline`,
+  `file`, `group`, `select` and `category`. That is the vocabulary a session
+  with a datamap already has.
 
 ## Wrong if
 

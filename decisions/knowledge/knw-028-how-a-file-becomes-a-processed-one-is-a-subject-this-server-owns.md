@@ -25,10 +25,10 @@ The actual gap is a statement in `knowledge/`.
   `gerrit:setup` commands that all answer `runs: unknown`. Neither the text nor
   the data names a processor or a task type.
 - The feedback contradicts itself on exactly that point. It credits the tool
-  with a return of "the declared processors and processingTaskTypes", lists the
-  processing classes it read by hand two paragraphs later, and then asks for the
-  map. This is the third corpus in which a strength's credit lands in the wrong
-  place;
+  with a return of "the declared processors and processingTaskTypes". It lists
+  the processing classes it read by hand two paragraphs later, and then asks for
+  the map. This is the third corpus in which a strength's credit lands in the
+  wrong place;
   [`D-FBK-018`](../feedback/fbk-018-a-strength-is-evidence-about-a-boundary-not-about-a-decision.md)
   records two. It is the first where the credit goes to no tool at all.
 - The sibling from the same debrief asks for the same thing, more precisely.
@@ -144,5 +144,5 @@ hint carries no range. What was wrong was the read of the declaration rather
 than the conclusion.
 
 The boundary had a visit from below the same day. A session that had asserted
-twice that image processing requires a FAL object filed the case the new hint
-answers up to the processor and not after it. `D-KNW-042` takes that half on.
+twice that image processing requires a FAL object filed the case. The new hint
+answers it up to the processor and not after it. `D-KNW-042` takes that half on.

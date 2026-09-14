@@ -85,8 +85,8 @@ of `feedback/2026-08-03-154508` was open behind that.
 ## Assumed
 
 - That a caller asks for a boot in this vocabulary. The patterns are one
-  session's wording plus the `installation-operations` match list, and no second
-  report of this task shape has been read against them.
+  session's wording plus the `installation-operations` match list, and nobody
+  has read a second report of this task shape against them.
 - That the DDEV half belongs to `typo3_project_describe` rather than here. The
   hint names the hooks as the procedure and points at that tool for them, on
   `R-PRJ-009`. So nothing states a stage or a provider twice.

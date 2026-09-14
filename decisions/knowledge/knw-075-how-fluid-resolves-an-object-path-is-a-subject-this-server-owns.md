@@ -15,16 +15,16 @@ property of that name, is inside this server's boundary and absent.**
 The corpus states where Fluid finds a template file, what a layout renders and
 where an expression goes wrong. It says nothing about what `{obj.items}` asks
 the object. A session that adds a `hasItems()` beside a public `$items` gets a
-boolean where the array was, and the only thing it is handed is an error naming
-the ViewHelper.
+boolean where the array was. The only thing it gets is an error that names the
+ViewHelper.
 
 ## Evidence
 
 - Re-run on 2026-08-14 against the corpus as it is now. `bin/cli hints:probe`
   with the feedback's own query matches nothing and returns 25 hints as the
-  index. Three narrower probes: "f:for each argument is of type boolean error"
-  matches nothing either; "naming methods on a DTO rendered in a Fluid template"
-  reaches `fluid-templates` alone; "hasItems method shadows the public items
+  index. Three narrower probes. "f:for each argument is of type boolean error"
+  matches nothing either. "naming methods on a DTO rendered in a Fluid template"
+  reaches `fluid-templates` alone. "hasItems method shadows the public items
   property in a Fluid template" reaches `fluid-templates` and
   `preview-record-variable`, neither of which states an accessor.
 - Nothing below `knowledge/` or `skills/` contains `getByPath`,
@@ -58,9 +58,9 @@ the ViewHelper.
 
 ## Decided
 
-- Step 1a, and queued. The order itself is established above rather than left to
-  the card, because four checkouts carry the file and reading it cost one call.
-  What the card owes is the symptom per major and where the statement goes.
+- Step 1a, and queued. The order itself stands above rather than with the card,
+  because four checkouts carry the file and a read of it cost one call. What the
+  card owes is the symptom per major and where the statement goes.
 - Not closed on the spot. What `<f:for>` does with a boolean on 12.4 and 13.4 is
   a claim about TYPO3 nobody here has read. It decides whether the statement
   carries a bound.
@@ -86,8 +86,8 @@ the ViewHelper.
   the mechanism. Nobody asks about an accessor before they suspect one, so the
   `appliesTo` carries the error string as well as `getByPath`.
 - That the naming half belongs beside the resolution half. It is advice to the
-  author of a PHP class and the rest of the statement is about a template, and
-  no hint here is about writing a DTO.
+  author of a PHP class and the rest of the statement is about a template. No
+  hint here is about a DTO.
 - That one session wrote this feedback and the four beside it. They share a
   directory, a model and seventy-five seconds, and nothing in a feedback records
   a session.

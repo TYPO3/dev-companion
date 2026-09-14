@@ -10,10 +10,11 @@ coveredBy:
 # D-KNW-056 — A file skeleton is shipped as a version-bound document section
 
 **The corpus ships a file a caller writes into its own repository as one
-document section, fenced whole and bound to the majors it holds for.**
+document section. The section fences it whole and binds it to the majors it
+holds for.**
 
-The corpus answers as prose today what an extension needs to start its tests:
-which two files to copy out of `typo3/testing-framework`, what to change in
+The corpus answers as prose today what an extension needs to start its tests.
+Which two files to copy out of `typo3/testing-framework`, what to change in
 them, which variables the run needs. The caller reconstructs the files from that
 description every time, and for Playwright outside the core there is no
 description to reconstruct from at all.
@@ -24,18 +25,18 @@ description to reconstruct from at all.
   and returns a section in its original form, code fences included.
   `typo3://core/{id}` serves the whole document uncut beside it.
 - The scope has a place already, and this stretches nothing.
-  `Documents::isCoreOnly()` reads it off the `covers` entry naming the document,
-  and those entries already carry `scope`, so a document answering for an
-  extension is a topic declared with that scope. That all five documents today
-  are the core's own is the subjects their writers chose.
+  `Documents::isCoreOnly()` reads it off the `covers` entry that names the
+  document, and those entries already carry `scope`. So a document that answers
+  for an extension is a topic declared with that scope. That all five documents
+  today are the core's own is the subjects their writers chose.
 - One file fits a section and a file with its prose does not.
   `MAX_SECTION_LENGTH` is 2400 characters; `UnitTests.xml` is 1845 bytes,
   `FunctionalTests.xml` 1881, and the core's `playwright.config.ts` 1611. The
   cut is fence-aware, which prevents an unclosed code block and not half an XML
   file.
 - The bound is not theoretical. Between `typo3/testing-framework` lines 8 and 9
-  both XML files differ in two lines — the PHPUnit schema URL, `10.1` against
-  `11.2`, and `beStrictAboutTestsThatDoNotTestAnything` — while line 9 and
+  both XML files differ in two lines. Those are the PHPUnit schema URL, `10.1`
+  against `11.2`, and `beStrictAboutTestsThatDoNotTestAnything`. Line 9 and
   `main` are identical. A caller on the older line handed the newer file gets a
   schema URL for a PHPUnit it does not have.
 - A document is the one part of the corpus with no bound at all. A hint carries

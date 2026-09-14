@@ -39,9 +39,9 @@ rendered error page in a terminal does not cheaply have.
   that cost the session six round trips shows on the page and never goes to the
   log. So an agent sent to the log for it finds nothing there.
 - The log is where the rest of them are, on all four. `LOG.writerConfiguration`
-  in `DefaultConfiguration.php` binds `FileWriter` with no options at `warning`,
+  in `DefaultConfiguration.php` binds `FileWriter` with no options at `warning`.
   `FileWriter::getDefaultLogFileName()` builds `Environment::getVarPath()` plus
-  `/log/typo3_<ten characters>.log` out of `defaultLogFileTemplate`, and
+  `/log/typo3_<ten characters>.log` out of `defaultLogFileTemplate`.
   `writeLogEntries()` logs an uncaught exception at `critical` with its class,
   code, file, line and message.
 - The symptom axis itself is not the gap. `D-ANS-081` and `D-ANS-084` built it
@@ -85,10 +85,10 @@ rendered error page in a terminal does not cheaply have.
 - The two statements that already name 1396795884 stay where they are. Each is
   right for the procedure it describes, and whether either owes a neighbour line
   is the todo's to decide against `D-KNW-087`.
-- The skill takes the routing at the step where the site is proved. Its proof
-  step asks for the site to answer on both sides and says nothing about what to
-  do when it does not. That is exactly where the session that reported stood.
-  The boot section takes the reference `D-KNW-054` asked for in the same work.
+- The skill takes the routing at the step that proves the site. Its proof step
+  asks for the site to answer on both sides and says nothing about what to do
+  when it does not. That is exactly where the session that reported stood. The
+  boot section takes the reference `D-KNW-054` asked for in the same work.
 - Curated with phrases of several words. `D-ANS-084` crosses the domain gate on
   those alone, and an agent at a 500 is regularly in another domain. The
   ViewHelper case is the worked example.
@@ -121,10 +121,10 @@ rendered error page in a terminal does not cheaply have.
   displaces `installation-boot` on a boot query. Its phrases would be the
   general words rather than the symptom, which is `D-ANS-084`'s second **Wrong
   if** from the corpus side.
-- The reading finds the log holds the trusted-hosts exception after all — a
-  writer configured below the ignored check, or a handler that is not the
-  core's. The hint's central caveat would be wrong, and this entry would have
-  rested on a list read in one class.
+- The read finds the log holds the trusted-hosts exception after all. A writer
+  configured below the ignored check, or a handler that is not the core's. The
+  hint's central caveat would be wrong, and this entry would have rested on a
+  list read in one class.
 - A release drops the ignored list, or a project's own `writerConfiguration`
   turns out to be the ordinary case rather than the exception. The statement
   would be version-bound, or wrong more often than right.
@@ -145,7 +145,7 @@ the code the logger refuses. So the trusted-hosts failure shows whatever the
 configuration and goes to no log, and every other uncaught exception is the
 other way round. The two halves invert, which is what the hint states.
 
-A PHP fatal is the boundary the reading added: the error masks exclude it, so it
+A PHP fatal is the boundary the read added. The error masks exclude it, so it
 reaches no handler and a caller told to read the log finds nothing.
 
 ## Since then

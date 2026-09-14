@@ -8,7 +8,7 @@ status: open
 # D-KNW-071 — Proving what a rendering change renders is a procedure this server carries
 
 **How a throwaway functional test renders frontend output in a core checkout,
-and how what it rendered is read at all, is a document below
+and how a session reads what it rendered, is a document below
 `knowledge/documents/core/testing/`.**
 
 Two skills grant the probe and neither says what one consists of. A session that
@@ -38,8 +38,8 @@ It spent five of six container rounds on its own harness.
   reproduction owes: where it goes, seen red before anybody believes it, taken
   out again. Both assume the test is already written.
 - `D-SKL-032` left the question open for "the run that has both", and this is
-  it: a session that could run a suite, that got every substantive finding out
-  of running it, and that still paid for the harness. It counted the cost, six
+  it. A session that could run a suite, that got every substantive finding out
+  of the run, and that still paid for the harness. It counted the cost, six
   rounds at roughly two minutes, three of them with nothing but its own mistakes
   as output. That is what `D-FBK-027` measures.
 - One of the four things the feedback names is already answered.
@@ -109,7 +109,7 @@ sentinel assertion is the worse way to read rendered output, since the test body
 may simply print. So the first **Wrong if** did not hold. The third did not
 either, and one section pair carries what differs between the majors.
 
-The second **Wrong if** held: a review had the document installed, read the
-paragraph naming it, skipped it because the diff was PHP, and spent six
+The second **Wrong if** held. A review had the document installed, read the
+paragraph that names it, skipped it because the diff was PHP, and spent six
 container rounds on the harness. So the gap was the route, which `D-KNW-122`
 reads.

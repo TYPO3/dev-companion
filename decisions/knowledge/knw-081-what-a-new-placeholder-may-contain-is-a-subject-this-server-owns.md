@@ -61,8 +61,8 @@ relation, and the run reports success.
 ## Assumed
 
 - One statement is enough. `datahandler-writing` defines the placeholder as
-  "NEW" plus a unique suffix, and a session naming its keys there is assumed to
-  reach the relation hint before it writes a relation field.
+  "NEW" plus a unique suffix. The assumption is that a session that names its
+  keys there reaches the relation hint before it writes a relation field.
 
 ## Wrong if
 
@@ -85,8 +85,8 @@ the five call sites that push a value array, four consume it and the fifth never
 reads the remapped array. So the rule is about what a relation field gets, which
 is where the statement puts it.
 
-Nothing logs the drop, and the reading now covers every site rather than two:
-the handler carries no logger, nothing compares the list before the drop with
-the list after, and what the log does hold is the parent's own update with the
+Nothing logs the drop, and the read now covers every site rather than two. The
+handler carries no logger, and nothing compares the list before the drop with
+the list after. What the log does hold is the parent's own update with the
 counter at zero. The first **Wrong if** stands, and only a second feedback would
 show it.

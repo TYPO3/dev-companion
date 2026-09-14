@@ -14,9 +14,9 @@ coveredBy:
 
 # D-KNW-055 — The first check a standalone extension gets is a subject this server owns
 
-**The corpus states how a session sets up an extension's coding standards,
-beside the static-analysis hint that is the only half of that layer it holds
-today.**
+**The corpus states how a session sets up an extension's coding standards. It
+stands beside the static-analysis hint that is the only half of that layer it
+holds today.**
 
 Six feedback, one session, one task: "add a code style fixer to a standalone
 TYPO3 14.3 extension repository". Three of them are the corpus gap seen from
@@ -39,9 +39,9 @@ analyser and nothing else in that layer.
 - **One session, six cards, four minutes.** `bin/cli feedback:list` on
   2026-08-04 reports 10 open in three directories, 8 of them in
   `/home/benji/projects/ext-guidedtour`. The six judged here are `055420`,
-  `055626`, `055638`, `055658`, `055715` and `055741`, all `claude-opus-5[1m]`,
-  all naming the same task, and all read whole for this entry. One session is
-  what they weigh, and it is why nothing here is `high`.
+  `055626`, `055638`, `055658`, `055715` and `055741`. All are
+  `claude-opus-5[1m]`, all name the same task, and this entry read all of them
+  whole. One session is what they weigh, and it is why nothing here is `high`.
 - **Nothing below `knowledge/` states the subject.**
   `bin/cli hints:probe "coding standards php-cs-fixer setup for an extension"`,
   the feedback's own query, returns `extension-repository-layout` alone. That is
@@ -51,18 +51,19 @@ analyser and nothing else in that layer.
   grep over `knowledge/` for the packages finds them in
   `catalog/reference/entries.json` and in the core-scripts document, neither of
   which is an answer about an extension.
-- **The one hint that exists is the analyser's.** `extension-static-analysis` in
-  `knowledge/hints/testing.json` was read whole: six statements, all PHPStan —
-  the configuration's place, `tmpDir`, `bootstrapFiles` for `LF` and `CR`, the
-  `ext_emconf.php` exclusion, level 5, the baseline. Its `appliesTo` needles are
-  `phpstan`, `phpstan.neon`, `static analysis`, `analyse`, `baseline`,
-  `phpstan-baseline`, `tmpDir`, `result cache`, `set up static analysis`,
-  `level`. Not one of them is a word a caller who asks for a fixer would use.
+- **The one hint that exists is the analyser's.** This entry read
+  `extension-static-analysis` in `knowledge/hints/testing.json` whole. Six
+  statements, all PHPStan: the configuration's place, `tmpDir`, `bootstrapFiles`
+  for `LF` and `CR`, the `ext_emconf.php` exclusion, level 5, the baseline. Its
+  `appliesTo` needles are `phpstan`, `phpstan.neon`, `static analysis`,
+  `analyse`, `baseline`, `phpstan-baseline`, `tmpDir`, `result cache`,
+  `set up static analysis`, `level`. Not one of them is a word a caller who asks
+  for a fixer would use.
 - **The skill routes to a corpus that answers half of what it names.**
   `skills/typo3-extension-testing/references/static-quality.md` names
   `friendsofphp/php-cs-fixer` driven by `typo3/coding-standards` and
-  `editorconfig-checker` under *Coding standards*, and under *Static analysis*
-  it hands the configuration question over: "`typo3_hint_lookup` with
+  `editorconfig-checker` under *Coding standards*. Under *Static analysis* it
+  hands the configuration question over. "`typo3_hint_lookup` with
   `id=extension-static-analysis` answers where the file belongs … ask it rather
   than recalling a configuration from another project". There is no such
   sentence for the fixer, because there is no such id.
@@ -98,10 +99,10 @@ analyser and nothing else in that layer.
   to read `Classes/Information/Typo3Version.php` out of it. So the floor is one
   further read at a path the server has resolved.
 - **The strength and the cost are the same boundary.** `055658` credits
-  `typo3_project_describe` for two things: the environment block naming the
+  `typo3_project_describe` for two things. The environment block that names the
   container's interpreter against the caller's shell, which sent every command
-  through DDEV, and the explicit empty answers — `commands: []`,
-  `artifacts.tests: []` — which turned "add a fixer" into "establish the first
+  through DDEV. The explicit empty answers, `commands: []`,
+  `artifacts.tests: []`, which turned "add a fixer" into "establish the first
   check". Both are already what must hold: `R-PRJ-008` holds the first with
   three `ProjectTest` methods, `R-PRJ-006` the second with one. Twelve seconds
   earlier, from the same debrief, `055638` reports the one number that same call

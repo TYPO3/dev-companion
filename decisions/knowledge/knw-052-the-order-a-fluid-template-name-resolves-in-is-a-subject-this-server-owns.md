@@ -151,7 +151,7 @@ so neither does the third.
 That settles both assumptions, and the second was the research the todo owed.
 The order an author sees is the one the resolver walks, for neither reason the
 question suggested. The setter sorts each root path list on its integer keys
-before the resolver reverses it, so the highest key wins and an appended path
+before the resolver reverses it. So the highest key wins and an appended path
 sorts last. What comes apart is the case nobody named. The setter skips that
 sort as soon as one key is a string, and then the array's own order decides.
 

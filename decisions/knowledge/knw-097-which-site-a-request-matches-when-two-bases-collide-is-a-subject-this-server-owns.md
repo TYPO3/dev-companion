@@ -14,9 +14,9 @@ without.**
 
 So a site on `base: /` loses every request the moment a second site names the
 host. The feedback goes to the queue at `normal`. The corpus carries the
-matcher's other direction — a base naming a host nobody is on matches nothing —
-and states the bare path as what "matches every host", which is the reading a
-caller with two sites has to arrive at the opposite of.
+matcher's other direction, a base that names a host nobody is on matches
+nothing. It states the bare path as what "matches every host", which is the read
+a caller with two sites has to arrive at the opposite of.
 
 ## Evidence
 
@@ -55,14 +55,14 @@ caller with two sites has to arrive at the opposite of.
   `CreateSiteConfiguration` wrote, and its card in `todo/open/` has no judgement
   yet.
 - `feedback/2026-08-18-074606` is the third from that session and says the
-  domain has no skill owner; its card is in hand as
+  domain has no skill owner. Its card is in hand as
   `todo/progress/2026-08-18-124747`, and that work reads the site-configuration
-  hints rather than writing them.
+  hints rather than writes them.
 
 ## Decided
 
 - Step 1a with a curation half, and queued rather than closed on the spot. What
-  the statement says about TYPO3 has to be read, which
+  the statement says about TYPO3 needs a read, which
   [`judging.rst`](../../documentation/records/judging.rst) puts on the todo's
   side of the line whatever its size.
 - `normal` rather than the `low` the card arrived at. One rule cost one session
@@ -104,9 +104,9 @@ caller with two sites has to arrive at the opposite of.
 
 ## Wrong if
 
-- The reading finds the collision is settled before `BestUrlMatcher` — a route
-  order in `SiteMatcher`, or an earlier return that never reaches the sort. The
-  statement would rest on a class read out of its call path.
+- The read finds something settles the collision before `BestUrlMatcher`, a
+  route order in `SiteMatcher`, or an earlier return that never reaches the
+  sort. The statement would rest on a class read out of its call path.
 - The statement lands and a root-404 query still returns
   `initial-content-references` first. The lever would have been that hint's own
   curation rather than a hint beside it, and this is step 4 of the ladder.
@@ -125,16 +125,16 @@ caller with two sites has to arrive at the opposite of.
 
 ## Since then
 
-The hint is written and the reading settled four of the six **Wrong if**. The
-sort is on the call path, so the first does not hold. What it sorts by is one
-comparison earlier than this entry had it. Each site's own entry route goes
-last, so the language routes collide and the matcher compares the host before
-the path matched. That is the part worth a statement: a base that names the host
-beats a more specific path.
+The hint exists and the read settled four of the six **Wrong if**. The sort is
+on the call path, so the first does not hold. What it sorts by is one comparison
+earlier than this entry had it. Each site's own entry route goes last, so the
+language routes collide and the matcher compares the host before the path
+matched. That is the part worth a statement: a base that names the host beats a
+more specific path.
 
 The second **Assumed** was the wrong way round and the statement is unbound. The
 fifth **Wrong if** is half true and improves the hint. A deleted root page and a
 mistyped slug produce the same sentence, and a hidden one differs by an
 exclamation mark. So the message carries one discriminator and never says which
 site answered. The third does not hold as measured, and the routing half went
-the same way — two surfaces named three causes and were missing this one.
+the same way. Two surfaces named three causes and lacked this one.

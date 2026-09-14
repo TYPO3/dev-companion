@@ -16,7 +16,7 @@ coveredBy:
 `$row['hidden']` on such a row is absent rather than false.**
 
 `record-system-properties` carries it beside `persistence-reading` rather than
-inside it: one hint is one question, and the two questions are which rows a
+inside it. One hint is one question, and the two questions are which rows a
 query returns and what the object built from one of them looks like.
 
 ## Evidence
@@ -53,7 +53,7 @@ query returns and what the object built from one of them looks like.
   the PHP objects.
 - `appliesTo` carries the class and accessor names and the moved field names,
   and not the bare `hidden`. A session that has the bug arrives with
-  `starttime`, `endtime`, `crdate`, `tstamp` or `fe_group` and reaches it; the
+  `starttime`, `endtime`, `crdate`, `tstamp` or `fe_group` and reaches it. The
   one word every question about a disabled record carries would take queries
   `persistence-reading` and `frontend-access-restriction` answer.
 - `persistence-reading` gains one sentence pointing here, bound `since: 13`. It

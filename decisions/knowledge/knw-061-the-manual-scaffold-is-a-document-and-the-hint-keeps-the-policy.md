@@ -36,8 +36,8 @@ out what to put in the directory.
 - [`D-FBK-043`](../feedback/fbk-043-a-structure-is-answered-with-a-document-rather-than-with-a-rule.md)
   is the shape. A session that found a *structure* unclear gets a document,
   because a hint states one thing and a file inventory is not one thing.
-  `knowledge/documents/extension/testing/phpunit.md` is the neighbour it is
-  written beside.
+  `knowledge/documents/extension/testing/phpunit.md` is the neighbour it stands
+  beside.
 
 ## Decided
 

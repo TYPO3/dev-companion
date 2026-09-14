@@ -60,8 +60,8 @@ answer.
 - One report, and the second in this family. `bin/cli feedback:list` on
   2026-08-13 holds 18 open feedback, all from `/home/benji/projects/typo3-cms`.
   [`D-KNW-065`](knw-065-what-a-public-method-commits-its-author-to-is-a-subject-this-server-owns.md)
-  took the same question on from the other side — writing a patch rather than
-  reviewing one — and covered the third move of a signature.
+  took the same question on from the other side, a patch written rather than
+  reviewed, and covered the third move of a signature.
 
 ## Decided
 
@@ -114,9 +114,8 @@ answer.
 - The statement lands and a review still answers the classification from memory.
   The lever is then a checklist that joins **Behaviour** to the changelog
   surface, rather than a sentence in the corpus.
-- The same surface is reported again from writing a patch rather than from
-  reviewing one. Placement in the review checklist is then the wrong half, and
-  one card carries both.
+- A written patch rather than a review reports the same surface again. Placement
+  in the review checklist is then the wrong half, and one card carries both.
 
 ## Confirmed on 2026-08-14
 

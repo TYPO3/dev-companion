@@ -19,9 +19,9 @@ a hidden record renders and nothing throws.
 ## Evidence
 
 - Re-run on 2026-08-14 against the corpus as it is now. `bin/cli hints:probe`
-  with the feedback's own task — "Record API SystemProperties hidden starttime
-  endtime fe_group enable fields" — reaches `persistence-reading`,
-  `frontend-access-restriction` and `frontend-records`, which are the three the
+  with the feedback's own task, "Record API SystemProperties hidden starttime
+  endtime fe_group enable fields", reaches `persistence-reading`,
+  `frontend-access-restriction` and `frontend-records`. Those are the three the
   feedback reported and in that order.
 - The vocabulary is absent. `SystemProperties`, `RecordFactory`,
   `getSystemProperties`, `isDisabled` and `toArray(true)` occur nowhere below
@@ -57,9 +57,8 @@ a hidden record renders and nothing throws.
   with `persistence-reading`, and what a data processor produces stays with
   `frontend-records`.
 - The hint stands around the silent failure rather than around the accessor
-  list. A caller who is told the accessors exist still has no reason to stop
-  reading `$row['hidden']`, because that read returns a value and the value
-  looks right.
+  list. A caller who hears the accessors exist still has no reason to stop with
+  `$row['hidden']`, because that read returns a value and the value looks right.
 - The card goes to `normal`. One session reported it, which is not the weight
   that lifts a card on its own. What lifts this one is that the failure reads as
   a correct answer. A session pays a gap whose cost is a wrong lookup once, and
@@ -82,8 +81,8 @@ a hidden record renders and nothing throws.
 
 ## Wrong if
 
-- The reading finds the enable fields are still among the properties on one of
-  the covered lines, which would make this a version boundary rather than a
+- The read finds the enable fields are still among the properties on one of the
+  covered lines. That would make this a version boundary rather than a
   statement.
 - `typo3_schema_lookup` turns out to answer the record's shape from the
   installation, which would make it an answer rather than a hint.

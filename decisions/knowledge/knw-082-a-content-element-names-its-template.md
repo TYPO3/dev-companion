@@ -19,9 +19,9 @@ sitepackage that trusted it would have named no template at all.
 
 ## Evidence
 
-- `feedback/2026-08-17-205817`. A session building a v14 demo site read the
-  installed `fluid_styled_content` before writing its TypoScript for six custom
-  elements, found the derivation absent there, and reports it would otherwise
+- `feedback/2026-08-17-205817`. A session that built a v14 demo site read the
+  installed `fluid_styled_content` before it wrote its TypoScript for six custom
+  elements. It found the derivation absent there, and reports it would otherwise
   have configured nothing.
 - The claim holds, read in `.checkouts/14.3` at `627949e9dd`.
   `typo3/sysext/fluid_styled_content/Configuration/TypoScript/Helper/ContentElement.typoscript`
@@ -44,7 +44,7 @@ sitepackage that trusted it would have named no template at all.
 - The same file is where `tt_content = CASE` gets a `default` of
   `lib.contentElement`. The core's own default, in
   `typo3/sysext/frontend/ext_localconf.php`, is the yellow "has no rendering
-  definition" `TEXT`, so under the theme the derivation answers for every CType
+  definition" `TEXT`. So under the theme the derivation answers for every CType,
   and under `fluid_styled_content` alone an unnamed one is a visible error.
 - What the feedback expects of the failure is not what the tree says.
   `fluid_styled_content` ships no `Default` template on any covered branch.
@@ -67,9 +67,9 @@ sitepackage that trusted it would have named no template at all.
   it.
 - Closed in this run rather than queued. `documentation/records/judging.rst`
   puts a feedback that needs a TYPO3 lookup on the todo side of the line because
-  the judging run has read nothing but this repository; the reading that
-  disqualifies it is the one the ladder owes any feedback claiming something
-  about TYPO3, and it was done here, in `.checkouts/`, on all three covered
+  the judgement run has read nothing but this repository. The read that
+  disqualifies it is the one the ladder owes any feedback that claims something
+  about TYPO3. That read happened here, in `.checkouts/`, on all three covered
   majors and named by file above.
 - The ladder has no rung for a statement the server delivered, the session took,
   and that was wrong. This is step 1a by the gap, since the corpus never said

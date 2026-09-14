@@ -57,7 +57,8 @@ it.
 - `typo3_schema_lookup` is a separate finding and not the answer to this one. It
   returns `notnull` and `default` per column and needs a booted installation
   with the table in it. That is a different question from what a type produces.
-  Its description not naming those two fields is queued on its own.
+  Its description names neither of those two fields, and that has a card of its
+  own.
 
 ## Assumed
 

@@ -71,11 +71,10 @@ variables into the web container.
 - The environment made here is where the session measures it, not the project of
   the session that reported. `bin/cli environment:create E-SITE` is that
   environment and `D-EVI-004` is why.
-- Where the statement lands is decided with the reading. `installation-setup`
-  names the variables and is where a setup question arrives; `installation-boot`
-  is where a clone is brought up. The boot document `feedback/2026-08-18-070538`
-  asks for may take it instead, and that card has no judgement yet and stays
-  where it is.
+- The read decides where the statement lands. `installation-setup` names the
+  variables and is where a setup question arrives; `installation-boot` is where
+  a clone is brought up. The boot document `feedback/2026-08-18-070538` asks for
+  may take it instead, and that card has no judgement yet and stays where it is.
 - `normal` rather than `low`. One session's suggestion is a suggestion. Two name
   this line and a third pays on the surface.
 - Not step 5. `doesNotCover` excludes the operation of an installation. This is
@@ -124,10 +123,10 @@ a configuration always holds.
 
 ## Since then
 
-The reading measured the forms the feedback named, and a session has since paid
-for one it did not: a command written across several lines inside the `bash -c`
-string. None of the four **Wrong if** covers that. DDEV did not change and the
-statement that landed is still right about what it says. So what is open is a
-case rather than a correction. Its judgement is in
+The read measured the forms the feedback named, and a session has since paid for
+one it did not. That is a command written across several lines inside the
+`bash -c` string. None of the four **Wrong if** covers that. DDEV did not change
+and the statement that landed is still right about what it says. So what is open
+is a case rather than a correction. Its judgement is in
 [`D-KNW-119`](knw-119-the-corpus-tells-apart-the-failures-one-usage-synopsis-presents-alike.md),
 which takes the same subject one form further and carries the card.

@@ -42,9 +42,9 @@ layer out of the checkout itself.
 ## Decided
 
 - One hint, `javascript-unit-tests`, in the `typescript` domain and `core`
-  scope. It carries where the file goes, what discovers it, that the import map
-  points at built output so the branch has to be built first, the `~labels` stub
-  and the `@open-wc/testing` plus mocha idiom.
+  scope. It carries where the file goes, what discovers it, and that the import
+  map points at built output so the branch needs a build first. It carries the
+  `~labels` stub and the `@open-wc/testing` plus mocha idiom.
 - The suite entry for `unitJavascript` names it. `typo3_test_run_guide` answers
   how a session runs a suite and this hint answers how a session writes one of
   its tests. The session that has the first has no reason to guess that the
@@ -57,8 +57,8 @@ layer out of the checkout itself.
 - No skill and no document. The gap was a set of statements about one layer,
   which is what a hint is. The order of the work was never in question.
 - The domain half is a carve-out in `Domains::detect()`, of the shape the
-  `ADMINISTERED_FROM_THE_BACKEND` one already has: the seven testing phrasings
-  do not add PHP where the paths carry a domain and PHP is not among them. Only
+  `ADMINISTERED_FROM_THE_BACKEND` one already has. The seven testing phrases do
+  not add PHP where the paths carry a domain and PHP is not among them. Only
   those seven, and only against paths. Every other PHP keyword names a PHP thing
   rather than a kind of work. Free text cannot narrow anything, because a
   negated mention reads like a positive one. The feedback's own call now answers
@@ -85,7 +85,7 @@ layer out of the checkout itself.
   source rather than the built output. Then a sentence in a list does not carry
   build-before-test, and it belongs where the session runs the suite.
 - A task that really does touch both layers loses its PHPUnit hints. The
-  carve-out reads the paths, so naming one PHP path keeps them; a session that
+  carve-out reads the paths, so one named PHP path keeps them. A session that
   names neither is what would show the condition is the wrong one.
 
 ## Since then

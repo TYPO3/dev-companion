@@ -67,8 +67,8 @@ read either off `ExportCommand`.
   other side of the line from a wording fix.
 - One card for the two, with both feedback in its `**Serves:**` line, and the
   same commit deletes `todo/open/2026-08-17-211418`. Both sentences are the same
-  procedure in the same hint, corrected in one file from one run, and two cards
-  would spin up an installation twice for one reading.
+  procedure in the same hint, corrected in one file from one run. Two cards
+  would spin up an installation twice for one read.
 - `normal` rather than the `low` both cards arrived at. Two sessions reported
   one hint as wrong within half an hour. The failure mode is a distribution that
   ships without its images or without its content at all while every command
@@ -82,8 +82,8 @@ read either off `ExportCommand`.
   in. To say which direction it applies to is what the second feedback asks for.
 - The todo words the discriminator the corrected hint carries, and does not
   invent it. `feedback/2026-08-17-212800` asks for one on every procedural hint
-  and names this one as its first example; this correction is that proposal's
-  worked case, and judging it stays its own card.
+  and names this one as its first example. This correction is that proposal's
+  worked case, and its judgement stays its own card.
 
 ## Assumed
 

@@ -40,9 +40,9 @@ moment every PHP answer this server has is unavailable, and nothing below
   decides the container's project type and document root under "Declare the
   container" and says nothing about its interpreter. `typo3_project_describe`
   answers "no installation" until the install has run.
-  `feedback/2026-08-17-211157` wrote `php_version: 8.4` there and reports that
-  by the time the three PHP numbers were available the container had long been
-  built and the number had stopped looking like a decision.
+  `feedback/2026-08-17-211157` wrote `php_version: 8.4` there. It reports that
+  by the time the three PHP numbers were available the container had long stood
+  built and the number no longer looked like a decision.
 
 ## Decided
 
@@ -51,8 +51,9 @@ moment every PHP answer this server has is unavailable, and nothing below
 - **The corpus states the floor and the tested range, and names them as what
   they are.** The floor is what the core's manifest requires. The range is what
   `runTests.sh` accepts, which is the core testing itself and not a support
-  statement — TYPO3's supported-version page is outside the indexed manual, and
-  a range labelled "supported" from this reading would claim more than was read.
+  statement. TYPO3's supported-version page is outside the indexed manual, and a
+  range labelled "supported" from this read would claim more than the read
+  covered.
 - **Bound as data.** The numbers differ per major, so `since` and `until` carry
   it and no sentence names a version — `D-VER-004`, and
   `documentation/server/versions.rst`.
@@ -86,9 +87,9 @@ moment every PHP answer this server has is unavailable, and nothing below
 ## Since then
 
 It landed as a hint of its own, `php-versions`, and as a routing line in the
-installation skill's "Declare the container" step — both, because the two
-**Wrong if** above are the two halves: the corpus carries the numbers and the
-step is what makes anybody ask for them before the container is written.
+installation skill's "Declare the container" step. Both, because the two **Wrong
+if** above are the two halves. The corpus carries the numbers and the step is
+what makes anybody ask for them before the session writes the container.
 `project-configuration-files` was the third option and the session refused it
 twice over. Its subject is what configures the installation rather than what the
 container runs. It was in another session's hands, so a statement written there

@@ -78,8 +78,8 @@ current API. One line above the signature the docblock reads
   `getPublicResourceWebPath()` still resolves the path and is the way out rather
   than the way in. It raises `E_USER_DEPRECATED` per call and is gone in the
   next major. The other says that `getSystemResourceUri()` is a third thing
-  beside the two: `@internal`, reserved for the core's own call sites, a finding
-  rather than a shorthand.
+  beside the two. It is `@internal`, reserved for the core's own call sites, a
+  finding rather than a shorthand.
 - Both carry no version number, no changelog id and no count, which is what
   `HintsTest::noHintStatesSomethingThatOnlyHoldsOnOneBranch` holds a hint to.
   The band carries the branch and the sentence has to read the same on all of
@@ -140,8 +140,8 @@ current API. One line above the signature the docblock reads
   calls it was never a finding. The hint owes a `since`/`until` rather than a
   correction, and the docblock's own wording makes this the likeliest failure.
 - A session reads the new statements and still reports the call as conformant,
-  or still goes to `PathUtility` to decide. The wording was then not the gap,
-  and what remains to suspect is step 2, that an audit's question does not pass
+  or still goes to `PathUtility` to decide. The wording was then not the gap.
+  What remains to suspect is step 2, that an audit's question does not pass
   through this hint at all.
 - A session finds another hint that names one entry point of a class that also
   holds an internal or deprecated lookalike. One correction is then a fix rather

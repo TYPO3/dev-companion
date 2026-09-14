@@ -24,8 +24,8 @@ number carries its word, so its exemption exempts nothing else.
 ## Evidence
 
 - The guard's three patterns are a version number, a concrete changelog file and
-  a count, and its own comment says a number naming something other than a
-  branch is exemptible where it is written with its word in front.
+  a count. Its own comment says a number that names something other than a
+  branch is exemptible where it stands with its word in front.
 - `php-versions` needs eight of them: `PHP ^8.1`, `PHP ^8.2`, `PHP ^8.5`, three
   `config.platform.php` pins and both ends of two tested ranges. Written bare,
   every one of them trips the guard; written with the word, none does.

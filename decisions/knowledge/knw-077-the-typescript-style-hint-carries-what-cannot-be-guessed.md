@@ -20,15 +20,15 @@ imitate the neighbours in a codebase where two rules are off on purpose.
 - `feedback/2026-08-13-215716`. Its query re-run on 2026-08-14,
   `bin/cli hints:probe "backend TypeScript ESLint code style conventions building JavaScript modules"`,
   still reaches `backend-typescript` and `backend-ui`. Neither names a rule, a
-  configuration file or a check. Step 1a of the ladder: a search for `eslint`
+  configuration file or a check. Step 1a of the ladder. A search for `eslint`
   over `knowledge/` and `skills/` reaches one file,
-  `skills/typo3-extension-testing/references/static-quality.md`, which answers
+  `skills/typo3-extension-testing/references/static-quality.md`. That answers
   the extension audience about an extension's own setup.
 - The server delivers half of it already. `knowledge/test-suite-hints.json`
   carries `lintTypescript` and `typo3_test_run_guide` hands it over. The session
   that reported ran it and it passed. What is nowhere in the corpus is where the
   style is *decided*, so a question about a single rule has no cheaper answer
-  than reading the config.
+  than a read of the config.
 - The corpus already names a checker where the work passes rather than only in
   the test guide: `css-source-build-boundaries` says to use `lintScss`. The
   TypeScript hint beside it says neither.

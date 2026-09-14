@@ -24,7 +24,7 @@ A backend module renders inside an iframe and nothing in this corpus says so.
   the module menu as `role=navigation` named "Module Menu". Its first guess, the
   custom element `<typo3-backend-module-menu>`, does not exist in 14.3.
 - `knowledge/documents/project/testing/playwright.md` already ships a backend
-  spec, and it asserts the URL alone: "whether the backend answered the module
+  spec, and it asserts the URL alone. "whether the backend answered the module
   or the login form is a question the URL answers". So the corpus carries a
   backend spec that never enters the module, and the first spec that does is on
   its own.

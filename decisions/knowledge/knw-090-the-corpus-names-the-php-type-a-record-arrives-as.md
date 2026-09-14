@@ -57,14 +57,14 @@ the five relational TCA types. A session that declares the variable with
   which is the shape
   [`D-FBK-027`](../feedback/fbk-027-the-server-builds-what-costs-its-caller-round-trips.md)
   weighs.
-- Not step 4. There is no sentence to reword: what the corpus states about
-  reading a field off the record is right and complete, and what to declare it
+- Not step 4. There is no sentence to reword. What the corpus states about a
+  read of a field off the record is right and complete, and what to declare it
   as is a different question about the same variable.
 - Not step 2 or 3. The session reached the hints that own the subject and read
   them, and named them in its report.
 - Not closed on the spot. Which TCA types transform into a value object is a
-  reading of `RecordFieldTransformer`, and the `f:argument` half needs an
-  installation, so both sides of the answer are established elsewhere.
+  read of `RecordFieldTransformer`, and the `f:argument` half needs an
+  installation. So both sides of the answer come from elsewhere.
 
 ## Assumed
 
@@ -85,8 +85,8 @@ the five relational TCA types. A session that declares the variable with
 - `f:argument` is not what raised the reported exception. A statement about type
   declarations would then send a caller after the wrong mechanism.
 - The set of columns that transform into a value object is open-ended enough
-  that naming it dates on the next major — the way `D-KNW-020`'s five relational
-  types can, and for the same reason.
+  that a list of it dates on the next major. That is the way `D-KNW-020`'s five
+  relational types can, and for the same reason.
 
 ## Confirmed on 2026-08-18
 

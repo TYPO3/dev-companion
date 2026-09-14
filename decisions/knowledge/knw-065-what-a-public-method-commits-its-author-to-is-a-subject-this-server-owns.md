@@ -8,7 +8,7 @@ status: confirmed
 # D-KNW-065 — What a public method commits its author to is a subject this server owns
 
 **That a parameter added to a public method on a non-final core class breaks
-every override of it is inside this server's boundary and absent from it.**
+every override of it is a fact this server owns. The corpus lacks it.**
 
 The corpus states the rule for what a change removes and narrows, in two places,
 and neither names the third move. A session that widens a signature therefore
@@ -60,8 +60,8 @@ wrote the diff, the tests and the changelog entry.
   optional parameter the same way is the research the todo owes.
 - The one thing that did fire fires last. `typo3_commit_message_guide` is the
   final step of the development skill's order and of the core-patch `routing`
-  entry in `knowledge/server-scope.json`, so the only statement of the rule
-  reaches a session after the change has been characterised.
+  entry in `knowledge/server-scope.json`. So the only statement of the rule
+  reaches a session after it has characterised the change.
 - One report from one session. `bin/cli feedback:list` on 2026-08-09 holds 12
   open feedback, all from `/home/benji/projects/typo3-cms` and all stamped
   within three minutes of each other. Nothing in the archive reports the public
@@ -70,9 +70,9 @@ wrote the diff, the tests and the changelog entry.
 ## Decided
 
 - Step 1a on the hint half and step 4 on the two wordings, queued rather than
-  closed on the spot. Both tests for the spot fail: the wording sits in `src/`
-  and in a skill's contract, and what the hint states is a claim about TYPO3
-  that has to be read across `.checkouts/`.
+  closed on the spot. Both tests for the spot fail. The wording sits in `src/`
+  and in a skill's contract, and what the hint states is a claim about TYPO3 a
+  session has to read across `.checkouts/`.
 - `normal` rather than the `low` the card arrived at. It is one session, so not
   more than that. But what the silence let through was a break with a `[BUGFIX]`
   on it, on a patch whose point was to reach two release lines. Every check the
@@ -103,9 +103,9 @@ wrote the diff, the tests and the changelog entry.
 - That the hint is the lever rather than the skill. The session made the hint
   call with the changed paths, so the placement is in reach by construction.
   Nothing tests whether a session that passes no path meets the rule.
-- That the silence produced the draft, rather than the model writing it and the
-  corpus never having been consulted. Nothing here separates the two, and the
-  lever is the same either way.
+- That the silence produced the draft, rather than the model that wrote it
+  without a look at the corpus. Nothing here separates the two, and the lever is
+  the same either way.
 - That one session wrote this feedback and the eleven beside it. They share a
   directory, a model and three minutes, and nothing in a feedback records a
   session.
@@ -121,9 +121,9 @@ wrote the diff, the tests and the changelog entry.
 - A session meets the rule, hands the state over with the additive setter, and
   the reviewers reject that shape. The lever would be the API design and this
   entry would have answered the wrong question.
-- The same surface is reported again from a review rather than from writing a
-  patch. The checklist's "from its deletions" is then the placement that has to
-  move, and one card carries both.
+- A review rather than a patch reports the same surface again. The checklist's
+  "from its deletions" is then the placement that has to move, and one card
+  carries both.
 
 ## Confirmed on 2026-08-09
 

@@ -32,7 +32,7 @@ belongs.
 - Each got its answer from its own feedback and card, after this one arrived.
   `D-KNW-080` for both impexp sentences, `D-KNW-081` for the `NEW` placeholder,
   `D-KNW-089` for the warm TCA cache.
-- Both of those entries deferred the general rule here by name — "the
+- Both of those entries deferred the general rule here by name. "the
   discriminator is left to the todo to word", "this is that proposal's worked
   case, and judging it stays its own card". So two entries passed the rule over
   by design and it is what remains of the feedback.
@@ -47,19 +47,19 @@ belongs.
   instance can fail while ddev start reports success" from a feedback of
   2026-08-03. `R-KNW-049` carries `cglGit` with SUCCESS after it inspected
   nothing, from one of 2026-08-02. Both stand where a session found them.
-- The corpus carries two discriminator sentences today, both written on
-  2026-08-18, and 24 statements naming a `typo3 <subject>:<verb>` command over
-  11 distinct commands — counted over `knowledge/hints/` on 2026-08-18. That is
-  the whole of what a sweep reads.
+- The corpus carries two discriminator sentences today, both from 2026-08-18. It
+  carries 24 statements that name a `typo3 <subject>:<verb>` command over 11
+  distinct commands, counted over `knowledge/hints/` on 2026-08-18. That is the
+  whole of what a sweep reads.
 - The session that reported paid between two and twelve round trips per
   sighting, four times. It says the four are most of its nine debug cycles.
 
 ## Decided
 
 - Queued rather than closed on the spot. Whether a given command answers success
-  unconditionally is read off that command's class in `.checkouts/`, and
+  unconditionally comes off that command's class in `.checkouts/`.
   [`judging.rst`](../../documentation/records/judging.rst) puts anything that
-  has to be looked up about TYPO3 on the todo's side of the line.
+  needs a lookup about TYPO3 on the todo's side of the line.
 - `normal` rather than the `low` the card arrived at. One session reported it,
   but the same failure now has a correction in four subsystems one at a time. A
   rule is what stops the fifth from the same route.
@@ -72,9 +72,9 @@ belongs.
   costs in the answer that carries the hint.
 - What the discriminator names sits outside the command's own output: the
   artifact, the database, the parent's column. Where a lookup on this server can
-  perform the check it is named, with what it does not settle —
-  `extension-schema-sql` naming `typo3_schema_lookup` and saying it answers what
-  TYPO3 would create is the worked example of both halves.
+  perform the check the statement names it, with what it does not settle.
+  `extension-schema-sql` names `typo3_schema_lookup` and says it answers what
+  TYPO3 would create, which is the worked example of both halves.
 - The requirement is about the command a hint prescribes, whoever ships it. The
   sweep starts at the console commands because that is where the evidence is.
   `ddev` and `runTests.sh` produced two of the sightings on record, and a rule
@@ -112,9 +112,9 @@ belongs.
   that reports its failures. Then "unconditional success" is the wrong test, and
   what decides is a command that acts on stale input. That is what `R-KNW-073`
   covers for one case and would then be the general rule instead.
-- A session follows a discriminator and it is wrong. Reading a check off the
-  corpus rather than off a run is the guess `judging.rst` warns about, and the
-  sweep would have produced sentences with a verified entry's authority.
+- A session follows a discriminator and it is wrong. A check read off the corpus
+  rather than off a run is the guess `judging.rst` warns about. The sweep would
+  have produced sentences with a verified entry's authority.
 - The discriminators land and the answers grow enough that a caller stops
   reading them. The cost is in payload, which `bin/cli hints:coverage` reports
   as body lengths. The rule would be right about the sentence and wrong about

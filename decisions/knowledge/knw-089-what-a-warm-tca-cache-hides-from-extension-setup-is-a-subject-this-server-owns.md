@@ -64,7 +64,7 @@ warm.
 - That is also why the feedback's aside is right. A fresh clone has no cache
   entry, so the first run builds TCA from the files and creates the tables in
   one pass. The trap needs a warm cache to appear at all.
-- The reading is uniform across the covered lines where it was checked.
+- The read is uniform across the covered lines it checked.
   `PackageDependentCacheIdentifier` builds `tca_base` on `.checkouts/12.4` at
   `31f881a212`, `.checkouts/13.4` at `fccbd407d8`, `.checkouts/14.3` at
   `627949e9dd` and `.checkouts/main` at `3a9f0b5e3c`. The success message is
@@ -76,9 +76,9 @@ warm.
 ## Decided
 
 - Step 1a, and queued rather than closed on the spot. The statement is about
-  TYPO3 rather than about the wording of a rule already written, and
+  TYPO3 rather than about the wording of a rule that exists.
   [`judging.rst`](../../documentation/records/judging.rst) puts that on the
-  todo's side of the line even where the reading is done.
+  todo's side of the line even where the read is done.
 - `normal` rather than the `low` the card arrived at. The corpus does not merely
   omit the precondition, it states the reverse order twice for the neighbour
   case. The failure is an absent table while every command answers `[OK]`.
@@ -93,13 +93,13 @@ warm.
   for the case each describes, and what the todo decides is whether either owes
   a neighbour line rather than a correction.
 - Neither archived nor trimmed. The feedback separates the half it blames itself
-  for — reading `typo3_schema_lookup` as evidence a table exists — from the half
-  nothing documents, and only the first is answered anywhere today, by that
-  tool's own description.
+  for, a read of `typo3_schema_lookup` as evidence a table exists, from the half
+  nothing documents. Only the first has an answer anywhere today, in that tool's
+  own description.
 - The todo words the discriminator rather than this entry invents it.
   `feedback/2026-08-17-212800` asks for one on every procedural hint and names
-  this failure as its third example; this is that proposal's worked case, and
-  judging it stays its own card.
+  this failure as its third example. This is that proposal's worked case, and
+  its judgement stays its own card.
 
 ## Assumed
 

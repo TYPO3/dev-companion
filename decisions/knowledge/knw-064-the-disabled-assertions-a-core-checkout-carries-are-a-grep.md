@@ -44,13 +44,13 @@ search over. The step that finds them is one grep in the skill that needs them.
 ## Decided
 
 - **No tool.** The todo asked for the price before the build, and the price is
-  the finding: nine lines is what `grep -rn "@todo" <sysext>/Tests` answers in
-  one call, and an index over them would be a surface, a schema and a contract
-  test standing on a corpus smaller than one of its own answers.
+  the finding. Nine lines is what `grep -rn "@todo" <sysext>/Tests` answers in
+  one call. An index over them would be a surface, a schema and a contract test
+  that stand on a corpus smaller than one of its own answers.
 - **The step goes where the work is.** `typo3-core-issue-triage` says to look
-  for the test the core already wrote and switched off before writing one, names
-  the grep, and says which subsystem to narrow it to — the reason text is what
-  identifies a hit, and the reader is already standing in the checkout.
+  for the test the core already wrote and switched off before the session writes
+  one. It names the grep, and says which subsystem to narrow it to. The reason
+  text is what identifies a hit, and the reader already stands in the checkout.
 - **The skill names `markTestSkipped` as the thing it is not.** Fifty of them
   against two that are about a defect is a ratio that sends a session into the
   wrong fifty. The skill says so rather than leaves it to the session to

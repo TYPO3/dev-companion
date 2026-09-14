@@ -24,14 +24,15 @@ step that asks with nothing to say.
   with no `Recognized as:` line at all, and the hints it carries are about
   `ext_tables.php` at boot. The same guide asked with boot wording answers
   `Recognized as: Bringing an installation up and running it` and names
-  `typo3-development-installation`, so the routing works and the question does
+  `typo3-development-installation`. So the routing works and the question does
   not reach it.
 - **The probe reaches the producer side alone.** `bin/cli hints:probe` for "how
   does an extension seed content into a fresh instance" and for "extension setup
-  wizard backend module seeds blog root page" reaches `datahandler-seeding` and,
-  on the second, `backend-modules`, `browser-tests` and `content-elements`.
-  `datahandler-seeding` is writing records with a script, which is what a
-  distribution is built from rather than how a package delivers one.
+  wizard backend module seeds blog root page" reaches `datahandler-seeding`. On
+  the second it also reaches `backend-modules`, `browser-tests` and
+  `content-elements`. `datahandler-seeding` is records written with a script,
+  which is what a distribution consists of rather than how a package delivers
+  one.
 - **Nothing here names another mechanism.** A search of `knowledge/` and
   `skills/` for `wizard` matches `content-elements.json`, `upgrade.json`,
   `task-intents.json` and `server-scope.json`, and none of those is about how to
@@ -73,10 +74,10 @@ step that asks with nothing to say.
   declarable is there has been told where to read next, and
   `typo3_extension_describe` already reports where the manual is. That is what
   the session that reported established by hand out of `.rst` files.
-- **One card for both halves of the feedback.** The closing item it asks for —
-  establish how this package expects a fresh instance to be filled before
-  reporting the boot done — is that knowledge delivered at the step that needs
-  it, and its wording depends on what the reading finds.
+- **One card for both halves of the feedback.** The closing item it asks for,
+  establish how this package expects a fresh instance to fill before the report
+  of a done boot, is that knowledge delivered at the step that needs it. Its
+  wording depends on what the read finds.
 - **Priority `normal`, set by the counted cost rather than by arrival.** One
   session on one extension is not what raises it. Five calls with two of them
   that answer nothing is the measure `D-FBK-027` names. The gap is the corpus's
@@ -113,13 +114,13 @@ step that asks with nothing to say.
 
 ## Since then
 
-The reading found more ways than the three this entry named, so its first
-**Wrong if** holds in the narrow sense: the statement stands and the list was
-understated. Core reads four files out of a package at setup rather than one.
-The last of them keys on its own hash, so it is the one shipped file that
-arrives again after an edit. From the newer major a package may also listen on
-an event and fill the instance with no file convention at all. The site set
-turned out to fill nothing by itself.
+The read found more ways than the three this entry named, so its first **Wrong
+if** holds in the narrow sense. The statement stands and the list was short.
+Core reads four files out of a package at setup rather than one. The last of
+them keys on its own hash, so it is the one shipped file that arrives again
+after an edit. From the newer major a package may also listen on an event and
+fill the instance with no file convention at all. The site set turned out to
+fill nothing by itself.
 
 Two things stayed as they were because neither is what the card asked for. The
 extension answer reports two of the four files, and the brief still reaches no

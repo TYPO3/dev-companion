@@ -49,15 +49,15 @@ installation the report came from.
 - It is a document rather than hints. The gap was a procedure with an order to
   it, which is what
   [`D-FBK-043`](../feedback/fbk-043-a-structure-is-answered-with-a-document-rather-than-with-a-rule.md)
-  answers with a document. `any/testing/browser-check`, because a DDEV site is
-  reached the same way whoever is working on it.
+  answers with a document. `any/testing/browser-check`, because a session
+  reaches a DDEV site the same way whoever works on it.
 - It carries the simple route first and the feedback's own as the case that
   needs it. A wildcard additional hostname is not an alias Docker can answer,
   and that is the one place a session has to read the router's address.
-- `browser-tests` gains the words a reviewer actually uses — visual check,
-  screenshot, render correctly, reproduce in the backend — because the session
-  had that hint listed under `omittedHints` and skipped it: its own vocabulary
-  was the vocabulary of somebody writing a spec.
+- `browser-tests` gains the words a reviewer uses: visual check, screenshot,
+  render correctly, reproduce in the backend. The session had that hint listed
+  under `omittedHints` and skipped it. Its own vocabulary was the vocabulary of
+  somebody who writes a spec.
 - The document names no `-s` suite. Which suites exist is per branch and lives
   in `test-suite-hints.json`, which `KnowledgeTest` holds prose to.
 
@@ -76,8 +76,8 @@ installation the report came from.
   `ddev_default`. Then the alias is not the mechanism and the explicit mapping
   is the route, not the fallback.
 - Somebody reaches for this document to write a committed browser suite. That is
-  `project/testing/playwright`, and a `whenToUse` that lets the two be confused
-  is the thing to fix.
+  `project/testing/playwright`, and a `whenToUse` that lets a reader confuse the
+  two is the thing to fix.
 
 ## Since then
 

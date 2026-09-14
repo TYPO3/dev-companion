@@ -9,14 +9,14 @@ comes back registered or not, in one call, which is what to use when you already
 read them out of a template. Pass query to search for one by name or by what it
 means. The answer comes from the booted installation. So what a package
 registers in a loop or from ext_localconf.php is in it, as well as what its
-Configuration/Icons.php declares. Where the installation cannot boot, with no
-console or no configuration yet, the tool reads the T3Icons set, the package
-registration files and the flag images instead. Then answeredBy says 'packages',
-and the answer states what that leaves out. Identifiers spell shapes rather than
-intents, so the search maps concept words: "warning" finds
-actions-exclamation-triangle. Backend only: IconFactory resolves the identifiers
-and <core:icon> renders them, and a frontend template can use neither. Answers
-from: installation, packages.
+Configuration/Icons.php declares. Where the installation cannot boot, the tool
+reads the T3Icons set, the package registration files and the flag images
+instead. That is a checkout with no console or no configuration yet. Then
+answeredBy says 'packages', and the answer states what that leaves out.
+Identifiers spell shapes rather than intents, so the search maps concept words:
+"warning" finds actions-exclamation-triangle. Backend only: IconFactory resolves
+the identifiers and <core:icon> renders them, and a frontend template can use
+neither. Answers from: installation, packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

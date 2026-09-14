@@ -12,26 +12,26 @@ coveredBy:
 
 **`typo3_gerrit_lookup` hands over the ref that fetches the patch set it names,
 derived from the change number and patch set it already answers with.** Two
-sessions held a complete description of a patch set they could not fetch, and
-both wrote the sharded ref themselves out of Gerrit trivia the answer never
+sessions had a complete description of a patch set they could not fetch in hand.
+Both wrote the sharded ref themselves out of Gerrit trivia the answer never
 states.
 
 ## Evidence
 
 - `feedback/2026-08-08-224354` is a review of change 95179. The answer carried
   number, patch set 1, commit `0b18ff0af75`, project `Packages/TYPO3.CMS` and
-  the review URL, and the session built `refs/changes/79/95179/1` from prior
+  the review URL. The session built `refs/changes/79/95179/1` from prior
   knowledge that Gerrit shards by the last two digits of the change number.
 - `feedback/2026-08-08-224352` is a triage of Forge #82228, a different task
   shape and the same reconstruction:
   `git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/19/53819/3 && git show FETCH_HEAD`.
-  That diff is what settled the triage — the 2017 proposal reinterpreted `width`
-  plus `height` as the fit-into-box the `m` modifier already does — and the
-  session names it as the read this server had no way to give it.
+  That diff settled the triage: the 2017 proposal took `width` plus `height` as
+  the fit-into-box the `m` modifier already does. The session names it as the
+  read this server had no way to give it.
 - Re-run on 2026-08-09, both against the review server. `change: "95179"` and
   `change: "53819"` answer number, subject, status, branch, patchSet, commit,
-  project, updated and url, in the text half and in the data half alike, and
-  neither half names a ref or a fetch.
+  project, updated and url. Both halves, text and data, carry them. Neither half
+  names a ref or a fetch.
 - Every input to the string is in that answer, and the derivation is checkable
   against a field beside it. Measured on 2026-08-09,
   `git ls-remote https://review.typo3.org/Packages/TYPO3.CMS refs/changes/79/95179/1 refs/changes/19/53819/3`
@@ -40,65 +40,65 @@ states.
   already carries.
 - The form is in the corpus and reached neither session.
   `knowledge/documents/core/contribution/gerrit-workflow.md` carries the ref,
-  the sharding and the remote asymmetry under *Fetch a Change Into This
-  Checkout*, and `D-SKL-021` measured on 2026-08-05 that the fetch is not
-  guessable from what the review server offers a reader.
+  the shard rule and the remote asymmetry under *Fetch a Change Into This
+  Checkout*. `D-SKL-021` measured on 2026-08-05 that nobody can guess the fetch
+  from what the review server offers a reader.
 
 ## Decided
 
-- This is step 2 of the ladder, delivery. Nothing is missing from the corpus:
-  the document states the ref exactly, and the answer that reaches the moment
-  the patch has to be fetched states nothing. The lever is the answering side of
-  the tool the session did call, which is what `D-ANS-061` settled for a
-  document uri and `D-ANS-064` for a change reference sitting in prose.
+- This is step 2 of the ladder, delivery. The corpus lacks nothing. The document
+  states the ref exactly, and the answer that reaches the moment the session has
+  to fetch the patch states nothing. The lever is the answer side of the tool
+  the session did call. That is what `D-ANS-061` settled for a document uri and
+  `D-ANS-064` for a change reference in prose.
 - The ref is a field of the change entry rather than a sentence in the text
-  half, so a caller composing a command reads it as data.
+  half. So a caller who composes a command reads it as data.
 - The remote goes with it. A ref on its own repeats the failure `D-SKL-021`
-  measured — `git fetch origin refs/changes/…` reports that the ref does not
-  exist in the very checkout whose push would reach the change, because a core
-  clone fetches from the mirror. What the answer names is the review server it
-  is fetchable over, which is `Gerrit::HOST` and the `project` field already in
-  the entry.
-- It stays a string in an answer. Nothing is fetched, and nothing is started on
-  the caller's machine as a side effect of a lookup — `R-DIS-006`.
+  measured. `git fetch origin refs/changes/…` reports that the ref does not
+  exist in the very checkout whose push would reach the change. A core clone
+  fetches from the mirror. What the answer names is the review server it is
+  fetchable over, which is `Gerrit::HOST` and the `project` field already in the
+  entry.
+- It stays a string in an answer. The tool fetches nothing, and starts nothing
+  on the caller's machine as a side effect of a lookup — `R-DIS-006`.
 - The ref follows the patch set the entry names, which is always the current
-  one: the query asks for `CURRENT_REVISION` and no parameter reaches an older
+  one. The query asks for `CURRENT_REVISION` and no parameter reaches an older
   patch set. Asking for an earlier one is a separate capability and is not
   decided here.
 - Where the server named no patch set, `patchSet` is `0` and there is no ref.
-  The field is null then rather than a string carrying a zero, which is the
+  The field is null then rather than a string with a zero in it. That is the
   shape `unavailable` and `indistinguishable` already have on this tool.
 
 ## Assumed
 
-- The sharding is Gerrit's own rule rather than this instance's configuration.
-  Two changes nine years apart resolve under the last two digits, which is
-  consistent with it and is not a reading of Gerrit's documentation.
-- The padding holds below ten. Both measured change numbers are five digits, and
-  what a change numbered under 10 shards to was not measured.
-- One field is enough. `D-ANS-061` assumed the same thing about naming a
-  document, and nothing yet shows a session acting on a name this server put in
+- The shard rule is Gerrit's own rather than this instance's configuration. Two
+  changes nine years apart resolve under the last two digits, which is
+  consistent with it and is not a read of Gerrit's documentation.
+- The zero pad holds below ten. Both measured change numbers are five digits,
+  and what a change numbered under 10 shards to was not measured.
+- One field is enough. `D-ANS-061` assumed the same thing about a named
+  document. Nothing yet shows a session that acts on a name this server put in
   front of it.
 
 ## Wrong if
 
 - A session fetches the ref this answer gave and gets a revision other than the
-  `commit` beside it, which would say the derivation is not the rule, or not the
+  `commit` beside it. That would say the derivation is not the rule, or not the
   rule on this server.
-- The fetch is reported as noise on an issue search answering ten changes, which
-  would say it belongs on a change lookup alone.
-- A session reads the ref and fetches over `origin` anyway, which would say
-  naming the remote in the same answer was not enough.
+- A report calls the fetch noise on an issue search that answers ten changes,
+  which would say it belongs on a change lookup alone.
+- A session reads the ref and fetches over `origin` anyway, which would say the
+  remote named in the same answer was not enough.
 
 ## Since then
 
-Built as a field on each change entry, carrying the ref and the remote and null
-where the server named no patch set, with the fetch command under the patch set
-line.
+Built as a field on each change entry. It carries the ref and the remote, and
+null where the server named no patch set, with the fetch command under the patch
+set line.
 
-Both assumptions are settled and neither moved anything. The sharding is
-Gerrit's own documented rule, and the case a shorter number would raise cannot
-arise here — the low change numbers answer nothing on that server. The first
-**Wrong if** was measured rather than waited for: the three refs this answer
+Both assumptions stand and neither moved anything. The shard rule is Gerrit's
+own documented rule, and the case a shorter number would raise cannot arise
+here. The low change numbers answer nothing on that server. A measurement
+settled the first **Wrong if** rather than a wait. The three refs this answer
 derives resolve on the review server to the commits the same answers carry. Two
 review sessions have since fetched what the answer named.

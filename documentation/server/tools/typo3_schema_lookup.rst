@@ -3,21 +3,21 @@
 ``typo3_schema_lookup``
 =======================
 
-List the columns TYPO3 derives for a table from its TCA — uid, pid, the
+List the columns TYPO3 derives for a table from its TCA. That is uid, pid, the
 timestamps, the delete and disable fields, the language and versioning columns,
-and one column per TCA field — each with the Doctrine type it gets, whether it
-is NOT NULL, and the default the core gives it. That is the DDL side of a TCA
-configuration: what column this field produces, whether it can hold SQL NULL,
-and what it stores when nothing is written. Those are also exactly the columns
-an ext_tables.sql does not have to declare, so this is what a redundant
-declaration is checked against. It asks the booted installation about a table
-that is in it, so it answers nothing about a table that exists only inside a
+and one column per TCA field. Each comes with the Doctrine type it gets, whether
+it is NOT NULL, and the default the core gives it. That is the DDL side of a TCA
+configuration. It is what column this field produces, whether it can hold SQL
+NULL, and what it stores when nothing writes to it. Those are also exactly the
+columns an ext_tables.sql does not have to declare, so this is what you check a
+redundant declaration against. It asks the booted installation about a table
+that is in it. So it answers nothing about a table that exists only inside a
 functional test, and nothing about a TCA type in the abstract. It describes what
-TYPO3 would create, never what the database currently has, and it says so rather
-than answering empty when it cannot boot. It is about the shape of the table and
-not about what is in it: how many rows one of this project's own tables holds
-and what they are is typo3_record_lookup. A type=flex column is one column here
-and a data structure elsewhere: what this installation resolves it to, sheet by
+TYPO3 creates, never what the database has now, and it says so rather than
+answers empty when it cannot boot. It is about the shape of the table and not
+about what is in it. How many rows one of this project's own tables holds and
+what they are is typo3_record_lookup. A type=flex column is one column here and
+a data structure elsewhere: what this installation resolves it to, sheet by
 sheet, is typo3_flexform_lookup. Answers from: installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
@@ -38,8 +38,8 @@ Answers with
 
 .. code-block:: yaml
 
-    # The table asked about. Null where none was named and the answer is the list of
-    # them.
+    # The table asked about. Null where the call named none and the answer is the
+    # list of them.
     table: string or null
     # Columns for a named table, tables for a call that named none. Zero means the
     # name is not a TCA table in this installation, never that TYPO3 derives
@@ -47,7 +47,7 @@ Answers with
     matchCount: integer  # optional
     # One of: installation. installation: its assembled runtime state answered.
     answeredBy: string  # optional
-    # Empty where no table was named.
+    # Empty where the call named no table.
     columns:  # optional
       - name: string
         # The Doctrine type the core declares it as: integer, string, text,
@@ -67,9 +67,9 @@ Answers with
         # ext_tables.sql declares one at all.
         relationTable: boolean
     # What the database has for the named table, read from the connection that table
-    # maps to. Null where no table was named, or where the schema could not be read
-    # — a project that is down, or an installation whose tables were never
-    # created.
+    # maps to. Null where the call named no table, or where the tool could not read
+    # the schema. That is a project that is down, or an installation whose tables
+    # nobody created.
     actual:  # optional
       # Whether the database has the table at all.
       present: boolean
@@ -88,9 +88,9 @@ Answers with
           unique: boolean
           primary: boolean
     # What TYPO3 would change to make the database match the schema its active
-    # extensions and its TCA declare. Empty where the two match, and null where no
-    # schema could be read. Where a table was named, only that table's changes are
-    # here.
+    # extensions and its TCA declare. Empty where the two match, and null where the
+    # tool could not read a schema. Where the call named a table, only that table's
+    # changes are here.
     updates: array or null  # optional
     unsupported:  # optional
       # One of: no-installation, misconfigured, installation-not-answering.

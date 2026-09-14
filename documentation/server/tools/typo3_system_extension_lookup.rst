@@ -3,13 +3,13 @@
 ``typo3_system_extension_lookup``
 =================================
 
-Answer whether an extension is part of the TYPO3 core, and on which versions:
-the system extensions of every covered TYPO3 line, by extension key and Composer
-package name, each with what it is for and the range it is shipped on.
-Independent of any installation, which is the point — the question comes up for
-a package that is not installed, and "is this core" is otherwise answered from
-memory. A miss means the name is not a system extension on the covered versions,
-never that it does not exist. Answers from: knowledge.
+Answer whether an extension is part of the TYPO3 core, and on which versions. It
+lists the system extensions of every covered TYPO3 line, by extension key and
+Composer package name. Each comes with what it is for and the range the core
+ships it on. Independent of any installation, which is the point. The question
+comes up for a package that is not installed, and otherwise memory answers "is
+this core". A miss means the name is not a system extension on the covered
+versions, never that it does not exist. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -26,8 +26,8 @@ Takes
     query: string  # optional
     # The TYPO3 version to answer for, for example "13.4" or "14". Restricts the
     # answer to what that line ships. Defaults to the version of the installation
-    # this server was started in; where there is none, every entry comes back with
-    # the range it is shipped on.
+    # this server started in. Where there is none, every entry comes back with the
+    # range the core ships it on.
     targetVersion: string  # optional
 
 Answers with
@@ -36,15 +36,15 @@ Answers with
 .. code-block:: yaml
 
     query: string
-    # The TYPO3 major the answer was composed for — stated by the caller, or read
-    # from the installation. Null means every covered version is in the answer and
-    # each entry carries its own range.
+    # The TYPO3 major the answer is for, stated by the caller or read from the
+    # installation. Null means every covered version is in the answer and each entry
+    # carries its own range.
     targetVersion: integer or null  # optional
     # How many system extensions matched. Zero means the name is not one of them on
     # the versions asked about, not that no such package exists.
     matchCount: integer
     extensions:
-      - # The extension key, as the directory below typo3/sysext is named.
+      - # The extension key, which is the name of the directory below typo3/sysext.
         key: string
         # The Composer package name to require it by, where an installation does not
         # have it already.
@@ -56,10 +56,10 @@ Answers with
         # Last covered major that ships it. Null means it is still shipped on the
         # newest one.
         until: integer or null
-        # The range in words, empty when it is shipped everywhere this knowledge
+        # The range in words, empty when the core ships it everywhere this knowledge
         # base reaches.
         shippedOn: string
-    # The TYPO3 majors this answer was derived from.
+    # The TYPO3 majors this answer derives from.
     coveredVersions: [integer]
 
 Answered

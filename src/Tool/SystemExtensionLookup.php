@@ -32,7 +32,7 @@ final class SystemExtensionLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Answer whether an extension is part of the TYPO3 core, and on which versions: the system extensions of every covered TYPO3 line, by extension key and Composer package name, each with what it is for and the range it is shipped on. Independent of any installation, which is the point — the question comes up for a package that is not installed, and "is this core" is otherwise answered from memory. A miss means the name is not a system extension on the covered versions, never that it does not exist.';
+        return 'Answer whether an extension is part of the TYPO3 core, and on which versions. It lists the system extensions of every covered TYPO3 line, by extension key and Composer package name. Each comes with what it is for and the range the core ships it on. Independent of any installation, which is the point. The question comes up for a package that is not installed, and otherwise memory answers "is this core". A miss means the name is not a system extension on the covered versions, never that it does not exist.';
     }
 
     public static function inputSchema(): array
@@ -41,7 +41,7 @@ final class SystemExtensionLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'query' => ['type' => 'string', 'description' => 'An extension key ("theme_camino"), a Composer package name ("typo3/cms-impexp"), or a word from what it does ("redirects"). Omit to list everything the core ships.'],
-                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version to answer for, for example "13.4" or "14". Restricts the answer to what that line ships. Defaults to the version of the installation this server was started in; where there is none, every entry comes back with the range it is shipped on.'],
+                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version to answer for, for example "13.4" or "14". Restricts the answer to what that line ships. Defaults to the version of the installation this server started in. Where there is none, every entry comes back with the range the core ships it on.'],
             ],
         ];
     }
@@ -50,17 +50,17 @@ final class SystemExtensionLookup extends ReadOnlyTool
     {
         return Schema::object([
             'query' => Schema::string(),
-            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the answer was composed for — stated by the caller, or read from the installation. Null means every covered version is in the answer and each entry carries its own range.'],
+            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the answer is for, stated by the caller or read from the installation. Null means every covered version is in the answer and each entry carries its own range.'],
             'matchCount' => Schema::integer('How many system extensions matched. Zero means the name is not one of them on the versions asked about, not that no such package exists.'),
             'extensions' => Schema::listOf(Schema::object([
-                'key' => Schema::string('The extension key, as the directory below typo3/sysext is named.'),
+                'key' => Schema::string('The extension key, which is the name of the directory below typo3/sysext.'),
                 'package' => Schema::string('The Composer package name to require it by, where an installation does not have it already.'),
                 'description' => Schema::string('What it is for.'),
                 'since' => ['type' => ['integer', 'null'], 'description' => 'First covered major that ships it. Null means every covered major does.'],
                 'until' => ['type' => ['integer', 'null'], 'description' => 'Last covered major that ships it. Null means it is still shipped on the newest one.'],
-                'shippedOn' => Schema::string('The range in words, empty when it is shipped everywhere this knowledge base reaches.'),
+                'shippedOn' => Schema::string('The range in words, empty when the core ships it everywhere this knowledge base reaches.'),
             ], ['key', 'package', 'description', 'since', 'until', 'shippedOn'])),
-            'coveredVersions' => Schema::listOf(Schema::integer(), 'The TYPO3 majors this answer was derived from.'),
+            'coveredVersions' => Schema::listOf(Schema::integer(), 'The TYPO3 majors this answer derives from.'),
         ], ['query', 'matchCount', 'extensions', 'coveredVersions']);
     }
 

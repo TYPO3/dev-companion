@@ -10,8 +10,8 @@ coveredBy:
 
 # D-SKL-090 — A review rates the patch and reads the chain for what a shape is for
 
-**A structural finding is checked against the change stacked on this one before
-it is reported, and the patch is still rated on its own.**
+**A reviewer checks a structural finding against the change stacked on this one
+before the report, and still rates the patch on its own.**
 
 A review of core change 94652 reported four structural findings and the change
 above it in the same stack refuted all four.
@@ -20,7 +20,7 @@ above it in the same stack refuted all four.
 
 - `feedback/2026-09-01-210110`. The one-class subnamespace, the non-final
   renderer, the public resolver and the protected accessors were groundwork that
-  94653 fills in, and each is defensible read against the change alone.
+  94653 fills in. Each is defensible read against the change alone.
 - The session had the answer in its first call. `typo3_gerrit_lookup` returns
   `chain` with every change read by name, and it listed 94653 with
   `thisChange: false`.
@@ -32,24 +32,24 @@ above it in the same stack refuted all four.
 
 ## Decided
 
-- The tool answer carries it, because that is where the session already was: a
-  shape that reads as an oversight is what the next change in the stack uses,
-  and the entries above are read before it is reported.
+- The tool answer carries it, because that is where the session already was. A
+  shape that reads as an oversight is what the next change in the stack uses. A
+  reviewer reads the entries above before the report.
 - The review checklist carries the step rather than the skill body. The failure
   is in what a finding owes, which is the checklist's subject, and the body
   keeps its routing shape.
-- **The patch is rated on its own.** That is the maintainer's wording on
-  2026-09-02, asked as one of two questions before the file was committed, and
-  it is what the first draft got wrong: the chain says whether a shape is
-  preparation, and it does not excuse the shape. What the follow-up explains is
-  reported as a question to the author.
-- The `Tests` surface says what the follow-up decides there too: a test pinning
-  behaviour the next change rewrites is churn, one covering what the follow-up
-  leaves alone lasts.
+- **The reviewer rates the patch on its own.** That is the maintainer's wording
+  on 2026-09-02, asked as one of two questions before the file was committed,
+  and it is what the first draft got wrong: the chain says whether a shape is
+  preparation, and it does not excuse the shape. What the follow-up explains
+  goes into the report as a question to the author.
+- The `Tests` surface says what the follow-up decides there too. A test that
+  pins behaviour the next change rewrites is churn, and one that covers what the
+  follow-up leaves alone lasts.
 - **Whether a review reports that the change is the bottom of a chain is not
-  decided.** The report asks for it, because rebasing such a change obliges
+  decided.** The report asks for it, because a rebase of such a change obliges
   everything stacked on it. Put to the maintainer the same day and left unsure,
-  so nothing states it — a sentence nobody is sure of is not what goes into a
+  so nothing states it. A sentence nobody is sure of is not what goes into a
   file that lands in somebody else's project.
 
 ## Assumed

@@ -10,11 +10,11 @@ coveredBy:
 
 # D-KNW-088 — What a Composer installation generates below the root is a subject this server owns
 
-**What a Composer installation generates below the document root is enumerated
-in `knowledge/`, because the ignore file that names it is written before the
+**`knowledge/` enumerates what a Composer installation generates below the
+document root, because a session writes the ignore file that names it before the
 installation exists.**
 
-The corpus places the answer and never states it: `project-build-and-scripts`
+The corpus places the answer and never states it. `project-build-and-scripts`
 ends on "the .gitignore is where the answer is read off" and names no path.
 
 ## Evidence
@@ -30,8 +30,8 @@ ends on "the .gitignore is where the answer is read off" and names no path.
   `text(18)`, both about what a test run leaves behind.
 - `_assets_install` occurs nowhere below `knowledge/` or `skills/`, while the
   query `_assets_install` returns `public-assets` at `appliesTo(7) + text(180)`.
-  That is the trap the feedback names: the top hit is precise about `_assets`
-  and silent about the directory that was asked for.
+  That is the trap the feedback names. The top hit is precise about `_assets`
+  and silent about the directory the caller asked for.
 - The directory is real and bound. `DefaultSystemResourcePublisher` declares
   `PUBLISHING_DIRECTORY_INSTALL = '_assets_install/'` in `.checkouts/14.3` and
   in `.checkouts/main`, and no file in `.checkouts/13.4` carries the name.
@@ -40,39 +40,39 @@ ends on "the .gitignore is where the answer is read off" and names no path.
   `.checkouts/14.3` holds `root-htaccess`, `resources-root-htaccess`,
   `typo3temp-var-htaccess` and the `fileadmin` ones, and
   `Install/Classes/FolderStructure/DefaultFactory` is what places them.
-- The rest is owned by packages the checkouts do not contain. What writes
-  `index.php` and `typo3/` is `typo3/cms-composer-installers`, and what a
-  project starts from is `typo3/cms-base-distribution` — `Environments` installs
-  that one, so `bin/cli environment:create E-SITE` is where it is read.
+- Packages the checkouts do not contain own the rest. What writes `index.php`
+  and `typo3/` is `typo3/cms-composer-installers`, and what a project starts
+  from is `typo3/cms-base-distribution`. `Environments` installs that one, so
+  `bin/cli environment:create E-SITE` is where a session reads it.
 - Convergence is not what carries this. `bin/cli feedback:list` reports 20 open
-  on 2026-08-18, all from one directory and one debrief, so the evidence for the
-  gap is the checkout rather than a second session saying the same thing.
+  on 2026-08-18, all from one directory and one debrief. So the evidence for the
+  gap is the checkout rather than a second session that says the same thing.
 
 ## Decided
 
-- Step 1a. The statement is missing — not misplaced, and not worded as a
+- Step 1a. The statement is absent, not misplaced, and not worded as a
   recommendation where it needed to be a rule.
-- Taken on rather than closed on the spot. Which paths a Composer installation
-  generates cannot be read out of this repository, so the establishing is the
-  todo's first step.
+- Taken on rather than closed on the spot. Nobody can read which paths a
+  Composer installation generates out of this repository, so that research is
+  the todo's first step.
 - Knowledge rather than an installation read. `typo3_project_describe` answers
-  from an installation that exists, and the ignore file is written before the
-  first commit and therefore before there is one. A caller who asks at the
-  prescribed time cannot be answered by the source that would otherwise own it.
+  from an installation that exists, and a session writes the ignore file before
+  the first commit and therefore before there is one. The source that would
+  otherwise own it cannot answer a caller who asks at the prescribed time.
 - Stated as a bound statement, not as prose about versions. `_assets_install/`
   exists since 14 and not before, so the entry carries `since` and the commit
   names both branches — `documentation/server/versions.rst`.
-- Not a document. What was missing is which paths exist, which is one statement,
-  rather than an order of steps or a procedure.
-- Not a tool. The set is stable across a major, so a lookup would cost the same
-  one call the hint already costs and would move a surface here for nothing —
+- Not a document. The gap was which paths exist, which is one statement, rather
+  than an order of steps or a procedure.
+- Not a tool. The set is stable across a major. So a lookup would cost the same
+  one call the hint already costs and would move a surface here for nothing,
   `D-FBK-027`.
 - The feedback stays open. The card in `todo/open/` archives it when the
   statements land.
 
 ## Assumed
 
-- That the two halves land on the hints that already carry them:
+- That the two halves land on the hints that already carry them.
   `project-build-and-scripts` for the ignore set, `public-assets` for the
   `_assets_install` sibling a reader of `_assets` has no reason to suspect.
 - That the set is stable enough to state at all. What the installer writes is a
@@ -81,29 +81,29 @@ ends on "the .gitignore is where the answer is read off" and names no path.
 
 ## Wrong if
 
-- The set turns out to depend on the installation — a `web-dir` other than
-  `public/`, a package publishing somewhere the default does not — so that no
-  enumeration holds without reading the project. Then it is
-  `typo3_project_describe`'s answer, and what it costs is the timing above.
-- `_assets_install/` is published only under a condition the enumeration does
-  not name. The statement would then name a path that is sometimes absent, which
-  reads as wrong on the installation that has not got it.
-- The next session is offered the enumeration and still writes an incomplete
-  ignore file. That is step 4 and a rewrite of where the sentence sits, rather
-  than a statement that was missing.
+- The set turns out to depend on the installation, a `web-dir` other than
+  `public/` or a package that publishes somewhere the default does not. Then no
+  enumeration holds without a read of the project. Then it is
+  `typo3_project_describe`'s answer, and what it costs is the moment above.
+- The publisher writes `_assets_install/` only under a condition the enumeration
+  does not name. The statement would then name a path that is sometimes absent,
+  which reads as wrong on the installation that has not got it.
+- The next session gets the enumeration and still writes an incomplete ignore
+  file. That is step 4 and a rewrite of where the sentence sits, rather than a
+  statement that was absent.
 
 ## Since then
 
-Step 1a was carried out and the enumeration is not what the statement leads
-with: the distribution ships one ignore file that enumerates nothing, denying
-both directories and naming back what the project owns. That is the rule which
-survives the timing this decision is about, so the hint carries both, the rule
-after the set.
+A session carried step 1a out and the enumeration is not what the statement
+leads with. The distribution ships one ignore file that enumerates nothing. It
+denies both directories and names back what the project owns. That is the rule
+which survives the moment this decision is about, so the hint carries both, the
+rule after the set.
 
-The set moved more than the decision assumed — a create-project per major left
-two entry points on one and no such directory on the next, the installer scripts
-being gone there — so the document root's contents are bound in both directions.
-The second **Wrong if** does not hold: the published assets directory is written
-unconditionally, and its content is a subset, which is what the statement says
-instead. Only two majors could be installed; the third was read from its
-checkout.
+The set moved more than the decision assumed. A create-project per major left
+two entry points on one and no such directory on the next, since the installer
+scripts are gone there. So the document root's contents carry a bound in both
+directions. The second **Wrong if** does not hold. The publisher writes the
+published assets directory in every case, and its content is a subset, which is
+what the statement says instead. Only two majors would install. The session read
+the third from its checkout.

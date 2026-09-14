@@ -226,15 +226,15 @@ Answers with
     # deprecation, and typo3_changelog_lookup is what answers that question.
     deprecatedFiles:  # optional
       - # The file, relative to the extension. Not always a registration file:
-        # ext_icon.* and ext_typoscript_*.txt are read by nothing now, so they are a
-        # registration point nowhere and are checked here alone.
+        # nothing reads ext_icon.* and ext_typoscript_*.txt now, so they are a
+        # registration point nowhere and this check alone covers them.
         file: string
         # The changelog entry, for typo3_changelog_lookup, which has the description
         # and the migration whole.
         changelog: string
-        # What the entry turns on, which is what holds here — shipping the file,
-        # and what stands beside it: what composer.json declares, or the file core
-        # reads before this one.
+        # What the entry turns on, which is what holds here. That is the shipped
+        # file and what stands beside it: what composer.json declares, or the file
+        # the core reads before this one.
         predicate: string
         # What it raises, from which version, and what the removal does instead.
         cost: string
@@ -269,40 +269,41 @@ Answers with
     # On a miss: the extension keys this installation does have.
     installed: [string]  # optional
     # One of: installation, packages. installation: its assembled runtime state
-    # answered. packages: read from the files the installed packages ship, because
-    # the console could not be asked — overrides applied at runtime are not
-    # reflected.
+    # answered. packages: the server read the files the installed packages ship,
+    # because it could not ask the console. The answer misses the overrides that
+    # apply at runtime.
     answeredBy: string  # optional
     unsupported:  # optional
       # One of: no-installation, misconfigured, installation-not-answering.
-      # no-installation: nothing to ask from here, and searched says where it
-      # looked. misconfigured: an installation was named and could not be used, so
-      # nothing was searched for. installation-not-answering: one was found and its
-      # console did not answer — a stopped container or a database with no schema,
-      # which is a state that ends without reinstalling anything.
+      # no-installation: nothing to ask from here, and searched says where the
+      # discovery looked. misconfigured: the caller named an installation the server
+      # could not use, so the discovery searched nothing.
+      # installation-not-answering: the discovery found one and its console did not
+      # answer. A stopped container or a database with no schema is that state, and
+      # it ends without a reinstall.
       cause: string
       # What stopped it, in the words the attempt produced.
       reason: string
-      # One of: installed, not-installed, undeclared, null. Which state the
-      # repository the caller stands in is in, which the cause does not say.
-      # installed: packages are installed below the root that was found, so an
-      # install is not what is missing here. not-installed: the repository declares
-      # TYPO3 and nothing is installed below it yet, so this call is answerable once
-      # composer install has run. undeclared: nothing in the directories walked
-      # declares TYPO3, so an install here would answer nothing. Null where nothing
-      # was looked at: a named root that could not be used, or an entrypoint that
-      # handed no directory in.
+      # One of: installed, not-installed, undeclared, null. The state of the
+      # repository the caller stands in, which the cause does not say. installed:
+      # packages sit below the root the discovery found, so an install is not what
+      # is missing. not-installed: the repository declares TYPO3 and has no packages
+      # below it yet, so this call answers once composer install has run.
+      # undeclared: nothing in the directories the discovery walked declares TYPO3,
+      # so an install here answers nothing. Null where the discovery looked at
+      # nothing: a named root the server could not use, or an entrypoint that handed
+      # no directory in.
       repositoryState: string or null  # optional
       # What the reason means where the message alone does not say it. A console
       # that starts and then fails on a missing table has a database without a
-      # schema, not a broken installation. Empty where nothing beyond the reason is
-      # known.
+      # schema, not a broken installation. Empty where the server knows nothing
+      # beyond the reason.
       diagnosis: string  # optional
-      # Every directory the discovery walked, in order. "Nothing was found" and "the
-      # server was started somewhere else" wear one sentence, and only this tells
-      # them apart. Empty where discovery never ran.
+      # Every directory the discovery walked, in order. "Nothing found" and "the
+      # server started somewhere else" read the same, and only this list tells them
+      # apart. Empty where the discovery never ran.
       searched: [string]
-      # What was set and could not be used. Null where nothing was set.
+      # The setting the server could not use. Null where the caller set nothing.
       misconfiguration: string or null  # optional
       settings:
         # Environment variable that names the installation root.

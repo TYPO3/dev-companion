@@ -92,7 +92,8 @@ Answers with
             # One of: title, path, manual. Where it was found: the page title, the
             # section path it sits in, or the name of the manual.
             field: string
-    # Why nothing was answered, where status says unavailable. Null otherwise.
+    # Why the source answered nothing, where status says unavailable. Null
+    # otherwise.
     unavailable:
       # One of: version-not-covered, source-not-answering. version-not-covered: the
       # release asked about is outside the ones this server knows the manuals for,

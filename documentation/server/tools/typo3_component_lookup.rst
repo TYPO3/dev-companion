@@ -102,29 +102,29 @@ Answers with
         # contractVersion when the installed styleguide has no matching example and
         # bundled markup is the fallback.
         describesVersion: string
-        # The TYPO3 major this entry starts holding at, or null when it holds on
-        # every covered version.
+        # The first TYPO3 major this entry holds on, or null when it holds on every
+        # covered version.
         since: integer or null  # optional
-        # The TYPO3 major it stops holding after, or null when nothing has replaced
-        # it.
+        # The last TYPO3 major this entry holds on, or null when nothing has
+        # replaced it.
         until: integer or null  # optional
         # The same range as a sentence, empty when the entry holds on every covered
         # version.
         verifiedOn: string
-    # Components this catalog has but was never verified on the target version. Left
-    # out of components rather than handed over — an empty answer here means "not
-    # verified where you are", not "does not exist".
+    # Components this catalog has and nobody verified on the target version. The
+    # answer leaves them out of components. An empty answer here means "not verified
+    # where you are", not "does not exist".
     withheld:
       - name: string
         title: string
         # What to verify the entry against on the target version.
         sassPaths: [string]  # optional
         demoPath: string or null  # optional
-        # The TYPO3 major this entry starts holding at, or null when it holds on
-        # every covered version.
+        # The first TYPO3 major this entry holds on, or null when it holds on every
+        # covered version.
         since: integer or null  # optional
-        # The TYPO3 major it stops holding after, or null when nothing has replaced
-        # it.
+        # The last TYPO3 major this entry holds on, or null when nothing has
+        # replaced it.
         until: integer or null  # optional
         # The same range as a sentence, empty when the entry holds on every covered
         # version.
@@ -148,11 +148,11 @@ Answers with
         stylesWithin: [string]
         # Where the core writes it.
         sassPaths: [string]
-        # The TYPO3 major this entry starts holding at, or null when it holds on
-        # every covered version.
+        # The first TYPO3 major this entry holds on, or null when it holds on every
+        # covered version.
         since: integer or null  # optional
-        # The TYPO3 major it stops holding after, or null when nothing has replaced
-        # it.
+        # The last TYPO3 major this entry holds on, or null when nothing has
+        # replaced it.
         until: integer or null  # optional
         # The same range as a sentence, empty when the entry holds on every covered
         # version.
@@ -166,11 +166,11 @@ Answers with
         tag: string
         # The TypeScript file that declares it in the core.
         source: string
-        # The TYPO3 major this entry starts holding at, or null when it holds on
-        # every covered version.
+        # The first TYPO3 major this entry holds on, or null when it holds on every
+        # covered version.
         since: integer or null  # optional
-        # The TYPO3 major it stops holding after, or null when nothing has replaced
-        # it.
+        # The last TYPO3 major this entry holds on, or null when nothing has
+        # replaced it.
         until: integer or null  # optional
         # The same range as a sentence, empty when the entry holds on every covered
         # version.
@@ -184,22 +184,22 @@ Answers with
     # snapshot answered.
     componentSource: string
     # The core revision behind catalog answers, and how it relates to the
-    # installation being read. A miss means "not in this snapshot".
+    # installation the server reads. A miss means "not in this snapshot".
     catalog:
       repository: string  # optional
       branch: string
       # TYPO3 version of the snapshot.
       version: string
-      # Core revision the catalogs were taken from.
+      # The core revision the catalogs come from.
       commit: string
       verifiedAt: string
       # The command that re-checks the snapshot against a core checkout.
       verifyCommand: string  # optional
-      # TYPO3 version of the installation this server was started in, where there is
-      # one. Null means there was nothing to compare the snapshot with.
+      # TYPO3 version of the installation this server started in, where there is
+      # one. Null means nothing to compare the snapshot with.
       installedVersion: string or null  # optional
-      # Set when that installation and the snapshot are different TYPO3 majors, and
-      # what to do about it. Null when they agree or nothing is known.
+      # What to do when that installation and the snapshot are different TYPO3
+      # majors. Null when they agree or the server knows nothing.
       skew: string or null  # optional
 
 Answered

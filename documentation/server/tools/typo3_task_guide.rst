@@ -75,10 +75,10 @@ Answers with
     scopes:  # optional
       - path: string
         # One of: core, uncertain, project, extension. Which kind of work this
-        # answer is for: core, a patch to the TYPO3 core itself; project, the site
-        # repository around an installation; extension, a package in it, whether a
-        # sitepackage or a third-party one; or uncertain, which means nothing in the
-        # call placed the work and what came back is the core's own.
+        # answer is for. core: a patch to the TYPO3 core itself. project: the site
+        # repository around an installation. extension: a package in it, a
+        # sitepackage or a third-party one. uncertain: nothing in the call placed
+        # the work, and the answer is the core's own.
         scope: string
     changeType: string
     # The TYPO3 major this repository runs — stated by the caller, or read from
@@ -138,13 +138,13 @@ Answers with
       - # What typo3_rule_lookup takes as documentId to return the whole document.
         id: string
         title: string
-        # What the caller has to be doing for this page to be the one to read.
+        # What the caller has to do for this page to be the one to read.
         when: string
-        # One of: core, project, extension, any. Which kind of work this page is
-        # written for: core, a patch to the TYPO3 core repository; project, the site
-        # repository around an installation; extension, a package in it; any, all
-        # three. Said here because it decides whether to open the page at all, and a
-        # caller reading it out of the id is parsing a path segment for it —
+        # One of: core, project, extension, any. Which kind of work this page
+        # serves. core: a patch to the TYPO3 core repository. project: the site
+        # repository around an installation. extension: a package in it. any: all
+        # three. It stands here because it decides whether to open the page at all,
+        # and a caller that reads it out of the id parses a path segment —
         # D-ANS-150.
         scope: string
         # The tool that takes the id above and returns the page whole.
@@ -161,13 +161,13 @@ Answers with
         # PHP, TypeScript, JavaScript, CSS, or General.
         category: string
         # One of: core, project, extension, null. Which kind of work the whole hint
-        # obliges. "core" means it is a condition of a patch to the TYPO3 core and a
-        # convention anywhere else — the backend's own design system, the
-        # changelog artifact, the paths of the mono repository. "project" and
-        # "extension" are the mirror: what the repository around an installation, or
-        # a package distributed on its own, has to do, and what is context rather
-        # than a condition inside the core. Null, the ordinary case, means it holds
-        # wherever TYPO3 is written: an API that throws throws in a sitepackage too.
+        # obliges. "core" means a condition of a patch to the TYPO3 core and a
+        # convention anywhere else. The backend's own design system, the changelog
+        # artifact and the paths of the mono repository are that case. "project" and
+        # "extension" are the mirror. They say what the repository around an
+        # installation, or a package on its own, has to do, and what is context
+        # inside the core. Null, the ordinary case, means it holds wherever somebody
+        # writes TYPO3: an API that throws throws in a sitepackage too.
         scope: string or null
         hints:
           - # The statement itself. It reads the same on every version it holds for;
@@ -178,18 +178,18 @@ Answers with
             since: integer or null
             # Last TYPO3 major this holds on. Null means it still holds.
             until: integer or null
-            # The same range as a sentence, empty when the statement is bound to
-            # nothing.
+            # The same range as a sentence, empty when the statement binds to no
+            # version.
             versions: string
             # One of: core, project, extension, null. Which kind of work this
-            # statement obliges. "core" means it is a condition of a patch to the
-            # TYPO3 core and a convention anywhere else — the backend's own design
-            # system, the changelog artifact, the paths of the mono repository.
-            # "project" and "extension" are the mirror: what the repository around
-            # an installation, or a package distributed on its own, has to do, and
-            # what is context rather than a condition inside the core. Null, the
-            # ordinary case, means it holds wherever TYPO3 is written: an API that
-            # throws throws in a sitepackage too.
+            # statement obliges. "core" means a condition of a patch to the TYPO3
+            # core and a convention anywhere else. The backend's own design system,
+            # the changelog artifact and the paths of the mono repository are that
+            # case. "project" and "extension" are the mirror. They say what the
+            # repository around an installation, or a package on its own, has to do,
+            # and what is context inside the core. Null, the ordinary case, means it
+            # holds wherever somebody writes TYPO3: an API that throws throws in a
+            # sitepackage too.
             scope: string or null
     # What typo3_hint_lookup also holds for these paths and this brief did not
     # carry, named rather than counted. A hint declared for another kind of
@@ -208,7 +208,7 @@ Answers with
       - documentId: string
         # Title of the knowledge document.
         title: string
-        # typo3://guides resource holding the full document.
+        # The typo3://guides resource that holds the full document.
         uri: string
         # Heading of the matched section.
         heading: string
@@ -223,7 +223,7 @@ Answers with
         # Weighted match score; headings weigh more than body text. Zero where no
         # search ranked this record.
         score: integer
-        # Whether the body was cut; read the resource for the rest.
+        # Whether the lookup cut the body. Read the resource for the rest.
         truncated: boolean
     # Commands to run, ready to execute from the core root. They are the base suites
     # of the domains above, which run whatever the task turns out to be, plus the
@@ -246,21 +246,21 @@ Answers with
       - suite: string
         # Full command, run from the core root.
         command: string
-        # One of: check, change, git, unknown. What running the command does to the
+        # One of: check, change, git, unknown. What the command does to the
         # checkout, read off the suite's body in Build/Scripts/runTests.sh rather
-        # than by running it. The values typo3_project_describe gives a declared
-        # command, plus one for the suites that run git. check: it reports and hands
-        # the files back as they were, so a task told not to change files can run it
-        # — installing its own node_modules or writing a cache is not a change.
-        # change: it rewrites files, generated or installed. git: it runs git over
-        # the working tree, so `git add *` stages what it finds, untracked files
-        # included, and a suite of this kind may discard uncommitted edits first.
-        # unknown: the body does not say, which is what a test suite is, because it
-        # runs the core's own code.
+        # than measured by a run. The values are what typo3_project_describe gives a
+        # declared command, plus one for the suites that run git. check: it reports
+        # and hands the files back as they were, so a task told not to change files
+        # can run it. An install of its own node_modules or a written cache is not a
+        # change. change: it rewrites files, generated or installed. git: it runs
+        # git over the working tree, so `git add *` stages what it finds, untracked
+        # files included. A suite of this kind may discard uncommitted edits first.
+        # unknown: the body does not say. A test suite is that case, because it runs
+        # the core's own code.
         runs: string
-        # Narrowed form for iterating on a single file or test. It can run
-        # differently from command — `-s cgl -n` reports where `-s cgl` rewrites
-        # — and runs above answers for command.
+        # The narrowed form for one file or one test. It can run differently from
+        # command: `-s cgl -n` reports where `-s cgl` rewrites, and runs answers for
+        # command.
         targeted: string or null
         description: string  # optional
         whenToUse: string  # optional

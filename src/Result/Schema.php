@@ -60,27 +60,27 @@ final class Schema
             'cause' => [
                 'type' => 'string',
                 'enum' => ['no-installation', 'misconfigured', 'installation-not-answering'],
-                'description' => 'no-installation: nothing to ask from here, and searched says where it looked. '
-                    . 'misconfigured: an installation was named and could not be used, so nothing was searched for. '
-                    . 'installation-not-answering: one was found and its console did not answer — a stopped '
-                    . 'container or a database with no schema, which is a state that ends without reinstalling '
-                    . 'anything.',
+                'description' => 'no-installation: nothing to ask from here, and searched says where the discovery looked. '
+                    . 'misconfigured: the caller named an installation the server could not use, so the discovery '
+                    . 'searched nothing. installation-not-answering: the discovery found one and its console did '
+                    . 'not answer. A stopped container or a database with no schema is that state, and it ends '
+                    . 'without a reinstall.',
             ],
             'reason' => self::string('What stopped it, in the words the attempt produced.'),
             'repositoryState' => [
                 'type' => ['string', 'null'],
                 'enum' => ['installed', 'not-installed', 'undeclared', null],
-                'description' => 'Which state the repository the caller stands in is in, which the cause does not '
-                    . 'say. installed: packages are installed below the root that was found, so an install is not '
-                    . 'what is missing here. not-installed: the repository declares TYPO3 and nothing is installed '
-                    . 'below it yet, so this call is answerable once composer install has run. undeclared: nothing '
-                    . 'in the directories walked declares TYPO3, so an install here would answer nothing. Null '
-                    . 'where nothing was looked at: a named root that could not be used, or an entrypoint that '
+                'description' => 'The state of the repository the caller stands in, which the cause does not say. '
+                    . 'installed: packages sit below the root the discovery found, so an install is not what is '
+                    . 'missing. not-installed: the repository declares TYPO3 and has no packages below it yet, so '
+                    . 'this call answers once composer install has run. undeclared: nothing in the directories '
+                    . 'the discovery walked declares TYPO3, so an install here answers nothing. Null where the '
+                    . 'discovery looked at nothing: a named root the server could not use, or an entrypoint that '
                     . 'handed no directory in.',
             ],
-            'diagnosis' => self::string('What the reason means where the message alone does not say it. A console that starts and then fails on a missing table has a database without a schema, not a broken installation. Empty where nothing beyond the reason is known.'),
-            'searched' => self::listOf(self::string(), 'Every directory the discovery walked, in order. "Nothing was found" and "the server was started somewhere else" wear one sentence, and only this tells them apart. Empty where discovery never ran.'),
-            'misconfiguration' => self::nullableString('What was set and could not be used. Null where nothing was set.'),
+            'diagnosis' => self::string('What the reason means where the message alone does not say it. A console that starts and then fails on a missing table has a database without a schema, not a broken installation. Empty where the server knows nothing beyond the reason.'),
+            'searched' => self::listOf(self::string(), 'Every directory the discovery walked, in order. "Nothing found" and "the server started somewhere else" read the same, and only this list tells them apart. Empty where the discovery never ran.'),
+            'misconfiguration' => self::nullableString('The setting the server could not use. Null where the caller set nothing.'),
             'settings' => self::object([
                 'root' => self::string('Environment variable that names the installation root.'),
                 'console' => self::string('Environment variable that names the console command.'),
@@ -116,7 +116,7 @@ final class Schema
             'type' => ['object', 'null'],
             'description' => $description !== ''
                 ? $description
-                : 'Why nothing was answered, where status says unavailable. Null otherwise.',
+                : 'Why the source answered nothing, where status says unavailable. Null otherwise.',
             'properties' => [
                 'cause' => [
                     'type' => 'string',
@@ -162,8 +162,8 @@ final class Schema
 
         $meaning = [
             Source::Installation->value => 'installation: its assembled runtime state answered.',
-            Source::Packages->value => 'packages: read from the files the installed packages ship, because the '
-                . 'console could not be asked — overrides applied at runtime are not reflected.',
+            Source::Packages->value => 'packages: the server read the files the installed packages ship, because it '
+                . 'could not ask the console. The answer misses the overrides that apply at runtime.',
         ];
 
         return [
@@ -191,10 +191,10 @@ final class Schema
             'type' => 'string',
             'enum' => array_map(static fn(Scope $scope): string => $scope->value, Scope::ofPaths()),
             'description' => $description === ''
-                ? 'Which kind of work this answer is for: core, a patch to the TYPO3 core itself; project, the '
-                    . 'site repository around an installation; extension, a package in it, whether a sitepackage '
-                    . 'or a third-party one; or uncertain, which means nothing in the call placed the work and '
-                    . 'what came back is the core\'s own.'
+                ? 'Which kind of work this answer is for. core: a patch to the TYPO3 core itself. project: the '
+                    . 'site repository around an installation. extension: a package in it, a sitepackage or a '
+                    . 'third-party one. uncertain: nothing in the call placed the work, and the answer is the '
+                    . 'core\'s own.'
                 : $description,
         ];
     }
@@ -218,19 +218,19 @@ final class Schema
     {
         return self::object([
             'query' => self::string(),
-            'resource' => self::nullableString('The exact XLF resource the result was restricted to. Null means the caller did not yet provide the usage context.'),
+            'resource' => self::nullableString('The exact XLF resource the lookup restricted the result to. Null means the caller gave no usage context.'),
             'matchCount' => self::integer(),
             'matches' => self::listOf(self::knowledgeMatch()),
             'documents' => self::listOf(self::object([
                 'id' => self::string(),
                 'title' => self::string(),
                 'topics' => self::listOf(self::string()),
-            ], ['id', 'title', 'topics']), 'Documents in the knowledge base with the topics they cover. Returned when nothing matched.'),
+            ], ['id', 'title', 'topics']), 'Documents in the knowledge base with the topics they cover. The lookup returns them when nothing matched.'),
             'elsewhere' => self::listOf(self::string(), 'Documents outside the searched ones that do match the query.'),
             'alsoInHints' => self::listOf(self::object([
                 'id' => self::string(),
                 'title' => self::string(),
-            ], ['id', 'title']), 'Hints matching the same query. They are a second corpus, searched by typo3_hint_lookup, which takes one of these ids.'),
+            ], ['id', 'title']), 'Hints that match the same query. They are a second corpus, which typo3_hint_lookup searches, and it takes one of these ids.'),
         ], ['query', 'matchCount', 'matches']);
     }
 
@@ -240,7 +240,7 @@ final class Schema
         return self::object([
             'documentId' => self::string(),
             'title' => self::string('Title of the knowledge document.'),
-            'uri' => self::string('typo3://guides resource holding the full document.'),
+            'uri' => self::string('The typo3://guides resource that holds the full document.'),
             'heading' => self::string('Heading of the matched section.'),
             'body' => self::string('The section as written, formatting included.'),
             'versions' => self::string('The TYPO3 majors this section holds for, in words. Empty means every covered major, which is what a section that declares nothing says.'),
@@ -248,7 +248,7 @@ final class Schema
                 . 'Zero where no search ranked this record, which is a page the caller named by documentId.'],
             'score' => self::integer('Weighted match score; headings weigh more than body text. Zero where no search '
                 . 'ranked this record.'),
-            'truncated' => ['type' => 'boolean', 'description' => 'Whether the body was cut; read the resource for the rest.'],
+            'truncated' => ['type' => 'boolean', 'description' => 'Whether the lookup cut the body. Read the resource for the rest.'],
         ], ['documentId', 'title', 'uri', 'heading', 'body', 'coverage', 'score', 'truncated']);
     }
 
@@ -263,11 +263,11 @@ final class Schema
             'type' => ['string', 'null'],
             'enum' => ['core', 'project', 'extension', null],
             'description' => sprintf(
-                'Which kind of work %s obliges. "core" means it is a condition of a patch to the TYPO3 core and a '
-                . 'convention anywhere else — the backend\'s own design system, the changelog artifact, the paths '
-                . 'of the mono repository. "project" and "extension" are the mirror: what the repository around an '
-                . 'installation, or a package distributed on its own, has to do, and what is context rather than a '
-                . 'condition inside the core. Null, the ordinary case, means it holds wherever TYPO3 is written: an '
+                'Which kind of work %s obliges. "core" means a condition of a patch to the TYPO3 core and a '
+                . 'convention anywhere else. The backend\'s own design system, the changelog artifact and the paths '
+                . 'of the mono repository are that case. "project" and "extension" are the mirror. They say what '
+                . 'the repository around an installation, or a package on its own, has to do, and what is context '
+                . 'inside the core. Null, the ordinary case, means it holds wherever somebody writes TYPO3: an '
                 . 'API that throws throws in a sitepackage too.',
                 $subject,
             ),
@@ -286,7 +286,7 @@ final class Schema
                 'text' => self::string('The statement itself. It reads the same on every version it holds for; the range is beside it, never inside it.'),
                 'since' => ['type' => ['integer', 'null'], 'description' => 'First TYPO3 major this holds on. Null means as far back as this knowledge base reaches.'],
                 'until' => ['type' => ['integer', 'null'], 'description' => 'Last TYPO3 major this holds on. Null means it still holds.'],
-                'versions' => self::string('The same range as a sentence, empty when the statement is bound to nothing.'),
+                'versions' => self::string('The same range as a sentence, empty when the statement binds to no version.'),
                 'scope' => self::obliges('this statement'),
             ], ['text', 'since', 'until', 'versions', 'scope'])),
         ], ['id', 'title', 'category', 'scope', 'hints']);
@@ -336,14 +336,14 @@ final class Schema
         return self::object([
             'id' => self::string('What typo3_rule_lookup takes as documentId to return the whole document.'),
             'title' => self::string(),
-            'when' => self::string('What the caller has to be doing for this page to be the one to read.'),
+            'when' => self::string('What the caller has to do for this page to be the one to read.'),
             'scope' => [
                 'type' => 'string',
                 'enum' => array_map(static fn(Scope $scope): string => $scope->value, Scope::ofKnowledge()),
-                'description' => 'Which kind of work this page is written for: core, a patch to the TYPO3 core '
-                    . 'repository; project, the site repository around an installation; extension, a package in '
-                    . 'it; any, all three. Said here because it decides whether to open the page at all, and a '
-                    . 'caller reading it out of the id is parsing a path segment for it — D-ANS-150.',
+                'description' => 'Which kind of work this page serves. core: a patch to the TYPO3 core repository. '
+                    . 'project: the site repository around an installation. extension: a package in it. any: all '
+                    . 'three. It stands here because it decides whether to open the page at all, and a caller '
+                    . 'that reads it out of the id parses a path segment — D-ANS-150.',
             ],
             'tool' => self::string('The tool that takes the id above and returns the page whole.'),
         ], ['id', 'title', 'when', 'scope', 'tool']);
@@ -379,9 +379,9 @@ final class Schema
     public static function deprecatedFile(): array
     {
         return self::object([
-            'file' => self::string('The file, relative to the extension. Not always a registration file: ext_icon.* and ext_typoscript_*.txt are read by nothing now, so they are a registration point nowhere and are checked here alone.'),
+            'file' => self::string('The file, relative to the extension. Not always a registration file: nothing reads ext_icon.* and ext_typoscript_*.txt now, so they are a registration point nowhere and this check alone covers them.'),
             'changelog' => self::string('The changelog entry, for typo3_changelog_lookup, which has the description and the migration whole.'),
-            'predicate' => self::string('What the entry turns on, which is what holds here — shipping the file, and what stands beside it: what composer.json declares, or the file core reads before this one.'),
+            'predicate' => self::string('What the entry turns on, which is what holds here. That is the shipped file and what stands beside it: what composer.json declares, or the file the core reads before this one.'),
             'cost' => self::string('What it raises, from which version, and what the removal does instead.'),
         ], ['file', 'changelog', 'predicate', 'cost']);
     }
@@ -395,9 +395,9 @@ final class Schema
             'runs' => [
                 'type' => 'string',
                 'enum' => ['check', 'change', 'git', 'unknown'],
-                'description' => 'What running the command does to the checkout, read off the suite\'s body in Build/Scripts/runTests.sh rather than by running it. The values typo3_project_describe gives a declared command, plus one for the suites that run git. check: it reports and hands the files back as they were, so a task told not to change files can run it — installing its own node_modules or writing a cache is not a change. change: it rewrites files, generated or installed. git: it runs git over the working tree, so `git add *` stages what it finds, untracked files included, and a suite of this kind may discard uncommitted edits first. unknown: the body does not say, which is what a test suite is, because it runs the core\'s own code.',
+                'description' => 'What the command does to the checkout, read off the suite\'s body in Build/Scripts/runTests.sh rather than measured by a run. The values are what typo3_project_describe gives a declared command, plus one for the suites that run git. check: it reports and hands the files back as they were, so a task told not to change files can run it. An install of its own node_modules or a written cache is not a change. change: it rewrites files, generated or installed. git: it runs git over the working tree, so `git add *` stages what it finds, untracked files included. A suite of this kind may discard uncommitted edits first. unknown: the body does not say. A test suite is that case, because it runs the core\'s own code.',
             ],
-            'targeted' => self::nullableString('Narrowed form for iterating on a single file or test. It can run differently from command — `-s cgl -n` reports where `-s cgl` rewrites — and runs above answers for command.'),
+            'targeted' => self::nullableString('The narrowed form for one file or one test. It can run differently from command: `-s cgl -n` reports where `-s cgl` rewrites, and runs answers for command.'),
             'description' => self::string(),
             'whenToUse' => self::string(),
             'domains' => self::listOf(self::string()),
@@ -418,7 +418,7 @@ final class Schema
     public static function termCounts(string $description): array
     {
         return self::listOf(self::object([
-            'term' => self::string('The word, lowercased as it was searched for.'),
+            'term' => self::string('The word, lowercased as the search used it.'),
             'matchCount' => self::integer(),
         ], ['term', 'matchCount']), $description);
     }
@@ -440,7 +440,7 @@ final class Schema
     {
         return [
             'issue' => self::integer($issue),
-            'subject' => self::string('What the issue is about, so it can be judged without being read. Empty where the tracker did not answer the one call that fills the whole set.'),
+            'subject' => self::string('What the issue is about, so a caller judges it without a read. Empty where the tracker did not answer the one call that fills the whole set.'),
             'tracker' => self::string('Bug, Feature, Task.'),
             'status' => self::string($status),
             'url' => self::string('Where a person reads it.'),
@@ -474,8 +474,8 @@ final class Schema
     public static function verifiedOn(): array
     {
         return [
-            'since' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major this entry starts holding at, or null when it holds on every covered version.'],
-            'until' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major it stops holding after, or null when nothing has replaced it.'],
+            'since' => ['type' => ['integer', 'null'], 'description' => 'The first TYPO3 major this entry holds on, or null when it holds on every covered version.'],
+            'until' => ['type' => ['integer', 'null'], 'description' => 'The last TYPO3 major this entry holds on, or null when nothing has replaced it.'],
             'verifiedOn' => self::string('The same range as a sentence, empty when the entry holds on every covered version.'),
         ];
     }
@@ -488,7 +488,7 @@ final class Schema
             'title' => self::string(),
             'sassPaths' => self::listOf(self::string(), 'What to verify the entry against on the target version.'),
             'demoPath' => self::nullableString(),
-        ] + self::verifiedOn(), ['name', 'title', 'verifiedOn']), 'Components this catalog has but was never verified on the target version. Left out of components rather than handed over — an empty answer here means "not verified where you are", not "does not exist".');
+        ] + self::verifiedOn(), ['name', 'title', 'verifiedOn']), 'Components this catalog has and nobody verified on the target version. The answer leaves them out of components. An empty answer here means "not verified where you are", not "does not exist".');
     }
 
     /** @return array<string, mixed> */
@@ -498,12 +498,12 @@ final class Schema
             'repository' => self::string(),
             'branch' => self::string(),
             'version' => self::string('TYPO3 version of the snapshot.'),
-            'commit' => self::string('Core revision the catalogs were taken from.'),
+            'commit' => self::string('The core revision the catalogs come from.'),
             'verifiedAt' => self::string(),
             'verifyCommand' => self::string('The command that re-checks the snapshot against a core checkout.'),
-            'installedVersion' => self::nullableString('TYPO3 version of the installation this server was started in, where there is one. Null means there was nothing to compare the snapshot with.'),
-            'skew' => self::nullableString('Set when that installation and the snapshot are different TYPO3 majors, and what to do about it. Null when they agree or nothing is known.'),
-        ], ['branch', 'version', 'commit', 'verifiedAt'], 'The core revision behind catalog answers, and how it relates to the installation being read. A miss means "not in this snapshot".');
+            'installedVersion' => self::nullableString('TYPO3 version of the installation this server started in, where there is one. Null means nothing to compare the snapshot with.'),
+            'skew' => self::nullableString('What to do when that installation and the snapshot are different TYPO3 majors. Null when they agree or the server knows nothing.'),
+        ], ['branch', 'version', 'commit', 'verifiedAt'], 'The core revision behind catalog answers, and how it relates to the installation the server reads. A miss means "not in this snapshot".');
     }
 
     /**

@@ -52,15 +52,15 @@ Answers with
 .. code-block:: yaml
 
     query: string
-    # The exact XLF resource the result was restricted to. Null means the caller did
-    # not yet provide the usage context.
+    # The exact XLF resource the lookup restricted the result to. Null means the
+    # caller gave no usage context.
     resource: string or null  # optional
     matchCount: integer
     matches:
       - documentId: string
         # Title of the knowledge document.
         title: string
-        # typo3://guides resource holding the full document.
+        # The typo3://guides resource that holds the full document.
         uri: string
         # Heading of the matched section.
         heading: string
@@ -75,26 +75,26 @@ Answers with
         # Weighted match score; headings weigh more than body text. Zero where no
         # search ranked this record.
         score: integer
-        # Whether the body was cut; read the resource for the rest.
+        # Whether the lookup cut the body. Read the resource for the rest.
         truncated: boolean
-    # Documents in the knowledge base with the topics they cover. Returned when
-    # nothing matched.
+    # Documents in the knowledge base with the topics they cover. The lookup returns
+    # them when nothing matched.
     documents:  # optional
       - id: string
         title: string
         topics: [string]
     # Documents outside the searched ones that do match the query.
     elsewhere: [string]  # optional
-    # Hints matching the same query. They are a second corpus, searched by
-    # typo3_hint_lookup, which takes one of these ids.
+    # Hints that match the same query. They are a second corpus, which
+    # typo3_hint_lookup searches, and it takes one of these ids.
     alsoInHints:  # optional
       - id: string
         title: string
     # One of: core, uncertain, project, extension. Which kind of work this answer is
-    # for: core, a patch to the TYPO3 core itself; project, the site repository
-    # around an installation; extension, a package in it, whether a sitepackage or a
-    # third-party one; or uncertain, which means nothing in the call placed the work
-    # and what came back is the core's own.
+    # for. core: a patch to the TYPO3 core itself. project: the site repository
+    # around an installation. extension: a package in it, a sitepackage or a
+    # third-party one. uncertain: nothing in the call placed the work, and the
+    # answer is the core's own.
     scope: string
     # The headings the query matched, where more than one match was in one document
     # and the answer is that document whole rather than the excerpts. Empty on every

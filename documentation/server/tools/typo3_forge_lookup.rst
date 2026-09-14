@@ -186,7 +186,7 @@ Answers with
     # than a few. Empty otherwise, and short of the query where the tracker stopped
     # answering partway through it.
     terms:
-      - # The word, lowercased as it was searched for.
+      - # The word, lowercased as the search used it.
         term: string
         matchCount: integer
     # Every area the core files its issues under, read from the project itself. A
@@ -288,7 +288,7 @@ Answers with
       relations:
         - # The other issue.
           issue: integer
-          # What the issue is about, so it can be judged without being read. Empty
+          # What the issue is about, so a caller judges it without a read. Empty
           # where the tracker did not answer the one call that fills the whole set.
           subject: string
           # Bug, Feature, Task.
@@ -310,7 +310,7 @@ Answers with
       mentioned:
         - # The issue the text cites.
           issue: integer
-          # What the issue is about, so it can be judged without being read. Empty
+          # What the issue is about, so a caller judges it without a read. Empty
           # where the tracker did not answer the one call that fills the whole set.
           subject: string
           # Bug, Feature, Task.
@@ -467,7 +467,7 @@ Answers with
         relations:
           - # The other issue.
             issue: integer
-            # What the issue is about, so it can be judged without being read. Empty
+            # What the issue is about, so a caller judges it without a read. Empty
             # where the tracker did not answer the one call that fills the whole
             # set.
             subject: string
@@ -563,7 +563,8 @@ Answers with
             status: string
             # Where a person reads the change.
             url: string
-    # Why nothing was answered, where status says unavailable. Null otherwise.
+    # Why the source answered nothing, where status says unavailable. Null
+    # otherwise.
     unavailable:
       # One of: source-not-answering, source-not-parseable. source-not-answering:
       # the tracker did not answer this time. source-not-parseable: something

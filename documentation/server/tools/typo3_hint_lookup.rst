@@ -66,10 +66,10 @@ Answers with
     scopes:
       - path: string
         # One of: core, uncertain, project, extension. Which kind of work this
-        # answer is for: core, a patch to the TYPO3 core itself; project, the site
-        # repository around an installation; extension, a package in it, whether a
-        # sitepackage or a third-party one; or uncertain, which means nothing in the
-        # call placed the work and what came back is the core's own.
+        # answer is for. core: a patch to the TYPO3 core itself. project: the site
+        # repository around an installation. extension: a package in it, a
+        # sitepackage or a third-party one. uncertain: nothing in the call placed
+        # the work, and the answer is the core's own.
         scope: string
     # The TYPO3 major this repository runs — stated by the caller, or read from
     # the installation. Null means nothing was filtered and every statement carries
@@ -98,13 +98,13 @@ Answers with
         # PHP, TypeScript, JavaScript, CSS, or General.
         category: string
         # One of: core, project, extension, null. Which kind of work the whole hint
-        # obliges. "core" means it is a condition of a patch to the TYPO3 core and a
-        # convention anywhere else — the backend's own design system, the
-        # changelog artifact, the paths of the mono repository. "project" and
-        # "extension" are the mirror: what the repository around an installation, or
-        # a package distributed on its own, has to do, and what is context rather
-        # than a condition inside the core. Null, the ordinary case, means it holds
-        # wherever TYPO3 is written: an API that throws throws in a sitepackage too.
+        # obliges. "core" means a condition of a patch to the TYPO3 core and a
+        # convention anywhere else. The backend's own design system, the changelog
+        # artifact and the paths of the mono repository are that case. "project" and
+        # "extension" are the mirror. They say what the repository around an
+        # installation, or a package on its own, has to do, and what is context
+        # inside the core. Null, the ordinary case, means it holds wherever somebody
+        # writes TYPO3: an API that throws throws in a sitepackage too.
         scope: string or null
         hints:
           - # The statement itself. It reads the same on every version it holds for;
@@ -115,18 +115,18 @@ Answers with
             since: integer or null
             # Last TYPO3 major this holds on. Null means it still holds.
             until: integer or null
-            # The same range as a sentence, empty when the statement is bound to
-            # nothing.
+            # The same range as a sentence, empty when the statement binds to no
+            # version.
             versions: string
             # One of: core, project, extension, null. Which kind of work this
-            # statement obliges. "core" means it is a condition of a patch to the
-            # TYPO3 core and a convention anywhere else — the backend's own design
-            # system, the changelog artifact, the paths of the mono repository.
-            # "project" and "extension" are the mirror: what the repository around
-            # an installation, or a package distributed on its own, has to do, and
-            # what is context rather than a condition inside the core. Null, the
-            # ordinary case, means it holds wherever TYPO3 is written: an API that
-            # throws throws in a sitepackage too.
+            # statement obliges. "core" means a condition of a patch to the TYPO3
+            # core and a convention anywhere else. The backend's own design system,
+            # the changelog artifact and the paths of the mono repository are that
+            # case. "project" and "extension" are the mirror. They say what the
+            # repository around an installation, or a package on its own, has to do,
+            # and what is context inside the core. Null, the ordinary case, means it
+            # holds wherever somebody writes TYPO3: an API that throws throws in a
+            # sitepackage too.
             scope: string or null
     # How much of the task the closest hint above carries, between 0 and 1, where 1
     # is every word of it. A hint answers on its own from 0.5; below that it was

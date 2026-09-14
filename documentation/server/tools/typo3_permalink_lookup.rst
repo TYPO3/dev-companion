@@ -130,7 +130,8 @@ Answers with
         answeredBranch: string or null
         # Why nothing exact came back. Null where something did.
         reason: string or null
-    # Why nothing was answered, where status says unavailable. Null otherwise.
+    # Why the source answered nothing, where status says unavailable. Null
+    # otherwise.
     unavailable:
       # One of: version-not-covered, source-not-answering. version-not-covered: the
       # release asked about is outside the ones this server knows the manuals for,

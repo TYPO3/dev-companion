@@ -60,10 +60,10 @@ Answers with
     scopes:
       - path: string
         # One of: core, uncertain, project, extension. Which kind of work this
-        # answer is for: core, a patch to the TYPO3 core itself; project, the site
-        # repository around an installation; extension, a package in it, whether a
-        # sitepackage or a third-party one; or uncertain, which means nothing in the
-        # call placed the work and what came back is the core's own.
+        # answer is for. core: a patch to the TYPO3 core itself. project: the site
+        # repository around an installation. extension: a package in it, a
+        # sitepackage or a third-party one. uncertain: nothing in the call placed
+        # the work, and the answer is the core's own.
         scope: string
     # Domains those paths touch. Empty means nothing was narrowed.
     domains: [string]  # optional
@@ -87,21 +87,21 @@ Answers with
       - suite: string
         # Full command, run from the core root.
         command: string
-        # One of: check, change, git, unknown. What running the command does to the
+        # One of: check, change, git, unknown. What the command does to the
         # checkout, read off the suite's body in Build/Scripts/runTests.sh rather
-        # than by running it. The values typo3_project_describe gives a declared
-        # command, plus one for the suites that run git. check: it reports and hands
-        # the files back as they were, so a task told not to change files can run it
-        # — installing its own node_modules or writing a cache is not a change.
-        # change: it rewrites files, generated or installed. git: it runs git over
-        # the working tree, so `git add *` stages what it finds, untracked files
-        # included, and a suite of this kind may discard uncommitted edits first.
-        # unknown: the body does not say, which is what a test suite is, because it
-        # runs the core's own code.
+        # than measured by a run. The values are what typo3_project_describe gives a
+        # declared command, plus one for the suites that run git. check: it reports
+        # and hands the files back as they were, so a task told not to change files
+        # can run it. An install of its own node_modules or a written cache is not a
+        # change. change: it rewrites files, generated or installed. git: it runs
+        # git over the working tree, so `git add *` stages what it finds, untracked
+        # files included. A suite of this kind may discard uncommitted edits first.
+        # unknown: the body does not say. A test suite is that case, because it runs
+        # the core's own code.
         runs: string
-        # Narrowed form for iterating on a single file or test. It can run
-        # differently from command — `-s cgl -n` reports where `-s cgl` rewrites
-        # — and runs above answers for command.
+        # The narrowed form for one file or one test. It can run differently from
+        # command: `-s cgl -n` reports where `-s cgl` rewrites, and runs answers for
+        # command.
         targeted: string or null
         description: string  # optional
         whenToUse: string  # optional

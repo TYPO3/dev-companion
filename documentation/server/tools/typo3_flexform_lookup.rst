@@ -139,34 +139,35 @@ Answers with
     answeredBy: string  # optional
     unsupported:  # optional
       # One of: no-installation, misconfigured, installation-not-answering.
-      # no-installation: nothing to ask from here, and searched says where it
-      # looked. misconfigured: an installation was named and could not be used, so
-      # nothing was searched for. installation-not-answering: one was found and its
-      # console did not answer — a stopped container or a database with no schema,
-      # which is a state that ends without reinstalling anything.
+      # no-installation: nothing to ask from here, and searched says where the
+      # discovery looked. misconfigured: the caller named an installation the server
+      # could not use, so the discovery searched nothing.
+      # installation-not-answering: the discovery found one and its console did not
+      # answer. A stopped container or a database with no schema is that state, and
+      # it ends without a reinstall.
       cause: string
       # What stopped it, in the words the attempt produced.
       reason: string
-      # One of: installed, not-installed, undeclared, null. Which state the
-      # repository the caller stands in is in, which the cause does not say.
-      # installed: packages are installed below the root that was found, so an
-      # install is not what is missing here. not-installed: the repository declares
-      # TYPO3 and nothing is installed below it yet, so this call is answerable once
-      # composer install has run. undeclared: nothing in the directories walked
-      # declares TYPO3, so an install here would answer nothing. Null where nothing
-      # was looked at: a named root that could not be used, or an entrypoint that
-      # handed no directory in.
+      # One of: installed, not-installed, undeclared, null. The state of the
+      # repository the caller stands in, which the cause does not say. installed:
+      # packages sit below the root the discovery found, so an install is not what
+      # is missing. not-installed: the repository declares TYPO3 and has no packages
+      # below it yet, so this call answers once composer install has run.
+      # undeclared: nothing in the directories the discovery walked declares TYPO3,
+      # so an install here answers nothing. Null where the discovery looked at
+      # nothing: a named root the server could not use, or an entrypoint that handed
+      # no directory in.
       repositoryState: string or null  # optional
       # What the reason means where the message alone does not say it. A console
       # that starts and then fails on a missing table has a database without a
-      # schema, not a broken installation. Empty where nothing beyond the reason is
-      # known.
+      # schema, not a broken installation. Empty where the server knows nothing
+      # beyond the reason.
       diagnosis: string  # optional
-      # Every directory the discovery walked, in order. "Nothing was found" and "the
-      # server was started somewhere else" wear one sentence, and only this tells
-      # them apart. Empty where discovery never ran.
+      # Every directory the discovery walked, in order. "Nothing found" and "the
+      # server started somewhere else" read the same, and only this list tells them
+      # apart. Empty where the discovery never ran.
       searched: [string]
-      # What was set and could not be used. Null where nothing was set.
+      # The setting the server could not use. Null where the caller set nothing.
       misconfiguration: string or null  # optional
       settings:
         # Environment variable that names the installation root.

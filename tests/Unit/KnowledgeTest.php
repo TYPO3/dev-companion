@@ -417,10 +417,10 @@ final class KnowledgeTest extends TestCase
         $rules = Documents::read('core/contribution/rules');
 
         self::assertStringContainsString('The diff is what a reviewer reads', $rules);
-        self::assertStringContainsString('Edit the file that is there rather than rewriting it', $rules);
+        self::assertStringContainsString('Edit the file that is there rather than rewrite it', $rules);
         self::assertStringContainsString('unless that is the change', $rules);
         self::assertStringContainsString('Write a new array expanded, one key per line', $rules);
-        self::assertStringContainsString('merge an assertion into the test that already', $rules);
+        self::assertStringContainsString('Merge an assertion into the test that already', $rules);
     }
 
     #[Test]

@@ -9,12 +9,12 @@ readings:
 
 # D-KNW-134 — What the functional harness does to the working directory is stated
 
-**`project-extension-tests` says that a functional test runs with the working
-directory at the instance path, because a test written without that passes with
-the defect it was written to prove.**
+**`project-extension-tests` says that a functional test runs with the work
+directory at the instance path. A test written without that passes with the
+defect it exists to prove.**
 
 The hint already carries what the harness does around a test — the databases,
-the instance directory, the interpreter check. The working directory was the one
+the instance directory, the interpreter check. The work directory was the one
 thing it did not carry, and it is the one a path-resolution test turns on.
 
 ## Evidence
@@ -25,14 +25,14 @@ thing it did not carry, and it is the one a path-resolution test turns on.
   It wrote the obvious regression test for a fix that resolves relative cache
   paths, and the test passed with and without the fix. For one round it
   concluded the reported defect did not reproduce, which is the wrong answer to
-  a pull request; `grep -rn chdir` over the installed framework explained it.
+  a pull request. `grep -rn chdir` over the installed framework explained it.
   Two functional runs of about 25 seconds each, plus the wrong conclusion.
 - **Read in `.checkouts/testing-framework` on 2026-08-28, on all three lines.**
-  `Testbase::setUpInstanceCoreLinks()` calls `chdir($instancePath)` — line 222
-  on `8`, line 215 on `9` and on `main` — so it holds for every covered major
-  and the statement takes no binding.
+  `Testbase::setUpInstanceCoreLinks()` calls `chdir($instancePath)`, line 222 on
+  `8`, line 215 on `9` and on `main`. So it holds for every covered major and
+  the statement takes no bound.
 - **It runs once per test case class.** `FunctionalTestCase::setUp()` calls it
-  in the `isFirstTest` branch, and that flag is a static tracking the current
+  in the `isFirstTest` branch, and that flag is a static that tracks the current
   class. Nothing changes the directory back, so every test after it runs there
   too.
 - **The same path is the public path.** `setUpBasicTypo3Bootstrap()` sets
@@ -51,21 +51,21 @@ thing it did not carry, and it is the one a path-resolution test turns on.
 - **Made in this run rather than queued.** The reading is
   `.checkouts/testing-framework`, which this judgement did, and `D-FBK-052`
   bounds the queueing rule to a lookup still to be made.
-- Written from the checkout rather than from the report's proposed sentence,
-  which claims the working directory equals the public path without saying that
-  two different calls set the two.
-- Not bound with `since` or `until`: it is the same call on the `8`, `9` and
-  `main` lines, which is every release line this repository pins.
+- Written from the checkout rather than from the report's proposed sentence.
+  That sentence claims the work directory equals the public path and does not
+  say that two different calls set the two.
+- No `since` or `until`. It is the same call on the `8`, `9` and `main` lines,
+  which is every release line this repository pins.
 
 ## Assumed
 
-- That a session reading the hint whole reads a statement in it. This one was
-  read whole and the missing line is what the session said it needed.
+- That a session reading the hint whole reads a statement in it. The session
+  read this one whole and the absent line is what it said it needed.
 
 ## Wrong if
 
 - The framework moves the `chdir` out of `setUpInstanceCoreLinks()` and the
   statement names a call that no longer makes it. `bin/cli checkouts:update`
   moves those lines, and nothing here re-reads the statement when it does.
-- A session reports moving the working directory in a test and something else in
-  the harness moving it back.
+- A session reports that it moved the work directory in a test and something
+  else in the harness moved it back.

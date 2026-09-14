@@ -10,22 +10,22 @@ readings:
 # D-KNW-133 — A guide's whenToUse names the answer it hands over
 
 **A `whenToUse` says what the page puts in the caller's hands, because that is
-what decides whether the call is made at all.**
+what decides whether the caller makes the call at all.**
 
 `D-KNW-057` settled that a document declares when to reach for it. What that
-declaration has to say is the half a session has now paid for: a line describing
-the page's method reads as a page about the method, and the caller solves the
-question elsewhere.
+declaration has to say is the half a session has now paid for. A line that
+describes the page's method reads as a page about the method, and the caller
+solves the question elsewhere.
 
 ## Evidence
 
 - **The session.** `/home/benji/projects/bootstrap_package` on 2026-08-28,
   `claude-opus-5[1m]`,
   [`feedback/2026-08-28-001428`](../../feedback/archive/2026-08-28-001428-two-routes-this-server-offered-and-the-session.md).
-  The package declares `^13.4 || ^14.3` and only 14.3.6 is installed. The
-  question was whether `GeneralUtility::getFileAbsFileName()` resolves a
-  relative path the same way on 13.4.
-- **The route was named twice and not taken.** Both the
+  The package declares `^13.4 || ^14.3` and only 14.3.6 is there. The question
+  was whether `GeneralUtility::getFileAbsFileName()` resolves a relative path
+  the same way on 13.4.
+- **Two surfaces named the route and the session did not take it.** Both the
   `typo3-extension-patch-review` skill and `typo3_project_describe`'s own
   `guides` array named
   `extension/compatibility/a-declared-major-that-is-not-installed` for exactly
@@ -48,10 +48,10 @@ question elsewhere.
 - The `whenToUse` now names the invocation and the fallback: one git call
   against the branch, or the released package where no checkout is at hand. The
   reporting session's own wording asked for exactly that.
-- **Closed on the spot.** The line is a declaration in `knowledge/`, the page it
-  describes was read in this run, and nothing about TYPO3 was looked up.
-- Against the report's other branch — a tool taking a symbol and a declared
-  major — for now. It is the answer where the page turns out not to hand over a
+- **Closed on the spot.** The line is a declaration in `knowledge/`, this run
+  read the page it describes, and nothing about TYPO3 needed a lookup.
+- Against the report's other branch, a tool that takes a symbol and a declared
+  major, for now. It is the answer where the page turns out not to hand over a
   reading, and the page does.
 - The second half of that feedback is not this: the deprecation sweep's
   exemption is in `skills/base.md`, which is a contract and waits.
@@ -63,9 +63,9 @@ question elsewhere.
 
 ## Wrong if
 
-- A session reports calling this document for a whole-subsystem question and
-  getting three git invocations where it needed the shape of a subtree. Then the
+- A session reports that it called this document for a whole-subsystem question
+  and got three git invocations where it needed the shape of a subtree. Then the
   line now oversells the page in the other direction.
-- Another `whenToUse` is reported the same way. Then the finding is the field
-  across the corpus rather than this one line, and what is owed is a sweep of
-  all of them.
+- A session reports another `whenToUse` the same way. Then the finding is the
+  field across the corpus rather than this one line, and what is owed is a sweep
+  of all of them.

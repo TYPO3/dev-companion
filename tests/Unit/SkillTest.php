@@ -3617,7 +3617,7 @@ final class SkillTest extends TestCase
         self::assertNotFalse($add);
         self::assertLessThan($establish, $verify);
         self::assertLessThan($add, $establish);
-        self::assertStringContainsString('for a review-only request, report the defect without changing it', $skill);
+        self::assertStringContainsString('For a review-only request, report the defect without changing it', $skill);
         self::assertStringContainsString('Keep unit and functional infrastructure with the extension', $skill);
         self::assertStringContainsString('Keep browser infrastructure with the runnable project', $skill);
         self::assertStringNotContainsString('Classify the work as setup', $skill);

@@ -7,22 +7,23 @@ status: open
 
 # D-SKL-005 — Core contribution earns two task skills
 
-**Core contribution earns two task skills — reviewing a patch and creating one —
-and what shows it is 35 feedback out of one checkout rather than one run.**
+**Core contribution earns two task skills, one to review a patch and one to
+create one. What shows it is 35 feedback out of one checkout rather than one
+run.**
 
 `REVIEW-03` is the run that made it visible: a core patch review that called
-this server nothing at all. The corpus behind it had been saying the same thing
-since 2026-08-01, unjudged.
+this server nothing at all. The corpus behind it had said the same thing since
+2026-08-01, with no judgement.
 
 ## Evidence
 
-- The run. 23 calls in 256 seconds — 22 `Bash`, one `Read`, no server call, no
-  skill — session `8622fa17`, `claude-opus-5`, Claude Code 2.1.220, one prompt
-  and no steering, judged `partial` in `scenarios/runs/REVIEW-03.json`. Not a
-  delivery failure: the transcript's attachments carry the
+- The run. 23 calls in 256 seconds: 22 `Bash`, one `Read`, no server call, no
+  skill. Session `8622fa17`, `claude-opus-5`, Claude Code 2.1.220, one prompt
+  and no steer, judged `partial` in `scenarios/runs/REVIEW-03.json`. Not a
+  delivery failure. The transcript's attachments carry the
   `mcp_instructions_delta` in full, first sentence
   `Start every task with typo3_project_describe`, and the `skill_listing` with
-  all seven descriptions; only the 22 tools arrived deferred, as names without
+  all seven descriptions. Only the 22 tools arrived deferred, as names without
   descriptions.
 - The nearest skill matches the shape and excludes the checkout.
   `typo3-extension-conformance` is "Review, audit, or improve a TYPO3 project,
@@ -32,13 +33,13 @@ since 2026-08-01, unjudged.
   The other six are extension or site work by their own descriptions.
 - 35 open feedback carry `directory: /home/benji/projects/typo3-cms`, in two
   clusters. Fifteen are patch **review**, from 2026-08-01, across three clients
-  and four models — the GD/SVG placeholder patch, `7175fcaf7fe`, and the
-  AssetCollector deprecation, each reviewed by a different session. Twenty are
-  patch **creation**, from 2026-08-02, one session on Forge #105403: the
-  worktree it worked in, the commit message, running unit, functional, cgl and
-  phpstan repeatedly, finding whether a patch already existed, pushing to Gerrit
-  as a private change, and operating Forge itself. No published skill names one
-  of those things.
+  and four models. The GD/SVG placeholder patch, `7175fcaf7fe`, and the
+  AssetCollector deprecation, each under review by a different session. Twenty
+  are patch **creation**, from 2026-08-02, one session on Forge #105403. The
+  worktree it worked in, the commit message, repeated runs of unit, functional,
+  cgl and phpstan. Whether a patch already existed, the push to Gerrit as a
+  private change, and the operation of Forge itself. No published skill names
+  one of those things.
 - One of them asks for it outright. `feedback/2026-08-01-115220`, GPT-5 mini:
   "Proposal: Add a dedicated MCP skill `typo3-patch-review` to support automated
   patch reviews." That is the third signal in
@@ -51,22 +52,22 @@ since 2026-08-01, unjudged.
   `typo3_test_run_guide` and `typo3_commit_message_guide` are tools this server
   ships. `bin/cli hints:probe` on the run's own prompt reaches nothing: 40 hints
   are candidates and none matches.
-- Where the entry point did fire it was answered thinly.
+- Where the entry point did fire the answer was thin.
   `feedback/2026-08-02-144350` is a core session that called
   `typo3_project_describe` and got four `gerrit:setup` commands and no
-  `Build/Scripts/runTests.sh`; it ran that script about thirty times and took
+  `Build/Scripts/runTests.sh`. It ran that script about thirty times and took
   its invocation syntax from elsewhere.
 
 ## Decided
 
-- Two skills rather than one. Reviewing a patch and creating one are two task
-  shapes with two corpora, and the split is the one the extension side already
+- Two skills rather than one. To review a patch and to create one are two task
+  shapes with two corpora. The split is the one the extension side already
   makes: `typo3-extension-conformance` reviews, the development skills build.
-  Each is written around what its own cluster shows and nothing else.
-- The entry is written before either skill exists, which departs from the rule
-  that a decision is written by the commit that implements it. What is settled
-  here is that the domain earned them and where the boundary runs; what they say
-  is not settled and is not guessable from this repository.
+  Each rests on what its own cluster shows and nothing else.
+- The entry comes before either skill exists, which departs from the rule that
+  the commit that implements a decision writes it. What this entry settles is
+  that the domain earned them and where the boundary runs. What they say is open
+  and nobody can guess it from this repository.
 - Not decided here: the names, the order each holds, and what each states. That
   is the reading
   [writing-a-skill.md](../../documentation/contributing/writing-a-skill.rst)
@@ -76,13 +77,13 @@ since 2026-08-01, unjudged.
 
 ## Assumed
 
-- That the two clusters are two skills. The evidence is the task shapes: the
+- That the two clusters are two skills. The evidence is the task shapes. The
   review cluster never pushes anything, and most of the creation cluster is
-  delivery — worktree, checks, Gerrit, Forge — which a review may not touch at
-  all (`D-EVI-003`).
-- That the corpus says what its titles say. Four of the 35 were read in full for
-  this entry; the rest were read as titles, models and directories. Reading them
-  is the todo's first step and may move the boundary this entry draws.
+  delivery, worktree, checks, Gerrit, Forge. A review may not touch that at all
+  (`D-EVI-003`).
+- That the corpus says what its titles say. This entry read four of the 35 in
+  full. It read the rest as titles, models and directories. Reading them is the
+  todo's first step and may move the boundary this entry draws.
 
 ## Wrong if
 
@@ -90,11 +91,11 @@ since 2026-08-01, unjudged.
   and the entry split a domain by its verbs, which is what `R-SKL-010` exists to
   prevent.
 - A second `REVIEW-03` run in the same client and model calls this server with
-  neither skill published. Then the missing skill was not the obstacle, and what
-  is left to suspect is what the tools answer a core checkout with.
-- Both are published and the next core run still hand-reads the checkout. Then
-  the domain did not earn them, and what a core session needs from here is
-  smaller than 35 feedback made it look.
+  neither skill published. Then the absent skill was not the obstacle, and what
+  remains to suspect is what the tools answer a core checkout with.
+- Both are out and the next core run still reads the checkout by hand. Then the
+  domain did not earn them, and what a core session needs from here is smaller
+  than 35 feedback made it look.
 
 ## Since then
 
@@ -114,15 +115,15 @@ the code is right.
 
 ## Since then
 
-One of the four links the review order was read off does not hold: re-run in the
-checkout it was written in, the changelog lookup reaches that entry from the
-words its title carries and from nothing the diff does. The session says so
-itself four seconds earlier — it found the entry by grepping the checkout — so
+One of the four links the review order came off does not hold. Re-run in the
+checkout it came from, the changelog lookup reaches that entry from the words
+its title carries and from nothing the diff does. The session says so itself
+four seconds earlier, since it found the entry with a grep of the checkout. So
 the strength credits a tool for the finding its sibling records as that tool's
-miss, which is the third corpus where the credit is misplaced.
+miss. That is the third corpus where the credit goes to the wrong place.
 
-That changes the order's first step rather than the decision: a reviewer holds
-what the diff removes, which is the one thing the matcher does not carry, so the
+That changes the order's first step rather than the decision. A reviewer holds
+what the diff removes, which is the one thing the matcher does not carry. So the
 step reaches a precedent by the entry's own subject words or from the checkout,
 and says which. The other three links reproduce, one credit looser than the
 answer.

@@ -66,7 +66,7 @@ final class RecordLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Read the rows of any table this installation has TCA for — pages, tt_content, a table of one of this project\'s own extensions, or one a dependency brings: how many there are, which page they sit on, whether they are live, hidden or deleted, and the rows themselves — uid, the label the table names in its own TCA, the timestamps, the two flags, and any column the call names in columns. That is what a backend visit would have told you and the one question typo3_schema_lookup cannot answer: it returns the shape of the table, this returns what is in it. It is also the fact that decides where records are maintained, because a table with a few dozen rows is edited in the generic record list and one with three thousand on a single storage folder needs a module with its own filtering and paging. Pass groupBy to get what values a column actually holds across the table, with the TCA default beside them and the uid of every row departing from it — that is the answer that decides whether a CType, a TCA default, a markup class or a template branch can be dropped, and the single row that departs is the one a cleanup breaks. Narrow it with where, which takes exact values for any column of the table, pid among them; pass count to get the numbers without the rows, and limit to say how many rows come back. A table TCA does not describe is refused, which is the caches, the queues and the session store. Omit the table to see which ones it will read. It reads with the shell user\'s database access rather than a backend user\'s, so no permission, workspace or language filter narrows what comes back. It never writes.';
+        return 'Read the rows of any table this installation has TCA for. That is pages, tt_content, a table of one of this project\'s own extensions, or one a dependency brings. It answers how many there are, which page they sit on, and whether they are live, hidden or deleted. It answers the rows themselves. That is uid, the label the table names in its own TCA, the timestamps, the two flags, and any column named in columns. That is what a backend visit tells you and the one question typo3_schema_lookup cannot answer. That tool returns the shape of the table, and this one returns what is in it. It is also the fact that decides where editors maintain records. A table with a few dozen rows fits the generic record list. One with three thousand on a single storage folder needs a module with its own filter and pages. Pass groupBy to get what values a column holds across the table. The TCA default stands beside them, with the uid of every row that departs from it. That answer decides whether a CType, a TCA default, a markup class or a template branch can go. The single row that departs is the one a cleanup breaks. Narrow it with where, which takes exact values for any column of the table, pid among them. Pass count to get the numbers without the rows, and limit to say how many rows come back. A table TCA does not describe is refused, which is the caches, the queues and the session store. Omit the table to see which ones it will read. It reads with the shell user\'s database access rather than a backend user\'s, so no permission, workspace or language filter narrows what comes back. It never writes.';
     }
 
     public static function inputSchema(): array
@@ -77,11 +77,11 @@ final class RecordLookup extends ReadOnlyTool
                 'table' => ['type' => 'string', 'description' => 'The table to read, for example "tt_content" or "tx_myext_animal". Omit to list the tables this installation has TCA for, which are the ones that can be read.'],
                 'where' => [
                     'type' => 'object',
-                    'description' => 'Exact values to narrow by, one per column: {"pid": 2, "status": "adopted"}. Every column of the table can be named, pid and uid among them, and a column the table does not have is an answer saying so rather than an empty result. Exact equality only — there is no operator, no wildcard and no range, which is what keeps this a lookup rather than a query language.',
+                    'description' => 'Exact values to narrow by, one per column: {"pid": 2, "status": "adopted"}. You can name every column of the table, pid and uid among them. A column the table does not have gets an answer that says so rather than an empty result. Exact equality only — there is no operator, no wildcard and no range, which is what keeps this a lookup rather than a query language.',
                     'additionalProperties' => ['type' => ['string', 'number', 'boolean']],
                 ],
                 'count' => ['type' => 'boolean', 'description' => 'True to answer with the numbers alone and read no row. Use it where the question is how much is in there rather than what.', 'default' => false],
-                'groupBy' => ['type' => 'string', 'description' => 'One column to count per distinct value of, for example "CType", "header_layout" or "status". The answer then carries one line per value with how many rows carry it, which is the distribution a call per value asks thirteen times for. It also carries the column\'s TCA default and the uid and pid of the rows departing from it, capped, which is what says whether a value is the site\'s convention or its one exception. Combines with where, which narrows what is counted. A column the table does not have is an answer saying so.'],
+                'groupBy' => ['type' => 'string', 'description' => 'One column to count per distinct value of, for example "CType", "header_layout" or "status". The answer then carries one line per value with how many rows carry it. That is the distribution a call per value asks thirteen times for. It also carries the column\'s TCA default and the uid and pid of the rows that depart from it, capped. That says whether a value is the site\'s convention or its one exception. Combines with where, which narrows what is counted. A column the table does not have is an answer saying so.'],
                 'columns' => [
                     'type' => 'array',
                     'items' => ['type' => 'string'],
@@ -101,7 +101,7 @@ final class RecordLookup extends ReadOnlyTool
             'where' => Schema::listOf(Schema::object([
                 'column' => Schema::string(),
                 'value' => ['description' => 'The value the column was matched against, exactly as it was passed.'],
-            ], ['column', 'value']), 'The filter the answer was read under, echoed so a count reported onwards carries what it counted. A list rather than a map keyed by column, because an empty map is [] in JSON and a schema saying object refuses it — a client reads one shape either way. Empty where the whole table was read.'),
+            ], ['column', 'value']), 'The filter the answer was read under, echoed so a count reported onwards carries what it counted. A list rather than a map keyed by column, because an empty map is [] in JSON and a schema that says object refuses it. A client reads one shape either way. Empty where the whole table was read.'),
             'counts' => ['type' => ['object', 'null']] + Schema::object([
                 'total' => Schema::integer('Every matching row, whatever state it is in.'),
                 'live' => Schema::integer('Rows that are neither hidden nor deleted.'),
@@ -120,7 +120,7 @@ final class RecordLookup extends ReadOnlyTool
                 'uid' => Schema::integer('What the backend edits the row by.'),
                 'pid' => Schema::integer(),
                 'value' => ['description' => 'What that row carries instead of the default.'],
-            ], ['uid', 'pid', 'value']), 'The rows whose grouped column is not the TCA default, by uid, capped at one page of the record list. This is the half of a distribution that decides something: a value one row in a hundred carries is what a cleanup drops and then breaks. Empty where groupBy was not passed, where the column declares no default, and where every row carries it.'),
+            ], ['uid', 'pid', 'value']), 'The rows whose grouped column is not the TCA default, by uid, capped at one page of the record list. This is the half of a distribution that decides something. A value one row in a hundred carries is what a cleanup drops and then breaks. Empty where groupBy was not passed, where the column declares no default, and where every row carries it.'),
             'pages' => Schema::listOf(Schema::object([
                 'pid' => Schema::integer('The page the rows sit on. Zero is the root, which is where records that belong to no page end up.'),
                 'total' => Schema::integer(),
@@ -145,7 +145,7 @@ final class RecordLookup extends ReadOnlyTool
                 'table' => Schema::string(),
                 'extension' => Schema::string('The extension whose TCA registers it, read from the EXT: reference in its ctrl title. Empty where the title names none.'),
             ], ['table', 'extension']), 'Every table this tool will read in this installation, which is every one TCA describes.'),
-            'readWith' => Schema::string('What the reading was made with. Said on every answer that carries one, because a number or a row reported onwards is read as a backend user\'s view of the table unless it says otherwise.'),
+            'readWith' => Schema::string('What the reading was made with. Every answer that carries a number or a row says it. A reader takes what you report onwards as a backend user\'s view of the table unless it says otherwise.'),
         ], ['table', 'matchCount', 'answeredBy', 'where', 'counts', 'groups', 'groupDefault', 'departing', 'pages', 'records', 'countable', 'readWith'], ['table']);
     }
 

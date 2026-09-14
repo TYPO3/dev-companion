@@ -23,19 +23,20 @@ two questions stopped having one answer and only one of them was askable.
   `tt_content.shortcut` and a `Generic` template asked the tool as a
   verification pass. Neither file appears anywhere in the answer — not under
   `contentElements`, not under `typoScript`, not under `files`.
-- The session only noticed because it had written both twenty minutes earlier.
-  A session inheriting the repository reads the answer as six elements, and
+- The session only noticed because it had written both twenty minutes earlier. A
+  session inheriting the repository reads the answer as six elements, and
   deleting `Shortcut.typoscript` leaves an element editors can still select with
   nothing to render it.
 - The evidence was already read. `Extension::typoScriptValues()` walks
   `Configuration/TypoScript/` and `Configuration/Sets/` alike and holds every
   assignment with the file it came from, so both facts are in hand before this
   change and neither reached the answer.
-- The `Generic` case is the one nothing points at. `ExtensionUtility::
-  configurePlugin()` writes `templateName = Generic` for every plugin registered
-  as a content type — verified in `.checkouts/12.4`, `13.4`, `14.3` and `main` —
-  so the file carries every Extbase plugin resolving through this extension's
-  template root, `EXT:form`'s content element included, while reading as unused.
+- The `Generic` case is the one nothing points at.
+  `ExtensionUtility:: configurePlugin()` writes `templateName = Generic` for
+  every plugin registered as a content type — verified in `.checkouts/12.4`,
+  `13.4`, `14.3` and `main` — so the file carries every Extbase plugin resolving
+  through this extension's template root, `EXT:form`'s content element included,
+  while reading as unused.
 - The feedback's third observation is not a defect. `typoScript` came back empty
   beside a populated `siteSets`, and the schema says what that field is: files
   below `Configuration/TypoScript/`. A package whose TypoScript is in a set has

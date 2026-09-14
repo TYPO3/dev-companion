@@ -20,10 +20,10 @@ regex it had to write itself.
 ## Evidence
 
 - `feedback/2026-09-04-053645`. The session says it read `core/` the way it
-  correctly read `core/contribution/changelog` and `core/contribution/
-  gerrit-workflow`, and that the `any/` prefix on the two neighbouring testing
-  guides confirmed the reading. It asks for the scope "somewhere it is asserted
-  rather than implied".
+  correctly read `core/contribution/changelog` and
+  `core/contribution/ gerrit-workflow`, and that the `any/` prefix on the two
+  neighbouring testing guides confirmed the reading. It asks for the scope
+  "somewhere it is asserted rather than implied".
 - The scope is already data. `Documents::scopeOf()` returns a `Scope`, declared
   once in the id so a move cannot leave it behind (`D-KNW-058`), and
   `guideReference` carried `id`, `title`, `when` and `tool` and not that.

@@ -1,11 +1,8 @@
 # Knowledge — what the corpus holds and how it is written
 
-Where a statement is filed, what verifies it when the core cannot, and what a
-package other than the core may contribute. These decide what is in the corpus
-rather than how it is found.
+Where a statement sits, what verifies it when the core cannot, and what a package other than the core may contribute. These decide what is in the corpus rather than how a caller finds it.
 
-See [the decisions readme](../readme.md) for how an entry is written and when
-one is added.
+See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-KNW-155`][D-KNW-155] — A core commit body names no count and is not held to one paragraph · 2026-09-09
 - [`D-KNW-156`][D-KNW-156] — The symlink publisher is active on the shipped default, not on the context · 2026-09-09

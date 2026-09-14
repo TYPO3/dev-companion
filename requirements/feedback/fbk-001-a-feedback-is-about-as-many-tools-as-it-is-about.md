@@ -13,16 +13,16 @@ heldBy:
 
 **A feedback is about as many tools as it is about.**
 
-The names survive recording as names, are listed as a list, and the store can be
-filtered by one of them — the obvious question to ask of it is what is open
-about one tool.
+The names survive the record as names, the listing shows them as a list, and a
+caller can filter the store by one of them. The obvious question to ask of it is
+what is open about one tool.
 
-How they arrive is one string, separated by commas: the declared argument is a
-plain `string` since `D-ANS-017`, and a list on the wire is refused. That is
-about what a client can compose, not about what a feedback may say, and this
-holds either way.
+They arrive as one string, with commas between them. The declared argument is a
+plain `string` since `D-ANS-017`, and the channel refuses a list on the wire.
+That is about what a client can compose, not about what a feedback may say, and
+this holds either way.
 
 ## From
 
-Four tool names recorded as one unsearchable word, because everything that was
-not `[a-z0-9_]` was stripped from the field (2026-07-29).
+Four tool names recorded as one unsearchable word, because the field stripped
+everything that was not `[a-z0-9_]` (2026-07-29).

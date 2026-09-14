@@ -14,21 +14,21 @@ heldBy:
 implementation shape produces forward evidence.**
 
 Those are the open forward reviews in `scenarios/forward/`, one per working
-context, and they are the only cases a run can be recorded for. A case that
-names its own task shape lives in `scenarios/contracts/`, carries a contract
-state instead of a mark, and is printed for inspection rather than run. Either
-kind is one file with one prompt, so a judgment cannot be about a prompt nobody
-can identify, and the environment a prompt names is a kind of working directory
-rather than one installation on somebody's machine — which checkout plays it
-belongs in `todo/reference/`. A contract state is settled by no run, so every
-case names the tests that hold it, or that something is not guarded, and a test
-it names has to exist.
+context, and they are the only cases with a recorded run. A case that names its
+own task shape lives in `scenarios/contracts/`. It carries a contract state
+instead of a mark, and a session prints it for inspection rather than runs it.
+Either kind is one file with one prompt, so a judgment cannot be about a prompt
+nobody can identify. The environment a prompt names is a kind of working
+directory rather than one installation on somebody's machine. Which checkout
+plays it belongs in `todo/reference/`. No run settles a contract state. So every
+case names the tests that hold it, or says that something is not guarded, and a
+test it names has to exist.
 
 ## From
 
 A suite whose prompts prescribed the feature, subsystem and often the
-implementation shape they were meant to discover, and whose site prompts named
-one person's project (2026-07-31).
+implementation shape they were there to discover. Its site prompts named one
+person's project (2026-07-31).
 
 ## Held by
 

@@ -38,8 +38,8 @@ final class TestRunGuide extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'query' => ['type' => 'string', 'description' => 'Test or script topic, for example functional, phpstan, TypeScript, composer, or CGL.'],
-                'paths' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'The changed file paths, as they are in the repository they belong to. Given, only suites touching their domains are returned. The answer places each path on its own. One outside the core narrows nothing, and the answer names it, because runTests.sh is not in its repository. One no suite covers is named too, so a path nothing checks is read off the answer rather than out of its silence.'],
-                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the commands have to run on, for example "13.4" or "14". Suites that branch\'s runTests.sh does not have are left out. Defaults to the version of the installation this server was started in; where there is none, every suite is listed.'],
+                'paths' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'The changed file paths, as they are in the repository they belong to. Given, only suites that touch their domains come back. The answer places each path on its own. One outside the core narrows nothing, and the answer names it, because runTests.sh is not in its repository. The answer names one no suite covers too, so you read a path nothing checks off the answer rather than out of its silence.'],
+                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the commands have to run on, for example "13.4" or "14". The answer leaves out suites that branch\'s runTests.sh does not have. Defaults to the version of the installation this server started in; where there is none, every suite comes back.'],
             ],
         ];
     }
@@ -48,16 +48,16 @@ final class TestRunGuide extends ReadOnlyTool
     {
         return Schema::object([
             'query' => Schema::nullableString(),
-            'paths' => Schema::listOf(Schema::string(), 'The paths the answer was narrowed by, given ones and ones named in the query.'),
+            'paths' => Schema::listOf(Schema::string(), 'The paths that narrowed the answer, given ones and ones named in the query.'),
             'scopes' => Schema::scopes('Which kind of work each path is. Only core paths can run a suite. runTests.sh is not in a project or an extension repository, so the answer names the others and they narrow nothing.'),
-            'domains' => Schema::listOf(Schema::string(), 'Domains those paths touch. Empty means nothing was narrowed.'),
+            'domains' => Schema::listOf(Schema::string(), 'Domains those paths touch. Empty means nothing narrowed the answer.'),
             'uncoveredPaths' => Schema::listOf(Schema::string(), 'Given paths no suite covers. A path reaches a suite '
                 . 'through its domain, and these reach none. So nothing in suites is about them and '
                 . 'nothing in it fails on them.'),
             'withheld' => Schema::object([
-                'domains' => Schema::listOf(Schema::string(), 'Domains no given path reached. A path landing in one of them means calling again, because this answer holds for the path set it was given.'),
-                'suites' => Schema::integer('How many suites those domains hold on the target version. Counted rather than listed: the list is what the narrowing exists to avoid.'),
-            ], ['domains', 'suites'], 'What the narrowing left out. Both empty where nothing was narrowed.'),
+                'domains' => Schema::listOf(Schema::string(), 'Domains no given path reached. A path that lands in one of them means a second call, because this answer holds for the path set the call gave it.'),
+                'suites' => Schema::integer('How many suites those domains hold on the target version. A count rather than a list: the list is what the narrowed answer exists to avoid.'),
+            ], ['domains', 'suites'], 'What the narrowed answer left out. Both empty where nothing narrowed it.'),
             'suites' => Schema::listOf(Schema::testSuiteRecord(), 'Every suite of the domains above, and where query '
                 . 'scores on some of them, those alone, strongest first. This is the list typo3_task_guide narrows '
                 . 'two ways. Its checks is what a task in these domains runs whatever it turns out to be. Its '

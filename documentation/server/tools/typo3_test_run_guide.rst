@@ -33,16 +33,16 @@ Takes
     # or CGL.
     query: string  # optional
     # The changed file paths, as they are in the repository they belong to. Given,
-    # only suites touching their domains are returned. The answer places each path
-    # on its own. One outside the core narrows nothing, and the answer names it,
-    # because runTests.sh is not in its repository. One no suite covers is named
-    # too, so a path nothing checks is read off the answer rather than out of its
-    # silence.
+    # only suites that touch their domains come back. The answer places each path on
+    # its own. One outside the core narrows nothing, and the answer names it,
+    # because runTests.sh is not in its repository. The answer names one no suite
+    # covers too, so you read a path nothing checks off the answer rather than out
+    # of its silence.
     paths: [string]  # optional
-    # The TYPO3 version the commands have to run on, for example "13.4" or "14".
-    # Suites that branch's runTests.sh does not have are left out. Defaults to the
-    # version of the installation this server was started in; where there is none,
-    # every suite is listed.
+    # The TYPO3 version the commands have to run on, for example "13.4" or "14". The
+    # answer leaves out suites that branch's runTests.sh does not have. Defaults to
+    # the version of the installation this server started in; where there is none,
+    # every suite comes back.
     targetVersion: string  # optional
 
 Answers with
@@ -51,7 +51,7 @@ Answers with
 .. code-block:: yaml
 
     query: string or null  # optional
-    # The paths the answer was narrowed by, given ones and ones named in the query.
+    # The paths that narrowed the answer, given ones and ones named in the query.
     paths: [string]  # optional
     # Which kind of work each path is. Only core paths can run a suite. runTests.sh
     # is not in a project or an extension repository, so the answer names the others
@@ -64,19 +64,19 @@ Answers with
         # sitepackage or a third-party one. uncertain: nothing in the call placed
         # the work, and the answer is the core's own.
         scope: string
-    # Domains those paths touch. Empty means nothing was narrowed.
+    # Domains those paths touch. Empty means nothing narrowed the answer.
     domains: [string]  # optional
     # Given paths no suite covers. A path reaches a suite through its domain, and
     # these reach none. So nothing in suites is about them and nothing in it fails
     # on them.
     uncoveredPaths: [string]
-    # What the narrowing left out. Both empty where nothing was narrowed.
+    # What the narrowed answer left out. Both empty where nothing narrowed it.
     withheld:
-      # Domains no given path reached. A path landing in one of them means calling
-      # again, because this answer holds for the path set it was given.
+      # Domains no given path reached. A path that lands in one of them means a
+      # second call, because this answer holds for the path set the call gave it.
       domains: [string]
-      # How many suites those domains hold on the target version. Counted rather
-      # than listed: the list is what the narrowing exists to avoid.
+      # How many suites those domains hold on the target version. A count rather
+      # than a list: the list is what the narrowed answer exists to avoid.
       suites: integer
     # Every suite of the domains above, and where query scores on some of them,
     # those alone, strongest first. This is the list typo3_task_guide narrows two

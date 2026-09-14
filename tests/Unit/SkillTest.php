@@ -1331,11 +1331,11 @@ final class SkillTest extends TestCase
         // Escaping is one sink and a query is another, so the gate is written
         // once for both: the run that earned it condemned a template line, and
         // a value concatenated into a statement needs the same reading.
-        self::assertStringContainsString('escaping and injection are the same claim about', $checklist);
+        self::assertStringContainsString('Escaping and injection are the same claim about', $checklist);
         // The half that decides that case: the opt-out the finding condemned is
         // on the path to the sink rather than the end of it, and it is there
         // because the sink escapes.
-        self::assertStringContainsString('is on the path rather than at the end of it', $checklist);
+        self::assertStringContainsString('is on the path, not at its end', $checklist);
         self::assertStringContainsString('report the finding as unverified', $checklist);
         // The sinks themselves are a tool's to answer, so the checklist asks
         // rather than carrying a list that goes stale in a published copy.
@@ -1358,14 +1358,14 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString('## What a dropped candidate owes', $checklist);
-        self::assertStringContainsString('dropping is the step nothing records', $checklist);
+        self::assertStringContainsString('nothing records the drop', $checklist);
         // The asymmetry is the whole of it: raising a candidate costs a reading,
         // dropping one costs the author a finding and announces nothing.
-        self::assertStringContainsString('dropped only where something concretely disproves it', $checklist);
-        self::assertStringContainsString('neither established nor disproved is reported as open', $checklist);
+        self::assertStringContainsString('only where something concretely disproves it', $checklist);
+        self::assertStringContainsString('neither establish nor disprove as open', $checklist);
         // The two dismissals that go wrong: the docblock read in place of the
         // implementation, and "unlikely" standing in for "impossible".
-        self::assertStringContainsString('read the implementation it describes', $checklist);
+        self::assertStringContainsString('Read the implementation it describes', $checklist);
         self::assertStringContainsString('Unlikely is not disproved', $checklist);
 
         $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
@@ -1385,10 +1385,10 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString('## What a dropped candidate owes', $audit);
-        self::assertStringContainsString('dropping is the step nothing records', $audit);
-        self::assertStringContainsString('dropped only where something concretely disproves it', $audit);
-        self::assertStringContainsString('neither established nor disproved is reported as open', $audit);
-        self::assertStringContainsString('read the implementation it describes', $audit);
+        self::assertStringContainsString('nothing records the drop', $audit);
+        self::assertStringContainsString('only where something concretely disproves it', $audit);
+        self::assertStringContainsString('neither establish nor disprove as open', $audit);
+        self::assertStringContainsString('Read the implementation it describes', $audit);
         self::assertStringContainsString('Unlikely is not disproved', $audit);
         // What the audit adds and the patch review has no use for: six surfaces
         // enumerated whole mean most of them are absent in any one package, and
@@ -1400,7 +1400,7 @@ final class SkillTest extends TestCase
         );
         // The bar came into the checklist for a security verdict alone, and what
         // makes it a bar is who pays for a wrong dismissal.
-        self::assertStringContainsString('the bar is not that subject\'s', $audit);
+        self::assertStringContainsString('The bar is not that subject\'s', $audit);
 
         $auditSkill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
             Paths::root() . '/skills/typo3-extension-health/SKILL.md',
@@ -4325,7 +4325,7 @@ final class SkillTest extends TestCase
         // And the clause that was outranked now points at the same list, so a
         // session reading the reference alone does not narrow it there.
         self::assertStringContainsString(
-            'the surface list below is written whole',
+            'write the surface list below whole',
             (string) file_get_contents(
                 Paths::root() . '/skills/typo3-extension-health/references/checklist.md',
             ),
@@ -4408,7 +4408,7 @@ final class SkillTest extends TestCase
         self::assertStringNotContainsString('declared validation commands', $checklist);
         self::assertStringContainsString('## The check layer', $checklist);
         self::assertStringContainsString(
-            'commands a repository declares are where this surface is read, never what it is',
+            'commands a repository declares are where you read this surface, never what it is',
             self::flat($checklist),
         );
 
@@ -4435,7 +4435,7 @@ final class SkillTest extends TestCase
         // it was, and the missing one reads as an optional subsystem the
         // opening line already excuses.
         self::assertStringContainsString(
-            'no command covers is a gap in the layer rather than an optional subsystem, and that absence is the finding',
+            'no command covers is a gap in the layer rather than an optional subsystem. That absence is the finding',
             self::flat($checklist),
         );
         self::assertStringContainsString('the ceiling of what', $checklist);

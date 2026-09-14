@@ -96,25 +96,25 @@ the reader a uniform confidence the review did not have.
 
 ## What a dropped candidate owes
 
-A review drops more than it reports, and dropping is the step nothing records.
-Each candidate raised while reading and then let go is named with what let it go
-— the guard that turned out to be there, the caller that holds it, the rule that
+A review drops more than it reports, and nothing records the drop. Each
+candidate raised while reading and then let go is named with what let it go —
+the guard that turned out to be there, the caller that holds it, the rule that
 turned out not to apply, the line that was actually read. One sentence each, and
 it is what tells the reader that a quiet surface went quiet after the reading
 rather than before it.
 
-The two directions are not held to the same bar. Raising a candidate costs a
-reading; dropping one costs the author a finding, silently, and nothing
-afterwards says it happened. So a candidate is dropped only where something
-concretely disproves it, and one that can be neither established nor disproved
-is reported as open, with the reading that would settle it named beside it.
+The two directions do not meet the same bar. To raise a candidate costs a
+reading. To drop one costs the author a finding, silently, and nothing
+afterwards says it happened. So drop a candidate only where something concretely
+disproves it. Report one you can neither establish nor disprove as open, with
+the reading that would settle it named beside it.
 
 Two dismissals go wrong reliably:
 
 - Dropped because a comment, a docblock or an annotation says the code behaves
-  that way. That is a sentence somebody wrote, not the behaviour — read the
-  implementation it describes, and where the two disagree the disagreement is
-  the finding.
+  that way. That is a sentence somebody wrote, not the behaviour. Read the
+  implementation it describes. Where the two disagree, the disagreement is the
+  finding.
 - Dropped because it looks unlikely to happen. Unlikely is not disproved. What
   disproves a path is what makes it impossible: a guard that cannot be passed or
   a caller that cannot exist, at a line.

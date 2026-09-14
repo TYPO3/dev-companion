@@ -416,9 +416,8 @@ Answers with
         # One of: core, project, extension, any. Which kind of work this page
         # serves. core: a patch to the TYPO3 core repository. project: the site
         # repository around an installation. extension: a package in it. any: all
-        # three. It stands here because it decides whether to open the page at all,
-        # and a caller that reads it out of the id parses a path segment —
-        # D-ANS-150.
+        # three. It stands here because it decides whether to open the page at all.
+        # A caller that reads it out of the id parses a path segment — D-ANS-150.
         scope: string
         # The tool that takes the id above and returns the page whole.
         tool: string

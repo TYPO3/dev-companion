@@ -3,26 +3,25 @@
 ``typo3_task_guide``
 ====================
 
-Answers what one change owes, which a repository's own conventions file cannot:
-that file states its rules once for every task, and this narrows them to the
-kind of change, the paths and the TYPO3 majors in front of you — down to whether
+Answers what one change owes, which a repository's own conventions file cannot.
+That file states its rules once for every task. This narrows them to the kind of
+change, the paths and the TYPO3 majors in front of you. It goes down to whether
 this fix owes a changelog entry. Where such a rule stays general it names the
 call that settles it, the branches a Releases: trailer takes among them. The
 answer is a task checklist with the hints and core checks that match. Not only
-for work that ends in a patch: deciding whether an open bug report still holds
-is changeType "triage", reviewing a body of code is "audit", bringing an
-installation up is "operations", and finding out why something is broken before
-anybody changes it is "diagnosis" — all four get a brief of their own rather
-than the steps a patch owes. Built from bundled conventions only: it does not
-read your checkout, so it also names what you have to establish there yourself,
-routes to the lookups that fit the task, and names the task skill that owns the
-work where a published one does, beside the guide the work is written up in
-where this server carries one. The hints for a set of paths without the
-checklist around them are typo3_hint_lookup, and a procedure read whole is
-typo3_rule_lookup. Work that reads as a project or third-party extension is
-answered with what transfers only — the core checks, checklist items and steps
-that name something only the core repository has are left out rather than handed
-over. Answers from: knowledge.
+for work that ends in a patch. Whether an open bug report still holds is
+changeType "triage", and a review of a body of code is "audit". A boot of an
+installation is "operations", and the cause of a defect before anybody changes
+it is "diagnosis". All four get a brief of their own rather than the steps a
+patch owes. Built from bundled conventions only: it does not read your checkout,
+so it also names what you have to establish there yourself. It routes to the
+lookups that fit the task. It names the task skill that owns the work where a
+published one does. It names the guide that writes the work up where this server
+carries one. The hints for a set of paths without the checklist around them are
+typo3_hint_lookup, and a procedure read whole is typo3_rule_lookup. Work that
+reads as a project or third-party extension gets what transfers only. The answer
+leaves out the core checks, checklist items and steps that name something only
+the core repository has. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -36,10 +35,10 @@ Takes
     # Short description of the TYPO3 core task, in English.
     task: string
     # The files the task is about, as they are in the repository they belong to.
-    # Pass them where the work touches more than one place: each is placed on its
-    # own, so a core path and an extension path in one call are not answered with
-    # one verdict. An extension key counts as a path. A subsystem no path can be
-    # named for belongs in task, because every entry here is answered as a file.
+    # Pass them where the work touches more than one place. The answer places each
+    # on its own, so a core path and an extension path in one call get two verdicts.
+    # An extension key counts as a path. A subsystem no path can be named for
+    # belongs in task, because every entry here is answered as a file.
     paths: [string]  # optional
     # The TYPO3 version this task is for, for example "13.4" or "14". Conventions
     # that do not hold there are left out, including those the repository needs for
@@ -50,15 +49,16 @@ Takes
     # One of: bugfix, feature, cleanup, test, documentation, deprecation, audit,
     # triage, operations, diagnosis, unknown. What kind of change the task is. Four
     # of them write no file and get a brief of their own instead of the steps a
-    # patch owes: audit asks for what reviewing a body of code needs, triage for
-    # what deciding an open bug report needs — whether it still happens, what a
-    # previous attempt cost, what a maintainer would need before it can move —
-    # operations for what running an installation needs, booting the environment a
-    # repository declares, importing its data, building its assets, and diagnosis
-    # for what finding the cause of a reported defect needs, before anybody has
-    # agreed what to change. Reviewing a report against code, reviewing a diff and
-    # saying why something is broken are three briefs and not one. A task that
-    # describes any of the four gets that shape without stating the type.
+    # patch owes. audit asks for what a review of a body of code needs. triage asks
+    # for what a decision on an open bug report needs. That is whether it still
+    # happens, what a previous attempt cost, and what a maintainer needs before it
+    # can move. operations asks for what a run of an installation needs. That is the
+    # boot of the environment a repository declares, the import of its data and the
+    # build of its assets. diagnosis asks for what the search for the cause of a
+    # reported defect needs, before anybody has agreed what to change. A review of a
+    # report against code, a review of a diff and the reason something is broken are
+    # three briefs and not one. A task that describes any of the four gets that
+    # shape without stating the type.
     changeType: string  # optional
 
 Answers with
@@ -87,10 +87,9 @@ Answers with
     targetVersion: integer or null  # optional
     # Every TYPO3 major the answer holds for. One entry is the ordinary case.
     # Several mean this repository declares typo3/cms-core for more than one of
-    # them, so a statement was kept when it holds on any — and where two
-    # statements about the same subject differ, the difference is the constraint the
-    # code lives under rather than drift. Empty when nothing was filtered by
-    # version.
+    # them, so the answer keeps a statement that holds on any. Where two statements
+    # about the same subject differ, the difference is the constraint the code lives
+    # under rather than drift. Empty when nothing was filtered by version.
     targetVersions: [integer]  # optional
     domains: [string]
     # One of: core, uncertain, project, extension. Which kind of work the call as a
@@ -102,38 +101,36 @@ Answers with
     intents:  # optional
       - id: string
         title: string
-        # One of: strong, weak. weak: a word named the subject without naming the
-        # work, or the intent is a core-only one and nothing in the task says this
-        # is core work. Either way it applies only under its condition.
+        # One of: strong, weak. weak: a word named the subject and not the work, or
+        # the intent is core-only and nothing in the task says this is core work.
+        # Either way it applies only under its condition.
         confidence: string
         # When a weakly matched intent applies. Empty for a strong match.
         condition: string
     # Which of the skills above this project holds an older copy of, read from what
     # is published there against what this server would write now. Empty where every
     # named copy is current, where this server never installed into this project,
-    # and where no skill was named at all — so it is a subset of skills and never
-    # a statement that one is missing. What to do about it is one command,
-    # typo3-dev-companion update, and what it costs is a change to the caller's own
-    # checkout.
+    # and where skills names none. So it is a subset of skills and never a statement
+    # that one is missing. What to do about it is one command, typo3-dev-companion
+    # update, and what it costs is a change to the caller's own checkout.
     staleSkills: [string]
     # The task skills that own the recognized work, named so that a caller who
     # reached this server without one can load it. A skill is a file in your own
-    # project rather than something this server can see, so a name here is not a
+    # project rather than something this server can see. So a name here is not a
     # promise that it is installed. A review, a triage, a boot and a diagnosis name
-    # only the workflows that change nothing either: the kind of change under review
-    # is still recognized in intents, and the workflow for writing one is not the
-    # one you are in. Empty means no published skill owns what was recognized, which
-    # is not a statement that the work has no workflow.
+    # only the workflows that change nothing either. intents still recognizes the
+    # kind of change under review, and the workflow that writes one is not the one
+    # you are in. Empty means no published skill owns what was recognized, which is
+    # not a statement that the work has no workflow.
     skills: [string]
     # The whole procedures this work is written up in or owes, the same corpus
     # typo3_project_describe lists at orientation and this server serves as
     # typo3://guides resources. Owes is the second half and the one a task text
-    # never asks for: a change that ends in a backend UI owes the browser check
+    # never asks for. A change that ends in a backend UI owes the browser check
     # whether or not it says so. Named rather than carried: a brief is one call
     # inside a procedure, and the page is one typo3_rule_lookup call by documentId.
-    # Empty means no page here is the write-up of what was recognized, which is not
-    # a statement that none of them is worth reading — the whole list is in that
-    # orientation call.
+    # Empty means no page here writes up what the brief recognized. It does not say
+    # that none of them is worth a read; the whole list is in that orientation call.
     guides:
       - # What typo3_rule_lookup takes as documentId to return the whole document.
         id: string
@@ -143,9 +140,8 @@ Answers with
         # One of: core, project, extension, any. Which kind of work this page
         # serves. core: a patch to the TYPO3 core repository. project: the site
         # repository around an installation. extension: a package in it. any: all
-        # three. It stands here because it decides whether to open the page at all,
-        # and a caller that reads it out of the id parses a path segment —
-        # D-ANS-150.
+        # three. It stands here because it decides whether to open the page at all.
+        # A caller that reads it out of the id parses a path segment — D-ANS-150.
         scope: string
         # The tool that takes the id above and returns the page whole.
         tool: string
@@ -153,8 +149,9 @@ Answers with
     # — the strongest few per group of paths, not everything it holds on them. A
     # hint declaring a different kind of repository from the paths given ranks below
     # the ones that bind them. A rule taken from one of these belongs to that
-    # lookup, so a report citing it names typo3_hint_lookup and a caller who needs
-    # more of the subject calls it directly. What was left is named in omittedHints.
+    # lookup. So a report that cites it names typo3_hint_lookup, and a caller who
+    # needs more of the subject calls it directly. What was left is named in
+    # omittedHints.
     hints:
       - id: string
         title: string
@@ -195,8 +192,8 @@ Answers with
     # carry, named rather than counted. A hint declared for another kind of
     # repository is here for that reason rather than for having matched weakly.
     # Empty means what it carries is everything that matched. A subject listed here
-    # and not in hints is one the brief did not reach, so it is the gap the pointer
-    # to that lookup stands for.
+    # and not in hints is one the brief did not reach. It is the gap the pointer to
+    # that lookup stands for.
     omittedHints:
       - # Ask for this hint outright by passing it as id.
         id: string
@@ -227,7 +224,7 @@ Answers with
         truncated: boolean
     # Commands to run, ready to execute from the core root. They are the base suites
     # of the domains above, which run whatever the task turns out to be, plus the
-    # ones the recognized work names. This is the list to run: testSuites is a
+    # ones the recognized work names. This is the list to run. testSuites is a
     # second narrowing of the same corpus, and a suite named there and not here is
     # one to decide about.
     checks: [string]
@@ -238,8 +235,8 @@ Answers with
         condition: string
         checks: [string]
     # The suites of those same domains that rank strongest against the task text, 4
-    # at most. A selection to pick a targeted run from rather than a list to run —
-    # what the task owes in any case is checks above, and neither list holds the
+    # at most. A selection to pick a targeted run from rather than a list to run.
+    # What the task owes in any case is checks above, and neither list holds the
     # other. typo3_test_run_guide called with these paths returns the whole list
     # these were ranked out of.
     testSuites:  # optional

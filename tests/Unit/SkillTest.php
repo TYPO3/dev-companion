@@ -1486,7 +1486,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-patch-review/references/checklist.md',
         ));
         self::assertStringContainsString(
-            'answered with both halves: what ran, and which of the suites the guide returned nobody started',
+            'Answer the surface with both halves: what ran, and which of the suites the guide returned nobody started',
             $checklist,
         );
     }
@@ -1741,7 +1741,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-patch-review/references/checklist.md',
         ));
         self::assertStringContainsString('**The review this patch is already in.**', $checklist);
-        self::assertStringContainsString('The issue is read for that, not inferred from the message', $checklist);
+        self::assertStringContainsString('Read the issue for that; do not infer it from the message', $checklist);
     }
 
     /**
@@ -2210,11 +2210,11 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('all three carry what backs them', $checklist);
         // Unassessed is the cheaper honest answer and costs the same line, which
         // is what keeps the demand from being answered with a fabricated one.
-        self::assertStringContainsString('where the reading did not happen the word is unassessed', $checklist);
+        self::assertStringContainsString('where the reading did not happen, write unassessed', $checklist);
         // The clean verdict in the rubric is held to the same bar as a finding,
         // and says so where a reader ranking one would look.
         self::assertStringContainsString(
-            'It names what was read, for the same reason a finding names what it collides with',
+            'It names what you read, for the same reason a finding names what it collides with',
             $checklist,
         );
     }
@@ -2241,12 +2241,12 @@ final class SkillTest extends TestCase
         // The half that is in the checkout and the half that is not, because the
         // two are disposed of differently and the surface names one word.
         self::assertStringContainsString(
-            'a system extension\'s own `Documentation/` is in this checkout and changes in the patch',
+            'A system extension\'s own `Documentation/` is in this checkout and changes in the patch',
             $checklist,
         );
         // What the shipped claim got wrong, in the words that answer it.
         self::assertStringContainsString(
-            'outside is where the follow-up goes, not a reason none is owed',
+            'Outside is where the follow-up goes, not a reason the patch owes none',
             $checklist,
         );
         self::assertStringContainsString(
@@ -2272,7 +2272,7 @@ final class SkillTest extends TestCase
 
         self::assertStringContainsString('Every finding carries five things', $checklist);
         self::assertStringContainsString('**whether this patch introduced it**', $checklist);
-        self::assertStringContainsString('What the patch did not introduce is reported in those words', $checklist);
+        self::assertStringContainsString('Report what the patch did not introduce in those words', $checklist);
         // The other half of attributing a finding: a diff is the weakest
         // evidence there is about who reaches a path, so what it shows may raise
         // a rank and never lower one.
@@ -2678,9 +2678,9 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString('The chain this change sits in', $checklist);
-        self::assertStringContainsString('rated on its own', $checklist);
+        self::assertStringContainsString('rate the patch on its own', $checklist);
         self::assertStringContainsString('before calling one of those an oversight', $checklist);
-        self::assertStringContainsString('reported as a question rather than as an oversight', $checklist);
+        self::assertStringContainsString('as a question rather than as an oversight', $checklist);
     }
 
     #[Decision('D-SKL-087')]

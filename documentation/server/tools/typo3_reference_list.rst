@@ -4,14 +4,13 @@
 ========================
 
 List the worked examples the TYPO3 core ships of its own conventions, and what
-each one is a reference for: the theme extension, the styleguide, the Extbase
-fixture extension, the content element rendering, the browser test suite, the
-static analysis setup. Read one of these before inventing a layout or a test
-harness — they are the version-correct, currently-passing form of what a
-convention describes, and every hint here is a summary of one. Paths are
-relative to a core checkout; where the answer names a Composer package, an
-installation that has it holds the same files below vendor/. Answers from:
-knowledge.
+each one is a reference for. That is the theme extension, the styleguide, the
+Extbase fixture extension, the content element render, the browser test suite,
+the static analysis setup. Read one of these before you invent a layout or a
+test harness. They are the version-correct form of what a convention describes,
+and they pass today. Every hint here is a summary of one. Paths are relative to
+a core checkout; where the answer names a Composer package, an installation that
+has it holds the same files below vendor/. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -22,9 +21,9 @@ Takes
 
 .. code-block:: yaml
 
-    # The TYPO3 version to list for, for example "13.4" or "14". An example that
-    # branch does not have is left out rather than qualified. Defaults to the
-    # version of the installation this server was started in; where there is none,
+    # The TYPO3 version to list for, for example "13.4" or "14". The answer leaves
+    # out an example that branch does not have rather than qualifies it. Defaults to
+    # the version of the installation this server started in. Where there is none,
     # every entry comes back with the range it exists on.
     targetVersion: string  # optional
 
@@ -33,9 +32,9 @@ Answers with
 
 .. code-block:: yaml
 
-    # The TYPO3 major the list was composed for — stated by the caller, or read
-    # from the installation. Null means every covered version is in it and each
-    # entry carries its own range.
+    # The TYPO3 major the list is for, stated by the caller or read from the
+    # installation. Null means every covered version is in it and each entry carries
+    # its own range.
     targetVersion: integer or null
     # How many worked examples exist on the version asked about.
     matchCount: integer
@@ -50,12 +49,12 @@ Answers with
         package: string or null
         # What it is a worked example of.
         reference: string
-        # What not to conclude from it — that it is read rather than depended on,
+        # What not to conclude from it: that you read it rather than depend on it,
         # or which part of it is the core's own. Null where there is nothing to warn
         # about.
         caveat: string or null
         # The hint whose conventions it demonstrates, for typo3_hint_lookup. Null
-        # where no hint covers the subject yet, which is exactly when reading the
+        # where no hint covers the subject yet, which is exactly when a read of the
         # example is worth most.
         hint: string or null
         # First covered major that has it. Null means every covered major does.
@@ -64,7 +63,7 @@ Answers with
         until: integer or null
         # The range in words, empty when every covered version has it.
         existsOn: string
-    # The TYPO3 majors this answer was derived from.
+    # The TYPO3 majors this answer derives from.
     coveredVersions: [integer]
 
 Answered

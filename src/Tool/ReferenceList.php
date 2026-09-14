@@ -27,7 +27,7 @@ final class ReferenceList extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'List the worked examples the TYPO3 core ships of its own conventions, and what each one is a reference for: the theme extension, the styleguide, the Extbase fixture extension, the content element rendering, the browser test suite, the static analysis setup. Read one of these before inventing a layout or a test harness — they are the version-correct, currently-passing form of what a convention describes, and every hint here is a summary of one. Paths are relative to a core checkout; where the answer names a Composer package, an installation that has it holds the same files below vendor/.';
+        return 'List the worked examples the TYPO3 core ships of its own conventions, and what each one is a reference for. That is the theme extension, the styleguide, the Extbase fixture extension, the content element render, the browser test suite, the static analysis setup. Read one of these before you invent a layout or a test harness. They are the version-correct form of what a convention describes, and they pass today. Every hint here is a summary of one. Paths are relative to a core checkout; where the answer names a Composer package, an installation that has it holds the same files below vendor/.';
     }
 
     public static function inputSchema(): array
@@ -35,7 +35,7 @@ final class ReferenceList extends ReadOnlyTool
         return [
             'type' => 'object',
             'properties' => [
-                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version to list for, for example "13.4" or "14". An example that branch does not have is left out rather than qualified. Defaults to the version of the installation this server was started in; where there is none, every entry comes back with the range it exists on.'],
+                'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version to list for, for example "13.4" or "14". The answer leaves out an example that branch does not have rather than qualifies it. Defaults to the version of the installation this server started in. Where there is none, every entry comes back with the range it exists on.'],
             ],
         ];
     }
@@ -43,20 +43,20 @@ final class ReferenceList extends ReadOnlyTool
     public static function outputSchema(): array
     {
         return Schema::object([
-            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the list was composed for — stated by the caller, or read from the installation. Null means every covered version is in it and each entry carries its own range.'],
+            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the list is for, stated by the caller or read from the installation. Null means every covered version is in it and each entry carries its own range.'],
             'matchCount' => Schema::integer('How many worked examples exist on the version asked about.'),
             'references' => Schema::listOf(Schema::object([
                 'id' => Schema::string('Stable identifier of the example.'),
                 'path' => Schema::string('Where it is, relative to the root of a core checkout.'),
                 'package' => ['type' => ['string', 'null'], 'description' => 'The Composer package that ships it, so an installation can read it below vendor/. Null means it exists only in the core repository, as everything below Build/ does.'],
                 'reference' => Schema::string('What it is a worked example of.'),
-                'caveat' => ['type' => ['string', 'null'], 'description' => 'What not to conclude from it — that it is read rather than depended on, or which part of it is the core\'s own. Null where there is nothing to warn about.'],
-                'hint' => ['type' => ['string', 'null'], 'description' => 'The hint whose conventions it demonstrates, for typo3_hint_lookup. Null where no hint covers the subject yet, which is exactly when reading the example is worth most.'],
+                'caveat' => ['type' => ['string', 'null'], 'description' => 'What not to conclude from it: that you read it rather than depend on it, or which part of it is the core\'s own. Null where there is nothing to warn about.'],
+                'hint' => ['type' => ['string', 'null'], 'description' => 'The hint whose conventions it demonstrates, for typo3_hint_lookup. Null where no hint covers the subject yet, which is exactly when a read of the example is worth most.'],
                 'since' => ['type' => ['integer', 'null'], 'description' => 'First covered major that has it. Null means every covered major does.'],
                 'until' => ['type' => ['integer', 'null'], 'description' => 'Last covered major that has it. Null means the newest one still does.'],
                 'existsOn' => Schema::string('The range in words, empty when every covered version has it.'),
             ], ['id', 'path', 'package', 'reference', 'caveat', 'hint', 'since', 'until', 'existsOn'])),
-            'coveredVersions' => Schema::listOf(Schema::integer(), 'The TYPO3 majors this answer was derived from.'),
+            'coveredVersions' => Schema::listOf(Schema::integer(), 'The TYPO3 majors this answer derives from.'),
         ], ['targetVersion', 'matchCount', 'references', 'coveredVersions']);
     }
 

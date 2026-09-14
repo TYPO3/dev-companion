@@ -9,11 +9,11 @@ coveredBy:
 
 # D-KNW-142 — A test is named for what holds rather than for the issue
 
-**The name says what holds and the comment says which case is exercised, and the
-issue number is in neither.**
+**The name says what holds and the comment says which case the test exercises,
+and the issue number is in neither.**
 
 `core-tests` carried the attribute, the base classes and the fixtures, and said
-nothing about what a test is called or what its docblock is for.
+nothing about a test's name or what its docblock is for.
 
 ## Evidence
 
@@ -22,37 +22,37 @@ nothing about what a test is called or what its docblock is for.
 - The core does not name a test after an issue. No test method below
   `typo3/sysext/*/Tests/` carries a five- or six-digit number in its name, read
   in `.checkouts/main` on 2026-09-02.
-- The framing is rare rather than absent there: twenty-one lines across those
-  same directories carry the word "regression", a handful of them as "Regression
-  test for ...".
+- The frame is rare rather than absent there. Twenty-one lines across those same
+  directories carry the word "regression", a handful of them as "Regression test
+  for ...".
 - The number is already written down twice: the commit's `Resolves:` trailer,
   which `core/contribution/commit-messages` states, and the changelog file name,
   which `core/contribution/changelog` does.
 
 ## Decided
 
-- One statement in `core-tests`, beside the sentence about mirroring the class
-  path. The name and the comment are one decision and the hint that owns test
-  shape is where it goes.
+- One statement in `core-tests`, beside the sentence about the mirror of the
+  class path. The name and the comment are one decision and the hint that owns
+  test shape is where it goes.
 - The example is a name read out of the checkout —
   `typeSpecificTitleOverridesCtrlTitle` — rather than one invented for the
   sentence.
-- The reason is stated as what a later reader needs, because that is what makes
-  it more than style: a reviewer without the issue open, and the same test read
-  years after the fix.
+- The statement gives the reason as what a later reader needs, because that is
+  what makes it more than style. A reviewer without the issue open, and the same
+  test read years after the fix.
 - The rare counter-examples are not named. A hint that lists them teaches the
-  shape it is written against.
-- `regression test` is not in the vocabulary, though it is the phrasing a caller
-  would use. It carried this core hint into an extension brief — the scenario
+  shape it stands against.
+- `regression test` is not in the vocabulary, though it is the words a caller
+  would use. It carried this core hint into an extension brief. The scenario
   `ScopeTest::anExtensionTestBriefRoutesTheHarnessTheExtensionHas` asks for
-  functional regression tests outside the core — and the hint names
+  functional regression tests outside the core. The hint names
   `typo3_test_run_guide`, which has no answer for those paths. The words that
   stayed reach the statement anyway.
 
 ## Assumed
 
-- That a docblock is where the case is described. The core marks cases with
-  `#[Test]` and many carry no docblock at all, so what this asks for is written
+- That a docblock is where the case has its description. The core marks cases
+  with `#[Test]` and many carry no docblock at all. So what this asks for goes
   where one exists rather than a docblock on every test.
 
 ## Wrong if

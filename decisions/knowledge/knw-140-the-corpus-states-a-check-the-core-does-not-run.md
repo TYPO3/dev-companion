@@ -9,21 +9,21 @@ coveredBy:
 
 # D-KNW-140 — The corpus states a check the core does not run
 
-**`empty()` is stated as a defect to raise, in a corpus whose own subject calls
+**The corpus states `empty()` as a defect to raise, while its own subject calls
 it everywhere and never fails on one.**
 
 Every other statement here is what the core does. This one is what a reviewer
-holds against it, so it says both, and the sentence that makes it usable is the
-one saying nothing will raise it for you.
+holds against it, so it says both. The sentence that makes it usable is the one
+that says nothing will raise it for you.
 
 ## Evidence
 
 - The maintainer ruled it a rule on 2026-09-01 and gave the reason on
-  2026-09-02: `empty()` is a falsiness test rather than a comparison against an
+  2026-09-02. `empty()` is a falsiness test rather than a comparison against an
   expected type. `D-FBK-053` is the migration the report arrived in.
 - The reason does not rest on a package. `phpstan/phpstan-strict-rules` rejects
   the call and is in no covered checkout's `composer.json` and in no
-  `Build/phpstan/*.neon`, so a statement resting on it would hold nowhere the
+  `Build/phpstan/*.neon`. So a statement that rests on it would hold nowhere the
   corpus answers for.
 - The core's own analysis cannot raise it. `Build/phpstan/phpstan.neon` is at
   level 5 on every covered branch, and the four rules it adds are about
@@ -39,7 +39,7 @@ one saying nothing will raise it for you.
 - The substitution is stated per expected type and said to be a reading rather
   than a rewrite, because `($x ?? false)`, `$x !== []` and `$x !== ''` are
   different answers to the same call and only the value says which.
-- The tension is stated in the hint rather than left to the reader. A session
+- The hint states the tension rather than leaves it to the reader. A session
   that infers style from the code around it reproduces `empty()`, which is what
   the report reached this server with.
 - The strict rules are not named in the hint. Naming a package the caller may
@@ -48,14 +48,14 @@ one saying nothing will raise it for you.
 
 ## Assumed
 
-- That a reviewer raising this is the common case and a checker running it is
-  the rare one. Nothing here measures either; what is written is what the
-  maintainer holds a patch to.
+- That a reviewer who raises this is the common case and a checker that runs it
+  is the rare one. Nothing here measures either. What the hint states is what
+  the maintainer holds a patch to.
 
 ## Wrong if
 
-- A covered branch adds the strict rules or a rule of its own against the call,
-  which would turn the statement into what the core enforces and move it to
+- A covered branch adds the strict rules or a rule of its own against the call.
+  That would turn the statement into what the core enforces and move it to
   `core-static-analysis`.
-- A session takes the hint as licence to rewrite `empty()` calls it was not
-  changing, which is the diff `D-FBK-053`'s minimal-diff card is about.
+- A session takes the hint as licence to rewrite `empty()` calls its change did
+  not touch, which is the diff `D-FBK-053`'s minimal-diff card is about.

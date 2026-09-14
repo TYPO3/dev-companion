@@ -1,11 +1,9 @@
 # Task skills — what an installed workflow owes the task
 
-A skill is installed into somebody else's project, so what it gets wrong is not
-corrected by the next release of this server. These hold the order it works in,
+A skill goes into somebody else's project, so the next release of this server does not correct what it gets wrong. These hold the order it works in,
 the evidence it gathers before it judges, and where it stops.
 
-See [the requirements readme](../readme.md) for how an entry is written and
-when it is added.
+See [the requirements readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`R-SKL-001`][R-SKL-001] — A backend-module task activates its own guidance · held
 - [`R-SKL-002`][R-SKL-002] — A testing task verifies the harness before relying on it · held

@@ -60,7 +60,7 @@ decide about.
 A skill states what it adds to that order, never a second copy of the order
 itself. The base also separates the two kinds of lookup, so a session does not
 take a runtime answer for a verdict. It says a session reads a returned rule
-against the code that exists as well as the code it is about to write, in both
+against the code that exists and the code it is about to write, in both
 directions. A mechanism that costs something is not a defect for that cost. So
 the session establishes what it is there for from the repository's own
 statements first. A documented purpose makes it a trade-off to name with its

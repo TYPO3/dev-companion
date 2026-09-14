@@ -9,91 +9,88 @@ coveredBy:
 
 # D-FBK-007 — How a todo is worked travels with the todo
 
-**The reading and the research a todo is owed are written down as a procedure
-page.**
+**The reads and the research a todo needs stand as a procedure page.**
 
 `bin/cli todo:next` prints the pointer to it with every todo it hands over
-rather than leaving it to be looked up.
+rather than leaves it to a lookup.
 
-Everything about the order of the work was written down and nothing about doing
-one piece of it was. A session that gets one todo, printed as an imperative
-paragraph, has every incentive to start at the first sentence of the step — and
-the two things that decide whether the change is right happen before it: reading
-what the todo serves against what the code does today, and settling a question
+Everything about the order of the work stood written and nothing about the work
+on one piece of it did. A session that gets one todo, printed as an imperative
+paragraph, has every incentive to start at the first sentence of the step. The
+two things that decide whether the change is right happen before it. A read of
+what the todo serves against what the code does today. And a question settled
 from the checkouts, the manuals or this server's own tools instead of from
 recall.
 
 ## Evidence
 
-- The queue on the day it was written — 35 sections, nearly all of them serving
-  a decision, and most in the shape "the entry names the failure; read whether
-  it happened". Every one of those is a research task whose output is either a
-  **Tested on** line or a test, and none of them says so; the authoring page for
-  skills had just gained the same two steps (`R-SKL-006`, 2026-08-01) after a
-  skill was written from recall, which is the same failure one directory over.
-  What `next` printed was the todo, the run output and one line about deleting
-  it afterwards.
+- The queue on this entry's day: 35 sections, nearly all of them for a decision.
+  Most are in the shape "the entry names the failure; read whether it happened".
+  Every one of those is a research task whose output is either a **Tested on**
+  line or a test, and none of them says so. The author page for skills had just
+  gained the same two steps (`R-SKL-006`, 2026-08-01) after a skill came from
+  recall. That is the same failure one directory over. What `next` printed was
+  the todo, the run output and one line about its removal afterwards.
 
 ## Decided
 
 - One page,
-  [documentation/records/working-a-todo.rst](../../documentation/records/working-a-todo.rst),
-  covering what is read first, that the step is judged rather than executed,
-  that a question the work turns on is settled from a source or recorded as
-  open, that what has no source here is asked before the change, and what the
-  file has to say afterwards — plus one closing block on `bin/cli todo:next`
-  naming it. `Todo::PROCEDURE` holds the path so the pointer and the page cannot
-  drift apart, and `R-FBK-009` carries the demand. The handover half stayed in
-  the command rather than moving to the page with everything else: which of the
-  three cases applies is read off the todo, and the page cannot know which one
-  it is being read for.
-- That putting the todo back is offered with the question rather than kept as a
-  fallback, and that a todo put back goes to the end of the queue. The person
-  asked can be out of answers too, and a session that has only "decide it" on
-  the table will decide it — so the todo keeps its file, gains the question in
-  the words it was asked in and what the reading already established, and moves
-  last. Last rather than down, because `next` hands over the first queued todo
-  and has no notion of blocked: one left in place is handed to every session
-  after this one, which is the queue not moving at all. Nothing new holds either
-  half — it is the existing rule that a change of order is written down before
-  the work, applied to a todo that never started.
+  [documentation/records/working-a-todo.rst](../../documentation/records/working-a-todo.rst).
+  It covers what a session reads first, and that the step gets a judgement
+  rather than an execution. It covers that a question the work turns on settles
+  from a source or stands recorded as open. It covers that what has no source
+  here is a question before the change, and what the file has to say afterwards.
+  Plus one last block on `bin/cli todo:next` that names it. `Todo::PROCEDURE`
+  holds the path so the pointer and the page cannot drift apart, and `R-FBK-009`
+  carries the demand. The handover half stayed in the command rather than moved
+  to the page with everything else. Which of the three cases applies comes off
+  the todo, and the page cannot know which one its reader has.
+- That the offer to put the todo back comes with the question rather than stays
+  as a fallback. And that a todo put back goes to the end of the queue. The
+  person asked can be out of answers too, and a session that has only "decide
+  it" on the table will decide it. So the todo keeps its file, gains the
+  question in the words it went out in and what the reads already established,
+  and moves last. Last rather than down, because `next` hands over the first
+  queued todo and has no notion of blocked. One left in place goes to every
+  session after this one, which is a queue that does not move at all. Nothing
+  new holds either half. It is the rule that already exists, a change of order
+  stands written before the work, applied to a todo that never started.
 
 ## Assumed
 
-- That a pointer handed over with the work is read where a page in
-  `documentation/` is not. That is the whole bet: the page has existed for one
-  commit and no session has been observed reading it. The alternative — putting
-  the reading itself into the output — was rejected because `next` exists to
-  print one todo and nothing else (`D-FBK-003`), and a command that grows a
-  second paragraph of instruction every time something is forgotten ends as the
-  62-line output that decision cut.
-- That the research a todo needs is worth naming by source at all. Most sessions
+- That a session reads a pointer handed over with the work where it does not
+  read a page in `documentation/`. That is the whole bet: the page has existed
+  for one commit and nobody has observed a session read it. The alternative, the
+  reads themselves in the output, fell because `next` exists to print one todo
+  and nothing else (`D-FBK-003`). A command that grows a second paragraph of
+  instruction every time somebody forgets something ends as the 62-line output
+  that decision cut.
+- That the research a todo needs is worth a name by source at all. Most sessions
   here run without an installation and with the checkouts already present, so
-  the sources are few and stable; if that stops being true the list becomes a
+  the sources are few and stable. If that no longer holds the list becomes a
   menu nobody reads to the end.
-- That asking is cheap where it is right, which holds while the person who
-  queues the todos is the one the session is talking to. A session running
-  unattended — a scheduled run, a forward review in somebody else's agent — has
-  nobody to ask, and for it the instruction degrades to recording the open
+- That a question is cheap where it is right, which holds while the person who
+  queues the todos is the one the session talks to. A session that runs
+  unattended, a scheduled run, a forward review in somebody else's agent, has
+  nobody to ask. For it the instruction degrades to a record of the open
   question instead, which is the same three places research that ran out already
   uses.
 
 ## Wrong if
 
-- A commit lands that states a version-bound fact, a default of a tool this
-  repository does not own, or the current state of a feedback, with no reading
-  behind it — the page is then present and inert, and what is left is putting
-  the question into the todo itself rather than into a page it points at. Or the
-  closing lines start being echoed back by sessions as a plan ("first I will
-  read what it serves") without any file being opened, which is the failure mode
-  of every instruction handed to an agent and is readable in a transcript. Or
-  the queue stops being answerable this way at all, because the research a todo
-  needs turns out to need an installation more often than not — then the page is
-  naming sources that are not there.
+- A commit lands with no source behind it. It states a version-bound fact, a
+  default of a tool this repository does not own, or the current state of a
+  feedback. The page is then present and inert, and what remains is the question
+  in the todo itself rather than in a page it points at. Or sessions start to
+  echo the last lines back as a plan ("first I will read what it serves") and
+  open no file. That is the failure mode of every instruction handed to an agent
+  and is readable in a transcript. Or the queue is no longer answerable this way
+  at all. The research a todo needs turns out to need an installation more often
+  than not. Then the page names sources that are not there.
 
 ## Since then
 
-The second **Decided** has been narrowed: a todo that no answer here can unblock
-leaves the queue instead of going last, and says what it waits on. Going last
+The second **Decided** is narrower now. A todo that no answer here can unblock
+leaves the queue instead of goes last, and says what it waits on. Going last
 stays what a merely unasked question earns. See
 [`D-FBK-009`](fbk-009-a-todo-nobody-can-start-waits-where-it-says-why.md).

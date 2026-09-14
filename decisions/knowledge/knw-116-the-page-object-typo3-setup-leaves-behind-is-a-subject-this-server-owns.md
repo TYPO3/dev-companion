@@ -10,11 +10,12 @@ coveredBy:
 # D-KNW-116 — The page object typo3 setup leaves behind is a subject this server owns
 
 **`installation-setup` gains what `--create-site` leaves behind: a welcome page
-object that is read after every site set and overrides what the sets render.**
+object the parser reads after every site set, which overrides what the sets
+render.**
 
 The hint says the command creates the root page and its site configuration and
 stops there. A session that installed an extension's own site set got TYPO3's
-welcome page, HTTP 200 and an empty log, and found the cause by grepping the
+welcome page, HTTP 200 and an empty log. It found the cause with a grep of the
 core for a CSS length out of the rendered markup.
 
 ## Evidence
@@ -22,8 +23,7 @@ core for a CSS length out of the rendered markup.
 - [`feedback/2026-08-24-140130`](../../feedback/archive/2026-08-24-140130-typo3-setup-create-site-also-writes-a-site.md)
   quotes the hint correctly. `installation-setup` carries "--create-site \<url\>
   and TYPO3_SETUP_CREATE_SITE create the root page and its site configuration
-  under config/sites/", and no statement of that hint says what else lands
-  there.
+  under config/sites/". No statement of that hint says what else lands there.
 - The file the session paid for is nowhere below `knowledge/` or `skills/`.
   `setup.typoscript` occurs in `site-sets`, where it is one of the files a set
   may hold, and in `content-rendering-templates`, where it is an extension's own
@@ -31,35 +31,34 @@ core for a CSS length out of the rendered markup.
   layer the sets are read before.
 - Re-run against the corpus as it is now, on 2026-08-24. `bin/cli hints:probe`
   on the install task reaches `installation-setup` first, which is the hint the
-  session read; on the symptom — "site set is applied but the page renders TYPO3
-  welcome content instead" — it reaches `site-sets` and `site-label-language`,
-  neither of which mentions a site-level file. So the right hint was in hand and
-  the statement is not in it.
+  session read. On the symptom, "site set is applied but the page renders TYPO3
+  welcome content instead", it reaches `site-sets` and `site-label-language`.
+  Neither mentions a site-level file. So the right hint was in hand and the
+  statement is not in it.
 - The claim holds on `.checkouts/14.3`. `SetupService::createSite()` calls
-  `writeSiteSetupTypoScript()` as its last step, which writes
+  `writeSiteSetupTypoScript()` as its last step. That writes
   `config/sites/<identifier>/setup.typoscript` with `page = PAGE`,
   `page.10 = COA`, the TYPO3 logo as a `TEXT` and a `CONTENT` over `tt_content`
   on `colPos = 0`.
 - The order the feedback infers is the mechanism, read in
-  `SysTemplateTreeBuilder::createSiteTemplateInclude()`. The site's sets are
-  added as child includes of the site node, and the site's own
-  `setup.typoscript` is then tokenised into that node's own line stream — so it
-  is read after every set, and `page = PAGE` in it replaces the object a set
-  built.
+  `SysTemplateTreeBuilder::createSiteTemplateInclude()`. The builder adds the
+  site's sets as child includes of the site node. Then it tokenises the site's
+  own `setup.typoscript` into that node's own line stream. So the parser reads
+  it after every set, and `page = PAGE` in it replaces the object a set built.
 - The mechanism is version-bound and the collision is not. `12.4` and `13.4`
-  have no `writeSiteSetupTypoScript()`; their `createSite()` inserts a
-  `sys_template` row instead, `root = 1`, `clear = 3`, carrying the same welcome
+  have no `writeSiteSetupTypoScript()`. Their `createSite()` inserts a
+  `sys_template` row instead, `root = 1`, `clear = 3`, with the same welcome
   `page = PAGE` in its `config`. That is the stronger form of the same trap,
-  because `clear = 3` discards the sets rather than overriding one object.
+  because `clear = 3` discards the sets rather than overrides one object.
 - The corpus already warns about that row on the other side of the boundary.
   `extension-test-site` states that `setUpFrontendRootPage()` and site sets
-  exclude each other because a clearing `sys_template` resets the AST, and the
+  exclude each other because a `sys_template` with `clear` resets the AST. The
   feedback names that statement as what saved it in the functional suite.
 - One session and one report, with a sibling on the same file.
   `feedback/2026-08-24-140317` comes from the same directory and asks where a
-  page object comes from at all for an extension that ships none; it is unjudged
-  and keeps its own card. `bin/cli feedback:list` on 2026-08-24 read 35 open
-  feedback across four checkouts, nine of them from that directory.
+  page object comes from at all for an extension that ships none. It has no
+  judgement yet and keeps its own card. `bin/cli feedback:list` on 2026-08-24
+  read 35 open feedback across four checkouts, nine of them from that directory.
 
 ## Decided
 
@@ -76,34 +75,34 @@ core for a CSS length out of the rendered markup.
   the page and take it out — and the file to look in differs, so the reading
   establishes the boundary rather than assuming the `14` form.
 - `site-sets` owes a neighbour line. A session whose set does not render arrives
-  on the symptom words, which the probe answers with that hint, and a statement
-  only the install hint carries is reachable by the caller who already knows the
+  on the symptom words, which the probe answers with that hint. A statement only
+  the install hint carries is in reach for the caller who already knows the
   cause.
-- `normal` rather than the `low` the card arrived at. The failure is silent —
-  HTTP 200, an empty log, the set demonstrably loaded — so the caller pays a
-  debugging cycle rather than reading an error, which is the cost
+- `normal` rather than the `low` the card arrived at. The failure is silent,
+  HTTP 200, an empty log, the set loaded beyond doubt. So the caller pays a
+  debug cycle rather than reads an error, which is the cost
   [`D-FBK-027`](../feedback/fbk-027-the-server-builds-what-costs-its-caller-round-trips.md)
   measures.
-- Not `high`. One session reported it, and what is missing is a statement rather
-  than a capability.
-- Neither archived nor trimmed. No part of the mechanism is stated below
-  `knowledge/` today.
+- Not `high`. One session reported it, and the gap is a statement rather than a
+  capability.
+- Neither archived nor trimmed. Nothing below `knowledge/` states any part of
+  the mechanism today.
 - The sibling card stays where it is. `2026-08-24-140317` asks a different
-  question about the same file — where a page object comes from for an extension
-  that defines none — and taking it over would answer it by writing the half
-  this entry owns.
+  question about the same file, where a page object comes from for an extension
+  that defines none. To take it over would answer it with the half this entry
+  owns.
 - Nothing holds this yet. The test declares the id in the commit that writes the
   statement.
 
 ## Assumed
 
 - That `main` writes the file as `14.3` does. `writeSiteSetupTypoScript()` is
-  there and was not read line for line, and `12.4` and `13.4` were read for the
-  absence of it rather than for what their row does at render time.
-- That the installation the session had was created by this command. TYPO3 14
-  makes both site options inert where a distribution is already active, which
-  `D-KNW-046` established, so a distribution-seeded installation has neither the
-  site nor the file.
+  there and this run did not read it line for line. It read `12.4` and `13.4`
+  for the absence of it rather than for what their row does at render time.
+- That this command created the installation the session had. TYPO3 14 makes
+  both site options inert where a distribution is already active, which
+  `D-KNW-046` established. So an installation a distribution seeded has neither
+  the site nor the file.
 - That a caller arrives on the install task rather than on the symptom. That is
   what puts the statement on `installation-setup`, and the neighbour line is
   what the assumption costs if it is wrong.
@@ -114,26 +113,26 @@ core for a CSS length out of the rendered markup.
   `clear = 3` or the row itself is skipped where the site carries sets. Then the
   statement is `since: 14` rather than bound twice, and the LTS half is a
   different subject.
-- The statement lands and a session with an unrendering set still reaches
+- The statement lands and a session whose set does not render still reaches
   `site-sets` alone. The lever was that hint's curation, and this is step 4
   rather than step 1a.
-- A caller removes the file, the set still renders nothing, and what was missing
-  was where a page object comes from. Then `2026-08-24-140317` is the gap and
-  this is one paragraph of it.
+- A caller removes the file, the set still renders nothing, and the gap was
+  where a page object comes from. Then `2026-08-24-140317` is the gap and this
+  is one paragraph of it.
 - A second `typo3 setup` run behind `--force` rewrites the file over a site
   whose rendering was corrected. The statement would owe the re-run as well as
-  the first install, and what it says about taking the file out is not enough.
+  the first install, and what it says about the file's removal is not enough.
 
 ## Since then
 
 The statement was written, bound twice as decided, and the reading settled the
 first **Wrong if**: the row does reach a set, and the oldest major has no sets
-to reach. The sets hang below the site's own include node, a node's children are
-read before its own lines, and the AST is reset for that include and nothing
-else — so the row discards what the sets built and the newer file replaces only
-the paths it assigns.
+to reach. The sets hang below the site's own include node, and the parser reads
+a node's children before its own lines. It resets the AST for that include and
+nothing else. So the row discards what the sets built and the newer file
+replaces only the paths it assigns.
 
-The re-run behind the force flag is half settled: the site is written again
-whenever a URL is given and no distribution is active, with no guard on what
-already exists, and whether the run reaches that step is another entry's
+The re-run behind the force flag is half settled. The command writes the site
+again whenever it gets a URL and no distribution is active, with no guard on
+what already exists. Whether the run reaches that step is another entry's
 subject.

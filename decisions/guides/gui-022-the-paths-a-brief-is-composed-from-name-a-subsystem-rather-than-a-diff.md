@@ -8,13 +8,13 @@ coveredBy: []
 
 # D-GUI-022 — The paths a brief is composed from name a subsystem rather than a diff
 
-**`typo3_task_guide` matches its hints against the paths and the task text, so
+**`typo3_task_guide` matches its hints against the paths and the task text. So
 it can say which subsystems a change is in and never what the change did to
 them.**
 
 A review of a link swap across git hooks, docblocks, an XML reference and five
-Fluid templates was answered with four Fluid hint groups and the removal surface
-a review of an API change owes, and reported that none of it changed a decision.
+Fluid templates got four Fluid hint groups. It got the removal surface a review
+of an API change owes. It reported that none of it changed a decision.
 `coveredBy: []` because nothing here is a new promise: the entry records what
 the judgement of that report established and what it declined to build.
 
@@ -24,58 +24,60 @@ the judgement of that report established and what it declined to build.
   `TaskGuide::answer` with the four paths it names, `changeType` `audit`,
   `targetVersion` `15.0`: `fluid-templates`, `fluid-viewhelpers`,
   `sitepackage-templates` and `system-extension-boundaries` come back, and
-  `omittedHints` names five more. The brief is larger than the one reported — it
-  is now also recognized as "Documenting a package for its readers" and carries
-  that intent's six checklist items, on a task text whose only documentation
-  word is "documentation URLs".
-- The hints are matched by `Hints::find($group['paths'], $task, …)`. The
-  `.fluid.html` path is what pulled the three Fluid groups; the task text names
-  no template. So suppressing them takes reading what the change did to that
-  file, and `TaskGuide::answersFrom()` is `Source::Knowledge` alone — the tool
-  opens no checkout.
-- The removal items are `D-GUI-004`'s and it priced the alternative already: an
+  `omittedHints` names five more. The brief is larger than the one reported. It
+  now also counts as "Documenting a package for its readers" and carries that
+  intent's six checklist items. The task text's only documentation word is
+  "documentation URLs".
+- `Hints::find($group['paths'], $task, …)` matches the hints. The `.fluid.html`
+  path is what pulled the three Fluid groups; the task text names no template.
+  So a filter on them takes a read of what the change did to that file.
+  `TaskGuide::answersFrom()` is `Source::Knowledge` alone: the tool opens no
+  checkout.
+- The removal items are `D-GUI-004`'s and it priced the alternative already. An
   intent keyed on the task text cannot fire, because a review's task text never
   says what the diff takes away. This report is the first from the other side of
-  that boundary — the surface arriving on a diff that removes nothing.
-- `TestRunGuide::answer`, re-run with those paths and a unit test beside them,
-  narrows to `php` and `fluid` and withholds `typoscript`, `xliff`, `docs`,
-  `typescript` and `css`, 13 suites.
-  `typo3/sysext/backend/Resources/Private/tsref.xml` is placed `core` and
-  reaches no domain; `Build/git-hooks/commit-msg` is placed `uncertain`. Neither
-  is named in the answer as a path no suite covers, which is what the session
-  concluded by hand.
+  that boundary: the surface on a diff that removes nothing.
+- `TestRunGuide::answer`, run again with those paths and a unit test beside
+  them, narrows to `php` and `fluid`. It withholds `typoscript`, `xliff`,
+  `docs`, `typescript` and `css`, 13 suites.
+  `typo3/sysext/backend/Resources/Private/tsref.xml` lands in `core` and reaches
+  no domain; `Build/git-hooks/commit-msg` lands in `uncertain`. The answer names
+  neither as a path no suite covers, which is what the session concluded by
+  hand.
 - The podman claim is one sentence's wording. `Build/Scripts/runTests.sh` probes
-  on all four covered branches — identical blocks in `.checkouts/12.4`, `13.4`,
-  `14.3` and `main`: podman where `type podman` succeeds, docker otherwise, and
+  on all four covered branches, identical blocks in `.checkouts/12.4`, `13.4`,
+  `14.3` and `main`. Podman where `type podman` succeeds, docker otherwise, and
   `-b` overrides. The script's own `-h` calls podman the default, which is where
-  the sentence came from, and `printSummary` prints `Container runtime: <bin>`,
+  the sentence came from. `printSummary` prints `Container runtime: <bin>`,
   which is the line the session read.
 - No second session asks for either lever. `bin/cli feedback:list` on 2026-08-27
-  reports 18 open in 4 directories, and neither they nor the archive hold
-  another report of a brief whose items did not bear on a mechanical change.
+  reports 18 open in 4 directories. Neither they nor the archive hold another
+  report of a brief whose items did not bear on a mechanical change.
 
 ## Decided
 
-- The podman sentence is corrected in the same commit, in
-  `knowledge/test-suite-hints.json`: the runtime is probed rather than
-  defaulted, and the summary line is what a run used. It is a wording fix on a
+- The podman sentence gets its correction in the same commit, in
+  `knowledge/test-suite-hints.json`. The script probes the runtime rather than
+  defaults it, and the summary line is what a run used. It is a wording fix on a
   reading this run made, which is `D-FBK-052`.
 - Letting the paths suppress hints is not built. It asks the brief for a
-  property of the diff, and the brief has the path and the task text — a path
+  property of the diff, and the brief has the path and the task text. A path
   names a subsystem, and every change to that subsystem looks the same from
   here.
 - So the only slot in the input that can say a change is mechanical is
   `changeType`, which is what the feedback's second suggestion reaches for. That
   makes the two suggestions one lever rather than two.
-- That lever is queued and not taken on. It is a value on a declared input enum
-  and a checklist arm beside the four of `D-GUI-008` and `D-SKL-065`, and the
-  corpus behind it is one session — the bar `documentation/records/judging.rst`
-  sets for building a shape is two from different task shapes.
-- What the card carries first is the other half: `typo3_test_run_guide` naming
-  the paths that reached no suite. That is `R-GUI-012`'s rule and `D-ANS-074`'s
-  one level down — an answer that narrows says what it left out — applied to
-  paths where both applied it to hints and domains. It touches `src/` and the
-  declared `outputSchema`, so it is queued rather than made here.
+- That lever sits in the queue and does not get taken on. It is a value on a
+  declared input enum and a checklist arm beside the four of `D-GUI-008` and
+  `D-SKL-065`. The corpus behind it is one session. The bar
+  `documentation/records/judging.rst` sets for a new shape is two from different
+  task shapes.
+- What the card carries first is the other half: a `typo3_test_run_guide` that
+  names the paths that reached no suite. That is `R-GUI-012`'s rule and
+  `D-ANS-074`'s one level down, an answer that narrows says what it left out. It
+  applies to paths where both applied it to hints and domains. It touches `src/`
+  and the declared `outputSchema`, so it goes to the queue rather than happens
+  here.
 - The card leaves `low`. One session, but the first half is precise and rests on
   a rule this repository already wrote twice, which is what `normal` says.
 
@@ -83,7 +85,7 @@ the judgement of that report established and what it declined to build.
 
 - That a caller who knows the change is mechanical will state it. Nothing in the
   four paths of this call says so, and the session that filed the report
-  classified its work as `audit` — correctly, since it was reviewing.
+  classified its work as `audit`. That is correct, since it was a review.
 - That the removal surface costs a reader of the wrong brief a read rather than
   a wrong finding. This report says it changed no decision; it does not say it
   sent the session anywhere.
@@ -104,13 +106,13 @@ the judgement of that report established and what it declined to build.
 
 **Built on 2026-08-27**, the first half. `typo3_test_run_guide` names the paths
 that reached no suite, as `uncoveredPaths` in the answer and as a sentence
-beside the narrowing one, before the suites rather than after them. The call
-this entry was judged from says: "No runTests.sh suite covers
+beside the narrow one. It stands before the suites rather than after them. The
+call this entry rests on says: "No runTests.sh suite covers
 Build/git-hooks/commit-msg and
 typo3/sysext/backend/Resources/Private/tsref.xml." The promise is
 [`R-ANS-036`](../../requirements/answers/ans-036-a-suite-list-names-the-paths-no-suite-covers.md).
 
 The second half is where it was. `bin/cli feedback:list` on this branch that day
-reports 15 open in 4 directories, and none is a second report of a brief whose
-items did not bear on a mechanical change — so `changeType` stays queued, and
-the feedback is trimmed to that half.
+reports 15 open in 4 directories. None is a second report of a brief whose items
+did not bear on a mechanical change. So `changeType` stays in the queue, and the
+feedback shrinks to that half.

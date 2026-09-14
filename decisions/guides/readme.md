@@ -1,11 +1,8 @@
 # Guides — what a returned draft is worth
 
-A draft is acted on, so what it leaves out has to be visible in it. These are
-the decisions about what a guide states, what it refuses, and what it asks the
-caller for rather than guessing.
+A caller acts on a draft, so what it leaves out has to be visible in it. These are the decisions about what a guide states, what it refuses, and what it asks the caller for rather than guesses.
 
-See [the decisions readme](../readme.md) for how an entry is written and when
-one is added.
+See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-GUI-027`][D-GUI-027] — An intent's condition decides whether its checklist arrives · 2026-09-04 · confirmed
 - [`D-GUI-026`][D-GUI-026] — The commit body is prose, and the check says so · 2026-09-02

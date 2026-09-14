@@ -177,7 +177,7 @@ at all in the state the machine is in.
         :label: Describe
         :action: Open reference
 
-        Describe the repository this server was started in and the TYPO3
+        Describe the repository this server started in and the TYPO3
         installation it has made.
 
     .. card:: :doc:`typo3_record_lookup <typo3_record_lookup>`

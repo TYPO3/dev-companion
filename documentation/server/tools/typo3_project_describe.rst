@@ -3,8 +3,8 @@
 ``typo3_project_describe``
 ==========================
 
-Describe the repository this server was started in and the TYPO3 installation it
-has made. It answers the TYPO3 and PHP constraints, with the floor the installed
+Describe the repository this server started in and the TYPO3 installation it has
+made. It answers the TYPO3 and PHP constraints, with the floor the installed
 core requires and how the PHP numbers stand to each other. It says whether the
 install is what composer.lock names. It lists the extensions that are its own
 rather than TYPO3's, and the sites it configures with the sets each depends on.
@@ -15,8 +15,8 @@ and pull recipes, and which Node its npm commands run on. It lists its patched
 dependencies and the guides this server carries. Read from files alone — no
 console, no database — so it answers on a fresh clone as well. Before composer
 install has run, installed says so and four fields wait for it: typo3Version,
-corePhpConstraint, installedPhpBound and extensions. Call it first, before
-booting the project and before recommending or running a check. A check this
+corePhpConstraint, installedPhpBound and extensions. Call it first, before you
+boot the project and before you recommend or run a check. A check this
 repository does not declare does not exist here. The ones marked check are what
 a task told not to change files may run. What one of the extensions it lists
 registers — its tables, content elements, backend modules and icons — is
@@ -36,36 +36,36 @@ Answers with
 
 .. code-block:: yaml
 
-    # Absolute path of the repository this describes. Null when no project root was
-    # found to describe.
+    # Absolute path of the repository this describes. Null when the discovery found
+    # no project root to describe.
     root: string or null  # optional
     # core-checkout or composer-project. What the root declares itself to be, not
-    # whether anything is installed in it — installed says that.
+    # whether anything sits installed in it; installed says that.
     kind: string  # optional
-    # Whether the packages this repository declares are installed below it. False is
+    # Whether the packages this repository declares sit installed below it. False is
     # a clone nobody has run composer install in, which is the state a boot or an
-    # installation task starts in. Everything else here is read from the
-    # repository's own files and answers either way. What false costs is the four
-    # fields that come out of the installed tree: typo3Version, corePhpConstraint
-    # and installedPhpBound are null and extensions is empty. None of the four tells
-    # you that on its own.
+    # installation task starts in. Everything else here comes from the repository's
+    # own files and answers either way. What false costs is the four fields that
+    # come out of the installed tree: typo3Version, corePhpConstraint and
+    # installedPhpBound are null and extensions is empty. None of the four tells you
+    # that on its own.
     installed: boolean  # optional
-    # Whether what is installed below the vendor directory is what composer.lock
-    # names, compared package by package and version by version. The one thing
-    # installed cannot say. A vendor directory a month older than the lock satisfies
-    # that boolean, and the suite run after it fails in classes your change never
+    # Whether what sits installed below the vendor directory is what composer.lock
+    # names, package by package and version by version. The one thing installed
+    # cannot say. A vendor directory a month older than the lock satisfies that
+    # boolean, and the suite run after it fails in classes your change never
     # touched. The modification times are not read: a lock a rebase rewrote is newer
-    # than the install it describes, and nothing there is stale. Locked dev packages
-    # are compared only where the metadata says the install took them, so a --no-dev
-    # install is not reported as a drift. Where the two differ, the text names the
+    # than the install it describes, and nothing there is stale. The comparison
+    # takes locked dev packages only where the metadata says the install took them,
+    # so a --no-dev install is no drift. Where the two differ, the text names the
     # command that reinstalls them. Empty packages where state is anything but
     # differs.
     installedAgainstLock:  # optional
       # One of: matches, differs, not-installed, no-lock. matches: every package
-      # composer.lock names is installed at that version, so a failure here is not a
-      # stale install. differs: packages says which of them are not, and the install
-      # is behind or ahead of the lock. not-installed: there is a lock and no
-      # Composer metadata below the vendor directory to hold it against. So the
+      # composer.lock names sits installed at that version, so a failure here is not
+      # a stale install. differs: packages says which of them are not, and the
+      # install is behind or ahead of the lock. not-installed: there is a lock and
+      # no Composer metadata below the vendor directory to hold it against. So the
       # packages it names are not on disk. no-lock: this root has no composer.lock,
       # so nothing states which versions it fixed.
       state: string
@@ -73,13 +73,13 @@ Answers with
         - # The Composer package name, as both files spell it.
           package: string
           # The version composer.lock names. Null where the lock names this package
-          # nowhere and it is installed anyway.
+          # nowhere and it sits installed anyway.
           locked: string or null
           # The version installed below the vendor directory. Null where the lock
-          # names it and nothing is installed under that name.
+          # names it and nothing sits installed under that name.
           installed: string or null
     # The TYPO3 version installed here, read from the core package. Null where
-    # nothing is installed yet, which installed is what says.
+    # nothing sits installed yet, which installed says.
     typo3Version: string or null  # optional
     # What composer.json requires of PHP. What the project declares, not what runs
     # it — see environment.
@@ -90,8 +90,8 @@ Answers with
     # composer.json — the lowest a package here may declare it supports. Neither
     # of the other two PHP numbers: not what this project declares, and not what
     # environment.php runs. Not derivable from the TYPO3 major either — v13.4 and
-    # v14.3 both require ^8.2, v12.4 requires ^8.1. Null where no core package was
-    # found to read.
+    # v14.3 both require ^8.2, v12.4 requires ^8.1. Null where the tool found no
+    # core package to read.
     corePhpConstraint: string or null  # optional
     # The lowest PHP the packages installed below this root accept, read out of
     # composer/platform_check.php below the vendor directory this project declares.
@@ -107,33 +107,32 @@ Answers with
     installedPhpBound: string or null  # optional
     # How the four PHP numbers above stand to each other, which none of them says on
     # its own. Derived from the constraints, the bound and the environment as the
-    # files spell them. Nothing was executed on any of these versions, so this is
-    # what the project claims and not evidence that any of it works. Null where
-    # phpConstraint names no floor: the project requires no PHP, or spells it in a
-    # way this will not claim to read. A constraint it cannot read costs this object
-    # rather than buying a wrong relation. installedPhpBound stands on its own
-    # either way.
+    # files spell them. Nothing ran on any of these versions, so this is what the
+    # project claims and not evidence that any of it works. Null where phpConstraint
+    # names no floor: the project requires no PHP, or spells it in a way this will
+    # not claim to read. A constraint it cannot read costs this object rather than
+    # buys a wrong relation. installedPhpBound stands on its own either way.
     phpRelation:  # optional
       # The lowest PHP phpConstraint admits, as major.minor. What the project
-      # promises to run on, and the number its own commands are worth holding
-      # against.
+      # promises to run on, and the number to hold its own commands against.
       floor: string
-      # The same, read off corePhpConstraint. Null where no core package was found
-      # to read one from.
+      # The same, read off corePhpConstraint. Null where the tool found no core
+      # package to read one from.
       coreFloor: string or null
       # One of: below, same, above, null. Where floor sits against coreFloor. below:
       # the project declares support for a PHP its own installed core refuses, so
-      # the promise cannot be kept. same: it declares what the core requires. above:
-      # it declares more than the core needs, which is a range the project narrowed
-      # itself and can widen without touching a dependency. Null where coreFloor is.
+      # the promise cannot hold. same: it declares what the core requires. above: it
+      # declares more than the core needs, which is a range the project narrowed
+      # itself and can widen without a change to a dependency. Null where coreFloor
+      # is.
       againstCore: string or null
       # One of: below, same, above, null. Where the PHP environment.php states sits
-      # against floor. same: the declared floor is the version the commands are run
-      # on. above: the environment runs higher, so the floor is a version nothing
+      # against floor. same: the declared floor is the version the commands run on.
+      # above: the environment runs higher, so the floor is a version nothing
       # configured here ever executes — a claim no check tests. below: the
       # environment runs a PHP the project says it does not support. Null where
-      # there is no environment or it states no version. Only the floors are
-      # compared, so a version over what the constraint's own upper bound allows
+      # there is no environment or it states no version. The comparison takes the
+      # floors alone, so a version over what the constraint's own upper bound allows
       # reads here like one inside it.
       inEnvironment: string or null
       # installedPhpBound as major.minor, which is the depth the environment states
@@ -143,9 +142,9 @@ Answers with
       # against bound. It is the only one of these three that says whether a command
       # runs at all rather than what it runs on. below: every command in the list
       # below aborts in Composer's platform check before its own tool starts,
-      # whatever runs says about it. The check then has to be run somewhere else.
-      # same or above: nothing in that file stops them. Null where there is no bound
-      # to clear, or no environment stating the version that would clear it. Where
+      # whatever runs says about it. The check then has to run somewhere else. same
+      # or above: nothing in that file stops them. Null where there is no bound to
+      # clear, or no environment that states the version that would clear it. Where
       # this repository configures no environment, the shell you run them in is the
       # interpreter and nothing here reads it.
       environmentAgainstBound: string or null
@@ -154,15 +153,15 @@ Answers with
     # actions/setup-node steps below .github/workflows/, and the nodejs_version a
     # DDEV project states. The composer half of that command list has its
     # interpreter in environment and the npm half had none. A version difference
-    # between the machine and CI is what a build breaks on. The first two are read
-    # wherever this repository keeps its manifest: at the root, or in Build/ where
-    # the frontend build sits one directory down. That is the layout the core has,
-    # and enginesIn and nvmrcIn name the file each came from. Null where this
+    # between the machine and CI is what a build breaks on. The tool reads the first
+    # two wherever this repository keeps its manifest. That is the root, or Build/
+    # where the frontend build sits one directory down. That is the layout the core
+    # has, and enginesIn and nvmrcIn name the file each came from. Null where this
     # repository has no package.json anywhere and nothing states a Node, which is a
     # repository with no npm surface to run.
     node:  # optional
       # What package.json requires of Node in engines.node, as spelled. A range: it
-      # says which versions are admitted, never which one a command is executed on.
+      # says which versions the package admits, never which one a command runs on.
       # Null where no manifest here states one, which is the ordinary case.
       engines: string or null
       # The manifest that stated it, relative to the project root: package.json, or
@@ -171,9 +170,9 @@ Answers with
       enginesIn: string or null
       # What the .nvmrc beside it says, as spelled. The closest thing here to what a
       # developer actually runs, because a version manager reads that file and
-      # selects it. An alias like lts/iron is kept and not resolved — what it
-      # names is a list nvm downloads, not anything in this repository. Null where
-      # there is no such file.
+      # selects it. An alias like lts/iron stays as it is, unresolved. What it names
+      # is a list nvm downloads, not anything in this repository. Null where there
+      # is no such file.
       nvmrc: string or null
       # The .nvmrc that said it, relative to the project root — .nvmrc, or
       # Build/.nvmrc beside the manifest there. Null where nvmrc is.
@@ -208,13 +207,14 @@ Answers with
       # read. There is then nothing this repository declares to hold the others
       # against, and the numbers above still stand.
       relation:
-        # The Node this repository declares for itself, and what the other two are
-        # held against.
+        # The Node this repository declares for itself, and what the other two stand
+        # against.
         declared: string
         # Which file that came from, relative to the project root — the nvmrcIn or
         # the enginesIn above. The .nvmrc wins where both state one: the pin is what
-        # a version manager selects and therefore what a run is executed on.
-        # engines.node is a range, and only its lowest version could be compared.
+        # a version manager selects and therefore what a run executes on.
+        # engines.node is a range, and only its lowest version could stand in a
+        # comparison.
         declaredBy: string
         # One of: below, same, above, null. Where the pin sits against the lowest
         # version engines.node admits. below: the pinned Node is one this package
@@ -230,8 +230,8 @@ Answers with
         # each statement.
         ci: string or null
         # One of: below, same, above, null. Where that version sits against
-        # declared. Only the segments both spell are compared, so an .nvmrc naming a
-        # major and a workflow naming a patch level agree wherever the major does.
+        # declared. The comparison takes the segments both spell, so an .nvmrc with
+        # a major and a workflow with a patch level agree wherever the major does.
         # The release difference inside one major is a thing no file here states.
         inCi: string or null
     # The environment this repository configures to run itself in, read from that
@@ -252,30 +252,30 @@ Answers with
       php: string or null
       # The Node that environment runs, where its files state one — nodejs_version
       # in the .ddev configuration. Null where they state none, and then the
-      # installed DDEV's own default applies. The node object above is where it is
-      # held against what this repository declares.
+      # installed DDEV's own default applies. The node object above holds it against
+      # what this repository declares.
       node: string or null
-      # Where this was read: the .ddev config file that states the version last, or
-      # TYPO3_DEV_COMPANION_CONSOLE.
+      # Where this comes from: the .ddev config file that states the version last,
+      # or TYPO3_DEV_COMPANION_CONSOLE.
       source: string
-      # The DDEV project name, which is what every ddev command takes and what the
-      # containers are named after: ddev-<project>-web and ddev-<project>-db. Where
-      # no file states it, DDEV uses the directory name and so does this. Null where
-      # the environment is not DDEV.
+      # The DDEV project name, which is what every ddev command takes and what names
+      # the containers: ddev-<project>-web and ddev-<project>-db. Where no file
+      # states it, DDEV uses the directory name and so does this. Null where the
+      # environment is not DDEV.
       project: string or null
-      # The hostnames those files declare the site is served under:
-      # <project>.ddev.site, every additional_hostnames entry with the same
-      # top-level domain, and every additional_fqdns entry as written. What the
-      # configuration declares, not what is running. The ports the router binds and
-      # its address on the container network are not in these files, and `ddev
-      # describe -j` is what carries them. Empty where the environment is not DDEV.
+      # The hostnames those files declare for the site: <project>.ddev.site, every
+      # additional_hostnames entry with the same top-level domain, and every
+      # additional_fqdns entry as written. What the configuration declares, not what
+      # runs. The ports the router binds and its address on the container network
+      # are not in these files, and `ddev describe -j` is what carries them. Empty
+      # where the environment is not DDEV.
       hostnames: [string]
       # True when this server already runs inside that environment. Then its shell
       # is that environment and a declared command needs nothing in front of it.
       entered: boolean
-      # What this environment runs without being asked, from .ddev/config.yaml and
-      # every .ddev/config.*.yaml beside it. The commands list is what a caller may
-      # run; these fire on their own at the stage each names. An environment that
+      # What this environment runs unasked, from .ddev/config.yaml and every
+      # .ddev/config.*.yaml beside it. The commands list is what a caller may run;
+      # these fire on their own at the stage each names. An environment that
       # installs dependencies on start and updates the schema on import says so
       # here. Empty means those files declare no hooks. Unmarked, unlike the
       # commands: runs says whether a caller may run something, and a hook is not
@@ -284,8 +284,8 @@ Answers with
         - # The DDEV stage it fires at: post-start, post-import-db, pre-pull and the
           # rest.
           stage: string
-          # What that stage runs, as the file states it. A block of several lines is
-          # joined with ";", which is what the shell does with it.
+          # What that stage runs, as the file states it. A block of several lines
+          # comes with ";" between them, which is what the shell does with it.
           command: string
           # The container it runs in, "web" where the task names none. Null means it
           # runs on the host instead, which is what an exec-host task is.
@@ -306,24 +306,24 @@ Answers with
           operations: [string]
     # Extensions that are not TYPO3 system extensions. Read from Composer's
     # installed metadata, so where installed is false this is empty because nothing
-    # has been installed rather than because the repository has none.
+    # sits installed rather than because the repository has none.
     extensions:  # optional
       - key: string
         # Relative to the project root.
         path: string
         # One of: project, third-party, fixture. project: inside the repository, so
-        # what it is working on. third-party: installed as a dependency. fixture:
-        # shipped by the repository's test setup, below a Tests/ directory, so it
-        # exists to be loaded by a suite rather than developed.
+        # what it works on. third-party: installed as a dependency. fixture: shipped
+        # by the repository's test setup, below a Tests/ directory, so it exists for
+        # a suite to load rather than for development.
         origin: string
-        # The files this extension ships that core has stopped reading, or is
-        # stopping, each with what shipping it costs. Read for an extension of
+        # The files this extension ships that the core no longer reads, or stops to
+        # read, each with what the shipped file costs. Read for an extension of
         # origin project alone and empty for the others, whose files are their own
-        # maintainer's. Four predicates are checked, each off the extension's own
-        # tree: ext_tables.php, ext_emconf.php, ext_icon.svg/.png/.gif and the two
-        # ext_typoscript_*.txt. An empty list says none of the four holds, not that
-        # the extension is ready for the next major. Nothing else it ships was read
-        # for a deprecation, and typo3_changelog_lookup is what answers that.
+        # maintainer's. The check reads four predicates, each off the extension's
+        # own tree: ext_tables.php, ext_emconf.php, ext_icon.svg/.png/.gif and the
+        # two ext_typoscript_*.txt. An empty list says none of the four holds, not
+        # that the extension is ready for the next major. It reads nothing else it
+        # ships for a deprecation, and typo3_changelog_lookup answers that.
         # typo3_extension_describe is the same verdict beside everything else that
         # extension registers.
         deprecatedFiles:
@@ -350,27 +350,27 @@ Answers with
     # What this repository declares. A check that is not here does not exist here.
     commands:  # optional
       - # As this repository declares it, run from the project root. Where
-        # environment is not null, it is run inside that environment rather than in
+        # environment is not null, it runs inside that environment rather than in
         # the caller's shell. An npm script declared below the root carries the
-        # --prefix that points npm at the manifest declaring it. So two manifests
-        # with a build script are two commands you can tell apart.
+        # --prefix that points npm at the manifest that declares it. So two
+        # manifests with a build script are two commands you can tell apart.
         command: string
-        # The manifest declaring it, relative to the project root: composer.json,
-        # package.json, or Build/package.json where the repository keeps its
-        # frontend build one directory down.
+        # The manifest that declares it, relative to the project root:
+        # composer.json, package.json, or Build/package.json where the repository
+        # keeps its frontend build one directory down.
         source: string
-        # The same command as it is run from where you stand, which is what to
+        # The same command as you run it from where you stand, which is what to
         # paste. Where this repository configures a DDEV project and this server is
         # not already inside it, it is the declared command with DDEV in front. That
         # is "ddev composer <name>" for a composer script and "ddev exec <command>"
-        # for the rest. It is the declared command unchanged everywhere else,
-        # including under TYPO3_DEV_COMPANION_CONSOLE, which reaches this
-        # installation's console rather than an arbitrary script.
+        # for the rest. It is the declared command unchanged everywhere else, under
+        # TYPO3_DEV_COMPANION_CONSOLE too, which reaches this installation's console
+        # rather than an arbitrary script.
         invocation: string
         # The body the manifest declares for it, lines joined with &&.
         declares: string
-        # One of: check, change, unknown. What running it does to the sources, read
-        # off the body rather than by running it. check: it reports and hands the
+        # One of: check, change, unknown. What a run does to the sources, read off
+        # the body rather than measured by a run. check: it reports and hands the
         # code back as it was, so a task told not to change files can run it. It may
         # still write a cache of its own. change: it rewrites something. unknown:
         # the body does not say, which is what a test suite is, because it runs the

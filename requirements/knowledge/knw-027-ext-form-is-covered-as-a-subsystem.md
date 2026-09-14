@@ -8,13 +8,13 @@ heldBy:
 
 # R-KNW-027 — EXT:form is covered as a subsystem
 
-**EXT:form is covered as a subsystem.**
+**EXT:form is a subsystem here.**
 
 That is extension form sets and definitions, storage choices, runtime identifier
-rewriting, overrides, and the request-aware point where a field can be prefilled
-without overriding a submitted value.
+rewrites and overrides. It is the request-aware point where a field can take a
+prefill without an override of a submitted value.
 
 ## From
 
-A sitepackage form task whose complete answer had to be read from the installed
-system extension and whose isolated identifier test was misleading (2026-07-29).
+A sitepackage form task whose complete answer had to come from the installed
+system extension, and whose isolated identifier test misled it (2026-07-29).

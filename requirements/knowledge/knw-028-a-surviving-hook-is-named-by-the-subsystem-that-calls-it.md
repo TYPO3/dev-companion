@@ -8,14 +8,14 @@ heldBy:
 
 # R-KNW-028 — A surviving hook is named by the subsystem that calls it
 
-**A surviving hook is named by the subsystem that still calls it, alongside the
-narrower event for a concrete intent.**
+**The subsystem that still calls a hook names it, beside the narrower event for
+a concrete intent.**
 
-Intent words belong in that hint's `appliesTo`; there is no parallel
-extension-point lookup whose registry would duplicate and drift from the
-subsystem knowledge.
+Intent words belong in that hint's `appliesTo`. There is no parallel
+extension-point lookup whose registry would copy the subsystem knowledge and
+drift from it.
 
 ## From
 
-Prefilling an EXT:form field requiring a grep to discover both a surviving hook
-and the request-aware event that should be used instead (2026-07-29).
+A prefill of an EXT:form field that needed a grep to discover both a hook that
+still lives and the request-aware event to use (2026-07-29).

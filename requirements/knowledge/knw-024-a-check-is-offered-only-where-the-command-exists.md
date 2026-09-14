@@ -9,32 +9,31 @@ heldBy:
 
 # R-KNW-024 — A check is offered only where the command exists
 
-**A check is offered only where the command exists.**
+**An answer offers a check only where the command exists.**
 
 Every check this server carries is a `runTests.sh` invocation, and which suites
-that script offers changes between majors — so a check names a suite, and the
-suite carries the range. The binding is declared once, in
-`knowledge/test-suite-hints.json`, and every task intent that names the suite in
-`-s <suite>` inherits it; the suite listing itself is filtered the same way and
-carries its range where it has one. A command the caller's checkout does not
-have is not a weaker answer than none — it sends them to debug their own
-checkout for something this server invented for another branch.
+that script offers changes between majors. So a check names a suite, and the
+suite carries the range. `knowledge/test-suite-hints.json` declares the bound
+once, and every task intent that names the suite in `-s <suite>` inherits it.
+The same filter runs over the suite listing itself, and it carries its range
+where it has one. A command the caller's checkout does not have is not a weaker
+answer than none. It sends them to debug their own checkout for something this
+server invented for another branch.
 
 The prose documents cannot inherit anything, so the rule reaches them as a
-restriction instead: a markdown document may name a suite only where every
-covered major has it, and a narrower one belongs in the hints, where
-`targetVersion` can pick the right command.
+restriction instead. A markdown document may name a suite only where every
+covered major has it. A narrower one belongs in the hints, where `targetVersion`
+can pick the right command.
 
 ## From
 
-Seven checks naming a suite absent from at least one covered branch, found while
-unifying the obligation vocabulary — a 13.4 core contributor asking about labels
-was handed `runTests.sh -s checkIntegrityXliff`, which arrives in 14
+Seven checks that named a suite absent from at least one covered branch, found
+during the unification of the obligation vocabulary. A 13.4 core contributor who
+asked about labels got `runTests.sh -s checkIntegrityXliff`, which arrives in 14
 (2026-07-30).
 
 ## Held by
 
-- `bin/cli catalog:check`, which reads the range each suite actually holds on
-  out of the `runTests.sh` of every covered branch. No test may reach
-  `.checkouts/`, and the numbers these three tests filter by are a claim about
-  that script.
+- `bin/cli catalog:check`, which reads the range each suite holds on out of the
+  `runTests.sh` of every covered branch. No test may reach `.checkouts/`, and
+  the numbers these three tests filter by are a claim about that script.

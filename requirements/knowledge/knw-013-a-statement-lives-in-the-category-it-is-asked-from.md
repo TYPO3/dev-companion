@@ -9,16 +9,16 @@ heldBy:
 
 # R-KNW-013 — A statement lives in the category it is asked from
 
-**A statement lives in the category its question is asked from, not in the one
-the mechanism happens to be implemented in.**
+**A statement lives in the category its question comes from, not in the one the
+mechanism happens to live in.**
 
-Domains withhold whole categories, so a trap about configuring a site that sits
-among the PHP hints is invisible to every query that reads as frontend work —
-and re-reported as missing by a caller who was right that they could not find
-it.
+Domains withhold whole categories. So a trap about the configuration of a site
+that sits among the PHP hints is invisible to every query that reads as frontend
+work. A caller who was right that they could not find it reports it as absent a
+second time.
 
 ## From
 
 `excludeDoktypes` reported a second time, while the sentence about it was in
-`frontend-dataprocessors` — a hint about writing a processor, which a
-sitepackage question never sees (2026-07-29).
+`frontend-dataprocessors`. That is a hint about the write of a processor, which
+a sitepackage question never sees (2026-07-29).

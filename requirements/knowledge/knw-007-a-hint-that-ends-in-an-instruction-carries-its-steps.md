@@ -8,13 +8,13 @@ heldBy:
 
 # R-KNW-007 — A hint that ends in an instruction carries its steps
 
-**A hint that ends in an instruction says how the instruction is carried out.**
+**A hint that ends in an instruction says how to carry the instruction out.**
 
-Naming the way in and stopping where the work starts leaves the caller with the
-traps the sentence just sent them into.
+A hint that names the way in and stops where the work starts leaves the caller
+with the traps the sentence just sent them into.
 
 ## From
 
-"seed with DataHandler, then export" — with no way to get a DataHandler, three
+"seed with DataHandler, then export", with no way to get a DataHandler. Three
 steps of a hand-written boot each of which fails on its own, and an export that
-silently omits every table nobody named (2026-07-29).
+omits every table nobody named in silence (2026-07-29).

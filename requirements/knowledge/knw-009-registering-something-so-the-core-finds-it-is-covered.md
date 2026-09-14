@@ -10,11 +10,11 @@ heldBy:
 
 **"How do I register this so the core finds it" is a covered question.**
 
-Registering a content type, and registering a class the container resolves by
-name, both fail at request time and neither is a convention of a subsystem or a
-piece of backend markup — the two places an answer was looked for.
+A content type registration and a class the container resolves by name both fail
+at request time. Neither is a convention of a subsystem or a piece of backend
+markup, the two places the session looked for an answer.
 
 ## From
 
-A content element registered with a call signature from the previous major, and
-a page title provider that was not public and therefore not found (2026-07-29).
+A content element registered with a call signature from the previous major. A
+page title provider that was not public and therefore never found (2026-07-29).

@@ -11,12 +11,12 @@ coveredBy:
 # D-ANS-045 — The Classes section reports every directory below it
 
 **`typo3_extension_describe` reports every directory below `Classes/` and every
-PHP file under it, and a value it derives from a directory existing is not
-presented as a registration.**
+PHP file under it. A value it derives from the presence of a directory does not
+present as a registration.**
 
 The answer promises "the shape of its Classes/ directory" and describes a
-whitelist of thirteen names. What falls outside is dropped without a trace, and
-a caller who trusts the promise never learns there was more to open.
+whitelist of thirteen names. What falls outside vanishes without a trace, and a
+caller who trusts the promise never learns there was more to open.
 
 ## Evidence
 
@@ -28,7 +28,7 @@ a caller who trusts the promise never learns there was more to open.
   `Classes/Utility/` is under no kind and in no line of the answer.
 - Extension::CLASS_KINDS is a closed list of thirteen names, and
   `Extension::classes()` iterates it and nothing else. A directory that is not
-  on the list is dropped, and so is a PHP file lying directly in `Classes/`.
+  on the list vanishes, and so does a PHP file directly in `Classes/`.
 - Measured against `.checkouts/14.3`, the filter is not an edge case. `core` has
   seventy directories below `Classes/` and 1508 PHP files under it; thirteen of
   those directories and 106 of those files are on the list. `extbase` reports 27
@@ -40,14 +40,14 @@ a caller who trusts the promise never learns there was more to open.
   `Classes/`.
 - Nothing records the whitelist as a boundary.
   [`D-ANS-014`](ans-014-the-extension-answer-enumerates-registrations-not-files.md)
-  puts the file tree on `glob`'s side, and
+  puts the file tree on `glob`'s side.
   [`D-ANS-008`](ans-008-a-number-a-reader-cannot-reproduce-is-read-as-wrong.md)
   deliberately puts this section on the other one: it "describes what an
   extension's `Classes/` holds rather than what it registers". A section on the
   file side that reads thirteen of seventy directories is a filter nobody chose.
 - The `fluidRoots` half holds too. `Extension::fluidRoots()` is `is_dir()` over
-  three fixed names, and the audited extension declares no Fluid root at all:
-  `Classes/EventListener/LoginTourEventListener.php:46` appends
+  three fixed names, and the extension under audit declares no Fluid root at
+  all. `Classes/EventListener/LoginTourEventListener.php:46` appends
   `EXT:guidedtour/Resources/Private/Layouts` to `setLayoutRootPaths()` while the
   event runs.
 - Where that reads as a registration is the text and the description, not the
@@ -60,12 +60,12 @@ a caller who trusts the promise never learns there was more to open.
 ## Decided
 
 - The whitelist goes, and the boundary is that no directory below `Classes/` and
-  no PHP file under it is absent from the answer. That is settled here because
-  it is about this answer's shape rather than about TYPO3.
+  no PHP file under it is absent from the answer. This entry settles that
+  because it is about this answer's shape rather than about TYPO3.
 - Which shape carries it belongs to the todo. A row per directory, the
   feedback's `Other` bucket for a name that matches nothing known, a total
-  beside the breakdown — all three satisfy the line above, and the tool is where
-  they are weighed against each other.
+  beside the breakdown. All three satisfy the line above, and the tool is where
+  the work weighs them against each other.
 - **Queued rather than closed on the spot.** Both halves touch `src/` and the
   declared `outputSchema`, which
   [judging.md](../../documentation/records/judging.rst) puts on the reviewed
@@ -73,11 +73,11 @@ a caller who trusts the promise never learns there was more to open.
 - The priority is `high` for the classes half, and this is what set it. The
   filter is silent, it holds for every extension this server answers for, and
   `skills/typo3-extension-conformance` routes an audit at exactly this section.
-- The `fluidRoots` half is step 4, wording, and narrow: the rendered line and
-  the tool description, not the schema field, which already says what it means.
-  It is `normal`, and it is a second todo because it is a second step.
-- The feedback stays open behind the two todos, and the card that asked for this
-  judgement is deleted by the same commit.
+- The `fluidRoots` half is step 4, wording, and narrow. It is the rendered line
+  and the tool description, not the schema field, which already says what it
+  means. It is `normal`, and it is a second todo because it is a second step.
+- The feedback stays open behind the two todos, and the same commit deletes the
+  card that asked for this judgement.
 
 ## Assumed
 
@@ -88,40 +88,38 @@ a caller who trusts the promise never learns there was more to open.
   subtree, `D-ANS-008` settled that it says so, and nothing here disputes a
   number.
 - That `typoScript`, `files` and `artifacts` are not in the `fluidRoots`
-  position. Each names a file that is there, which is nearer to a reading than
-  to a guess, and none of them was checked here.
+  position. Each names a file that is there, which is nearer to a read than to a
+  guess, and this entry checked none of them.
 
 ## Wrong if
 
 - A feedback reports the widened list as noise. That is
   [`D-ANS-014`](ans-014-the-extension-answer-enumerates-registrations-not-files.md)'s
-  third **Wrong if** arriving at this section, and the boundary would then be in
-  the right place and drawn too far out.
+  third **Wrong if**, arrived at this section. The boundary would then be in the
+  right place and drawn too far out.
 - A caller checks the section after the change and still gets a number `find`
-  disagrees with. What was missing would then be the shape rather than the
-  coverage.
-- `fluidRoots` is read as a registration by a session that had the qualified
-  line in front of it. The field would then be the problem rather than its
-  wording, and removing it would be the change.
+  disagrees with. The gap would then be the shape rather than the coverage.
+- A session that had the qualified line in front of it reads `fluidRoots` as a
+  registration. The field would then be the problem rather than its wording, and
+  its removal would be the change.
 
 ## Since then
 
-The shape left to the todo is settled and it is all three at once: a row per
-directory, the files lying loose counted as their own row, and the total beside
-the breakdown.
+The shape left to the todo stands, and it is all three at once. A row per
+directory, the loose files as their own row, and the total beside the breakdown.
 
-The bucket alone was rejected, because it names no directory and the name is
-what the audit needed — it went past a directory without learning there was one
-to open. The total is there because the check that found the gap was a count,
-and summing forty-six rows by hand is not that check. The **Assumed** section's
-fear is real and accepted: one extension's line names seventy-one things, and
-the cheaper shape buys that back by dropping the names.
+The bucket alone failed, because it names no directory and the name is what the
+audit needed. The audit went past a directory and never learned there was one to
+open. The total is there because the check that found the gap was a count. A sum
+of forty-six rows by hand is not that check. The **Assumed** section's fear is
+real and this entry accepts it. One extension's line names seventy-one things,
+and the cheaper shape buys that back at the price of the names.
 
 ## Since then
 
-Extension::CLASS_KINDS is gone and `Extension::classes()` reads the directory:
+Extension::CLASS_KINDS is gone and `Extension::classes()` reads the directory.
 `Finder::create()->directories()->in($directory)->depth(0)` takes every
 directory below `Classes/`, so the bullet above describes a closed list that no
-longer decides anything. What it settled still holds — the section covers the
-directory it names — and the mechanism under it is the opposite of the one
-recorded, a reading rather than a list.
+longer decides anything. What it settled still holds: the section covers the
+directory it names. The mechanism under it is the opposite of the one recorded,
+a read rather than a list.

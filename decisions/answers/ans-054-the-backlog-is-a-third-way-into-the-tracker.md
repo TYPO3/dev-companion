@@ -20,11 +20,11 @@ enumeration, and resolves the area a caller names against the project's own
 categories.**
 
 The two ways in that existed both start from something the caller already holds:
-a number, or the words a report was written in. A triage holds neither. The
-issue nobody has looked at since 2015 is found by no number, because nobody
-holds it, and by no wording, because its wording is the one nobody thought of.
-That question was unanswerable through this server and cost the caller a hand
-written Redmine URL, which is the shape `D-FBK-027` names as earning a tool.
+a number, or the words of a report. A triage holds neither. No number finds the
+issue nobody has looked at since 2015, because nobody holds it. No wording finds
+it either, because its wording is the one nobody thought of. This server could
+not answer that question, and it cost the caller a hand written Redmine URL.
+That is the shape `D-FBK-027` names as what earns a tool.
 
 ## Evidence
 
@@ -39,9 +39,8 @@ written Redmine URL, which is the shape `D-FBK-027` names as earning a tool.
   `/projects/typo3cms-core.json?include=issue_categories` the same day.
   `/projects/typo3cms-core/issue_categories.json` answers an empty list without
   a credential, so the project is the way to reach them.
-- Nobody types "RTE (rtehtmlarea + ckeditor)". The three questions this was
-  written against were worded "rte", "backend ui" and "are there known bugs in
-  the RTE".
+- Nobody types "RTE (rtehtmlarea + ckeditor)". The three questions this stands
+  against read "rte", "backend ui" and "are there known bugs in the RTE".
 - A substring match on "rte" reaches "Reporter" and "Renderer".
   `Text::containsWord` is what the rest of this server matches prose with, and
   it separates them.
@@ -49,87 +48,86 @@ written Redmine URL, which is the shape `D-FBK-027` names as earning a tool.
 ## Decided
 
 - One tool, three ways in, one record shape. `open` is a third `oneOf` branch
-  beside `issue` and `query`, because the entries a caller reads back are the
-  same identity in all three and `AGENTS.md` gives two tools sharing an output
-  schema one verb.
+  beside `issue` and `query`. The entries a caller reads back are the same
+  identity in all three, and `AGENTS.md` gives two tools with one output schema
+  one verb.
 - The record gained `category`, `assignedTo`, `createdOn` and `updatedOn`. Who
-  holds an issue is what says whether it is free to take; the two dates are the
-  two different questions age is asked as. A search hit answers the four empty,
-  because a hit is a title and the fields are not in it.
+  holds an issue says whether it is free to take; the two dates are the two
+  different questions a caller asks about age. A search hit answers the four
+  empty, because a hit is a title and the fields are not in it.
 - `total` comes back with every page. A caller shown thirty of 2487 that reads
   them as the set has measured the limit rather than the backlog.
-- The categories are fetched and held for a day, not written into the source. A
-  list in the code is one the core can add to without anything reporting it, and
-  the addition is exactly the subsystem somebody would be filtering for.
-- A word matching no category reads nothing and says which areas exist. Sent on
-  unfiltered it would answer with the whole backlog, which is a set about
-  everything wearing the shape of a set about one thing.
+- The tool fetches the categories and holds them for a day, and the source does
+  not carry them. The core can add to a list in the code and nothing reports it,
+  and the addition is exactly the subsystem somebody would filter for.
+- A word that matches no category reads nothing and says which areas exist. Sent
+  on with no filter it would answer with the whole backlog. That is a set about
+  everything in the shape of a set about one thing.
 - The tracker ids **are** written into the source, against the same argument.
-  There are eleven, `/trackers.json` is a second round trip on every
-  enumeration, and a twelfth tracker being unfilterable costs one filter while a
-  missing category costs a wrong answer.
+  There are eleven, and `/trackers.json` is a second round trip on every
+  enumeration. A twelfth tracker with no filter costs one filter, while an
+  absent category costs a wrong answer.
 
 ## Assumed
 
 - The category names the core uses are recognisable in the words a caller
-  brings. "backend ui" reaching four areas including "Language Manager
-  (backend)" is the fallback working as designed and is answered back, not
-  hidden.
-- Enumerating by age is a triage's entry point. If the question that actually
-  gets asked is "what is worth fixing", age is a weak proxy and the ordering
-  earns nothing.
+  brings. "backend ui" reaches four areas, "Language Manager (backend)" among
+  them. That is the fallback at work as designed, and the answer says so rather
+  than hides it.
+- Enumerating by age is a triage's entry point. If the question callers ask is
+  "what is worth a fix", age is a weak proxy and the order earns nothing.
 
 ## Wrong if
 
 - Callers reach the enumeration and then ask the same thing again in other
   words, which would say the filters do not carry the question.
-- The category fallback is reported as wrong more often than it is used: a word
-  selecting four areas where one was meant, in answers people act on.
-- The `total` is read as a promise that the rest is reachable, and callers page
-  by raising `limit` instead of narrowing.
+- Reports call the category fallback wrong more often than callers use it. A
+  word selects four areas where the caller meant one, in answers people act on.
+- Callers read the `total` as a promise that the rest is reachable, and page
+  with a higher `limit` instead of a narrower query.
 - The core adds a tracker and somebody has to release this server to filter by
-  it, which would say the two lists were split on the wrong side.
+  it. That would say the two lists split on the wrong side.
 
 ## Confirmed on 2026-08-05
 
-The question this was written for was asked for real an hour before it landed. A
-session was told by `typo3-core-issue-triage` to call this tool with `open`,
+A session asked the question this entry serves for real an hour before it
+landed. `typo3-core-issue-triage` told a session to call this tool with `open`,
 narrowed by `category` and `tracker`, and the schema had none of it
-(`feedback/2026-08-05-033805`); it left the server and wrote the Redmine URL by
-hand, then spent three round trips guessing at the category id because
-`/issue_categories.json` answers 401 without a credential. That is the shape
-this entry describes, reported independently of it.
+(`feedback/2026-08-05-033805`). The session left the server and wrote the
+Redmine URL by hand. Then it spent three round trips on guesses at the category
+id, because `/issue_categories.json` answers 401 without a credential. That is
+the shape this entry describes, reported independently of it.
 
-Re-run today with the enumeration in place: `open: "oldest"`, `category: "rte"`,
-`tracker: "Bug"` answers 5 of 23, oldest first, with the area resolved to "RTE
-(rtehtmlarea + ckeditor)" and both dates on every row — which is the call that
-session could not make.
+Re-run today with the enumeration in place. `open: "oldest"`, `category: "rte"`,
+`tracker: "Bug"` answers 5 of 23, oldest first. The area resolves to "RTE
+(rtehtmlarea + ckeditor)" and both dates stand on every row. That is the call
+that session could not make.
 
 ## Since then
 
 Two of its **Decided** bullets have moved, and neither statement above them has.
 
 A search hit no longer answers the four fields empty. What that reads as to a
-caller was the next thing reported, and
-[`D-ANS-056`](ans-056-a-search-hit-is-filled-from-the-issue-it-is.md) is where
-that was decided; the reasoning here — a hit is a title, and the fields are not
-in it — is why it takes a further call rather than a wider parse.
+caller was the next report, and
+[`D-ANS-056`](ans-056-a-search-hit-is-filled-from-the-issue-it-is.md) decided
+that. The reason here is that a hit is a title and the fields are not in it.
+That is why it takes a further call rather than a wider parse.
 
 The same feedback found that RTE reports sit under
-System/Bootstrap/Configuration and under Link Handling as well as under RTE, so
+System/Bootstrap/Configuration and under Link Handling as well as under RTE. So
 an area filter is a floor rather than the set. The enumeration says that in its
-answer where a category was used, which the "the areas that exist come back"
-bullet did not cover: a word that matched is as much of a partial answer as a
-word that did not.
+answer where the caller used a category, which the "the areas that exist come
+back" bullet did not cover. A word that matched is as much of a partial answer
+as a word that did not.
 
 ## Since then
 
-**The first and third Wrong if are engaged by a question this was not built
-for.** A caller whose words matched nothing is now routed into this enumeration,
-so a duplicate check arrives beside the triage. The second **Assumed** covers
-the difference and was written the other way round: enumerating by age is a
-triage's entry point, and a duplicate of a defect somebody has just found is at
-the end neither ordering reaches — both are ascending.
+**A question this was not built for engages the first and third Wrong if.** A
+caller whose words matched nothing is now routed into this enumeration, so a
+duplicate check arrives beside the triage. The second **Assumed** covers the
+difference and reads the other way round. An enumeration by age is a triage's
+entry point. A duplicate of a defect somebody has just found is at the end
+neither order reaches, because both ascend.
 
-Measured: one area holds 437 open issues against the 26 the routing was written
-on, so a caller sent here for that question reads a fraction of them.
+Measured: one area holds 437 open issues against the 26 the routing rests on. So
+a caller sent here for that question reads a fraction of them.

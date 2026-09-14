@@ -3911,7 +3911,7 @@ final class SkillTest extends TestCase
             '**Make the package\'s own manifest the Composer root package.**',
             '**Declare the container.**',
             '**Install non-interactively.**',
-            '**Seed the content the package is to be developed against**',
+            '**Seed the content the package\'s development runs against**',
             '**Decide what the install wrote into the repository.**',
         ];
         $position = -1;
@@ -4008,7 +4008,7 @@ final class SkillTest extends TestCase
         $exceptions = (int) strpos($skill, 'id=installation-exception-output');
         self::assertGreaterThan($proving, $exceptions, 'the exception lookup is named before the site is proved');
         self::assertNotNull(Hints::byId('installation-exception-output'));
-        self::assertStringContainsString('which codes are shown and never written at all', $flat);
+        self::assertStringContainsString('which codes it shows and never writes at all', $flat);
 
         // What the closing section owes is read off the repository and not off
         // the session: `070448` authored every step and committed nothing, so
@@ -4018,7 +4018,7 @@ final class SkillTest extends TestCase
             'follows from what the install wrote into the repository',
             $flat,
         );
-        self::assertStringContainsString('Where every path it wrote is ignored', $flat);
+        self::assertStringContainsString('Git may ignore every path it wrote', $flat);
         self::assertStringContainsString('the report names the two and says why', $flat);
 
         // Both directions of the crossing, because the feedback asked for both.
@@ -4027,7 +4027,7 @@ final class SkillTest extends TestCase
         // and wrote the tests here forty minutes later — `R-SKL-018`.
         self::assertStringContainsString('typo3-extension-testing', $skill);
         self::assertStringContainsString('The moment this task grows a test, invoke', $flat);
-        self::assertStringContainsString('stops before editing that owner\'s files', $flat);
+        self::assertStringContainsString('stops before you edit that owner\'s files', $flat);
         self::assertStringContainsString(
             'a suite that needs a served site and has none is this workflow first',
             $flat,
@@ -4043,9 +4043,9 @@ final class SkillTest extends TestCase
         // that decided the diagnosis was in the page it had been told not to
         // fetch. So the detour is bounded by what was thrown, and the empty log
         // is stated as the finding rather than as a missing file.
-        self::assertStringContainsString('the detour this replaces wherever something was thrown', $flat);
+        self::assertStringContainsString('the detour this replaces wherever something threw', $flat);
         self::assertStringContainsString('A log that stayed empty is itself the finding', $flat);
-        self::assertStringContainsString('fetching it is right here where it was the detour above', $flat);
+        self::assertStringContainsString('Its fetch is right here where it was the detour above', $flat);
 
         // The bullet above separates a request that matched a site from one
         // that matched none, and only the second half had a lookup. The first
@@ -4117,7 +4117,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-development-installation/SKILL.md',
         ));
 
-        $console = strpos($skill, 'option set is read off the installed console');
+        $console = strpos($skill, 'option set off the installed console');
         self::assertNotFalse($console, 'the setup step reads its option set from somewhere other than the console');
         self::assertStringContainsString('reports an option as disabled where a package it needs is inactive', $skill);
         self::assertStringContainsString('From 14 on', $skill);

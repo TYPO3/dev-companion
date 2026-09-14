@@ -4,23 +4,23 @@
 ==========================
 
 Search the TYPO3 changelog: one entry per breaking change, deprecation, feature
-and important note, in the version it was released in. This reads the entries;
-writing one for a core patch of your own is the other direction and is
+and important note, in the version of its release. This reads the entries. An
+entry for a core patch of your own is the other direction, and it is
 typo3_rule_lookup with documentId "core/contribution/changelog". Answers "what
 did this version deprecate", "what changed about X", "which release introduced
 Y". This is the first stop when you build on a major you have not built on
 recently. What separates a current answer from a two-major-old one stands here
-and almost nowhere else. A deprecation carries the version it stops working in
+and almost nowhere else. A deprecation carries the version it stops to work in
 where the entry states one, and the rule that answers the rest beside it. The
 tool reads the versions the installation ships from the core package on disk. It
 reads the ones above its own major from docs.typo3.org, which is what an upgrade
-to a version you have not installed asks for. Every word of the query has to be
-carried by an entry; narrow further with type and version. A version and a type
-with the query omitted list whole under a raised limit. That is the deprecation
-sweep of one major in a single call. A method or class you found in the code is
-a query of its own. An identifier reaches the entries that name it, whether or
-not the change has its title. That holds inside the installed versions, which
-are the ones whose text is on disk. Answers from: packages, network.
+to a version you have not installed asks for. An entry has to carry every word
+of the query; narrow further with type and version. A version and a type with
+the query omitted list whole under a raised limit. That is the deprecation sweep
+of one major in a single call. A method or class you found in the code is a
+query of its own. An identifier reaches the entries that name it, whether or not
+the change has its title. That holds inside the installed versions, which are
+the ones whose text is on disk. Answers from: packages, network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 
@@ -45,7 +45,7 @@ Takes
     # is what to ask again with. Omit to list a version or a type as a whole.
     query: string  # optional
     # One of: breaking, deprecation, feature, important. Restrict to one kind of
-    # change. Breaking and deprecation are what affects existing code.
+    # change. Breaking and deprecation are what affects code you have.
     type: string  # optional
     # Restrict to a version, by prefix: "14" covers 14.0 through 14.3.x, "13.4"
     # covers 13.4 and 13.4.x.
@@ -70,7 +70,7 @@ Answers with
 .. code-block:: yaml
 
     query: string
-    # Entries carrying every word of the query and the tag, before the limit.
+    # Entries that carry every word of the query and the tag, before the limit.
     matchCount: integer  # optional
     # Where the query matched. "name" is the entry names. "body" is where no name
     # carried it and the inside of the file did. That is the title as the file
@@ -79,21 +79,21 @@ Answers with
     # answer carries entries.
     matchedIn: string  # optional
     # Every index tag the entries of this version and type carry, with the ones
-    # already filtered by among them. Returned where a tag was asked for, so a tag
-    # that matched nothing can be replaced by one that exists.
+    # already filtered by among them. Returned where the call named a tag, so you
+    # replace a tag that matched nothing with one that exists.
     tags: [string]  # optional
     entries:  # optional
       - # One of: Breaking, Deprecation, Feature, Important.
         type: string
-        # The version directory it was released in.
+        # The version directory of its release.
         version: string
         # Forge issue number.
         issue: string
         title: string
-        # The version a Deprecation states the deprecated thing stops working in —
-        # what an upgrade decides on. Empty on the other three types, and on a
-        # deprecation whose entry states none. That is most of a major and does not
-        # mean "no removal planned"; removalRule answers it there.
+        # The version a Deprecation states the deprecated thing stops to work in,
+        # which is what an upgrade decides on. Empty on the other three types, and
+        # on a deprecation whose entry states none. That is most of a major and does
+        # not mean "no removal planned"; removalRule answers it there.
         removal: string
         # What to write instead, as the entry's own Migration section states it,
         # code blocks included. Carried where the call reached one entry, by an
@@ -114,10 +114,10 @@ Answers with
         # what an upgrade reads, and it moves for a major without a release yet.
         publishedIn: string
     # What each word of the query reaches on its own, inside the version and the
-    # type that were asked for. A word at 0 is the one that emptied the answer —
-    # it is misspelled, or nothing here is named after it. Returned on a miss that
-    # carried words. These are counts and not a query: termSubsets is what can be
-    # asked outright.
+    # type the call named. A word at 0 is the one that emptied the answer: a
+    # misspelt word, or nothing here carries its name. Returned on a miss that
+    # carried words. These are counts and not a query; termSubsets is what you ask
+    # outright.
     termCounts:  # optional
       - # The word, lowercased as the search used it.
         term: string
@@ -138,17 +138,17 @@ Answers with
     termSubsets:  # optional
       - # Words of the query, as a query to ask again with.
         terms: [string]
-        # Entries carrying every word of this subset, inside the same version and
+        # Entries that carry every word of this subset, inside the same version and
         # type.
         matchCount: integer
-    # When a deprecation stops working where the entry itself does not say. Returned
+    # When a deprecation stops to work where the entry itself does not say. Returned
     # where the answer carries a deprecation.
     removalRule: string  # optional
     # The versions this installation ships changelog entries for, newest first.
     versions: [string]  # optional
     # The versions above those, read from docs.typo3.org, newest first. Absent where
-    # the host did not answer, which is the one case a version is missing from this
-    # answer rather than from the changelog.
+    # the host did not answer, which is the one case this answer lacks a version
+    # rather than the changelog.
     versionsFromTheManual: [string]  # optional
     # One of: packages. packages: the server read the files the installed packages
     # ship, because it could not ask the console. The answer misses the overrides

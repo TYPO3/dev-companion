@@ -319,7 +319,7 @@ Text:
     Recognized as: Deprecation
     Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.
     Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
-    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
     Hints:
     The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
@@ -374,55 +374,54 @@ Text:
     ## Deprecations
     Source: TYPO3 Core Commit Message Rules (typo3://guides/core/contribution/commit-messages) — matches 100% of the query terms
 
-    - Deprecations must not use `[!!!]`.
-    - Deprecations may only use `[TASK]` or `[FEATURE]`.
-    - Deprecations must be documented with a changelog RST file.
-    - Deprecations need migration guidance and may need extension scanner
+    - A deprecation must not use `[!!!]`.
+    - A deprecation may only use `[TASK]` or `[FEATURE]`.
+    - A deprecation must have a changelog RST file.
+    - A deprecation needs migration guidance and may need extension scanner
       considerations.
-    - All of the above is the authoring side. Reading it — what a given version
-      deprecated, and what that means for code that uses it — works the other way
-      round: the changelog files below `Documentation/Changelog/` of the core
-      package and the matchers below the install package's
-      `Configuration/ExtensionScanner/Php/` are what an installation is checked
-      against, by the Extension Scanner in the Install Tool. Both directories ship
-      with a Composer installation.
+    - All of the above is the author's side. The reader's side works the other way
+      round. It asks what a given version deprecated, and what that means for code
+      that uses it. The Extension Scanner in the Install Tool checks an installation
+      against two directories. Those are the changelog files below
+      `Documentation/Changelog/` of the core package, and the matchers below the
+      install package's `Configuration/ExtensionScanner/Php/`. Both ship with a
+      Composer installation.
 
     ## Breaking Changes
     Source: TYPO3 Core Commit Message Rules (typo3://guides/core/contribution/commit-messages) — matches 100% of the query terms
 
-    - Breaking changes must use `[!!!]` before the keyword.
-    - Breaking changes must be documented with a changelog RST file.
-    - Breaking changes should usually target `main`.
+    - A breaking change must use `[!!!]` before the keyword.
+    - A breaking change must have a changelog RST file.
+    - A breaking change should usually target `main`.
     - A removed or narrowed PHP API gets an extension scanner matcher entry in the
       same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.
-      How the removed member is written where it is used decides the file:
+      How code writes the removed member where it uses it decides the file:
       - `MethodCallMatcher.php` — an instance method.
       - `MethodCallStaticMatcher.php` — a static method.
       - `PropertyPublicMatcher.php` — a removed public property.
       - `PropertyProtectedMatcher.php` — a public property that became protected.
       - `ClassNameMatcher.php` — a whole class or interface.
     - Visibility routes a property and never a method. The method matchers are a
-      weak match on the method name where it is used, and they do not resolve the
-      class, so they cannot see one. A method that is protected, or that has become
-      protected, is entered where a public one is.
-      `RendererRegistry->getRendererInstances` went from public to protected in
-      `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The list above
-      has no row for a protected method because none is needed, and that absence
-      says nothing about whether an entry is owed.
-    - An entry is keyed by the fully qualified name with `->` or `::` and carries
-      `restFiles`, naming the changelog file that removed it. The method matchers
-      add `numberOfMandatoryArguments` and `maximumNumberOfArguments`. A member
-      deprecated before it was removed lists both changelog files.
+      weak match on the method name where code uses it. They do not resolve the
+      class, so they cannot see visibility, and a protected method goes with a
+      public one. `RendererRegistry->getRendererInstances` went from public to
+      protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The
+      list above has no row for a protected method because it needs none. That
+      absence says nothing about whether the change owes an entry.
+    - The fully qualified name with `->` or `::` keys an entry. The entry carries
+      `restFiles`, which names the changelog file that removed the member. The
+      method matchers add `numberOfMandatoryArguments` and
+      `maximumNumberOfArguments`. A member deprecated before its removal lists both
+      changelog files.
     - Every Breaking and Deprecation entry carries exactly one of `NotScanned`,
-      `PartiallyScanned` and `FullyScanned` in its `.. index::` line, and that tag
-      is the claim those entries have to back: `FullyScanned` says every item the
-      changelog entry names can be found. The scanner reads PHP, so what an entry
-      changes in TypoScript, TCA, YAML or JavaScript is what leaves it partially
-      scanned.
+      `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is
+      the claim those entries have to back. `FullyScanned` says the scanner finds
+      every item the changelog entry names. The scanner reads PHP. So what an entry
+      changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.
     - `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the
-      changelog files the matchers name exist, and nothing checks the other
-      direction. A missing entry surfaces when somebody audits the matcher files
-      against the changelog.
+      changelog files the matchers name exist. Nothing checks the other direction. A
+      missing entry surfaces when somebody audits the matcher files against the
+      changelog.
 
     Each excerpt above is one section of a longer document, and each page below carries the `##` headings that are not above. Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list:
     - core/contribution/commit-messages — TYPO3 Core Commit Message Rules: 11 of its 13 headings are not above — Who Reads It, Summary Line, Work in Progress, Body, The Longest Line The Hook Accepts, Relationships, Release Targets, The Trailers A Core Commit Carries, What The Commit Hook Writes, Changed Signatures, The Changelog Entry a Message Announces.
@@ -521,7 +520,7 @@ Data:
             {
                 "id": "any/writing/the-prose-a-patch-carries",
                 "title": "The Prose a Patch Carries",
-                "when": "Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
                 "scope": "any",
                 "tool": "typo3_rule_lookup"
             }
@@ -763,7 +762,7 @@ Data:
                 "title": "TYPO3 Core Commit Message Rules",
                 "uri": "typo3://guides/core/contribution/commit-messages",
                 "heading": "Deprecations",
-                "body": "- Deprecations must not use `[!!!]`.\n- Deprecations may only use `[TASK]` or `[FEATURE]`.\n- Deprecations must be documented with a changelog RST file.\n- Deprecations need migration guidance and may need extension scanner\n  considerations.\n- All of the above is the authoring side. Reading it — what a given version\n  deprecated, and what that means for code that uses it — works the other way\n  round: the changelog files below `Documentation/Changelog/` of the core\n  package and the matchers below the install package's\n  `Configuration/ExtensionScanner/Php/` are what an installation is checked\n  against, by the Extension Scanner in the Install Tool. Both directories ship\n  with a Composer installation.",
+                "body": "- A deprecation must not use `[!!!]`.\n- A deprecation may only use `[TASK]` or `[FEATURE]`.\n- A deprecation must have a changelog RST file.\n- A deprecation needs migration guidance and may need extension scanner\n  considerations.\n- All of the above is the author's side. The reader's side works the other way\n  round. It asks what a given version deprecated, and what that means for code\n  that uses it. The Extension Scanner in the Install Tool checks an installation\n  against two directories. Those are the changelog files below\n  `Documentation/Changelog/` of the core package, and the matchers below the\n  install package's `Configuration/ExtensionScanner/Php/`. Both ship with a\n  Composer installation.",
                 "versions": "",
                 "coverage": 1,
                 "score": 68,
@@ -774,7 +773,7 @@ Data:
                 "title": "TYPO3 Core Commit Message Rules",
                 "uri": "typo3://guides/core/contribution/commit-messages",
                 "heading": "Breaking Changes",
-                "body": "- Breaking changes must use `[!!!]` before the keyword.\n- Breaking changes must be documented with a changelog RST file.\n- Breaking changes should usually target `main`.\n- A removed or narrowed PHP API gets an extension scanner matcher entry in the\n  same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.\n  How the removed member is written where it is used decides the file:\n  - `MethodCallMatcher.php` — an instance method.\n  - `MethodCallStaticMatcher.php` — a static method.\n  - `PropertyPublicMatcher.php` — a removed public property.\n  - `PropertyProtectedMatcher.php` — a public property that became protected.\n  - `ClassNameMatcher.php` — a whole class or interface.\n- Visibility routes a property and never a method. The method matchers are a\n  weak match on the method name where it is used, and they do not resolve the\n  class, so they cannot see one. A method that is protected, or that has become\n  protected, is entered where a public one is.\n  `RendererRegistry->getRendererInstances` went from public to protected in\n  `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The list above\n  has no row for a protected method because none is needed, and that absence\n  says nothing about whether an entry is owed.\n- An entry is keyed by the fully qualified name with `->` or `::` and carries\n  `restFiles`, naming the changelog file that removed it. The method matchers\n  add `numberOfMandatoryArguments` and `maximumNumberOfArguments`. A member\n  deprecated before it was removed lists both changelog files.\n- Every Breaking and Deprecation entry carries exactly one of `NotScanned`,\n  `PartiallyScanned` and `FullyScanned` in its `.. index::` line, and that tag\n  is the claim those entries have to back: `FullyScanned` says every item the\n  changelog entry names can be found. The scanner reads PHP, so what an entry\n  changes in TypoScript, TCA, YAML or JavaScript is what leaves it partially\n  scanned.\n- `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the\n  changelog files the matchers name exist, and nothing checks the other\n  direction. A missing entry surfaces when somebody audits the matcher files\n  against the changelog.",
+                "body": "- A breaking change must use `[!!!]` before the keyword.\n- A breaking change must have a changelog RST file.\n- A breaking change should usually target `main`.\n- A removed or narrowed PHP API gets an extension scanner matcher entry in the\n  same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.\n  How code writes the removed member where it uses it decides the file:\n  - `MethodCallMatcher.php` — an instance method.\n  - `MethodCallStaticMatcher.php` — a static method.\n  - `PropertyPublicMatcher.php` — a removed public property.\n  - `PropertyProtectedMatcher.php` — a public property that became protected.\n  - `ClassNameMatcher.php` — a whole class or interface.\n- Visibility routes a property and never a method. The method matchers are a\n  weak match on the method name where code uses it. They do not resolve the\n  class, so they cannot see visibility, and a protected method goes with a\n  public one. `RendererRegistry->getRendererInstances` went from public to\n  protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The\n  list above has no row for a protected method because it needs none. That\n  absence says nothing about whether the change owes an entry.\n- The fully qualified name with `->` or `::` keys an entry. The entry carries\n  `restFiles`, which names the changelog file that removed the member. The\n  method matchers add `numberOfMandatoryArguments` and\n  `maximumNumberOfArguments`. A member deprecated before its removal lists both\n  changelog files.\n- Every Breaking and Deprecation entry carries exactly one of `NotScanned`,\n  `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is\n  the claim those entries have to back. `FullyScanned` says the scanner finds\n  every item the changelog entry names. The scanner reads PHP. So what an entry\n  changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.\n- `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the\n  changelog files the matchers name exist. Nothing checks the other direction. A\n  missing entry surfaces when somebody audits the matcher files against the\n  changelog.",
                 "versions": "",
                 "coverage": 1,
                 "score": 21,
@@ -897,8 +896,8 @@ Text:
     Domains: php
     Recognized as: Backend UI markup
     Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
-    - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.
-    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+    - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.
+    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
     Hints:
     - No hint matched this task text. That means no convention was recognized, not that none applies: call typo3_hint_lookup again with the concrete file paths once they are known.
@@ -910,13 +909,13 @@ Text:
     ## Testing
     Source: TYPO3 Core Contribution Rules (typo3://guides/core/contribution/rules) — matches 50% of the query terms
 
-    - Unit tests are expected for isolated behavior.
-    - Functional tests are expected for persistence, configuration, routing, backend
-      behavior, or integration with TYPO3 services.
-    - End-to-end tests, the `e2e` suite, are useful when the change affects editor
-      or administrator workflows and only breaks in the assembled backend. They
-      replaced the former acceptance suites.
-    - Document tests that could not be executed and why.
+    - A reviewer expects a unit test for isolated behavior.
+    - A reviewer expects a functional test for persistence, configuration, routing,
+      backend behavior, or integration with TYPO3 services.
+    - An end-to-end test in the `e2e` suite is useful for a change to an editor or
+      administrator workflow. Such a change breaks only in the assembled backend.
+      That suite replaced the former acceptance suites.
+    - Document the tests you could not execute and why.
 
     Each excerpt above is one section of a longer document, and each page below carries the `##` headings that are not above. Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list:
     - core/contribution/rules — TYPO3 Core Contribution Rules: 4 of its 5 headings are not above — Contribution Flow, Code Style, Documentation, Review Readiness.
@@ -1008,14 +1007,14 @@ Data:
             {
                 "id": "any/testing/browser-check",
                 "title": "Looking at a Change in a Real Browser",
-                "when": "When a defect has to be seen rather than asserted — a position, a stacking order, something that only appears while scrolling — and when a screenshot or a browser session has to run against an installation that already has the content.",
+                "when": "When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.",
                 "scope": "any",
                 "tool": "typo3_rule_lookup"
             },
             {
                 "id": "any/writing/the-prose-a-patch-carries",
                 "title": "The Prose a Patch Carries",
-                "when": "Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
                 "scope": "any",
                 "tool": "typo3_rule_lookup"
             }
@@ -1028,7 +1027,7 @@ Data:
                 "title": "TYPO3 Core Contribution Rules",
                 "uri": "typo3://guides/core/contribution/rules",
                 "heading": "Testing",
-                "body": "- Unit tests are expected for isolated behavior.\n- Functional tests are expected for persistence, configuration, routing, backend\n  behavior, or integration with TYPO3 services.\n- End-to-end tests, the `e2e` suite, are useful when the change affects editor\n  or administrator workflows and only breaks in the assembled backend. They\n  replaced the former acceptance suites.\n- Document tests that could not be executed and why.",
+                "body": "- A reviewer expects a unit test for isolated behavior.\n- A reviewer expects a functional test for persistence, configuration, routing,\n  backend behavior, or integration with TYPO3 services.\n- An end-to-end test in the `e2e` suite is useful for a change to an editor or\n  administrator workflow. Such a change breaks only in the assembled backend.\n  That suite replaced the former acceptance suites.\n- Document the tests you could not execute and why.",
                 "versions": "",
                 "coverage": 0.5,
                 "score": 35,
@@ -1184,7 +1183,7 @@ Text:
     Possibly also: Registering an event listener, only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this. Its checklist items are marked as conditional below and its checks are listed separately.
     Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.
     Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
-    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
     Hints:
     The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
@@ -1331,7 +1330,7 @@ Data:
             {
                 "id": "any/writing/the-prose-a-patch-carries",
                 "title": "The Prose a Patch Carries",
-                "when": "Before writing the comments and docblocks of a patch somebody else will review, and again before the patch is handed over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
                 "scope": "any",
                 "tool": "typo3_rule_lookup"
             }

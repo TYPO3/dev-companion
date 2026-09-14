@@ -112,7 +112,7 @@ the shortest line that matches.
   defect present on an older maintained line does not put that line in the
   trailer. The older lines take priority bug fixes and grave or
   security-relevant defects. When you name one for an ordinary fix, you ask a
-  merger to cherry-pick onto a line the change was not for.
+  merger to cherry-pick onto the wrong line.
 - So the trailer is two judgements rather than one. Where the defect is, on each
   line, is the first. Whether its severity earns an older line is the second.
   You state that judgement rather than derive it from the first.
@@ -189,8 +189,8 @@ copy of the message to decide whether to.
   - `ClassNameMatcher.php` — a whole class or interface.
 - Visibility routes a property and never a method. The method matchers are a
   weak match on the method name where code uses it. They do not resolve the
-  class, so they cannot see visibility, and a protected method goes where a
-  public one goes. `RendererRegistry->getRendererInstances` went from public to
+  class, so they cannot see visibility, and a protected method goes with a
+  public one. `RendererRegistry->getRendererInstances` went from public to
   protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The
   list above has no row for a protected method because it needs none. That
   absence says nothing about whether the change owes an entry.

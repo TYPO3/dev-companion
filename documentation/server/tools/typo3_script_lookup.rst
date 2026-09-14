@@ -113,16 +113,16 @@ Text:
     ## Invoking runTests.sh
     Source: TYPO3 Core Script Help (typo3://guides/core/testing/scripts) — matches 100% of the query terms
 
-    `Build/Scripts/runTests.sh` runs every suite inside a container and is started
+    `Build/Scripts/runTests.sh` runs every suite inside a container. You start it
     from the core checkout root.
 
-    - Prefix scripted or non-interactive runs with `CI=true`. It drops the
+    - Prefix a scripted or non-interactive run with `CI=true`. It drops the
       interactive container flags, skips the SIGINT trap, and picks the CI phpstan
       configuration. Without a TTY the script removes the interactive flags on its
       own, but `CI=true` is the explicit form.
-    - Everything after `--` is passed through unchanged: to phpunit for the test
-      suites, to npm for `-s npm`, to composer for `-s composer`.
-    - Run one file or one method while iterating; a full suite costs minutes per
+    - The script passes everything after `--` through unchanged. It goes to phpunit
+      for the test suites, to npm for `-s npm`, to composer for `-s composer`.
+    - Run one file or one method while you iterate. A full suite costs minutes per
       round.
     - `./Build/Scripts/runTests.sh -h` lists the suites and option values the
       checked-out branch supports.
@@ -146,15 +146,15 @@ Text:
     - `-a mysqli|pdo_mysql` selects the driver for mysql and mariadb.
     - `-i <version>` pins a database version, for example `-d mariadb -i 11.4`.
     - `-p <php minor>` selects the PHP version of the container.
-    - `-n` turns the `cgl` suites, and any other suite the branch lists under it,
-      into a dry run that only reports.
+    - `-n` turns the `cgl` suites into a dry run that only reports. The same holds
+      for any other suite the branch lists under it.
     - `-c <chunk>/<total>` splits `-s functional`, and the browser suite where the
       branch has one, into chunks.
     - `-x` (with optional `-y <port>`) enables xdebug towards a listening IDE.
-    - `-b docker|podman` selects the container runtime; podman is the default.
+    - `-b docker|podman` selects the container runtime. podman is the default.
 
     ## Common Commands
-    Source: TYPO3 Core Script Help (typo3://guides/core/testing/scripts) — matches 63% of the query terms
+    Source: TYPO3 Core Script Help (typo3://guides/core/testing/scripts) — matches 62% of the query terms
 
     ### Install Dependencies
 
@@ -162,25 +162,27 @@ Text:
     CI=true ./Build/Scripts/runTests.sh -s composerInstall
     ```
 
-    A suite runs against the `vendor/` and `bin/` of the directory it is started
-    from, because `runTests.sh` mounts that directory and nothing else. A fresh
-    clone has neither, and so does a git worktree of a checkout that has them:
-    `/vendor/*` and `/bin/*` are gitignored, so git never brings them. The first
-    suite there stops at `exec: line 9: bin/phpunit: not found`, which names phpunit
-    rather than the directory, so the cause is not readable from the symptom. Run
-    the install once in that directory first.
+    A suite runs against the `vendor/` and `bin/` of the directory you start it
+    from. `runTests.sh` mounts that directory and nothing else. A fresh clone has
+    neither, and neither does a git worktree of a checkout that has them. Git
+    ignores `/vendor/*` and `/bin/*`, so it never brings them.
 
-    Symlinking `vendor/` and `bin/` from another checkout does not stand in for it.
-    The target sits outside the one mount and does not resolve inside the container,
-    whether the link is absolute or relative.
+    The first suite there stops at `exec: line 9: bin/phpunit: not found`. That
+    names phpunit rather than the directory, so you cannot read the cause from the
+    symptom. Run the install once in that directory first.
+
+    A symlink of `vendor/` and `bin/` from another checkout does not stand in for
+    it. The target sits outside the one mount and does not resolve inside the
+    container. That holds whether the link is absolute or relative.
 
     `composer install` on the host installs the same dependencies, but it wants the
-    PHP the branch requires; the containerised form is why `runTests.sh` exists.
-    Either way this is a precondition and not a step: a checkout that already has
-    `vendor/` needs it again only after `composer.json` or `composer.lock` changed.
+    PHP the branch requires. The container form is why `runTests.sh` exists. Either
+    way this is a precondition and not a step. A checkout that already has `vendor/`
+    needs it again only after `composer.json` or `composer.lock` changed.
 
     Each of those two changes has a symptom of its own, and neither names the
-    install: *When a Suite Fails for the Install Rather Than the Code* below.
+    install. The section *When a Suite Fails for the Install Rather Than the Code*
+    has them.
 
     ### Run PHP Unit Tests
 
@@ -189,7 +191,7 @@ Text:
     ```
 
     Runs the TYPO3 core unit test suite. Add a path or `--filter` after `--` when
-    working on a narrow area.
+    you work on a narrow area.
 
     ### Run Functional Tests
 
@@ -207,13 +209,15 @@ Text:
     CI=true ./Build/Scripts/runTests.sh -s cgl -n
     ```
 
-    Checks coding guidelines for all core PHP files and reports without changing
-    them; drop `-n` to have them fixed. `-s cglGit` runs
+    Checks the coding guidelines for all core PHP files and reports without a change
+    to them. Drop `-n` to have the suite fix them. `-s cglGit` runs
     `Build/Scripts/cglFixMyCommit.sh` over the latest commit alone and is quicker,
-    but only from a normal checkout: that script asks git for its file list inside
-    the container, and a git worktree keeps its gitdir outside the mounted
-    directory, so git fails, the list comes back empty and the suite reports SUCCESS
-    having read no file. `-s cgl` asks git nothing and works from either.
+    but only from a normal checkout.
+
+    That script asks git for its file list inside the container. A git worktree
+    keeps its gitdir outside the mounted directory, so git fails and the list comes
+    back empty. The suite then reports SUCCESS after it read no file. `-s cgl` asks
+    git nothing and works from either.
 
     (section truncated — read core/testing/scripts whole for the rest)
 
@@ -235,7 +239,7 @@ Data:
                 "title": "TYPO3 Core Script Help",
                 "uri": "typo3://guides/core/testing/scripts",
                 "heading": "Invoking runTests.sh",
-                "body": "`Build/Scripts/runTests.sh` runs every suite inside a container and is started\nfrom the core checkout root.\n\n- Prefix scripted or non-interactive runs with `CI=true`. It drops the\n  interactive container flags, skips the SIGINT trap, and picks the CI phpstan\n  configuration. Without a TTY the script removes the interactive flags on its\n  own, but `CI=true` is the explicit form.\n- Everything after `--` is passed through unchanged: to phpunit for the test\n  suites, to npm for `-s npm`, to composer for `-s composer`.\n- Run one file or one method while iterating; a full suite costs minutes per\n  round.\n- `./Build/Scripts/runTests.sh -h` lists the suites and option values the\n  checked-out branch supports.\n\n```bash\n# one unit test file\nCI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php\n\n# one unit test method\nCI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php\n\n# one functional test file, sqlite (default)\nCI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/impexp/Tests/Functional/Export/ExportTest.php\n```\n\nFrequently needed options:\n\n- `-d sqlite|mariadb|mysql|postgres` selects the database for `-s functional`\n  and for whichever installer suite the branch carries. sqlite is the default\n  and the fastest.\n- `-a mysqli|pdo_mysql` selects the driver for mysql and mariadb.\n- `-i <version>` pins a database version, for example `-d mariadb -i 11.4`.\n- `-p <php minor>` selects the PHP version of the container.\n- `-n` turns the `cgl` suites, and any other suite the branch lists under it,\n  into a dry run that only reports.\n- `-c <chunk>/<total>` splits `-s functional`, and the browser suite where the\n  branch has one, into chunks.\n- `-x` (with optional `-y <port>`) enables xdebug towards a listening IDE.\n- `-b docker|podman` selects the container runtime; podman is the default.",
+                "body": "`Build/Scripts/runTests.sh` runs every suite inside a container. You start it\nfrom the core checkout root.\n\n- Prefix a scripted or non-interactive run with `CI=true`. It drops the\n  interactive container flags, skips the SIGINT trap, and picks the CI phpstan\n  configuration. Without a TTY the script removes the interactive flags on its\n  own, but `CI=true` is the explicit form.\n- The script passes everything after `--` through unchanged. It goes to phpunit\n  for the test suites, to npm for `-s npm`, to composer for `-s composer`.\n- Run one file or one method while you iterate. A full suite costs minutes per\n  round.\n- `./Build/Scripts/runTests.sh -h` lists the suites and option values the\n  checked-out branch supports.\n\n```bash\n# one unit test file\nCI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php\n\n# one unit test method\nCI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php\n\n# one functional test file, sqlite (default)\nCI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/impexp/Tests/Functional/Export/ExportTest.php\n```\n\nFrequently needed options:\n\n- `-d sqlite|mariadb|mysql|postgres` selects the database for `-s functional`\n  and for whichever installer suite the branch carries. sqlite is the default\n  and the fastest.\n- `-a mysqli|pdo_mysql` selects the driver for mysql and mariadb.\n- `-i <version>` pins a database version, for example `-d mariadb -i 11.4`.\n- `-p <php minor>` selects the PHP version of the container.\n- `-n` turns the `cgl` suites into a dry run that only reports. The same holds\n  for any other suite the branch lists under it.\n- `-c <chunk>/<total>` splits `-s functional`, and the browser suite where the\n  branch has one, into chunks.\n- `-x` (with optional `-y <port>`) enables xdebug towards a listening IDE.\n- `-b docker|podman` selects the container runtime. podman is the default.",
                 "versions": "",
                 "coverage": 1,
                 "score": 18,
@@ -246,9 +250,9 @@ Data:
                 "title": "TYPO3 Core Script Help",
                 "uri": "typo3://guides/core/testing/scripts",
                 "heading": "Common Commands",
-                "body": "### Install Dependencies\n\n```bash\nCI=true ./Build/Scripts/runTests.sh -s composerInstall\n```\n\nA suite runs against the `vendor/` and `bin/` of the directory it is started\nfrom, because `runTests.sh` mounts that directory and nothing else. A fresh\nclone has neither, and so does a git worktree of a checkout that has them:\n`/vendor/*` and `/bin/*` are gitignored, so git never brings them. The first\nsuite there stops at `exec: line 9: bin/phpunit: not found`, which names phpunit\nrather than the directory, so the cause is not readable from the symptom. Run\nthe install once in that directory first.\n\nSymlinking `vendor/` and `bin/` from another checkout does not stand in for it.\nThe target sits outside the one mount and does not resolve inside the container,\nwhether the link is absolute or relative.\n\n`composer install` on the host installs the same dependencies, but it wants the\nPHP the branch requires; the containerised form is why `runTests.sh` exists.\nEither way this is a precondition and not a step: a checkout that already has\n`vendor/` needs it again only after `composer.json` or `composer.lock` changed.\n\nEach of those two changes has a symptom of its own, and neither names the\ninstall: *When a Suite Fails for the Install Rather Than the Code* below.\n\n### Run PHP Unit Tests\n\n```bash\nCI=true ./Build/Scripts/runTests.sh -s unit\n```\n\nRuns the TYPO3 core unit test suite. Add a path or `--filter` after `--` when\nworking on a narrow area.\n\n### Run Functional Tests\n\n```bash\nCI=true ./Build/Scripts/runTests.sh -s functional\n```\n\nRuns functional tests. Use these for changes that touch TYPO3 services,\npersistence, configuration, or integrations. Add `-d mariadb` or `-d postgres`\nto reproduce DBMS-specific behaviour.\n\n### Run Coding Standards\n\n```bash\nCI=true ./Build/Scripts/runTests.sh -s cgl -n\n```\n\nChecks coding guidelines for all core PHP files and reports without changing\nthem; drop `-n` to have them fixed. `-s cglGit` runs\n`Build/Scripts/cglFixMyCommit.sh` over the latest commit alone and is quicker,\nbut only from a normal checkout: that script asks git for its file list inside\nthe container, and a git worktree keeps its gitdir outside the mounted\ndirectory, so git fails, the list comes back empty and the suite reports SUCCESS\nhaving read no file. `-s cgl` asks git nothing and works from either.",
+                "body": "### Install Dependencies\n\n```bash\nCI=true ./Build/Scripts/runTests.sh -s composerInstall\n```\n\nA suite runs against the `vendor/` and `bin/` of the directory you start it\nfrom. `runTests.sh` mounts that directory and nothing else. A fresh clone has\nneither, and neither does a git worktree of a checkout that has them. Git\nignores `/vendor/*` and `/bin/*`, so it never brings them.\n\nThe first suite there stops at `exec: line 9: bin/phpunit: not found`. That\nnames phpunit rather than the directory, so you cannot read the cause from the\nsymptom. Run the install once in that directory first.\n\nA symlink of `vendor/` and `bin/` from another checkout does not stand in for\nit. The target sits outside the one mount and does not resolve inside the\ncontainer. That holds whether the link is absolute or relative.\n\n`composer install` on the host installs the same dependencies, but it wants the\nPHP the branch requires. The container form is why `runTests.sh` exists. Either\nway this is a precondition and not a step. A checkout that already has `vendor/`\nneeds it again only after `composer.json` or `composer.lock` changed.\n\nEach of those two changes has a symptom of its own, and neither names the\ninstall. The section *When a Suite Fails for the Install Rather Than the Code*\nhas them.\n\n### Run PHP Unit Tests\n\n```bash\nCI=true ./Build/Scripts/runTests.sh -s unit\n```\n\nRuns the TYPO3 core unit test suite. Add a path or `--filter` after `--` when\nyou work on a narrow area.\n\n### Run Functional Tests\n\n```bash\nCI=true ./Build/Scripts/runTests.sh -s functional\n```\n\nRuns functional tests. Use these for changes that touch TYPO3 services,\npersistence, configuration, or integrations. Add `-d mariadb` or `-d postgres`\nto reproduce DBMS-specific behaviour.\n\n### Run Coding Standards\n\n```bash\nCI=true ./Build/Scripts/runTests.sh -s cgl -n\n```\n\nChecks the coding guidelines for all core PHP files and reports without a change\nto them. Drop `-n` to have the suite fix them. `-s cglGit` runs\n`Build/Scripts/cglFixMyCommit.sh` over the latest commit alone and is quicker,\nbut only from a normal checkout.\n\nThat script asks git for its file list inside the container. A git worktree\nkeeps its gitdir outside the mounted directory, so git fails and the list comes\nback empty. The suite then reports SUCCESS after it read no file. `-s cgl` asks\ngit nothing and works from either.",
                 "versions": "",
-                "coverage": 0.633,
+                "coverage": 0.624,
                 "score": 11,
                 "truncated": true
             }

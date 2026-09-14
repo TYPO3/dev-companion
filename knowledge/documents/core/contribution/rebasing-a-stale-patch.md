@@ -10,9 +10,9 @@ hints:
 # Rebasing a Stale Patch
 
 A rebase that raised no conflict is not a patch that still holds. Where a change
-rewrites a class rather than edits it, every later fix `main` landed in that
-class is at risk. Git reports nothing, because the code moved to a different
-file and no text collides.
+rewrites a class rather than edits it, every later fix `main` landed there is at
+risk. Git reports nothing, because the code moved to a different file and no
+text collides.
 
 The four steps below say whether that happened. They are cheap. They stand in
 this order because each narrows what the next one reads. None of them is what a

@@ -71,7 +71,7 @@ you have replaced the literals.
 
 A test suite that passes proves its assertions. What proves a rename is a query
 for the old prefix over the columns that carry a name as data. Those are
-`CType`, `backend_layout`, `tablenames` and `ref_table`. A reference index that
-comes back clean proves the rest, and a read of the backend afterwards proves it
-once more. The record list and the page module are where TYPO3 draws an invalid
-value. A frontend that renders is no evidence about either.
+`CType`, `backend_layout`, `tablenames` and `ref_table`. A clean reference index
+proves the rest, and a read of the backend afterwards proves it once more. The
+record list and the page module are where TYPO3 draws an invalid value. A
+frontend that renders is no evidence about either.

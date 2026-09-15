@@ -8,52 +8,53 @@ namespace TYPO3\DevCompanion\Feedback;
  * Takes a value that looks like a credential out of text a session wrote, and
  * says what it took out.
  *
- * A feedback is moved from the project a session is standing in into this
- * checkout, which is committed and pushed. A key, a password or a token pasted
- * as evidence therefore leaves the repository that owns it for one where nobody
- * is looking for it and nobody can take it back, and no amount of asking the
- * session not to reaches the one that is busy proving what the live value is.
- * What the finding needed was the path and the shape — "the key at
- * `SYS/encryptionKey` is the active one, hardcoded in
- * `config/system/settings.php`" is the whole of it, and the 96 characters after
- * it establish nothing further.
+ * A feedback moves from the project a session stands in into this checkout,
+ * which goes into a commit and a push. So a key, a password or a token pasted
+ * as evidence leaves the repository that owns it. It lands in one where nobody
+ * looks for it and nobody can take it back. No request to the session reaches
+ * the one that is busy with a proof of what the live value is. What the finding
+ * needed was the path and the shape. "The key at `SYS/encryptionKey` is the
+ * active one, hardcoded in `config/system/settings.php`" is the whole of it,
+ * and the 96 characters after it establish nothing further.
  *
  * **Marked, never silently.** The archive keeps a session's report because the
- * report is the evidence, so a reader has to be able to see that something was
- * taken out and go and ask. Every removal leaves `[redacted: …]` naming the
- * shape of what stood there, which is also what makes the corpus checkable: the
- * marker is greppable and the value it replaced is not.
+ * report is the evidence. So a reader has to see that something came out and go
+ * and ask. Every removal leaves `[redacted: …]` with the shape of what stood
+ * there, which is also what makes the corpus checkable. The marker is greppable
+ * and the value it replaced is not.
  *
  * **What counts, and why the thresholds are where they are.** Every rule below
- * was run over the 207 recorded feedback before it was written down, because a
- * rule that redacts a class name or a version string costs more than the leak
- * it prevents. Over that corpus all four together take out exactly one value:
- * the encryption key this was written for.
+ * ran over the 207 recorded feedback before its commit. A rule that redacts a
+ * class name or a version string costs more than the leak it prevents. Over
+ * that corpus all four together take out exactly one value: the encryption key
+ * behind this.
  *
- * - A hexadecimal run of 64 characters or more. The key was 96; a git revision
- *   is 7 to 40 and is quoted constantly in feedback about core patches, so 64
+ * - A hexadecimal run of 64 characters or more. The key was 96. A git revision
+ *   is 7 to 40 and appears constantly in feedback about core patches, so 64
  *   clears the longest of those by 24 characters.
  * - A base64 run of 64 characters or more. The same threshold, for the same
- *   measured reason: at 40 the corpus loses `RemovedPublicMethodsRelated`…,
+ *   measured reason. At 40 the corpus loses `RemovedPublicMethodsRelated`…,
  *   `ImportSiteConfigurationsOnPackageInitialization` and six more changelog
  *   and class names, and at 64 it loses nothing.
- * - A value assigned to a name that says what it is — `password`, `secret`,
+ * - A value assigned to a name that says what it is: `password`, `secret`,
  *   `token`, an API key, an encryption key. This is the half a length rule
- *   cannot see: a short password is only recognisable by the name next to it.
- * - The password in a URL that carries one, `mysqli://user:…@host` — a database
- *   DSN read out of an installation, which is one string and not an assignment.
+ *   cannot see. A short password is only recognisable by the name next to it.
+ * - The password in a URL that carries one, `mysqli://user:…@host`. A database
+ *   DSN out of an installation, which is one string and not an assignment.
  *
- * **What it deliberately does not catch**, so that what holds is readable
- * without reading the code: a base64 value containing `/`, which the corpus
- * showed is indistinguishable from a class path; base64url and the JWTs made of
- * it, whose `-` and `_` run into every changelog identifier; and a short secret
- * standing on its own, with no name and no shape to know it by. A value the
- * session simply describes — "the key is the one in `settings.php`" — is not a
- * leak and is left alone.
+ * **What it does not catch on purpose**, so that what holds is readable without
+ * a read of the code. A base64 value with `/` in it, which the corpus showed
+ * looks the same as a class path. base64url and the JWTs that consist of it,
+ * whose `-` and `_` run into every changelog identifier. And a short secret on
+ * its own, with no name and no shape to know it by. A value the session simply
+ * describes, "the key is the one in `settings.php`", is not a leak and stays
+ * alone.
  */
 final class Redaction
 {
-    /** What is left where a value was, so a reader can see that something was. */
+    /**
+     * What remains where a value was, so a reader can see that something was.
+     */
     private const MARKER = '[redacted: %s]';
 
     /** Names that say the value after them is a credential. */
@@ -63,22 +64,22 @@ final class Redaction
      * A name of that kind, an assignment, and the value it assigns.
      *
      * The separator is where the false positives were. `:` alone matched
-     * `install:password:set` — a console command quoted in a feedback about
-     * setting an installation up — so a colon counts only where a value follows
-     * it, after a space or a quote, which is what YAML, PHP arrays and prose
+     * `install:password:set`, a console command quoted in a feedback about the
+     * setup of an installation. So a colon counts only where a value follows
+     * it, after a space or a quote. That is what YAML, PHP arrays and prose
      * agree on. `=` and `=>` need no such help.
      */
     private const NAMED_VALUE = '~(?<name>(?<![\w-])[\w.$\[\]\'"-]*(?:' . self::NAMES . ')[\w.\[\]\'"-]*)'
         . '(?<separator>\s*(?:=>|=|:(?=\s|[\'"]))\s*)'
         . '(?<value>\'[^\']+\'|"[^"]+"|[^\s,;)\]}\[]+)~i';
 
-    /** `scheme://user:password@host`, of which only the password is taken. */
+    /** `scheme://user:password@host`, of which only the password comes out. */
     private const URL_CREDENTIALS = '~\b(?<prefix>[a-z][a-z0-9+.\-]*://[^\s/:@]+:)(?<secret>[^\s/@]+)@~i';
 
     /**
      * How long a run has to be before nothing anybody writes by hand reaches
-     * it: longer than a git revision, longer than the longest changelog
-     * identifier in the corpus, and shorter than the key this was written for.
+     * it. Longer than a git revision, longer than the longest changelog
+     * identifier in the corpus, and shorter than the key behind this.
      */
     private const RUN_LENGTH = 64;
 
@@ -96,13 +97,13 @@ final class Redaction
     ) {}
 
     /**
-     * The text as it may be written down, and what was taken out of it.
+     * The text as it may go into the file, and what came out of it.
      *
-     * The order is the point: a named value is redacted before the length rules
-     * see it, so a key assigned to its own name is reported as "the value of
+     * The order is the point. A named value comes out before the length rules
+     * see it. So a key assigned to its own name reports as "the value of
      * `encryptionKey`" rather than as an anonymous run of hexadecimal. The
      * marker each rule leaves carries none of the shapes the later rules look
-     * for, so nothing is redacted twice.
+     * for, so nothing comes out twice.
      */
     public static function of(string $text): self
     {
@@ -201,10 +202,10 @@ final class Redaction
      *
      * `the install tool password: it never prints` is a sentence, and the word
      * after the colon is `it`. What tells the two apart without a dictionary is
-     * that a value carries something prose does not: a digit, a symbol, or a
+     * that a value carries something prose does not. A digit, a symbol, or a
      * capital letter that is not the first one. A password of six lowercase
-     * letters walks past this, and that is the side to be wrong on — the other
-     * one redacts an English sentence out of a report.
+     * letters walks past this, and that is the side to be wrong on. The other
+     * one takes an English sentence out of a report.
      */
     private static function isAValue(string $value): bool
     {
@@ -219,15 +220,15 @@ final class Redaction
 
     /**
      * Whether a long run is bytes rather than one word or one character over
-     * and over: it has to carry a digit, and whatever else the shape needs.
+     * and over. It has to carry a digit, and whatever else the shape needs.
      *
      * An encoded value carries every class of character it has at this length
-     * as a matter of arithmetic — a 96-character key without one digit in it is
-     * a coin landing the same way 96 times. What does not is what would
-     * otherwise be caught by the alphabet alone: a 64-character camel-cased
-     * identifier, which the corpus is full of, and a run of the same character
-     * padding a line out, which is hexadecimal by charset and a value by
-     * nothing else.
+     * as a matter of arithmetic. A 96-character key without one digit in it is
+     * a coin that lands the same way 96 times. What does not is what the
+     * alphabet alone would otherwise catch. A 64-character camel-cased
+     * identifier, which the corpus is full of. A run of the same character that
+     * pads a line out, which is hexadecimal by charset and a value by nothing
+     * else.
      */
     private static function isMixed(string $run, string $letters): bool
     {
@@ -238,7 +239,7 @@ final class Redaction
      * The part of a name a reader needs: `encryptionKey` out of
      * `$GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']`.
      *
-     * The path is what the finding was about and it stays in the report — this
+     * The path is what the finding was about and it stays in the report. This
      * is only what the marker itself says, where the whole left-hand side would
      * be a sentence of brackets.
      */

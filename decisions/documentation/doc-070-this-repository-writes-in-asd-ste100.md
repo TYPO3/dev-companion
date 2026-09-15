@@ -124,3 +124,9 @@ is gone and `Prose::leadsOverTheMeasure()` reads `Prose::MEASURE`. The third
 found instead is a lesson about its own method. A first pass that hid sentences
 behind a filter for verb forms left long sentences in the bodies. A second pass
 over each group took them. Every quoted sentence stays as its source wrote it.
+
+The `documentation/` sweep landed the same day, `readme.md` and `CLAUDE.md` with
+it. `bin/cli prose:check` still names `documentation/usage/installing.rst` for
+two sentences the clients' documentation wrote, and the sweep leaves them. The
+generated tool pages come from `ToolSurface` and `ToolAnswers`, so their
+sentences moved in the source and the recorded half ran again.

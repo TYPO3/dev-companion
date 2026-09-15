@@ -12,9 +12,9 @@ use TYPO3\DevCompanion\Result\Unsupported;
 
 /**
  * What the installation's dependency injection container assembles, and what
- * each service is handed.
+ * each service gets.
  *
- * The container a TYPO3 runs is compiled and has forgotten every private
+ * The container a TYPO3 runs is a compiled one and has forgotten every private
  * definition, which is nearly all of them. What answers is the builder the core
  * assembles before that — `D-DIS-023`.
  */

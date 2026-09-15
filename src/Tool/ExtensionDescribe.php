@@ -21,10 +21,11 @@ final class ExtensionDescribe extends ReadOnlyTool
      * same shape as a hit, so a client never has to branch on which it got.
      *
      * answeredBy is not among them, because the two misses this fills are not
-     * the same answer: an installation that has other extensions and not this
-     * one has answered, and a directory with no installation has not. Sharing
-     * the value made every miss report "nothing", which says the installation
-     * could not be asked about an installation that just listed 27 packages.
+     * the same answer. An installation that has other extensions and not this
+     * one has answered, and a directory with no installation has not. One
+     * shared value made every miss report "nothing", which says the
+     * installation could not answer about an installation that just listed 27
+     * packages.
      *
      * @var array<string, mixed>
      */
@@ -58,8 +59,8 @@ final class ExtensionDescribe extends ReadOnlyTool
     ];
 
     /**
-     * The call a listed binding raises, said once and rendered wherever one is
-     * listed — `D-ANS-129`.
+     * The call a listed binding raises, said once and rendered wherever one
+     * stands in the list, `D-ANS-129`.
      */
     private const FLEX_FORM_CALL = 'typo3_flexform_lookup resolves one of those structures to the fields it holds '
         . 'and the names a template and a settings array read them by: the table, the type=flex column the binding '
@@ -207,8 +208,8 @@ final class ExtensionDescribe extends ReadOnlyTool
         }
 
         // The next call, named where the list that raises it stands. A session
-        // holding this answer read a FlexForm with grep and diffed two tables'
-        // columns through `SHOW COLUMNS`, having called neither tool all day —
+        // with this answer read a FlexForm with grep and diffed two tables'
+        // columns through `SHOW COLUMNS`, and called neither tool all day,
         // `D-ANS-129`.
         if ($extension['tcaTables'] !== [] || $extension['tcaOverrides'] !== []) {
             $lines[] = 'typo3_schema_lookup with one of those table names answers what columns the core derives '
@@ -217,9 +218,9 @@ final class ExtensionDescribe extends ReadOnlyTool
                 . 'the order they come back in.';
         }
 
-        // Apart from the registrations above, because this one is three is_dir()
-        // calls: an extension appending its layout root from an event listener
-        // got the same line as one that declares it — D-ANS-045.
+        // Apart from the registrations above, because this one is three
+        // is_dir() calls. An extension that appends its layout root from an
+        // event listener got the same line as one that declares it, D-ANS-045.
         if ($extension['fluidRoots'] !== []) {
             $lines[] = '';
             $lines[] = 'Fluid root directories it ships: ' . implode(', ', $extension['fluidRoots']);
@@ -229,16 +230,15 @@ final class ExtensionDescribe extends ReadOnlyTool
         }
 
         // Directly under the file listing, because that listing is where two of
-        // the four are the finding: every predicate is a file the extension
-        // ships, and none is reachable by a changelog sweep over what its code
-        // calls — D-ANS-009. Nothing is rendered where there is none. "No
-        // deprecated files" is one line away from being read as a compatibility
-        // verdict, and this answer checks nothing else for one. Which
-        // predicates were checked is the closing sentence rather than a line per
-        // file that did not fire, for the same reason: a clean line under this
-        // heading is that verdict at file granularity, and a reviewer confirmed
-        // the absent sibling by hand for want of the sentence, not for want of
-        // a bullet.
+        // the four are the finding. Every predicate is a file the extension
+        // ships, and no changelog sweep over what its code calls reaches one,
+        // D-ANS-009. Nothing renders where there is none. "No deprecated files"
+        // is one line away from a read as a compatibility verdict, and this
+        // answer checks nothing else for one. Which predicates ran is the last
+        // sentence rather than a line per file that did not fire, for the same
+        // reason. A clean line under this heading is that verdict at file
+        // granularity. A reviewer confirmed the absent sibling by hand for want
+        // of the sentence, not for want of a bullet.
         if ($extension['deprecatedFiles'] !== []) {
             $lines[] = '';
             $lines[] = 'Files core has stopped reading, or is stopping:';
@@ -367,7 +367,7 @@ final class ExtensionDescribe extends ReadOnlyTool
         );
         if ($classes['looseFiles'] > 0) {
             // Their own row rather than a directory's, because that is where
-            // they are: core keeps four of them, SingletonInterface.php among
+            // they are. Core keeps four of them, SingletonInterface.php among
             // them, and a whitelist of directory names had them nowhere.
             $rows[] = $classes['looseFiles'] . ' directly in Classes/';
         }
@@ -375,9 +375,9 @@ final class ExtensionDescribe extends ReadOnlyTool
             $lines[] = '';
             $lines[] = 'Classes: ' . implode(', ', $rows) . ' — ' . $classes['total']
                 . ' PHP file' . ($classes['total'] === 1 ? '' : 's') . ' in total.';
-            // Both numbers are said because both are checked: a caller who
-            // counts one level of Classes/Updates/ gets a smaller number
-            // (D-ANS-008), and one who runs find over Classes/ gets the total.
+            // Both numbers stand because both get a check. A caller who counts
+            // one level of Classes/Updates/ gets a smaller number (D-ANS-008),
+            // and one who runs find over Classes/ gets the total.
             $lines[] = 'Every directory below Classes/ is named here, and each count is every PHP file below that '
                 . 'directory, its own subdirectories included. The total is what `find Classes -name \'*.php\' | wc -l` '
                 . 'gives.';
@@ -391,12 +391,12 @@ final class ExtensionDescribe extends ReadOnlyTool
             ));
         }
 
-        // Always rendered, present or not. Everything above is found by reading
-        // further; these are the ones a caller finds by being told, because a
-        // manual nobody wrote leaves no file to notice. All four of them: the
-        // language files were the list below alone until D-FBK-018, so an
-        // extension shipping no XLF said nothing about them here. A term in
-        // this line is what makes saying it on every answer cost a word.
+        // Always rendered, present or not. Everything above turns up on a
+        // further read. These are the ones a caller finds only when told,
+        // because a manual nobody wrote leaves no file to notice. All four of
+        // them. The language files were the list below alone until D-FBK-018,
+        // so an extension that ships no XLF said nothing about them here. A
+        // term in this line is what makes the line on every answer cost a word.
         $artifacts = $extension['artifacts'];
         $lines[] = '';
         $lines[] = 'Ships: ' . implode(', ', [
@@ -421,14 +421,13 @@ final class ExtensionDescribe extends ReadOnlyTool
         }
 
         // Each absence names the workflow that owns it, on the object the
-        // caller is already looking at. A session read `manual: null`,
-        // `readme: null` and `tests: []` twice, wrote three READMEs by hand and
-        // shipped no test at all, holding the closing sentence of the skill it
-        // was following, which names both of these — D-SKL-053. Only where the
-        // artifact is absent, so an extension that ships them reads as it did
-        // before. Only these two, because no field of this answer reports that
-        // nobody audited the package, and an absence is what a name here hangs
-        // on.
+        // caller already looks at. A session read `manual: null`, `readme:
+        // null` and `tests: []` twice, wrote three READMEs by hand and shipped
+        // no test at all. It held the last sentence of the skill it followed,
+        // which names both of these, D-SKL-053. Only where the artifact is
+        // absent, so an extension that ships them reads as it did before. Only
+        // these two. No field of this answer reports that nobody audited the
+        // package, and an absence is what a name here hangs on.
         $absent = [];
         if ($artifacts['manual'] === null) {
             $absent[] = 'manual';
@@ -446,9 +445,9 @@ final class ExtensionDescribe extends ReadOnlyTool
         }
 
         $lines[] = '';
-        // The boundary of this answer, stated rather than implied — and it is
-        // not the same boundary in both cases, which is why it is not one
-        // sentence with a clause bolted on.
+        // The boundary of this answer, stated rather than implied. It is not
+        // the same boundary in both cases, which is why it is not one sentence
+        // with a clause bolted on.
         $lines[] = Extension::answeredBy() === 'installation'
             ? 'The tables, content elements and icons are what the booted installation has, attributed to this '
                 . 'extension by the EXT: reference each entry carries; everything else is read from its files. '
@@ -460,8 +459,8 @@ final class ExtensionDescribe extends ReadOnlyTool
 
         // The two a caller reads as registrations and this answer never opens.
         // notReadStatically is about a declaration file that defeated the
-        // parser, so its empty list is not the "nothing more to read" a session
-        // took it for — D-ANS-003.
+        // parser. So its empty list is not the "nothing more to read" a session
+        // took it for, D-ANS-003.
         $byRunning = array_values(array_intersect(['ext_localconf.php', 'ext_tables.php'], $extension['files']));
         if ($byRunning !== []) {
             $lines[] = implode(' and ', $byRunning) . (count($byRunning) === 1 ? ' is' : ' are')
@@ -471,7 +470,7 @@ final class ExtensionDescribe extends ReadOnlyTool
         }
 
         if ($extension['notReadStatically'] !== []) {
-            // Which files the degradation cost, beside the reason it names: an
+            // Which files the fallback cost, beside the reason it names. An
             // omitted section is otherwise the same silence as a file that is
             // not there at all.
             $lines[] = 'Nothing could be read statically from ' . implode(', ', $extension['notReadStatically'])
@@ -485,10 +484,10 @@ final class ExtensionDescribe extends ReadOnlyTool
     /**
      * What one content element of the list renders through.
      *
-     * A plugin and an element are two answers to that, and the plugin one used
-     * to be given as the element one with the template missing (`D-ANS-015`).
-     * What replaces the absence is where its configuration is, because that is
-     * the file the caller was after.
+     * A plugin and an element are two answers to that. The plugin one used to
+     * come as the element one with the template absent (`D-ANS-015`). What
+     * replaces the absence is where its configuration is, because that is the
+     * file the caller was after.
      *
      * @param array{identifier: string, kind: string, templateName: ?string, source: ?string, pluginSettings: ?string} $element
      */
@@ -531,9 +530,9 @@ final class ExtensionDescribe extends ReadOnlyTool
                     $key,
                     implode(', ', $installed),
                 ),
-            // The package list is what answered, and it is read from the
-            // metadata the installed packages ship rather than from the booted
-            // container — which is what "packages" says.
+            // The package list is what answered, and it comes from the metadata
+            // the installed packages ship rather than from the booted
+            // container. That is what "packages" says.
             self::MISS_FIELDS + ['key' => $key, 'installed' => $installed, 'answeredBy' => 'packages'],
         );
     }

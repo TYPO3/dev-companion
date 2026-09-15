@@ -90,26 +90,26 @@ final class TestRunGuide extends ReadOnlyTool
         $target = Versions::target(isset($args['targetVersion']) ? (string) $args['targetVersion'] : null);
 
         // Every suite this guide knows is a Build/Scripts/runTests.sh
-        // invocation, and that script is part of the core repository. Handing
-        // it to a site package is worse than declining: the commands look
-        // copy-pasteable and none of them exists there. Which paths those are
-        // is decided one by one — the other half of a call is not evidence
-        // about this path.
+        // invocation, and that script is part of the core repository. A
+        // handover to a site package is worse than a refusal: the commands look
+        // ready to paste and none of them exists there. Which paths those are
+        // is a decision one by one, because the other half of a call is not
+        // evidence about this path.
         $scopes = Scope::ofEach($paths, (string) $query);
         $outside = Scope::pathsOf($scopes, Scope::Project, Scope::Extension);
-        // A path nothing placed is answered from the core, which is where a
-        // call that says nothing is answered from at all — unless the call has
-        // been placed outside it already, and then the unplaced path is in that
-        // repository too rather than in the one with the script (`D-SCO-016`).
+        // A path nothing placed answers from the core, which is where a call
+        // that says nothing answers from at all. Unless the call already sits
+        // outside it. Then the unplaced path is in that repository too rather
+        // than in the one with the script (`D-SCO-016`).
         $runnable = Scope::everyPlacedPathIsOutsideTheCore(Scope::groups($paths, $scopes, (string) $query))
             ? []
             : Scope::pathsOf($scopes, Scope::Core, Scope::Uncertain);
         $domains = Domains::fromPaths($runnable);
 
-        // A suite is selected by the domains of the paths, so a path that
-        // reaches none selected nothing and is not what any command below runs
-        // over. Nothing said so, and the session that reported it worked out by
-        // hand that no suite covers an XML reference file (`D-GUI-022`).
+        // The domains of the paths select a suite, so a path that reaches none
+        // selected nothing and is not what any command below runs over. Nothing
+        // said so, and the session that reported it worked out by hand that no
+        // suite covers an XML reference file (`D-GUI-022`).
         $uncovered = array_values(array_filter(
             $runnable,
             static fn(string $path): bool => Domains::fromPaths([$path]) === [],
@@ -144,24 +144,24 @@ final class TestRunGuide extends ReadOnlyTool
         $hints = TestSuiteHints::find($query, $domains, $target);
 
         $blocks = [];
-        // The other half of the same answer: the suites below are for the paths
-        // that can run them, and the paths that cannot are named rather than
-        // left to read the answer as theirs.
+        // The other half of the same answer. The suites below are for the paths
+        // that can run them. The paths that cannot stand by name rather than
+        // read the answer as theirs.
         if ($outside !== []) {
             $blocks[] = Scope::outsideCoreAmong($outside) . ' Build/Scripts/runTests.sh is not there, so no suite '
                 . 'below is about ' . (count($outside) === 1 ? 'that path' : 'those paths') . '. What such a '
                 . 'repository needs instead is typo3_hint_lookup with id=project-extension-tests, '
                 . 'id=browser-tests and id=extension-static-analysis.';
         }
-        // A call that named no path is answered from the core root, and every
-        // command below says so itself. A path that was named and could not be
-        // placed is the case worth a sentence: the caller believes it said
-        // which repository this is.
+        // A call that named no path answers from the core root, and every
+        // command below says so itself. A named path that nothing could place
+        // is the case worth a sentence: the caller believes it said which
+        // repository this is.
         if (Scope::pathsOf($scopes, Scope::Uncertain) !== []) {
             $blocks[] = Scope::UNCERTAIN_NOTICE;
         }
-        // Before the suites rather than after them, because a caller reaching
-        // for `ls` and `command -v` has not got as far as choosing one
+        // Before the suites rather than after them. A caller who reaches for
+        // `ls` and `command -v` has not got as far as a choice of one
         // (`D-AUD-009`).
         $blocks[] = self::preconditionBlock();
         $withheld = TestSuiteHints::withheld($domains, $target);
@@ -171,9 +171,9 @@ final class TestRunGuide extends ReadOnlyTool
                 . 'call again without paths to see all of them.',
                 self::named($domains)
             );
-            // The half a session holding this answer through a rework needs: a
-            // path set grows, and an answer that names only what it kept reads
-            // as the suites for the change rather than for the paths given
+            // The half a session that holds this answer through a rework needs.
+            // A path set grows. An answer that names only what it kept reads as
+            // the suites for the change rather than for the given paths
             // (`D-ANS-074`).
             if ($withheld['domains'] !== []) {
                 $narrowing .= sprintf(
@@ -185,8 +185,8 @@ final class TestRunGuide extends ReadOnlyTool
             }
             $blocks[] = $narrowing;
         }
-        // Beside the narrowing rather than after the suites, because both
-        // sentences answer the same question: which of the paths given this
+        // Beside the filter rather than after the suites, because both
+        // sentences answer the same question. Which of the given paths this
         // list of commands is about (`D-GUI-022`).
         if ($uncovered !== []) {
             $blocks[] = sprintf(
@@ -221,17 +221,17 @@ final class TestRunGuide extends ReadOnlyTool
             }
 
             // An e2e suite puts a browser in front of the change and stops
-            // there. What to do with it, and what to do when that styleguide
-            // instance has not got the content the defect needs, is the page
-            // named below (`D-KNW-069`).
+            // there. What to do with it is the page named below (`D-KNW-069`).
+            // So is what to do when that styleguide instance has not got the
+            // content the defect needs.
             $browser = array_filter($hints, static fn(array $hint): bool => str_starts_with($hint['suite'], 'e2e'));
             if ($browser !== []) {
                 $blocks[] = self::BROWSER_CHECK_GUIDE;
             }
 
             // A functional suite says whether it passed and not what it
-            // rendered, and the page that says how to see the second one is
-            // gated on TypoScript everywhere else (`D-KNW-122`).
+            // rendered. The page that says how to see the second one sits
+            // behind a TypoScript gate everywhere else (`D-KNW-122`).
             $functional = array_filter($hints, static fn(array $hint): bool => str_starts_with($hint['suite'], 'functional'));
             if ($functional !== []) {
                 $blocks[] = self::RENDERING_PROBE_GUIDE;
@@ -254,13 +254,13 @@ final class TestRunGuide extends ReadOnlyTool
     }
 
     /**
-     * What running the command above does to the checkout, beside the command
+     * What a run of the command above does to the checkout, beside the command
      * rather than under the description.
      *
-     * A review told to change nothing was offered `-s build` first and worked
-     * out by hand that it regenerates the committed JavaScript (`R-ANS-034`).
-     * The word is the one the data carries, so a caller reading the text filters
-     * on the same value as one reading `runs`.
+     * A review told to change nothing got `-s build` first and worked out by
+     * hand that it regenerates the committed JavaScript (`R-ANS-034`). The word
+     * is the one the data carries, so a caller who reads the text filters on
+     * the same value as one who reads `runs`.
      */
     private static function runsLine(string $runs): string
     {
@@ -290,13 +290,13 @@ final class TestRunGuide extends ReadOnlyTool
     }
 
     /**
-     * The document this answer is the short form of, named where it is used.
+     * The document this answer is the short form of, named where it is in use.
      *
      * A session that had every `runTests.sh` question answered here never
-     * reached `typo3_script_lookup`, whose description reads as a subset of this
-     * one, and so never saw the guide either (`D-ANS-061`). The moment a caller
-     * is about to run something is the one moment they are certainly reading,
-     * which is why the pointer sits here rather than waiting for somebody to ask
+     * reached `typo3_script_lookup`. Its description reads as a subset of this
+     * one, so the session never saw the guide either (`D-ANS-061`). The moment
+     * a caller is about to run something is the one moment they certainly read.
+     * That is why the pointer sits here rather than waits for somebody to ask
      * what exists.
      */
     public const SCRIPTS_GUIDE = "## The whole procedure\n"
@@ -310,11 +310,11 @@ final class TestRunGuide extends ReadOnlyTool
     /**
      * The page the e2e suites hand the caller over to, named where they are.
      *
-     * A session reviewing a backend CSS patch held `any/testing/browser-check`,
-     * never opened it, and told its reader five times it could not judge the
+     * A session on a backend CSS patch held `any/testing/browser-check` and
+     * never opened it. It told its reader five times it could not judge the
      * change visually (`D-KNW-069`). The suite was already in front of it; the
-     * page saying what to do with a styleguide instance that has not got the
-     * content was not.
+     * page that says what to do with a styleguide instance without the content
+     * was not.
      */
     public const BROWSER_CHECK_GUIDE = "## Looking at it rather than asserting it\n"
         . 'The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with '
@@ -330,10 +330,10 @@ final class TestRunGuide extends ReadOnlyTool
      * The page a functional suite hands the caller over to, named where that
      * suite is.
      *
-     * A review of a PHP diff read the gate that names this page for TypoScript,
-     * skipped it, and then built the same harness by hand over six container
-     * rounds (`D-KNW-122`). A suite answers whether it passed; a finding about a
-     * rendering turns on what came out, which is the other question and the one
+     * A review of a PHP diff read the gate that names this page for TypoScript
+     * and skipped it. It then built the same harness by hand over six container
+     * rounds (`D-KNW-122`). A suite answers whether it passed. A finding about
+     * a render turns on what came out. That is the other question, and the one
      * a caller holds at the moment it writes the test.
      */
     public const RENDERING_PROBE_GUIDE = "## Seeing what it rendered rather than whether it passed\n"
@@ -348,11 +348,11 @@ final class TestRunGuide extends ReadOnlyTool
     /**
      * What has to be true before any of the suites below can run.
      *
-     * A session establishing whether a bug reproduced reached for `ls` and
-     * `command -v`, found no `vendor/bin/phpunit`, and reported the functional
-     * suite as not executed — with this tool in its list and its schema never
-     * loaded. Both facts it needed were in this answer and both were below
-     * every suite block (`D-AUD-009`).
+     * A session that had to establish whether a bug reproduced reached for `ls`
+     * and `command -v`. It found no `vendor/bin/phpunit`, and reported the
+     * functional suite as not run. This tool was in its list and its schema
+     * never loaded. Both facts it needed were in this answer and both were
+     * below every suite block (`D-AUD-009`).
      */
     private static function preconditionBlock(): string
     {

@@ -14,30 +14,30 @@ use TYPO3\DevCompanion\Result\Unsupported;
  * Icon identifiers registered in the installation.
  *
  * The only instance question with no console command behind it, so the registry
- * is read from the three places TYPO3 assembles it from. An identifier-shaped
- * query is a validation and is answered as one: fuzzy results for it are
- * suggestions, and saying so is the whole point — a confident wrong substitute
- * is worse than a miss.
+ * comes from the three places TYPO3 assembles it from. An identifier-shaped
+ * query is a validation and gets a validation's answer. Fuzzy results for it
+ * are suggestions, and the line that says so is the whole point. A confident
+ * wrong substitute is worse than a miss.
  */
 final class IconLookup extends ReadOnlyTool
 {
     /**
-     * How many neighbours a missing identifier is offered.
+     * How many neighbours an absent identifier gets.
      *
-     * Few, because a validation of several names is one answer: the reported
+     * Few, because a validation of several names is one answer. The reported
      * case was three identifiers, and one of them alone had come back with 22.
      */
     private const SUGGESTIONS_PER_MISS = 5;
 
     /**
-     * Where the identifiers this tool answers with may be used.
+     * Where a caller may use the identifiers this tool answers with.
      *
      * It travels with every answer rather than with the ones that look like
-     * frontend work, because the tool is handed a query and not a task: nothing
-     * in "product package box" says which half of TYPO3 it is for. An
-     * identifier is resolved by IconFactory and rendered by <core:icon>, and a
-     * frontend template reaches neither — so an answer without this sentence is
-     * usable in a place where it is wrong.
+     * frontend work, because the tool gets a query and not a task. Nothing in
+     * "product package box" says which half of TYPO3 it is for. IconFactory
+     * resolves an identifier and <core:icon> renders it, and a frontend
+     * template reaches neither. So an answer without this sentence is usable in
+     * a place where it is wrong.
      */
     private const SCOPE = 'These identifiers address the backend icon registry. They are resolved by '
         . 'IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, '
@@ -109,9 +109,9 @@ final class IconLookup extends ReadOnlyTool
         $query = trim((string) ($args['query'] ?? ''));
         $limit = (int) ($args['limit'] ?? 40);
         $scope = self::SCOPE;
-        // Where the registry could not be read from the booted installation,
-        // the scope sentence says so. Every answered path below carries that
-        // sentence, and a line of its own is one a caller reading the matches
+        // Where the registry did not come from the booted installation, the
+        // scope sentence says so. Every answered path below carries that
+        // sentence, and a line of its own is one a caller who reads the matches
         // would skip.
         $limitation = Icons::limitation();
         if ($limitation !== '') {
@@ -128,9 +128,9 @@ final class IconLookup extends ReadOnlyTool
         $concepts = Icons::concepts();
 
         // The validation mode. It comes before everything below because the
-        // question is a different one: "do these exist" is answered per name,
-        // and the ranking that serves "what icon means X" is noise behind a
-        // name that was already correct — `D-ANS-078`.
+        // question is a different one. "Do these exist" has an answer per name.
+        // The rank that serves "what icon means X" is noise behind a name that
+        // was already correct, `D-ANS-078`.
         $validated = self::validate($args['identifiers'] ?? null, $concepts);
         if ($validated !== []) {
             $registered = array_filter($validated, static fn(array $entry): bool => $entry['registered']);
@@ -150,8 +150,8 @@ final class IconLookup extends ReadOnlyTool
                 if ($entry['registered'] && $entry['source'] !== Icons::SOURCE_T3ICONS) {
                     $lines[] = '  registered in ' . $entry['source'];
                 }
-                // Whose picture it already is, which is what a caller asking
-                // whether they may borrow one is actually asking — `D-ANS-131`.
+                // Whose picture it already is, which is what a caller who asks
+                // whether they may borrow one asks, `D-ANS-131`.
                 if ($entry['usedBy'] !== []) {
                     $lines[] = '  already the icon of ' . implode(', ', $entry['usedBy'])
                         . ' — registered says it resolves, not that it is free to describe something else';
@@ -285,9 +285,9 @@ final class IconLookup extends ReadOnlyTool
         return ToolResult::create(implode("\n", $lines), [
             'query' => $query,
             // A complete identifier is a validation question. Its only match is
-            // the identifier itself; same-category or same-name results are
-            // suggestions and travel under their own count. In particular,
-            // the usage prefixes actions-/content- must not turn one missing
+            // the identifier itself. Same-category or same-name results are
+            // suggestions and travel under their own count. In particular, the
+            // usage prefixes actions-/content- must not turn one absent
             // identifier into hundreds of apparent matches.
             'matchCount' => $isIdentifier ? ($exactMatch ? 1 : 0) : $total,
             'suggestionCount' => $suggestionCount,
@@ -300,11 +300,11 @@ final class IconLookup extends ReadOnlyTool
     }
 
     /**
-     * One verdict per identifier passed in, in the order they were passed.
+     * One verdict per identifier passed in, in the order of the call.
      *
-     * A miss keeps suggestions and a hit gets none: neighbours of a correct
-     * identifier are noise, and neighbours of a wrong one are the next step —
-     * `D-ANS-016`. Empty where nothing was passed.
+     * A miss keeps suggestions and a hit gets none. Neighbours of a correct
+     * identifier are noise, and neighbours of a wrong one are the next step,
+     * `D-ANS-016`. Empty where the call passed nothing.
      *
      * @param array<string, array<int, string>> $concepts
      * @return array<int, array{identifier: string, registered: bool, category: string, aliasOf: ?string, source: string, usedBy: array<int, string>, suggestions: array<int, string>}>
@@ -340,8 +340,8 @@ final class IconLookup extends ReadOnlyTool
      * Ranks the registered identifiers against a query.
      *
      * A concept only contributes a term the identifier's own name did not
-     * already carry, so a vague identifier cannot outrank a precise one by
-     * matching the same word twice.
+     * already carry. So a vague identifier cannot outrank a precise one on the
+     * same word twice.
      *
      * @param array<string, array<int, string>> $concepts
      * @return array<int, array<string, mixed>>
@@ -354,9 +354,9 @@ final class IconLookup extends ReadOnlyTool
         }
         $normalized = implode('-', $terms);
         if (Icons::looksLikeIdentifier($query)) {
-            // actions-, content-, status- and the other leading categories say
-            // where/how an icon is used. They are not a distinguishing shape
-            // and therefore contribute nothing to related suggestions.
+            // actions-, content-, status- and the other first categories say
+            // where and how an icon serves. They are not a shape that tells
+            // icons apart and so contribute nothing to related suggestions.
             array_shift($terms);
         }
 
@@ -417,8 +417,8 @@ final class IconLookup extends ReadOnlyTool
      * miss statement on this server has — `D-ANS-139`.
      *
      * A ranked list of eleven icons all matched on one word reads as an answer
-     * to the concept; the two words that reached nothing are what says it is
-     * not. The session this was written for stopped asking after such a list.
+     * to the concept. The two words that reached nothing are what says it is
+     * not. The session behind this stopped its questions after such a list.
      *
      * @param array<int, array<string, mixed>> $matches
      * @return list<array{term: string, matchCount: int}>
@@ -446,7 +446,7 @@ final class IconLookup extends ReadOnlyTool
     }
 
     /**
-     * The query as the words it is matched by.
+     * The query as the words the matcher reads.
      *
      * @return list<string>
      */

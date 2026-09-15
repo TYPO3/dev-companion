@@ -11,13 +11,13 @@ use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Result\Unsupported;
 
 /**
- * What may be written into one `type=flex` column, resolved by the installation
- * that would resolve it.
+ * What may go into one `type=flex` column, resolved by the installation that
+ * would resolve it.
  *
- * The two calls `TcaFlexPrepare` makes and nothing else, so what comes back is
+ * The two calls `TcaFlexPrepare` makes and nothing else. So what comes back is
  * what the backend form builds rather than what the file the TCA points at
- * says. Why that is a different answer, and why the record is emulated from
- * values the caller passes rather than loaded: `D-ANS-095`.
+ * says. Why that is a different answer, and why the record comes from values
+ * the caller passes rather than from a load: `D-ANS-095`.
  */
 final class FlexFormLookup extends ReadOnlyTool
 {
@@ -250,8 +250,8 @@ final class FlexFormLookup extends ReadOnlyTool
     /**
      * Nothing resolved, and what the caller does about it.
      *
-     * The three cases the todo behind `D-ANS-095` names are all the same shape:
-     * the installation reported by throwing, and the exception plus what the
+     * The three cases the todo behind `D-ANS-095` names are all the same shape.
+     * The installation reported with a throw, and the exception plus what the
      * TCA declares is more than a retry could work out for itself.
      *
      * @param array{type: string, recordTypeField: string, keys: array<int, string>, pointerFields: array<int, string>, flexFields: array<int, string>} $declaration

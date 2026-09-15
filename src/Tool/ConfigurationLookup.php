@@ -68,16 +68,16 @@ final class ConfigurationLookup extends ReadOnlyTool
             return Unsupported::because('no path into TYPO3_CONF_VARS was named', ['configurationPath' => $path]);
         }
 
-        // The booted container rather than `configuration:show`, which arrived
-        // in TYPO3 14.2 and would leave the two LTS lines this server covers
-        // holding the console's "command is not defined" — D-ANS-077 is the
-        // same case decided for the backend modules, and its reading is why
-        // this has one source rather than a version-bound pair of them.
+        // The booted container rather than `configuration:show`. That command
+        // arrived in TYPO3 14.2 and would leave the two LTS lines this server
+        // covers with the console's "command is not defined". D-ANS-077 is the
+        // same case decided for the backend modules. Its read is why this has
+        // one source rather than a version-bound pair of them.
         $read = Typo3Runtime::configuration($path);
         if ($read === null || isset($read['unavailable'])) {
-            // found is absent rather than false: false is a statement about the
-            // installation — "it has no value at that path" — and nothing was
-            // consulted to make it.
+            // found is absent rather than false. False is a statement about the
+            // installation, "it has no value at that path", and nothing looked
+            // to make it.
             return Unsupported::because(
                 is_array($read) ? (string) $read['unavailable'] : Typo3Runtime::reason(),
                 ['configurationPath' => $path],
@@ -125,13 +125,13 @@ final class ConfigurationLookup extends ReadOnlyTool
 
     /**
      * The execution order behind a form data group, or null where the path
-     * names none and where the installation could not be asked.
+     * names none and where the installation did not answer.
      *
      * The registry is one of the few configuration values whose assembled shape
-     * is not what anybody wants: a caller asking about it is asking whether one
+     * is not what anybody wants. A caller who asks about it asks whether one
      * provider runs before another, and the map answers with 64 entries whose
-     * edges sit far apart. A session settled it by writing a throwaway script
-     * into its own checkout and running the resolver by hand — the feedback of
+     * edges sit far apart. A session settled it with a throwaway script in its
+     * own checkout and a run of the resolver by hand, the feedback of
      * 2026-08-05.
      *
      * Ordered on the other side of the process boundary by the core's own

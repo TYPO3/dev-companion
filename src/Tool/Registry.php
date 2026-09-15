@@ -11,20 +11,20 @@ use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Server\ExcludedTools;
 
 /**
- * Every tool this server has, and the only place one is switched on.
+ * Every tool this server has, and the only place that switches one on.
  *
- * What a tool is called, takes, returns and answers lives in the class that
- * answers it; this is the list, in the order a client is offered them. Two
- * things narrow that list: what the caller excluded, and the feedback channel,
- * which exists only in a standalone checkout. Nothing else does — which
- * repository the server was started in shapes what an answer says, never
- * whether the tool that says it is there.
+ * A tool's name, what it takes, returns and answers lives in the class that
+ * answers it. This is the list, in the order a client gets them. Two things
+ * narrow that list: what the caller excluded, and the feedback channel, which
+ * exists only in a standalone checkout. Nothing else does. Which repository the
+ * server started in shapes what an answer says, never whether the tool that
+ * says it is there.
  */
 final class Registry
 {
     /**
      * In the order a client sees them: orientation first, then the guides and
-     * lookups, then what describes the repository being worked in.
+     * lookups, then what describes the repository at hand.
      *
      * @var array<int, class-string<Tool>>
      */
@@ -63,10 +63,10 @@ final class Registry
     /**
      * Offered from a standalone checkout alone — see the feedback channel.
      *
-     * The exclusion list does not reach these two, which is `R-SCO-009`'s second
-     * exception rather than an oversight. `typo3_feedback_record` writes into
-     * that checkout and not into the installation the server read — `D-FBK-042`,
-     * written because the two were read as one.
+     * The exclusion list does not reach these two, which is `R-SCO-009`'s
+     * second exception rather than an oversight. `typo3_feedback_record` writes
+     * into that checkout and not into the installation the server read.
+     * `D-FBK-042`, written because a reader took the two as one.
      *
      * @var array<int, class-string<Tool>>
      */
@@ -87,9 +87,9 @@ final class Registry
      */
     public static function definitions(): array
     {
-        // The sources are appended to the description here rather than written
-        // into each one, so a tool that gains or loses a source cannot say the
-        // old thing in the sentence a client actually reads.
+        // The sources join the description here rather than stand in each one.
+        // So a tool that gains or loses a source cannot say the old thing in
+        // the sentence a client reads.
         return array_map(static fn(string $tool): array => [
             'name' => $tool::name(),
             'description' => rtrim($tool::description()) . ' ' . Source::clause($tool::answersFrom()),
@@ -104,24 +104,23 @@ final class Registry
     }
 
     /**
-     * The answer one tool gives, and the end of what was read for it.
+     * The answer one tool gives, and the end of the read behind it.
      *
-     * One boot answers every topic a call needs, so the reading is memoized for
-     * the length of the call and dropped with it. Keeping it past the answer it
-     * was taken for is what makes an installation answer about itself as it was
-     * before the caller's own edit: between two calls the agent writes, and the
-     * icon it registered a minute ago comes back unregistered from a registry
-     * read before it existed. A boot costs time and no tokens, and a wrong
-     * answer costs both.
+     * One boot answers every topic a call needs, so the read stays in memory
+     * for the length of the call and goes with it. Kept past the answer it came
+     * for, it makes an installation answer about itself as it was before the
+     * caller's own edit. Between two calls the agent writes, and the icon it
+     * registered a minute ago comes back unregistered from a registry read
+     * before it existed. A boot costs time and no tokens, and a wrong answer
+     * costs both.
      *
-     * The console resolution is not dropped with them, for a narrower reason
-     * than this carried before `4b43734`. A project stopped mid-session does
-     * not fail at the boot: where host PHP satisfies the bound the installation
+     * The console resolution does not go with them, for a narrower reason than
+     * this carried before `4b43734`. A project stopped mid-session does not
+     * fail at the boot. Where host PHP satisfies the bound the installation
      * pins, it resolves through that interpreter and answers with a caveat.
-     * `resolve()` declines to remember that one, so there is nothing left here
-     * to drop. Dropping per call would take the uncaveated resolution with it,
-     * and that one is discovered once per process — 0.492s cold against 0.002s
-     * warm.
+     * `resolve()` declines to remember that one, so nothing remains here to
+     * drop. A drop per call would take the resolution without caveat with it,
+     * and that one comes once per process, 0.492s cold against 0.002s warm.
      *
      * @param array<string, mixed> $args
      */
@@ -142,7 +141,7 @@ final class Registry
     }
 
     /**
-     * The tools this client is being offered, in order.
+     * The tools this client gets, in order.
      *
      * @return array<int, class-string<Tool>>
      */

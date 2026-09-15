@@ -7,26 +7,29 @@ namespace TYPO3\DevCompanion\Tool;
 /**
  * Where a tool's answer can come from, as the tool itself declares it.
  *
- * A caller choosing a tool reads what it is about in the description. What is
- * not in there is whether the answer will exist at all when nothing is running,
- * and that decides how a task is planned rather than only how an answer is
- * read: a tool answering from the knowledge base answers on a fresh clone, and
- * one answering from the installation alone is the reason to start the
+ * A caller who chooses a tool reads what it is about in the description. What
+ * is not in there is whether the answer will exist at all when nothing is up.
+ * That decides how a caller plans a task rather than only how it reads an
+ * answer. A tool that answers from the knowledge base answers on a fresh clone.
+ * One that answers from the installation alone is the reason to start the
  * containers before the task instead of in the middle of it.
  *
  * What a tool declares is the set of sources that can answer it, first one
  * first. Which one did answer is `answeredBy` in the output schema, and it is a
- * different statement: this one is about the tool, that one about the call.
+ * different statement. This one is about the tool, that one about the call.
  */
 enum Source: string
 {
-    /** The installation this server was started in: booted, or asked through its console. */
+    /**
+     * The installation this server started in: booted, or asked through its
+     * console.
+     */
     case Installation = 'installation';
 
     /** The files the installed packages ship, read rather than executed. */
     case Packages = 'packages';
 
-    /** The knowledge base inside this package, which needs nothing running. */
+    /** The knowledge base inside this package, which needs nothing up. */
     case Knowledge = 'knowledge';
 
     /** A service read over the network, named in the tool's own description. */
@@ -56,9 +59,9 @@ enum Source: string
     /**
      * The sentence appended to every tool description.
      *
-     * Uniform and short on purpose: every client reads it in every session and
-     * pays for it in tokens each time, so it carries the names and leaves what
-     * they mean to typo3_server_scope, which is asked once and by choice.
+     * Uniform and short on purpose. Every client reads it in every session and
+     * pays for it in tokens each time. So it carries the names and leaves what
+     * they mean to typo3_server_scope, which a caller calls once and by choice.
      *
      * @param array<int, self> $sources
      * @return non-empty-string

@@ -27,7 +27,7 @@ use TYPO3\DevCompanion\Server\Installer;
  */
 final class TaskGuide extends ReadOnlyTool
 {
-    /** The premise every checklist below is composed under, stated once (R-GUI-008). */
+    /** The premise under every checklist below, stated once (R-GUI-008). */
     public const PRODUCT_PREMISE = 'Content changes, so what is delivered has to be the version that is '
         . 'current after the change — that is what the editor and the visitor are owed. A defect is judged by '
         . 'that outcome: the old version still being served is the defect, and the error it eventually throws '
@@ -47,20 +47,20 @@ final class TaskGuide extends ReadOnlyTool
      * How many suites a brief carries, out of the list `typo3_test_run_guide`
      * returns for the same paths.
      *
-     * Named for the same reason as the constant above it: the schema says how
-     * many the answer carries, and it says the number the answer is sliced by.
+     * Named for the same reason as the constant above it. The schema says how
+     * many the answer carries, and it says the number that cuts the answer.
      */
     public const SUITES_PER_BRIEF = 4;
 
     /**
-     * Whose the hints in a brief are, said where they are printed (R-GUI-009).
+     * Whose the hints in a brief are, said where they print (R-GUI-009).
      *
      * They are `typo3_hint_lookup`'s corpus, matched by the same matcher and
-     * quoted statement for statement — and a selection of it, which is the half
+     * quoted statement for statement. And a selection of it, which is the half
      * a caller cannot see from here. The fifth recorded `REVIEW-03` run cited
-     * two of them as that lookup without having called it: the attribution was
-     * right, nothing in the answer had said so, and the reader was sent to a
-     * tool that did not answer.
+     * two of them as that lookup without a call to it. The attribution was
+     * right, nothing in the answer had said so, and the reader went to a tool
+     * that did not answer.
      */
     public const HINTS_SOURCE = 'The hints below are typo3_hint_lookup\'s, matched for these paths and quoted '
         . 'whole. A finding that cites one of these rules is citing that lookup rather than this guide.';
@@ -68,10 +68,10 @@ final class TaskGuide extends ReadOnlyTool
     /**
      * The second half of `HINTS_SOURCE`, said only where it is true.
      *
-     * It was printed unconditionally and claimed the lookup holds more whenever
-     * a brief carried hints at all, beside an `omittedHints` that was empty and
-     * said the opposite in the same payload — which is the pointer `R-GUI-012`
-     * exists to stop being empty.
+     * It printed without condition and claimed the lookup holds more whenever a
+     * brief carried hints at all. Beside it stood an `omittedHints` that was
+     * empty and said the opposite in the same payload, which is the pointer
+     * `R-GUI-012` exists to fill.
      */
     public const HINTS_TRUNCATED = 'A brief carries the %d strongest per group of paths, which is not '
         . 'everything the lookup holds on them — call it for the rest, by path, with a larger limit, or by id.';
@@ -79,9 +79,9 @@ final class TaskGuide extends ReadOnlyTool
     /**
      * The same half where the brief did carry everything the lookup matched.
      *
-     * A caller that has to find out by calling has paid a round trip to be
-     * told nothing, and the step the brief stands in for is the one a skill
-     * prescribes next — so the answer says which it was.
+     * A caller that has to find out with a call has paid a round trip to hear
+     * nothing. The step the brief stands in for is the one a skill prescribes
+     * next, so the answer says which it was.
      */
     public const HINTS_COMPLETE = 'These are everything typo3_hint_lookup matches for these paths, so calling '
         . 'it again by path adds nothing; a subject it holds under another path or id is still a call away.';
@@ -90,14 +90,13 @@ final class TaskGuide extends ReadOnlyTool
      * Which hints the brief left, said before the brief rather than inside it
      * (`R-GUI-012`, `D-ANS-146`).
      *
-     * A subsystem the brief did not reach is invisible until the lookup is
-     * called. The review that lost `dependency-injection` on a patch injecting a
-     * new service read four hint bodies and established the rule by grepping
-     * three call sites out of the checkout instead
-     * (`feedback/2026-08-03-144410`). Saying it under the `Hints:` heading was
-     * not enough: a second session read the four blocks below it, moved on to
-     * the code, and made about a hundred further calls without the id coming
-     * back.
+     * A subsystem the brief did not reach is invisible until the lookup runs.
+     * The review that lost `dependency-injection` on a patch that injects a new
+     * service read four hint bodies. It established the rule from a grep over
+     * three call sites in the checkout instead (`feedback/2026-08-03-144410`).
+     * A line under the `Hints:` heading was not enough. A second session read
+     * the four blocks below it, moved on to the code, and made about a hundred
+     * further calls. The id never came back.
      */
     public const HINTS_OMITTED = 'Owed after this brief, and not carried below: %s. One typo3_hint_lookup '
         . 'call by id each, and a subject named here and not below is one this brief did not reach.';
@@ -107,7 +106,7 @@ final class TaskGuide extends ReadOnlyTool
      * (`D-SKL-013`).
      *
      * The skill is a file in the caller's own project and this server cannot
-     * see it, so the line names it and stops there: what it is worth is the
+     * see it, so the line names it and stops there. What it is worth is the
      * order it carries, and a brief is one call inside that order.
      */
     public const SKILLS_OWNING = 'Owned by: %s. Load it where this project has it installed — the skill carries '
@@ -118,21 +117,20 @@ final class TaskGuide extends ReadOnlyTool
      * (`D-SKL-081`).
      *
      * Two names without an order are two names to pick one of, and the session
-     * this was written from picked neither. The order is the work's: what
-     * establishes what is there comes before what writes the change.
+     * behind this picked neither. The order is the work's: what establishes
+     * what is there comes before what writes the change.
      */
     public const SKILLS_IN_ORDER = 'Owned by: %s — in that order, because this task establishes what is there '
         . 'before it changes it. Load both where this project has them installed: each carries the working order '
         . 'for its half, and this brief is one call inside the first.';
 
     /**
-     * Said where the skill is named, for the copy this project has of it
+     * Said where the skill's name stands, for the copy this project has of it
      * (`D-SKL-086`).
      *
-     * The same thing is said once at initialize, before a task is known, and a
-     * session read it there and worked four such skills anyway. This is the
-     * last moment this server controls: the load itself is a call it cannot
-     * see.
+     * The same line stands once at initialize, before any task, and a session
+     * read it there and worked four such skills anyway. This is the last moment
+     * this server controls: the load itself is a call it cannot see.
      */
     public const SKILLS_STALE = 'Behind what this server publishes, in this project: %s. Run '
         . 'typo3-dev-companion update before loading %s, or say in any report which copy you read.';
@@ -142,10 +140,10 @@ final class TaskGuide extends ReadOnlyTool
      * (`D-GUI-013`).
      *
      * It is step 5 of `skills/base.md`, and the paragraph before it exempts the
-     * task that produces no change — so a session that walked the order on a 404
+     * task that produces no change. So a session that walked the order on a 404
      * and then wrote four PHP files has read the step and taken the exemption.
-     * What is placed here is the obligation, its axes and the condition it is
-     * skipped under (`D-GUI-025`); the step's reasoning stays where it is.
+     * What stands here is the obligation, its axes and the condition that skips
+     * it (`D-GUI-025`); the step's reasons stay where they are.
      */
     public const DEPRECATION_SWEEP = 'Sweep the deprecations before writing: typo3_changelog_lookup with '
         . 'type "deprecation" and the query omitted, %s. Only a change touching no TYPO3 API skips it, a CI '
@@ -155,7 +153,7 @@ final class TaskGuide extends ReadOnlyTool
         . 'onwards is read off the first.';
 
     /**
-     * The page this kind of work is written up in, said in the same place
+     * The page that writes this kind of work up, said in the same place
      * (`D-GUI-012`).
      *
      * The pointer arrives with the work instead of before it, where the `guides`
@@ -177,10 +175,10 @@ final class TaskGuide extends ReadOnlyTool
     /**
      * The other change type that writes no file, and the intent it reaches.
      *
-     * The two are spelled differently because the intent stands beside
-     * `installation-setup` and `installation-upgrade` as the third thing that is
-     * done to an installation, rather than being what a caller states about the
-     * work (`D-GUI-008`).
+     * The two differ because the intent stands beside `installation-setup` and
+     * `installation-upgrade` as the third thing somebody does to an
+     * installation. It is not what a caller states about the work
+     * (`D-GUI-008`).
      */
     private const OPERATIONS = 'operations';
     private const OPERATIONS_INTENT = 'installation-operations';
@@ -188,12 +186,12 @@ final class TaskGuide extends ReadOnlyTool
     /**
      * The third change type that writes no file, and the intent it is the id of.
      *
-     * It exists because a session triaging a core report picked `audit` — the
-     * one documented as writing no file — and was answered with what a review of
-     * a diff owes, which it used none of because a triage produces no diff
-     * (`D-GUI-011`). So `audit` keeps its meaning, and what withholds the diff
-     * items is that neither intent matches the other's words rather than a rule
-     * about which items apply.
+     * It exists because a session on the triage of a core report picked
+     * `audit`, the one documented as the type that writes no file. The answer
+     * was what a review of a diff owes, and the session used none of it because
+     * a triage produces no diff (`D-GUI-011`). So `audit` keeps its meaning.
+     * What withholds the diff items is that neither intent matches the other's
+     * words, rather than a rule about which items apply.
      */
     private const TRIAGE = 'triage';
 
@@ -201,37 +199,37 @@ final class TaskGuide extends ReadOnlyTool
      * The fourth, and the id of the intent it reaches (`D-SKL-065`).
      *
      * A defect reported by its symptom, where the request is the file and the
-     * cause and nothing is to be changed yet. It is the shape that was answered
-     * worst of the four: measured on 2026-08-19, a content element rendering
-     * wrong handed over the workflow for adding one, and a page answering with
-     * an error was recognized as nothing at all and came back with the steps a
-     * patch owes. The value exists for the same reason `triage` does — a caller
-     * classifying rather than describing reaches for the one documented as
-     * writing no file, and `audit` is what they picked last time (`D-GUI-011`).
+     * cause and no change is due yet. It is the shape with the worst answer of
+     * the four, measured on 2026-08-19. A content element that renders wrong
+     * got the workflow to add one. A page that answers with an error matched
+     * nothing at all and came back with the steps a patch owes. The value
+     * exists for the same reason `triage` does. A caller who classifies rather
+     * than describes reaches for the one documented as the type that writes no
+     * file. `audit` is what they picked last time (`D-GUI-011`).
      */
     private const DIAGNOSIS = 'diagnosis';
 
     /**
-     * The intent that recognizes the caller's own act of writing the change,
+     * The intent that recognizes the caller's own act, the change they write,
      * and the one that ends every shape above where a brief carries it.
      *
-     * It is the discriminator `D-SKL-039` had no word for: a review names the
-     * change it is about, and the words of that change are the words of writing
-     * one, while "and fix it" is the caller saying what they are going to do.
+     * It is the discriminator `D-SKL-039` had no word for. A review names the
+     * change it is about, and the words of that change are the words of its
+     * author. "And fix it" is the caller's own word on what they will do.
      */
     private const PATCH = 'patch';
 
     /**
      * The intent a stated change type names, where it names one.
      *
-     * A caller states the type instead of describing the work, and the four
-     * that write no file are only reachable that way. So the route is real and
-     * what it may not be is a word appended to the task text: that made every
-     * intent carrying the type as a needle a strong match, and `cleanup` names
-     * two different pieces of work — a mechanical patch, which is what the
-     * enum value means and what the arm below answers, and putting a whole
-     * repository right, which is the intent (`D-GUI-027`). `bugfix`, `feature`
-     * and `cleanup` name no intent: what those tasks are about is the sentence.
+     * A caller states the type instead of a description of the work, and the
+     * four that write no file are only reachable that way. So the route is real
+     * and what it may not be is a word appended to the task text. That made
+     * every intent with the type as a needle a strong match. `cleanup` names
+     * two different pieces of work. A mechanical patch, which is what the enum
+     * value means and what the arm below answers. And a whole repository put
+     * right, which is the intent (`D-GUI-027`). `bugfix`, `feature` and
+     * `cleanup` name no intent: what those tasks are about is the sentence.
      *
      * @var array<string, string>
      */
@@ -250,19 +248,21 @@ final class TaskGuide extends ReadOnlyTool
         'bugfix' => [
             'Reproduce the bug first, ideally with a failing test that the fix turns green.',
             // The checkout a caller stands in is regularly the one branch, so
-            // this asked for a reading nobody could make and a session
-            // answered it from typo3_commit_message_guide instead and said so
+            // this asked for a read nobody could make. A session answered it
+            // from typo3_commit_message_guide instead and said so
             // (`D-GUI-023`). That tool states which lines take the change and
-            // what naming an older one claims; which of them carry the defect
-            // is still the caller's reading, on whatever branches they have.
+            // what a name for an older one claims. Which of them carry the
+            // defect is still the caller's read, on whatever branches they
+            // have.
             'Settle which release branches the fix goes to with typo3_commit_message_guide, which names the '
                 . 'lines a change of this type takes and says what claiming an older one costs. Whether the '
                 . 'defect is on them is your reading, and a checkout holding one branch cannot make it.',
-            // The obligation the core's own conventions file leaves at "user-facing
-            // changes need an entry", which a session working a bugfix answered by
-            // guessing and said so (`D-AUD-014`). The directory is here for the
-            // same reason and is the second half of `D-KNW-132`; the four types and
-            // the boundary against Breaking stay the page's.
+            // The obligation the core's own conventions file leaves at
+            // "user-facing changes need an entry". A session on a bugfix
+            // answered it with a guess and said so (`D-AUD-014`). The directory
+            // is here for the same reason and is the second half of
+            // `D-KNW-132`. The four types and the boundary against Breaking
+            // stay the page's.
             'A bugfix owes a changelog entry only where it changes what an installation renders, is configured '
                 . 'by, or has documented, and then it is an Important below typo3/sysext/core/Documentation/'
                 . 'Changelog/. Write it into the <lts>.x directory of the oldest branch the Releases: trailer '
@@ -276,26 +276,26 @@ final class TaskGuide extends ReadOnlyTool
         'cleanup' => ['Keep the cleanup mechanical; avoid mixing behavioural changes into the same patch.'],
         'test' => ['Confirm the test fails without the fix and passes with it; avoid asserting on incidental output.'],
         'documentation' => ['Run ./Build/Scripts/runTests.sh -s checkRst to validate ReST syntax.'],
-        // The one type whose rules are stated elsewhere: it names the
-        // `deprecation` intent above, which already carries them for the caller
-        // who describes the work instead of classifying it. A block here would
-        // print every one of those items a second time.
+        // The one type whose rules stand elsewhere. It names the `deprecation`
+        // intent above, which already carries them for the caller who describes
+        // the work instead of classifies it. A block here would print every one
+        // of those items a second time.
         'deprecation' => [],
         // The type that changes nothing. What a review owes is the audit
-        // intent's, for the same reason, and what it does not owe is the
-        // checklist this one is not assembled into at all — see answer().
+        // intent's, for the same reason. What it does not owe is the checklist
+        // this one never joins, see answer().
         self::AUDIT => [],
-        // The other one. What operating an installation owes is the intent's,
-        // which this value names above, and what it does not owe is the
-        // skeleton a review is composed into — see answer().
+        // The other one. What the operation of an installation owes is the
+        // intent's, which this value names above. What it does not owe is the
+        // skeleton of a review, see answer().
         self::OPERATIONS => [],
-        // The third, and the same arrangement: the triage intent carries what a
-        // triage owes, and this value is how a caller reaches it by classifying
-        // rather than by describing.
+        // The third, and the same arrangement. The triage intent carries what a
+        // triage owes, and this value is how a caller reaches it by a
+        // classification rather than a description.
         self::TRIAGE => [],
-        // The fourth, and the same arrangement again: what looking for a cause
-        // owes is the diagnosis intent's, and this value is how a caller
-        // reaches it by classifying rather than by describing.
+        // The fourth, and the same arrangement again. What the search for a
+        // cause owes is the diagnosis intent's. This value is how a caller
+        // reaches it by a classification rather than a description.
         self::DIAGNOSIS => [],
         'unknown' => [],
     ];
@@ -309,13 +309,13 @@ final class TaskGuide extends ReadOnlyTool
         'bugfix' => '',
         'cleanup' => '',
         self::AUDIT => '',
-        // Empty, and measured rather than assumed: the terms here reach
-        // Domains::detect() for this brief alone, while the hints are matched by
-        // Hints::find() from the paths and the task text. `frontend build
-        // sitepackage` — the vocabulary an asset build is asked for in — left
-        // the four hints of `feedback/2026-08-03-154508` identical and moved the
-        // brief to buildCss, lintScss and the component lookup, which is what
-        // writes backend markup rather than what boots an installation.
+        // Empty, and measured rather than assumed. The terms here reach
+        // Domains::detect() for this brief alone, while Hints::find() matches
+        // the hints from the paths and the task text. `frontend build
+        // sitepackage`, the vocabulary of a request for an asset build, left
+        // the four hints of `feedback/2026-08-03-154508` identical. It moved
+        // the brief to buildCss, lintScss and the component lookup, which is
+        // what writes backend markup rather than what boots an installation.
         self::OPERATIONS => '',
         self::TRIAGE => '',
         self::DIAGNOSIS => '',
@@ -324,8 +324,8 @@ final class TaskGuide extends ReadOnlyTool
 
     /**
      * The tool that answers a matched subject from the installation instead of
-     * from memory. These are invented or misregistered in bulk when nobody
-     * points at them, and fail at runtime rather than at build time.
+     * from memory. Sessions invent or misregister these in bulk when nobody
+     * points at them, and they fail at runtime rather than at build time.
      *
      * @var array<string, string>
      */
@@ -429,15 +429,15 @@ final class TaskGuide extends ReadOnlyTool
         )));
         $domains = Domains::detect($paths, $task . ' ' . (self::CHANGE_TYPE_TERMS[$changeType] ?? ''));
 
-        // Several of the conventions below — the changelog, the Gerrit
-        // workflow, the runTests.sh suites — do not exist outside the core, so
-        // handing them over as a checklist for a project extension is worse
-        // than saying the question is outside what this server knows. The
-        // decision is per path, because a call is not one piece of work, and
-        // the brief states it once for what every path shares: the checklist,
-        // the checks and the discovery steps are filtered where nothing in the
-        // call is core work, and the notice names the paths they are not for
-        // where something is (D-SCO-009).
+        // Several of the conventions below, the changelog, the Gerrit workflow,
+        // the runTests.sh suites, do not exist outside the core. A checklist of
+        // them for a project extension is worse than a line that says the
+        // question is outside what this server knows. The decision is per path,
+        // because a call is not one piece of work, and the brief states it once
+        // for what every path shares. The checklist, the checks and the
+        // discovery steps drop out where nothing in the call is core work. The
+        // notice names the paths they are not for where something is
+        // (D-SCO-009).
         $scopes = Scope::ofEach($paths, $task);
         $groups = Scope::groups($paths, $scopes, $task);
         $outside = Scope::pathsOf($scopes, Scope::Project, Scope::Extension);
@@ -445,7 +445,7 @@ final class TaskGuide extends ReadOnlyTool
         // the paths disagree there is no one answer, so the whole-call verdict
         // falls back to what the task text says on its own. A group that placed
         // nothing is not that disagreement and does not veto the placement
-        // either: it takes the one the rest of the call has (`D-SCO-016`).
+        // either. It takes the one the rest of the call has (`D-SCO-016`).
         $placed = Scope::placed($groups);
         $scope = count($placed) === 1 ? $placed[0]['scope'] : Scope::of('', $task);
         $outsideCore = Scope::everyPlacedPathIsOutsideTheCore($groups);
@@ -458,35 +458,33 @@ final class TaskGuide extends ReadOnlyTool
             $coreWork
         );
         // A stated change type is the caller's own classification and it keeps
-        // the skeleton: "review the patch that deprecates X" is authoring work
-        // described from the reviewer's side, and a brief that answered it as a
-        // review would leave out the steps that patch owes. The same holds for
-        // the boot half of "fix the post-start hook so the import runs". What
-        // the words add is kept, because the other caller is real too — one who
-        // states the type of the patch under review rather than of their own
-        // work — and appending is what costs neither of them a step
-        // (`D-GUI-009`).
+        // the skeleton. "Review the patch that deprecates X" is author's work
+        // in the reviewer's words. A brief that answered it as a review would
+        // leave out the steps that patch owes. The same holds for the boot half
+        // of "fix the post-start hook so the import runs". What the words add
+        // stays, because the other caller is real too. That one states the type
+        // of the patch under review rather than of their own work. An appendix
+        // is what costs neither of them a step (`D-GUI-009`).
         $stated = !in_array($changeType, [self::AUDIT, self::TRIAGE, self::OPERATIONS, self::DIAGNOSIS, 'unknown'], true);
         $confirmed = TaskIntents::confirmed($intents);
         $confirmedIds = array_column($confirmed, 'id');
         // A task may read and then write, and "find an old Forge issue and fix
         // it" is the shape two sessions asked for. Where the words name the
-        // caller's own change, the skeleton is the patch's and the reading half
-        // arrives as its intent's own items beside it — one brief, carrying
-        // what the change owes (`D-SKL-081`). A stated change type says the
-        // same thing by classification and already does this.
+        // caller's own change, the skeleton is the patch's and the read half
+        // arrives as its intent's own items beside it. One brief, with what the
+        // change owes (`D-SKL-081`). A stated change type says the same thing
+        // by classification and already does this.
         $writes = in_array(self::PATCH, $confirmedIds, true);
         $reading = !$stated && !$writes;
         $triages = $reading && in_array(self::TRIAGE, $confirmedIds, true);
-        // A triage is checked before a review, because a task that reads as
-        // both is the one this was written from: "review this old bug report"
-        // reviews a report and not a diff, and the review arm is the answer
-        // that was wrong.
+        // A triage comes before a review, because a task that reads as both is
+        // the one behind this. "Review this old bug report" reviews a report
+        // and not a diff, and the review arm is the answer that was wrong.
         $reviews = $reading && !$triages && in_array(self::AUDIT, $confirmedIds, true);
         $operates = $reading && in_array(self::OPERATIONS_INTENT, $confirmedIds, true);
-        // Last of the four, so a task that reads as a boot and as a diagnosis is
-        // a boot: booting is what makes the cause readable, and the diagnosis
-        // intent's own items arrive in that brief anyway.
+        // Last of the four, so a task that reads as a boot and as a diagnosis
+        // is a boot. The boot is what makes the cause readable, and the
+        // diagnosis intent's own items arrive in that brief anyway.
         $diagnoses = $reading && !$operates && in_array(self::DIAGNOSIS, $confirmedIds, true);
         $changesNothing = $reviews || $triages || $operates || $diagnoses;
         // Both halves recognized, which is what makes the two names an order
@@ -502,9 +500,9 @@ final class TaskGuide extends ReadOnlyTool
         // The core's own skills own the work only where nothing in the call is
         // outside it. A path in an extension settles the side, and the word
         // "core" in a task text about a sitepackage does not. A brief that
-        // changes nothing routes only the workflows that change nothing either:
-        // the words of the change under review name what it is about, not what
-        // the caller is doing (`D-SKL-039`).
+        // changes nothing routes only the workflows that change nothing either.
+        // The words of the change under review name what it is about, not what
+        // the caller does (`D-SKL-039`).
         $skills = TaskIntents::skills($confirmed, $coreWork && !$outsideCore, $changesNothing);
         $guides = self::guideRecords(TaskIntents::guides($confirmed, $coreWork && !$outsideCore, $changesNothing));
 
@@ -513,9 +511,8 @@ final class TaskGuide extends ReadOnlyTool
         $targets = Versions::targets($stated);
         // Matched per group, because a hint matched for a core path and one
         // matched for an extension path are answers to different questions.
-        //
-        // Matched at the lookup's own ceiling and cut here rather than there:
-        // the tier below decides which hints a brief carries, and applied to a
+        // Matched at the lookup's own ceiling and cut here rather than there.
+        // The tier below decides which hints a brief carries. Applied to a
         // slice already taken it would only reorder what it was meant to
         // choose. The same list is what the brief names as left rather than
         // counts (R-GUI-012), so the pointer names what that tool holds for
@@ -557,16 +554,16 @@ final class TaskGuide extends ReadOnlyTool
             $lines[] = '';
         }
         // The checklist below is the one payload of this server that states a
-        // process as the process, so where nothing placed the work it says so
-        // before stating it — the changelog and the Gerrit route are steps a
-        // caller in their own repository cannot take at all.
+        // process as the process. So where nothing placed the work it says so
+        // first. The changelog and the Gerrit route are steps a caller in their
+        // own repository cannot take at all.
         if ($scope === Scope::Uncertain) {
             $lines[] = Scope::UNCERTAIN_NOTICE . ' Name a path the work touches, and this brief is composed '
                 . 'for the repository it is in.';
             $lines[] = '';
         }
         // Said once, because the steps a caller expects and does not find are
-        // the ones they go looking for a second time.
+        // the ones they search for a second time.
         if ($changesNothing) {
             $lines[] = 'This is a brief for work that changes nothing, so what a patch owes — the deprecation '
                 . 'sweep, the focused diff, the test coverage, the commit message — is left out below. Pass '
@@ -574,9 +571,9 @@ final class TaskGuide extends ReadOnlyTool
             $lines[] = '';
         }
 
-        // Above the brief rather than under its `Hints:` heading: what a caller
-        // still owes is read while they are deciding what to do, and a line
-        // below a payload is read after they have decided (`D-ANS-146`).
+        // Above the brief rather than under its `Hints:` heading. A caller
+        // reads what they still owe while they decide what to do, and a line
+        // below a payload after they have decided (`D-ANS-146`).
         if ($omitted !== []) {
             $lines[] = sprintf(self::HINTS_OMITTED, implode(', ', array_column($omitted, 'id')));
             $lines[] = '';
@@ -587,10 +584,10 @@ final class TaskGuide extends ReadOnlyTool
             'Change type: ' . $changeType,
             'Domains: ' . implode(', ', $domains),
         ]);
-        // Named with what each was placed as, because the point of passing them
-        // is that the caller can tell which half of the brief is about which of
-        // its files. Also where there is one: the verdict on it is what every
-        // filtered list below was filtered by.
+        // Named with the placement of each. The point of the pass is that the
+        // caller can tell which half of the brief is about which of its files.
+        // Also where there is one: the verdict on it is what filtered every
+        // list below.
         if ($paths !== []) {
             $lines[] = "Paths:\n" . implode("\n", array_map(
                 static fn(array $entry): string => '- ' . $entry['path']
@@ -599,9 +596,9 @@ final class TaskGuide extends ReadOnlyTool
             ));
         }
         // Silent on the ordinary task, where one version is the whole question
-        // and saying so is noise. It speaks for the repository that serves
-        // several majors — whether the answer holds for all of them, or was
-        // narrowed to one because the caller stated it.
+        // and a line about it is noise. It speaks for the repository that
+        // serves several majors. Whether the answer holds for all of them, or
+        // narrows to one because the caller stated it.
         if (count($targets) > 1 || VersionScope::severalDeclared() !== []) {
             $lines[] = VersionScope::line($targets);
         }
@@ -615,9 +612,9 @@ final class TaskGuide extends ReadOnlyTool
             $lines[] = 'Possibly also: ' . $intent['title'] . ', ' . $intent['condition']
                 . '. Its checklist items are marked as conditional below and its checks are listed separately.';
         }
-        // Above the payload rather than under it: a caller that is in the wrong
+        // Above the payload rather than under it. A caller in the wrong
         // workflow is in it for the whole answer, and the line is worth nothing
-        // once the reading has started.
+        // once the read has started.
         $stale = Installer::behind(Instance::startedFrom() ?? '', $skills);
         if ($skills !== []) {
             $lines[] = sprintf(
@@ -633,8 +630,8 @@ final class TaskGuide extends ReadOnlyTool
             );
         }
         // Under the skill and above the payload for the same reason, and two
-        // lines rather than one: the skill is a file in the caller's own
-        // project and the guide is a page here, so a session that has neither
+        // lines rather than one. The skill is a file in the caller's own
+        // project and the guide is a page here. So a session that has neither
         // installed nor listed still gets the one it can reach.
         if ($guides !== []) {
             $lines[] = self::GUIDES_OWNING;
@@ -652,13 +649,13 @@ final class TaskGuide extends ReadOnlyTool
         $lines[] = '';
         $lines[] = 'Hints:';
         if ($hints['matchedHints'] !== []) {
-            // Said above the blocks rather than under them, because what it
-            // corrects is a citation and the citation is written while the
-            // block is being read.
+            // Said above the blocks rather than under them. What it corrects is
+            // a citation, and the citation happens while the reader is in the
+            // block.
             $lines[] = self::HINTS_SOURCE;
-            // Which of the two follows is what the brief actually did, not a
-            // standing disclaimer: a caller told there is more when there is
-            // not spends the call the pointer promised on nothing.
+            // Which of the two follows is what the brief did, not a standing
+            // disclaimer. A caller told there is more when there is not spends
+            // the call the pointer promised on nothing.
             if ($omitted !== []) {
                 $lines[] = sprintf(self::HINTS_TRUNCATED, self::HINTS_PER_GROUP);
             } else {
@@ -666,7 +663,7 @@ final class TaskGuide extends ReadOnlyTool
             }
             $lines[] = '';
             // One block per group, and the heading only where there is more
-            // than one: the caller named two repositories, and which half of
+            // than one. The caller named two repositories, and which half of
             // the brief is about which path is half of the answer.
             $sectionTexts = [];
             foreach ($found as $group) {
@@ -692,9 +689,9 @@ final class TaskGuide extends ReadOnlyTool
                 . 'not that none applies: call typo3_hint_lookup again with the concrete file paths once they are known.';
         }
 
-        // Only the confirmed intents may state a rule as applying: a
-        // conditionally matched one would fill the whole section with rules for
-        // work the task may not contain at all.
+        // Only the confirmed intents may state a rule as one that applies. A
+        // conditional match would fill the whole section with rules for work
+        // the task may not contain at all.
         $rules = TaskIntents::rules($confirmed, 2, $targets);
         if ($rules !== []) {
             $lines[] = '';
@@ -711,9 +708,9 @@ final class TaskGuide extends ReadOnlyTool
         $conditionalChecks = self::conditionalChecks($conditional, $checks, $target);
 
         // Every check this server knows is a runTests.sh invocation against a
-        // script in the core repository. Reporting a scope outside the core and then listing
-        // four of them was the whole complaint: the flag said the answer knew,
-        // and the payload said it had not acted on it.
+        // script in the core repository. A scope outside the core and then a
+        // list of four of them was the whole complaint. The flag said the
+        // answer knew, and the payload said it had not acted on it.
         if ($outsideCore) {
             $checks = [];
             $conditionalChecks = [];
@@ -731,19 +728,17 @@ final class TaskGuide extends ReadOnlyTool
                 $lines[] = '- `' . $check . '`';
             }
             if ($testHints !== []) {
-                // The two lists sit next to each other and are two narrowings of
-                // one corpus, which is what the reporting session had no way to
-                // read: it took the shorter one for the authoritative one and
-                // the longer one for suites the first had dropped
-                // (`D-ANS-108`).
+                // The two lists sit next to each other and are two cuts of one
+                // corpus, which is what the reporter had no way to read. It
+                // took the shorter one for the authoritative one and the longer
+                // one for suites the first had dropped (`D-ANS-108`).
                 $lines[] = '';
                 $lines[] = 'Suites that match this task, strongest first. Each is one to decide about rather than '
                     . 'one the list above left out, and typo3_test_run_guide holds the rest for these paths.';
-                // The one caveat that belongs to the answer handing over the
-                // command rather than to the one a session may never call: a
-                // suite can take untracked work with it, and this brief is
-                // step 3 of the order while the run guide is optional
-                // (`D-ANS-145`).
+                // The one caveat that belongs to the answer that hands over the
+                // command rather than to the one a session may never call. A
+                // suite can take untracked work with it, and this brief is step
+                // 3 of the order while the run guide is optional (`D-ANS-145`).
                 $lines[] = 'Before running one: ' . TestSuiteHints::invocation()['beforeYouRun'];
                 foreach ($testHints as $hint) {
                     $lines[] = '## ' . $hint['suite'];
@@ -767,23 +762,19 @@ final class TaskGuide extends ReadOnlyTool
         }
 
         // Three of the five in the last arm are steps a review does not take,
-        // and handing them to one was the whole of R-GUI-006. What replaces
-        // them is the reading a finding rests on rather than a second copy of an
-        // audit workflow: what the review is about is the audit intent's
-        // checklist. The arms before it are each other's counterparts — a review
+        // and their handover to one was the whole of R-GUI-006. What replaces
+        // them is the read a finding rests on rather than a second copy of an
+        // audit workflow. What the review is about is the audit intent's
+        // checklist. The arms before it are each other's counterparts. A review
         // owes the gaps it left, a boot owes what it produced, a diagnosis owes
-        // the reading each half of its answer came from — and none owes the
-        // others', which is why the shapes that write no file are four arms
-        // rather than one (D-GUI-008, D-SKL-065).
-        //
-        // Each arm carries only what its intent does not: this is the skeleton
-        // the intent's own items are appended to, and the arm is chosen by that
-        // intent having matched.
-        //
-        // The premise opens all three. R-GUI-008 is about every brief, and the
-        // review is the case it was written from: a session that never asks
-        // what the change does to the editor and the visitor reads a report as
-        // an API question and answers the wrong one.
+        // the read each half of its answer came from. None owes the others',
+        // which is why the shapes that write no file are four arms rather than
+        // one (D-GUI-008, D-SKL-065). Each arm carries only what its intent
+        // does not. This is the skeleton the intent's own items follow, and a
+        // match on that intent chooses the arm. The premise opens all three.
+        // R-GUI-008 is about every brief, and the review is the case behind it.
+        // A session that never asks what the change does to the editor and the
+        // visitor reads a report as an API question. It answers the wrong one.
         if ($triages) {
             $checklist = [
                 self::PRODUCT_PREMISE,
@@ -870,9 +861,9 @@ final class TaskGuide extends ReadOnlyTool
                     . 'the keyword, the trailers and the wrapping.';
         }
 
-        // Per line, not per section: a checklist mixes "reproduce the bug with
-        // a failing test" — true anywhere — with a changelog file below
-        // typo3/sysext/, which is a path the caller's repository does not have.
+        // Per line, not per section. A checklist mixes "reproduce the bug with
+        // a failing test", true anywhere, with a changelog file below
+        // typo3/sysext/. That is a path the caller's repository does not have.
         if ($outsideCore) {
             $checklist = array_values(array_filter(
                 $checklist,
@@ -886,10 +877,10 @@ final class TaskGuide extends ReadOnlyTool
             $lines[] = '- ' . $entry;
         }
 
-        // The brief is assembled from bundled knowledge alone, so everything
-        // that depends on the working tree is the agent's job. Saying which
-        // parts those are — and how to get them — is more useful than letting
-        // the checklist read as if the brief had already looked.
+        // The brief consists of bundled knowledge alone, so everything that
+        // depends on the working tree is the agent's job. A line on which parts
+        // those are, and how to get them, is more useful. The alternative is a
+        // checklist that reads as if the brief had already looked.
         $checkoutDiscovery = Coverage::read()['checkoutDiscovery'];
         if ($outsideCore) {
             $checkoutDiscovery = array_values(array_filter(
@@ -955,9 +946,9 @@ final class TaskGuide extends ReadOnlyTool
     /**
      * The documents an intent named, with the titles a caller picks one by.
      *
-     * A document whose file is gone is dropped rather than named: an id that
-     * answers nothing is worse than no pointer, and `KnowledgeTest` fails on
-     * the same mapping so nobody finds out here.
+     * A document whose file is gone drops out rather than gets a name. An id
+     * that answers nothing is worse than no pointer, and `KnowledgeTest` fails
+     * on the same mapping so nobody finds out here.
      *
      * @param array<int, string> $ids
      * @return array<int, array{id: string, title: string, when: string, scope: string, tool: string}>
@@ -980,15 +971,15 @@ final class TaskGuide extends ReadOnlyTool
      * The matched hints with the ones declared for another repository last.
      *
      * A brief carries `HINTS_PER_GROUP` per group, and there a hint about
-     * somebody else's repository takes the place of one the caller is obliged
-     * by: a build is described in the same words wherever it runs, so
-     * `extension-asset-build` outranked `backend-typescript` on a core patch
-     * (`D-ANS-097`, `R-ANS-033`). Nothing is dropped — `D-KNW-007` stands, and
-     * what moves past the slice the brief names in `omittedHints`.
+     * somebody else's repository takes the place of one the caller owes. A
+     * build has the same words wherever it runs, so `extension-asset-build`
+     * outranked `backend-typescript` on a core patch (`D-ANS-097`,
+     * `R-ANS-033`). Nothing drops out: `D-KNW-007` stands, and what moves past
+     * the slice the brief names in `omittedHints`.
      *
-     * What is demoted is what `MatchedHints::scopeNotice()` has something to say
-     * about, so the order and the notice above a block answer one question and
-     * not two. Within each tier the matcher's own ranking stands.
+     * What moves down is what `MatchedHints::scopeNotice()` has something to
+     * say about. So the order and the notice above a block answer one question
+     * and not two. Within each tier the matcher's own rank stands.
      *
      * @param array<int, array<string, mixed>> $hints
      * @return array<int, array<string, mixed>>
@@ -1009,13 +1000,13 @@ final class TaskGuide extends ReadOnlyTool
     }
 
     /**
-     * The checks a brief states as applying: the base suites of the domains the
-     * task is in, then those of the confirmed intents, deduplicated.
+     * The checks a brief states as due: the base suites of the domains the task
+     * is in, then those of the confirmed intents, each once.
      *
      * The base suites come first because they hold whatever the task turns out
-     * to be, and because nothing else states them: an intent is recognised from
-     * the words of the task, and a bugfix in FormEngine names no suite in any
-     * of its words.
+     * to be, and because nothing else states them. An intent comes from the
+     * words of the task, and a bugfix in FormEngine names no suite in any of
+     * its words.
      *
      * @param array<int, array<string, mixed>> $intents
      * @param array<int, string> $domains
@@ -1038,8 +1029,8 @@ final class TaskGuide extends ReadOnlyTool
     }
 
     /**
-     * The checks of the conditionally matched intents, minus the ones already
-     * stated as applying.
+     * The checks of the conditional intents, minus the ones already stated as
+     * due.
      *
      * @param array<int, array<string, mixed>> $intents
      * @param array<int, string> $stated
@@ -1068,7 +1059,7 @@ final class TaskGuide extends ReadOnlyTool
 
     /**
      * Routes to the specialised tools, so an agent that starts here learns that
-     * they exist instead of writing markup or label keys from memory.
+     * they exist instead of writes markup or label keys from memory.
      *
      * @param array<int, array<string, mixed>> $intents
      * @param array<int, string> $domains
@@ -1093,10 +1084,10 @@ final class TaskGuide extends ReadOnlyTool
         if (array_intersect([Domains::CSS, Domains::FLUID], $domains) !== []) {
             $candidates[] = 'typo3_component_lookup, before writing backend markup or CSS classes';
         }
-        // A subject whose hint matched is a subject the caller is about to write
-        // in, and both of these answer from the installation rather than from
+        // A subject whose hint matched is a subject the caller is about to
+        // write in. Both of these answer from the installation rather than from
         // memory. The pointer is in the hint text as well, which is exactly the
-        // place nobody rereads while writing the fortieth label key.
+        // place nobody reads again at the fortieth label key.
         foreach (self::HINT_TOOLS as $hintId => $suggestion) {
             if (in_array($hintId, $hintIds, true)) {
                 $candidates[] = $suggestion;
@@ -1110,18 +1101,18 @@ final class TaskGuide extends ReadOnlyTool
                 $target
             );
         $candidates[] = 'typo3_hint_lookup with the concrete file paths, once they are known';
-        // What the round trip buys, and nothing more: the `testSuites` above are
-        // the strongest few of the list it returns, so what it adds is the rest
-        // of them and the invocation notes (`D-KNW-067`).
+        // What the round trip buys, and nothing more. The `testSuites` above
+        // are the strongest few of the list it returns. So what it adds is the
+        // rest of them and the invocation notes (`D-KNW-067`).
         $candidates[] = 'typo3_test_run_guide, for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few';
         // The one step this brief describes and never pointed at. A caller who
-        // read the routing table at the start of a session is committing hours
-        // later, from this list — and outside the core it is the follow-up call
-        // that has to carry the workflow, because the guide defaults to the
-        // core's and cannot read a repository off a commit message. The
-        // checklist above says it; a list of calls that leaves it out is one
-        // answer disagreeing with itself about the same step — which is why a
-        // review, whose checklist ends without it, does not point at it either.
+        // read the routing table at the start of a session commits hours later,
+        // from this list. Outside the core it is the follow-up call that has to
+        // carry the workflow. The guide defaults to the core's and cannot read
+        // a repository off a commit message. The checklist above says it; a
+        // list of calls that leaves it out is one answer at odds with itself
+        // about the same step. That is why a review, whose checklist ends
+        // without it, does not point at it either.
         if (!$changesNothing) {
             $candidates[] = $outsideCore
                 ? 'typo3_commit_message_guide, before committing — its default is this repository\'s case and '
@@ -1129,11 +1120,12 @@ final class TaskGuide extends ReadOnlyTool
                 : 'typo3_commit_message_guide with workflow="core", before committing — the default is a '
                     . 'repository of your own and demands no Forge issue or release trailer';
         }
-        // This call again. It is made once, against the request, which is the
-        // moment least is known about the work — so what the brief adds is the
-        // acts to ask at, which are the caller's own and can be named without
-        // seeing the checkout (`D-SKL-062`). The instructions carry the same
-        // acts in a shorter form, for the session that never asked for a brief.
+        // This call again. It happens once, against the request, which is the
+        // moment nobody knows the least about the work. So what the brief adds
+        // is the acts to ask at. Those are the caller's own and have names
+        // without a look at the checkout (`D-SKL-062`). The instructions carry
+        // the same acts in a shorter form, for the session that never asked for
+        // a brief.
         $candidates[] = 'typo3_task_guide again, where the work enters a subject this task did not name — the '
             . 'first file under a test directory, the first run of a check the repository declares, the first '
             . 'branch or commit, the first edit to code or documentation the package ships';
@@ -1141,10 +1133,10 @@ final class TaskGuide extends ReadOnlyTool
             $candidates[] = 'typo3_feedback_record, when one of these answers was wrong or incomplete';
         }
 
-        // What only the core has goes before that, not after it: an intent's
-        // own wording is what the check reads, and the generic candidate for
-        // the same tool — which does name the artefact — is what would be left
-        // to carry the caller outside the core (`D-SCO-015`).
+        // What only the core has goes before that, not after it. An intent's
+        // own wording is what the check reads. The generic candidate for the
+        // same tool, which does name the artefact, is what would remain to
+        // carry the caller outside the core (`D-SCO-015`).
         if ($outsideCore) {
             $candidates = array_filter(
                 $candidates,
@@ -1153,7 +1145,7 @@ final class TaskGuide extends ReadOnlyTool
         }
 
         // One entry per tool: an intent that already suggested a tool keeps its
-        // own wording, the generic fallback for that tool is dropped.
+        // own wording, and the generic fallback for that tool goes.
         $suggestions = [];
         foreach ($candidates as $candidate) {
             $tool = strtok($candidate, ' ,');
@@ -1162,9 +1154,9 @@ final class TaskGuide extends ReadOnlyTool
             }
             $suggestions[$tool] = [
                 'tool' => $tool,
-                // The candidates are written as one sentence, "tool, when", so
-                // the separator has to come off with the tool name — otherwise
-                // both halves carry it and the answer reads "tool , when".
+                // The candidates stand as one sentence, "tool, when", so the
+                // separator has to come off with the tool name. Otherwise both
+                // halves carry it and the answer reads "tool , when".
                 'when' => ltrim(substr($candidate, strlen($tool)), ' ,'),
             ];
         }

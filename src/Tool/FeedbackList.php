@@ -9,8 +9,8 @@ use TYPO3\DevCompanion\Result\Schema;
 use TYPO3\DevCompanion\Result\ToolResult;
 
 /**
- * The improvement feedback recorded so far, so it can be worked off — and read
- * back once it was.
+ * The improvement feedback recorded so far, so a session can work it off, and
+ * read it back once it has.
  */
 final class FeedbackList extends ReadOnlyTool
 {
@@ -96,9 +96,9 @@ final class FeedbackList extends ReadOnlyTool
         $lines = array_map(static function (array $feedback): string {
             $date = substr($feedback['date'], 0, 10);
             $about = $feedback['tool'] === '' ? '' : ' — ' . $feedback['tool'];
-            // Named even when it is "unknown": a feedback nobody can attribute is a
-            // different thing from one whose model simply is not shown, and the
-            // list is where the difference is acted on.
+            // Named even when it is "unknown". A feedback nobody can attribute
+            // is a different thing from one whose model simply does not show.
+            // The list is where somebody acts on the difference.
             $by = $feedback['model'] === '' ? '' : ' · ' . $feedback['model'];
 
             $entry = sprintf(

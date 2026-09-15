@@ -14,7 +14,7 @@ use TYPO3\DevCompanion\Result\ToolResult;
 
 /**
  * What the component catalog is worth: where the contracts come from, which
- * core revision the fallback was taken from, and what a miss means.
+ * core revision the fallback came from, and what a miss means.
  */
 final class SnapshotScope extends ReadOnlyTool
 {

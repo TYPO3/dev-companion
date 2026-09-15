@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tool;
 
 /**
- * A tool that only reads bundled knowledge or the installation it was started
- * in: same arguments, same answer, no side effect, nothing outside this
- * package.
+ * A tool that only reads bundled knowledge or the installation it started in:
+ * same arguments, same answer, no side effect, nothing outside this package.
  *
  * That is every tool but typo3_feedback_record, which is why the annotations
- * are stated once here rather than twenty-one times. A tool that reaches
- * outside says so in the one hint that changes and inherits the rest.
+ * stand once here rather than twenty-one times. A tool that reaches outside
+ * says so in the one hint that changes and inherits the rest.
  */
 abstract class ReadOnlyTool implements Tool
 {
     /**
-     * Whether the answer is read from a host this package does not own, which
-     * is the one annotation that varies. The tools that reach one are the
-     * manuals and their permalinks, the tracker, the review server, the
-     * registry, and the changelog above the installed major.
+     * Whether the answer comes from a host this package does not own, which is
+     * the one annotation that varies. The tools that reach one are the manuals
+     * and their permalinks, the tracker, the review server, the registry, and
+     * the changelog above the installed major.
      */
     protected const OPEN_WORLD = false;
 

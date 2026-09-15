@@ -11,11 +11,11 @@ use TYPO3\DevCompanion\Result\ToolResult;
 
 /**
  * This server's only write: one markdown feedback per call, in its own
- * checkout, never touching an existing one.
+ * checkout, and it never touches one that exists.
  *
- * In its own checkout is the load-bearing half. Nothing here reaches the TYPO3
- * installation the server was reading, so this tool is not an exception to the
- * read-only posture — D-FBK-042, where reading it as one is the recorded
+ * In its own checkout is the half that carries the weight. Nothing here reaches
+ * the TYPO3 installation the server reads, so this tool is not an exception to
+ * the read-only posture. D-FBK-042, where a read of it as one is the recorded
  * mistake.
  */
 final class FeedbackRecord implements Tool
@@ -48,11 +48,11 @@ final class FeedbackRecord implements Tool
 
     public static function inputSchema(): array
     {
-        // The cap each field is cut at, in the one place a caller reads before
-        // writing to it. A session that knows the budget writes to it; one that
-        // does not writes past it and finds out from the answer which sentences
-        // it cost — D-FBK-049. Interpolated rather than typed out, so the
-        // sentence cannot say one number while the channel applies another.
+        // The cap that cuts each field, in the one place a caller reads before
+        // it writes to it. A session that knows the budget writes to it. One
+        // that does not writes past it and finds out from the answer which
+        // sentences it cost, D-FBK-049. Interpolated rather than typed out, so
+        // the sentence cannot say one number while the channel applies another.
         $storedCap = sprintf(
             ' At most %d characters; the channel cuts a longer text there rather than refuses it.',
             Channel::MAX_FIELD_LENGTH,
@@ -66,13 +66,13 @@ final class FeedbackRecord implements Tool
                 'model' => ['type' => 'string', 'minLength' => 1, 'description' => 'The model that records this feedback, as it identifies itself, for example claude-opus-5 or gpt-5.3-codex. Read it where it stands: what your client reports for the current session, or the person who runs you. Do not read it from what you remember about yourself. A feedback is evidence about one model\'s behaviour, and nobody can tell one filed as "unknown" apart from another model\'s. That fallback is for a session that looked and could not find out; an invented identifier is worse than none.'],
                 'category' => ['type' => 'string', 'enum' => Channel::CATEGORIES, 'default' => 'idea', 'description' => 'missing-knowledge: the knowledge base lacks the answer. wrong-answer: the answer was incorrect. tool-gap: no tool covers the need. bug: the server misbehaved. idea: anything else.'],
                 // One declared type, not the string-or-array it was. That union
-                // was the only one in any input schema this server offers, and
-                // the one model that has ever recorded feedback without naming a
-                // tool is the one that reported being unable to send the
-                // argument at all — D-ANS-017. The several still travel: the
-                // recorder splits on commas and spaces, so nothing about what a
-                // feedback can say was given up, and a client that sends a list
-                // anyway is told which type was expected before the tool runs.
+                // was the only one in any input schema this server offers. The
+                // one model that has ever recorded feedback without a tool name
+                // is the one that reported it could not send the argument,
+                // D-ANS-017. The several still travel. The recorder splits on
+                // commas and spaces, so a feedback can say everything it could
+                // before. A client that sends a list anyway hears which type
+                // the schema expects before the tool runs.
                 'tool' => ['type' => 'string', 'description' => 'The tool the observation is about, for example typo3_component_lookup, or the skill it activated, for example typo3-extension-health. Name several in one string, with commas between them.'],
                 'query' => ['type' => 'string', 'description' => 'The arguments that produced the poor result, or the task text where a whole session produced it. So somebody can re-run the feedback against a later version of the server instead of a read. The rule from observation holds: the arguments and the path they named, never a value the installation keeps secret. A re-run needs to know that the call asked for SYS/encryptionKey and that a key came back, not what the key was. Name a password or a token that was itself an argument rather than quote it.' . $storedCap],
                 'suggestion' => ['type' => 'string', 'description' => 'What the server should have answered or should be able to do instead.' . $storedCap],
@@ -104,17 +104,17 @@ final class FeedbackRecord implements Tool
         $cut = [];
         $file = Channel::record($args, $redacted, $cut);
         // The absolute path, because the relative one is relative to somewhere
-        // the caller has never been. A feedback recorded from a site package was
-        // reported back as feedback/<name>.md, looked for under that project,
-        // not found, and written off as a failed write — the file was there the
-        // whole time, one checkout over.
-        // Against the store rather than the checkout: the two are the same
-        // thing in a real installation and differ where a test writes into one
-        // of its own, and what this reports has to be where the file is.
+        // the caller has never been. A feedback recorded from a site package
+        // came back as feedback/<name>.md. The session searched under that
+        // project, found nothing, and wrote it off as a failed write. The file
+        // was there the whole time, one checkout over. Against the store rather
+        // than the checkout. The two are the same thing in a real installation
+        // and differ where a test writes into one of its own. What this reports
+        // has to be where the file is.
         $path = Channel::root() . '/' . $file;
-        // The card the feedback was written with, which Channel::record() has
-        // already put in the queue — reported so the answer says the report is
-        // waiting to be judged rather than lying in a directory.
+        // The card the feedback came with, which Channel::record() has already
+        // put in the queue. Reported so the answer says the report waits for a
+        // judgement rather than lies in a directory.
         $todo = Card::path($file);
 
         return ToolResult::create(
@@ -131,13 +131,13 @@ final class FeedbackRecord implements Tool
     }
 
     /**
-     * What was taken out of the feedback, said back to whoever wrote it.
+     * What came out of the feedback, said back to whoever wrote it.
      *
-     * A report that was altered says so, or it stops being a report — the same
+     * An altered report says so, or it stops as a report. That is the same
      * reason the marker in the file is visible rather than a silent
-     * substitution. It is also the only moment the value can still be discussed:
-     * the session is standing in the installation the value came from and knows
-     * what it was, and a reader of the archive three weeks later does not.
+     * substitution. It is also the only moment anybody can still discuss the
+     * value. The session stands in the installation the value came from and
+     * knows what it was. A reader of the archive three weeks later does not.
      *
      * @param array<int, string> $redacted
      */
@@ -158,13 +158,13 @@ final class FeedbackRecord implements Tool
     }
 
     /**
-     * What was cut off the end of a field, said back to whoever wrote it.
+     * What came off the end of a field, said back to whoever wrote it.
      *
      * The same ground as the redaction notice, and the half nothing else can
-     * report. A redacted value leaves a name beside its marker; a cut leaves
-     * mid-word, so the file gives a later reader no sign that the sentence was
-     * going somewhere — and this answer reaches the one session that still has
-     * the rest of it.
+     * report. A redacted value leaves a name beside its marker. A cut leaves
+     * mid-word, so the file gives a later reader no sign that the sentence went
+     * somewhere. This answer reaches the one session that still has the rest of
+     * it.
      *
      * @param array<int, string> $cut
      */

@@ -15,10 +15,10 @@ use TYPO3\DevCompanion\Result\Unsupported;
 /**
  * The backend modules the installation has registered.
  *
- * Read from the booted container rather than from `debug:backend:modules`,
- * whose CSV carries neither the navigation component a module resolves to nor
- * any route beyond the module's own path — and which the two maintained LTS
- * lines do not have at all, the command being TYPO3 v14 and up. `D-ANS-077`.
+ * Read from the booted container rather than from `debug:backend:modules`. Its
+ * CSV carries neither the navigation component a module resolves to nor any
+ * route beyond the module's own path. The two maintained LTS lines do not have
+ * it at all, because the command is TYPO3 v14 and up. `D-ANS-077`.
  */
 final class BackendModuleLookup extends ReadOnlyTool
 {
@@ -93,8 +93,8 @@ final class BackendModuleLookup extends ReadOnlyTool
         if (!is_array($topic) || !is_array($topic['modules'] ?? null)) {
             $reason = Typo3Runtime::reason();
             if ($reason === '') {
-                // The boot came up and this one topic did not, which the probe
-                // says why of. Every other topic of the same reading answered.
+                // The boot came up and this one topic did not, and the probe
+                // says why. Every other topic of the same read answered.
                 $reason = is_array($topic) && is_string($topic['unavailable'] ?? null)
                     ? 'the installation booted and its module registry could not be read: ' . $topic['unavailable']
                     : 'the installation booted and answered nothing about its backend modules';
@@ -171,15 +171,15 @@ final class BackendModuleLookup extends ReadOnlyTool
     /**
      * What a registration file names that this installation does not have.
      *
-     * Five registration mistakes in one session were each caught by an
-     * installation that had already been rebuilt, and the cycle was: edit the
-     * file, flush the cache, ask the registry — `D-FBK-055`. This is the half
-     * that needs neither, and it is the half whose three fields fail when a
-     * user opens the module and never when the file is read.
+     * An installation with a rebuild behind it caught each of five registration
+     * mistakes in one session. The cycle was: edit the file, flush the cache,
+     * ask the registry, `D-FBK-055`. This is the half that needs neither. It is
+     * the half whose three fields fail when a user opens the module and never
+     * on a read of the file.
      *
-     * The file is read as text. Executing it would run the caller's own PHP in
-     * this process, which nothing here does, so a value a constant or a
-     * variable computes is reported as unread rather than followed.
+     * The file comes in as text. To execute it would run the caller's own PHP
+     * in this process, which nothing here does. So a value a constant or a
+     * variable computes comes back as unread rather than followed.
      *
      * @param array<int, mixed> $registered
      */
@@ -257,15 +257,15 @@ final class BackendModuleLookup extends ReadOnlyTool
      * What the labels of one entry resolve to in this installation.
      *
      * `BaseModule` reads the module title out of one trans-unit, and which one
-     * follows from the form: an `LLL:` reference gets `mlang_tabs_tab`
-     * appended, a translation domain gets `title`, and a value that is neither
+     * follows from the form. An `LLL:` reference gets `mlang_tabs_tab`
+     * appended, a translation domain gets `title`. A value that is neither
      * matches no branch and leaves the module without a title at all. Read in
      * `.checkouts/12.4`, `13.4`, `14.3` and `main`, which differ in the domain
-     * branch alone — it arrived with the domains themselves, so below that
+     * branch alone. It arrived with the domains themselves, so below that
      * version the same value names nothing.
      *
-     * Each of these fails when a user opens the module and never when the file
-     * is read, which is what `D-FBK-055` had the check built for.
+     * Each of these fails when a user opens the module and never on a read of
+     * the file. That is what `D-FBK-055` had the check built for.
      *
      * @return array{resource: string, registered: ?bool, note: string}
      */
@@ -324,10 +324,10 @@ final class BackendModuleLookup extends ReadOnlyTool
     /**
      * The entries of a declarative registration file, by identifier.
      *
-     * A top-level key opens at one indent and its fields sit at two, which is
-     * what every one of these files is written in and what the parser here
-     * stands on. A file written otherwise reads as no entries, which is an
-     * answer rather than a wrong one.
+     * A top-level key opens at one indent and its fields sit at two. That is
+     * the form of every one of these files and what the parser here stands on.
+     * A file in another form reads as no entries, which is an answer rather
+     * than a wrong one.
      *
      * @return array<string, array<string, string>>
      */

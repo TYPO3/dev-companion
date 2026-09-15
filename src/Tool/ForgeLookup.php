@@ -12,37 +12,34 @@ use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Result\Unreachable;
 
 /**
- * What a Forge issue actually says, including the part that decides it.
+ * What a Forge issue says, the part that decides it included.
  *
  * Four round trips and a trap by hand, and the decision sits in the journal
- * rather than in the description (`D-FBK-027`). What the tool description opens
- * on is what a request written by hand cannot do, because the core's own
- * `AGENTS.md` hands the caller a `curl` recipe for this tracker (`D-AUD-014`).
- * A number is not the only way in:
- * whether somebody else already reported this is asked before a patch and no
- * number answers it, so `query` searches the tracker by words (`D-ANS-038`). Nor
- * is a wording — a triage starts before there is an issue in hand at all, and
- * the issue nobody has touched since 2015 is worded the way nobody thinks of, so
- * `backlog` is that way in. Both ends of it: the neglected one a triage reads, and
- * the recent one a duplicate of a fresh defect is at (`D-ANS-116`).
+ * rather than in the description (`D-FBK-027`). The tool description opens on
+ * what a hand-written request cannot do. The core's own `AGENTS.md` hands the
+ * caller a `curl` recipe for this tracker (`D-AUD-014`). A number is not the
+ * only way in. `query` searches the tracker by words, because whether somebody
+ * else already reported this is the question before a patch (`D-ANS-038`).
+ * `backlog` is the way in for a triage, which starts before there is an issue
+ * in hand at all, from either end (`D-ANS-116`).
  */
 final class ForgeLookup extends ReadOnlyTool
 {
-    /** The issue is read from the tracker at forge.typo3.org. */
+    /** The issue comes from the tracker at forge.typo3.org. */
     protected const OPEN_WORLD = true;
 
     /**
-     * How many cited names a row prints, the rest being in the data.
+     * How many cited names a row prints; the rest are in the data.
      *
-     * A page is read to choose one row out of thirty, and a stack trace naming
+     * A reader scans a page to choose one row out of thirty. A stack trace with
      * a file per frame would take that page's whole screen.
      */
     private const CITED_PER_ROW = 6;
 
     /**
-     * Why nothing was answered, in the caller's terms rather than the
-     * transport's — one shape for all three ways in, because what a caller does
-     * about it is the same whichever question it asked.
+     * Why no answer came, in the caller's terms rather than the transport's.
+     * One shape for all three ways in, because what a caller does about it is
+     * the same whichever question it asked.
      */
     private const UNREACHABLE = [
         Unreachable::NOT_ANSWERING => 'The tracker did not answer. It is reachable at ' . Forge::HOST
@@ -268,7 +265,7 @@ final class ForgeLookup extends ReadOnlyTool
      * An issue the prose cites, which a relation is not.
      *
      * A relation is somebody's triage and this is the writer's own claim about
-     * prior art, so the two carry the same five fields and one more each.
+     * prior art. So the two carry the same five fields and one more each.
      *
      * @return array<string, array<string, mixed>>
      */
@@ -281,7 +278,7 @@ final class ForgeLookup extends ReadOnlyTool
     }
 
     /**
-     * A change this issue is known to have, with what the prose said about it.
+     * A change this issue has on record, with what the prose said about it.
      *
      * The row of an enumeration carries the reference alone; an issue read
      * whole carries what the journal named beside it.
@@ -301,8 +298,8 @@ final class ForgeLookup extends ReadOnlyTool
     /**
      * One related issue, in the one shape both answers carry it in.
      *
-     * A row of an enumeration and an issue read whole name the same thing, and
-     * a caller that reads two shapes for it reads the second one wrong.
+     * A row of an enumeration and an issue read whole name the same thing. A
+     * caller that reads two shapes for it reads the second one wrong.
      *
      * @return array<string, mixed>
      */
@@ -316,7 +313,7 @@ final class ForgeLookup extends ReadOnlyTool
 
     /**
      * The code a report names, as the section an issue read whole carries it
-     * in: one line per name, with where it was found.
+     * in: one line per name, with where it stands.
      *
      * @param list<array<string, mixed>> $cites
      * @return list<string>
@@ -370,7 +367,7 @@ final class ForgeLookup extends ReadOnlyTool
      * Why every name came back unplaced, where that is what happened.
      *
      * The states alone read as a statement about the code, and this one is
-     * about the machine: a client started outside an installation has nothing
+     * about the machine. A client started outside an installation has nothing
      * to place a name in and nothing about the list says so.
      */
     private static function placedNowhere(): string
@@ -408,9 +405,9 @@ final class ForgeLookup extends ReadOnlyTool
      * The code a report names, in the one shape both answers carry it in.
      *
      * What a caller does with it is rank candidates, so the field says where a
-     * symbol stands and stops there — `D-ANS-122`. The two ways it may not be
-     * read are stated on the states themselves, because that is where a client
-     * reads them.
+     * symbol stands and stops there, `D-ANS-122`. The two ways it may not read
+     * stand on the states themselves, because that is where a client reads
+     * them.
      *
      * @return array<string, mixed>
      */
@@ -437,7 +434,7 @@ final class ForgeLookup extends ReadOnlyTool
     }
 
     /**
-     * One file hanging off an issue, in the one shape both answers carry it in.
+     * One file attached to an issue, in the one shape both answers carry it in.
      *
      * @return array<string, mixed>
      */
@@ -466,10 +463,10 @@ final class ForgeLookup extends ReadOnlyTool
         if ($issue !== '') {
             return self::read($issue, is_string($args['notes'] ?? null) ? trim($args['notes']) : 'all');
         }
-        // A person filter is a narrowing of the enumeration and the schema says
-        // so. Passing one without `backlog` is a call no schema allows, and what a
-        // client that validates nothing would otherwise reach is a search for
-        // the empty string rather than the question it plainly asked.
+        // A person filter narrows the enumeration and the schema says so. One
+        // without `backlog` is a call no schema allows. What a client that
+        // validates nothing would otherwise reach is a search for the empty
+        // string rather than the question it plainly asked.
         if ($backlog !== '' || $reportedBy !== '' || $assignedTo !== '' || $involving !== '') {
             return self::enumerated(
                 $backlog !== '' ? $backlog : 'oldest',
@@ -490,7 +487,7 @@ final class ForgeLookup extends ReadOnlyTool
         return self::searched($query, $limit);
     }
 
-    /** One issue, whole, which is what a number is asked for. */
+    /** One issue, whole, which is what a number asks for. */
     private static function read(string $issue, string $notes): ToolResult
     {
         $answer = (new Forge())->issue($issue, $notes);
@@ -539,9 +536,9 @@ final class ForgeLookup extends ReadOnlyTool
             $lines[] = self::relationLine($relation);
         }
         // Beside the relations and on every issue that has one, because a
-        // citation says the same kind of thing — and where `relations` is empty
-        // this is the whole of what the answer had to say about prior art,
-        // which is the sentence `D-ANS-123` was written about.
+        // citation says the same kind of thing. Where `relations` is empty this
+        // is the whole of what the answer had to say about prior art, which is
+        // the sentence behind `D-ANS-123`.
         if ($found['mentioned'] !== []) {
             $lines[] = 'Cited in the text below and filed as no relation, so this is the writer\'s own claim about'
                 . ' prior art rather than somebody\'s triage. It is regularly wrong: read it before framing a patch'
@@ -622,10 +619,10 @@ final class ForgeLookup extends ReadOnlyTool
 
     /**
      * One relation, with the subject that decides whether to read it and the
-     * URL that reaches it — so which of them is worth an issue read is settled
-     * here rather than by reading all of them, and the number a reader repeats
-     * carries where it points (`D-ANS-103`). Separated from the two answers it
-     * is printed in so it can be held without a tracker.
+     * URL that reaches it. So which of them is worth an issue read settles here
+     * rather than after a read of all of them. The number a reader repeats
+     * carries where it points (`D-ANS-103`). Apart from the two answers that
+     * print it so a test can hold it without a tracker.
      *
      * @param array<string, mixed> $relation
      */
@@ -641,23 +638,14 @@ final class ForgeLookup extends ReadOnlyTool
 
     /**
      * The issues a set of words matches, with what a caller has to know about
-     * the set: these words found it, and other words find other issues.
+     * the set. These words found it, and other words find other issues.
      *
-     * An empty answer is where that matters most. A report worded differently
-     * is invisible to a word match, so nothing matching is a statement about
-     * the query and never about whether the bug was reported — `D-ANS-038`
-     * names reading it the other way as the failure this is written against.
-     *
-     * What it offers is the other way in and not another wording. A session
-     * that read a rewording went round eight times and was settled by the
-     * enumeration on its ninth call, so `backlog` is named here as a call to
-     * compose (`R-ANS-006`). Which end of it is `D-ANS-116`: a duplicate of a
-     * defect somebody has just found is among the newest issues, and what
-     * bounds that end to a set is a day to count from rather than an area,
-     * which an issue filed under no Category is in none of.
-     *
-     * Which of the caller's own words emptied it is the one thing no advice
-     * here can supply, so it is read from the tracker rather than guessed at.
+     * An empty answer is where that matters most. A report in other words is
+     * invisible to a word match. So no match is a statement about the query and
+     * never about whether the bug has a report, `D-ANS-038`. What it offers is
+     * the other way in and not other words. `backlog`, as a call to compose,
+     * `R-ANS-006`, and which end of it is `D-ANS-116`. Which of the caller's
+     * own words emptied it comes from the tracker rather than from a guess.
      */
     private static function searched(string $query, int $limit): ToolResult
     {
@@ -721,9 +709,9 @@ final class ForgeLookup extends ReadOnlyTool
             $lines[] = '';
             $lines[] = sprintf('## #%d %s', $hit['issue'], $hit['subject']);
             // The tracker and the status where the title carried them, which is
-            // every hit the tracker words as it words its own; the area, the
-            // assignee and the two dates where the fields behind them were
-            // reachable.
+            // every hit the tracker words as it words its own. The area, the
+            // assignee and the two dates where the fields behind them were in
+            // reach.
             $lines[] = implode(' · ', array_filter([
                 $hit['tracker'],
                 $hit['status'],
@@ -743,10 +731,10 @@ final class ForgeLookup extends ReadOnlyTool
      * What each word reached on its own, which is what says which of them
      * emptied the answer.
      *
-     * The generic advice cannot: it names a class as the kind of term that
-     * empties a query, and on the query this was written from one class name
-     * reached five issues while the other reached none (`D-ANS-038`). So the
-     * counts lead and the advice is what is left where none were read.
+     * The generic advice cannot. It names a class as the kind of term that
+     * empties a query. On the query behind this one class name reached five
+     * issues while the other reached none (`D-ANS-038`). So the counts lead and
+     * the advice is what remains where none came in.
      *
      * @param list<array{term: string, matchCount: int}> $terms
      * @return list<string>
@@ -791,20 +779,17 @@ final class ForgeLookup extends ReadOnlyTool
     }
 
     /**
-     * The workflow a caller holding a page of the backlog is in, and the
-     * readings that decide a row.
+     * The workflow a caller with a page of the backlog is in, and the reads
+     * that decide a row.
      *
      * `D-SKL-038` is the placement, in the shape `GerritLookup::workflow()`
-     * took, and `D-SKL-031` the five readings. The two calls named with them are
-     * the ones `feedback/2026-08-24-173116` says it never made, having chosen
-     * ten candidates itself and found four of them already fixed. The `issue`
-     * form takes none of this, and a breakdown returns above it holding no
-     * candidates. Separated from `answer()` so it can be held without a tracker.
-     *
-     * The recent end takes none of it either. A caller who ordered by `newest`
-     * is asking whether a defect is filed already, and the first thing this
-     * says is that choosing from the page is somebody else's — which is the one
-     * step that question cannot hand over (`D-ANS-116`).
+     * took, and `D-SKL-031` the five reads. The two calls named with them are
+     * the ones `feedback/2026-08-24-173116` says it never made. The `issue`
+     * form takes none of this, and neither does the recent end. A caller who
+     * ordered by `newest` asks whether a defect has a report already. The
+     * choice from the page is the one step that question cannot hand over
+     * (`D-ANS-116`). Apart from `answer()` so a test can hold it without a
+     * tracker.
      */
     public static function workflow(string $status, string $order): ?string
     {
@@ -840,9 +825,9 @@ final class ForgeLookup extends ReadOnlyTool
      * The shape of a set rather than a page of it, which for a person is the
      * answer and not a summary of one.
      *
-     * A page of 50 out of 621 leaves the rest reachable by nothing: there are
-     * no other words to narrow a person's history by, and every filter that
-     * would make it fit answers a smaller question than the one asked
+     * A page of 50 out of 621 leaves the rest reachable by nothing. There are
+     * no other words to narrow a person's history by. Every filter that would
+     * make it fit answers a smaller question than the one asked
      * (`feedback/2026-08-19-134651`).
      *
      * @param array<string, mixed> $breakdown
@@ -905,16 +890,16 @@ final class ForgeLookup extends ReadOnlyTool
     }
 
     /**
-     * The issues of the core project, ordered by the thing that was asked about
-     * them.
+     * The issues of the core project, in the order of the caller's question
+     * about them.
      *
-     * What this owes a caller beyond the entries is the size of what it is
-     * looking at. A backlog answers a filter with thousands, and a page of
-     * thirty read as the set is a triage that believes it has seen the problem.
-     * So the count of everything that matched leads, and where it is larger
-     * than the page the answer says which way to make it smaller: a narrower
-     * filter and not a larger limit, because the order is the tracker's and
-     * more of it is more of the same end.
+     * What this owes a caller beyond the entries is the size of what it looks
+     * at. A backlog answers a filter with thousands. A page of thirty read as
+     * the set is a triage that believes it has seen the problem. So the count
+     * of everything that matched leads, and where it is larger than the page
+     * the answer says which way to make it smaller. A narrower filter and not a
+     * larger limit, because the order is the tracker's and more of it is more
+     * of the same end.
      */
     private static function enumerated(
         string $order,
@@ -990,9 +975,10 @@ final class ForgeLookup extends ReadOnlyTool
                 $data,
             );
         }
-        // The areas asked for rather than corrected into. What a report being
-        // filed by hand needs is the tracker's own spelling, and until this the
-        // only way to it was a word wrong enough to fail (`D-KNW-113`).
+        // The areas the caller asked for rather than a correction into them.
+        // What a report filed by hand needs is the tracker's own spelling.
+        // Until this the only way to it was a word wrong enough to fail
+        // (`D-KNW-113`).
         if ($category === Forge::EVERY_AREA) {
             return ToolResult::create(
                 'TYPO3 issue tracker: the ' . count($answer['categories']) . ' areas the core files its issues'
@@ -1006,7 +992,7 @@ final class ForgeLookup extends ReadOnlyTool
             );
         }
         // A word that named no category is a different answer to a filter that
-        // excluded everything, and reading it as an empty backlog is the one
+        // excluded everything. To read it as an empty backlog is the one
         // mistake this path can make.
         if ($category !== '' && $answer['categoriesUsed'] === []) {
             return ToolResult::create(
@@ -1017,8 +1003,8 @@ final class ForgeLookup extends ReadOnlyTool
             );
         }
         // A name that named nobody is a different answer to a filter that
-        // excluded everything, the same way a word naming no area is — and the
-        // set it would otherwise be answered with is the backlog of everybody.
+        // excluded everything, the same way a word that names no area is. The
+        // set it would otherwise get is the backlog of everybody.
         foreach ($answer['people'] as $person) {
             if ($person['id'] > 0) {
                 continue;
@@ -1056,16 +1042,16 @@ final class ForgeLookup extends ReadOnlyTool
         if ($shown >= $answer['total']) {
             $lines[] = 'That is the whole set on these filters.';
         } elseif ($answer['people'] !== []) {
-            // A backlog is narrowed by other words and a person's history is
-            // not: every filter that would make it fit answers a smaller
+            // Other words narrow a backlog and nothing narrows a person's
+            // history. Every filter that would make it fit answers a smaller
             // question than the one asked (`feedback/2026-08-19-134651`).
             $lines[] = 'This is a page and not the set, and limit stops at 50. What reaches the rest is breakdown, which'
                 . ' answers how the whole set is distributed — there are no other words to narrow a person by, and a'
                 . ' tracker or a date answers a smaller question than the one asked.';
         } elseif ($order === 'newest') {
-            // The narrowing that reaches the rest of this end is a later day
-            // and never an earlier one, which is what the sentence below would
-            // have said (`D-ANS-116`).
+            // The narrower filter that reaches the rest of this end is a later
+            // day and never an earlier one. That is what the sentence below
+            // would have said (`D-ANS-116`).
             $lines[] = 'This is a page and not the set, and what it leaves out is older than its last row. A question'
                 . ' about whether something has been reported is settled by a whole window rather than by more of this'
                 . ' page: pass createdSince from the day the defect could first have been reported — a later day where'
@@ -1100,7 +1086,7 @@ final class ForgeLookup extends ReadOnlyTool
         }
         if ($answer['categoriesUsed'] !== []) {
             // Where the reporter filed it, which is not everything about the
-            // subject: three of the RTE reports a session went looking for on
+            // subject. Three of the RTE reports a session searched for on
             // 2026-08-05 sat under System/Bootstrap/Configuration and under
             // Link Handling.
             $lines[] = 'An area is where an issue was filed and not everything it is about. A report about this one'
@@ -1126,8 +1112,9 @@ final class ForgeLookup extends ReadOnlyTool
                 $lines[] = self::relationLine($relation);
             }
             if ($entry['attachments'] !== []) {
-                // Named and not linked: the files are read after the issue is,
-                // and a page of thirty rows is read to choose which one that is.
+                // Named and not linked. The files come after the issue, and a
+                // reader scans a page of thirty rows to choose which one that
+                // is.
                 $lines[] = sprintf(
                     'Files (%d): %s',
                     count($entry['attachments']),

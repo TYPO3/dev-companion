@@ -83,11 +83,11 @@ final class FluidNamespaceList extends ReadOnlyTool
                 );
             }
             // Every covered version below 14 carries the key in its own
-            // DefaultConfiguration, so an absent one is a reading that went
-            // wrong rather than an installation without namespaces. Answering
-            // it as none would tell a template author to declare `f:` per
-            // template — the same distinction `ConfigurationLookup` draws,
-            // where found is a statement about the installation.
+            // DefaultConfiguration. So an absent one is a read that went wrong
+            // rather than an installation without namespaces. An answer of none
+            // would tell a template author to declare `f:` per template. That
+            // is the same distinction `ConfigurationLookup` draws, where found
+            // is a statement about the installation.
             if ($read['found'] !== true) {
                 return Unsupported::because(
                     'this installation reports no SYS/fluid/namespaces, which every TYPO3 below 14 declares',

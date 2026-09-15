@@ -101,10 +101,10 @@ final class ComponentLookup extends ReadOnlyTool
     /**
      * What a withheld entry still answers about a class the query named.
      *
-     * Written as its own block rather than beside the component, and carrying no
-     * markup, so a caller cannot read a covered class as a covered component —
-     * `D-CAT-006`. It does carry where the class sits, because a name on its own
-     * is what let `table-fit` be attached to the table it belongs around —
+     * Its own block rather than a line beside the component, and with no
+     * markup. So a caller cannot read a covered class as a covered component,
+     * `D-CAT-006`. It does carry where the class sits, because a name on its
+     * own is what let `table-fit` land on the table it belongs around,
      * `D-CAT-008`.
      *
      * @param array<int, array{
@@ -147,7 +147,7 @@ final class ComponentLookup extends ReadOnlyTool
      * The elements the query named, said as the way in they are.
      *
      * An element carries its own position and its own contract, so a caller who
-     * has one does not need a class placed for them — which is why this stands
+     * has one does not need a class placed for them. That is why this stands
      * above the classes in the answer rather than beside them (`D-CAT-009`).
      *
      * @param list<array<string, mixed>> $elements
@@ -172,8 +172,8 @@ final class ComponentLookup extends ReadOnlyTool
 
     /**
      * The component's classes the core's stylesheet writes above it, which is
-     * the one grouping a curated list gets wrong in a way that ships: a wrapper
-     * attached to the element it should wrap changes nothing and fails nowhere.
+     * the one group a hand-kept list gets wrong in a way that ships. A wrapper
+     * on the element it should wrap changes nothing and fails nowhere.
      *
      * @param array<string, mixed> $component
      * @return list<string>
@@ -193,9 +193,9 @@ final class ComponentLookup extends ReadOnlyTool
     }
 
     /**
-     * Where the class sits, in the words the derivation reads off the core's own
-     * selectors. A class the stylesheet never writes beside its component is
-     * left unplaced rather than guessed at.
+     * Where the class sits, in the words the derivation reads off the core's
+     * own selectors. A class the stylesheet never writes beside its component
+     * stays unplaced rather than gets a guess.
      */
     private static function placed(?string $position, string $component): string
     {
@@ -229,9 +229,9 @@ final class ComponentLookup extends ReadOnlyTool
                     $elementNote === '' ? '' : $elementNote . "\n\n",
                     $withheld === [] ? '' : sprintf(' verified on TYPO3 v%d', (int) $target),
                     (string) $query,
-                    // Nothing on the bundled side: the snapshot line below says
+                    // Nothing on the bundled side. The snapshot line below says
                     // what the snapshot is, what a miss on it means and how to
-                    // check it — D-CAT-010.
+                    // check it, D-CAT-010.
                     $installed
                         ? ' The installed packages were checked, but the searchable component index remains curated; inspect the installed backend CSS for an uncatalogued class.'
                         : '',
@@ -288,7 +288,7 @@ final class ComponentLookup extends ReadOnlyTool
             );
         }
 
-        // Only the best matches are described in full; the rest stay in the count.
+        // Only the best matches come in full; the rest stay in the count.
         $described = array_slice($components, 0, 3);
 
         $blocks = array_map(static function (array $c) use ($target): string {
@@ -296,8 +296,8 @@ final class ComponentLookup extends ReadOnlyTool
             if (($c['matchedIn'] ?? []) !== []) {
                 $lines[] = 'Matched in: ' . implode(', ', $c['matchedIn']);
                 // A component reached only through a sub-component class or a
-                // word in its description is a neighbour of what was asked
-                // for, not an answer to it.
+                // word in its description is a neighbour of the question, not
+                // an answer to it.
                 if (array_intersect(['name', 'keywords'], $c['matchedIn']) === []) {
                     $lines[] = 'Related, not the component you asked for: it matched through '
                         . implode(' and ', $c['matchedIn']) . ' only.';
@@ -319,10 +319,10 @@ final class ComponentLookup extends ReadOnlyTool
                 }
             };
             // A class the stylesheet writes above the component is not a
-            // modifier of it, whichever list it was curated into: `table-fit`
-            // sat beside `table-striped` and is the element around the table —
+            // modifier of it, whichever list somebody put it in. `table-fit`
+            // sat beside `table-striped` and is the element around the table,
             // `D-CAT-008`. The lists keep everything the derivation has no
-            // opinion on, because a curated grouping is worth more than the
+            // opinion on, because a hand-kept group is worth more than the
             // silence that would replace it.
             $wrapping = self::wrapping($c, $target);
             $appendList('Wrapping the component', $wrapping);
@@ -356,7 +356,7 @@ final class ComponentLookup extends ReadOnlyTool
             }
             $label = Versions::label($c['since'], $c['until']);
             if ($label !== '') {
-                // Beside the markup rather than in the block at the end: a
+                // Beside the markup rather than in the block at the end. A
                 // client that renders one component shows the classes without
                 // any statement of where they exist.
                 $lines[] = 'Verified on: ' . $label . '.';

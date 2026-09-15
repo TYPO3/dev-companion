@@ -80,8 +80,8 @@ final class RuleLookup extends ReadOnlyTool
      * How many matched sections make a page the answer rather than the cut.
      *
      * One is a word that landed somewhere. `query="signed-off-by"` matched one
-     * body carrying "signed in" and was handed six kilobytes on proving a
-     * TypoScript condition — `D-ANS-101`.
+     * body with "signed in" in it and got six kilobytes on the proof of a
+     * TypoScript condition, `D-ANS-101`.
      */
     private const CONCENTRATED = 2;
 
@@ -112,36 +112,36 @@ final class RuleLookup extends ReadOnlyTool
         $query = (string) ($args['query'] ?? '');
         $targets = Versions::targets(isset($args['targetVersion']) ? (string) $args['targetVersion'] : null);
 
-        // This tool is asked about a topic rather than about paths, so the call
-        // has one scope — the same reading typo3_script_lookup makes.
+        // This tool answers about a topic rather than about paths, so the call
+        // has one scope, the same read typo3_script_lookup makes.
         $scope = Scope::of('', $query);
         $outsideCore = $scope->isOutsideTheCore();
 
         $found = Documents::search($query, [], 6, $targets);
-        // Withheld per document rather than per call: this corpus is the
+        // Held back per document rather than per call. This corpus is the
         // contribution process and the commit conventions at once, and only the
-        // first half stops at the core repository. Dropping the tool whole —
-        // which is what the project profile does — takes the second half with
-        // it, and a caller writing a commit message in their own project needs
+        // first half stops at the core repository. A drop of the whole tool,
+        // which is what the project profile does, takes the second half with
+        // it. A caller who writes a commit message in their own project needs
         // exactly that.
         $results = $outsideCore
             ? array_values(array_filter($found, static fn(array $r): bool => !Documents::isCoreOnly($r['id'])))
             : $found;
         $withheld = self::withheldDocuments($found, $results);
 
-        // The prose and the hints are two corpora, and which one
-        // holds a subject is this server's business, not the caller's: site
-        // sets are a hint, the Gerrit workflow is prose, and the question is
-        // phrased the same way either way. The hints transfer, so they are
-        // returned on both sides of the boundary.
+        // The prose and the hints are two corpora, and which one holds a
+        // subject is this server's business, not the caller's. Site sets are a
+        // hint, the Gerrit workflow is prose, and the question has the same
+        // words either way. The hints transfer, so they come back on both sides
+        // of the boundary.
         $hints = Hints::find([], $query, 3)['matchedHints'];
 
         // The boundary is only the reason for a miss where it withheld
-        // something. Blaming it wherever a hint had matched printed "No section
-        // that holds outside the core matched" inside the core, on a call that
-        // withheld nothing, and a judging run read that back as an answer —
-        // `D-ANS-037`. Every other empty result is a miss and gets the miss
-        // answer.
+        // something. Blame on it wherever a hint had matched printed "No
+        // section that holds outside the core matched" inside the core. That
+        // was on a call that held nothing back. A judge read that back as an
+        // answer, `D-ANS-037`. Every other empty result is a miss and gets the
+        // miss answer.
         if ($results === [] && $withheld === []) {
             return self::noMatch($query, $scope, $outsideCore, $hints, $targets);
         }
@@ -155,19 +155,19 @@ final class RuleLookup extends ReadOnlyTool
                 $withheld,
             )) . '. Each is readable in full as typo3://guides/<id> where the work really is a core patch.';
             $lines[] = '';
-            // What is withheld here has a counterpart outside the core, and it
-            // is a tool rather than a second copy of the page: the commit
+            // What stays back here has a counterpart outside the core, and it
+            // is a tool rather than a second copy of the page. The commit
             // conventions of a repository of your own are what
-            // typo3_commit_message_guide composes for workflow="project", which
-            // is the one measure this repository writes by as well — D-DOC-013.
+            // typo3_commit_message_guide composes for workflow="project". That
+            // is the one measure this repository writes by as well, D-DOC-013.
             $lines[] = 'For a repository of your own, the same subjects are answered by '
                 . 'typo3_commit_message_guide with workflow="project" and by typo3_hint_lookup.';
             $lines[] = '';
         }
         // Where several matches are in one page, the page is the answer. The
         // cut is what a caller pays a second call to undo, and two sessions
-        // have now paid it into the same document — `D-ANS-076`. One match is
-        // below the floor and is answered with the section — `D-ANS-101`.
+        // have now paid it into the same document, `D-ANS-076`. One match is
+        // below the floor and gets the section, `D-ANS-101`.
         $concentrated = self::oneDocument($results);
         $lines[] = match (true) {
             $results === [] => sprintf('No section that holds outside the core matched "%s".', $query),
@@ -175,7 +175,7 @@ final class RuleLookup extends ReadOnlyTool
             default => Prose::sections($results, $outsideCore),
         };
         // The offer to read the page whole is `Prose::sections()`'s own line
-        // now, so every tool that renders this corpus carries it — a second
+        // now, so every tool that renders this corpus carries it. A second
         // block here said the same thing twice in one answer.
         if ($hints !== []) {
             $lines[] = "\n" . self::alsoInHints($hints);
@@ -201,10 +201,10 @@ final class RuleLookup extends ReadOnlyTool
      * One document, whole, for a caller who cannot read the resource.
      *
      * A match carries `uri`, and a `typo3://guides` resource is only reachable
-     * where the client lists resources at all — three core sessions held that
+     * where the client lists resources at all. Three core sessions held that
      * uri and read none of them (`D-ANS-061`, `R-ANS-028`). No search and no
-     * version filter: the caller named the document, and a section left out for
-     * a major it does not hold on is a hole in a page somebody asked to read
+     * version filter. The caller named the document. A section left out for a
+     * major it does not hold on is a hole in a page somebody asked to read
      * whole.
      */
     private static function wholeDocument(string $documentId): ToolResult
@@ -244,9 +244,9 @@ final class RuleLookup extends ReadOnlyTool
         $body = Documents::read($documentId);
         $scope = Documents::scopeOf($documentId);
 
-        // The hints this document declares itself the long form of, which is
-        // the other corpus on the same subject and the one place a reader of
-        // the whole page still has somewhere to go.
+        // The hints this document declares itself the long form of. That is the
+        // other corpus on the same subject and the one place a reader of the
+        // whole page still has somewhere to go.
         $alsoInHints = [];
         foreach ($declared as $hintId) {
             $hint = Hints::byId((string) $hintId);
@@ -254,8 +254,8 @@ final class RuleLookup extends ReadOnlyTool
                 $alsoInHints[] = ['id' => $hint['id'], 'title' => $hint['title']];
             }
         }
-        // In the text as well, as the call that reads them: as data and as raw
-        // front matter they were read past — `D-ANS-114`.
+        // In the text as well, as the call that reads them. As data and as raw
+        // front matter a session read past them, `D-ANS-114`.
         if ($alsoInHints !== []) {
             $body .= "\n" . self::alsoInHints($alsoInHints);
         }
@@ -274,10 +274,10 @@ final class RuleLookup extends ReadOnlyTool
     /**
      * What the knowledge base does cover, for a query that reached none of it.
      *
-     * It carries the same fields a hit does, boundary included, so a client that
-     * validates the answer never has to branch on which of the two it got. The
-     * words that emptied it come first, because that is what the caller can act
-     * on in the same call (`R-ANS-006`). The subsets are counted over the
+     * It carries the same fields a hit does, boundary included. So a client
+     * that validates the answer never has to branch on which of the two it got.
+     * The words that emptied it come first, because that is what the caller can
+     * act on in the same call (`R-ANS-006`). The subsets count over the
      * documents this call may answer from.
      *
      * @param array<int, array<string, mixed>> $hints
@@ -336,11 +336,11 @@ final class RuleLookup extends ReadOnlyTool
     }
 
     /**
-     * The documents a match was dropped from, once each.
+     * The documents that lost a match, once each.
      *
-     * Named rather than silently missing: an answer that is thinner than the
-     * corpus and does not say so reads as "nobody wrote this down", which is
-     * the one thing it does not mean.
+     * Named rather than silently absent. An answer that is thinner than the
+     * corpus and does not say so reads as "nobody wrote this down". That is the
+     * one thing it does not mean.
      *
      * @param array<int, array<string, mixed>> $found
      * @param array<int, array<string, mixed>> $kept

@@ -12,18 +12,20 @@ use TYPO3\DevCompanion\Result\Unreachable;
 /**
  * What the TYPO3 Extension Repository already holds under an extension key.
  *
- * A release audit turns on it and no checkout can answer it: Tailor requires
- * `ext_emconf.php` to name the version being released, so the file still names
+ * A release audit turns on it and no checkout can answer it. Tailor requires
+ * `ext_emconf.php` to name the version under release. So the file still names
  * it after the upload and a published repository reads like an unreleased one.
- * A session that could not see the registry reported a release-blocking finding
- * and had it confirmed wrongly (`D-FBK-051`).
+ * A session that could not see the registry reported a finding that blocks a
+ * release, and a reviewer confirmed it wrongly (`D-FBK-051`).
  */
 final class TerLookup extends ReadOnlyTool
 {
-    /** The releases are read from the registry at extensions.typo3.org. */
+    /** The releases come from the registry at extensions.typo3.org. */
     protected const OPEN_WORLD = true;
 
-    /** Why nothing was answered, in the caller's terms rather than the transport's. */
+    /**
+     * Why no answer came, in the caller's terms rather than the transport's.
+     */
     private const UNREACHABLE = [
         Unreachable::NOT_ANSWERING => 'The registry did not answer. It is reachable at ' . Ter::HOST
             . ' in a browser; nothing here can answer this offline, and no bundled list of releases could be right '
@@ -107,9 +109,9 @@ final class TerLookup extends ReadOnlyTool
     /** @param array<string, mixed> $args */
     public static function answer(array $args): ToolResult
     {
-        // Lowercased rather than refused: a key is lowercase by definition, so
-        // this can turn no valid one into another, and what is left for the
-        // check below is a name of the wrong kind.
+        // Lowercase rather than a refusal. A key is lowercase by definition, so
+        // this can turn no valid one into another. What remains for the check
+        // below is a name of the wrong kind.
         $key = mb_strtolower(is_string($args['extension'] ?? null) ? trim($args['extension']) : '');
         $version = is_string($args['extensionVersion'] ?? null) ? trim($args['extensionVersion']) : '';
         $limit = is_int($args['limit'] ?? null) ? max(1, min(50, $args['limit'])) : 10;
@@ -153,12 +155,12 @@ final class TerLookup extends ReadOnlyTool
     }
 
     /**
-     * The name is not one the registry takes, so nothing was read.
+     * The name is not one the registry takes, so no read happened.
      *
-     * A statement about the argument rather than about what is published, and
-     * the one mistake this path exists to keep out of the answer: a Composer
-     * package name reaches the API as a `400`, and reporting that as "nothing
-     * is published" would tell a maintainer their release is missing.
+     * A statement about the argument rather than about the published set, and
+     * the one mistake this path exists to keep out of the answer. A Composer
+     * package name reaches the API as a `400`. A report of that as "nothing is
+     * published" would tell a maintainer their release is absent.
      */
     private static function notAKey(string $key, string $version): ToolResult
     {
@@ -184,11 +186,11 @@ final class TerLookup extends ReadOnlyTool
     }
 
     /**
-     * Whether the registry holds the number that was asked about.
+     * Whether the registry holds the number in question.
      *
-     * Null where none was asked and null where nothing was read, because "the
-     * registry does not have it" and "the registry did not answer" are the two
-     * readings a release audit must not confuse.
+     * Null where the caller asked for none and null where no read happened.
+     * "The registry does not have it" and "the registry did not answer" are the
+     * two reads a release audit must not confuse.
      *
      * @param array{status: string, versions: list<array<string, mixed>>} $answer
      */
@@ -203,12 +205,11 @@ final class TerLookup extends ReadOnlyTool
 
 
     /**
-     * What is published, with the asked version answered first.
+     * The published set, with the asked version first.
      *
-     * The number a caller passed is the whole reason for the call, so it leads
-     * — and it is answered as what the registry holds rather than as what may
-     * be released, which is the caller's own comparison against its working
-     * tree.
+     * The number a caller passed is the whole reason for the call, so it leads.
+     * It answers as what the registry holds rather than as what may go out,
+     * which is the caller's own comparison against its working tree.
      *
      * @param list<array<string, mixed>> $all
      * @param list<array<string, mixed>> $shown
@@ -270,7 +271,7 @@ final class TerLookup extends ReadOnlyTool
     }
 
     /**
-     * The published version carrying one number.
+     * The published version with one number.
      *
      * @param list<array<string, mixed>> $all
      * @return array<string, mixed>

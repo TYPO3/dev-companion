@@ -14,13 +14,13 @@ use TYPO3\DevCompanion\Result\Unsupported;
  * The columns TYPO3 adds to a table by itself, which an ext_tables.sql may
  * leave out.
  *
- * The core derives a table's technical columns from its TCA, and a declaration
- * that repeats them is the thing a review cannot check without asking the
- * installation. Beside them stands what the database actually has, where a
- * table is named and a schema is there to read — the difference between the two
+ * The core derives a table's technical columns from its TCA. A declaration that
+ * repeats them is the thing a review cannot check without a question to the
+ * installation. Beside them stands what the database has, where the caller
+ * names a table and a schema is there to read. The difference between the two
  * is the finding, and neither side alone carries it (`D-DIS-022`). The derived
- * side answers with no schema at all, which is the state this tool is asked in
- * while the file that creates one is being written.
+ * side answers with no schema at all. That is the state a caller asks this tool
+ * in while it writes the file that creates one.
  */
 final class SchemaLookup extends ReadOnlyTool
 {
@@ -105,9 +105,9 @@ final class SchemaLookup extends ReadOnlyTool
         }
 
         // Two ways not to have an answer, and the caller acts on them
-        // differently: no reading at all is the boot — a container that stayed
-        // failsafe, a project that is down — while a reading carrying
-        // `unavailable` is the enrichment itself, which is the database.
+        // differently. No read at all is the boot, a container that stayed
+        // failsafe, a project that is down. A read with `unavailable` is the
+        // enrichment itself, which is the database.
         $derived = Typo3Runtime::topic('derivedColumns');
         if (!is_array($derived)) {
             return Unsupported::because(Typo3Runtime::reason(), $echo);
@@ -219,10 +219,10 @@ final class SchemaLookup extends ReadOnlyTool
 
     /**
      * What the database has for a table and what TYPO3 would change about it,
-     * or null where no schema could be read.
+     * or null where no schema came in.
      *
-     * Both come from one reading, because both need the connection the derived
-     * side does not — `D-DIS-022`.
+     * Both come from one read, because both need the connection the derived
+     * side does not, `D-DIS-022`.
      *
      * @return array{schema: array{present: bool, columns: array<int, array<string, mixed>>, indexes: array<int, array<string, mixed>>}, updates: array<int, array{connection: string, change: string, tables: array<int, string>}>}|null
      */
@@ -245,7 +245,7 @@ final class SchemaLookup extends ReadOnlyTool
 
     /**
      * The one line the live side adds to the text, which says which of three
-     * states the database is in rather than repeating the columns.
+     * states the database is in rather than repeats the columns.
      *
      * @param array{schema: array{present: bool, columns: array<int, array<string, mixed>>, indexes: array<int, array<string, mixed>>}, updates: array<int, array{connection: string, change: string, tables: array<int, string>}>}|null $actual
      */

@@ -23,10 +23,10 @@ final class ServerScope extends ReadOnlyTool
      * The parts of this answer a caller can ask for by name, each with what it
      * holds, in the order the payload carries them.
      *
-     * The names are the payload's own field names, so a caller asking again for
-     * one of them names the field it is already holding rather than a word
-     * invented for the parameter. What is not here is never withheld: the
-     * purpose, the initialize instructions and what the caller excluded —
+     * The names are the payload's own field names. So a caller that asks again
+     * for one of them names the field it already has rather than a word
+     * invented for the parameter. What is not here never stays back: the
+     * purpose, the initialize instructions and what the caller excluded,
      * `R-SCO-009`.
      *
      * @var array<string, string>
@@ -65,9 +65,9 @@ final class ServerScope extends ReadOnlyTool
                 'sections' => [
                     'type' => 'array',
                     // The field names rather than a vocabulary of its own, and
-                    // without repeating what each one holds: the output schema
-                    // says that per field, and every answer says it again under
-                    // withheld for the parts that are not in it.
+                    // without a repeat of what each one holds. The output
+                    // schema says that per field, and every answer says it
+                    // again under withheld for the parts that are not in it.
                     'items' => ['type' => 'string', 'enum' => array_keys(self::SECTIONS)],
                     'minItems' => 1,
                     'description' => 'The parts of the answer to return, named by the fields they arrive in. '
@@ -157,9 +157,9 @@ final class ServerScope extends ReadOnlyTool
 
         $lines = [];
         if (ExcludedTools::all() !== []) {
-            // Before the purpose rather than after it: the purpose describes
-            // the whole server, and a client that reads what it holds first and
-            // that a tool is missing second has been told and then corrected.
+            // Before the purpose rather than after it. The purpose describes
+            // the whole server. A client that reads what it holds first and
+            // that a tool is absent second hears a claim and then a correction.
             $lines[] = self::exclusionLine();
             $lines[] = '';
         }
@@ -185,9 +185,9 @@ final class ServerScope extends ReadOnlyTool
         }
 
         $lines[] = '';
-        // Stated here as well as in the initialize instructions, because this
-        // is the tool an agent calls when it does not know how to use the
-        // server, and a client is free not to surface instructions at all.
+        // Stated here as well as in the initialize instructions. This is the
+        // tool an agent calls when it does not know how to use the server. A
+        // client is free to show no instructions at all.
         $lines[] = 'Query this server in English, whatever language you are speaking with the user. Its '
             . 'knowledge is written in English and its matching is lexical, so a query in another language '
             . 'reaches only the words the two happen to share and otherwise comes back empty.';
@@ -206,8 +206,8 @@ final class ServerScope extends ReadOnlyTool
         if (in_array('doesNotCover', $sections, true)) {
             $lines[] = '';
             // What the list is worth read from the other side. A caller cannot
-            // tell a boundary from a gap by the size of an answer, and the two
-            // ask for opposite reactions: leave, or say what was missing.
+            // tell a boundary from a gap by the size of an answer. The two ask
+            // for opposite reactions: leave, or say what was absent.
             $lines[] = 'Deliberately not covered — and this list is the boundary: a subject that is not on it is in '
                 . 'scope, so a thin answer to it is a gap in the knowledge base rather than a limit of it.'
                 . (Channel::isAvailable() ? ' Record one with typo3_feedback_record instead of going elsewhere.' : '');
@@ -226,24 +226,21 @@ final class ServerScope extends ReadOnlyTool
             }
         }
 
-        // What the installation can be asked is a different question from
-        // whether one was found, and the answer is actionable often enough to
-        // belong here rather than in a failing tool call.
-        //
-        // Read once, and both halves of the answer are written from these
-        // locals. `reason()` and `caveat()` each re-enter `resolve()`, which no
-        // longer remembers a failed or caveated resolution (`R-DIS-009`), so
-        // every read of the console state pays a `ddev describe -j` of its own
-        // while the project is stopped. This answer made six of them, 2.648s
-        // against `.environments/e-site-13.4` with its project down on
-        // 2026-08-04. Two are left, 0.869s there: a failed resolution carries no
-        // caveat and a successful one carries no reason, so only one of the two
-        // is asked, and neither can be had from outside `Typo3Cli` without
-        // resolving again. Nothing changes where the resolution is remembered —
-        // one describe, 0.002s on the second call.
-        //
-        // Not resolved at all where the caller did not ask for this section:
-        // the two describes are the one part of this answer that costs seconds
+        // What the installation can answer is a different question from whether
+        // one turned up. The answer is actionable often enough to belong here
+        // rather than in a failed tool call. Read once, and both halves of the
+        // answer come from these locals. `reason()` and `caveat()` each
+        // re-enter `resolve()`, which no longer remembers a failed or caveated
+        // resolution (`R-DIS-009`). So every read of the console state pays a
+        // `ddev describe -j` of its own while the project is down. This answer
+        // made six of them, 2.648s against `.environments/e-site-13.4` with its
+        // project down on 2026-08-04. Two remain, 0.869s there. A failed
+        // resolution carries no caveat and a successful one carries no reason,
+        // so only one of the two runs. Neither is reachable from outside
+        // `Typo3Cli` without a second resolution. Nothing changes where the
+        // resolution stays in memory: one describe, 0.002s on the second call.
+        // No resolution at all where the caller did not ask for this section.
+        // The two describes are the one part of this answer that costs seconds
         // rather than bytes.
         $wanted = in_array('installation', $sections, true);
         $console = $wanted ? Typo3Cli::resolve() : null;
@@ -259,9 +256,9 @@ final class ServerScope extends ReadOnlyTool
             . 'manuals at docs.typo3.org; apart from that and the installation named above, nothing is fetched, '
             . 'executed, or looked up online.';
         if (Channel::isAvailable()) {
-            // Naming the one write next to the read-only claim, not after it:
-            // a blanket "everything is read-only" followed by a tool that
-            // creates a file contradicts both the annotations and the behaviour.
+            // The one write stands next to the read-only claim, not after it. A
+            // blanket "everything is read only" followed by a tool that creates
+            // a file contradicts both the annotations and the behaviour.
             $lines[] = 'The one exception is typo3_feedback_record, this server\'s only write: '
                 . 'it creates a new markdown feedback under feedback/ and touches nothing else. '
                 . 'Missing something that belongs here? Leave feedback about it.';
@@ -289,11 +286,11 @@ final class ServerScope extends ReadOnlyTool
     }
 
     /**
-     * Which installation is being read, and what it can be asked.
+     * Which installation the server reads, and what it can answer.
      *
-     * It is the one thing a caller cannot check for itself, and reading the
-     * wrong one would be worse than reading none — so it is stated, with where
-     * the search started.
+     * It is the one thing a caller cannot check for itself. A read of the wrong
+     * one would be worse than a read of none. So it stands here, with where the
+     * search started.
      *
      * @param array{command: array<int, string>, via: string, php: string}|null $console
      * @return list<string>
@@ -307,9 +304,9 @@ final class ServerScope extends ReadOnlyTool
                 . 'comes from the bundled knowledge base alone. Questions about what is registered in an '
                 . 'installation — which icon identifiers exist, which labels — cannot be answered here.';
             if (Instance::searched() !== []) {
-                // Where it looked is the difference between "this layout cannot
-                // be read" and "the client started the server somewhere else",
-                // and the caller can check neither without being told.
+                // Where it looked is the difference between "this layout is
+                // unreadable" and "the client started the server somewhere
+                // else". The caller can check neither unaided.
                 $lines[] = 'Looked in: ' . implode(', ', Instance::searched())
                     . ' — none of them declares a TYPO3 core checkout or holds Composer metadata with TYPO3 packages in it.';
             }
@@ -369,11 +366,11 @@ final class ServerScope extends ReadOnlyTool
     }
 
     /**
-     * The answer as data, carrying the sections this call asked for.
+     * The answer as data, with the sections this call asked for.
      *
-     * A section left out is absent rather than empty: an empty `covers` reads
+     * A section left out is absent rather than empty. An empty `covers` reads
      * as a server that covers nothing, which is the failure
-     * `installationReport()` below was written for in its own field. What names
+     * `installationReport()` below stands against in its own field. What names
      * the difference is `withheld`, which every answer carries.
      *
      * @param array{purpose: string, instructions: string, covers: array<int, mixed>, doesNotCover: array<int, mixed>, checkoutDiscovery: array<int, mixed>, routing: array<int, mixed>} $coverage
@@ -416,11 +413,11 @@ final class ServerScope extends ReadOnlyTool
     /**
      * The sections this call asked for, in the order the answer carries them.
      *
-     * Naming none is the whole answer, and that is the default because this is
-     * the tool for a caller who does not yet know what the server covers — one
-     * that cannot name the part it wants is choosing in its least informed
-     * moment, which is `D-ANS-087`. A caller that can name one has the question
-     * this tool was too large for.
+     * No name is the whole answer. That is the default because this is the tool
+     * for a caller who does not yet know what the server covers. One that
+     * cannot name the part it wants chooses in its least informed moment, which
+     * is `D-ANS-087`. A caller that can name one has the question this tool was
+     * too large for.
      *
      * @param array<string, mixed> $args
      * @return list<string>
@@ -439,8 +436,8 @@ final class ServerScope extends ReadOnlyTool
     }
 
     /**
-     * What this call did not ask for, so a narrowed answer cannot be read as
-     * the whole one.
+     * What this call did not ask for, so a narrow answer cannot pass as the
+     * whole one.
      *
      * @param list<string> $sections
      * @return list<array{section: string, holds: string}>
@@ -461,9 +458,9 @@ final class ServerScope extends ReadOnlyTool
      * The offered tools grouped by what can answer them.
      *
      * Grouped rather than listed per tool, because the question it is here for
-     * is asked about the state of the machine and not about one tool: nothing
-     * is running, so what is still worth calling. A tool answering from two
-     * sources stands under both, which is the answer to that question for it.
+     * is about the state of the machine and not about one tool. Nothing is up,
+     * so what is still worth a call. A tool that answers from two sources
+     * stands under both, which is the answer to that question for it.
      *
      * @return array<int, array{source: string, meaning: string, tools: array<int, string>}>
      */
@@ -488,9 +485,9 @@ final class ServerScope extends ReadOnlyTool
     /**
      * Which tools the caller asked to have left out.
      *
-     * A shorter tool list than the documentation describes is otherwise
-     * indistinguishable from a broken server, and the caller has no way to
-     * check: it sees the list it was given and nothing else.
+     * A shorter tool list than the documentation describes otherwise looks like
+     * a broken server, and the caller has no way to check. It sees the list it
+     * got and nothing else.
      */
     private static function exclusionLine(): string
     {
@@ -508,10 +505,10 @@ final class ServerScope extends ReadOnlyTool
     /**
      * The names in the variable that took nothing away, in one list.
      *
-     * The two reasons are one fact to a client: the tool is in the list it was
-     * handed. Which of the two it is says what somebody has to change, and that
-     * is what the sentence below carries — a startup warning on stderr says it
-     * too, and a client is free to show that to nobody.
+     * The two reasons are one fact to a client: the tool is in the list it got.
+     * Which of the two it is says what somebody has to change, and that is what
+     * the sentence below carries. A startup warning on stderr says it too, and
+     * a client is free to show that to nobody.
      *
      * @return array<int, string>
      */
@@ -549,15 +546,15 @@ final class ServerScope extends ReadOnlyTool
      *
      * It used to be in the text alone, and a client that renders
      * structuredContent and drops the text block never saw it. What the caller
-     * got instead was five tools answering {"matchCount": 0, "answeredBy":
-     * "nothing"} — indistinguishable from a registry that really is empty, and
-     * read as one: an extension with forty registered icons was reported as
-     * registering none, twice.
+     * got instead was five tools that answered {"matchCount": 0, "answeredBy":
+     * "nothing"}. That looks like a registry that really is empty, and read as
+     * one. An extension with forty registered icons came back as one that
+     * registers none, twice.
      *
-     * The console state is handed in rather than read again, which is half of
-     * the cost measured above. It is also the half that could disagree: each of
-     * the two resolved for itself, so a project coming up between them left the
-     * text and the data of one answer saying different things.
+     * The console state comes in rather than reads again, which is half of the
+     * cost measured above. It is also the half that could disagree. Each of the
+     * two resolved for itself. So a project that came up between them left the
+     * text and the data of one answer at odds.
      *
      * @param array{command: array<int, string>, via: string, php: string}|null $console
      * @return array<string, mixed>
@@ -582,8 +579,8 @@ final class ServerScope extends ReadOnlyTool
                 'command' => $console === null ? null : implode(' ', $console['command']),
                 'reason' => $console === null ? $reason : null,
                 // Reachable and ready are two questions, and the second one has
-                // its own answer: a console reached through an interpreter on
-                // this machine while the project's containers are stopped runs,
+                // its own answer. A console reached through an interpreter on
+                // this machine while the project's containers are down runs,
                 // and runs outside the runtime the project declares.
                 'caveat' => $caveat === '' ? null : $caveat,
             ],

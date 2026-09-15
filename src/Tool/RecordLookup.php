@@ -11,35 +11,28 @@ use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Result\Unsupported;
 
 /**
- * What is in a table this installation has TCA for: how many rows, where they
+ * What a table this installation has TCA for holds: how many rows, where they
  * sit, what one column holds across them, and the rows themselves.
  *
  * A session maintained 3101 records through the generic record list, read the
- * count twice and drew nothing from it, because nothing connected a number to
- * the question of whether that table needs a backend module of its own
- * (`feedback/archive/2026-08-31-233952`). The count is one half of the answer
- * and the rows are the other: what a table holds cannot be judged from a number
- * alone, and opening the backend to see it is the round trip this exists to
- * take off the caller.
- *
- * A second session then decided the markup of a whole replacement layout from
- * six `ddev mysql` queries and never called this at all, because the table it
- * was asking about was refused (`feedback/archive/2026-09-04-053618`). So the
- * boundary is TCA and nothing narrower, the columns a row carries are the
- * caller's to name, and a distribution says which rows depart from the default
- * — `D-AUD-018`.
+ * count twice and drew nothing from it (`feedback/archive/2026-08-31-233952`).
+ * The count is one half of the answer and the rows are the other. Nobody can
+ * judge what a table holds from a number alone. A second session decided the
+ * markup of a whole replacement layout from six `ddev mysql` queries and never
+ * called this at all. The table it asked about met a refusal
+ * (`feedback/archive/2026-09-04-053618`). So the boundary is TCA and nothing
+ * narrower, `D-AUD-018`.
  */
 final class RecordLookup extends ReadOnlyTool
 {
     /**
-     * What the answer says it was read with, on every path that reads the
-     * database.
+     * What the answer says it read with, on every path that reads the database.
      *
      * The client launches this server as a stdio subprocess, so what came out
      * of the database came out with whatever access the shell user has. That is
-     * not a backend user's view of the table and never becomes one, and a
-     * caller reporting a number or a row onwards is the reason it is said here
-     * rather than assumed.
+     * not a backend user's view of the table and never becomes one. A caller
+     * who reports a number or a row onwards is the reason it stands here rather
+     * than as an assumption.
      */
     public const READ_WITH = 'Read with the shell user\'s database access, with no backend permissions applied '
         . 'and no workspace or language filter, so this is every row in the table rather than what a backend user '
@@ -49,7 +42,7 @@ final class RecordLookup extends ReadOnlyTool
      * Rows returned where the caller names no limit.
      *
      * It is the record list's own page size, which makes the first answer the
-     * same size as the surface the caller is deciding about.
+     * same size as the surface the caller decides about.
      */
     private const ROWS = 20;
 
@@ -342,12 +335,12 @@ final class RecordLookup extends ReadOnlyTool
     /**
      * Every table this installation has TCA for, in the order a listing reads.
      *
-     * TCA is the boundary and the whole of it: a row a `ctrl` describes is a
-     * record, and a table nothing describes is the caches, the queues and the
-     * session store, which no reading here is about — `D-AUD-018`. The
-     * extension beside each one is read out of the reference every `ctrl` title
-     * carries, the same attribution the icons and the content elements are made
-     * by, and it says whose table it is rather than deciding whether it is read.
+     * TCA is the boundary and the whole of it. A row a `ctrl` describes is a
+     * record. A table nothing describes is the caches, the queues and the
+     * session store, which no read here is about, `D-AUD-018`. The extension
+     * beside each one comes out of the reference every `ctrl` title carries,
+     * the same attribution the icons and the content elements have. It says
+     * whose table it is rather than decides whether the read happens.
      *
      * @param array<string, mixed> $tables
      * @return array<int, array{table: string, extension: string}>
@@ -370,9 +363,9 @@ final class RecordLookup extends ReadOnlyTool
      * The filter's columns the table does not have.
      *
      * Checked here rather than left to the database, because a column name goes
-     * into the SQL as an identifier where the value beside it is bound. What
-     * TYPO3 derives for the table is the list it is checked against, since that
-     * is one column per TCA field plus the technical ones — the same answer
+     * into the SQL as an identifier where the value beside it binds. What TYPO3
+     * derives for the table is the list it checks against, since that is one
+     * column per TCA field plus the technical ones. That is the same answer
      * `typo3_schema_lookup` hands the caller to write the filter from.
      *
      * @param array<mixed, mixed> $where
@@ -403,8 +396,8 @@ final class RecordLookup extends ReadOnlyTool
      * The groupings the probe returned, folded to one entry per page.
      *
      * The probe groups by every flag the table declares, so one page arrives as
-     * up to four rows. A deleted row that is also hidden is counted as deleted:
-     * a caller asking what is still there wants one number per row, and deleted
+     * up to four rows. A deleted row that is also hidden counts as deleted. A
+     * caller who asks what is still there wants one number per row, and deleted
      * is the state that answers it.
      *
      * @param array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}> $groups
@@ -428,10 +421,10 @@ final class RecordLookup extends ReadOnlyTool
     /**
      * The distribution of one column, out of the same grouped read.
      *
-     * A session established one with thirteen counted calls, one per value,
-     * and said six of them would have been this — `D-ANS-141`. The probe
-     * already grouped by page and by the two state flags, so the column the
-     * caller names is a third one on the same query rather than a second read.
+     * A session established one with thirteen counted calls, one per value, and
+     * said six of them would have been this, `D-ANS-141`. The probe already
+     * grouped by page and by the two state flags. So the column the caller
+     * names is a third one on the same query rather than a second read.
      *
      * @param array<int, array<string, mixed>> $groups
      * @return array<int, array<string, mixed>>
@@ -456,10 +449,10 @@ final class RecordLookup extends ReadOnlyTool
      * The default the grouped column declares, and the rows that are not it.
      *
      * A distribution says what the table holds and not which of it is the
-     * exception, and the exception is what a cleanup breaks: one row of 137
+     * exception, and the exception is what a cleanup breaks. One row of 137
      * carried a header layout no other row did and was the site's only h1
      * (`feedback/archive/2026-09-04-053618`). A column with no TCA default has
-     * nothing to depart from and says that instead — `D-AUD-018`.
+     * nothing to depart from and says that instead, `D-AUD-018`.
      *
      * @param array<int, array{uid: int, pid: int, value: mixed}> $departing
      * @return array<int, string>
@@ -533,7 +526,7 @@ final class RecordLookup extends ReadOnlyTool
      * What the row list is, said before it.
      *
      * A list that is the first page of a longer one and a list that is the
-     * whole table read alike, and the difference decides whether the caller has
+     * whole table read alike. The difference decides whether the caller has
      * seen what is in there.
      *
      * @param array{rows: array<int, array<string, mixed>>, labelField: string} $read
@@ -556,10 +549,10 @@ final class RecordLookup extends ReadOnlyTool
      * not have.
      *
      * A number on its own was in that session's hands twice and changed
-     * nothing, so the answer says what the number means for where the records
-     * are edited. The threshold is the record list's own page size: one page of
-     * it is a table nobody has to leave the list for, and a storage folder that
-     * runs to dozens of pages is the case the sighting was. It is withheld
+     * nothing. So the answer says what the number means for where an editor
+     * edits the records. The threshold is the record list's own page size. One
+     * page of it is a table nobody has to leave the list for. A storage folder
+     * that runs to dozens of pages is the case the sighting was. It stays out
      * under a filter, where the number is about a slice and says nothing about
      * the surface the editor faces.
      *

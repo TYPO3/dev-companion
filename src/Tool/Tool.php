@@ -9,21 +9,21 @@ use TYPO3\DevCompanion\Result\ToolResult;
 /**
  * One tool: what a client is told about it, and what it answers.
  *
- * Everything a caller can see of a tool is declared in the class that answers
- * it — the description it is chosen by, the arguments it takes, the shape of
- * the data it returns, and the answer itself. A description that stops
- * describing the answer is then a change to one file rather than a drift
- * between three.
+ * Everything a caller can see of a tool stands in the class that answers it.
+ * The description a client chooses it by, the arguments it takes, the shape of
+ * the data it returns, and the answer itself. A description that stops to
+ * describe the answer is then a change to one file rather than a drift between
+ * three.
  *
  * What these are is the MCP primitive the protocol calls a tool — the SDK
  * declares it as Mcp\Schema\Tool, beside Prompt and Resource. So the word here
  * is the protocol's, and the qualifier that says which kind of tool is meant is
- * already the root namespace. Nothing is a "server tool": a tool is defined by
- * the protocol rather than by the side offering it, and both sides speak of the
- * same one.
+ * already the root namespace. Nothing is a "server tool". The protocol defines
+ * a tool rather than the side that offers it, and both sides speak of the same
+ * one.
  *
- * TYPO3\DevCompanion\Tool\Registry is the list of them, and the only place a tool is switched
- * on.
+ * TYPO3\DevCompanion\Tool\Registry is the list of them, and the only place that
+ * switches a tool on.
  */
 interface Tool
 {
@@ -37,9 +37,9 @@ interface Tool
      * Where this tool's answer can come from, first one first.
      *
      * Declared per tool rather than kept as a list somewhere, for the reason
-     * every such list here is derived: a list is what still names a tool after
-     * the tool stopped answering that way. Registry renders it into the
-     * description a client reads and typo3_server_scope groups the tools by it.
+     * every such list here derives. A list is what still names a tool after the
+     * tool stopped to answer that way. Registry renders it into the description
+     * a client reads and typo3_server_scope groups the tools by it.
      *
      * @return array<int, Source>
      */

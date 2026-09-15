@@ -16,20 +16,20 @@ use TYPO3\DevCompanion\Result\Unsupported;
  * What the repository around the installation consists of.
  *
  * The knowledge base describes TYPO3; this describes the project, because a
- * recommendation is only worth as much as its fit: a check that is not declared
+ * recommendation is only worth as much as its fit. A check nothing declares
  * here does not exist here, whatever the core does with the same name.
  */
 final class ProjectDescribe extends ReadOnlyTool
 {
     /**
-     * What the answer says where nothing has been installed below the root yet.
+     * What the answer says where nothing has installed below the root yet.
      *
-     * Said rather than left to the three fields that go quiet: `typo3Version:
+     * Said rather than left to the three fields that go quiet. `typo3Version:
      * null` is what a root with no readable core answers and `extensions: []`
-     * is what a project with no extensions of its own answers, so neither of
+     * is what a project with no extensions of its own answers. So neither of
      * them tells a caller that the install has not happened (`D-ANS-085`). It
-     * is also the state the installation workflow is entered in, which is why
-     * the rest of the answer is composed for it rather than withheld.
+     * is also the state the installation workflow starts in, which is why the
+     * rest of the answer composes for it rather than stays back.
      */
     private const NOTHING_INSTALLED = 'Nothing is installed below this root yet: no Composer metadata under the '
         . 'vendor directory it declares. So this is what the repository declares and not what is running — the '
@@ -38,19 +38,19 @@ final class ProjectDescribe extends ReadOnlyTool
         . 'else here is read from the files as they stand.';
 
     /**
-     * How many drifting packages the text names before it says how many it left
-     * out. A lock a rebase moved drifts by more packages than a reader can use,
-     * and the data beside the text carries every one of them.
+     * How many drifted packages the text names before it says how many it left
+     * out. A lock a rebase moved drifts by more packages than a reader can use.
+     * The data beside the text carries every one of them.
      */
     private const LOCK_PACKAGES_LISTED = 10;
 
     /**
      * What the block of guides opens with, above one line per page.
      *
-     * A const because it is also where the answer stops being about this
-     * repository: the corpus is the same in every answer and each entry says
-     * for itself which kind of checkout it holds for, so a test reading the
-     * part that is about the caller's own project splits the text here.
+     * A const because it is also where the answer stops to be about this
+     * repository. The corpus is the same in every answer and each entry says
+     * for itself which kind of checkout it holds for. So a test that reads the
+     * part about the caller's own project splits the text here.
      */
     public const GUIDES_INTRO = 'Whole procedures this server carries, each one typo3_rule_lookup with that '
         . 'documentId — no resource list needed, and none of them is answered by a search over sections. Read the '
@@ -241,7 +241,7 @@ final class ProjectDescribe extends ReadOnlyTool
         $lines[] = '';
         $lines[] = match (true) {
             // The list is Composer's metadata rather than anything the manifest
-            // declares, so an empty one here would read as a repository with no
+            // declares. So an empty one here would read as a repository with no
             // extensions where it is a repository with nothing installed.
             !$project['installed'] => 'Extensions: not readable until the install has run — which extensions are '
                 . 'here is what Composer wrote, not what composer.json requires.',
@@ -281,9 +281,9 @@ final class ProjectDescribe extends ReadOnlyTool
         if ($project['commands'] !== []) {
             $lines[] = self::whereTheyRun($project['environment'], $project['installedPhpBound']);
         }
-        // The one thing the list cannot show: what is missing from it. A
-        // sitepackage with one stylesheet and no linter for it had to be told
-        // so by its owner (`D-ANS-148`).
+        // The one thing the list cannot show: what it lacks. A sitepackage with
+        // one stylesheet and no linter for it had to hear so from its owner
+        // (`D-ANS-148`).
         if ($project['uncheckedKinds'] !== []) {
             $lines[] = 'These packages ship ' . implode(' and ', $project['uncheckedKinds'])
                 . ' and no declared command names a checker for it. That is what is not covered rather than what '
@@ -342,13 +342,12 @@ final class ProjectDescribe extends ReadOnlyTool
     /**
      * The whole procedures this server carries, named where every task starts.
      *
-     * They are served as `typo3://guides` resources and a client that lists no
-     * resources renders none of them, while `typo3_server_scope` is the call an
-     * agent skips precisely when the task looks legible without orientation.
-     * This tool is the one the instructions open every task with, so the
-     * inventory is here and the detail stays there (`D-ANS-061`). Last in the
-     * answer rather than first, because what this tool is called for is the
-     * installation.
+     * They come as `typo3://guides` resources and a client that lists no
+     * resources renders none of them. `typo3_server_scope` is the call an agent
+     * skips precisely when the task looks legible without orientation. This
+     * tool is the one the instructions open every task with, so the inventory
+     * is here and the detail stays there (`D-ANS-061`). Last in the answer
+     * rather than first, because a caller calls this tool for the installation.
      *
      * @return array{lines: array<int, string>, records: array<int, array{id: string, title: string, when: string}>}
      */
@@ -372,20 +371,16 @@ final class ProjectDescribe extends ReadOnlyTool
     }
 
     /**
-     * Which files the repository's own extensions ship that core has stopped
-     * reading, volunteered rather than left to a second call.
+     * Which files the repository's own extensions ship that core has stopped to
+     * read, volunteered rather than left to a second call.
      *
      * `typo3_extension_describe` carries the same verdict for the extension a
-     * caller names, and a session that never makes that call never sees it: the
-     * reporting one held the tool's description, complete and in context, and
-     * called nothing — `D-ANS-009`, `D-GUI-012`. So it arrives with the
-     * orientation, for the extensions inside the repository, which are the ones
-     * somebody here can fix.
-     *
-     * The closing sentence is said whether or not anything fired, which is what
-     * `D-ANS-009`'s second **Wrong if** is about: an answer volunteering
-     * deprecations is read as a compatibility verdict, and the absence of a
-     * signal as a clean bill for the next major.
+     * caller names, and a session that never makes that call never sees it,
+     * `D-ANS-009`, `D-GUI-012`. So it arrives with the orientation, for the
+     * extensions inside the repository, which are the ones somebody here can
+     * fix. The last sentence stands whether or not anything fired. An answer
+     * that volunteers deprecations reads as a compatibility verdict, and
+     * silence as a clean bill for the next major.
      *
      * @param array<int, array{key: string, origin: string, deprecatedFiles: array<int, array{file: string, changelog: string, predicate: string, cost: string}>}> $extensions
      * @return array<int, string>
@@ -430,15 +425,15 @@ final class ProjectDescribe extends ReadOnlyTool
     }
 
     /**
-     * Where the suites this list says are absent are run, and what the ones it
-     * does list need before their first assertion.
+     * Where the suites this list says are absent run, and what the ones it does
+     * list need before their first assertion.
      *
-     * The core arm came first: the sentence named an absence and nothing that
-     * has it, and a session read it and reached for a `Build/bin/phpunit` the
-     * checkout does not contain — `D-ANS-031`. Everywhere else there is no
-     * runTests.sh to point at and the suites are the repository's own, and the
-     * answer said nothing about running them while a session spent eight round
-     * trips working it out by hand — `D-ANS-092`.
+     * The core arm came first. The sentence named an absence and nothing that
+     * has it. A session read it and reached for a `Build/bin/phpunit` the
+     * checkout does not contain, `D-ANS-031`. Everywhere else there is no
+     * runTests.sh to point at and the suites are the repository's own. The
+     * answer said nothing about how to run them while a session spent eight
+     * round trips on it by hand, `D-ANS-092`.
      *
      * @param array<int, array{command: string, source: string, declares: string, runs: string, runThrough: string|null}> $commands
      */
@@ -468,8 +463,8 @@ final class ProjectDescribe extends ReadOnlyTool
     /**
      * What the opening line says about the second PHP, beside the declared one.
      *
-     * Beside rather than instead: the constraint is what the project accepts
-     * and the environment is what it gets, and a review that holds the first
+     * Beside rather than instead. The constraint is what the project accepts
+     * and the environment is what it gets. A review that holds the first
      * against the interpreter its own shell happens to have has compared two
      * machines. Empty where there is one machine, so the line an ordinary
      * project answers with does not change.
@@ -503,12 +498,12 @@ final class ProjectDescribe extends ReadOnlyTool
      * The third PHP number, on the same line as the other two.
      *
      * A task that has to state what PHP a package supports needs the floor the
-     * core requires, and the two numbers already here are the wrong ones to take
-     * it from: one is what the project accepts and may be absent, the other what
+     * core requires. The two numbers already here are the wrong ones to take it
+     * from. One is what the project accepts and may be absent, the other what
      * the container happens to run (`D-KNW-055`). Here rather than in a section
-     * of its own, because it is the line the first call of a workflow is read
-     * for, and stated even where it repeats the project's own — a number the
-     * answer drops where the two agree cannot be told from one it never read.
+     * of its own, because it is the line a workflow's first call is for. It
+     * stands even where it repeats the project's own. A number the answer drops
+     * where the two agree looks the same as one it never read.
      */
     private static function floor(?string $constraint): string
     {
@@ -520,19 +515,16 @@ final class ProjectDescribe extends ReadOnlyTool
     }
 
     /**
-     * Whether what is installed is what composer.lock names, which `installed`
+     * Whether the installed set is what composer.lock names, which `installed`
      * never said.
      *
-     * A vendor directory older than the lock satisfies that boolean, and the
-     * suite run after it fails in classes the caller's own change never touched
-     * — two sessions from two task shapes spent a full run each attributing
-     * those failures (`D-ANS-102`). Said where the two agree as well, for the
-     * reason `relation()` states its own numbers: a line the answer drops when
-     * nothing is wrong cannot be told from one it never computed, and what a
-     * review takes from this is exactly that attribution.
-     *
-     * Called only where something is installed. Where nothing is, the paragraph
-     * above says so and this would say it a second time.
+     * A vendor directory older than the lock satisfies that boolean. The suite
+     * run after it fails in classes the caller's own change never touched
+     * (`D-ANS-102`). Said where the two agree as well, for the reason
+     * `relation()` states its own numbers. A line the answer drops when nothing
+     * is wrong looks the same as one it never computed. Called only where
+     * something has installed, because where nothing is the paragraph above
+     * already says so.
      *
      * @param array{state: string, packages: array<int, array{package: string, locked: ?string, installed: ?string}>} $lock
      * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
@@ -587,9 +579,9 @@ final class ProjectDescribe extends ReadOnlyTool
     /**
      * The command that makes the install what the lock names.
      *
-     * Not one command everywhere: the core installs its dependencies through
-     * the script its suites are run by, and a Composer project that configures
-     * DDEV installs them in that project rather than in the caller's own shell.
+     * Not one command everywhere. The core installs its dependencies through
+     * the script that runs its suites. A Composer project that configures DDEV
+     * installs them in that project rather than in the caller's own shell.
      *
      * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      */
@@ -607,11 +599,11 @@ final class ProjectDescribe extends ReadOnlyTool
     /**
      * How the three numbers on the line above stand to each other.
      *
-     * The line states them and states which is which; what it never said is the
+     * The line states them and states which is which. What it never said is the
      * relation, and the relation is the defect (`D-ANS-082`). Stated even where
      * the three agree, for the reason `floor()` states the core's number where
-     * it repeats the project's own: a line the answer drops when nothing is
-     * wrong cannot be told from one it never computed.
+     * it repeats the project's own. A line the answer drops when nothing is
+     * wrong looks the same as one it never computed.
      *
      * @param array{floor: string, coreFloor: ?string, againstCore: ?string, inEnvironment: ?string, bound: ?string, environmentAgainstBound: ?string}|null $relation
      * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
@@ -687,13 +679,13 @@ final class ProjectDescribe extends ReadOnlyTool
     }
 
     /**
-     * Where the commands just listed are run, which the list itself never said.
+     * Where the commands just listed run, which the list itself never said.
      *
-     * `skills/base.md` sends every task to run the checks this list holds, and
-     * a declared `composer test:unit` put on the caller's own shell in a
+     * `skills/base.md` sends every task to run the checks this list holds. A
+     * declared `composer test:unit` on the caller's own shell in a
      * containerised project is a different interpreter from the one the project
-     * is built for — which is the finding `feedback/2026-07-31-193611` reported
-     * as a version mismatch that blocked nothing.
+     * builds for. That is the finding `feedback/2026-07-31-193611` reported as
+     * a version mismatch that blocked nothing.
      *
      * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      */
@@ -701,7 +693,7 @@ final class ProjectDescribe extends ReadOnlyTool
     {
         if ($environment === null) {
             // Said rather than left out. An answer that names no environment
-            // reads as "there is none" whether this looked or not, so it says
+            // reads as "there is none" whether this looked or not. So it says
             // what it looked at and the reader can tell the two apart.
             return 'Nothing in this repository configures an environment of its own — .ddev/config.yaml and '
                 . Typo3Cli::CONSOLE_VARIABLE . ' are what this reads — so these run wherever you run them.'
@@ -729,15 +721,15 @@ final class ProjectDescribe extends ReadOnlyTool
     }
 
     /**
-     * Whether the commands about to be listed start on the interpreter that
+     * Whether the commands in the list below start on the interpreter that
      * would run them, which what each one does to the sources never said.
      *
      * `R-PRJ-007` marks a command a check a task told not to change files may
-     * run, and a session offered one ran into `composer cgl:ci` aborting in the
-     * platform check before the fixer started — then went looking for another
-     * interpreter and gave the check to CI (`D-ANS-086`). Empty where nothing
-     * bounds them: the number and its absence belong among the numbers above,
-     * and here there is nothing to warn about.
+     * run. A session offered one saw `composer cgl:ci` abort in the platform
+     * check before the fixer started. It then searched for another interpreter
+     * and gave the check to CI (`D-ANS-086`). Empty where nothing bounds them.
+     * The number and its absence belong among the numbers above, and here there
+     * is nothing to warn about.
      */
     private static function startable(?string $bound, ?string $interpreter, string $where): string
     {
@@ -775,10 +767,10 @@ final class ProjectDescribe extends ReadOnlyTool
      * them said.
      *
      * The PHP relation above is the same sentence for the other interpreter,
-     * and the reported defect was this one: a build broke on the machine and CI
-     * being different releases of one Node major (`D-SCO-013`). Empty where
-     * this repository has no npm surface at all, which is the one case where a
-     * silence about Node says something rather than hiding it.
+     * and the reported defect was this one. A build broke because the machine
+     * and CI ran different releases of one Node major (`D-SCO-013`). Empty
+     * where this repository has no npm surface at all. That is the one case
+     * where a silence about Node says something rather than hides it.
      *
      * @param array{engines: ?string, enginesIn: ?string, nvmrc: ?string, nvmrcIn: ?string, environment: ?string, ci: array<int, array{workflow: string, from: string, states: string, version: ?string}>, relation: array{declared: string, declaredBy: string, nvmrcAgainstEngines: ?string, inEnvironment: ?string, ci: ?string, inCi: ?string}|null}|null $node
      * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
@@ -872,10 +864,10 @@ final class ProjectDescribe extends ReadOnlyTool
     /**
      * That no file here declares the Node, and what those files say instead.
      *
-     * Two states wear one sentence otherwise: a repository that states nothing,
-     * and one that states `lts/iron` or a range whose lowest version this will
-     * not claim to read. The second is where the caller has something to open,
-     * so each file is named where it sits.
+     * Two states share one sentence otherwise. A repository that states
+     * nothing, and one that states `lts/iron` or a range whose lowest version
+     * this will not claim to read. The second is where the caller has something
+     * to open, so each file stands by name where it sits.
      *
      * @param array{engines: ?string, enginesIn: ?string, nvmrc: ?string, nvmrcIn: ?string, environment: ?string, ci: array<int, array{workflow: string, from: string, states: string, version: ?string}>, relation: array{declared: string, declaredBy: string, nvmrcAgainstEngines: ?string, inEnvironment: ?string, ci: ?string, inCi: ?string}|null} $node
      */
@@ -901,11 +893,11 @@ final class ProjectDescribe extends ReadOnlyTool
 
     /**
      * What the environment serves, which is not the same question as where the
-     * commands run and is answered whether the repository declares any.
+     * commands run. It has an answer whether the repository declares any.
      *
-     * The running half is named rather than guessed at: bound ports and a
-     * container address are not in these files, and `R-DIS-006` is why nothing
-     * here starts anything to find out.
+     * The live half has a name rather than a guess. Bound ports and a container
+     * address are not in these files, and `R-DIS-006` is why nothing here
+     * starts anything to find out.
      *
      * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      */
@@ -928,7 +920,7 @@ final class ProjectDescribe extends ReadOnlyTool
 
     /**
      * What the environment runs by itself, which the commands above never
-     * covered: those are what a caller may run, these run without being asked.
+     * covered. Those are what a caller may run, these run unasked.
      *
      * `R-PRJ-009`. Said even where there are none, because an answer that names
      * no hook reads as "there is none" whether this looked or not.

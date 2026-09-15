@@ -12,10 +12,10 @@ use TYPO3\DevCompanion\Result\ToolResult;
 /**
  * Whether an extension is part of the core, and since when.
  *
- * Answered from the catalog rather than from the installation being read,
- * because the case that matters is the extension that is not installed: that is
- * when the question is asked, and answering it from memory is how a community
- * package gets cited as evidence of what the core does.
+ * Answered from the catalog rather than from the installation at hand, because
+ * the case that matters is the extension that is not installed. That is when
+ * the question comes, and an answer from memory is how a community package gets
+ * cited as evidence of what the core does.
  */
 final class SystemExtensionLookup extends ReadOnlyTool
 {

@@ -18,9 +18,9 @@ use TYPO3\DevCompanion\Search\LabelSearch;
  * Labels registered in the installation or kept in project site configuration.
  *
  * The console searches the packages it has active, which is what makes the
- * answer right: a project extension's labels are in it, and so are the resource
+ * answer right. A project extension's labels are in it, and so are the resource
  * overrides the installation applies. Neither follows from a core checkout, and
- * neither could be shipped as a snapshot.
+ * neither could ship as a snapshot.
  */
 final class LabelLookup extends ReadOnlyTool
 {
@@ -30,10 +30,11 @@ final class LabelLookup extends ReadOnlyTool
      *
      * Read in `.checkouts/14.3` and `.checkouts/main`, where
      * `TranslationDomainSearchCommand` warns with this text and returns
-     * SUCCESS; the command does not exist before 14.0, and there the console
-     * exits non-zero. Matching the text rather than the exit code fails in the
-     * safe direction: if the wording moves, an empty result reads as nothing
-     * established, which costs a fallback rather than an answer that is wrong.
+     * SUCCESS. The command does not exist before 14.0, and there the console
+     * exits non-zero. A match on the text rather than the exit code fails in
+     * the safe direction. If the wording moves, an empty result reads as
+     * nothing established, which costs a fallback rather than an answer that is
+     * wrong.
      */
     private const NOTHING_MATCHED = 'No language resource files found';
 
@@ -43,9 +44,9 @@ final class LabelLookup extends ReadOnlyTool
      *
      * Both sessions that wrote German into a source XLF had called this tool.
      * Neither called `typo3_task_guide`, whose `labels` intent holds the same
-     * rule, and neither asked for a hint: every other route opens on the word
-     * label, which a session describing its work as a content element has no
-     * reason to type.
+     * rule, and neither asked for a hint. Every other route opens on the word
+     * label, which a session that describes its work as a content element has
+     * no reason to type.
      */
     private const SOURCE_LANGUAGE = "\n\nWrite a new trans-unit in English in the unprefixed source file, and put any "
         . 'other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same '
@@ -129,21 +130,20 @@ final class LabelLookup extends ReadOnlyTool
         $answer = Typo3Cli::json($arguments);
 
         // The console prints a warning instead of a payload when nothing
-        // matched, and exits successfully while doing it. That is an
-        // installation that answered "none", not one that could not be asked —
-        // and the difference decides whether the caller refines the query or
-        // goes looking for a console that is not broken.
-        //
-        // The exit code cannot draw that line on its own, and reading it alone
-        // put every other exit-0-without-payload on the "none" side. Nobody has
-        // established what else lands there — the two obvious carriers do not:
-        // Xdebug's connection warning goes to stderr, and a PHP deprecation is
-        // swallowed by TYPO3's own error handler before it can print. What is
-        // measured is the tool's side of it: four different stdouts, one of
-        // them carrying an intact payload the decoder missed, all answered "no
-        // label carries these words". An exit code of 0 certifies nothing about
-        // the stream, so the warning is what says "none", and everything else
-        // without a payload is nothing established.
+        // matched, and exits with success as it does so. That is an
+        // installation that answered "none", not one that could not answer. The
+        // difference decides whether the caller refines the query or searches
+        // for a console that is not broken. The exit code cannot draw that line
+        // on its own, and a read of it alone put every other
+        // exit-0-without-payload on the "none" side. Nobody has established
+        // what else lands there, and the two obvious carriers do not. Xdebug's
+        // connection warning goes to stderr, and TYPO3's own error handler
+        // swallows a PHP deprecation before it can print. The measurement is
+        // the tool's side of it. Four different stdouts, one of them with an
+        // intact payload the decoder missed, all answered "no label carries
+        // these words". An exit code of 0 certifies nothing about the stream.
+        // So the warning is what says "none", and everything else without a
+        // payload is nothing established.
         $establishedNone = $answer['exitCode'] === 0
             && str_contains($answer['output'], self::NOTHING_MATCHED);
 
@@ -213,8 +213,8 @@ final class LabelLookup extends ReadOnlyTool
             ));
         }
 
-        // The console returned everything carrying any of the words; the query
-        // asked for the labels carrying all of them.
+        // The console returned everything with any of the words; the query
+        // asked for the labels with all of them.
         $labels = LabelSearch::carryingEvery($candidates, $terms);
         $termCounts = LabelSearch::perTermCounts($candidates, $terms);
 
@@ -257,15 +257,15 @@ final class LabelLookup extends ReadOnlyTool
                 count($terms) > 1 ? 'carries all of ' . LabelSearch::quoted($terms) : sprintf('matches "%s"', $query)
             )];
 
-            // Every count above was taken after the resource narrowed the
-            // labels, so a path that names nothing at all reports every word at
-            // 0 — which is what `perTermCounts()` reserves for a word that was
-            // misspelled. A session read that as "this resource holds no such
-            // label", concluded the label had to be written, and the file it
-            // had guessed the name of held it. So where a word reaches outside
-            // the resource and nothing inside it, the resource is what emptied
-            // this and that is the first sentence — `D-ANS-016`, one corpus
-            // over from the version filter of typo3_changelog_lookup.
+            // Every count above ran after the resource narrowed the labels. So
+            // a path that names nothing at all reports every word at 0, which
+            // is what `perTermCounts()` reserves for a word with a wrong
+            // spelling. A session read that as "this resource holds no such
+            // label" and concluded the label needed a write. The file whose
+            // name it had guessed held it. So where a word reaches outside the
+            // resource and nothing inside it, the resource is what emptied this
+            // and that is the first sentence. `D-ANS-016`, one corpus over from
+            // the version filter of typo3_changelog_lookup.
             $outside = [];
             $elsewhere = [];
             if ($resource !== '' && $terms !== []) {
@@ -297,10 +297,10 @@ final class LabelLookup extends ReadOnlyTool
                     ),
                 );
             }
-            // The resources that do hold what was asked for, where the one
-            // named holds nothing at all. A guessed path is a segment or a
-            // plural away from a file that is there, so what replaces it is a
-            // list of the ones that are — `D-ANS-016`.
+            // The resources that do hold the answer, where the named one holds
+            // nothing at all. A guessed path is a segment or a plural away from
+            // a file that is there. So what replaces it is a list of the ones
+            // that are, `D-ANS-016`.
             if ($resource !== '' && $candidates === []) {
                 $lines[] = '';
                 $lines[] = $elsewhere === []
@@ -331,11 +331,11 @@ final class LabelLookup extends ReadOnlyTool
                 'resourceDiagnostics' => $diagnostics,
                 'answeredBy' => $answeredBy,
             ];
-            // Each field is present where it was computed and absent where
-            // there was nothing to compute it against, so which of the two
-            // carries a count is what says which side of the resource it was
-            // taken on — `R-ANS-002`, for the client that renders the data and
-            // drops the text.
+            // Each field is present where a count ran and absent where there
+            // was nothing to count against. So which of the two carries a count
+            // is what says which side of the resource it stands on.
+            // `R-ANS-002`, for the client that renders the data and drops the
+            // text.
             if ($outside !== []) {
                 $data['termCountsWithoutTheNarrowing'] = $outside;
             }
@@ -421,9 +421,9 @@ final class LabelLookup extends ReadOnlyTool
      */
     private static function resourceDiagnostics(array $labels): array
     {
-        // The scan reads every source file of every package, so it is asked
-        // for the resources this answer names and not for the hundreds the
-        // installation ships — `D-ANS-135`.
+        // The scan reads every source file of every package. So it runs over
+        // the resources this answer names and not over the hundreds the
+        // installation ships, `D-ANS-135`.
         $wanted = [];
         foreach ($labels as $label) {
             if (!isset($label['conventionalName'], $label['implicitReferences'], $label['location'])) {
@@ -494,11 +494,11 @@ final class LabelLookup extends ReadOnlyTool
     }
 
     /**
-     * The axes a count was taken inside, as a miss names them back.
+     * The axes a count ran inside, as a miss names them back.
      *
-     * Both of them, because the console is asked for one extension and the
-     * resource narrows what it answered: a number taken inside either reads as
-     * a fact about the installation otherwise.
+     * Both of them, because the question to the console names one extension and
+     * the resource narrows what it answered. A number from inside either reads
+     * as a fact about the installation otherwise.
      *
      * @return array<int, string>
      */
@@ -519,11 +519,11 @@ final class LabelLookup extends ReadOnlyTool
      * Why the console settled neither the labels nor their absence.
      *
      * Two failures arrive here and they send the caller to different places.
-     * One is a console that could not be run, and its own message is the
-     * reason. The other ran, exited 0 and printed something that is neither
-     * the payload nor the warning it prints when nothing matched — there is no
-     * message to pass on, and "could not be asked" would send the caller after
-     * a console that is working.
+     * One is a console that did not run, and its own message is the reason. The
+     * other ran, exited 0 and printed something that is neither the payload nor
+     * the warning it prints when nothing matched. There is no message to pass
+     * on, and "did not answer" would send the caller after a console that
+     * works.
      *
      * @param array{error: string, exitCode: int, output: string, ok: bool, data: mixed} $answer
      */

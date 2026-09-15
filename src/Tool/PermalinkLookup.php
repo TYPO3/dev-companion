@@ -16,7 +16,7 @@ use TYPO3\DevCompanion\Result\ToolResult;
  */
 final class PermalinkLookup extends ReadOnlyTool
 {
-    /** The inventories are read from docs.typo3.org. */
+    /** The inventories come from docs.typo3.org. */
     protected const OPEN_WORLD = true;
 
     public static function name(): string
@@ -247,9 +247,9 @@ final class PermalinkLookup extends ReadOnlyTool
      * What the caller asked for against what the host served.
      *
      * The host answers a branch it does not publish with a redirect to `main`
-     * and a 200, so an identifier can be reported as resolving for a release
-     * whose manual was never reached. That is what `R-DOC-001` forbids being
-     * passed on, and the inventory's own version line is where it is visible.
+     * and a 200. So an identifier can come back as resolved for a release whose
+     * manual nobody reached. That is what `R-DOC-001` forbids to pass on, and
+     * the inventory's own version line is where it shows.
      *
      * @return array<int, string>
      */
@@ -268,8 +268,9 @@ final class PermalinkLookup extends ReadOnlyTool
     }
 
     /**
-     * One name with what the manual registers it as, which is what says whether
-     * writing it is a link to a section, to a configuration value or to API.
+     * One name with what the manual registers it as. That says whether a
+     * reference to it is a link to a section, to a configuration value or to
+     * API.
      *
      * @param array{name: string, roles: array<int, string>} $spelling
      */

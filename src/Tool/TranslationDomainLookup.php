@@ -13,23 +13,23 @@ use TYPO3\DevCompanion\Result\ToolResult;
 /**
  * The translation domain an XLF file resolves to, computed from its path.
  *
- * Nothing registers a domain: it follows from the path by the rules in the
- * core's own path-to-domain rules — the class holding them has been both
- * TranslationDomainMapper and TranslationDomainResolver. Computing it rather
- * than looking it up is what makes it answerable at all — for a file in any
- * extension, in any instance, and for one a patch is about to add, which is
- * exactly when it cannot be looked up anywhere.
+ * Nothing registers a domain. It follows from the path by the core's own
+ * path-to-domain rules, and the class with them has been both
+ * TranslationDomainMapper and TranslationDomainResolver. A computation rather
+ * than a lookup is what makes it answerable at all. For a file in any
+ * extension, in any instance, and for one a patch is about to add. That is
+ * exactly when no lookup anywhere can find it.
  */
 final class TranslationDomainLookup extends ReadOnlyTool
 {
     /**
      * The first TYPO3 major that resolves translation domains.
      *
-     * Verified against the core: 13.4 has no TranslationDomain* class at all, 14
-     * ships the mapper. A domain written into a label below this renders
-     * nothing, silently and at runtime, which is why this is the one version
-     * fact the code carries rather than the knowledge base. Public because it is
-     * one number in one place (`D-DIS-004`), held to what it claims by
+     * Verified against the core: 13.4 has no TranslationDomain* class at all,
+     * 14 ships the mapper. A domain in a label below this renders nothing,
+     * silently and at runtime. That is why this is the one version fact the
+     * code carries rather than the knowledge base. Public because it is one
+     * number in one place (`D-DIS-004`), held to what it claims by
      * `VersionsTest` and by `bin/cli versions:check`.
      */
     public const SINCE = 14;
@@ -77,10 +77,10 @@ final class TranslationDomainLookup extends ReadOnlyTool
     {
         $path = trim((string) ($args['path'] ?? ''));
         $stated = isset($args['targetVersion']) ? trim((string) $args['targetVersion']) : '';
-        // One major, never the several a repository may declare: the whole
+        // One major, never the several a repository may declare. The whole
         // answer is one string that either works on a version or renders
-        // nothing there, and "it depends which of your two majors" is not an
-        // answer a label can be written from (D-DIS-004).
+        // nothing there. "It depends which of your two majors" is no answer to
+        // write a label from (D-DIS-004).
         $target = Versions::target($stated === '' ? null : $stated);
         $domain = TranslationDomain::fromPath($path);
 
@@ -96,11 +96,11 @@ final class TranslationDomainLookup extends ReadOnlyTool
             );
         }
 
-        // The domain form is younger than the versions this is asked from. On a
+        // The domain form is younger than the versions this answers from. On a
         // version that has no resolver for it, the domain string is
-        // syntactically fine and resolves to nothing at runtime: every label it
-        // is written into silently renders empty. That is the one answer here
-        // that has to be withheld rather than qualified.
+        // syntactically fine and resolves to nothing at runtime. Every label
+        // with it in silently renders empty. That is the one answer here that
+        // has to stay back rather than carry a qualification.
         if ($target !== null && $target < self::SINCE) {
             $reference = str_starts_with($path, 'EXT:') ? $path : 'EXT:<key>/' . ltrim($path, '/');
 
@@ -152,14 +152,14 @@ final class TranslationDomainLookup extends ReadOnlyTool
     }
 
     /**
-     * Which version the domain is being handed over for.
+     * Which version the domain answers for.
      *
-     * The withheld answer has always named the version it was withheld for; the
-     * one that hands a domain over said nothing, so a caller on a backport
-     * branch could not see that it had been answered for the installation
-     * instead. Where nothing placed the call at all, that is what it says —
-     * this form is the newer one, and a caller who is on an older branch has to
-     * be the one to know it.
+     * The answer that stays back has always named the version it stays back
+     * for. The one that hands a domain over said nothing. So a caller on a
+     * backport branch could not see that the answer was for the installation
+     * instead. Where nothing placed the call at all, that is what it says. This
+     * form is the newer one, and a caller on an older branch has to be the one
+     * to know it.
      */
     private static function composedFor(string $stated, ?int $target): string
     {

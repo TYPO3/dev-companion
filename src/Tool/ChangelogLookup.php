@@ -15,25 +15,25 @@ use TYPO3\DevCompanion\Search\LabelSearch;
 /**
  * What a TYPO3 version changed, from the changelog that installation ships.
  *
- * The one question the knowledge base cannot answer from conventions: what a
- * given release broke, deprecated or added is a list, and the list is on disk in
- * every installation.
+ * The one question the knowledge base cannot answer from conventions. What a
+ * given release broke, deprecated or added is a list, and the list is on disk
+ * in every installation.
  */
 final class ChangelogLookup extends ReadOnlyTool
 {
-    /** The versions above the installed major are read from docs.typo3.org. */
+    /** The versions above the installed major come from docs.typo3.org. */
     protected const OPEN_WORLD = true;
 
     /**
-     * What an entry that states no removal leaves to be said.
+     * What an entry that states no removal leaves unsaid.
      *
      * The removal version is what an upgrade audit decides on, and an empty
-     * field beside a populated one is read as "no removal planned" — the
-     * silence-as-verdict failure `D-ANS-009` was built against. So the rule that
+     * field beside a populated one reads as "no removal planned". That is the
+     * silence-as-verdict failure `D-ANS-009` stands against. So the rule that
      * covers the silence travels with the answer as data and not only as text,
-     * which is what `R-ANS-002` is written against. It is stated, never applied
-     * per entry: a number derived from the rule would have been wrong where the
-     * core kept an entry that skips a major.
+     * which is what `R-ANS-002` stands against. It stands as a statement and
+     * never applies per entry. A number derived from the rule would have been
+     * wrong where the core kept an entry that skips a major.
      */
     private const REMOVAL_RULE = 'A deprecated API keeps working until the next major release. An entry that '
         . 'states a removal version overrides that, and some state one more than a major away. An empty removal '
@@ -106,20 +106,20 @@ final class ChangelogLookup extends ReadOnlyTool
      * named it.
      *
      * `extendToSubpages` is the TCA column and the natural word for inherited
-     * frontend access restriction, and the changelog answers it with a single
-     * 12.0 Breaking removing an Indexed Search option that happens to spell it.
-     * The answer is arguably correct — that area was never reworked, and a
-     * changelog records change events — but a session that started from the
+     * frontend access restriction. The changelog answers it with a single 12.0
+     * Breaking that removes an Indexed Search option that happens to spell it.
+     * The answer is arguably correct, that area never saw a rework, and a
+     * changelog records change events. But a session that started from the
      * column name and stopped there reads one hit as evidence about the area
      * (`feedback/2026-08-07-233553`).
      *
-     * Only where the query does not name it, because a caller asking about
-     * indexed search is answered by `ext:indexed_search` entries and told
-     * nothing by being reminded of it — matched a word at a time, since nobody
-     * types the key with its underscore.
+     * Only where the query does not name it. A caller who asks about indexed
+     * search gets `ext:indexed_search` entries and learns nothing from a
+     * reminder of it. Matched a word at a time, since nobody types the key with
+     * its underscore.
      *
-     * `ext:core` is never it. Most of what the changelog records is in there,
-     * so "every one of these is in ext:core" is a statement about the corpus
+     * `ext:core` is never it. Most of what the changelog records is in there.
+     * So "every one of these is in ext:core" is a statement about the corpus
      * rather than about the query.
      *
      * @param array<int, array<string, mixed>> $entries
@@ -137,7 +137,7 @@ final class ChangelogLookup extends ReadOnlyTool
                 static fn(string $tag): bool => str_starts_with($tag, 'ext:'),
             ));
             // An entry in two of them is a change across system extensions and
-            // says nothing about the query being answered by the wrong one.
+            // says nothing about a wrong extension in the answer.
             if (count($tags) !== 1 || ($only !== null && $only !== $tags[0])) {
                 return null;
             }
@@ -182,14 +182,14 @@ final class ChangelogLookup extends ReadOnlyTool
         );
 
         // What the installation ships stops at its own major, and the versions
-        // above it are the ones an upgrade is asking about. They come from the
+        // above it are the ones an upgrade asks about. They come from the
         // manual, and only where the installation has no directory of its own
-        // for them — a version it ships is the version it runs, and the two
-        // must never both be in one answer.
-        // Not where the caller named a version this installation ships. That
-        // answer is complete on disk, and the tool a session calls most should
-        // not pay a round trip — or, on a machine with no network, a connect
-        // timeout — for entries the narrowing has already excluded.
+        // for them. A version it ships is the version it runs, and the two must
+        // never both be in one answer. Not where the caller named a version
+        // this installation ships. That answer is complete on disk. The tool a
+        // session calls most should not pay a round trip for entries the filter
+        // has already excluded. On a machine with no network that is a connect
+        // timeout.
         $manual = new CoreChangelog();
         $asksBeyond = $version === '' || !self::ships($installed, $version);
         $published = $asksBeyond ? $manual->entries() : [];
@@ -214,26 +214,23 @@ final class ChangelogLookup extends ReadOnlyTool
 
         $matching = LabelSearch::carryingEvery($narrowed, $terms);
 
-        // The names answer first and the file only where they answered nothing,
-        // so a call that hits today pays no read and nothing that matches today
-        // stops matching. Opening every file costs an order of magnitude more
-        // than scanning the names, and where the names answer nothing there is
-        // no answer to slow down — `D-ANS-041`, and `D-ANS-042` for what the
-        // same read takes out of the body.
-        //
-        // Two things are taken out of that one read, because the file is open
-        // either way: the title as it is stated, which the name spells
-        // differently, and the identifiers the body writes, which the name
-        // leaves out. The counts and subsets a miss prints run over the same
-        // enriched entries, so they say what was actually searched.
-        //
-        // The manual's half of that read is free and its other half is not.
-        // The inventory line already carries the stated title, so a title
-        // search costs nothing there; the identifiers are in the body, and
-        // reading 469 of them over the network is six seconds for a fallback
-        // that runs on a miss. So a manual entry is searched by its title and
-        // never by its identifiers, and the answer says so where that is what
-        // the caller was doing.
+        // The names answer first and the file only where they answered nothing.
+        // So a call that hits today pays no read and nothing that matches today
+        // stops to match. A read of every file costs an order of magnitude more
+        // than a scan of the names. Where the names answer nothing there is no
+        // answer to slow down. `D-ANS-041`, and `D-ANS-042` for what the same
+        // read takes out of the body. Two things come out of that one read,
+        // because the file is open either way. The title as the file states it,
+        // which the name spells differently, and the identifiers the body
+        // writes, which the name leaves out. The counts and subsets a miss
+        // prints run over the same enriched entries, so they say what the
+        // search covered. The manual's half of that read is free and its other
+        // half is not. The inventory line already carries the stated title, so
+        // a title search costs nothing there. The identifiers are in the body.
+        // A read of 469 of them over the network is six seconds for a fallback
+        // that runs on a miss. So the search reads a manual entry by its title
+        // and never by its identifiers. The answer says so where that is what
+        // the caller did.
         $read = false;
         if ($matching === [] && $terms !== []) {
             $narrowed = array_map(
@@ -251,11 +248,11 @@ final class ChangelogLookup extends ReadOnlyTool
             $read = $matching !== [];
         }
 
-        // The tags are inside the file, so narrowing by one costs a read of
-        // every entry that survived the type and the version — 23 ms for the
-        // deprecations of one major, six hundred for the whole changelog. That
-        // read is why it is a field of its own rather than more words in the
-        // query, and it bounds one question rather than a sweep: a major comes
+        // The tags are inside the file, so a filter by one costs a read of
+        // every entry that survived the type and the version. That is 23 ms for
+        // the deprecations of one major, six hundred for the whole changelog.
+        // That read is why it is a field of its own rather than more words in
+        // the query. It bounds one question rather than a sweep. A major comes
         // back whole from the version and the type under a raised `limit`,
         // which `D-ANS-093` measured against eleven tag calls.
         $tags = [];
@@ -280,9 +277,9 @@ final class ChangelogLookup extends ReadOnlyTool
             ?: strcmp($a['key'], $b['key']));
 
         $shown = array_slice($matching, 0, $limit);
-        // The migration is the part a session went to the file for, and it is
-        // handed over where the answer is about one entry. On a sweep it is the
-        // volume the titles exist to keep down — `D-ANS-139`.
+        // The migration is the part a session went to the file for, and it
+        // comes over where the answer is about one entry. On a sweep it is the
+        // volume the titles exist to keep down, `D-ANS-139`.
         $whole = count($shown) === 1;
         $entries = array_map(static function (array $entry) use ($manual, $whole): array {
             $read = self::body($entry, $manual);
@@ -310,18 +307,18 @@ final class ChangelogLookup extends ReadOnlyTool
                 $counts,
                 static fn(array $term): bool => $term['matchCount'] > 0,
             ));
-            // Every count on this miss is taken inside the version and the
-            // type, and reads as a fact about the changelog: the reported miss
-            // said "preview reaches 1 entry" at `version: "15"` where all four
-            // words reach without it, and the session concluded the tool could
-            // not reach the entry at all. So where a word reaches outside the
-            // narrowing and nothing inside it, the filter is what emptied the
-            // answer and that is the first sentence — `D-ANS-016`. The second
-            // scan is the whole changelog and costs 48 ms for the 3795 entries
-            // of `/home/benji/projects/typo3-cms`, on a narrowed miss alone. It
+            // Every count on this miss runs inside the version and the type,
+            // and reads as a fact about the changelog. The reported miss said
+            // "preview reaches 1 entry" at `version: "15"` where all four words
+            // reach without it. The session concluded the tool could not reach
+            // the entry at all. So where a word reaches outside the filter and
+            // nothing inside it, the filter is what emptied the answer. That is
+            // the first sentence, `D-ANS-016`. The second scan is the whole
+            // changelog and costs 48 ms for the 3795 entries of
+            // `/home/benji/projects/typo3-cms`, on a narrowed miss alone. It
             // reads the names and not the titles, because what it establishes
-            // is which filter emptied the answer, and the whole-file read is
-            // what the caller pays once it asks again without that filter.
+            // is which filter emptied the answer. The whole-file read is what
+            // the caller pays once it asks again without that filter.
             $outside = [];
             if ($narrowing !== [] && $terms !== []) {
                 $inside = array_column($counts, 'matchCount', 'term');
@@ -357,11 +354,11 @@ final class ChangelogLookup extends ReadOnlyTool
                     : 'The tags those entries carry: ' . implode(', ', array_keys($tags)) . '.';
             }
             // What the caller can act on is a query rather than five numbers:
-            // the words that do reach something together. Offered where no tag
-            // was asked for, because the peel reads file names while a tag is
-            // inside the file — a subset counted without the tag would promise
-            // entries the same call does not return. On the narrowed set, for
-            // the same reason.
+            // the words that do reach something together. Offered where the
+            // caller asked for no tag, because the peel reads file names while
+            // a tag is inside the file. A subset counted without the tag would
+            // promise entries the same call does not return. On the narrowed
+            // set, for the same reason.
             $subsets = $tag === '' ? LabelSearch::largestReachingSubsets($narrowed, $terms) : [];
             if (count($terms) > 1 && $reached !== []) {
                 $lines[] = ($narrowing === [] ? 'On its own, ' : sprintf('Inside %s, on its own, ', implode(' and ', $narrowing)))
@@ -377,30 +374,27 @@ final class ChangelogLookup extends ReadOnlyTool
                     $narrowing === [] ? '' : 'inside ' . implode(' and ', $narrowing),
                 );
                 // Where the offered re-query comes back empty too, what is
-                // missing is the corpus and not the words — `D-ANS-010`, which
+                // absent is the corpus and not the words. `D-ANS-010`, which
                 // routes "does it still work" to the manual. After the offer
-                // and never in place of it: the reported miss did carry the
-                // entry its review turned on, one subset away, and a sentence
-                // naming the manual first is what would have routed that
-                // session away from it (`D-ANS-043`). Offered nowhere else,
-                // because "that" is the re-query and a miss with none has
-                // nothing for this sentence to follow.
+                // and never in place of it. The reported miss did carry the
+                // entry its review turned on, one subset away. A sentence that
+                // names the manual first is what would have routed that session
+                // away from it (`D-ANS-043`). Offered nowhere else, because
+                // "that" is the re-query and a miss with none has nothing for
+                // this sentence to follow.
                 $lines[] = 'Where that comes back empty too, ask typo3_documentation_lookup with targetVersion: a '
                     . 'changelog records change events, so a mechanism nobody changed has no entry here, and '
                     . 'whether one still holds in a version is what the manual answers.';
             } elseif ($terms !== [] && $outside === [] && $tag === '') {
-                // Nothing was computed to ask this corpus again with, so the
-                // next call is a different corpus rather than a different query
-                // — `R-ANS-018`, which the branch above held alone. Both of
-                // them, because a miss says nothing about which of the two
-                // shapes the question had, and a caller with no re-query left
-                // cannot recover from being sent to the wrong one —
-                // `D-ANS-110`.
-                //
-                // Not where a filter or a tag emptied the answer: those name
-                // their own way back into this corpus, and routing out of it
-                // ahead of a re-query that answers is what `D-ANS-043`
-                // declined.
+                // Nothing came out to ask this corpus again with, so the next
+                // call is a different corpus rather than a different query.
+                // `R-ANS-018`, which the branch above held alone. Both of them,
+                // because a miss says nothing about which of the two shapes the
+                // question had. A caller with no re-query left cannot recover
+                // from a route to the wrong one, `D-ANS-110`. Not where a
+                // filter or a tag emptied the answer. Those name their own way
+                // back into this corpus, and a route out of it ahead of a
+                // re-query that answers is what `D-ANS-043` declined.
                 $lines[] = 'A changelog records change events, so a miss can mean the question belongs to another '
                     . 'corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with '
                     . 'targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with '
@@ -409,18 +403,16 @@ final class ChangelogLookup extends ReadOnlyTool
             $lines[] = self::covers($versions, $ahead, $asksBeyond, $published === null);
 
             // What the miss worked out is a field as well as a line. A session
-            // read `matchCount: 0` and the five fields beside it, reported that
-            // nothing came back to re-ask with, and settled its question by
-            // grep — while the text of that same answer offered the subset that
-            // returns the entry its review turned on (`D-ANS-043`, and
-            // `R-ANS-002` for the client that renders `structuredContent` and
-            // drops the text block).
-            //
-            // Each field is present where it was computed and absent where it
-            // was withheld, under the two withholdings the text already makes:
-            // the subsets never travel beside a `tag`, and a count says which
-            // side of the narrowing it was taken on by which of the two fields
-            // carries it.
+            // read `matchCount: 0` and the five fields beside it. It reported
+            // that nothing came back to ask again with, and settled its
+            // question by grep. All the while the text of that same answer
+            // offered the subset that returns the entry its review turned on
+            // (`D-ANS-043`). `R-ANS-002` is for the client that renders
+            // `structuredContent` and drops the text block. Each field is
+            // present where the miss computed it and absent where it held it
+            // back, under the two holds the text already makes. The subsets
+            // never travel beside a `tag`. A count says which side of the
+            // filter it stands on by which of the two fields carries it.
             $data = [
                 'query' => $query,
                 'matchCount' => 0,
@@ -502,15 +494,15 @@ final class ChangelogLookup extends ReadOnlyTool
                 . 'FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool '
                 . 'can find the call sites for you.';
         // A hit says nothing about what it could not see, and that is the one
-        // silence this must not leave: entries came back, so the answer looks
-        // complete, while the versions an upgrade is about were never read.
+        // silence this must not leave. Entries came back, so the answer looks
+        // complete, while the versions an upgrade is about never came in.
         if ($asksBeyond && $published === null) {
             $lines[] = 'docs.typo3.org did not answer, so nothing above ' . ($versions[0] ?? 'this installation')
                 . ' is in this answer — those versions are missing from it rather than from the changelog.';
         }
-        // Only where the answer actually carries one. A caller reading entries
-        // from its own installation is reading what it runs, and the sentence
-        // would be about nothing.
+        // Only where the answer actually carries one. A caller who reads
+        // entries from its own installation reads what it runs, and the
+        // sentence would be about nothing.
         if (in_array('manual', array_column($entries, 'publishedIn'), true)) {
             $lines[] = 'Entries above ' . ($versions[0] ?? 'this installation') . ' come from docs.typo3.org rather '
                 . 'than from this installation: they are what the host publishes today, they are linked by URL '
@@ -540,10 +532,10 @@ final class ChangelogLookup extends ReadOnlyTool
     }
 
     /**
-     * Whether the installation has a directory of its own for what was asked.
+     * Whether the installation has a directory of its own for the question.
      *
-     * By prefix, the way the version filter itself narrows: "13.4" is shipped
-     * where `13.4` or `13.4.x` is on disk, and "14" is not where nothing there
+     * By prefix, the way the version filter itself narrows. "13.4" ships where
+     * `13.4` or `13.4.x` is on disk, and "14" does not where nothing there
      * starts with it.
      *
      * @param array<int, string> $installed
@@ -562,10 +554,10 @@ final class ChangelogLookup extends ReadOnlyTool
     /**
      * What this answer could see, and where each half came from.
      *
-     * The two are never one list. A caller acting on an entry above its own
-     * major is reading what the host publishes today, and for a major that is
-     * not released that is a moving target — an answer that presented both as
-     * "the changelog" would hide exactly the distinction the upgrade turns on.
+     * The two are never one list. A caller who acts on an entry above its own
+     * major reads what the host publishes today. For a major without a release
+     * that is a target that moves. An answer that presented both as "the
+     * changelog" would hide exactly the distinction the upgrade turns on.
      *
      * @param array<int, string> $installed
      * @param array<int, string> $ahead
@@ -602,7 +594,7 @@ final class ChangelogLookup extends ReadOnlyTool
      * that publishes it.
      *
      * One parser reads both, because the host serves the same RST the package
-     * ships — what differs is the delivery, and that is the whole of what this
+     * ships. What differs is the delivery, and that is the whole of what this
      * decides.
      *
      * @param array<string, mixed> $entry
@@ -619,11 +611,11 @@ final class ChangelogLookup extends ReadOnlyTool
     }
 
     /**
-     * The same entries, each carrying the title its own side states.
+     * The same entries, each with the title its own side states.
      *
      * The installation's are a file read apiece and the manual's came with the
-     * inventory, so this is where the free half is taken and `Changelog` keeps
-     * knowing nothing about the other side.
+     * inventory. So this is where the free half comes in, and `Changelog` stays
+     * unaware of the other side.
      *
      * @param array<int, array<string, mixed>> $entries
      * @return array<int, array<string, mixed>>
@@ -644,10 +636,10 @@ final class ChangelogLookup extends ReadOnlyTool
     }
 
     /**
-     * The axes the call was narrowed on, as a miss names them back.
+     * The axes that narrowed the call, as a miss names them back.
      *
-     * The tag is not one of them: it is read inside the file rather than off
-     * the name, so the counts a miss prints never saw it, and the tags those
+     * The tag is not one of them. It comes from inside the file rather than off
+     * the name, so the counts a miss prints never saw it. The tags those
      * entries do carry are what the answer offers there instead.
      *
      * @return array<int, string>

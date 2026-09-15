@@ -65,10 +65,11 @@ final class ScriptLookup extends ReadOnlyTool
         $task = (string) ($args['task'] ?? '');
         $targets = Versions::targets(isset($args['targetVersion']) ? (string) $args['targetVersion'] : null);
 
-        // Every command in these feedback runs in a core checkout. Handing them to
-        // a repository that has none is the same mistake typo3_test_run_guide
-        // used to make, and the same answer applies. This tool is asked about a
-        // task rather than about paths, so the call has one scope.
+        // Every command in these feedback runs in a core checkout. Handing them
+        // to a repository that has none is the same mistake
+        // typo3_test_run_guide used to make, and the same answer applies. This
+        // tool answers about a task rather than about paths, so the call has
+        // one scope.
         $scope = Scope::of('', $task);
         if ($scope->isOutsideTheCore()) {
             return ToolResult::create(
@@ -83,8 +84,8 @@ final class ScriptLookup extends ReadOnlyTool
 
         if ($results !== []) {
             $text = Prose::sections($results, $scope->isOutsideTheCore());
-            // Where nothing said which repository this is, the commands are
-            // offered under their condition rather than stated as the answer.
+            // Where nothing said which repository this is, the commands come
+            // under their condition rather than as the answer.
             if (!Scope::isCoreWork([], $task)) {
                 $text .= "\n\nThese commands run in a TYPO3 core checkout. In any other repository, what to run is "
                     . 'declared in its own composer.json, package.json and CI configuration.';
@@ -98,8 +99,9 @@ final class ScriptLookup extends ReadOnlyTool
             ]);
         }
 
-        // Nothing about scripts matched. Say so, and route to the documents that
-        // do cover the topic instead of answering with the nearest script prose.
+        // Nothing about scripts matched. Say so, and route to the documents
+        // that do cover the topic instead of an answer with the nearest script
+        // prose.
         $message = sprintf(
             'No section of the TYPO3 core script notes matched "%s". They cover: %s.',
             $task,

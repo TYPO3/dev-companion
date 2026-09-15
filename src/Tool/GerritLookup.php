@@ -14,17 +14,18 @@ use TYPO3\DevCompanion\Result\Unreachable;
 /**
  * Whether a core patch already exists, read from the review server.
  *
- * The question is asked before every core task and answerable from no checkout,
- * and the sessions that asked it paid a round trip for the search and another
- * for the XSSI prefix the response opens with. This is one call
- * (`D-FBK-027`).
+ * The question comes before every core task and no checkout can answer it. The
+ * sessions that asked it paid a round trip for the search and another for the
+ * XSSI prefix the response opens with. This is one call (`D-FBK-027`).
  */
 final class GerritLookup extends ReadOnlyTool
 {
-    /** The change is read from the review server at review.typo3.org. */
+    /** The change comes from the review server at review.typo3.org. */
     protected const OPEN_WORLD = true;
 
-    /** Why nothing was answered, in the caller's terms rather than the transport's. */
+    /**
+     * Why no answer came, in the caller's terms rather than the transport's.
+     */
     private const UNREACHABLE = [
         Unreachable::NOT_ANSWERING => 'The review server did not answer. It is reachable at ' . Gerrit::HOST
             . ' in a browser; nothing here can answer this question offline.',
@@ -153,10 +154,10 @@ final class GerritLookup extends ReadOnlyTool
                 ],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 25, 'default' => 10, 'description' => 'How many changes come back from a search or the backlog. A change read by name is one answer whatever this says.'],
             ],
-            // A search is one way in carrying two arguments, so the path branch
-            // is the one that excludes rather than the one that is excluded: a
-            // call passing both would otherwise match two branches and fail the
-            // rule it satisfies.
+            // A search is one way in with two arguments, so the path branch is
+            // the one that excludes rather than the excluded one. A call that
+            // passes both would otherwise match two branches and fail the rule
+            // it satisfies.
             'oneOf' => [
                 ['required' => ['issue']],
                 ['required' => ['change']],
@@ -420,10 +421,10 @@ final class GerritLookup extends ReadOnlyTool
                     . 'or a captive portal looks like from here.',
             ]),
             // Required and nullable, the shape `unavailable` beside it has. A
-            // caller that has to branch on whether the key is there cannot
-            // tell an answer with nothing to qualify from a server too old to
-            // qualify anything, and this field exists precisely because that
-            // distinction was being got wrong one level down.
+            // caller that has to branch on whether the key is there cannot tell
+            // two answers apart. One with nothing to qualify, and one from a
+            // server too old to qualify anything. This field exists precisely
+            // because one level down that distinction went wrong.
             'indistinguishable' => [
                 'type' => ['string', 'null'],
                 'description' => 'Why an empty answer does not mean an absence, or null where it does. This '
@@ -437,14 +438,14 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * The branches that take a patch today, beside the branch each change names.
      *
-     * The one thing this answer said nothing about while naming a branch: a
-     * session rewriting a `Releases:` trailer was told the change targets `main`
-     * and rebuilt the rest from `git branch -r` and a listing of the changelog
-     * folders — an inference that holds in a full clone and nowhere else
+     * The one thing this answer said nothing about while it named a branch. A
+     * session that rewrote a `Releases:` trailer heard the change targets
+     * `main`. It rebuilt the rest from `git branch -r` and a listing of the
+     * changelog folders. That inference holds in a full clone and nowhere else
      * (`D-ANS-104`). Which of the lines a change belongs on stays out, because
      * that is the author's claim rather than a consequence of the list
-     * (`D-ANS-073`), and the tool that reads a trailer against them is named
-     * instead. Separated from `answer()` so it can be held without a review
+     * (`D-ANS-073`). The tool that reads a trailer against them stands here
+     * instead. Apart from `answer()` so a test can hold it without a review
      * server.
      *
      * @return array{
@@ -492,13 +493,13 @@ final class GerritLookup extends ReadOnlyTool
     }
 
     /**
-     * Which of the two forms `change` was given in.
+     * Which of the two forms `change` came in.
      *
      * A Change-Id is the `I` and forty hex digits a commit message carries; a
-     * change number is the digits a review URL ends with. Saying "no change
-     * with this number" back to a caller that passed a Change-Id is wrong
-     * twice over, and one review read it as its own commit never having been
-     * pushed (`feedback/2026-08-07-132416`).
+     * change number is the digits a review URL ends with. "No change with this
+     * number" back to a caller that passed a Change-Id is wrong twice over. One
+     * review read it as its own commit never pushed
+     * (`feedback/2026-08-07-132416`).
      */
     private static function isChangeId(string $change): bool
     {
@@ -508,13 +509,13 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * What an empty answer cannot separate, where it cannot separate anything.
      *
-     * A caller that named one change has named something it read somewhere, and
-     * an empty answer there is a restricted change at least as often as an
-     * absent one: this server reads Gerrit anonymously (`R-ANS-027`). A search
+     * A caller that named one change has named something it read somewhere. An
+     * empty answer there is a restricted change at least as often as an absent
+     * one, because this server reads Gerrit anonymously (`R-ANS-027`). A search
      * owes the same caveat and one more of its own (`D-ANS-100`), and an issue
-     * search owes neither — "no change names this issue" is a claim about a
-     * query, and the text half states it there. Separated from `answer()` so it
-     * can be held without a review server.
+     * search owes neither. "No change names this issue" is a claim about a
+     * query, and the text half states it there. Apart from `answer()` so a test
+     * can hold it without a review server.
      *
      * @param string $direction the argument the caller passed, since what an
      *     empty answer fails to separate is different for each of them
@@ -529,10 +530,10 @@ final class GerritLookup extends ReadOnlyTool
         }
 
         // The issue case, where the tracker settled it. Gerrit Code Review
-        // posts a note on the issue for every patch set it receives, so a
+        // posts a note on the issue for every patch set it receives. So a
         // review URL there and nothing here is not two possibilities: the
         // change exists and this reader may not see it. That is the report's
-        // own idea, and it is only buildable on this side —
+        // own idea, and only this side can build it,
         // `feedback/2026-08-07-132416`.
         if ($review !== null) {
             return sprintf(
@@ -559,18 +560,18 @@ final class GerritLookup extends ReadOnlyTool
                 . 'separates them. Ask again with `query` in the words of the commit subject, which reaches the '
                 . 'change whatever commit its patch set stands at.',
             // The word direction's own trap, and the one that reads as an
-            // established negative: `feedback/2026-08-24-110833` took a zero for
-            // an identifier as nobody having attempted the fix — `D-ANS-100`.
+            // established negative. `feedback/2026-08-24-110833` took a zero
+            // for an identifier as no attempt at the fix, `D-ANS-100`.
             'query' => $anonymous . 'A word is matched against the commit message rather than against the diff: '
                 . 'change 89000 added `writePagesOrder`, and a search for that name answers nothing. So a zero says '
                 . 'that no commit message names the word, not that nobody has touched the code. Ask again in the '
                 . 'words a commit message would use, and pass `path` for the changes that touch a file whatever '
                 . 'they are called.',
-            // The enumeration's own trap is the person filter. The review server
-            // answers a name it cannot place with no changes and no error, so
-            // "nobody by that name" arrives as "this person has nothing open" —
-            // measured on 2026-08-25, where `owner:zzzznotauser` came back 200
-            // with an empty list.
+            // The enumeration's own trap is the person filter. The review
+            // server answers a name it cannot place with no changes and no
+            // error. So "nobody by that name" arrives as "this person has
+            // nothing open". Measured on 2026-08-25, where `owner:zzzznotauser`
+            // came back 200 with an empty list.
             'backlog' => $anonymous . 'A name the review server cannot place answers the same way as a person with '
                 . 'nothing open, so where owner, reviewedBy or involving was passed, check the spelling against a '
                 . 'change of theirs before reading this as an empty backlog. Part of a name or an address reaches '
@@ -587,17 +588,14 @@ final class GerritLookup extends ReadOnlyTool
      * The workflow a patch set in front of a caller is in, and the order it
      * takes, where there is one.
      *
-     * A review session that opened no skill asked this tool for a change and was
-     * handed a ref, a remote and nothing about the work it had just begun
-     * (`D-SKL-038`). Naming the two workflows was the first answer to that and
-     * it was one step short: a second session read the names, opened neither,
-     * and reviewed change 95179 and rebased it by hand
-     * (`feedback/2026-08-24-122413`). So the order is here too, in the shape
-     * `TestRunGuide::SCRIPTS_GUIDE` took — the whole of it is still the skill,
-     * and what the answer carries is the steps that decide the result. The
-     * `change` form alone, because a search has no one workflow to name
-     * whichever way it was asked. Separated from `answer()` so it can be held
-     * without a review server.
+     * A review session that opened no skill asked this tool for a change. It
+     * got a ref, a remote and nothing about the work it had just begun
+     * (`D-SKL-038`). The names of the two workflows were one step short. A
+     * second session read them, opened neither, and reviewed and rebased change
+     * 95179 by hand (`feedback/2026-08-24-122413`). So the order is here too,
+     * in the shape `TestRunGuide::SCRIPTS_GUIDE` took. The `change` form alone,
+     * because a search has no one workflow to name. Apart from `answer()` so a
+     * test can hold it without a review server.
      */
     public static function workflow(string $status, string $change): ?string
     {
@@ -625,17 +623,16 @@ final class GerritLookup extends ReadOnlyTool
      * The newest review URL Gerrit posted on an issue, or null.
      *
      * Read from the journal rather than from the description, because that is
-     * where it is: the note is authored by Gerrit itself and names the patch
-     * set and the change. Only asked where a search over commit messages came
-     * back empty, so the second host is reached on the path where the answer
-     * would otherwise be a guess, and not on the ordinary one.
+     * where it is. Gerrit itself authors the note, and it names the patch set
+     * and the change. Asked only where a search over commit messages came back
+     * empty. So the second host answers on the path where the answer would
+     * otherwise be a guess, and not on the ordinary one.
      *
      * The same cross-check for a caller that named a change rather than an
-     * issue was measured on 2026-08-07 and is not built: searching the tracker
-     * for `95162` costs 2.5 seconds and answers two issues, one of them
-     * unrelated, and searching for the Change-Id answers nothing at all. That
-     * is a second guess rather than evidence, and it is the case the report was
-     * about.
+     * issue measured on 2026-08-07 and stays unbuilt. A tracker search for
+     * `95162` costs 2.5 seconds and answers two issues, one of them unrelated.
+     * A search for the Change-Id answers nothing at all. That is a second guess
+     * rather than evidence, and it is the case the report was about.
      *
      * @return array{author: string, url: string}|null
      */
@@ -694,17 +691,17 @@ final class GerritLookup extends ReadOnlyTool
         $reviewedBy = is_string($args['reviewedBy'] ?? null) ? trim($args['reviewedBy']) : '';
         $involving = is_string($args['involving'] ?? null) ? trim($args['involving']) : '';
         $reviewableBy = is_string($args['reviewableBy'] ?? null) ? trim($args['reviewableBy']) : '';
-        // A person filter is a narrowing of the enumeration and the schema says
-        // so. Passing one without `backlog` is a call no schema allows, and what
-        // a client that validates nothing would otherwise reach is a search for
-        // the empty string rather than the question it plainly asked.
+        // A person filter narrows the enumeration and the schema says so. One
+        // without `backlog` is a call no schema allows. What a client that
+        // validates nothing would otherwise reach is a search for the empty
+        // string rather than the question it plainly asked.
         if ($backlog === '' && ($owner !== '' || $reviewedBy !== '' || $involving !== '' || $reviewableBy !== '')) {
             $backlog = 'oldest';
         }
 
-        // Which of the six the caller passed, which is what decides the query,
-        // what a hit carries, and what an empty answer fails to separate. The
-        // words carry the search where both were given, because their caveat is
+        // Which of the six the caller passed. That decides the query, what a
+        // hit carries, and what an empty answer fails to separate. The words
+        // carry the search where the caller gave both, because their caveat is
         // the wider one.
         $direction = match (true) {
             $issue !== '' => 'issue',
@@ -737,10 +734,10 @@ final class GerritLookup extends ReadOnlyTool
             default => $gerrit->changesMatching($query, $path, $open, $limit),
         };
 
-        // The tracker is asked only where the review server answered
-        // nothing for an issue, which is the one path where a second host
-        // buys an answer instead of a hedge. It cost 0.12 seconds measured
-        // against forge.typo3.org on 2026-08-07.
+        // The tracker answers only where the review server answered nothing for
+        // an issue. That is the one path where a second host buys an answer
+        // instead of a hedge. It cost 0.12 seconds measured against
+        // forge.typo3.org on 2026-08-07.
         $review = $direction === 'issue' && $answer['status'] === 'empty'
             ? self::reviewPostedOnIssue($issue)
             : null;
@@ -825,9 +822,9 @@ final class GerritLookup extends ReadOnlyTool
                 $lines = [...$lines, ...self::conflicts($entry, $byName), ...self::cherryPick($entry)];
                 $lines = [...$lines, ...self::releases($entry)];
                 foreach ($entry['labels'] ?? [] as $label) {
-                    // Only where the voters were read, since the paragraph this
-                    // decides is about a vote that is gone and a state carries
-                    // no voter for one to be gone from.
+                    // Only where the voters came in. The paragraph this decides
+                    // is about a vote that is gone, and a state carries no
+                    // voter for one to be gone from.
                     $voted = $voted || $label['votes'] !== null;
                     $lines[] = self::vote($label);
                 }
@@ -838,8 +835,8 @@ final class GerritLookup extends ReadOnlyTool
                 foreach ($entry['chain'] ?? [] as $related) {
                     $moved = $moved || self::behind($related);
                 }
-                // Only a change read by name asked for any of it, so silence
-                // elsewhere is not a claim that it could not be read — which a
+                // Only a change read by name asked for any of it. So silence
+                // elsewhere is not a claim that it was unreadable, which a
                 // search would otherwise make about every hit it answers.
                 $lines = [
                     ...$lines,
@@ -891,11 +888,11 @@ final class GerritLookup extends ReadOnlyTool
                     . 'so they are one patch on the branches each of them names. Gerrit relates them by nothing '
                     . 'else, and the state of one says nothing about the state of the other.';
             }
-            // What the trailer above is worth, before the lines it names are
-            // held against the ones that take a patch today.
+            // What the trailer above is worth, before the lines it names meet
+            // the ones that take a patch today.
             $lines = [...$lines, ...self::releaseClaim($answer['changes'])];
             // Printed where a change came back, because that is where a branch
-            // was named — the placement `D-ANS-104` asks for. A search that
+            // has its name, the placement `D-ANS-104` asks for. A search that
             // matched nothing named none, and the data half carries the list
             // either way.
             $lines = [...$lines, ...$releaseLines['lines']];
@@ -909,18 +906,18 @@ final class GerritLookup extends ReadOnlyTool
                     . 'differ, the checkout is not the revision under review, and a review says which of '
                     . 'the two it read.';
             }
-            // The remote is spelled out because `origin` is the wrong one, and
-            // wrong in the way that reads as the change not existing —
-            // `D-SKL-021` measured the fetch coming back empty over the mirror.
+            // The remote stands in full because `origin` is the wrong one, and
+            // wrong in the way that reads as a change that does not exist.
+            // `D-SKL-021` measured the fetch come back empty over the mirror.
             if ($fetchable) {
                 $lines[] = '';
                 $lines[] = 'The fetch goes to the review server rather than to `origin`: a core clone fetches '
                     . 'from the GitHub mirror, where `refs/changes/…` does not exist. `git switch --detach '
                     . 'FETCH_HEAD` is what puts the checkout on the patch set afterwards.';
             }
-            // A search is the one direction whose set has no natural end, so a
-            // full page is as likely to be where the answer stopped as where the
-            // matches did, and a caller counting it reports the limit. The
+            // A search is the one direction whose set has no natural end. So a
+            // full page is as likely to be where the answer stopped as where
+            // the matches did. A caller that counts it reports the limit. The
             // review server's own flag says which of the two it was, and the
             // enumeration says it with a count instead.
             if (!$byName && $direction !== 'backlog' && $answer['more']) {
@@ -948,19 +945,19 @@ final class GerritLookup extends ReadOnlyTool
     }
 
     /**
-     * One label, as a reviewer picking the change up reads it: where it stands
-     * and who put it there.
+     * One label, as a reviewer who picks the change up reads it: where it
+     * stands and who put it there.
      *
-     * The state is said in words rather than in the submit rule's own, because
-     * the pair a caller acts on is `NEED` against `REJECT` — a change waiting
-     * for a reviewer and a change somebody has already turned down — and
-     * "not satisfied" was what this said for both of them. The voters follow
-     * where they were read, which is a change read by name; a search asks for
-     * none, and a list of zeros there would read as nobody having voted.
+     * The state stands in words rather than in the submit rule's own, because
+     * the pair a caller acts on is `NEED` against `REJECT`. That is a change
+     * that waits for a reviewer and a change somebody has already turned down.
+     * "Not satisfied" was what this said for both of them. The voters follow
+     * where they came in, which is a change read by name. A search asks for
+     * none, and a list of zeros there would read as no votes at all.
      *
      * The values carry their sign, because +1 and -1 are the vote and 1 is a
      * number. A label nobody has voted on still lists its reviewers at 0, which
-     * is who was asked rather than who answered.
+     * is who got the question rather than who answered.
      *
      * @param array<string, mixed> $label
      */
@@ -994,17 +991,17 @@ final class GerritLookup extends ReadOnlyTool
      * What a page of the backlog is a page of, said before the rows.
      *
      * The size of the set leads, because a page read as the backlog is a triage
-     * that believes it has seen it — the tracker's enumeration owes the same
+     * that believes it has seen it. The tracker's enumeration owes the same
      * sentence and for the same reason. What follows it is the one thing the
-     * ordering cannot supply: of the five oldest open core changes measured on
-     * 2026-08-25, three were over 250 lines and three no longer merged, so age
-     * on its own is the opposite of what a review session is looking for
-     * (`D-ANS-107`). Separated from `answer()` so it can be held without a
+     * order cannot supply. Of the five oldest open core changes measured on
+     * 2026-08-25, three were over 250 lines and three no longer merged. So age
+     * on its own is the opposite of what a review session looks for
+     * (`D-ANS-107`). Apart from `answer()` so a test can hold it without a
      * review server.
      *
      * @param array<string, mixed> $backlog
-     * @param string $reviewableBy the person the enumeration was asked to leave
-     *     out, whose misspelling widens this answer rather than emptying it
+     * @param string $reviewableBy the person the caller asked the enumeration to leave
+     *     out, whose wrong spelling widens this answer rather than empties it
      * @return list<string>
      */
     public static function page(array $backlog, int $shown, string $reviewableBy = ''): array
@@ -1030,9 +1027,9 @@ final class GerritLookup extends ReadOnlyTool
         }
         if ($reviewableBy !== '') {
             // The trap the empty-answer caveat cannot carry: this filter fails
-            // wide. A name the review server cannot place takes nothing out, and
-            // the answer is then the backlog wearing the shape of a filtered one
-            // — `D-ANS-109`.
+            // wide. A name the review server cannot place takes nothing out,
+            // and the answer is then the backlog in the shape of a filtered
+            // one, `D-ANS-109`.
             $lines[] = sprintf(
                 'What "%s" pushed and voted on is out of this. A name the review server cannot place takes nothing '
                     . 'out, so where a change of theirs is in the list above, the spelling reached nobody rather than '
@@ -1052,15 +1049,15 @@ final class GerritLookup extends ReadOnlyTool
     }
 
     /**
-     * The size, the merge and the age of one change, on the line a page is
-     * scanned by.
+     * The size, the merge and the age of one change, on the line a reader scans
+     * a page by.
      *
-     * The three readings a review candidate is picked by, which the two reports
-     * behind `D-ANS-107` each scored by hand: how much there is to read, whether
-     * it still applies, and how long it has been waiting. Nothing is printed for
+     * The three reads that pick a review candidate, which the two reports
+     * behind `D-ANS-107` each scored by hand. How much there is to read,
+     * whether it still applies, and how long it has waited. Nothing prints for
      * a field the review server stated nothing for, because a size of zero and
-     * an unstated size are different claims. Separated from `answer()` so it can
-     * be held without a review server.
+     * an unstated size are different claims. Apart from `answer()` so a test
+     * can hold it without a review server.
      *
      * @param array<string, mixed> $entry
      */
@@ -1092,11 +1089,11 @@ final class GerritLookup extends ReadOnlyTool
      * it is.
      *
      * Read as the other one, a chain would say the Change-Id was the whole of
-     * the work — so the paragraph the pair gets under `D-ANS-080` is what this
-     * one sits beside, and neither says what the other says. The staleness
-     * sentence is printed only where an entry is behind, because it is a
-     * warning about entries in this answer rather than a property of chains.
-     * Separated from `answer()` so it can be held without a review server.
+     * the work. So the paragraph the pair gets under `D-ANS-080` is what this
+     * one sits beside, and neither says what the other says. The stale sentence
+     * prints only where an entry is behind. It is a warning about entries in
+     * this answer rather than a property of chains. Apart from `answer()` so a
+     * test can hold it without a review server.
      *
      * @return list<string>
      */
@@ -1136,11 +1133,11 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * The stack the change sits in, where there is one.
      *
-     * A change read alone says a feature exists; the stack under it says what
-     * the feature consists of, which parts landed and which were given up
-     * (`D-ANS-094`). Nothing is printed for a change standing alone, which is
-     * the ordinary case rather than a finding. Separated from `answer()` so it
-     * can be held without a review server.
+     * A change read alone says a feature exists. The stack under it says what
+     * the feature consists of, which parts landed and which the author gave up
+     * (`D-ANS-094`). Nothing prints for a change that stands alone, which is
+     * the ordinary case rather than a finding. Apart from `answer()` so a test
+     * can hold it without a review server.
      *
      * @param array<string, mixed> $entry
      * @param bool $read whether the chain was asked for, which only a change
@@ -1184,14 +1181,14 @@ final class GerritLookup extends ReadOnlyTool
     }
 
     /**
-     * The issues the commit message names, where it was read.
+     * The issues the commit message names, where the message came in.
      *
-     * The trailer is said with each of them, because what a patch closes and
-     * what it touches are different claims and a reader acting on the second as
-     * the first reports work that is not being done here. Nothing is printed
-     * for a message naming none, which a change outside the core project is
-     * ordinarily. Separated from `answer()` so it can be held without a review
-     * server — `D-ANS-098`.
+     * The trailer stands with each of them, because what a patch closes and
+     * what it touches are different claims. A reader who acts on the second as
+     * the first reports work nobody does here. Nothing prints for a message
+     * that names none, which a change outside the core project is ordinarily.
+     * Apart from `answer()` so a test can hold it without a review server,
+     * `D-ANS-098`.
      *
      * @param array<string, mixed> $entry
      * @param bool $read whether the commit message was asked for, which an
@@ -1226,12 +1223,12 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * An open change whose trailers name no issue, said as an absence.
      *
-     * Both halves were in the answer already and neither pointed at the other:
-     * a session read the empty array as nothing to do and finished a patch
-     * still carrying `Resolves: #XXXXXX`, committed past the hook with
-     * `--no-verify` (`D-ANS-153`). A change its own subject marks as a draft is
-     * left alone — not being ready is what a draft says, and the trailer is
-     * what merging asks for.
+     * Both halves were in the answer already and neither pointed at the other.
+     * A session read the empty array as nothing to do and finished a patch that
+     * still carried `Resolves: #XXXXXX`. It committed past the hook with
+     * `--no-verify` (`D-ANS-153`). A change its own subject marks as a draft
+     * stays alone. Not ready is what a draft says, and the trailer is what a
+     * merge asks for.
      *
      * @param array<string, mixed> $entry
      * @return list<string>
@@ -1251,13 +1248,12 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * The commit message of the change, whole.
      *
-     * One of the four things a review is told to establish, and until now
-     * reachable only by fetching the patch set: the answer carried the subject
-     * and the readings taken off the message, and a caller holding those cannot
-     * check a trailer (`D-ANS-112`). Nothing is printed where it was not read —
-     * the issues section below says that once, and a second sentence for one
-     * silence is two. Separated from `answer()` so it can be held without a
-     * review server.
+     * One of the four things a review has to establish, and until now reachable
+     * only through a fetch of the patch set. The answer carried the subject and
+     * the reads taken off the message, and a caller with those cannot check a
+     * trailer (`D-ANS-112`). Nothing prints where nothing came in. The issues
+     * section below says that once, and a second sentence for one silence is
+     * two. Apart from `answer()` so a test can hold it without a review server.
      *
      * @param array<string, mixed> $entry
      * @return list<string>
@@ -1273,11 +1269,11 @@ final class GerritLookup extends ReadOnlyTool
     }
 
     /**
-     * The most files a change carries before the list stops being printed.
+     * The most files a change carries before the list stops.
      *
      * `D-ANS-112` measured the population it put the list on: a median of five
      * files and a ninetieth percentile of forty. So forty is where the ordinary
-     * patch ends and the refactoring begins, and it is the boundary that
+     * patch ends and the refactoring begins. It is the boundary that
      * measurement already drew rather than a number picked here.
      */
     private const FILES_LISTED_AT_MOST = 40;
@@ -1301,10 +1297,10 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * What a change touches said as a count and its top-level directories.
      *
-     * What the reporting session wanted where it wanted paths at all — which
-     * system extension does this touch — in a fraction of the space, and it
-     * names the two ways to the list itself: `files="full"` here, and the
-     * `git diff --stat` a caller holding `fetch.ref` is one command away from.
+     * What the reporter wanted where it wanted paths at all, which system
+     * extension does this touch, in a fraction of the space. It names the two
+     * ways to the list itself: `files="full"` here, and the `git diff --stat` a
+     * caller with `fetch.ref` is one command away from.
      *
      * @param array<string, mixed> $entry
      * @return list<string>
@@ -1339,12 +1335,12 @@ final class GerritLookup extends ReadOnlyTool
      * The paths this patch set touches, each with what it does to one.
      *
      * The first thing a review establishes and the one a session went to the
-     * checkout for: eight open changes were fetched into the user's own working
-     * tree to triage a shortlist none of them was reviewed from (`D-ANS-112`).
-     * How much of it is printed is `$want`, because a refactoring is not the
-     * median change: a session read two of 137 and 200 files in one task and
-     * used none of the list (`D-ANS-151`). Separated from `answer()` so it can
-     * be held without a review server.
+     * checkout for. Eight open changes went into the user's own working tree
+     * for the triage of a shortlist. None of them got a review from there
+     * (`D-ANS-112`). How much of it prints is `$want`, because a refactoring is
+     * not the median change. A session read two of 137 and 200 files in one
+     * task and used none of the list (`D-ANS-151`). Apart from `answer()` so a
+     * test can hold it without a review server.
      *
      * @param array<string, mixed> $entry
      * @param bool $read whether the paths were asked for, which only a change
@@ -1373,8 +1369,8 @@ final class GerritLookup extends ReadOnlyTool
             if ($file['movedFrom'] !== null) {
                 $said[] = 'from ' . $file['movedFrom'];
             }
-            // A binary carries no line counts, and printing its two zeros is
-            // the answer saying the file was left alone.
+            // A binary carries no line counts, and its two zeros in print would
+            // say the file stayed untouched.
             $said[] = $file['binary']
                 ? 'binary'
                 : sprintf('+%d -%d', $file['insertions'], $file['deletions']);
@@ -1388,14 +1384,14 @@ final class GerritLookup extends ReadOnlyTool
      * That this patch set carries git conflict markers, beside the line a
      * reader decides on.
      *
-     * The fact the default answer hid: change 95412 was cherry-picked through
-     * the web UI, landed with the markers committed into a shipped JavaScript
-     * file, and read as a fresh patch set in every field beside this one
-     * (`D-ANS-121`). So the line says which of the two it is rather than naming
-     * the paths and leaving the reading to a caller who has no other sign of it.
-     * Nothing is printed for a patch set carrying none, which is what almost
-     * every change is. Separated from `answer()` so it can be held without a
-     * review server.
+     * The fact the default answer hid. Change 95412 came through the web UI as
+     * a cherry-pick and landed with the markers in a shipped JavaScript file.
+     * It read as a fresh patch set in every field beside this one
+     * (`D-ANS-121`). So the line says which of the two it is. It does not name
+     * the paths and leave the read to a caller who has no other sign of it.
+     * Nothing prints for a patch set with none, which is what almost every
+     * change is. Apart from `answer()` so a test can hold it without a review
+     * server.
      *
      * @param array<string, mixed> $entry
      * @param bool $read whether the review log was asked for, which only a
@@ -1426,11 +1422,11 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * The change this one was cherry-picked from, where it was one.
      *
-     * Provenance rather than a warning, and said plainly for that reason: a
-     * cherry-pick is how a backport is ordinarily made, and 133 of 400 recent
-     * merged core changes are one (`D-ANS-121`). What says a patch set is broken
-     * is the line above. Separated from `answer()` so it can be held without a
-     * review server.
+     * Provenance rather than a warning, and said plainly for that reason. A
+     * cherry-pick is how a backport ordinarily comes about, and 133 of 400
+     * recent merged core changes are one (`D-ANS-121`). What says a patch set
+     * is broken is the line above. Apart from `answer()` so a test can hold it
+     * without a review server.
      *
      * @param array<string, mixed> $entry
      * @return list<string>
@@ -1453,13 +1449,13 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * The branches this change's commit message claims, on the line under it.
      *
-     * The fact the reporting session reached last, after four git calls per
-     * commit, and reached only after telling the user a release set the trailer
-     * contradicted (`D-ANS-106`). Nothing is printed where the trailer names
-     * none, which every change outside the core project is, and nothing where
-     * the message was not read — what that silence means is said once below
-     * rather than per change. Separated from `answer()` so it can be held
-     * without a review server.
+     * The fact the reporter reached last, after four git calls per commit. And
+     * only after it told the user a release set the trailer contradicted
+     * (`D-ANS-106`). Nothing prints where the trailer names none, which every
+     * change outside the core project is, and nothing where the message did not
+     * come in. What that silence means stands once below rather than per
+     * change. Apart from `answer()` so a test can hold it without a review
+     * server.
      *
      * @param array<string, mixed> $entry
      * @return list<string>
@@ -1477,13 +1473,13 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * What a `Releases:` trailer claims and what it does not settle.
      *
-     * Two claims stand in this answer and a reader taking the first for the
-     * second reports a fix as released where nobody pushed it: a trailer says
+     * Two claims stand in this answer, and a reader who takes the first for the
+     * second reports a fix as released where nobody pushed it. A trailer says
      * where the author meant the patch to go, and a change on a branch is a
      * patch that is there (`D-ANS-073`, `D-ANS-106`). Printed once, and only
-     * where a trailer was read, because it is about the lines above rather
-     * than about trailers. Separated from `answer()` so it can be held without
-     * a review server.
+     * where a trailer came in, because it is about the lines above rather than
+     * about trailers. Apart from `answer()` so a test can hold it without a
+     * review server.
      *
      * @param list<array<string, mixed>> $changes
      * @return list<string>
@@ -1510,15 +1506,15 @@ final class GerritLookup extends ReadOnlyTool
      * The comment threads, and what an absent one means where the change said
      * it has comments.
      *
-     * One thread is one heading and the comments under it in the order they
-     * were written, because the thread is what carries the state and what the
-     * review server counts (`D-ANS-111`). The reading a session made for itself
-     * out of the flags and the reply ids is the listing itself.
+     * One thread is one heading and the comments under it in the order of their
+     * arrival. The thread is what carries the state and what the review server
+     * counts (`D-ANS-111`). The read a session made for itself out of the flags
+     * and the reply ids is the listing itself.
      *
-     * A reply is said to answer somebody only where that is not the comment
-     * above it, which is where the order stops saying it — a thread nobody
-     * branched says it on every line otherwise. Separated from `answer()` so it
-     * can be held without a review server.
+     * A reply names who it answers only where that is not the comment above it,
+     * which is where the order stops to say it. A thread nobody branched says
+     * it on every line otherwise. Apart from `answer()` so a test can hold it
+     * without a review server.
      *
      * @param array<string, mixed> $entry
      * @param bool $read whether the review was read for this change, which an
@@ -1583,8 +1579,8 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * What somebody wrote, indented under the line that says who and where.
      *
-     * The blank line inside a message keeps no indent, because trailing spaces
-     * are what a diff and a terminal both show and neither is what the message
+     * The blank line inside a message keeps no indent. Spaces at the end are
+     * what a diff and a terminal both show, and neither is what the message
      * says.
      */
     private static function quoted(string $said): string
@@ -1596,7 +1592,7 @@ final class GerritLookup extends ReadOnlyTool
     }
 
     /**
-     * The review log, where it was asked for.
+     * The review log, where the caller asked for it.
      *
      * @param array<string, mixed> $entry
      * @return list<string>
@@ -1625,10 +1621,10 @@ final class GerritLookup extends ReadOnlyTool
     /**
      * What the same query answers by hand and this one does not.
      *
-     * The `query` field is there so the question can be asked again outside
-     * this server, and a hand-run one comes back with more than this — so what
-     * was held back is said, rather than left as a difference the caller finds
-     * and reads as this answer being short.
+     * The `query` field is there so somebody can ask the question again outside
+     * this server, and a hand-run one comes back with more than this. So the
+     * answer says what it held back, rather than leaves a difference the caller
+     * finds and reads as a short answer.
      */
     private static function held(int $dropped): string
     {

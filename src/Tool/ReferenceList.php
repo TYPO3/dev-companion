@@ -82,8 +82,8 @@ final class ReferenceList extends ReadOnlyTool
             }
             $lines[] = '  ' . ($entry['package'] === null
                 // Build/ is the repository's own; a Composer installation has
-                // none of it, and saying so beats a caller searching vendor/
-                // for a directory that was never published.
+                // none of it. A line that says so beats a caller's search of
+                // vendor/ for a directory nobody published.
                 ? 'Only in the core repository — no Composer package ships it.'
                 : 'In an installation: vendor/' . $entry['package'] . '/, below the same path with the '
                     . 'typo3/sysext/<key>/ prefix removed.');

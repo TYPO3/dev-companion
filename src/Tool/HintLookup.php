@@ -19,10 +19,10 @@ use TYPO3\DevCompanion\Result\VersionScope;
 final class HintLookup extends ReadOnlyTool
 {
     /**
-     * The most hints one call answers with, and the ceiling `limit` is taken at.
+     * The most hints one call answers with, and the ceiling of `limit`.
      *
      * A brief matches a second time at this number to name what its own slice
-     * dropped (`R-GUI-012`), so what it points at is what this tool would hand
+     * dropped (`R-GUI-012`). So what it points at is what this tool would hand
      * back rather than a longer list nothing answers with.
      */
     public const MAX_HINTS = 10;
@@ -80,14 +80,14 @@ final class HintLookup extends ReadOnlyTool
     }
 
     /**
-     * How much of the query the closest returned hint carries, or null where
-     * nothing was matched against words at all.
+     * How much of the query the closest returned hint carries, or null where no
+     * words took part in the match at all.
      *
      * Read off what the matcher already recorded per hit rather than scored
-     * again — `D-ANS-115` put it there for the probe, and this is the same
+     * again. `D-ANS-115` put it there for the probe, and this is the same
      * number in the answer. The unmatched words of the query were the other
-     * candidate and are worse: a term is weighed by how few hints carry it, so
-     * the rarest unmatched word of a real query was "via".
+     * candidate and are worse. A term weighs by how few hints carry it, so the
+     * rarest unmatched word of a real query was "via".
      *
      * @param array<int, array<string, mixed>> $hints
      */
@@ -116,10 +116,10 @@ final class HintLookup extends ReadOnlyTool
         $target = Versions::target($stated);
         $targets = Versions::targets($stated);
 
-        // Paths of different scope are asked separately, so a statement that
-        // declares whose it is can be labelled against the paths it was matched
-        // for. Matched together, an extension path would be answered under the
-        // core path's scope.
+        // Paths of different scope get separate questions, so a statement that
+        // declares whose it is can carry a label against the paths it matched
+        // for. Matched together, an extension path would get its answer under
+        // the core path's scope.
         $scopes = Scope::ofEach($paths, $task ?? '');
         $groups = Scope::groups($paths, $scopes, $task ?? '');
         $outside = Scope::pathsOf($scopes, Scope::Project, Scope::Extension);
@@ -181,9 +181,9 @@ final class HintLookup extends ReadOnlyTool
         $lines[] = 'Hints:';
 
         // Before the hints rather than after them, because it is what says how
-        // to read them — `D-ANS-130`. A caller that got six adjacent hints and
-        // no sign of the miss spent three calls establishing that none of them
-        // was about the question.
+        // to read them, `D-ANS-130`. A caller that got six adjacent hints and
+        // no sign of the miss spent three calls on one question. Was any of
+        // them about the question at all.
         $coverage = self::bestCoverage($result['matchedHints']);
         if ($coverage !== null && $coverage < Hints::MIN_COVERAGE) {
             $lines[] = sprintf(
@@ -198,7 +198,7 @@ final class HintLookup extends ReadOnlyTool
 
         if ($result['matchedHints'] !== []) {
             // One block per scope, and the heading only where there is more
-            // than one of them: the caller asked about two repositories, and
+            // than one of them. The caller asked about two repositories, and
             // which half of the answer is about which path is the answer.
             $sectionTexts = [];
             foreach ($found as $group) {
@@ -229,9 +229,9 @@ final class HintLookup extends ReadOnlyTool
         }
 
         // The long form of a returned hint, where a document declares itself as
-        // one — `D-KNW-057`. Declared on the document rather than written into
-        // every hint that has one, so the crossing `D-KNW-008` describes is one
-        // statement instead of a sentence per cell.
+        // one, `D-KNW-057`. Declared on the document rather than in every hint
+        // that has one. So the crossing `D-KNW-008` describes is one statement
+        // instead of a sentence per cell.
         $expanding = [];
         foreach ($result['matchedHints'] as $hint) {
             foreach (Documents::forHint($hint['id']) as $document) {
@@ -247,16 +247,15 @@ final class HintLookup extends ReadOnlyTool
         }
 
         // The index is the difference between "nothing matched your words" and
-        // "nobody wrote this down". Without it both answers read the same, and
-        // the caller tries another phrasing for a subject that does not exist —
-        // or gives up on one that does. It is carried on an answer that matched
-        // as well, because a match is a guess at the caller's words: three
-        // hints about something else read as a subject nobody wrote down, and
-        // that answer has not even an empty result to be read as one.
-        //
-        // The order is the matcher's, so the first entry is the one the limit
-        // cut, and the copy says so: a list read as a catalogue is a list
-        // nobody reads past (`D-ANS-075`).
+        // "nobody wrote this down". Without it both answers read the same. The
+        // caller tries other words for a subject that does not exist, or gives
+        // up on one that does. It travels on an answer that matched as well,
+        // because a match is a guess at the caller's words. Three hints about
+        // something else read as a subject nobody wrote down, and that answer
+        // has not even an empty result to read as one. The order is the
+        // matcher's, so the first entry is the one the limit cut, and the copy
+        // says so. A list read as a catalogue is a list nobody reads past
+        // (`D-ANS-075`).
         if ($result['availableHints'] !== []) {
             $lines[] = '';
             $lines[] = match (true) {
@@ -270,8 +269,8 @@ final class HintLookup extends ReadOnlyTool
             }
         }
 
-        // What was left out is counted either way (`R-ANS-030`), because a
-        // caller cannot ask for a list it was never told about.
+        // What stayed out counts either way (`R-ANS-030`), because a caller
+        // cannot ask for a list it never heard of.
         if ($result['availableHintsWithheld'] > 0) {
             $lines[] = '';
             $lines[] = sprintf(

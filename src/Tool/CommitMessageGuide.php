@@ -14,15 +14,15 @@ use TYPO3\DevCompanion\Result\ToolResult;
 final class CommitMessageGuide extends ReadOnlyTool
 {
     /**
-     * The page this tool's whole subject is written up in, named where the
-     * caller is already standing in the answer.
+     * The page that writes this tool's whole subject up, named where the caller
+     * already stands in the answer.
      *
      * Four sessions wanted `core/contribution/commit-messages` and none read
-     * it. One was inside this answer when it gave up and assembled the page out
-     * of `AGENTS.md`, the checkout's hook and three `git log` statistics runs —
+     * it. One was inside this answer when it gave up. It assembled the page out
+     * of `AGENTS.md`, the checkout's hook and three `git log` statistics runs,
      * `D-ANS-061`, `R-ANS-028`. Named as the call rather than as the
-     * `typo3://guides` address, which is delivery to a client that lists
-     * resources and none of the four had one.
+     * `typo3://guides` address. That is delivery to a client that lists
+     * resources, and none of the four had one.
      */
     private const CORE_GUIDE = 'The rules this was checked against are one page, and reading it whole is one call '
         . '— typo3_rule_lookup with documentId "core/contribution/commit-messages", which needs no resource list. '
@@ -37,15 +37,12 @@ final class CommitMessageGuide extends ReadOnlyTool
      * under momentum still asks for (`D-ANS-117`).
      *
      * The imperative to open a task at `typo3_task_guide` was in one session's
-     * context from the first token, is quoted back in its report word for word,
-     * and produced no call in five turns; the two calls it did make were this
-     * tool, in the last turn, under challenge. So the pointer sits at the phase
-     * rather than at the opening, in the shape `GerritLookup::workflow()` took.
-     *
-     * Written for the workflow the call carries rather than guessed: `workflow`
-     * is a parameter, and the two answers are different work. It is a record
-     * rather than a sentence because a client that renders `structuredContent`
-     * and drops the text block would read no pointer at all — `R-ANS-002`.
+     * context from the first token and produced no call in five turns. The two
+     * calls it did make were this tool, in the last turn, under challenge. So
+     * the pointer sits at the phase rather than at the start, in the shape
+     * `GerritLookup::workflow()` took. `workflow` is a parameter, and the two
+     * answers are different work. It is a record rather than a sentence, for
+     * the client that drops the text block, `R-ANS-002`.
      *
      * @return array{tool: string, when: string}
      */
@@ -135,8 +132,8 @@ final class CommitMessageGuide extends ReadOnlyTool
         $parseChecks = [];
         if ($existing !== '') {
             $parsed = CommitMessage::parse($existing, $workflow);
-            // Explicit arguments still win, so a message can be checked and
-            // amended in one call: pass the message plus issue=12345.
+            // Explicit arguments still win, so one call can check and amend a
+            // message: pass the message plus issue=12345.
             $input = array_merge($parsed['input'], array_intersect_key($args, array_flip([
                 'keyword', 'summary', 'issue', 'relatedIssues', 'releases', 'isBreaking', 'isDeprecation',
             ])));
@@ -146,9 +143,9 @@ final class CommitMessageGuide extends ReadOnlyTool
         }
         $input['workflow'] = $workflow;
         // A subject that says [WIP] itself needs no argument; the parse has
-        // already read it. The argument is for the caller composing a fresh
-        // message out of a keyword and a summary, which is the shape the
-        // session that reported this used.
+        // already read it. The argument is for the caller who composes a fresh
+        // message out of a keyword and a summary. That is the shape the session
+        // that reported this used.
         if (($args['workInProgress'] ?? false) === true && ($input['draftPrefixes'] ?? []) === []) {
             $input['draftPrefixes'] = ['WIP'];
         }
@@ -165,8 +162,8 @@ final class CommitMessageGuide extends ReadOnlyTool
         $checks = $result['checks'];
         if ($parseChecks !== []) {
             // "Nothing to complain about" only holds when nothing complained.
-            // Dropped by code rather than by level, because what the wrapping
-            // did to the body is reported at info too and is not a complaint.
+            // Dropped by code rather than by level, because what the wrap did
+            // to the body reports at info too and is not a complaint.
             $checks = array_values(array_filter(
                 $checks,
                 static fn(array $check): bool => $check['code'] !== 'no-issues-found'
@@ -181,9 +178,9 @@ final class CommitMessageGuide extends ReadOnlyTool
             $lines[] = '- ' . strtoupper($check['level']) . ': ' . $check['message'];
         }
 
-        // Which rules were applied belongs in the answer, because the two sets
-        // differ in what they demand rather than in how strict they are: a
-        // caller who did not know about the other one reads a missing Forge
+        // Which rules applied belongs in the answer, because the two sets
+        // differ in what they demand rather than in how strict they are. A
+        // caller who did not know about the other one reads an absent Forge
         // issue as a defect in their commit message.
         $lines[] = '';
         $lines[] = $workflow === CommitMessage::WORKFLOW_PROJECT
@@ -193,17 +190,17 @@ final class CommitMessageGuide extends ReadOnlyTool
             : 'Checked against the core contribution rules, trailers included. workflow="project" applies the same '
                 . 'subject and body rules without the Forge issue and the Releases: trailer.';
 
-        // Above the page and not under it: the pointer is an act the caller has
-        // not taken yet, and the page is a reading of the subject they are
-        // already in. Burying the one line under the longest block in the
-        // answer is the failure it was placed against (`D-ANS-117`).
+        // Above the page and not under it. The pointer is an act the caller has
+        // not taken yet, and the page is a read of the subject they are already
+        // in. The one line under the longest block in the answer is the failure
+        // this placement stands against (`D-ANS-117`).
         $next = self::workflowGuide($workflow);
         $lines[] = '';
         $lines[] = $next['tool'] . ' — ' . $next['when'];
 
         // The core answer alone, because the page describes the core repository
-        // and says so in its own whenToUse. A project commit is checked against
-        // the subject and body rules the page shares, and owes none of what the
+        // and says so in its own whenToUse. A project commit checks against the
+        // subject and body rules the page shares, and owes none of what the
         // rest of it demands.
         if ($workflow === CommitMessage::WORKFLOW_CORE) {
             $lines[] = '';

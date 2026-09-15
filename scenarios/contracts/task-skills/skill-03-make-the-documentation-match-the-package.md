@@ -18,14 +18,14 @@ directory. The `documentation` needle moved to the intent of that name —
 
 **What has to come out of it**
 
-- Integrator and editor material are separated and placed in the repository's
-  existing README/manual structure.
+- Integrator and editor material stay apart and go into the repository's own
+  README/manual structure.
 - Keys, defaults, registrations, paths, and examples come from the checkout;
   external TYPO3 claims use versioned official evidence.
-- Credentials, personal data, internal hosts, and machine-specific paths are
-  removed or replaced with named placeholders.
-- A dynamic-registration parser miss is described as a tooling limitation, not
-  as proof that the feature does not exist.
+- Credentials, personal data, internal hosts, and machine-specific paths go, or
+  named placeholders replace them.
+- The answer describes a dynamic-registration parser miss as a limit of the
+  tools, not as proof that the feature does not exist.
 - The work stops at the completion gate and reports validations and remaining
   unknowns rather than continuing an unbounded survey.
 

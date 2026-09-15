@@ -12,12 +12,7 @@ follows the value instead of stopping at the opt-out is **not guarded** — a
 sentence and a lookup are the kind of hold a reorganization satisfies while the
 behavior goes. This case is what measures the rest.
 
-**Read 2026-09-02:** the finding gate in
-`typo3-extension-health/references/checklist.md` still carries every clause this
-case is written against — the sink named and its code read, a ViewHelper handing
-its children on as path rather than end, the opt-out that prevents double
-encoding, the unverified finding naming the unread class. Whether a review
-follows the value is unguarded as before.
+**Read 2026-09-02:** the finding gate in `typo3-extension-health/references/checklist.md` still carries every clause this case stands against. The sink named and its code read, and a ViewHelper that hands its children on as path rather than end. The opt-out that prevents a double encode, and the unverified finding that names the unread class. Nothing guards whether a review follows the value, as before.
 
 > Before we hand this extension over to a new maintainer, check whether any
 > editor-supplied value reaches the frontend unescaped. Report what you find
@@ -25,36 +20,36 @@ follows the value is unguarded as before.
 
 **What has to come out of it**
 
-- The value is followed to the thing that emits it: the answer names the tag,
-  attribute, header or API it is finally written through, and the call that
-  escapes it there or the absence of one.
+- The review follows the value to the thing that emits it. The answer names the
+  tag, attribute, header or API that writes it in the end. It names the call
+  that escapes it there or the absence of one.
 - That reading crosses into the installed package below the vendor tree, because
   the class that emits the value is not one the extension ships.
-- A ViewHelper that hands its rendered children to another component is
-  recognized as emitting nothing, so the opt-out inside it is on the path to a
-  sink rather than at the end of one.
-- An opt-out that exists to keep a value from being encoded twice is reported as
-  that — at most a maintainability note naming what it depends on — instead of
-  as a violation.
-- Where the value cannot be followed that far, the finding is reported as
-  unverified and says which class was not read, rather than being dropped or
-  promoted.
+- The review recognizes a ViewHelper that hands its rendered children to another
+  component as one that emits nothing. So the opt-out inside it is on the path
+  to a sink rather than at the end of one.
+- The review reports an opt-out that exists to keep a value from a second encode
+  as that. At most it is a maintainability note that names what it depends on,
+  and not a violation.
+- Where the review cannot follow the value that far, it reports the finding as
+  unverified and says which class it did not read. It neither drops nor promotes
+  it.
 - Escaping stays an assessed surface either way: an opt-out whose sink does not
   escape is still a finding, and severity follows the demonstrated consequence.
 
 **How it fails**
 
-- The finding is established from the template line, the disabled escaping on
-  the core formatting ViewHelper and the plain field type in TCA — three correct
+- The finding rests on the template line, the disabled escape on the core
+  formatting ViewHelper and the plain field type in TCA. Three correct
   citations, none of them the sink.
-- The only class opened is the one that confirms what the review already
-  believes, while the extension's own ViewHelper and the class that emits the
-  resolved value go unread.
-- The opt-out is given an active security consequence and a place in the
-  priority order while nothing in the answer says where the value is emitted.
-- Escaping disappears from the review instead: nothing is reported because
-  nothing was followed, and the answer does not say the surface was left
+- The only class the review opens is the one that confirms what it already
+  believes. The extension's own ViewHelper and the class that emits the resolved
+  value go unread.
+- The opt-out gets an active security consequence and a place in the priority
+  order while nothing in the answer says where the value comes out.
+- The escape disappears from the review instead. The review reports nothing
+  because it followed nothing, and the answer does not say the surface stayed
   unassessed.
-- The sink is asserted from memory — the core escapes this on its own — without
-  opening the installed class, which is the same unread claim with its sign
-  flipped.
+- The review asserts the sink from memory, the core escapes this on its own,
+  without a look at the installed class. That is the same unread claim with its
+  sign flipped.

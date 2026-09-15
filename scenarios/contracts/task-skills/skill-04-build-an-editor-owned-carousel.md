@@ -12,15 +12,15 @@
 
 **What has to come out of it**
 
-- The editor workflow and ownership model are decided before fields or
-  rendering; owned repeatable slides use dedicated inline child records.
-- Element-specific TCA and TypoScript are split into named files rather than
-  added to generic files.
-- Element-only CSS and JavaScript are loaded through the Fluid AssetCollector.
-- Labels, localization, workspaces, sorting and visibility are handled for the
-  full parent/child lifecycle.
-- Functional tests cover persistence and rendering order; browser behavior is
-  tested or explicitly reported as unverified.
+- The editor workflow and ownership model come before fields or a render. Owned
+  repeatable slides use dedicated inline child records.
+- Element-specific TCA and TypoScript go into named files rather than into
+  generic files.
+- Element-only CSS and JavaScript load through the Fluid AssetCollector.
+- Labels, localization, workspaces, sort order and visibility work for the full
+  parent/child lifecycle.
+- Functional tests cover persistence and render order. Browser behavior has a
+  test or an explicit report as unverified.
 
 **How it fails**
 

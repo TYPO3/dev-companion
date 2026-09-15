@@ -12,8 +12,9 @@ browser runner · **Contract:** `held`
 
 **What has to come out of it**
 
-- The answer verifies the existing PHP harness and keeps it; browser coverage is
-  added because JavaScript, form interaction and login cannot be proved there.
+- The answer verifies the PHP harness that exists and keeps it. Browser coverage
+  comes in because nothing there can prove JavaScript, form interaction and
+  login.
 - Playwright belongs to the runnable project, uses real mounted URLs and derives
   its base URL, authentication and browser execution location from the project.
 - Stable project scripts exist before CI calls the same commands, and at least
@@ -23,9 +24,9 @@ browser runner · **Contract:** `held`
 
 **How it fails**
 
-- Working PHP tests are replaced or described as useless.
-- Browser packages or URLs are imposed from a generic DDEV recipe without
-  inspecting how this project runs.
-- Configuration and CI are added, but no served page is exercised.
-- A screenshot-only assertion is presented as proof that the form submitted or
+- PHP tests that work replaced or described as useless.
+- Browser packages or URLs imposed from a generic DDEV recipe without a look at
+  how this project runs.
+- Configuration and CI added, but no served page exercised.
+- A screenshot-only assertion presented as proof that the form submitted or
   login succeeded.

@@ -17,8 +17,8 @@
 - Each proposed test names a concrete unprotected behavior and explains why
   unit, functional, browser, or architecture coverage is the lowest useful
   layer.
-- Commands exist in the checkout or are declared by the project; no TYPO3 core
-  `runTests.sh` suite is offered.
+- Commands exist in the checkout or the project declares them. The answer offers
+  no TYPO3 core `runTests.sh` suite.
 - Missing infrastructure and commands not executed are clearly marked.
 
 **How it fails**

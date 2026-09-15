@@ -99,12 +99,11 @@ final class Entrypoint
      * A server start is the one thing that happens in a project without a
      * decision by anybody, so it is what carries the refresh, `D-DIS-021`.
      * stderr gets the long form for whoever is at the terminal. The
-     * instructions get the one sentence the budget has room for, because a
-     * skill the client loaded at the start of the session is the copy from
-     * before this ran. A refresh that fails leaves the notice as it was,
-     * because a write into somebody else's project may not stop a server. The
-     * directory is the one this process started in, where `install` writes and
-     * so where the record is.
+     * instructions get the one sentence the budget has room for, because the
+     * client loaded its skills before this ran. A refresh that fails leaves the
+     * notice as it was, because a write into somebody else's project may not
+     * stop a server. The directory is the one this process started in, where
+     * `install` writes and so where the record is.
      */
     private static function refreshSkillsNobodyHasUpdated(string $binary): string
     {

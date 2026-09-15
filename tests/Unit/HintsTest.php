@@ -4786,6 +4786,53 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The six questions one review session answered from the checkout because
+     * nothing here did — `D-KNW-157`. The key of each cache, the four
+     * conditions that make a row stale, the setting that is in neither key,
+     * which clean-up reaches which directory, and where the one lock is.
+     */
+    #[Decision('D-KNW-157')]
+    #[Test]
+    public function whatKeysAProcessedImageAndWhatClearsItIsAnswered(): void
+    {
+        foreach ([
+            'how is image caching implemented',
+            'what happens when processed files are cleared',
+            'are our cache identifiers stable enough',
+            'concurrent hits before an image is processed, locking strategy',
+        ] as $query) {
+            $reached = array_column(Hints::find([], $query, 6)['matchedHints'], 'id');
+            self::assertContains('fal-processed-file-cache', $reached, $query);
+        }
+
+        $text = self::statementsOf('fal-processed-file-cache');
+
+        self::assertStringContainsString('original uid, task type and configurationsha1', $text, 'the row key');
+        self::assertStringContainsString('four conditions and on no other', $text, 'what makes a row stale');
+        self::assertStringContainsString("['GFX'] is in neither", $text, 'what neither key carries');
+        self::assertStringContainsString('the absolute source path', $text, 'the file key');
+        self::assertStringContainsString('file_exists() on that name is the whole check', $text, 'its only validation');
+        self::assertStringContainsString('new release directory', $text, 'what a deployment does to it');
+        self::assertStringContainsString('Neither reads typo3temp/assets/images/', $text, 'which clean-up misses it');
+        self::assertStringContainsString('nothing runs it on its own', $text, 'why the directory grows');
+        self::assertStringContainsString('the frontend path has none', $text, 'where the lock is not');
+
+        // The reprocess decision moved between the majors, and the statement
+        // that named fileNeedsProcessing() for every branch named a method
+        // that returns false on the oldest one.
+        $onTwelve = Registry::call('typo3_task_guide', ['task' => 'why is my thumbnail processed again', 'targetVersion' => '12.4'])->text;
+        self::assertStringContainsString('ProcessedFile::isOutdated()', $onTwelve);
+        $onThirteen = Registry::call('typo3_task_guide', ['task' => 'why is my thumbnail processed again', 'targetVersion' => '13.4'])->text;
+        self::assertStringContainsString('AbstractTask::fileNeedsProcessing()', $onThirteen);
+        self::assertStringNotContainsString('isOutdated()', $onThirteen);
+
+        // The _assets hash, which the same session asked for as "the paths in
+        // composer mode". Its derivation is the same on every major.
+        $assets = self::statementsOf('public-assets');
+        self::assertStringContainsString('/vendor/<vendor>/<name>/', $assets);
+    }
+
+    /**
      * Two FAL traps that only show up as "nothing happened". The same call
      * carries a different default on the folder and on the storage. A
      * reference's own fields are the ones an editor filled in.

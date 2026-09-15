@@ -4,6 +4,7 @@ Where a statement sits, what verifies it when the core cannot, and what a packag
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-KNW-157`][D-KNW-157] — A processed image is keyed twice and cleared by three actions · 2026-09-15
 - [`D-KNW-155`][D-KNW-155] — A core commit body names no count and is not held to one paragraph · 2026-09-09
 - [`D-KNW-156`][D-KNW-156] — The symlink publisher is active on the shipped default, not on the context · 2026-09-09
 - [`D-KNW-147`][D-KNW-147] — A list of what is supported says what an unsupported key does · 2026-09-04
@@ -152,6 +153,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-028`][D-KNW-028] — How a file becomes a processed one is a subject this server owns · 2026-08-02
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
+[D-KNW-157]: knw-157-a-processed-image-is-keyed-twice-and-cleared-by-three-actions.md
 [D-KNW-155]: knw-155-a-core-commit-body-names-no-count-and-is-not-held-to-one-paragraph.md
 [D-KNW-156]: knw-156-the-symlink-publisher-is-active-on-the-shipped-default-not-on-the-context.md
 [D-KNW-147]: knw-147-a-list-of-what-is-supported-says-what-an-unsupported-key-does.md

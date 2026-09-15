@@ -292,6 +292,7 @@ Text:
     - verifying-a-change-against-the-installation — Verifying a Change Against the Installation Rather Than Against Its Own Output (PHP)
     - extbase-arguments — What Arrives From a Request, and What Silently Does Not (PHP)
     - extbase — What Extbase Is For, and When It Is Not Needed (PHP)
+    - fal-processed-file-cache — What Keys a Processed Image, and What Clears It (PHP)
     - extension-manifest — What Makes a Directory an Extension (PHP)
     - upgrade-own-code — What No Wizard Touches (PHP)
     - extension-ter-release — What Publishing to the TER Requires of an Extension (PHP)
@@ -831,6 +832,11 @@ Data:
             {
                 "id": "extbase",
                 "title": "What Extbase Is For, and When It Is Not Needed",
+                "category": "PHP"
+            },
+            {
+                "id": "fal-processed-file-cache",
+                "title": "What Keys a Processed Image, and What Clears It",
                 "category": "PHP"
             },
             {
@@ -1659,6 +1665,7 @@ Text:
     - verifying-a-change-against-the-installation — Verifying a Change Against the Installation Rather Than Against Its Own Output (PHP)
     - extbase-arguments — What Arrives From a Request, and What Silently Does Not (PHP)
     - extbase — What Extbase Is For, and When It Is Not Needed (PHP)
+    - fal-processed-file-cache — What Keys a Processed Image, and What Clears It (PHP)
     - extension-manifest — What Makes a Directory an Extension (PHP)
     - upgrade-own-code — What No Wizard Touches (PHP)
     - extension-ter-release — What Publishing to the TER Requires of an Extension (PHP)
@@ -2111,6 +2118,11 @@ Data:
             {
                 "id": "extbase",
                 "title": "What Extbase Is For, and When It Is Not Needed",
+                "category": "PHP"
+            },
+            {
+                "id": "fal-processed-file-cache",
+                "title": "What Keys a Processed Image, and What Clears It",
                 "category": "PHP"
             },
             {

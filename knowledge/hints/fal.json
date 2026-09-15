@@ -147,7 +147,15 @@
     ],
     "hints": [
       "Processing starts at the file: $file->process($taskType, $configuration) hands over to ResourceStorage::processFile() and then to FileProcessingService. There are two task types and no more — Image.Preview and Image.CropScaleMask, declared in SYS/fal/processingTaskTypes — so a processor can only claim one of those two unless a task type is registered beside them.",
-      "Nothing is processed twice. The service asks ProcessedFileRepository::findOneByOriginalFileAndTaskTypeAndConfiguration() first, and a processor runs only where the task that comes back says fileNeedsProcessing(). A BeforeFileProcessingEvent and an AfterFileProcessingEvent bracket that, and the first of them can replace the processed file outright.",
+      "Nothing is processed twice. The service asks ProcessedFileRepository::findOneByOriginalFileAndTaskTypeAndConfiguration() first, and a processor runs only where the row that comes back needs it. A BeforeFileProcessingEvent and an AfterFileProcessingEvent bracket that, and the first of them can replace the processed file outright. fal-processed-file-cache says what keys a row, what makes it stale and what clears it.",
+      {
+        "text": "AbstractTask::fileNeedsProcessing() makes that decision, and FileProcessingService asks the task.",
+        "since": 13
+      },
+      {
+        "text": "FileProcessingService::process() makes that decision with ProcessedFile::isOutdated(). The tasks carry a fileNeedsProcessing() of their own that returns false and is marked as a todo.",
+        "until": 12
+      },
       "Which processor runs is decided by ProcessorRegistry: it orders SYS/fal/processors with DependencyOrderingService using the before and after keys each entry declares, then asks canProcessTask() down that order and stops at the first that says yes. First match wins, so taking a case over means registering before the processor that would otherwise claim it, never after it. Where none says yes the registry throws exception 1560876294, naming the task type and the task name.",
       "The processors the core registers claim in this order. SvgImageProcessor takes a task whose target extension is svg. DeferredBackendImageProcessor takes a backend request where the fileProcessing aspect asks for deferred processing, where the source file has a width and a height, and where the target is not in the processing folder yet — it persists the processed file, points it at the image_processing route and returns, so the work happens when the browser requests that URL. OnlineMediaPreviewProcessor takes a file an online-media helper knows and whose preview image already exists on disk. LocalImageProcessor takes every other Image.Preview and Image.CropScaleMask and declares no order at all, which is what leaves it last.",
       "The list is the installation's rather than the core's, because every extension may add to it. typo3_configuration_lookup with SYS/fal/processors answers what is really registered there, and only where the installation can be reached.",
@@ -170,6 +178,77 @@
       },
       "Image dimensions need no FAL record: GraphicalFunctions::getImageDimensions() and TYPO3\\CMS\\Core\\Type\\File\\ImageInfo both take a path.",
       "ContentObjectRenderer::getImgResource() and the GIFBUILDER it dispatches to take a path or an EXT: path, but they are not a way past FAL: the string is resolved through ResourceFactory::retrieveFileOrFolderObject() and processed as a File, and GifBuilder's own IMAGE and mask files come back through getImgResource(). What reaches the pipeline without FAL is GraphicalFunctions itself."
+    ]
+  },
+  {
+    "id": "fal-processed-file-cache",
+    "title": "What Keys a Processed Image, and What Clears It",
+    "domains": [
+      "php"
+    ],
+    "appliesTo": [
+      "sys_file_processedfile",
+      "ProcessedFile",
+      "configurationsha1",
+      "originalfilesha1",
+      "getConfigurationChecksum",
+      "getChecksumData",
+      "fileNeedsProcessing",
+      "isOutdated",
+      "needsReprocessing",
+      "typo3temp/assets/images",
+      "typo3temp/assets/_processed_",
+      "processingfolder",
+      "processing folder",
+      "Typo3tempFileService",
+      "clearProcessedFiles",
+      "clearAssetsFolder",
+      "cleanup:localprocessedfiles",
+      "CleanUpLocalProcessedFilesCommand",
+      "Clear processed files",
+      "Clear typo3temp/assets",
+      "ImageProcessingService",
+      "ImageProcessController",
+      "image_processing",
+      "processed file cache",
+      "processed image",
+      "cache identifier",
+      "stale thumbnail",
+      "reprocess",
+      "reprocessed",
+      "image cache",
+      "image lock",
+      "locking",
+      "concurrent image requests",
+      "placeholder image",
+      "GFX",
+      "processor_colorspace",
+      "webp quality",
+      "release directory",
+      "deployment",
+      "disk usage",
+      "image caching",
+      "temporary assets",
+      "typo3temp grows",
+      "processed files cleared",
+      "clearing processed files"
+    ],
+    "hints": [
+      "Two caches hold a processed image, and each has a key of its own. A FAL variant is a sys_file_processedfile row and the file it names. What GraphicalFunctions writes is a file below typo3temp/assets/images/ under the public path, in a Composer installation and in the classic layout alike. fal-processing says how a task reaches either.",
+      "The row is found by original uid, task type and configurationsha1, the sha1 of the sanitised configuration ConfigurationService serialises. Its file is <name>_<checksum>.<extension> in the storage's processing folder: _processed_ by default, the storage record's processingfolder where one is set, and typo3temp/assets/_processed_/ for the fallback storage.",
+      {
+        "text": "The rows of one original are read once per request, behind a runtime cache the repository flushes for that original on add(), update() and remove().",
+        "since": 14
+      },
+      "A row is processed again on four conditions and on no other: it is new, its file is gone from the processing folder, the original's sha1 differs from originalfilesha1, or its checksum differs. The checksum is the first ten characters of md5 over the original's uid, the task type and name with the original's modification time, and the serialised configuration.",
+      "$GLOBALS['TYPO3_CONF_VARS']['GFX'] is in neither the sha1 nor the checksum. The docblock over AbstractTask::getChecksumData() asks a subclass to add it, and none does. So a changed colorspace, quality or processor leaves every existing variant as it is until its row goes.",
+      "The file GraphicalFunctions writes is named md5 over the convert command, the crop area, the absolute source path, the source's filemtime and the frame. file_exists() on that name is the whole check. The command carries the geometry, the colorspace and the quality, so a GFX change misses here where it hits a row. The absolute path is in the key, so a deployment into a new release directory makes every such file again.",
+      "Three clean-ups exist, and none reaches everything. The Install Tool's Clear processed files runs ProcessedFileRepository::removeAll() per storage: every row with an identifier, and the file each row names. cleanup:localprocessedfiles walks the processing folder of every Local storage and deletes a file no row names and a row whose file is gone. Neither reads typo3temp/assets/images/. Only the Install Tool's Clear typo3temp/assets empties that directory, one folder at a time through Typo3tempFileService::clearAssetsFolder(), and nothing runs it on its own.",
+      {
+        "text": "cleanup:localprocessedfiles --all deletes every file in those folders and every Local row, the identifier-less stubs included.",
+        "since": 13
+      },
+      "One lock exists, and the frontend path has none. ImageProcessingService locks per processed-file uid, and ImageProcessController behind the backend route image_processing is its only caller. The frontend serialises an uncached render per page cache identifier, not per image. GraphicalFunctions hands convert the final path, with no temporary name and no rename. So a request that arrives during the write finds the file and returns it as it stands."
     ]
   }
 ]

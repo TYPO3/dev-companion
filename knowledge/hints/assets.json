@@ -21,7 +21,10 @@
       "CanNotResolvePublicResourceException",
       "PathUtility",
       "getSystemResourceUri",
-      "getPublicResourceWebPath"
+      "getPublicResourceWebPath",
+      "_assets hash",
+      "composer mode paths",
+      "published path"
     ],
     "hints": [
       {
@@ -66,6 +69,11 @@
       },
       {
         "text": "_assets_install/ is the sibling directory that publishing writes, and a reader who has just learned about _assets/ has no reason to suspect it. It is the same publishing done from the failsafe container the install tool boots, so it holds that container's packages and not the rest, and the same asset:publish run produces both.",
+        "since": 14
+      },
+      "The hash is md5 of the package directory's path relative to the project root, with the slash on both ends: /vendor/<vendor>/<name>/ for a package Composer installed. The same layout on another machine yields the same hash, and a package that moves between vendor/ and packages/ gets a new one.",
+      {
+        "text": "A folder Configuration/Resources.php declares beside Resources/Public hashes the same relative path with the declared folder appended, so each declared folder publishes under a prefix of its own.",
         "since": 14
       },
       "Reference such a file as EXT:<key>/Resources/Public/... and let the resolver produce the published URI. The _assets path is an implementation detail and its hash changes with the layout.",

@@ -3,54 +3,25 @@
 The tool surface
 ================
 
-Every tool this server offers, one page each. A page says what the tool is
-called, what it takes, the fields it answers with and what a call to it comes
-back with, and this is the list of them.
+Every tool this server offers, one page each. A page says the tool's name, what it takes, the fields it answers with and what a call to it comes back with. This is the list of them.
 
-Every tool answers twice: the readable text, and the same answer as
-``structuredContent`` matching the ``outputSchema`` the tool declares — matches with
-their source, coverage and score, checks as command strings, components, icons
-and labels as typed records, commit diagnostics as ``level``/``code``/``message``. So
+Every tool answers twice: the readable text, and the same answer as ``structuredContent`` that matches the ``outputSchema`` the tool declares. Matches come with their source, coverage and score, checks as command strings, components, icons and labels as typed records, commit diagnostics as ``level``/``code``/``message``. So
 composing several tools does not mean parsing headings and code fences back out
-of prose. All tools are annotated ``readOnlyHint``; only ``typo3_feedback_record``
-writes anything, and then only a new file.
+of prose. All tools carry the ``readOnlyHint`` annotation. Only ``typo3_feedback_record`` writes anything, and then only a new file.
 
-Names are ``typo3_<subject>_<verb>``, with the verb taken from a fixed set —
-``lookup`` finds and may find nothing, ``guide`` composes an answer for a task,
-``list`` enumerates, ``scope`` states what a source covers, ``describe`` states what
-one thing you name is, ``record`` writes. So the name already says what shape the
+Names are ``typo3_<subject>_<verb>``, with the verb from a fixed set. ``lookup`` finds and may find nothing, ``guide`` composes an answer for a task, ``list`` enumerates. ``scope`` states what a source covers, ``describe`` states what one thing you name is, ``record`` writes. So the name already says what shape the
 answer has.
 
-The half of a page above its ``Answered`` heading is written by ``bin/cli
-tools:index`` from the classes that answer the calls, and ``bin/cli tools:check``
-fails where it has gone stale — a surface written out a second time by hand
-stops describing the answer at the first change nobody carried across. What is
+``bin/cli tools:index`` writes the half of a page above its ``Answered`` heading from the classes that answer the calls. ``bin/cli tools:check`` fails where it has gone stale. A surface written out a second time by hand stops to describe the answer at the first change nobody carried across. What is
 below that heading is one of two things, and the sentence it opens with says
-which. Where a tool's answers read nothing an installation contains, they are
-derived and held by that same check. Where they do, an installation has to be
-called for them: ``bin/cli tools:record`` writes those and nothing checks them, so
-such a page may say what it answered on a day the code has since moved past. The
-check counts how many of them were answered before this repository last changed
-``knowledge/`` or ``src/``, and fails on none of them. Two tools have no answered
+which. Where a tool's answers read nothing an installation contains, they derive from the code and that same check holds them. Where they do, a call to an installation has to produce them. ``bin/cli tools:record`` writes those and nothing checks them. So such a page may say what it answered on a day the code has since moved past. The check counts how many of them predate the last change to ``knowledge/`` or ``src/``, and fails on none of them. Two tools have no answered
 half at all, on purpose, and say so in its place.
 
-A client may be offered fewer than these. ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` names the
-tools a caller does not want offered, the two feedback tools exist only in a
-standalone checkout, and ``typo3_server_scope`` names what was left out.
+A client may get fewer than these. ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` names the tools a caller does not want, and the two feedback tools exist only in a standalone checkout. ``typo3_server_scope`` names what stayed out.
 
-The schema on a page is YAML: a key per field, the fields of an object or of a
-list entry nested under it, and the value is the type. A field carries
-``# optional`` where it may be absent, because required is the promise — a
-required output field is present on every path through the tool, misses
-included. Absolute paths in a recorded answer are written as ``<repository>``,
-``<installation>`` and ``<home>``, so no page carries one machine's layout.
+The schema on a page is YAML. A key per field, the fields of an object or of a list entry nested under it, and the value is the type. A field carries ``# optional`` where it may be absent, because required is the promise. A required output field is present on every path through the tool, misses included. Absolute paths in a recorded answer read ``<repository>``, ``<installation>`` and ``<home>``, so no page carries one machine's layout.
 
-Each page names the sources that can answer that tool, under its annotations and
-at the foot of its description, and links them into
-:doc:`Where an answer comes from <../answer-sources>` — which is the same
-statement read the other way round, one heading per source with the tools it
-answers. What it settles is not what a tool is about but whether it can be asked
-at all in the state the machine is in.
+Each page names the sources that can answer that tool, under its annotations and at the foot of its description. It links them into :doc:`Where an answer comes from <../answer-sources>`. That is the same statement read the other way round, one heading per source with the tools it answers. What it settles is not what a tool is about. It settles whether a caller can ask it at all in the state the machine is in.
 
 .. The cards below are written by ``bin/cli tools:index``.
 

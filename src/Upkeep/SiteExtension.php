@@ -13,9 +13,9 @@ namespace TYPO3\DevCompanion\Upkeep;
  * `D-EVI-010` is why it stands here rather than with whoever runs a case.
  *
  * It goes below `packages/`, where the distribution's own path repository
- * already looks. It carries one table with a label column, rows enough that the
- * answer says where an editor edits the records, and the two states a count
- * separates. The `EXT:` reference in the ctrl title is what
+ * already looks. It carries one table with a label column and the two states a
+ * count separates. It has rows enough that the answer says where an editor
+ * edits the records. The `EXT:` reference in the ctrl title is what
  * `Typo3Runtime::extensionIn` attributes the table by.
  */
 final class SiteExtension

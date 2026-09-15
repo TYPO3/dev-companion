@@ -11,7 +11,7 @@ use Symfony\Component\Finder\Finder;
  * and a report of what nobody here can move.
  *
  * The new number is the dangerous part rather than the collision. Twice the
- * files that named the old number did not all mean the same entry, so a search
+ * files that named the old number did not all mean the same entry. So a search
  * and replace over the id is silently wrong there. A reference moves only where
  * the file itself says which entry it means, which is a link path. Every other
  * one comes back in the report, `D-DOC-015`. A mention this branch added means

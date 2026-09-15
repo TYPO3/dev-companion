@@ -146,8 +146,8 @@ final class Decisions
      * references first.
      *
      * Not a defect and nothing fails on it. Most entries here are about process
-     * and nothing runs over them, and a check that demanded a `coveredBy` would
-     * get a test name chosen to satisfy it. What it reports is the one tie that
+     * and nothing runs over them. A check that demanded a `coveredBy` would get
+     * a test name chosen to satisfy it. What it reports is the one tie that
      * holds an entry to the code: a test named in `coveredBy` fails when the
      * behaviour moves.
      *

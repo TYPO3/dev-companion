@@ -17,10 +17,9 @@ use TYPO3\DevCompanion\Paths;
  * boundary: `Typo3Cli` resolves this project, starts it and reads what it
  * printed.
  *
- * Written rather than committed, for the reason `.checkouts/` is not in git
- * either, and shaped by `ToolCalls` rather than after a real site. Everything
- * in it says whose it is, because a recorded answer must not carry an entry a
- * reader could take for TYPO3's own.
+ * Written rather than committed, like `.checkouts/`, and shaped by `ToolCalls`
+ * rather than after a real site. Everything in it says whose it is, because a
+ * recorded answer must not carry an entry a reader could take for TYPO3's own.
  */
 final class Fixture
 {

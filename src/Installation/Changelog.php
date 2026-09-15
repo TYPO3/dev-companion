@@ -7,16 +7,15 @@ namespace TYPO3\DevCompanion\Installation;
 use Symfony\Component\Finder\Finder;
 
 /**
- * The changelog entries of the installation this server was started in.
+ * The changelog entries of the installation this server started in.
  *
  * Every TYPO3 package ships the core's own changelog, one RST file per breaking
- * change, deprecation, feature and important note. Nothing is bundled here: a
- * snapshot would answer for the version it was taken from, while the
+ * change, deprecation, feature and important note. Nothing ships here as a
+ * bundle. A snapshot would answer for the version it came from, while the
  * installation's own copy answers for the version the caller runs. The scan
- * reads file names and not files, and what a name does not carry is read out of
- * the file only where the names reached nothing — the stated title
- * (`D-ANS-041`), and the identifiers a removed method is asked for by
- * (`D-ANS-042`).
+ * reads file names and not files. What a name does not carry comes out of the
+ * file only where the names reached nothing. The stated title (`D-ANS-041`),
+ * and the identifiers a caller asks for a removed method by (`D-ANS-042`).
  */
 final class Changelog
 {
@@ -90,7 +89,7 @@ final class Changelog
                     'version' => $inVersion,
                     // The two fields a label search works on, so the same
                     // "carries every word" rule applies here without a second
-                    // matcher: the title as words, and the file name as it is.
+                    // matcher. The title as words, and the file name as it is.
                     'key' => $name,
                     'source' => self::words($matches[3]),
                     'file' => $file->getPathname(),
@@ -102,7 +101,7 @@ final class Changelog
     }
 
     /**
-     * The same entries, each carrying the title its file states.
+     * The same entries, each with the title its file states.
      *
      * A file name spells a title of its own and the two differ. This is a read
      * per entry, which is why a search reaches for it only after the names —
@@ -136,8 +135,8 @@ final class Changelog
      * The same three fields out of an entry's RST, whatever delivered it.
      *
      * The host publishes the source of every entry byte for byte under
-     * `_sources`, so what the manual answers with is the file this parses on
-     * disk and there is one parser rather than two — `D-ANS-067`.
+     * `_sources`. So what the manual answers with is the file this parses on
+     * disk, and there is one parser rather than two, `D-ANS-067`.
      *
      * @param array{version: string, type: string} $entry
      * @return array{title: string, tags: array<int, string>, removal: string, migration: string}
@@ -147,9 +146,9 @@ final class Changelog
         $title = '';
         $tags = [];
         foreach (preg_split('/\R/', $contents) ?: [] as $line) {
-            // "Deprecation: #107208 - <f:debug.render> ViewHelper" — the type
-            // and the issue are fields of their own, so the title is what is
-            // left of the line.
+            // "Deprecation: #107208 - <f:debug.render> ViewHelper". The type
+            // and the issue are fields of their own, so the title is what
+            // remains of the line.
             if ($title === '' && preg_match('/^(Breaking|Deprecation|Feature|Important):\s*(?:#\d+\s*-\s*)?(.+)$/', trim($line), $matches) === 1) {
                 $title = trim($matches[2]);
             }
@@ -170,8 +169,8 @@ final class Changelog
     /**
      * One section of an entry's reStructuredText, whole.
      *
-     * A title says what stopped working and the migration says what to write
-     * instead, and a session that got the first read the file for the second —
+     * A title says what stopped to work and the migration says what to write
+     * instead. A session that got the first read the file for the second,
      * `D-ANS-139`. The file is already open here, so what this costs is the
      * lines between two headings.
      *
@@ -217,9 +216,9 @@ final class Changelog
     /**
      * The identifiers an entry names, as its body spells them.
      *
-     * Every inline literal is read whatever markup it is written in, because the
-     * `:php:` role postdates 9.0. Only a word carrying a hump or an underscore
-     * is one — `D-ANS-042`.
+     * Every inline literal counts whatever markup it stands in, because the
+     * `:php:` role postdates 9.0. Only a word with a hump or an underscore is
+     * one, `D-ANS-042`.
      *
      * @param array{file: string} $entry
      * @return array<int, string>
@@ -247,27 +246,28 @@ final class Changelog
     }
 
     /**
-     * The version this entry states its subject stops working in, empty where
+     * The version this entry states its subject stops to work in, empty where
      * it states none.
      *
-     * There is no field to read: the removal is a clause in the Description,
-     * written freely — "will be removed in TYPO3 v15.0", "will be removed with
-     * v15", "marked for removal in v15" are all in `.checkouts/14.3`, and the
-     * sentence wraps, so the whole text is matched rather than a line. 44 of
-     * the 75 deprecations of 14 state one that way and 31 state none, which is
-     * why an empty answer here is the ordinary case rather than a failure.
+     * There is no field to read. The removal is a free clause in the
+     * Description. "will be removed in TYPO3 v15.0", "will be removed with
+     * v15", "marked for removal in v15" are all in `.checkouts/14.3`. The
+     * sentence wraps, so the match runs over the whole text rather than a line.
+     * 44 of the 75 deprecations of 14 state one that way and 31 state none.
+     * That is why an empty answer here is the ordinary case rather than a
+     * failure.
      *
      * Only a Deprecation states one about itself. Ten entries of the other
-     * three types carry the same clause about something else: `14.2`
+     * three types carry the same clause about something else. `14.2`
      * Feature-109412 announces the replacement and says the mechanism it
-     * replaces will be removed in v15.0, which is the deprecation's removal
-     * and not the feature's.
+     * replaces will be removed in v15.0, which is the deprecation's removal and
+     * not the feature's.
      *
-     * What a number has to survive is being later than the version the entry
-     * was released in. Two things in the corpus are not this entry's removal
-     * and read like one: a 13.3 deprecation says its subject "will be removed
-     * with v5", which is Fluid standalone, and an entry recounting what an
-     * earlier release already removed carries that release's number.
+     * What a number has to survive is a check that it is later than the version
+     * of the entry's release. Two things in the corpus are not this entry's
+     * removal and read like one. A 13.3 deprecation says its subject "will be
+     * removed with v5", which is Fluid standalone. An entry that recounts what
+     * an earlier release already removed carries that release's number.
      *
      * @param array{version: string, type: string} $entry
      */
@@ -291,7 +291,7 @@ final class Changelog
         return '';
     }
 
-    /** "ExperimentalBackendViewHelpers" as the words it is made of. */
+    /** "ExperimentalBackendViewHelpers" as the words it consists of. */
     public static function words(string $camelCase): string
     {
         $spaced = preg_replace('/(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', ' ', $camelCase);

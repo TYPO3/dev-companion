@@ -9,28 +9,28 @@ namespace TYPO3\DevCompanion\Installation;
  *
  * Some registries are only ever assembled at runtime. An icon list built in a
  * foreach, a table added by a PHP call, a content element whose identifier
- * comes out of a variable — none of them exists in a file a reader could parse,
- * and a review that compares a parsed list against the tree reports defects
- * nobody has. So TYPO3 is booted and its container is asked, which is the same
- * move `Typo3Cli` makes for the questions a console command covers.
+ * comes out of a variable. None of them exists in a file a reader could parse.
+ * A review that compares a parsed list against the tree reports defects nobody
+ * has. So TYPO3 boots and its container answers, which is the same move
+ * `Typo3Cli` makes for the questions a console command covers.
  *
  * Three answers, and the middle one is why this class exists:
  *
- * - **full** — the container came up with every extension in it, and what it
+ * - **full**: the container came up with every extension in it, and what it
  *   reports is the truth about this installation.
- * - **failsafe** — TYPO3 booted, but without essential configuration, so only
- *   core packages are in the container. Every registry still answers, and
- *   every answer is a subset that looks like the whole. It is never handed on
- *   as a result; it is a reason to fall back and say so.
- * - **unreachable** — no console could be resolved, no interpreter derived, or
- *   the boot failed. Also a reason, never silence.
+ * - **failsafe**: TYPO3 booted, but without essential configuration, so only
+ *   core packages are in the container. Every registry still answers, and every
+ *   answer is a subset that looks like the whole. It never goes on as a result;
+ *   it is a reason to fall back and say so.
+ * - **unreachable**: no console resolved, no interpreter derived, or the boot
+ *   failed. Also a reason, never silence.
  *
- * The reading is memoized for the length of one tool call, because it costs a
- * boot and one reading answers every topic. `Registry::call` drops it when the
- * call ends, and that is what keeps an answer from describing the installation
- * as it was before the caller's own edit. It is also why nothing here has to
- * notice a project that was started, or configured, since the last reading:
- * between two calls there is no reading left to be stale.
+ * The read stays in memory for the length of one tool call, because it costs a
+ * boot and one read answers every topic. `Registry::call` drops it when the
+ * call ends. That is what keeps an answer from a description of the
+ * installation as it was before the caller's own edit. It is also why nothing
+ * here has to notice a project that started, or got its configuration, since
+ * the last read. Between two calls no read remains to go stale.
  */
 final class Typo3Runtime
 {
@@ -40,32 +40,31 @@ final class Typo3Runtime
     /** TYPO3 booted without its configuration: core only, and it looks complete. */
     public const STATE_FAILSAFE = 'failsafe';
 
-    /** Nothing was asked, and the reason says what stood in the way. */
+    /** No question went out, and the reason says what stood in the way. */
     public const STATE_UNREACHABLE = 'unreachable';
 
     /** @var array{state: string, reason: string, topics: array<string, mixed>}|null */
     private static ?array $answer = null;
 
     /**
-     * What the topics that take an argument were asked with; empty means none
-     * of them is read at all.
+     * The arguments of the topics that take one; empty means none of them reads
+     * at all.
      *
      * @var array<string, mixed>
      */
     private static array $parameters = [];
 
     /**
-     * What the running installation reports, or why it did not.
+     * What the live installation reports, or why it did not.
      *
      * @return array{state: string, reason: string, topics: array<string, mixed>}
      */
     public static function ask(): array
     {
-        // Every state is kept alike, because within one call there is nothing
-        // for any of them to become: the console that was resolved stays
-        // resolved, and a project the caller starts on reading "the DDEV
-        // project is stopped" is started between two calls, where no reading
-        // survives to be corrected.
+        // Every state stays alike, because within one call there is nothing for
+        // any of them to become. The resolved console stays resolved. A project
+        // the caller starts on "the DDEV project is stopped" starts between two
+        // calls, where no read survives for a correction.
         if (self::$answer !== null) {
             return self::$answer;
         }
@@ -74,10 +73,10 @@ final class Typo3Runtime
     }
 
     /**
-     * One topic of a full reading, or null when there was none.
+     * One topic of a full read, or null when there was none.
      *
      * Null and an empty topic are different answers, and the caller that falls
-     * back needs the difference: nothing registered is a fact, nothing asked is
+     * back needs the difference. Nothing registered is a fact, nothing asked is
      * a gap with a reason attached.
      */
     public static function topic(string $name): mixed
@@ -89,11 +88,11 @@ final class Typo3Runtime
 
     /**
      * One path out of TYPO3_CONF_VARS as the installation has it, or null where
-     * there was no full reading to take it from.
+     * there was no full read to take it from.
      *
-     * Asked for rather than read with everything else, because the whole of
-     * TYPO3_CONF_VARS is around 50 kB of JSON before an extension has added to
-     * it and every other reading would carry it for nothing.
+     * On request rather than with everything else. The whole of TYPO3_CONF_VARS
+     * is around 50 kB of JSON before an extension has added to it. Every other
+     * read would carry it for nothing.
      *
      * @return array{found: bool, value: mixed}|array{unavailable: string}|null
      */
@@ -107,7 +106,7 @@ final class Typo3Runtime
 
     /**
      * The service definitions this installation assembles, or null where there
-     * was no full reading to take them from.
+     * was no full read to take them from.
      *
      * Asked for, because it builds the container a second time — `D-DIS-023`.
      *
@@ -122,14 +121,14 @@ final class Typo3Runtime
     }
 
     /**
-     * What the database has for a table, or the tables it has at all, or null
-     * where there was no full reading to take it from.
+     * What the database has for a table, or the tables it has at all. Null
+     * where there was no full read to take it from.
      *
-     * Asked for, because it opens a connection and lists a schema — the derived
+     * On request, because it opens a connection and lists a schema. The derived
      * columns beside it say what TYPO3 would create, and a caller who asked
      * about an icon should pay for neither. An empty table name lists the
-     * tables and nothing else; a table the schema does not have comes back
-     * `present: false` rather than as a failure — `D-DIS-022`.
+     * tables and nothing else. A table the schema does not have comes back
+     * `present: false` rather than as a failure, `D-DIS-022`.
      *
      * @return array{tables: array<int, string>, statementCount: int, suggestions: array<int, array{connection: string, change: string, tables: array<int, string>}>, table?: string, present?: bool, columns?: array<int, array<string, mixed>>, indexes?: array<int, array<string, mixed>>}|array{unavailable: string}|null
      */
@@ -143,12 +142,12 @@ final class Typo3Runtime
 
     /**
      * The rows of a table, and how many there are, or null where there was no
-     * full reading to take them from.
+     * full read to take them from.
      *
-     * Asked for, because it is the only reading this server takes over rows and
-     * no reading taken for anything else wants it. What a row always carries is
-     * the probe's to decide (`D-AUD-017`); the columns beside it are the
-     * caller's, named and checked against the table first — `D-AUD-019`.
+     * On request, because it is the only read this server takes over rows and
+     * no read for anything else wants it. What a row always carries is the
+     * probe's to decide (`D-AUD-017`). The columns beside it are the caller's,
+     * named and checked against the table first, `D-AUD-019`.
      *
      * @param array<string, scalar> $where exact matches, one per column
      * @param int $limit rows to read, 0 for none and -1 for all of them
@@ -173,11 +172,11 @@ final class Typo3Runtime
 
     /**
      * What one `type=flex` column of this installation resolves to, or null
-     * where there was no full reading to take it from.
+     * where there was no full read to take it from.
      *
-     * Asked for, because the resolution costs the events, the file reads and
-     * the preparation behind one column, and no reading taken for anything else
-     * has a use for it.
+     * On request, because the resolution costs the events, the file reads and
+     * the preparation behind one column. No read for anything else has a use
+     * for it.
      *
      * @param array<string, mixed> $record the values the row is emulated from,
      *     since which structure it is can depend on them and nothing here loads
@@ -193,7 +192,7 @@ final class Typo3Runtime
         ]]);
     }
 
-    /** Why there is no full reading. Empty when there is one. */
+    /** Why there is no full read. Empty when there is one. */
     public static function reason(): string
     {
         $answer = self::ask();
@@ -204,9 +203,9 @@ final class Typo3Runtime
     /**
      * Drops the memoized reading.
      *
-     * Called at the end of every tool call, which is what bounds the reading to
-     * the answer it was taken for — `Registry::call` carries the reason. Also
-     * what a recording and a test move between two installations with.
+     * Called at the end of every tool call, which is what bounds the read to
+     * the answer it came for. `Registry::call` carries the reason. Also what a
+     * recording and a test move between two installations with.
      */
     public static function forget(): void
     {
@@ -215,13 +214,13 @@ final class Typo3Runtime
     }
 
     /**
-     * One topic the probe reads only where a caller asked for it, with what it
-     * was asked with.
+     * One topic the probe reads only where a caller asked for it, with the
+     * argument of the ask.
      *
-     * A reading taken before this was asked does not carry the topic, so asking
-     * discards it and takes another. That is the whole of the ordering: no
-     * caller has to ask its parameterized topic first, and two of them in one
-     * call cost two boots rather than a wrong answer.
+     * A read from before this ask does not carry the topic, so the ask discards
+     * it and takes another. That is the whole of the order. No caller has to
+     * ask its parameterized topic first, and two of them in one call cost two
+     * boots rather than a wrong answer.
      *
      * @param array<string, mixed> $parameters
      * @return array<string, mixed>|null
@@ -241,13 +240,13 @@ final class Typo3Runtime
     /**
      * The extension key a runtime entry names, or null where it names none.
      *
-     * TCA and the icon registry are the installation's, not any package's, and
-     * an answer about one extension cannot be assembled from a list belonging
-     * to all of them. What every entry does carry is a reference into the
-     * package that owns it — `LLL:EXT:news/…locallang.xlf:plugin.list` on a
-     * label or a ctrl title, `EXT:news/Resources/Public/Icons/list.svg` on an
-     * icon — and that reference is evidence rather than a naming convention.
-     * Where there is none, the entry belongs to the installation.
+     * TCA and the icon registry are the installation's, not any package's. An
+     * answer about one extension cannot come from a list that belongs to all of
+     * them. What every entry does carry is a reference into the package that
+     * owns it. `LLL:EXT:news/…locallang.xlf:plugin.list` on a label or a ctrl
+     * title, `EXT:news/Resources/Public/Icons/list.svg` on an icon. That
+     * reference is evidence rather than a name convention. Where there is none,
+     * the entry belongs to the installation.
      */
     public static function extensionIn(string $reference): ?string
     {
@@ -287,8 +286,8 @@ final class Typo3Runtime
      * The probe with the autoloader of this installation and what this call
      * asked for written into it.
      *
-     * The opening tag goes because the body is delivered through `php -r`,
-     * which supplies its own.
+     * The open tag goes because the body travels through `php -r`, which
+     * supplies its own.
      */
     private static function payload(string $root): string
     {

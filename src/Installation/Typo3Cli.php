@@ -11,20 +11,19 @@ use TYPO3\DevCompanion\Process\SystemRunner;
  * Runs the TYPO3 console of the discovered installation and hands back what it
  * printed.
  *
- * Asking TYPO3 beats reimplementing it. The registries this server is asked
- * about — which labels exist, which namespaces are registered — are assembled
- * at runtime from the active packages, and the console commands that expose
- * them (language:domain:list, fluid:namespaces) already
- * know things no file scan can work out: which packages are active rather than
- * merely installed, and which language files an installation overrides through
- * resourceOverrides.
+ * A question to TYPO3 beats a second implementation of it. The registries this
+ * server answers about, which labels exist, which namespaces exist, assemble at
+ * runtime from the active packages. The console commands that expose them
+ * (language:domain:list, fluid:namespaces) already know things no file scan can
+ * work out. Which packages are active rather than merely installed, and which
+ * language files an installation overrides through resourceOverrides.
  *
- * It runs as a subprocess, never in this process. Loading the installation's
- * autoloader here would put two Composer autoloaders and two sets of Symfony
- * and PSR classes under the same class names into one process, and a platform
- * check failing would take the whole MCP session down instead of one answer.
- * A subprocess brings its own interpreter and its own autoloader, and fails as
- * an exit code.
+ * It runs as a subprocess, never in this process. A load of the installation's
+ * autoloader here would put two Composer autoloaders into one process. Two sets
+ * of Symfony and PSR classes under the same class names would come with them. A
+ * failed platform check would take the whole MCP session down instead of one
+ * answer. A subprocess brings its own interpreter and its own autoloader, and
+ * fails as an exit code.
  */
 final class Typo3Cli
 {
@@ -47,10 +46,10 @@ final class Typo3Cli
      * What leaves this process, and the seam a unit test takes instead.
      *
      * Static because everything on this class is, and settable because
-     * `R-COD-003` says a unit test stubs what it needs from outside rather
-     * than starting it. `forget()` deliberately leaves it alone: that one
-     * drops the memoized resolution, which a test does between installations
-     * and which would otherwise take the stub with it.
+     * `R-COD-003` says a unit test stubs what it needs from outside rather than
+     * starts it. `forget()` leaves it alone on purpose. That one drops the
+     * memoized resolution, which a test does between installations and which
+     * would otherwise take the stub with it.
      */
     private static ?CommandRunner $runner = null;
 
@@ -63,11 +62,11 @@ final class Typo3Cli
     /**
      * Where DDEV mounts the project inside its web container.
      *
-     * The invocation has to be absolute: `ddev exec` runs in the container's
+     * The invocation has to be absolute. `ddev exec` runs in the container's
      * configured working directory, which a project may point at its docroot,
-     * and `D-DIS-002` measured exit 127 for exactly that. `$DDEV_APPROOT` is not
-     * the safer form — DDEV sets it in the web container only from v1.24.5, and
-     * below that it expands to nothing.
+     * and `D-DIS-002` measured exit 127 for exactly that. `$DDEV_APPROOT` is
+     * not the safer form. DDEV sets it in the web container only from v1.24.5,
+     * and below that it expands to nothing.
      */
     private const DDEV_APPROOT = '/var/www/html';
 
@@ -79,17 +78,16 @@ final class Typo3Cli
     private static string $caveat = '';
 
     /**
-     * How this installation's console can be invoked, or null when it cannot.
+     * How to invoke this installation's console, or null when nobody can.
      *
      * @return array{command: array<int, string>, via: string, php: string}|null
      */
     public static function resolve(): ?array
     {
-        // Only a success with nothing limiting it is remembered. A failure and
-        // a caveated success are both retried on the next call, because the
-        // usual reason for either is a DDEV project that is not running yet —
-        // and the caller who reads that and starts it has to be able to ask
-        // again in the same session.
+        // Only a success with no limit on it stays in memory. A failure and a
+        // caveated success both run again on the next call. The usual reason
+        // for either is a DDEV project that is not up yet. The caller who reads
+        // that and starts it has to be able to ask again in the same session.
         if (is_array(self::$resolved)) {
             return self::$resolved;
         }
@@ -112,9 +110,10 @@ final class Typo3Cli
             return self::$resolved = $invocation;
         }
         if ($overrideReason !== '') {
-            // A stated command that cannot be used is not quietly replaced by a
-            // discovered one. The caller would then be answered from something
-            // other than what it named, and never learn its setting was ignored.
+            // A stated command that does not work gets no quiet replacement by
+            // a discovered one. The caller would then get an answer from
+            // something other than what it named, and never learn its setting
+            // went unread.
             self::$reason = $overrideReason;
 
             return null;
@@ -122,9 +121,9 @@ final class Typo3Cli
 
         $binary = self::consoleBinary($root);
         if ($binary === null) {
-            // Naming every probed path rather than the two defaults: a console
-            // that sits somewhere else is the likely case here, and a reason
-            // that lists where this looked is one the caller can act on.
+            // Every probed path by name rather than the two defaults. A console
+            // that sits somewhere else is the likely case here. A reason that
+            // lists where this looked is one the caller can act on.
             self::$reason = sprintf(
                 '%s has no TYPO3 console — none of %s exists%s%s',
                 $root,
@@ -143,9 +142,9 @@ final class Typo3Cli
 
         [$invocation, $phpReason] = self::viaPhp($root, $binary);
 
-        // A project that ships a DDEV setup is meant to run there, so its
-        // reason wins over the direct one: "start the project" is something the
-        // caller can act on, "install another PHP" is not.
+        // A project that ships a DDEV setup runs there by design, so its reason
+        // wins over the direct one. "Start the project" is something the caller
+        // can act on, "install another PHP" is not.
         if ($invocation === null) {
             self::$reason = $ddevReason !== '' ? $ddevReason : $phpReason;
 
@@ -153,21 +152,21 @@ final class Typo3Cli
         }
 
         // An interpreter on this machine reaches the console of a project that
-        // is meant to run elsewhere. That is not "unreachable", and it is not
-        // "reachable" either — but what it costs is not the list of tools this
+        // runs elsewhere by design. That is not "unreachable", and it is not
+        // "reachable" either. But what it costs is not the list of tools this
         // sentence used to name. Driven against `.environments/e-site-14.3`
-        // with its DDEV project stopped on 2026-08-04, all seven
-        // installation-backed tools answered, byte for byte what the same calls
-        // answered through `ddev exec` with the project up, on a host PHP 8.3
-        // that had no database driver compiled in at all. Booting TYPO3 is not
-        // what a stopped project takes away; the runtime the project declares
-        // is, and which answer meets that limit is a property of the
-        // installation rather than of the tool asked.
-        // Naming the way out is half of it. The caller that acts on it holds an
-        // answer given from the weaker source, and nothing revises that answer
-        // where it stands — so the step that ends the state is the second call,
-        // and a caveat that names only the first leaves the session working
-        // from what it was told to stop trusting. `R-DIS-010`.
+        // with its DDEV project down on 2026-08-04, all seven
+        // installation-backed tools answered. Byte for byte what the same calls
+        // answered through `ddev exec` with the project up. That was on a host
+        // PHP 8.3 with no database driver compiled in at all. The boot of TYPO3
+        // is not what a stopped project takes away; the runtime the project
+        // declares is. Which answer meets that limit is a property of the
+        // installation rather than of the tool in question. Naming the way out
+        // is half of it. The caller that acts on it holds an answer from the
+        // weaker source, and nothing revises that answer where it stands. So
+        // the step that ends the state is the second call. A caveat that names
+        // only the first leaves the session at work on what it heard to stop to
+        // trust. `R-DIS-010`.
         self::$caveat = $ddevReason === '' ? '' : $ddevReason
             . '. Until then the console runs on an interpreter of this machine rather than in the runtime the '
             . 'project declares. What TYPO3 assembles from its own files answers as it would there; what needs '
@@ -176,14 +175,14 @@ final class Typo3Cli
             . 'given, and the runtime the project declares reaches only the calls that come after the start';
 
         // A caveated resolution is the weaker of two and the stronger one
-        // arrives during the session, so it is not remembered — `R-DIS-009`,
-        // one state over from the negative it was written for. Measured in one
-        // process against `.environments/e-site-13.4` stopped on 2026-08-04:
-        // host PHP 8.3 satisfies the 8.2.0 that installation pins, so the
-        // resolution succeeded through it, was remembered, and `ddev start`
-        // changed nothing until the process ended. What it costs is one
-        // `ddev describe -j` per call while the project is stopped, 0.25s
-        // there, which is what a failing resolution already pays on that path.
+        // arrives during the session, so it stays out of memory. `R-DIS-009`,
+        // one state over from the negative behind it. Measured in one process
+        // against `.environments/e-site-13.4` down on 2026-08-04. Host PHP 8.3
+        // satisfies the 8.2.0 that installation pins, so the resolution
+        // succeeded through it and stayed in memory. `ddev start` changed
+        // nothing until the process ended. What it costs is one `ddev describe
+        // -j` per call while the project is down, 0.25s there. That is what a
+        // failed resolution already pays on that path.
         if (self::$caveat !== '') {
             return $invocation;
         }
@@ -197,8 +196,8 @@ final class Typo3Cli
     }
 
     /**
-     * Drops the memoized resolution. The installation is discovered once per
-     * process in normal use, so this exists for tests that move between
+     * Drops the memoized resolution. Discovery of the installation happens once
+     * per process in normal use, so this exists for tests that move between
      * installations within one.
      */
     public static function forget(): void
@@ -208,7 +207,7 @@ final class Typo3Cli
         self::$caveat = '';
     }
 
-    /** Why the console cannot be invoked. Empty once it can. */
+    /** Why nobody can invoke the console. Empty once it can. */
     public static function reason(): string
     {
         self::resolve();
@@ -217,13 +216,14 @@ final class Typo3Cli
     }
 
     /**
-     * What limits the console that was found. Empty when nothing does.
+     * What limits the console that turned up. Empty when nothing does.
      *
-     * Reachable is not one state: a project whose containers are stopped is
-     * answered by an interpreter of this machine, which is not the runtime the
+     * Reachable is not one state. An interpreter of this machine answers for a
+     * project whose containers are down, and that is not the runtime the
      * project declares. What it says is what the boot cannot reach, never which
-     * lookups are lost — which answer a stopped project costs depends on the
-     * installation, so a sentence naming tools is wrong somewhere (`D-DIS-012`).
+     * lookups are lost. Which answer a stopped project costs depends on the
+     * installation, so a sentence that names tools is wrong somewhere
+     * (`D-DIS-012`).
      */
     public static function caveat(): string
     {
@@ -235,10 +235,10 @@ final class Typo3Cli
     /**
      * What a failure means, where the message alone does not say it.
      *
-     * A console that starts and then fails on a missing table has a specific
-     * remedy, and the caller cannot see it in the stack trace: the code is
-     * installed, the database behind it is not. Empty for everything else —
-     * guessing at the rest would bury the one diagnosis worth having.
+     * A console that starts and then fails on an absent table has a specific
+     * remedy, and the caller cannot see it in the stack trace. The code is
+     * there, the database behind it is not. Empty for everything else, because
+     * a guess at the rest would bury the one diagnosis worth its place.
      */
     public static function diagnose(string $error): string
     {
@@ -280,26 +280,26 @@ final class Typo3Cli
     /**
      * Arguments that survive the one shell on the way to the console.
      *
-     * `proc_open` is given an array and runs no shell, so nothing here would
-     * need quoting — except that `ddev exec` joins its arguments back into a
-     * line and hands that to bash inside the container. An argument carrying a
-     * character bash acts on is then bash's rather than the console's, and the
-     * command dies before TYPO3 is reached. Measured against DDEV v1.25.1 on
-     * 2026-08-02: `--regex=/(save)/i` — the argument `typo3_label_lookup`
-     * builds for `language:domain:search` — comes back exit 2 with "syntax
-     * error near unexpected token `('", every time, in every DDEV project. So
-     * that tool never once answered from a booted installation there; it fell
-     * back to the package files and said `answeredBy: "packages"`, which reads
-     * as a console that could not be reached rather than as a quoting fault.
+     * `proc_open` gets an array and runs no shell, so nothing here would need
+     * quotes. Except that `ddev exec` joins its arguments back into a line and
+     * hands that to bash inside the container. An argument with a character
+     * bash acts on is then bash's rather than the console's, and the command
+     * dies before it reaches TYPO3. Measured against DDEV v1.25.1 on
+     * 2026-08-02. `--regex=/(save)/i`, the argument `typo3_label_lookup` builds
+     * for `language:domain:search`, comes back exit 2 with "syntax error near
+     * unexpected token `('", every time, in every DDEV project. So that tool
+     * never once answered from a booted installation there. It fell back to the
+     * package files and said `answeredBy: "packages"`, which reads as a console
+     * out of reach rather than as a quote fault.
      *
-     * Only the DDEV transport is quoted. The direct one reaches the console
+     * Only the DDEV transport gets quotes. The direct one reaches the console
      * through `proc_open` with no shell between, where a quoted argument would
-     * arrive with its quotes. A stated one is left alone for a reason rather
-     * than an oversight: what `TYPO3_DEV_COMPANION_CONSOLE` names may put a shell in the
-     * way or may not — `docker compose exec` does not, another wrapper might —
-     * and this cannot tell. Quoting it would break every stated command that
-     * needs no quoting, to fix the ones that do; the caller who names a
-     * transport is the one who can quote for it.
+     * arrive with its quotes. A stated one stays alone for a reason rather than
+     * an oversight. What `TYPO3_DEV_COMPANION_CONSOLE` names may put a shell in
+     * the way or may not, `docker compose exec` does not, another wrapper
+     * might, and this cannot tell. Quotes would break every stated command that
+     * needs none, to fix the ones that do. The caller who names a transport is
+     * the one who can quote for it.
      *
      * @param array<int, string> $arguments
      * @return array<int, string>
@@ -313,16 +313,16 @@ final class Typo3Cli
      * Runs PHP inside the installation and returns what it printed.
      *
      * The console answers what a command exists for. Everything else an
-     * installation knows — its icon registry, its TCA — has no command, and
-     * reading it means booting TYPO3 and asking the container. That happens
-     * here, in a subprocess, for the same reason every console call does: the
+     * installation knows, its icon registry, its TCA, has no command. A read of
+     * it means a boot of TYPO3 and a question to the container. That happens
+     * here, in a subprocess, for the same reason every console call does. The
      * installation's autoloader, its PHP version and its extensions stay on the
      * other side of a process boundary.
      *
-     * The code is delivered base64-encoded inside an `eval`, and that is not
+     * The code travels base64-encoded inside an `eval`, and that is not
      * decoration. `ddev exec` joins its arguments and hands the line to bash,
-     * so a payload travels through one shell whose quoting nobody controls
-     * from here; an encoded one carries no character that shell could act on.
+     * so a payload travels through one shell whose quotes nobody controls from
+     * here. An encoded one carries no character that shell could act on.
      *
      * @return array{ok: bool, exitCode: int, output: string, error: string}
      */
@@ -356,11 +356,11 @@ final class Typo3Cli
     /**
      * The same way in, pointed at PHP itself rather than at the console.
      *
-     * A stated console is a transport plus a binary — `ddev exec .build/bin/typo3`,
-     * `docker compose exec web bin/typo3` — and the transport is what this
-     * server could never have worked out on its own. So the transport is kept
-     * and the binary is exchanged, which is the opposite of answering from
-     * somewhere the caller did not name: it is the same machine, the same
+     * A stated console is a transport plus a binary, `ddev exec
+     * .build/bin/typo3`, `docker compose exec web bin/typo3`. The transport is
+     * what this server could never have worked out on its own. So the transport
+     * stays and the binary changes, which is the opposite of an answer from
+     * somewhere the caller did not name. It is the same machine, the same
      * container, one program along.
      *
      * @param array{command: array<int, string>, via: string, php: string} $invocation
@@ -376,8 +376,8 @@ final class Typo3Cli
         }
 
         $command = $invocation['command'];
-        // An invocation with nothing to run is not one an interpreter can be
-        // taken out of, and every read below assumes there is a first word.
+        // An invocation with nothing to run is not one an interpreter can come
+        // out of, and every read below assumes there is a first word.
         if ($command === []) {
             return null;
         }
@@ -398,14 +398,14 @@ final class Typo3Cli
      * Runs a command that speaks JSON and returns what it decoded.
      *
      * Some commands print a SymfonyStyle title before the payload and some
-     * answer with a bare scalar, so the payload is looked for rather than
-     * assumed to start at the first byte or at a brace.
+     * answer with a bare scalar. So a search finds the payload rather than an
+     * assumption that it starts at the first byte or at a brace.
      *
-     * What was printed is handed back whether or not it decoded, because the
-     * exit code cannot tell a caller which of two things happened when no
-     * payload arrived. A console that exits 0 without one may have said "there
-     * is nothing" in its own words, or may have said nothing at all — and only
-     * the caller knows what its command prints in the first case.
+     * What the console printed comes back whether or not it decoded. The exit
+     * code cannot tell a caller which of two things happened when no payload
+     * arrived. A console that exits 0 without one may have said "there is
+     * nothing" in its own words, or may have said nothing at all. Only the
+     * caller knows what its command prints in the first case.
      *
      * @param array<int, string> $arguments
      * @return array{ok: bool, data: mixed, error: string, exitCode: int, output: string}
@@ -465,18 +465,18 @@ final class Typo3Cli
     }
 
     /**
-     * The command the caller stated, before anything is worked out.
+     * The command the caller stated, before any discovery.
      *
-     * Autodiscovery is a chain — a binary at a known path, then DDEV, then an
-     * interpreter that satisfies the platform — and every link is something
-     * about a machine this server does not control. When one breaks there is
-     * nothing left to try, and five tools go quiet over a layout its owner
-     * could have described in a sentence: TYPO3_DEV_COMPANION_CONSOLE="ddev exec
-     * .build/bin/typo3". Lando, a compose stack, a container this server has
-     * never heard of are then all one setting rather than a feature request.
+     * Discovery is a chain, a binary at a known path, then DDEV, then an
+     * interpreter that satisfies the platform. Every link is something about a
+     * machine this server does not control. When one breaks nothing remains to
+     * try, and five tools go quiet over a layout its owner could have described
+     * in a sentence. TYPO3_DEV_COMPANION_CONSOLE="ddev exec .build/bin/typo3".
+     * Lando, a compose stack, a container this server has never heard of are
+     * then all one setting rather than a feature request.
      *
-     * The command is run as given, never through a shell, so quoting a
-     * multi-word argument is all the syntax there is.
+     * The command runs as given, never through a shell, so quotes around a
+     * multi-word argument are all the syntax there is.
      *
      * @return array{0: array{command: array<int, string>, via: string, php: string}|null, 1: string}
      */
@@ -492,9 +492,9 @@ final class Typo3Cli
             return [null, sprintf('%s is set but empty', self::CONSOLE_VARIABLE)];
         }
 
-        // Only that the program exists is checked here, not that it answers:
-        // running it to find out would put a subprocess in front of every
-        // lookup, and a wrong argument surfaces as the failing call it is.
+        // Only that the program exists counts here, not that it answers. A run
+        // to find out would put a subprocess in front of every lookup, and a
+        // wrong argument surfaces as the failed call it is.
         $program = $command[0];
         $found = str_contains($program, '/') ? is_file($program) : self::locateBinary($program) !== null;
         if (!$found) {
@@ -509,8 +509,8 @@ final class Typo3Cli
     }
 
     /**
-     * Splits a command line into arguments, honouring quotes. proc_open is
-     * given an array and runs no shell, so nothing else in a shell's syntax
+     * Splits a command line into arguments, with respect for quotes. proc_open
+     * gets an array and runs no shell, so nothing else in a shell's syntax
      * would do anything here.
      *
      * @return array<int, string>
@@ -531,10 +531,10 @@ final class Typo3Cli
     }
 
     /**
-     * DDEV first: the project declares the PHP version it needs and DDEV has
-     * it, while this machine may not. A paused or stopped project is reported
-     * rather than started — an agent asking about a label must not bring
-     * containers up as a side effect.
+     * DDEV first. The project declares the PHP version it needs and DDEV has
+     * it, while this machine may not. A paused or stopped project goes into the
+     * report rather than starts. An agent that asks about a label must not
+     * bring containers up as a side effect.
      *
      * @return array{0: array{command: array<int, string>, via: string, php: string}|null, 1: string}
      */
@@ -543,11 +543,11 @@ final class Typo3Cli
         if (!is_file($root . '/.ddev/config.yaml')) {
             return [null, ''];
         }
-        // The server may itself have been started with `ddev exec`. There is
-        // deliberately no nested DDEV binary in the web container; the direct
-        // PHP process is already the project's declared runtime and reaches its
-        // services. Treating the missing host-side binary as a stopped project
-        // adds a false database caveat to an otherwise fully ready console.
+        // The server may itself have started with `ddev exec`. There is no
+        // nested DDEV binary in the web container, on purpose. The direct PHP
+        // process is already the project's declared runtime and reaches its
+        // services. The absent host-side binary read as a stopped project adds
+        // a false database caveat to an otherwise ready console.
         if (filter_var(getenv('IS_DDEV_PROJECT'), FILTER_VALIDATE_BOOL)) {
             return [null, ''];
         }
@@ -582,8 +582,8 @@ final class Typo3Cli
 
     /**
      * Directly, with an interpreter that satisfies what the installation
-     * declares. Composer pins the platform, so running the console with a PHP
-     * below it aborts in platform_check.php before TYPO3 is even reached.
+     * declares. Composer pins the platform, so a run of the console with a PHP
+     * below it aborts in platform_check.php before it even reaches TYPO3.
      *
      * @return array{0: array{command: array<int, string>, via: string, php: string}|null, 1: string}
      */
@@ -627,12 +627,12 @@ final class Typo3Cli
      * Where the console may sit, what the installation declares first.
      *
      * Composer's default bin-dir is vendor/bin, so an installation that
-     * declares nothing is probed exactly as before. One that declares
-     * `"bin-dir": ".build/bin"` — the layout the TYPO3 extension testing setup
-     * produces, and with it a large share of the published extensions — has its
-     * console there and nowhere else, and probing only the default meant every
-     * question the installation alone can answer came back unanswered in a
-     * checkout whose console was one directory away.
+     * declares nothing gets the probe exactly as before. One that declares
+     * `"bin-dir": ".build/bin"` has its console there and nowhere else. That is
+     * the layout the TYPO3 extension test setup produces, and with it a large
+     * share of the published extensions. A probe of only the default meant
+     * every question the installation alone can answer came back empty. That
+     * was in a checkout whose console was one directory away.
      *
      * @return array<int, string>
      */
@@ -650,14 +650,14 @@ final class Typo3Cli
     /**
      * The bin directory the installation declares, relative to its root.
      *
-     * Composer expands `$vendor-dir` inside bin-dir, so that spelling is
-     * expanded here too. It also accepts an absolute bin-dir and puts the
-     * binaries there — verified with Composer 2.9.5 against a project
-     * declaring one — so an absolute declaration below the root is expressed
-     * relative to it rather than dropped: it is the same directory the
-     * relative spelling names, and the console is reached the same way. One
-     * outside the root has no relative form, and the invocation has to have
-     * one — inside a DDEV container the host path would not exist anyway.
+     * Composer expands `$vendor-dir` inside bin-dir, so that form expands here
+     * too. It also accepts an absolute bin-dir and puts the binaries there,
+     * verified with Composer 2.9.5 against a project that declares one. So an
+     * absolute declaration below the root turns relative to it rather than
+     * drops out. It is the same directory the relative form names, and the
+     * console answers the same way. One outside the root has no relative form,
+     * and the invocation has to have one. Inside a DDEV container the host path
+     * would not exist anyway.
      *
      * `Installer` asks the same question about a different binary: where this
      * server's own entrypoint sits once a project has required it. One rule,
@@ -673,11 +673,11 @@ final class Typo3Cli
     }
 
     /**
-     * What to add where nothing was installed rather than installed elsewhere.
+     * What to add where nothing has installed rather than installed elsewhere.
      *
-     * A checkout whose dependencies were never installed has no autoloader
-     * either, and a reason naming only the empty paths reads as a property of
-     * the checkout: the core monorepo declares `bin-dir: bin` and answers every
+     * A checkout whose dependencies never installed has no autoloader either. A
+     * reason that names only the empty paths reads as a property of the
+     * checkout. The core monorepo declares `bin-dir: bin` and answers every
      * installation-backed tool once `composer install` has run in it.
      */
     private static function withoutDependencies(string $root): string
@@ -694,10 +694,10 @@ final class Typo3Cli
     }
 
     /**
-     * What to add to "no console was found" when the installation declares a
-     * bin directory outside its root. Without it the caller reads a list of
-     * two default paths while its own composer.json names a third, and nothing
-     * says the declaration was read at all.
+     * What to add to "no console turned up" when the installation declares a
+     * bin directory outside its root. Without it the caller reads a list of two
+     * default paths while its own composer.json names a third. Nothing says the
+     * declaration got a read at all.
      */
     private static function unreachableBinDirectory(string $root): string
     {
@@ -715,7 +715,7 @@ final class Typo3Cli
 
     /**
      * The bin directory as the manifest spells it, absolute declaration and
-     * all, so a console that cannot be reached can still be named.
+     * all, so a console out of reach still has a name.
      */
     private static function declaredBinDirectory(string $root): ?string
     {
@@ -743,11 +743,11 @@ final class Typo3Cli
     /**
      * The installation's autoloader, relative to its root.
      *
-     * Relative because the two sides of DDEV do not share absolute paths: the
+     * Relative because the two sides of DDEV do not share absolute paths. The
      * subprocess starts in the root, and inside the container that same root is
-     * /var/www/html. An absolute vendor directory is treated like an absolute
-     * bin directory: expressed relative to the root where it is below it, and
-     * left at the default where no relative form exists.
+     * /var/www/html. An absolute vendor directory counts like an absolute bin
+     * directory. Relative to the root where it is below it, and at the default
+     * where no relative form exists.
      */
     public static function autoloader(string $root): string
     {
@@ -763,8 +763,8 @@ final class Typo3Cli
 
     /**
      * An absolute path as the root sees it, or null when it is not below the
-     * root at all. Both sides are resolved, because a declaration is written by
-     * hand while the root has been through realpath().
+     * root at all. Both sides resolve, because a declaration comes by hand
+     * while the root has been through realpath().
      */
     private static function belowRoot(string $root, string $path): ?string
     {
@@ -775,28 +775,28 @@ final class Typo3Cli
     }
 
     /**
-     * The lowest PHP the installation accepts: the pinned Composer platform
-     * first, then what the install itself was resolved to, then the root's own
+     * The lowest PHP the installation accepts. The pinned Composer platform
+     * first, then what the install itself resolved to, then the root's own
      * requirement.
      *
      * The manifest alone was not enough, and the base distribution is why. Its
-     * `composer.json` carries `"platform": {}` and no `require.php` at all —
-     * the PHP bound lives in the packages it pulls in, not in the file that
-     * pulls them — so this read `null`, every interpreter satisfied it, and
-     * host PHP 8.3 was accepted for an installation whose dependencies require
-     * 8.5.0. `typo3_server_scope` then reported that console reachable while
-     * every boot through it aborted in Composer's own platform check.
+     * `composer.json` carries `"platform": {}` and no `require.php` at all. The
+     * PHP bound lives in the packages it pulls in, not in the file that pulls
+     * them. So this read `null`, every interpreter satisfied it, and host PHP
+     * 8.3 passed for an installation whose dependencies require 8.5.0.
+     * `typo3_server_scope` then reported that console reachable while every
+     * boot through it aborted in Composer's own platform check.
      *
      * That check is where the bound actually is, and `Instance` is what reads
      * it out of the install.
      *
-     * It goes above `require.php` and below the pin, which is what each of the
-     * three knows. `config.platform.php` is what Composer resolves against and
-     * will resolve against again, and the generated check cannot be higher than
-     * it in an install that check came out of. `require.php` is the root
-     * package's own bound and says nothing about the twenty-five packages it
-     * requires, so it is the weakest of the three and only answers where
-     * nothing has been installed to read.
+     * It goes above `require.php` and below the pin, which follows from what
+     * each of the three knows. `config.platform.php` is what Composer resolves
+     * against and will resolve against again. The generated check cannot be
+     * higher than it in an install that check came out of. `require.php` is the
+     * root package's own bound and says nothing about the twenty-five packages
+     * it requires. So it is the weakest of the three and only answers where
+     * nothing has installed to read.
      */
     private static function requiredPhpVersion(string $root): ?string
     {
@@ -822,7 +822,7 @@ final class Typo3Cli
 
     /**
      * What the installation declares about itself. Its manifest answers both
-     * where the console is and which PHP may run it, so it is read in one place.
+     * where the console is and which PHP may run it, so one place reads it.
      *
      * @return array<string, mixed>
      */
@@ -884,9 +884,9 @@ final class Typo3Cli
     {
         $result = self::runner()->run($command, $workingDirectory, self::TIMEOUT_SECONDS);
 
-        // The error is trimmed here rather than in the runner: what a caller of
-        // this class does with it is put into an answer a client reads, and a
-        // trailing newline in one of those is a blank line in a tool result.
+        // The error trims here rather than in the runner. A caller of this
+        // class puts it into an answer a client reads. A newline at the end of
+        // one of those is a blank line in a tool result.
         $result['error'] = trim($result['error']);
 
         return $result;

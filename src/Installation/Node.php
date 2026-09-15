@@ -9,18 +9,17 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 
 /**
  * Which Node the npm half of a repository's declared commands runs on, read
- * from the four files that state one: `package.json` a range, an `.nvmrc` a
+ * from the four files that state one. `package.json` a range, an `.nvmrc` a
  * pin, an `actions/setup-node` step what CI installs, a DDEV project what its
  * container runs.
  *
- * The first two are read wherever the repository keeps its manifest, and the
- * answer names the file each came from — a core-shaped checkout declares both
- * of them in `Build/` and nothing at its root.
+ * The first two come from wherever the repository keeps its manifest, and the
+ * answer names the file each came from. A core-shaped checkout declares both of
+ * them in `Build/` and nothing at its root.
  *
- * Read outright or not at all — `R-PRJ-013`. A version a matrix or another
- * file decides is stated back as the workflow writes it, because the caller
- * reads that workflow in one call and a resolved wrong number would carry this
- * answer's authority.
+ * Read outright or not at all, `R-PRJ-013`. A version a matrix or another file
+ * decides comes back as the workflow writes it. The caller reads that workflow
+ * in one call, and a resolved wrong number would carry this answer's authority.
  */
 final class Node
 {
@@ -28,11 +27,11 @@ final class Node
     private const SETUP_NODE = '#^actions/setup-node(@|$)#i';
 
     /**
-     * A version stated outright: `24`, `24.19`, `v24.19.0`, and the trailing
-     * wildcard that means any release of what stands before it.
+     * A version stated outright: `24`, `24.19`, `v24.19.0`, and the wildcard at
+     * the end that means any release of what stands before it.
      *
-     * Everything else is left unread — `lts/*`, `latest`, a `>=20` that
-     * installs whatever is newest, and every `${{ }}` expression.
+     * Everything else stays unread: `lts/*`, `latest`, a `>=20` that installs
+     * whatever is newest, and every `${{ }}` expression.
      */
     private const STATED_VERSION = '/^v?(\d+(?:\.\d+)*?)(?:\.(?:x|\*))?$/i';
 
@@ -40,9 +39,8 @@ final class Node
      * What each source says, and where they stand to each other.
      *
      * Null where this repository says nothing about Node anywhere and has no
-     * `package.json` to run one — there is no npm surface, and a sentence
-     * about the interpreter of commands that do not exist is cost with no
-     * reader.
+     * `package.json` to run one. There is no npm surface, and a sentence about
+     * the interpreter of commands that do not exist is cost with no reader.
      *
      * @param ?string $environment what the environment states, where it does
      * @return array{
@@ -92,14 +90,14 @@ final class Node
     }
 
     /**
-     * The directories a declaration is read from, relative to the root and
-     * ending in a slash where it is not the root itself.
+     * The directories a declaration comes from, relative to the root and with a
+     * slash at the end where it is not the root itself.
      *
      * The root always, because an `.nvmrc` is what a version manager here
-     * selects whether or not a manifest sits beside it, and the directory of
-     * every npm manifest after it. The first statement of each of the two
-     * files is the one that holds, so a root manifest answers for a repository
-     * that has one and `Build/` answers for the core's layout.
+     * selects whether or not a manifest sits beside it. Then the directory of
+     * every npm manifest after it. The first statement of each of the two files
+     * is the one that holds. So a root manifest answers for a repository that
+     * has one and `Build/` answers for the core's layout.
      *
      * @param array<int, string> $manifests
      * @return array<int, string>
@@ -121,12 +119,12 @@ final class Node
      * How the numbers stand to each other, against the one this repository
      * declares for itself.
      *
-     * The pin is that number where there is one, because `.nvmrc` is what a
-     * machine's own version manager reads and what a run is therefore executed
-     * on; the range's floor answers for it where there is none. Whichever wins
-     * is named by the file it was read from, which is not the same file in
-     * every repository. Null where neither can be read — nothing declared is a
-     * state to say in words, not one to relate three numbers to.
+     * The pin is that number where there is one. `.nvmrc` is what a machine's
+     * own version manager reads and so what a run executes on. The range's
+     * floor answers for it where there is none. Whichever wins carries the name
+     * of the file it came from, which is not the same file in every repository.
+     * Null where neither reads. Nothing declared is a state to say in words,
+     * not one to relate three numbers to.
      *
      * @param array<int, array{workflow: string, from: string, states: string, version: ?string}> $ci
      * @return array{declared: string, declaredBy: string, nvmrcAgainstEngines: ?string, inEnvironment: ?string, ci: ?string, inCi: ?string}|null
@@ -147,7 +145,7 @@ final class Node
         }
 
         $inEnvironment = self::version($environment);
-        // Several workflows agreeing are one answer; several disagreeing are a
+        // Several workflows in agreement are one answer. Several at odds are a
         // finding the list above carries, and no single relation states it.
         $stated = array_values(array_unique(array_filter(array_column($ci, 'version'))));
 
@@ -165,7 +163,7 @@ final class Node
      * What `.nvmrc` says, as it says it.
      *
      * One line and nothing else is the whole format nvm reads, and an alias is
-     * as legitimate a content as a number: `lts/iron` is kept and left unread,
+     * as legitimate a content as a number. `lts/iron` stays and stays unread,
      * because what it resolves to is a list nvm downloads rather than anything
      * in this repository.
      */
@@ -183,9 +181,9 @@ final class Node
      * Every `actions/setup-node` step below `.github/workflows/`, with what it
      * states.
      *
-     * One entry per distinct statement rather than per step: a matrix of five
-     * jobs setting the same version up is one fact about this repository, and
-     * five lines saying it are five lines.
+     * One entry per distinct statement rather than per step. A matrix of five
+     * jobs that set the same version up is one fact about this repository. Five
+     * lines that say it are five lines.
      *
      * @return array<int, array{workflow: string, from: string, states: string, version: ?string}>
      */
@@ -215,9 +213,9 @@ final class Node
     /**
      * What one step sets Node up with, or null where it is not that step.
      *
-     * A step stating neither input is not a step stating nothing: it installs
-     * whatever the runner image ships, which is a version this repository does
-     * not decide and the next runner image changes.
+     * A step that states neither input is not a step that states nothing. It
+     * installs whatever the runner image ships, which is a version this
+     * repository does not decide and the next runner image changes.
      *
      * @param array<mixed> $step
      * @return array{from: string, states: string, version: ?string}|null

@@ -5,34 +5,33 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Installation;
 
 /**
- * Reads the keys of the array a TYPO3 declaration file returns, without running
- * it.
+ * Reads the keys of the array a TYPO3 declaration file returns, and runs
+ * nothing.
  *
  * Configuration/Icons.php, Configuration/Backend/Modules.php and
- * Configuration/RequestMiddlewares.php all have the same shape: a file whose
- * whole content is `return [ 'identifier' => [...], ... ];`, and the identifiers
- * are what a caller asks for. Including such a file would load somebody else's
- * code into this process, which is the one thing this server never does — so the
- * file is tokenised and the keys at the wanted nesting level are taken from the
- * token stream.
+ * Configuration/RequestMiddlewares.php all have the same shape. A file whose
+ * whole content is `return [ 'identifier' => [...], ... ];`, and the
+ * identifiers are what a caller asks for. An include of such a file would load
+ * somebody else's code into this process, which is the one thing this server
+ * never does. So a tokenizer reads the file and the keys at the wanted level
+ * come out of the token stream.
  *
  * The keys of *that* literal and of no other. A file is free to hold more than
  * one array, and the extra ones sit at the same bracket depth as the returned
- * one — an `Icons.php` that builds its list in a `foreach` writes
- * `['provider' => …, 'source' => …]` once, and reading every literal at a depth
- * reports `provider` as an icon. Where the file returns something a reader
- * cannot resolve — a variable the loop filled — nothing is returned, because an
- * empty list reads as "not determinable" and a wrong identifier reads as a
- * registration.
+ * one. An `Icons.php` that builds its list in a `foreach` writes `['provider'
+ * => …, 'source' => …]` once. A read of every literal at a depth reports
+ * `provider` as an icon. Where the file returns something a reader cannot
+ * resolve, a variable the loop filled, nothing comes back. An empty list reads
+ * as "not determinable" and a wrong identifier reads as a registration.
  */
 final class PhpArray
 {
     /**
      * The array keys at $level of the array literal $file returns.
      *
-     * Level 1 is the outermost array — the icon identifiers, the module
-     * identifiers — and level 2 the entries below each of them, which is where
-     * a middleware identifier sits under its request scope.
+     * Level 1 is the outermost array, the icon identifiers, the module
+     * identifiers. Level 2 is the entries below each of them, which is where a
+     * middleware identifier sits under its request scope.
      *
      * @return array<int, string>
      */
@@ -53,7 +52,7 @@ final class PhpArray
                 continue;
             }
             if ($token === ']') {
-                // The literal is closed; whatever follows it is another array.
+                // The literal has closed; whatever follows it is another array.
                 if (--$depth === 0) {
                     break;
                 }
@@ -71,15 +70,16 @@ final class PhpArray
     }
 
     /**
-     * Whether the file is there and returns something other than a literal — so
-     * its entries do not stand in its text and exist only once it has run.
+     * Whether the file is there and returns something other than a literal. Its
+     * entries then do not stand in its text and exist only once it has run.
      *
-     * The empty list `keys()` answers with says two different things: the file
+     * The empty list `keys()` answers with says two different things. The file
      * is not there, or it is there and assembles its list while it runs. A
-     * caller that omits an empty section reports both as silence, and a reader
+     * caller that omits an empty section reports both as silence. A reader
      * cannot tell "this extension registers no icons" from "its Icons.php is a
      * foreach". This separates them, and is false for a file that returns `[]`
-     * outright: that one was read, and what it says is that there is nothing.
+     * outright. That one had its read, and what it says is that there is
+     * nothing.
      */
     public static function assembledAtRuntime(string $file): bool
     {
@@ -102,7 +102,7 @@ final class PhpArray
      * The index of the `[` the file returns, or null when it returns anything
      * else.
      *
-     * The return that counts is the one at the top level of the file: a return
+     * The return that counts is the one at the top level of the file. A return
      * inside a closure or a function belongs to that closure, and the literal
      * next to it is not what the file is worth.
      *
@@ -113,7 +113,7 @@ final class PhpArray
         $braces = 0;
         foreach ($tokens as $index => $token) {
             // The two interpolation tokens open a brace a plain `}` closes, so
-            // counting them keeps the depth balanced across "{$a['b']}".
+            // a count of them keeps the depth balanced across "{$a['b']}".
             if ($token === '{' || (is_array($token) && in_array($token[0], [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], true))) {
                 ++$braces;
                 continue;

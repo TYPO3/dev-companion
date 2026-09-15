@@ -10,14 +10,14 @@ use Symfony\Component\Yaml\Yaml;
  * The JSON and YAML an installation ships, decoded — or nothing where the file
  * will not decode.
  *
- * A manifest or a configuration file that is mid-edit is a state a repository
- * is genuinely in, and one unreadable file must not cost the rest of the
- * answer: the caller reads a key out of what comes back and gets the same
- * nothing it gets for a key that was never there.
+ * A manifest or a configuration file mid-edit is a state a repository is in for
+ * real, and one unreadable file must not cost the rest of the answer. The
+ * caller reads a key out of what comes back and gets the same nothing it gets
+ * for a key that was never there.
  *
- * Here rather than three times over, which is where it was: `Node`, `Project`
- * and `Extension` each had both readers, and the copies had already drifted —
- * one of the three guarded the YAML with `is_file()` and two left it to the
+ * Here rather than three times over, which is where it was. `Node`, `Project`
+ * and `Extension` each had both readers, and the copies had already drifted.
+ * One of the three guarded the YAML with `is_file()` and two left it to the
  * parser to throw.
  */
 final class Data

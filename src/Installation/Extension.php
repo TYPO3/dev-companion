@@ -10,41 +10,40 @@ use Symfony\Component\Finder\Finder;
  * What one installed extension registers, read from its own files.
  *
  * typo3_project_describe names the extensions and where they are. A maintenance
- * question is almost never about that — it is about what is inside one of them:
- * which tables its TCA defines and which it extends, which backend modules and
- * icons it brings, which site sets it ships, what it hangs into the container.
- * Most of that is declarative and sits in files with fixed names, so it is
- * readable without a console and without a database, the same way the sites are.
- * What is not declarative is asked of the installation instead: `Typo3Runtime`
- * boots it in a subprocess and reads the registries, because a table added by a
- * PHP call, a content element whose identifier came out of a variable and an
- * icon list built in a `foreach` exist in no file a reader could follow. Those
- * three are attributed back to this extension by the `EXT:<key>/` reference the
- * entry itself carries; where the boot did not happen, the files answer and the
- * answer says so.
+ * question is almost never about that. It is about what is inside one of them.
+ * Which tables its TCA defines and which it extends, which backend modules and
+ * icons it brings. Which site sets it ships, what it hangs into the container.
+ * Most of that is declarative and sits in files with fixed names. So it is
+ * readable without a console and without a database, the same way the sites
+ * are. What is not declarative comes from the installation instead.
+ * `Typo3Runtime` boots it in a subprocess and reads the registries. A table
+ * added by a PHP call, a content element whose identifier came out of a
+ * variable, an icon list built in a `foreach`. None of them exists in a file a
+ * reader could follow. The `EXT:<key>/` reference the entry itself carries
+ * attributes those three back to this extension. Where the boot did not happen,
+ * the files answer and the answer says so.
  *
- * Nothing is included or executed here. The declaration files are tokenised for
- * their keys (see PhpArray) and the YAML is parsed; where the extension's own
- * code runs, it runs in TYPO3's process, not in this one.
+ * Nothing here includes or executes a file. A tokenizer reads the declaration
+ * files for their keys (see PhpArray) and a parser reads the YAML. Where the
+ * extension's own code runs, it runs in TYPO3's process, not in this one.
  */
 final class Extension
 {
     /**
      * The files core reads from a site set directory by exact name.
      *
-     * `config.yaml` is not among them: it is what makes the directory a set,
-     * so it is always there and saying so tells a reader nothing. The rest are
-     * optional and each one is a registration — `YamlSetDefinitionProvider`
-     * reads the first four, and the last four are the defaults
-     * `typoscript`, `pagets` and `labels` fall back to when the set declares
-     * none of its own.
+     * `config.yaml` is not among them. It is what makes the directory a set, so
+     * it is always there and a line about it tells a reader nothing. The rest
+     * are optional and each one is a registration. `YamlSetDefinitionProvider`
+     * reads the first four. The last four are the defaults `typoscript`,
+     * `pagets` and `labels` fall back to when the set declares none of its own.
      */
     private const SET_FILES = [
         'settings.definitions.yaml', 'settings.yaml', 'route-enhancers.yaml', 'labels.xlf',
         'page.tsconfig', 'constants.typoscript', 'setup.typoscript', 'include_static_file.txt',
     ];
 
-    /** Files an extension is recognised by, each one a registration point. */
+    /** Files that mark an extension, each one a registration point. */
     private const ROOT_FILES = [
         'ext_localconf.php', 'ext_tables.php', 'ext_tables.sql', 'ext_emconf.php',
         'Configuration/page.tsconfig', 'Configuration/user.tsconfig',
@@ -120,10 +119,10 @@ final class Extension
             'composerName' => isset($manifest['name']) ? (string) $manifest['name'] : null,
             'description' => isset($manifest['description']) ? (string) $manifest['description'] : null,
             'requires' => $requires,
-            // A file below Configuration/TCA/ is named after the table it
-            // defines. A file below Overrides/ is not: extensions number them
-            // to fix their load order, so which table it extends is read from
-            // what the file does — see overrides().
+            // A file below Configuration/TCA/ has the name of the table it
+            // defines. A file below Overrides/ does not. Extensions number them
+            // to fix their load order, so which table it extends comes from
+            // what the file does, see overrides().
             'tcaTables' => self::tcaTables($key, $path),
             'tcaOverrides' => $overrides['tables'],
             'contentElements' => $elements,
@@ -160,10 +159,10 @@ final class Extension
      * The same verdict for an extension nobody asked about by key.
      *
      * `typo3_project_describe` volunteers it for the extensions inside the
-     * repository, so a session that never calls `typo3_extension_describe` is
-     * still told which of the files it ships core has stopped reading —
-     * `D-ANS-009`. Reading the manifest and the file listing again is what a
-     * path alone buys; everything else `describe()` computes stays uncomputed.
+     * repository. So a session that never calls `typo3_extension_describe`
+     * still hears which of the files it ships core has stopped to read,
+     * `D-ANS-009`. A second read of the manifest and the file listing is what a
+     * path alone buys; everything else `describe()` computes stays out.
      *
      * @return array<int, array{file: string, changelog: string, predicate: string, cost: string}>
      */
@@ -178,13 +177,13 @@ final class Extension
      * Everything above this answers what the extension registers, which a
      * caller can only ever find more of by reading further. These four are the
      * ones whose *absence* is the answer, and absence has no file to stumble
-     * over: a review that lists the tree cannot see a manual nobody wrote. Each
-     * key is therefore always present, null or empty where the artifact is not
-     * there, so a caller can tell "looked for and missing" from "not looked
+     * over. A review that lists the tree cannot see a manual nobody wrote. So
+     * each key is always present, null or empty where the artifact is not
+     * there. A caller can then tell "looked for and absent" from "not looked
      * for".
      *
-     * The source language is a fact about the file and is reported as one. What
-     * it ought to be is a convention and stays in the knowledge base.
+     * The source language is a fact about the file and reports as one. What it
+     * ought to be is a convention and stays in the knowledge base.
      *
      * @return array{manual: ?string, readme: ?string, tests: array<int, string>, languageFiles: array<int, array{path: string, sourceLanguage: ?string, translations: array<int, string>}>}
      */
@@ -192,7 +191,7 @@ final class Extension
     {
         $manual = self::firstFile($path, ['Documentation/Index.rst', 'Documentation/index.rst']);
         if ($manual === null && is_dir($path . '/Documentation')) {
-            // A manual whose entry point is missing is not the same as no
+            // A manual whose entry point is absent is not the same as no
             // manual, and the difference is the finding.
             $manual = 'Documentation/';
         }
@@ -215,9 +214,10 @@ final class Extension
     /**
      * The XLF files it ships, each with the language its own header declares.
      *
-     * A locale-prefixed file is the translation of the one beside it — de.foo.xlf
-     * belongs to foo.xlf — so it is listed there rather than as a file of its
-     * own, which is also the shape that makes a missing translation visible.
+     * A file with a locale prefix is the translation of the one beside it,
+     * de.foo.xlf belongs to foo.xlf. So it stands there rather than as a file
+     * of its own, which is also the shape that makes an absent translation
+     * visible.
      *
      * @return array<int, array{path: string, sourceLanguage: ?string, translations: array<int, string>}>
      */
@@ -268,8 +268,8 @@ final class Extension
 
     /**
      * Whether this is TYPO3's own, the project's, a dependency it pulled in, or
-     * a package its test setup ships — the same four the project scope draws,
-     * so the two answers agree.
+     * a package its test setup ships. The same four the project scope draws, so
+     * the two answers agree.
      */
     private static function origin(string $key, string $path): string
     {
@@ -283,9 +283,9 @@ final class Extension
     /**
      * ExtensionManagementUtility methods whose first argument is the table.
      *
-     * Deliberately only these: addStaticFile() and addPiFlexFormValue() take a
-     * first argument of exactly the same shape that is not a table, and a list
-     * of tables with an extension key in it is worse than a shorter list.
+     * Only these, on purpose. addStaticFile() and addPiFlexFormValue() take a
+     * first argument of exactly the same shape that is not a table. A list of
+     * tables with an extension key in it is worse than a shorter list.
      *
      * @var array<int, string>
      */
@@ -298,11 +298,11 @@ final class Extension
      * What the override files do: the tables they extend, and the content
      * elements they add.
      *
-     * The file name is no answer here — `102_tt_content.php` and
-     * `600_ext_container.php` are both ordinary — because the number is what
-     * fixes the order the overrides load in. What the file touches is either
+     * The file name is no answer here, `102_tt_content.php` and
+     * `600_ext_container.php` are both ordinary. The number is what fixes the
+     * order the overrides load in. What the file touches is either
      * $GLOBALS['TCA']['<table>'] or the first argument of one of the
-     * ExtensionManagementUtility calls above, and both survive tokenising.
+     * ExtensionManagementUtility calls above, and both survive the tokenizer.
      *
      * @return array{tables: array<int, string>, contentElements: array<int, string>, plugins: array<int, string>, flexForms: array<string, string>}
      */
@@ -321,8 +321,8 @@ final class Extension
             $found = self::declarationsIn((string) file_get_contents($file->getPathname()));
             $flexForms += $found['flexForms'];
             if ($found['tables'] === []) {
-                // Nothing recognisable: the conventional file name is the best
-                // that is left, and only where it looks like a table at all.
+                // Nothing recognisable. The conventional file name is the best
+                // that remains, and only where it looks like a table at all.
                 $name = $file->getBasename('.php');
                 $found['tables'] = preg_match('/^[a-z][a-z0-9_]*$/', $name) === 1 ? [$name] : [];
             }
@@ -369,8 +369,8 @@ final class Extension
 
             if ($token[0] === T_VARIABLE && $token[1] === '$GLOBALS') {
                 // Nine, because the longest subscript this reads is the one the
-                // v14 deprecation of addPiFlexFormValue() points at, and the
-                // value it assigns is the ninth literal before the semicolon.
+                // v14 deprecation of addPiFlexFormValue() points at. The value
+                // it assigns is the ninth literal before the semicolon.
                 $keys = self::followingStrings($tokens, $index, 9);
                 if (($keys[0] ?? '') === 'TCA' && isset($keys[1])) {
                     $tables[] = $keys[1];
@@ -388,10 +388,10 @@ final class Extension
             }
 
             if ($token[0] === T_STRING && $token[1] === 'addPiFlexFormValue') {
-                // The way in until v14.3, where it is deprecated. Its first
-                // argument was the plugin key and is now unused; the content
-                // type it binds to is the third, and the second is the data
-                // structure itself.
+                // The way in until v14.3, where it becomes deprecated. Its
+                // first argument was the plugin key and is now unused. The
+                // content type it binds to is the third, and the second is the
+                // data structure itself.
                 $arguments = self::arguments($tokens, $index);
                 $identifier = self::firstLiteral($arguments[2] ?? [], $variables);
                 $structure = self::dataStructure(self::firstLiteral($arguments[1] ?? [], $variables));
@@ -402,20 +402,18 @@ final class Extension
             }
 
             if ($token[0] === T_STRING && in_array($token[1], ['addPlugin', 'registerPlugin'], true)) {
-                // One handler, because both calls answer two questions at once
-                // and each of them used to have a reader of its own that ran
-                // first and returned.
-                //
-                // The binding: both take the data structure as an argument
-                // since v14.2, and it is where core binds its own from then on.
-                // Which argument it is differs, and so does where the identifier
-                // comes from — addPlugin() carries the select item,
+                // One handler, because both calls answer two questions at once.
+                // Each of them used to have a reader of its own that ran first
+                // and returned. The binding. Both take the data structure as an
+                // argument since v14.2, and it is where core binds its own from
+                // then on. Which argument it is differs, and so does where the
+                // identifier comes from. addPlugin() carries the select item,
                 // registerPlugin() composes the signature out of its first two.
-                //
-                // The kind: an Extbase plugin is a content element registered by
-                // a call of its own, and this is the only place it can stand.
-                // The identifier is neither argument but the signature both
-                // derive, which is what pluginSignature() already returns above.
+                // The kind: an Extbase plugin is a content element registered
+                // by a call of its own, and this is the only place it can
+                // stand. The identifier is neither argument but the signature
+                // both derive, which is what pluginSignature() already returns
+                // above.
                 $arguments = self::arguments($tokens, $index);
                 $isAddPlugin = $token[1] === 'addPlugin';
                 $identifier = $isAddPlugin
@@ -436,12 +434,12 @@ final class Extension
             if ($token[0] === T_STRING && $token[1] === 'addRecordType') {
                 $arguments = self::arguments($tokens, $index);
                 // The one registration call that does not name its table first
-                // and often does not name it at all: the table is the fifth
-                // argument and defaults to tt_content, which is what makes this
-                // the short way to register a content element on 13.4 and newer.
-                // Read positionally — a call that passes `table:` by name keeps
-                // the default here, the same way an identifier that is not a
-                // literal is left out rather than guessed.
+                // and often does not name it at all. The table is the fifth
+                // argument and defaults to tt_content. That is what makes this
+                // the short way to register a content element on 13.4 and
+                // newer. Read by position. A call that passes `table:` by name
+                // keeps the default here. An identifier that is not a literal
+                // stays out rather than gets a guess, the same way.
                 $table = self::firstLiteral($arguments[4] ?? [], $variables) ?? 'tt_content';
                 $tables[] = $table;
                 if ($table === 'tt_content') {
@@ -465,9 +463,9 @@ final class Extension
             $tables[] = $table;
 
             // A content element is an item of tt_content's CType. Every other
-            // select item this call adds is a value in some other field, and
-            // handing those over as content elements would be worse than the
-            // pointer at tt_content the answer already carried.
+            // select item this call adds is a value in some other field. Those
+            // as content elements would be worse than the pointer at tt_content
+            // the answer already carried.
             if (
                 $token[1] === 'addTcaSelectItem'
                 && $table === 'tt_content'
@@ -492,12 +490,12 @@ final class Extension
     }
 
     /**
-     * A FlexForm data structure argument, as it is worth reporting.
+     * A FlexForm data structure argument, as it is worth a report.
      *
      * Every method that takes one documents the same two forms: a reference to
-     * a file, or the XML itself. The reference is the answer — it names a file
-     * a reviewer opens — and the XML is a document rather than a fact about the
-     * registration, so it is reported as being there and not quoted.
+     * a file, or the XML itself. The reference is the answer, because it names
+     * a file a reviewer opens. The XML is a document rather than a fact about
+     * the registration, so the report says it is there and quotes nothing.
      */
     private static function dataStructure(?string $value): ?string
     {
@@ -516,9 +514,9 @@ final class Extension
      * composes it out of.
      *
      * `strtolower($extensionName) . '_' . strtolower($pluginName)`, on every
-     * covered major, after the extension name has had its underscores taken
-     * out — which is why `printworks_sitepackage` becomes
-     * `printworkssitepackage_catalogue` rather than keeping its underscore.
+     * covered major, after the extension name loses its underscores. That is
+     * why `printworks_sitepackage` becomes `printworkssitepackage_catalogue`
+     * rather than keeps its underscore.
      *
      * @param array<int, array<int, array{0: int, 1: string, 2: int}|string>> $arguments
      * @param array<string, string> $variables
@@ -537,18 +535,18 @@ final class Extension
     /**
      * The string variables a declaration file assigns to itself, once each.
      *
-     * A registration file is read and never executed, so a value that arrives
+     * A registration file gets a read and never a run. So a value that arrives
      * through a variable used to be a value this parser could not see. Most of
-     * them do not need executing: `$contentType = 'my_element';` at the top of a
-     * TCA override, used further down, is a plain literal that took a detour,
-     * and refusing it drops a whole content element from the answer.
+     * them need no run. `$contentType = 'my_element';` at the top of a TCA
+     * override, in use further down, is a plain literal that took a detour. A
+     * refusal drops a whole content element from the answer.
      *
-     * Two shapes are resolved — one assignment of a string literal, and one of
-     * a registerPlugin() call, which returns a signature it composes out of its
-     * own arguments. A variable assigned twice, or assigned anything else, is
-     * dropped rather than resolved to its first value: what it holds at the call
-     * depends on the order the file runs in, and that is the thing this parser
-     * deliberately does not know.
+     * Two shapes resolve. One assignment of a string literal, and one of a
+     * registerPlugin() call, which returns a signature it composes out of its
+     * own arguments. A variable assigned twice, or assigned anything else,
+     * drops out rather than resolves to its first value. What it holds at the
+     * call depends on the order the file runs in. That is the thing this parser
+     * does not know on purpose.
      *
      * @param array<int, array{0: int, 1: string, 2: int}|string> $tokens
      * @return array<string, string>
@@ -584,14 +582,14 @@ final class Extension
     }
 
     /**
-     * What an assignment puts into a variable, where reading can say what it is.
+     * What an assignment puts into a variable, where a read can say what it is.
      *
-     * The second shape is the one core writes itself: `$contentTypeName =
-     * ExtensionUtility::registerPlugin('Felogin', 'Login', …)`, used further
-     * down as the content type a FlexForm binds to. The signature is composed
-     * from arguments that stand in the file, so it is as readable as a literal
-     * — and refusing it drops the binding of every plugin registered the way
-     * core registers its own.
+     * The second shape is the one core writes itself. `$contentTypeName =
+     * ExtensionUtility::registerPlugin('Felogin', 'Login', …)`, in use further
+     * down as the content type a FlexForm binds to. The signature consists of
+     * arguments that stand in the file, so it is as readable as a literal. A
+     * refusal drops the binding of every plugin registered the way core
+     * registers its own.
      *
      * @param array<int, array{0: int, 1: string, 2: int}|string> $tokens
      */
@@ -635,12 +633,12 @@ final class Extension
     /**
      * The identifier the item array of an addTcaSelectItem() call carries.
      *
-     * Its shape changed inside the covered range: keyed by `value`, and
+     * Its shape changed inside the covered range. Keyed by `value`, and
      * positional before that, where the value is the second entry after the
-     * label. Both are read, because an extension is written for the line it
-     * supports rather than for the newest one. An item whose value comes from a
-     * constant, or from a variable this file assigns more than once, still has
-     * no identifier that reading can establish.
+     * label. Both count, because an extension serves the line it supports
+     * rather than the newest one. An item whose value comes from a constant
+     * still has no identifier a read can establish. Nor has one from a variable
+     * this file assigns more than once.
      *
      * @param array<int, array{0: int, 1: string, 2: int}|string> $item
      * @param array<string, string> $variables
@@ -762,8 +760,8 @@ final class Extension
     }
 
     /**
-     * The next $wanted string literals after $index, in order, stopping at the
-     * end of the subscript they belong to.
+     * The next $wanted string literals after $index, in order, up to the end of
+     * the subscript they belong to.
      *
      * @param array<int, array{0: int, 1: string, 2: int}|string> $tokens
      * @return array<int, string>
@@ -789,20 +787,18 @@ final class Extension
     /**
      * The content types this extension renders and does not register.
      *
-     * A sitepackage that takes the rendering frame over from
-     * `fluid_styled_content` ends up owning `tt_content.shortcut` while
-     * `EXT:frontend` still registers it, and the two questions — what does this
-     * package render, what does it register — stop having one answer. Deleting
-     * such a definition kills an element editors can still select, and nothing
-     * else in the package points at it (`D-ANS-149`).
+     * A sitepackage that takes the render frame over from
+     * `fluid_styled_content` ends up with `tt_content.shortcut` while
+     * `EXT:frontend` still registers it. A deletion of such a definition kills
+     * an element editors can still select, and nothing else in the package
+     * points at it (`D-ANS-149`).
      *
-     * The evidence is the assignment itself: a `tt_content.<identifier>` line
-     * in this extension's own TypoScript whose identifier is none of the
-     * elements it registers. Who does register it is the installation's to say,
-     * read off the `EXT:` reference in the CType's label the way every other
-     * attribution here is; null is a foreign identifier nothing could be asked
-     * about, and on a booted installation it is a definition for an element
-     * nothing registers at all.
+     * The evidence is a `tt_content.<identifier>` line in this extension's own
+     * TypoScript whose identifier is none of the elements it registers. Who
+     * does register it is the installation's to say, read off the `EXT:`
+     * reference in the CType's label. Null is a foreign identifier nothing
+     * could answer about, and on a booted installation a definition for an
+     * element nothing registers at all.
      *
      * @param array<string, array{value: string, file: string}> $typoScript
      * @param array<int, string> $registered the identifiers this extension registers
@@ -839,16 +835,16 @@ final class Extension
      * The template every Extbase plugin on the site renders through, where this
      * extension ships one.
      *
-     * `ExtensionUtility::configurePlugin()` writes
-     * `tt_content.<signature> =< lib.contentElement` with
-     * `templateName = Generic` for every plugin registered as a content type,
-     * so a package that defines `lib.contentElement` itself owes a `Generic`
-     * template beside it. Nothing in the package points at that file, which
-     * makes it the one most likely to be deleted as unused, and deleting it
-     * empties every plugin on the site — `EXT:form`'s content element included.
+     * `ExtensionUtility::configurePlugin()` writes `tt_content.<signature> =<
+     * lib.contentElement` with `templateName = Generic` for every plugin
+     * registered as a content type. So a package that defines
+     * `lib.contentElement` itself owes a `Generic` template beside it. Nothing
+     * in the package points at that file, which makes it the one most likely to
+     * go as unused. Its deletion empties every plugin on the site, `EXT:form`'s
+     * content element included.
      *
      * Its own list rather than a row of the one above, because it is not a
-     * content type: it is the frame all of them share.
+     * content type. It is the frame all of them share.
      */
     private static function pluginFrame(string $path): ?string
     {
@@ -867,13 +863,13 @@ final class Extension
      * The content elements it adds, each with the template it renders through
      * and the FlexForm it binds.
      *
-     * The template is this extension's own `templateName` under the identifier,
-     * and where it says nothing the template stays unknown rather than being
-     * derived from the identifier: a guessed file name sends the caller to a
-     * file that is not there. The FlexForm is on the entry because an element
-     * with one and an element without are different things to review. An Extbase
-     * plugin has nothing to be unknown about — its rendering definition is
-     * generated — so the kind is said instead and the answer points at
+     * The template is this extension's own `templateName` under the identifier.
+     * Where it says nothing the template stays unknown rather than derives from
+     * the identifier. A guessed file name sends the caller to a file that is
+     * not there. The FlexForm is on the entry because an element with one and
+     * an element without are different things to review. An Extbase plugin has
+     * nothing to be unknown about, because a generator writes its render
+     * definition. So the kind stands instead and the answer points at
      * `plugin.tx_<identifier>` (`D-ANS-015`).
      *
      * @param array<int, string> $identifiers
@@ -903,10 +899,10 @@ final class Extension
      * The file where this extension's TypoScript configures a plugin.
      *
      * `plugin.tx_<signature>` is the path Extbase reads a plugin's own
-     * configuration from, the signature being the same string as the CType, so
-     * the question needs no second source. Any line below it counts — the
-     * `view.templateRootPaths` a template is looked for in is one of several
-     * ways to arrive there, and a reference to a `lib.` object is the shortest.
+     * configuration from. The signature is the same string as the CType, so the
+     * question needs no second source. Any line below it counts. The
+     * `view.templateRootPaths` a template lives under is one of several ways to
+     * arrive there, and a reference to a `lib.` object is the shortest.
      *
      * @param array<string, array{value: string, file: string}> $typoScript
      */
@@ -925,10 +921,10 @@ final class Extension
     /**
      * The FlexForm bindings that found no content element to sit on.
      *
-     * Reading an override file for a binding and reading it for an identifier
-     * are two different parsers, and the second does not recognise every call
-     * the first does. Where they disagree the binding is reported here rather
-     * than dropped — `R-ANS-012`.
+     * A read of an override file for a binding and a read of it for an
+     * identifier are two different parsers. The second does not recognise every
+     * call the first does. Where they disagree the binding stands here rather
+     * than drops out, `R-ANS-012`.
      *
      * @param array<string, string> $flexForms
      * @param array<int, array{identifier: string, templateName: ?string, source: ?string, flexForm: ?string}> $elements
@@ -951,13 +947,13 @@ final class Extension
     /**
      * Every value this extension's TypoScript sets, by its full path.
      *
-     * Not a TypoScript parser: it tracks the nesting so that a value can be
-     * addressed however it was written — `tt_content.x.templateName = T`, a
-     * `tt_content.x { }` block, or a `tt_content { x { } }` one. A reference is
-     * held as the path it copies from rather than followed. Conditions are
-     * ignored rather than evaluated, so a value set only inside one reads as
-     * though it were set outright; the file it came from travels with it, which
-     * is where a caller checks that.
+     * Not a TypoScript parser. It tracks the levels so that a value has an
+     * address however the file writes it. `tt_content.x.templateName = T`, a
+     * `tt_content.x { }` block, or a `tt_content { x { } }` one. A reference
+     * stays as the path it copies from rather than gets a follow. Conditions do
+     * not count rather than evaluate, so a value set only inside one reads as
+     * though set outright. The file it came from travels with it, which is
+     * where a caller checks that.
      *
      * @return array<string, array{value: string, file: string}>
      */
@@ -984,9 +980,9 @@ final class Extension
                     $stack[] = $matches[1];
                     continue;
                 }
-                // The reference operators along with the assignment, because
+                // The reference operators along with the assignment.
                 // `plugin.tx_x < lib.y` is how a plugin usually arrives at its
-                // configuration and a path that only ever stands on the left of
+                // configuration. A path that only ever stands on the left of
                 // one is nowhere in a store of assignments alone.
                 if (preg_match('/^([\w.\-]+)\s*(=<|<|=)\s*(.*)$/', $line, $matches) !== 1) {
                     continue;
@@ -1007,9 +1003,9 @@ final class Extension
     }
 
     /**
-     * The TypoScript files it ships, from both places it can put them: the
-     * Configuration/TypoScript/ directory an extension is included from, and
-     * the site sets a site depends on.
+     * The TypoScript files it ships, from both places it can put them. The
+     * Configuration/TypoScript/ directory an extension includes from, and the
+     * site sets a site depends on.
      *
      * @return array<int, string>
      */
@@ -1035,8 +1031,8 @@ final class Extension
      * The site sets it ships, each with the files core reads it for.
      *
      * A set is a directory of files with fixed names, and which of them are
-     * there is what the set carries: settings and their definitions, route
-     * enhancers, labels, page TSconfig and TypoScript. Naming the directory
+     * there is what the set carries. Settings and their definitions, route
+     * enhancers, labels, page TSconfig and TypoScript. The directory's name
      * says where to look, which is the answer a caller already had.
      *
      * @return array<int, array{name: string, path: string, files: array<int, string>}>
@@ -1068,19 +1064,19 @@ final class Extension
      * The form configurations it registers, and the form definitions each one
      * stores.
      *
-     * Two ways in, and an extension supporting two majors ships both. Since
-     * v14.2 a directory below `Configuration/Form/` carrying a `config.yaml` is
-     * a form set and is collected without being registered anywhere — the same
+     * Two ways in, and an extension that supports two majors ships both. Since
+     * v14.2 a directory below `Configuration/Form/` with a `config.yaml` is a
+     * form set and counts without a registration anywhere. That is the same
      * convention site sets already work by, and `FormYamlCollectorConfigurator`
-     * is what walks it. Before that, and still read in v14.3, a YAML file is
-     * registered by TypoScript under `plugin.tx_form.settings.yamlConfigurations`
-     * or the `module.` one beside it, which is this extension's own TypoScript
-     * and is already parsed.
+     * is what walks it. Before that, and still in v14.3, TypoScript registers a
+     * YAML file under `plugin.tx_form.settings.yamlConfigurations` or the
+     * `module.` one beside it. That is this extension's own TypoScript and
+     * already parsed.
      *
      * Either file declares where the form definitions live, in
-     * `persistenceManager.allowedExtensionPaths`. The ones inside this extension
-     * are read; a storage in a file mount is a record rather than a file and is
-     * in no answer that reads files.
+     * `persistenceManager.allowedExtensionPaths`. The ones inside this
+     * extension count. A storage in a file mount is a record rather than a file
+     * and is in no answer that reads files.
      *
      * @param array<string, array{value: string, file: string}> $typoScript
      * @return array<int, array{path: string, name: ?string, registeredBy: string, storagePaths: array<int, string>, formDefinitions: array<int, string>}>
@@ -1175,9 +1171,9 @@ final class Extension
     /**
      * The tags this extension's services carry, deduplicated.
      *
-     * A tag is where an extension hangs itself into a core mechanism —
-     * data.processor, event.listener, console.command — so the list says what
-     * kind of extension this is in one line, without naming every service.
+     * A tag is where an extension hangs itself into a core mechanism,
+     * data.processor, event.listener, console.command. So the list says what
+     * kind of extension this is in one line, without a name for every service.
      *
      * @return array<int, string>
      */
@@ -1252,10 +1248,10 @@ final class Extension
     /**
      * The whole subtree, because a nested directory has no row of its own.
      *
-     * `Classes/Updates/Criteria/` is below a directory that is listed rather
-     * than beside it, so counting one level alone would leave its files out of
-     * that row. What the number covers is stated where it is rendered and in
-     * the schema, because a reader who counts one level gets a different one —
+     * `Classes/Updates/Criteria/` is below a directory in the list rather than
+     * beside it. So a count of one level alone would leave its files out of
+     * that row. What the number covers stands where it renders and in the
+     * schema, because a reader who counts one level gets a different one,
      * `D-ANS-008`.
      */
     private static function countPhpFiles(string $directory): int
@@ -1273,16 +1269,16 @@ final class Extension
     }
 
     /**
-     * The files it ships that core has stopped reading, or is stopping, and what
+     * The files it ships that core has stopped to read, or stops soon, and what
      * each costs.
      *
-     * The predicate is the file being there, plus what stands beside it that
-     * core reads first — `D-ANS-009`, which has the four and where each was
-     * read. Two are registration files `files` names already; the rest are read
-     * by nothing now, so they are a registration point nowhere and are checked
-     * here alone. A cost is stated with the version it starts at rather than
-     * filtered by the installation's, because an extension supporting two
-     * majors is read from both. A framework package is exempt from all four.
+     * The predicate is the file's presence, plus what stands beside it that
+     * core reads first. `D-ANS-009` has the four and where each came from. Two
+     * are registration files `files` names already. Nothing reads the rest now,
+     * so they are a registration point nowhere and this check alone covers
+     * them. A cost stands with the version it starts at rather than filters by
+     * the installation's, because an extension that supports two majors reads
+     * from both. A framework package stands outside all four.
      *
      * @param array<string, mixed> $manifest
      * @param array<int, string> $files
@@ -1296,10 +1292,10 @@ final class Extension
 
         $extra = $manifest['extra']['typo3/cms'] ?? null;
         $extra = is_array($extra) ? $extra : [];
-        // PackageManager::isComposerOnlyCapable(): providesPackages declared —
-        // an empty object counts, and is what an extension shipping no Composer
-        // packages of its own writes — and a version in either of the two
-        // places. Declaring one of the two and not the other still reads the
+        // PackageManager::isComposerOnlyCapable(): providesPackages declared,
+        // and a version in either of the two places. An empty object counts,
+        // and is what an extension that ships no Composer packages of its own
+        // writes. One of the two declared and not the other still reads the
         // file.
         $composerOnly = isset($extra['Package']['providesPackages'])
             && (($manifest['version'] ?? null) !== null || isset($extra['version']));
@@ -1333,9 +1329,9 @@ final class Extension
         }
 
         // getExtensionIcon() takes the first of six locations that is there and
-        // reads Resources/Public/Icons/Extension.* before the root file, so an
-        // extension shipping both never reaches the deprecated one and pays
-        // nothing for leaving it behind.
+        // reads Resources/Public/Icons/Extension.* before the root file. So an
+        // extension that ships both never reaches the deprecated one and pays
+        // nothing for it.
         $icon = self::firstFile($path, ['ext_icon.svg', 'ext_icon.png', 'ext_icon.gif']);
         $outranks = self::firstFile($path, [
             'Resources/Public/Icons/Extension.svg',
@@ -1395,10 +1391,10 @@ final class Extension
     /**
      * The registration files whose entries do not stand in their own text.
      *
-     * Not a statement about the file — its content is read in full — but about
-     * what reading it yields: a list assembled in a `foreach` exists only once
-     * the file has run, and an empty list is omitted, so such a file arrives as
-     * the same silence as one that does not exist. `ext_localconf.php` and
+     * Not a statement about the file, whose content comes in full, but about
+     * what a read yields. A list assembled in a `foreach` exists only once the
+     * file has run, and an empty list stays out. So such a file arrives as the
+     * same silence as one that does not exist. `ext_localconf.php` and
      * `ext_tables.php` stay out, for the reason `D-ANS-003` records.
      *
      * @return array<int, string>
@@ -1411,9 +1407,9 @@ final class Extension
             'Configuration/Backend/AjaxRoutes.php',
             'Configuration/RequestMiddlewares.php',
         ];
-        // Where the container answered, the icons are its and this file is no
-        // longer what the answer rests on. The four above have no such source:
-        // no registry hands them over, so reading them is all there ever is.
+        // Where the container answered, the icons are its, and this file is no
+        // longer what the answer rests on. The four above have no such source.
+        // No registry hands them over, so a read of them is all there ever is.
         if (self::answeredBy() === 'packages') {
             array_unshift($files, 'Configuration/Icons.php');
         }
@@ -1427,12 +1423,12 @@ final class Extension
     /**
      * The tables this extension defines, as the installation has them.
      *
-     * A file below Configuration/TCA/ is named after the table it defines, so
+     * A file below Configuration/TCA/ has the name of the table it defines, so
      * the files answer on their own. What they cannot show is a table an
-     * extension adds through a PHP call, and what they cannot check is whether
-     * a file that looks like a definition produced one — so where the
-     * installation booted, a table is in the answer when TCA has it and either
-     * this extension's file declares it or its ctrl title names this extension.
+     * extension adds through a PHP call. What they cannot check is whether a
+     * file that looks like a definition produced one. So where the installation
+     * booted, a table is in the answer when TCA has it. And either this
+     * extension's file declares it or its ctrl title names this extension.
      *
      * @return array<int, string>
      */
@@ -1462,10 +1458,10 @@ final class Extension
     /**
      * The content elements this extension adds, as the installation has them.
      *
-     * Attribution is the whole difficulty: `tt_content.CType` is one list for
-     * every extension at once. An item names its owner twice over — its label
-     * is `LLL:EXT:<key>/…` and its icon resolves to a file below `EXT:<key>/` —
-     * and where neither names this extension the item is somebody else's.
+     * Attribution is the whole difficulty. `tt_content.CType` is one list for
+     * every extension at once. An item names its owner twice over. Its label is
+     * `LLL:EXT:<key>/…` and its icon resolves to a file below `EXT:<key>/`, and
+     * where neither names this extension the item is somebody else's.
      *
      * @param array<int, string> $parsed the identifiers read from this extension's own files
      * @return array<int, string>
@@ -1487,9 +1483,9 @@ final class Extension
                 $identifiers[] = (string) $identifier;
             }
         }
-        // One this extension's files register and the installation does not have
-        // was registered under a condition that did not apply here, and saying
-        // it is registered would send a caller to a template nothing renders.
+        // One this extension's files register and the installation does not
+        // have came under a condition that did not apply here. A line that says
+        // it registers would send a caller to a template nothing renders.
         foreach ($parsed as $identifier) {
             if (isset($runtime[$identifier])) {
                 $identifiers[] = $identifier;
@@ -1525,8 +1521,8 @@ final class Extension
      * Where this answer comes from, in the vocabulary every tool reports it in.
      *
      * `installation` once the container answered for the registries that have
-     * no file behind them; `packages` for the reading that has to leave those
-     * out. `Typo3Runtime::reason()` says why, and the answer carries it.
+     * no file behind them. `packages` for the read that has to leave those out.
+     * `Typo3Runtime::reason()` says why, and the answer carries it.
      */
     public static function answeredBy(): string
     {
@@ -1546,8 +1542,8 @@ final class Extension
     }
 
     /**
-     * The file names in a directory, without their extension by default: a TCA
-     * file is named after its table, and the table is what is wanted.
+     * The file names in a directory, without their extension by default. A TCA
+     * file has its table's name, and the table is what the caller wants.
      *
      * @return array<int, string>
      */

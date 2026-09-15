@@ -11,17 +11,17 @@ use TYPO3\DevCompanion\Paths;
  * The icon identifiers registered in the discovered installation.
  *
  * Unlike labels or backend modules there is no console command that exposes the
- * icon registry, so it is asked for twice over. `Typo3Runtime` boots the
+ * icon registry, so the question goes out twice over. `Typo3Runtime` boots the
  * installation in a subprocess and reads the registry itself, which is the only
- * source that knows what a package registers dynamically. Where that cannot be
- * done — no console, or a system without configuration, which is the ordinary
- * state of an extension repository — the three places TYPO3 assembles the
- * registry from are read instead: the T3Icons set shipped with the core, the
+ * source that knows what a package registers at runtime. Where that fails, the
+ * three places TYPO3 assembles the registry from answer instead. That is no
+ * console, or a system without configuration, which is the ordinary state of an
+ * extension repository. The T3Icons set the core ships, the
  * Configuration/Icons.php of every installed package, and the flag images.
  *
- * Nothing is ever included in this process. The registration files are parsed
- * here; where they are executed, it is TYPO3 executing them in a process of its
- * own, with its own autoloader and its own PHP.
+ * This process never includes anything. A parser reads the registration files
+ * here. Where they run, TYPO3 runs them in a process of its own, with its own
+ * autoloader and its own PHP.
  *
  * The two answers are not worth the same, and `limitation()` is what says so.
  */
@@ -46,9 +46,9 @@ final class Icons
 
         $packages = Instance::packages();
         if ($packages === []) {
-            // Not remembered: there being nothing to read is a state of the
-            // machine, and the caller who reads that answer is the one likely
-            // to change it before asking again.
+            // Not in memory. Nothing to read is a state of the machine. The
+            // caller who reads that answer is the one likely to change it
+            // before the next ask.
             return [];
         }
 
@@ -82,15 +82,15 @@ final class Icons
     }
 
     /**
-     * The registry as the booted installation has it, where it could be asked.
+     * The registry as the booted installation has it, where it answered.
      *
-     * Reading the files gets the registration shapes a parser can follow. What
-     * it cannot follow is a list built in a loop, an identifier assembled from
-     * a variable, a `registerIcon()` call in ext_localconf.php, and the entries
-     * TYPO3 derives from TCA — measured against a site with news installed, 25
-     * of 1314 identifiers exist only after the boot, and none of the 1289 read
-     * from files was wrong. So the runtime decides which identifiers there are,
-     * and the files keep saying where each one comes from.
+     * A read of the files gets the registration shapes a parser can follow.
+     * What it cannot follow is a list built in a loop, an identifier assembled
+     * from a variable, a `registerIcon()` call in ext_localconf.php. Nor the
+     * entries TYPO3 derives from TCA. Measured against a site with news
+     * installed, 25 of 1314 identifiers exist only after the boot, and none of
+     * the 1289 from files was wrong. So the runtime decides which identifiers
+     * there are, and the files keep saying where each one comes from.
      *
      * @param array<string, array{identifier: string, category: string, aliasOf: ?string, source: string}> $parsed
      * @return array<string, array{identifier: string, category: string, aliasOf: ?string, source: string}>
@@ -122,11 +122,11 @@ final class Icons
      * The content elements an identifier is the icon of, in this installation.
      *
      * "Registered" and "free to use" are different questions and a lookup only
-     * answers the first — the session that read a yes as the second put the
-     * core HTML element's icon on a content element of its own
-     * (`D-ANS-131`). What this adds is the one binding the installation can be
-     * asked for without a further boot: the item icon of each CType, which the
-     * probe already reads for `typo3_extension_describe`.
+     * answers the first. The session that read a yes as the second put the core
+     * HTML element's icon on a content element of its own (`D-ANS-131`). What
+     * this adds is the one binding the installation answers without a further
+     * boot. The item icon of each CType, which the probe already reads for
+     * `typo3_extension_describe`.
      *
      * Empty where the installation did not answer, which is the same silence as
      * a CType nothing binds.
@@ -156,10 +156,10 @@ final class Icons
      * Where the answer comes from, in the vocabulary every tool reports it in:
      * `installation` for the booted registry, `packages` for the files.
      *
-     * Two answers of different worth must not read alike. A file-read registry
-     * is complete for everything declared and silent about everything else, and
-     * a caller comparing it against a directory of SVGs would report icons as
-     * unregistered that are registered in a loop.
+     * Two answers of different worth must not read alike. A registry from files
+     * is complete for everything declared and silent about everything else. A
+     * caller who compares it against a directory of SVGs would report icons as
+     * unregistered that a loop registers.
      */
     public static function answeredBy(): string
     {
@@ -169,8 +169,8 @@ final class Icons
     }
 
     /**
-     * What a file-read registry leaves out, with why it was read that way.
-     * Empty where the installation itself answered.
+     * What a registry from files leaves out, with why it came that way. Empty
+     * where the installation itself answered.
      */
     public static function limitation(): string
     {
@@ -190,7 +190,7 @@ final class Icons
      * Drops the memoized registry.
      *
      * Called at the end of every tool call, for the reason `Registry::call`
-     * carries: it sits on the runtime reading, so it goes when that goes. Also
+     * carries. It sits on the runtime read, so it goes when that goes. Also
      * what a recording and a test move between two installations with.
      */
     public static function forget(): void
@@ -230,10 +230,10 @@ final class Icons
     }
 
     /**
-     * Whether the query is shaped like an identifier rather than like a search
-     * phrase. The distinction decides what a miss means: "passkey" finding
-     * nothing is a search that came up empty, "status-reference-hard" finding
-     * nothing is a validation result.
+     * Whether the query has the shape of an identifier rather than of a search
+     * phrase. The distinction decides what a miss means. "passkey" with nothing
+     * found is a search that came up empty, "status-reference-hard" with
+     * nothing found is a validation result.
      */
     public static function looksLikeIdentifier(string $query): bool
     {
@@ -246,12 +246,12 @@ final class Icons
     }
 
     /**
-     * The curated concept map: which meaning is spelled by which shape.
+     * The hand-kept concept map: which shape stands for which meaning.
      *
-     * Identifiers name shapes, not intents — a warning is
-     * actions-exclamation-triangle — so searching for the meaning finds
-     * nothing without this. It is the one part of the old bundled catalog worth
-     * keeping, because it is judgement rather than an inventory.
+     * Identifiers name shapes, not intents, a warning is
+     * actions-exclamation-triangle. So a search for the meaning finds nothing
+     * without this. It is the one part of the old bundled catalog worth a keep,
+     * because it is judgement rather than an inventory.
      *
      * @return array<string, array<int, string>>
      */
@@ -303,9 +303,9 @@ final class Icons
     }
 
     /**
-     * The identifiers a package registers, read out of its Configuration/Icons.php
-     * by tokenising it: the file returns an array keyed by identifier, and the
-     * keys are all that is needed.
+     * The identifiers a package registers, read out of its
+     * Configuration/Icons.php with a tokenizer. The file returns an array keyed
+     * by identifier, and the keys are all a caller needs.
      *
      * @return array<int, string>
      */

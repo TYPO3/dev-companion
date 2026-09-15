@@ -11,15 +11,15 @@ use TYPO3\DevCompanion\Knowledge\Catalog\TranslationDomain;
  * The labels shipped by the packages and site configuration of the discovered
  * installation, read from their XLF files.
  *
- * `language:domain:search` is the better answer and stays the first one asked:
- * it knows the assembled runtime state, including the overrides an installation
- * applies through `LANG/resourceOverrides`. But it needs a console that boots,
- * and booting needs a migrated database — while a fresh clone, a colleague
- * onboarding, and CI all spend their time not having one. The labels are in the
- * files either way, next to the icons that are already read from there.
+ * `language:domain:search` is the better answer and stays the first question.
+ * It knows the assembled runtime state, the overrides an installation applies
+ * through `LANG/resourceOverrides` included. But it needs a console that boots,
+ * and a boot needs a migrated database. A fresh clone, a colleague on their
+ * first day, and CI all spend their time without one. The labels are in the
+ * files either way, next to the icons that already come from there.
  *
- * Only the source files are read, never a locale variant: `de.locallang.xlf`
- * is a translation of a file that is itself the label.
+ * Only the source files count, never a locale variant. `de.locallang.xlf` is a
+ * translation of a file that is itself the label.
  */
 final class Labels
 {
@@ -34,8 +34,8 @@ final class Labels
      * disk, or null where this installation has none.
      *
      * Two forms reach here and only one is a path. `LLL:EXT:key/...xlf` names
-     * the file itself; a translation domain names it by what its path derives,
-     * which is a search — `TranslationDomain` computes a domain from a path and
+     * the file itself. A translation domain names it by what its path derives,
+     * which is a search. `TranslationDomain` computes a domain from a path and
      * never the other way, and several paths fold onto one domain.
      *
      * @return array{resource: string, absolute: string}|null
@@ -76,10 +76,10 @@ final class Labels
      * Every label of every installed package and project site, or of one
      * package where an extension key narrows the call.
      *
-     * The static references a resource carries are not resolved here: finding
-     * them means reading every source file of every package, and which
-     * resources an answer needs them for is only known once the query has
-     * matched — `D-ANS-135`. `LabelReference::find()` is asked there.
+     * The static references a resource carries do not resolve here. To find
+     * them means a read of every source file of every package, and which
+     * resources an answer needs them for is only clear once the query has
+     * matched, `D-ANS-135`. `LabelReference::find()` is asked there.
      *
      * @return array<int, array{
      *     ref: string,
@@ -255,9 +255,9 @@ final class Labels
     /**
      * The trans-unit ids and source texts of one XLF file.
      *
-     * Read with local-name(), because the same file is written with and without
-     * the XLIFF namespace depending on how old it is, and a namespace-aware
-     * query would silently return nothing for half of them.
+     * Read with local-name(), because the same file comes with and without the
+     * XLIFF namespace according to its age. A query aware of the namespace
+     * would silently return nothing for half of them.
      *
      * @return array<string, string>
      */

@@ -7,20 +7,20 @@ namespace TYPO3\DevCompanion\Installation;
 use Symfony\Component\Finder\Finder;
 
 /**
- * The TYPO3 installation the calling agent is working in, if there is one.
+ * The TYPO3 installation the caller works in, if there is one.
  *
  * Most of this server answers from bundled knowledge. This class supplies the
- * exception for questions whose answer belongs to an installation: registered
+ * exception for questions whose answer belongs to an installation. Registered
  * icons and labels, and the backend CSS, JavaScript, and styleguide files that
  * define its component contract. A snapshot of one core revision cannot be the
  * primary answer for those.
  *
- * Discovery is opt-in per entrypoint and is never derived from getcwd() on its
- * own. Only bin/typo3-dev-companion hands its working directory in, because only
- * there is that directory the agent's own: the client launches the server as a
- * subprocess of the session it is working in. An HTTP endpoint has no such
- * relationship to its callers — its document root may itself sit inside a TYPO3
- * installation, and a cwd-derived answer would then report that installation to
+ * Discovery is opt-in per entrypoint and never derives from getcwd() on its
+ * own. Only bin/typo3-dev-companion hands its working directory in, because
+ * only there is that directory the agent's own. The client launches the server
+ * as a subprocess of the session it works in. An HTTP endpoint has no such
+ * relationship to its callers. Its document root may itself sit inside a TYPO3
+ * installation, and an answer from cwd would then report that installation to
  * every remote caller. Hence the flag rather than a lookup.
  */
 final class Instance
@@ -37,7 +37,10 @@ final class Instance
      */
     public const KIND_EXTENSION_REPOSITORY = 'extension-repository';
 
-    /** Every package composer.lock names is installed below the vendor directory at that version. */
+    /**
+     * Every package composer.lock names is below the vendor directory at that
+     * version.
+     */
     public const LOCK_MATCHES = 'matches';
 
     /** One of them is at another version, absent, or installed and locked nowhere. */
@@ -49,7 +52,7 @@ final class Instance
     /** This root has no composer.lock, so nothing here states which versions it fixed. */
     public const LOCK_ABSENT = 'no-lock';
 
-    /** Found by walking up from the directory the server was started in. */
+    /** Found by a walk up from the directory the server started in. */
     public const VIA_DISCOVERY = 'discovery';
 
     /** Named outright by the caller, and then not searched for at all. */
@@ -58,7 +61,7 @@ final class Instance
     /** Names the installation to read, whatever the working directory says. */
     public const ROOT_VARIABLE = 'TYPO3_DEV_COMPANION_ROOT';
 
-    /** How far up from the starting directory to look before giving up. */
+    /** How far up from the start directory to look before the search stops. */
     private const MAX_DEPTH = 12;
 
     /**
@@ -68,7 +71,10 @@ final class Instance
      */
     private const PACKAGE_TYPES = ['typo3-cms-framework', 'typo3-cms-extension'];
 
-    /** How every package TYPO3 itself ships is named: typo3/cms-core, typo3/cms-fluid. */
+    /**
+     * The name of every package TYPO3 itself ships: typo3/cms-core,
+     * typo3/cms-fluid.
+     */
     private const CORE_PACKAGE_PREFIX = 'typo3/cms-';
 
     private static ?string $startingDirectory = null;
@@ -86,7 +92,7 @@ final class Instance
     private static ?string $startedInPackage = null;
 
     /**
-     * Hands the working directory the server was started in to the discovery.
+     * Hands the working directory the server started in to the discovery.
      * Called by the stdio entrypoint and by nothing else.
      */
     public static function discoverFrom(?string $directory): void
@@ -98,15 +104,15 @@ final class Instance
     }
 
     /**
-     * The working directory the server was started in, when an entrypoint
-     * handed one in, and null otherwise.
+     * The working directory the server started in, when an entrypoint handed
+     * one in, and null otherwise.
      *
-     * Unlike root() this says nothing about an installation — it is only where
-     * the calling session was, which is worth knowing even when nothing was
-     * found there. The same restriction applies as everywhere else in this
-     * class: it is the agent's directory only because the stdio entrypoint says
-     * so, so an endpoint that never calls discoverFrom() gets null rather than
-     * its own document root.
+     * Unlike root() this says nothing about an installation. It is only where
+     * the caller's session was, which is worth a note even when nothing turned
+     * up there. The same restriction applies as everywhere else in this class.
+     * It is the agent's directory only because the stdio entrypoint says so. An
+     * endpoint that never calls discoverFrom() gets null rather than its own
+     * document root.
      */
     public static function startedFrom(): ?string
     {
@@ -114,15 +120,15 @@ final class Instance
     }
 
     /**
-     * The kind of repository the session is standing in, or null where nothing
-     * places it. Not always the installation being read, and not always an
+     * The kind of repository the session stands in, or null where nothing
+     * places it. Not always the installation under read, and not always an
      * installation at all.
      *
-     * `TYPO3_DEV_COMPANION_ROOT` names the one to read, and which repository the
-     * work is in is a different question — reading both off one value let the
-     * variable move that boundary too (`D-SCO-005`). Where the walk-up reaches
-     * no installation the named one is the only evidence there is and it answers
-     * (`D-DIS-006`).
+     * `TYPO3_DEV_COMPANION_ROOT` names the one to read, and which repository
+     * the work is in is a different question. A read of both off one value let
+     * the variable move that boundary too (`D-SCO-005`). Where the walk-up
+     * reaches no installation the named one is the only evidence there is and
+     * it answers (`D-DIS-006`).
      */
     public static function startedIn(): ?string
     {
@@ -131,9 +137,9 @@ final class Instance
         }
 
         // The root manifest before anything installed under it. It is a
-        // decision somebody wrote down rather than a directory that has to be
-        // populated, so it places an extension repository in the state it is
-        // cloned in, and it places it the same way once it is (`D-SCO-012`).
+        // decision somebody wrote down rather than a directory that has to fill
+        // up. So it places an extension repository in the state of a fresh
+        // clone, and it places it the same way once it fills (`D-SCO-012`).
         if (self::startedInPackage() !== null) {
             return self::$startedIn = self::KIND_EXTENSION_REPOSITORY;
         }
@@ -152,15 +158,15 @@ final class Instance
     }
 
     /**
-     * The extension key the repository the session is standing in declares at
-     * its own root, or null where the walk up from the starting directory
-     * reaches no such root.
+     * The extension key the repository the session stands in declares at its
+     * own root. Null where the walk up from the start directory reaches no such
+     * root.
      *
-     * A repository is not an installation: what the manifest says is enough to
-     * place the work and never enough to report one, so nothing here starts
-     * speaking for a checkout with no console behind it (`D-DIS-001`). Only
-     * `typo3-cms-extension` — `typo3-cms-framework` would place a contributor
-     * standing in `typo3/sysext/backend/` outside the core.
+     * A repository is not an installation. What the manifest says is enough to
+     * place the work and never enough to report one. So nothing here starts to
+     * speak for a checkout with no console behind it (`D-DIS-001`). Only
+     * `typo3-cms-extension`. `typo3-cms-framework` would place a contributor
+     * who stands in `typo3/sysext/backend/` outside the core.
      */
     public static function startedInPackage(): ?string
     {
@@ -185,7 +191,7 @@ final class Instance
         return null;
     }
 
-    /** Whether an installation was found to read from. */
+    /** Whether an installation turned up to read from. */
     public static function isAvailable(): bool
     {
         return self::describe() !== null;
@@ -198,21 +204,21 @@ final class Instance
     }
 
     /**
-     * What was found, how, and where the search started, so a caller can tell
-     * whether the server is reading the installation it means. A silently wrong
+     * What turned up, how, and where the search started, so a caller can tell
+     * whether the server reads the installation it means. A silently wrong
      * instance would be worse than none at all.
      *
      * @return array{root: string, kind: string, startedFrom: string, via: string}|null
      */
     public static function describe(): ?array
     {
-        // Only a success is remembered. A failure is retried on the next call,
-        // because an installation appearing during a session is the ordinary
-        // case, not the exotic one: the agent runs composer install, or starts
-        // the containers, and does it precisely because the answer said there
-        // was nothing to read. Remembering "nothing" outlives the reason for
-        // it, and the caller has no way to tell — the session would have to be
-        // restarted to get an answer that is already true.
+        // Only a success stays in memory. A failure runs again on the next
+        // call, because an installation that appears during a session is the
+        // ordinary case, not the exotic one. The agent runs composer install,
+        // or starts the containers, and does it precisely because the answer
+        // said there was nothing to read. A memory of "nothing" outlives the
+        // reason for it, and the caller has no way to tell. The session would
+        // have to restart to get an answer that is already true.
         if (is_array(self::$resolved)) {
             return self::$resolved;
         }
@@ -220,9 +226,9 @@ final class Instance
         self::$searched = [];
         [$configured, self::$misconfiguration] = self::fromEnvironment();
         if ($configured !== null || self::$misconfiguration !== '') {
-            // A configured root that cannot be used is not quietly replaced by
-            // a discovered one: the caller stated which installation it means,
-            // and answering about a different one is the failure this whole
+            // A configured root that does not work gets no quiet replacement by
+            // a discovered one. The caller stated which installation it means,
+            // and an answer about a different one is the failure this whole
             // class exists to avoid.
             return self::$resolved = $configured;
         }
@@ -235,24 +241,25 @@ final class Instance
     }
 
     /**
-     * The repository the session is standing in, whether or not anything is
-     * installed in it: the installation where there is one, and otherwise the
+     * The repository the session stands in, whether or not anything has
+     * installed in it. The installation where there is one, and otherwise the
      * nearest root whose own composer.json declares TYPO3.
      *
-     * Gating the whole answer on installed metadata left a fresh clone — the
-     * state the installation workflow starts in — the one state it answered
-     * nothing in (`D-ANS-085`). Not an installation, and nothing else may read
-     * it as one: `describe()` stays what every other tool asks (`D-DIS-001`).
-     * Nothing is remembered here, because the answer has to change the moment
-     * the install this state exists to prompt has run.
+     * A gate of the whole answer on installed metadata left a fresh clone as
+     * the one state it answered nothing in. That is the state the installation
+     * workflow starts in (`D-ANS-085`). Not an installation, and nothing else
+     * may read it as one. `describe()` stays what every other tool asks
+     * (`D-DIS-001`). Nothing stays in memory here, because the answer has to
+     * change the moment the install this state exists to prompt has run.
      *
      * @return array{root: string, kind: string, startedFrom: string, via: string}|null
      */
     public static function project(): ?array
     {
         $instance = self::describe();
-        // A named root that cannot be used is not quietly replaced by a
-        // discovered one here either: the caller said which repository it means.
+        // A named root that does not work gets no quiet replacement by a
+        // discovered one here either. The caller said which repository it
+        // means.
         if ($instance !== null || self::$misconfiguration !== '') {
             return $instance;
         }
@@ -271,20 +278,21 @@ final class Instance
 
     /**
      * Whether this directory's own composer.json declares TYPO3, which is what
-     * identifies a project root before anything is installed in it.
+     * identifies a project root before anything installs in it.
      *
-     * A declaration in all three shapes rather than a name or a layout: the root
-     * is a TYPO3 package itself, it requires one of TYPO3's own packages, or it
-     * carries the `extra.typo3/cms` block TYPO3's Composer installer reads. A
-     * rule admitting any composer.json would report a TYPO3 project for every
-     * PHP repository up to twelve directories above the caller.
+     * A declaration in all three shapes rather than a name or a layout. The
+     * root is a TYPO3 package itself, it requires one of TYPO3's own packages,
+     * or it carries the `extra.typo3/cms` block TYPO3's Composer installer
+     * reads. A rule that admits any composer.json would report a TYPO3 project
+     * for every PHP repository up to twelve directories above the caller.
      *
      * Read on 2026-08-18 against the two shapes it has to cover. The `t3g/blog`
      * extension repository of `feedback/2026-08-18-070333` declares
      * `typo3-cms-extension`, `extra.typo3/cms.extension-key` and a required
-     * `typo3/cms-core`; the site installations below `.environments/` declare
-     * `"type": "project"` and twenty-six required `typo3/cms-*` packages with no
-     * `extra` block at all, so the package types alone would walk past a site.
+     * `typo3/cms-core`. The site installations below `.environments/` declare
+     * `"type": "project"` and twenty-six required `typo3/cms-*` packages with
+     * no `extra` block at all. So the package types alone would walk past a
+     * site.
      */
     private static function declaresTypo3(string $directory): bool
     {
@@ -293,10 +301,11 @@ final class Instance
             return true;
         }
 
-        // What it needs of TYPO3 to be developed at all counts as much as what
-        // it needs to run: an extension that installs the core for its test
-        // setup alone is a TYPO3 repository, and requiring one of TYPO3's tools
-        // — typo3/coding-standards, typo3/tailor — is not requiring TYPO3.
+        // What it needs of TYPO3 for development at all counts as much as what
+        // it needs to run. An extension that installs the core for its test
+        // setup alone is a TYPO3 repository. A requirement on one of TYPO3's
+        // tools, typo3/coding-standards, typo3/tailor, is not a requirement on
+        // TYPO3.
         foreach (['require', 'require-dev'] as $section) {
             $required = $manifest[$section] ?? null;
             foreach (is_array($required) ? array_keys($required) : [] as $package) {
@@ -312,9 +321,9 @@ final class Instance
     /**
      * What is wrong with the configuration, if anything. Empty otherwise.
      *
-     * A variable that was set and could not be used has to be said out loud.
-     * Silence would look exactly like not having set it, which is the one thing
-     * the caller knows it did.
+     * A variable somebody set and that did not work has to stand out loud.
+     * Silence would look exactly like a variable never set, which is the one
+     * thing the caller knows it did.
      */
     public static function misconfiguration(): string
     {
@@ -327,8 +336,8 @@ final class Instance
      * The directories the search walked, so a failure can be told apart from a
      * server started in the wrong place.
      *
-     * "No installation was found" is two very different situations wearing one
-     * sentence: a layout this cannot read, and a client that launched the
+     * "No installation turned up" is two very different situations in one
+     * sentence. A layout this cannot read, and a client that launched the
      * server somewhere else entirely. Which one it is follows from where it
      * looked, and from nothing else the caller has access to.
      *
@@ -342,13 +351,13 @@ final class Instance
     }
 
     /**
-     * The installation named outright, for the layouts discovery cannot reach:
-     * an installation in a subdirectory, a checkout the client starts the
+     * The installation named outright, for the layouts discovery cannot reach.
+     * An installation in a subdirectory, a checkout the client starts the
      * server beside rather than inside, a stack this server has never heard of.
      *
-     * Unlike the working directory this is not derived from anything — it is a
-     * decision someone made — so it holds for every entrypoint, the HTTP one
-     * included, where it is the only way to name an installation at all.
+     * Unlike the working directory this derives from nothing, it is a decision
+     * someone made. So it holds for every entrypoint, the HTTP one included,
+     * where it is the only way to name an installation at all.
      *
      * @return array{0: array{root: string, kind: string, startedFrom: string, via: string}|null, 1: string}
      */
@@ -408,11 +417,11 @@ final class Instance
      * The TYPO3 version of this installation, or null when there is none to
      * read.
      *
-     * Read from the core package's Typo3Version class rather than asked of the
-     * console: the version decides whether an answer holds, so it has to be
-     * available exactly when the console is not — an installation whose
-     * database has no schema still has a version, and knowing it is what keeps
-     * a v15 answer from being handed to a v13 caller.
+     * Read from the core package's Typo3Version class rather than from the
+     * console. The version decides whether an answer holds, so it has to be
+     * there exactly when the console is not. An installation whose database has
+     * no schema still has a version, and that number is what keeps a v15 answer
+     * away from a v13 caller.
      */
     public static function typo3Version(): ?string
     {
@@ -439,21 +448,22 @@ final class Instance
      *
      * `composer install` writes the lower bound over every package it installed
      * into `composer/platform_check.php` below the vendor directory, and the
-     * autoloader includes it — so this is not a second opinion about which
+     * autoloader includes it. So this is not a second opinion about which
      * interpreter may run here, it is the code that stops one. No manifest
-     * field states it: a fixer required for development alone raises it in a
+     * field states it. A fixer required for development alone raises it in a
      * repository whose own `require.php` says two minors less.
      *
      * Read against Composer 2.9.5 on 2026-08-04, in its own
      * `AutoloadGenerator::getPlatformCheck()` and in the four installations
-     * under `.environments/`: the expression is `PHP_VERSION_ID >= 80500`, an
+     * under `.environments/`. The expression is `PHP_VERSION_ID >= 80500`, an
      * integer of major*10000 + minor*100 + patch, with `>` where the bound is
      * exclusive.
      *
-     * Absent is a real answer and not a failure: Composer leaves the file out
-     * when nothing requires a PHP version, and deletes it where `platform-check`
-     * is off or the platform requirements were ignored. In none of those does a
-     * version stop anything, so nothing here may say one might.
+     * Absent is a real answer and not a failure. Composer leaves the file out
+     * when nothing requires a PHP version, and deletes it where
+     * `platform-check` is off or the install ignored the platform requirements.
+     * In none of those does a version stop anything, so nothing here may say
+     * one might.
      */
     public static function installedPhpBound(string $root): ?string
     {
@@ -468,8 +478,8 @@ final class Instance
         }
 
         // PHP_VERSION_ID is an integer, so "greater than 80500" is "at least
-        // 80501" exactly rather than approximately, and the operator does not
-        // have to be carried any further than this line.
+        // 80501" exactly rather than approximately. The operator does not have
+        // to travel any further than this line.
         $id = (int) $matches[2] + ($matches[1] === '>' ? 1 : 0);
 
         return $id <= 0 ? null : sprintf('%d.%d.%d', intdiv($id, 10000), intdiv($id % 10000, 100), $id % 100);
@@ -479,11 +489,11 @@ final class Instance
      * Where the packages installed below this root and the ones composer.lock
      * names disagree, which nothing else in an answer about this project says.
      *
-     * A vendor directory that predates the lock satisfies `installed`, and the
-     * suite run that follows fails in classes the caller's own change never
-     * touched (`D-ANS-102`). The versions are what is compared, not the
-     * modification times: a lock written by a rebase that changed nothing in it
-     * is newer than the install it describes, and nothing there is stale.
+     * A vendor directory older than the lock satisfies `installed`. The suite
+     * run that follows fails in classes the caller's own change never touched
+     * (`D-ANS-102`). The comparison is the versions, not the modification
+     * times. A lock a rebase wrote that changed nothing in it is newer than the
+     * install it describes, and nothing there is stale.
      *
      * Locked dev packages count only where `installed.json` says the install
      * took them. `composer install --no-dev` leaves every one of them locked and
@@ -516,16 +526,16 @@ final class Instance
 
                 continue;
             }
-            // An entry stating no version is one this cannot hold against
-            // anything, and it is installed either way.
+            // An entry that states no version is one this cannot hold against
+            // anything, and it is there either way.
             if ($installed[$package] !== null && $version !== null && $installed[$package] !== $version) {
                 $drift[] = ['package' => $package, 'locked' => $version, 'installed' => $installed[$package]];
             }
         }
         foreach ($installed as $package => $version) {
-            // Held against both halves of the lock whichever of them was
-            // installed: a dev package the install left out is the absent case
-            // above, and reporting it here as well would say it twice.
+            // Held against both halves of the lock whichever of them installed.
+            // A dev package the install left out is the absent case above, and
+            // a report of it here as well would say it twice.
             if (!array_key_exists($package, $locked) && !array_key_exists($package, $lockedForDevelopment)) {
                 $drift[] = ['package' => $package, 'locked' => null, 'installed' => $version];
             }
@@ -554,7 +564,7 @@ final class Instance
         return $versions;
     }
 
-    /** The major of that version as a number, for comparing it with another. */
+    /** The major of that version as a number, for a comparison with another. */
     public static function typo3Major(): ?int
     {
         $version = self::typo3Version();
@@ -564,11 +574,11 @@ final class Instance
 
     /**
      * Whether an extension key is a system extension of this installation, or
-     * null when the installation does not have it — or when there is none.
+     * null when the installation does not have it, or when there is none.
      *
-     * Where a package lives is what decides it, because the key alone cannot:
-     * a system extension is below typo3/sysext/ in a core checkout and comes
-     * from typo3/cms-* in a Composer project, and everything else is somebody's
+     * Where a package lives is what decides it, because the key alone cannot. A
+     * system extension is below typo3/sysext/ in a core checkout and comes from
+     * typo3/cms-* in a Composer project, and everything else is somebody's
      * extension.
      */
     public static function isSystemExtension(string $key): ?bool
@@ -584,11 +594,11 @@ final class Instance
     }
 
     /**
-     * Both the kind of installation and the packages in it are declared by the
-     * installation itself, so neither is guessed here: the monorepo root
-     * declares "type": "typo3-cms-core", and a Composer installation lists
-     * every TYPO3 package in composer/installed.json below the vendor directory
-     * it declares — the same source TYPO3's own PackageArtifactBuilder reads.
+     * The installation itself declares both its kind and the packages in it, so
+     * neither is a guess here. The monorepo root declares "type":
+     * "typo3-cms-core". A Composer installation lists every TYPO3 package in
+     * composer/installed.json below the vendor directory it declares, the same
+     * source TYPO3's own PackageArtifactBuilder reads.
      *
      * @param array<int, string> $walked the directories it looked in, in order
      * @return array{root: string, kind: string, startedFrom: string, via: string}|null
@@ -603,13 +613,13 @@ final class Instance
     }
 
     /**
-     * The nearest directory up from the starting one that the caller's rule
+     * The nearest directory up from the start one that the caller's rule
      * recognises, and what it recognised it as.
      *
-     * The walk is reported through $walked rather than into the diagnostic
-     * itself, because startedIn() walks for a question of its own and the
-     * directories the caller is shown have to stay the ones searched for the
-     * installation being read.
+     * The walk reports through $walked rather than into the diagnostic itself.
+     * startedIn() walks for a question of its own, and the directories the
+     * caller sees have to stay the ones searched for the installation under
+     * read.
      *
      * @param array<int, string> $walked the directories it looked in, in order
      * @param callable(string): ?string $kindOf the kind that directory is, or null where it is none
@@ -688,13 +698,12 @@ final class Instance
     /**
      * Where this root keeps its dependencies.
      *
-     * Composer's default is vendor/, and a root that declares nothing is
-     * resolved exactly as before. But the layout the TYPO3 extension testing
-     * setup produces moves it — `"vendor-dir": ".build/vendor"` — and an
-     * installation whose metadata is looked for in the wrong place is an
-     * installation that does not exist as far as this server is concerned:
-     * discovery walks past it and every question only it could answer goes
-     * unanswered.
+     * Composer's default is vendor/, and a root that declares nothing resolves
+     * exactly as before. But the layout the TYPO3 extension test setup produces
+     * moves it, `"vendor-dir": ".build/vendor"`. An installation whose metadata
+     * the search looks for in the wrong place does not exist for this server.
+     * Discovery walks past it and every question only it could answer stays
+     * open.
      */
     private static function vendorDirectory(string $root): string
     {
@@ -741,12 +750,12 @@ final class Instance
             }
         }
 
-        // The extension being worked on is the root package, and Composer lists
-        // dependencies rather than the root — so in an extension development
-        // checkout the one package the agent is actually editing would be the
-        // only one missing from its own answers. It is added only when the
-        // installation around it is real: a package list of nothing but the
-        // root would report an installation where there is only a repository.
+        // The extension under work is the root package, and Composer lists
+        // dependencies rather than the root. So in an extension development
+        // checkout the one package the agent edits would be the only one absent
+        // from its own answers. It joins only when the installation around it
+        // is real. A package list of nothing but the root would report an
+        // installation where there is only a repository.
         if ($packages !== []) {
             $rootKey = self::rootPackage($root);
             if ($rootKey !== null) {
@@ -771,7 +780,7 @@ final class Instance
     }
 
     /**
-     * The extension key a TYPO3 package declares, wherever it was read: a root
+     * The extension key a TYPO3 package declares, wherever it came from: a root
      * manifest, or one entry of Composer's installed metadata.
      *
      * @param array<string, mixed> $manifest

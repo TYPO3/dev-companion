@@ -9,21 +9,21 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Search\Text;
 
 /**
- * What the repository the session is standing in consists of, read from its
- * files, whether or not an installation has been made below it.
+ * What the repository the session stands in consists of, read from its files,
+ * whether or not an installation exists below it.
  *
  * The knowledge base describes TYPO3; this describes the repository the caller
- * is standing in — which extensions are its own, which sites it configures,
- * which commands it declares, and which environment it declares them to run in.
- * None of that could be bundled, and all of it is what an answer has to be
- * right about before it can recommend anything: a check that does not exist
- * here is worse than no check.
+ * stands in. Which extensions are its own, which sites it configures, which
+ * commands it declares, and which environment it declares them to run in. None
+ * of that could ship as a bundle. All of it is what an answer has to be right
+ * about before it can recommend anything. A check that does not exist here is
+ * worse than no check.
  *
- * Files only. No console, no database, nothing started — the same rule the rest
- * of this server follows, and the reason this works on a fresh clone. Four
- * fields are the exception and wait for the install: the TYPO3 version, the PHP
- * the installed core requires, the PHP the install as a whole is bounded at, and
- * the extensions, which are Composer's metadata rather than anything the
+ * Files only. No console, no database, nothing started. That is the same rule
+ * the rest of this server follows, and the reason this works on a fresh clone.
+ * Four fields are the exception and wait for the install. The TYPO3 version,
+ * the PHP the installed core requires, the PHP bound of the install as a whole,
+ * and the extensions. Those are Composer's metadata rather than anything the
  * manifest declares.
  */
 final class Project
@@ -38,12 +38,12 @@ final class Project
      * Shipped by the repository's test setup, not by the repository.
      *
      * An extension repository routinely installs a package of its own from
-     * below Tests/ — a fixture the functional suite loads, a demo package a
-     * scenario needs. Composer lists it like any other path repository, and
-     * calling it the project's own says "this is what is being worked on"
-     * about something that exists to be loaded and thrown away. Reported as
-     * its own thing rather than dropped: a fixture the answer omits is one
-     * nobody can account for when it shows up in an installed package list.
+     * below Tests/, a fixture the functional suite loads, a demo package a
+     * scenario needs. Composer lists it like any other path repository. The
+     * name "the project's own" says "this is the work" about something that
+     * exists for a load and a throw away. Reported as its own thing rather than
+     * dropped. A fixture the answer omits is one nobody can account for when it
+     * shows up in an installed package list.
      */
     public const ORIGIN_FIXTURE = 'fixture';
 
@@ -60,8 +60,8 @@ final class Project
      * Where one version sits against another — the whole vocabulary of every
      * relation this answer states, the PHP numbers and the Node ones alike.
      *
-     * One word for one idea: the declared floor stands `below`, on the `same`
-     * version as, or `above` what the core requires, and the environment's
+     * One word for one idea. The declared floor stands `below`, on the `same`
+     * version as, or `above` what the core requires. The environment's
      * interpreter stands the same three ways against that floor. What each of
      * them means for the project is the schema's to say, not the value's.
      */
@@ -72,26 +72,26 @@ final class Project
     /**
      * The keys a DDEV hook task states its command under.
      *
-     * `exec` runs it in a container, `exec-host` on the machine DDEV was
-     * called from, `composer` in the web container with `composer` in front.
+     * `exec` runs it in a container, `exec-host` on the machine of the DDEV
+     * call, `composer` in the web container with `composer` in front.
      */
     private const DDEV_TASKS = ['exec', 'exec-host', 'composer'];
 
     /**
-     * What DDEV marks the files it owns with, and replaces them by while the
-     * marker is there — `nodeps.DdevFileSignature` in v1.25.1, matched as a
+     * The mark DDEV puts on the files it owns, and replaces them by while the
+     * mark is there. `nodeps.DdevFileSignature` in v1.25.1, matched as a
      * literal anywhere in the file the way `fileutil.FgrepStringInFile` does.
      */
     private const DDEV_SIGNATURE = '#ddev-generated';
 
     /**
-     * The top-level domain a project's URLs are built from where no file names
-     * one — the default of `ddev config --project-tld`.
+     * The top-level domain a project's URLs build from where no file names one,
+     * the default of `ddev config --project-tld`.
      *
-     * A machine whose global DDEV configuration sets another one is not read
-     * here: this answer is the project's own files (`R-PRJ-001`), and the
-     * hostnames it states say what the configuration declares rather than what
-     * a running router answers on.
+     * A machine whose global DDEV configuration sets another one gets no read
+     * here. This answer is the project's own files (`R-PRJ-001`). The hostnames
+     * it states say what the configuration declares rather than what a live
+     * router answers on.
      */
     private const DDEV_TLD = 'ddev.site';
 
@@ -135,10 +135,11 @@ final class Project
             'root' => $root,
             'kind' => $project['kind'],
             // The four fields below that read the installed tree answer null
-            // and empty here, and none of them says on its own that nothing is
-            // installed rather than that there was nothing to find (`D-ANS-085`).
+            // and empty here. None of them says on its own that nothing has
+            // installed rather than that there was nothing to find
+            // (`D-ANS-085`).
             'installed' => Instance::packages() !== [],
-            // What that boolean cannot say: a vendor directory older than the
+            // What that boolean cannot say. A vendor directory older than the
             // lock satisfies it, and the drift is a field beside it rather than
             // a third state inside it (`D-ANS-102`).
             'installedAgainstLock' => Instance::installedAgainstLock($root),
@@ -162,13 +163,13 @@ final class Project
      * The environment this repository configures to run itself in, where it
      * configures one at all.
      *
-     * A containerised project has two PHP versions — the one its manifest
-     * constrains and the one its container runs — and the commands below make
-     * that worse rather than better, being the ones a task is sent to run. Read
-     * from the environment's own files, so `R-PRJ-001` still holds on a fresh
-     * clone and nothing is started to find out (`R-DIS-006`): a stopped project
-     * reads exactly like a running one here. The interpreter is half of it, and
-     * what the environment runs by itself is `R-PRJ-009`.
+     * A containerised project has two PHP versions, the one its manifest
+     * constrains and the one its container runs. The commands below make that
+     * worse rather than better, as the ones a task runs. Read from the
+     * environment's own files, so `R-PRJ-001` still holds on a fresh clone and
+     * nothing starts to find out (`R-DIS-006`). A stopped project reads exactly
+     * like a live one here. The interpreter is half of it, and what the
+     * environment runs by itself is `R-PRJ-009`.
      *
      * @return array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null
      */
@@ -194,11 +195,11 @@ final class Project
         }
 
         // Nothing in the files says DDEV, and one thing outside them may still
-        // say there is an environment: the console command the caller stated
+        // say there is an environment. The console command the caller stated
         // for `Typo3Cli`. A `docker compose exec web bin/typo3` is a machine
-        // this server cannot read a PHP version from — and reporting no
-        // environment there says "these run in your shell", which is the claim
-        // this whole field exists to stop being made by silence.
+        // this server cannot read a PHP version from. No environment in the
+        // report there says "these run in your shell", which is the claim this
+        // whole field exists to keep silence from.
         $stated = getenv(Typo3Cli::CONSOLE_VARIABLE);
         $program = is_string($stated) ? (self::firstToken($stated) ?? '') : '';
         if ($program !== '' && !str_starts_with(basename($program), 'php')) {
@@ -218,7 +219,7 @@ final class Project
             ];
         }
 
-        // An interpreter on this machine is not another environment: a stated
+        // An interpreter on this machine is not another environment. A stated
         // `php /some/where/typo3` reaches the console from the same shell every
         // declared command would run in, and there is one PHP.
         return null;
@@ -233,31 +234,31 @@ final class Project
     }
 
     /**
-     * What a DDEV project's configuration says: the PHP it runs, the file that
+     * What a DDEV project's configuration says. The PHP it runs, the file that
      * states it, and the tasks it runs at a stage of its own.
      *
-     * `.ddev/config.yaml` is read first, then every `.ddev/config.*.yaml` and
+     * `.ddev/config.yaml` comes first, then every `.ddev/config.*.yaml` and
      * `.ddev/config.*.yml` beside it in filename order. The last statement of
-     * the version is the one that holds; the hooks of one stage concatenate in
-     * that same order, and a stage no later file mentions keeps what it had.
+     * the version is the one that holds. The hooks of one stage join in that
+     * same order, and a stage no later file mentions keeps what it had.
      * `override_config: true` replaces instead, per stage and only for the
-     * stages the file carrying it names — so `post-start: []` under it erases
-     * that one stage and leaves the rest, and a plain file after it appends to
-     * what it left. Reading the base file alone would report a lifecycle the
-     * container does not run in every project that keeps its local settings in
-     * the `config.local.yaml` DDEV gitignores for that.
+     * stages the file with it names. So `post-start: []` under it erases that
+     * one stage and leaves the rest, and a plain file after it adds to what it
+     * left. A read of the base file alone would report a lifecycle the
+     * container does not run. That is every project that keeps its local
+     * settings in the `config.local.yaml` DDEV gitignores for that.
      *
      * All of it measured against DDEV v1.25.1 through `ddev debug configyaml`,
      * on 2026-08-02 for the version and 2026-08-03 for the hooks.
      *
-     * Null where nothing states a version: DDEV then uses the default of the
-     * DDEV that is installed, which is not in these files and is not the same
-     * number from one release to the next.
+     * Null where nothing states a version. DDEV then uses the default of the
+     * installed DDEV. That is not in these files and is not the same number
+     * from one release to the next.
      *
      * The name and the hostnames come from the same files, and they are what a
-     * caller needs to reach the site at all: a session that had the environment
-     * reported and nothing else spent four shell round trips finding the
-     * project name and one wrong attempt in between
+     * caller needs to reach the site at all. A session that had the environment
+     * in the report and nothing else spent four shell round trips on the
+     * project name. One wrong attempt lay in between
      * (`feedback/2026-08-10-101723`).
      *
      * @return array{php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, hooks: array<int, array{stage: string, command: string, service: ?string}>}
@@ -274,7 +275,7 @@ final class Project
         $node = null;
         $source = '.ddev/config.yaml';
         $stages = [];
-        // What DDEV falls back to when no file names one: `ddev config
+        // What DDEV falls back to when no file names one. `ddev config
         // --project-name` is "normally the same as the last part of directory
         // name", and `--project-tld` defaults to ddev.site.
         $project = basename($root);
@@ -354,10 +355,10 @@ final class Project
     /**
      * One task of one stage, or null where it states no command.
      *
-     * Unmarked, unlike the declared commands: `runs()` answers whether a caller
+     * No mark, unlike the declared commands. `runs()` answers whether a caller
      * may run something, and a hook is not the caller's to run. What it does to
-     * the sources is in the command beside it, which is short and printed
-     * whole — the mark earns its place on a `cgl` whose body nobody sees.
+     * the sources is in the command beside it, which is short and prints whole.
+     * The mark earns its place on a `cgl` whose body nobody sees.
      *
      * @return array{stage: string, command: string, service: ?string}|null
      */
@@ -379,8 +380,8 @@ final class Project
             return [
                 'stage' => $stage,
                 'command' => $type === 'composer' ? 'composer ' . $command : $command,
-                // The one task type that runs on the machine DDEV was called
-                // from rather than inside the project.
+                // The one task type that runs on the machine of the DDEV call
+                // rather than inside the project.
                 'service' => $type === 'exec-host'
                     ? null
                     : (is_string($task['service'] ?? null) ? $task['service'] : 'web'),
@@ -395,8 +396,8 @@ final class Project
      * argument list it states instead.
      *
      * A block command is several lines in one shell and nothing stops it at the
-     * first failure, so the lines are joined with `;` — the `&&` the composer
-     * scripts are joined with would say the file does something it does not.
+     * first failure, so `;` joins the lines. The `&&` that joins the composer
+     * scripts would say the file does something it does not.
      */
     private static function hookCommand(mixed $stated, mixed $raw): string
     {
@@ -414,14 +415,14 @@ final class Project
      * `ddev pull <name>` and `ddev push <name>` run.
      *
      * `.ddev/providers/<name>.yaml` exactly, measured against DDEV v1.25.1 on
-     * 2026-08-03: `ddev pull` offered the two `.yaml` files in that directory
+     * 2026-08-03. `ddev pull` offered the two `.yaml` files in that directory
      * and neither the `.yml` nor the `.yaml.example` beside them.
      *
-     * DDEV writes its own recipes into every project — Acquia, Lagoon, Upsun,
-     * platform.sh and four examples — and marks each with the signature it
-     * replaces the file by while the marker is there. So a marked one says what
-     * DDEV puts everywhere and an unmarked one says what this repository
-     * decided, and listing both would report ten integrations in a project that
+     * DDEV writes its own recipes into every project, Acquia, Lagoon, Upsun,
+     * platform.sh and four examples. It marks each with the signature it
+     * replaces the file by while the mark is there. So a marked one says what
+     * DDEV puts everywhere and one without a mark says what this repository
+     * decided. A list of both would report ten integrations in a project that
      * has one.
      *
      * @return array<int, array{name: string, source: string, operations: array<int, string>}>
@@ -464,17 +465,16 @@ final class Project
      * A version a DDEV configuration states, as the file spells it —
      * `php_version` and `nodejs_version` alike.
      *
-     * Quoting it is optional there and the difference reaches here: unquoted,
-     * `8.0` is a YAML float and casting that to a string gives "8", a version
-     * that exists nowhere. `nodejs_version` is why the spelling is kept rather
-     * than cut to major.minor: DDEV v1.25.1 takes a bare major there, and a
-     * `20.19` beside a workflow's `20.19.0` is the pair the relation is read
-     * from.
+     * Quotes are optional there and the difference reaches here. Without them,
+     * `8.0` is a YAML float and a cast to a string gives "8", a version that
+     * exists nowhere. `nodejs_version` is why the form stays rather than cuts
+     * to major.minor. DDEV v1.25.1 takes a bare major there, and a `20.19`
+     * beside a workflow's `20.19.0` is the pair the relation reads from.
      */
     private static function configuredVersion(mixed $stated): ?string
     {
         if (is_float($stated)) {
-            // A float carries no trailing zero, so 8.0 comes back "8" — a
+            // A float carries no zero at the end, so 8.0 comes back "8", a
             // version that exists nowhere. Everything else it spells as typed.
             $spelled = (string) $stated;
 
@@ -492,9 +492,9 @@ final class Project
      * The patches this project applies to its dependencies.
      *
      * A patched package is a package whose behaviour is not what its version
-     * says, and the next composer update either reapplies the patch or fails on
+     * says. The next composer update either applies the patch again or fails on
      * it. Nothing else in an answer about this project matters more to an
-     * upgrade, and it is one entry in composer.json.
+     * upgrade. It is one entry in composer.json.
      *
      * @param array<string, mixed> $manifest
      * @return array<int, array{package: string, description: string, file: string}>
@@ -524,14 +524,13 @@ final class Project
     /**
      * The extensions that are not TYPO3's own, with where they come from.
      *
-     * A system extension is TYPO3; everything else is what this project brought
-     * with it, and the ones inside the repository are the ones it is actually
-     * working on.
+     * A system extension is TYPO3. Everything else is what this project brought
+     * with it, and the ones inside the repository are the ones under work.
      *
-     * The deprecated files are read for the ones inside the repository alone.
-     * They are what the project is working on, so a file core has stopped
-     * reading is a defect somebody here can fix; in a dependency it is the
-     * dependency's — `D-ANS-009`.
+     * The deprecated files come in for the ones inside the repository alone.
+     * They are the work of the project, so a file core has stopped to read is a
+     * defect somebody here can fix. In a dependency it is the dependency's,
+     * `D-ANS-009`.
      *
      * @return array<int, array{key: string, path: string, origin: string, deprecatedFiles: array<int, array{file: string, changelog: string, predicate: string, cost: string}>}>
      */
@@ -555,12 +554,12 @@ final class Project
     }
 
     /**
-     * The kinds of file this project's own packages ship, by the pattern each
-     * one is found with.
+     * The kinds of file this project's own packages ship, by the pattern that
+     * finds each one.
      *
-     * JavaScript is not among them, and deliberately: a `.js` a package ships is
-     * as often build output or a vendored library as it is source, so an
-     * unchecked one says nothing — `D-ANS-148`.
+     * JavaScript is not among them, on purpose. A `.js` a package ships is as
+     * often build output or a vendored library as it is source, so an unchecked
+     * one says nothing, `D-ANS-148`.
      *
      * @var array<string, string>
      */
@@ -573,11 +572,11 @@ final class Project
     ];
 
     /**
-     * The kinds a checker is known to check, by the name it is invoked under.
+     * The kinds a checker checks, by the name it runs under.
      *
      * A tool that is not here contributes no coverage, which is what keeps a
-     * gap this names to the ones it can see: a test runner checks no kind of
-     * file, and a checker nobody has listed is indistinguishable from one
+     * gap this names to the ones it can see. A test runner checks no kind of
+     * file, and a checker nobody has listed looks the same as one
      * (`D-ANS-148`).
      *
      * @var array<string, array<int, string>>
@@ -602,9 +601,9 @@ final class Project
      * command names a checker for.
      *
      * What it does not say is what to add. A repository's standards are its
-     * own, and this answer's worth is that it reports what is declared rather
-     * than what is customary — the same reason a check that is not declared is
-     * not recommended (`D-ANS-148`).
+     * own, and this answer's worth is that it reports the declared rather than
+     * the customary. That is the same reason it recommends no undeclared check
+     * (`D-ANS-148`).
      *
      * @param array<int, array<string, mixed>> $commands
      * @return array<int, string>
@@ -653,11 +652,11 @@ final class Project
     /**
      * Where an extension in this installation comes from, read off its path.
      *
-     * Below the vendor directory it was installed as a dependency. Below a
-     * Tests/ directory it belongs to the test setup, whatever Composer's
-     * install path says — a package repository under Tests/Packages/ resolves
-     * to a real directory in the repository, and nothing else distinguishes it
-     * from the extension being developed.
+     * Below the vendor directory it came in as a dependency. Below a Tests/
+     * directory it belongs to the test setup, whatever Composer's install path
+     * says. A package repository under Tests/Packages/ resolves to a real
+     * directory in the repository, and nothing else tells it apart from the
+     * extension under development.
      */
     public static function origin(string $path): string
     {
@@ -707,12 +706,12 @@ final class Project
     }
 
     /**
-     * The commands this repository declares, which are the only ones worth
-     * recommending in it.
+     * The commands this repository declares, which are the only ones worth a
+     * recommendation in it.
      *
      * Composer scripts and npm scripts are where a project writes down what it
-     * runs; the core's own testing suites are not there, which is the whole
-     * point of asking.
+     * runs. The core's own test suites are not there, which is the whole point
+     * of the question.
      *
      * @param array<string, mixed> $manifest
      * @param array{via: string, entered: bool}|null $environment
@@ -755,11 +754,11 @@ final class Project
     /**
      * The command the repository's own contract runs an npm script through.
      *
-     * Only the core has one. Its `AGENTS.md` forbids invoking npm directly on
+     * Only the core has one. Its `AGENTS.md` forbids a direct npm call on
      * `main`, `14.3` and `13.4`, `12.4` carries no such file, and all four ship
-     * the dispatcher — so the sentence names the dispatcher rather than the
-     * file (`D-ANS-152`). It rides on the entry because a session read the
-     * paragraph above the list and reported the pointer as absent.
+     * the dispatcher. So the sentence names the dispatcher rather than the file
+     * (`D-ANS-152`). It rides on the entry because a session read the paragraph
+     * above the list and reported the pointer as absent.
      */
     private static function runThrough(string $kind): ?string
     {
@@ -771,17 +770,17 @@ final class Project
     }
 
     /**
-     * The command as it is run from where the caller stands.
+     * The command as it runs from where the caller stands.
      *
-     * The prose above the list has named both forms since 2026-08-04 and a
-     * session ran the declared one into Composer's platform check anyway,
-     * because the half it was reading was the payload — `D-ANS-126`. DDEV's own
-     * `composer` command is what carries a composer script in, and `ddev exec`
-     * the rest, which is what that sentence says.
+     * The prose above the list has named both forms since 2026-08-04, and a
+     * session ran the declared one into Composer's platform check anyway. The
+     * half it read was the payload, `D-ANS-126`. DDEV's own `composer` command
+     * is what carries a composer script in, and `ddev exec` the rest, which is
+     * what that sentence says.
      *
-     * It is the command unchanged wherever nothing can be put in front of it:
-     * no environment, a shell that is already inside one, and an environment
-     * named by `TYPO3_DEV_COMPANION_CONSOLE`, which reaches this installation's
+     * It is the command unchanged wherever nothing can go in front of it. No
+     * environment, a shell that is already inside one, and an environment
+     * `TYPO3_DEV_COMPANION_CONSOLE` names, which reaches this installation's
      * console rather than an arbitrary script.
      *
      * @param array{via: string, entered: bool}|null $environment
@@ -802,14 +801,13 @@ final class Project
 
     /**
      * The npm manifests this repository has, relative to its root and in the
-     * order they are read.
+     * order of the read.
      *
-     * The root one, and the `Build/package.json` beside it: the TYPO3 layout
-     * keeps the frontend build one directory down, and the core has its
-     * manifest, its `.nvmrc` and its Gruntfile there on every covered branch
-     * and no root manifest at all. Reading the root alone left such a
-     * repository with no npm command in this list and no Node under it —
-     * `D-SCO-014`.
+     * The root one, and the `Build/package.json` beside it. The TYPO3 layout
+     * keeps the frontend build one directory down. The core has its manifest,
+     * its `.nvmrc` and its Gruntfile there on every covered branch and no root
+     * manifest at all. A read of the root alone left such a repository with no
+     * npm command in this list and no Node under it, `D-SCO-014`.
      *
      * @return array<int, string>
      */
@@ -822,14 +820,13 @@ final class Project
     }
 
     /**
-     * What runs a script of one manifest, from the root the caller is standing
-     * in.
+     * What runs a script of one manifest, from the root the caller stands in.
      *
-     * `npm run` reads the manifest of the directory it is called in, so a
-     * script declared below the root carries the `--prefix` that points it
-     * there — which is what the core's own runTests.sh puts in front of its
-     * playwright scripts, and what makes two manifests declaring a `build`
-     * two commands a caller can tell apart.
+     * `npm run` reads the manifest of the directory of the call, so a script
+     * declared below the root carries the `--prefix` that points it there. That
+     * is what the core's own runTests.sh puts in front of its playwright
+     * scripts. It is what makes two manifests that declare a `build` two
+     * commands a caller can tell apart.
      */
     private static function npm(string $manifest): string
     {
@@ -839,23 +836,23 @@ final class Project
     }
 
     /**
-     * What running a declared command does to the sources, read off what it
+     * What a run of a declared command does to the sources, read off what it
      * declares.
      *
      * A task told not to change files still wants the checks, and no script
-     * name carries the difference: `cgl` and `cgl:ci` are one `--dry-run` apart
-     * and are the same tool. So it is read out of the body — the tool that is
-     * invoked, and the flags that decide which way that tool runs.
+     * name carries the difference. `cgl` and `cgl:ci` are one `--dry-run` apart
+     * and are the same tool. So it comes out of the body: the tool the script
+     * invokes, and the flags that decide which way that tool runs.
      *
-     * Three answers rather than two, because a `no` covering everything
+     * Three answers rather than two, because a `no` that covers everything
      * unrecognised makes the undecided look decided. A test suite is the
-     * ordinary undeclared case: it runs the project's own code, and nothing in
+     * ordinary undeclared case. It runs the project's own code, and nothing in
      * a composer.json says what that code writes.
      *
-     * "The sources", not "nothing": a checker may still write a cache of its
-     * own — `php-cs-fixer --dry-run` writes `.php-cs-fixer.cache` unless told
-     * not to — and this answers whether the code it was pointed at comes back
-     * different, which is what a review is asked about.
+     * "The sources", not "nothing". A checker may still write a cache of its
+     * own, `php-cs-fixer --dry-run` writes `.php-cs-fixer.cache` unless told
+     * not to. This answers whether the code it points at comes back different,
+     * which is what a review is about.
      *
      * @param array<int, mixed>|string $declaration one composer or npm script, as declared
      * @param array<string, mixed> $scripts the declaring manifest's scripts, for `@name` references
@@ -873,9 +870,9 @@ final class Project
             $answers[] = self::runsLine($line, $scripts, $seen);
         }
 
-        // The strongest claim any line makes is the claim about all of them: a
-        // script that lints and then fixes changes the sources, and one that
-        // lints and then runs a suite is as undeclared as the suite is.
+        // The strongest claim any line makes is the claim about all of them. A
+        // script that lints and then fixes changes the sources. One that lints
+        // and then runs a suite is as undeclared as the suite is.
         return match (true) {
             in_array(self::RUNS_AS_CHANGE, $answers, true) => self::RUNS_AS_CHANGE,
             in_array(self::RUNS_UNDECLARED, $answers, true) => self::RUNS_UNDECLARED,
@@ -893,16 +890,16 @@ final class Project
 
         // One line is one command only where nothing chains another onto it.
         // Read as the tool in front, `phpstan analyse && php-cs-fixer fix` is
-        // the analyser and the rewriter is never reached — and an npm script
-        // chains by convention, so the shape is the ordinary one there.
+        // the analyser and the rewriter never comes up. An npm script chains by
+        // convention, so the shape is the ordinary one there.
         $chained = self::chained($line);
         if (count($chained) > 1) {
             return self::runs($chained, $scripts, $seen);
         }
 
-        // Composer's own prefixes come before any tool: @php picks the PHP the
-        // project runs on, @putenv sets a variable for the lines after it, and
-        // a bare @name is another script of the same manifest.
+        // Composer's own prefixes come before any tool. @php picks the PHP the
+        // project runs on, @putenv sets a variable for the lines after it. A
+        // bare @name is another script of the same manifest.
         while ($line !== '' && $line[0] === '@') {
             [$prefix, $rest] = array_pad(preg_split('/\s+/', $line, 2) ?: [], 2, '');
             if ($prefix === '@php' || $prefix === '@php_binary' || $prefix === '@composer') {
@@ -921,10 +918,11 @@ final class Project
                 : self::RUNS_UNDECLARED;
         }
 
-        // A leading `NAME=value` is the environment a command is given, not the
-        // command: `PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run` is the
-        // fixer reporting, and reading the assignment as the tool loses every
-        // flag behind it — so the reporter and the rewriter come back the same.
+        // A `NAME=value` in front is the environment a command gets, not the
+        // command. `PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run` is
+        // the fixer in report mode, and a read of the assignment as the tool
+        // loses every flag behind it. So the reporter and the rewriter come
+        // back the same.
         $line = (string) preg_replace('/^(?:[A-Za-z_][A-Za-z0-9_]*=(?:"[^"]*"|\'[^\']*\'|\S*)\s+)+/', '', $line);
 
         $tokens = array_values(array_filter(preg_split('/\s+/', $line) ?: []));
@@ -979,13 +977,14 @@ final class Project
                 'install', 'ci', 'update', 'add' => self::RUNS_AS_CHANGE,
                 default => self::RUNS_UNDECLARED,
             },
-            // Its two writing subcommands are what TYPO3 extensions declare it
-            // for; the rest of it is not read here.
+            // Its two write subcommands are what TYPO3 extensions declare it
+            // for; the rest of it gets no read here.
             'extension-helper' => in_array($first, ['version:set', 'changelog:create'], true)
                 ? self::RUNS_AS_CHANGE
                 : self::RUNS_UNDECLARED,
-            // A suite runs the project's own code, and `bin/typo3` runs whatever
-            // command it is handed. Neither is readable from the declaration.
+            // A suite runs the project's own code, and `bin/typo3` runs
+            // whatever command it gets. Neither is readable from the
+            // declaration.
             default => self::RUNS_UNDECLARED,
         };
     }
@@ -994,8 +993,8 @@ final class Project
      * The commands one declared line puts on the shell.
      *
      * `&&`, `||`, `;`, `|` and a trailing `&` each start another one, and every
-     * one of them runs. A quoted operator does not, because a filter pattern
-     * carries `|` and a message carries `;`.
+     * one of them runs. An operator in quotes does not, because a filter
+     * pattern carries `|` and a message carries `;`.
      *
      * @return array<int, string>
      */
@@ -1050,10 +1049,10 @@ final class Project
     /**
      * The PHP the installed core requires, out of that package's own manifest.
      *
-     * A third number rather than a second reading of the first two: the project
+     * A third number rather than a second read of the first two. The project
      * states what it accepts, the environment states what it runs, and this is
-     * the lowest a package installed beside this core may declare. It is not
-     * derivable from the major, so an extension given the container's PHP as its
+     * the lowest a package installed beside this core may declare. It does not
+     * derive from the major. So an extension with the container's PHP as its
      * minimum narrows its own range with every check still green (`D-KNW-055`).
      */
     private static function corePhpConstraint(): ?string
@@ -1067,12 +1066,13 @@ final class Project
      * How the four PHP numbers beside it stand to each other.
      *
      * The first two comparisons are against what this project declares, because
-     * that is what a manifest can be rewritten to (`D-ANS-082`). The third is
-     * against the bound instead, because that one is not a declaration at all:
-     * it is the line the declared commands abort on, and what decides whether
-     * they abort is the interpreter that would run them (`D-ANS-086`). Nothing
-     * was run to find any of it out — this is what the files say, never evidence
-     * that the floor works. Null where the declared constraint names no floor.
+     * that is what a rewrite of a manifest can change (`D-ANS-082`). The third
+     * is against the bound instead, because that one is not a declaration at
+     * all. It is the line the declared commands abort on, and what decides
+     * whether they abort is the interpreter that would run them (`D-ANS-086`).
+     * Nothing ran to find any of it out. This is what the files say, never
+     * evidence that the floor works. Null where the declared constraint names
+     * no floor.
      *
      * @return array{floor: string, coreFloor: ?string, againstCore: ?string, inEnvironment: ?string, bound: ?string, environmentAgainstBound: ?string}|null
      */
@@ -1084,7 +1084,7 @@ final class Project
         }
         $coreFloor = Versions::floor($core);
         // The bound is an exact version and a DDEV php_version is major.minor,
-        // so both are read to the depth the shallower one has.
+        // so both read to the depth the shallower one has.
         $boundFloor = Versions::floor($bound);
 
         return [
@@ -1099,11 +1099,11 @@ final class Project
 
     /**
      * Where the interpreter that would run the declared commands sits against
-     * the bound the install carries, or null where either is missing.
+     * the bound the install carries, or null where either is absent.
      *
-     * Public because the answer states this twice and may compute it once: the
+     * Public because the answer states this twice and may compute it once. The
      * relation belongs among the numbers, and whether a command starts belongs
-     * beside the commands — which is also stated where no declared floor left a
+     * beside the commands. That also stands where no declared floor left a
      * `phpRelation` to carry it.
      */
     public static function againstBound(?string $environment, ?string $bound): ?string
@@ -1118,7 +1118,7 @@ final class Project
      * state.
      *
      * The PHP numbers are `major.minor` on both sides and the depth never
-     * bites. A Node version is where it does: an `.nvmrc` says 24 and a
+     * bites. A Node version is where it does. An `.nvmrc` says 24 and a
      * workflow says 24.19.0, and compared as written the pin would come out
      * below the version that satisfies it.
      */
@@ -1142,8 +1142,8 @@ final class Project
      * root manifest.
      *
      * `describe()` returns it too, but everything else there costs file reads
-     * this has no use for, and the version an answer is composed for is decided
-     * before any of it.
+     * this has no use for. The version an answer composes for settles before
+     * any of it.
      */
     public static function coreConstraint(): ?string
     {

@@ -5,41 +5,41 @@ declare(strict_types=1);
 /**
  * What the running installation says about itself.
  *
- * This file is never included by the server. It is read as text and handed to
- * the installation's own interpreter as a subprocess — through DDEV where the
- * project runs there. Everything below therefore executes on the other side of
- * a process boundary, with the installation's autoloader, its PHP version and
- * its extensions, and a fatal error here is an exit code rather than a dead MCP
+ * The server never includes this file. It comes in as text and goes to the
+ * installation's own interpreter as a subprocess, through DDEV where the
+ * project runs there. So everything below executes on the other side of a
+ * process boundary, with the installation's autoloader, its PHP version and its
+ * extensions. A fatal error here is an exit code rather than a dead MCP
  * session.
  *
- * Two properties are load-bearing and both look like omissions:
+ * Two properties carry weight and both look like omissions:
  *
- * - No `declare(strict_types=1)`. The body is delivered through `php -r`, which
+ * - No `declare(strict_types=1)`. The body travels through `php -r`, which
  *   wraps it, and a declare is only legal as the very first statement of a
- *   script. Typo3Runtime strips the opening tag for the same reason.
- * - The autoloader path is relative and is substituted into the literal below
- *   before delivery. The two sides of DDEV do not share absolute paths: the
- *   subprocess is started with the installation root as its working directory,
- *   and inside the container that same root is /var/www/html.
+ *   script. Typo3Runtime strips the open tag for the same reason.
+ * - The autoloader path is relative and goes into the literal below before
+ *   delivery. The two sides of DDEV do not share absolute paths. The subprocess
+ *   starts with the installation root as its working directory, and inside the
+ *   container that same root is /var/www/html.
  *
- * What a caller asked for is substituted the same way, as one array. The topics
- * that read it are the ones no other reading wants: TYPO3_CONF_VARS is around
- * 50 kB of JSON before an extension has added to it, and a flex field costs a
- * resolution nobody who asked about an icon has a use for.
+ * What a caller asked for goes in the same way, as one array. The topics that
+ * read it are the ones no other read wants. TYPO3_CONF_VARS is around 50 kB of
+ * JSON before an extension has added to it. A flex field costs a resolution
+ * nobody who asked about an icon has a use for.
  *
  * It prints one JSON object on stdout and nothing else. TYPO3's own output
- * buffer is discarded first, because an extension that echoes during boot would
+ * buffer goes first, because an extension that echoes during boot would
  * otherwise sit in front of the payload.
  */
 $answer = ['state' => 'unreachable', 'reason' => '', 'topics' => []];
 
 try {
-    // Replaced by Typo3Runtime before delivery; a literal so the file stays
-    // valid PHP that can be linted and read on its own.
+    // Typo3Runtime replaces it before delivery; a literal so the file stays
+    // valid PHP a linter and a reader can take on its own.
     $autoload = 'vendor/autoload.php';
-    // What the call asked for, substituted the same way. Empty unless a caller
-    // asked a topic that takes an argument, and then the only reason that topic
-    // is read at all.
+    // What the call asked for, in the same way. Empty unless a caller asked a
+    // topic that takes an argument, and then the only reason that topic reads
+    // at all.
     $parameters = [];
     $configurationPath = (string) ($parameters['configurationPath'] ?? '');
     $flexForm = is_array($parameters['flexForm'] ?? null) ? $parameters['flexForm'] : null;
@@ -58,10 +58,10 @@ try {
     );
     $container = TYPO3\CMS\Core\Core\Bootstrap::init($classLoader);
 
-    // A system without essential configuration boots into a failsafe container:
-    // core packages only, no ext_localconf.php, no TCA. Its registries answer,
-    // and what they answer is a subset that looks like the whole. Naming that
-    // state is the entire point of asking.
+    // A system without essential configuration boots into a failsafe container.
+    // Core packages only, no ext_localconf.php, no TCA. Its registries answer,
+    // and what they answer is a subset that looks like the whole. A name for
+    // that state is the entire point of the question.
     if ($container instanceof TYPO3\CMS\Core\DependencyInjection\FailsafeContainer) {
         $answer['state'] = 'failsafe';
         $answer['reason'] = 'the installation has no essential configuration yet, so TYPO3 booted failsafe '
@@ -72,12 +72,10 @@ try {
     $answer['state'] = 'full';
 
     // One path out of TYPO3_CONF_VARS as it stands after every extension has
-    // had its say. `ArrayUtility` is the core's own reading of such a path and
-    // is what `configuration:show --type=active` traverses with, so a caller
-    // gets the same value on a line that has that command and on the two that
-    // do not.
-    //
-    // In a try of its own: a failure here is one topic.
+    // had its say. `ArrayUtility` is the core's own read of such a path and is
+    // what `configuration:show --type=active` traverses with. So a caller gets
+    // the same value on a line that has that command and on the two that do
+    // not. In a try of its own: a failure here is one topic.
     if ($configurationPath !== '') {
         try {
             $found = TYPO3\CMS\Core\Utility\ArrayUtility::isValidPath(
@@ -104,7 +102,7 @@ try {
         $identifier = (string) $identifier;
         $configuration = $registry->getIconConfigurationByIdentifier($identifier);
         $options = is_array($configuration['options'] ?? null) ? $configuration['options'] : [];
-        // The source is what says which extension an identifier belongs to:
+        // The source is what says which extension an identifier belongs to.
         // EXT:news/Resources/Public/Icons/… is the only attribution the
         // registry carries, and a bitmap or sprite icon names it differently.
         $source = $options['source'] ?? ($options['name'] ?? '');
@@ -112,17 +110,15 @@ try {
     }
     $answer['topics']['icons'] = $icons;
 
-    // TCA as it is after every extension has had its say, which is where the
+    // TCA as it is after every extension has had its say. That is where the
     // tables an extension adds through a PHP call and the content elements
-    // registered from a variable exist at all.
-    //
-    // What TCA does not carry is which extension an entry belongs to, and an
-    // answer about one extension cannot use a list belonging to all of them.
-    // So each entry travels with what names an extension in it: a label or a
-    // ctrl title is `LLL:EXT:<key>/…`, and an item's icon resolves through the
-    // registry to `EXT:<key>/…`. Both are read here, attributed on the other
-    // side, and where neither names anything the entry is the installation's
-    // rather than a package's.
+    // registered from a variable exist at all. What TCA does not carry is which
+    // extension an entry belongs to. An answer about one extension cannot use a
+    // list that belongs to all of them. So each entry travels with what names
+    // an extension in it. A label or a ctrl title is `LLL:EXT:<key>/…`, and an
+    // item's icon resolves through the registry to `EXT:<key>/…`. Both come in
+    // here and get their attribution on the other side. Where neither names
+    // anything the entry is the installation's rather than a package's.
     $tca = is_array($GLOBALS['TCA'] ?? null) ? $GLOBALS['TCA'] : [];
     $tables = [];
     foreach ($tca as $table => $configuration) {
@@ -137,7 +133,7 @@ try {
             continue;
         }
         // Keyed since v12, positional before it, and both shapes are in the
-        // wild because an extension is written for the line it supports.
+        // wild because an extension serves the line it supports.
         $value = $item['value'] ?? ($item[1] ?? null);
         if (!is_string($value) || $value === '' || $value === '--div--') {
             continue;
@@ -152,16 +148,13 @@ try {
     $answer['topics']['contentElements'] = $contentElements;
 
     // One type=flex column resolved the way FormEngine resolves it, which is
-    // the two calls TcaFlexPrepare makes and nothing else: the identifier, and
+    // the two calls TcaFlexPrepare makes and nothing else. The identifier, and
     // the structure that identifier parses to. Everything between them is the
-    // installation's — the events a package listens to, the file a sheet is
-    // held in, the migration and the preparation — and none of it is in the
-    // file the TCA points at.
-    //
-    // The row is the caller's. FlexFormTools needs one to find the key with,
-    // and nothing here loads one.
-    //
-    // Read only where a caller asked, for the reason the configuration path is.
+    // installation's: the events a package listens to, the file that holds a
+    // sheet, the migration and the preparation. None of it is in the file the
+    // TCA points at. The row is the caller's. FlexFormTools needs one to find
+    // the key with, and nothing here loads one. Read only where a caller asked,
+    // for the reason the configuration path is.
     if ($flexForm !== null) {
         $table = (string) ($flexForm['table'] ?? '');
         $field = (string) ($flexForm['field'] ?? '');
@@ -179,10 +172,10 @@ try {
         }
 
         // What a caller can put in the record to reach another structure, read
-        // off the declaration in the shape this installation writes it in. An
-        // array of structures is keyed by the pointer fields; a single one is
-        // overridden per record type. Those are the two mechanisms the covered
-        // majors differ by, and the core's own resolution branches on the same
+        // off the declaration in the shape this installation has it in. The
+        // pointer fields key an array of structures; a single one has an
+        // override per record type. Those are the two mechanisms the covered
+        // majors differ by. The core's own resolution branches on the same
         // shape rather than on a version.
         $keys = [];
         $pointerFields = [];
@@ -216,8 +209,8 @@ try {
             'failure' => '',
         ];
 
-        // What a caller writing or reading a FlexForm needs of an element,
-        // rather than the prepared TCA of it: the same fields the backend form
+        // What a caller who writes or reads a FlexForm needs of an element,
+        // rather than the prepared TCA of it. The same fields the backend form
         // labels an input with, and not the rest of what the preparation left
         // on it.
         $summarize = static function (array $elements) use (&$summarize): array {
@@ -267,18 +260,18 @@ try {
             return $fields;
         };
 
-        // In a try of its own, and its failure is the answer rather than a
-        // missing topic: an empty ds, a column that is not type=flex and a
-        // record type nothing is registered for are all reported by throwing,
-        // and what they throw is what the caller has to read.
+        // In a try of its own, and its failure is the answer rather than an
+        // absent topic. An empty ds, a column that is not type=flex and a
+        // record type nothing registers for all report with a throw. What they
+        // throw is what the caller has to read.
         try {
             $tools = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools::class,
             );
-            // The installation is asked what its own signature is rather than
-            // told from a version number. TYPO3 v14 resolves against a TcaSchema
-            // handed in and throws where it is null; v12 and v13 read the global
-            // TCA and have no such parameter.
+            // The installation answers what its own signature is rather than
+            // hears it from a version number. TYPO3 v14 resolves against a
+            // TcaSchema the caller hands in and throws where it is null. v12
+            // and v13 read the global TCA and have no such parameter.
             $wantsSchema = (new ReflectionMethod($tools, 'getDataStructureIdentifier'))->getNumberOfParameters() > 4;
             $schema = null;
             if ($wantsSchema) {
@@ -312,14 +305,13 @@ try {
     }
 
     // The columns TYPO3 adds to a table by itself, which is what an
-    // ext_tables.sql may leave out. DefaultTcaSchema is handed one empty table
-    // per TCA table — it throws where one is missing — so everything it comes
-    // back with was derived rather than declared. It reaches the ConnectionPool
-    // for the platform of each table, which the MySQL, MariaDB and PostgreSQL
-    // drivers ask the server for and the SQLite one does not (D-DIS-012).
-    //
-    // In a try of its own: a failure here is one topic, and the icons and the
-    // TCA above have already been read.
+    // ext_tables.sql may leave out. DefaultTcaSchema gets one empty table per
+    // TCA table, it throws where one is absent. So everything it comes back
+    // with derives rather than comes from a declaration. It reaches the
+    // ConnectionPool for the platform of each table. The MySQL, MariaDB and
+    // PostgreSQL drivers ask the server for that and the SQLite one does not
+    // (D-DIS-012). In a try of its own. A failure here is one topic, and the
+    // icons and the TCA above are already in.
     try {
         $tables = [];
         foreach (array_keys($tca) as $table) {
@@ -342,7 +334,7 @@ try {
                 ];
             }
             // A table the enrichment created rather than enriched is an MM
-            // table: it exists because a relation asked for it, and no
+            // table. It exists because a relation asked for it, and no
             // ext_tables.sql needs to declare it at all.
             $derived[(string) $table] = [
                 'columns' => $columns,
@@ -355,10 +347,10 @@ try {
             'unavailable' => get_class($failure) . ': ' . $failure->getMessage(),
         ];
     }
-    // Asked for rather than read with everything else: it opens a connection
-    // and lists a schema, which a caller who asked about an icon should not pay
+    // On request rather than with everything else. It opens a connection and
+    // lists a schema, which a caller who asked about an icon should not pay
     // for. The derived columns above say what TYPO3 would create; this says
-    // what is there, and the difference is the finding — `D-DIS-022`.
+    // what is there, and the difference is the finding, `D-DIS-022`.
     if ($liveSchema !== null) {
         try {
             $wanted = (string) ($liveSchema['table'] ?? '');
@@ -372,8 +364,8 @@ try {
             $topic = ['tables' => $names];
             if ($wanted !== '') {
                 // A table the schema does not have is an answer rather than a
-                // failure: an installation whose tables were never created is
-                // the case the derived side exists for.
+                // failure. An installation whose tables never came to be is the
+                // case the derived side exists for.
                 $topic['table'] = $wanted;
                 $topic['present'] = in_array($wanted, $names, true);
                 if ($topic['present']) {
@@ -402,17 +394,16 @@ try {
                 }
             }
 
-            // What the two sides differ by is asked of TYPO3 rather than
-            // computed here. `SqlReader` assembles the effective schema — every
-            // active extension's ext_tables.sql and what TCA generates — and
-            // the migrator diffs that against the connection, which is the
-            // reading the Install Tool and database:updateschema act on. Its
-            // change types are that command's own argument.
-            //
-            // The statements themselves are dropped and only the tables they
-            // name are kept. SQLite cannot alter a column, so one extra column
-            // comes back as a four-kilobyte table rebuild, and a caller who
-            // wants the SQL has the command that prints it.
+            // TYPO3 answers what the two sides differ by rather than a
+            // computation here. `SqlReader` assembles the effective schema,
+            // every active extension's ext_tables.sql and what TCA generates.
+            // The migrator diffs that against the connection, which is the read
+            // the Install Tool and database:updateschema act on. Its change
+            // types are that command's own argument. The statements themselves
+            // drop out and only the tables they name stay. SQLite cannot alter
+            // a column, so one extra column comes back as a four-kilobyte table
+            // rebuild. A caller who wants the SQL has the command that prints
+            // it.
             $reader = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 TYPO3\CMS\Core\Database\Schema\SqlReader::class,
             );
@@ -437,8 +428,8 @@ try {
                             }
                             // Only where a name stands in a table position. A
                             // column called `backend_layout` sits in the column
-                            // list of a rebuilt `pages`, and matching the bare
-                            // word reported the table of that name as drifting.
+                            // list of a rebuilt `pages`. A match on the bare
+                            // word reported the table of that name as drifted.
                             preg_match_all(
                                 '/(?:TABLE|INTO)\s+[`"]?([a-zA-Z0-9_]+)[`"]?/i',
                                 $entry,
@@ -451,10 +442,10 @@ try {
                             if ($wanted !== '' && !in_array($wanted, $named, true)) {
                                 continue;
                             }
-                            // The tables and not how many statements name
-                            // them: one changed column is one ALTER on MySQL
-                            // and a whole table rebuild on SQLite, so a count
-                            // says which platform is under the answer.
+                            // The tables and not how many statements name them.
+                            // One changed column is one ALTER on MySQL and a
+                            // whole table rebuild on SQLite, so a count says
+                            // which platform is under the answer.
                             $key = $name . "\0" . $type;
                             $at = array_values(array_unique(array_merge($suggestions[$key]['tables'] ?? [], $named)));
                             sort($at);
@@ -467,9 +458,9 @@ try {
                     }
                 }
             }
-            // A list rather than a map keyed by connection: an empty map is
-            // `[]` in JSON and a schema saying object refuses it, and a client
-            // reads one shape either way.
+            // A list rather than a map keyed by connection. An empty map is
+            // `[]` in JSON and a schema that says object refuses it, and a
+            // client reads one shape either way.
             ksort($suggestions);
             $topic['statementCount'] = count($statements);
             $topic['suggestions'] = array_values($suggestions);
@@ -481,20 +472,16 @@ try {
         }
     }
 
-    // The queries this probe runs over rows, and the only ones it may run: how
+    // The queries this probe runs over rows, and the only ones it may run. How
     // many there are, grouped by the page they sit on and by the state the
-    // enable fields put them in, and the rows themselves where the caller asked
-    // for them — `D-AUD-017`.
-    //
-    // What a row carries is fixed here rather than by the caller: the
-    // identifiers, the label the table names in its own ctrl, the timestamps
-    // and the two flags. A column list the caller composes would make every
-    // column of a countable table readable, which is the boundary rather than a
-    // convenience.
-    //
-    // Every restriction is removed on purpose: a deleted or hidden row is what
-    // the caller is asking about, and the default restrictions would report it
-    // as absent rather than as deleted.
+    // enable fields put them in. And the rows themselves where the caller asked
+    // for them, `D-AUD-017`. What a row carries stands here rather than with
+    // the caller. The identifiers, the label the table names in its own ctrl,
+    // the timestamps and the two flags. A column list the caller composes would
+    // make every column of a countable table readable, which is the boundary
+    // rather than a convenience. Every restriction goes on purpose. A deleted
+    // or hidden row is what the caller asks about, and the default restrictions
+    // would report it as absent rather than as deleted.
     if ($records !== null) {
         try {
             $wanted = (string) ($records['table'] ?? '');
@@ -514,9 +501,9 @@ try {
             );
 
             // One place builds the filter, so the count and the rows are two
-            // answers about one set. Every value is bound rather than written
-            // into the SQL, and every column name is one the caller was told
-            // this table has.
+            // answers about one set. Every value binds rather than goes into
+            // the SQL, and every column name is one the caller heard this table
+            // has.
             $constrain = static function (
                 TYPO3\CMS\Core\Database\Query\QueryBuilder $builder
             ) use ($where): TYPO3\CMS\Core\Database\Query\QueryBuilder {
@@ -545,9 +532,9 @@ try {
                     $grouped[] = $flag;
                 }
             }
-            // The alias is given rather than taken: what a bare COUNT(*) comes
-            // back keyed by is the platform's, and the three this server covers
-            // do not agree on it.
+            // The alias stands here rather than comes from the platform. The
+            // key a bare COUNT(*) comes back under is the platform's, and the
+            // three this server covers do not agree on it.
             $counting->selectLiteral($counting->expr()->count('*', 'rowCount'))->from($wanted);
             foreach ($grouped as $column) {
                 $counting->addSelect($column);
@@ -568,9 +555,9 @@ try {
             }
 
             // The rows that depart from the column's TCA default, which is what
-            // turns a distribution into a decision: a value one row in a
-            // hundred carries is invisible in the counts and is the row that
-            // breaks when the branch it needs is dropped — `D-AUD-018`.
+            // turns a distribution into a decision. A value one row in a
+            // hundred carries is invisible in the counts. It is the row that
+            // breaks when the branch it needs goes, `D-AUD-018`.
             $departing = [];
             if ($groupBy !== '' && $default !== null) {
                 $departingFrom = $constrain($pool->getQueryBuilderForTable($wanted));
@@ -599,9 +586,9 @@ try {
                 $selecting->getRestrictions()->removeAll();
                 $columns = ['uid', 'pid'];
                 // The columns the caller named come off the same read. Each one
-                // was checked against what TYPO3 derives for the table before
-                // the call was made, which is what lets it go into the SQL as
-                // an identifier — `D-AUD-019`.
+                // had a check against what TYPO3 derives for the table before
+                // the call. That is what lets it go into the SQL as an
+                // identifier, `D-AUD-019`.
                 $wantedColumns = is_array($records['columns'] ?? null) ? array_values($records['columns']) : [];
                 foreach ([$label, $changed, $created, $deleted, $hidden, ...$wantedColumns] as $column) {
                     if (is_string($column) && $column !== '' && !in_array($column, $columns, true)) {
@@ -634,17 +621,17 @@ try {
 
             $answer['topics']['records'] = [
                 'table' => $wanted,
-                // Said rather than inferred from what came back: a table with
+                // Said rather than inferred from what came back. A table with
                 // no delete field marks nothing as deleted, and that is not the
-                // same answer as nothing having been deleted. The label field
-                // is here for the same reason — an empty label on every row is
-                // a table whose ctrl names none.
+                // same answer as no deletion at all. The label field is here
+                // for the same reason. An empty label on every row is a table
+                // whose ctrl names none.
                 'deleteField' => $deleted,
                 'hiddenField' => $hidden,
                 'labelField' => $label,
                 'groups' => $groups,
                 // Null is a column whose TCA declares no default, which is a
-                // different answer from a default of zero: nothing departs from
+                // different answer from a default of zero. Nothing departs from
                 // the first and every non-zero row departs from the second.
                 'groupDefault' => $default,
                 'departing' => $departing,
@@ -657,14 +644,14 @@ try {
         }
     }
 
-    // The container the installation runs is compiled, and a compiled one has
-    // forgotten every private service — which is nearly all of them. What can
-    // be read is the builder before that, and it is assembled by asking the
-    // core's own ContainerBuilder rather than by repeating what it does: the
-    // passes, the load order and the synthetic early services are its, and a
-    // copy of them here would drift without anything failing. `buildContainer`
-    // is protected, so this reaches it by reflection and reports the topic
-    // unavailable where that stops working — `D-DIS-023`.
+    // The container the installation runs is a compiled one, and a compiled one
+    // has forgotten every private service, which is nearly all of them. What is
+    // readable is the builder before that, and it assembles through the core's
+    // own ContainerBuilder rather than a repeat of what it does. The passes,
+    // the load order and the synthetic early services are its, and a copy of
+    // them here would drift with no failure. `buildContainer` has protected
+    // visibility, so this reaches it by reflection and reports the topic
+    // unavailable where that stops to work, `D-DIS-023`.
     if ($services !== null) {
         try {
             $packageManager = $container->get(TYPO3\CMS\Core\Package\PackageManager::class);
@@ -683,11 +670,10 @@ try {
                 $builder = $build->invoke($coreBuilder, $packageManager, $registry);
             } catch (Symfony\Component\DependencyInjection\Exception\ExceptionInterface $broken) {
                 // A container that will not assemble is the finding rather than
-                // the absence of one: the message names the service and the
-                // argument, which is what the caller came for. It is answered
-                // and not thrown on — one try wraps this whole file, so a throw
-                // here would end the reading and take every other topic with
-                // it.
+                // the absence of one. The message names the service and the
+                // argument, which is what the caller came for. It answers and
+                // does not throw. One try wraps this whole file, so a throw
+                // here would end the read and take every other topic with it.
                 $answer['topics']['services'] = [
                     'definitionCount' => 0,
                     'aliasCount' => 0,
@@ -697,10 +683,10 @@ try {
             }
 
             if ($builder !== null) {
-                // `buildContainer` compiles before it returns, so what comes back
-                // is the builder with autowiring resolved and the unused private
-                // definitions already removed. That is the set the running
-                // container has, which is the one a caller is asking about.
+                // `buildContainer` compiles before it returns, so what comes
+                // back is the builder with autowiring resolved and the unused
+                // private definitions already removed. That is the set the live
+                // container has, which is the one a caller asks about.
                 $definitions = $builder->getDefinitions();
 
                 $wanted = strtolower((string) ($services['query'] ?? ''));
@@ -740,9 +726,9 @@ try {
                         'arguments' => $arguments,
                     ];
                 }
-                // An interface usually reaches its implementation through an alias,
-                // and a lookup that reads definitions alone answers "nothing" to
-                // the commonest question there is — `D-DIS-023`.
+                // An interface usually reaches its implementation through an
+                // alias. A lookup that reads definitions alone answers
+                // "nothing" to the commonest question there is, `D-DIS-023`.
                 $aliases = $builder->getAliases();
                 foreach ($aliases as $id => $alias) {
                     $target = (string) $alias;
@@ -790,18 +776,16 @@ try {
         }
     }
 
-    // A form data group is a dependency graph and not a list: every provider
+    // A form data group is a dependency graph and not a list. Every provider
     // declares `depends` and `before`, and what orders the run is what the core
     // resolves from those. The raw registry hands a reader the inputs and calls
-    // it the answer — tcaDatabaseRecord has 61 providers, and the pair any one
-    // question is about sits far apart in it with no edge between them.
-    //
-    // Ordered by the core's own service, with the two keys
+    // it the answer. tcaDatabaseRecord has 61 providers, and the pair any one
+    // question is about sits far apart in it with no edge between them. Ordered
+    // by the core's own service, with the two keys
     // `Form\FormDataGroup\OrderedProviderList` passes it. A second
     // implementation on the other side would answer confidently and, the day
-    // the resolution changes, differently.
-    //
-    // In a try of its own, for the reason the enrichment above has one.
+    // the resolution changes, differently. In a try of its own, for the reason
+    // the enrichment above has one.
     try {
         $groups = [];
         $registry = $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup'] ?? [];
@@ -830,17 +814,15 @@ try {
         ];
     }
     // The module tree as the registry resolved it. Two of the values exist
-    // nowhere else: `navigationComponent` is inherited from the parent module,
-    // so a Modules.php says nothing about whether a module is page-tree
-    // navigated, and the routes beyond the module's own path are assembled per
-    // module rather than declared. Reading the files instead is not a weaker
-    // answer here, it is a wrong one — and EXT:backend's own Modules.php
-    // references enum constants and cannot be included outside a booted core.
-    //
-    // The package and the labels are not on the registry's API, so the raw
-    // configuration is read beside it. That is the same low-level access the
+    // nowhere else. `navigationComponent` comes down from the parent module, so
+    // a Modules.php says nothing about whether a module has page-tree
+    // navigation. The routes beyond the module's own path assemble per module
+    // rather than come from a declaration. A read of the files instead is not a
+    // weaker answer here, it is a wrong one. EXT:backend's own Modules.php
+    // references enum constants and no include outside a booted core works. The
+    // package and the labels are not on the registry's API, so the raw
+    // configuration comes in beside it. That is the same low-level access the
     // core's own debug:backend:modules takes, for the reason it states there.
-    //
     // In a try of its own, for the reason the enrichment above has one.
     try {
         $registry = $container->get(TYPO3\CMS\Backend\Module\ModuleRegistry::class);
@@ -860,11 +842,11 @@ try {
             }
 
             // What ModuleRegistry::registerRoutesForModules() registers for
-            // this module, worked out its way: a first-level module that is not
+            // this module, worked out its way. A first-level module that is not
             // standalone gets none, `_default` goes under the module identifier
             // and every other route under `<module>.<name>` below the module's
             // path. A module with no routable default throws rather than
-            // answering, and that is a module with no routes.
+            // answers, and that is a module with no routes.
             $routes = [];
             if ($module->hasParentModule() || $module->isStandalone()) {
                 try {
@@ -880,7 +862,7 @@ try {
                         'identifier' => $name === '_default' ? $identifier : $identifier . '.' . $name,
                         'path' => $name === '_default' ? $module->getPath() : $module->getPath() . $below,
                         // The options carry the module object itself, so the
-                        // fields are named rather than handed over whole.
+                        // fields stand by name rather than go over whole.
                         'target' => is_string($options['target'] ?? null) ? $options['target'] : '',
                     ];
                 }

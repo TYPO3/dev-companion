@@ -14,9 +14,9 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Whether every path the component catalog names still exists in one checkout.
  *
- * Two things can be wrong with an entry, and each has its own command: the
- * paths it names are gone from a checkout — this one — or its `since`/`until`
- * no longer say which versions it holds on, which is `components:check`. This one
+ * Two things can be wrong with an entry, and each has its own command. The
+ * paths it names are gone from a checkout, this one. Or its `since`/`until` no
+ * longer say which versions it holds on, which is `components:check`. This one
  * reads a checkout of the caller's own rather than .checkouts/, because it
  * answers a question about that checkout.
  */

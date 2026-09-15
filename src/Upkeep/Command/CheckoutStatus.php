@@ -14,9 +14,9 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * What is below .checkouts/, and how old it is.
  *
- * The packages the core pins are reported beside the core branches, because a
- * statement about one of them is verified against a tag of that package rather
- * than against a core branch (D-KNW-106).
+ * The packages the core pins stand beside the core branches. A statement about
+ * one of them verifies against a tag of that package rather than against a core
+ * branch (D-KNW-106).
  */
 #[AsCommand(
     name: 'checkouts:status',

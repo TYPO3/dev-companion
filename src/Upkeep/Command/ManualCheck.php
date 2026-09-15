@@ -14,12 +14,12 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Whether each manual still declares the shortcode `knowledge/manuals.json`
  * addresses it by.
  *
- * Nothing on docs.typo3.org publishes the set of shortcodes, so the list is
- * maintained here and would otherwise go stale without anything failing — a
- * manual renamed, moved to another collection or dropped is a 404 the next
- * session reports as a gap (`D-ANS-120`). Each manual does publish its own,
- * though: the theme writes the `interlink-shortcode` of its `guides.xml` into
- * every page it renders, so the claim is checkable one entry at a time.
+ * Nothing on docs.typo3.org publishes the set of shortcodes, so the list lives
+ * here and would otherwise go stale with no failure. A manual renamed, moved to
+ * another collection or dropped is a 404 the next session reports as a gap
+ * (`D-ANS-120`). Each manual does publish its own, though. The theme writes the
+ * `interlink-shortcode` of its `guides.xml` into every page it renders, so the
+ * claim is checkable one entry at a time.
  *
  * It reads the host, which no other command here does, and that is the whole
  * reason it is a command rather than a test.

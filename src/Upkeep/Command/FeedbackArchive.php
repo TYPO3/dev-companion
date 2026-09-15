@@ -11,11 +11,11 @@ use TYPO3\DevCompanion\Feedback\Channel;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * Closing a feedback, which is moving it.
+ * Closes a feedback, which is a move.
  *
  * In the same commit as the improvement it asked for, so that commit is both
- * what answers the feedback and what says so. Several feedback closed by one
- * change are named in one call, because they are one commit.
+ * what answers the feedback and what says so. Several feedback one change
+ * closes go in one call, because they are one commit.
  */
 #[AsCommand(
     name: 'feedback:archive',

@@ -13,12 +13,12 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Writes the tool reference back from the registry.
  *
- * What this replaces is the surface being written twice: the classes declare
- * what a caller can see of a tool, and the only place it was readable without
- * calling the server was a list of names in the readme. The fields a tool
- * answers with were written down nowhere at all.
+ * What this replaces is the surface in two copies. The classes declare what a
+ * caller can see of a tool. The only place it was readable without a call to
+ * the server was a list of names in the readme. The fields a tool answers with
+ * stood nowhere at all.
  *
- * What a tool answered is not rewritten. It is carried over from the page as it
+ * What a tool answered is not rewritten. It carries over from the page as it
  * stands, because `tools:record` is the only thing that can produce it.
  */
 #[AsCommand(

@@ -8,15 +8,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * A scenario handed to whoever runs it: what has to be pasted, and what the
- * session is judged against.
+ * A scenario handed to whoever runs it: what to paste, and what the judge holds
+ * the session to.
  *
- * Two commands print this and differ in one word — `scenarios:show` for an open
- * forward review, `scenarios:contract` for a targeted case that is read rather
- * than run — so what they have in common is stated once here. That word is the
- * label above the status line, because the two claim their state on different
- * evidence: a forward review on a run somebody recorded, a contract case on the
- * test that holds it.
+ * Two commands print this and differ in one word. `scenarios:show` for an open
+ * forward review, `scenarios:contract` for a targeted case a session reads
+ * rather than runs. So what they have in common stands once here. That word is
+ * the label above the status line, because the two claim their state on
+ * different evidence. A forward review on a run somebody recorded, a contract
+ * case on the test that holds it.
  */
 abstract class ScenarioReport
 {
@@ -40,8 +40,8 @@ abstract class ScenarioReport
         }
         Voice::row($output, sprintf('%s %s', Voice::key('Criteria', 12), $scenario['criteria']));
 
-        // Verbatim, on its own, with nothing around it: a prompt read off a screen
-        // that also explains what it is testing is no longer the prompt.
+        // Verbatim, on its own, with nothing around it: a prompt read off a
+        // screen that also explains what it tests is no longer the prompt.
         Voice::heading($output, 'Paste this and add nothing');
         $output->writeln('');
         $output->writeln($scenario['prompt']);

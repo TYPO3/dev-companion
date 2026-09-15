@@ -10,17 +10,18 @@ use TYPO3\DevCompanion\Upkeep\Todo;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * The one move left in the queue: what waits, out of where it would be offered.
+ * The one move left in the queue: what waits, out of where a session would get
+ * it.
  *
- * A session that hits a question nothing here can answer writes it onto its todo
- * and ends. The file is in `open/`, where the next session is offered it as
- * ordinary work — and what it actually needs is a person, which no session can
- * supply by reading harder.
+ * A session that hits a question nothing here can answer writes it onto its
+ * todo and ends. The file is in `open/`, where the next session gets it as
+ * ordinary work. What it needs is a person, which no session can supply with a
+ * harder read.
  *
- * It is asked for nothing. The question is the signal, so a todo carrying one is
- * parked wherever it was written, and a caller cannot name the wrong file.
- * Taking a todo on and finishing one write nothing for this to undo — the
- * worktree says the first and a deletion says the second (`D-DOC-060`).
+ * It takes no argument. The question is the signal, so a todo with one parks
+ * wherever it stands, and a caller cannot name the wrong file. To take a todo
+ * on and to finish one write nothing for this to undo. The worktree says the
+ * first and a deletion says the second (`D-DOC-060`).
  */
 #[AsCommand(
     name: 'todo:park',

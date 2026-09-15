@@ -11,10 +11,10 @@ use TYPO3\DevCompanion\Upkeep\Scenarios;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * One open forward review, in the only sense a command can hand it over: what
- * has to be pasted, and what the session that comes of it is judged against.
- * The session itself happens in a client, in the environment the scenario
- * names, and no part of that is automated here.
+ * One open forward review, in the only sense a command can hand it over. What
+ * to paste, and what the judge holds the session that comes of it to. The
+ * session itself happens in a client, in the environment the scenario names,
+ * and nothing here automates any part of that.
  */
 #[AsCommand(
     name: 'scenarios:show',

@@ -13,24 +13,18 @@ use TYPO3\DevCompanion\Upkeep\Todo;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * Giving a todo back: the worktree down, and the todo offered again.
+ * Gives a todo back: the worktree down, and the todo on offer again.
  *
- * The other end of `todo:claim` for work that did not get anywhere — a session
- * that never started, one that was abandoned, a claim taken by mistake.
- * `todo:home` is the end for work that did: it rebases, checks and merges, and
- * none of that means anything for a branch carrying nothing.
+ * The other end of `todo:claim` for work that did not get anywhere: a session
+ * that never started, one somebody abandoned, a claim taken by mistake.
+ * `todo:home` is the end for work that did. The todo needs no return. It never
+ * left the queue, so the worktree's removal is what offers it again,
+ * `D-DOC-060`.
  *
- * The todo needs no putting back. It never left the queue, so what offers it
- * again is the worktree coming down — `D-DOC-060`.
- *
- * What it decides is the branch, and it decides it by looking. One carrying
- * commits is left alone, because it is the only place that work exists; one
- * carrying none is deleted, because a branch nobody can take down is a todo
- * `todo:claim` passes over for good.
- *
- * A todo is named by its id. The worktree is how this repository holds one in
- * hand and not what a caller should have to know, so the directory name is
- * accepted too and neither is the one written down.
+ * What it decides is the branch, and it decides it by a look. One with commits
+ * stays, because it is the only place that work exists. One with none goes,
+ * because a branch nobody can take down is a todo `todo:claim` passes over for
+ * good. A todo goes by its id, and the directory name passes too.
  */
 #[AsCommand(
     name: 'todo:drop',
@@ -86,8 +80,8 @@ final class TodoDrop
         Voice::heading($output, $name);
 
         // The same refusal `todo:home` makes, for the same reason: what nobody
-        // committed is on no branch, and removing the worktree is what throws
-        // it away.
+        // committed is on no branch, and the removal of the worktree is what
+        // throws it away.
         [, $dirty] = Checkouts::run(['git', '-C', $root . '/.worktrees/' . $name, 'status', '--porcelain']);
         if (trim($dirty) !== '') {
             Voice::problem(
@@ -127,7 +121,7 @@ final class TodoDrop
     }
 
     /**
-     * What is standing, for a caller who has not said which to take down.
+     * What stands, for a caller who has not said which to take down.
      *
      * @param array<string, string> $standing
      */

@@ -18,10 +18,10 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * files.
  *
  * An id that agrees with its file name, its heading and its group, a date, a
- * status, a sentence to open with, fields from the fixed set in the order they
+ * status, a sentence to open with. Fields from the fixed set in the order they
  * belong in, and something under **Wrong if**. `composer test` runs the same
- * check through `DecisionsTest`, the listing apart: that one is a property of
- * the whole checkout rather than of one branch, so it is held here alone —
+ * check through `DecisionsTest`, the listing apart. That one is a property of
+ * the whole checkout rather than of one branch, so it holds here alone,
  * `D-FBK-011`.
  */
 #[AsCommand(
@@ -66,7 +66,7 @@ final class DecisionCheck
                 $problems[] = $id . ' is titled "' . $decision['title'] . '" and its heading says "' . $decision['written'] . '"';
             } elseif (basename($path) !== Entry::fileName($id, $decision['title'])) {
                 // The file name is the title, so a title corrected in place
-                // leaves a file claiming the old one — `D-DOC-047`.
+                // leaves a file that claims the old one — `D-DOC-047`.
                 $problems[] = $id . ' is titled "' . $decision['title'] . '" and filed as ' . basename($path)
                     . '; run bin/cli decisions:rename';
             }
@@ -112,7 +112,7 @@ final class DecisionCheck
             }
 
             // The status names the last dated line, not the only one: an entry
-            // may be confirmed by one run and revoked by the next, and both
+            // may see one run confirm it and the next revoke it, and both
             // belong in the file. What a reader relies on is the latest.
             if ($decision['revokedBy'] !== '') {
                 if (DecisionStatus::tryFrom($decision['status']) !== DecisionStatus::Revoked) {
@@ -124,8 +124,8 @@ final class DecisionCheck
             }
 
             // A revoked entry names no test: its statement no longer describes
-            // this server, so a test declaring it claims to hold something the
-            // repository says it stopped doing — `D-DOC-052`.
+            // this server, so a test that declares it claims to hold something
+            // the repository says it no longer does — `D-DOC-052`.
             if (DecisionStatus::tryFrom($decision['status']) === DecisionStatus::Revoked && $decision['tests'] !== []) {
                 $problems[] = $id . ' is revoked and ' . count($decision['tests']) . ' tests declare they hold it'
                     . ($decision['revokedBy'] === '' ? '' : ' — the attribute belongs on ' . $decision['revokedBy']);
@@ -181,11 +181,11 @@ final class DecisionCheck
                 }
             }
 
-            // `coveredBy` is generated from the `#[Decision]` attributes the
-            // tests carry, so what is held here is that the copy still says
-            // what the source does. A test renamed, moved or given another
-            // entry leaves the front matter behind otherwise, which is the
-            // drift `D-DOC-043` measured.
+            // `coveredBy` comes from the `#[Decision]` attributes the tests
+            // carry, so what holds here is that the copy still says what the
+            // source does. A test renamed, moved or given another entry leaves
+            // the front matter behind otherwise, which is the drift `D-DOC-043`
+            // measured.
             if (Entry::withNames($contents, 'coveredBy', $held[Decisions::read($path)['id']] ?? []) !== $contents) {
                 $problems[] = basename($path) . ' carries a coveredBy the tests do not write — run bin/cli decisions:cover';
             }
@@ -198,8 +198,8 @@ final class DecisionCheck
         }
 
         // The other report, and the one that says which entries can go stale
-        // without anything noticing: a test naming it in `coveredBy` is the
-        // only thing that fails when the behaviour an entry describes moves.
+        // without any notice: a test that names it in `coveredBy` is the only
+        // thing that fails when the behaviour an entry describes moves.
         $uncovered = Decisions::uncovered();
         if ($uncovered !== []) {
             Voice::heading($output, sprintf(

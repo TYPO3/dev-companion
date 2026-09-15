@@ -13,8 +13,8 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Whether the paths this repository writes between its own files still resolve.
  *
  * This one fails rather than reports. A long sentence can be the right sentence
- * and `prose:check` says so; a link to a file that is not there is wrong in
- * every reading, and the reader who follows it is otherwise the check.
+ * and `prose:check` says so. A link to a file that is not there is wrong in
+ * every read, and the reader who follows it is otherwise the check.
  */
 #[AsCommand(
     name: 'links:check',

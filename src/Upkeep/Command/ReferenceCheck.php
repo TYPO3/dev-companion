@@ -15,9 +15,9 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Whether every worked example is still where the catalog records it.
  *
- * A reference entry promises a shape rather than a path, so its range is
- * derived from the files that carry that shape and not from the directory
- * around them (`D-CAT-007`).
+ * A reference entry promises a shape rather than a path. So its range derives
+ * from the files that carry that shape and not from the directory around them
+ * (`D-CAT-007`).
  */
 #[AsCommand(
     name: 'references:check',
@@ -36,11 +36,11 @@ final class ReferenceCheck
      * Re-reads which covered versions have each worked example, and reports every
      * entry whose recorded range no longer says so.
      *
-     * A directory that moved leaves an answer pointing at nothing, and the caller
-     * reads the miss as "I looked in the wrong place". Where the directory alone
-     * would claim a major the shape is not on, the entry names the files that
-     * carry it in `files` and a version has the example when it has all of them
-     * — `D-CAT-007`.
+     * A directory that moved leaves an answer that points at nothing, and the
+     * caller reads the miss as "I looked in the wrong place". Where the
+     * directory alone would claim a major the shape is not on, the entry names
+     * the files that carry it in `files`. A version has the example when it has
+     * all of them, `D-CAT-007`.
      *
      * @param array<int, array<string, mixed>> $references
      */
@@ -93,11 +93,11 @@ final class ReferenceCheck
      * The first thing a worked example names that this checkout does not have, or
      * null where it has all of them.
      *
-     * The path comes first, so an entry that names no files reads exactly as it did
-     * before. `files` is what the entry adds when its sentence promises a shape: the
-     * two or three files that carry it, named absolutely from the checkout root
-     * because half of what a suite is made of sits beside the directory rather than
-     * inside it.
+     * The path comes first, so an entry that names no files reads exactly as it
+     * did before. `files` is what the entry adds when its sentence promises a
+     * shape. The two or three files that carry it, named from the checkout
+     * root. Half of what a suite consists of sits beside the directory rather
+     * than inside it.
      *
      * @param array<string, mixed> $entry
      */

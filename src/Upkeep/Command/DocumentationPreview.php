@@ -19,26 +19,16 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * The whole site on this machine, in one call, to look at.
  *
- * `documentation:prepare` is what a deployment needs and it stops at the copy —
- * `D-DOC-028`. This is the other half: it fetches the renderer into a gitignored
- * directory beside the build, renders, runs the theme's finish step and says
- * where to read the result. The renderer is fetched where it is missing and not
- * otherwise, because a preview is run again after every paragraph, and `.site/`
- * is deleted to resolve it fresh.
+ * `documentation:prepare` is what a deployment needs and it stops at the copy,
+ * `D-DOC-028`. This is the other half. It fetches the renderer into a
+ * gitignored directory beside the build where none is there. It renders, runs
+ * the theme's finish step and says where to read the result. It prints one row
+ * per step and a bar over them. The error stream shows every time, because that
+ * is where the renderer's warnings go.
  *
- * What is printed is one row per step with what it produced, counted here
- * rather than read out of what the step said, and a bar over the steps while
- * one of them runs. What a step said is kept for `-v` and for the step that
- * failed, with one exception: what a step wrote to its error stream is shown
- * every time, because that is where the renderer puts its warnings and a
- * warning is what an author is rendering to see.
- *
- * `--watch` serves the site and is the same render again after every save: the
- * tree is looked at once a second and a render is run when a file in it has
- * moved. Polling rather than inotify, because the extension is not on every
- * PHP and a watcher that needs one installed first is one more step in a
- * recipe that was six. The server is PHP's own, as a child that Ctrl-C takes
- * down with the watch.
+ * `--watch` serves the site and renders again after every save. It polls the
+ * tree once a second rather than uses inotify, because that extension is not on
+ * every PHP.
  */
 #[AsCommand(
     name: 'documentation:preview',
@@ -49,7 +39,7 @@ final class DocumentationPreview
     /** Named with no constraint, so a fetch takes the theme's newest release. */
     private const THEME = 'typo3/soul-guides-theme';
 
-    /** Where the renderer is fetched to, below the build directory it renders into. */
+    /** Where the renderer lands, below the build directory it renders into. */
     private const RENDERER = 'renderer';
 
     /** The width of the step column, so what a step produced lines up below the heading. */
@@ -62,7 +52,7 @@ final class DocumentationPreview
      * changed, or null once there is nothing left to wait for.
      *
      * The real one sleeps and never says null, so a watch ends with Ctrl-C. A
-     * test hands in one that names a change without touching the checkout
+     * test hands in one that names a change and leaves the checkout alone
      * (`R-COD-003`).
      *
      * @var \Closure(): ?list<string>
@@ -88,8 +78,8 @@ final class DocumentationPreview
         Voice::heading($output, sprintf('Rendering %s/ into %s', Site::SOURCE, $into . '/html'));
         $rendered = $this->render($output, $into);
         if (!$watch) {
-            // Over a server rather than by opening the file: the search fetches
-            // its index beside the pages, which a browser refuses over `file://`.
+            // Over a server rather than from the file: the search fetches its
+            // index beside the pages, which a browser refuses over `file://`.
             if ($rendered) {
                 Voice::note($output, sprintf('read it: php -S localhost:%d -t %s', $port, $into . '/html'));
             }
@@ -132,13 +122,13 @@ final class DocumentationPreview
     }
 
     /**
-     * The copy, the renderer where there is none, the render and the finish,
-     * in that order, with the bar standing on the step that is running.
+     * The copy, the renderer where there is none, the render and the finish, in
+     * that order. The bar stands on the step that runs.
      *
-     * The rendered pages are taken away before the renderer writes new ones:
-     * it removes nothing itself, and a page renamed since the last render is
-     * otherwise served on — and read by the finish step, which looped over
-     * three stale ones for two minutes before this was cleared.
+     * The rendered pages go before the renderer writes new ones. It removes
+     * nothing itself, and a page renamed since the last render otherwise stays
+     * on the site. The finish step reads it too, and looped over three stale
+     * ones for two minutes before this existed.
      */
     private function render(OutputInterface $output, string $into): bool
     {
@@ -210,7 +200,7 @@ final class DocumentationPreview
     }
 
     /**
-     * The look a watch takes when nothing hands one in: a second's sleep, then
+     * The look a watch takes when nothing hands one in. A second's sleep, then
      * every file whose stamp is not the one seen last time, a removed file
      * included.
      *
@@ -234,8 +224,8 @@ final class DocumentationPreview
      * What it takes to have a renderer at that path, or nothing where there is
      * one already.
      *
-     * Composer has no way to require into an empty directory, so the manifest
-     * is written by `init` before the require that fills it in. It is not this
+     * Composer has no way to require into an empty directory, so `init` writes
+     * the manifest before the require that fills it in. It is not this
      * repository's to keep: what asks for the theme is here, and the theme
      * brings phpDocumentor Guides with it.
      *
@@ -244,7 +234,7 @@ final class DocumentationPreview
     private function fetch(string $renderer): array
     {
         // The build directory is an argument and may be anywhere, which is what
-        // lets the suite drive this without writing into the checkout.
+        // lets the suite drive this and write nothing into the checkout.
         $where = str_starts_with($renderer, '/') ? $renderer : Paths::root() . '/' . $renderer;
         if (is_file($where . '/vendor/bin/guides')) {
             return [];
@@ -265,9 +255,9 @@ final class DocumentationPreview
      * One command of a step: quiet where it succeeded, quoted whole where it
      * failed.
      *
-     * The command is printed under `-v`, as what a person could have typed, and
-     * a failure prints it whatever the verbosity, because a preview that dies
-     * has to say which step.
+     * The command prints under `-v`, as what a person could have typed. A
+     * failure prints it whatever the verbosity, because a preview that dies has
+     * to say which step.
      *
      * @param list<string> $command
      */

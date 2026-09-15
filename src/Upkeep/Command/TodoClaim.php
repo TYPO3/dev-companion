@@ -15,30 +15,19 @@ use TYPO3\DevCompanion\Upkeep\Todo;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * Taking the front of the queue on, and putting the sessions in front of it.
+ * Takes the front of the queue on, and puts the sessions in front of it.
  *
  * `bin/cli todo:next` hands the same first todo to everybody who asks, because
- * the queue is an order rather than an assignment. That is what has to change
- * before two sessions can work at once, and the worktree is the change: a todo
- * whose branch one stands on is one somebody has in hand, so the second session
- * is offered the item behind it rather than the one somebody is already writing.
+ * the queue is an order rather than an assignment. The worktree is what changes
+ * that: a todo whose branch one stands on is in hand, so the second session
+ * gets the item behind it. Nothing moves and nothing commits, `D-DOC-060`.
  *
- * Nothing is moved and nothing is committed — `D-DOC-060`.
- *
- * It carries the setup out rather than printing it, and the reason is the order
- * rather than the typing: a worktree apiece with its own `composer install`, and
- * the message the sessions are started with.
- *
- * The branch is derived from the todo and the worktree named after the branch,
- * so a todo somebody has in hand and one whose branch nobody took down are both
- * visible before anything is cut. Both are passed over rather than given a
- * second name, because a worktree that quietly attaches to an old branch is the
- * one failure here that looks like success.
- *
- * The overlap it reports is the only one it can see. Two todos that serve the
- * same entry are two sessions likely to edit one file, and nothing here knows
- * which files a step will touch — so it is a warning to read before the
- * sessions start, not a refusal.
+ * It carries the setup out rather than prints it, because the order matters. A
+ * worktree apiece with its own `composer install`, and the message the sessions
+ * start with. A todo in hand and one whose branch nobody took down both stay
+ * untouched. A worktree that quietly attaches to an old branch looks like
+ * success. The overlap it reports, two todos that serve one entry, is a warning
+ * to read before the sessions start, not a refusal.
  *
  * @phpstan-import-type Section from Todo
  */
@@ -49,11 +38,11 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 final class TodoClaim
 {
     /**
-     * Where this machine says how a session is started on it.
+     * Where this machine says how a session starts on it.
      *
      * Ignored by git, because it is a property of the machine rather than of
      * the repository — the same reason `.checkouts/` is. What it holds is one
-     * command line, run once per worktree: that worktree is its working
+     * command line, run once per worktree. That worktree is its working
      * directory, the message arrives on standard input, and `TODO_SESSION_ID`
      * is in its environment.
      */
@@ -64,8 +53,8 @@ final class TodoClaim
         #[Argument('how many sessions are going to work at once')]
         int $count = 1,
     ): int {
-        // Worktrees are cut where `main` is. Asked in a worktree, every one it
-        // made would be cut from somebody's half-finished branch.
+        // Worktrees come off `main`. Asked in a worktree, every one it made
+        // would come off somebody's half-finished branch.
         if (Todo::linked()) {
             Voice::problem(
                 $output,
@@ -137,14 +126,14 @@ final class TodoClaim
     /**
      * The queued todos nobody has, which is what there is to take on.
      *
-     * Two ways a todo is not free, and they are named apart because they are
-     * different things to do about it. One with a worktree is being worked, and
-     * that is the arrangement doing its job. One whose branch is standing with no
-     * worktree on it is work somebody left: the branch still holds the half that
-     * is done, so it is neither reused nor deleted here.
+     * Two ways a todo is not free, and they stand apart because they are
+     * different things to do about it. One with a worktree is in hand, and that
+     * is the arrangement at work. One whose branch stands with no worktree on
+     * it is work somebody left. The branch still holds the finished half, so it
+     * neither serves again nor goes here.
      *
-     * The branches are read in one call rather than one per todo, which is the
-     * same reading `Todo::inHand()` makes of the worktrees.
+     * The branches come in one call rather than one per todo, which is the same
+     * read `Todo::inHand()` makes of the worktrees.
      *
      * @param array<int, Section> $items
      *
@@ -180,15 +169,15 @@ final class TodoClaim
      * One worktree per claim, each with the install that makes `bin/cli` in it
      * this checkout rather than the one next door.
      *
-     * `vendor/` cannot be shared and is not worth trying to: `Paths::root()` is
-     * the directory above `src/`, Composer resolves `src/` from where the
-     * autoloader physically sits, and a symlinked one therefore points every
-     * path in this repository back here. `.checkouts/` is the opposite case and
-     * is linked on purpose — 861 MB a session only ever reads.
+     * Two worktrees cannot share `vendor/` and the attempt is not worth it.
+     * `Paths::root()` is the directory above `src/`, and Composer resolves
+     * `src/` from where the autoloader physically sits. So a symlinked one
+     * points every path in this repository back here. `.checkouts/` is the
+     * opposite case and a link on purpose, 861 MB a session only ever reads.
      *
-     * A worktree that could not be finished is named and the rest go on. What
-     * it must not do is stay half-made in silence, because the session started
-     * against it fails at its first command with nothing saying why.
+     * A worktree that did not finish gets a name in the report and the rest go
+     * on. What it must not do is stay half-made in silence, because the session
+     * started against it fails at its first command with no word why.
      *
      * @param array<int, array{title: string, branch: string, directory: string, ...}> $claims
      *
@@ -227,29 +216,29 @@ final class TodoClaim
     }
 
     /**
-     * The sessions themselves, where this machine has said how one is started.
+     * The sessions themselves, where this machine has said how one starts.
      *
-     * The fourth step, and it is here for the reason the other three are: a
-     * claim, the commit carrying it and a worktree apiece already happen in one
-     * move, and the launch is what was left over for somebody to carry out by
-     * reading. It broke the way the left-over step always breaks — the run of
-     * 2026-08-02 started every session in the directory that was already open,
-     * and the claims sat untouched while three worktrees stood there.
+     * The fourth step, and it is here for the reason the other three are. A
+     * claim, the commit that carries it and a worktree apiece already happen in
+     * one move. The launch was the step left over for somebody to carry out
+     * from a page. It broke the way the left-over step always breaks. The run
+     * of 2026-08-02 started every session in the directory that was already
+     * open, and the claims sat untouched while three worktrees stood there.
      *
-     * What the client is called is not this repository's business, and
-     * `documentation/contributing/driving-a-session.rst` says so: clients differ in what the
-     * flags are named, not in what has to be true. So the command line is the
-     * machine's, in an ignored file, and the three things a person gets wrong
-     * are this command's — the working directory, the message, and a session id
-     * per session. Where the file is absent nothing is started and the handover
-     * prints as it always did, so a checkout that never configures one loses
-     * nothing.
+     * The client's name is not this repository's business, and
+     * `documentation/contributing/driving-a-session.rst` says so. Clients
+     * differ in the names of the flags, not in what has to be true. So the
+     * command line is the machine's, in an ignored file. The three things a
+     * person gets wrong are this command's: the working directory, the message,
+     * and a session id per session. Where the file is absent nothing starts and
+     * the handover prints as it always did, so a checkout that never configures
+     * one loses nothing.
      *
      * Started detached rather than waited on. `Checkouts::run` captures and
-     * waits, which is right for the git it was named for and wrong for three
-     * agent sessions: waiting serialises them and holds the terminal for as
-     * long as the work takes. Each gets a log instead, named here, because a
-     * launch that fails does it in the client rather than in the shell.
+     * waits, which is right for the git it serves and wrong for three agent
+     * sessions. A wait serialises them and holds the terminal for as long as
+     * the work takes. Each gets a log instead, named here, because a launch
+     * that fails does it in the client rather than in the shell.
      *
      * @param array<int, string> $standing
      *
@@ -270,8 +259,8 @@ final class TodoClaim
             return $standing;
         }
 
-        // One file for every session there has ever been, because nothing in the
-        // briefing is per-session: which todo is whose is read out of the
+        // One file for every session there has ever been, because nothing in
+        // the briefing is per-session: which todo is whose comes out of the
         // worktree. Written per worktree it left a copy of one constant behind
         // for each, and 484 of them had accumulated by 2026-08-27.
         $message = $logs . '/briefing.message';
@@ -318,12 +307,12 @@ final class TodoClaim
     }
 
     /**
-     * A session id per session, so a transcript can be found afterwards.
+     * A session id per session, so somebody can find a transcript afterwards.
      *
-     * The flag it is passed by belongs to the client, so it is handed over as
+     * The flag that carries it belongs to the client. So it goes over as
      * `TODO_SESSION_ID` in the environment and the launch command names it. One
-     * per session and never one per claim: three sessions sharing an id are
-     * three transcripts nobody can tell apart.
+     * per session and never one per claim: three sessions with one id are three
+     * transcripts nobody can tell apart.
      */
     private static function identifier(): string
     {
@@ -341,20 +330,19 @@ final class TodoClaim
     }
 
     /**
-     * What is left for the caller: where each session is started, and what
-     * every one of them is sent.
+     * What remains for the caller: where each session starts, and what every
+     * one of them gets.
      *
-     * Both halves are printed filled in, and the second is why. The message was
-     * a template once, `<absolute path to the worktree>` and all, and the run
-     * that broke sent it as it stood — so the blanks came out of it and the
+     * Both halves print filled in, and the second is why. The message was a
+     * template once, `<absolute path to the worktree>` and all, and the run
+     * that broke sent it as it stood. So the blanks came out of it and the
      * session reads its todo off the worktree instead. The half above it kept
-     * one: *with that worktree as its working directory* is a property somebody
-     * satisfies, which is a blank wearing prose, and the run of 2026-08-02
-     * satisfied it with the directory that was already open — the checkout the
-     * worktrees are cut from. So the directories are lines to run, one per
-     * session, and the sentence over the message says the rest of this output
-     * is not part of it. A caller with nothing to compose composes nothing
-     * wrong.
+     * one. *With that worktree as its working directory* is a property somebody
+     * satisfies, which is a blank in prose's clothes. The run of 2026-08-02
+     * satisfied it with the directory that was already open, the checkout the
+     * worktrees come off. So the directories are lines to run, one per session.
+     * The sentence over the message says the rest of this output is not part of
+     * it. A caller with nothing to compose composes nothing wrong.
      *
      * `todo:next --worktree` catches what still gets through, which is what it
      * caught that day. It costs a session to find out, so it is the net rather
@@ -401,13 +389,13 @@ final class TodoClaim
     /**
      * What two of the claimed todos both stand on, in the three ways they can.
      *
-     * `serves:` alone missed the collision that cost the most: two todos with
+     * `serves:` alone missed the collision that cost the most. Two todos with
      * different `serves:` keys each added a handler for one token to one
-     * function, and both had named `R-ANS-012` and the class they were about to
-     * edit — a session saying where it is about to work, in the file the claim
-     * reads anyway. So three readings, reported apart because they are worth
-     * different things, and none of them a refusal: nothing here can know which
-     * lines a step will touch.
+     * function. Both had named `R-ANS-012` and the class they were about to
+     * edit. That is a session's word on where it is about to work, in the file
+     * the claim reads anyway. So three reads, reported apart because they are
+     * worth different things, and none of them a refusal. Nothing here can know
+     * which lines a step will touch.
      *
      * @param array<int, array{title: string, serves: array<int, string>, body: string, ...}> $taken
      *
@@ -418,11 +406,11 @@ final class TodoClaim
         $served = [];
         foreach ($taken as $todo) {
             foreach ($todo['serves'] as $what) {
-                // A directory is what most of the queue serves, so counting one
-                // would put a line under every claim ever taken — and a warning
+                // A directory is what most of the queue serves, so a count of
+                // one would put a line under every claim ever taken. A warning
                 // that is always there is one nobody reads by the third time.
-                // It would also be saying nothing: `decisions/` names the place
-                // a step reports to rather than the file it edits.
+                // It would also say nothing: `decisions/` names the place a
+                // step reports to rather than the file it edits.
                 if (!str_ends_with($what, '/')) {
                     $served[$what][] = $todo['title'];
                 }
@@ -438,8 +426,8 @@ final class TodoClaim
                 $named[$class][] = $todo['title'];
             }
             foreach (self::entriesNamedIn($todo['body']) as $entry) {
-                // What it serves is already said above, and saying it twice
-                // reads as two findings.
+                // What it serves already stands above, and a second time reads
+                // as two findings.
                 if (!isset($served[$entry])) {
                     $standing[$entry][] = $todo['title'];
                 }
@@ -481,9 +469,9 @@ final class TodoClaim
     /**
      * Which of them a todo names, however it spelled it.
      *
-     * A step names the class it is going to change as the path, as the class
-     * with the method on it, or as the bare name in backticks, and all three
-     * are the same statement. What is compared is the file each resolves to.
+     * A step names the class it will change as the path or as the class with
+     * the method on it. Or as the bare name in backticks. All three are the
+     * same statement. The comparison is the file each resolves to.
      *
      * @param array<string, string> $classes
      *

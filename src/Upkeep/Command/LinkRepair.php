@@ -13,8 +13,8 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * The other half of `links:check`: the dead link this repository moved the file
  * out from under, repointed.
  *
- * One move here does that, and it is the one nothing can do in advance —
- * `feedback:archive` cannot see the decision another branch is writing to the
+ * One move here does that, and it is the one nothing can do in advance.
+ * `feedback:archive` cannot see the decision another branch writes to the
  * report in the same window, and whichever of the two merges second carries the
  * link. `todo:home` runs this on the rebased branch, and it is the same command
  * for a checkout that met it some other way — `D-DOC-064`.

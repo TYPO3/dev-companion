@@ -14,16 +14,15 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Makes the working directory a scenario names, where this repository makes it.
  *
- * `E-SITE` is a DDEV project with a TYPO3 installation in it, which is to say a
- * directory in which `ddev exec vendor/bin/typo3 …` answers — the half of this
- * server no test reaches, and where `D-DIS-007` and `R-DIS-018` were both found
- * by a real run. One per covered line, with the version as the second argument
- * (`D-EVI-006`). It carries one extension of its own, because a base
- * distribution registers nothing this project owns and half of what this server
- * answers is about what it does (`D-EVI-010`). What it is not is a repository to
- * review, because a scaffold of one would be this repository writing the defects
- * it then measures itself on finding (`D-EVI-001`). Every step is printed before it runs and quoted in full
- * when it fails, because a build that dies on step four has to say which four.
+ * `E-SITE` is a DDEV project with a TYPO3 installation in it, a directory in
+ * which `ddev exec vendor/bin/typo3 …` answers. That is the half of this server
+ * no test reaches, and where a real run found `D-DIS-007` and `R-DIS-018`. One
+ * per covered line, with the version as the second argument, `D-EVI-006`. It
+ * carries one extension of its own, `D-EVI-010`, and it is not a repository to
+ * review, `D-EVI-001`.
+ *
+ * Every step prints before it runs and in full when it fails, because a build
+ * that dies on step four has to say which four.
  */
 #[AsCommand(
     name: 'environment:create',
@@ -79,12 +78,12 @@ final class EnvironmentCreate
 
     /**
      * `E-NONE` is a directory with no installation above it, which this
-     * checkout is, so making one is a `mkdir` and a note saying so.
+     * checkout is. So to make one is a `mkdir` and a note that says so.
      *
-     * It is here rather than left to the caller for the reason the rest is: an
+     * It is here rather than with the caller for the reason the rest is. An
      * environment somebody makes by hand is one that differs per person. The
-     * note is what stops it from being an empty directory somebody deletes for
-     * tidiness.
+     * note is what keeps it from the fate of an empty directory somebody
+     * deletes for tidiness.
      */
     private function nothing(OutputInterface $output): int
     {
@@ -141,11 +140,11 @@ final class EnvironmentCreate
         }
 
         // The directory is per checkout and the project name is per machine, so
-        // two checkouts asking for an E-SITE ask for one name. Taking it over
-        // would stop the other one's environment without saying so — but only
+        // two checkouts that ask for an E-SITE ask for one name. Taking it over
+        // would stop the other one's environment with no word of it — but only
         // while there is a checkout to take it from. A worktree that made an
         // environment and was then removed leaves the name held on behalf of a
-        // directory nobody can visit, and refusing in its name is a dead end.
+        // directory nobody can visit, and a refusal in its name is a dead end.
         $registered = Environments::projects()[$project] ?? null;
         if ($registered !== null && Environments::abandoned($registered)) {
             Voice::note($output, sprintf(
@@ -191,9 +190,9 @@ final class EnvironmentCreate
                 'Stopped at "%s". What is there stays, and this command carries on from it.',
                 $stopped,
             ));
-            // The one failure that never finishes by carrying on. `--force`
-            // covers the settings file, and no option of the setup gets
-            // past tables an earlier installation left in the database.
+            // The one failure that never finishes on its own. `--force` covers
+            // the settings file, and no option of the setup gets past tables an
+            // earlier installation left in the database.
             Voice::note(
                 $output,
                 "A database an earlier installation populated is the exception: its tables\n"
@@ -206,9 +205,9 @@ final class EnvironmentCreate
         }
 
         // DDEV owns config/system/additional.php until this, and what it writes
-        // there is wrong for the driver this environment was built on. Left
-        // alone, the installation talks to a database container that is not
-        // running and the backend refuses every login without saying why.
+        // there is wrong for the driver this environment stands on. Left alone,
+        // the installation talks to a database container that is not up and the
+        // backend refuses every login with no word why.
         $takenOver = Environments::takeOverGeneratedSettings($path);
         if ($takenOver !== null) {
             Voice::note($output, $takenOver);
@@ -225,12 +224,12 @@ final class EnvironmentCreate
     }
 
     /**
-     * An installation that is already there is started, never built again.
+     * An installation that is already there starts, and never builds again.
      *
      * The build is minutes and a hundred packages and the containers are
-     * seconds, so an environment kept between runs is only worth keeping if
-     * asking for it again costs the seconds. DDEV pauses an idle project by
-     * itself, which is the state this meets most of the time.
+     * seconds. So an environment kept between runs is only worth the keep if a
+     * second request costs the seconds. DDEV pauses an idle project by itself,
+     * which is the state this meets most of the time.
      */
     private function resume(OutputInterface $output, string $branch, string $driver, ?string $status): int
     {
@@ -287,10 +286,10 @@ final class EnvironmentCreate
     }
 
     /**
-     * Runs steps in the project, printing each one before it runs.
+     * Runs steps in the project, and prints each one before it runs.
      *
-     * A build that dies on step four has to say which four, so the name and
-     * the command are printed first and what the command said is quoted whole.
+     * A build that dies on step four has to say which four. So the name and the
+     * command print first, and what the command said follows whole.
      *
      * @param array<string, list<string>> $steps
      * @return string|null the step that stopped it, and null where none did

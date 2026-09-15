@@ -13,12 +13,12 @@ use TYPO3\DevCompanion\Upkeep\Scenarios;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * The empty run, ready to be filled in after the session.
+ * The empty run, ready for the session to fill in.
  *
  * What this replaces is a judgment that was only ever in somebody's head. A
  * scenario carries a `Status today`, and that line was the whole record of the
- * last forward run — so it went stale the moment the server changed, and
- * nothing about the file looked any different.
+ * last forward run. So it went stale the moment the server changed, and nothing
+ * about the file looked any different.
  */
 #[AsCommand(
     name: 'scenarios:record',
@@ -36,7 +36,7 @@ final class ScenarioRecord
         $id = strtoupper($id);
 
         if (isset(Scenarios::contracts()[$id])) {
-            // Not an oversight to be worked around: a case that names its own task
+            // Not an oversight to work around: a case that names its own task
             // shape cannot be evidence that an agent found it.
             Voice::problem($output, sprintf('%s is a targeted contract case and is not run forward.', $id));
 

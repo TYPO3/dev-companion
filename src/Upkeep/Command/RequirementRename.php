@@ -14,11 +14,11 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Puts every requirement where its title says, and rewrites what named it.
  *
- * A title that is wrong is corrected, and the file name is the title — so the
- * move is a consequence of the correction rather than a reason not to make it,
- * which is what this command exists to make cheap (`D-DOC-047`). Run over the
- * whole corpus rather than one entry, because a title is edited where it stands
- * and nobody knows afterwards which one moved.
+ * A wrong title gets a correction, and the file name is the title. So the move
+ * is a consequence of the correction rather than a reason not to make it. This
+ * command exists to make it cheap (`D-DOC-047`). Run over the whole corpus
+ * rather than one entry, because a title changes where it stands and nobody
+ * knows afterwards which one moved.
  */
 #[AsCommand(
     name: 'requirements:rename',

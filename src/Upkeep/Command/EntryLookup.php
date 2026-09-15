@@ -11,12 +11,12 @@ use TYPO3\DevCompanion\Upkeep\Entries;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * What is written down about the code at a path, before it is changed.
+ * What the records say about the code at a path, before a change.
  *
- * The attributes answer from the failing end: a red test names the entries that
+ * The attributes answer from the red end: a red test names the entries that
  * rested on it. That is after the change. This is the call a session makes
- * before one — the entries naming the class it is about to edit, and the tests
- * that would print them.
+ * before one. The entries that name the class it is about to edit, and the
+ * tests that would print them.
  */
 #[AsCommand(
     name: 'entries:lookup',
@@ -24,7 +24,7 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 )]
 final class EntryLookup
 {
-    /** How many entries a test class is listed with rather than counted. */
+    /** How many entries a test class lists rather than counts. */
     private const LISTED = 8;
 
     public function __invoke(

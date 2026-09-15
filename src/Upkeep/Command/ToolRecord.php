@@ -21,13 +21,13 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Calls every tool once and writes down what came back.
  *
  * `tools:index` renders the surface, which is derivable and therefore checked.
- * This is the other half — what a filled answer looks like — and half of those
- * answers belong to the installation being read, so it is evidence rather than
+ * This is the other half, what a filled answer looks like. Half of those
+ * answers belong to the installation under read, so it is evidence rather than
  * a derivation. Two roots, because neither the newest covered core checkout
  * below `.checkouts/` nor the installation `Fixture` writes fills the surface
- * alone, and neither of them is somebody's own site, which only the machine
- * holding it could record again — `D-DOC-006`. A checkout carrying anything
- * `checkouts:update` did not put there is refused — `D-DOC-034`.
+ * alone. Neither of them is somebody's own site, which only the machine that
+ * holds it could record again, `D-DOC-006`. A checkout with anything
+ * `checkouts:update` did not put there meets a refusal, `D-DOC-034`.
  */
 #[AsCommand(
     name: 'tools:record',
@@ -80,9 +80,9 @@ final class ToolRecord
         Voice::heading($output, sprintf('Answering from %s (TYPO3 %s)', $found, Instance::typo3Version() ?? 'unknown'));
 
         $installation = $this->consoleAnswering($output, $found);
-        // Trimmed rather than defaulted on null alone: naming the tools means
-        // passing this argument, and the empty string that gets a caller past
-        // it wrote a page saying "Recorded on ".
+        // Trimmed rather than defaulted on null alone: to name the tools means
+        // to pass this argument, and the empty string that gets a caller past
+        // it wrote a page that says "Recorded on ".
         $day = trim((string) $today) === '' ? ToolAnswers::day() : trim((string) $today);
         $bar = Voice::progress($output);
         $bar->start();
@@ -98,9 +98,9 @@ final class ToolRecord
             file_put_contents($file, $contents);
         }
 
-        // Only where the whole surface was written. Named tools leave every
-        // other page alone, and a page nothing wrote this run is not a page
-        // nothing writes any more.
+        // Only where the whole surface went out. Named tools leave every other
+        // page alone, and a page nothing wrote this run is not a page nothing
+        // writes any more.
         if ($tools === []) {
             foreach (ToolSurface::written() as $written) {
                 if (!isset($pages[$written->getPathname()])) {
@@ -123,12 +123,12 @@ final class ToolRecord
      * The fixture installation, written and then asked whether its console
      * answers, and null with a reason where it does not.
      *
-     * Asked rather than assumed: what resolves the console is an interpreter on
-     * this machine satisfying what the installation declares, and a machine
+     * Asked rather than assumed. What resolves the console is an interpreter on
+     * this machine that satisfies what the installation declares. A machine
      * that has none is one where this root answers nothing. A silent absence is
-     * the failure that guards against — the pages would come back with one
-     * answer per call, and a reader would take the console-answering shape as
-     * still missing rather than as not recorded today.
+     * the failure that guards against. The pages would come back with one
+     * answer per call. A reader would take the shape from the console as still
+     * absent rather than as not recorded today.
      */
     private function consoleAnswering(OutputInterface $output, string $primary): ?string
     {
@@ -159,10 +159,10 @@ final class ToolRecord
      * What a core checkout below `.checkouts/` carries beyond its index, and
      * nothing at all for any other root.
      *
-     * The first root is one of ours, and the recording is evidence about the
-     * checkout `checkouts:update` makes: run `composer install` in it and the
+     * The first root is one of ours, and the record is evidence about the
+     * checkout `checkouts:update` makes. Run `composer install` in it and the
      * same calls record a Doctrine exception about a database nothing here
-     * creates, which is an answer no reader can produce again — `D-DOC-034`. A
+     * creates. That is an answer no reader can produce again, `D-DOC-034`. A
      * root somebody named is theirs, and this says nothing about it.
      *
      * @return array<int, string>
@@ -172,7 +172,7 @@ final class ToolRecord
         $checkouts = (string) realpath(Checkouts::directory());
         $root = (string) (realpath($root) ?: $root);
         // Resolved on both sides: a worktree reaches the checkouts through a
-        // symlink, so the recording made in one would otherwise ask nothing.
+        // symlink, so the record made in one would otherwise ask nothing.
         if ($checkouts === '' || !str_starts_with($root, $checkouts . '/')) {
             return [];
         }
@@ -195,10 +195,10 @@ final class ToolRecord
     }
 
     /**
-     * The newest covered branch that is released, which is the version a client
-     * is most likely to be on. `main` is covered too and is a development line:
-     * recording against it would make the sample say `15.0.0-dev`, which is
-     * true of nobody's installation.
+     * The newest covered branch with a release, which is the version a client
+     * is most likely to be on. `main` is in the covered set too and is a
+     * development line. A record against it would make the sample say
+     * `15.0.0-dev`, which is true of nobody's installation.
      */
     private static function newestCheckout(): string
     {

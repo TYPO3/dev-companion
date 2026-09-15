@@ -11,11 +11,11 @@ use TYPO3\DevCompanion\Upkeep\Decisions;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * What was decided, newest first.
+ * The decisions, newest first.
  *
- * One decision is one file below decisions/, an id decides the directory and
- * the file name, and the order is generated from the dates rather than
- * maintained by where a paragraph was pasted.
+ * One decision is one file below decisions/, and an id decides the directory
+ * and the file name. The order comes from the dates rather than from where
+ * somebody pasted a paragraph.
  */
 #[AsCommand(
     name: 'decisions:list',

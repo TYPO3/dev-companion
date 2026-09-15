@@ -12,12 +12,12 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * The questions nothing else will ask again.
  *
- * A waiting todo is offered to no session, which is the point and also the
- * risk: `todo/waiting/` is one unread directory away from being where todos go
- * to be forgotten. This is the way back. It prints whole rather than by title —
- * the question is the thing to be answered, and a session that has to open the
- * file to see it is one that will not — and it exits nonzero while anything
- * waits, which is what makes the todo that runs it due.
+ * No session gets a todo in `waiting/`, which is the point and also the risk.
+ * `todo/waiting/` is one unread directory away from the place where todos go to
+ * die. This is the way back. It prints whole rather than by title. The question
+ * is the thing that needs an answer. A session that has to open the file to see
+ * it is one that will not. It exits nonzero while anything waits, which is what
+ * makes the todo that runs it due.
  */
 #[AsCommand(
     name: 'todo:waiting',

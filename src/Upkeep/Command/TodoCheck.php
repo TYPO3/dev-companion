@@ -14,24 +14,24 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Holds todo/ to the shape `bin/cli todo:next` reads it in.
  *
- * A todo is prose and stays prose — the next concrete step is a paragraph
+ * A todo is prose and stays prose. The next concrete step is a paragraph
  * somebody wrote for somebody else to start from, and nothing here shortens it.
- * What is checked is the front matter each file opens with, where the file sits,
- * and that what a todo claims to serve exists. A todo naming a feedback that was
- * closed two commits ago is the failure worth catching: the feedback is the
- * reason it is in the queue, and when it goes the todo is either done or needs
- * trimming to the part that is left. A todo in `waiting/` is held to the one
- * thing it exists to carry — the question it is blocked on, in the words it was
- * asked in, because no session is offered it to ask again.
+ * The check reads the front matter each file opens with, where the file sits,
+ * and that what a todo claims to serve exists. A todo that names a feedback
+ * closed two commits ago is the failure worth the catch. The feedback is the
+ * reason it is in the queue. When it goes the todo is either complete or needs
+ * a trim to the part that remains. A todo in `waiting/` holds to the one thing
+ * it exists to carry. The question it waits on, in the words of the ask,
+ * because no session gets it to ask again.
  *
- * The last two things it says are about the other direction, where the fault is
- * in the relation between a feedback and the todos rather than in one file: an
- * open feedback that no todo answers for, and a card still asking for a
- * judgement another todo has already been given. Both are drift rather than a
- * state, both are repaired by hand — a card written where one is missing, and
- * the deletion this names for the other — and both are reported here because
- * this is what a session runs, while the cases that also hold them are in a
- * suite the session that recorded the feedback never runs.
+ * The last two things it says are about the other direction. There the fault is
+ * in the relation between a feedback and the todos rather than in one file. An
+ * open feedback that no todo answers for, and a card that still asks for a
+ * judgement another todo already has. Both are drift rather than a state, and
+ * both take a repair by hand. A card written where one is absent, and the
+ * deletion this names for the other. Both report here because this is what a
+ * session runs. The cases that also hold them are in a suite the session that
+ * recorded the feedback never runs.
  */
 #[AsCommand(
     name: 'todo:check',
@@ -76,11 +76,11 @@ final class TodoCheck
                 $problems[] = $where . ' is ' . $todo['priority'] . ', and a priority is '
                     . implode(', ', Todo::PRIORITIES);
             }
-            // A todo in a stage carries a priority and one that recurs does not.
-            // The clock is what orders an appointment, and a word beside it
-            // would be a second answer to the same question — while a stage
+            // A todo in a stage carries a priority and one that recurs does
+            // not. The clock is what orders an appointment, and a word beside
+            // it would be a second answer to the same question — while a stage
             // without one is a file that says nothing about where it stands,
-            // which is exactly what could not be reported while absence meant
+            // which is exactly what no report could name while absence meant
             // something.
             if (in_array($todo['kind'], ['queue', 'waiting'], true)) {
                 if ($todo['priority'] === '') {
@@ -88,7 +88,7 @@ final class TodoCheck
                 }
                 // The id is the second half of the order and the only way to
                 // cite one, so a todo in a stage named anything else sorts
-                // wherever the file system puts it and is cited by nothing.
+                // wherever the file system puts it and nothing cites it.
                 if (preg_match(Todo::NAME, basename($where, '.md')) !== 1) {
                     $problems[] = $where . ' is not named `T-<yymmdd>-<hash>`, so nothing orders or cites it';
                 }
@@ -109,8 +109,8 @@ final class TodoCheck
             }
 
             if ($todo['kind'] === 'waiting') {
-                // The question is the whole of what a waiting todo adds: it is
-                // offered to no session, so nothing else will ask it again.
+                // The question is the whole of what a todo in `waiting/` adds:
+                // no session gets it, so nothing else will ask it again.
                 if ($todo['waitingOn'] === '') {
                     $problems[] = $where . ' waits and does not say on what — `waitingOn:` is the question';
                 }
@@ -138,9 +138,9 @@ final class TodoCheck
             }
         }
 
-        // The readings `bin/cli todo:next` performs are the reason it can tell a
-        // session there is nothing left to read: none and it silently stops
-        // doing half its job, two and it does it twice.
+        // The readings `bin/cli todo:next` performs are the reason it can tell
+        // a session there is nothing left to read: none and it silently stops
+        // at half its job, two and it does it twice.
         foreach (Todo::READINGS as $command) {
             $named = $reading[$command] ?? [];
             if ($named === []) {
@@ -152,20 +152,20 @@ final class TodoCheck
 
         // An open feedback nothing answers for is one no session will be
         // handed. `typo3_feedback_record` writes the card with the report, so
-        // one missing means the feedback got here some other way — added by
+        // one absent means the feedback got here some other way — added by
         // hand, or its card deleted while it stayed open (`D-FBK-045`). Left to
-        // the suite alone it would be found by whoever runs phpunit, which is
-        // not the session that recorded the feedback.
+        // the suite alone whoever runs phpunit would find it, which is not the
+        // session that recorded the feedback.
         foreach (OpenFeedback::all() as $feedback) {
             if (!$feedback['judged']) {
                 $problems[] = $feedback['file'] . ' is open and no todo answers for it — write it a card in todo/open/';
             }
         }
 
-        // And the same relation from above. A feedback is given one card and
-        // never a second, so the pair only ever arrives the other way round: a
+        // And the same relation from above. A feedback gets one card and never
+        // a second, so the pair only ever arrives the other way round: a
         // judgement folds a feedback onto another todo's `Serves:` line and the
-        // card it already had keeps asking for the judgement just made.
+        // card it already had keeps up its ask for the judgement just made.
         // Nothing repairs this one — the fold deletes the card, and what is
         // named here is that deletion.
         foreach (Todo::folded() as $pair) {

@@ -12,11 +12,11 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * The pile as a pile, for whoever wants to read it rather than work it.
  *
- * What is to be done about any of it is on the board, one card per open
- * feedback. This is the other question: what has arrived, and which of it
- * somebody has taken on. Grouped by the checkout it was written in, because a
- * gap reported once and the same gap reported by thirty sessions out of one
- * directory are judged differently — `D-FBK-025`.
+ * What to do about any of it is on the board, one card per open feedback. This
+ * is the other question: what has arrived, and which of it somebody has taken
+ * on. Grouped by the checkout it came from. A gap reported once and the same
+ * gap reported by thirty sessions out of one directory get different
+ * judgements, `D-FBK-025`.
  */
 #[AsCommand(
     name: 'feedback:list',
@@ -24,7 +24,9 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 )]
 final class FeedbackList
 {
-    /** Where a feedback with no directory is grouped, for a session that left none. */
+    /**
+     * Where a feedback with no directory goes, for a session that left none.
+     */
     private const NO_DIRECTORY = 'no directory recorded';
 
     public function __invoke(OutputInterface $output): int
@@ -40,9 +42,9 @@ final class FeedbackList
         foreach ($open as $feedback) {
             $groups[$feedback['directory'] === '' ? self::NO_DIRECTORY : $feedback['directory']][] = $feedback;
         }
-        // The biggest corpus first: what several sessions reported from one place
-        // is what a judging run is looking for, and it is the group that is
-        // easiest to miss one card at a time.
+        // The biggest corpus first: what several sessions reported from one
+        // place is what a judge looks for, and it is the group that is easiest
+        // to miss one card at a time.
         uasort($groups, static fn(array $a, array $b): int => count($b) <=> count($a));
 
         $unjudged = count(array_filter($open, static fn(array $feedback): bool => !$feedback['judged']));

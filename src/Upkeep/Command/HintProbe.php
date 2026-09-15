@@ -15,8 +15,8 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * What one query reaches in the hint corpus, and why.
  *
  * `components:check` exists because a core update invalidates an entry
- * silently. A hint decays the same way and even more quietly: nothing about it
- * changes, the query nobody phrased right simply comes back empty, and the
+ * silently. A hint decays the same way and even more quietly. Nothing about it
+ * changes, and the query nobody phrased right simply comes back empty. The
  * caller reads that as "this server does not know" rather than as "I said it
  * differently". This is one of the two readings that make it loud.
  */
@@ -48,11 +48,11 @@ final class HintProbe
             return 0;
         }
 
-        // What each word of the query is worth, before any hint is named. A
-        // term is weighed by how few of the candidates carry it, so this is
-        // where a common word shows as the cheap one — and where the statement
-        // somebody has just written into the corpus shows what it cost every
-        // query carrying that word.
+        // What each word of the query is worth, before any hint comes up. A
+        // term weighs by how few of the candidates carry it, so this is where a
+        // common word shows as the cheap one — and where the statement somebody
+        // has just written into the corpus shows what it cost every query
+        // carrying that word.
         $weights = $result['matchedHints'][0]['matchedOn']['weights'];
         if ($weights !== []) {
             arsort($weights);
@@ -65,9 +65,9 @@ final class HintProbe
         Voice::heading($output, 'Hits');
         foreach ($result['matchedHints'] as $hint) {
             // Which way in earned it. A hit on the curated vocabulary means
-            // somebody anticipated this phrasing; a hit on the text alone means
-            // the hint answers a question nobody indexed it for, and that is the
-            // one worth reading — it is either a good catch or a false one.
+            // somebody anticipated these words; a hit on the text alone means
+            // the hint answers a question nobody indexed it for, and that is
+            // the one worth a read — it is either a good catch or a false one.
             $how = $hint['matchedOn']['keywords'] > 0
                 ? sprintf('appliesTo(%d) + text(%d)', $hint['matchedOn']['keywords'], $hint['matchedOn']['score'])
                 : sprintf('text only(%d)', $hint['matchedOn']['score']);
@@ -82,11 +82,11 @@ final class HintProbe
     /**
      * Which of the three ways in admitted this hit, and how much room it left.
      *
-     * The third is the fragile one: a coverage share is measured against
-     * weights the whole corpus decides, so an unrelated statement using one of
-     * these words moves it. The number is printed rather than a verdict on it,
-     * because a reader seeing 0.502 against 0.500 knows to look at what they
-     * have just written instead of at the assertion that failed — `D-ANS-115`.
+     * The third is the fragile one. A coverage share measures against weights
+     * the whole corpus decides, so an unrelated statement with one of these
+     * words moves it. The number prints rather than a verdict on it. A reader
+     * who sees 0.502 against 0.500 knows to look at what they have just written
+     * instead of at the assertion that failed, `D-ANS-115`.
      *
      * @param array{keywords: int, score: int, coverage: float, terms: array<string, string>, weights: array<string, float>} $matchedOn
      */

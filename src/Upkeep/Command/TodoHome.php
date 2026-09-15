@@ -19,30 +19,29 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  *
  * The setup was a command and the return was a page, and the asymmetry cost
  * exactly what it looks like it would. A session sent to bring three branches
- * home read `working-todos-in-parallel.md` whole and then `TodoClaim.php` whole
- * — 46 KB — to find out what four git commands were, and it did that before
- * running the first of them. What a caller needs from a procedure is that it
- * happens in the right order, and an order is the one thing prose cannot hold
+ * home read `working-todos-in-parallel.md` whole and then `TodoClaim.php`
+ * whole, 46 KB, to find out what four git commands were. It did that before it
+ * ran the first of them. What a caller needs from a procedure is that it
+ * happens in the right order. An order is the one thing prose cannot hold
  * somebody to.
  *
  * The order is the whole content. The rebase is what makes the merge a
- * fast-forward, because `main` moved while the session ran; what the branch
- * owes `main` is written between the rebase and `composer ci`, because the
- * rebase is what lets a worktree get it right and the suite then runs on the
- * tree that merges; and the worktree comes down after the merge, never before,
- * because removed early it takes the only checkout the rebase and the suite can
- * run in.
+ * fast-forward, because `main` moved while the session ran. What the branch
+ * owes `main` goes in between the rebase and `composer ci`. The rebase is what
+ * lets a worktree get it right, and the suite then runs on the tree that
+ * merges. The worktree comes down after the merge, never before, because
+ * removed early it takes the only checkout the rebase and the suite can run in.
  *
  * One branch, and the next one starts again from the top. `main` moved when the
- * last merge landed, so a branch rebased before it is behind again — running two
- * merges from one rebase is the mistake `--ff-only` exists to catch, and this
- * command cannot make it because each name it is given is carried through all
- * four steps before the next is looked at.
+ * last merge landed, so a branch rebased before it is behind again. Two merges
+ * from one rebase is the mistake `--ff-only` exists to catch. This command
+ * cannot make it, because each name it gets goes through all four steps before
+ * the next one's turn.
  *
  * What it does not do is decide that a session has ended. Nothing here can see
- * that, and a branch merged out from under a session that was still writing is
- * worse than a branch that waited: the names are the caller's, and with none it
- * reports what is standing instead.
+ * that, and a branch merged out from under a session that still writes is worse
+ * than a branch that waited. The names are the caller's, and with none it
+ * reports what stands instead.
  */
 #[AsCommand(
     name: 'todo:home',
@@ -123,10 +122,10 @@ final class TodoHome
      * The four steps for one branch, in the order that is the point of them.
      *
      * Each one stops the sequence where it fails and says what state it left,
-     * because every stopping point here is a different thing to do next: a
-     * rebase that conflicts is read, a red suite is fixed on the branch, and a
-     * merge that will not fast-forward is the assumption of this procedure
-     * being wrong somewhere.
+     * because every stop here is a different thing to do next. A rebase that
+     * conflicts needs a read, a red suite a fix on the branch. A merge that
+     * will not fast-forward means this procedure's assumption is wrong
+     * somewhere.
      *
      * @return string|null the branch that is now on `main`, or null where it is not
      */
@@ -145,7 +144,7 @@ final class TodoHome
 
         // A session that died mid-write leaves a tree the rebase would refuse
         // and the merge would silently leave behind. Either way the half that
-        // is done is on nobody's branch, which is the state this whole
+        // is complete is on nobody's branch, which is the state this whole
         // arrangement exists to prevent.
         [, $dirty] = Checkouts::run(['git', '-C', $path, 'status', '--porcelain']);
         if (trim($dirty) !== '') {
@@ -213,19 +212,15 @@ final class TodoHome
     /**
      * What the branch owes `main`, written into the branch's own commit.
      *
-     * Three things a session cannot get right and a rebased worktree can: the
-     * generated listing at the foot of a group readme, which a session sees only
-     * its own entry of; a todo left carrying the question the session stopped
-     * on, which belongs where nobody is offered it; and a link to a feedback the
-     * branch archived that another branch wrote after this one was cut —
-     * `D-DOC-064`. Amended rather than committed beside the work, because a
-     * listing line and the entry it lists are one change — `D-FBK-011`. Before
+     * Three things a session cannot get right and a rebased worktree can. The
+     * generated listing at the foot of a group readme, and a todo left with the
+     * question the session stopped on. And a link to a feedback the branch
+     * archived that another branch wrote after this one came off, `D-DOC-064`.
+     * Amended rather than committed beside the work, `D-FBK-011`, and before
      * `composer ci`, so the suite runs on the tree that merges.
      *
-     * Run in the worktree, which is where the session wrote the question. A todo
-     * it finished is a deletion the branch already carries and a todo it left is
-     * back in the queue the moment this worktree comes down, so neither needs
-     * anything doing to it here — `D-DOC-060`.
+     * Run in the worktree, which is where the session wrote the question. A
+     * todo it finished or left needs nothing here, `D-DOC-060`.
      */
     private static function owed(OutputInterface $output, string $path): void
     {
@@ -238,11 +233,11 @@ final class TodoHome
             }
         }
 
-        // The whole tree, because it was read clean above and everything dirty
-        // in it now is what those commands just wrote. A repair reaches whatever
+        // The whole tree, because it read clean above and everything dirty in
+        // it now is what those commands just wrote. A repair reaches whatever
         // file wrote the link, which is no directory anybody can name in
         // advance. Each file rather than the directory it is new in, because
-        // what is read here is also what is printed back.
+        // what the read finds here is also what prints back.
         [, $changed] = Checkouts::run(['git', '-C', $path, 'status', '--porcelain', '--untracked-files=all']);
         $paths = [];
         foreach (preg_split('/\R/', trim($changed)) ?: [] as $line) {
@@ -273,12 +268,11 @@ final class TodoHome
     }
 
     /**
-     * What is standing, for a caller who has not said which branch is done.
+     * What stands, for a caller who has not said which branch is complete.
      *
      * The state of each rather than the id alone: which todo it is, and whether
-     * anything on it is uncommitted. A worktree with a dirty tree is the one
-     * this command will refuse, and finding that out before naming it costs
-     * nothing.
+     * anything on it awaits a commit. A worktree with a dirty tree is the one
+     * this command will refuse, and a look before the name costs nothing.
      *
      * @param array<int, string> $standing
      */

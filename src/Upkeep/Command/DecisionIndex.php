@@ -14,7 +14,7 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Writes the listing of every group, and of all of them, back into the readmes.
  *
  * What this replaces is one document of thirty entries that called itself
- * newest-first and was not: two had arrived at its foot, and the labels a
+ * newest-first and was not. Two had arrived at its foot, and the labels a
  * reader navigates by had drifted into thirteen spellings of four things.
  */
 #[AsCommand(
@@ -25,13 +25,13 @@ final class DecisionIndex
 {
     /**
      * Where the generated listing begins, so everything above it survives a
-     * regeneration. Three shapes are matched: the table these listings were
-     * until D-DOC-001, the list they are now, and the group heading the root
-     * readme carries above each run of it.
+     * regeneration. Three shapes match. The table these listings were until
+     * D-DOC-001, the list they are now, and the group heading the root readme
+     * carries above each run of it.
      *
      * That last one is why prose above a listing may not use a third-level
-     * heading: it would be read as the start of the generated half and go with
-     * the next regeneration.
+     * heading. It would read as the start of the generated half and go with the
+     * next regeneration.
      */
     private const LISTING_STARTS = '/(?:\| Decided\s|### |- \[`D-)[^\n]*(?:\n.*)?$/s';
 

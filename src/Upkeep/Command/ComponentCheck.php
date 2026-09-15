@@ -18,10 +18,10 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Whether the component catalog still says what the core checkouts say.
  *
- * Three readings over one subject: the range each entry is bound on, the demo
- * each one recorded, and the classes and elements `components:derive` wrote.
- * Nothing is written — a failure is an entry somebody has to reread, and the
- * new range is a judgement rather than a substitution (`D-CAT-001`).
+ * Three reads over one subject: the range each entry binds on, the demo each
+ * one recorded, and the classes and elements `components:derive` wrote. It
+ * writes nothing. A failure is an entry somebody has to read again, and the new
+ * range is a judgement rather than a substitution (`D-CAT-001`).
  */
 #[AsCommand(
     name: 'components:check',
@@ -44,14 +44,15 @@ final class ComponentCheck
      * Re-derives which majors each entry holds on and which its class list alone
      * holds on, and reports where either differs from what it records.
      *
-     * An entry holds on a version when everything it describes is there: its Sass
-     * sources, and every class and custom property it names that the newest covered
-     * version has. Missing a custom property is not a detail — a caller pasting one
-     * that does not exist gets CSS that silently does nothing.
+     * An entry holds on a version when everything it describes is there. Its
+     * Sass sources, and every class and custom property it names that the
+     * newest covered version has. An absent custom property is not a detail: a
+     * caller who pastes one that does not exist gets CSS that silently does
+     * nothing.
      *
-     * The class list is derived a second time without the custom properties, because
-     * a caller asking about one class is not asking to paste the component
-     * (`D-CAT-006`). It is the same reading over fewer names, so the two cannot
+     * The class list derives a second time without the custom properties. A
+     * caller who asks about one class does not ask to paste the component
+     * (`D-CAT-006`). It is the same read over fewer names, so the two cannot
      * drift apart on what a checkout says.
      *
      * @param array<int, array<string, mixed>> $components
@@ -122,8 +123,8 @@ final class ComponentCheck
     }
 
     /**
-     * Whether the sources an entry was read off are on this version at all: its
-     * Sass partials, or — for a custom element, which has none — the TypeScript
+     * Whether the sources an entry came off are on this version at all. Its
+     * Sass partials, or, for a custom element, which has none, the TypeScript
      * that defines its tag.
      *
      * @param array<string, mixed> $component
@@ -146,10 +147,10 @@ final class ComponentCheck
      * Whether this version's Sass writes every name the newest covered version
      * writes.
      *
-     * Only what the newest covered version actually writes is asked about. A
-     * Bootstrap class the core never spells out — btn-secondary comes from a state
-     * map loop — is absent on every version and says nothing about which ones an
-     * entry holds on.
+     * The question covers only what the newest covered version writes. A
+     * Bootstrap class the core never spells out, btn-secondary comes from a
+     * state map loop, is absent on every version. It says nothing about which
+     * ones an entry holds on.
      *
      * @param array<int, string> $named
      * @param array<int, array{scss: string, ts: string}> $sources
@@ -211,13 +212,13 @@ final class ComponentCheck
     }
 
     /**
-     * Re-reads the markup each entry was read off, and reports every checkout
+     * Reads the markup each entry came off again, and reports every checkout
      * that no longer carries what the entry recorded.
      *
-     * The binding above is derived from names, so a demo rewritten around the
-     * same classes reads as unchanged — `D-CAT-001` named that as what would show
-     * it wrong, and a digest per entry per checkout is what notices it. Nothing
-     * is written: a failure is a demo somebody has to reread, and the new digest
+     * The range above derives from names, so a demo rewritten around the same
+     * classes reads as unchanged. `D-CAT-001` named that as what would show it
+     * wrong, and a digest per entry per checkout is what notices it. It writes
+     * nothing. A failure is a demo somebody has to read again. The new digest
      * is only true once the entry says what that demo now shows.
      *
      * @param array<int, array<string, mixed>> $components
@@ -256,7 +257,7 @@ final class ComponentCheck
                 }
                 $selector = (string) ($component['demoSelector'] ?? '');
                 $template = (string) file_get_contents($file);
-                // An entry that derives nothing is held to the whole file, for
+                // An entry that derives nothing holds to the whole file, for
                 // the reason a demo with no example at all is: nothing is
                 // handed over, so what a rewrite could change is whether the
                 // judgment behind the entry still stands.
@@ -312,8 +313,8 @@ final class ComponentCheck
      * The demo as this checkout spells it, or nothing where it has none.
      *
      * A branch older than the rename carries `.html` where the entry records
-     * `.fluid.html`, and reading only the recorded spelling digested no demo at
-     * all on that major — which read as four checkouts covered and was two.
+     * `.fluid.html`. A read of only the recorded form digested no demo at all
+     * on that major, which read as four checkouts covered and was two.
      */
     private static function demoFile(string $path): ?string
     {
@@ -329,17 +330,17 @@ final class ComponentCheck
     /**
      * What one checkout's demo says about one component.
      *
-     * The examples carrying the component are the markup an installation would
-     * hand a caller, so they are what the digest covers. Where a demo wraps none
-     * in `sg:example`, the file itself is the demo: `Panels.fluid.html` and
+     * The examples with the component are the markup an installation would hand
+     * a caller, so they are what the digest covers. Where a demo wraps none in
+     * `sg:example`, the file itself is the demo. `Panels.fluid.html` and
      * `RecordSearchBox.fluid.html` are pages about one component rather than
      * galleries, so an edit anywhere in them is an edit to what the entry
      * describes.
      *
      * An entry's `demoSelector` narrows that the same way it narrows the
-     * answer, because the two have to be the same reading: a digest over
-     * examples nobody is handed would go on passing while the one example that
-     * is handed over was rewritten underneath it.
+     * answer, because the two have to be the same read. A digest over examples
+     * nobody gets would stay green while somebody rewrote the one example that
+     * goes out.
      */
     private static function demoMarkup(string $template, string $rootClass, ?string $selector): string
     {
@@ -352,9 +353,9 @@ final class ComponentCheck
      * Whether the derived files still say what the checkouts say.
      *
      * `components:derive` writes them and nothing else does, so the only way
-     * they go wrong is by not being run after a core release. Re-deriving and
-     * comparing is the whole check, and it is cheap: the sources are committed
-     * files — `D-CAT-008`.
+     * they go wrong is a core release with no run after it. A second derivation
+     * and a comparison is the whole check, and it is cheap: the sources are
+     * files in git, `D-CAT-008`.
      */
     private static function verifyDerived(OutputInterface $output, string $checkouts): int
     {

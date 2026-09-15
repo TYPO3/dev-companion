@@ -14,16 +14,16 @@ use TYPO3\DevCompanion\Upkeep\Renumber;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * Giving a decision another number, and handing over the references it cannot.
+ * Gives a decision another number, and hands over the references it cannot.
  *
- * What moves is the file the caller named, never the first one carrying the id:
- * both files carry it, and an id two files claim is refused with both named,
- * because the one that keeps its number is the one that merged first and
- * nothing here can read that. This settles the half a file can settle — the
- * entry, its name, and every reference whose link path says which entry is meant
- * — and prints the rest, which a person reads against `git diff main -- <file>`
- * (`D-DOC-015`). A listing that already carried the entry is put back in order,
- * and one a branch left alone is left alone.
+ * What moves is the file the caller named, never the first one with the id.
+ * Both files carry it, and an id two files claim meets a refusal that names
+ * both. The one that keeps its number is the one that merged first, and nothing
+ * here can read that. This settles the half a file can settle: the entry, its
+ * name, and every reference whose link path says which entry it means. It
+ * prints the rest, which a person reads against `git diff main -- <file>`
+ * (`D-DOC-015`). A listing that already carried the entry goes back in order,
+ * and one a branch left alone stays alone.
  */
 #[AsCommand(
     name: 'decisions:renumber',
@@ -128,8 +128,8 @@ final class DecisionRenumber
 
     /**
      * The number a caller named, as a whole id. A bare one takes the group of
-     * the entry being moved; a written-out id is left as it stands, so naming
-     * another group is refused rather than silently corrected.
+     * the entry on the move. A written-out id stays as it stands, so a name for
+     * another group meets a refusal rather than a silent correction.
      */
     private function target(string $from, string $number): string
     {

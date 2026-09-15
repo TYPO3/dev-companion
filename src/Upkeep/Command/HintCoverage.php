@@ -12,11 +12,11 @@ use TYPO3\DevCompanion\Upkeep\Scenarios;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * What the hint corpus cannot be found by. It never writes.
+ * What fails to find the hint corpus. It never writes.
  *
  * Three numbers nobody otherwise knows: hints that their own title does not
  * reach, hints no scenario prompt reaches, and scenario prompts that reach
- * nothing. Then two the corpus can grow into rather than out of — what the
+ * nothing. Then two the corpus can grow into rather than out of. What the
  * always-selected domain supplies, and the body lengths against the matcher's
  * dilution reference. Only the last one fails.
  */
@@ -41,10 +41,10 @@ final class HintCoverage
             Voice::row($output, 'none');
         }
         foreach ($unreachable as $hint) {
-            // Almost always the domain gate rather than the scoring: a title with
-            // no signal in it falls back to PHP, and a hint in any other category
-            // is then never a candidate. The hint is not badly written; it is
-            // filed where the query cannot see it.
+            // Almost always the domain gate rather than the score: a title with
+            // no signal in it falls back to PHP, and a hint in any other
+            // category is then never a candidate. The hint is not badly
+            // written; it sits where the query cannot see it.
             Voice::row($output, sprintf(
                 '%s %-16s (candidates: %s)',
                 Voice::key($hint['id'], 34),
@@ -53,9 +53,10 @@ final class HintCoverage
             ));
         }
 
-        // The scenarios are the only corpus of real phrasings this repository has,
-        // and deliberately not a list kept beside the matcher: a query written to
-        // test a matcher is written by someone who knows what it should return.
+        // The scenarios are the only corpus of real phrasings this repository
+        // has, and deliberately not a list kept beside the matcher: a query
+        // written to test a matcher comes from someone who knows what it should
+        // return.
         $prompts = array_map(
             static fn(array $scenario): string => $scenario['prompt'],
             [...Scenarios::load(), ...Scenarios::contracts()],
@@ -93,9 +94,10 @@ final class HintCoverage
 
         // What D-KNW-001's second half asks for. `any` is the one domain no
         // query has to earn, so a hint tagged with it is reachable from every
-        // task there is. `D-KNW-033` took the share to nothing by naming the
-        // domains each of those hints is really asked from; what this reports
-        // is whether it comes back, and the number to watch is the growth.
+        // task there is. `D-KNW-033` took the share to nothing with a name for
+        // the domains each of those hints is really asked from; what this
+        // reports is whether it comes back, and the number to watch is the
+        // growth.
         $answers = 0;
         $fromGeneral = 0;
         $onlyGeneral = 0;
@@ -130,13 +132,13 @@ final class HintCoverage
             $onlyGeneral > 0 ? ' (every answer is what D-KNW-001 called wrong)' : '',
         ));
 
-        // The tripwire D-ANS-002 asks for. The matcher discounts a term found in a
-        // body longer than the corpus's ordinary one, and the reference is what
-        // "ordinary" was measured at. The mean has since grown past it, which is
-        // not itself the failure — the reference is a floor now rather than the
-        // mean. The headroom is the number to read: at MAX_MEAN_BODY_WORDS the
-        // corpus is close to the length at which a query it has no answer for
-        // gets one anyway, and the constant has to be measured again.
+        // The tripwire D-ANS-002 asks for. The matcher discounts a term found
+        // in a body longer than the corpus's ordinary one, and the reference is
+        // what "ordinary" measured at. The mean has since grown past it, which
+        // is not itself the failure — the reference is a floor now rather than
+        // the mean. The headroom is the number to read: at MAX_MEAN_BODY_WORDS
+        // the corpus is close to the length at which a query it has no answer
+        // for gets one anyway, and the constant needs a second measurement.
         $lengths = array_values(Hints::bodyWords());
         sort($lengths);
         $mean = (int) round(array_sum($lengths) / max(1, count($lengths)));

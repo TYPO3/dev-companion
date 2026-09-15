@@ -16,10 +16,10 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Whether the tool reference still says what the registry declares, and how far
  * behind the recorded half of it is.
  *
- * A generated page nothing reads back is a hand-written one that was generated
- * once: a tool added, a description rewritten or a schema field gained leaves
- * it standing, and it goes on being read. `composer test` runs the same
- * comparison through ToolSurfaceTest; this is the readable half.
+ * A generated page nothing reads back is a hand-written one with one generation
+ * behind it. A tool added, a description rewritten or a schema field gained
+ * leaves it as it stands, and readers go on with it. `composer test` runs the
+ * same comparison through ToolSurfaceTest; this is the readable half.
  */
 #[AsCommand(
     name: 'tools:check',
@@ -55,12 +55,12 @@ final class ToolCheck
     /**
      * How far the recorded half of the surface is behind what it answers from.
      *
-     * It reports and never fails, because a recording is evidence about a day
-     * and a command only a machine with `.checkouts/` can re-run may not turn
-     * anything red — `D-DOC-006`, whose second **Wrong if** is a recording
-     * nobody re-runs and nothing that asks. This is the asking, and it is here
-     * rather than in `unresolved:list` because the reader who can answer it is
-     * the one already looking at this surface — `D-DOC-058`.
+     * It reports and never fails. A record is evidence about a day, and a
+     * command only a machine with `.checkouts/` can run again may not turn
+     * anything red. `D-DOC-006`'s second **Wrong if** is a record nobody runs
+     * again and nothing that asks. This is the ask, and it is here rather than
+     * in `unresolved:list`. The reader who can answer it is the one who already
+     * looks at this surface, `D-DOC-058`.
      */
     private static function howOldTheRecordingIs(OutputInterface $output): void
     {

@@ -10,10 +10,10 @@ use TYPO3\DevCompanion\Upkeep\Scenarios;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * Every recorded run against the scenario it claims to answer: judged in full,
- * evidenced, run in the right environment, judged against the criteria as they
- * read now, and adding up to the status the scenario claims. `composer test`
- * runs the same check through ScenarioTest; this is the readable half.
+ * Every recorded run against the scenario it claims to answer. Judged in full,
+ * with evidence, and run in the right environment. Judged against the criteria
+ * as they read now, and equal to the status the scenario claims. `composer
+ * test` runs the same check through ScenarioTest; this is the readable half.
  */
 #[AsCommand(
     name: 'scenarios:check',
@@ -53,7 +53,7 @@ final class ScenarioCheck
             Voice::note($output, sprintf('%s quotes %s, and its trace carries no such call.', $id, implode(', ', $quoted)));
         }
 
-        // Not a failure. Most scenarios have never been run forward, and a suite
+        // Not a failure. Most scenarios have never run forward, and a suite
         // that fails for that would be a suite nobody could add a scenario to.
         $unrun = array_values(array_diff(array_keys(Scenarios::load()), array_keys($runs)));
         Voice::note($output, sprintf('%d of %d forward reviews have a recorded run.', count($runs), count($runs) + count($unrun)));

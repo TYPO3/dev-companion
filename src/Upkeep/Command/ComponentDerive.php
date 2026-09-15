@@ -18,10 +18,10 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Where each of a component's classes sits, and which majors it holds on.
  *
  * Both come out of the compiled `backend.css`, which the core commits on every
- * branch, so the four covered majors are read at once and reading them is the
- * verification rather than a step after it. What stays curated is which
- * components are worth answering about; every fact about a class is written
- * here — `D-CAT-008`.
+ * branch. So one pass reads the four covered majors, and the read is the
+ * verification rather than a step after it. What stays a choice by hand is
+ * which components are worth an answer; every fact about a class comes from
+ * here, `D-CAT-008`.
  */
 #[AsCommand(
     name: 'components:derive',

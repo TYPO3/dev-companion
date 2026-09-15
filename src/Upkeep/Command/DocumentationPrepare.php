@@ -13,12 +13,13 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Writes the copy a renderer publishes, and nothing else.
  *
- * This is the half of a render that belongs to this repository: something over a
- * third of the links below `documentation/` point at a decision, a requirement
- * or a class that no visitor of the site has, and the copy is where each of them
- * becomes the file on GitHub. It also publishes a directory's `readme.md` as the
- * `index.md` a generator serves as the directory itself. It needs no renderer,
- * no theme and no network — `D-DOC-028` is why the two halves are two commands.
+ * This is the half of a render that belongs to this repository. Something over
+ * a third of the links below `documentation/` point at a decision, a
+ * requirement or a class that no visitor of the site has. The copy is where
+ * each of them becomes the file on GitHub. It also publishes a directory's
+ * `readme.md` as the `index.md` a generator serves as the directory itself. It
+ * needs no renderer, no theme and no network — `D-DOC-028` is why the two
+ * halves are two commands.
  */
 #[AsCommand(
     name: 'documentation:prepare',

@@ -14,15 +14,15 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Everything this repository binds to a core version, against the checkouts.
  *
- * The four below each answer for one subject and are the ones to run while
- * working on it. This is the other question — whether anything has fallen
- * behind a core release — and it is one question rather than four, because a
- * release moves all of them at once and a session that runs three of the four
- * has checked nothing in particular.
+ * The four below each answer for one subject and are the ones to run while the
+ * work is on it. This is the other question, whether anything has fallen behind
+ * a core release. It is one question rather than four. A release moves all of
+ * them at once, and a session that runs three of the four has checked nothing
+ * in particular.
  *
  * It is not part of `repository:check`, which reads only what this checkout can
- * answer on its own: the clones below `.checkouts/` are a second thing to have,
- * and a check that fails for not having one is a check nobody keeps green.
+ * answer on its own. The clones below `.checkouts/` are a second thing to have,
+ * and a check that fails without one is a check nobody keeps green.
  */
 #[AsCommand(
     name: 'checkouts:verify',
@@ -30,7 +30,10 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 )]
 final class CheckoutVerify
 {
-    /** In the order a reader wants them: the catalogs first, then what is bound to a version. */
+    /**
+     * In the order a reader wants them: the catalogs first, then what binds to
+     * a version.
+     */
     private const VERIFIED = ['components', 'references', 'system-extensions', 'versions'];
 
     public function __invoke(OutputInterface $output, Application $application): int

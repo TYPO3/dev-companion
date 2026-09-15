@@ -17,7 +17,7 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  *
  * The same one-way generation `decisions:cover` does, for the corpus that says
  * what must be true — `D-DOC-049`. What stays in the `## Held by` section is
- * what is not a test: a `bin/cli` command, a clause saying what one of them
+ * what is not a test. A `bin/cli` command, a clause that says what one of them
  * holds, a half nothing guards.
  */
 #[AsCommand(

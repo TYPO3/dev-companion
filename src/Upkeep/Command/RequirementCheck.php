@@ -21,10 +21,10 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * files.
  *
  * An id that agrees with its file name, its heading and its group, a statement
- * to open with, a status, and tests that exist behind what claims to be held.
+ * to open with, a status. And tests that exist behind what claims `held`.
  * `composer test` runs the same check through `RequirementsTest`, the listing
- * apart: that one can only be true on a checkout that has every file in the
- * group, so it is held here alone — `D-FBK-011`.
+ * apart. That one can only be true on a checkout that has every file in the
+ * group, so it holds here alone, `D-FBK-011`.
  */
 #[AsCommand(
     name: 'requirements:check',
@@ -68,7 +68,7 @@ final class RequirementCheck
                 $problems[] = $id . ' is titled "' . $requirement['title'] . '" and its heading says "' . $requirement['written'] . '"';
             } elseif (basename($path) !== Entry::fileName($id, $requirement['title'])) {
                 // The file name is the title, so a title corrected in place
-                // leaves a file claiming the old one — `D-DOC-047`.
+                // leaves a file that claims the old one — `D-DOC-047`.
                 $problems[] = $id . ' is titled "' . $requirement['title'] . '" and filed as ' . basename($path)
                     . '; run bin/cli requirements:rename';
             }
@@ -77,9 +77,9 @@ final class RequirementCheck
             }
             $seen[$id] = $file;
 
-            // `heldBy` is generated from the `#[Requirement]` attributes the
-            // tests carry, so what is held here is that the copy still says
-            // what the source does — `D-DOC-049`.
+            // `heldBy` comes from the `#[Requirement]` attributes the tests
+            // carry, so what holds here is that the copy still says what the
+            // source does — `D-DOC-049`.
             $contents = (string) file_get_contents($path);
             if (Entry::withNames($contents, 'heldBy', $held[$id] ?? []) !== $contents) {
                 $problems[] = $file . ' carries a heldBy the tests do not write — run bin/cli requirements:cover';
@@ -87,8 +87,8 @@ final class RequirementCheck
             // A bullet that is only a test name is the front matter written a
             // second time. What the section is for is what is not a test — a
             // `bin/cli` command, a half nothing guards, or the clause on the
-            // next line saying what one of the tests holds, which is a bullet
-            // this leaves alone.
+            // next line that says what one of the tests holds, which is a
+            // bullet this leaves alone.
             if (preg_match('/^## Held by$\R(.*?)(?=^## |\z)/ms', $contents, $section) === 1) {
                 preg_match_all('/^- `(\w+Test(?:::\w+)?)`$(?:\R(?!  \S)|\z)/m', $section[1], $bare);
                 foreach ($bare[1] as $test) {
@@ -107,15 +107,15 @@ final class RequirementCheck
                 $problems[] = $id . ' has the status ' . ($requirement['status'] === '' ? '(none)' : $requirement['status']);
             }
             // A date rather than a word, because a judgement is about the entry
-            // as it read on the day it was made, and the entry can be rewritten
-            // under it. Nothing catches that happening; the date is what lets a
-            // reader notice.
+            // as it read on the day of the judgement, and the entry can change
+            // under it. Nothing catches that; the date is what lets a reader
+            // notice.
             if ($requirement['judged'] !== '' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $requirement['judged']) !== 1) {
                 $problems[] = $id . ' is judged ' . $requirement['judged'] . ', and a judgement is the date it was made on';
             }
             foreach ($requirement['restsOn'] as $decision) {
-                // Whether the decision still holds is a reading rather than a
-                // failure, and bin/cli unresolved:list is where that is read out.
+                // Whether the decision still holds is a read rather than a
+                // failure, and bin/cli unresolved:list is where that comes out.
                 // What fails here is a pointer at nothing.
                 if (!isset($decisions[$decision])) {
                     $problems[] = $id . ' rests on ' . $decision . ', which no decision has';

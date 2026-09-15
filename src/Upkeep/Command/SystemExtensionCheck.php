@@ -36,10 +36,10 @@ final class SystemExtensionCheck
      * Re-reads which system extensions each covered version ships, and reports
      * every difference from what the catalog records.
      *
-     * Nothing is judged here: the extension keys below typo3/sysext are the answer,
-     * and the Composer package name is what that directory's own composer.json says.
-     * A core release that adds or drops a system extension therefore invalidates the
-     * catalog loudly rather than leaving it to be noticed by a caller.
+     * No judgement here. The extension keys below typo3/sysext are the answer,
+     * and the Composer package name is what that directory's own composer.json
+     * says. So a core release that adds or drops a system extension invalidates
+     * the catalog loudly rather than leaves it to a caller to notice.
      *
      * @param array<int, array<string, mixed>> $recorded
      */

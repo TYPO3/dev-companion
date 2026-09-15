@@ -15,43 +15,41 @@ use TYPO3\DevCompanion\Upkeep\Todo;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * The one thing to do now, for whoever is starting a session.
+ * The one thing to do now, for whoever starts a session.
  *
  * It prints a single todo and nothing else. Everything it could print instead
- * was already written down somewhere — the feedback that arrived from outside,
- * the two directories that say what is unfinished, the file that says in which
- * order — and a session that is handed all of it reads for ten minutes before
- * it does anything. Context is not free: an agent given the queue reads it as a
- * plan and works in the wrong order, and one given five paragraphs of why a
- * todo is where it is starts by summarising them. `bin/cli todo:list` is where
- * the overview lives, for whoever wants it.
+ * already stands somewhere. The feedback that arrived from outside, the two
+ * directories that say what is open, the file that says in which order. A
+ * session that gets all of it reads for ten minutes before it does anything.
+ * Context is not free. An agent given the queue reads it as a plan and works in
+ * the wrong order. One given five paragraphs of why a todo is where it is
+ * starts with a summary of them. `bin/cli todo:list` is where the overview
+ * lives, for whoever wants it.
  *
  * Whether a todo is due is two questions. Has the clock come round — cheap, and
- * answered by the cadence. And is there anything to do — expensive, and
- * answered by running the todo's own `run:` command: a command this repository
- * owns exits nonzero when it found work, so the feedback stop being the next
- * thing the moment the last one is judged, without anybody editing a todo to
- * say so. A command it does not own is named rather than run; `next` starts no
- * process that needs the network, and the cadence is what keeps it from being
- * asked twice in an afternoon.
+ * answered by the cadence. And is there anything to do, which is expensive, and
+ * the todo's own `run:` command answers it. A command this repository owns
+ * exits nonzero when it found work. So the feedback stop as the next thing the
+ * moment the last one has its judgement, without an edit to a todo to say so. A
+ * command it does not own gets a name rather than a run. `next` starts no
+ * process that needs the network, and the cadence is what keeps the question
+ * from a second ask in one afternoon.
  *
  * Three groups, in this order, because for a while the first of them ate the
  * other two. A sighting that recurs every session is due for as long as
- * anything is unjudged, and the feedback arrive faster than a session closes
- * them — so every session started by sighting, the queue was never reached,
- * and items sat in it for as long as feedback/ was not empty. What it means to
- * take something on is that it is now ahead of the deciding whether to:
+ * anything awaits a judgement. The feedback arrive faster than a session closes
+ * them. So every session started with a sighting, never reached the queue, and
+ * items sat in it for as long as feedback/ was not empty. What it means to take
+ * something on is that it is now ahead of the decision whether to:
  *
- * - What has a clock has an appointment. A cadence in days is a date that
- *   comes round, and missing it is missing the day, not losing a place in
- *   an order.
- * - Then the queue, in the order the queue has. It is work somebody has
- *   already judged to be worth doing, which is exactly what a sighting
- *   produces — so leaving it standing to sight more is deciding twice and
- *   doing nothing.
- * - Then, with the queue empty, what recurs every session: the feedback and
- *   the unresolved, whose whole output is new entries for the queue that just
- *   ran dry.
+ * - What has a clock has an appointment. A cadence in days is a date that comes
+ *   round, and a miss is a missed day, not a lost place in an order.
+ * - Then the queue, in the order the queue has. It is work somebody has already
+ *   judged worth the effort, which is exactly what a sighting produces. So to
+ *   leave it and sight more is to decide twice and do nothing.
+ * - Then, with the queue empty, what recurs every session. The feedback and the
+ *   unresolved, whose whole output is new entries for the queue that just ran
+ *   dry.
  */
 #[AsCommand(
     name: 'todo:next',
@@ -65,28 +63,26 @@ final class TodoNext
         #[Option('this session is one of several and works the claim its worktree stands on')]
         bool $worktree = false,
     ): int {
-        // A worktree standing on a claim has one todo and it is not the front
-        // of the queue. Asked there, this command would hand over work
-        // somebody else is already doing, and nothing about the answer would
-        // look wrong — which is why the branch is read before anything else.
+        // A worktree on a claim has one todo and it is not the front of the
+        // queue. Asked there, this command would hand over work somebody else
+        // already does, and nothing about the answer would look wrong. That is
+        // why the branch comes first.
         $claim = Todo::claimed();
         if ($claim !== null) {
             return self::present($output, $claim, self::perform($application, $claim['run'])[0], null, Todo::standing());
         }
 
-        // A worktree exists because somebody took a todo on, so one standing on
-        // no claim is a setup that went wrong rather than a session with
-        // nothing to do. Everything below this line would answer it with real
-        // work that belongs to somebody else, and the check above cannot tell
-        // the two apart: a worktree on the wrong branch and the main checkout
-        // on `main` are both on no claim.
-        //
-        // The flag is the same refusal for the case git cannot see: a session
-        // started as one of several that is standing in the main checkout. That
-        // one is not a worktree at all, so every check below it passes and the
-        // queue it is then handed is real work belonging to somebody else. The
-        // prompt says the session is one of several, because the prompt is the
-        // only thing that knows.
+        // A worktree exists because somebody took a todo on, so one on no claim
+        // is a setup that went wrong rather than a session with nothing to do.
+        // Everything below this line would answer it with real work that
+        // belongs to somebody else, and the check above cannot tell the two
+        // apart: a worktree on the wrong branch and the main checkout on `main`
+        // are both on no claim. The flag is the same refusal for the case git
+        // cannot see: a session started as one of several that stands in the
+        // main checkout. That one is not a worktree at all, so every check
+        // below it passes and the queue it then gets is real work that belongs
+        // to somebody else. The prompt says the session is one of several,
+        // because the prompt is the only thing that knows.
         if ($worktree || Todo::linked()) {
             return self::astray($output, $worktree);
         }
@@ -101,10 +97,9 @@ final class TodoNext
             }
         }
 
-        // What somebody has in hand stays in the queue and is offered to nobody
-        // else — the worktree standing on its branch is what says so, and it is
-        // the whole of what `todo/progress/` used to say (`D-DOC-060`,
-        // `R-FBK-010`).
+        // What somebody has in hand stays in the queue and goes to nobody else.
+        // The worktree on its branch is what says so, and it is the whole of
+        // what `todo/progress/` used to say (`D-DOC-060`, `R-FBK-010`).
         $held = Todo::held();
         $free = array_values(array_filter(
             Todo::items(),
@@ -147,24 +142,23 @@ final class TodoNext
      * A worktree that is on no claim, told what is wrong instead of handed
      * work.
      *
-     * Both causes leave the same trace, which is why they are named together:
-     * the branch is not the one the claim was taken for, or the claim was not
-     * on `main` when the worktree was cut from it and this checkout therefore
-     * has no file that could match. Neither is visible from inside the session,
-     * and the second one is the ordering the page warns about, seen from the
-     * far end.
+     * Both causes leave the same trace, which is why they stand together. The
+     * branch is not the one the claim was for. Or the claim was not on `main`
+     * when the worktree came off it, and this checkout has no file that could
+     * match. Neither is visible from inside the session, and the second one is
+     * the order the page warns about, seen from the far end.
      *
-     * It refuses rather than falling through to the queue, and that is the
-     * whole point of the case. Handing over the front of the queue here would
-     * be right in every way a session can check — a real todo, correctly read,
-     * commit rights on a branch of its own — and wrong in the only way that
-     * matters, which is that somebody else is already writing it.
+     * It refuses rather than falls through to the queue, and that is the whole
+     * point of the case. The front of the queue here would be right in every
+     * way a session can check. A real todo, correctly read, commit rights on a
+     * branch of its own. It would be wrong in the only way that matters, which
+     * is that somebody else already writes it.
      *
      * A third cause reaches the same refusal from the other direction, and only
-     * because the session said so: `--worktree` in a checkout that is not one.
-     * There the setup did not go wrong halfway, it never happened — no worktree
-     * was cut, or the session was started in the wrong directory — and the
-     * queue standing ready in front of it is the trap, not the fix.
+     * because the session said so. `--worktree` in a checkout that is not one.
+     * There the setup did not go wrong halfway, it never happened. No worktree
+     * came off, or the session started in the wrong directory. The queue ready
+     * in front of it is the trap, not the fix.
      */
     private static function astray(OutputInterface $output, bool $declared): int
     {
@@ -204,13 +198,13 @@ final class TodoNext
     }
 
     /**
-     * One todo, how it is worked, and what it leaves behind.
+     * One todo, how a session works it, and what it leaves behind.
      *
-     * The closing block is the only thing here that is not the todo: the two
-     * halves a session gets no second chance at, and which of the three
-     * handovers applies, which the page itself cannot know. It opens by naming
-     * the file the todo is, because that is the one fact a session needs before
-     * it can finish and can read nowhere — left unsaid it is looked for, and
+     * The close is the only thing here that is not the todo. The two halves a
+     * session gets no second chance at, and which of the three handovers
+     * applies, which the page itself cannot know. It opens with the name of the
+     * file the todo is. That is the one fact a session needs before it can
+     * finish and can read nowhere. Left unsaid, a session searches for it, and
      * every call costs the whole context again (`D-FBK-020`).
      *
      * @param array{title: string, kind: string, every: string, path: string, serves: array<int, string>, body: string, ...} $todo
@@ -227,17 +221,17 @@ final class TodoNext
         if ($after !== null && $after > 0) {
             $meta[] = $after . ' more after it — `bin/cli todo:list`';
         }
-        // What somebody else has in hand is named because this command cannot
-        // otherwise be told apart from the one it was before: it hands over the
-        // first queued todo, and a session that does not know it is one of
-        // several reads that as "nothing else is happening". Its own claim is
-        // not one of them — a session counting itself among the others would
-        // read one claim as two sessions at work.
+        // What somebody else has in hand stands here because this command
+        // otherwise reads like the one it was before: it hands over the first
+        // queued todo, and a session that does not know it is one of several
+        // reads that as "nothing else happens". Its own claim is not one of
+        // them: a session that counts itself among the others would read one
+        // claim as two sessions at work.
         $inHand = count(Todo::held()) - ($branch === '' ? 0 : 1);
         if ($inHand > 0) {
             $meta[] = $inHand . ' in hand elsewhere — `bin/cli todo:list`';
         }
-        // What waits is named by a count and nothing else. A blocked todo is
+        // What waits stands as a count and nothing else. A blocked todo is
         // addressed to whoever can answer it, and if no output ever mentions
         // one it is a file nobody opens again; the paragraph still belongs to
         // the one todo this command exists to hand over.
@@ -263,11 +257,11 @@ final class TodoNext
             Todo::PROCEDURE,
         ));
         Voice::note($output, match (true) {
-            // The three rules a session working one of several claims cannot
-            // read anywhere in time. They are printed with the claim rather
-            // than put in the prompt because two of them name the branch, and
-            // the branch is the one thing the prompt is not allowed to carry:
-            // what is filled in per session is what gets filled in wrong.
+            // The three rules a session on one of several claims cannot read
+            // anywhere in time. They print with the claim rather than in the
+            // prompt because two of them name the branch. The branch is the one
+            // thing the prompt may not carry: what a person fills in per
+            // session is what gets filled in wrong.
             $branch !== '' => sprintf(
                 "Commit it on the branch it was claimed for, never on `main` — this file included:\n"
                 . "    %s\n"
@@ -290,9 +284,9 @@ final class TodoNext
     /**
      * A todo's own commands, run where this repository owns them.
      *
-     * Whether there is work is the command's answer rather than a guess: the
+     * Whether there is work is the command's answer rather than a guess. The
      * listings a recurring todo starts from exit nonzero when they found
-     * something. Anything else is printed for the session to run, and counts as
+     * something. Anything else prints for the session to run, and counts as
      * work because nothing here can tell whether it is.
      *
      * @param array<int, string> $run
@@ -305,12 +299,12 @@ final class TodoNext
         $working = $run === [];
         foreach ($run as $command) {
             // A shell line starts with `bin/cli` too, and what the console is
-            // handed is a line rather than a shell: the pipe in
-            // `bin/cli decisions:list | grep revoked` arrives as an argument,
-            // the command refuses the lot, and the session's first call prints
-            // that refusal where its todo was. So a plain invocation is run and
-            // anything a shell would have to read is named, like every other
-            // command this repository does not own.
+            // handed is a line rather than a shell: the pipe in `bin/cli
+            // decisions:list | grep revoked` arrives as an argument, the
+            // command refuses the lot, and the session's first call prints that
+            // refusal where its todo was. So a plain invocation runs and
+            // anything a shell would have to read prints as a name, like every
+            // other command this repository does not own.
             if (!str_starts_with($command, 'bin/cli ') || preg_match('/[|;&<>`$]/', $command) === 1) {
                 $reading .= $command . "\n";
                 $working = true;
@@ -318,8 +312,8 @@ final class TodoNext
             }
 
             // One buffer for both streams, because what a check writes to
-            // stderr is the half a session has to read, and it is placed under
-            // the todo rather than beside it.
+            // stderr is the half a session has to read, and it goes under the
+            // todo rather than beside it.
             $buffer = new BufferedOutput();
             $status = $application->doRun(new StringInput(substr($command, strlen('bin/cli '))), $buffer);
             $reading .= $buffer->fetch();

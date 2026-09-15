@@ -14,7 +14,7 @@ use TYPO3\DevCompanion\Upkeep\Wrap;
  * The overview `bin/cli todo:next` deliberately does not give, for whoever wants it.
  *
  * Titles only, because that is what an overview is. What a todo asks for is a
- * paragraph, and five paragraphs are what `next` exists to spare a session that
+ * paragraph. Five paragraphs are what `next` exists to spare a session that
  * only has to start one of them.
  */
 #[AsCommand(
@@ -34,13 +34,13 @@ final class TodoList
             ));
         }
 
-        // The queue comes out in the order it is worked, so the column says
-        // what put each one where it is rather than repeating the order as a
-        // count. A blank there is a todo carrying no priority, which
-        // `bin/cli todo:check` reports — the gap is the point.
-        // What somebody has in hand is in the queue like everything else, and is
-        // marked rather than listed apart: it is the worktree that says so, and a
-        // todo whose worktree came down is workable again with nothing rewritten.
+        // The queue comes out in the order of the work, so the column says what
+        // put each one where it is rather than repeats the order as a count. A
+        // blank there is a todo with no priority, which `bin/cli todo:check`
+        // reports — the gap is the point. What somebody has in hand is in the
+        // queue like everything else, with a mark rather than a list apart: it
+        // is the worktree that says so, and a todo whose worktree came down is
+        // workable again with nothing rewritten.
         $held = [];
         foreach (Todo::held() as $branch => $todo) {
             $held[$todo['path']] = $branch;

@@ -14,8 +14,8 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Writes the listing of every group, and of all of them, back into the readmes.
  *
  * What this replaces is a document nobody could index. Entries arrived at the
- * top of whichever section they belonged to, the ids ran in no order, and five
- * of them had been handed out twice before anybody read far enough to notice.
+ * top of whichever section they belonged to, and the ids ran in no order. Five
+ * of them went out twice before anybody read far enough to notice.
  */
 #[AsCommand(
     name: 'requirements:index',
@@ -25,13 +25,13 @@ final class RequirementIndex
 {
     /**
      * Where the generated listing begins, so everything above it survives a
-     * regeneration. Three shapes are matched: the table these listings were
-     * until D-DOC-001, the list they are now, and the group heading the root
-     * readme carries above each run of it.
+     * regeneration. Three shapes match. The table these listings were until
+     * D-DOC-001, the list they are now, and the group heading the root readme
+     * carries above each run of it.
      *
      * That last one is why prose above a listing may not use a third-level
-     * heading: it would be read as the start of the generated half and go with
-     * the next regeneration.
+     * heading. It would read as the start of the generated half and go with the
+     * next regeneration.
      */
     private const LISTING_STARTS = '/(?:\| Id\s|### |- \[`R-)[^\n]*(?:\n.*)?$/s';
 

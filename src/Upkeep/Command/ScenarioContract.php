@@ -12,19 +12,17 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 use TYPO3\DevCompanion\Upkeep\Wrap;
 
 /**
- * The targeted contract cases, which are read rather than run forward.
+ * The targeted contract cases, which a session reads rather than runs forward.
  *
  * Named one case it hands that one over, the same way `scenarios:show` hands
- * over a forward review: what it claims is held by a test rather than by a
- * session somebody recorded, which is why it is never recorded as a run.
+ * over a forward review. A test holds what a case claims rather than a recorded
+ * session, which is why no run records one.
  *
- * Named none it says which cases are still owed a reading, and exits nonzero
- * while there are any. A case whose `Held by` says `not guarded` is the part no
- * test reaches and a session standing in for it is the only evidence there is.
- * That is what the recurring todo reading them is due on (`D-FBK-012`), so the
- * question is asked of every case rather than of one standing in for the rest —
- * a list of cases in a todo is written against the cases of its day and read
- * for months as though it still named them.
+ * Named none it says which cases are still owed a read, and exits nonzero while
+ * there are any. A case whose `Held by` says `not guarded` is the part no test
+ * reaches. A session that stands in for it is the only evidence there is. That
+ * is what the recurring todo is due on, `D-FBK-012`. So the question goes to
+ * every case rather than to a list in a todo that ages.
  */
 #[AsCommand(
     name: 'scenarios:contract',
@@ -57,11 +55,11 @@ final class ScenarioContract extends ScenarioReport
     }
 
     /**
-     * Every case still owed a reading, with what its own line says is unheld.
+     * Every case still owed a read, with what its own line says nothing holds.
      *
      * The sentence rather than the id alone, because that is what decides
-     * whether the reading is worth a session: two of them name a crossing no
-     * run can reach, and one names a step nothing makes a session take.
+     * whether the read is worth a session. Two of them name a crossing no run
+     * can reach, and one names a step nothing makes a session take.
      */
     private static function unguarded(OutputInterface $output): int
     {

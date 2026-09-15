@@ -14,7 +14,7 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * What must hold, and what state it is in.
  *
  * One requirement is one file below requirements/, and an id decides the
- * directory and the file name — so which group a requirement is in is a
+ * directory and the file name. So which group a requirement is in is a
  * comparison rather than a search.
  */
 #[AsCommand(

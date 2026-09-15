@@ -13,10 +13,10 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Every environment a scenario names, and where this checkout stands on it.
  *
- * A made one is reported by what it is registered as rather than by whether its
- * directory exists, because the state that matters is the one a case turns on:
- * `E-STOPPED` is `E-SITE` with the project down, and the two are the same files.
- * `E-SITE` is one installation per covered version, so it is a row per version —
+ * A made one reports by its registration rather than by whether its directory
+ * exists. The state that matters is the one a case turns on. `E-STOPPED` is
+ * `E-SITE` with the project down, and the two are the same files. `E-SITE` is
+ * one installation per covered version, so it is a row per version —
  * `D-EVI-006`.
  */
 #[AsCommand(
@@ -39,11 +39,11 @@ final class EnvironmentStatus
                     Voice::row($output, sprintf('  %s %s', Voice::key($branch, 8), Environments::refusal($branch) === ''
                         ? $this->site($branch, Environments::DEFAULT_DRIVER, $projects)
                         : 'not made here — `bin/cli environment:create E-SITE ' . $branch . '` says why'));
-                    // One row per database that has actually been made. Every
-                    // covered line on every driver would be four rows of
-                    // "missing" per version for something almost nobody asks
-                    // for, and what this command answers is "which of these do
-                    // I have" rather than "which could I have".
+                    // One row per database that exists. Every covered line on
+                    // every driver would be four rows of "missing" per version
+                    // for something almost nobody asks for, and what this
+                    // command answers is "which of these do I have" rather than
+                    // "which could I have".
                     foreach (Environments::drivers() as $driver) {
                         if ($driver === Environments::DEFAULT_DRIVER || !Environments::installed($branch, $driver)) {
                             continue;
@@ -101,7 +101,7 @@ final class EnvironmentStatus
         $project = $projects[$name] ?? null;
         if (!Environments::installed($branch, $driver)) {
             // Where another live checkout holds the name, `create` refuses, so
-            // naming it is the answer rather than the command that would. One
+            // its name is the answer rather than the command that would. One
             // held for a checkout that is gone is not reported here: `create`
             // clears that itself, which makes the command the true answer.
             if (

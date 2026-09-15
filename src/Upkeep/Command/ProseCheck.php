@@ -15,9 +15,9 @@ use TYPO3\DevCompanion\Upkeep\Wrap;
  *
  * A test or a check holds every other rule that file states, and a reader who
  * rereads the paragraph held "one point per sentence". This command counts. It
- * fails on one thing only — the bold sentence a requirement or a decision opens
- * with, because that one has a job the rest of the file does not — and reports
- * the rest, over the three corpora `D-DOC-035` names.
+ * fails on one thing only, the bold sentence a requirement or a decision opens
+ * with. That one has a job the rest of the file does not. It reports the rest,
+ * over the three corpora `D-DOC-035` names.
  */
 #[AsCommand(
     name: 'prose:check',
@@ -25,18 +25,18 @@ use TYPO3\DevCompanion\Upkeep\Wrap;
 )]
 final class ProseCheck
 {
-    /** How many files the report names before it stops naming them. */
+    /** How many files the report names before it stops. */
     private const NAMED = 10;
 
     /**
      * The measures over the whole corpus, worst file first.
      *
-     * The command reports a long sentence in the body and does nothing else:
-     * it can be the right sentence, and a rewrite that satisfies a counter
+     * The command reports a long sentence in the body and does nothing else. It
+     * can be the right sentence, and a rewrite that satisfies a counter
      * produces two short ones that say what one said. The number serves the
-     * file that has twenty of them, which nobody has reread since it was
-     * written — and, since `D-DOC-070`, the sweep that brings a directory to
-     * STE and needs a worklist.
+     * file that has twenty of them, which nobody has read since its commit.
+     * And, since `D-DOC-070`, the sweep that brings a directory to STE and
+     * needs a worklist.
      */
     public function __invoke(OutputInterface $output): int
     {
@@ -75,11 +75,11 @@ final class ProseCheck
             }
         }
 
-        // The other half, and the one nothing counted: what a client is handed
-        // at connect. It is reported beside the corpus rather than folded into
-        // it, because the number a reader wants here is the weight — a caller
-        // pays for all of it before it has asked anything — and not which of
-        // 578 markdown files is worst.
+        // The other half, and the one nothing counted: what a client gets at
+        // connect. It stands beside the corpus rather than folded into it,
+        // because the number a reader wants here is the weight — a caller pays
+        // for all of it before it has asked anything — and not which of 578
+        // markdown files is worst.
         $payload = Prose::payloadOverTheMeasure();
         Voice::heading($output, sprintf(
             'A client is handed %d characters of prose at connect, and %d of those sentences run past %d words',
@@ -114,9 +114,9 @@ final class ProseCheck
         }
 
         // The fourth corpus, and the one a formatter owns half of. Padding is
-        // mechanical and `bin/cli prose:format` does it; what is reported is
-        // the width that leaves, because a cell nobody can shorten is a list
-        // rather than a table and only a reader can say which — `D-DOC-001`.
+        // mechanical and `bin/cli prose:format` does it; the report is the
+        // width that leaves, because a cell nobody can shorten is a list rather
+        // than a table and only a reader can say which — `D-DOC-001`.
         $tables = Prose::tables();
         $wide = array_values(array_filter(
             $tables,
@@ -139,8 +139,8 @@ final class ProseCheck
         }
 
         // The other half of the same rule, and the half nothing measured: a
-        // title is the name an entry is read by, not its statement said again
-        // — `D-DOC-046`.
+        // title is the name a reader knows an entry by, not its statement said
+        // again — `D-DOC-046`.
         $titles = Prose::titles();
         $joined = array_values(array_filter($titles, static fn(array $title): bool => $title['joined']));
         Voice::heading($output, sprintf(

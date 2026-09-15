@@ -14,12 +14,12 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Every check this checkout can answer on its own, one after the other, and
  * what none of them fails on.
  *
- * The checks hold the files to their shape, and a file can be perfectly shaped
- * and still say that nobody has built the requirement or been back to the
- * decision. That state is legitimate, so it cannot be an error — but it was
- * invisible, and an entry sat in requirements/ unbuilt from the day the
- * directory was created because nothing ever read it out. The closing block is
- * that reading. It changes no exit code.
+ * The checks hold the files to their shape. A file can be perfectly shaped and
+ * still say that nobody has built the requirement or been back to the decision.
+ * That state is legitimate, so it cannot be an error. But it was invisible, and
+ * an entry sat in requirements/ unbuilt from the directory's first day because
+ * nothing ever read it out. The last block is that read. It changes no exit
+ * code.
  */
 #[AsCommand(
     name: 'repository:check',
@@ -29,9 +29,9 @@ final class RepositoryCheck
 {
     /**
      * The checks this runs, which are the ones that need nothing but this
-     * checkout. `checkouts:verify` and the four checks under it read a
-     * clone this checkout may not have, and `hints:coverage` reports gaps
-     * rather than failures, so both are asked for by name.
+     * checkout. `checkouts:verify` and the four checks under it read a clone
+     * this checkout may not have, and `hints:coverage` reports gaps rather than
+     * failures. So both run by name only.
      */
     private const CHECKED = ['requirements', 'decisions', 'scenarios', 'todo', 'tools', 'links', 'prose'];
 

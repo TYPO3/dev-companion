@@ -18,10 +18,9 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * Whether the version statements this repository binds still hold.
  *
- * None of these reads the catalog: they are claims about what a branch pins,
- * what a harness releases, what a script offers and when an API arrived, and
- * each is wrong by a release rather than by an edit — which no test here can
- * see.
+ * None of these reads the catalog. They are claims about what a branch pins,
+ * what a harness releases, what a script offers and when an API arrived. Each
+ * is wrong by a release rather than by an edit, which no test here can see.
  */
 #[AsCommand(
     name: 'versions:check',
@@ -29,14 +28,14 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 )]
 final class VersionCheck
 {
-    /** How many uncurated suites the report names before it stops naming them. */
+    /** How many uncurated suites the report names before it stops. */
     private const NAMED_UNCURATED = 12;
 
     /**
      * What the hints about typo3/testing-framework rest on, per file of the
-     * package, so a release changing one of them fails here rather than ageing
-     * quietly into a wrong answer (`D-KNW-106`). Existence carries the statement
-     * that the four boilerplate files are there to be copied; each needle
+     * package. So a release that changes one of them fails here rather than
+     * ages quietly into a wrong answer (`D-KNW-106`). Existence carries the
+     * statement that the four boilerplate files are there to copy. Each needle
      * carries one sentence of `project-extension-tests`, named beside it, and
      * what no needle covers is not guarded.
      *
@@ -50,7 +49,7 @@ final class VersionCheck
         'Resources/Core/Build/FunctionalTestsBootstrap.php' => [],
         'Classes/Core/Testbase.php' => [
             // "a functional run needs database credentials in the environment",
-            // and the message that does not name the variables it is missing
+            // and the message that does not name the variables it lacks
             'typo3DatabaseDriver',
             'typo3DatabaseHost',
             'typo3DatabaseName',
@@ -82,11 +81,11 @@ final class VersionCheck
     /**
      * Which Fluid engine each covered branch pins itself to.
      *
-     * `D-VER-003` gave Fluid no version axis of its own, which holds only while a
-     * branch admits exactly one engine major: the day one loosens its constraint
-     * to span two, a `since:` on a Fluid statement stops naming an engine and
-     * nothing about the statement changes to say so. The reading is printed
-     * whether or not it fails, because this is where that number is looked up.
+     * `D-VER-003` gave Fluid no version axis of its own, which holds only while
+     * a branch admits exactly one engine major. The day one loosens its
+     * constraint to span two, a `since:` on a Fluid statement stops to name an
+     * engine. Nothing about the statement changes to say so. The read prints
+     * whether or not it fails, because this is where that number comes from.
      */
     private static function verifyFluidEngine(OutputInterface $output, string $checkouts): int
     {
@@ -107,11 +106,11 @@ final class VersionCheck
                 continue;
             }
 
-            // Asked over a window rather than parsed into a range, which is what
-            // makes an open constraint visible: `^5.3.1` answers for one major
-            // and `>=4` for every one in the window, and the second is the case
-            // this exists to catch. The window is wide enough that a Fluid major
-            // reaching its edge would be news in itself.
+            // Asked over a window rather than parsed into a range, which is
+            // what makes an open constraint visible: `^5.3.1` answers for one
+            // major and `>=4` for every one in the window, and the second is
+            // the case this exists to catch. The window is wide enough that a
+            // Fluid major its edge would be news in itself.
             $majors = array_values(array_filter(
                 range(1, 20),
                 static fn(int $major): bool => Versions::admits($constraint, $major),
@@ -130,10 +129,10 @@ final class VersionCheck
      * Whether the testing-framework release each branch pins still says what the
      * hints about it say.
      *
-     * Which release each covered major is read against is derived rather than
-     * recorded (`D-KNW-106`), and the needles below are what closes the gap
-     * `D-KNW-002` named in reading against a tag at all: a release that changes
-     * one of the statements inside a line.
+     * Which release each covered major reads against derives rather than stands
+     * on record (`D-KNW-106`). The needles below close the gap `D-KNW-002`
+     * named in a read against a tag at all. That is a release that changes one
+     * of the statements inside a line.
      */
     private static function verifyTestingFramework(OutputInterface $output, string $checkouts): int
     {
@@ -172,11 +171,12 @@ final class VersionCheck
     }
 
     /**
-     * One release line, read where it is checked out.
+     * One release line, read where its checkout is.
      *
-     * A worktree behind the line's newest tag is reported rather than read: the
-     * release that moved it is precisely what this is looking for, and reading
-     * the older one would answer for a version nobody installs any more.
+     * A worktree behind the line's newest tag goes into the report rather than
+     * the read. The release that moved it is precisely what this looks for. A
+     * read of the older one would answer for a version nobody installs any
+     * more.
      *
      * @param array{major: int, branch: string, constraint: string, line: ?string, ref: ?string, path: string} $pair
      */
@@ -217,11 +217,11 @@ final class VersionCheck
     /**
      * The range each suite hint declares, against the script that has to have it.
      *
-     * `since`/`until` on an entry in `knowledge/test-suite-hints.json` is a claim
-     * about `Build/Scripts/runTests.sh`, and the whole of `R-KNW-024` rests on
-     * it. The suite is taken from the command rather than from the `suite` field,
-     * because the command is what has to run: `build-css` is an npm script, so
-     * what the script needs to have is `npm`.
+     * `since`/`until` on an entry in `knowledge/test-suite-hints.json` is a
+     * claim about `Build/Scripts/runTests.sh`, and the whole of `R-KNW-024`
+     * rests on it. The suite comes from the command rather than from the
+     * `suite` field, because the command is what has to run. `build-css` is an
+     * npm script, so what the script needs to have is `npm`.
      *
      * @param array<int, array{suite: string, command: string, since: ?int, until: ?int}> $suites
      */
@@ -275,7 +275,7 @@ final class VersionCheck
             }
         }
 
-        // Not a problem, and the reason it is printed: the hints are a curated
+        // Not a problem, and the reason it prints: the hints are a curated
         // subset with a description and a domain each, so a suite nobody wrote
         // one for is a gap somebody may want to close rather than an error.
         $uncurated = array_values(array_diff(
@@ -304,19 +304,18 @@ final class VersionCheck
      * The suites one `runTests.sh` offers: what its `-s` usage block lists, and
      * what its own `case` over the suite name accepts.
      *
-     * The usage block alone was the reading until 2026-08-12, and it is the
+     * The usage block alone was the read until 2026-08-12, and it is the
      * documentation rather than the dispatch. 13.4 accepts `-s e2e-prepare` and
-     * mentions it only inside the `e2e` line — "use e2e-prepare for manual
-     * execution" — so a suite that runs there was read as absent, and the hint
-     * saying it arrives with v13 was reported as the error. The same holds for
+     * mentions it only inside the `e2e` line, "use e2e-prepare for manual
+     * execution". So a suite that runs there read as absent, and the hint that
+     * says it arrives with v13 came back as the error. The same holds for
      * `accessibility-prepare`.
      *
-     * A label carrying a `*` is left out: `build*` and `accessibility*` name no
-     * suite that can be enumerated, and no hint runs a command they are the only
-     * route to.
+     * A label with a `*` stays out. `build*` and `accessibility*` name no suite
+     * a list can hold, and no hint runs a command they are the only route to.
      *
-     * Public because it is the one reading in this command a test can hold
-     * without a checkout on disk.
+     * Public because it is the one read in this command a test can hold without
+     * a checkout on disk.
      *
      * @return array<int, string>
      */
@@ -332,7 +331,10 @@ final class VersionCheck
         return array_values(array_unique(array_merge($names, $dispatched[1])));
     }
 
-    /** What a hint's command asks the script for, falling back to what the entry calls itself. */
+    /**
+     * What a hint's command asks the script for, or else what the entry calls
+     * itself.
+     */
     private static function suiteOf(string $command, string $suite): string
     {
         return preg_match('/-s ([A-Za-z][A-Za-z0-9_-]*)/', $command, $named) === 1 ? $named[1] : $suite;
@@ -342,13 +344,13 @@ final class VersionCheck
      * Whether the major the translation domain answer is withheld below is still
      * the major the checkouts say the API arrived in.
      *
-     * This is `D-DIS-004`'s first **Wrong if**, and it is read here because the
+     * This is `D-DIS-004`'s first **Wrong if**. It reads here because the
      * domain API backported into a 13.x patch makes the constant wrong by a
-     * release rather than by an edit, which no test in this repository can see.
-     * The class carrying the rules has been both `TranslationDomainMapper` and
-     * `TranslationDomainResolver`, so the branch is asked for either. The reading
-     * is printed whether or not it fails, because this is where that number is
-     * looked up.
+     * release rather than by an edit. No test in this repository can see that.
+     * The class with the rules has been both `TranslationDomainMapper` and
+     * `TranslationDomainResolver`, so the question to the branch is for either.
+     * The read prints whether or not it fails, because this is where that
+     * number comes from.
      */
     private static function verifyTranslationDomains(OutputInterface $output, string $checkouts): int
     {

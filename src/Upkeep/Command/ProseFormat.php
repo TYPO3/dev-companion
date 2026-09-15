@@ -17,21 +17,14 @@ use TYPO3\DevCompanion\Upkeep\Wrap;
 /**
  * `knowledge:format` for the half of this repository that is prose.
  *
- * What it is for is the paragraph a rename left ragged. A word swept out of a
- * hundred files leaves a hundred short lines behind it, and rewrapping them was
- * a throwaway script every time — one that nobody reviewed, that knew nothing
- * about a code fence, and that was written again from memory on the next
- * rename.
- *
- * It rewrites rather than reports, like `knowledge:format`: what it changed is
- * in the working tree, where `git diff` is the report. `prose:check` is the
- * other half and stays a report, because a long sentence can be the right one
- * and no formatter can tell.
+ * It is there for the paragraph a rename left ragged. A word swept out of a
+ * hundred files leaves a hundred short lines behind it, and the rewrap was a
+ * throwaway script every time. It rewrites rather than reports, like
+ * `knowledge:format`: `git diff` is the report. `prose:check` stays a report,
+ * because a long sentence can be the right one and no formatter can tell.
  *
  * A path narrows it to the files a change touched, which is what a commit
- * wants. Named nothing it sweeps, and a sweep reaches what nobody is holding:
- * in a worktree the branch's own files, and in the checkout `main` stands on
- * the corpus minus what the standing claims changed — `D-DOC-063`.
+ * wants. Named nothing it sweeps what nobody has in hand, `D-DOC-063`.
  */
 #[AsCommand(
     name: 'prose:format',
@@ -88,8 +81,8 @@ final class ProseFormat
      *
      * Matched against `Prose::documents()` rather than resolved into a file to
      * rewrite, so this touches the prose this repository writes about itself
-     * and nothing else. `feedback/` is outside it on purpose — a feedback is a
-     * session's report, and reformatting somebody else's report is an edit to
+     * and nothing else. `feedback/` is outside it on purpose. A feedback is a
+     * session's report, and a reformat of somebody else's report is an edit to
      * evidence.
      *
      * @param list<string> $paths
@@ -120,12 +113,11 @@ final class ProseFormat
     /**
      * The corpus, minus every file somebody has in hand — `D-DOC-063`.
      *
-     * A rewrap of a file another branch is holding is a conflict whichever side
-     * lands first: the branch that only rewrapped it meets the card `main`
+     * A rewrap of a file another branch has in hand is a conflict whichever
+     * side lands first. The branch that only rewrapped it meets the card `main`
      * deleted, and the branch that deleted its card meets the sweep that
-     * rewrapped it. So a sweep reaches what nobody is holding, and a claim
-     * rewraps its own files and leaves the rest to the checkout `main` stands
-     * on.
+     * rewrapped it. So a sweep reaches what nobody has in hand. A claim rewraps
+     * its own files and leaves the rest to the checkout `main` stands on.
      *
      * @param list<string> $corpus
      *
@@ -163,9 +155,9 @@ final class ProseFormat
     /**
      * What a checkout has changed against `main`, committed or not.
      *
-     * The uncommitted half is what makes this the answer while a session is
-     * still working: a decision file it has written and not added is one nobody
-     * else may rewrap either, and it arrives with the porcelain.
+     * The uncommitted half is what makes this the answer while a session still
+     * works. A decision file it has written and not added is one nobody else
+     * may rewrap either, and it arrives with the porcelain.
      *
      * @return list<string>
      */
@@ -190,17 +182,17 @@ final class ProseFormat
     /**
      * Whether a file has a writer already.
      *
-     * Not because it is generated — the column is no longer the difference,
-     * since `ToolSurface` wraps through `Wrap` like everything else here. It is
-     * that a generator decides what a line is: `tools:index` keeps the
-     * annotations of a tool on one line however wide, because they are one
+     * Not because a generator writes it. The column is no longer the
+     * difference, since `ToolSurface` wraps through `Wrap` like everything else
+     * here. It is that a generator decides what a line is. `tools:index` keeps
+     * the annotations of a tool on one line however wide, because they are one
      * fact. A formatter cannot know that, so it wraps them, and the next
-     * `tools:index` puts them back — the file then changes in every commit and
-     * says nothing by changing.
+     * `tools:index` puts them back. The file then changes in every commit and
+     * says nothing by the change.
      *
-     * A recording is out for a second reason. Every block below a page's
-     * `## Answered` heading is what a client received, and rewrapping it makes
-     * the page claim an answer arrived in lines it did not.
+     * A record is out for a second reason. Every block below a page's `##
+     * Answered` heading is what a client received. A rewrap makes the page
+     * claim an answer arrived in lines it did not.
      */
     private static function isWrittenByHand(string $file): bool
     {

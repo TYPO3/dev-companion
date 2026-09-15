@@ -14,14 +14,14 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * `composer cgl` for the half of this repository that is not PHP.
  *
- * It rewrites rather than reports, and what it changed is left in the working
- * tree, where `git diff` is the report — a second mode that only says what
- * would change is a mode nobody runs when the rewriting one is one keystroke
+ * It rewrites rather than reports, and what it changed stays in the working
+ * tree, where `git diff` is the report. A second mode that only says what would
+ * change is a mode nobody runs when the one that rewrites is one keystroke
  * away.
  *
  * A path narrows it to part of the corpus, which is what a knowledge change
- * wants: the file that was edited comes out formatted, and the rest of the
- * corpus stays out of the commit.
+ * wants. The edited file comes out formatted, and the rest of the corpus stays
+ * out of the commit.
  */
 #[AsCommand(
     name: 'knowledge:format',
@@ -54,8 +54,8 @@ final class KnowledgeFormat
                 $formatted = Json::format($contents);
             } catch (\JsonException $exception) {
                 // Left as it is. A file the formatter cannot read is a file
-                // somebody is halfway through editing, and rewriting it from
-                // what could still be parsed of it would lose the other half.
+                // somebody is halfway through an edit, and a rewrite from what
+                // still parses of it would lose the other half.
                 $unreadable[$file] = $exception->getMessage();
 
                 continue;
@@ -84,9 +84,9 @@ final class KnowledgeFormat
     }
 
     /**
-     * The files a run works on: the corpus, or the part of it that was named.
+     * The files a run works on: the corpus, or the part of it the caller named.
      *
-     * A path is matched against the corpus rather than resolved into a file to
+     * A path matches against the corpus rather than resolves into a file to
      * format, so this formats what it holds and nothing else. A caller who
      * names something outside it gets no match rather than a rewritten
      * composer.lock.

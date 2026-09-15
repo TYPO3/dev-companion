@@ -12,15 +12,15 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 /**
  * What one answer of each tool costs the caller who asked for it.
  *
- * A session is charged one context per call and what comes back is nearly free
- * per token — until it is not, and nothing here said which tool was the one
- * paying. Three sessions reported the same thing from three sides and none of
- * them was a number for the whole surface, so a trim started at whichever tool
+ * A session pays one context per call and what comes back is nearly free per
+ * token. Until it is not, and nothing here said which tool was the one that
+ * paid. Three sessions reported the same thing from three sides and none of
+ * them was a number for the whole surface. So a trim started at whichever tool
  * somebody had noticed rather than at the top of a list.
  *
- * It reports and never fails. A long answer can be the right one — the guides
- * are long because a procedure is — and a counter that failed on one would be
- * answered by splitting it in two.
+ * It reports and never fails. A long answer can be the right one, the guides
+ * are long because a procedure is. A counter that failed on one would get a
+ * split in two as its answer.
  */
 #[AsCommand(
     name: 'tools:measure',

@@ -14,9 +14,9 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Whether the areas the system extension catalog names are areas the tracker
  * still has.
  *
- * The core administers that vocabulary and renames an area without telling
- * anybody, and a `forgeCategory` naming one that is gone resolves to nothing:
- * the caller is back at the empty answer the mapping exists to save them
+ * The core administers that vocabulary and renames an area with no word to
+ * anybody. A `forgeCategory` that names one that is gone resolves to nothing.
+ * The caller is back at the empty answer the mapping exists to save them
  * (`D-ANS-142`). It reads forge.typo3.org, which is what makes it a command
  * rather than a test.
  */

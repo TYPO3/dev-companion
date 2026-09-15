@@ -15,12 +15,11 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * Writes each entry's `coveredBy` from the `#[Decision]` attributes the tests
  * carry.
  *
- * The coupling has to be readable from both ends: a session standing in a red
- * test needs the entry that rested on it, and a reader of the entry needs the
- * test that would catch its **Wrong if**. Written in both places by hand, the
- * two drifted — 405 tests were named by an entry and said nothing about it
- * (`D-DOC-043`). One is generated from the other now, so drifting is not a
- * state the two can be in.
+ * The tie has to be readable from both ends. A session in a red test needs the
+ * entry that rested on it. A reader of the entry needs the test that would
+ * catch its **Wrong if**. Written in both places by hand, the two drifted: an
+ * entry named 405 tests that said nothing about it (`D-DOC-043`). One derives
+ * from the other now, so drift is not a state the two can be in.
  */
 #[AsCommand(
     name: 'decisions:cover',

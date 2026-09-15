@@ -97,16 +97,17 @@ final class ProseTest extends TestCase
      * cannot see: a retold entry is within the measure on every sentence of it.
      *
      * A report rather than a failure, so this holds that the report finds the
-     * shape it claims to find — `D-DOC-035`.
+     * shape it claims to find — `D-DOC-035`. The corpus may hold none, as it
+     * has since the STE rewrite of 2026-09-15, so what shows the measure read
+     * something is the comments it read them out of.
      */
     #[Decision('D-DOC-035')]
     #[Test]
     public function aCommentThatNamesAnEntryAndRetellsItAnywayIsReported(): void
     {
-        $retold = Prose::retellings();
+        self::assertNotEmpty(Prose::comments(), 'the measure found no comment at all, which means it read nothing');
 
-        self::assertNotEmpty($retold, 'the measure found nothing at all, which means it read nothing');
-        foreach ($retold as $comment) {
+        foreach (Prose::retellings() as $comment) {
             self::assertGreaterThan(Prose::RETOLD, $comment['prose']);
             // Two delimiters at least, so what the markup costs is never zero
             // where there is this much prose above it.

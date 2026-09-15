@@ -196,11 +196,11 @@ Text:
 
     ### PHP
 
-    ## System Extension Boundaries
+    ## Where One System Extension Ends and the Next Begins
     Hints:
-    - Keep changes inside the owning system extension unless a cross-extension contract really changes.
-    - Reuse public APIs from other system extensions instead of depending on internal implementation details.
-    - Check nearby extension-local tests before adding shared behavior.
+    - A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.
+    - @internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.
+    - A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.
 
     ## DataHandler Is the Write Path for Records
     Hints:
@@ -359,26 +359,26 @@ Data:
         "hints": [
             {
                 "id": "system-extension-boundaries",
-                "title": "System Extension Boundaries",
+                "title": "Where One System Extension Ends and the Next Begins",
                 "category": "PHP",
                 "scope": null,
                 "hints": [
                     {
-                        "text": "Keep changes inside the owning system extension unless a cross-extension contract really changes.",
+                        "text": "A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.",
                         "since": null,
                         "until": null,
                         "versions": "",
                         "scope": null
                     },
                     {
-                        "text": "Reuse public APIs from other system extensions instead of depending on internal implementation details.",
+                        "text": "@internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.",
                         "since": null,
                         "until": null,
                         "versions": "",
                         "scope": null
                     },
                     {
-                        "text": "Check nearby extension-local tests before adding shared behavior.",
+                        "text": "A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.",
                         "since": null,
                         "until": null,
                         "versions": "",
@@ -1644,7 +1644,6 @@ Text:
     - sitepackage-initial-content — Shipping Initial Content with an Extension (PHP)
     - site-sets — Site Sets (TypoScript)
     - fal-storages-drivers — Storages and the Drivers Behind Them (PHP)
-    - system-extension-boundaries — System Extension Boundaries (PHP)
     - tca-schema-api — TCA Schema API (PHP)
     - tca-formengine — TCA, FormEngine, and Backend Forms (PHP)
     - datahandler-testing — Testing DataHandler Behaviour (PHP)
@@ -1687,6 +1686,7 @@ Text:
     - project-configuration-files — What the Installation Is Configured By (PHP)
     - tca-sub-schema — What the Schema of One Record Type Holds (PHP)
     - installation-setup — What typo3 setup Takes and What It Refuses (PHP)
+    - system-extension-boundaries — Where One System Extension Ends and the Next Begins (PHP)
     - development-installation-page-object — Where a Development Installation Gets Its Page Object (TypoScript)
     - impexp-import-placement — Where an impexp Import Puts the Records It Writes (PHP)
     - breaking-without-a-moved-member — Whether a Change Is Breaking When No Member Moved (PHP)
@@ -2016,11 +2016,6 @@ Data:
                 "category": "PHP"
             },
             {
-                "id": "system-extension-boundaries",
-                "title": "System Extension Boundaries",
-                "category": "PHP"
-            },
-            {
                 "id": "tca-schema-api",
                 "title": "TCA Schema API",
                 "category": "PHP"
@@ -2228,6 +2223,11 @@ Data:
             {
                 "id": "installation-setup",
                 "title": "What typo3 setup Takes and What It Refuses",
+                "category": "PHP"
+            },
+            {
+                "id": "system-extension-boundaries",
+                "title": "Where One System Extension Ends and the Next Begins",
                 "category": "PHP"
             },
             {

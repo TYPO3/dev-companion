@@ -976,7 +976,9 @@ final class HintsTest extends TestCase
         // example is an EXT: path the core's suite covers. `D-KNW-043`.
         self::assertStringContainsString('discouraged, not forbidden', $onFifteen);
         self::assertStringContainsString('f:uri.image\'s class documentation', $onFifteen);
-        self::assertStringContainsString('SvgImageViewHelperTest', $onFifteen);
+        // The suite carries its path since `D-KNW-159`: a session found it by
+        // ls, and it was the suite that turned the review.
+        self::assertStringContainsString('typo3/sysext/fluid/Tests/Functional/ViewHelpers/: SvgImageViewHelperTest.php', $onFifteen);
         self::assertStringContainsString('fallback storage', $onFifteen);
         self::assertStringNotContainsString('their own class documentation sends', $onFifteen);
 
@@ -992,6 +994,13 @@ final class HintsTest extends TestCase
         $guide = Registry::call('typo3_task_guide', ['task' => $query, 'targetVersion' => '13.4']);
         self::assertStringNotContainsString('System Resource API', $guide->text);
         self::assertStringContainsString('computes the URL itself through PathUtility', $guide->text);
+
+        // The SVG suite arrived with the native crop in 13, so the oldest
+        // branch is sent to the raster suite alone and never to a file it
+        // does not have.
+        $onTwelve = Registry::call('typo3_hint_lookup', ['id' => 'fluid-resource-uris', 'targetVersion' => '12.4'])->text;
+        self::assertStringContainsString('ImageViewHelperTest.php, whose EXT: cases', $onTwelve);
+        self::assertStringNotContainsString('SvgImageViewHelperTest', $onTwelve);
     }
 
     /**

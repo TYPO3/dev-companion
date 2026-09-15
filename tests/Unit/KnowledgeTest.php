@@ -2265,6 +2265,11 @@ final class KnowledgeTest extends TestCase
         // `feedback/2026-08-08-224455` had just made one, and the copy it came
         // from has both directories.
         self::assertStringContainsString('worktree', $notes, 'the preconditions name only the checkout nobody is surprised by');
+        // The third case, `D-KNW-159`: a worktree that has both directories
+        // because tooling copied them, from a checkout whose lock differs. The
+        // session compared the lock files by hand before its first suite.
+        self::assertStringContainsString('behind this branch\'s `composer.lock`', $notes, 'the preconditions do not say a copied vendor/ can be stale');
+        self::assertStringContainsString('-s composer -- install --dry-run', $notes, 'the preconditions name no command that says whether it is');
 
         foreach (Versions::majors() as $major) {
             self::assertContains(

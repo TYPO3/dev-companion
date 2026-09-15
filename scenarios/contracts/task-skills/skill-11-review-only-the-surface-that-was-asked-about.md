@@ -10,13 +10,7 @@ arrival; that a session given a focused prompt actually writes the whole list
 and reads only part of it is **not guarded**, because no recorded run has ever
 been given a focused prompt. This case is what measures it.
 
-**Read 2026-09-02:** the skill still writes the surface list before a file is
-opened, still marks what the request left out **not requested** on that same
-list, and still closes on it with assessed, unassessed and not requested kept
-apart and none of the three reading as clean. Repaired on 2026-08-19:
-`review only` and `security review` became needles of the `audit` intent,
-because the prompt below reached no skill at all and the narrowing was being
-measured after a route that does not happen — `D-GUI-015`.
+**Read 2026-09-02:** the skill still writes the surface list before it opens a file. It still marks what the request left out **not requested** on that same list. It still closes on it with assessed, unassessed and not requested kept apart and none of the three read as clean. Repaired on 2026-08-19: `review only` and `security review` became needles of the `audit` intent. The prompt below reached no skill at all, so the measure of the narrow review came after a route that does not happen (`D-GUI-015`).
 
 > Go over the security of this extension — anything an editor or a visitor
 > could reach that we have not thought about. Just security for now, with
@@ -24,32 +18,32 @@ measured after a route that does not happen — `D-GUI-015`.
 
 **What has to come out of it**
 
-- The surface list is written whole, from the checklist and the extension scope,
-  and the report closes on all of it — not on the security entry alone.
-- The entries the request left out carry a state that says so, and it is
-  distinct from the one an in-scope surface nobody reached carries: what the
-  request excluded and what the review missed are separately readable.
+- The surface list comes whole, from the checklist and the extension scope. The
+  report closes on all of it, not on the security entry alone.
+- The entries the request left out carry a state that says so, and it differs
+  from the one an in-scope surface nobody reached carries. A reader can tell
+  what the request excluded from what the review missed.
 - Neither of those entries reads as clean, and neither carries a finding, a
   severity or a "nothing to report".
-- The reading is where the narrowing lands: the security surface gets the
-  conventions lookup, the runtime lookup and the checkout reading the skill asks
-  for on an in-scope surface, and an unrequested surface gets none of it.
-- Each security finding is still held to the gate — the sink is named and read,
-  and an unfollowed value is reported as unverified rather than dropped for
-  being outside a narrower reading.
+- The read is where the narrow review lands. The security surface gets the
+  conventions lookup, the runtime lookup and the checkout read the skill asks
+  for on an in-scope surface. An unrequested surface gets none of it.
+- The gate still holds each security finding. The review names and reads the
+  sink, and reports an unfollowed value as unverified rather than drops it as
+  outside a narrower read.
 - The report says what asking for the rest would cost, so the narrowing is the
   reader's to undo.
 
 **How it fails**
 
-- The list is written to the request: security is the only entry on it, and the
-  report closes clean on a list nobody can tell was narrowed.
-- The unrequested surfaces are dropped from the report entirely, or folded into
-  one sentence that names none of them.
-- They are marked the same as an in-scope surface that went unread, so a reader
+- The list follows the request. Security is the only entry on it, and the report
+  closes clean on a list nobody can tell was narrow.
+- The unrequested surfaces vanish from the report entirely, or fold into one
+  sentence that names none of them.
+- They carry the same mark as an in-scope surface that went unread, so a reader
   cannot tell the request's boundary from the review's gap.
-- The narrowing reaches the security surface instead: fewer lookups, an
-  unfollowed sink, or a finding established from the call site because the
-  review was told to be cheap.
-- The request is read as permission to skip the base — the scope calls, the
-  deprecation sweep — rather than to read fewer surfaces after it.
+- The narrow review reaches the security surface instead. Fewer lookups, an
+  unfollowed sink, or a finding established from the call site because the user
+  told the review to be cheap.
+- The review reads the request as permission to skip the base, the scope calls,
+  the deprecation sweep, rather than to read fewer surfaces after it.

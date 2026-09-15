@@ -13,13 +13,7 @@ asking for a cause and no change is answered with what finding one needs rather
 than with the workflow that writes a patch. That the session then reaches the
 cause is **not guarded**, because nothing short of a run on `E-SITE` reads it.
 
-**Read 2026-09-02:** the `diagnosis` intent still changes nothing and still
-opens on what the installation wrote down rather than on what it rendered, by
-`typo3_hint_lookup` with id=installation-exception-output. It was built on
-2026-08-21, so the request is recognized as the shape it is instead of by the
-subject it names. What is still owed is the run — `D-SKL-065`'s first **Wrong
-if** is a session that has the route and hand-reads its way past both owners
-anyway.
+**Read 2026-09-02:** the `diagnosis` intent still changes nothing. It still opens on what the installation wrote down rather than on what it rendered, by `typo3_hint_lookup` with id=installation-exception-output. It exists since 2026-08-21, so the guide recognizes the request as the shape it is instead of by the subject it names. What remains owed is the run. `D-SKL-065`'s first **Wrong if** is a session that has the route and hand-reads its way past both owners anyway.
 
 > One page on our site answers with an error instead of rendering, and the rest
 > of it is fine. Work out what is causing it and where. Don't change anything
@@ -27,33 +21,33 @@ anyway.
 
 **What has to come out of it**
 
-- The answer says which half the failure is in: something was thrown, or the
+- The answer says which half the failure is in: something threw, or the
   installation answered that way on purpose and wrote nothing down.
-- Where something was thrown, the message is read out of what the installation
-  wrote rather than out of the page it rendered, and the answer says that some
-  exceptions are never written at all.
-- Where the page carries no message, what decided that is named rather than read
-  as the installation having nothing to say.
-- The cause is a file and a reason, with the evidence each was read from.
-- Nothing is changed. No configuration is corrected, no code is edited, and the
-  session stops at the finding with what the fix would be beside it.
-- Where the cause belongs to a workflow that exists, that workflow is named —
-  the installation and its site configuration, a removal on a declared major, a
-  package-wide defect.
+- Where something threw, the session reads the message out of what the
+  installation wrote rather than out of the page it rendered. The answer says
+  that some exceptions never land in the log at all.
+- Where the page carries no message, the answer names what decided that rather
+  than reads it as an installation with nothing to say.
+- The cause is a file and a reason, with the evidence each came from.
+- Nothing is changed. The session corrects no configuration and edits no code.
+  It stops at the finding with what the fix would be beside it.
+- Where the cause belongs to a workflow that exists, the answer names that
+  workflow. The installation and its site configuration, a removal on a declared
+  major, a package-wide defect.
 
 **How it fails**
 
-- The request is read as the subject it names and the workflow that builds that
-  subject is loaded: a content element renders wrong, and the session is in the
-  order for adding one.
-- The steps it works from are the ones a patch owes — keep the change focused,
-  add the narrowest useful coverage, draft the commit message — against a
-  request that asked for nothing to change.
-- The rendered error page is fetched and parsed for a message the log holds
-  whole.
-- An empty log is read as nothing having been recorded, and the answer stops
-  there instead of separating a response TYPO3 returns on purpose from an
-  exception that is never written.
-- The cause is asserted from the symptom, with no file opened and nothing said
-  about which reading is missing.
-- The fix is made and the change is reported as the finding.
+- The guide reads the request as the subject it names and the session loads the
+  workflow that builds that subject. A content element renders wrong, and the
+  session is in the order that adds one.
+- The steps it works from are the ones a patch owes, keep the change focused,
+  add the narrowest useful coverage, draft the commit message. The request asked
+  for nothing to change.
+- The session fetches the rendered error page and parses it for a message the
+  log holds whole.
+- The session reads an empty log as no record at all. The answer stops there
+  instead of separates a response TYPO3 returns on purpose from an exception
+  that never lands in the log.
+- The session asserts the cause from the symptom, with no file opened and
+  nothing said about which read it lacks.
+- The session makes the fix and reports the change as the finding.

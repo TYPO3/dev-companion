@@ -28,8 +28,8 @@ final class KnowledgeTest extends TestCase
      *
      * Both take the last commit's files from `git diff-tree` and treat an empty
      * answer as nothing to do. `checkGitSubmodule` asks git too and fails
-     * loudly instead, which a session can see; `checkExtensionScannerRst` was
-     * reported as a suspect and reads the files itself.
+     * loudly instead, which a session can see. A report named
+     * `checkExtensionScannerRst` as a suspect, and it reads the files itself.
      */
     private const GIT_DRIVEN_SUITES = ['cglGit', 'cglHeaderGit'];
 
@@ -42,10 +42,10 @@ final class KnowledgeTest extends TestCase
     private const WAITING_SUITES = ['e2e-prepare', 'e2e-browser'];
 
     /**
-     * A corpus of this test's own, because `D-VER-005` cannot be held against
-     * the real one: no bundled document declares a binding, and one written to
-     * carry a `**Since:**` for a test would be a statement in the knowledge
-     * base whose purpose is the test.
+     * A corpus of this test's own, because nothing can hold `D-VER-005` against
+     * the real one. No bundled document declares a bound. One written with a
+     * `**Since:**` for a test would be a statement in the knowledge base whose
+     * purpose is the test.
      */
     private ?string $corpus = null;
 
@@ -75,9 +75,9 @@ final class KnowledgeTest extends TestCase
     /**
      * A second document with a vocabulary of its own comes with every corpus.
      * The matcher weighs a term by how far it separates one section from the
-     * next, so in a corpus where every section says the same words nothing
-     * discriminates, every weight is zero and the coverage threshold drops the
-     * lot — which is a property of the fixture rather than of the binding.
+     * next. So in a corpus where every section says the same words nothing
+     * separates, every weight is zero and the coverage threshold drops the lot.
+     * That is a property of the fixture rather than of the bound.
      *
      * @param array<string, string> $documents Filename without .md, to content.
      */
@@ -137,9 +137,9 @@ final class KnowledgeTest extends TestCase
         self::assertStringContainsString('thirteen', $bodies(13)[0]);
 
         // A package serving both majors needs both, and the range beside each
-        // is what says which is which. Handing over two variants of one file
-        // with nothing separating them is `D-VER-005`'s first **Wrong if**, so
-        // the rendered answer is what the range has to reach.
+        // is what says which is which. Two variants of one file handed over
+        // with nothing between them is `D-VER-005`'s first **Wrong if**. So the
+        // rendered answer is what the range has to reach.
         self::assertCount(2, $bodies(null));
         $both = Documents::search('phpunit configuration variant', [], 6, [13, 14]);
         self::assertCount(2, $both);
@@ -155,7 +155,7 @@ final class KnowledgeTest extends TestCase
 
     /**
      * The Since and Until lines are what filters a section and never part of
-     * what is handed back, so a caller reads the rule and not its bookkeeping —
+     * what comes back. So a caller reads the rule and not its records —
      * `D-VER-005`.
      */
     #[Decision('D-VER-005')]
@@ -189,8 +189,8 @@ final class KnowledgeTest extends TestCase
     public function aDeclarationBelowTheFirstLineOfContentBindsNothing(): void
     {
         // The declaration has one place, so a reader never has to search a
-        // section for the range it holds on — and a sentence that happens to
-        // start that way stays prose — `D-VER-005`.
+        // section for the range it holds on. A sentence that happens to start
+        // that way stays prose — `D-VER-005`.
         $this->useCorpus(['extension/testing/loose' => <<<'MD'
             # Loose
 
@@ -237,8 +237,8 @@ final class KnowledgeTest extends TestCase
         self::assertSame('What the page is, in one sentence.', $document['description']);
         self::assertSame(['project-extension-tests'], $document['hints']);
 
-        // It says what the page is rather than answering a query, so a query
-        // about it must not reach it — the section above the first heading is
+        // It says what the page is rather than answers a query, so a query
+        // about it must not reach it. The section above the first heading is
         // one this corpus returns, and the front matter lands in it —
         // `D-KNW-057`.
         foreach (Documents::search('description whenToUse hints') as $match) {
@@ -253,10 +253,10 @@ final class KnowledgeTest extends TestCase
     /**
      * A document id is `<scope>/<topic>/<name>`, and the scope is the directory.
      *
-     * Moving a document between the scope directories is how it is rescoped, so
+     * A move between the scope directories is how a document changes scope, so
      * nothing else states it and the two cannot drift apart. A fourth segment
      * or a directory that is not a scope means a caller who learned to read one
-     * `typo3://guides/` URI cannot predict the next — `D-KNW-058`.
+     * `typo3://guides/` URI cannot predict the next. `D-KNW-058`.
      */
     #[Decision('D-KNW-058')]
     #[Test]
@@ -279,8 +279,8 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The card a client lists is the front matter plus who the document is for,
-     * so a document declares itself once and nothing states it a second time —
+     * The card a client lists is the front matter plus who the document is for.
+     * So a document declares itself once and nothing states it a second time —
      * `D-KNW-057`.
      */
     #[Decision('D-KNW-057')]
@@ -310,7 +310,7 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * A hint that a document is the long form of names it in the answer, so the
+     * A hint that a document is the long form of names it in the answer. So the
      * caller reaches the whole of it by the call rather than by the scheme —
      * `D-KNW-057`.
      */
@@ -331,8 +331,8 @@ final class KnowledgeTest extends TestCase
      * The split `D-KNW-095` made: the document orders the run and the hint
      * keeps the facts it runs on.
      *
-     * `installation-boot` was the procedure — its first statement enumerated
-     * the four steps — and a session that read the guides list found no
+     * `installation-boot` was the procedure, since its first statement
+     * enumerated the four steps. A session that read the guides list found no
      * installation entry among the eleven and assembled one out of a skill and
      * two hint ids. Two orderings that release together are the pair that
      * disagrees, so the hint may not grow the order back.
@@ -349,8 +349,8 @@ final class KnowledgeTest extends TestCase
         $hint = Registry::call('typo3_hint_lookup', ['id' => 'installation-boot']);
         self::assertStringNotContainsString('four steps', $hint->text);
 
-        // The crossing is declared on the document alone — `D-KNW-057` — so
-        // this is what a caller who reached the hint is told the run is in.
+        // The document alone declares the cross — `D-KNW-057`. So this is what
+        // a caller who reached the hint hears the run is in.
         self::assertContains(
             ['uri' => 'typo3://guides/project/installation/booting-a-clone', 'hint' => 'installation-boot'],
             $hint->data['documents'],
@@ -361,10 +361,10 @@ final class KnowledgeTest extends TestCase
      * The half `D-VER-007` took on: the question reaches the procedure, and the
      * procedure hands the reading over rather than the answer.
      *
-     * A session writing against a Schema API on an installation of one major,
-     * for a package declaring two, settled the other one by fetching five core
-     * files itself. Nothing here said how that is done, so the words the
-     * situation is described in have to arrive at the page that does.
+     * A session wrote against a Schema API on an installation of one major, for
+     * a package that declares two. It settled the other one with five core
+     * files it fetched itself. Nothing here said how to do that, so the words
+     * that describe the situation have to arrive at the page that does.
      */
     #[Decision('D-VER-007')]
     #[Test]
@@ -382,13 +382,13 @@ final class KnowledgeTest extends TestCase
 
     /**
      * What the same page may not become — `D-VER-007`, and the strength the
-     * same session reported half an hour later: a scope that says plainly "this
+     * same session reported half an hour later. A scope that says plainly "this
      * is not mine" is worth more than a half-answer, because the half-answer is
-     * the one that gets believed.
+     * the one a reader believes.
      *
      * So the page names the invocation and carries no core symbol of its own. A
-     * signature written here is right on the day it is written, and nothing in
-     * the answer would tell a caller which day that was.
+     * signature written here is right on its day, and nothing in the answer
+     * would tell a caller which day that was.
      */
     #[Decision('D-VER-007')]
     #[Test]
@@ -402,13 +402,13 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * What the patch may not carry, where the patch is judged.
+     * What the patch may not carry, where the review judges it.
      *
      * `D-KNW-141`. The section said to avoid unrelated refactoring in a bug fix
-     * and stopped there, so the array collapsed on the way past and the file
-     * rewritten instead of edited were noise nothing names — and nothing
-     * catches either: the core's fixer normalises the trailing comma per form
-     * and takes no position on which form an array has.
+     * and stopped there. So the array collapsed on the way past and the file
+     * rewritten instead of edited were noise nothing names. Nothing catches
+     * either: the core's fixer normalises the trailing comma per form and takes
+     * no position on which form an array has.
      */
     #[Decision('D-KNW-141')]
     #[Test]
@@ -441,12 +441,12 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * A brief names the page the recognized work is written up in
-     * (`D-GUI-012`), and an id that answers nothing is worse than no pointer:
-     * the caller pays a `typo3_rule_lookup` call to be told the document does
-     * not exist. One direction only — a document no intent names is still
-     * listed at orientation and served as its resource, which is what the
-     * skills the same file routes to have no equivalent of — `D-GUI-018`.
+     * A brief names the page that writes up the recognized work (`D-GUI-012`),
+     * and an id that answers nothing is worse than no pointer. The caller pays
+     * a `typo3_rule_lookup` call to hear that the document does not exist. One
+     * direction only. A document no intent names still stands at orientation
+     * and serves as its resource. The skills the same file routes to have no
+     * equivalent of that — `D-GUI-018`.
      */
     #[Requirement('R-GUI-013')]
     #[Decision('D-GUI-012')]
@@ -472,12 +472,12 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The side a guide is named on is the side it answers for.
+     * The side that names a guide is the side it answers for.
      *
-     * `guide` is taken where nothing in the call is core work and `guideCore`
-     * where everything is, so a core-only page under `guide` is the core's own
-     * process handed to somebody's package — which is what the brief measured
-     * in `D-GUI-012` did with `core/contribution/rules`.
+     * `guide` applies where nothing in the call is core work and `guideCore`
+     * where everything is. So a core-only page under `guide` is the core's own
+     * process handed to somebody's package. That is what the brief measured in
+     * `D-GUI-012` did with `core/contribution/rules`.
      */
     #[Requirement('R-GUI-013')]
     #[Test]
@@ -523,11 +523,11 @@ final class KnowledgeTest extends TestCase
     {
         // The same rule VersionsTest holds the hints to. A section can declare
         // since/until since `D-VER-005`, and that is the whole of how it says
-        // what it holds for: a version written into the sentence is still
-        // invisible to the filter, so it reaches a caller on any branch. That
-        // is how "Since TYPO3 v14.1 a label marked that way raises an
-        // E_USER_DEPRECATED" was answering a 13.4 question — a sentence the
-        // binding would have carried. A version inside an example command is a
+        // what it holds for. A version inside the sentence is still invisible
+        // to the filter, so it reaches a caller on any branch. That is how
+        // "Since TYPO3 v14.1 a label marked that way raises an
+        // E_USER_DEPRECATED" answered a 13.4 question, a sentence the bound
+        // would have carried. A version inside an example command is a
         // different thing and stays: "git push origin HEAD:refs/for/13.4" is
         // the command — `D-VER-002`.
         foreach (Documents::documents() as $document) {
@@ -546,15 +546,15 @@ final class KnowledgeTest extends TestCase
     {
         // The other half of the rule above, for the statement that dates itself
         // without a digit in it. `-s checkIntegrityXliff` reads as timeless and
-        // arrives in 14; a 12.4 contributor asking typo3_script_lookup about
-        // language files was handed it, plus `-s normalizeXliff` and `-s
-        // build`, none of which that branch has. A section binding could filter
-        // that now and still must not: the range of a suite already lives on
-        // the suite in test-suite-hints.json, and declaring it here as well is
-        // one fact in two places that can disagree. So a prose document may
-        // only name a suite every covered major carries, and anything narrower
-        // stays where typo3_test_run_guide filters it by targetVersion —
-        // `D-VER-002` — `D-VER-005`.
+        // arrives in 14. A 12.4 contributor who asked typo3_script_lookup about
+        // language files got it, plus `-s normalizeXliff` and `-s build`, none
+        // of which that branch has. A section bound could filter that now and
+        // still must not. The range of a suite already lives on the suite in
+        // test-suite-hints.json. A declaration here as well is one fact in two
+        // places that can disagree. So a prose document may only name a suite
+        // every covered major carries. Anything narrower stays where
+        // typo3_test_run_guide filters it by targetVersion — `D-VER-002`,
+        // `D-VER-005`.
         $everywhere = array_intersect(...array_map(TestSuiteHints::availableOn(...), Versions::majors()));
 
         foreach (Documents::documents() as $document) {
@@ -574,12 +574,12 @@ final class KnowledgeTest extends TestCase
     #[Test]
     public function theDiscriminatingTermsOfAQueryDecideTheAnswer(): void
     {
-        // "site set settings definitions" was answered with the backend's Sass
-        // class naming at a confident three quarters of the query terms:
-        // "content", "structure" and "element" are everywhere, and every term
-        // counted the same. The subject now lives in the hint corpus rather
-        // than in prose, and the weighting is the same weighting — so the case
-        // is asked of the corpus that holds the answer.
+        // "site set settings definitions" got the backend's Sass class names at
+        // a confident three quarters of the query terms. "content", "structure"
+        // and "element" are everywhere, and every term counted the same. The
+        // subject now lives in the hint corpus rather than in prose, and the
+        // weights are the same weights. So the case asks the corpus that holds
+        // the answer.
         $result = Hints::find([], 'site set settings definitions', 6);
 
         self::assertSame('site-sets', $result['matchedHints'][0]['id']);
@@ -608,9 +608,9 @@ final class KnowledgeTest extends TestCase
     #[Test]
     public function anAnswerAboutAuthoringPointsAtTheReadingSideOfTheSameThing(): void
     {
-        // "deprecation" was answered with how to write one — correct for a core
-        // contributor, inverted for the reader who wants to know what a version
-        // deprecated, and nothing said which of the two it was.
+        // "deprecation" got how to write one. That is correct for a core
+        // contributor and inverted for the reader who wants to know what a
+        // version deprecated. Nothing said which of the two it was.
         $bodies = implode("\n", array_column(Documents::search('deprecation'), 'body'));
 
         self::assertStringContainsString('Extension Scanner', $bodies);
@@ -622,12 +622,12 @@ final class KnowledgeTest extends TestCase
     #[Test]
     public function aChangelogQuestionIsToldWhichTypeTheChangeOwes(): void
     {
-        // R-KNW-051. The list of four says nothing about which one is being
-        // written, and the type is the one part checkRst does not report: a
+        // R-KNW-051. The list of four says nothing about which one the session
+        // writes, and the type is the one part checkRst does not report. A
         // session that guessed it passes every suite. The corpus answered with
-        // five bullets that named a Task- prefix no branch's validator accepts,
-        // and the session behind feedback/2026-08-02-145315 picked the type by
-        // reading neighbouring entries — `D-KNW-039`.
+        // five bullets that named a Task- prefix no branch's validator accepts.
+        // The session behind feedback/2026-08-02-145315 picked the type from a
+        // read of entries nearby — `D-KNW-039`.
         $bodies = implode("\n", array_column(Documents::search('changelog file'), 'body'));
 
         // Four aspects of one search result rather than four cases: a
@@ -653,10 +653,10 @@ final class KnowledgeTest extends TestCase
     public function theChangelogProcedureIsFoundUnderItsOwnName(): void
     {
         // D-KNW-111. Two sessions read the guides list, saw no name for the
-        // changelog and assembled the conventions from the core checkout, while
-        // the rules sat in the page named for commit messages. The split pays
-        // only if the changelog query still lands, so both ends are held: the
-        // page carries its own id, and a backport question reaches it.
+        // changelog and assembled the conventions from the core checkout. The
+        // rules sat in the page named for commit messages. The split pays only
+        // if the changelog query still lands, so this holds both ends. The page
+        // carries its own id, and a backport question reaches it.
         self::assertContains(
             'core/contribution/changelog',
             array_column(Documents::documents(), 'id'),
@@ -678,11 +678,11 @@ final class KnowledgeTest extends TestCase
     #[Test]
     public function theChangelogDirectoryArrivesWhereTheFileIsWritten(): void
     {
-        // D-KNW-132. The rule was reachable from a question about the
-        // directory and from nothing a session writing the file asks, so it
-        // arrived after the file had been written into the release under
-        // development. Both queries and both surfaces are held, because the
-        // section is reached on the wording of its own body.
+        // D-KNW-132. The rule was reachable from a question about the directory
+        // and from nothing a session that writes the file asks. So it arrived
+        // after the file had gone into the release under development. This
+        // holds both queries and both surfaces, because the words of its own
+        // body are what reach the section.
         foreach (['write a changelog entry for a bugfix', 'add a changelog file'] as $query) {
             self::assertContains(
                 'Where a Changelog File Goes',
@@ -708,10 +708,10 @@ final class KnowledgeTest extends TestCase
      * The page a task that writes files owes, and the one a task that writes
      * none does not.
      *
-     * A session writes its comments in the register it spent the task reading,
-     * and three reports traced a patch's twice-rejected comments back to this
-     * server's own surfaces — `D-DOC-068`. No intent owns the page, so it hangs
-     * off the property every writing intent shares.
+     * A session writes its comments in the register it spent the task in. Three
+     * reports traced a patch's twice-rejected comments back to this server's
+     * own surfaces — `D-DOC-068`. No intent owns the page, so it hangs off the
+     * property every writing intent shares.
      */
     #[Decision('D-DOC-068')]
     #[Test]
@@ -742,11 +742,11 @@ final class KnowledgeTest extends TestCase
     #[Test]
     public function aReportBeingWrittenIsToldWhichMarkupTheDescriptionRenders(): void
     {
-        // D-KNW-113. A session wrote a Forge issue out of its recollection of
-        // the form and wrapped every code block in raw <pre> because nothing
-        // here said which markup the field renders — a hedge for one line it
-        // could have been told. The markup is what that session could not
-        // derive at all, so it is the end the query is held at.
+        // D-KNW-113. A session wrote a Forge issue out of its memory of the
+        // form and wrapped every code block in raw <pre>. Nothing here said
+        // which markup the field renders. That is a hedge for one line it could
+        // have heard. The markup is what that session could not derive at all,
+        // so it is the end the query holds at.
         $matches = Documents::search('does a forge issue description render textile or markdown');
 
         self::assertContains('core/contribution/reporting-an-issue', array_column($matches, 'id'));
@@ -759,8 +759,8 @@ final class KnowledgeTest extends TestCase
         foreach (['TYPO3 Version', 'Category', 'Target version'] as $field) {
             self::assertStringContainsString($field, $page, 'the page names no ' . $field);
         }
-        // The areas are the tracker's and are named by the call that reads
-        // them, because a copy of an administered list goes stale in silence.
+        // The areas are the tracker's and the call that reads them names them,
+        // because a copy of an administered list goes stale in silence.
         self::assertStringContainsString('category="*"', $page);
         self::assertStringNotContainsString('Linkvalidator', $page);
     }
@@ -770,11 +770,11 @@ final class KnowledgeTest extends TestCase
     #[Test]
     public function theBreakingRouteStatesWhatTheScannerMatcherRequires(): void
     {
-        // R-ANS-017. The matcher was stated under Deprecations alone, so a
-        // reviewer asking about a removal was handed the [!!!] marker and the
-        // changelog file and nothing else — D-ANS-029. The query is read off
-        // the intent rather than written here, because that is the one a
-        // removal actually arrives on — `D-ANS-035`.
+        // R-ANS-017. The matcher stood under Deprecations alone. So a reviewer
+        // who asked about a removal got the [!!!] marker and the changelog file
+        // and nothing else — D-ANS-029. The query comes off the intent rather
+        // than stands here, because that is the one a removal arrives on —
+        // `D-ANS-035`.
         $breaking = array_values(array_filter(
             TaskIntents::load(),
             static fn(array $intent): bool => $intent['id'] === 'breaking',
@@ -789,13 +789,13 @@ final class KnowledgeTest extends TestCase
     /**
      * One brief per kind of work, each reaching its own kind and no other.
      *
-     * A needle is widened to reach a task that named its work, and nothing said
-     * before this what that cost the neighbouring intents: a word broad enough
-     * to reach one brief reaches several, and the second intent arrives stated
-     * as fact with a checklist and a skill behind it (`D-SKL-051`). The briefs
-     * are written here rather than taken from `scenarios/`, because a scenario
-     * prompt is a whole task and half of them name two kinds of work on purpose
-     * — `D-GUI-018`, `D-SKL-066`, `D-GUI-014`.
+     * A needle grows to reach a task that named its work, and nothing said
+     * before this what that cost the intents beside it. A word broad enough to
+     * reach one brief reaches several. The second intent arrives as fact with a
+     * checklist and a skill behind it (`D-SKL-051`). The briefs stand here
+     * rather than come from `scenarios/`. A scenario prompt is a whole task and
+     * half of them name two kinds of work on purpose — `D-GUI-018`,
+     * `D-SKL-066`, `D-GUI-014`.
      */
     #[Decision('D-GUI-014')]
     #[Decision('D-GUI-018')]
@@ -816,11 +816,11 @@ final class KnowledgeTest extends TestCase
      * A procedure a kind of work owes, named without a second intent firing.
      *
      * A session had `any/testing/browser-check` in the guides list its first
-     * call returned, never matched it against a task it did not have yet, and
-     * wrote its own throwaway spec fifteen times. Its own words never say
-     * "browser", and widening the intent to reach them is what `D-SKL-051`
-     * refuses: the second intent arrives with a checklist and a skill behind
-     * it — `D-ANS-140`.
+     * call returned. It never matched it against a task it did not have yet,
+     * and wrote its own throwaway spec fifteen times. Its own words never say
+     * "browser", and a wider intent that reaches them is what `D-SKL-051`
+     * refuses. The second intent arrives with a checklist and a skill behind it
+     * — `D-ANS-140`.
      */
     #[Decision('D-ANS-140')]
     #[Decision('D-SKL-051')]
@@ -852,9 +852,9 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * And the set is every intent, so an intent added without a brief is caught
-     * here rather than by the first widening that swallows it unmeasured —
-     * `D-SKL-051`.
+     * And the set is every intent. So an intent added without a brief fails
+     * here rather than at the first widened needle that swallows it with no
+     * measure — `D-SKL-051`.
      */
     #[Decision('D-SKL-051')]
     #[Test]
@@ -869,12 +869,12 @@ final class KnowledgeTest extends TestCase
     /**
      * A site saying which major it is on is not a package declaring a range.
      *
-     * The two are described in the same ordinary words, and the brief above
-     * cannot catch the crossing because the text that breaks it matches
-     * `installation-upgrade` on nothing: measured while `compatibility` was
-     * written, a strong "runs on typo3" made the compatibility brief the whole
-     * answer to a site upgrade rather than a second one beside it. The subject
-     * inside the needle is what separates them (`D-GUI-012`) — `D-GUI-018`.
+     * The two have the same ordinary words, and the brief above cannot catch
+     * the cross because the text that breaks it matches `installation-upgrade`
+     * on nothing. Measured at the time of `compatibility`, a strong "runs on
+     * typo3" made the compatibility brief the whole answer to a site upgrade.
+     * Not a second one beside it. The subject inside the needle is what
+     * separates them (`D-GUI-012`) — `D-GUI-018`.
      */
     #[Decision('D-GUI-018')]
     #[Test]
@@ -939,13 +939,13 @@ final class KnowledgeTest extends TestCase
     public function theMatcherListSaysWhatItsMissingRowsDoNotMean(): void
     {
         // R-ANS-017. The five rows name a visibility twice, on the property
-        // half, and a reviewer read the list as closed over visibilities: no
+        // half, and a reviewer read the list as closed over visibilities. No
         // row for a protected method, therefore no matcher can exist for one,
-        // therefore the entry is NotScanned. It reported that to a core
+        // therefore the entry gets NotScanned. It reported that to a core
         // reviewer as a finding and filed the list's silence as the thing that
         // corrected it (`feedback/2026-08-03-144316`, D-ANS-035). The method
         // matchers are a weak match on the call site and never see a
-        // visibility, so what the list omits is what needs no row.
+        // visibility. So what the list omits is what needs no row.
         $bodies = implode("\n", array_column(Documents::search('breaking change'), 'body'));
 
         self::assertStringContainsString('Visibility routes a property and never a method', $bodies);
@@ -956,11 +956,11 @@ final class KnowledgeTest extends TestCase
     #[Test]
     public function aPromotedMemberIsAnsweredAsTheMoveTheCoreFilesNothingFor(): void
     {
-        // The section said what a widened parameter owes and nothing about a
-        // widened visibility, so a reviewer holding a protected-to-public
-        // promotion read a submittable patch as unsubmittable. The sweep that
-        // settled it is in the entry: promotions carry no changelog file and
-        // reach maintained release lines, which a breaking change cannot.
+        // The section said what a wider parameter owes and nothing about a
+        // wider visibility. So a reviewer with a protected-to-public promotion
+        // read a submittable patch as unsubmittable. The sweep that settled it
+        // is in the entry: promotions carry no changelog file and reach
+        // maintained release lines, which a breaking change cannot.
         $bodies = implode("\n", array_column(Documents::search('breaking change'), 'body'));
 
         self::assertStringContainsString('promoted from protected to public', $bodies);
@@ -971,11 +971,11 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * R-KNW-057. The query is the skill's own step arriving: `typo3-core-patch-
-     * development` makes the visible-or-unlisted question mandatory and tells
-     * the caller the Gerrit lookup "has both forms", and the corpus carried the
-     * one that publishes alone — six sections on this query and `%private` in
-     * none of them (`D-SKL-005`, 2026-08-03).
+     * R-KNW-057. The query is the skill's own step on arrival.
+     * `typo3-core-patch- development` makes the visible-or-unlisted question
+     * mandatory and tells the caller the Gerrit lookup "has both forms". The
+     * corpus carried the one that publishes alone. Six sections on this query
+     * and `%private` in none of them (`D-SKL-005`, 2026-08-03).
      */
     #[Requirement('R-KNW-057')]
     #[Test]
@@ -985,8 +985,8 @@ final class KnowledgeTest extends TestCase
 
         self::assertStringContainsString('%private', $bodies);
         self::assertStringContainsString('%wip', $bodies);
-        // The two are chosen between rather than looked up, so the answer says
-        // what each one does to the change and not only how it is typed.
+        // The two are a choice rather than a lookup, so the answer says what
+        // each one does to the change and not only its form.
         self::assertStringContainsString('View Private Changes', $bodies, 'nothing says who can see a private change');
         // The flag that does not come off by omitting it is the one a caller
         // cannot guess the way back out of.
@@ -994,10 +994,10 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * R-KNW-057. The three readings around the same push: where this checkout
-     * sends it, whether the refspec holds from a worktree, and what the state of
-     * the issue behind it means. One test rather than three, because they are
-     * three aspects of the step the skill calls irreversible.
+     * R-KNW-057. The three reads around the same push. Where this checkout
+     * sends it, whether the refspec holds from a worktree, and what the state
+     * of the issue behind it means. One test rather than three, because they
+     * are three aspects of the step the skill calls irreversible.
      */
     #[Requirement('R-KNW-057')]
     #[Test]
@@ -1008,9 +1008,9 @@ final class KnowledgeTest extends TestCase
             array_column(Documents::search($query), 'body'),
         );
 
-        // Read rather than set: the corpus had `git remote set-url --push`,
-        // which is what a human runs once per clone, and no way to ask a
-        // checkout where it is already pointed.
+        // Read rather than set. The corpus had `git remote set-url --push`,
+        // which is what a human runs once per clone. It had no way to ask a
+        // checkout where it already points.
         $where = $bodies('where does this checkout push');
         self::assertStringContainsString('remote.origin.pushurl', $where);
         self::assertStringContainsString('.gitreview', $where);
@@ -1025,9 +1025,9 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The same asymmetry from the reading side, which no requirement names and
-     * which nothing here held: a core clone fetches the mirror and pushes the
-     * review server, so `git fetch origin refs/changes/…` reports a ref that
+     * The same asymmetry from the read side, which no requirement names and
+     * which nothing here held. A core clone fetches the mirror and pushes the
+     * review server. So `git fetch origin refs/changes/…` reports a ref that
      * does not exist in the one checkout whose push would reach it. `D-SKL-021`
      * measured the two fetches, and `feedback/2026-08-13-214838` is the session
      * that would have run the failing one and read it as an absent change.
@@ -1044,20 +1044,20 @@ final class KnowledgeTest extends TestCase
         self::assertStringContainsString('not on GitHub', $fetch, 'nothing says which remote carries the ref');
         self::assertStringContainsString('remote.origin.pushurl', $fetch, 'nothing says what to fetch from instead');
         // The date is the half `feedback/2026-08-24-183447` names as what made
-        // it trust the page over its own habit without testing the claim: a
+        // it trust the page over its own habit with no test of the claim. A
         // rule it could have been wrong about, with the day somebody was not.
         self::assertStringContainsString('Measured on 2026-08-05', $fetch, 'the claim no longer says when it held');
         self::assertStringContainsString('refs/changes/02/95102/2', $fetch, 'nothing says which ref was measured');
     }
 
     /**
-     * Where the carry lands, and how it is taken back.
+     * Where the carry lands, and how a session takes it back.
      *
      * `D-SKL-041` gave the local result a name because the alternative is the
-     * contribution guide's own cherry-pick page, which runs after
-     * `git reset --hard origin/main` and writes somebody else's patch onto the
-     * branch tracking the core. `feedback/2026-08-24-183447` used the branch
-     * form, the https URL and the undo, and nothing here held any of the three.
+     * contribution guide's own cherry-pick page. That runs after `git reset
+     * --hard origin/main` and writes somebody else's patch onto the branch that
+     * tracks the core. `feedback/2026-08-24-183447` used the branch form, the
+     * https URL and the undo, and nothing here held any of the three.
      */
     #[Decision('D-SKL-041')]
     #[Test]
@@ -1079,12 +1079,12 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The page carried amending a change of your own and stopped there, so a
-     * session asked twice to put local work on somebody else's open change
+     * The page carried the amend of a change of your own and stopped there. So
+     * a session asked twice to put local work on somebody else's open change
      * worked out the mechanics and the etiquette alone — `D-KNW-129`.
      *
-     * The four claims below are what it had to establish: that the practice
-     * exists, what the amend does to the two names, what survives it, and what
+     * The four claims below are what it had to establish. That the practice
+     * exists, what the amend does to the two names, what survives it. And what
      * the upload owes the author on the change itself.
      */
     #[Decision('D-KNW-129')]
@@ -1111,7 +1111,7 @@ final class KnowledgeTest extends TestCase
         // What the diff between two patch sets cannot carry, and therefore what
         // the change itself has to be told.
         self::assertStringContainsString('comment on the change', $foreign);
-        // The same rule as the fetch direction above: a claim measured on a day
+        // The same rule as the fetch direction above. A claim measured on a day
         // says which day, so the next session can be wrong about it on purpose.
         self::assertStringContainsString('Measured on 2026-08-27', $foreign, 'the claim does not say when it held');
     }
@@ -1121,11 +1121,11 @@ final class KnowledgeTest extends TestCase
     public function aQueryThatNamesItsDocumentReachesTheSectionThatAnswersIt(): void
     {
         // D-ANS-037. "commit message summary line length" returned two Gerrit
-        // workflow sections at coverage 0.525 and score 38, and the section
-        // carrying the 52-character rule sat at 0.429 — the two words naming the
-        // document were in no field the matcher read, so the section they
-        // belong to paid for them and the sections merely saying the subject's
-        // name did not.
+        // workflow sections at coverage 0.525 and score 38. The section with
+        // the 52-character rule sat at 0.429. The two words that name the
+        // document were in no field the matcher read. So the section they
+        // belong to paid for them, and the sections that merely say the
+        // subject's name did not.
         $results = Documents::search('commit message summary line length');
 
         self::assertSame(
@@ -1138,10 +1138,9 @@ final class KnowledgeTest extends TestCase
     #[Test]
     public function everyDocumentIsReachedByItsOwnTitle(): void
     {
-        // The weakest thing that can be asked of this corpus, and only two of
-        // the five documents did it: "TYPO3 Core Script Help" returned nothing,
-        // and three titles were answered first by another document —
-        // `D-ANS-037`.
+        // The weakest question this corpus can take, and only two of the five
+        // documents did it. "TYPO3 Core Script Help" returned nothing, and
+        // another document answered three titles first — `D-ANS-037`.
         foreach (Documents::documents() as $document) {
             $results = Documents::search($document['title']);
 
@@ -1159,11 +1158,11 @@ final class KnowledgeTest extends TestCase
     {
         self::assertSame([], Documents::search('quantum entanglement pineapple'));
 
-        // The floor is what stops a query the corpus cannot answer from being
-        // answered by whatever is nearest, and it stayed where it is when the
-        // title was weighted in — D-ANS-037. This is the query that measured it
-        // for the hint corpus in D-ANS-025: long enough that something always
-        // carries part of it.
+        // The floor is what stops whatever is nearest from an answer to a query
+        // the corpus cannot answer. It stayed where it is when the title joined
+        // the weights — D-ANS-037. This is the query that measured it for the
+        // hint corpus in D-ANS-025: long enough that something always carries
+        // part of it.
         self::assertSame([], Documents::search('how do I write a good sonnet'));
     }
 
@@ -1207,10 +1206,10 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The query `feedback/2026-08-01-115115` was working on, asked from the core
-     * checkout it was written in: nothing matched, nothing was withheld, and the
-     * answer blamed the boundary for both — which `D-ANS-029` then quoted back
-     * as what the tool answers a core query (`D-ANS-037`).
+     * The query `feedback/2026-08-01-115115` worked on, asked from the core
+     * checkout it came from. Nothing matched, nothing stayed back, and the
+     * answer blamed the boundary for both. `D-ANS-029` then quoted that back as
+     * what the tool answers a core query (`D-ANS-037`).
      */
     #[Requirement('R-ANS-006')]
     #[Decision('D-ANS-037')]
@@ -1241,7 +1240,7 @@ final class KnowledgeTest extends TestCase
      * `feedback/2026-08-07-132446` queried twice for what each change type owes
      * as a changelog entry and got `Release Targets` both times. The section it
      * wanted, `## Changelog Files`, is in the same document, whose uri the
-     * answer carried and which the session never fetched — it says nothing in
+     * answer carried and which the session never fetched. It says nothing in
      * the answer presented the uri as something to do (`D-ANS-061`).
      */
     #[Requirement('R-ANS-028')]
@@ -1258,10 +1257,10 @@ final class KnowledgeTest extends TestCase
         self::assertStringContainsString('typo3_rule_lookup with documentId', $search->text);
         self::assertStringContainsString('core/contribution/commit-messages', $search->text);
         // A section is a cut of the page whether or not it is the right cut.
-        // The ranking half of this report is
-        // aQueryForTheChangelogObligationReachesTheSectionThatStatesIt; what
-        // this holds is that the rest of the page is reachable either way,
-        // because the next question is regularly in it.
+        // The rank half of this report is
+        // aQueryForTheChangelogObligationReachesTheSectionThatStatesIt. This
+        // holds that the rest of the page is reachable either way, because the
+        // next question is regularly in it.
         self::assertNotSame([], $search->data['matches']);
 
         $whole = Registry::call('typo3_rule_lookup', [
@@ -1281,14 +1280,14 @@ final class KnowledgeTest extends TestCase
 
     /**
      * `D-ANS-114`. The hints a page declares are the other corpus on its
-     * subject, and a reader who has reached the foot of the page has no query
-     * of its own left to find them with.
+     * subject. A reader who has reached the foot of the page has no query of
+     * its own left to find them with.
      *
      * `feedback/2026-08-24-225022` read `any/testing/browser-check` whole and
-     * then spent roughly five round trips establishing that a backend module
-     * renders in an iframe — which `browser-tests`, the hint that page declares,
-     * states verbatim. The ids were in the answer as `alsoInHints` data and in
-     * the raw front matter, and no sentence said what they were.
+     * then spent roughly five round trips on the fact that a backend module
+     * renders in an iframe. `browser-tests`, the hint that page declares,
+     * states that verbatim. The ids were in the answer as `alsoInHints` data
+     * and in the raw front matter, and no sentence said what they were.
      */
     #[Decision('D-ANS-114')]
     #[Test]
@@ -1309,23 +1308,22 @@ final class KnowledgeTest extends TestCase
      * `R-ANS-028` over every tool that renders this corpus, not one of them.
      *
      * The offer is `Prose::sections()`'s own line, so the rule lookup, the
-     * script lookup and the task guide carry it without being wired for it —
-     * which is also why the brief needs no mapping of its own. Searching the
-     * caller's task text for a document was measured on 2026-08-07 and is not
-     * usable: "add a content element to a sitepackage" reaches the Playwright
-     * guide at 0.60 and "style a backend module with Sass" the core script
-     * notes at 0.56, so no threshold tells a right answer from a plausible one.
-     * The intent's own curated `rulesQuery` already decided.
+     * script lookup and the task guide carry it with no wire of their own. That
+     * is also why the brief needs no map of its own. A search of the caller's
+     * task text for a document, measured on 2026-08-07, is not usable. "add a
+     * content element to a sitepackage" reaches the Playwright guide at 0.60.
+     * "style a backend module with Sass" reaches the core script notes at 0.56.
+     * So no threshold tells a right answer from a plausible one. The intent's
+     * own curated `rulesQuery` already decided.
      */
     #[Decision('D-ANS-076')]
     #[Test]
     public function everyToolThatRendersASectionOffersThePageAsACall(): void
     {
         $answers = [
-            // Spread over three documents on purpose: a query whose matches sit
-            // in one page is answered with the page and has nothing left to
-            // offer (`D-ANS-076`), and "push a patch for review" became one of
-            // those.
+            // Spread over three documents on purpose. A query whose matches sit
+            // in one page gets the page and has nothing left to offer
+            // (`D-ANS-076`). "push a patch for review" became one of those.
             Registry::call('typo3_rule_lookup', ['query' => 'review readiness for a typo3/sysext/core patch']),
             Registry::call('typo3_script_lookup', ['task' => 'run the functional tests', 'targetVersion' => '15']),
             Registry::call('typo3_task_guide', [
@@ -1360,9 +1358,9 @@ final class KnowledgeTest extends TestCase
     /**
      * The same document, offered where a session is certainly reading.
      *
-     * `feedback/2026-08-07-130058` had every `runTests.sh` question answered by
+     * `feedback/2026-08-07-130058` got every `runTests.sh` question answered by
      * this tool, never reached `typo3_script_lookup`, and so never saw the
-     * guide — which carries the two things below and this answer does not.
+     * guide. That carries the two things below and this answer does not.
      */
     #[Requirement('R-ANS-028')]
     #[Test]
@@ -1390,11 +1388,11 @@ final class KnowledgeTest extends TestCase
     /**
      * The e2e suites hand over the page saying what to do with the browser.
      *
-     * `feedback/2026-08-10-182417` reviewed a backend CSS patch, took
-     * `-s e2e-prepare` out of this answer each time, and told its reader five
-     * times that it could not judge the change visually — with
-     * `any/testing/browser-check` sitting unopened in the first answer it
-     * received. The paths below are that session's own (`D-KNW-069`).
+     * `feedback/2026-08-10-182417` reviewed a backend CSS patch and took `-s
+     * e2e-prepare` out of this answer each time. It told its reader five times
+     * that it could not judge the change visually. `any/testing/browser-check`
+     * sat unopened in the first answer it received. The paths below are that
+     * session's own (`D-KNW-069`).
      */
     #[Decision('D-KNW-069')]
     #[Requirement('R-ANS-028')]
@@ -1421,11 +1419,11 @@ final class KnowledgeTest extends TestCase
     /**
      * A functional suite hands over the page that says what it rendered.
      *
-     * `feedback/2026-08-24-183345` reviewed a PHP diff — an error handler and a
-     * page renderer — read the review skill's gate, which names the page for
+     * `feedback/2026-08-24-183345` reviewed a PHP diff, an error handler and a
+     * page renderer. It read the review skill's gate, which names the page for
      * TypoScript, and built the same harness by hand. The path below is that
-     * session's own, and the page is routed by the evidence the review needed
-     * rather than by the diff that made it necessary (`D-KNW-122`).
+     * session's own. The route to the page is the evidence the review needed
+     * rather than the diff that made it necessary (`D-KNW-122`).
      */
     #[Decision('D-KNW-122')]
     #[Requirement('R-ANS-028')]
@@ -1450,10 +1448,10 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The gate the page is reached by names the evidence rather than the diff.
+     * The gate that leads to the page names the evidence rather than the diff.
      *
      * Four places named a TypoScript diff and the session that needed the page
-     * was reviewing PHP (`D-KNW-122`). Both halves are read here, because a page
+     * was reviewing PHP (`D-KNW-122`). This reads both halves, because a page
      * gated twice routes twice.
      */
     #[Decision('D-KNW-122')]
@@ -1484,13 +1482,13 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The changelog obligation is reached by the words a patch author holds.
+     * The words a patch author holds reach the changelog obligation.
      *
      * `feedback/2026-08-07-132446` asked twice and got `Release Targets` both
      * times, from a section that never uses the word in that sense. The section
-     * that answers was written in the corpus's words rather than the caller's:
-     * `bug fix` where the commit keyword is `BUGFIX`, and nothing naming the
-     * thing being asked for as an obligation. It is a page of its own since
+     * that answers stood in the corpus's words rather than the caller's. `bug
+     * fix` where the commit keyword is `BUGFIX`, and nothing that named the
+     * thing in question as an obligation. It is a page of its own since
      * `D-KNW-111`, and the query has to reach it there.
      */
     #[Decision('D-KNW-111')]
@@ -1508,13 +1506,13 @@ final class KnowledgeTest extends TestCase
         // The two it used to answer with instead.
         self::assertNotContains('Release Targets', array_column($result->data['matches'], 'heading'));
 
-        // What the section has to say, since a review has to answer either way
-        // and demanding an entry where none is owed is a defect of its own.
-        // The last two are what `feedback/2026-08-08-224455` and `-224426`
-        // report as the sentences that stopped the entry being written to be
-        // safe: an answer cut to `A BUGFIX owes none` settles the common case
-        // and leaves a review with nothing to say about the exception. Matched
-        // against the corpus unwrapped, since both cross a line break.
+        // What the section has to say, since a review has to answer either way.
+        // A demand for an entry where none is due is a defect of its own. The
+        // last two are what `feedback/2026-08-08-224455` and `-224426` report
+        // as the sentences that stopped an entry "to be safe". An answer cut to
+        // `A BUGFIX owes none` settles the common case and leaves a review with
+        // nothing to say about the exception. Matched against the corpus
+        // unwrapped, since both cross a line break.
         $body = (string) preg_replace('/\s+/', ' ', Documents::read('core/contribution/changelog'));
         self::assertStringContainsString('A `BUGFIX` owes none', $body);
         self::assertStringContainsString(
@@ -1525,9 +1523,9 @@ final class KnowledgeTest extends TestCase
             'A review that demands one of a `BUGFIX` that changes none of the three has a defect of its own',
             $body,
         );
-        // The condition the refusal used to carry was `removes nothing public`,
-        // which is what a fix removing a configured option passes while owing
-        // an entry all the same — `feedback/2026-08-24-100635`, `D-KNW-073`.
+        // The condition the refusal used to carry was `removes nothing public`.
+        // A fix that removes a configured option passes that and owes an entry
+        // all the same — `feedback/2026-08-24-100635`, `D-KNW-073`.
         self::assertStringContainsString(
             'changes nothing an installation renders, is configured by, or has documented',
             $body,
@@ -1538,13 +1536,13 @@ final class KnowledgeTest extends TestCase
      * The release-targets answer refuses the source a caller would otherwise
      * read the branches off, and says what naming an unsupported one is.
      *
-     * Two sessions report the refusal as what stopped them:
-     * `feedback/2026-08-08-224426` had run `git branch -r` one turn earlier,
-     * and `-224455` left 12.4 out of a review as correctly excluded ELTS
-     * instead of asking for it. Both sentences are the part a section
-     * summarised down to "`Releases:` names the maintained lines" would lose,
-     * and the reading it leaves behind is wrong in a way no check reports:
-     * `git branch -r` answers, and what it answers reaches back to `TYPO3_3-6`.
+     * Two sessions report the refusal as what stopped them.
+     * `feedback/2026-08-08-224426` had run `git branch -r` one turn earlier.
+     * `-224455` left 12.4 out of a review as correctly excluded ELTS instead of
+     * a question about it. Both sentences are the part a section cut down to
+     * "`Releases:` names the maintained lines" would lose. The read it leaves
+     * behind is wrong in a way no check reports: `git branch -r` answers, and
+     * what it answers reaches back to `TYPO3_3-6`.
      */
     #[Test]
     public function theReleaseTargetsAnswerRefusesTheBranchListInTheCheckout(): void
@@ -1567,17 +1565,15 @@ final class KnowledgeTest extends TestCase
     /**
      * The two wrong moves this document exists to stop, held as sentences.
      *
-     * A session asked for one query, got both sections back, and reports each of
-     * them stopping an action already in flight: an `Important-*.rst` written
-     * "to be safe", and the release targets about to be read off `git branch -r`
-     * (`D-ANS-058`).
+     * A session asked for one query, got both sections back, and reports that
+     * each of them stopped an action already in flight. An `Important-*.rst`
+     * written "to be safe", and the release targets about to come off `git
+     * branch -r` (`D-ANS-058`).
      *
-     * The obligation itself is held twice over, by the ranking test above and by
-     * the section lead it asserts. What rested on nobody rewriting the file is
-     * the half that says what a reviewer may not demand, and the half that says
-     * the checkout does not answer the branch question — the sentences a
-     * summarising rewrite drops first, because both stop an action rather than
-     * enabling one.
+     * The obligation itself has two holds, the rank test above and the section
+     * lead it asserts. What rested on nobody's rewrite is the half that says
+     * what a reviewer may not demand. And the half that says the checkout does
+     * not answer the branch question — `D-KNW-111`.
      */
     #[Decision('D-KNW-111')]
     #[Test]
@@ -1608,9 +1604,9 @@ final class KnowledgeTest extends TestCase
      *
      * `feedback/2026-08-24-225153` asked for `changelog entry` and acted on the
      * sentence this section leads with, twice hours apart. That query answers
-     * with this page first, so a rewrite reducing the section to its pointer
-     * would leave the winning match saying where the rule is and not what it is
-     * — which `D-KNW-111` moved the rest of the page for and did not intend
+     * with this page first. So a rewrite that cut the section to its pointer
+     * would leave the top match to say where the rule is. Not what it is.
+     * `D-KNW-111` moved the rest of the page for that and did not intend it
      * here.
      */
     #[Decision('D-KNW-111')]
@@ -1634,10 +1630,10 @@ final class KnowledgeTest extends TestCase
      * The trailers a core commit message carries, and the two it does not.
      *
      * `feedback/2026-08-24-110851` asked for the sign-off and got one unrelated
-     * page back. The certificate is required since `D-KNW-125`, so the page has
-     * to state the obligation, what signing it claims, and where the rule comes
-     * from — a caller who reads only the merged history finds the practice the
-     * rule replaces.
+     * page back. The certificate is a requirement since `D-KNW-125`, so the
+     * page has to state the obligation, what the signature claims, and where
+     * the rule comes from. A caller who reads only the merged history finds the
+     * practice the rule replaces.
      */
     #[Decision('D-KNW-125')]
     #[Test]
@@ -1710,20 +1706,19 @@ final class KnowledgeTest extends TestCase
      * The third of them, and the one that already returned the guide.
      *
      * It returns a cut, and `truncated: true` is the field a caller has no way
-     * to act on where the client lists no resources — the same session, same
+     * to act on where the client lists no resources. The same session, same
      * call, `feedback/2026-08-07-130058`.
      */
     #[Requirement('R-ANS-028')]
     #[Test]
     public function aCutScriptSectionSaysHowToReadThePageWhole(): void
     {
-        // Neither the query the report made nor the one that replaced it: the
+        // Neither the query the report made nor the one that replaced it. The
         // first came back cut and reaches `The Pre-Commit Hook` whole, and the
-        // second reaches the section the install symptoms were moved into
-        // (`D-ANS-102`). What is held here is the rule rather than any of those
-        // calls: a section this tool had to cut carries the way to the rest of
-        // the page. `Common Commands` is the one that is still longer than the
-        // budget.
+        // second reaches the section the install symptoms moved into
+        // (`D-ANS-102`). This holds the rule rather than any of those calls. A
+        // section this tool had to cut carries the way to the rest of the page.
+        // `Common Commands` is the one that is still longer than the budget.
         $result = Registry::call('typo3_script_lookup', [
             'task' => 'run the unit and functional suites in the container',
             'targetVersion' => '15',
@@ -1742,13 +1737,13 @@ final class KnowledgeTest extends TestCase
      * searched no further — `D-ANS-070`.
      *
      * What it gets now is the share and the headings it did not see, because
-     * the next query is picked out of those. The share is stated in headings
-     * rather than in `##` lines, which is the only count of a page two sections
-     * under one heading do not make ambiguous.
+     * the next query comes out of those. The share stands in headings rather
+     * than in `##` lines. That is the only count of a page two sections under
+     * one heading do not make ambiguous.
      *
      * The query is that report's with a word more, because its own reaches one
-     * document and is answered with the page instead (`D-ANS-076`). What is
-     * held here is the answer that really is a cut: two pages, part of each.
+     * document and gets the page instead (`D-ANS-076`). This holds the answer
+     * that really is a cut: two pages, part of each.
      */
     #[Decision('D-ANS-070')]
     #[Decision('D-ANS-076')]
@@ -1785,46 +1780,13 @@ final class KnowledgeTest extends TestCase
      *
      * Each matched one heading of `core/contribution/commit-messages`, and the
      * first answer already carries what the second went looking for. So one of
-     * the two is answered with the page: the second search is what the cut
-     * costs, and the text it saves is nearly free beside a round trip.
+     * the two gets the page, and the second search is what the cut costs.
      *
-     * Which of the two that is moved when the corpus grew by
-     * `project/installation/booting-a-clone` — `D-KNW-095`. A term's weight is
-     * computed over the sections in front of the query, so eight more of them
-     * carried two sections of the first query over the coverage floor, one of
-     * them in a second page. That call is now the cut, and it hands over
-     * `Release Targets` among its three; the second call is the one whose
-     * matches all sit in one page. Both halves the entry bought are still
-     * bought, on the other call.
-     *
-     * The reported second call matches one section and is below `D-ANS-101`'s
-     * floor. The query here is that call widened by two subjects the same
-     * session had live: three sections, one page, the round trip still removed.
-     *
-     * It moved a second time when `D-KNW-111` cut the changelog sections out
-     * into `core/contribution/changelog`, because a query naming the trailer
-     * and the entry at once now reaches both pages by construction. The one
-     * page it holds is the new one, on the words a session already editing the
-     * file asks with.
-     *
-     * A third time with `D-KNW-129`, which added a section about patch sets to
-     * the Gerrit page. A term's weight is computed over the sections in front
-     * of the query, so one more section carrying `patch` costs every term of
-     * this query a quarter of a percent — and `Release Branches and Backports`
-     * and `Release Targets` were sitting at 0.501286 against a floor of 0.5.
-     * Both fell through it, which is what a fixture resting on a thousandth was
-     * worth. The cut is still a cut and still spans two pages, so what it holds
-     * is the other half: the page the second call is answered with is already
-     * excerpted and already offered here.
-     *
-     * A fourth time with `D-KNW-132`, which put "entry" into a section that
-     * carried "entries", and `Release Branches and Backports` came back up
-     * through the same floor. The cut now spans three pages, which is the same
-     * half this holds.
-     *
-     * A fifth time with `D-DOC-070`, whose sweep rewrites every page and moves
-     * every weight with each commit. So the test holds the half it always
-     * held: the cut spans more than one page and the changelog page is in it.
+     * Which of the two moves with every change to the corpus, because a term's
+     * weight comes from the sections in front of the query. `D-KNW-095`,
+     * `D-KNW-111`, `D-KNW-129`, `D-KNW-132` and `D-DOC-070` each moved it. So
+     * the test holds the half it always held: the cut spans more than one page
+     * and the changelog page is in it.
      */
     #[Decision('D-ANS-076')]
     #[Decision('D-KNW-111')]
@@ -1864,13 +1826,13 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * How much of the question the closest hint carries, and the sentence that
+     * How much of the question the closest hint carries. And the sentence that
      * says so where it is under the floor a hint answers on its own from.
      *
-     * A path admits a hint whatever its words say, so an answer assembled from
-     * path matches alone is well-formed, adjacent and about something else —
-     * which is what six hints looked like to the session that reported this
-     * (`D-ANS-130`). The two calls below are the two sides: one whose subject
+     * A path admits a hint whatever its words say. So an answer assembled from
+     * path matches alone is well-formed, adjacent and about something else.
+     * That is what six hints looked like to the session that reported this
+     * (`D-ANS-130`). The two calls below are the two sides. One whose subject
      * the corpus carries, and one that names a path and asks about something
      * nobody wrote down.
      */
@@ -1907,35 +1869,15 @@ final class KnowledgeTest extends TestCase
     /**
      * The floor `D-ANS-101` puts under `D-ANS-076`.
      *
-     * `feedback/2026-08-24-110851` asked for `signed-off-by` and was handed
-     * `any/testing/proving-a-condition` whole, six kilobytes on proving a
-     * TypoScript condition, on one body carrying "signed in". The other half of
-     * that feedback wrote the trailer rule, so the query now reaches the
-     * sections it was asking for — and the unrelated page is still a cut, which
-     * is the floor doing its work rather than the corpus doing it.
-     *
-     * Two of the five cuts are one page since `D-KNW-125` split the hook's own
-     * mechanics off the rule, and the page is still not handed over: the other
-     * three are two more documents, and a concentrated answer is every match
-     * coming from one. Those three match on "signed" out of "signed-in", in a
-     * clause about requesting without a backend session — a thin match in three
-     * places rather than one, which is the floor doing exactly its work.
-     *
-     * `xdebug` is the thin match that stands for the second instance
-     * `D-ANS-101` names in its evidence: one section, and a whole page handed
-     * over on the word appearing once. It was `icon` until 2026-09-01, when a
-     * document about drawing one made that word reach six sections — which is
-     * the corpus taking a thin match away rather than the floor failing.
-     *
-     * The STE rewrite (`D-DOC-070`) took "signed-in" out of the two testing
-     * pages, so the thin matches are gone and the reported query concentrates
-     * on the commit-messages page: two sections, one page, handed over. The
-     * cut this test holds is now `xdebug` alone.
-     *
-     * What the floor costs, measured over `Documents::topics()` on 2026-08-24
-     * at `targetVersion=15.0`: of the corpus's 103 subjects, 25 reach one page
-     * and 12 of those reach exactly one section. So a ninth of the subjects is
-     * answered with the section and the offer where the page came before.
+     * `feedback/2026-08-24-110851` asked for `signed-off-by` and got
+     * `any/testing/proving-a-condition` whole, on one body with "signed in".
+     * The other half of that feedback wrote the trailer rule, so the query now
+     * concentrates on the commit-messages page: two sections, one page, handed
+     * over. `xdebug` is the thin match that stands for the second instance
+     * `D-ANS-101` names, one section and a whole page on one occurrence of the
+     * word. The corpus moved both cases more than once; the entry has the
+     * account, and its evidence has what the floor costs over
+     * `Documents::topics()`.
      */
     #[Decision('D-ANS-101')]
     #[Test]
@@ -1978,10 +1920,10 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The pair a match is ranked by, on the two answers that hand a page over.
+     * The pair that ranks a match, on the two answers that hand a page over.
      *
      * The session above read the `score: 0` beside its answer as "nothing
-     * matched" and was right by accident: the zero was a constant, and the
+     * matched" and was right by accident. The zero was a constant, and the
      * search had scored that match 48. The `coverage: 1.0` beside it was the
      * constant nothing caught, since it asserts that the page covers the whole
      * query — `D-ANS-101`.
@@ -2000,8 +1942,8 @@ final class KnowledgeTest extends TestCase
         // asserted all of it.
         self::assertLessThan(1.0, $page->data['matches'][0]['coverage']);
 
-        // A page the caller named was matched against nothing, and both halves
-        // of the pair say so.
+        // A page the caller named matched against nothing, and both halves of
+        // the pair say so.
         $named = Registry::call('typo3_rule_lookup', ['documentId' => 'core/contribution/commit-messages']);
         self::assertSame(0, $named->data['matches'][0]['score']);
         self::assertSame(0.0, $named->data['matches'][0]['coverage']);
@@ -2012,15 +1954,13 @@ final class KnowledgeTest extends TestCase
      * matched The Probe, ." — the text above a page's first heading is a
      * section this corpus returns, and it carries no heading.
      *
-     * It is named for what it is rather than dropped, which the second call
-     * holds. The first matched the opening alone, and a page has one such
-     * section, so `D-ANS-101`'s floor makes that answer the cut — where the
-     * excerpt is named by the document's own title.
+     * It gets its name for what it is rather than a drop, which the second call
+     * holds. The first matched the first section alone, and a page has one such
+     * section, so `D-ANS-101`'s floor makes that answer the cut.
      *
-     * Both queries are retuned from the ones that session sent: the page grew
-     * three sections in `D-KNW-122` and each of the recorded strings then
-     * matched a different set. What is held is the shape they were sent for, an
-     * opening matched alone and an opening matched beside one heading.
+     * Both queries differ from the ones that session sent, because the page
+     * grew three sections in `D-KNW-122`. This holds the shape they went out
+     * for, a first section matched alone and one matched beside one heading.
      */
     #[Decision('D-ANS-101')]
     #[Test]
@@ -2089,10 +2029,10 @@ final class KnowledgeTest extends TestCase
      * The two symptoms `feedback/2026-08-07-125950` and `-130007` reported,
      * reachable by the words the session arrived with.
      *
-     * Both are failures whose message names something other than their cause:
-     * a header error printed because a script exited non-zero for an unrelated
-     * reason, and a class-not-found naming a fixture rather than the
-     * autoloader. Verified against `.checkouts/main` before they were written.
+     * Both are failures whose message names something other than their cause. A
+     * header error printed because a script exited non-zero for an unrelated
+     * reason, and a class-not-found that names a fixture rather than the
+     * autoloader. Verified against `.checkouts/main` before the write.
      */
     #[Test]
     public function theScriptsGuideCarriesTheTwoUnreadableSymptoms(): void
@@ -2134,8 +2074,7 @@ final class KnowledgeTest extends TestCase
 
     /**
      * A miss offers what would have hit rather than the boundary it thought it
-     * met, and every subset it names returns sections when it is asked —
-     * `D-ANS-037`.
+     * met. Every subset it names returns sections on a call — `D-ANS-037`.
      */
     #[Requirement('R-ANS-006')]
     #[Decision('D-ANS-037')]
@@ -2159,8 +2098,8 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The subset offered is spelled in the caller's own words, because a re-
-     * query it has to translate first is one more round trip — `D-ANS-037`.
+     * The offered subset is in the caller's own words, because a re- query it
+     * has to translate first is one more round trip — `D-ANS-037`.
      */
     #[Requirement('R-ANS-006')]
     #[Decision('D-ANS-037')]
@@ -2181,12 +2120,13 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The four vocabularies are one now, the `Scope` enum — `D-KNW-003` is where
-     * the last of them was kept apart and `D-KNW-005` where it went.
+     * The four vocabularies are one now, the `Scope` enum. `D-KNW-003` is where
+     * the last of them stood apart and `D-KNW-005` where it went.
      *
-     * This is what holds it to one: every scope written anywhere in the corpus
-     * has to be a case of it, and a statement may not claim `uncertain`, which
-     * belongs to a path nothing placed rather than to a sentence somebody wrote.
+     * This is what holds it to one. Every scope written anywhere in the corpus
+     * has to be a case of it, and a statement may not claim `uncertain`. That
+     * belongs to a path nothing placed rather than to a sentence somebody
+     * wrote.
      */
     #[Decision('D-KNW-005')]
     #[Requirement('R-SCO-006')]
@@ -2217,15 +2157,16 @@ final class KnowledgeTest extends TestCase
 
     /**
      * A suite that takes its file list from git carries the condition it holds
-     * under, wherever it is recommended.
+     * under, wherever an answer recommends it.
      *
-     * `cglGit` reports SUCCESS having read no file when it is run from a git
-     * worktree: `cglFixMyCommit.sh` asks git for the files of the last commit,
-     * `runTests.sh` mounts the checkout alone, a worktree keeps its gitdir
+     * `cglGit` reports SUCCESS with no file read when it runs from a git
+     * worktree. `cglFixMyCommit.sh` asks git for the files of the last commit
+     * and `runTests.sh` mounts the checkout alone. A worktree keeps its gitdir
      * outside that mount, and an empty list is "all is well" to the script. A
-     * false green is the one failure a reading session cannot see, so the entry
-     * that offers the command says where it does not hold — in the same entry,
-     * because nothing carries a caller from one to the next — `D-KNW-036`.
+     * false green is the one failure a session that reads cannot see. So the
+     * entry that offers the command says where it does not hold. In the same
+     * entry, because nothing carries a caller from one to the next —
+     * `D-KNW-036`.
      */
     #[Requirement('R-KNW-049')]
     #[Decision('D-KNW-036')]
@@ -2261,13 +2202,13 @@ final class KnowledgeTest extends TestCase
      * The invocation notes say what a checkout has to hold before any suite
      * runs, and name the command that puts it there.
      *
-     * `runTests.sh` mounts the started-from directory alone, so a suite finds the
-     * `vendor/` of that directory or none at all. A git worktree has none, and
-     * the run stops at `bin/phpunit: not found`, which names phpunit rather than
-     * the directory — the note carries the symptom for that reason. It sits
-     * under `preconditions` rather than in one suite entry, because it holds for
-     * every suite the script offers and is read before one is chosen, which is
-     * where `typo3_test_run_guide` prints it (`D-AUD-009`).
+     * `runTests.sh` mounts the started-from directory alone, so a suite finds
+     * the `vendor/` of that directory or none at all. A git worktree has none,
+     * and the run stops at `bin/phpunit: not found`, which names phpunit rather
+     * than the directory. The note carries the symptom for that reason. It sits
+     * under `preconditions` rather than in one suite entry, because it holds
+     * for every suite the script offers. A caller reads it before the choice of
+     * one, which is where `typo3_test_run_guide` prints it (`D-AUD-009`).
      */
     #[Requirement('R-KNW-052')]
     #[Decision('D-AUD-009')]
@@ -2284,13 +2225,13 @@ final class KnowledgeTest extends TestCase
             'the notes carry the precondition without the symptom it is recognised by',
         );
         // The other half of the precondition, and the one the session that
-        // reached for `command -v` was actually missing: the suite runs inside
-        // a container, so the shell's PHP is not the interpreter.
+        // reached for `command -v` lacked. The suite runs inside a container,
+        // so the shell's PHP is not the interpreter.
         self::assertStringContainsString('container', $notes, 'the preconditions do not say what runs the suite');
         // The checkout the docblock above is about. A fresh clone is the
-        // obvious case and a worktree is the one that surprises — the session
-        // in `feedback/2026-08-08-224455` had just made one, and the copy it
-        // was made from has both directories.
+        // obvious case and a worktree is the one that surprises. The session in
+        // `feedback/2026-08-08-224455` had just made one, and the copy it came
+        // from has both directories.
         self::assertStringContainsString('worktree', $notes, 'the preconditions name only the checkout nobody is surprised by');
 
         foreach (Versions::majors() as $major) {
@@ -2303,8 +2244,8 @@ final class KnowledgeTest extends TestCase
 
         // The prose document offering the install says the same thing. Its
         // Install Dependencies section used to offer host `composer install`
-        // "after cloning TYPO3 core or changing PHP dependencies", which is
-        // neither of the two cases that actually stop a run.
+        // "after cloning TYPO3 core or changing PHP dependencies". That is
+        // neither of the two cases that stop a run.
         $section = '';
         foreach (preg_split('/^#{2,3} /m', Documents::read('core/testing/scripts')) ?: [] as $candidate) {
             if (str_starts_with($candidate, 'Install Dependencies')) {
@@ -2320,15 +2261,15 @@ final class KnowledgeTest extends TestCase
      * The e2e answer says what a change to one spec costs.
      *
      * Every e2e case builds its Playwright command from the project alone and
-     * reaches no `"$@"`, so nothing a caller writes after `--` arrives, where
+     * reaches no `"$@"`. So nothing a caller writes after `--` arrives, where
      * `-s unit` and `-s functional` pass a path and a filter through. A
      * Playwright-only diff therefore costs the whole suite, and the entry says
-     * so beside the command — a session read the old wording as an offer to
-     * narrow and got no reportable evidence out of it (`D-KNW-068`).
+     * so beside the command. A session read the old words as an offer to narrow
+     * and got no reportable evidence out of it (`D-KNW-068`).
      *
      * The local commands the prepare suite prints keep their place and carry
-     * what they need: they run on the host, where the browsers are an install of
-     * their own, while the containerised path never asks.
+     * what they need. They run on the host, where the browsers are an install
+     * of their own, while the container path never asks.
      */
     #[Requirement('R-KNW-067')]
     #[Test]
@@ -2353,20 +2294,20 @@ final class KnowledgeTest extends TestCase
      * A suite that waits for a keypress says it needs a terminal.
      *
      * `runPlaywright()` ends in `read ... </dev/tty`, which no container flag
-     * removes: without a controlling terminal the redirect fails, the wait
-     * ends, the cleanup takes the instance the suite exists to leave standing,
-     * and the exit code is still the one from before the wait. So the run
-     * reports SUCCESS having done the opposite of what was asked, which is the
-     * failure a reading session cannot see — the same shape `cglGit` has above.
+     * removes. Without a control terminal the redirect fails and the wait ends.
+     * The cleanup takes the instance the suite exists to leave up, and the exit
+     * code is still the one from before the wait. So the run reports SUCCESS
+     * after the opposite of what the caller asked, which is the failure a
+     * session that reads cannot see. The same shape `cglGit` has above.
      * `feedback/2026-08-13-214729` lost the instance that way with `CI=true`
      * set, which the note beside it read as covering exactly this.
      *
-     * The cleanup is named rather than its outcome, because the outcome holds
-     * for the run that reaches it and for no other: a run killed earlier leaves
-     * both containers up and serving, and a session read the unqualified
-     * sentence as "the instance is gone" while it was still answering
-     * (`feedback/2026-08-24-225044`). So the notes carry how what is running is
-     * read and how it is stopped.
+     * The note names the cleanup rather than its outcome, because the outcome
+     * holds for the run that reaches it and for no other. A run killed earlier
+     * leaves both containers up and in service. A session read the unqualified
+     * sentence as "the instance is gone" while it still answered
+     * (`feedback/2026-08-24-225044`). So the notes carry how to read what runs
+     * and how to stop it.
      */
     #[Requirement('R-KNW-068')]
     #[Test]
@@ -2418,8 +2359,8 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
-     * The innermost entries that name such a suite, so the condition is looked
-     * for beside the command rather than anywhere in the file.
+     * The innermost entries that name such a suite, so the search for the
+     * condition reads beside the command rather than anywhere in the file.
      *
      * @param array<mixed> $data
      *

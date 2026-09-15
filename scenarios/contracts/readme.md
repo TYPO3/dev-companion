@@ -1,19 +1,19 @@
 # Targeted contract cases
 
-These cases name a concrete task or failure mode so one behavior can be held
-still: routing to a backend-module workflow, preserving an existing test
-harness, withholding a version-bound component, or handing verified behavior
-from one skill to another.
+These cases name a concrete task or failure mode so a test can hold one behavior
+still. The route to a backend-module workflow, a test harness that survives, a
+version-bound component withheld, or verified behavior handed from one skill to
+another.
 
 They are intentionally more specific than a forward review. They answer “does
 this known task shape still receive the required workflow?” They do not answer
-“can an agent inspect an unfamiliar repository and decide what matters?” and
-therefore do not receive recorded forward runs or a `Status today`.
+“can an agent inspect an unfamiliar repository and decide what matters?” So they
+receive no recorded forward runs and no `Status today`.
 
 `bin/cli scenarios:contract <id>` prints a case and its criteria. Named no case
 it prints the ones whose **Held by** says `not guarded`, and either form exits
-nonzero where a case is one of them — that is what makes the recurring todo
-reading them due, so a case that later gets a test stops asking to be read.
+nonzero where a case is one of them. That is what makes the recurring todo that
+reads them due, so a case that later gets a test no longer asks for a read.
 PHPUnit holds the files to the contract format; the relevant tool and skill
 tests hold the behavior directly.
 
@@ -26,16 +26,16 @@ tests hold the behavior directly.
 | `boundary` | A clean decline and correct route elsewhere is the required behavior. |
 
 A forward review settles its mark with a run. A contract case has no run, so its
-state would be a claim nobody ever answers — which is the drift the forward side
-was just rid of. So every case carries a **Held by** line naming the tests that
+state would be a claim nobody ever answers. That is the drift the forward side
+just got rid of. So every case carries a **Held by** line naming the tests that
 hold it, or saying in as many words that something is not guarded. A test named
-there has to exist: `ScenariosTest::everyContractCaseNamesWhatHoldsIt` checks
-both halves, so a test renamed or deleted takes the case's claim down with it
-rather than leaving it standing.
+there has to exist. `ScenariosTest::everyContractCaseNamesWhatHoldsIt` checks
+both halves, so a renamed or deleted test takes the case's claim down with it
+rather than leaves it in place.
 
-`held` and `not guarded` can appear together — the case names the tests that
-hold most of it and the part nothing covers, the way a requirement does. A case
-with nothing behind it at all is a case whose state is fiction.
+`held` and `not guarded` can appear together. The case names the tests that hold
+most of it and the part nothing covers, the way a requirement does. A case with
+nothing behind it at all is a case whose state is fiction.
 
 ## Where a case lives
 

@@ -18,8 +18,8 @@ and [contracts/](../contracts/readme.md) for the targeted cases these are not.
 
 Three of the failures below **How it fails** stand in all three reviews, each in
 its own wording, and a fourth in two of them. They are what a broad review goes
-wrong at whatever it is reviewing, so the next review is written with its own
-failures rather than these:
+wrong at whatever it reviews, so the next review comes with its own failures
+rather than these:
 
 - **The corpus instead of this thing** — the generic TYPO3 checklist, every
   subsystem an extension might need, the whole contribution guide.
@@ -31,8 +31,8 @@ failures rather than these:
   asked for, or a recommendation reported as a verified defect.
 
 The three lists still carry their own wordings rather than naming these. What a
-review words as its criteria is what its recorded run was judged against, so
-rewriting one resets that run — measured on 2026-09-01, and the trade is three
+review words as its criteria is what its recorded run stands judged against, so
+a rewrite of one resets that run. Measured on 2026-09-01, and the trade is three
 forward runs against three sentences.
 
 ## Status of a forward review
@@ -45,17 +45,17 @@ forward runs against three sentences.
 | `partial`  | Answered, but not for every audience or not to the depth the task needs.       | Record which half was missing.                                              |
 | `gap`      | An accepted requirement that is not met yet, or knowledge that does not exist. | Record what the task needed, not that it fell short.                        |
 
-`boundary` and `gap` are not the same thing. A boundary is an answer — "this
-server does not cover it, the documentation does" — and it can be given
+`boundary` and `gap` are not the same thing. A boundary is an answer, "this
+server does not cover it, the documentation does", and an agent can give it
 perfectly. A gap is an answer that ought to exist and does not.
 
-Only these are run and recorded. One run is one file below [runs/](../runs/),
-and it is what the **Status today** line of a review rests on: the environment,
-the server it ran against, the skills that activated, the tools the session
-called, and one judgment with evidence per criterion. The verdict is not written
-into it — it follows from the judgments, and a review whose mark disagrees with
-what its run establishes is a failing check rather than a sentence nobody
+Only these run and get a record. One run is one file below [runs/](../runs/),
+and it is what the **Status today** line of a review rests on. It holds the
+environment, the server it ran against, the skills that activated, the tools the
+session called, and one judgment with evidence per criterion. The verdict stands
+nowhere in it. It follows from the judgments. A review whose mark disagrees with
+what its run establishes is a failed check rather than a sentence nobody
 rereads.
 
-How one is run, judged, and read when it stops without an error:
+How to run one, judge it, and read it when it stops without an error:
 [documentation/records/forward-runs.rst](../../documentation/records/forward-runs.rst).

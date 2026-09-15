@@ -10,16 +10,17 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 /**
  * The drift between a range an entry records and the one the checkouts carry.
  *
- * Shared by the two checks that verify a recorded range — the system extensions
- * and the worked examples — because one wording for a drift is what makes two
- * reports readable as one kind of finding.
+ * Shared by the two checks that verify a recorded range, the system extensions
+ * and the worked examples. One wording for a drift is what makes two reports
+ * readable as one kind of finding.
  */
 final class RangeReport
 {
     /**
-     * Whether the recorded since/until still says which versions ship an extension.
-     * A range with a hole in it is reported as such: it cannot be expressed, and an
-     * extension that came back is a different statement from one that never left.
+     * Whether the recorded since/until still says which versions ship an
+     * extension. A range with a hole in it comes back as such. No range can
+     * express it, and an extension that came back is a different statement from
+     * one that never left.
      *
      * @param array<string, mixed> $entry
      * @param array<int, int> $majors
@@ -60,10 +61,10 @@ final class RangeReport
 
     /**
      * The first covered major from which an entry holds without a gap up to the
-     * newest, or null when it holds everywhere. An entry with a hole in it binds
-     * on the newest unbroken run, so what is older than the hole is withheld — a
-     * range cannot express a gap, and such an entry needs splitting rather than
-     * a number.
+     * newest, or null when it holds everywhere. An entry with a hole in it
+     * binds on the newest unbroken run, so what is older than the hole stays
+     * out. A range cannot express a gap, and such an entry needs a split rather
+     * than a number.
      *
      * @param array<int, bool> $holds
      */

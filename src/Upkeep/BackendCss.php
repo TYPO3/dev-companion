@@ -7,11 +7,11 @@ namespace TYPO3\DevCompanion\Upkeep;
 /**
  * The compiled backend stylesheet of one core checkout, read as relationships.
  *
- * The core commits this file on every branch, so where a class sits is read
- * rather than installed, and all four covered majors are read at once. What a
- * selector proves is that the core styles that combination — strong evidence of
- * intent and not a promise, which is why `D-CAT-008` keeps the wording of the
- * answer apart from the derivation.
+ * The core commits this file on every branch. So where a class sits comes from
+ * a read rather than an install, and one pass reads all four covered majors.
+ * What a selector proves is that the core styles that combination. That is
+ * strong evidence of intent and not a promise, which is why `D-CAT-008` keeps
+ * the wording of the answer apart from the derivation.
  */
 final class BackendCss
 {
@@ -48,10 +48,10 @@ final class BackendCss
     }
 
     /**
-     * Where `$class` sits relative to `$root`: `around` where a selector makes
-     * it an ancestor of the root, `below` where it makes it a descendant, `on`
-     * where the two are written on one element. Null where no selector places
-     * them together, which is the honest answer for a modifier that carries no
+     * Where `$class` sits relative to `$root`. `around` where a selector makes
+     * it an ancestor of the root. `below` where it makes it a descendant. `on`
+     * where the two stand on one element. Null where no selector places them
+     * together, which is the honest answer for a modifier that carries no
      * position to get wrong.
      */
     public function position(string $class, string $root): ?string
@@ -152,7 +152,7 @@ final class BackendCss
             $selector = trim($head);
             $head = '';
             if ($selector === '' || $selector[0] === '@') {
-                // an at-rule: its own block holds the selectors, so keep reading
+                // an at-rule: its own block holds the selectors, so read on
                 continue;
             }
             foreach (explode(',', $selector) as $one) {
@@ -162,10 +162,10 @@ final class BackendCss
                 }
             }
             // Skip the declarations, which hold no selector. The depth is
-            // tested first so that closing the block leaves $i on the brace:
-            // incrementing past it here and again in the loop below swallows
-            // the first character of the next selector, which a stylesheet
-            // written on one line is entirely made of.
+            // tested first so that the close of the block leaves $i on the
+            // brace: an increment past it here and again in the loop below
+            // swallows the first character of the next selector, which a
+            // stylesheet written on one line is entirely made of.
             $depth = 1;
             while ($depth > 0 && ++$i < $length) {
                 $depth += match ($css[$i]) {
@@ -180,9 +180,9 @@ final class BackendCss
     }
 
     /**
-     * The compounds of a selector, in order. The combinator between them is
-     * dropped: a child and a descendant place a class the same way, and the
-     * difference is not one an answer acts on.
+     * The compounds of a selector, in order. The combinator between them goes.
+     * A child and a descendant place a class the same way, and the difference
+     * is not one an answer acts on.
      *
      * @return list<string>
      */
@@ -194,10 +194,10 @@ final class BackendCss
     }
 
     /**
-     * Whether one compound carries `$name`, which is a class where it is
-     * written with its dot and an element tag where it is not. The caller says
-     * which, because `table-fit` and `typo3-backend-icon` are told apart by
-     * nothing in the name itself.
+     * Whether one compound carries `$name`, which is a class where it stands
+     * with its dot and an element tag where it does not. The caller says which,
+     * because `table-fit` and `typo3-backend-icon` are told apart by nothing in
+     * the name itself.
      */
     private static function compoundHas(string $compound, string $name): bool
     {

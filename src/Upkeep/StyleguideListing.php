@@ -9,18 +9,17 @@ use Symfony\Component\Finder\Finder;
 /**
  * The components the styleguide of one core checkout lists.
  *
- * What the styleguide lists is public API and what it does not list is not to
- * be used or suggested — the maintainer, 2026-08-24. So this is a boundary
- * rather than a demo, and it is read out of the checkout like everything else:
- * the controller offers one action per component, and that list is the whole of
- * it.
+ * What the styleguide lists is public API, and nobody may use or suggest what
+ * it does not list. The maintainer, 2026-08-24. So this is a boundary rather
+ * than a demo, and it comes out of the checkout like everything else. The
+ * controller offers one action per component, and that list is the whole of it.
  *
- * Whether a single class is demonstrated is not read here and cannot be. A demo
- * renders its markup through a ViewHelper or a web component as often as it
- * writes it — `<be:avatar>` spells no avatar class at all — and what the
- * template does write is as often the styleguide's own page furniture, such as
- * the `indicators-grid` the status indicators are laid out in. Read on
- * 2026-08-24: that question belongs to a rendered styleguide.
+ * Whether a demo shows a single class is not readable here. A demo renders its
+ * markup through a ViewHelper or a web component as often as it writes it,
+ * `<be:avatar>` spells no avatar class at all. What the template does write is
+ * as often the styleguide's own page furniture, such as the `indicators-grid`
+ * that lays out the status indicators. Read on 2026-08-24: that question
+ * belongs to a rendered styleguide.
  *
  * The styleguide is a system extension from 13.4 and an installable package
  * before it, so a checkout that ships none answers nothing here.
@@ -29,7 +28,10 @@ final class StyleguideListing
 {
     private const CONTROLLER = '/typo3/sysext/styleguide/Classes/Controller/ComponentsController.php';
 
-    /** Templates and the partials they render, which is where a demo's markup is written. */
+    /**
+     * Templates and the partials they render, which is where a demo's markup
+     * stands.
+     */
     private const TEMPLATES = '/typo3/sysext/styleguide/Resources/Private';
 
     /** The action that lists the rest, which is the page and not a component. */
@@ -67,10 +69,10 @@ final class StyleguideListing
     /**
      * Whether a demo writes this element.
      *
-     * A tag survives being read out of a template where a class name does not:
-     * a demo loops over the variants it assigns and builds `badge-{variant}`,
-     * and it never builds a tag name the same way. Read on 2026-08-24, this
-     * finds 13 of the 137 the core declares — `D-CAT-009`.
+     * A tag survives a read out of a template where a class name does not. A
+     * demo loops over the variants it assigns and builds `badge-{variant}`, and
+     * it never builds a tag name the same way. Read on 2026-08-24, this finds
+     * 13 of the 137 the core declares — `D-CAT-009`.
      */
     public function demonstrates(string $tag): bool
     {

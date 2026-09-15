@@ -10,10 +10,10 @@ use TYPO3\DevCompanion\Feedback\Channel;
  * The feedback that arrived from outside this repository and are still open,
  * each with whether a todo already names it.
  *
- * That flag is the whole difference between a feedback that is waiting and one
+ * That flag is the whole difference between a feedback that waits and one
  * somebody has taken on. `bin/cli todo:check` reports the feedback no todo
- * answers for, and `feedback:list` marks the ones that have — two readings of
- * one relation, kept here so they cannot disagree about it.
+ * answers for, and `feedback:list` marks the ones that have. Two reads of one
+ * relation, kept here so they cannot disagree about it.
  */
 final class OpenFeedback
 {

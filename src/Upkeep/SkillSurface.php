@@ -13,9 +13,9 @@ use TYPO3\DevCompanion\Sdk\Skills;
  * by.
  *
  * The explanatory head stays hand-written. The listing, workflow bodies and
- * references are the repeated facts: keeping them by hand would leave a
- * renamed, drafted or newly published skill documented differently from what
- * the next install puts into a project.
+ * references are the repeated facts. Kept by hand, a renamed, drafted or newly
+ * published skill would read differently from what the next install puts into a
+ * project.
  */
 final class SkillSurface
 {
@@ -53,7 +53,7 @@ final class SkillSurface
         return $files;
     }
 
-    /** The catalog head is prose; only the listing and its tree are replaced. */
+    /** The catalog head is prose; only the listing and its tree change. */
     private static function indexPage(): string
     {
         $contents = (string) file_get_contents(self::index());
@@ -125,8 +125,8 @@ final class SkillSurface
 
     /**
      * The copied file rather than a conversion of it. Indentation belongs to
-     * the directive and the rendered code block drops it again, leaving every
-     * byte of the Markdown visible as the skill carries it.
+     * the directive and the rendered code block drops it again, so every byte
+     * of the Markdown shows as the skill carries it.
      *
      * @return list<string>
      */

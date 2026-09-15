@@ -5,29 +5,30 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Upkeep;
 
 /**
- * Whether a requirement is built, and whether anything holds it there.
+ * Whether a requirement stands in the code, and whether anything holds it
+ * there.
  *
- * Two of the three are written in the front matter and the third is derived,
- * which is why this is not simply the `status` field: a requirement that says it
- * is `held` and names no test is not held by anything, and from a listing it
- * looks exactly like one that is. None of the three is an error, because whether
- * an entry is worth working off is a judgement — `D-FBK-001`.
+ * Two of the three stand in the front matter and the third derives, which is
+ * why this is not simply the `status` field. A requirement that says it is
+ * `held` and names no test has nothing that holds it. From a listing it looks
+ * exactly like one that has. None of the three is an error, because whether an
+ * entry is worth the work is a judgement, `D-FBK-001`.
  */
 enum RequirementState: string
 {
     /** Written down and not built. */
     case Open = 'open';
 
-    /** Built, and nothing would catch it going wrong. */
+    /** Built, and nothing would catch it when it goes wrong. */
     case NotGuarded = 'not guarded';
 
     /** Built, and the tests it names hold it there. */
     case Held = 'held';
 
     /**
-     * The states that may be written in the front matter. `not guarded` is
-     * never one of them: it is what a claim of `held` turns out to be when the
-     * entry names no test, and an entry may not claim it of itself.
+     * The states the front matter may carry. `not guarded` is never one of
+     * them. It is what a claim of `held` turns out to be when the entry names
+     * no test. An entry may not claim it of itself.
      *
      * @return array<int, self>
      */
@@ -44,7 +45,7 @@ enum RequirementState: string
         return array_map(static fn(self $state): string => $state->value, self::written());
     }
 
-    /** Whether something would fail if the sentence stopped being true. */
+    /** Whether something would fail if the sentence stopped to be true. */
     public function isGuarded(): bool
     {
         return $this === self::Held;

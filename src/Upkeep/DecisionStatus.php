@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Upkeep;
 
 /**
- * What has come back about a decision since it was written.
+ * What has come back about a decision since its commit.
  *
- * Not a workflow: a decision is written by the commit that implements it, so
- * every entry here is already in the code. What the status answers is the one
- * question a reader has on opening a file that may be a year old — has anybody
- * been back to the **Wrong if**, and what did they find.
+ * Not a workflow: the commit that implements a decision writes it, so every
+ * entry here is already in the code. What the status answers is the one
+ * question a reader has when they open a file that may be a year old. Has
+ * anybody been back to the **Wrong if**, and what did they find.
  *
- * `corrected` used to answer that and three other things besides — on
- * `D-DIS-003`, a measurement where the **Wrong if** had explicitly not fired —
- * so a reader could not tell from the status whether to rely on the entry.
+ * `corrected` used to answer that and three other things besides. On
+ * `D-DIS-003` it stood for a measurement where the **Wrong if** had explicitly
+ * not fired. So a reader could not tell from the status whether to rely on the
+ * entry.
  */
 enum DecisionStatus: string
 {
@@ -49,10 +50,10 @@ enum DecisionStatus: string
     /**
      * The dated lines, in the order a file may carry them.
      *
-     * An entry may carry several, because a decision has a history: `D-KNW-003`
-     * was confirmed by a run on the morning of 2026-08-02 and revoked by the
-     * evidence that arrived the same day. The status names the most recent one,
-     * so what a reader relies on is the last line rather than the only one.
+     * An entry may carry several, because a decision has a history. A run on
+     * the morning of 2026-08-02 confirmed `D-KNW-003`, and the evidence that
+     * arrived the same day revoked it. The status names the most recent one, so
+     * what a reader relies on is the last line rather than the only one.
      *
      * @return array<int, string>
      */

@@ -11,11 +11,12 @@ use TYPO3\DevCompanion\Process\SystemRunner;
 /**
  * Where the core checkouts live, and the git this repository reads them with.
  *
- * Two commands stand on this — `checkouts:update` creates them, `checkouts:status`
- * reports what is there — and two more read them: `components:check` and its three siblings verify
- * against one, `tools:record` answers from one. What they share is the
- * directory and the one way a command in here runs git: captured rather than
- * streamed, so a command decides what of it reaches its caller.
+ * Two commands stand on this: `checkouts:update` creates them,
+ * `checkouts:status` reports what is there. Two more read them:
+ * `components:check` and its three siblings verify against one, `tools:record`
+ * answers from one. What they share is the directory and the one way a command
+ * in here runs git. Captured rather than streamed, so a command decides what of
+ * it reaches its caller.
  */
 final class Checkouts
 {
@@ -38,10 +39,10 @@ final class Checkouts
      * What a checkout carries that `checkouts:update` did not put there, an
      * ignored directory collapsed to the one entry git reports it as.
      *
-     * `--ignored` is the whole of it: everything `composer install` writes into
-     * a core checkout is ignored by the core's own `.gitignore`, so a plain
-     * status calls such a tree clean while the console it installed answers.
-     * A git that cannot answer reports nothing rather than a difference — the
+     * `--ignored` is the whole of it. The core's own `.gitignore` covers
+     * everything `composer install` writes into a core checkout. So a plain
+     * status calls such a tree clean while the console it installed answers. A
+     * git that cannot answer reports nothing rather than a difference. The
      * question is what the tree carries, and "not a checkout at all" is not an
      * answer to it.
      *
@@ -68,10 +69,10 @@ final class Checkouts
     /**
      * What leaves this process, and the seam a unit test takes instead.
      *
-     * `R-COD-003`: a unit test stubs what is outside it. `Todo::standing()`
-     * and `Todo::linked()` ask git through here, and the test that held them
-     * used to answer by making a real worktree and a real branch in whatever
-     * checkout the suite was running in — a process, and one that wrote.
+     * `R-COD-003`: a unit test stubs what is outside it. `Todo::standing()` and
+     * `Todo::linked()` ask git through here. The test that held them used to
+     * make a real worktree and a real branch in whatever checkout the suite ran
+     * in. That was a process, and one that wrote.
      */
     private static ?CommandRunner $runner = null;
 
@@ -84,14 +85,14 @@ final class Checkouts
     /**
      * One command, with both its streams as one string.
      *
-     * Almost every caller runs git, which is what it was named for. The one
-     * that does not is the claim setting up a worktree: `composer install`
-     * belongs to the same step and starting it any other way would be a second
-     * way to start a process, kept apart by nothing but the name.
+     * Almost every caller runs git, which is what the name says. The one that
+     * does not is the claim that sets up a worktree. `composer install` belongs
+     * to the same step. Any other start for it would be a second way to start a
+     * process, apart from the first by nothing but the name.
      *
      * Unlike the other two callers of `SystemRunner` this one leaves stdin
-     * inherited — which is what git wants, and why it was written separately
-     * in the first place. It is a parameter rather than two implementations.
+     * inherited. That is what git wants, and why it stood apart in the first
+     * place. It is a parameter rather than two implementations.
      *
      * @param list<string> $command
      *

@@ -7,29 +7,29 @@ namespace TYPO3\DevCompanion\Upkeep;
 /**
  * Every tool driven once on a hit and once on a miss, as arguments.
  *
- * Two things read this and they need the same table: `ToolContractTest` holds
+ * Two things read this and they need the same table. `ToolContractTest` holds
  * every answer to the schema its tool declares, and `bin/cli tools:record`
  * writes down what a filled answer looks like. A second table would drift, and
- * the recording would then illustrate calls nothing validates. It lives in
+ * the record would then illustrate calls nothing validates. It lives in
  * `Upkeep` rather than in `tests/` because a command may not depend on a test
  * class. The calls that reach a host outside this repository are here rather
- * than behind a skip list, because a host that does not answer is an answer the
- * schema declares — `D-DOC-008`.
+ * than behind a skip list. A host that does not answer is an answer the schema
+ * declares, `D-DOC-008`.
  */
 final class ToolCalls
 {
     /**
      * The offered tools this table leaves out, each with why, in the words a
-     * reader of the documentation is given them in.
+     * reader of the documentation gets.
      *
      * It is data rather than a paragraph in this file because two readers need
      * it and neither of them opens this class. `ToolSurface` states the absence
-     * at the tool somebody is standing at in `documentation/server/tools/`,
-     * where a missing link otherwise renders as nothing at all, and
-     * `ToolAnswers` says the same on the map of the recording. `ToolAnswersTest`
-     * holds this list against the table, so the next tool to drop out has to
-     * arrive here with a reason before the suite goes green again — which is
-     * the whole of what the prose could not do.
+     * at the tool somebody stands at in `documentation/server/tools/`, where an
+     * absent link otherwise renders as nothing at all. `ToolAnswers` says the
+     * same on the map of the record. `ToolAnswersTest` holds this list against
+     * the table. So the next tool to drop out has to arrive here with a reason
+     * before the suite goes green again. That is the whole of what the prose
+     * could not do.
      *
      * @return array<string, string>
      */
@@ -47,20 +47,20 @@ final class ToolCalls
     }
 
     /**
-     * The tools whose answered half is derived rather than recorded.
+     * The tools whose answered half derives rather than comes from a record.
      *
-     * A recording is evidence because the answer belongs to an installation
-     * nobody else has. These eight read none: what reaches their answer is
-     * `knowledge/` and two declarations about the root — that it is the core
+     * A record is evidence because the answer belongs to an installation nobody
+     * else has. These eight read none. What reaches their answer is
+     * `knowledge/` and two declarations about the root: that it is the core
      * monorepo, and which TYPO3 major that is. So the answer is the same for
-     * every caller on that major, which makes it derivable, and what is
-     * derivable is checked rather than believed.
+     * every caller on that major, which makes it derivable. A check reads what
+     * derives rather than trusts it.
      *
-     * Measured on 2026-08-04 against `.checkouts/14.3` and against a root
-     * holding nothing but those two declarations: these eight came back
-     * byte-identical over their 20 calls, and every other tool moved.
+     * Measured on 2026-08-04 against `.checkouts/14.3` and against a root with
+     * nothing but those two declarations. These eight came back byte-identical
+     * over their 20 calls, and every other tool moved.
      * `typo3_translation_domain_lookup` is the near miss and belongs to the
-     * recorded half — it prints the installation's exact version into its text,
+     * recorded half. It prints the installation's exact version into its text,
      * so a derived page would state a patch level no checkout here has.
      *
      * @return list<string>
@@ -82,11 +82,11 @@ final class ToolCalls
     /**
      * The calls, keyed by what each one is an example of.
      *
-     * An installation-backed tool answers from whatever the caller is standing
-     * in: nothing in a test run, so the entry exercises the unsupported path
-     * there, and the packages of a core checkout when `tools:record` is pointed
-     * at one. Both are worth seeing and neither is named in the key, because
-     * the key describes the call rather than the answer.
+     * An installation-backed tool answers from whatever the caller stands in.
+     * Nothing in a test run, so the entry exercises the unsupported path there,
+     * and the packages of a core checkout when `tools:record` points at one.
+     * Both are worth a look and neither stands in the key, because the key
+     * describes the call rather than the answer.
      *
      * @return array<string, array{0: string, 1: array<string, mixed>}>
      */
@@ -95,8 +95,8 @@ final class ToolCalls
         return [
             'scope' => ['typo3_server_scope', []],
             // The two forms side by side, because what the second one is for is
-            // the difference between them: the same call asking only whether an
-            // installation and its console can be reached.
+            // the difference between them: the same call that asks only whether
+            // an installation and its console answer.
             'scope: one section' => ['typo3_server_scope', ['sections' => ['installation']]],
             'rules: hit' => ['typo3_rule_lookup', ['query' => 'deprecation']],
             'rules: miss' => ['typo3_rule_lookup', ['query' => 'quantum entanglement pineapple']],
@@ -132,13 +132,13 @@ final class ToolCalls
             'forge: what an issue says and what was decided' => ['typo3_forge_lookup', [
                 'issue' => '110348',
             ]],
-            // A report about rendering, whose evidence is in seven screenshots
+            // A report about the render, whose evidence is in seven screenshots
             // and whose comments are the filenames of them.
             'forge: an issue whose evidence hangs off it' => ['typo3_forge_lookup', [
                 'issue' => '88556',
             ]],
-            // Half of this journal is a review bot pinging the tracker, which
-            // is what a session sweeping candidates is paying for.
+            // Half of this journal is a review bot that pings the tracker,
+            // which is what a session that sweeps candidates pays for.
             'forge: an issue without the patch-set pings' => ['typo3_forge_lookup', [
                 'issue' => '14858',
                 'notes' => 'people',
@@ -185,8 +185,8 @@ final class ToolCalls
                 'backlog' => 'oldest',
                 'assignedTo' => 'daniel',
             ]],
-            // What somebody says out loud, which the tracker cannot be asked:
-            // it ANDs its filters, so the union is two reads and a merge.
+            // What somebody says out loud, which the tracker cannot answer: it
+            // ANDs its filters, so the union is two reads and a merge.
             'forge: everything one person has touched' => ['typo3_forge_lookup', [
                 'backlog' => 'stale',
                 'involving' => 'Frank Nägler',
@@ -207,8 +207,8 @@ final class ToolCalls
             'gerrit: one change by number' => ['typo3_gerrit_lookup', [
                 'change' => '89011',
             ]],
-            // The head of a stack, which answers like a change standing alone
-            // until the relation chain is in it — `D-ANS-094`.
+            // The head of a stack, which answers like a change that stands
+            // alone until the relation chain is in it — `D-ANS-094`.
             'gerrit: a change that is one part of a stack' => ['typo3_gerrit_lookup', [
                 'change' => '91563',
             ]],
@@ -235,9 +235,9 @@ final class ToolCalls
                 'queries' => ['page title event'],
                 'targetVersion' => '999',
             ]],
-            // The three shapes of the reporting session's own question, in one
-            // call: an identifier that resolves, one it guessed wrong, and the
-            // dead URL the guess came from — `D-ANS-118`.
+            // The three shapes of the reporter's own question, in one call: an
+            // identifier that resolves, one it guessed wrong, and the dead URL
+            // the guess came from — `D-ANS-118`.
             'permalink: identifiers and a URL at once' => ['typo3_permalink_lookup', [
                 'identifiers' => ['t3tca:columns-onchange', 'typo3-cms-lowlevel:start'],
                 'urls' => ['https://docs.typo3.org/m/typo3/reference-tca/11.5/en-us/Columns/Properties/OnChange.html'],
@@ -283,7 +283,7 @@ final class ToolCalls
             'schema: every table' => ['typo3_schema_lookup', []],
             // The five states: a table of this project's own, the same one
             // counted rather than read, the distribution of one column with the
-            // rows departing from its default, one TCA does not describe, and
+            // rows that depart from its default, one TCA does not describe, and
             // the list of what it will read.
             'records: a table of this project' => ['typo3_record_lookup', ['table' => 'tx_acme_events_event']],
             'records: counted rather than read' => ['typo3_record_lookup', [
@@ -317,8 +317,9 @@ final class ToolCalls
                 'extension' => 'blog',
                 'limit' => 3,
             ]],
-            // The release audit's own question, in the form it is asked: the
-            // number ext_emconf.php names, held against what is published.
+            // The release audit's own question, in the form the audit asks it:
+            // the number ext_emconf.php names, held against what the registry
+            // publishes.
             'ter: is this version already out' => ['typo3_ter_lookup', [
                 'extension' => 'blog',
                 'extensionVersion' => '14.0.1',

@@ -8,14 +8,14 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 
 /**
  * A package the core pins rather than contains, and which release of it each
- * covered TYPO3 major is read against.
+ * covered TYPO3 major reads against.
  *
- * `.checkouts/` holds the core alone, so a statement whose subject is one of
- * these packages would otherwise be verified against whichever vendor tree
- * happens to be on the machine — evidence the next session cannot reproduce.
- * Each is kept beside the core checkouts instead, at a tag rather than at a
- * branch, and which tag that is is derived from the covered branch's own
- * constraint rather than recorded here — `D-KNW-106`.
+ * `.checkouts/` holds the core alone. So a statement whose subject is one of
+ * these packages would otherwise verify against whichever vendor tree happens
+ * to be on the machine. That is evidence the next session cannot reproduce.
+ * Each stands beside the core checkouts instead, at a tag rather than at a
+ * branch. Which tag that is comes from the covered branch's own constraint
+ * rather than from a record here, `D-KNW-106`.
  */
 final class PinnedPackage
 {
@@ -24,7 +24,7 @@ final class PinnedPackage
         public readonly string $repository,
         /** The manifest section the core pins it in. */
         public readonly string $section,
-        /** What it is called below `.checkouts/`, mirror and worktrees alike. */
+        /** Its name below `.checkouts/`, mirror and worktrees alike. */
         public readonly string $directory,
         /** What it is to a caller of this server, for the line a command prints. */
         public readonly string $subject,
@@ -62,10 +62,10 @@ final class PinnedPackage
      * The release line a core branch pins itself to: a major as a string, or the
      * branch name where the pin is a development one.
      *
-     * Asked over a window rather than parsed into a range, the way the Fluid
-     * engine is asked in `bin/cli versions:check`: the question is only ever
-     * "does this pin line 9", and a pin that answers for two lines is the case
-     * this exists to catch.
+     * Asked over a window rather than parsed into a range, the way `bin/cli
+     * versions:check` asks the Fluid engine. The question is only ever "does
+     * this pin line 9", and a pin that answers for two lines is the case this
+     * exists to catch.
      */
     public static function line(string $constraint): ?string
     {
@@ -98,7 +98,7 @@ final class PinnedPackage
         return $checkouts . '/' . $this->directory . '.git';
     }
 
-    /** Where one release line is checked out. */
+    /** Where one release line has its checkout. */
     public function worktree(string $checkouts, string $line): string
     {
         return $checkouts . '/' . $this->directory . '/' . $line;
@@ -108,9 +108,9 @@ final class PinnedPackage
      * The release each covered major pairs with, as the core checkouts say it.
      *
      * `constraint` is empty where the branch pins nothing, and `line` and `ref`
-     * are null where the pin names no single release line — both are reported
-     * rather than guessed at, because a pin that spans two lines means the core
-     * major no longer says which release a statement was read in.
+     * are null where the pin names no single release line. Both come as reports
+     * rather than guesses. A pin that spans two lines means the core major no
+     * longer says which release a statement came from.
      *
      * @return array<int, array{major: int, branch: string, constraint: string, line: ?string, ref: ?string, path: string}>
      */
@@ -138,7 +138,7 @@ final class PinnedPackage
     }
 
     /**
-     * The ref a line is read at: its newest tag, or the branch itself where the
+     * The ref a line reads at: its newest tag, or the branch itself where the
      * line is a development one.
      */
     public function ref(string $checkouts, string $line): ?string

@@ -9,9 +9,9 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 /**
  * What `components:derive` writes, built from a set of core checkouts.
  *
- * Apart from the command so that `components:check` can build the same thing and
- * compare it against what is committed: derived data nothing re-reads is
- * curated data with a longer path to going stale — `D-CAT-008`.
+ * Apart from the command so that `components:check` can build the same thing
+ * and compare it against the committed copy. Derived data nothing reads again
+ * is hand-kept data with a longer path to stale, `D-CAT-008`.
  */
 final class ComponentDerivation
 {
@@ -59,7 +59,8 @@ final class ComponentDerivation
     }
 
     /**
-     * Which majors ship a styleguide, which is where the boundary can be read.
+     * Which majors ship a styleguide, which is where a reader finds the
+     * boundary.
      *
      * @param array<int, string> $checkouts
      * @return list<int>
@@ -180,8 +181,8 @@ final class ComponentDerivation
 
     /**
      * The last major a fact holds on, or null where it reaches the newest one.
-     * An open range is written as an absent `until` throughout `knowledge/`, so
-     * a fact that is still true says nothing rather than naming today's major.
+     * An open range stands as an absent `until` throughout `knowledge/`, so a
+     * fact that is still true says nothing rather than names today's major.
      *
      * @param list<int> $majors
      */
@@ -197,11 +198,11 @@ final class ComponentDerivation
 
     /**
      * What the styleguide of each major lists, which is the public API
-     * boundary: a component it lists may be used and one it does not list may
-     * not. Only the listing is written — whether a single class is
-     * demonstrated cannot be read out of the templates, because a demo renders
-     * its markup through a ViewHelper or a web component as often as it writes
-     * it, and what is written is as often the styleguide's own page furniture.
+     * boundary. A caller may use a component it lists and not one it does not
+     * list. Only the listing goes out. Whether a demo shows a single class is
+     * not readable out of the templates. A demo renders its markup through a
+     * ViewHelper or a web component as often as it writes it. What it writes is
+     * as often the styleguide's own page furniture.
      *
      * @param array<int, StyleguideListing> $listings
      * @return list<array<string, mixed>>

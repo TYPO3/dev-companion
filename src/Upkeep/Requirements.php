@@ -10,11 +10,11 @@ use TYPO3\DevCompanion\Paths;
 /**
  * Reads requirements/, where every requirement is one file.
  *
- * The file used to be one document, and five ids had been handed out twice
- * before anybody noticed — which is what a list nobody can index looks like
- * from the inside. An id now decides the group directory and the file name, so
- * the check below is a comparison rather than a search, and the group listing
- * is generated from the files instead of maintained beside them.
+ * The file used to be one document, and five ids went out twice before anybody
+ * noticed. That is what a list nobody can index looks like from the inside. An
+ * id now decides the group directory and the file name, so the check below is a
+ * comparison rather than a search. The group listing comes from the files
+ * instead of a hand beside them.
  */
 final class Requirements
 {
@@ -40,7 +40,7 @@ final class Requirements
     ];
 
     /**
-     * The sections an entry is written in, in the order they have to appear.
+     * The sections an entry consists of, in the order they have to appear.
      * Where the demand came from is evidence and comes first; what holds it
      * there is the claim the suite keeps, and closes the entry.
      *
@@ -84,9 +84,9 @@ final class Requirements
     }
 
     /**
-     * The ids more than one file claims, each with the files claiming it,
-     * relative to the root. `all()` is keyed by id and keeps whichever of the
-     * two it read last, so the collision is only visible from the files.
+     * The ids more than one file claims, each with the files that claim it,
+     * relative to the root. `all()` keys by id and keeps whichever of the two
+     * it read last, so the collision is only visible from the files.
      *
      * @return array<string, array<int, string>>
      */
@@ -103,10 +103,10 @@ final class Requirements
     }
 
     /**
-     * What the failure says, which is all a reader of it gets: `todo:home`
+     * What the failure says, which is all a reader of it gets. `todo:home`
      * prints the tail of a red `composer ci` and adds nothing to it. Nothing
      * renumbers a requirement, so the message names the files and says that the
-     * move is by hand — `D-FBK-046`, and `D-DOC-015` for what by hand costs.
+     * move is by hand. `D-FBK-046`, and `D-DOC-015` for what by hand costs.
      *
      * @param array<string, array<int, string>> $duplicates
      */
@@ -153,7 +153,7 @@ final class Requirements
             return Listing::render(self::entries($group, ''));
         }
 
-        // The whole of it is read by group rather than as one run of 184 lines:
+        // The whole of it goes by group rather than as one run of 184 lines:
         // the id already sorts that way, and the heading is what says where the
         // run the reader is in stops.
         $listing = '';
@@ -172,8 +172,8 @@ final class Requirements
     /**
      * One group as a listing renders it.
      *
-     * The prefix is what the readme being written stands in: nothing from the
-     * group's own, the group's directory from the one above it.
+     * The prefix is what the readme under construction stands in: nothing from
+     * the group's own, the group's directory from the one above it.
      *
      * @return array<int, array{ref: string, path: string, says: string}>
      */
@@ -197,9 +197,9 @@ final class Requirements
     }
 
     /**
-     * `open` is written down and not built. Everything else is held by the
-     * tests it names, or says outright that nothing holds it — the third state
-     * is the one worth seeing in a listing, because it looks exactly like the
+     * `open` stands in the file and not in the code. Everything else has the
+     * tests it names, or says outright that nothing holds it. The third state
+     * is the one worth a look in a listing, because it looks exactly like the
      * first from afar.
      *
      * The three words are the state itself, and a reader that wants one of them
@@ -218,7 +218,7 @@ final class Requirements
     }
 
     /**
-     * The requirements a test holds, which is what a failing one prints.
+     * The requirements a test holds, which is what a red one prints.
      *
      * @return list<array{id: string, title: string, file: string}>
      */
@@ -251,8 +251,8 @@ final class Requirements
     }
 
     /**
-     * One file. Read on its own rather than through all(), which is keyed by
-     * id and would hide the second file claiming one.
+     * One file. Read on its own rather than through all(), which keys by id and
+     * would hide the second file that claims one.
      *
      * @return array{id: string, group: string, file: string, heading: string, written: string, title: string, status: string, judged: string, restsOn: array<int, string>, statement: string, heldBy: string, tests: list<string>}
      */
@@ -263,7 +263,7 @@ final class Requirements
         $matter = $head['matter'];
 
         // What holds the entry and is not a test: a `bin/cli` command, a half
-        // nothing guards, a clause saying what one of the tests holds. The
+        // nothing guards, a clause that says what one of the tests holds. The
         // tests themselves are the front matter, generated from the
         // `#[Requirement]` attributes they carry — `D-DOC-049`.
         $heldBy = self::field($contents, 'Held by');
@@ -278,20 +278,20 @@ final class Requirements
             'status' => Entry::value($matter, 'status'),
             // The day a session read this entry, found nothing holds it, and
             // decided it stays that way. `bin/cli unresolved:list` names what
-            // nobody has answered for, and a todo naming the id was the only
-            // answer it could see — so a requirement no test can hold, which is
-            // a legitimate state, could never leave the reading.
+            // nobody has answered for, and a todo that names the id was the
+            // only answer it could see — so a requirement no test can hold,
+            // which is a legitimate state, could never leave the read.
             'judged' => Entry::value($matter, 'judged'),
             // The decisions this requirement stands on. A decision can be
-            // revoked without anything noticing that a requirement was resting
-            // on it, which is the silent case decisions/ exists to prevent.
+            // revoked without any notice that a requirement rested on it, which
+            // is the silent case decisions/ exists to prevent.
             'restsOn' => Entry::names($matter, 'restsOn'),
             'statement' => $head['statement'],
             'heldBy' => $heldBy,
             // A test method where one holds it, a whole test class where the
             // class is the answer — `VersionsTest` in full is a claim about
-            // every method in it, and naming them one at a time would go stale
-            // on the next one written.
+            // every method in it, and a list of them one at a time would go
+            // stale on the next one written.
             'tests' => Entry::names($matter, 'heldBy'),
         ];
     }
@@ -301,8 +301,8 @@ final class Requirements
      * A section's body, to the next heading or the end of the file.
      *
      * They were bold labels on a paragraph until 2026-08-02. `Held by` names
-     * more than one test on 60 of the 123 entries and nine on one of them, and
-     * a comma-separated sentence is not what that is — see `D-DOC-004`.
+     * more than one test on 60 of the 123 entries and nine on one of them. A
+     * comma-separated sentence is not what that is, see `D-DOC-004`.
      */
     private static function field(string $contents, string $label): string
     {

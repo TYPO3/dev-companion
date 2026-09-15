@@ -5,39 +5,42 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Upkeep;
 
 /**
- * A core checkout this repository writes, holding nothing but what it is.
+ * A core checkout this repository writes, which holds nothing but what it is.
  *
- * Eight tools read nothing an installation contains: what reaches their answer
- * is `knowledge/` and two declarations about the root — that it is the core
+ * Eight tools read nothing an installation contains. What reaches their answer
+ * is `knowledge/` and two declarations about the root. That it is the core
  * monorepo rather than a project, and which TYPO3 major that is. So this writes
- * those and nothing else, and the emptiness is the point: a root with content
- * would put that content into a page claiming to be derived, which is
+ * those and nothing else, and the emptiness is the point. A root with content
+ * would put that content into a page that claims a derivation, which is
  * `D-DOC-012`'s first **Wrong if**. `Fixture` answers the opposite question,
  * and neither replaces the core checkout below `.checkouts/`.
  */
 final class CoreFixture
 {
-    /** Where it is written: beside the other fixture, ignored by git, rewritten whole. */
+    /**
+     * Where it stands: beside the other fixture, ignored by git, rewritten
+     * whole.
+     */
     public static function root(): string
     {
         return Fixture::directory() . '/checkout';
     }
 
     /**
-     * The version it states it is: the newest covered line that is released, at
+     * The version it states it is: the newest covered line with a release, at
      * its first patch.
      *
-     * The patch level is written rather than guessed at because nothing derived
-     * from here may carry it. `typo3_translation_domain_lookup` prints the
-     * installation's exact version into its answer and is out of the derived
-     * set for that reason, measured on 2026-08-04.
+     * The patch level stands here rather than as a guess because nothing
+     * derived from here may carry it. `typo3_translation_domain_lookup` prints
+     * the installation's exact version into its answer and is out of the
+     * derived set for that reason, measured on 2026-08-04.
      */
     public static function typo3Version(): string
     {
         return Environments::branch() . '.0';
     }
 
-    /** Writes it whole and hands back the root it was written to. */
+    /** Writes it whole and hands back the root it went to. */
     public static function write(): string
     {
         $root = self::root();

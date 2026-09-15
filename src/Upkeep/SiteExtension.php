@@ -9,16 +9,16 @@ namespace TYPO3\DevCompanion\Upkeep;
  *
  * TYPO3's base distribution installs no package of its own, so an installation
  * made here answers every question about what this project registers with
- * nothing — and the one `typo3_record_lookup` exists for, the rows of a table a
- * project-owned extension registers, could be recorded nowhere: the fixture
+ * nothing. The one `typo3_record_lookup` exists for, the rows of a table a
+ * project-owned extension registers, had nowhere to come from. The fixture
  * below `.fixtures/` has the extension and no database to open, and this
  * environment had the database and no extension. This is that package, and
- * `D-EVI-010` is why it is written rather than left to whoever runs a case.
+ * `D-EVI-010` is why it stands here rather than with whoever runs a case.
  *
- * It is written below `packages/`, where the distribution's own path repository
- * already looks, and it carries one table with a label column, rows enough that
- * the answer says where the records are edited, and the two states a count
- * separates — hidden and deleted.
+ * It goes below `packages/`, where the distribution's own path repository
+ * already looks. It carries one table with a label column and rows enough that
+ * the answer says where an editor edits the records. It has the two states a
+ * count separates, hidden and deleted.
  *
  * What attributes the table to this project is the `EXT:` reference in the
  * ctrl title and nothing else, which is what `Typo3Runtime::extensionIn` reads.
@@ -40,9 +40,9 @@ final class SiteExtension
     /**
      * The page the rows sit on: the root page the setup's `--create-site` makes.
      *
-     * One page rather than several, because what the answer is read for is how
-     * full the page an editor opens is, and rows spread thin over a tree say
-     * nothing about that.
+     * One page rather than several. A reader asks the answer how full the page
+     * an editor opens is, and rows spread thin over a tree say nothing about
+     * that.
      */
     public const PAGE = 1;
 
@@ -50,8 +50,8 @@ final class SiteExtension
      * Live rows, which is more pages of the record list than one.
      *
      * The sighting `D-AUD-017` rests on was a storage folder nobody could
-     * maintain through the generic list, and a recorded answer showing twenty
-     * rows on one page would be the case that needs no tool.
+     * maintain through the generic list. A recorded answer with twenty rows on
+     * one page would be the case that needs no tool.
      */
     public const LIVE = 120;
 
@@ -61,7 +61,7 @@ final class SiteExtension
     /** Rows the delete field marks, which are still in the table. */
     public const DELETED = 2;
 
-    /** Writes it into an installation, replacing whatever an earlier run left. */
+    /** Writes it into an installation, over whatever an earlier run left. */
     public static function write(string $installation): void
     {
         $root = rtrim($installation, '/') . '/packages/' . self::KEY;
@@ -93,11 +93,12 @@ final class SiteExtension
     }
 
     /**
-     * A version is stated because a path repository has no other source for one.
+     * A version stands here because a path repository has no other source for
+     * one.
      *
      * The directory is not a checkout, so Composer has no tag to read and no
-     * branch to derive a `dev-` version from, and the requirement below would
-     * be resolved against nothing.
+     * branch to derive a `dev-` version from. The requirement below would
+     * resolve against nothing.
      */
     private static function manifest(): string
     {
@@ -203,10 +204,10 @@ final class SiteExtension
      * The script that fills the table, run inside the installation.
      *
      * It boots TYPO3 the way `src/Installation/probe.php` does and for the same
-     * reason: rows go in through the installation's own connection, at its own
+     * reason. Rows go in through the installation's own connection, at its own
      * PHP version, on the other side of a process boundary. It writes nothing
-     * where the table already holds a row, so asking for the environment again
-     * costs a subprocess rather than a second set of rows.
+     * where the table already holds a row. So a second request for the
+     * environment costs a subprocess rather than a second set of rows.
      */
     private static function seed(): string
     {

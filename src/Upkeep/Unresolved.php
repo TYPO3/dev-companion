@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Upkeep;
 
 /**
- * What is written down and nothing has answered for yet.
+ * What stands on record and nothing has answered for yet.
  *
- * Both directories carry a state that means unfinished, and neither of them
- * was ever read for it. A requirement is `open` when nobody has built it and
- * `not guarded` when nothing holds it; a decision is `open` when nobody
- * has been back to its "Wrong if". None of the three is an error, which is
- * exactly why none of them surfaced: the queue is fed by feedback/ and the
- * forward reviews, so an entry could sit in either directory indefinitely
- * without anything saying so — and one of them sat there from the day the
- * directory was created.
+ * Both directories carry a state that means unfinished, and neither of them was
+ * ever read for it. A requirement is `open` when nobody has built it and `not
+ * guarded` when nothing holds it. A decision is `open` when nobody has been
+ * back to its "Wrong if". None of the three is an error, which is exactly why
+ * none of them surfaced. feedback/ and the forward reviews feed the queue, so
+ * an entry could sit in either directory for ever without a word from anything.
+ * One of them sat there from the day the directory came to be.
  *
- * This is the reading, and it reports rather than fails. Whether an entry is
- * worth working off is a judgement, and the judgement stays with whoever runs
- * `bin/cli unresolved:list`. What it cannot stay is invisible.
+ * This is the read, and it reports rather than fails. Whether an entry is worth
+ * the work is a judgement, and the judgement stays with whoever runs `bin/cli
+ * unresolved:list`. What it cannot stay is invisible.
  */
 final class Unresolved
 {
@@ -26,17 +25,18 @@ final class Unresolved
      * Every requirement nothing answers for, in id order.
      *
      * Two answers take an entry out of what nobody has decided about, and
-     * `queued` is only the first: a queued todo naming the id is what turns it
-     * into work, and `judged` is the day a session read it and decided it stays
-     * as it is. Without the second, a requirement no test can hold — which
-     * `writing-a-requirement.rst` names as the honest answer, and which the
-     * **Held by** of three entries has carried since July — could never leave
-     * this reading, and every session re-derived the same judgement.
+     * `queued` is only the first. A queued todo that names the id is what turns
+     * it into work. `judged` is the day a session read it and decided it stays
+     * as it is. Without the second, a requirement no test can hold could never
+     * leave this read, and every session derived the same judgement again.
+     * `writing-a-requirement.rst` names that as the honest answer, and the
+     * **Held by** of three entries has carried it since July.
      *
-     * `queued` is read from what the queue says it serves rather than from
+     * `queued` comes from what the queue says it serves rather than from
      * `todo/` as a whole. A search over the directory answers yes for an id
-     * named in the page that lists what is deliberately *not* queued — which is
-     * a decision that was taken, and the opposite of the one this flag reports.
+     * named in the page that lists what stays out of the queue on purpose. That
+     * is a decision somebody took, and the opposite of the one this flag
+     * reports.
      *
      * @return array<int, array{id: string, state: string, title: string, queued: bool, judged: string}>
      */
@@ -63,13 +63,13 @@ final class Unresolved
     }
 
     /**
-     * Requirements standing on a decision that has since been revoked.
+     * Requirements that stand on a decision somebody has since revoked.
      *
-     * The quiet one. A decision is revoked because a later reading disproved
-     * it, and the requirement written on top of it keeps its `held` status and
-     * its passing test the whole time — the test holds the requirement, and
-     * nothing holds the reasoning under it. Neither directory can see the other,
-     * so this is the one crossing that has to be read out.
+     * The quiet one. A later read disproved a revoked decision, and the
+     * requirement on top of it keeps its `held` status and its green test the
+     * whole time. The test holds the requirement, and nothing holds the reasons
+     * under it. Neither directory can see the other, so this is the one
+     * crossing somebody has to read out.
      *
      * @return array<int, array{id: string, title: string, decision: string, revokedBy: string}>
      */
@@ -103,25 +103,24 @@ final class Unresolved
     /**
      * Every open decision, oldest first, and whether somebody has been back.
      *
-     * An open decision is not a defect the way an open requirement is —
-     * most of them are simply still true, and some name a "Wrong if" only a
-     * forward run or an outside event could answer. What makes the oldest
-     * worth naming is that the repository around it has moved furthest since,
-     * so it is where a decision has most likely been overtaken without anyone
-     * noticing.
+     * An open decision is not a defect the way an open requirement is. Most of
+     * them are simply still true, and some name a "Wrong if" only a forward run
+     * or an outside event could answer. What makes the oldest worth a name is
+     * that the repository around it has moved furthest since. So it is where a
+     * decision has most likely fallen behind without any notice.
      *
-     * `open` is two states, though, and reporting them as one made the pile
-     * look untouched: a reading that settles the **Wrong if** either way
-     * changes the status, and one that settles neither leaves it open with a
-     * **Since then** to show for it. Half of what this returns is of the second
-     * kind. So the reading carries both and the caller names the oldest nobody
-     * has opened, which is the one a session can still do something about.
+     * `open` is two states, though, and a report of them as one made the pile
+     * look untouched. A read that settles the **Wrong if** either way changes
+     * the status. One that settles neither leaves it open with a **Since then**
+     * to show for it. Half of what this returns is of the second kind. So the
+     * read carries both and the caller names the oldest nobody has opened,
+     * which is the one a session can still do something about.
      *
-     * `held` is what narrows that further, and it is why going back stopped
-     * being a scheduled task: a decision a test declares is read when somebody
-     * changes the behaviour, because the failure prints the entry — `D-DOC-044`.
-     * What is left for a reader is the entry nothing fires on, and the oldest
-     * of those is what the listing names — `D-DOC-054`.
+     * `held` is what narrows that further, and it is why the return visit
+     * stopped as a scheduled task. A decision a test declares gets its read
+     * when somebody changes the behaviour, because the failure prints the
+     * entry, `D-DOC-044`. What remains for a reader is the entry nothing fires
+     * on, and the oldest of those is what the listing names, `D-DOC-054`.
      *
      * @return array<int, array{id: string, date: string, title: string, revisited: bool, held: bool}>
      */
@@ -142,8 +141,8 @@ final class Unresolved
             ];
         }
 
-        // Decisions::all() is newest first, and reversing it would leave the
-        // ids of one day in the order that listing wants them read.
+        // Decisions::all() is newest first, and a reverse would leave the ids
+        // of one day in the order that listing wants them read.
         usort($open, static fn(array $a, array $b): int => [$a['date'], $a['id']] <=> [$b['date'], $b['id']]);
 
         return $open;

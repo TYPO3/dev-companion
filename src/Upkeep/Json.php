@@ -8,34 +8,33 @@ use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Paths;
 
 /**
- * The one form the hand-written JSON below knowledge/ is written in.
+ * The one form of the hand-written JSON below knowledge/.
  *
- * Two indentations grew side by side — the hints and the scope at four spaces,
- * the catalog at two — because nothing ever said which one this repository
- * writes. What that costs is a diff: a file reindented by whichever editor last
- * opened it shows every line as changed, and the statement somebody actually
- * edited is somewhere in it.
+ * Two indentations grew side by side, the hints and the scope at four spaces,
+ * the catalog at two. Nothing ever said which one this repository writes. What
+ * that costs is a diff. A file that the last editor to open it reindented shows
+ * every line as changed, and the statement somebody edited is somewhere in it.
  *
  * The form is PHP's own pretty print at the indentation `.editorconfig` states,
- * with slashes and unicode left alone. Key order is untouched: in
- * server-scope.json and in the hints the order is the order an answer is read
- * out in, and sorting it would rewrite what the tools say.
+ * with slashes and unicode left alone. Key order stays. In server-scope.json
+ * and in the hints the order is the order of the answer, and a sort would
+ * rewrite what the tools say.
  */
 final class Json
 {
     /**
-     * The indentation, which `.editorconfig` is where it is said — that file is
-     * what every editor opening one of these already obeys, and a formatter
-     * that disagreed with it would undo whoever typed the last line by hand.
-     * `JsonTest` holds this to it.
+     * The indentation, which `.editorconfig` states. That file is what every
+     * editor that opens one of these already obeys. A formatter that disagreed
+     * with it would undo whoever typed the last line by hand. `JsonTest` holds
+     * this to it.
      */
     public const INDENT = 2;
 
     /**
-     * Slashes and unicode stay as they were written, because the corpus is full
-     * of URLs and a reader of the file is meant to see one. The zero fraction is
-     * kept for the same reason a version is a string here: a number that was
-     * written 1.0 means something other than 1.
+     * Slashes and unicode stay as the writer typed them, because the corpus is
+     * full of URLs and a reader of the file should see one. The zero fraction
+     * stays for the same reason a version is a string here: a number somebody
+     * wrote as 1.0 means something other than 1.
      */
     private const FLAGS = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR;
 
@@ -68,15 +67,15 @@ final class Json
     /**
      * What one file's contents look like once written in that form.
      *
-     * Decoded to objects rather than to arrays: associatively, an empty object
-     * and an empty array are the same PHP value, and a formatter that cannot
-     * tell them apart turns every `{}` in the corpus into `[]` — a change no
-     * reindentation was asked for and no reviewer would look for in a
-     * whitespace commit.
+     * Decoded to objects rather than to arrays. As arrays, an empty object and
+     * an empty array are the same PHP value. A formatter that cannot tell them
+     * apart turns every `{}` in the corpus into `[]`. That is a change nobody
+     * asked a reindentation for and no reviewer would look for in a whitespace
+     * commit.
      *
      * Reindented afterwards rather than by the encoder, which indents by four
      * and takes no say in it. Only the printer ever puts a run of spaces at the
-     * start of a line: a newline inside a value is written `\n`, so there is no
+     * start of a line. A newline inside a value stands as `\n`, so there is no
      * multi-line string for this to reach into.
      *
      * @throws \JsonException on anything that is not JSON

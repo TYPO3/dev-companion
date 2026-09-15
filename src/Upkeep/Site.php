@@ -10,13 +10,13 @@ use TYPO3\DevCompanion\Paths;
 /**
  * The pages published, written out as the source a site generator publishes.
  *
- * What is published is `documentation/` and nothing besides, so the front page
- * is that directory's own page and the repository's `readme.md` stays out of the
- * site — `D-DOC-026`. Every link leaving the published pages is rewritten here
- * to the file on GitHub, a literal block included, and the sources keep the
- * paths a reader of the checkout follows — which is what `links:check` goes on
- * reading. The copy carries the renames a generator needs: `readme.rst` is what
- * this repository calls a directory's own page, `index.rst` is what a generator
+ * The site is `documentation/` and nothing besides. So the front page is that
+ * directory's own page and the repository's `readme.md` stays out of the site,
+ * `D-DOC-026`. Every link that leaves the published pages changes here to the
+ * file on GitHub, a literal block included. The sources keep the paths a reader
+ * of the checkout follows, which is what `links:check` goes on to read. The
+ * copy carries the renames a generator needs. `readme.rst` is what this
+ * repository calls a directory's own page, `index.rst` is what a generator
  * publishes as the directory itself.
  */
 final class Site
@@ -32,19 +32,19 @@ final class Site
     private const CONFIG = 'guides.xml';
 
     /**
-     * Where the site is built, and what `guides.xml` names as its `input` and
-     * its `output`. Gitignored, because a build product that is committed is
-     * one somebody edits.
+     * Where the site build lands, and what `guides.xml` names as its `input`
+     * and its `output`. Gitignored, because a build product in the repository
+     * is one somebody edits.
      */
     public const ROOT = '.site';
     public const TARGET = self::ROOT . '/source';
     public const HTML = self::ROOT . '/html';
 
-    /** What a directory's own page is called here, and what it is published as. */
+    /** The name of a directory's own page here, and its name on the site. */
     private const OWN_PAGE = 'readme.rst';
     private const PUBLISHED_PAGE = 'index.rst';
 
-    /** The branch a link leaving the published tree points into. */
+    /** The branch a link that leaves the published tree points into. */
     private const BRANCH = 'main';
 
     /** Where the drawings sit, in the checkout and in the published site alike. */
@@ -55,9 +55,9 @@ final class Site
     /**
      * Writes the copy, and takes back out of it whatever this no longer writes.
      *
-     * Removing the strangers rather than the directory: a build that starts by
-     * deleting a path it was handed is one bad argument away from deleting
-     * something else.
+     * The strangers go rather than the directory. A build that starts with the
+     * deletion of a path it received is one bad argument away from the deletion
+     * of something else.
      *
      * @return array{written: list<string>, removed: list<string>}
      */
@@ -89,7 +89,7 @@ final class Site
     }
 
     /**
-     * Every file the site is made of, named as this repository names it.
+     * Every file the site consists of, named as this repository names it.
      *
      * @return list<string>
      */
@@ -108,7 +108,7 @@ final class Site
      * Takes everything below a build directory away, and leaves the directory.
      *
      * The renderer writes over what is there and removes nothing, so a page
-     * renamed or deleted since the last render is served on, and the theme's
+     * renamed or deleted since the last render stays on the site. The theme's
      * finish step read those stale pages for two minutes at full tilt before
      * this existed.
      */
@@ -121,13 +121,12 @@ final class Site
     }
 
     /**
-     * Every file the copy is made from, and when each was last written.
+     * Every file the copy comes from, and when each last changed.
      *
-     * Two of these compared is what a watch goes on: a file is named by the
-     * path this repository knows it by, and its value moves when it is saved
-     * and when it is saved to a different length, so two saves within one
-     * second still read as two. The skills are in it because the copy carries
-     * them.
+     * Two of these compared is what a watch goes on. A file has the path this
+     * repository knows it by, and its value moves on a save and on a save to a
+     * different length. So two saves within one second still read as two. The
+     * skills are in it because the copy carries them.
      *
      * @return array<string, string>
      */
@@ -144,19 +143,19 @@ final class Site
     }
 
     /**
-     * One page as it is published: every link that leaves the tree turned into
-     * the file on GitHub, and everything else left exactly as it stands.
+     * One page as the site shows it. Every link that leaves the tree turned
+     * into the file on GitHub, and everything else exactly as it stands.
      *
      * There is only the one case now. A link inside the corpus is a `:doc:` or
-     * a `:ref:`, which the renderer resolves against the document tree itself,
-     * so nothing here has to know what a page is called on the site or how many
-     * directories up it sits. What is left is the links that name something
-     * this site does not serve — a decision, a todo, a class — and every one of
-     * those is somewhere on GitHub.
+     * a `:ref:`, which the renderer resolves against the document tree itself.
+     * So nothing here has to know a page's name on the site or how many
+     * directories up it sits. What remains is the links that name something
+     * this site does not serve, a decision, a todo, a class. Every one of those
+     * is somewhere on GitHub.
      *
-     * That the two cannot be confused is the convention `SiteTest` holds: an
-     * embedded link naming a published page would be rewritten to GitHub here
-     * and send the reader out of the site they were reading.
+     * That nobody can confuse the two is the convention `SiteTest` holds. An
+     * embedded link that names a published page would turn into GitHub here and
+     * send the reader out of the site.
      */
     public static function page(string $file, string $rst): string
     {
@@ -184,12 +183,12 @@ final class Site
     }
 
     /**
-     * What a path in this repository is called on the site.
+     * The name of a path in this repository on the site.
      *
-     * `documentation/` is served at the root, so a link that was written
-     * against the checkout points at a page a segment higher than it reads.
-     * Every target is resolved against the repository and named again from
-     * there, rather than the last segment being swapped in place.
+     * `documentation/` sits at the root of the site, so a link against the
+     * checkout points at a page a segment higher than it reads. Every target
+     * resolves against the repository and takes its name again from there,
+     * rather than a swap of the last segment in place.
      */
     public static function published(string $path): string
     {
@@ -231,8 +230,8 @@ final class Site
 
     /**
      * What stands in the target that this build did not write, taken back out.
-     * A page that was renamed or deleted is otherwise served for as long as the
-     * directory is kept.
+     * A renamed or deleted page otherwise stays on the site for as long as the
+     * directory stays.
      *
      * @param array<string, true> $written
      *
@@ -250,7 +249,7 @@ final class Site
         }
 
         // Deepest first, so a directory emptied by the pass above is gone
-        // before the one holding it is looked at.
+        // before the one that holds it comes up.
         $directories = Finder::create()->directories()->in($target)->ignoreDotFiles(false)->reverseSorting();
         foreach ($directories as $directory) {
             if (!Finder::create()->in($directory->getPathname())->ignoreDotFiles(false)->hasResults()) {

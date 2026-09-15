@@ -7,12 +7,12 @@ namespace TYPO3\DevCompanion\Upkeep;
 /**
  * The generated listing at the foot of a readme.
  *
- * It was a table, and a table earns its border characters by letting a column
- * be scanned vertically — which holds only while every cell fits on one line. A
- * listing carries a title, so the widest column was always going to be a
- * sentence, and aligned it came to 237 characters a row (`D-DOC-001`). A
- * reference link is what fixes the rest: the path moves to the foot of the
- * file, where it is read by nobody and breaks nothing.
+ * It was a table, and a table earns its border characters with a column a
+ * reader can scan. That holds only while every cell fits on one line. A listing
+ * carries a title, so the widest column was always a sentence. Aligned, it came
+ * to 237 characters a row (`D-DOC-001`). A reference link is what fixes the
+ * rest. The path moves to the foot of the file, where nobody reads it and it
+ * breaks nothing.
  */
 final class Listing
 {

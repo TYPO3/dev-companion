@@ -10,17 +10,17 @@ use TYPO3\DevCompanion\Process\CommandRunner;
 use TYPO3\DevCompanion\Process\SystemRunner;
 
 /**
- * The environments a scenario is run in, and which of them this checkout makes
+ * The environments a scenario runs in, and which of them this checkout makes
  * for itself.
  *
  * Where what a run needs from the directory is a property this repository can
- * state — a Composer installation under DDEV, on a covered version, whose
- * console answers — it is made here below `.environments/`, gitignored and
- * re-creatable the way `.checkouts/` is. Where it is a property of somebody
- * else's repository it stays declared, because a scaffold of it would be this
- * repository grading itself against its own idea of the thing — `D-EVI-004`. So
- * each id carries how it is come by, and asking for one that is not made here
- * answers with the reason rather than with a directory.
+ * state, this class makes it below `.environments/`. That is a Composer
+ * installation under DDEV, on a covered version, whose console answers. Git
+ * ignores it and a command re-creates it, the way `.checkouts/` works. Where it
+ * is a property of somebody else's repository it stays declared. A scaffold of
+ * it would be this repository's grade of itself against its own idea of the
+ * thing, `D-EVI-004`. So each id carries how it comes about. A request for one
+ * not made here answers with the reason rather than with a directory.
  */
 final class Environments
 {
@@ -33,7 +33,7 @@ final class Environments
     /** Made here, by a command of its own. */
     public const ELSEWHERE = 'elsewhere';
 
-    /** Not a directory at all: a state the environment above it is put into. */
+    /** Not a directory at all: a state the environment above it goes into. */
     public const STATE = 'state';
 
     /** What `knowledge/versions.json` calls the line that has no release. */
@@ -45,11 +45,11 @@ final class Environments
     /**
      * What DDEV registers a created project under, one name per covered line.
      *
-     * The name is global to the machine — `ddev list` is one namespace — while
-     * the directory is per checkout, so two checkouts asking for the same
-     * environment ask for one name, which is refused rather than taken over. The
-     * version and a database that is not the default are in the name because
-     * they are in the installation — `D-EVI-006`.
+     * The name is global to the machine, `ddev list` is one namespace, while
+     * the directory is per checkout. So two checkouts that ask for the same
+     * environment ask for one name, and the second gets a refusal rather than
+     * the name. The version and a database that is not the default are in the
+     * name because they are in the installation — `D-EVI-006`.
      */
     public static function project(string $branch, string $driver = self::DEFAULT_DRIVER): string
     {
@@ -70,20 +70,21 @@ final class Environments
     /**
      * The password the created installation's admin user gets.
      *
-     * Written down rather than generated: the environment exists to be logged
-     * into by whoever runs a scenario in it, and a secret nobody can read is a
-     * step back to the machine this is replacing. It guards a throwaway site on
-     * `*.ddev.site`, reachable from the machine that made it.
+     * Written down rather than generated. Whoever runs a scenario in the
+     * environment logs into it, and a secret nobody can read is a step back to
+     * the machine this replaces. It guards a throwaway site on `*.ddev.site`,
+     * reachable from the machine that made it.
      */
     public const ADMIN_PASSWORD = 'Environment.Created.Here.1';
 
     /**
-     * TYPO3's own starting site, which is what the installation is built from.
+     * TYPO3's own start site, which is what the build makes the installation
+     * from.
      *
      * Not a `composer.json` written here. The shape of a site installation is
-     * TYPO3's to decide and it moves with the major; a copy of it in this
-     * repository would be one more thing to keep true, and wrong in the way
-     * that is hardest to see — plausibly out of date.
+     * TYPO3's to decide and it moves with the major. A copy of it in this
+     * repository would be one more thing to keep true. It would be wrong in the
+     * way that is hardest to see: out of date and plausible.
      */
     public const DISTRIBUTION = 'typo3/cms-base-distribution';
 
@@ -94,22 +95,22 @@ final class Environments
      * run `configuration:show`; both are `EXT:lowlevel` commands, and the base
      * distribution does not require it. Without this the environment is a site
      * whose console answers "There are no commands defined in the
-     * language:domain namespace", which is the one thing `scenarios/readme.md`
-     * says an `E-SITE` has to have.
+     * language:domain namespace". That command is the one thing
+     * `scenarios/readme.md` says an `E-SITE` has to have.
      *
      * @var array<int, string>
      */
     public const REQUIRED = ['typo3/cms-lowlevel'];
 
     /**
-     * The PHP the containers run, on every released line an installation is
-     * made of.
+     * The PHP the containers run, on every released line the build makes an
+     * installation of.
      *
-     * Pinned rather than left to DDEV, which defaults to whatever is current
-     * when it is installed. One pin covers every released covered line: each
-     * one's own `Build/Scripts/runTests.sh` runs this version — 12.4 accepts
-     * `8.1` to `8.5`, 13.4 and 14.3 accept `8.2` to `8.5`, read in
-     * `.checkouts/` on 2026-08-03.
+     * Pinned rather than left to DDEV, which defaults to whatever is current at
+     * its install. One pin covers every released covered line: each one's own
+     * `Build/Scripts/runTests.sh` runs this version. 12.4 accepts `8.1` to
+     * `8.5`, 13.4 and 14.3 accept `8.2` to `8.5`, read in `.checkouts/` on
+     * 2026-08-03.
      */
     public const PHP = '8.4';
 
@@ -117,23 +118,23 @@ final class Environments
      * The PHP the development line's containers run, which is not that one.
      *
      * `.checkouts/main/composer.json` declares `"php": "^8.5"` and a platform
-     * of `8.5.0`, so the released pin does not install that line at all — the
-     * constraint is refused before anything is downloaded. DDEV 1.25.1 offers
-     * `5.6` through `8.5`, so the version is there to ask for; both read on
-     * 2026-08-03.
+     * of `8.5.0`, so the released pin does not install that line at all.
+     * Composer refuses the constraint before it downloads anything. DDEV 1.25.1
+     * offers `5.6` through `8.5`, so the version is there to ask for; both read
+     * on 2026-08-03.
      *
-     * Two pins rather than one at 8.5 for every line: what a released line's
-     * environment is for is answering the way an installation of it answers,
-     * and its own test script runs 8.4.
+     * Two pins rather than one at 8.5 for every line. A released line's
+     * environment is there to answer the way an installation of it answers, and
+     * its own test script runs 8.4.
      */
     public const DEVELOPMENT_PHP = '8.5';
 
     /**
      * How each environment in `scenarios/readme.md` is come by.
      *
-     * The ids are not repeated here — `EnvironmentsTest` holds these keys to
-     * the table that defines them, so an environment added there and forgotten
-     * here is a failure rather than a `null`.
+     * The ids do not repeat here. `EnvironmentsTest` holds these keys to the
+     * table that defines them, so an environment added there and forgotten here
+     * is a failure rather than a `null`.
      *
      * @return array<string, string>
      */
@@ -159,8 +160,8 @@ final class Environments
     }
 
     /**
-     * Why an environment that is not made here is not, in the words somebody
-     * asking for it needs — which is where to get it instead.
+     * Why an environment not made here is not, in the words somebody who asks
+     * for it needs, which is where to get it instead.
      */
     public static function reason(string $id): string
     {
@@ -201,20 +202,20 @@ final class Environments
             . ($branch === null ? '' : '-' . $branch . self::suffix($driver));
     }
 
-    /** Whether the installation of a covered line is there to be run in. */
+    /** Whether the installation of a covered line is there to run in. */
     public static function installed(string $branch, string $driver = self::DEFAULT_DRIVER): bool
     {
         return is_file(self::path('E-SITE', $branch, $driver) . '/config/system/settings.php');
     }
 
     /**
-     * The line a made installation is built on where nobody says which: the
+     * The line a made installation stands on where nobody says which: the
      * covered version that is stable.
      *
      * Read off `knowledge/versions.json` rather than written down, because a
      * run that names no version validates against the version this server
-     * answers for. A repository that starts covering a new stable and keeps
-     * making installations of the old one measures itself in the wrong place.
+     * answers for. A repository that starts to cover a new stable and keeps to
+     * installations of the old one measures itself in the wrong place.
      */
     public static function branch(): string
     {
@@ -228,13 +229,13 @@ final class Environments
     }
 
     /**
-     * Every covered line an installation is made of, oldest first.
+     * Every covered line the build makes an installation of, oldest first.
      *
-     * One installation runs one version, so a client asking about another
-     * covered line is answered by nothing this repository has — `SITE-02` is the
-     * case that says so out loud, and it is the reason this is a list rather
-     * than `branch()`. Every covered line, the development one included, which
-     * is a judgement about what this repository is for — `D-EVI-006`.
+     * One installation runs one version, so nothing this repository has answers
+     * a client that asks about another covered line. `SITE-02` is the case that
+     * says so out loud, and it is the reason this is a list rather than
+     * `branch()`. Every covered line, the development one included, which is a
+     * judgement about what this repository is for — `D-EVI-006`.
      *
      * @return array<int, string>
      */
@@ -267,27 +268,26 @@ final class Environments
     }
 
     /**
-     * The database an installation is set up against where nobody asks for
-     * another.
+     * The database an installation stands on where nobody asks for another.
      *
-     * sqlite is a file below `var/sqlite/` in the project directory, so an
-     * environment is its directory and nothing else and `rm -rf` is the whole of
-     * taking one away — which is what `--omit-containers=db` in the build pays
+     * sqlite is a file below `var/sqlite/` in the project directory. So an
+     * environment is its directory and nothing else, and `rm -rf` is the whole
+     * of its removal. That is what `--omit-containers=db` in the build pays
      * for. What it says nothing about is what a database server does under the
-     * same schema, so it is a default rather than the only one — `D-EVI-006`.
+     * same schema. So it is a default rather than the only one, `D-EVI-006`.
      */
     public const DEFAULT_DRIVER = 'sqlite';
 
     /**
-     * The databases an installation can be made on, and what each is called by
-     * the two tools that have to agree about it.
+     * The databases an installation can stand on, and the name each of the two
+     * tools that have to agree about it uses.
      *
-     * They disagree on every name: `ddev config --database` takes a
+     * They disagree on every name. `ddev config --database` takes a
      * `type:version` and checks the version at `ddev start` rather than at
-     * `config`, so a wrong one configures cleanly and fails minutes later, while
+     * `config`. So a wrong one configures cleanly and fails minutes later.
      * `setup --driver` takes a connection type that is not the DBAL driver it
-     * resolves to. `port` is `null` where there is no service to connect to. The
-     * versions and the connection values are `D-EVI-006`.
+     * resolves to. `port` is `null` where there is no service to connect to.
+     * The versions and the connection values are `D-EVI-006`.
      *
      * @var array<string, array{setup: string, ddev: ?string, port: ?int}>
      */
@@ -303,8 +303,8 @@ final class Environments
      *
      * One set of values for both, because DDEV gives every project the same
      * ones and only the port moves. Written down rather than read out of the
-     * container, because the build has to pass them to a `setup` that runs
-     * before there is a project to ask.
+     * container. The build has to pass them to a `setup` that runs before there
+     * is a project to ask.
      */
     private const SERVICE_HOST = 'db';
     private const SERVICE_DATABASE = 'db';
@@ -312,7 +312,7 @@ final class Environments
     private const SERVICE_PASSWORD = 'db';
 
     /**
-     * The databases an installation can be asked for, for the command's own
+     * The databases a caller can ask an installation for, for the command's own
      * help and for whoever typed one that is not among them.
      *
      * @return array<int, string>
@@ -323,7 +323,7 @@ final class Environments
     }
 
     /**
-     * The one a name stands for, or a refusal naming the ones there are.
+     * The one a name stands for, or a refusal that names the ones there are.
      *
      * @return array{setup: string, ddev: ?string, port: ?int}
      */
@@ -343,20 +343,20 @@ final class Environments
      * wrong, and says what it did.
      *
      * DDEV writes that block from its own database container and has no variant
-     * that reads the driver the installation was set up with. An installation
-     * on SQLite runs with `omit_containers: [db]`, so the block points `mysqli`
-     * at a host that does not exist — and because it is merged over the
-     * connection `settings.php` carries, the installation talks to nothing. The
-     * backend then answers "your login attempt did not succeed" to correct
-     * credentials, which names neither the file nor the container.
+     * that reads the driver the installation runs on. An installation on SQLite
+     * runs with `omit_containers: [db]`, so the block points `mysqli` at a host
+     * that does not exist. The block merges over the connection `settings.php`
+     * carries, so the installation talks to nothing. The backend then answers
+     * "your login attempt did not succeed" to correct credentials, which names
+     * neither the file nor the container.
      *
      * The block goes and the rest stays. GFX, MAIL and SYS are what DDEV knows
-     * and this does not: the ImageMagick in that container, its mail catcher,
+     * and this does not. The ImageMagick in that container, its mail catcher,
      * and the trusted hosts pattern without which TYPO3 refuses the host name
-     * the router forwards. Disabling settings management would end the same
-     * collision and leave all three to be written by hand.
+     * the router forwards. Settings management switched off would end the same
+     * collision and leave all three to a hand.
      *
-     * The marker goes with it, because a file DDEV still owns is regenerated on
+     * The marker goes with it, because DDEV regenerates a file it still owns on
      * the next start and the block comes back.
      */
     public static function takeOverGeneratedSettings(string $path): ?string
@@ -371,10 +371,10 @@ final class Environments
             return null;
         }
 
-        // The closing bracket is matched at the indentation the block opened
-        // at. Without that backreference the first `],` in the file ends the
-        // match, which is two levels in, and what is left behind does not
-        // parse — measured on 2026-08-04, on two environments this repaired.
+        // The close bracket matches at the indentation the block opened at.
+        // Without that backreference the first `],` in the file ends the match,
+        // which is two levels in, and what remains does not parse — measured on
+        // 2026-08-04, on two environments this repaired.
         $after = preg_replace("/^(\h*)'DB' => \[\R(?:.*\R)*?\\1\],\R/m", '', $before, 1);
         if ($after === null || $after === $before) {
             return null;
@@ -392,11 +392,11 @@ final class Environments
     }
 
     /**
-     * What Composer is asked for on one line, of the distribution and of every
-     * package required beside it.
+     * What the build asks Composer for on one line, of the distribution and of
+     * every package required beside it.
      *
      * `typo3/cms-base-distribution` publishes no release above the newest
-     * stable — `v14.3.0` is its top tag — so the development line is its
+     * stable, `v14.3.0` is its top tag. So the development line is its
      * `dev-main`, which requires `dev-main` of all twenty-four core packages.
      * Read from packagist on 2026-08-03.
      */
@@ -406,12 +406,12 @@ final class Environments
     }
 
     /**
-     * Why no installation is made of a version, and an empty string where one
-     * is.
+     * Why no build makes an installation of a version, and an empty string
+     * where one does.
      *
-     * Every covered line is made now, so what is left to decline is a version
-     * this server does not cover — which is a thing somebody types wrong, and
-     * the answer it needs is which ones there are.
+     * The build makes every covered line now, so what remains to decline is a
+     * version this server does not cover. That is a thing somebody types wrong,
+     * and the answer it needs is which ones there are.
      */
     public static function refusal(string $branch): string
     {
@@ -430,11 +430,11 @@ final class Environments
     /**
      * What `create` does with an installation that is already there.
      *
-     * Never the build again, and `ddev start` where the containers are down —
-     * which is every state but `running`, the pause DDEV puts an idle project
+     * Never the build again, and `ddev start` where the containers are down.
+     * That is every state but `running`, the pause DDEV puts an idle project
      * into included. A registration that is gone is the same case: `start` in
-     * the directory registers it back. An installation is minutes and a
-     * hundred packages; the containers are seconds.
+     * the directory registers it back. An installation is minutes and a hundred
+     * packages; the containers are seconds.
      *
      * @return list<string>|null
      */
@@ -447,8 +447,8 @@ final class Environments
      * Every DDEV project this machine knows, by name.
      *
      * `ddev list` is the one place a project registered somewhere else is
-     * visible, and both commands here need it: one to refuse a name that is
-     * taken, the other to say whether the environment it made is up.
+     * visible, and both commands here need it. One to refuse a name in use, the
+     * other to say whether the environment it made is up.
      *
      * @return array<string, array{name: string, status: string, approot: string, url: string}>
      */
@@ -460,10 +460,10 @@ final class Environments
         }
 
         // `--json-output` is one JSON document per line and more than one of
-        // them: the human table is a `msg` on the error stream, the projects are
-        // a `raw` on the standard one, and both arrive here as one string.
+        // them: the human table is a `msg` on the error stream, the projects
+        // are a `raw` on the standard one, and both arrive here as one string.
         // Decoding from the first brace therefore reads whichever came first
-        // and fails on the rest, so the lines are taken one at a time.
+        // and fails on the rest, so the reader takes the lines one at a time.
         $listed = null;
         foreach (preg_split('/\R/', $said) ?: [] as $line) {
             $decoded = json_decode(trim($line), true);
@@ -497,13 +497,13 @@ final class Environments
      * Whether a registration points at a checkout that is no longer there.
      *
      * The project name is global to this machine and the directory is per
-     * checkout, so a worktree that made an environment and was then removed
-     * leaves the name held by an approot DDEV itself reports as `project
-     * directory missing`. Nothing can reach what it names: the code, the
-     * settings file and the DDEV config went with the directory, and what is
-     * left is a name and a database volume. An `rm -rf .environments` in this
-     * checkout leaves the same thing behind, which is why the question is
-     * whether the approot is there rather than whose it was.
+     * checkout. So a worktree that made an environment and then went leaves the
+     * name with an approot DDEV itself reports as `project directory missing`.
+     * Nothing can reach what it names. The code, the settings file and the DDEV
+     * config went with the directory, and what remains is a name and a database
+     * volume. An `rm -rf .environments` in this checkout leaves the same thing
+     * behind. That is why the question is whether the approot is there rather
+     * than whose it was.
      *
      * @param array{name: string, status: string, approot: string, url: string} $project
      */
@@ -516,15 +516,15 @@ final class Environments
      * What clears a registration nothing can reach, and whatever DDEV named
      * after the project with it.
      *
-     * `ddev stop --unlist` is the smaller command and the wrong one: it frees
-     * the name and leaves the volumes, which are named after the project
-     * rather than after the directory, so the next build registers the name
-     * again and attaches to them. That mattered most while the installation
-     * was in a database volume — measured on 2026-08-02 against a registration
-     * whose approot had been removed, on DDEV 1.25.1 — and it is smaller now
-     * that the database is a file in the directory and `--omit-containers=db`
-     * means there is no database volume to leave. `delete` is still the one
-     * that takes what a name is holding, and taking the directory is `rm -rf`.
+     * `ddev stop --unlist` is the smaller command and the wrong one. It frees
+     * the name and leaves the volumes, which carry the project's name rather
+     * than the directory's. So the next build registers the name again and
+     * attaches to them. That mattered most while the installation was in a
+     * database volume, measured on 2026-08-02 against a registration whose
+     * approot was gone, on DDEV 1.25.1. It is smaller now that the database is
+     * a file in the directory and `--omit-containers=db` means there is no
+     * database volume to leave. `delete` is still the one that takes what a
+     * name holds, and `rm -rf` takes the directory.
      *
      * @return list<string>
      */
@@ -533,7 +533,7 @@ final class Environments
         return ['ddev', 'delete', '--omit-snapshot', '-y', $project];
     }
 
-    /** Whether the tool a made environment is built with is on this machine. */
+    /** Whether the tool that builds a made environment is on this machine. */
     public static function ddev(): bool
     {
         [$exitCode] = self::run(['ddev', '--version']);
@@ -545,9 +545,9 @@ final class Environments
      * What leaves this process, and the seam a unit test takes instead.
      *
      * `R-COD-003`: a unit test mocks what it needs from outside rather than
-     * starting it. Nothing in the suite drives a build today — the tests read
-     * the commands `build()` returns — and the seam is here so that the one
-     * that wants to can.
+     * starts it. Nothing in the suite drives a build today, the tests read the
+     * commands `build()` returns. The seam is here so that the one that wants
+     * to can.
      */
     private static ?CommandRunner $runner = null;
 
@@ -560,12 +560,12 @@ final class Environments
     /**
      * One step of a build, with both its streams as one string.
      *
-     * `Checkouts::run` is the same shape and is not reused because of stdin: it
-     * leaves it inherited, which is right for git and wrong here — `ddev` and
-     * the TYPO3 console read stdin where they think a person is there, and
-     * `SystemRunner` is where that is got right for both (`R-DIS-018`). No
-     * timeout, unlike the console: a step here is a `composer create-project` of
-     * a hundred packages.
+     * `Checkouts::run` is the same shape and stays unused here because of
+     * stdin. It leaves stdin inherited, which is right for git and wrong here.
+     * `ddev` and the TYPO3 console read stdin where they think a person is
+     * there, and `SystemRunner` gets that right for both (`R-DIS-018`). No
+     * timeout, unlike the console: a step here is a `composer create-project`
+     * of a hundred packages.
      *
      * @param list<string> $command
      *
@@ -581,12 +581,12 @@ final class Environments
     /**
      * The steps that put this project's own extension into the installation.
      *
-     * They run after the build and after a resume alike, so an environment
-     * made before this extension existed gains it by being asked for again.
-     * All three cost seconds and none of them is skipped on a state read from
-     * the directory: a require that is already satisfied, a setup that finds
-     * its table and a seed that finds rows each say so and change nothing,
-     * which is cheaper than a check that can be wrong — `D-EVI-010`.
+     * They run after the build and after a resume alike, so an environment made
+     * before this extension existed gains it on the next request. All three
+     * cost seconds and none of them skips on a state read from the directory. A
+     * require that is already satisfied, a setup that finds its table and a
+     * seed that finds rows each say so and change nothing. That is cheaper than
+     * a check that can be wrong, `D-EVI-010`.
      *
      * @return array<string, list<string>>
      */
@@ -606,22 +606,22 @@ final class Environments
     }
 
     /**
-     * The build, as the commands in the order they are run.
+     * The build, as the commands in the order they run.
      *
-     * Every one of them is idempotent or forced, so a build that failed
-     * halfway is finished by running this again rather than by deleting the
-     * directory. That is not a convenience: a `composer create-project` of a
+     * Every one of them is idempotent or forced. So a second run of this
+     * finishes a build that failed halfway, rather than a deletion of the
+     * directory. That is not a convenience. A `composer create-project` of a
      * TYPO3 is minutes and a hundred packages, and a step that has to start
      * over is a step nobody repeats.
      *
-     * The setup step is where that stops holding, and `--force` is not the
-     * exception it reads as. It forces the settings file and nothing else —
-     * `prepareSystemSettings()` is its only use in 14.3 — while the database
-     * is guarded by a validator that refuses any table at all, on the
-     * non-interactive path as much as the asked one. A build that meets a
-     * populated database is finished by taking the directory away, which on
-     * sqlite is the whole of it: the file is `var/sqlite/` below the project
-     * and nothing named after the project outlives an `rm -rf`.
+     * The setup step is where that stops to hold, and `--force` is not the
+     * exception it reads as. It forces the settings file and nothing else,
+     * `prepareSystemSettings()` is its only use in 14.3. A validator that
+     * refuses any table at all guards the database, on the non-interactive path
+     * as much as the asked one. A build that meets a populated database ends
+     * with the removal of the directory, which on sqlite is the whole of it.
+     * The file is `var/sqlite/` below the project and nothing with the
+     * project's name outlives an `rm -rf`.
      *
      * @return array<string, list<string>>
      */
@@ -634,12 +634,12 @@ final class Environments
         if (self::development($branch)) {
             // The distribution's `dev-main` declares no `minimum-stability` of
             // its own, so the twenty-four `dev-main` requires it carries are
-            // refused by the default `stable` before anything is downloaded.
-            // The flag is on `create-project` alone: the requires below name a
-            // dev version outright, and a root requirement's own constraint is
-            // what sets its stability flag.
+            // refused by the default `stable` before any download. The flag is
+            // on `create-project` alone: the requires below name a dev version
+            // outright, and a root requirement's own constraint is what sets
+            // its stability flag.
             $create[] = '--stability=dev';
-            // And nothing is installed yet, because what create-project would
+            // And nothing has installed yet, because what create-project would
             // install cannot resolve until the step after this one has run.
             $create[] = '--no-install';
         }
@@ -675,12 +675,11 @@ final class Environments
             // Composer resolves against a PHP its own root requirement refuses
             // and the install ends in "your php version (8.2.0; overridden via
             // config.platform, actual: 8.5.3) does not satisfy that
-            // requirement". Measured on 2026-08-03 at `dev-main` c374dbc.
-            //
-            // Unset rather than raised to the pin above: what this environment
-            // is for is answering the way an installation of that line
-            // answers, which is against the PHP the container actually runs.
-            // A released line keeps the pin, where it is not in conflict.
+            // requirement". Measured on 2026-08-03 at `dev-main` c374dbc. Unset
+            // rather than raised to the pin above: what this environment is for
+            // is to answer the way an installation of that line answers, which
+            // is against the PHP the container actually runs. A released line
+            // keeps the pin, where it is not in conflict.
             $steps['The platform pin the distribution outgrew on this branch'] = [
                 'ddev', 'composer', 'config', '--unset', 'platform.php',
             ];
@@ -696,9 +695,9 @@ final class Environments
             'ddev', 'exec', 'vendor/bin/typo3', 'setup',
             '--no-interaction',
             // The settings file and nothing else. This is what lets a
-            // half-built environment be finished rather than stopping on the
-            // file the first attempt wrote, and it does not reach the database
-            // an earlier installation populated.
+            // half-built environment finish rather than stop on the file the
+            // first attempt wrote, and it does not reach the database an
+            // earlier installation populated.
             '--force',
             // The connection type out of `SetupCommand::$connectionLabels`,
             // which is not the DBAL driver it resolves to — see self::DRIVERS.
@@ -718,8 +717,8 @@ final class Environments
                 // Passed rather than left to `TYPO3_DB_PASSWORD`, because the
                 // setup forces the password question even under
                 // `--no-interaction` where neither the option nor the variable
-                // is set: `getFallbackValueEnvOrOption` reads the option first,
-                // so the flag is what keeps the build unattended.
+                // has a value: `getFallbackValueEnvOrOption` reads the option
+                // first, so the flag is what keeps the build unattended.
                 '--password=' . self::SERVICE_PASSWORD,
             ];
         }
@@ -731,7 +730,7 @@ final class Environments
             '--project-name=TYPO3 MCP scenario environment ' . $branch,
             // Not optional, whatever the option definition says. Its default is
             // read through the same fallback as the environment variable, so
-            // with --no-interaction and nothing passed the validator is handed
+            // with --no-interaction and nothing passed the validator gets
             // `false` and 14.3.5 dies on the type — measured on 2026-08-02.
             // `other` is the answer for the nginx DDEV runs anyway.
             '--server-type=other',

@@ -11,51 +11,52 @@ use TYPO3\DevCompanion\Paths;
  * Reads scenarios/ back as data, and holds a recorded forward run to the
  * scenario it says it is a run of.
  *
- * Two kinds live there and only one of them is run forward. An open forward
+ * Two kinds live there and only one of them runs forward. An open forward
  * review below scenarios/forward/ asks for a review of the repository and
- * nothing more, carries a `Status today`, and is what a recorded run answers. A
- * targeted contract case below scenarios/contracts/ names one task shape so its
- * routing can be held still, carries a `Contract` state instead, and is read for
- * inspection only. Both are the same file shape, which is why they parse
- * through the same code and differ in one label.
+ * nothing more. It carries a `Status today`, and is what a recorded run
+ * answers. A targeted contract case below scenarios/contracts/ names one task
+ * shape so a test can hold its routing still. It carries a `Contract` state
+ * instead, and serves inspection only. Both are the same file shape, which is
+ * why they parse through the same code and differ in one label.
  *
- * A scenario is prose because it is written for a person: a prompt in the words
- * a user would use, and the criteria somebody has to judge an answer against.
- * Nothing here changes that. The prose stays the only copy of the prompt and of
- * the criteria — this class parses it rather than restating it, so a criterion
- * cannot be edited in one place and stay true in another.
+ * A scenario is prose because a person reads it. A prompt in the words a user
+ * would use, and the criteria somebody has to judge an answer against. Nothing
+ * here changes that. The prose stays the only copy of the prompt and of the
+ * criteria. This class parses it rather than restates it, so nobody can edit a
+ * criterion in one place while it stays true in another.
  *
  * What the prose cannot hold is the run. A run happens in a client, against one
  * state of this server, and what it establishes is a judgment per criterion.
  * That judgment used to live in the head of whoever ran it, which is why a
- * recorded status drifts: the scenario says `covered` long after the run that
- * earned it stopped being true, and nothing says so out loud.
+ * recorded status drifts. The scenario says `covered` long after the run that
+ * earned it stopped to be true, and nothing says so out loud.
  *
  * So a run is one file below scenarios/runs/, and it holds only what the run
- * adds: where it ran, against which server, which skills the session activated
+ * adds. Where it ran, against which server, which skills the session activated
  * and which tools it called with what, and one judgment with evidence per
  * criterion. Two things follow from that:
  *
- * - The verdict is derived, never written down. All criteria met and no failure
- *   condition hit is `covered`; some is `partial`; none is `gap`. A verdict a
- *   run could state for itself would be the one field nobody could check.
- * - The run carries a digest of the criteria it was judged against. Edit the
- *   prompt or a criterion and the digest stops matching, which is the run
- *   saying it predates the thing it claims to answer — rather than silently
- *   answering the old question.
+ * - The verdict derives, and nobody writes it down. All criteria met and no
+ *   failure condition hit is `covered`; some is `partial`; none is `gap`. A
+ *   verdict a run could state for itself would be the one field nobody could
+ *   check.
+ * - The run carries a digest of the criteria it stood against. Edit the prompt
+ *   or a criterion and the digest stops to match. That is the run's way to say
+ *   it predates the thing it claims to answer, rather than silently answers the
+ *   old question.
  */
 final class Scenarios
 {
     /**
-     * The vocabularies a scenario is written in, read out of the tables that
-     * define them: the environments in scenarios/readme.md, the marks a forward
-     * review carries in scenarios/forward/readme.md, and the contract states in
+     * The vocabularies a scenario uses, read out of the tables that define
+     * them. The environments in scenarios/readme.md, the marks a forward review
+     * carries in scenarios/forward/readme.md, and the contract states in
      * scenarios/contracts/readme.md.
      *
-     * Each is defined where somebody writing that kind of case reads it. A copy
-     * here would be the second definition, and the one that goes stale is always
-     * the one nobody is reading — so this looks through every readme below
-     * scenarios/ for the column rather than naming one file.
+     * Each stands where somebody who writes that kind of case reads it. A copy
+     * here would be the second definition, and the one that goes stale is
+     * always the one nobody reads. So this looks through every readme below
+     * scenarios/ for the column rather than names one file.
      *
      * @return array<int, string>
      */
@@ -129,10 +130,10 @@ final class Scenarios
             }
 
             $contents = (string) file_get_contents($path);
-            // Split on the headings rather than scanning line by line: every
+            // Split on the headings rather than a scan line by line: every
             // field of a scenario is inside its own section, so the section is
-            // the unit both this and the criteria digest are built from. One
-            // file holds one case, and a second heading in it is what the tests
+            // the unit both this and the criteria digest stand on. One file
+            // holds one case, and a second heading in it is what the tests
             // catch rather than something to parse around.
             $parts = preg_split('/^#{1,2} (?=[A-Z]+-\d+\b)/m', $contents) ?: [];
             foreach (array_slice($parts, 1) as $section) {
@@ -176,7 +177,7 @@ final class Scenarios
         $prompt = [];
         foreach (preg_split('/\R/', $section) ?: [] as $line) {
             if (str_starts_with($line, '> ')) {
-                // The line breaks are the markdown's wrapping, not the user's.
+                // The line breaks are the markdown's wrap, not the user's.
                 $prompt[] = substr($line, 2);
             }
         }
@@ -204,10 +205,10 @@ final class Scenarios
     /**
      * The whole of a labelled statement, wrapped lines folded back together.
      *
-     * A contract case cannot be answered by a run, so what holds it has to be
-     * named beside it: the tests that do, or that nothing does. The state line
-     * above it is a claim either way, and this is the only thing that makes the
-     * claim checkable.
+     * No run can answer a contract case, so what holds it has to stand beside
+     * it: the tests that do, or that nothing does. The state line above it is a
+     * claim either way, and this is the only thing that makes the claim
+     * checkable.
      */
     private static function statement(string $section, string $label): string
     {
@@ -231,9 +232,9 @@ final class Scenarios
     }
 
     /**
-     * The requirements a state line names, which is where a `partial`, `gap` or
-     * `open` says what is already written down and what a run should not
-     * re-file.
+     * The requirements a state line names. That is where a `partial`, `gap` or
+     * `open` says what is already on record and what a run should not file
+     * again.
      *
      * @return array<int, string>
      */
@@ -245,7 +246,7 @@ final class Scenarios
         }
 
         // Only that paragraph: the same code appears in prose further down, and
-        // what is wanted here is what this scenario holds itself to.
+        // what matters here is what this scenario holds itself to.
         $paragraph = Entry::firstParagraph(substr($section, $start));
         preg_match_all('/`(R-[A-Z]+-\d+)`/', $paragraph, $matches);
 
@@ -280,7 +281,7 @@ final class Scenarios
     }
 
     /**
-     * What a run was judged against, short enough to read in a diff.
+     * What a run stood against, short enough to read in a diff.
      *
      * @param array<int, string> $outcomes
      * @param array<int, string> $failures
@@ -294,8 +295,8 @@ final class Scenarios
      * Every recorded run, with the scenario it belongs to, the verdict its
      * judgments derive, and what is wrong with it.
      *
-     * A run whose problems are empty is one that can be believed: it judged
-     * every criterion of the scenario as the scenario words them today, and the
+     * A run whose problems are empty is one a reader can trust. It judged every
+     * criterion of the scenario as the scenario words them today, and the
      * verdict that follows is the status the scenario claims.
      *
      * @param string|null $directory where the runs are, for a test that needs
@@ -358,7 +359,7 @@ final class Scenarios
     }
 
     /**
-     * A run nobody has judged yet: written, and waiting for its session.
+     * A run nobody has judged yet: on disk, and in wait for its session.
      *
      * @param array<string, mixed> $run
      */
@@ -376,11 +377,11 @@ final class Scenarios
      * The tools a run's evidence quotes that its own trace does not carry.
      *
      * A run holds the claim and what backs it in one file, and nothing read the
-     * two against each other: REVIEW-03 quotes two hints as
-     * `typo3_hint_lookup` where `typo3_task_guide` returned them and no such
-     * call was made, which a judge found by hand. It reports rather than fails,
-     * because a judgment naming a tool in order to say it was never called
-     * reads the same from here — `D-EVI-009`.
+     * two against each other. REVIEW-03 quotes two hints as `typo3_hint_lookup`
+     * where `typo3_task_guide` returned them and no such call happened, which a
+     * judge found by hand. It reports rather than fails. A judgment that names
+     * a tool in order to say it was never called reads the same from here,
+     * `D-EVI-009`.
      *
      * @param array<string, mixed> $run
      * @return array<int, string>
@@ -451,17 +452,17 @@ final class Scenarios
                 $scenario['environment'],
             );
         }
-        // Both empty is a legitimate and damning result: an agent that reached
-        // for neither is the run this suite exists to catch. Both absent is
-        // not a result at all — nobody looked.
+        // Both empty is a legitimate and harsh result: an agent that reached
+        // for neither is the run this suite exists to catch. Both absent is not
+        // a result at all — nobody looked.
         foreach (['skills' => 'which skills activated', 'toolTrace' => 'which tools were called'] as $field => $what) {
             if (!is_array($run[$field] ?? null)) {
                 $problems[] = $file . ' does not say ' . $what . ', not even that it was nothing';
             }
         }
-        // A tool name says a lookup happened, never what was asked of it, and
-        // most of what a run is judged on is the difference: one query per
-        // surface or one broad one, the version a lookup was given, whether a
+        // A tool name says a lookup happened, never what the question was, and
+        // most of what a judge reads a run on is the difference: one query per
+        // surface or one broad one, the version a lookup got, whether a
         // returned id was followed. So each call carries the arguments it was
         // made with, `{}` where it takes none, read out of the transcript with
         // the name.
@@ -528,8 +529,8 @@ final class Scenarios
         }
 
         $verdict = self::verdict($run);
-        // `boundary` is a scenario that is answered by declining well, so its
-        // criteria are met like any other scenario's.
+        // `boundary` is a scenario a good refusal answers, so its criteria pass
+        // like any other scenario's.
         $expected = $scenario['status'] === 'boundary' ? 'covered' : $scenario['status'];
         if ($verdict !== '' && $verdict !== $expected) {
             $problems[] = sprintf(

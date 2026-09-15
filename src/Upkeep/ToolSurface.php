@@ -11,27 +11,26 @@ use TYPO3\DevCompanion\Tool\Source;
 
 /**
  * The tool surface: one page per tool, an index that reaches them, and the
- * server-level page defining their answer sources.
+ * server-level page that defines their answer sources.
  *
- * A surface written out a second time by hand stops describing the answer at
- * the first change nobody carried across, so this renders it from
+ * A surface written out a second time by hand stops to describe the answer at
+ * the first change nobody carried across. So this renders it from
  * Registry::definitions() and `tools:check` fails where a page has gone stale.
  *
  * The rest of a page is `ToolAnswers`', under the page's `## Answered` heading,
  * and it is one of two things. What a filled answer looks like usually needs an
- * installation to call, so it is recorded and checked by nothing, and each of
- * the two commands carries the other's half over untouched — which is what lets
- * one file hold both. Where a tool's answers read nothing an installation
- * contains, that half is derived here instead and falls inside the same check
- * as the fields above it: `ToolCalls::derived()` is the set and what measured
- * it.
+ * installation to call, so it comes from a record and no check reads it. Each
+ * of the two commands carries the other's half over untouched, which is what
+ * lets one file hold both. Where a tool's answers read nothing an installation
+ * contains, that half derives here instead and falls inside the same check as
+ * the fields above it. `ToolCalls::derived()` is the set and what measured it.
  */
 final class ToolSurface
 {
     /**
      * The page every tool page links its sources into, named without the
-     * extension because that is how a reference addresses a document and the
-     * file is the one place that has to add it back.
+     * extension. That is how a reference addresses a document, and the file is
+     * the one place that has to add it back.
      */
     public const SOURCES_PAGE = 'answer-sources';
 
@@ -60,14 +59,14 @@ final class ToolSurface
     }
 
     /**
-     * Every page as it would be written now, keyed by its file.
+     * Every page as it would come out now, keyed by its file.
      *
-     * The recorded half is carried over as it stands. It came out of an
-     * installation on a day, nothing here can derive it again, and a
+     * The recorded half carries over as it stands. It came out of an
+     * installation on a day, and nothing here can derive it again. A
      * regeneration that dropped it would make `tools:index` delete evidence.
      *
-     * The derived half is the other case and is written here rather than
-     * carried: eight tools read nothing an installation contains, so their
+     * The derived half is the other case and comes from here rather than
+     * carries over. Eight tools read nothing an installation contains, so their
      * answers follow from the registry and `knowledge/` the way the fields
      * above them do. That is what puts them inside what `tools:check` holds —
      * `ToolCalls::derived()` is the set and why.
@@ -94,8 +93,8 @@ final class ToolSurface
      * The pages generated with this surface that belong to no single tool.
      *
      * Both `tools:index` and `tools:record` write the surface and then delete
-     * what is not in what they wrote, so a page only one of them knows about is
-     * removed by the other. There is one list of them and both read it.
+     * what is not in what they wrote. So the other removes a page only one of
+     * them knows about. There is one list of them and both read it.
      *
      * @return array<string, string>
      */
@@ -108,10 +107,10 @@ final class ToolSurface
     }
 
     /**
-     * One page: the derived half, then whatever recording goes under it.
+     * One page: the derived half, then whatever record goes under it.
      *
-     * A tool the recording table leaves out keeps no recorded half, whatever an
-     * earlier table left on its page — the written reason and a recorded answer
+     * A tool the record table leaves out keeps no recorded half, whatever an
+     * earlier table left on its page. The written reason and a recorded answer
      * would otherwise contradict each other on one page.
      *
      * @param array{name: string, description: string, answersFrom: array<int, string>, inputSchema: array<string, mixed>, annotations: array<string, bool>, outputSchema: array<string, mixed>|null} $definition
@@ -141,8 +140,8 @@ final class ToolSurface
      * One card per tool: its name, verb, page, and the sentence its description
      * opens with.
      *
-     * The whole surface used to be here, and it was two thousand lines of field
-     * list a reader arriving with one tool in hand scrolled past.
+     * The whole surface used to be here. It was two thousand lines of field
+     * list a reader with one tool in hand scrolled past.
      */
     private static function listing(): string
     {
@@ -162,7 +161,7 @@ final class ToolSurface
         }
 
         // The rail of this section is the listing rather than a second list
-        // beside it, so a tool that is added reaches the menu by being in the
+        // beside it, so a new tool reaches the menu because it is in the
         // registry and by nothing else. The server index carries the sources
         // page, because it defines a server-wide boundary rather than a tool.
         $pages = array_map(
@@ -178,12 +177,11 @@ final class ToolSurface
     }
 
     /**
-     * The tools by name, which is the order every list on these pages is read
-     * in.
+     * The tools by name, which is the order of every list on these pages.
      *
-     * The registry's own order is what a client is offered — orientation first,
-     * then the guides and lookups — and a reader arriving with one tool name in
-     * hand cannot reconstruct it, so on the site the name is the index.
+     * The registry's own order is what a client gets, orientation first, then
+     * the guides and lookups. A reader with one tool name in hand cannot
+     * reconstruct it, so on the site the name is the index.
      *
      * @return array<int, array{name: string, description: string, answersFrom: array<int, string>, inputSchema: array<string, mixed>, annotations: array<string, bool>, outputSchema: array<string, mixed>|null}>
      */
@@ -197,8 +195,8 @@ final class ToolSurface
 
     /**
      * The first sentence, and the colon or dash before an enumeration counts as
-     * its end. What follows one of those is the detail the index is dropping,
-     * and read whole `typo3_extension_describe` opens with ten lines of it.
+     * its end. What follows one of those is the detail the index drops, and
+     * read whole `typo3_extension_describe` opens with ten lines of it.
      */
     private static function opening(string $description): string
     {
@@ -251,8 +249,8 @@ final class ToolSurface
      *
      * The reasons are `ToolCalls::undriven()`'s, beside the table that leaves
      * those tools out, so an absence and the reason for it cannot come apart. A
-     * tool with neither renders as saying so, which is a defect a reader can see
-     * rather than a silence they cannot.
+     * tool with neither renders with a line that says so, which is a defect a
+     * reader can see rather than a silence they cannot.
      *
      * @return list<string>
      */
@@ -273,7 +271,7 @@ final class ToolSurface
      * The sources, linked to what each one means.
      *
      * A reader who has not met the word cannot tell `packages` from
-     * `installation`, and the difference is the whole point of the line: one
+     * `installation`. The difference is the whole point of the line: one
      * answers with the containers down and the other does not. So the page
      * carries the names and the page behind them carries the meanings, written
      * once from the enum.
@@ -293,7 +291,7 @@ final class ToolSurface
      * defines it and the pages that point at it.
      *
      * A reference is global in reStructuredText, so the name has to say which
-     * page it belongs to: `knowledge` alone would collide with the first
+     * page it belongs to. `knowledge` alone would collide with the first
      * heading anywhere else that calls itself that.
      */
     public static function sourceLabel(string $source): string
@@ -347,7 +345,8 @@ final class ToolSurface
     }
 
     /**
-     * The names are the client's, so they are printed rather than translated.
+     * The names are the client's, so they print as they are rather than in
+     * translation.
      *
      * @param array<string, bool> $annotations
      */
@@ -364,8 +363,8 @@ final class ToolSurface
     /**
      * The schema as the shape a client validates against.
      *
-     * A bullet list said the same thing and could not say the nesting: every
-     * field came out at one level however deep it sat, so `covers` and the
+     * A bullet list said the same thing and could not say the depth. Every
+     * field came out at one level however deep it sat. So `covers` and the
      * `topic` inside one of its entries read as two fields of the answer.
      *
      * @param array<string, mixed> $schema
@@ -447,9 +446,9 @@ final class ToolSurface
     }
 
     /**
-     * The values a field is limited to first: a closed set is what a caller has
-     * to pass, and the description behind it explains the cases rather than
-     * listing them.
+     * The values a field permits first. A closed set is what a caller has to
+     * pass, and the description behind it explains the cases rather than lists
+     * them.
      *
      * @param array<string, mixed> $field
      */
@@ -470,7 +469,7 @@ final class ToolSurface
 
     /**
      * A `oneOf` on either schema, read out — `D-ANS-012`. A field list alone
-     * reads as one answer carrying everything, and on the way in it refuses a
+     * reads as one answer with everything in it. On the way in it refuses a
      * caller for both branches at once.
      *
      * @param array<string, mixed> $schema

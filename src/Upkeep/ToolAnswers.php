@@ -15,19 +15,19 @@ use TYPO3\DevCompanion\Tool\Registry;
  * What every tool actually answered, once, written down: the half of a tool's
  * page below `## Answered`, where `ToolSurface` writes the half above it.
  *
- * A recording and not a check, because it needs an installation and no test run
- * discovers one — `D-DOC-006`. The tools `ToolCalls::derived()` names read
+ * A record and not a check, because it needs an installation and no test run
+ * discovers one, `D-DOC-006`. The tools `ToolCalls::derived()` names read
  * nothing an installation contains, so `derivedSections()` writes their half
  * against `CoreFixture` and `tools:check` holds it. Of two working directories,
- * because neither fills the surface alone, and the second answer goes on the
- * pages of the tools that declare `answeredBy` — `D-DOC-012`.
+ * because neither fills the surface alone. The second answer goes on the pages
+ * of the tools that declare `answeredBy`, `D-DOC-012`.
  */
 final class ToolAnswers
 {
     /**
-     * What an absolute path is written as, so the pages are not one machine's
+     * What stands in for an absolute path, so the pages are not one machine's
      * layout. Deepest first, because an installation below this checkout has to
-     * be recognised before the checkout around it is.
+     * match before the checkout around it does.
      *
      * @var array<int, array{0: callable(): ?string, 1: string}>
      */
@@ -36,7 +36,7 @@ final class ToolAnswers
         [[Paths::class, 'root'], '<repository>'],
     ];
 
-    /** The width the rest of the documentation is written at. */
+    /** The width the rest of the documentation wraps at. */
     private const WIDTH = 79;
 
     /** The recorded half of a page as it stands, and nothing where there is none. */
@@ -47,19 +47,20 @@ final class ToolAnswers
         }
 
         // The heading and the underline that makes it one, which is what tells
-        // it from the word standing in a sentence.
+        // it from the word in a sentence.
         return preg_match('/^Answered\n-+\n.*/ms', (string) file_get_contents($file), $matched) === 1
             ? rtrim($matched[0]) . "\n"
             : '';
     }
 
     /**
-     * The day an instant fell on in UTC, and today's where none is named.
+     * The day an instant fell on in UTC, and today's where the caller names
+     * none.
      *
-     * Both days the drift report compares come through here, because a
-     * comparison of days is one only where both sides are on one clock —
-     * `D-DOC-059`. UTC rather than the machine's, so the day a page carries
-     * does not depend on where its recorder was standing.
+     * Both days the drift report compares come through here. A comparison of
+     * days is one only where both sides are on one clock, `D-DOC-059`. UTC
+     * rather than the machine's, so the day a page carries does not depend on
+     * where its recorder stood.
      */
     public static function day(?int $instant = null): string
     {
@@ -67,10 +68,10 @@ final class ToolAnswers
     }
 
     /**
-     * The day each recorded page says it was answered on, by tool.
+     * The day each recorded page says its answer came on, by tool.
      *
-     * Read off the page rather than out of git: the page is what a reader is
-     * given, and a re-recording that changed nothing is a day git never saw.
+     * Read off the page rather than out of git. The page is what a reader gets,
+     * and a second record that changed nothing is a day git never saw.
      *
      * @return array<string, string>
      */
@@ -91,16 +92,16 @@ final class ToolAnswers
     /**
      * The day this repository last moved what a recorded answer comes out of.
      *
-     * `knowledge/` is what those answers are composed from and `src/` is what
-     * composes them, so a commit to either can move an answer while every check
-     * stays green: `tools:check` reads a page down to its `## Answered` heading,
-     * and `ToolAnswersTest` holds what is below it to the schema and to nothing
+     * `knowledge/` is what those answers consist of and `src/` is what composes
+     * them. So a commit to either can move an answer while every check stays
+     * green. `tools:check` reads a page down to its `## Answered` heading.
+     * `ToolAnswersTest` holds what is below it to the schema and to nothing
      * about the content. Null where git cannot say, which is a checkout without
-     * history rather than a recording that is current.
+     * history rather than a record that is current.
      *
-     * The instant is asked for and the day is made here: `%cs` would answer in
-     * the committer's own zone, which is a third clock beside the recorder's
-     * and this one — `D-DOC-059`.
+     * The question is the instant and the day comes from here. `%cs` would
+     * answer in the committer's own zone, which is a third clock beside the
+     * recorder's and this one, `D-DOC-059`.
      */
     public static function sourcesMovedOn(): ?string
     {
@@ -117,13 +118,13 @@ final class ToolAnswers
      * What each tool's recorded answers cost a caller, worst first.
      *
      * The corpus is the one `tools:record` and `tools:index` already write, so
-     * nothing is called to measure it. Bytes rather than tokens: a tokenizer is
-     * the client's and differs between them, while the byte count is the same
+     * no call measures it. Bytes rather than tokens. A tokenizer is the
+     * client's and differs between them, while the byte count is the same
      * number for everybody and moves the same way.
      *
-     * Text and data are counted apart because they are paid for differently. A
-     * client renders the text and may never read the data, and a field nobody
-     * reads is the cheapest thing to take out.
+     * Text and data count apart because they cost differently. A client renders
+     * the text and may never read the data, and a field nobody reads is the
+     * cheapest thing to take out.
      *
      * @return list<array{tool: string, calls: int, text: int, data: int, total: int}>
      */
@@ -163,7 +164,7 @@ final class ToolAnswers
      * The `Text:` and `Data:` blocks of a recorded section, each with what it
      * weighs once the four spaces the directive indents it by are off.
      *
-     * `Called with:` is left out: the arguments are the caller's own and cost
+     * `Called with:` stays out: the arguments are the caller's own and cost
      * this server nothing to answer with.
      *
      * @return list<array{0: string, 1: int}>
@@ -176,8 +177,8 @@ final class ToolAnswers
         $inside = false;
 
         foreach (preg_split('/\\R/', $section) ?: [] as $line) {
-            // Closing comes first: `Data:` ends the text block above it, and
-            // reading the label before the close threw those bytes away.
+            // Closing comes first: `Data:` ends the text block above it, and a
+            // read of the label before the close threw those bytes away.
             if ($inside && $line !== '' && !str_starts_with($line, '    ')) {
                 $blocks[] = [$label, $bytes];
                 $inside = false;
@@ -206,16 +207,17 @@ final class ToolAnswers
     /**
      * Every page of the surface, the recorded halves rewritten.
      *
-     * Every call is answered from `$primary`, and the calls of the
-     * installation-backed tools are answered a second time from
-     * `$installation`. Both are pointed at here rather than by the caller: the
-     * substitutions that keep a machine's layout out of the pages read the
-     * installation root as it stands, so an answer has to be rendered while the
-     * root it came from is the one that is pointed at.
+     * Every call answers from `$primary`, and the calls of the
+     * installation-backed tools answer a second time from `$installation`. This
+     * points at both rather than the caller. The substitutions that keep a
+     * machine's layout out of the pages read the installation root as it
+     * stands. So an answer has to render while the root it came from is the
+     * current one.
      *
-     * `$tools` narrows the run to the tools named. What is not named keeps the
-     * section its page already carries, which is the only way to answer for one
-     * tool without dropping every answer this root cannot produce.
+     * `$tools` narrows the run to the tools named. What the caller does not
+     * name keeps the section its page already carries. That is the only way to
+     * answer for one tool without a loss of every answer this root cannot
+     * produce.
      *
      * @param list<string> $tools
      * @param ?\Closure(string): void $each told the label of every call as it is answered, for a bar
@@ -235,9 +237,9 @@ final class ToolAnswers
 
         $derived = self::derivedSections($tools);
         $recordings = [self::recordAgainst($primary, $tools, $each)];
-        // No second recording where the named tools have no installation-backed
+        // No second record where the named tools have no installation-backed
         // one among them. An empty list means every tool to `recordAgainst`, so
-        // narrowing to one that answers the same from any root would otherwise
+        // a narrow set that answers the same from any root would otherwise
         // record the whole surface a second time and head every page it touched
         // with a second provenance it does not have.
         if ($installation !== null && $backed !== []) {
@@ -258,10 +260,10 @@ final class ToolAnswers
     }
 
     /**
-     * Every call answered from one root, with the sentence saying which.
+     * Every call answered from one root, with the sentence that says which.
      *
-     * `$only` narrows it to the tools whose answers that root is being recorded
-     * for; empty means all of them.
+     * `$only` narrows it to the tools whose answers that root records; empty
+     * means all of them.
      *
      * @param list<string> $only
      * @param ?\Closure(string): void $each
@@ -276,7 +278,7 @@ final class ToolAnswers
             if ($only !== [] && !in_array($name, $only, true)) {
                 continue;
             }
-            // A derived answer is not evidence about this root, and recording
+            // A derived answer is not evidence about this root, and a record of
             // it would put a second one under the same heading that says so.
             if (in_array($name, ToolCalls::derived(), true)) {
                 continue;
@@ -291,15 +293,15 @@ final class ToolAnswers
     }
 
     /**
-     * Moves every reading of an installation to this one.
+     * Moves every read of an installation to this one.
      *
      * Discovery is the only one of these a caller normally sets, because in a
-     * session there is one installation and it is found once. A recording moves
+     * session there is one installation and one discovery. A record moves
      * between two in one process, and each of the three below memoizes what it
-     * read from the last one: the console invocation, the booted runtime's
-     * answer, the icon registry. Forgetting the discovery alone leaves the
-     * second recording showing the first installation's registries under the
-     * second one's head.
+     * read from the last one. The console invocation, the booted runtime's
+     * answer, the icon registry. A reset of the discovery alone leaves the
+     * second record with the first installation's registries under the second
+     * one's head.
      */
     private static function pointAt(?string $root): void
     {
@@ -311,12 +313,12 @@ final class ToolAnswers
 
     /**
      * The tools whose answer depends on the installation, as they say so
-     * themselves: `answeredBy` is the field a tool declares when its answer has
-     * two provenances — the booted installation, or the packages read as files
-     * because the console could not be asked. That is precisely the property
-     * that makes a second recording worth its lines, so it is read off the
-     * registry rather than written down again here. A list would be the thing
-     * that still names a tool after the field left it.
+     * themselves. `answeredBy` is the field a tool declares when its answer has
+     * two provenances. The booted installation, or the packages read as files
+     * because the console did not answer. That is precisely the property that
+     * makes a second record worth its lines. So it comes off the registry
+     * rather than from a second list here. A list would be the thing that still
+     * names a tool after the field left it.
      *
      * @return list<string>
      */
@@ -333,12 +335,12 @@ final class ToolAnswers
     }
 
     /**
-     * What the recording is of, in as many sentences as it has roots.
+     * What the record is of, in as many sentences as it has roots.
      *
      * One root reads as it always did. Two say so first, because a reader who
-     * meets a second answer further down has to have been told there is one —
-     * and because "recorded against a checkout" was the sentence that made the
-     * installation half of this surface look like it had no filled answer.
+     * meets a second answer further down has to know there is one. And because
+     * "recorded against a checkout" was the sentence that made the installation
+     * half of this surface look like it had no filled answer.
      *
      * @param list<array{against: string, shortly: string, answers: array<string, array<string, array{0: string, 1: string}>>}> $recordings
      */
@@ -358,12 +360,12 @@ final class ToolAnswers
     /**
      * The recorded half of one tool's page: what it is of, then every call.
      *
-     * It says which day and which installation it came from, because a recording
-     * that does not is an assertion about nothing and the derived half above it
-     * may not make that claim for it — `D-DOC-006`. A call is the unit whether it
-     * was answered once or twice, so the second answer goes under the same
-     * heading and the arguments are written once: two answers 600 lines apart
-     * are not a comparison.
+     * It says which day and which installation it came from. A record that does
+     * not is an assertion about nothing, and the derived half above it may not
+     * make that claim for it, `D-DOC-006`. A call is the unit whether it has
+     * one answer or two. So the second answer goes under the same heading and
+     * the arguments stand once: two answers 600 lines apart are not a
+     * comparison.
      *
      * @param list<array{against: string, shortly: string, answers: array<string, array<string, array{0: string, 1: string}>>}> $recordings
      */
@@ -382,10 +384,10 @@ final class ToolAnswers
     /**
      * The answered half of one tool: what it is of, then every call it drives.
      *
-     * Both halves of the surface come through here — a recording of one or two
-     * roots, and a derived section of exactly one — because what a reader
-     * compares is the same thing either way: the call, then what came back.
-     * Only the opening sentence says which kind of evidence it is looking at.
+     * Both halves of the surface come through here, a record of one or two
+     * roots, and a derived section of exactly one. What a reader compares is
+     * the same thing either way: the call, then what came back. Only the first
+     * sentence says which kind of evidence the reader has.
      *
      * @param list<array{against: string, shortly: string, answers: array<string, array<string, array{0: string, 1: string}>>}> $of
      */
@@ -424,10 +426,10 @@ final class ToolAnswers
      * The answered half of every derived tool, against the root that declares
      * nothing but its identity.
      *
-     * It points at that root and puts back whatever was pointed at before,
-     * because both callers reach this in the middle of something else:
-     * `tools:index` and `tools:check` are standing wherever they were started,
-     * and `tools:record` is between its two recordings.
+     * It points at that root and puts back the previous one, because both
+     * callers reach this in the middle of something else. `tools:index` and
+     * `tools:check` stand wherever they started, and `tools:record` is between
+     * its two records.
      *
      * @param list<string> $only the tools a caller narrowed the run to, empty for all of them
      * @return array<string, string>
@@ -469,7 +471,7 @@ final class ToolAnswers
     }
 
     /**
-     * Every call one tool drives, answered from wherever this is pointed.
+     * Every call one tool drives, answered from wherever this points.
      *
      * @return array<string, array{0: string, 1: string}>
      */
@@ -510,11 +512,11 @@ final class ToolAnswers
     /**
      * The same, short enough to head one answer among several.
      *
-     * A heading is read in the contents list beside every other heading of the
-     * page, so it carries the one thing a reader is telling apart: which of the
-     * two roots. Where it sits, which version it declares and whether its
-     * console answered stand in the sentence above, once — written into every
-     * heading they were longer than several of the answers under them.
+     * A reader meets a heading in the contents list beside every other heading
+     * of the page. So it carries the one thing a reader tells apart: which of
+     * the two roots. Where it sits, which version it declares and whether its
+     * console answered stand in the sentence above, once. In every heading they
+     * were longer than several of the answers under them.
      */
     private static function shortly(): string
     {
@@ -530,23 +532,22 @@ final class ToolAnswers
     }
 
     /**
-     * A recorded root, named by what it is rather than by where it sits: what a
+     * A recorded root, named by what it is rather than by where it sits. What a
      * heading calls it, and what a sentence says it is.
      *
-     * The three this repository can produce are named as such — `bin/cli
+     * The three this repository can produce carry that name. `bin/cli
      * tools:record` writes the fixture itself, `bin/cli checkouts:update` makes
-     * a core checkout and `bin/cli environment:create` an environment — so
-     * naming which says how to record the same thing again. Anything else is
-     * somebody's machine, and the path to it is not evidence anybody else can
-     * use.
+     * a core checkout and `bin/cli environment:create` an environment. So the
+     * name says how to record the same thing again. Anything else is somebody's
+     * machine, and the path to it is not evidence anybody else can use.
      *
-     * The fixture is named first and named as one. What it answers is true of
-     * it and of nothing else, and a reader who cannot see that from the heading
-     * has a page of two answers it looks like one machine gave.
+     * The fixture comes first and as one. What it answers is true of it and of
+     * nothing else. A reader who cannot see that from the heading has a page of
+     * two answers it looks like one machine gave.
      *
-     * Both sides are resolved first: a worktree reaches the checkouts through a
-     * symlink, so the recording made in one would otherwise call this
-     * repository's own checkout somebody's machine.
+     * Both sides resolve first. A worktree reaches the checkouts through a
+     * symlink, so the record made in one would otherwise call this repository's
+     * own checkout somebody's machine.
      *
      * @return array{0: string, 1: string}
      */
@@ -584,9 +585,9 @@ final class ToolAnswers
     /**
      * One call, as its two halves, with this root's paths already written out.
      *
-     * The substitution happens here rather than at rendering time because it
-     * reads the installation root as it stands, and by the time a page is
-     * composed the roots have both been pointed at.
+     * The substitution happens here rather than at render time because it reads
+     * the installation root as it stands. By the time a page composes, both
+     * roots have had their turn.
      *
      * @param array<string, mixed> $arguments
      * @return array{0: string, 1: string}
@@ -604,10 +605,10 @@ final class ToolAnswers
     /**
      * A block whose fence is longer than anything inside it.
      *
-     * Several of these answers are markdown themselves — the script notes hand
-     * back commands in fenced blocks, and a knowledge section comes back as it
-     * was written. Three backticks around that ends the block at the answer's
-     * own fence and renders the rest of the page as prose.
+     * Several of these answers are markdown themselves. The script notes hand
+     * back commands in fenced blocks, and a knowledge section comes back as its
+     * author wrote it. Three backticks around that ends the block at the
+     * answer's own fence and renders the rest of the page as prose.
      *
      * @return list<string>
      */
@@ -615,7 +616,7 @@ final class ToolAnswers
     {
         // A recorded answer carries whatever the tool said, fences and
         // directives included, and none of it can end the block: the content of
-        // a directive is what is indented under it, so there is no closing
+        // a directive is what stands indented under it, so there is no close
         // marker for the content to imitate. Counting backtick runs to outrun
         // the longest was what the markdown this replaced needed — `D-DOC-029`.
         return Rst::code($language === '' ? 'text' : $language, $content);
@@ -624,14 +625,14 @@ final class ToolAnswers
     /**
      * The two roots, written as what they are.
      *
-     * Several of these answers name where they looked, and a recording that
-     * kept those paths would commit one machine's directory layout into pages
-     * every reader of this package gets. What the answer is showing is that it
-     * says where it looked, which survives the substitution.
+     * Several of these answers name where they looked. A record that kept those
+     * paths would commit one machine's directory layout into pages every reader
+     * of this package gets. What the answer shows is that it says where it
+     * looked, which survives the substitution.
      *
-     * It runs over the rendered JSON rather than over the values behind it:
-     * slashes are left unescaped, so a path is the same characters in a data
-     * block as in a text one, and one substitution reaches both.
+     * It runs over the rendered JSON rather than over the values behind it.
+     * Slashes stay unescaped, so a path is the same characters in a data block
+     * as in a text one, and one substitution reaches both.
      */
     private static function withoutAbsolutePaths(string $text): string
     {
@@ -642,9 +643,9 @@ final class ToolAnswers
             }
         }
 
-        // Everything above the checkout is the machine rather than the
-        // recording, and it reaches the page through the directories discovery
-        // walked on its way up.
+        // Everything above the checkout is the machine rather than the record,
+        // and it reaches the page through the directories discovery walked on
+        // its way up.
         $home = (string) getenv('HOME');
 
         return $home === '' ? $text : str_replace($home, '<home>', $text);
@@ -661,8 +662,8 @@ final class ToolAnswers
     }
 
     /**
-     * The same, as the lines it becomes, so a caller assembling a page by lines
-     * does not put a wrapped paragraph back together to split it again.
+     * The same, as the lines it becomes. So a caller that assembles a page by
+     * lines does not put a wrapped paragraph back together to split it again.
      *
      * @return list<string>
      */

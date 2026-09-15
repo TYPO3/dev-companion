@@ -11,23 +11,23 @@ use TYPO3\DevCompanion\Paths;
  * A TYPO3 installation this repository writes, whose console answers.
  *
  * Nine tools answer `installation` where TYPO3 booted and said so and
- * `packages` where the files had to stand in, and a core checkout can only ever
- * produce the second — so the first shape used to be recorded against whichever
- * real site the machine had (`D-DOC-006`). Nothing is faked on this side of the
- * process boundary: `Typo3Cli` resolves this project, starts it and reads what
- * it printed exactly as it does anywhere else.
+ * `packages` where the files had to stand in. A core checkout can only ever
+ * produce the second, so the first shape used to come from whichever real site
+ * the machine had (`D-DOC-006`). Nothing is fake on this side of the process
+ * boundary. `Typo3Cli` resolves this project, starts it and reads what it
+ * printed exactly as it does anywhere else.
  *
  * Written rather than committed, for the reason `.checkouts/` is not in git
  * either, and shaped by `ToolCalls` rather than after a real site. Everything
- * in it says whose it is, because an entry a reader could take for TYPO3's own
- * is the one thing a recorded answer must not carry.
+ * in it says whose it is. An entry a reader could take for TYPO3's own is the
+ * one thing a recorded answer must not carry.
  */
 final class Fixture
 {
     /** The extension the fixture's own registrations belong to. */
     public const EXTENSION = 'acme_events';
 
-    /** Where it is written: below the checkout, ignored by git, rewritten whole. */
+    /** Where it stands: below the checkout, ignored by git, rewritten whole. */
     public static function directory(): string
     {
         return Paths::root() . '/.fixtures';
@@ -42,7 +42,7 @@ final class Fixture
      * The version it states it is.
      *
      * Read off `knowledge/versions.json` rather than written down, for the
-     * reason `Environments::branch()` reads it: an installation recorded
+     * reason `Environments::branch()` reads it. An installation recorded
      * against a version this server no longer answers for measures the wrong
      * thing.
      */
@@ -51,7 +51,7 @@ final class Fixture
         return Environments::branch() . '.0';
     }
 
-    /** Writes it whole and hands back the root it was written to. */
+    /** Writes it whole and hands back the root it went to. */
     public static function write(): string
     {
         $root = self::root();
@@ -77,18 +77,19 @@ final class Fixture
     }
 
     /**
-     * Writes an autoloader that boots into a container answering every topic.
+     * Writes an autoloader that boots into a container that answers every
+     * topic.
      *
-     * The probe is the real one and this is what it lands in, so everything it
-     * reads has to be here in the shape it reads it in: a registry whose icons
+     * The probe is the real one and this is what it lands in. So everything it
+     * reads has to be here in the shape it reads it in. A registry whose icons
      * carry `EXT:<key>/` sources and a TCA whose titles carry `LLL:EXT:<key>/`,
      * because that reference is the only attribution either of them has.
      *
      * The Doctrine and schema classes are the fourth topic. `DefaultTcaSchema`
      * is what says which columns TYPO3 derives for a table and which table
-     * exists only because a relation asked for it, and a container without it
-     * answers that topic `unavailable` — which is a state, and not the one this
-     * installation is written to show.
+     * exists only because a relation asked for it. A container without it
+     * answers that topic `unavailable`, which is a state, and not the one this
+     * installation exists to show.
      *
      * @param array<string, string> $icons identifier => source, as the registry resolves it
      * @param array<string, string> $tables table => ctrl title
@@ -143,7 +144,7 @@ final class Fixture
                 . '\'Can not resolve default data structure without TCA.\', 1753182123); }'
             : '';
         // Declared only beside that signature, so a probe that asks for a
-        // schema where none is wanted reaches a class this installation does
+        // schema where nobody wants one reaches a class this installation does
         // not have.
         $schemaFactory = $flexFormTakesTheSchema ? <<<PHP
             namespace TYPO3\\CMS\\Core\\Schema {
@@ -411,8 +412,8 @@ final class Fixture
     /**
      * Every file of it, by where it goes.
      *
-     * One list rather than a method per package, because what a reader of this
-     * class needs first is what the installation is — and that is the list.
+     * One list rather than a method per package. What a reader of this class
+     * needs first is what the installation is, and that is the list.
      *
      * @return array<string, string>
      */
@@ -526,9 +527,9 @@ final class Fixture
     /**
      * The icons the registry answers with.
      *
-     * `actions-open` is the one `ToolCalls` asks for by name; the rest are what
-     * a list looks like around it, and each one is attributed by the `EXT:`
-     * source it carries.
+     * `actions-open` is the one `ToolCalls` asks for by name. The rest are what
+     * a list looks like around it, and the `EXT:` source each carries says
+     * whose it is.
      *
      * @var array<string, string>
      */
@@ -561,11 +562,11 @@ final class Fixture
      * The flex column the fixture's content element carries.
      *
      * Written in the shape the stable line uses, because that is the version
-     * this installation states it is: one `ds` string on the column and a
-     * record type overriding it through `columnsOverrides`. `Breaking-107047`
-     * removed the keyed `ds` array and `ds_pointerField` the two LTS lines
-     * still resolve by. `bodytext` is here so a call about a column that is not
-     * flex has one to name.
+     * this installation states it is. One `ds` string on the column and a
+     * record type that overrides it through `columnsOverrides`.
+     * `Breaking-107047` removed the keyed `ds` array and `ds_pointerField` the
+     * two LTS lines still resolve by. `bodytext` is here so a call about a
+     * column that is not flex has one to name.
      *
      * @var array<string, mixed>
      */
@@ -599,8 +600,8 @@ final class Fixture
     ];
 
     /**
-     * What its FlexFormTools answers: the column the key is taken out of the
-     * record by, and one parsed structure per key.
+     * What its FlexFormTools answers: the column that carries the key in the
+     * record, and one parsed structure per key.
      *
      * Parsed rather than declared. This stands where the installation does, and
      * what an installation hands back is what its own migration, preparation
@@ -724,11 +725,11 @@ final class Fixture
     /**
      * The changelog the installed core ships.
      *
-     * Three entries, and each is one of the states `ToolCalls` asks for: the
-     * query that names a file, the sweep for a deprecation carrying a scanner
-     * tag, and the deprecation that carries none. Every issue number is far
-     * outside the range Forge has ever issued and every title names this
-     * fixture, so no entry here can be read as something TYPO3 deprecated.
+     * Three entries, and each is one of the states `ToolCalls` asks for. The
+     * query that names a file, the sweep for a deprecation with a scanner tag,
+     * and the deprecation that carries none. Every issue number is far outside
+     * the range Forge has ever issued and every title names this fixture. So no
+     * entry here can pass as something TYPO3 deprecated.
      *
      * @return array<string, string>
      */
@@ -773,13 +774,13 @@ final class Fixture
     }
 
     /**
-     * The console, answering the four commands the installation-backed tools
-     * run and refusing everything else the way a console does.
+     * The console, which answers the four commands the installation-backed
+     * tools run and refuses everything else the way a console does.
      *
-     * It is a program rather than a recording: `language:domain:search` applies
-     * the regex it was handed, so the query that asks for nothing gets the
-     * warning the real console prints and the tool takes the "none" branch it
-     * exists for. A script that printed the same payload whatever it was asked
+     * It is a program rather than a record. `language:domain:search` applies
+     * the regex it receives. So the query that asks for nothing gets the
+     * warning the real console prints, and the tool takes the "none" branch it
+     * exists for. A script that printed the same payload whatever the question
      * would record one answer twice.
      */
     private static function console(): string
@@ -916,12 +917,11 @@ final class Fixture
      * One installed package's manifest, with what it requires where something
      * here reads that.
      *
-     * `typo3_project_describe` reports the installed core's PHP floor out of this
-     * file, so the core package states the one TYPO3 14.3 really declares:
-     * `^8.2`, read in `.checkouts/14.3` on 2026-08-04. It is written rather
-     * than composed from the branch beside it, because the floor does not
-     * follow the major — 12.4 requires `^8.1`, 13.4 and 14.3 both `^8.2`, main
-     * `^8.5`.
+     * `typo3_project_describe` reports the installed core's PHP floor out of
+     * this file. So the core package states the one TYPO3 14.3 really declares:
+     * `^8.2`, read in `.checkouts/14.3` on 2026-08-04. It stands here rather
+     * than comes from the branch beside it, because the floor does not follow
+     * the major. 12.4 requires `^8.1`, 13.4 and 14.3 both `^8.2`, main `^8.5`.
      *
      * @param array<string, string> $require
      */
@@ -952,11 +952,11 @@ final class Fixture
     }
 
     /**
-     * Takes the last one away before writing this one.
+     * Takes the last one away before it writes this one.
      *
-     * A file the shape no longer has would otherwise stay: an extension that
-     * was renamed keeps answering under both keys, and the recording shows an
-     * installation nothing here describes.
+     * A file the shape no longer has would otherwise stay. A renamed extension
+     * then answers under both keys, and the record shows an installation
+     * nothing here describes.
      */
     private static function clear(string $root): void
     {
@@ -964,8 +964,8 @@ final class Fixture
             return;
         }
 
-        // Read whole before anything is removed: the walk is lazy, and a
-        // directory taken away under it is one the iterator then descends into.
+        // Read whole before any removal: the walk is lazy, and a directory
+        // taken away under it is one the iterator then descends into.
         $entries = iterator_to_array(Finder::create()->in($root)->sortByName()->reverseSorting(), false);
         foreach ($entries as $entry) {
             $entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());

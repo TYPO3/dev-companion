@@ -9,10 +9,9 @@ use TYPO3\DevCompanion\Paths;
 /**
  * The bundled catalogs below knowledge/catalog/, as they are on disk.
  *
- * Read rather than validated: what a catalog has to say is checked against the
- * core checkouts by `components:check`, `references:check` and
- * `system-extensions:check`, and against one checkout of the caller's own by
- * `components:paths`. All four start here.
+ * Read rather than validated. `components:check`, `references:check` and
+ * `system-extensions:check` hold what a catalog says to the core checkouts, and
+ * `components:paths` to one checkout of the caller's own. All four start here.
  */
 final class Catalogs
 {

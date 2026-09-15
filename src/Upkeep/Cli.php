@@ -63,29 +63,29 @@ use TYPO3\DevCompanion\Upkeep\Command\UnresolvedList;
 use TYPO3\DevCompanion\Upkeep\Command\VersionCheck;
 
 /**
- * Everything this repository is kept in order by, as one console application.
+ * Everything that keeps this repository in order, as one console application.
  *
  * What this replaces is six scripts below bin/, each with a usage line of its
- * own. Nothing said what the set of them was: a command existed for whoever had
- * listed the directory, and the only overview was a block in AGENTS.md that no
- * code read and nothing held to the truth. The list below is that set, and it is
- * the only place a command is switched on — everything a caller is shown, from
- * `bin/cli list` down to the arguments of one command, the console reads off the
- * classes registered here.
+ * own. Nothing said what the set of them was. A command existed for whoever had
+ * listed the directory. The only overview was a block in AGENTS.md that no code
+ * read and nothing held to the truth. The list below is that set, and it is the
+ * only place that switches a command on. Everything a caller sees, from
+ * `bin/cli list` down to the arguments of one command, the console reads off
+ * the classes registered here.
  *
- * The console is `symfony/console`, and it is a dev dependency: `bin/cli` is the
- * upkeep of this checkout and Composer exports it as no `bin`, so what it needs
- * is not what an installation of this package needs.
+ * The console is `symfony/console`, and it is a dev dependency. `bin/cli` is
+ * the upkeep of this checkout and Composer exports it as no `bin`. So what it
+ * needs is not what an installation of this package needs.
  *
- * `bin/typo3-dev-companion` is deliberately not here. That one is the product — the
- * client launches it, Composer exports it as a `bin`, and it has no business
- * carrying the upkeep of the repository it happens to live in.
+ * `bin/typo3-dev-companion` is deliberately not here. That one is the product.
+ * The client launches it and Composer exports it as a `bin`. It has no business
+ * with the upkeep of the repository it happens to live in.
  */
 final class Cli
 {
     /**
      * The sentence at the head of the command list. It is the application's
-     * name because that is where the console prints it, and there is no second
+     * name because that is where the console prints it. There is no second
      * place to say what this command is for.
      */
     private const ABOUT = 'The upkeep of this repository. bin/typo3-dev-companion is the server itself.';
@@ -94,7 +94,7 @@ final class Cli
 
     /**
      * Every command there is, on the application `bin/cli` runs and that a
-     * todo's own `Run:` lines are dispatched through.
+     * todo's own `Run:` lines go through.
      */
     public static function application(): Application
     {
@@ -182,7 +182,7 @@ final class Cli
     /**
      * Where a command writes what went wrong, which is not where it writes its
      * answer. A check prints its problems here and its count on stdout, so the
-     * count survives a pipe that the problems are read out of.
+     * count survives a pipe that carries the problems away.
      */
     public static function errors(OutputInterface $output): OutputInterface
     {

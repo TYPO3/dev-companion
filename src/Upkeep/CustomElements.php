@@ -10,9 +10,9 @@ use Symfony\Component\Finder\Finder;
  * The custom elements one core checkout declares, read from its TypeScript.
  *
  * A `@customElement` decorator is the one machine-readable component surface
- * the core has, and an element is the half of the answer that cannot be
- * attached to the wrong node — which is the whole of what went wrong with a
- * borrowed class name (`D-CAT-008`).
+ * the core has. An element is the half of the answer that cannot attach to the
+ * wrong node. That is the whole of what went wrong with a borrowed class name
+ * (`D-CAT-008`).
  */
 final class CustomElements
 {

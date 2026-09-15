@@ -8,16 +8,15 @@ use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Paths;
 
 /**
- * Both corpora read together: what is written down about a piece of this code.
+ * Both corpora read together: what the records say about a piece of this code.
  *
- * The attributes reach a session from the failing end — a red test names the
- * entries that rested on it. This is the other end, and the one a session is at
- * before it changes anything: which entries name the class it is about to edit,
- * and which tests would go red for one.
+ * The attributes reach a session from the red end: a red test names the entries
+ * that rested on it. This is the other end, and the one a session is at before
+ * it changes anything. Which entries name the class it is about to edit, and
+ * which tests would go red for one.
  *
- * A decision and a requirement are one question here, so they are read as one
- * list. Where they differ is the corpus each is filed in, which the answer
- * carries.
+ * A decision and a requirement are one question here, so they come as one list.
+ * Where they differ is the corpus each sits in, which the answer carries.
  */
 final class Entries
 {
@@ -70,10 +69,10 @@ final class Entries
     }
 
     /**
-     * The entries naming one of these classes in backticks, and which of them
-     * each names.
+     * The entries that name one of these classes in backticks, and which of
+     * them each names.
      *
-     * A backticked name is how this corpus points at the code — `RecordsTest`
+     * A backticked name is how this corpus points at the code. `RecordsTest`
      * holds every one of them to a class that has it, so a name here resolves
      * or the suite is already red.
      *
@@ -103,9 +102,9 @@ final class Entries
      * The test classes whose code names one of these classes, with the entries
      * each of them holds.
      *
-     * What would go red, as far as a text can say it: a test naming the class
-     * runs over it, and the entries it declares are what that failure would
-     * print.
+     * What would go red, as far as a text can say it. A test that names the
+     * class runs over it, and the entries it declares are what that failure
+     * would print.
      *
      * @param array<int, string> $classes
      * @return array<string, list<string>>

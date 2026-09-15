@@ -7,17 +7,17 @@ namespace TYPO3\DevCompanion\Upkeep;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * The head a requirement and a decision are both written with: front matter, a
- * heading naming the id and the title, and the sentence under it.
+ * The head a requirement and a decision share: front matter, a heading with the
+ * id and the title, and the sentence under it.
  *
  * One format read in one place. `Requirements` and `Decisions` had the same six
- * lines and the same `frontMatterValue()` each, which is how the two could have
- * drifted on what a heading looks like while every check went on passing. A
- * todo opens the same way and reads its front matter through `opening()`, where
- * its heading is the title alone — `D-DOC-062`.
+ * lines and the same `frontMatterValue()` each. So the two could have drifted
+ * on what a heading looks like while every check stayed green. A todo opens the
+ * same way and reads its front matter through `opening()`, where its heading is
+ * the title alone, `D-DOC-062`.
  *
  * An entry rather than a record, because in TYPO3 a record is a row in the
- * database and the corpus names `Record::get()` as that — a class called
+ * database and the corpus names `Record::get()` as that. A class called
  * `Record` here answers a backticked name that belongs to somebody else.
  */
 final class Entry
@@ -47,8 +47,8 @@ final class Entry
      * matter as data, the heading, and what stands under it.
      *
      * The one place those are told apart. A requirement, a decision and a todo
-     * are the same shape and differ in what the heading says, so a second reader
-     * would be the same two patterns written again — `D-DOC-062`.
+     * are the same shape and differ in what the heading says. So a second
+     * reader would be the same two patterns once more, `D-DOC-062`.
      *
      * @return array{matter: array<string, mixed>, heading: string, body: string}
      */
@@ -68,9 +68,9 @@ final class Entry
     /**
      * The front matter as data, which is what it is.
      *
-     * Read with a YAML parser rather than a line at a time: it carries a list
-     * since the tests moved into it, and a hand-rolled reader for one is a
-     * third parser over a format somebody else already implements.
+     * Read with a YAML parser rather than a line at a time. It carries a list
+     * since the tests moved into it. A hand-rolled reader for one is a third
+     * parser over a format somebody else already implements.
      *
      * @return array<string, mixed>
      */
@@ -81,9 +81,9 @@ final class Entry
         }
 
         try {
-            // A date is asked for as a date rather than left to become the
-            // Unix timestamp the parser answers by default, so `2026-08-23`
-            // comes back as the day it is written as.
+            // A date comes back as a date rather than becomes the Unix
+            // timestamp the parser answers by default, so `2026-08-23` comes
+            // back as the day it stands as.
             $parsed = Yaml::parse($frontMatter, Yaml::PARSE_DATETIME);
         } catch (\Throwable) {
             return [];
@@ -96,10 +96,10 @@ final class Entry
      * The file name an entry takes, which is its id and its title.
      *
      * One implementation, because the check that holds a name and whatever
-     * writes one have to agree on every character of it: an apostrophe or a
-     * backtick is dropped rather than turned into a separator, so "a package's
-     * build" reads `a-packages-build`, and every other run of what is neither a
-     * letter nor a figure is one dash.
+     * writes one have to agree on every character of it. An apostrophe or a
+     * backtick goes rather than turns into a separator, so "a package's build"
+     * reads `a-packages-build`. Every other run of what is neither a letter nor
+     * a figure is one dash.
      */
     public static function fileName(string $id, string $title): string
     {
@@ -110,14 +110,13 @@ final class Entry
     }
 
     /**
-     * The entries a test holds, which is what a failing one prints.
+     * The entries a test holds, which is what a red one prints.
      *
      * Read from the generated list, which the test's own `#[Decision]` or
-     * `#[Requirement]` attributes are what wrote — so this answers with the
-     * entries that test declared, and a session standing in a red test is sent
-     * to them.
+     * `#[Requirement]` attributes wrote. So this answers with the entries that
+     * test declared, and a session in a red test goes to them.
      *
-     * A whole class counts for every method in it: an entry naming
+     * A whole class counts for every method in it: an entry that names
      * `VersionsTest` rests on all of it.
      *
      * @param array<string, array{id: string, title: string, group: string, file: string, tests: list<string>}> $entries
@@ -144,15 +143,14 @@ final class Entry
      * The entry's file as the generated list of names would write it.
      *
      * The `#[Decision]` and `#[Requirement]` attributes are the source and the
-     * front matter is the copy, which is why the whole file comes back rather
-     * than the list: `decisions:cover` and `requirements:cover` write what this
+     * front matter is the copy. That is why the whole file comes back rather
+     * than the list. `decisions:cover` and `requirements:cover` write what this
      * returns and the checks compare against it, so one implementation decides
      * what the front matter says.
      *
-     * An entry no test names keeps what it was written with — an empty list, or
-     * the `not guarded` a person wrote to say nothing holds it. Either says
-     * nothing holds the entry, where the absence of the key says nobody has
-     * asked.
+     * An entry no test names keeps what it came with: an empty list, or the
+     * `not guarded` a person wrote to say nothing holds it. Either says nothing
+     * holds the entry, where the absence of the key says nobody has asked.
      *
      * @param list<string> $names
      */
@@ -162,21 +160,21 @@ final class Entry
             ? $key . ": []\n"
             : $key . ":\n" . implode('', array_map(static fn(string $name): string => '  - ' . $name . "\n", $names));
 
-        // Whatever value the key was written with, so that one written as a
-        // word is replaced rather than left for a second key to be appended
-        // under it. Matching only the empty and the `[]` forms put two
-        // `coveredBy:` into every entry somebody had written `not guarded` on.
+        // Whatever value the key came with, so that one written as a word gives
+        // way rather than stays for a second key to follow under it. Matching
+        // only the empty and the `[]` forms put two `coveredBy:` into every
+        // entry somebody had written `not guarded` on.
         $carries = '/^' . $key . ': *(.*)\R(?:  - .*\R)*/m';
         if (preg_match($carries, $contents, $already) === 1) {
             // What a person wrote to say nothing holds it stays in their words.
             // Rewriting `not guarded` to `[]` would say the same thing and lose
-            // that somebody had been asked and answered.
+            // that somebody heard the question and answered.
             if ($names === [] && !in_array(trim($already[1]), ['', '[]'], true)) {
                 return $contents;
             }
 
-            // A callback rather than a replacement string: a `$` in one would be
-            // read as a group reference, and what is written here is a name.
+            // A callback rather than a replacement string: a `$` in one would
+            // count as a group reference, and what stands here is a name.
             return (string) preg_replace_callback($carries, static fn(): string => $written, $contents, 1);
         }
         if ($names === []) {
@@ -184,8 +182,8 @@ final class Entry
         }
 
         // The key is new, and goes at the foot of the front matter: the first
-        // `---` on a line of its own, the opening one standing at the very
-        // start of the file.
+        // `---` on a line of its own, the first one at the very start of the
+        // file.
         return (string) preg_replace_callback('/\R---\R/', static fn(): string => "\n" . $written . "---\n", $contents, 1);
     }
 
@@ -201,12 +199,12 @@ final class Entry
     }
 
     /**
-     * One entry of the front matter as it was written.
+     * One entry of the front matter as the file has it.
      *
-     * A bare date is a `DateTimeImmutable` by the time the parser is done with
-     * it, and the value the file carries is the day — so it is rendered back
-     * rather than dropped, which is what a scalar test alone did to every
-     * `readings:` date (`D-DOC-066`).
+     * A bare date is a `DateTimeImmutable` once the parser has finished with
+     * it, and the value the file carries is the day. So it renders back rather
+     * than drops, which is what a scalar test alone did to every `readings:`
+     * date (`D-DOC-066`).
      */
     private static function text(mixed $value): string
     {
@@ -218,7 +216,7 @@ final class Entry
     }
 
     /**
-     * One key as a list of names, whatever shape it was written in.
+     * One key as a list of names, whatever shape the file has it in.
      *
      * @param array<string, mixed> $matter
      * @return list<string>
@@ -243,7 +241,7 @@ final class Entry
      * The first paragraph of a body, which is where a statement ends.
      *
      * A pattern that will not compile is the one way `preg_split()` answers
-     * `false`, and these are literals — so the empty string is what a body with
+     * `false`, and these are literals. So the empty string is what a body with
      * nothing in it gives, and there is no second case to read.
      */
     public static function firstParagraph(string $body): string

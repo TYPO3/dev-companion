@@ -7,22 +7,22 @@ namespace TYPO3\DevCompanion\Upkeep;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Moving an entry's file — to another number, or under the title it now has —
- * and naming what nobody here can move.
+ * A move of an entry's file, to another number or under the title it now has,
+ * and a report of what nobody here can move.
  *
- * The renumbering is the dangerous part rather than the collision: twice the
- * files naming the old number did not all mean the same entry — `R-PRJ-008`
+ * The new number is the dangerous part rather than the collision. Twice the
+ * files that named the old number did not all mean the same entry. `R-PRJ-008`
  * rested on the `D-ANS-013` that kept its number while five other files meant
- * the one that became `D-ANS-015` — so a search and replace over the id is
- * silently wrong there. A reference is therefore moved only where the file
- * itself says which entry is meant, which is a link path, and every other one is
- * reported: moved or named, never silently left — `D-DOC-015`.
+ * the one that became `D-ANS-015`. So a search and replace over the id is
+ * silently wrong there. So a reference moves only where the file itself says
+ * which entry it means, which is a link path. Every other one comes back in the
+ * report: moved or named, never silently left, `D-DOC-015`.
  *
  * The one other thing a file says is who wrote the line. A mention this branch
  * added means this branch's entry, because the entry it would otherwise mean
- * was already on `main` when the line was written — which is what the report
- * used to send a person to `git diff` for, and is now settled here and reported
- * apart from the rest — `D-FBK-046`.
+ * was already on `main` when the line arrived. The report used to send a person
+ * to `git diff` for that. It is now settled here and stands apart from the
+ * rest, `D-FBK-046`.
  */
 final class Renumber
 {
@@ -41,9 +41,9 @@ final class Renumber
             throw new \InvalidArgumentException($file . ' is no decision in ' . $root . '/decisions/');
         }
 
-        // Both sides of every path comparison below, in one spelling. The entry
-        // is recognised among the documents by being the same path, and a
-        // caller naming it relatively would leave its own id line unmoved.
+        // Both sides of every path comparison below, in one form. The entry
+        // counts among the documents as the same path, and a caller that names
+        // it relatively would leave its own id line unmoved.
         $root = (string) (realpath($root) ?: $root);
         $file = (string) realpath($file);
 
@@ -55,9 +55,9 @@ final class Renumber
             throw new \InvalidArgumentException($from . ' already has that number');
         }
         if (substr($from, 0, 6) !== substr($to, 0, 6)) {
-            // The prefix names the group directory, so this would be a
-            // re-filing rather than a renumbering, and what the entry is about
-            // moves with it.
+            // The prefix names the group directory, so this would be a re-file
+            // rather than a new number, and what the entry is about moves with
+            // it.
             throw new \InvalidArgumentException($from . ' and ' . $to . ' are not in one group');
         }
         $taken = self::taken($root, $to);
@@ -109,15 +109,15 @@ final class Renumber
     /**
      * The mentions this branch wrote, rewritten, and the ones it did not.
      *
-     * A line naming the old id is ambiguous between two entries only while both
-     * were reachable when it was written. One the branch added was written when
-     * the other entry was already on `main` under that number, so it means the
-     * entry that is moving. The comparison is the line rather than a diff hunk:
-     * a file `main` does not carry is the branch's whole, and a line its version
+     * A line that names the old id is ambiguous between two entries only while
+     * both were reachable at its commit. One the branch added arrived when the
+     * other entry was already on `main` under that number, so it means the
+     * entry that moves. The comparison is the line rather than a diff hunk. A
+     * file `main` does not carry is the branch's whole, and a line its version
      * does not carry is one the branch wrote.
      *
-     * Where git cannot answer — no `main`, no repository — nothing is moved and
-     * every mention is reported, which is what this did before.
+     * Where git cannot answer, no `main`, no repository, nothing moves and
+     * every mention comes back in the report, which is what this did before.
      *
      * @param list<array{file: string, line: int, text: string}> $named
      * @return array{0: list<array{file: string, line: int, text: string}>, 1: list<array{file: string, line: int, text: string}>}
@@ -183,11 +183,11 @@ final class Renumber
     /**
      * One entry, filed under the name its title says — `D-DOC-047`.
      *
-     * A number never moves here, so nothing has to be told apart: an id is
-     * ambiguous across two entries and a file name is not, which is why this
-     * rewrites every reference to the name rather than reporting the ones it
-     * cannot settle. Where the file is already where it belongs it is left
-     * alone and nothing is rewritten.
+     * A number never moves here, so nothing has to stand apart. An id is
+     * ambiguous across two entries and a file name is not. That is why this
+     * rewrites every reference to the name rather than reports the ones it
+     * cannot settle. Where the file is already where it belongs it stays and
+     * nothing changes.
      *
      * @return array{from: string, to: string, references: int}
      */
@@ -219,15 +219,15 @@ final class Renumber
     }
 
     /**
-     * One document, line by line: what the line settles is rewritten, what it
-     * does not is recorded where it stands.
+     * One document, line by line. What the line settles changes, what it does
+     * not goes into the report where it stands.
      *
-     * A line naming the entry's own file settles the id on it, which is every
-     * markdown link and the reference definition a generated listing ends with.
-     * A reference-style link is the one form whose path sits on another line, so
-     * a file carrying that definition settles its own usages of it too. The
-     * entry's own front matter and heading are the id rather than a reference to
-     * it.
+     * A line that names the entry's own file settles the id on it. That is
+     * every markdown link and the reference definition a generated listing ends
+     * with. A reference-style link is the one form whose path sits on another
+     * line. So a file with that definition settles its own uses of it too. The
+     * entry's own front matter and heading are the id rather than a reference
+     * to it.
      *
      * @param list<array{file: string, line: int, text: string}> $moved
      * @param list<array{file: string, line: int, text: string}> $named
@@ -244,7 +244,7 @@ final class Renumber
         array &$named,
     ): string {
         // The lookahead is the letter suffix: `R-ANS-008b` is the entry split
-        // off `R-ANS-008` and never a spelling of it — D-DOC-005.
+        // off `R-ANS-008` and never a form of it — D-DOC-005.
         $id = '/\b' . preg_quote($from, '/') . '(?![0-9a-z])/';
         $defines = preg_match('/^\[' . preg_quote($from, '/') . '\]:\s*\S*' . preg_quote($old, '/') . '\s*$/m', $contents) === 1;
         $usage = '/\[`?' . preg_quote($from, '/') . '`?\]\[' . preg_quote($from, '/') . '\]/';
@@ -272,13 +272,13 @@ final class Renumber
     }
 
     /**
-     * Every decision file a caller's argument names: a path names itself, an id
-     * names each file carrying it, and a bare file name names the one called
-     * that.
+     * Every decision file a caller's argument names. A path names itself, an id
+     * names each file that carries it, and a bare file name names the one with
+     * that name.
      *
-     * More than one comes back only in the state this class exists for — two
-     * branches cut from one `main` handed out one id — and which of them moves
-     * is the caller's to say, because the entry already on `main` keeps its
+     * More than one comes back only in the state this class exists for: two
+     * branches cut from one `main` handed out one id. Which of them moves is
+     * the caller's to say, because the entry already on `main` keeps its
      * number.
      *
      * @return list<string>
@@ -314,10 +314,10 @@ final class Renumber
 
     /**
      * The next number free in a group, which is one past the highest rather
-     * than the first gap. An id is never reused, and nothing reads a gap:
-     * `decisions:check` reads the width, the group, the heading, the date, the
-     * status, the field order and the duplicates, and never one number against
-     * the next.
+     * than the first gap. An id never sees a second use, and nothing reads a
+     * gap. `decisions:check` reads the width, the group, the heading, the date,
+     * the status, the field order and the duplicates, and never one number
+     * against the next.
      */
     public static function next(string $root, string $prefix): string
     {

@@ -10,16 +10,16 @@ use TYPO3\DevCompanion\Paths;
 /**
  * The PHP this repository declares, as the records name it.
  *
- * Three readings want it and none wants another's copy: `RecordsTest` holds a
- * backticked `Class::member` to a class that has it, `Decisions::uncovered()`
- * asks which entries point at this code naming no test that would catch it
- * moving, and `decisions:cover` writes each entry's `coveredBy` from the
+ * Three readers want it and none wants another's copy. `RecordsTest` holds a
+ * backticked `Class::member` to a class that has it. `Decisions::uncovered()`
+ * asks which entries point at this code and name no test that would catch a
+ * move. `decisions:cover` writes each entry's `coveredBy` from the
  * `#[Decision]` attributes. A second copy of the list is the duplication those
  * readings exist to find.
  *
- * Read from the files rather than through reflection, because the records name
- * a private member as readily as a public one, and because loading every class
- * to ask about it is a cost a check pays on every run.
+ * Read from the files rather than through reflection. The records name a
+ * private member as readily as a public one. A load of every class to ask about
+ * it is a cost a check pays on every run.
  */
 final class Sources
 {
@@ -37,7 +37,7 @@ final class Sources
     }
 
     /**
-     * Every `Class::member` those files declare — a method, a constant, a
+     * Every `Class::member` those files declare. A method, a constant, a
      * property or an enum case, which is the whole of what a record can point
      * at with two colons.
      *
@@ -52,17 +52,16 @@ final class Sources
      * Which tests declare they hold an entry, keyed by id.
      *
      * The `#[Decision]` and `#[Requirement]` attributes over a test are where
-     * the coupling is written, and the entry's `coveredBy` or `heldBy` is
-     * generated from them — one source, so the test and the entry cannot name
-     * each other differently.
+     * the tie stands, and the entry's `coveredBy` or `heldBy` comes from them.
+     * One source, so the test and the entry cannot name each other differently.
      *
-     * An attribute over the class names the class, which is a claim about every
+     * An attribute over the class names the class. That is a claim about every
      * method in it and what a requirement writes where the whole class is the
      * answer.
      *
      * Read from the text rather than through reflection, for the reason the
-     * rest of this class is: loading every test class to ask about it is a cost
-     * a check pays on every run.
+     * rest of this class is. A load of every test class to ask about it is a
+     * cost a check pays on every run.
      *
      * @return array<string, list<string>>
      */
@@ -105,7 +104,7 @@ final class Sources
     }
 
     /**
-     * The file each class is declared in.
+     * The file that declares each class.
      *
      * @return array<string, string>
      */
@@ -115,8 +114,8 @@ final class Sources
     }
 
     /**
-     * The scan, once per process. Both callers run over the whole corpus, so
-     * reading the tree twice is the difference between one pass and two.
+     * The scan, once per process. Both callers run over the whole corpus, so a
+     * second read of the tree is the difference between one pass and two.
      *
      * @return array{0: array<string, true>, 1: array<string, true>, 2: array<string, string>}
      */

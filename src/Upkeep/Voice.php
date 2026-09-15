@@ -12,11 +12,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * The one voice every command speaks in.
  *
- * A heading, a row under it, a verdict at the end, a problem where one is
- * found and a note that is context rather than answer: five shapes, and a
- * reader who has seen one command has seen them all. The colour is on the mark
- * and nowhere in the words, so a pipe and `--no-ansi` read the same sentence
- * — `D-DOC-067`.
+ * A heading, a row under it, a verdict at the end. A problem where one turns
+ * up, and a note that is context rather than answer. Five shapes, and a reader
+ * who has seen one command has seen them all. The colour is on the mark and
+ * nowhere in the words, so a pipe and `--no-ansi` read the same sentence —
+ * `D-DOC-067`.
  */
 final class Voice
 {
@@ -24,8 +24,8 @@ final class Voice
     private const WRONG = '<fg=red>✗</> ';
 
     /**
-     * Every output a heading has been written to, so the second heading on one
-     * is set off from what came before it and the first is not.
+     * Every output that has had a heading, so the second heading on one stands
+     * off from what came before it and the first does not.
      *
      * @var ?\WeakMap<OutputInterface, true>
      */
@@ -45,8 +45,8 @@ final class Voice
     /**
      * One entry under a heading, at the indent every row stands at.
      *
-     * Not escaped, because a row is assembled from `key()` and `dim()`, which
-     * escape what they are given and hand back a tag.
+     * Not escaped, because a row consists of `key()` and `dim()`, which escape
+     * what they get and hand back a tag.
      */
     public static function row(OutputInterface $output, string $text): void
     {
@@ -62,8 +62,8 @@ final class Voice
     /**
      * What went wrong, on the error stream.
      *
-     * A check prints its problems here and its verdict on stdout, so the count
-     * survives a pipe that the problems are read out of — `Cli::errors()`.
+     * A check prints its problems here and its verdict on stdout. So the count
+     * survives a pipe that carries the problems away, `Cli::errors()`.
      */
     public static function problem(OutputInterface $output, string $text): void
     {
@@ -79,8 +79,8 @@ final class Voice
     /**
      * How a check came out, as the exit code the caller returns.
      *
-     * The sentence for the failing case is the one the count already sits in,
-     * so a caller with one sentence for both leaves the second out.
+     * The sentence for the red case is the one the count already sits in. So a
+     * caller with one sentence for both leaves the second out.
      */
     public static function verdict(OutputInterface $output, int $problems, string $fine, ?string $wrong = null): int
     {
@@ -101,8 +101,8 @@ final class Voice
     }
 
     /**
-     * An identifier where it leads a row — an entry id, a branch, a step —
-     * padded to its column and coloured so a listing can be scanned by it.
+     * An identifier where it leads a row, an entry id, a branch, a step. Padded
+     * to its column and coloured so a reader can scan a listing by it.
      */
     public static function key(string $text, int $width = 0): string
     {
@@ -118,10 +118,10 @@ final class Voice
     /**
      * A bar for the steps a command takes, on a terminal and nowhere else.
      *
-     * A pipe, a log and `--no-ansi` get none of it: a bar that cannot redraw
+     * A pipe, a log and `--no-ansi` get none of it. A bar that cannot redraw
      * itself is a line per step, and the rows the command prints are those
-     * already. Zero steps is a bar with no end, for a loop whose length is
-     * not known before it runs.
+     * already. Zero steps is a bar with no end, for a loop whose length is not
+     * known before it runs.
      */
     public static function progress(OutputInterface $output, int $steps = 0): ProgressBar
     {

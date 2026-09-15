@@ -348,11 +348,11 @@ final class ToolAnswers
             return $recordings[0]['against'];
         }
 
-        return 'Of two working directories, because what this server answers depends on which one a client is '
-            . 'standing in, and neither fills the whole surface. '
+        return 'Of two working directories, because what this server answers depends on the one a client '
+            . 'stands in. Neither fills the whole surface. '
             . implode(' ', array_column($recordings, 'against'))
-            . ' The tools that declare ``answeredBy`` carry an answer from each, under a heading naming which; '
-            . 'every other answer is from the first alone, because nothing in it would differ.';
+            . ' The tools that declare ``answeredBy`` carry an answer from each, under a heading that names which. '
+            . 'Every other answer comes from the first alone, because nothing in it would differ.';
     }
 
     /**
@@ -446,10 +446,10 @@ final class ToolAnswers
         self::pointAt(CoreFixture::write());
 
         $opening = sprintf(
-            'Derived by ``bin/cli tools:index``, and ``bin/cli tools:check`` holds it — the same as everything above '
-            . 'this heading. This tool reads nothing an installation contains: what reaches its answer is the '
-            . 'bundled knowledge and which TYPO3 major the caller is on, so what comes back is written down rather '
-            . 'than recorded from one machine\'s checkout. Answered against %s, declaring TYPO3 %s.',
+            'Derived by ``bin/cli tools:index``, and ``bin/cli tools:check`` holds it, the same as everything above '
+            . 'this heading. This tool reads nothing an installation contains. What reaches its answer is the '
+            . 'bundled knowledge and which TYPO3 major the caller is on. So what comes back stands in a file rather '
+            . 'than in a recording from one machine\'s checkout. Answered against %s, which declares TYPO3 %s.',
             self::describeRoot(CoreFixture::root()),
             CoreFixture::typo3Version(),
         );
@@ -496,13 +496,13 @@ final class ToolAnswers
             $root === null
                 ? 'no installation: the recording ran where nothing was found above the working directory'
                 : sprintf(
-                    '%s, TYPO3 %s, %s, whose console %s',
+                    '%s, TYPO3 %s, %s. Its console %s',
                     $installation['kind'] ?? 'an installation',
                     Instance::typo3Version() ?? 'of an unread version',
                     self::describeRoot((string) $root),
                     Typo3Cli::isAvailable()
                         ? 'answers'
-                        : 'could not be reached: ' . self::withoutAbsolutePaths(rtrim(Typo3Cli::reason(), '.')),
+                                                : 'is out of reach: ' . self::withoutAbsolutePaths(rtrim(Typo3Cli::reason(), '.')),
                 ),
         );
     }

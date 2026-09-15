@@ -65,12 +65,12 @@ Answers with
 Answered
 --------
 
-Derived by ``bin/cli tools:index``, and ``bin/cli tools:check`` holds it —
-the same as everything above this heading. This tool reads nothing an
-installation contains: what reaches its answer is the bundled knowledge and
-which TYPO3 major the caller is on, so what comes back is written down rather
-than recorded from one machine's checkout. Answered against the core checkout
-this repository writes below .fixtures/, declaring TYPO3 14.3.0.
+Derived by ``bin/cli tools:index``, and ``bin/cli tools:check`` holds it, the
+same as everything above this heading. This tool reads nothing an installation
+contains. What reaches its answer is the bundled knowledge and which TYPO3
+major the caller is on. So what comes back stands in a file rather than in a
+recording from one machine's checkout. Answered against the core checkout this
+repository writes below .fixtures/, which declares TYPO3 14.3.0.
 
 system extensions: hit
 ~~~~~~~~~~~~~~~~~~~~~~

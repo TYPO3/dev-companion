@@ -169,8 +169,14 @@ Takes
     # is one answer whatever this says.
     limit: integer  # optional
 
-The call carries exactly one of these sets of arguments: ``issue`` — or
-``change`` — or ``commit`` — or ``query`` — or ``path`` — or ``backlog``.
+The call carries exactly one of these sets of arguments:
+
+- ``issue``
+- ``change``
+- ``commit``
+- ``query``
+- ``path``
+- ``backlog``
 
 Answers with
 ------------
@@ -398,11 +404,11 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-14 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/,
-whose console could not be reached: <installation> has no TYPO3 console —
-none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed
-— vendor/autoload.php is not there either, and composer install writes both.
+Recorded on 2026-09-15 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/. Its
+console is out of reach: <installation> has no TYPO3 console — none of
+bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
+vendor/autoload.php is not there either, and composer install writes both.
 Nothing checks what is below this heading; everything above it is derived from
 the class that answers the call, and ``bin/cli tools:check`` holds it.
 
@@ -1775,7 +1781,7 @@ Text:
 
     TYPO3 core review server: https://review.typo3.org
     Query: project:"Packages/TYPO3.CMS" status:open -is:wip delta:<=60 label:Code-Review>=1 -label:Code-Review<=-1 -label:Verified<=-1 is:mergeable
-    3 of 30 open core changes, oldest pushed first.
+    3 of 29 open core changes, oldest pushed first.
     This is a page and not the set, and limit stops at 25. What comes after it is reached by a narrower filter — a smaller maxSize, a branch, an earlier updatedBefore — rather than by a larger limit, because more of one order is more of the same end.
     Age is a candidate and never a finding. The oldest changes are regularly the largest and the ones that no longer merge, so maxSize and mergeable are what turn this order into a shortlist — and what a change is actually waiting on is read by passing its number back as change, which answers the votes with their voters and the comments with their threads.
     `typo3-core-patch-review` is the workflow a change picked off this page opens, and `typo3-core-patch-checkout` is what gets the patch set into a checkout. Open the one this task is before reading a diff.
@@ -1964,7 +1970,7 @@ Data:
         ],
         "backlog": {
             "order": "oldest",
-            "read": 30,
+            "read": 29,
             "complete": true
         },
         "releaseLines": {

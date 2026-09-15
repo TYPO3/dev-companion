@@ -490,7 +490,13 @@ final class ToolSurface
             (array) $schema['oneOf'],
         );
 
-        return [self::wrap($opening . ': ' . implode(' — or ', $sets) . '.'), ''];
+        $lines = [$opening . ':', ''];
+        foreach ($sets as $set) {
+            $lines[] = self::wrap('- ' . $set, '  ');
+        }
+        $lines[] = '';
+
+        return $lines;
     }
 
     /**

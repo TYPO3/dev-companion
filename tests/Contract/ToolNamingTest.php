@@ -12,9 +12,9 @@ use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
- * The naming schema every tool follows: typo3_<subject>_<verb>, with the verb
- * taken from a closed list. This test is the list — see AGENTS.md for the rule
- * a new tool is named by.
+ * The name schema every tool follows: typo3_<subject>_<verb>, with the verb
+ * from a closed list. This test is the list — see AGENTS.md for the rule that
+ * names a new tool.
  */
 final class ToolNamingTest extends TestCase
 {
@@ -24,18 +24,18 @@ final class ToolNamingTest extends TestCase
      * @var array<string, string>
      */
     private const VERBS = [
-        // `scope` and `describe` are the pair a reader gets wrong: a scope
-        // answers for a source and states what it covers, a describe answers
+        // `scope` and `describe` are the pair a reader gets wrong. A scope
+        // answers for a source and states what it covers. A describe answers
         // for one thing the caller named and states what it is — D-SCO-010.
         'lookup' => 'a query goes in, matching entries come out, and finding nothing is a legitimate answer',
         'guide' => 'an answer composed for the task at hand, which always exists',
         'list' => 'an enumeration of what is there, no query needed',
         'scope' => 'what a source covers and where its boundary runs',
         'describe' => 'what one thing the caller names is and what it registers',
-        // Where, not just that: writing into this server's own checkout is not
-        // writing into the installation it read, and one word for both is how
-        // the feedback channel got read as a hole in the read-only posture —
-        // D-FBK-042.
+        // Where, not just that. A write into this server's own checkout is not
+        // a write into the installation it read. One word for both is how a
+        // reader took the feedback channel for a hole in the read-only posture
+        // — D-FBK-042.
         'record' => 'the tool writes into this server\'s own checkout',
     ];
 
@@ -44,8 +44,8 @@ final class ToolNamingTest extends TestCase
 
     /**
      * The prefix and the shape are what clients installed months ago call this
-     * server by, so the vocabulary is defined here and nowhere else —
-     * `D-SCO-010`, `D-SCO-011`.
+     * server by. So the vocabulary stands here and nowhere else — `D-SCO-010`,
+     * `D-SCO-011`.
      */
     #[Decision('D-SCO-010')]
     #[Decision('D-SCO-011')]
@@ -83,28 +83,16 @@ final class ToolNamingTest extends TestCase
 
     /**
      * A rename that misses one prose string leaves an answer that tells an
-     * agent to call a tool this server does not have. The tool call fails, and
-     * it fails in exactly the part of the answer meant to steer the next step.
+     * agent to call a tool this server does not have. That is exactly the part
+     * of the answer meant to steer the next step.
      *
-     * The skills are read the same way and for the same reason. They are almost
-     * nothing but tool names in an order, they are installed into somebody
-     * else's project, and there a stale name is not corrected by the next
-     * release of this server.
-     *
-     * The records join them where a name is a claim about today: what
-     * `documentation/` publishes, what a requirement demands, what the queue
-     * says the next step is, and what a scenario says has to come out of a
-     * prompt. All four were clean when this was widened, so it holds a boundary
-     * rather than reporting a breach.
-     *
-     * Two corpora stay out, and neither is an oversight. `feedback/` is a
-     * session's own report and `scenarios/runs/` is a trace of the calls one
-     * made, both on a date — a rename there would edit the evidence, so each
-     * run carries a line naming the current spelling instead.
-     *
-     * `decisions/` is read by the test below rather than by this one, because
-     * it is the one corpus where a superseded name is sometimes the subject of
-     * the sentence — `D-DOC-040`, `D-SCO-011`, `D-KNW-035`.
+     * The skills take the same read: a client installs them into somebody
+     * else's project, where no release of this server corrects a stale name.
+     * The records join them where a name is a claim about today, and all four
+     * were clean when the test grew to them. `feedback/` and `scenarios/runs/`
+     * stay out as evidence on a date. The test below reads `decisions/`, the
+     * one corpus where a superseded name is sometimes the subject —
+     * `D-DOC-040`, `D-SCO-011`, `D-KNW-035`.
      */
     #[Decision('D-DOC-040')]
     #[Decision('D-KNW-035')]
@@ -128,20 +116,18 @@ final class ToolNamingTest extends TestCase
     }
 
     /**
-     * A decision names a tool in backticks, or is not naming a tool.
+     * A decision names a tool in backticks, or names no tool.
      *
-     * The corpus went stale unwatched: 157 mentions of three tools renamed
-     * weeks earlier, across 56 entries, while this file read the knowledge base
-     * and the skills alone. Guarding it took no list of what those names used
-     * to be, only the distinction a reader wants anyway — a name in backticks
-     * is one to call, and a name being talked about is written plainly.
-     * `Rejected: typo3_debrief_guide` keeps the name a later session searches
-     * for when the demand comes back, and offers it to nobody.
+     * The corpus went stale with nobody to watch it, while this file read the
+     * knowledge base and the skills alone — `D-DOC-040` has the count. The
+     * guard took no list of the old names, only the distinction a reader wants
+     * anyway. A name in backticks is one to call, and a name under discussion
+     * stands plain. `Rejected: typo3_debrief_guide` keeps the name a later
+     * session searches for when the demand comes back, and offers it to nobody.
      *
      * Matched is the whole backticked token in the tool shape, a subject and
      * one of the verbs above. So the TER's own `typo3_versions` field is not a
-     * tool name, and neither is the `typo3_logo.png` inside a Fluid example —
-     * `D-DOC-040`.
+     * tool name, and neither is the `typo3_logo.png` inside a Fluid example.
      */
     #[Decision('D-DOC-040')]
     #[Test]
@@ -164,8 +150,8 @@ final class ToolNamingTest extends TestCase
     }
 
     /**
-     * A rename reaches the answers as well as the registry, which is what a
-     * caller reading a tool name out of an answer depends on — `D-SCO-011`.
+     * A rename reaches the answers as well as the registry. A caller that reads
+     * a tool name out of an answer depends on that — `D-SCO-011`.
      */
     /** @param array<string, mixed> $arguments */
     #[Decision('D-SCO-011')]
@@ -219,7 +205,8 @@ final class ToolNamingTest extends TestCase
     }
 
     /**
-     * The records that state what is true now rather than what was called once.
+     * The records that state what is true now rather than what a thing's name
+     * once was.
      *
      * @return array<int, string>
      */
@@ -243,7 +230,7 @@ final class ToolNamingTest extends TestCase
 
     /**
      * The verb names the answer shape, so the same shape has to answer to the
-     * same verb — otherwise the name stops predicting what comes back.
+     * same verb. Otherwise the name no longer says what comes back.
      */
     #[Test]
     public function toolsSharingAnOutputSchemaShareTheirVerb(): void

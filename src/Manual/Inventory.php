@@ -10,15 +10,15 @@ use TYPO3\DevCompanion\Http\Fetch;
  * The Sphinx inventory one manual publishes, read once and revalidated after.
  *
  * The format is four comment lines and then everything else compressed with
- * zlib, one object per line: the name, its `domain:role`, a priority, the URI it
- * resolves to and the name it is displayed under, where a `-` stands for a
- * display name equal to the object's own. Two readers take it apart differently
- * — the manual search reads the pages and the permalink lookup reads everything
- * that is not one — so what they share is the fetch and the parse.
+ * zlib, one object per line. That is the name, its `domain:role`, a priority,
+ * the URI it resolves to and its display name. A `-` stands for a display name
+ * equal to the object's own. Two readers take it apart differently. The manual
+ * search reads the pages and the permalink lookup reads everything that is not
+ * one. What they share is the fetch and the parse.
  *
- * The third comment line is the branch that answered, which is the whole of what
- * says a version was widened: the host redirects a manual it has no branch for
- * to `main` and says nothing about it in the status.
+ * The third comment line is the branch that answered, which is the whole of
+ * what says the host widened a version. The host redirects a manual it has no
+ * branch for to `main` and says nothing about it in the status.
  */
 final class Inventory
 {
@@ -32,16 +32,13 @@ final class Inventory
      * Each inventory as it was last read, under the URL it came from.
      *
      * Every artefact on this host carries an `ETag` and answers `If-None-Match`
-     * with a 304 and a zero-byte body, so the second read of a session pays one
+     * with a 304 and a zero-byte body. So the second read of a session pays one
      * round trip and no payload for an inventory that is still current. That is
-     * what makes it affordable at all: it is 308 kB for TYPO3 Explained against
-     * 19.9 kB for the compressed root, so a session that fetched it again every
-     * time would cost the host more than the navigation tree it replaced.
+     * what makes it affordable: `D-ANS-065` has the sizes.
      *
      * It is not held in `Http\Recent`, which holds an answer for a chosen while
-     * because its source cannot say whether it is still current. This one can, so
-     * there is no while to choose: a 304 is the host saying that what is held is
-     * still its answer — `D-ANS-065`.
+     * because its source cannot say whether it is still current. This one can,
+     * so there is no while to choose.
      *
      * @var array<string, array{etag: string, inventory: array{title: string, branch: string, objects: list<array{name: string, role: string, uri: string, display: string}>}}>
      */
@@ -58,10 +55,10 @@ final class Inventory
     /**
      * The inventory of the manual published at one base URL.
      *
-     * A read that failed answers the same way a 304 does, with what is held. The
-     * objects are what this host published, and a caller reaching one of them
-     * while the host is down gets a stale answer rather than the book
-     * disappearing.
+     * A read that failed answers the same way a 304 does, with what this holds.
+     * The objects are what this host published. A caller that reaches one of
+     * them while the host is down gets a stale answer rather than a book that
+     * is gone.
      *
      * @return array{title: string, branch: string, objects: list<array{name: string, role: string, uri: string, display: string}>}|null
      */
@@ -89,8 +86,8 @@ final class Inventory
      * One inventory taken apart.
      *
      * Null is a body that is not an inventory, which is what bot protection
-     * answers with a 200 in front of it (`D-ANS-034`), and an empty object list
-     * is a manual that answered.
+     * answers with a 200 in front of it (`D-ANS-034`). An empty object list is
+     * a manual that answered.
      *
      * @return array{title: string, branch: string, objects: list<array{name: string, role: string, uri: string, display: string}>}|null
      */

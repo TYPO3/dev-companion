@@ -7,40 +7,40 @@ namespace TYPO3\DevCompanion\Manual;
 use TYPO3\DevCompanion\Paths;
 
 /**
- * The manuals docs.typo3.org publishes, and the shortcode each is addressed by.
+ * The manuals docs.typo3.org publishes, and the shortcode of each.
  *
- * The shortcode is what a permalink names a manual with, and nothing on the host
- * publishes the set of them: each manual declares its own, in the
- * `interlink-shortcode` of its `guides.xml` and again as `data-interlink-shortcode`
- * in every page it renders. So the named ones are a list here, kept in
- * `knowledge/manuals.json` and verified per entry against the host by
- * `bin/cli manuals:check` — `D-ANS-120`.
+ * The shortcode is what a permalink names a manual with, and nothing on the
+ * host publishes the set of them. Each manual declares its own, in the
+ * `interlink-shortcode` of its `guides.xml` and again as
+ * `data-interlink-shortcode` in every page it renders. So the named ones are a
+ * list here, kept in `knowledge/manuals.json` and verified per entry against
+ * the host by `bin/cli manuals:check` — `D-ANS-120`.
  *
- * The manual of a Composer package is not one of them and needs no entry: its
- * shortcode is the package name, and the manual is published under that name in
- * the `c` collection.
+ * The manual of a Composer package is not one of them and needs no entry. Its
+ * shortcode is the package name, and the host publishes the manual under that
+ * name in the `c` collection.
  */
 final class Manuals
 {
-    /** Where every manual this reads is published. */
+    /** Where the host publishes every manual this reads. */
     public const HOST = 'https://docs.typo3.org';
 
     /**
-     * The collection holding the manual of a package the core ships.
+     * The collection that holds the manual of a package the core ships.
      *
-     * `p` is the neighbouring one and holds everybody else's, which this does
-     * not reach: those manuals are versioned on the extension's own releases
-     * rather than on TYPO3's, so a TYPO3 version would select the wrong branch
-     * of one — `D-ANS-120`.
+     * `p` is the one beside it and holds everybody else's, which this does not
+     * reach. Those manuals have versions per the extension's own releases
+     * rather than TYPO3's, so a TYPO3 version would select the wrong branch of
+     * one — `D-ANS-120`.
      */
     private const PACKAGE_COLLECTION = 'c';
 
     /**
-     * A shortcode naming a package the core ships, in either spelling.
+     * A shortcode that names a package the core ships, in either spelling.
      *
-     * Both reach the same manual: `typo3/cms-felogin` is what the manual
-     * declares and `typo3-cms-felogin` is what the permalink route also accepts,
-     * and the core writes both into its own source.
+     * Both reach the same manual. `typo3/cms-felogin` is what the manual
+     * declares and `typo3-cms-felogin` is what the permalink route also
+     * accepts, and the core writes both into its own source.
      */
     private const PACKAGE_SHORTCODE = '#^typo3[/-]((?:cms|theme)-[a-z0-9-]+)$#';
 
@@ -48,13 +48,13 @@ final class Manuals
     private static ?array $manuals = null;
 
     /**
-     * What leaves this process when a manual is read, and the seam a unit test
+     * What leaves this process for a manual read, and the seam a unit test
      * takes instead.
      *
-     * One seam for the whole source: `Documentation` and `Permalink` both build
-     * their own instance from a tool, so neither has anywhere else to be handed
-     * a transport, and two seams would let a test silence one reader and reach
-     * the host through the other — `R-COD-003`.
+     * One seam for the whole source. `Documentation` and `Permalink` both build
+     * their own instance from a tool, so neither has anywhere else to take a
+     * transport. Two seams would let a test silence one reader and reach the
+     * host through the other — `R-COD-003`.
      *
      * @var (\Closure(string): ?string)|null
      */
@@ -64,9 +64,8 @@ final class Manuals
      * What a test hands in, so nothing it drives reaches docs.typo3.org. Null
      * puts the host back.
      *
-     * What is held goes with it: another reader is another host, and an
-     * inventory kept across the two would answer for a manual that was never
-     * read.
+     * What this holds goes with it. Another reader is another host, and an
+     * inventory kept across the two would answer for a manual nobody read.
      *
      * @param (\Closure(string): ?string)|null $reader
      */
@@ -107,12 +106,11 @@ final class Manuals
      * The manuals `typo3_documentation_lookup` searches, keyed by document.
      *
      * Four rather than all of them, and each of the last two for a reason. The
-     * TCA reference is its own manual and TYPO3 Explained does not repeat it, so
-     * a question about `inline`, `foreign_field` or a column type was searched in
+     * TCA reference is its own manual and TYPO3 Explained does not repeat it.
+     * So a question about `inline`, `foreign_field` or a column type reached
      * two manuals that describe everything around TCA and never TCA itself. No
-     * manual above documents a ViewHelper either, so `f:if` was answered with
-     * whatever prose carries the word rather than with `Global/If.html`
-     * (`D-ANS-023`).
+     * manual above documents a ViewHelper either, so `f:if` got whatever prose
+     * carries the word rather than `Global/If.html` (`D-ANS-023`).
      *
      * @return array<string, array{title: string, collection: string}>
      */
@@ -133,12 +131,12 @@ final class Manuals
      * here places.
      *
      * The permalink route reads a shortcode case-insensitively, so this does
-     * too: `T3COREAPI:OPCACHE-SAVE-COMMENTS` resolves on the host exactly as its
-     * lowercase spelling does.
+     * too: `T3COREAPI:OPCACHE-SAVE-COMMENTS` resolves on the host exactly as
+     * its lowercase form does.
      *
-     * A derived entry carries the package name as its title, because what a
-     * package's manual calls itself is in the inventory this is about to read
-     * and there is no second place to keep it.
+     * A derived entry carries the package name as its title. What a package's
+     * manual calls itself is in the inventory this is about to read, and there
+     * is no second place to keep it.
      *
      * @return array{shortcode: string, collection: string, document: string, title: string, searched: bool}|null
      */
@@ -165,13 +163,13 @@ final class Manuals
         ];
     }
 
-    /** Every shortcode the list names, in the order it is written in. */
+    /** Every shortcode the list names, in the order of the list. */
     public static function shortcodes(): string
     {
         return implode(', ', array_column(self::all(), 'shortcode'));
     }
 
-    /** Where one manual is published, at one branch. */
+    /** Where the host publishes one manual, at one branch. */
     public static function base(string $collection, string $document, string $branch): string
     {
         return sprintf('%s/%s/%s/%s/en-us/', self::HOST, $collection, $document, rawurlencode($branch));

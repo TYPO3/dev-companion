@@ -14,21 +14,21 @@ use TYPO3\DevCompanion\Search\Text;
  * docs.typo3.org publishes the Sphinx inventory of every manual beside it. That
  * is the public index used here; /search/ is deliberately not called because
  * robots.txt excludes it, and there is no search index to read instead. The
- * selected result pages are then read for a short excerpt. A canonical result
- * URL can then be handed back to read that page as text, without re-deriving
- * its API from an installed source tree.
+ * selected result pages are then read for a short excerpt. A caller then hands
+ * a canonical result URL back to read that page as text. Nothing derives its
+ * API from an installed source tree a second time.
  */
 final class Documentation
 {
     /**
      * The page of a manual that is not one, and the one page an inventory lists
-     * that a caller must never be sent to.
+     * that no answer sends a caller to.
      */
     private const NOT_A_PAGE = '404.html';
 
     /**
      * What an inventory lists that this searches: the pages, which is what a
-     * table of contents is made of.
+     * table of contents consists of.
      *
      * The other roles are the addressable objects inside those pages, they are
      * what a permalink identifier names, and `Manual\Permalink` reads them
@@ -38,11 +38,11 @@ final class Documentation
 
     /**
      * The other role this searches: a configuration value the manual declares,
-     * with the anchor of the section documenting it.
+     * with the anchor of the section that documents it.
      *
-     * The TCA reference is a handful of large pages carrying hundreds of
-     * properties as sections, so nothing in its table of contents is called
-     * `columnsOverrides` and a query naming that property reached six pages
+     * The TCA reference is a handful of large pages that carry hundreds of
+     * properties as sections. So nothing in its table of contents has the name
+     * `columnsOverrides`. A query that names that property reached six pages
      * that never mention it — `D-ANS-144`. `Manual\Permalink` reads the same
      * objects for the other question asked of them.
      */
@@ -53,35 +53,35 @@ final class Documentation
      * it: an inner capital, an underscore, or a dot.
      *
      * A property named like an English word is one every prose question carries
-     * by accident — `template`, `title`, `default` — and admitting those put
-     * three of the seven ranked questions of `D-ANS-032` behind sections nobody
-     * asked for. Written the way code is, it is the subject rather than a word
-     * of the sentence.
+     * by accident — `template`, `title`, `default`. To admit those put three of
+     * the seven ranked questions of `D-ANS-032` behind sections nobody asked
+     * for. Written the way code is, it is the subject rather than a word of the
+     * sentence.
      */
     private const IDENTIFIER = '/\p{Ll}\p{Lu}|[_.]/u';
 
     /**
-     * What a page is searched by. The title is what it is called; the path is
-     * the section it sits in, which is the other half of what a table of
-     * contents knows — "Assets" says little, `ApiOverview/Assets/Index.html`
-     * says where it belongs. The manual is the third thing a caller names
-     * without meaning to name a page: a question about TCA belongs in the TCA
-     * reference before it belongs in any page of another manual that carries
-     * the word.
+     * What a search reads a page by. The title is its name. The path is the
+     * section it sits in, which is the other half of what a table of contents
+     * knows. "Assets" says little, `ApiOverview/Assets/Index.html` says where
+     * it belongs. The manual is the third thing a caller names without the
+     * intent to name a page. A question about TCA belongs in the TCA reference
+     * before it belongs in any page of another manual that carries the word.
      *
      * @var array<string, int>
      */
     private const FIELD_WEIGHTS = ['title' => 4, 'path' => 2, 'manual' => 2];
 
     /**
-     * The ordinary field of this corpus, which is what a longer one is measured
-     * against. A title runs to about four words over the pages the four manuals
-     * index and a path to seven, so a path is diluted against a title by design.
+     * The ordinary field of this corpus, which is what the score measures a
+     * longer one against. A title runs to about four words over the pages the
+     * four manuals index and a path to seven. So a path weighs less than a
+     * title by design.
      *
      * It was 12, longer than any title the rendered navigation carried, so no
      * title was ever diluted and the field length did nothing. Not below 3
-     * either: `Fluid ViewHelper Reference` is three words and the other three
-     * books are two, so a smaller reference weighs the books by the length of
+     * either. `Fluid ViewHelper Reference` is three words and the other three
+     * books are two. A smaller reference weighs the books by the length of
      * their names — `D-ANS-065`.
      */
     private const UNDILUTED_WORDS = 3;
@@ -164,8 +164,8 @@ final class Documentation
             ]);
         }
 
-        // Every manual is weighed against every other manual's pages, because
-        // what makes a term worth something is how few of all the pages there
+        // The score weighs every manual against every other manual's pages.
+        // What makes a term worth something is how few of all the pages there
         // are carry it.
         $searchable = array_column($pages, 'searchable');
         foreach ($queries as $query) {
@@ -187,25 +187,25 @@ final class Documentation
                 );
             }
 
-            // Each query is its own question and its scores are its own scale —
-            // one made of common words scores everything higher than one made of
-            // rare ones. So a page is worth how well it answers a question
-            // rather than what that question's words happen to be worth, and it
-            // keeps the best question it answers rather than the sum of the ones
-            // it brushes past. Two questions in one call otherwise return one
-            // question's pages twice over.
+            // Each query is its own question and its scores are its own scale.
+            // One made of common words scores everything higher than one made
+            // of rare ones. So a page is worth how well it answers a question
+            // rather than what that question's words happen to be worth. It
+            // keeps the best question it answers rather than the sum of the
+            // ones it brushes past. Two questions in one call otherwise return
+            // one question's pages twice over.
             $best = max([0, ...$scores]);
             foreach ($scores as $key => $score) {
                 $relative = $best === 0 ? 0 : (int) round($score / $best * 1000);
                 if ($relative <= $pages[$key]['score']) {
                     continue;
                 }
-                // The match reported is the one of the question the page is
-                // kept for, so it is the words of that query rather than of
-                // whichever one was passed last. The coverage is that query's
-                // too: the share of its weight this page carries, which the
-                // score has always returned and this lookup discarded in the
-                // destructuring. It labels rather than filters — `D-ANS-051`.
+                // The reported match is the one of the question the page stays
+                // for. So it is the words of that query rather than of
+                // whichever one came last. The coverage is that query's too:
+                // the share of its weight this page carries. The score has
+                // always returned it and this lookup dropped it in the
+                // destructure. It labels rather than filters — `D-ANS-051`.
                 $pages[$key]['score'] = $relative;
                 $pages[$key]['matched'] = $matched[$key];
                 $pages[$key]['coverage'] = $askedFor > 0.0 ? $covered[$key] / $askedFor : 0.0;
@@ -297,15 +297,15 @@ final class Documentation
             'section' => $title,
             'excerpt' => substr($content, 0, 700),
             'content' => $content,
-            // Nothing was asked, so there is no query to cover — the null
-            // beside the empty match, rather than a zero that says this page
-            // answers nothing.
+            // The caller asked nothing, so there is no query to cover. That is
+            // the null beside the empty match, rather than a zero that says
+            // this page answers nothing.
             'coverage' => null,
             'matched' => [],
         ]], null);
     }
 
-    /** Where one manual is published, at one version. */
+    /** Where the host publishes one manual, at one version. */
     private static function base(string $document, string $targetVersion): string
     {
         return Manuals::base(Manuals::searched()[$document]['collection'], $document, $targetVersion);
@@ -313,7 +313,7 @@ final class Documentation
 
     /**
      * The properties this manual declares that a question named, with the
-     * anchor of the section documenting each.
+     * anchor of the section that documents each.
      *
      * @param list<string> $named the lowercased names a question may reach one by
      * @return list<array{title: string, path: string, url: string}>
@@ -332,7 +332,7 @@ final class Documentation
                 continue;
             }
             // `-` is what the writer puts where the display name is the
-            // object's own name, which is how a property with no label of its
+            // object's own name. That is how a property with no label of its
             // own arrives.
             $title = in_array($object['display'], ['-', ''], true) ? $object['name'] : $object['display'];
             $url = $base . $object['uri'];
@@ -340,9 +340,9 @@ final class Documentation
                 continue;
             }
             $seen[$url] = true;
-            // Placed under the path of the page it is a section of, so it sits
-            // in its chapter the way a page does and the anchor's own slug adds
-            // no words to match against.
+            // It sits under the path of the page it is a section of. So it
+            // stands in its chapter the way a page does, and the anchor's own
+            // slug adds no words to match against.
             $properties[] = ['title' => $title, 'path' => (string) strtok($object['uri'], '#'), 'url' => $url];
         }
 
@@ -350,13 +350,13 @@ final class Documentation
     }
 
     /**
-     * The names a declared property may be offered for, lowercased.
+     * The names a query reaches a declared property by, lowercased.
      *
      * Two ways in, and both keep the sections out of a question asked in prose.
-     * A word written the way code is names its subject wherever it stands, and
-     * a question that is one word is asking about that word whatever it is
-     * called — which is the only way `showitem` or `label` is reachable, since
-     * either of them inside a sentence is a word of the sentence.
+     * A word written the way code is names its subject wherever it stands. A
+     * question that is one word asks about that word whatever its name. That is
+     * the only way a query reaches `showitem` or `label`, since either of them
+     * inside a sentence is a word of the sentence.
      *
      * @param list<string> $queries
      * @return list<string>
@@ -379,10 +379,10 @@ final class Documentation
     }
 
     /**
-     * The pages of one manual, each with the title it was published under.
+     * The pages of one manual, each with the title the host published it under.
      *
-     * Null is a manual that did not answer and has not answered before, which is
-     * `Inventory`'s whole error vocabulary; an empty list is a book that
+     * Null is a manual that did not answer and has not answered before, which
+     * is `Inventory`'s whole error vocabulary. An empty list is a book that
      * answered and lists no page.
      *
      * @return list<array{title: string, path: string, url: string}>|null
@@ -401,8 +401,8 @@ final class Documentation
                 continue;
             }
             // `<Unknown>` is what the writer puts where a page has no title of
-            // its own — three pages of the ViewHelper reference at 14.3 — and
-            // the document name is what the navigation showed for them.
+            // its own — three pages of the ViewHelper reference at 14.3. The
+            // document name is what the navigation showed for them.
             $title = $object['display'] === '<Unknown>' ? $object['name'] : $object['display'];
             $url = $base . $object['uri'];
             if ($object['uri'] === self::NOT_A_PAGE || $title === '' || isset($seen[$url])) {
@@ -416,12 +416,12 @@ final class Documentation
     }
 
     /**
-     * The one manual a query names by the namespace prefix it is written in.
+     * The one manual a query names by the namespace prefix it carries.
      *
-     * `f:` is the Fluid namespace prefix, which a session reporting what a
-     * template did writes instead of the word Fluid — a domain keyword for the
-     * hints since `D-KNW-024` and read by nothing here. It selects the book
-     * rather than weighing it, which is the difference `D-ANS-036` measured.
+     * `f:` is the Fluid namespace prefix, which a session that reports what a
+     * template did writes instead of the word Fluid. It is a domain keyword for
+     * the hints since `D-KNW-024`, and nothing here reads it. It selects the
+     * book rather than weighs it, which is the difference `D-ANS-036` measured.
      * Only a book that answered, so a root that is down leaves the query the
      * whole index rather than no candidates at all.
      *
@@ -438,15 +438,15 @@ final class Documentation
     /**
      * The same text with the compound names in it taken apart.
      *
-     * Both sides need it, and for the same reason. What is searched is a table
-     * of contents — page titles and paths — and no page is titled after the
-     * class it documents, while a caller arrives with the words that are in the
-     * code: `AssetCollector`, `FunctionalTestCase`, `executeFrontendSubRequest`.
-     * Split, those reach the pages that are actually called "Assets" and
-     * "Functional tests", and no list of the identifiers there are has to be
-     * kept. The candidate side is split for the mirror image of it: a term is
-     * matched at a word boundary, and `AfterPageColumnsSelectedForLocalizationEvent`
-     * has one word in it until it is taken apart.
+     * Both sides need it, and for the same reason. The search reads a table of
+     * contents — page titles and paths — and no page carries the name of the
+     * class it documents. A caller arrives with the words that are in the code:
+     * `AssetCollector`, `FunctionalTestCase`, `executeFrontendSubRequest`.
+     * Split, those reach the pages whose names are "Assets" and "Functional
+     * tests", and nothing keeps a list of the identifiers there are. The
+     * candidate side splits for the mirror image of it. A term matches at a
+     * word boundary, and `AfterPageColumnsSelectedForLocalizationEvent` has one
+     * word in it until the split takes it apart.
      */
     private static function split(string $text): string
     {
@@ -458,11 +458,10 @@ final class Documentation
     }
 
     /**
-     * What a page was matched on, in the order the query's words were read: the
-     * stem each was reduced to, and the field of the table of contents that
-     * carried it. A word of the query that is not here reached the page
-     * nowhere, which is what tells an aimed answer from a confident one
-     * (`R-DOC-002`).
+     * What matched the page, in the order of the query's words. The stem each
+     * came down to, and the field of the table of contents that carried it. A
+     * word of the query that is not here reached the page nowhere, which is
+     * what tells an aimed answer from a confident one (`R-DOC-002`).
      *
      * @param array<string, string> $matched
      * @return list<array{term: string, field: string}>
@@ -478,10 +477,10 @@ final class Documentation
     }
 
     /**
-     * The opening prose of what the URL names.
+     * The first prose of what the URL names.
      *
      * An anchor names a section rather than the page, and the page's own
-     * introduction says nothing about it: every property of the TCA reference's
+     * introduction says nothing about it. Every property of the TCA reference's
      * Types page would come back with the same two sentences about record
      * types. Where the anchor names nothing on the page, the article answers as
      * before.
@@ -533,7 +532,8 @@ final class Documentation
 
     /**
      * The page body as compact Markdown-like text. Code examples and headings
-     * keep their boundaries; navigation outside the main article is omitted.
+     * keep their boundaries; the reader drops navigation outside the main
+     * article.
      */
     private function content(string $html): string
     {
@@ -550,9 +550,9 @@ final class Documentation
 
         $blocks = [];
         // A `dd` this loop has already printed beside its term. Held by the
-        // node itself rather than by a position, because the same element is
-        // reached twice: once from the `dt` it belongs to and once in document
-        // order.
+        // node itself rather than by a position, because the loop reaches the
+        // same element twice. Once from the `dt` it belongs to and once in
+        // document order.
         /** @var \SplObjectStorage<\DOMElement, null> $paired */
         $paired = new \SplObjectStorage();
         foreach (self::elements($xpath, self::BLOCKS, $article) as $node) {
@@ -561,7 +561,7 @@ final class Documentation
             }
             if ($node->tagName === 'dd' && (isset($paired[$node]) || !self::isLeaf($xpath, $node))) {
                 // Either the term above already carries it, or it is a wrapper
-                // whose own children this loop reaches on their own — printing
+                // whose own children this loop reaches on their own. A print of
                 // its `textContent` would be every one of them a second time.
                 continue;
             }
@@ -598,17 +598,16 @@ final class Documentation
      * A term with its definition, where the definition is one value.
      *
      * The TCA reference states the machine-readable half of every property as a
-     * definition list — Type, Default, Path, Scope — and only the terms were
-     * ever emitted, so a caller read `**Default**` with nothing under it and
-     * had no way to tell a property with no documented default from a value
-     * this reader dropped. That is worse than dropping both, and it cost a
-     * review the default of `nullable` per `dbType`
-     * (`feedback/2026-08-07-132457`).
+     * definition list — Type, Default, Path, Scope. This reader emitted only
+     * the terms. So a caller read `**Default**` with nothing under it. Nothing
+     * told a property with no documented default from a value this reader
+     * dropped. That is worse than a drop of both, and it cost a review the
+     * default of `nullable` per `dbType` (`feedback/2026-08-07-132457`).
      *
-     * Only a definition that is one value is pulled up here. A `dd` carrying
+     * Only a definition that is one value comes up here. A `dd` that carries
      * paragraphs, a nested list or another definition list stays where it is
-     * and is printed as its own blocks, because a term joined to a page of
-     * prose is not a pair.
+     * and prints as its own blocks. A term joined to a page of prose is not a
+     * pair.
      *
      * @param \SplObjectStorage<\DOMElement, null> $paired
      */
@@ -645,7 +644,7 @@ final class Documentation
      *
      * `DOMXPath::query()` answers `false` on a query it cannot compile, and a
      * list that may hold a namespace node. Neither carries an element's text or
-     * its tag name, so what leaves here is elements or nothing and a caller
+     * its tag name. So what leaves here is elements or nothing, and a caller
      * reads one case instead of three.
      *
      * @return list<\DOMElement>

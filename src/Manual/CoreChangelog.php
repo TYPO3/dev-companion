@@ -11,20 +11,20 @@ use TYPO3\DevCompanion\Installation\Changelog;
  * The changelog docs.typo3.org publishes, which is where the installation's own
  * copy stops.
  *
- * A package ships every changelog down to 7.0 and nothing above its own major,
- * so the entries a caller is upgrading *to* are the ones its installation cannot
- * show it. There is one manual and it is not versioned — every version in the
- * URL of `/c/typo3/cms-core/` redirects to `main` — so the version a caller asks
- * for is applied to the entry names here and never to the URL, and nothing is
- * read per version (`D-ANS-067`). What it costs is one inventory read, held
- * under its entity tag, and one `_sources` read per entry an answer shows.
+ * A package ships every changelog down to 7.0 and nothing above its own major.
+ * So the entries a caller upgrades *to* are the ones its installation cannot
+ * show it. There is one manual and it has no versions: every version in the URL
+ * of `/c/typo3/cms-core/` redirects to `main`. So the version a caller asks for
+ * filters the entry names here and never reaches the URL, and nothing reads per
+ * version (`D-ANS-067`). What it costs is one inventory read, held under its
+ * entity tag, and one `_sources` read per entry an answer shows.
  */
 final class CoreChangelog
 {
     /**
-     * The manual the core's changelog is published as. It is the `cms-core`
-     * extension manual under `/c/`, not one of the books under `/m/` — TYPO3
-     * Explained indexes no changelog entry at all.
+     * The manual the host publishes the core's changelog as. It is the
+     * `cms-core` extension manual under `/c/`, not one of the books under `/m/`
+     * — TYPO3 Explained indexes no changelog entry at all.
      */
     private const BASE = 'https://docs.typo3.org/c/typo3/cms-core/main/en-us/';
 
@@ -32,8 +32,8 @@ final class CoreChangelog
 
     /**
      * The RST of a rendered page, byte for byte. Sphinx writes it beside the
-     * HTML from the same build, `.. index::` and all, so the entries this hands
-     * on are parsed by what parses the files on disk.
+     * HTML from the same build, `.. index::` and all, so the same parser reads
+     * the entries this hands on and the files on disk.
      */
     private const SOURCES = '_sources/';
 
@@ -52,10 +52,10 @@ final class CoreChangelog
      * Whether the host has already failed to answer in this process.
      *
      * A changelog lookup is the tool a session calls most, and it used to touch
-     * nothing outside the machine. Asking a host that is not there costs the
-     * connect timeout on every call, so it is asked once: a session that starts
-     * offline pays three seconds once rather than three seconds a question, and
-     * answers from the installation for the rest of it.
+     * nothing outside the machine. A call to a host that is not there costs the
+     * connect timeout, so this asks once. A session that starts offline pays
+     * three seconds once rather than three seconds a question, and answers from
+     * the installation for the rest of it.
      */
     private static bool $unreachable = false;
 
@@ -73,8 +73,8 @@ final class CoreChangelog
     /**
      * What a test hands in, so nothing it drives reaches docs.typo3.org.
      *
-     * What is held goes with it: another reader is another host, and entries
-     * kept across the two would answer for a changelog that was never read.
+     * What this holds goes with it. Another reader is another host, and entries
+     * kept across the two would answer for a changelog nobody read.
      *
      * @param (\Closure(string): ?string)|null $reader
      */
@@ -90,14 +90,14 @@ final class CoreChangelog
      * entries have.
      *
      * The type, the issue and the version are in the page name, and the stated
-     * title is the other half of the inventory line — the same title
+     * title is the other half of the inventory line. It is the same title
      * `Changelog::read()` finds inside the file, so it costs no read here. Both
-     * are searchable, which is what lets an answer be composed without opening
-     * a single entry.
+     * are searchable, which is what lets a search compose an answer without one
+     * entry read.
      *
      * Null is a host that did not answer, which is a different thing from a
-     * host that published nothing: the caller is told the gap could not be
-     * read rather than that there is none.
+     * host that published nothing. The answer tells the caller that the gap is
+     * unread rather than that there is none.
      *
      * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, url: string, path: string}>|null
      */
@@ -160,9 +160,9 @@ final class CoreChangelog
     /**
      * The changelog pages of a Sphinx inventory, as entries.
      *
-     * Only `std:doc` and only under `Changelog/`: the manual carries a handful
-     * of pages that are not entries, and every other role is an addressable
-     * object inside a page rather than a page.
+     * Only `std:doc` and only under `Changelog/`. The manual carries a handful
+     * of pages that are not entries. Every other role is an addressable object
+     * inside a page rather than a page.
      *
      * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, url: string, path: string}>|null
      */
@@ -194,10 +194,9 @@ final class CoreChangelog
                 // what the line carries, and the two fields in front of it are
                 // fields of their own here. It is `stated` and not `title`
                 // because a search reads `title` and the installation's entries
-                // gain theirs only from a file read: carried under that name it
-                // would match a manual entry in the pass where the installed
-                // one it should have found is still searched by its file name
-                // alone.
+                // gain theirs only from a file read. Under that name it would
+                // match a manual entry in the pass where the search still reads
+                // the installed one by its file name alone.
                 'stated' => $title === '-' ? '' : trim((string) preg_replace('/^(?:Breaking|Deprecation|Feature|Important):\s*(?:#\d+\s*-\s*)?/', '', $title)),
                 'url' => self::url($version, $key),
                 'path' => $path,

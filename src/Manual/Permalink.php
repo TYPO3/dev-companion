@@ -10,12 +10,12 @@ use TYPO3\DevCompanion\Http\Fetch;
  * A docs.typo3.org permalink identifier, resolved out of the inventory the
  * manual it names publishes.
  *
- * `https://docs.typo3.org/permalink/<shortcode>:<name>` answers 307 for a name a
- * manual registers and 404 for one it does not, which is one round trip per
- * question and reports a version fallback as a hit. The same table the redirect
- * is built from is the inventory this server already reads, so validating an
- * identifier, resolving it to its page and recovering it from an old URL are
- * three readings of one artefact — `D-ANS-118`.
+ * `https://docs.typo3.org/permalink/<shortcode>:<name>` answers 307 for a name
+ * a manual registers and 404 for one it does not. That is one round trip per
+ * question, and it reports a version fallback as a hit. The table behind the
+ * redirect is the inventory this server already reads. So the validation of an
+ * identifier, its resolution to a page and its recovery from an old URL are
+ * three readings of one artefact. `D-ANS-118`.
  */
 final class Permalink
 {
@@ -34,9 +34,9 @@ final class Permalink
      * declares.
      *
      * Sphinx also writes a label of the same target named after the anchor, so
-     * `columns-onchange` and `confval-columns-onchange` both resolve. Which one a
-     * patch should use is the review question the reporting session had to
-     * invent a rule for, and this is the rule: the declared one.
+     * `columns-onchange` and `confval-columns-onchange` both resolve. Which one
+     * a patch should use is the review question the session that reported it
+     * had to invent a rule for. This is the rule: the declared one.
      */
     private const DECLARED = 'std:confval';
 
@@ -46,7 +46,7 @@ final class Permalink
     /** A manual URL of this host: the collection, the two-part document, the branch and the page. */
     private const MANUAL_URL = '#^/(?<collection>[a-z]+)/(?<document>[^/]+/[^/]+)/(?<branch>[^/]+)/en-us/(?<page>.*)$#';
 
-    /** How many near names a URL that resolves to nothing is answered with. */
+    /** How many near names the answer gives a URL that resolves to nothing. */
     private const NEAREST = 5;
 
     /** What a page path contributes nothing as: the extension, and the name every chapter index carries. */
@@ -238,10 +238,11 @@ final class Permalink
     /**
      * The same table read the other way: the identifiers that reach one URL.
      *
-     * The URL is read for the manual it belongs to and the page it names, and
-     * the inventory is then asked at the branch the caller works on rather than
-     * at the one the URL points at. That is the question a link being replaced
-     * actually asks: what the identifier is here, not what it was on 11.5.
+     * The lookup reads the URL for the manual it belongs to and the page it
+     * names. It then asks the inventory at the branch the caller works on
+     * rather than at the one the URL points at. That is the question a link
+     * under replacement asks: what the identifier is here, not what it was on
+     * 11.5.
      *
      * @return array{url: string, shortcode: string|null, manual: string|null, branch: string, urlBranch: string|null, page: string|null, anchor: string|null, identifiers: list<array{name: string, roles: list<string>}>, nearest: list<array{name: string, roles: list<string>, url: string}>, answeredBranch: string|null, reason: string|null}
      */
@@ -341,11 +342,11 @@ final class Permalink
     }
 
     /**
-     * One entry per name, with everything that name is registered as.
+     * One entry per name, with every role the manual registers that name under.
      *
-     * An identifier is a name and the role is what the manual made of it, so a
-     * name that is both a section and a PHP class is one spelling and not two —
-     * a caller reading a list of names has no way to tell a repetition from a
+     * An identifier is a name and the role is what the manual made of it. So a
+     * name that is both a section and a PHP class is one entry and not two. A
+     * caller that reads a list of names has no way to tell a repetition from a
      * second identifier.
      *
      * @param list<array{name: string, role: string, uri: string, display: string}> $objects
@@ -369,12 +370,12 @@ final class Permalink
     /**
      * What an inventory carries that a dead URL is about.
      *
-     * The page a manual moved a subject to is not derivable from the URL it left
-     * behind, and the words of that URL are all a caller holds:
+     * Nothing derives the page a manual moved a subject to from the URL it left
+     * behind. The words of that URL are all a caller holds.
      * `Columns/Properties/OnChange.html` is gone from the TCA reference and
-     * `columns-onchange` is what replaced it. So the segments of the path are
-     * matched against the names, and the answer says these are near rather than
-     * right — the reader picks.
+     * `columns-onchange` is what replaced it. So the lookup matches the
+     * segments of the path against the names. The answer says these are near
+     * rather than right — the reader picks.
      *
      * @param list<array{name: string, role: string, uri: string, display: string}> $objects
      * @return list<array{name: string, roles: list<string>, url: string}>
@@ -406,9 +407,9 @@ final class Permalink
             $scored[$object['name']]['roles'][$object['role']] = true;
         }
 
-        // The best score first, and the shortest name inside one score: a name
-        // carrying the words and nothing else is the subject, and a longer one
-        // carrying them is a section of it.
+        // The best score first, and the shortest name inside one score. A name
+        // that carries the words and nothing else is the subject, and a longer
+        // one that carries them is a section of it.
         uksort($scored, static fn(string $left, string $right): int => [$scored[$right]['score'], mb_strlen($left)]
             <=> [$scored[$left]['score'], mb_strlen($right)]);
 

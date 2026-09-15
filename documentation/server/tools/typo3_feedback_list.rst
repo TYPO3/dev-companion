@@ -63,7 +63,7 @@ Answers with
 Not answered
 ------------
 
-And deliberately: it answers with the feedback somebody else wrote, which is
-different in every checkout and carries the tool names that were current when
-each feedback was filed. One recorded title ends in a tool name cut to length,
-which reads to ``ToolNamingTest`` as a tool this server does not have.
+And deliberately: it answers with the feedback somebody else wrote. That differs
+in every checkout and carries the tool names that were current on the day of
+each feedback. One recorded title ends in a tool name cut to length, which reads
+to ``ToolNamingTest`` as a tool this server does not have.

@@ -39,15 +39,15 @@ enum Source: string
     public function meaning(): string
     {
         return match ($this) {
-            self::Installation => 'The installation this server was started in, booted or asked through its '
-                . 'console: its assembled state after every extension has had its say, and nothing at all where '
-                . 'it cannot be reached.',
+            self::Installation => 'The installation this server started in, booted or asked through its '
+                . 'console. Its assembled state after every extension has had its say, and nothing at all where '
+                . 'it is out of reach.',
             self::Packages => 'The files the installed packages ship, read rather than executed. Answers on a '
-                . 'fresh clone and with the containers down; what a package registers by running is not in it.',
-            self::Knowledge => 'The knowledge base inside this package. Needs nothing running, and is bound to '
-                . 'TYPO3 versions rather than to an installation.',
-            self::Network => 'A service outside this machine. An unreachable one is said out loud rather than '
-                . 'answered as empty.',
+                . 'fresh clone and with the containers down. What a package registers at runtime is not in it.',
+            self::Knowledge => 'The knowledge base inside this package. Needs nothing up, and binds to TYPO3 '
+                . 'versions rather than to an installation.',
+            self::Network => 'A service outside this machine. An unreachable one says so out loud rather than '
+                . 'answers as empty.',
             self::Checkout => "This server's own checkout, which is why the tool offering it exists only in a "
                 . 'standalone one.',
         };

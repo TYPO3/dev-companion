@@ -439,16 +439,16 @@ Text:
 
     Where the answers come from, which is what says whether a question can be asked at all right now. Every tool states the same thing at the foot of its own description.
     ## Answers from installation
-    The installation this server was started in, booted or asked through its console: its assembled state after every extension has had its say, and nothing at all where it cannot be reached.
+    The installation this server started in, booted or asked through its console. Its assembled state after every extension has had its say, and nothing at all where it is out of reach.
     Tools: typo3_server_scope, typo3_label_lookup, typo3_fluid_namespace_list, typo3_configuration_lookup, typo3_schema_lookup, typo3_record_lookup, typo3_service_lookup, typo3_flexform_lookup, typo3_backend_module_lookup, typo3_icon_lookup, typo3_extension_describe
     ## Answers from packages
-    The files the installed packages ship, read rather than executed. Answers on a fresh clone and with the containers down; what a package registers by running is not in it.
+    The files the installed packages ship, read rather than executed. Answers on a fresh clone and with the containers down. What a package registers at runtime is not in it.
     Tools: typo3_forge_lookup, typo3_component_lookup, typo3_label_lookup, typo3_fluid_namespace_list, typo3_icon_lookup, typo3_changelog_lookup, typo3_project_describe, typo3_extension_describe, typo3_snapshot_scope
     ## Answers from knowledge
-    The knowledge base inside this package. Needs nothing running, and is bound to TYPO3 versions rather than to an installation.
+    The knowledge base inside this package. Needs nothing up, and binds to TYPO3 versions rather than to an installation.
     Tools: typo3_server_scope, typo3_rule_lookup, typo3_script_lookup, typo3_task_guide, typo3_test_run_guide, typo3_hint_lookup, typo3_component_lookup, typo3_system_extension_lookup, typo3_reference_list, typo3_translation_domain_lookup, typo3_snapshot_scope, typo3_commit_message_guide
     ## Answers from network
-    A service outside this machine. An unreachable one is said out loud rather than answered as empty.
+    A service outside this machine. An unreachable one says so out loud rather than answers as empty.
     Tools: typo3_documentation_lookup, typo3_permalink_lookup, typo3_forge_lookup, typo3_gerrit_lookup, typo3_changelog_lookup, typo3_ter_lookup
     ## Answers from checkout
     This server's own checkout, which is why the tool offering it exists only in a standalone one.
@@ -1182,7 +1182,7 @@ Data:
         "answersFrom": [
             {
                 "source": "installation",
-                "meaning": "The installation this server was started in, booted or asked through its console: its assembled state after every extension has had its say, and nothing at all where it cannot be reached.",
+                "meaning": "The installation this server started in, booted or asked through its console. Its assembled state after every extension has had its say, and nothing at all where it is out of reach.",
                 "tools": [
                     "typo3_server_scope",
                     "typo3_label_lookup",
@@ -1199,7 +1199,7 @@ Data:
             },
             {
                 "source": "packages",
-                "meaning": "The files the installed packages ship, read rather than executed. Answers on a fresh clone and with the containers down; what a package registers by running is not in it.",
+                "meaning": "The files the installed packages ship, read rather than executed. Answers on a fresh clone and with the containers down. What a package registers at runtime is not in it.",
                 "tools": [
                     "typo3_forge_lookup",
                     "typo3_component_lookup",
@@ -1214,7 +1214,7 @@ Data:
             },
             {
                 "source": "knowledge",
-                "meaning": "The knowledge base inside this package. Needs nothing running, and is bound to TYPO3 versions rather than to an installation.",
+                "meaning": "The knowledge base inside this package. Needs nothing up, and binds to TYPO3 versions rather than to an installation.",
                 "tools": [
                     "typo3_server_scope",
                     "typo3_rule_lookup",
@@ -1232,7 +1232,7 @@ Data:
             },
             {
                 "source": "network",
-                "meaning": "A service outside this machine. An unreachable one is said out loud rather than answered as empty.",
+                "meaning": "A service outside this machine. An unreachable one says so out loud rather than answers as empty.",
                 "tools": [
                     "typo3_documentation_lookup",
                     "typo3_permalink_lookup",

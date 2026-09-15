@@ -310,18 +310,18 @@ final class ToolSurface
             ...Rst::heading('Where an answer comes from'),
             self::wrap(
                 'Every tool declares which sources can answer it, and says so at the foot of its own description '
-                . 'and on its page here. What that answers is not what a tool is about but whether it can be '
-                . 'asked at all right now: with nothing running, the tools under knowledge and packages are the '
-                . 'ones still worth calling. Which source answered one call is ' . Rst::literal('answeredBy')
-                . ' in that answer, where the tool has two. This page is written by '
-                . Rst::literal('bin/cli tools:index') . ' from the Source enum.',
+                                . 'and on its page here. What that answers is whether a caller can ask a tool at all right now, '
+                . 'not what the tool is about. With nothing up, the tools under knowledge and packages are the '
+                . 'ones still worth a call. Which source answered one call is ' . Rst::literal('answeredBy')
+                . ' in that answer, where the tool has two. ' . Rst::literal('bin/cli tools:index')
+                . ' writes this page from the Source enum.',
             ),
             '',
             ...Rst::image(
                 '../images/answer-sources.svg',
-                'The five sources plotted against how much of the machine has to be running: bundled knowledge '
-                . 'and this server\'s own checkout answer with nothing running, packages need files on disk, the '
-                . 'installation source needs a booted installation, and network sources need outbound reach.',
+                'The five sources against how much of the machine has to run. Bundled knowledge and this '
+                . 'server\'s own checkout answer with nothing up. Packages need files on disk, the installation '
+                . 'source needs a booted installation, and network sources need outbound reach.',
             ),
         ];
 

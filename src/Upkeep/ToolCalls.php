@@ -39,8 +39,8 @@ final class ToolCalls
             'typo3_feedback_record' => 'it is the one tool here that writes, and this table has two drivers '
                 . 'rather than one. A call recorded from it would file a real feedback into the open ones every '
                 . 'time ``ToolContractTest`` runs, not only when the recording does.',
-            'typo3_feedback_list' => 'it answers with the feedback somebody else wrote, which is different in '
-                . 'every checkout and carries the tool names that were current when each feedback was filed. '
+            'typo3_feedback_list' => 'it answers with the feedback somebody else wrote. That differs in every '
+                . 'checkout and carries the tool names that were current on the day of each feedback. '
                 . 'One recorded title ends in a tool name cut to length, which reads to ``ToolNamingTest`` as a '
                 . 'tool this server does not have.',
         ];

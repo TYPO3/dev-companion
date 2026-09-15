@@ -6,27 +6,27 @@ Where an answer comes from
 ==========================
 
 Every tool declares which sources can answer it, and says so at the foot of its
-own description and on its page here. What that answers is not what a tool is
-about but whether it can be asked at all right now: with nothing running, the
-tools under knowledge and packages are the ones still worth calling. Which
-source answered one call is ``answeredBy`` in that answer, where the tool has
-two. This page is written by ``bin/cli tools:index`` from the Source enum.
+own description and on its page here. What that answers is whether a caller can
+ask a tool at all right now, not what the tool is about. With nothing up, the
+tools under knowledge and packages are the ones still worth a call. Which source
+answered one call is ``answeredBy`` in that answer, where the tool has two.
+``bin/cli tools:index`` writes this page from the Source enum.
 
 .. image:: ../images/answer-sources.svg
     :zoomable:
-    :alt: The five sources plotted against how much of the machine has to be running:
-          bundled knowledge and this server's own checkout answer with nothing
-          running, packages need files on disk, the installation source needs a
-          booted installation, and network sources need outbound reach.
+    :alt: The five sources against how much of the machine has to run. Bundled knowledge
+          and this server's own checkout answer with nothing up. Packages need
+          files on disk, the installation source needs a booted installation,
+          and network sources need outbound reach.
 
 .. _answer-sources-installation:
 
 installation
 ------------
 
-The installation this server was started in, booted or asked through its
-console: its assembled state after every extension has had its say, and nothing
-at all where it cannot be reached.
+The installation this server started in, booted or asked through its console.
+Its assembled state after every extension has had its say, and nothing at all
+where it is out of reach.
 
 :doc:`typo3_backend_module_lookup <tools/typo3_backend_module_lookup>`,
 :doc:`typo3_configuration_lookup <tools/typo3_configuration_lookup>`,
@@ -46,7 +46,7 @@ packages
 --------
 
 The files the installed packages ship, read rather than executed. Answers on a
-fresh clone and with the containers down; what a package registers by running is
+fresh clone and with the containers down. What a package registers at runtime is
 not in it.
 
 :doc:`typo3_changelog_lookup <tools/typo3_changelog_lookup>`,
@@ -64,8 +64,8 @@ not in it.
 knowledge
 ---------
 
-The knowledge base inside this package. Needs nothing running, and is bound to
-TYPO3 versions rather than to an installation.
+The knowledge base inside this package. Needs nothing up, and binds to TYPO3
+versions rather than to an installation.
 
 :doc:`typo3_commit_message_guide <tools/typo3_commit_message_guide>`,
 :doc:`typo3_component_lookup <tools/typo3_component_lookup>`,
@@ -85,8 +85,8 @@ TYPO3 versions rather than to an installation.
 network
 -------
 
-A service outside this machine. An unreachable one is said out loud rather than
-answered as empty.
+A service outside this machine. An unreachable one says so out loud rather than
+answers as empty.
 
 :doc:`typo3_changelog_lookup <tools/typo3_changelog_lookup>`,
 :doc:`typo3_documentation_lookup <tools/typo3_documentation_lookup>`,

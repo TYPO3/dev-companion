@@ -1448,6 +1448,38 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
+     * A review asked about performance, and the session wrote the probe, the
+     * warm-up and the caveats itself because no page carried them —
+     * `D-KNW-158`. The page is reached by the question in the reviewer's words
+     * and by the shape of the probe.
+     */
+    #[Decision('D-KNW-158')]
+    #[Test]
+    public function timingACodePathIsAnsweredWithTheProbeAndWhatItLeavesOut(): void
+    {
+        foreach ([
+            'is the patch slower than its parent',
+            'we also have to address performance',
+            'measure how long a call takes on both revisions of a core change',
+        ] as $query) {
+            $result = Registry::call('typo3_rule_lookup', ['query' => $query, 'targetVersion' => '15.0']);
+            self::assertContains(
+                'core/testing/timing-a-code-path',
+                array_column($result->data['matches'], 'documentId'),
+                $query,
+            );
+        }
+
+        $page = Documents::read('core/testing/timing-a-code-path');
+        self::assertStringContainsString('hrtime(true)', $page, 'the clock');
+        self::assertStringContainsString('The call before the loop is the warm-up', $page, 'what stays outside the loop');
+        self::assertStringContainsString('The finding is the ratio between the patch', $page, 'what the finding is');
+        self::assertStringContainsString('SQLite unless `-d` says otherwise', $page, 'the database caveat');
+        self::assertStringContainsString('TransientMemoryBackend', $page, 'the runtime cache caveat');
+        self::assertStringContainsString('no concurrency', $page, 'the one-process caveat');
+    }
+
+    /**
      * The gate that leads to the page names the evidence rather than the diff.
      *
      * Four places named a TypoScript diff and the session that needed the page

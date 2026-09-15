@@ -159,6 +159,16 @@
       "scope": "core"
     },
     {
+      "topic": "Timing a code path between a patch and its parent, where a review asks what a change costs at runtime",
+      "depth": "The throwaway functional test that calls one path many times and prints what a call cost: the warm-up call outside the loop, hrtime() and the per-call division, the same probe run on the patch and on its parent so the finding is a ratio, and the three things the number leaves out — the SQLite default, the per-process runtime cache, and one process without load. It says nothing about what the path does, which the probe is for.",
+      "tools": [
+        "typo3_rule_lookup",
+        "typo3_hint_lookup"
+      ],
+      "source": "typo3://guides/core/testing/timing-a-code-path",
+      "scope": "core"
+    },
+    {
       "topic": "The PHPUnit configuration an extension runs its own tests with",
       "depth": "The two files a package writes into Build/, whole and ready to write out, one variant per PHPUnit the paired typo3/testing-framework release admits. Beside them: which two attributes a copy has to correct and why the bootstrap is referenced rather than copied, the environment a functional run reads its connection from, and what a finished suite leaves behind. It does not set the harness up for you and it names no dependency constraint — which release resolves is the solver's answer, not this document's.",
       "tools": [
@@ -580,6 +590,10 @@
     {
       "when": "Settling a finding on what a rendering contains rather than on what a diff says — TypoScript defaults, TypoScript declared in an ext_localconf.php or anything below lib.parseFunc, and equally a PHP change to the frontend request pipeline, an error handler or a page renderer caller whose effect is only visible in the response",
       "call": "typo3_rule_lookup with documentId=\"core/testing/proving-a-rendering\" for the throwaway functional test that renders one page, prints what came out, and marks each region so the response says which part changed"
+    },
+    {
+      "when": "Settling a finding on what a change costs at runtime — a review that asks about performance, a loop or a cache a patch adds or removes — rather than on what it renders",
+      "call": "typo3_rule_lookup with documentId=\"core/testing/timing-a-code-path\" for the throwaway functional test that times one call on the patch and on its parent, and what that number leaves out"
     },
     {
       "when": "Writing a core patch: taking a Forge issue on, fixing a core bug, deprecating or removing core API, or amending a patch after review",

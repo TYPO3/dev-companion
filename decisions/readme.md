@@ -93,6 +93,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### answers
 
 - [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15
+- [`D-ANS-156`][D-ANS-156] — A change read by name lists the changes its messages name · 2026-09-15
 - [`D-ANS-151`][D-ANS-151] — The file list on a change answer is asked for rather than sent · 2026-09-09
 - [`D-ANS-152`][D-ANS-152] — The core answer's npm entries say which dispatcher owns them · 2026-09-09
 - [`D-ANS-153`][D-ANS-153] — The route to prior art runs through the review server · 2026-09-09
@@ -244,6 +245,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-155]: answers/ans-155-a-read-on-a-php-without-curl-names-the-extension.md
+[D-ANS-156]: answers/ans-156-a-change-read-by-name-lists-the-changes-its-messages-name.md
 [D-ANS-151]: answers/ans-151-the-file-list-on-a-change-answer-is-asked-for-rather-than-sent.md
 [D-ANS-152]: answers/ans-152-the-core-answers-npm-entries-say-which-dispatcher-owns-them.md
 [D-ANS-153]: answers/ans-153-the-route-to-prior-art-runs-through-the-review-server.md
@@ -397,6 +399,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### knowledge
 
 - [`D-KNW-157`][D-KNW-157] — A processed image is keyed twice and cleared by three actions · 2026-09-15
+- [`D-KNW-158`][D-KNW-158] — A timing probe is a page beside the rendering probe · 2026-09-15
 - [`D-KNW-155`][D-KNW-155] — A core commit body names no count and is not held to one paragraph · 2026-09-09
 - [`D-KNW-156`][D-KNW-156] — The symlink publisher is active on the shipped default, not on the context · 2026-09-09
 - [`D-KNW-147`][D-KNW-147] — A list of what is supported says what an unsupported key does · 2026-09-04
@@ -546,6 +549,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
 [D-KNW-157]: knowledge/knw-157-a-processed-image-is-keyed-twice-and-cleared-by-three-actions.md
+[D-KNW-158]: knowledge/knw-158-a-timing-probe-is-a-page-beside-the-rendering-probe.md
 [D-KNW-155]: knowledge/knw-155-a-core-commit-body-names-no-count-and-is-not-held-to-one-paragraph.md
 [D-KNW-156]: knowledge/knw-156-the-symlink-publisher-is-active-on-the-shipped-default-not-on-the-context.md
 [D-KNW-147]: knowledge/knw-147-a-list-of-what-is-supported-says-what-an-unsupported-key-does.md

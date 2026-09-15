@@ -17,14 +17,12 @@ The three typo3_gerrit_lookup calls answered the messages, the votes, the file l
 
 The author's messages linked the alternatives by number in free text. The relation chain in the answer was empty, because the changes are not stacked. A reader who does not read the messages misses them.
 
-For the performance question no rule or hint exists. I wrote a temporary functional test with hrtime() and 500 calls, ran it on both revisions, and removed it. The rule core/testing/proving-a-rendering covers a rendering, not a timing. The technique is the same: a throwaway test that prints. The page I wanted would be core/testing/timing-a-code-path, with the warm-up, the per-call division, and the caveats about SQLite, the runtime cache and one process. I wrote those caveats into the report myself.
-
 Also never put to the server: the Soul design system, the diagram grammar and the ASD-STE100 prose check. They live in another repository of the user, and I assumed the server does not know it. That assumption held; nothing in the task guide or the skill named it.
 
 ## Query
 
-User: "ok bitte lies die kommentare auf dem patch und vergleiche die alternativen ansätze"; later "natürlich müssen wir hier auch auf die performance eingehen". Calls made: typo3_gerrit_lookup change=95814 messages=people files=none; change=95817 messages=people files=full; change=95818 messages=people files=full. Then git fetch of refs/changes/17/95817/2 and refs/changes/18/95818/2 into the worktree's object store as tags, and git diff between the three commits. For the timing: a temporary functional test with hrtime() around 500 calls, run on patch and parent, then removed.
+User: "ok bitte lies die kommentare auf dem patch und vergleiche die alternativen ansätze"; Calls made: typo3_gerrit_lookup change=95814 messages=people files=none; change=95817 messages=people files=full; change=95818 messages=people files=full. Then git fetch of refs/changes/17/95817/2 and refs/changes/18/95818/2 into the worktree's object store as tags, and git diff between the three commits.
 
 ## Suggestion
 
-Give typo3_gerrit_lookup a second change argument, or a "differs" answer: for two changes on one parent, the paths that differ between their current patch sets, with insertions and deletions per path. Where the review server cannot diff, say so and return the two fetch refs side by side. Read the messages for change numbers and list them as "named in messages" beside the chain, so an alternative pushed as a separate change is visible in one read. Add a small testing rule for a timing probe, beside proving-a-rendering.
+Give typo3_gerrit_lookup a second change argument, or a "differs" answer: for two changes on one parent, the paths that differ between their current patch sets, with insertions and deletions per path. Where the review server cannot diff, say so and return the two fetch refs side by side. Read the messages for change numbers and list them as "named in messages" beside the chain, so an alternative pushed as a separate change is visible in one read.

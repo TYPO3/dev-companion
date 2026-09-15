@@ -39,8 +39,8 @@ TYPO3 Dev Companion
 .. band:: Quickstart
 
 Requirements: **PHP 8.2+** and Composer. One checkout serves every project on
-the machine, and the last two lines are run from the root of the project the
-agent works in:
+the machine, and the last two lines run from the root of the project the agent
+works in:
 
 .. code-block:: bash
 
@@ -49,11 +49,11 @@ agent works in:
     cd /path/to/your/project
     /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
 
-Then restart the client, approve the server when it asks, and ask it one
-question a client cannot answer from memory: *which icon identifier is the right
-one for a delete button in the TYPO3 backend?* A call to ``typo3_icon_lookup``
-behind the answer means it runs. :doc:`The four steps <usage/index>` say what to
-do where it does not.
+Then restart the client and approve the server when it asks. Ask it one question
+a client cannot answer from memory. *Which icon identifier is the right one for
+a delete button in the TYPO3 backend?* A call to ``typo3_icon_lookup`` behind
+the answer means it runs. :doc:`The four steps <usage/index>` say what to do
+where it does not.
 
 .. grid:: flush
 

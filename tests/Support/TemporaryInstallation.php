@@ -9,8 +9,8 @@ use PHPUnit\Framework\Attributes\After;
 /**
  * Builds the two installation layouts on disk and takes them away again.
  *
- * What an installation is, this server reads from the files Composer and the
- * core monorepo leave behind — so a test about installations has to have those
+ * This server reads what an installation is from the files Composer and the
+ * core monorepo leave behind. So a test about installations has to have those
  * files, and there are only two shapes of them.
  */
 trait TemporaryInstallation
@@ -21,9 +21,9 @@ trait TemporaryInstallation
     #[After]
     public function removeTemporaryInstallation(): void
     {
-        // A test needs two of them as soon as it is about one installation
-        // being read while the session sits in another, and remembering only
-        // the last left the other in the temporary directory for good.
+        // A test needs two of them as soon as it reads one installation while
+        // the session sits in another. A record of only the last one left the
+        // other in the temporary directory for good.
         foreach ($this->temporaryRoots as $root) {
             Directory::remove($root);
         }
@@ -41,7 +41,10 @@ trait TemporaryInstallation
         return $root;
     }
 
-    /** A core monorepo checkout holding the core and backend system extensions. */
+    /**
+     * A core monorepo checkout that holds the core and backend system
+     * extensions.
+     */
     private function coreCheckout(string $version = ''): string
     {
         $root = $this->temporaryDirectory();
@@ -74,9 +77,9 @@ trait TemporaryInstallation
     }
 
     /**
-     * The repository of a distributed extension: a root manifest declaring the
-     * key, the container setup beside it, and — where the caller asks for it —
-     * what `composer install` leaves behind.
+     * The repository of a distributed extension. A root manifest that declares
+     * the key, the container setup beside it, and, where the caller asks for
+     * it, what `composer install` leaves behind.
      */
     private function extensionRepository(bool $installed = false): string
     {
@@ -150,8 +153,8 @@ trait TemporaryInstallation
 
     /**
      * The platform check `composer install` writes, in the form Composer 2.9.5
-     * generates it — the whole file, because what is read out of it is a line
-     * among others rather than the file's only content.
+     * generates it. The whole file, because the reader takes a line among
+     * others out of it rather than the file's only content.
      */
     private function installedRequiring(string $root, int $versionId): void
     {

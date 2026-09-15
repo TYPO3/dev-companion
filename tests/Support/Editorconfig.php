@@ -10,16 +10,16 @@ use TYPO3\DevCompanion\Paths;
  * What `.editorconfig` states for a file, for the tests that hold something to
  * it.
  *
- * That file is what every editor opening this checkout obeys, so it is where
- * the indentation of a file type is said. Two things here write files of their
- * own — php-cs-fixer and `bin/cli knowledge:format` — and each would undo
- * whoever typed the last line by hand if it disagreed with it.
+ * That file is what every editor that opens this checkout obeys, so it is where
+ * the indentation of a file type stands. Two things here write files of their
+ * own, php-cs-fixer and `bin/cli knowledge:format`. Each would undo whoever
+ * typed the last line by hand if it disagreed with it.
  */
 final class Editorconfig
 {
     /**
-     * The indent a file of this name is typed at, or null where nothing states
-     * one. A later section wins, which is editorconfig's own rule.
+     * The indent a file of this name takes, or null where nothing states one. A
+     * later section wins, which is editorconfig's own rule.
      */
     public static function indentFor(string $filename): ?int
     {

@@ -12,20 +12,20 @@ use TYPO3\DevCompanion\Paths;
 /**
  * A feedback store of the test's own, for the cases that record one.
  *
- * The same arrangement as `QueuedTodo` and for the same reason: a unit test
- * writes into no directory this repository keeps, and a fixture left in
- * `feedback/` by a run that died is a report somebody left (`R-COD-003`).
+ * The same arrangement as `QueuedTodo` and for the same reason. A unit test
+ * writes into no directory this repository keeps. A fixture left in `feedback/`
+ * by a run that died is a report somebody left (`R-COD-003`).
  *
- * The redirect happens on the first write, so the cases that are *about* the
- * corpus — the mangled names, the tools every feedback in the archive names —
- * go on reading the real one.
+ * The redirect happens on the first write. So the cases that are *about* the
+ * corpus, the mangled names and the tools every feedback in the archive names,
+ * still read the real one.
  */
 trait RecordedFeedback
 {
     /** What a fixture's text carries, so a case can pick its own out of what it wrote. */
     private const MARKER = 'phpunit-feedback-fixture';
 
-    /** The store this case is writing into, made on the first record. */
+    /** The store this case writes into, made on the first record. */
     private ?string $ownFeedback = null;
 
     #[After]
@@ -42,7 +42,7 @@ trait RecordedFeedback
         foreach (Finder::create()->files()->in($store) as $file) {
             unlink($file->getPathname());
         }
-        // The queue with it: a feedback arrives with the card that asks for its
+        // The queue with it. A feedback arrives with the card that asks for its
         // judgement, so a store of this case's own has one of those too.
         @rmdir($store . '/todo/open');
         @rmdir($store . '/todo');
@@ -52,10 +52,10 @@ trait RecordedFeedback
     }
 
     /**
-     * One recorded feedback, in a store belonging to this case.
+     * One recorded feedback, in a store of this case's own.
      *
      * `Channel::record()` decides the file name and the front matter, which is
-     * what most of these cases are about, so it is still what writes — only
+     * what most of these cases are about. So it is still what writes, and only
      * where it writes is this case's own.
      *
      * @param array<string, mixed> $payload
@@ -79,9 +79,8 @@ trait RecordedFeedback
     /**
      * The store this case writes into, made once and pointed at.
      *
-     * The archive is made with it, because a feedback that is closed moves
-     * there and a store without one would fail on the move rather than on what
-     * the case is holding.
+     * The archive comes with it. A closed feedback moves there, and a store
+     * without one would fail on the move rather than on what the case holds.
      */
     private function ownFeedbackStore(): string
     {
@@ -89,9 +88,9 @@ trait RecordedFeedback
             return $this->ownFeedback;
         }
 
-        // A root of its own with a `feedback` in it, because what `record()`
-        // and `archive()` hand back is a path relative to that root and the
-        // cases read the file at it.
+        // A root of its own with a `feedback` in it. What `record()` and
+        // `archive()` hand back is a path relative to that root, and the cases
+        // read the file at it.
         $root = sys_get_temp_dir() . '/' . self::MARKER . '-' . getmypid() . '-' . bin2hex(random_bytes(6));
         mkdir($root . '/feedback/archive', 0o777, true);
         Paths::useFeedback($root . '/feedback');

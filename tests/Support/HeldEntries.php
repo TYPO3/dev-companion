@@ -19,14 +19,14 @@ use TYPO3\DevCompanion\Upkeep\Decisions;
 use TYPO3\DevCompanion\Upkeep\Requirements;
 
 /**
- * What a failing test was holding, printed where the failure is read.
+ * What a failed test held, printed where a reader meets the failure.
  *
- * A decision and a requirement are held by the tests declaring `#[Decision]`
- * and `#[Requirement]`, and the session that changes the behaviour stands in
- * the test rather than in `decisions/` or `requirements/`. The attribute
- * reaches whoever opens the file; this reaches whoever reads the run — each
- * entry is named with the path to it, so a test made green again is an entry
- * somebody looked at rather than one nobody knew was there.
+ * The tests that declare `#[Decision]` and `#[Requirement]` hold a decision and
+ * a requirement. The session that changes the behaviour stands in the test
+ * rather than in `decisions/` or `requirements/`. The attribute reaches whoever
+ * opens the file; this reaches whoever reads the run. Each entry comes with the
+ * path to it. So a test made green again is an entry somebody looked at rather
+ * than one nobody knew was there.
  *
  * The state is static because a run has one of these, and the three subscribers
  * are one collector seen from three events. A run where nothing fails prints
@@ -64,7 +64,7 @@ final class HeldEntries implements Extension
     }
 
     /**
-     * One failing test, by the name a decision writes it under: the class
+     * One failed test, by the name a decision writes it under: the class
      * without its namespace, and the method.
      */
     public static function remember(mixed $test): void
@@ -80,7 +80,7 @@ final class HeldEntries implements Extension
         ];
     }
 
-    /** Every entry the failures of this run were holding, once each. */
+    /** Every entry the failures of this run held, once each. */
     public static function report(): void
     {
         $lines = [];

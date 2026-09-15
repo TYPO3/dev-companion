@@ -39,28 +39,36 @@ final class Documentation
     private const PAGE = 'std:doc';
 
     /**
-     * The other role this searches: a configuration value the manual declares,
-     * with the anchor of the section that documents it.
+     * The other roles this searches: what a manual declares under its own
+     * name, with the anchor of the section that documents it.
      *
      * The TCA reference is a handful of large pages that carry hundreds of
      * properties as sections. So nothing in its table of contents has the name
      * `columnsOverrides`. A query that names that property reached six pages
-     * that never mention it — `D-ANS-144`. `Manual\Permalink` reads the same
-     * objects for the other question asked of them.
+     * that never mention it — `D-ANS-144`. TYPO3 Explained declares the
+     * classes, the interfaces, the methods and the console commands it
+     * documents the same way, and none of them titles a page — `D-ANS-158`.
+     * `Manual\Permalink` reads the same objects for the other question asked
+     * of them.
+     *
+     * @var list<string>
      */
-    private const PROPERTY = 'std:confval';
+    private const DECLARED = ['std:confval', 'php:class', 'php:interface', 'php:method', 'std:console:command'];
+
+    /** What a console command's display name carries in front of the command. */
+    private const CONSOLE = 'vendor/bin/typo3 ';
 
     /**
-     * What a declared property has to look like before a query word may reach
-     * it: an inner capital, an underscore, or a dot.
+     * What a declared name has to look like before a query word may reach it:
+     * an inner capital, an underscore, a dot, or a colon between two words.
      *
      * A property named like an English word is one every prose question carries
      * by accident — `template`, `title`, `default`. To admit those put three of
      * the seven ranked questions of `D-ANS-032` behind sections nobody asked
      * for. Written the way code is, it is the subject rather than a word of the
-     * sentence.
+     * sentence. The colon is how a console command and a method are written.
      */
-    private const IDENTIFIER = '/\p{Ll}\p{Lu}|[_.]/u';
+    private const IDENTIFIER = '/\p{Ll}\p{Lu}|[_.]|\p{L}:\p{L}/u';
 
     /**
      * What a search reads a page by. The title is its name. The path is the
@@ -171,7 +179,7 @@ final class Documentation
             }
             $indexed[$document] = true;
 
-            foreach ([...$index, ...$this->properties($base, $named)] as $page) {
+            foreach ([...$index, ...$this->declared($base, $named)] as $page) {
                 $pages[$document . '|' . $page['url']] = [
                     'score' => 0,
                     'coverage' => 0.0,
@@ -358,23 +366,23 @@ final class Documentation
     }
 
     /**
-     * The properties this manual declares that a question named, with the
-     * anchor of the section that documents each.
+     * What this manual declares that a question named, with the anchor of the
+     * section that documents each.
      *
      * @param list<string> $named the lowercased names a question may reach one by
      * @return list<array{title: string, path: string, url: string}>
      */
-    private function properties(string $base, array $named): array
+    private function declared(string $base, array $named): array
     {
         $inventory = $named === [] ? null : $this->inventory->of($base);
         if ($inventory === null) {
             return [];
         }
 
-        $properties = [];
+        $declared = [];
         $seen = [];
         foreach ($inventory['objects'] as $object) {
-            if ($object['role'] !== self::PROPERTY) {
+            if (!in_array($object['role'], self::DECLARED, true)) {
                 continue;
             }
             // `-` is what the writer puts where the display name is the
@@ -382,27 +390,62 @@ final class Documentation
             // own arrives.
             $title = in_array($object['display'], ['-', ''], true) ? $object['name'] : $object['display'];
             $url = $base . $object['uri'];
-            if (!in_array(mb_strtolower($title), $named, true) || isset($seen[$url])) {
+            if (array_intersect(self::names($object['role'], $title), $named) === [] || isset($seen[$url])) {
                 continue;
             }
             $seen[$url] = true;
             // It sits under the path of the page it is a section of. So it
             // stands in its chapter the way a page does, and the anchor's own
             // slug adds no words to match against.
-            $properties[] = ['title' => $title, 'path' => (string) strtok($object['uri'], '#'), 'url' => $url];
+            $declared[] = ['title' => $title, 'path' => (string) strtok($object['uri'], '#'), 'url' => $url];
         }
 
-        return $properties;
+        return $declared;
     }
 
     /**
-     * The names a query reaches a declared property by, lowercased.
+     * The names a query reaches one declared object by, lowercased.
+     *
+     * A class by its short name or its qualified one, without the leading
+     * backslash the manual writes. A method by `Class::method` in either
+     * spelling of the class, and never by the method alone: `getRequest` is
+     * declared on 48 pages of TYPO3 Explained at 14.3, and a query that names
+     * only it asks for none of them in particular — `D-ANS-158`. A console
+     * command by what a caller types after the binary.
+     *
+     * @return list<string>
+     */
+    private static function names(string $role, string $display): array
+    {
+        $display = mb_strtolower($display);
+        switch ($role) {
+            case 'php:class':
+            case 'php:interface':
+                $qualified = ltrim($display, '\\');
+
+                return [$qualified, substr((string) strrchr('\\' . $qualified, '\\'), 1)];
+            case 'php:method':
+                [$class, $method] = explode('::', $display, 2) + [1 => ''];
+                $qualified = ltrim($class, '\\');
+
+                return [$qualified . '::' . $method, substr((string) strrchr('\\' . $qualified, '\\'), 1) . '::' . $method];
+            case 'std:console:command':
+                return [str_starts_with($display, self::CONSOLE) ? substr($display, strlen(self::CONSOLE)) : $display];
+            default:
+                return [$display];
+        }
+    }
+
+    /**
+     * The names a query reaches a declared object by, lowercased.
      *
      * Two ways in, and both keep the sections out of a question asked in prose.
      * A word written the way code is names its subject wherever it stands. A
      * question that is one word asks about that word whatever its name. That is
      * the only way a query reaches `showitem` or `label`, since either of them
-     * inside a sentence is a word of the sentence.
+     * inside a sentence is a word of the sentence. A word keeps its colons and
+     * backslashes, so `cache:flushtags` and `AssetCollector::addJavaScript`
+     * arrive whole.
      *
      * @param list<string> $queries
      * @return list<string>
@@ -412,9 +455,10 @@ final class Documentation
         $identifiers = [];
         foreach ($queries as $query) {
             if (preg_match('/\s/u', $query) !== 1) {
-                $identifiers[mb_strtolower($query)] = true;
+                $identifiers[mb_strtolower(ltrim($query, '\\'))] = true;
             }
-            foreach (preg_split('/[^\p{L}\p{N}_.]+/u', $query) ?: [] as $word) {
+            foreach (preg_split('/[^\p{L}\p{N}_.:\\\\]+/u', $query) ?: [] as $word) {
+                $word = ltrim(trim($word, ':'), '\\');
                 if ($word !== '' && preg_match(self::IDENTIFIER, $word) === 1) {
                     $identifiers[mb_strtolower($word)] = true;
                 }

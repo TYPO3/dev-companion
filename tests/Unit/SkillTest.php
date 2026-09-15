@@ -1094,12 +1094,15 @@ final class SkillTest extends TestCase
         // the 7.5 Feature entry that introduced it and no deprecation, which is
         // `D-ANS-042`. So the miss above is a result for a surface and the
         // wrong corpus for an identifier (`D-ANS-010`).
+        // Since `D-ANS-158` the manual declares the classes, methods and
+        // commands it documents, so the sentence bounds the identifier route
+        // to what a manual does not declare.
         self::assertStringContainsString(
-            'The manual matches page titles, section paths and the property names each manual declares, never the'
+            'The manual matches page titles, section paths and what each manual declares by name, never the'
             . ' text of a page',
             self::flat($base),
         );
-        self::assertStringContainsString('a PHP identifier has no page named after it', self::flat($base));
+        self::assertStringContainsString('A PHP identifier the manual does not declare has no page named after it', self::flat($base));
         $identifier = strpos($base, 'An identifier goes to');
         self::assertNotFalse($identifier, 'the base leaves a PHP identifier pointed at the manual');
         self::assertLessThan(

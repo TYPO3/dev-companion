@@ -484,6 +484,57 @@ final class DocumentationTest extends TestCase
         self::assertSame('showitem', $alone['results'][0]['title']);
     }
 
+    /**
+     * TYPO3 Explained declares the classes, the methods and the console
+     * commands it documents, with the anchor of the section that does. So a
+     * query that names one reaches that section the way it reaches a property.
+     * A method is reached as `Class::method` and never by its own name alone,
+     * which 48 event pages share — `D-ANS-158`.
+     */
+    #[Decision('D-ANS-158')]
+    #[Test]
+    public function aDeclaredClassMethodOrCommandIsReachedByItsOwnName(): void
+    {
+        $base = 'https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/';
+        $index = $this->inventory(
+            [
+                'ApiOverview/Assets/Index.html' => 'Assets (CSS, JavaScript, media)',
+                'ApiOverview/CommandControllers/ListCommands.html' => 'List of commands',
+                'ApiOverview/Events/Events/Backend/AfterPageTreeItemsPreparedEvent.html' => 'AfterPageTreeItemsPreparedEvent',
+            ],
+            [],
+            [
+                ['php:class', 'ApiOverview/Assets/Index.html#typo3-cms-core-page-assetcollector', '\\TYPO3\\CMS\\Core\\Page\\AssetCollector'],
+                ['php:method', 'ApiOverview/Assets/Index.html#typo3-cms-core-page-assetcollector-addjavascript', '\\TYPO3\\CMS\\Core\\Page\\AssetCollector::addJavaScript'],
+                ['php:method', 'ApiOverview/Events/Events/Backend/AfterPageTreeItemsPreparedEvent.html#getrequest', '\\TYPO3\\Backend\\Event\\AfterPageTreeItemsPreparedEvent::getRequest'],
+                ['std:console:command', 'ApiOverview/CommandControllers/ListCommands.html#console-command-cache-flushtags', 'vendor/bin/typo3 cache:flushtags'],
+            ],
+        );
+        $documentation = new Documentation(static fn(string $url): string => str_ends_with($url, 'objects.inv')
+            ? $index
+            : '<html><article role="main"><p>What this page says.</p></article></html>');
+
+        $class = $documentation->lookup(['AssetCollector'], '14.3', 1)['results'][0];
+        self::assertSame('\\TYPO3\\CMS\\Core\\Page\\AssetCollector', $class['title']);
+        self::assertSame($base . 'ApiOverview/Assets/Index.html#typo3-cms-core-page-assetcollector', $class['url']);
+
+        $qualified = $documentation->lookup(['\\TYPO3\\CMS\\Core\\Page\\AssetCollector'], '14.3', 1)['results'][0];
+        self::assertSame($class['url'], $qualified['url']);
+
+        $method = $documentation->lookup(['AssetCollector::addJavaScript'], '14.3', 1)['results'][0];
+        self::assertSame($base . 'ApiOverview/Assets/Index.html#typo3-cms-core-page-assetcollector-addjavascript', $method['url']);
+
+        $alone = $documentation->lookup(['getRequest'], '14.3', 3);
+        self::assertNotContains('getrequest', array_map(
+            static fn(array $result): string => (string) parse_url($result['url'], PHP_URL_FRAGMENT),
+            $alone['results'],
+        ));
+
+        $command = $documentation->lookup(['run vendor/bin/typo3 cache:flushtags after a deploy'], '14.3', 1)['results'][0];
+        self::assertSame('vendor/bin/typo3 cache:flushtags', $command['title']);
+        self::assertSame($base . 'ApiOverview/CommandControllers/ListCommands.html#console-command-cache-flushtags', $command['url']);
+    }
+
     #[Decision('D-ANS-065')]
     #[Test]
     public function anApiIdentifierReachesThePageThatIsNotNamedAfterIt(): void
@@ -770,8 +821,9 @@ final class DocumentationTest extends TestCase
      *
      * @param array<string, string> $pages      the path of each page, and its title
      * @param array<string, string> $properties  the anchored uri of each declared property, and its name
+     * @param list<array{string, string, string}> $declared  the role, the anchored uri and the display name of anything else the manual declares
      */
-    private function inventory(array $pages, array $properties = []): string
+    private function inventory(array $pages, array $properties = [], array $declared = []): string
     {
         $objects = '';
         foreach ($pages as $path => $title) {
@@ -779,6 +831,9 @@ final class DocumentationTest extends TestCase
         }
         foreach ($properties as $uri => $name) {
             $objects .= sprintf("%s std:confval -1 %s %s\n", mb_strtolower($name), $uri, $name);
+        }
+        foreach ($declared as [$role, $uri, $display]) {
+            $objects .= sprintf("%s %s -1 %s %s\n", (string) strtok($uri, '#'), $role, $uri, $display);
         }
 
         return "# Sphinx inventory version 2\n"

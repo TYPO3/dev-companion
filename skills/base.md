@@ -106,11 +106,12 @@ ones that matter too.
    it here, and whenever the reading raises it again.
 
    That is a question for a documented surface: a ViewHelper, a TCA type, a
-   TypoScript setting. The manual matches page titles, section paths and the
-   property names each manual declares, never the text of a page. So a PHP
-   identifier has no page named after it. You reach a property by its own name
-   where the query writes that name the way code does. You also reach it where
-   the query is nothing but the name.
+   TypoScript setting. The manual matches page titles, section paths and what
+   each manual declares by name, never the text of a page. Declared is a
+   property, a class or method the manual documents, a console command. You
+   reach one by its own name where the query writes that name the way code
+   does. You also reach it where the query is nothing but the name. A PHP
+   identifier the manual does not declare has no page named after it.
 
    An identifier goes to `typo3_changelog_lookup` under its own name. That
    reaches the entries that write it, however the core titled the change. Then

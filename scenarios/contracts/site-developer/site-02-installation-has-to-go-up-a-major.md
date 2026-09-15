@@ -20,15 +20,15 @@ operations with what `typo3_project_describe` and `typo3_changelog_lookup` know
   notices in the log.
 - What the third-party extensions in this installation do to the plan, and which
   ones are actually installed here.
-- The effective configuration as it is now, so what the upgrade changes can be
-  compared against something real.
+- The effective configuration as it is now, so the agent can compare what the
+  upgrade changes against something real.
 
 **What has to come out of it**
 
-- The parts that are properties of this installation are read from it rather
-  than assumed.
-- The upgrade procedure itself is either answered or declined; what it must not
-  be is guessed. A wrong order here costs a production site.
+- The parts that are properties of this installation come from it rather than
+  from an assumption.
+- The upgrade procedure itself gets an answer or a refusal. What it must not get
+  is a guess. A wrong order here costs a production site.
 
 **How it fails**
 

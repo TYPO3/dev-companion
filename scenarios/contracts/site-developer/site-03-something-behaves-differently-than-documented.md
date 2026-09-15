@@ -24,16 +24,16 @@
 
 - The configuration value comes from this installation's runtime, and the answer
   says it did — on every covered line. This case runs on `E-SITE`, which unnamed
-  is the covered stable one, so the environment alone would never have shown
+  is the covered stable one. So the environment alone would never have shown
   that the console command behind this answer exists on two of the four
   (`D-ANS-052`).
 - The subsystem conventions explain the mechanism, and the agent then finds the
   concrete override in the checkout rather than being told which one it is.
-- Where the installation could not be asked, that is said — and is
-  distinguishable from a value that is genuinely empty.
+- Where the server could not ask the installation, the answer says so, and a
+  reader can tell that from a value that is empty.
 
 **How it fails**
 
 - The core default quoted as the effective value.
-- An unreachable console producing an answer shaped like "nothing is configured"
-  (`R-ANS-001`, `R-ANS-002`).
+- An unreachable console that produces an answer in the shape of "nothing is
+  configured" (`R-ANS-001`, `R-ANS-002`).

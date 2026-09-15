@@ -25,15 +25,15 @@
 
 - Site set and TSconfig conventions come over as conventions, without core paths
   or core checks attached.
-- What is not covered is named as not covered, with the documentation as the
-  route, rather than filled in with something plausible. `typo3_server_scope`
-  declines deciding this site's languages, base and error handling outright; a
-  site set and how its settings resolve against the site's own are the covered
-  half and stay in the answer.
+- The answer names what the server does not cover as not covered, with the
+  documentation as the route. It does not fill it in with something plausible.
+  `typo3_server_scope` declines the decision about this site's languages, base
+  and error handling outright. A site set and how its settings resolve against
+  the site's own are the covered half and stay in the answer.
 - Nothing suggests that a `typo3/sysext/` path is where this project's files go.
 
 **How it fails**
 
-- The core's own TypoScript defaults presented as how a site is configured.
+- The core's own TypoScript defaults presented as how to configure a site.
 - The scope boundary stated in one paragraph and then contradicted by the
   checklist below it.

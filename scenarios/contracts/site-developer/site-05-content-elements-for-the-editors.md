@@ -12,8 +12,8 @@
 **What the agent needs from this server**
 
 - The TCA conventions for the element and its fields.
-- How the data gets to the template: the data processor, what it is registered
-  as, what it may do.
+- How the data gets to the template: the data processor, its registered name,
+  what it may do.
 - The Fluid conventions for the template, and the namespaces available
   undeclared.
 - The label domain of the site package's own language file.
@@ -22,8 +22,8 @@
 **What has to come out of it**
 
 - Conventions come over without core checks or core paths attached.
-- Where the answer for data processors is thin, that is said rather than covered
-  with generic Fluid advice (`R-KNW-001`).
+- Where the answer for data processors is thin, the answer says so rather than
+  covers it with generic Fluid advice (`R-KNW-001`).
 
 **How it fails**
 

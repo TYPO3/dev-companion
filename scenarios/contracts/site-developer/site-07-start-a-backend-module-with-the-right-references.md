@@ -14,8 +14,8 @@
 
 **What the agent needs from this server**
 
-- Task-level orientation that makes the relevant sources available before code
-  is written instead of relying on the agent to discover each lookup by chance.
+- Task-level orientation that makes the relevant sources available before the
+  first line of code, instead of an agent that discovers each lookup by chance.
 - Project and extension scope, the modules already registered, valid icons and
   existing labels in this installation.
 - Version-correct component markup from the catalog and the official module API
@@ -27,7 +27,7 @@
   icons, labels, components and live documentation before implementing them.
 - Facts stay in the tools that own them; the task guidance contains routing and
   order rather than a duplicate copy of their answers.
-- No core-only path, check or obligation is imposed on the site package.
+- The answer imposes no core-only path, check or obligation on the site package.
 
 **How it fails**
 
@@ -35,5 +35,4 @@
   component class.
 - A permanently loaded instruction repeats the catalog markup and becomes a
   second version of it.
-- The extension task is answered as a core patch because it concerns the
-  backend.
+- The extension task gets a core patch answer because it concerns the backend.

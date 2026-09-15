@@ -22,13 +22,13 @@
 
 - The backend CSS architecture, its design tokens and its class naming do
   **not** come back as advice for a Bootstrap frontend theme.
-- If CSS knowledge is offered at all, it is marked as the core backend's and as
-  not applying here.
+- If the answer offers CSS knowledge at all, it marks it as the core backend's
+  and as one that does not apply here.
 
 **How it fails**
 
-- Backend token names, backend component class naming, and "the backend has
-  moved off Bootstrap" handed over as instructions for a Bootstrap theme — four
+- Backend token names, backend component class names, and "the backend has moved
+  off Bootstrap" handed over as instructions for a Bootstrap theme. That is four
   confidently inverted hints, which is the note this scenario exists for
   (`R-SCO-004`).
 - A `.scss` path being enough to trigger core CSS conventions.

@@ -18,14 +18,14 @@
 - An icon identifier the installation has registered, rather than one that reads
   plausibly.
 - Nothing about where templates live: the element exists and its output is not
-  what was asked about.
+  what the user asked about.
 
 **What has to come out of it**
 
 - The element's registration and its backend form are what the answer is about.
 - The sitepackage layout is not returned. It is the longest hint in the corpus
-  and is written in the words of the backend the package is administered from,
-  so it reads as an answer to any task naming a content element (`D-KNW-001`).
+  and stands in the words of the backend that administers the package. So it
+  reads as an answer to any task that names a content element (`D-KNW-001`).
 - A task that does name the other half — building the element and its frontend
   output — still gets it, which is `SITE-05`.
 
@@ -33,9 +33,9 @@
 
 - The brief opens with where `Resources/Private/Templates/Content/` goes for a
   task that changes one field.
-- An icon identifier is invented instead of read from the registry.
-- A Fluid or TypoScript convention is stated as applying, or the brief opens by
-  naming both domains. "Content element" is a keyword of each and stays one,
-  because a task that names neither half of TYPO3 is the case it was added for;
-  what it no longer does is add them where the task names only the backend
+- An icon identifier invented instead of read from the registry.
+- A Fluid or TypoScript convention stated as one that applies, or a brief that
+  opens with both domains. "Content element" is a keyword of each and stays one,
+  because a task that names neither half of TYPO3 is the case it serves. What it
+  no longer does is add them where the task names only the backend
   (`D-KNW-006`).

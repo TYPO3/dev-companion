@@ -51,10 +51,10 @@ final class InstallerTest extends TestCase
 
     /**
      * The entry is the caller's file, and the run owns the command in it and
-     * nothing else. `env` is where that matters: an exclusion written in by
-     * hand was replaced away by the next install, and the tools it had taken
-     * out came back with nothing said — the same silence `D-AUD-005` is about,
-     * reached from the other side.
+     * nothing else. `env` is where that matters. The next install replaced an
+     * exclusion written in by hand, and the tools it had taken out came back
+     * with nothing said. That is the same silence `D-AUD-005` is about, reached
+     * from the other side.
      */
     #[Decision('D-AUD-005')]
     #[Test]
@@ -178,10 +178,10 @@ final class InstallerTest extends TestCase
                     $directory . '/.agents/skills/typo3-extension-testing/references/' . $reference . '.md',
                 );
             }
-            // The base is one file here and a copy in every published skill:
-            // each of them lands in somebody else's project alone, so a skill
-            // pointing out of its own directory would resolve in this
-            // repository and nowhere it is actually read.
+            // The base is one file here and a copy in every published skill.
+            // Each of them lands in somebody else's project alone. So a skill
+            // that points out of its own directory would resolve in this
+            // repository and nowhere a client reads it.
             foreach (Installer::skills() as $publishedSkill) {
                 self::assertFileEquals(
                     Paths::root() . '/skills/base.md',
@@ -248,11 +248,11 @@ final class InstallerTest extends TestCase
 
     /**
      * The entry names this checkout, and every file it goes into is the one its
-     * client documents as shared and committed. Nothing else can be written
-     * for this one: Claude Code names no way to reach the project root that
-     * does not end at the working directory the MCP specification leaves
-     * undefined (`D-DIS-016`). So the install says it instead, where the person
-     * who can act on it is looking.
+     * client documents as shared and committed. Nothing else fits this one.
+     * Claude Code names no way to reach the project root that does not end at
+     * the working directory the MCP specification leaves undefined
+     * (`D-DIS-016`). So the install says it instead, where the person who can
+     * act on it looks.
      */
     #[Test]
     public function anEntryTrueOnThisMachineAloneSaysSo(): void
@@ -264,8 +264,8 @@ final class InstallerTest extends TestCase
             $stdout = '';
             self::assertSame(0, $this->execute($directory, ['install', '--agent=claude'], $stderr, $stdout), $stderr);
 
-            // Wrapped to the terminal before it is printed, so what is asserted
-            // is the sentence rather than where its line breaks fell.
+            // The print wraps to the terminal first, so the assertion reads the
+            // sentence rather than where its line breaks fell.
             $said = (string) preg_replace('/\s+/', ' ', $stdout);
             self::assertStringContainsString('valid on this machine only', $said);
             self::assertStringContainsString('.gitignore', $said);
@@ -277,9 +277,9 @@ final class InstallerTest extends TestCase
     }
 
     /**
-     * A DDEV project is the one case that escapes it: `ddev exec` runs in the
+     * A DDEV project is the one case that escapes it. `ddev exec` runs in the
      * container's project root, so the entry names the path relative to it and
-     * is true wherever the repository is checked out.
+     * is true wherever the checkout sits.
      */
     #[Test]
     public function aDdevEntryNamingTheProjectSaysNothingAboutThisMachine(): void
@@ -303,12 +303,12 @@ final class InstallerTest extends TestCase
     }
 
     /**
-     * The third shape `D-DIS-016` names: a client that resolves a variable to
+     * The third shape `D-DIS-016` names. A client that resolves a variable to
      * the project root gets an entry that is true in every checkout of it.
      *
-     * The variable rather than a plain relative path, because the working
-     * directory a client spawns the server in is not something the MCP
-     * specification defines — which is what `D-DIS-015` was revoked over.
+     * The variable rather than a plain relative path, because the MCP
+     * specification does not define the working directory a client spawns the
+     * server in. That is what revoked `D-DIS-015`.
      *
      * @param string $key the object the client keeps its servers under
      */
@@ -363,13 +363,14 @@ final class InstallerTest extends TestCase
     }
 
     /**
-     * The variable names a path inside the project, so it is written only where
-     * the project has one to name.
+     * The variable names a path inside the project, so the install writes it
+     * only where the project has one to name.
      *
-     * A standalone checkout is the case the whole reading is about: the server
+     * A standalone checkout is the case the whole read is about. The server
      * runs from somewhere else, and `${workspaceFolder}/vendor/bin/…` there
-     * would be an entry that starts a server for nobody — worse than the host
-     * path, because it is wrong on the machine that wrote it too — `D-DIS-016`.
+     * would be an entry that starts a server for nobody. That is worse than the
+     * host path, because it is wrong on the machine that wrote it too —
+     * `D-DIS-016`.
      */
     #[Decision('D-DIS-016')]
     #[Test]
@@ -398,8 +399,8 @@ final class InstallerTest extends TestCase
     }
 
     /**
-     * DDEV comes before the variable, because it decides more than the path:
-     * the entry has to start the container's PHP, and that container sees the
+     * DDEV comes before the variable, because it decides more than the path.
+     * The entry has to start the container's PHP, and that container sees the
      * project directory rather than the host.
      */
     #[Test]
@@ -429,10 +430,10 @@ final class InstallerTest extends TestCase
     }
 
     /**
-     * The defect the feedback reported, where it still stands: a client whose
+     * The defect the feedback reported, where it still stands. A client whose
      * documentation names no way to reach the project root gets the host path
-     * even though `vendor/bin/typo3-dev-companion` is sitting there, and is
-     * told so — `D-DIS-016`.
+     * even though `vendor/bin/typo3-dev-companion` sits there. The install says
+     * so — `D-DIS-016`.
      */
     #[Decision('D-DIS-016')]
     #[Test]
@@ -621,10 +622,10 @@ final class InstallerTest extends TestCase
     }
 
     /**
-     * The TOML half of what `453e439` fixed for JSON. The section was replaced
-     * whole, so the `env` block that is the only place a TOML client can carry
-     * `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS` was gone after an `install` — measured
-     * 2026-08-04, `D-AUD-006`.
+     * The TOML half of what `453e439` fixed for JSON. The install replaced the
+     * section whole. So the `env` block, the only place a TOML client can carry
+     * `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`, was gone after an `install` —
+     * measured 2026-08-04, `D-AUD-006`.
      */
     #[Decision('D-AUD-006')]
     #[Test]
@@ -652,9 +653,10 @@ final class InstallerTest extends TestCase
 
     /**
      * A value continued on the next line is the reason this path replaced the
-     * section rather than editing it: keeping a line means knowing where one
-     * ends. Refusing is what is left, because the alternative on record is
-     * deleting the caller's lines without saying so — `D-AUD-006`.
+     * section rather than edited it. To keep a line, the writer has to know
+     * where one ends. A refusal is what remains, because the alternative on
+     * record is a deletion of the caller's lines with nothing said —
+     * `D-AUD-006`.
      */
     #[Decision('D-AUD-006')]
     #[Test]
@@ -720,9 +722,9 @@ final class InstallerTest extends TestCase
     }
 
     /**
-     * The published copy is kept current from the state the last install wrote,
-     * so a skill this package has dropped goes with the update rather than
-     * staying behind in somebody's project — `D-DIS-014`.
+     * The update reads the state the last install wrote and keeps the published
+     * copy current. So a skill this package has dropped goes with the update
+     * rather than stays behind in somebody's project — `D-DIS-014`.
      */
     #[Decision('D-DIS-014')]
     #[Test]
@@ -756,20 +758,20 @@ final class InstallerTest extends TestCase
     /**
      * What the ignores are for, asked of git rather than of the files.
      *
-     * Everything else here reads what was written; this reads what the tool it
-     * was written for makes of it, in a repository of its own, because the
-     * property being kept is about `git status` and not about a file's
-     * contents. A skill the project wrote itself sits beside the published ones
-     * throughout: it is what tells "this package's directories are invisible"
-     * apart from "the whole skills directory is" — `D-DIS-010`.
+     * Everything else here reads what the install wrote. This reads what git
+     * makes of it, in a repository of its own. The property under test is about
+     * `git status` and not about a file's contents. A skill the project wrote
+     * itself sits beside the published ones throughout. It is what tells "this
+     * package's directories are invisible" apart from "the whole skills
+     * directory is" — `D-DIS-010`.
      */
     #[Requirement('R-DIS-024')]
     #[Decision('D-DIS-010')]
     #[Test]
     public function gitReportsTheProjectsOwnFiles(): void
     {
-        // A property of this repository rather than of the machine: it is a git
-        // checkout, its coverage is fetched by `checkouts:update` and it commits
+        // A property of this repository rather than of the machine. It is a git
+        // checkout, `checkouts:update` fetches its coverage and it commits
         // through `.githooks/`. A checkout without git is a failure with a
         // sentence, not a test that quietly goes away.
         $version = '';

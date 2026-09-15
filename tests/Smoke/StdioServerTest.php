@@ -16,9 +16,9 @@ use TYPO3\DevCompanion\Tests\Support\Directory;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 
 /**
- * Drives the real entrypoint the way a client does: a subprocess speaking
- * JSON-RPC over stdin and stdout. Everything in between — SDK wiring, schema
- * validation, error mapping — is only exercised here.
+ * Drives the real entrypoint the way a client does: a subprocess that speaks
+ * JSON-RPC over stdin and stdout. Only this reaches everything in between: the
+ * SDK setup, the schema validation, the error mapping.
  */
 final class StdioServerTest extends TestCase
 {
@@ -29,10 +29,10 @@ final class StdioServerTest extends TestCase
     private const PROTOCOL_VERSION = '2025-11-25';
 
     /**
-     * What a feedback recorded from here says about itself, so the file it
-     * became can be found again. The server writes into its own checkout
-     * whatever directory the subprocess was started in, which is the whole
-     * point of `Paths::root()` — so a case that records leaves a real file in
+     * What a feedback recorded from here says about itself, so tearDown finds
+     * the file it became. The server writes into its own checkout whatever
+     * directory the subprocess starts in, which is the whole point of
+     * `Paths::root()`. So a case that records leaves a real file in
      * `feedback/`, and this is what tearDown removes it by.
      */
     private const MARKER = 'phpunit-stdio-fixture';
@@ -55,13 +55,12 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * Where a server started here records what it is asked to record.
+     * Where a server started here records what a caller asks it to.
      *
      * The server runs as a subprocess, so the static redirect a unit test uses
-     * cannot reach it and the directory is handed over in the environment
-     * instead. Without it a recorded feedback lands in the corpus this
-     * repository keeps, where the next run reads it as a report somebody left
-     * — `R-COD-003`.
+     * cannot reach it. The environment carries the directory instead. Without
+     * it a recorded feedback lands in the corpus this repository keeps, where
+     * the next run reads it as a report somebody left — `R-COD-003`.
      */
     private function ownFeedbackDirectory(): string
     {
@@ -91,8 +90,8 @@ final class StdioServerTest extends TestCase
         self::assertSame(self::PROTOCOL_VERSION, $result['result']['protocolVersion']);
         self::assertStringContainsString('checkout', $result['result']['instructions']);
         // Held here as well as in ScopeTest, because this is the string a
-        // client is actually handed: what the SDK puts on the wire is what a
-        // client truncates, and it truncates without telling either side.
+        // client gets. What the SDK puts on the wire is what a client
+        // truncates, and it truncates without a word to either side.
         self::assertLessThanOrEqual(
             Coverage::INSTRUCTIONS_BUDGET,
             mb_strlen($result['result']['instructions']),
@@ -101,13 +100,13 @@ final class StdioServerTest extends TestCase
 
     /**
      * A client that has moved on to the revision this transport cannot speak
-     * is answered with the newest one it can, rather than turned away.
+     * gets the newest one it can, rather than a refusal.
      *
      * `2026-07-28` replaced `initialize` with per-request metadata and
      * `server/discover`, which mcp/sdk serves from `StreamableHttpTransport`
-     * alone. The negotiation it gained with that revision is therefore the
-     * whole of what keeps such a client talking to this server, and it is the
-     * one thing every answer here travels over.
+     * alone. So the negotiation it gained with that revision is the whole of
+     * what keeps such a client in contact with this server. It is the one thing
+     * every answer here travels over.
      */
     #[Test]
     public function aClientOfferingARevisionThisTransportCannotSpeakIsAnsweredWithOneItCan(): void
@@ -123,16 +122,16 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * A project whose task skills nobody has updated has them put back before
-     * its first call, and is told so on both channels a starting server has.
+     * A project whose task skills nobody has updated gets them back before its
+     * first call. The server says so on both channels it has at start.
      *
-     * Saying it was all this did, and saying it needs somebody to be listening:
-     * on the machine `D-DIS-021` was written on, twelve projects had drifted
-     * and none of them had a reader. So the server puts the copies back, and
-     * both channels still speak — stderr with what differed, for whoever is at
-     * the terminal, and the instructions with the one sentence the budget has
-     * room for, because the client read that directory when the session opened
-     * rather than now — `R-DIS-025`, `D-DIS-013`.
+     * To say it was all this did, and a report needs somebody to hear it. On
+     * the machine behind `D-DIS-021`, twelve projects had drifted and none of
+     * them had a reader. So the server puts the copies back, and both channels
+     * still speak. stderr with what differed, for whoever is at the terminal.
+     * The instructions with the one sentence the budget has room for. The
+     * client read that directory when the session opened rather than now —
+     * `R-DIS-025`, `D-DIS-013`.
      */
     #[Requirement('R-DIS-025')]
     #[Decision('D-DIS-013')]
@@ -157,8 +156,8 @@ final class StdioServerTest extends TestCase
         // an earlier one, and what nothing said until now.
         Directory::remove($this->temporaryRoot . '/.agents/skills');
 
-        // Asked not to, the server says it and changes nothing — the reading is
-        // the same either way, and only what follows it moves.
+        // Asked not to, the server says it and changes nothing. The read is the
+        // same either way, and only what follows it moves.
         $reported = $this->call([$this->request(1, 'initialize', [
             'protocolVersion' => self::PROTOCOL_VERSION,
             'capabilities' => new \stdClass(),
@@ -185,8 +184,8 @@ final class StdioServerTest extends TestCase
             $this->temporaryRoot . '/.agents/skills/typo3-extension-health/SKILL.md',
         );
 
-        // The next start has nothing to say, which is what says the record was
-        // written too and not only the files.
+        // The next start has nothing to say, which is what says the record went
+        // out too and not only the files.
         $settled = $this->call([$this->request(1, 'initialize', [
             'protocolVersion' => self::PROTOCOL_VERSION,
             'capabilities' => new \stdClass(),
@@ -295,7 +294,7 @@ final class StdioServerTest extends TestCase
      * A question about an installation, asked where there is none, over the
      * wire a client actually reads. Nothing failed, so nothing is an error —
      * `D-ANS-005`. What comes back is the unsupported answer and the caller's
-     * own query, with no count, no flag and no empty list to read as a result.
+     * own query. No count, no flag and no empty list to read as a result.
      */
     #[Requirement('R-ANS-001')]
     #[Decision('D-ANS-005')]
@@ -334,9 +333,9 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * The `typo3://` scheme is what a client addresses this corpus by, and the
-     * index is served under it over the wire rather than only in a unit —
-     * `D-SCO-010`.
+     * The `typo3://` scheme is what a client addresses this corpus by. The
+     * server serves the index under it over the wire rather than only in a unit
+     * — `D-SCO-010`.
      */
     #[Decision('D-SCO-010')]
     #[Test]
@@ -354,7 +353,7 @@ final class StdioServerTest extends TestCase
     /**
      * The list a host picks from, on the wire that carries it. What the
      * definitions say is `ResourceSurfaceTest`; this is that the SDK passes the
-     * fields on rather than dropping the ones it does not use itself.
+     * fields on rather than drops the ones it does not use itself.
      */
     #[Requirement('R-ANS-022')]
     #[Test]
@@ -384,14 +383,14 @@ final class StdioServerTest extends TestCase
 
     /**
      * The second family on the same wire: a task workflow, and the file it
-     * opens by sending its reader to.
+     * sends its reader to.
      *
      * That second read is what the URI shape exists for. `references/base.md`
-     * is a file in no skill in this checkout — `Installer` writes it when it
-     * publishes one — and the client this family is for is precisely the one
-     * that never ran that install. Resolved against the URI the body is served
-     * at, the link the body writes is the URI read here, and the SDK matches it
-     * against the registered template.
+     * is a file in no skill in this checkout; `Installer` writes it when it
+     * publishes one. The client this family is for is precisely the one that
+     * never ran that install. Resolved against the URI of the body, the link
+     * the body writes is the URI this reads. The SDK matches it against the
+     * registered template.
      */
     #[Requirement('R-ANS-022')]
     #[Test]
@@ -438,10 +437,10 @@ final class StdioServerTest extends TestCase
      * What a tool refuses, over the wire that decides whether the caller ever
      * reads it.
      *
-     * A session filing five feedback was answered "Error while executing tool"
-     * and nothing else, and spent its remaining calls bisecting which parameter
-     * had done it — `D-ANS-143`. The refusal it hit says what to send instead,
-     * and the SDK dropped every word of it.
+     * A session that filed five feedback got "Error while executing tool" and
+     * nothing else. It spent its remaining calls on a bisection of which
+     * parameter had done it — `D-ANS-143`. The refusal it hit says what to send
+     * instead, and the SDK dropped every word of it.
      */
     #[Decision('D-ANS-143')]
     #[Test]
@@ -463,8 +462,8 @@ final class StdioServerTest extends TestCase
         self::assertTrue($answers[2]['result']['isError']);
         self::assertSame('An observation is required.', $answers[2]['result']['content'][0]['text']);
 
-        // The refusal that names the parameter, which is the one this was
-        // written from: nothing is written, and the caller is told why.
+        // The refusal that names the parameter, which is the one behind this
+        // test. Nothing goes to disk, and the caller learns why.
         self::assertTrue($answers[3]['result']['isError']);
         self::assertStringContainsString('The suggestion carries the frame', $answers[3]['result']['content'][0]['text']);
     }
@@ -473,10 +472,11 @@ final class StdioServerTest extends TestCase
      * The one argument that ever declared two types, over the wire that decides
      * whether a client can compose the call at all.
      *
-     * `tool` is a plain string since `D-ANS-017`, the several travel separated
-     * by commas, and the list a client sends instead is refused with the type it
-     * should have used. Both halves belong over the wire, because `FeedbackTest`
-     * calls `Channel::record` directly and the recorder still takes a list.
+     * `tool` is a plain string since `D-ANS-017`, and several travel separated
+     * by commas. A list a client sends instead gets a refusal that names the
+     * type it should have used. Both halves belong over the wire, because
+     * `FeedbackTest` calls `Channel::record` directly and the recorder still
+     * takes a list.
      */
     #[Requirement('R-FBK-001')]
     #[Decision('D-ANS-017')]
@@ -508,14 +508,14 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * The one input-side alternative on the surface, over the wire that produced
-     * the complaint. A call carrying neither branch is refused for both at once,
-     * one sentence per branch, because the SDK formats the leaves of a failed
-     * `oneOf` separately — a session read the last half as "page is required"
-     * and reported the tool as unusable for search. The keyword stays and the
-     * rule is stated where the call is composed, so this holds what a client
-     * still validates against; `D-ANS-012` says what would show that the wrong
-     * half was fixed.
+     * The one input-side alternative on the surface, over the wire that
+     * produced the complaint. A call that carries neither branch gets a refusal
+     * for both at once, one sentence per branch. The SDK formats the leaves of
+     * a failed `oneOf` one by one. A session read the last half as "page is
+     * required" and reported the tool as unusable for search. The keyword stays
+     * and the rule stands where the caller composes the call, so this holds
+     * what a client still validates against. `D-ANS-012` says what would show
+     * that the fix hit the wrong half.
      */
     #[Decision('D-ANS-012')]
     #[Test]
@@ -548,8 +548,8 @@ final class StdioServerTest extends TestCase
 
     /**
      * The session of `feedback/2026-08-04-175819` spelled the argument `query`,
-     * the way five other lookups here spell theirs. The unknown property was
-     * dropped, both `oneOf` branches failed, and the message named two
+     * the way five other lookups here spell theirs. The validator dropped the
+     * unknown property, both `oneOf` branches failed, and the message named two
      * arguments the call had not been about — `D-ANS-053`.
      */
     #[Decision('D-ANS-053')]
@@ -590,12 +590,12 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * A client writes its next request while the server is still working on the
-     * last one. Where that work is a console command, the command inherits the
-     * server's stdin unless it is given one of its own — and `ddev exec` reads
-     * stdin to the end, so the queued request is eaten and the session hangs on
-     * an answer that can never come. Both runs of `REVIEW-02` in an extension
-     * checkout died here, 24 minutes apart, with no error on either side.
+     * A client writes its next request while the server still works on the last
+     * one. Where that work is a console command, the command inherits the
+     * server's stdin unless it gets one of its own. `ddev exec` reads stdin to
+     * the end, so it eats the queued request and the session hangs on an answer
+     * that can never come. Both runs of `REVIEW-02` in an extension checkout
+     * died here, 24 minutes apart, with no error on either side.
      */
     #[Requirement('R-DIS-018')]
     #[Test]
@@ -620,9 +620,9 @@ final class StdioServerTest extends TestCase
             (string) json_encode(['jsonrpc' => '2.0', 'method' => 'notifications/initialized']),
             $this->request(2, 'tools/call', ['name' => 'typo3_fluid_namespace_list', 'arguments' => new \stdClass()]),
         ]) . "\n");
-        // Late enough that the console command is running, which is the only
-        // moment this can go wrong: written earlier the line sits in the
-        // server's own read buffer, where no child can reach it.
+        // Late enough that the console command runs, which is the only moment
+        // this can go wrong. Written earlier, the line sits in the server's own
+        // read buffer, where no child can reach it.
         usleep(200_000);
         fwrite($pipes[0], $this->request(3, 'tools/call', ['name' => 'typo3_server_scope', 'arguments' => new \stdClass()]) . "\n");
         fclose($pipes[0]);
@@ -648,13 +648,13 @@ final class StdioServerTest extends TestCase
      * The one thing a client never tells this server and it has to work out for
      * itself: which installation the session is in.
      *
-     * Thirteen of the twenty tools answer differently once one is found, and
-     * three of them are not even offered — so a server that reads nothing
-     * answers about TYPO3 in general where it was asked about a checkout, and
-     * says so nowhere. The mechanism is covered a class at a time by every test
-     * that hands `Instance` a directory itself. What only this can cover is that
-     * something hands one in at all: the line doing it is in the entrypoint, and
-     * with it deleted the rest of the suite stays green.
+     * Thirteen of the twenty tools answer differently once discovery finds one,
+     * and three of them are not even on offer. So a server that reads nothing
+     * answers about TYPO3 in general where the question was about a checkout,
+     * and says so nowhere. Every test that hands `Instance` a directory itself
+     * covers the mechanism a class at a time. What only this can cover is that
+     * something hands one in at all. The line that does it is in the
+     * entrypoint, and with it deleted the rest of the suite stays green.
      */
     #[Requirement('R-DIS-022')]
     #[Test]
@@ -674,8 +674,8 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * A client starts the server in the directory the session is in, and that is
-     * rarely the project root — it is wherever the file being worked on lives.
+     * A client starts the server in the directory the session is in, and that
+     * is rarely the project root. It is wherever the file under edit lives.
      * Finding the installation from there is the walk-up, and it is the half
      * that makes the answer right in practice rather than in a fixture.
      */
@@ -773,7 +773,7 @@ final class StdioServerTest extends TestCase
         array $environment = [],
     ): array {
         // The working directory is the whole of what a client tells this server
-        // about where it is, so a test about discovery is a test about this
+        // about where it is. So a test about discovery is a test about this
         // argument.
         $process = proc_open(
             [PHP_BINARY, Paths::root() . '/bin/typo3-dev-companion'],

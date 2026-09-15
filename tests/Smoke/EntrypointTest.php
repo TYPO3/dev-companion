@@ -13,13 +13,13 @@ use TYPO3\DevCompanion\Tests\Support\Requirement;
 /**
  * What the entrypoint does with an argument that is not a command.
  *
- * The server is what runs when nothing is passed, so every other word has to
- * end in a message and an exit code. Falling through to the transport instead
- * leaves whoever typed it in front of a process that reads stdin forever.
+ * The server is what runs on no argument, so every other word has to end in a
+ * message and an exit code. Falling through to the transport instead leaves
+ * whoever typed it in front of a process that reads stdin forever.
  *
- * What it says when the server does start belongs here for the same reason:
+ * What it says when the server does start belongs here for the same reason.
  * stdout is the protocol from the first line on, so a diagnostic goes to
- * stderr, and only a subprocess shows that the two are actually apart.
+ * stderr, and only a subprocess shows that the two are apart.
  */
 final class EntrypointTest extends TestCase
 {
@@ -53,11 +53,10 @@ final class EntrypointTest extends TestCase
      * streams a client actually reads.
      *
      * `a4470ee` renamed `typo3_project_scope`, and the caller who had excluded
-     * it was handed the tool back under its new name — nothing on either side
-     * said so, because the list is never read against the registry. It is said
-     * on stderr now, and this holds the half that matters more: stdout carries
-     * the protocol and nothing else, whatever was written beside it —
-     * `D-AUD-005`.
+     * it got the tool back under its new name. Nothing on either side said so,
+     * because nothing reads the list against the registry. stderr says it now,
+     * and this holds the half that matters more. stdout carries the protocol
+     * and nothing else, whatever stands beside it — `D-AUD-005`.
      */
     #[Decision('D-AUD-005')]
     #[Test]
@@ -95,9 +94,9 @@ final class EntrypointTest extends TestCase
     /**
      * The other name that takes nothing away: one of the three `R-SCO-009` says
      * a caller cannot exclude. It said nothing at all before, on either stream,
-     * while the instructions claimed the tool was gone — measured 2026-08-04
-     * with `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS=typo3_feedback_record`, 26 tools
-     * offered including it — `D-AUD-006`.
+     * while the instructions claimed the tool was gone. Measured 2026-08-04
+     * with `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS=typo3_feedback_record`: 26 tools
+     * offered, that one among them — `D-AUD-006`.
      */
     #[Decision('D-AUD-006')]
     #[Test]

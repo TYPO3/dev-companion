@@ -56,9 +56,9 @@ final class InstallerAgentSupportTest extends TestCase
                     $directory . '/' . $paths['skills']
                     . '/typo3-backend-module-development/SKILL.md',
                 );
-                // Nothing this package writes is ignored from a file the
-                // project owns, so an install into a project that has no
-                // .gitignore leaves it without one.
+                // No file the project owns ignores what this package writes. So
+                // an install into a project that has no .gitignore leaves it
+                // without one.
                 self::assertFileDoesNotExist($directory . '/.gitignore');
                 self::assertSame("*\n", file_get_contents($directory . '/.typo3-dev-companion/.gitignore'));
                 self::assertSame(
@@ -80,11 +80,11 @@ final class InstallerAgentSupportTest extends TestCase
      * Every client that gets an entry is told what is still between that entry
      * and a callable tool.
      *
-     * Writing the file registers the server with nothing, and what is left —
-     * an approval the client has not asked for yet, a session that was already
-     * open — belongs to the client rather than to this package. So what can be
-     * held here is that something is said, per client, on both commands and
-     * beside the entry it is about; whether it is true of that client is what
+     * The file write registers the server with nothing. What remains belongs to
+     * the client rather than to this package. An approval the client has not
+     * asked for yet, or a session that was already open. So what this can hold
+     * is that the install says something, per client, on both commands and
+     * beside the entry it is about. Whether it is true of that client is what
      * `documentation/usage/installing.rst` sources, and no test reaches it.
      */
     #[Requirement('R-DIS-023')]
@@ -122,8 +122,8 @@ final class InstallerAgentSupportTest extends TestCase
     }
 
     /**
-     * Which line reported the entry, so that what follows it is read as being
-     * about that entry rather than about the run.
+     * Which line reported the entry, so that what follows it reads as about
+     * that entry rather than about the run.
      *
      * @param list<string> $lines
      */

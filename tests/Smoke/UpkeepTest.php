@@ -13,24 +13,24 @@ use TYPO3\DevCompanion\Tests\Support\Requirement;
 /**
  * That `bin/cli` still runs, driven the way a session drives it.
  *
- * The logic behind each subject is covered a class at a time, and that is what
- * left the gap this closes: a command can be held to its rules and still be
- * unreachable, because what it reads is resolved from where its own file sits.
+ * Unit tests cover the logic behind each subject a class at a time, and that is
+ * what left the gap this closes. A command can meet its rules and still be
+ * unreachable, because it resolves what it reads from where its own file sits.
  * Moving the subjects one directory deeper broke four of them at once and every
  * test stayed green, since none of them went through the entrypoint. These do.
  */
 final class UpkeepTest extends TestCase
 {
     /**
-     * Every command that only reports. The ones that write — the three
-     * indexes, `tools:record`, `scenarios:record`, `feedback:archive`,
-     * `checkouts:update` — are left out on purpose: a test suite that rewrites
-     * the repository it is run in is worse than the gap.
+     * Every command that only reports. The ones that write stay out on purpose:
+     * the three indexes, `tools:record`, `scenarios:record`,
+     * `feedback:archive`, `checkouts:update`. A test suite that rewrites the
+     * repository it runs in is worse than the gap.
      *
      * The ones that take an argument are here with one, because that is the
-     * half a class-at-a-time test cannot see: the console reads what a command
-     * takes off the parameters of its own `__invoke`, and a command whose
-     * arguments stopped being read refuses the caller who passes one.
+     * half a class-at-a-time test cannot see. The console reads what a command
+     * takes off the parameters of its own `__invoke`. A command whose arguments
+     * the console no longer reads refuses the caller who passes one.
      *
      * @return array<string, array{0: array<int, string>}>
      */
@@ -70,9 +70,9 @@ final class UpkeepTest extends TestCase
     /**
      * That it reaches its own code and reports, which is a different question
      * from whether it liked what it found. The exit code is the command's to
-     * decide — `hints coverage` reports a gap and says so with a 1, an empty
-     * invocation is a usage error and says so with a 2 — so what is held here
-     * is that nothing died on the way: no uncaught error, and an answer.
+     * decide. `hints coverage` reports a gap and says so with a 1, an empty
+     * invocation is a usage error and says so with a 2. So what this holds is
+     * that nothing died on the way: no uncaught error, and an answer.
      *
      * @param array<int, string> $arguments
      */

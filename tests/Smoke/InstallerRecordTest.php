@@ -15,10 +15,10 @@ use TYPO3\DevCompanion\Tests\Support\Requirement;
 /**
  * What a project records about the clients installed in it.
  *
- * A project is worked on by more than one client, and which ones is knowledge
- * only the project has. It keeps it in `.typo3-dev-companion/state.json`, so that an
- * update needs no list from whoever runs it, and so that a skill this package
- * has stopped shipping can be taken out of every client it reached.
+ * More than one client works on a project, and which ones is knowledge only the
+ * project has. It keeps it in `.typo3-dev-companion/state.json`. So an update
+ * needs no list from whoever runs it, and a skill this package no longer ships
+ * can leave every client it reached.
  */
 #[Requirement('R-DIS-020')]
 final class InstallerRecordTest extends TestCase
@@ -92,8 +92,9 @@ final class InstallerRecordTest extends TestCase
             $skill = $directory . '/.agents/skills/' . self::SKILL . '/SKILL.md';
             self::assertFileEquals(Paths::root() . '/skills/' . self::SKILL . '/SKILL.md', $skill);
             self::assertFileExists($directory . '/.mcp.json');
-            // It is recorded like any other client, so it is refreshed like
-            // one — the setup that names nobody needs no case of its own.
+            // The record holds it like any other client, so the refresh treats
+            // it like one. The setup that names nobody needs no case of its
+            // own.
             self::assertSame(['generic'], $this->state($directory)['agents']);
             self::assertSame(
                 "*\n",
@@ -125,9 +126,9 @@ final class InstallerRecordTest extends TestCase
     }
 
     /**
-     * Said, and not a failure: this is the command a project wires into
+     * Said, and not a failure. This is the command a project wires into
      * Composer's `post-update-cmd`, where a non-zero exit fails the run, and
-     * the record ignores itself — so a colleague who never installed would have
+     * the record ignores itself. So a colleague who never installed would see
      * their `composer update` fail over a dev tool they do not use —
      * `D-DIS-014`.
      */
@@ -153,10 +154,10 @@ final class InstallerRecordTest extends TestCase
      * The project's `.gitignore` is the project's, on a run that has every
      * reason to touch it.
      *
-     * This is the one file an install used to write into, and the case that
-     * would show it doing so again is an `update` in a project that has one:
-     * nine skills are republished, the record is rewritten, and what the
-     * project wrote stays byte for byte what it was — `D-DIS-010`.
+     * This is the one file an install used to write into. The case that would
+     * show it again is an `update` in a project that has one. The update
+     * publishes nine skills again and rewrites the record, and what the project
+     * wrote stays byte for byte what it was — `D-DIS-010`.
      */
     #[Requirement('R-DIS-024')]
     #[Decision('D-DIS-010')]
@@ -184,8 +185,8 @@ final class InstallerRecordTest extends TestCase
     }
 
     /**
-     * What the record is read for once the install is over: whether the copies
-     * down there are still the ones this server publishes.
+     * What the record answers once the install is over: whether the copies down
+     * there are still the ones this server publishes.
      *
      * The four cases are the four ways a project drifts. A publication that was
      * never made is silence, because this package has nothing to say about a
@@ -211,7 +212,7 @@ final class InstallerRecordTest extends TestCase
 
             // The skills this package ships have moved on since the install.
             // Nothing in the project changes when they do — the names are the
-            // names — which is the whole reason the digest is recorded.
+            // names — which is the whole reason the record carries the digest.
             $this->rewriteState($directory, ['digest' => str_repeat('0', 64)]);
             $moved = (string) Installer::outdated($directory);
             self::assertStringContainsString('publishes something other than what was published here', $moved);
@@ -241,11 +242,11 @@ final class InstallerRecordTest extends TestCase
     }
 
     /**
-     * The state file with those keys set, and null taking one out.
+     * The state file with those keys set, and null takes one out.
      *
-     * Written rather than installed, because what is being reproduced is a
-     * record no run of this version would write: one from a build before the
-     * digest, and one whose skills have moved under it.
+     * Written rather than installed, because the case reproduces a record no
+     * run of this version would write. One from a build before the digest, and
+     * one whose skills have moved under it.
      *
      * @param array<string, string|null> $keys
      */

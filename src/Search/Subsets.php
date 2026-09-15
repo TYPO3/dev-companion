@@ -5,24 +5,23 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Search;
 
 /**
- * The most of a query a corpus still carries, as a query that can be asked.
+ * The most of a query a corpus still carries, as a query a caller can ask.
  *
  * What a caller needs when the intersection is empty and the per-term counts
  * cannot say it: which words have to go (`D-ANS-016`). It is one pass rather
- * than a subset lattice, because a subset reaches an item exactly when that item
- * carries every word of it, so the largest subsets that reach anything are the
+ * than a subset lattice. A subset reaches an item exactly when that item
+ * carries every word of it. So the largest subsets that reach anything are the
  * largest sets of words a single item carries. The matcher is the caller's,
- * because the answer is only true of the corpus it was computed over — a subset
- * offered on the wrong one names items the re-query does not return.
+ * because the answer is only true of the corpus behind it. A subset offered on
+ * the wrong one names items the re-query does not return.
  */
 final class Subsets
 {
     /**
-     * Every largest reaching subset rather than the best of them. On
-     * `form set yaml registration deprecated` there are two, they reach one
-     * entry each, and the one a tie-break picks first is
-     * `Unify form setup YAML loading` rather than the deprecation that was
-     * being looked for.
+     * Every largest subset that reaches an item rather than the best of them.
+     * On `form set yaml registration deprecated` there are two, and they reach
+     * one entry each. The one a tie-break picks first is `Unify form setup YAML
+     * loading` rather than the deprecation the caller looked for.
      *
      * @param array<int, string> $texts One searchable text per item of the corpus.
      * @param array<int, string> $terms

@@ -7,13 +7,12 @@ namespace TYPO3\DevCompanion\Search;
 /**
  * Scores free-text queries against a corpus of field-addressed documents.
  *
- * Two corpora are searched this way — the prose sections and the hints — and
- * they used to score differently, which is why the same question reached one
- * of them and not the other. What they share is the whole method: a
- * term is worth what it separates one document from the rest, it is matched at
- * a word boundary rather than as a substring, and where in the document it
- * appears decides how much it counts. What they do not share is the field
- * layout, so that is the parameter.
+ * Two corpora take this search, the prose sections and the hints. They used to
+ * score differently, which is why the same question reached one of them and not
+ * the other. What they share is the whole method. A term is worth what it
+ * separates one document from the rest. It matches at a word boundary rather
+ * than as a substring, and where in the document it appears decides how much it
+ * counts. What they do not share is the field layout, so that is the parameter.
  *
  * A document is `['field name' => 'text', ...]`; the caller says what each
  * field is worth.
@@ -24,9 +23,9 @@ final class TermSearch
      * Words that carry no topic signal.
      *
      * The two-letter ones are here because MIN_LENGTH is two: until it was, the
-     * floor did this list's work for every word that short. "if" is deliberately
-     * not one of them, and it is the reason the floor moved — it names a
-     * ViewHelper and a TypoScript function, so it is the word a caller asking
+     * floor did this list's work for every word that short. "if" is not one of
+     * them on purpose, and it is the reason the floor moved. It names a
+     * ViewHelper and a TypoScript function, so it is the word a caller who asks
      * about `f:if` has left. A word in this list is still a term where a query
      * writes it behind a namespace prefix — `D-ANS-047`.
      */
@@ -42,39 +41,39 @@ final class TermSearch
     /**
      * Longest term still matched as a whole word rather than as a prefix.
      *
-     * Prefix matching is how a stem finds every form of its word — "label"
-     * finds "labels". At three characters there is no word form left to find
-     * and the prefix matches whatever happens to start with those letters, so
-     * the tolerance turns into noise. Measured over the hint corpus: "fal", the
+     * A prefix match is how a stem finds every form of its word — "label" finds
+     * "labels". At three characters there is no word form left to find. The
+     * prefix matches whatever happens to start with those letters, so the
+     * tolerance turns into noise. Measured over the hint corpus: "fal", the
      * File Abstraction Layer, prefix-matched seven hints through "fallback" and
-     * "false" and the right one once. And because a term is weighed by how few
-     * documents carry it, an accident that lands in exactly one document
-     * becomes the most discriminating term in the query — "ist", which occurs
-     * in no hint as a word at all, outweighed everything in "die Beschriftung
-     * im Frontend ist falsch" and decided the answer.
+     * "false" and the right one once. And a term weighs by how few documents
+     * carry it. So an accident that lands in exactly one document becomes the
+     * strongest term in the query. "ist", which occurs in no hint as a word at
+     * all, outweighed everything in "die Beschriftung im Frontend ist falsch"
+     * and decided the answer.
      */
     private const PREFIX_FROM_LENGTH = 4;
 
     /**
-     * Shortest word of a query that is searched for at all.
+     * Shortest word of a query the search reads at all.
      *
-     * It is two rather than three because of the line above: a word this short
-     * is matched as a whole word, so none of what makes a short prefix noisy
-     * applies to it. "if" is the case that showed the floor was set against the
-     * wrong risk — `Global/If.html` of the ViewHelper reference is titled "if",
-     * and no query naming `f:if` reached it while every word under three
-     * characters was dropped.
+     * It is two rather than three because of the line above. A word this short
+     * matches as a whole word, so none of what makes a short prefix noisy
+     * applies to it. "if" is the case that showed the floor stood against the
+     * wrong risk. `Global/If.html` of the ViewHelper reference has the title
+     * "if". No query that names `f:if` reached it while the floor dropped every
+     * word under three characters.
      *
      * One character is where it stops. A single letter is a whole word in the
-     * corpus as readily as in the query — the `f` of `f:if` matches the `f` of
-     * every other ViewHelper written out — so it separates nothing and is
-     * carried by whatever happens to spell it out.
+     * corpus as readily as in the query. The `f` of `f:if` matches the `f` of
+     * every other ViewHelper written out. So it separates nothing, and whatever
+     * happens to spell it out carries it.
      */
     private const MIN_LENGTH = 2;
 
     /**
      * The meaningful terms of a query, reduced to a stem so that word forms of
-     * the same word are one term: "deprecate", "deprecated" and "deprecations"
+     * the same word are one term. "deprecate", "deprecated" and "deprecations"
      * all become "deprec" and match the "Deprecations" section.
      *
      * @return array<int, string>
@@ -86,9 +85,9 @@ final class TermSearch
 
     /**
      * The caller's own word behind each term, so an answer that hands a query
-     * back is one they recognise: "commit message line" rather than
-     * "commit messag line". The stem re-queries to the same term, so what is
-     * named is still exactly what was measured.
+     * back is one they recognise. "commit message line" rather than "commit
+     * messag line". The stem re-queries to the same term, so the answer still
+     * names exactly what the search measured.
      *
      * @return array<string, string> The first word of the query that produced each term.
      */
@@ -103,13 +102,13 @@ final class TermSearch
     }
 
     /**
-     * The words of a query that are searched for at all, as they were written.
+     * The words of a query the search reads at all, as the caller wrote them.
      *
      * A word written behind a namespace prefix is never a stopword, because it
-     * is not prose there: the `or` of `f:or` is the name of a ViewHelper and the
-     * `core` of `EXT:core` is an extension key, and `f:or` and `f:then` had no
-     * term left at all — `D-ANS-047`. The prefix itself is dropped by
-     * MIN_LENGTH, which is every namespace the corpora carry.
+     * is not prose there. The `or` of `f:or` is the name of a ViewHelper and
+     * the `core` of `EXT:core` is an extension key. `f:or` and `f:then` had no
+     * term left at all — `D-ANS-047`. MIN_LENGTH drops the prefix itself, which
+     * is every namespace the corpora carry.
      *
      * @return array<int, string>
      */
@@ -139,9 +138,9 @@ final class TermSearch
      *
      * "content", "structure" and "element" are in half the knowledge base and
      * say almost nothing about which document answers the question; "tsconfig"
-     * says nearly everything. Weighing them the same is what let a query about
-     * site sets be answered with the backend's Sass class naming, at a
-     * confident three quarters of the query terms.
+     * says nearly everything. An equal weight is what let the backend's Sass
+     * class names answer a query about site sets. That was at a confident three
+     * quarters of the query terms.
      *
      * @param array<int, string> $terms
      * @param array<int, array<string, string>> $documents
@@ -167,15 +166,14 @@ final class TermSearch
             }
 
             // A term nothing carries counts as if the square root of the corpus
-            // held it — halfway between the rarest term there is and no term at
-            // all. It can never be covered, so what it does is lower the
-            // coverage of everything else, and the fraction is what decides
-            // which way that cuts: weighing it nothing let "how do I write a
-            // good sonnet" decay into a query about writing and about good, and
-            // something always answers that. Weighing it fully let one unknown
-            // word sink a query the corpus does answer — nobody wrote "upload",
-            // and the storage hint stopped being the answer to "file upload
-            // storage configuration".
+            // held it. That is halfway between the rarest term there is and no
+            // term at all. Nothing can cover it, so what it does is lower the
+            // coverage of everything else, and the fraction decides which way
+            // that cuts. A weight of nothing let "how do I write a good sonnet"
+            // decay into a query about "write" and "good". Something always
+            // answers that. A full weight let one unknown word sink a query the
+            // corpus does answer. Nobody wrote "upload", and the storage hint
+            // was no longer the answer to "file upload storage configuration".
             $weights[$term] = $carrying === 0
                 ? log($total) / 2
                 : log($total / $carrying);
@@ -185,24 +183,24 @@ final class TermSearch
     }
 
     /**
-     * Returns [score, weight covered, the field each term was found in]. A term
-     * counts by what it says, by the weight of the field it was found in, and
-     * against how much other text it was found among; the strongest field wins,
-     * so a term in both the title and the body is not counted twice.
+     * Returns [score, weight covered, the field that carried each term]. A term
+     * counts by what it says, by the weight of the field that carries it, and
+     * against how much other text stands around it. The strongest field wins,
+     * so a term in both the title and the body counts once.
      *
-     * That strongest field is the third number's whole content, because a
-     * caller told what a result was matched on is being told which words of the
-     * query reached the document and where — the terms it does not carry are
-     * the ones absent from it. Working that out anywhere else means deciding
-     * the same tie a second time.
+     * That strongest field is the third number's whole content. A caller that
+     * learns what matched a result learns which words of the query reached the
+     * document and where. The terms it does not carry are the ones absent from
+     * it. To work that out anywhere else means to decide the same tie a second
+     * time.
      *
      * The covered weight is the second number because it answers a different
-     * question than the score: the score ranks, and the coverage says whether
-     * the document is about the query at all. Which field carried the term is
-     * a ranking signal and deliberately not an aboutness one — a rare word
-     * anywhere in a document is evidence that it is about it, and demoting that
-     * to a quarter of a title hit is what dropped "my extension service is not
-     * found at runtime" below the floor while its own hint said exactly that.
+     * question than the score. The score ranks, and the coverage says whether
+     * the document is about the query at all. Which field carried the term is a
+     * rank signal and on purpose not an aboutness one. A rare word anywhere in
+     * a document is evidence that it is about it. A demotion of that to a
+     * quarter of a title hit dropped "my extension service is not found at
+     * runtime" below the floor. Its own hint said exactly that.
      *
      * @param array<string, string> $document
      * @param array<string, float> $weights
@@ -249,9 +247,9 @@ final class TermSearch
      * PREFIX_FROM_LENGTH characters up, as a whole word below it.
      *
      * A term is what stem() left of a query word, so the prefix is the whole
-     * point of it — "deprecated" is searched for as "deprec" and reaches the
-     * "Deprecations" section by running past its own end. That is why this is
-     * `Text::startsWord()` and carriesWord() beside it is not.
+     * point of it. The search reads "deprecated" as "deprec" and reaches the
+     * "Deprecations" section because the match runs past its own end. That is
+     * why this is `Text::startsWord()` and carriesWord() beside it is not.
      */
     public static function carries(string $text, string $term): bool
     {
@@ -265,11 +263,11 @@ final class TermSearch
     /**
      * The same question asked of a curated pattern, which is a word.
      *
-     * The vocabulary needs the length floor for the same reason a query does —
+     * The vocabulary needs the length floor for the same reason a query does:
      * `fal`, the File Abstraction Layer, prefix-matched seven hints through
-     * "fallback" and "false" — and it needs the other half of the rule for the
-     * opposite reason: nobody truncated these, so a pattern that runs past its
-     * own end is matching a word it only starts. `D-ANS-050`.
+     * "fallback" and "false". It needs the other half of the rule for the
+     * opposite reason. Nobody truncated these, so a pattern that runs past its
+     * own end matches a word it only starts. `D-ANS-050`.
      */
     public static function carriesWord(string $text, string $word): bool
     {
@@ -284,9 +282,9 @@ final class TermSearch
      * How much longer than the corpus's ordinary field this one is, on a log
      * scale; never below 1, so a short field is not sharpened.
      *
-     * A term says the same thing wherever it appears, but finding it among a
-     * thousand other words is weaker evidence than finding it among fifty — a
-     * long enough text contains anything.
+     * A term says the same thing wherever it appears. A find among a thousand
+     * other words is weaker evidence than a find among fifty, because a long
+     * enough text contains anything.
      */
     private static function dilution(string $text, int $undilutedWords): float
     {
@@ -296,8 +294,8 @@ final class TermSearch
     }
 
     /**
-     * Cuts a plural ending and shortens long words, so the remaining stem is a
-     * substring of every form of that word. Words are only shortened while at
+     * Cuts a plural suffix and shortens long words, so the stem that remains is
+     * a substring of every form of that word. Words are only shortened while at
      * least four characters remain, so short words like "css" stay intact.
      */
     private static function stem(string $word): string

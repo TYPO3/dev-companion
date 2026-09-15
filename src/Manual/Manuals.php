@@ -73,6 +73,7 @@ final class Manuals
     {
         self::$transport = $reader;
         Inventory::forget();
+        Documentation::forget();
     }
 
     /** @return (\Closure(string): ?string)|null */

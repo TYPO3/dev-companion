@@ -87,6 +87,137 @@ final class DocumentationTest extends TestCase
     }
 
     /**
+     * The host publishes every page as Markdown beside its HTML, at the same
+     * URL with `.md` for `.html`. It is the whole page after the build, with
+     * the title in its front matter, and a seventh of the HTML on the wire. So
+     * a page is read as that, and the HTML is not asked for — `D-ANS-157`.
+     */
+    #[Decision('D-ANS-157')]
+    #[Test]
+    public function aPageIsReadAsTheMarkdownTheHostPublishesBesideIt(): void
+    {
+        $url = 'https://docs.typo3.org/other/typo3/view-helper-reference/14.3/en-us/Global/If.html';
+        $requested = [];
+        $documentation = new Documentation(static function (string $requested_) use (&$requested, $url): string {
+            $requested[] = $requested_;
+
+            return $requested_ === substr($url, 0, -strlen('.html')) . '.md'
+                ? <<<'MARKDOWN'
+                    ---
+                    title: "If ViewHelper <f:if>"
+                    manual: "Fluid ViewHelper Reference"
+                    version: "14.3"
+                    ---
+
+                    # If ViewHelper `<f:if>`
+
+                    This ViewHelper implements an if/else condition.
+
+                    ```
+                    <f:if condition="{foo}">shown</f:if>
+                    ```
+                    MARKDOWN
+                : '<html><article role="main"><h1>Not the page</h1></article></html>';
+        });
+
+        $answer = $documentation->page($url, '14.3');
+
+        self::assertSame('answered', $answer['status']);
+        self::assertSame('If ViewHelper <f:if>', $answer['results'][0]['title']);
+        self::assertSame($url, $answer['results'][0]['url']);
+        self::assertStringStartsWith('# If ViewHelper', $answer['results'][0]['content']);
+        self::assertStringContainsString('<f:if condition="{foo}">shown</f:if>', $answer['results'][0]['content']);
+        self::assertStringNotContainsString('manual: "Fluid', $answer['results'][0]['content']);
+        self::assertSame([substr($url, 0, -strlen('.html')) . '.md'], $requested);
+    }
+
+    /**
+     * A manual has Markdown once it is rendered again since the format
+     * arrived, per manual and per version. So a page that answers as HTML
+     * alone says the manual has none, and the next page of it is not asked for
+     * Markdown first — `D-ANS-157`.
+     */
+    #[Decision('D-ANS-157')]
+    #[Test]
+    public function aManualWithoutMarkdownIsReadFromItsHtmlAndAskedOnce(): void
+    {
+        $base = 'https://docs.typo3.org/m/typo3/reference-coreapi/12.4/en-us/';
+        $requested = [];
+        $documentation = new Documentation(static function (string $url) use (&$requested): ?string {
+            $requested[] = $url;
+
+            return str_ends_with($url, '.html')
+                ? '<html><article role="main"><h1>Assets</h1><p>The AssetCollector.</p></article></html>'
+                : null;
+        });
+
+        $first = $documentation->page($base . 'ApiOverview/Assets/Index.html', '12.4');
+        $second = $documentation->page($base . 'ApiOverview/Events/Index.html', '12.4');
+
+        self::assertSame('Assets', $first['results'][0]['title']);
+        self::assertStringContainsString('The AssetCollector.', $second['results'][0]['content']);
+        self::assertSame([
+            $base . 'ApiOverview/Assets/Index.md',
+            $base . 'ApiOverview/Assets/Index.html',
+            $base . 'ApiOverview/Events/Index.html',
+        ], $requested);
+    }
+
+    /**
+     * A search reads each result page for its lead, and it reads the Markdown
+     * where the host has it. The lead is the first paragraphs, and none of the
+     * front matter, the heading and the section list every page opens with —
+     * `D-ANS-157`.
+     */
+    #[Decision('D-ANS-157')]
+    #[Test]
+    public function aSearchExcerptIsTheLeadOfTheMarkdownPage(): void
+    {
+        $index = $this->inventory([
+            'Testing/FunctionalTesting/Index.html' => 'Functional testing',
+            'ApiOverview/Events/Index.html' => 'Events and hooks',
+        ]);
+        $documentation = new Documentation(static fn(string $url): ?string => match (true) {
+            str_ends_with($url, 'objects.inv') => $index,
+            str_ends_with($url, '.md') => <<<'MARKDOWN'
+                ---
+                title: "Functional testing"
+                ---
+
+                # Functional testing
+
+                **Sections on this page**
+
+                -   [Simple example](https://docs.typo3.org/permalink/t3coreapi:simple-example@14.3)
+
+                ## Simple example
+
+                TYPO3 Core contains more than 2600 functional tests.
+
+                ```php
+                final class GeneratorTest extends FunctionalTestCase
+
+                {
+                }
+                ```
+
+                > [!NOTE]
+                > A quote is not the lead.
+
+                Do not hesitate looking around.
+                MARKDOWN,
+            default => null,
+        });
+
+        $answer = $documentation->lookup(['functional testing'], '14.3', 1);
+
+        self::assertSame(
+            'TYPO3 Core contains more than 2600 functional tests. Do not hesitate looking around.',
+            $answer['results'][0]['excerpt'],
+        );
+    }
+
+    /**
      * The TCA reference states the machine-readable half of every property as a
      * definition list, and the reader emitted only the terms.
      *

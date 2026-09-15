@@ -70,3 +70,12 @@ what the reader takes. Asked at a covered version, the answer carries six pages
 each with an excerpt of the article's own prose rather than a navigation tree.
 That is the first watch for a theme that moves under the reader, and the read is
 a live one, which the test is not. No second source without an API has arrived.
+
+## Since then
+
+On 2026-09-15 the host publishes every page as Markdown beside its HTML, and
+`D-ANS-157` reads that form first. So the manual is still read in the form it
+publishes, and that form is no longer HTML alone. The `DOMXPath` reader stays
+for the manuals without Markdown yet, and the rule above stands. A source with
+an API goes through `decode()`, and a parser exists where the source publishes
+nothing a decoder reads.

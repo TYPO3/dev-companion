@@ -15,8 +15,10 @@ use TYPO3\DevCompanion\Search\Text;
  * is the public index used here; /search/ is deliberately not called because
  * robots.txt excludes it, and there is no search index to read instead. The
  * selected result pages are then read for a short excerpt. A caller then hands
- * a canonical result URL back to read that page as text. Nothing derives its
- * API from an installed source tree a second time.
+ * a canonical result URL back to read that page as text. A page is read as the
+ * Markdown the host publishes beside it, and as the rendered HTML where the
+ * manual has none yet — `D-ANS-157`. Nothing derives its API from an installed
+ * source tree a second time.
  */
 final class Documentation
 {
@@ -89,6 +91,30 @@ final class Documentation
     /** What this reader prints as a block of its own, which is also what makes a `dd` more than a value. */
     private const BLOCKS = './/h1|.//h2|.//h3|.//h4|.//h5|.//h6|.//p|.//pre|.//li|.//dt|.//dd';
 
+    /**
+     * The front matter every Markdown page opens with, and the body after it.
+     *
+     * It carries the title the manual states, the manual, the version and the
+     * permalink. A body that does not open with it is not a page: the 404 the
+     * host renders is HTML, and so is a challenge page with a 200 in front of
+     * it (`D-ANS-034`).
+     */
+    private const FRONT_MATTER = '/^---\n(.*?)\n---\n\s*/s';
+
+    /**
+     * Whether the manual at a base publishes Markdown, learned from the first
+     * page of it read in this process.
+     *
+     * The host has Markdown for a manual once it is rendered again since the
+     * format arrived, per manual and per version. So one page that answers as
+     * HTML and not as Markdown says the whole manual answers that way, and the
+     * rest of its pages cost one read rather than a miss and a read. Static
+     * because the tool builds an instance per call — `D-ANS-157`.
+     *
+     * @var array<string, bool>
+     */
+    private static array $markdown = [];
+
     private readonly Fetch $reader;
 
     private readonly Inventory $inventory;
@@ -98,6 +124,12 @@ final class Documentation
     {
         $this->reader = new Fetch($fetch ?? Manuals::reader());
         $this->inventory = new Inventory($this->reader);
+    }
+
+    /** What a reader handed in leaves behind: another reader is another host. */
+    public static function forget(): void
+    {
+        self::$markdown = [];
     }
 
     /**
@@ -216,7 +248,13 @@ final class Documentation
         uasort($candidates, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
         $results = [];
         foreach (array_slice($candidates, 0, $limit) as $candidate) {
-            $page = $this->get($candidate['url']);
+            // An anchor names a section, and only the rendered page carries
+            // the ids a section is found by. So a property is read from the
+            // HTML, and a page from what the host publishes it as.
+            $anchor = (string) parse_url($candidate['url'], PHP_URL_FRAGMENT);
+            $page = $anchor === ''
+                ? $this->fetch(self::base($candidate['document'], $targetVersion), $candidate['url'])
+                : $this->html($candidate['url']);
             $results[] = [
                 'title' => $candidate['title'],
                 'url' => $candidate['url'],
@@ -224,7 +262,11 @@ final class Documentation
                 'documentTitle' => $candidate['documentTitle'],
                 'documentVersion' => $targetVersion,
                 'section' => $candidate['title'],
-                'excerpt' => $page === null ? '' : $this->excerpt($page, (string) parse_url($candidate['url'], PHP_URL_FRAGMENT)),
+                'excerpt' => match (true) {
+                    $page === null => '',
+                    isset($page['markdown']) => self::lead($page['markdown']),
+                    default => $this->excerpt($page['html'], $anchor),
+                },
                 'content' => '',
                 'coverage' => round($candidate['coverage'], 3),
                 'matched' => self::matched($candidate['matched']),
@@ -264,7 +306,7 @@ final class Documentation
         foreach (Manuals::searched() as $document => $manual) {
             $base = self::base($document, $targetVersion);
             if (str_starts_with($url, $base) && str_ends_with(explode('#', $url, 2)[0], '.html')) {
-                $owner = ['document' => $document, 'title' => $manual['title']];
+                $owner = ['document' => $document, 'title' => $manual['title'], 'base' => $base];
                 break;
             }
         }
@@ -274,16 +316,20 @@ final class Documentation
             );
         }
 
-        $html = $this->get($url);
-        if ($html === null) {
+        $page = $this->fetch($owner['base'], $url);
+        if ($page === null) {
             return $this->answer('page', 'unavailable', [], $targetVersion, [], [
                 'cause' => 'source-not-answering',
                 'reason' => 'The selected TYPO3 documentation page could not be reached.',
             ]);
         }
 
-        $content = $this->content($html);
-        $title = $this->title($html);
+        if (isset($page['markdown'])) {
+            [$title, $content] = self::document($page['markdown']);
+        } else {
+            $content = $this->content($page['html']);
+            $title = $this->title($page['html']);
+        }
         if ($content === '') {
             return $this->answer('page', 'empty', [], $targetVersion, [], null);
         }
@@ -474,6 +520,118 @@ final class Documentation
         }
 
         return $terms;
+    }
+
+    /**
+     * One page, as the Markdown the host publishes beside it where the manual
+     * has it, and as the rendered HTML where it does not.
+     *
+     * The Markdown sits at the page's own URL with `.md` for `.html`. It is the
+     * whole page after the build, with a front matter that states the title,
+     * and a tenth of the HTML on the wire. A manual has it once it is rendered
+     * again since the format arrived, so a 404 is per manual and per version.
+     * That is what this remembers, once a page answers as HTML alone —
+     * `D-ANS-157` has the sizes.
+     *
+     * @return array{markdown: string}|array{html: string}|null
+     */
+    private function fetch(string $base, string $url): ?array
+    {
+        $page = (string) strtok($url, '#');
+        if (self::$markdown[$base] ?? true) {
+            $markdown = $this->get(substr($page, 0, -strlen('.html')) . '.md');
+            if ($markdown !== null && preg_match(self::FRONT_MATTER, $markdown) === 1) {
+                self::$markdown[$base] = true;
+
+                return ['markdown' => $markdown];
+            }
+        }
+
+        $html = $this->get($page);
+        if ($html === null) {
+            return null;
+        }
+        self::$markdown[$base] ??= false;
+
+        return ['html' => $html];
+    }
+
+    /**
+     * The rendered page alone, for a read that needs the ids in it.
+     *
+     * @return array{html: string}|null
+     */
+    private function html(string $url): ?array
+    {
+        $html = $this->get($url);
+
+        return $html === null ? null : ['html' => $html];
+    }
+
+    /**
+     * The title a Markdown page states and the page after its front matter.
+     *
+     * The front matter writes the title as a double-quoted YAML scalar, which
+     * `json_decode` reads. The first heading is the same title with the
+     * markup of its subject in it, and stands in where the front matter
+     * states none.
+     *
+     * @return array{string, string}
+     */
+    private static function document(string $markdown): array
+    {
+        $title = '';
+        $body = $markdown;
+        if (preg_match(self::FRONT_MATTER, $markdown, $front) === 1) {
+            $body = substr($markdown, strlen($front[0]));
+            if (preg_match('/^title: *(".*")$/m', $front[1], $stated) === 1) {
+                $title = is_string($decoded = json_decode($stated[1])) ? trim($decoded) : '';
+            }
+        }
+        if ($title === '' && preg_match('/^# +(.+)$/m', $body, $heading) === 1) {
+            $title = self::plain(str_replace('`', '', $heading[1]));
+        }
+
+        return [$title, trim($body)];
+    }
+
+    /**
+     * The first prose of a Markdown page.
+     *
+     * The paragraphs, and none of the front matter, the headings, the lists,
+     * the quotes, the tables and the code. The list of sections every page
+     * opens with is a bold label over a list, so both halves of it stay out.
+     * It is the mirror of `excerpt()`, which takes the paragraphs of the
+     * article.
+     */
+    private static function lead(string $markdown): string
+    {
+        $parts = [];
+        $paragraph = [];
+        $code = false;
+        $body = (string) preg_replace(self::FRONT_MATTER, '', $markdown, 1);
+        foreach ([...explode("\n", $body), ''] as $line) {
+            if (str_starts_with(ltrim($line), '```')) {
+                $code = !$code;
+                continue;
+            }
+            if ($code) {
+                continue;
+            }
+            if (trim($line) !== '') {
+                $paragraph[] = trim($line);
+                continue;
+            }
+            if ($paragraph !== [] && preg_match('/^(?:[#>|`*-]|\d+\.\s)/', $paragraph[0]) !== 1) {
+                $parts[] = implode(' ', $paragraph);
+                if (strlen(implode(' ', $parts)) >= 500) {
+                    break;
+                }
+            }
+            $paragraph = [];
+        }
+
+        return substr(implode(' ', $parts), 0, 700);
     }
 
     /**

@@ -8,21 +8,21 @@ use TYPO3\DevCompanion\Installation\Project;
 use TYPO3\DevCompanion\Knowledge\Versions;
 
 /**
- * Which TYPO3 versions an answer was selected for, and why.
+ * Which TYPO3 versions an answer selected for, and why.
  *
- * The task guide and the hint lookup both filter by version and both
- * have to say what that filtering cost, so the sentence is written once.
+ * The task guide and the hint lookup both filter by version and both have to
+ * say what that filter cost, so the sentence stands once.
  */
 final class VersionScope
 {
     /**
-     * The interesting case is the one this said nothing about for a long time:
-     * a repository declaring `^13.4 || ^14.3` gets both majors, and a caller
+     * The case worth a note is the one this said nothing about for a long time.
+     * A repository that declares `^13.4 || ^14.3` gets both majors. A caller
      * that does not know this reads a statement labelled for one of them as the
-     * current shape and the other as drift. It is the difference between the
-     * two that the code is built around — the file kept for the older major,
-     * the interface not replaced yet — so the sentence names it as a constraint
-     * rather than leaving it to be discovered.
+     * current shape and the other as drift. The code builds around the
+     * difference between the two, the file kept for the older major, the
+     * interface not replaced yet. So the sentence names it as a constraint
+     * rather than leaves it for discovery.
      *
      * @param array<int, int> $targets
      */
@@ -36,12 +36,12 @@ final class VersionScope
         $constraint = Project::coreConstraint();
         $declared = self::severalDeclared();
 
-        // The narrowing is invisible from inside the answer, and that is how a
-        // widened default gets switched off by a caller being careful: a
-        // session reads the installed version out of typo3_project_describe,
-        // states it because it looks like the accurate thing to do, and gets
-        // back exactly the answer this filtering was changed to stop giving.
-        // So the one case where the two disagree says so.
+        // The filter is invisible from inside the answer, and that is how a
+        // careful caller switches a wider default off. A session reads the
+        // installed version out of typo3_project_describe and states it because
+        // it looks like the accurate thing to do. It gets back exactly the
+        // answer this filter changed to stop. So the one case where the two
+        // disagree says so.
         if (count($targets) === 1) {
             if ($declared === []) {
                 return sprintf('Answered for TYPO3 v%d: statements that do not hold there are left out.', $targets[0]);
@@ -73,7 +73,7 @@ final class VersionScope
     /**
      * The majors this repository declares, where it declares more than one.
      *
-     * Empty is the ordinary case and covers both shapes that behave alike: a
+     * Empty is the ordinary case and covers both shapes that behave alike. A
      * repository built for a single major, and one whose constraint nothing
      * here can read. Neither has an answer that could have been wider.
      *

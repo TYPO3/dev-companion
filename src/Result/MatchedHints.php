@@ -12,9 +12,9 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 /**
  * Matched hints, as an answer.
  *
- * The hint lookup returns them as the answer and the task guide carries
- * them inside a larger one, so the range beside a statement, the notice above a
- * core-scoped hint and the worked example under it are written once.
+ * The hint lookup returns them as the answer and the task guide carries them
+ * inside a larger one. So the range beside a statement, the notice above a
+ * core-scoped hint and the worked example under it stand once.
  */
 final class MatchedHints
 {
@@ -45,12 +45,12 @@ final class MatchedHints
      * One statement as a line, with the versions it holds for where that is not
      * all of them.
      *
-     * The range is rendered beside the sentence rather than inside it: the
-     * sentence is the same sentence on every version it holds for, and a reader
-     * filtering by version must not have to parse prose to do it. What it is
-     * binding for is rendered the same way, and only where it is not this
-     * caller's obligation — inside the core everything listed applies, so the
-     * marker would be on every line and say nothing.
+     * The range renders beside the sentence rather than inside it. The sentence
+     * is the same sentence on every version it holds for. A reader who filters
+     * by version must not have to parse prose for it. Whose obligation it is
+     * renders the same way, and only where it is not this caller's. Inside the
+     * core everything listed applies, so the marker would be on every line and
+     * say nothing.
      *
      * @param array{text: string, since: ?int, until: ?int, scope: ?Scope} $statement
      */
@@ -67,9 +67,9 @@ final class MatchedHints
     /**
      * What one statement obliges, where that is not this caller.
      *
-     * Two directions and one rule: a statement declares whose it is, and it is
-     * labelled where the answer is for somebody else. Inside its own scope the
-     * label would be on every line and say nothing, and where nothing placed
+     * Two directions and one rule. A statement declares whose it is, and it
+     * gets a label where the answer is for somebody else. Inside its own scope
+     * the label would be on every line and say nothing. Where nothing placed
      * the work there is nobody to contrast it with.
      */
     private static function obligation(?Scope $declared, Scope $of): string
@@ -90,11 +90,11 @@ final class MatchedHints
     /**
      * What a whole hint obliges, where that is not this caller.
      *
-     * The backend's design system is the case this exists for: every rule in it
+     * The backend's design system is the case this exists for. Every rule in it
      * is a condition of a core patch and none of it is a condition of anything
-     * in a project — which does not make it useless there, because a project
-     * building a backend module wants exactly those rules. So the answer keeps
-     * them and says which of the two it is handing over.
+     * in a project. That does not make it useless there, because a project that
+     * builds a backend module wants exactly those rules. So the answer keeps
+     * them and says which of the two it hands over.
      *
      * @param array<string, mixed> $hint
      */
@@ -119,9 +119,9 @@ final class MatchedHints
     /**
      * The core's own worked example per hint id, as one line for the answer.
      *
-     * A hint is a summary of something that exists in full and passing; naming
-     * it beside the summary is what makes "read it" available at the moment the
-     * summary turns out to be thin, rather than in a document read once.
+     * A hint is a summary of something that exists in full and green. Its name
+     * beside the summary is what makes "read it" available at the moment the
+     * summary turns out thin. Not in a document read once.
      *
      * @return array<string, string>
      */
@@ -141,8 +141,8 @@ final class MatchedHints
     /**
      * The matched hints as text: one section per category, one block per hint.
      *
-     * `$of` is the scope of the paths this block was matched for, so a
-     * statement declaring whose it is can be labelled where the answer is for
+     * `$of` is the scope of the paths this block matched for. So a statement
+     * that declares whose it is can get a label where the answer is for
      * somebody else.
      *
      * @param array<int, array<string, mixed>> $hints
@@ -201,13 +201,13 @@ final class MatchedHints
 
         return [
             'matchedHints' => array_values($matched),
-            // Subtracted across the groups as well as inside each: a hint the
+            // Subtracted across the groups as well as inside each. A hint the
             // core path matched is in the answer, and the extension path's
             // index would otherwise offer it as something still to ask for.
             'availableHints' => array_values(array_diff_key($available, $matched)),
-            // The largest of the groups rather than their sum: an id call
-            // withholds the same neighbours in every group it is asked in, so
-            // adding them up would count one list several times over.
+            // The largest of the groups rather than their sum. An id call holds
+            // back the same neighbours in every group it runs in, so a sum
+            // would count one list several times over.
             'availableHintsWithheld' => $withheldIndex,
             'domains' => array_values(array_unique($domains)),
             'withheldCategories' => array_values(array_unique($withheld)),

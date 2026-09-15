@@ -6,7 +6,7 @@ namespace TYPO3\DevCompanion;
 
 /**
  * Resolves the paths this checkout keeps things at. The project root is the
- * parent of the src/ directory, and everything below is named from there.
+ * parent of the src/ directory, and everything below takes its name from there.
  */
 final class Paths
 {
@@ -29,12 +29,11 @@ final class Paths
      * The prose corpus: the markdown documents searched by typo3_rule_lookup
      * and served as typo3://guides resources.
      *
-     * They have a directory of their own because lying in it is what publishes
-     * them, and a readme laid beside the knowledge base became
-     * `typo3://guides/readme` without anybody deciding that. What publishes one
-     * today is the shape below this directory rather than the directory alone
-     * — `<scope>/<topic>/<name>.md`, so a file at any other depth is read by
-     * nobody.
+     * They have a directory of their own because a place in it is what
+     * publishes them. A readme beside the knowledge base became
+     * `typo3://guides/readme` without a decision by anybody. What publishes one
+     * today is the shape below this directory rather than the directory alone.
+     * `<scope>/<topic>/<name>.md`, so nobody reads a file at any other depth.
      */
     public static function documents(): string
     {
@@ -45,15 +44,14 @@ final class Paths
      * A prose corpus other than this checkout's, which only a test asks for.
      *
      * `R-COD-003`: a unit test writes into no directory this repository keeps.
-     * What the section binding of `D-VER-005` does cannot be held against the
-     * corpus itself — a document written to carry a `**Since:**` for a test
-     * would be a statement in the knowledge base whose purpose is the test,
-     * and every guard over that directory would have to make an exception for
-     * it.
+     * What the section range of `D-VER-005` does has no hold against the corpus
+     * itself. A document that carries a `**Since:**` for a test would be a
+     * statement in the knowledge base whose purpose is the test. Every guard
+     * over that directory would have to make an exception for it.
      */
     private static ?string $documents = null;
 
-    /** Where the prose corpus is read, for as long as a test says so. */
+    /** Where the prose corpus lives, for as long as a test says so. */
     public static function useDocuments(?string $directory): void
     {
         self::$documents = $directory;
@@ -69,14 +67,14 @@ final class Paths
      * asks for.
      *
      * `R-COD-003`: a unit test writes into no directory this repository keeps.
-     * The cases that hold recording, filtering and archiving have to write a
-     * feedback to have one, and they used to write it into the real `feedback/`,
+     * The cases that hold a record, a filter and an archive have to write a
+     * feedback to have one. They used to write it into the real `feedback/`,
      * which leaves a fixture in the corpus whenever a run does not finish. The
      * archive follows it, because the two are one store.
      */
     private static ?string $feedback = null;
 
-    /** Where feedback is read and written, for as long as a test says so. */
+    /** Where feedback lives, for as long as a test says so. */
     public static function useFeedback(?string $directory): void
     {
         self::$feedback = $directory;
@@ -101,9 +99,9 @@ final class Paths
     }
 
     /**
-     * The feedback that were worked off. They stay readable rather than being
-     * deleted: what a session reported about this server is evidence about it,
-     * and the answer to it is the half nobody else can reconstruct.
+     * The feedback a session has worked off. They stay readable rather than go.
+     * What a session reported about this server is evidence about it, and the
+     * answer to it is the half nobody else can reconstruct.
      */
     public static function feedbackArchive(): string
     {
@@ -111,13 +109,13 @@ final class Paths
     }
 
     /**
-     * The questions a finished session is debriefed with, which the `debrief`
-     * prompt hands over and `documentation/records/asking-for-a-debrief.rst`
-     * includes — one text, so what somebody pastes is what the server offers
-     * (`D-FBK-048`).
+     * The questions a finished session answers in its debrief, which the
+     * `debrief` prompt hands over and
+     * `documentation/records/asking-for-a-debrief.rst` includes. One text, so
+     * what somebody pastes is what the server offers (`D-FBK-048`).
      *
      * It sits in the published tree rather than below `knowledge/` because the
-     * page is what includes it, and a renderer resolves an include against the
+     * page is what includes it. A renderer resolves an include against the
      * directory it publishes and nothing outside it.
      */
     public static function debrief(): string

@@ -12,7 +12,7 @@ use TYPO3\DevCompanion\Knowledge\Documents;
 /**
  * Serves the typo3:// resources from what this package ships.
  *
- * One instance backs every registered resource: the typo3://guides index (what
+ * One instance backs every registered resource. The typo3://guides index (what
  * this server covers, plus a JSON listing of what it serves), each
  * typo3://guides/{id} knowledge document, and each typo3://skill/{id} task
  * workflow. The SDK wraps the returned string with the mime type declared on
@@ -27,11 +27,11 @@ final class ResourceHandler implements ResourceHandlerInterface
      * The file a skill's own body is, kept in its URI.
      *
      * A skill is a directory and its body links to the files beside it by
-     * relative path — `references/base.md` in every one of them. Resolved
+     * relative path, `references/base.md` in every one of them. Resolved
      * against `typo3://skill/{id}/SKILL.md` those links land on the reference
      * URIs this server serves, which is the whole reason the file name is in
-     * there: the published prose goes over the wire as it was written, and
-     * nothing has to be rewritten for it to point somewhere.
+     * there. The published prose goes over the wire as it stands, and nothing
+     * has to change for it to point somewhere.
      */
     public const SKILL_BODY = '/SKILL.md';
 
@@ -39,7 +39,7 @@ final class ResourceHandler implements ResourceHandlerInterface
     public const SKILL_REFERENCES = 'references/';
     public const SKILL_REFERENCE_TEMPLATE = 'typo3://skill/{skill}/references/{reference}';
 
-    /** Where a skill's body is offered. */
+    /** Where a skill's body is on offer. */
     public static function skillUri(string $id): string
     {
         return self::SKILL_PREFIX . $id . self::SKILL_BODY;
@@ -76,15 +76,15 @@ final class ResourceHandler implements ResourceHandlerInterface
     }
 
     /**
-     * The index as it is served, which is also what its declared size counts:
-     * the definition tells a client how many bytes reading it costs, and the
-     * only honest source for that number is the string handed over.
+     * The index as the server serves it, which is also what its declared size
+     * counts. The definition tells a client how many bytes a read costs, and
+     * the only honest source for that number is the string that goes over.
      */
     public static function index(): string
     {
-        // The profile's scope, not the stored one: the index is read by the
-        // same client that gets the tool list, and a topic it cannot reach is
-        // no more useful here than in typo3_server_scope.
+        // The profile's scope, not the stored one. The same client that gets
+        // the tool list reads the index, and a topic it cannot reach is no more
+        // useful here than in typo3_server_scope.
         $scope = Coverage::offered();
 
         $index = [
@@ -96,10 +96,10 @@ final class ResourceHandler implements ResourceHandlerInterface
                 'title' => $document['title'],
                 'uri' => Documents::uri($document['id']),
             ], Documents::documents()),
-            // A skill's references are named here rather than left to be found
-            // by resolving the links in its body: they are a resource template,
-            // so no list a client reads enumerates them, and one of them exists
-            // as a file only once the skill is published.
+            // A skill's references stand here by name rather than wait for a
+            // resolution of the links in its body. They are a resource
+            // template, so no list a client reads enumerates them. One of them
+            // exists as a file only once the skill goes out.
             'skills' => array_map(static fn(array $skill): array => [
                 'id' => $skill['id'],
                 'title' => $skill['title'],

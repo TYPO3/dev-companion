@@ -8,14 +8,14 @@ namespace TYPO3\DevCompanion\Result;
  * What a lookup that found nothing hands back, where more than one of them says
  * it the same way.
  *
- * `R-ANS-006`: a miss says what there would have been to find, and what it
- * names can be asked for outright. A caller who learns to read one miss reads
- * the next one without learning it again, so the sentence is written once and
- * each corpus says what one of its items is called.
+ * `R-ANS-006`: a miss says what there would have been to find, and a caller can
+ * ask for what it names outright. A caller who learns to read one miss reads
+ * the next one without a second lesson. So the sentence stands once and each
+ * corpus says the name of one of its items.
  */
 final class Miss
 {
-    /** Subsets named outright before the rest are counted instead. */
+    /** Subsets named outright, before the rest come as counts instead. */
     private const SHOWN = 4;
 
     /**

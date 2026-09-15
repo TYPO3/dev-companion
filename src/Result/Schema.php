@@ -8,14 +8,14 @@ use TYPO3\DevCompanion\Knowledge\Scope;
 use TYPO3\DevCompanion\Tool\Source;
 
 /**
- * The record shapes several tools answer with, and the builders they are
- * written in.
+ * The record shapes several tools answer with, and the builders that write
+ * them.
  *
- * A tool declares its own output schema; what lives here is what more than one
- * of them says — a knowledge match, an hint, a catalog entry, the
- * reason an installation could not be asked. Schemas stay open (no
- * additionalProperties: false) so a new field is an addition rather than a
- * break, and only fields that are always present are required.
+ * A tool declares its own output schema. What lives here is what more than one
+ * of them says. A knowledge match, a hint, a catalog entry, the reason an
+ * installation did not answer. Schemas stay open (no additionalProperties:
+ * false) so a new field is an addition rather than a break. Only fields that
+ * are always present stand as required.
  */
 final class Schema
 {
@@ -23,11 +23,11 @@ final class Schema
      * The output schema of a tool that answers from the installation: either
      * the result it promises, or the unsupported answer in place of it.
      *
-     * The two are alternatives and the schema says so, so a client validating
-     * structuredContent — which the specification tells it to — still gets the
-     * full promise on a hit, and gets it as a promise rather than as a field
-     * that might be there. oneOf also makes the two exclusive: an answer
-     * carrying both is invalid, which is the shape this whole entry is against.
+     * The two are alternatives and the schema says so. So a client that
+     * validates structuredContent, which the specification tells it to, still
+     * gets the full promise on a hit. As a promise rather than as a field that
+     * might be there. oneOf also makes the two exclusive. An answer with both
+     * is invalid, which is the shape this whole entry stands against.
      *
      * @param array<string, mixed> $properties
      * @param array<int, string>   $answered what a result always carries
@@ -46,10 +46,10 @@ final class Schema
     }
 
     /**
-     * The question could not be answered here, and this is the whole answer.
+     * The question had no answer here, and this is the whole answer.
      *
-     * Present instead of the result, never beside it: a tool that cannot ask
-     * states this and states nothing else, so there is no count to read as a
+     * Present instead of the result, never beside it. A tool that cannot ask
+     * states this and states nothing else. So there is no count to read as a
      * count and no flag to read as a fact.
      *
      * @return array<string, mixed>
@@ -92,15 +92,15 @@ final class Schema
      * The other shape of "not answered", and the one a source outside this
      * process takes — `D-ANS-007`.
      *
-     * `unsupported()` is what a question this server cannot be asked from
-     * where it stands answers with, and it replaces the result. A manual, a
-     * tracker, a review server and a registry are reachable from anywhere or
-     * from nowhere, so those answer with a status beside the result and this
-     * object where the status is `unavailable`.
+     * `unsupported()` is what a question this server cannot take from where it
+     * stands answers with, and it replaces the result. A manual, a tracker, a
+     * review server and a registry are reachable from anywhere or from nowhere.
+     * So those answer with a status beside the result and this object where the
+     * status is `unavailable`.
      *
      * What varies per source is which causes it can have and how each one
-     * reads, which is why the caller passes them: the enum is the keys and the
-     * description is the sentences, in the order they were written.
+     * reads, which is why the caller passes them. The enum is the keys and the
+     * description is the sentences, in the caller's order.
      *
      * @param array<string, string> $causes each cause this source can have, and what it means
      * @return array<string, mixed>
@@ -130,8 +130,8 @@ final class Schema
     }
 
     /**
-     * What a call to a source outside this process came back as: an answer, an
-     * answer that is empty, or the source not answering at all.
+     * What a call to a source outside this process came back as. An answer, an
+     * answer that is empty, or a source with no answer at all.
      *
      * @return array<string, mixed>
      */
@@ -142,13 +142,13 @@ final class Schema
 
     /**
      * Which source answered this call. An answer that came from none of them is
-     * not one of its cases — that is unsupported, and it replaces the answer
-     * rather than labelling it.
+     * not one of its cases. That is the unsupported case, and it replaces the
+     * answer rather than labels it.
      *
-     * The cases are the tool's own `answersFrom()`, so a tool that can only be
-     * answered one way says so instead of declaring a fallback it does not
-     * have. Sources that never label an answer are left out: a knowledge file
-     * and a network service are what the whole tool reads, never one call.
+     * The cases are the tool's own `answersFrom()`. So a tool with only one way
+     * to answer says so instead of declares a fallback it does not have.
+     * Sources that never label an answer stay out. A knowledge file and a
+     * network service are what the whole tool reads, never one call.
      *
      * @param array<int, Source> $sources what the tool declares it answers from
      * @return array<string, mixed>
@@ -253,7 +253,7 @@ final class Schema
     }
 
     /**
-     * Who is obliged by something, where that is not everyone.
+     * Whom something obliges, where that is not everyone.
      *
      * @return array<string, mixed>
      */
@@ -293,8 +293,8 @@ final class Schema
     }
 
     /**
-     * A hint named rather than quoted: what an answer says exists without
-     * carrying it, and what typo3_hint_lookup takes as an id.
+     * A hint by name rather than in quotes. What an answer says exists without
+     * a copy of it, and what typo3_hint_lookup takes as an id.
      *
      * @return array<string, mixed>
      */
@@ -308,26 +308,16 @@ final class Schema
     }
 
     /**
-     * A whole procedure named rather than handed over, the call that reads it,
-     * and what the caller has to be doing for it to be worth reading.
+     * A whole procedure by name rather than in a handover. The call that reads
+     * it, and what the caller has to do for it to be worth a read.
      *
-     * Two tools answer with one: the orientation call lists every page this
-     * server carries, and a brief names the one the work it recognized belongs
-     * to. A `typo3://guides` address reaches only a client that renders
-     * resources, so what is named is the id `typo3_rule_lookup` takes —
-     * `D-ANS-061`, `D-GUI-012`.
-     *
-     * The `when` is what makes a `documentId` a decision rather than a title:
-     * six sessions read a page's name from four different surfaces and opened
-     * none of them, and every account of why says the entry gave them nothing
-     * to weigh. It is the document's own `whenToUse`, so the page and the
-     * pointer to it cannot say different things.
-     *
-     * The `tool` is the other half of the same failure. The field is called
-     * `guides`, the argument is a `documentId` and the call is
-     * `typo3_rule_lookup`: no name joins the three, and a session that read the
-     * array as data had the route only in the sentence above it — `D-GUI-012`.
-     * A record beside `nextTool` says which tool to call, so this one does too.
+     * Two tools answer with one, the orientation call and a brief. A
+     * `typo3://guides` address reaches only a client that renders resources, so
+     * the name is the id `typo3_rule_lookup` takes, `D-ANS-061`. The `when` is
+     * what makes a `documentId` a decision rather than a title, because six
+     * sessions read a page's name and opened none of them. It is the document's
+     * own `whenToUse`. The `tool` is the other half, because no name joins the
+     * field, the argument and the call, `D-GUI-012`.
      *
      * @return array<string, mixed>
      */
@@ -367,12 +357,12 @@ final class Schema
     }
 
     /**
-     * A file the extension ships that core has stopped reading, or is stopping.
+     * A file the extension ships that core has stopped to read, or stops soon.
      *
-     * Two tools answer with it: the extension answer for the extension the
+     * Two tools answer with it. The extension answer for the extension the
      * caller named, and the orientation answer for the ones inside the
-     * repository, which is what reaches a session that never makes the second
-     * call — `D-ANS-009`.
+     * repository. The second is what reaches a session that never makes the
+     * second call, `D-ANS-009`.
      *
      * @return array<string, mixed>
      */
@@ -408,10 +398,9 @@ final class Schema
     /**
      * What each word of a query reaches on its own, as a miss reports it.
      *
-     * The same shape wherever it is answered, and which field carries it is
-     * what says where it was counted: a number taken inside a filter reads as a
-     * fact about the corpus otherwise, which is the miss `D-ANS-016` was
-     * corrected for.
+     * The same shape wherever it answers, and which field carries it is what
+     * says where the count ran. A number from inside a filter reads as a fact
+     * about the corpus otherwise, which is the miss `D-ANS-016` corrected.
      *
      * @return array<string, mixed>
      */
@@ -430,9 +419,9 @@ final class Schema
      * cites, and the issues a change's trailers name. A caller that reads two
      * shapes for one thing reads the second one wrong.
      *
-     * The two that take an argument are the two that genuinely differ — which
-     * issue this is and what its state says here — and the three that do not
-     * are the same sentence at every site.
+     * The two that take an argument are the two that differ, which issue this
+     * is and what its state says here. The three that do not are the same
+     * sentence at every site.
      *
      * @return array<string, array<string, mixed>>
      */
@@ -466,8 +455,8 @@ final class Schema
     }
 
     /**
-     * The majors a catalog entry was verified on — the same since/until the
-     * hints carry, so a client reads one model rather than two.
+     * The majors a catalog entry has a check on, the same since/until the hints
+     * carry, so a client reads one model rather than two.
      *
      * @return array<string, mixed>
      */

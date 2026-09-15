@@ -12,9 +12,9 @@ use TYPO3\DevCompanion\Knowledge\Versions;
  * What a component answer says about where it came from.
  *
  * The component lookup and the catalog scope answer the same question from two
- * sides — one hands over entries, the other reports what the catalog is worth —
- * so the provenance, the version range per entry and what a target version
- * withheld are written once for both.
+ * sides. One hands over entries, the other reports what the catalog is worth.
+ * So the provenance, the version range per entry and what a target version held
+ * back stand once for both.
  */
 final class Provenance
 {
@@ -36,7 +36,7 @@ final class Provenance
 
     /**
      * The evidence version travels inside the component, not only in the block
-     * after it: clients often render one record without its surrounding answer.
+     * after it. Clients often render one record without the answer around it.
      *
      * @param array<string, mixed> $component
      * @return array{
@@ -60,7 +60,7 @@ final class Provenance
     }
 
     /**
-     * The majors a catalog entry was verified on, as data beside the label.
+     * The majors a catalog entry has a check on, as data beside the label.
      *
      * @param array<string, mixed> $component
      * @return array{since: ?int, until: ?int, verifiedOn: string}
@@ -91,10 +91,10 @@ final class Provenance
     /**
      * What the stated version cost the answer, and what to check instead.
      *
-     * Dropping the entry silently would be the one thing worse than handing it
-     * over: the caller then reads "this component does not exist" into an
-     * answer that means "the catalog has it and was never verified where you
-     * are". So it is named, with the branch and the sources to verify against.
+     * A silent drop of the entry would be the one thing worse than a handover.
+     * The caller then reads "this component does not exist" into an answer that
+     * means "the catalog has it and nobody checked it where you are". So it
+     * stands by name, with the branch and the sources to verify against.
      *
      * @param array<int, array<string, mixed>> $withheld
      */
@@ -143,7 +143,7 @@ final class Provenance
     }
 
     /**
-     * The provenance every catalog answer carries, so a client can tell a miss
+     * The provenance every catalog answer carries. So a client can tell a miss
      * on an old snapshot from a miss on the branch it works on.
      *
      * @return array<string, string>
@@ -162,7 +162,7 @@ final class Provenance
             // It travels with the pin instead, so an answer that says "not in
             // this snapshot" says how to check the snapshot in the same breath.
             'verifyCommand' => $meta['verifyCommand'],
-            // Both numbers were known and never contrasted. They travel
+            // Both numbers were on hand and never in contrast. They travel
             // together now, in every answer that carries the pin at all.
             'installedVersion' => Instance::typo3Version(),
             'skew' => $componentsDerived || CatalogMeta::skew() === '' ? null : CatalogMeta::skew(),

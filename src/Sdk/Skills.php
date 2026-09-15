@@ -16,28 +16,30 @@ use TYPO3\DevCompanion\Server\Installer;
  * The published task skills, as the resource surface offers them.
  *
  * They are here rather than in `Knowledge\` because this is the only thing that
- * reads a skill body: `Server\Installer` copies the directory without opening
+ * reads a skill body. `Server\Installer` copies the directory and never opens
  * it, and no tool answers from one. What a client picks up is the workflow
- * itself, and for a client that never ran the install this resource is the one
- * route there is (`R-ANS-022`). What is offered is `Installer::skills()` and
- * never the directory listing, so a skill the list leaves out is not served here
- * either — `D-SKL-013`.
+ * itself. For a client that never ran the install this resource is the one
+ * route there is (`R-ANS-022`). The offer is `Installer::skills()` and never
+ * the directory listing, so a skill the list leaves out does not come from here
+ * either, `D-SKL-013`.
  */
 final class Skills
 {
     /**
-     * What a client is picking up, said in front of the skill's own
-     * description.
+     * What a client picks up, said in front of the skill's own description.
      *
-     * A resource list is a list of pages everywhere else, and this one is not:
-     * the file is an order of steps written for the agent doing the work. That
-     * is the confusion the sentence is written against, which is the one place
-     * saying what something is not belongs.
+     * A resource list is a list of pages everywhere else, and this one is not.
+     * The file is an order of steps for the agent that does the work. That is
+     * the confusion the sentence stands against, which is the one place a line
+     * on what something is not belongs.
      */
     private const WHAT_IT_IS = 'A workflow an agent follows while doing the task, not a page to read. '
         . 'The references it sends you to are served beside it, one URI each.';
 
-    /** The order every task starts in, which is a file in a skill only once it is published. */
+    /**
+     * The order every task starts in, which is a file in a skill only once the
+     * skill goes out.
+     */
     private const BASE = 'references/base.md';
 
     /** @return array<int, array{id: string, title: string, summary: string, path: string}> */
@@ -51,20 +53,23 @@ final class Skills
         ], Installer::skills());
     }
 
-    /** The name the skill declares, which is what a client loading it knows it by. */
+    /**
+     * The name the skill declares, which is what a client that loads it knows
+     * it by.
+     */
     public static function name(string $id): string
     {
         return self::field($id, 'name');
     }
 
     /**
-     * What a client reads to understand what it is being offered.
+     * What a client reads to understand the offer.
      *
-     * The skill's own front matter says what the workflow is for, and it is
-     * already maintained against the body it introduces — so it is used rather
-     * than described a second time here. What is added is what the front matter
-     * cannot say: that this is a workflow rather than a page, and who its steps
-     * oblige.
+     * The skill's own front matter says what the workflow is for, and its
+     * author already keeps it true to the body it introduces. So it serves as
+     * it is rather than gets a second description here. What joins it is what
+     * the front matter cannot say: that this is a workflow rather than a page,
+     * and whom its steps oblige.
      */
     public static function description(string $id): ?string
     {
@@ -80,7 +85,7 @@ final class Skills
 
     /**
      * Whether a skill is the core repository's own, read off the coverage for
-     * the reason `Documents::isCoreOnly` is: `knowledge/server-scope.json`
+     * the reason `Documents::isCoreOnly` is. `knowledge/server-scope.json`
      * already says what a topic's answers are worth outside the core, and a
      * second list here could disagree with it.
      */
@@ -99,10 +104,10 @@ final class Skills
     /**
      * What a skill's body links to, at the paths it links to them by.
      *
-     * `references/base.md` is in every one of them and is a file in no skill:
+     * `references/base.md` is in every one of them and is a file in no skill.
      * `Installer` writes it at publication from `skills/base.md` (`D-SKL-001`).
-     * The same copy is what is served here, so the resource is the file the
-     * client would have had if it had run the install.
+     * The same copy is what comes from here, so the resource is the file the
+     * client would have had after an install.
      *
      * @return array<int, string>
      */
@@ -143,7 +148,7 @@ final class Skills
     }
 
     /**
-     * The covered topic naming this skill as its source, where one does.
+     * The covered topic that names this skill as its source, where one does.
      *
      * @return array{topic: string, depth: string, tools: array<int, string>, source: string, scope: Scope}|null
      */
@@ -172,9 +177,9 @@ final class Skills
     /**
      * The task the skill declares itself for, as YAML readers receive it.
      *
-     * This is exposed beside the title because the documentation index needs
-     * both. Reading it from the front matter keeps that catalog on the
-     * declaration the skill itself owns.
+     * This stands beside the title because the documentation index needs both.
+     * A read from the front matter keeps that catalog on the declaration the
+     * skill itself owns.
      */
     private static function summary(string $id): string
     {
@@ -201,9 +206,9 @@ final class Skills
     }
 
     /**
-     * One field of the front matter, which is written on one line in all of
-     * them. The block is cut out first, so a line of the body that opens with
-     * the same word is not read as the declaration.
+     * One field of the front matter, which stands on one line in all of them.
+     * The block comes out first, so a line of the body that opens with the same
+     * word does not read as the declaration.
      */
     private static function field(string $id, string $field): string
     {

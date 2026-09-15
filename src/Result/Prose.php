@@ -10,21 +10,21 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 /**
  * Matched sections of the markdown knowledge documents, as an answer.
  *
- * Three tools render the same corpus — the rule lookup, the script lookup and
- * the task guide — and a caller that learns to read one of those answers has to
- * find the next one built the same way.
+ * Three tools render the same corpus, the rule lookup, the script lookup and
+ * the task guide. A caller that learns to read one of those answers has to find
+ * the next one built the same way.
  */
 final class Prose
 {
     /**
-     * Where a range that is not this corpus's own is carried.
+     * Where a range that is not this corpus's own travels.
      *
      * A section says what it holds for beside itself since `D-VER-005`, so this
      * no longer stands in for a binding. What it still answers is the question
-     * the ranges here cannot: a runTests.sh command is bound to the suite in
-     * test-suite-hints.json rather than to the section quoting it, and a
-     * convention is bound to the statement in the hints — a 12.4 reader
-     * following the wrong one of those finds nothing.
+     * the ranges here cannot. A runTests.sh command binds to the suite in
+     * test-suite-hints.json rather than to the section that quotes it. A
+     * convention binds to the statement in the hints. A 12.4 reader who follows
+     * the wrong one of those finds nothing.
      */
     private const BOUND_ELSEWHERE = 'A section carries the range it holds for where it has one. '
         . 'What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention';
@@ -38,8 +38,8 @@ final class Prose
     private const BOUND_TO_A_SUITE = ', and typo3_test_run_guide with targetVersion for a runTests.sh command';
 
     /**
-     * Renders matched knowledge sections as coherent excerpts: the section
-     * keeps its own heading and original formatting, so code blocks and nested
+     * Renders matched knowledge sections as coherent excerpts. The section
+     * keeps its own heading and original format, so code blocks and nested
      * lists survive.
      *
      * @param array<int, array{id: string, title: string, heading: string, body: string, since: ?int, until: ?int, score: int, coverage: float, truncated: bool}> $results
@@ -50,7 +50,10 @@ final class Prose
             . self::excerpts($results) . "\n\n" . self::readWhole($results);
     }
 
-    /** What a range that is not this corpus's own is carried by, in the scope the caller is in. */
+    /**
+     * What carries a range that is not this corpus's own, in the scope the
+     * caller is in.
+     */
     private static function boundElsewhere(bool $outsideCore): string
     {
         return self::BOUND_ELSEWHERE . ($outsideCore ? '' : self::BOUND_TO_A_SUITE) . '.';
@@ -60,17 +63,13 @@ final class Prose
      * The page every match came out of, instead of the matches.
      *
      * A search whose several hits all sit in one document has established which
-     * page answers the task, and cutting it there buys nothing: the second
-     * search is the expensive part, not the text (`D-ANS-076`). How many hits
-     * that takes is the caller's floor rather than this renderer's —
-     * `D-ANS-101`. The page is handed over as written, which is what
-     * `documentId` does and for the same reason — a section left out for a
-     * major it does not hold on is a hole in a page, and every bound section
-     * carries its own range under its heading.
-     *
-     * One of the matches may be the text above the first heading, which carries
-     * no heading; all of them cannot, since a page has one such section and the
-     * floor takes two.
+     * page answers the task. A cut there buys nothing, because the second
+     * search is the expensive part, `D-ANS-076`. How many hits that takes is
+     * the caller's floor rather than this renderer's, `D-ANS-101`. The page
+     * goes over as it stands. A section left out for a major it does not hold
+     * on is a hole in a page. One of the matches may be the text above the
+     * first heading. All of them cannot, since a page has one such section and
+     * the floor takes two.
      *
      * @param array<int, array{id: string, title: string, heading: string, body: string, since: ?int, until: ?int, score: int, coverage: float, truncated: bool}> $results
      */
@@ -96,10 +95,10 @@ final class Prose
      * The headings the query matched, for the answer that hands the page over.
      *
      * The text above a page's first heading is a section this corpus returns
-     * and carries no heading, so it is not one of these. Listed as one it named
+     * and carries no heading. So it is not one of these. Listed as one it named
      * nothing at all: "of which the query matched The Probe, .". The count it
-     * is read against is `Documents::headings()`, which leaves the opening out
-     * for the same reason.
+     * stands against is `Documents::headings()`, which leaves the start out for
+     * the same reason.
      *
      * @param array<int, array<string, mixed>> $results
      * @return array<int, string>
@@ -122,11 +121,11 @@ final class Prose
     /**
      * The page a search concentrated in, as the one record its answer carries.
      *
-     * The pair it is ranked by is the best-ranked match's, which is the section
-     * the ordering put the answer on. It was the constants `0` and `1.0` until
-     * `D-ANS-101`: a session read the score as "nothing matched" and was right
-     * by accident, and the coverage asserted that the page answers the whole
-     * query on a client that may validate the declared schema and act on it.
+     * The pair that ranks it is the best-ranked match's, which is the section
+     * the order put the answer on. It was the constants `0` and `1.0` until
+     * `D-ANS-101`. A session read the score as "nothing matched" and was right
+     * by accident. The coverage asserted that the page answers the whole query
+     * on a client that may validate the declared schema and act on it.
      *
      * @param array<int, array{id: string, title: string, heading: string, body: string, since: ?int, until: ?int, score: int, coverage: float, truncated: bool}> $results
      * @return array<int, array<string, mixed>>
@@ -172,15 +171,15 @@ final class Prose
     }
 
     /**
-     * The pages the excerpts were cut out of, as the resources they are readable
-     * whole as.
+     * The pages the excerpts came out of, as the resources that hold them
+     * whole.
      *
-     * A search answers the section the query matched, and a procedure is several
-     * of them — `D-AUD-007`. The `Source:` line above each excerpt carries the
-     * same uri and was read as attribution, which is what this says out loud
-     * instead. Each page says what the search left of it, because naming the
-     * page did not take on its own (`D-ANS-070`), and the headings rather than
-     * the share alone, because the next query is picked out of them.
+     * A search answers the section the query matched, and a procedure is
+     * several of them, `D-AUD-007`. The `Source:` line above each excerpt
+     * carries the same uri and read as attribution, which is what this says out
+     * loud instead. Each page says what the search left of it, because the
+     * page's name alone did not take (`D-ANS-070`). The headings rather than
+     * the share alone, because the next query comes out of them.
      *
      * @param array<int, array{id: string, title: string, heading: string, body: string, since: ?int, until: ?int, score: int, coverage: float, truncated: bool}> $results
      */
@@ -213,12 +212,12 @@ final class Prose
         }
 
         // Named as a call rather than as an address. The uri was here and three
-        // core sessions held one without ever fetching the page, one of them
-        // finishing a full patch review having read no document end to end and
-        // going looking in the checkout for a section the same document
-        // carried. A `typo3://guides` address is delivery to a client that
-        // renders MCP resources; `typo3_rule_lookup` reaches every client
-        // there is — `D-ANS-061`, `R-ANS-028`.
+        // core sessions held one and never fetched the page. One of them
+        // finished a full patch review with no document read end to end. It
+        // searched the checkout for a section the same document carried. A
+        // `typo3://guides` address is delivery to a client that renders MCP
+        // resources. `typo3_rule_lookup` reaches every client there is,
+        // `D-ANS-061`, `R-ANS-028`.
         return 'Each excerpt above is one section of a longer document, and each page below carries the `##` '
             . 'headings that are not above. Where the task is the whole procedure rather than the fact you '
             . 'searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list:'
@@ -244,7 +243,7 @@ final class Prose
             $body = $result['body'];
             if ($result['truncated']) {
                 // Named as the call the line below names, rather than as the
-                // uri it used to be: a cut is exactly where a caller stops, and
+                // uri it used to be. A cut is exactly where a caller stops, and
                 // a client that lists no resources cannot act on an address.
                 $body .= "\n\n(section truncated — read " . $result['id'] . ' whole for the rest)';
             }
@@ -254,8 +253,8 @@ final class Prose
     }
 
     /**
-     * The same matched sections as data: the document they come from, how much
-     * of the query they cover, and the resource holding the full text.
+     * The same matched sections as data. The document they come from, how much
+     * of the query they cover, and the resource that holds the full text.
      *
      * @param array<int, array{id: string, title: string, heading: string, body: string, since: ?int, until: ?int, score: int, coverage: float, truncated: bool}> $results
      * @return array<int, array<string, mixed>>

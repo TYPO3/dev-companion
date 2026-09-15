@@ -7,40 +7,37 @@ namespace TYPO3\DevCompanion\Publication;
 use TYPO3\DevCompanion\Http\Fetch;
 
 /**
- * The registry a TYPO3 extension is published to, read over its public API.
+ * The registry a TYPO3 extension goes out to, read over its public API.
  *
- * What it answers is not in the repository being audited: Tailor refuses to
- * package unless `ext_emconf.php` names the version being released, so the file
- * still names it afterwards and a published checkout reads exactly like an
- * unreleased one (`D-FBK-051`). Read-only and without a credential — the
- * versions endpoint declares `security: []` in the TER's own OpenAPI schema,
- * and publishing, transferring and deleting stay the maintainer's, through
- * Tailor and the token it carries.
+ * What it answers is not in the repository under audit, because
+ * `ext_emconf.php` reads the same before and after a release (`D-FBK-051`).
+ * Read only and without a credential. The versions endpoint declares `security:
+ * []` in the TER's own OpenAPI schema. A publication, a transfer and a deletion
+ * stay the maintainer's, through Tailor and the token it carries.
  *
- * Nothing is held between calls. Every other network source here is read
- * repeatedly inside one task; this one is a single read per key, made at the
- * moment the caller is about to change what it reports, so a store could only
- * ever answer somebody who has just published.
+ * Nothing stays between calls. This one is a single read per key, at the moment
+ * the caller is about to change what it reports. So a store could only ever
+ * answer somebody who has just published.
  */
 final class Ter
 {
     public const HOST = 'https://extensions.typo3.org';
 
     /**
-     * What the registry accepts as an extension key, in its own words: the
+     * What the registry accepts as an extension key, in its own words. The
      * pattern and the two lengths the `/extension/{key}/versions` route
-     * declares. Held here so a composer package name — which carries a slash
-     * and a dash — is answered as the wrong kind of name rather than spent on a
-     * read the host answers `400` to.
+     * declares. Held here so a composer package name, which carries a slash and
+     * a dash, gets the answer "wrong kind of name". Not a read the host answers
+     * `400` to.
      */
     public const KEY = '~^[a-z][a-z0-9_]{2,29}$~';
 
     /**
      * What leaves this process, and the seam a unit test takes instead.
      *
-     * `TerLookup` builds its own instance, so a test driving the tool itself —
-     * its text half, which is where a caller reads whether a version is out —
-     * has nowhere else to hand a transport in. `R-COD-003`.
+     * `TerLookup` builds its own instance, so a test that drives the tool
+     * itself has nowhere else to hand a transport in. That is its text half,
+     * which is where a caller reads whether a version is out. `R-COD-003`.
      *
      * @var (\Closure(string): ?string)|null
      */
@@ -69,9 +66,9 @@ final class Ter
      * Every version published under one key, highest number first.
      *
      * A key the registry does not know answers `404` with a JSON body, which is
-     * an answer and not a failure: nothing is published under it. What that
-     * does not say is that no such package exists — an extension distributed
-     * through Composer alone is never registered here at all.
+     * an answer and not a failure. Nothing stands under it. What that does not
+     * say is that no such package exists. An extension that ships through
+     * Composer alone never registers here at all.
      *
      * @return array{status: 'answered'|'empty'|'unavailable', url: string, versions: list<array<string, mixed>>, cause: ?string}
      */
@@ -92,8 +89,8 @@ final class Ter
             return ['status' => 'unavailable', 'url' => $url, 'versions' => [], 'cause' => 'source-not-parseable'];
         }
 
-        // The list arrives wrapped in an array of one, so the versions are a
-        // level down from where a reader of the endpoint's name expects them.
+        // The list arrives inside an array of one, so the versions are a level
+        // down from where a reader of the endpoint's name expects them.
         $entries = is_array($decoded[0] ?? null) && !isset($decoded[0]['number']) ? $decoded[0] : $decoded;
 
         $versions = [];
@@ -102,10 +99,10 @@ final class Ter
                 $versions[] = self::version($entry);
             }
         }
-        // By version number here rather than trusting the order it came in:
-        // that order is the registry's and it is not the upload order, so a
-        // maintenance release on an older line sits below a newer major and was
-        // uploaded after it.
+        // By version number here rather than by the order it came in. That
+        // order is the registry's and it is not the upload order. So a
+        // maintenance release on an older line sits below a newer major and
+        // came after it.
         usort($versions, static fn(array $one, array $other): int => version_compare($other['number'], $one['number']));
 
         return [
@@ -136,7 +133,7 @@ final class Ter
         return [
             'number' => (string) $entry['number'],
             'state' => is_string($entry['state'] ?? null) ? $entry['state'] : '',
-            // A unix timestamp on the wire, and a day is what it is read as.
+            // A unix timestamp on the wire, and a day is what it reads as.
             'uploaded' => is_numeric($uploaded) && (int) $uploaded > 0 ? gmdate('Y-m-d', (int) $uploaded) : '',
             'majors' => $majors,
             'constraint' => is_string($dependencies['typo3'] ?? null) ? $dependencies['typo3'] : '',

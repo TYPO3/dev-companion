@@ -789,16 +789,14 @@ final class Extension
      *
      * A sitepackage that takes the render frame over from
      * `fluid_styled_content` ends up with `tt_content.shortcut` while
-     * `EXT:frontend` still registers it. A deletion of such a definition kills
-     * an element editors can still select, and nothing else in the package
-     * points at it (`D-ANS-149`).
+     * `EXT:frontend` still registers it. A deletion of that definition kills an
+     * element editors can still select (`D-ANS-149`).
      *
      * The evidence is a `tt_content.<identifier>` line in this extension's own
-     * TypoScript whose identifier is none of the elements it registers. Who
-     * does register it is the installation's to say, read off the `EXT:`
-     * reference in the CType's label. Null is a foreign identifier nothing
-     * could answer about, and on a booted installation a definition for an
-     * element nothing registers at all.
+     * TypoScript whose identifier is none of the elements it registers. The
+     * `EXT:` reference in the CType's label says who does. Null is a foreign
+     * identifier nothing could answer about, and on a booted installation a
+     * definition for an element nothing registers at all.
      *
      * @param array<string, array{value: string, file: string}> $typoScript
      * @param array<int, string> $registered the identifiers this extension registers

@@ -10,11 +10,11 @@ use Mcp\Server\Handler\ResourceTemplateHandlerInterface;
 /**
  * Serves what a skill's body links to, at the URIs those links resolve to.
  *
- * A template rather than a resource each, because these are followed and not
- * picked: `R-ANS-022` is about the list a host offers for selection, and a
- * checklist offered beside the workflow that owns it is an entry nobody can
- * choose between. They stay addressable — `resources/templates/list` says the
- * shape, and the body says which of them it sends the reader to.
+ * A template rather than a resource each, because a reader follows these and
+ * does not pick them. `R-ANS-022` is about the list a host offers for
+ * selection. A checklist on offer beside the workflow that owns it is an entry
+ * nobody can choose between. They stay addressable. `resources/templates/list`
+ * says the shape, and the body says which of them it sends the reader to.
  */
 final class SkillReferenceHandler implements ResourceTemplateHandlerInterface
 {

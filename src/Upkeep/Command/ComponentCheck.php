@@ -41,18 +41,17 @@ final class ComponentCheck
     }
 
     /**
-     * Re-derives which majors each entry holds on and which its class list alone
-     * holds on, and reports where either differs from what it records.
+     * Derives again which majors each entry holds on and which its class list
+     * alone holds on, and reports where either differs from what it records.
      *
-     * An entry holds on a version when everything it describes is there. Its
+     * An entry holds on a version when everything it describes is there: its
      * Sass sources, and every class and custom property it names that the
-     * newest covered version has. An absent custom property is not a detail: a
-     * caller who pastes one that does not exist gets CSS that silently does
-     * nothing.
+     * newest covered version has. An absent custom property is not a detail,
+     * because a caller who pastes one that does not exist gets CSS that
+     * silently does nothing.
      *
-     * The class list derives a second time without the custom properties. A
-     * caller who asks about one class does not ask to paste the component
-     * (`D-CAT-006`). It is the same read over fewer names, so the two cannot
+     * The class list derives a second time without the custom properties,
+     * `D-CAT-006`. It is the same read over fewer names, so the two cannot
      * drift apart on what a checkout says.
      *
      * @param array<int, array<string, mixed>> $components

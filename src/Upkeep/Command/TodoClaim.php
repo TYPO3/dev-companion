@@ -23,11 +23,10 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * gets the item behind it. Nothing moves and nothing commits, `D-DOC-060`.
  *
  * It carries the setup out rather than prints it, because the order matters. A
- * worktree apiece with its own `composer install`, and the message the sessions
- * start with. A todo in hand and one whose branch nobody took down both stay
- * untouched. A worktree that quietly attaches to an old branch looks like
- * success. The overlap it reports, two todos that serve one entry, is a warning
- * to read before the sessions start, not a refusal.
+ * todo in hand and one whose branch nobody took down both stay untouched,
+ * because a worktree that quietly attaches to an old branch looks like success.
+ * The overlap it reports, two todos that serve one entry, is a warning to read
+ * before the sessions start, not a refusal.
  *
  * @phpstan-import-type Section from Todo
  */

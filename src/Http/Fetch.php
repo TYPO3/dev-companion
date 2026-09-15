@@ -153,6 +153,16 @@ final class Fetch
         }
 
         if ($this->handle === null) {
+            // Refused with the extension named, before PHP's own error names a
+            // function instead — `D-ANS-155`.
+            if (!function_exists('curl_init')) {
+                throw new \RuntimeException(sprintf(
+                    'The PHP that runs this server has no curl extension, and every read of a host outside it goes through curl. '
+                    . 'That PHP is %s (%s). Install ext-curl for it, or start the server with a PHP that has it.',
+                    PHP_BINARY,
+                    PHP_VERSION,
+                ));
+            }
             $handle = curl_init();
             if ($handle === false) {
                 return ['status' => 0, 'body' => null, 'etag' => null];

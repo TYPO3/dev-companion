@@ -4,6 +4,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15
 - [`D-ANS-151`][D-ANS-151] — The file list on a change answer is asked for rather than sent · 2026-09-09
 - [`D-ANS-152`][D-ANS-152] — The core answer's npm entries say which dispatcher owns them · 2026-09-09
 - [`D-ANS-153`][D-ANS-153] — The route to prior art runs through the review server · 2026-09-09
@@ -154,6 +155,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-155]: ans-155-a-read-on-a-php-without-curl-names-the-extension.md
 [D-ANS-151]: ans-151-the-file-list-on-a-change-answer-is-asked-for-rather-than-sent.md
 [D-ANS-152]: ans-152-the-core-answers-npm-entries-say-which-dispatcher-owns-them.md
 [D-ANS-153]: ans-153-the-route-to-prior-art-runs-through-the-review-server.md

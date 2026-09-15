@@ -469,6 +469,38 @@ final class StdioServerTest extends TestCase
     }
 
     /**
+     * The one case `read()` cannot get a handle in, over the wire where a lost
+     * answer costs the most.
+     *
+     * `composer.json` requires ext-curl, and two ways in pass it: an install
+     * with the platform check off, and an entry that starts a PHP other than
+     * the one Composer resolved against. PHP's own error named a function and
+     * no extension — `D-ANS-155`. `disable_functions` takes the function away
+     * from a PHP that has it, so the case runs on every PHP the suite runs on.
+     */
+    #[Decision('D-ANS-155')]
+    #[Test]
+    public function aPhpWithoutCurlIsRefusedWithTheExtensionNamed(): void
+    {
+        $answers = $this->session([
+            $this->request(2, 'tools/call', ['name' => 'typo3_forge_lookup', 'arguments' => ['issue' => '110348']]),
+            $this->request(3, 'tools/call', ['name' => 'typo3_server_scope', 'arguments' => new \stdClass()]),
+        ], php: ['-d', 'disable_functions=curl_init']);
+
+        self::assertArrayNotHasKey('error', $answers[2]);
+        self::assertTrue($answers[2]['result']['isError']);
+        $said = $answers[2]['result']['content'][0]['text'];
+        self::assertStringContainsString('ext-curl', $said);
+        self::assertStringContainsString(PHP_BINARY, $said);
+        self::assertStringNotContainsString('undefined function', $said);
+
+        // The read is the one answer lost. The server stands, and the next
+        // request is answered.
+        self::assertArrayNotHasKey('error', $answers[3]);
+        self::assertFalse($answers[3]['result']['isError'] ?? false);
+    }
+
+    /**
      * The one argument that ever declared two types, over the wire that decides
      * whether a client can compose the call at all.
      *
@@ -745,9 +777,10 @@ final class StdioServerTest extends TestCase
 
     /**
      * @param array<int, string> $requests
+     * @param array<int, string> $php options for the interpreter that runs the server
      * @return array<int, array<string, mixed>> responses by request id
      */
-    private function session(array $requests, ?string $cwd = null): array
+    private function session(array $requests, ?string $cwd = null, array $php = []): array
     {
         return $this->call(array_merge([
             $this->request(1, 'initialize', [
@@ -756,13 +789,14 @@ final class StdioServerTest extends TestCase
                 'clientInfo' => ['name' => 'phpunit', 'version' => '1'],
             ]),
             (string) json_encode(['jsonrpc' => '2.0', 'method' => 'notifications/initialized']),
-        ], $requests), $cwd);
+        ], $requests), $cwd, php: $php);
     }
 
     /**
      * @param array<int, string> $lines
      * @param string|null $stderr what the server said beside the protocol
      * @param array<string, string> $environment
+     * @param array<int, string> $php options for the interpreter that runs the server
      * @param-out string $stderr
      * @return array<int, array<string, mixed>>
      */
@@ -771,12 +805,13 @@ final class StdioServerTest extends TestCase
         ?string $cwd = null,
         ?string &$stderr = null,
         array $environment = [],
+        array $php = [],
     ): array {
         // The working directory is the whole of what a client tells this server
         // about where it is. So a test about discovery is a test about this
         // argument.
         $process = proc_open(
-            [PHP_BINARY, Paths::root() . '/bin/typo3-dev-companion'],
+            [PHP_BINARY, ...$php, Paths::root() . '/bin/typo3-dev-companion'],
             [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
             $pipes,
             $cwd,

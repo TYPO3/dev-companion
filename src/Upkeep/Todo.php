@@ -333,15 +333,10 @@ final class Todo
      *
      * The queue is an order, not an assignment, and `bin/cli todo:next` reads
      * the same first item for everybody who asks. That is right while one
-     * session works at a time and wrong the moment two do. Both get the same
-     * todo, and the second finds out when it writes a change somebody else has
-     * already written.
-     *
-     * What says a todo is in hand is the worktree cut for it, `D-DOC-060`. It
-     * was a file in `todo/progress/` as well, which is a third copy of what the
-     * branch name and the worktree already carry. The copy was the one that
-     * could go stale. A claim outlived the branch it named often enough to need
-     * a check of its own.
+     * session works at a time and wrong the moment two do. What says a todo is
+     * in hand is the worktree cut for it, `D-DOC-060`. A file in
+     * `todo/progress/` was a third copy of that, and the one that could go
+     * stale.
      *
      * Read as one call rather than one per worktree, because every caller here
      * wants the whole set.

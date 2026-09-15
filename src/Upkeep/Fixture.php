@@ -13,14 +13,14 @@ use TYPO3\DevCompanion\Paths;
  * Nine tools answer `installation` where TYPO3 booted and said so and
  * `packages` where the files had to stand in. A core checkout can only ever
  * produce the second, so the first shape used to come from whichever real site
- * the machine had (`D-DOC-006`). Nothing is fake on this side of the process
- * boundary. `Typo3Cli` resolves this project, starts it and reads what it
- * printed exactly as it does anywhere else.
+ * the machine had, `D-DOC-006`. Nothing is fake on this side of the process
+ * boundary: `Typo3Cli` resolves this project, starts it and reads what it
+ * printed.
  *
  * Written rather than committed, for the reason `.checkouts/` is not in git
  * either, and shaped by `ToolCalls` rather than after a real site. Everything
- * in it says whose it is. An entry a reader could take for TYPO3's own is the
- * one thing a recorded answer must not carry.
+ * in it says whose it is, because a recorded answer must not carry an entry a
+ * reader could take for TYPO3's own.
  */
 final class Fixture
 {

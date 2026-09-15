@@ -9,19 +9,14 @@ namespace TYPO3\DevCompanion\Upkeep;
  *
  * TYPO3's base distribution installs no package of its own, so an installation
  * made here answers every question about what this project registers with
- * nothing. The one `typo3_record_lookup` exists for, the rows of a table a
- * project-owned extension registers, had nowhere to come from. The fixture
- * below `.fixtures/` has the extension and no database to open, and this
- * environment had the database and no extension. This is that package, and
+ * nothing. This package fills the one `typo3_record_lookup` exists for, and
  * `D-EVI-010` is why it stands here rather than with whoever runs a case.
  *
  * It goes below `packages/`, where the distribution's own path repository
- * already looks. It carries one table with a label column and rows enough that
- * the answer says where an editor edits the records. It has the two states a
- * count separates, hidden and deleted.
- *
- * What attributes the table to this project is the `EXT:` reference in the
- * ctrl title and nothing else, which is what `Typo3Runtime::extensionIn` reads.
+ * already looks. It carries one table with a label column, rows enough that the
+ * answer says where an editor edits the records, and the two states a count
+ * separates. The `EXT:` reference in the ctrl title is what
+ * `Typo3Runtime::extensionIn` attributes the table by.
  */
 final class SiteExtension
 {

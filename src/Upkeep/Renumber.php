@@ -11,18 +11,11 @@ use Symfony\Component\Finder\Finder;
  * and a report of what nobody here can move.
  *
  * The new number is the dangerous part rather than the collision. Twice the
- * files that named the old number did not all mean the same entry. `R-PRJ-008`
- * rested on the `D-ANS-013` that kept its number while five other files meant
- * the one that became `D-ANS-015`. So a search and replace over the id is
- * silently wrong there. So a reference moves only where the file itself says
- * which entry it means, which is a link path. Every other one comes back in the
- * report: moved or named, never silently left, `D-DOC-015`.
- *
- * The one other thing a file says is who wrote the line. A mention this branch
- * added means this branch's entry, because the entry it would otherwise mean
- * was already on `main` when the line arrived. The report used to send a person
- * to `git diff` for that. It is now settled here and stands apart from the
- * rest, `D-FBK-046`.
+ * files that named the old number did not all mean the same entry, so a search
+ * and replace over the id is silently wrong there. A reference moves only where
+ * the file itself says which entry it means, which is a link path. Every other
+ * one comes back in the report, `D-DOC-015`. A mention this branch added means
+ * this branch's entry, `D-FBK-046`.
  */
 final class Renumber
 {

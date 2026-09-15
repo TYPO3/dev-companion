@@ -146,24 +146,13 @@ final class Decisions
      * references first.
      *
      * Not a defect and nothing fails on it. Most entries here are about process
-     * and nothing runs over them. So an entry may name `Scope::of()` in its
-     * evidence while it decides something no test could keep. A check that
-     * demanded a `coveredBy` would get a test name chosen to satisfy it.
+     * and nothing runs over them, and a check that demanded a `coveredBy` would
+     * get a test name chosen to satisfy it. What it reports is the one tie that
+     * holds an entry to the code: a test named in `coveredBy` fails when the
+     * behaviour moves.
      *
-     * What it reports is the one tie that holds an entry to the code. A test
-     * named in `coveredBy` fails when the behaviour moves, and
-     * `DecisionsTest::everyTestADecisionNamesExists` fails when the test goes
-     * with it. Read on 2026-08-22: the three entries found stale that day
-     * carried no such name. The two whose code had moved under them carried one
-     * and were right.
-     *
-     * A revoked entry stays out. Its statement is not the case any more, so no
-     * test may declare it, `D-DOC-052`. A count of it here would report as
-     * absent what the checks forbid.
-     *
-     * The number that remains is not a backlog. The corpus was swept on
-     * 2026-08-23 and what stayed uncovered stayed for a reason written in the
-     * entry, which is what `D-DOC-053` records.
+     * A revoked entry stays out, because no test may declare it, `D-DOC-052`.
+     * The number that remains is not a backlog, `D-DOC-053`.
      *
      * @return array<int, array{id: string, names: int, status: string}>
      */
@@ -397,20 +386,14 @@ final class Decisions
     /**
      * Whether somebody has been back to this entry since its commit.
      *
-     * `status` cannot answer it. `confirmed` and `revoked` are the two reads
-     * that settle a **Wrong if**. A read that settles neither leaves the entry
-     * `open`, the same as one nobody has opened.
+     * `status` cannot answer it. A read that settles neither `confirmed` nor
+     * `revoked` leaves the entry `open`, the same as one nobody has opened. Two
+     * things tell those apart: a **Since then** where the read changed
+     * something, a date in `readings:` where it changed nothing, `D-DOC-066`.
      *
-     * Two things tell those apart, because such a read writes one or the other.
-     * A **Since then** where it changed something, a date in `readings:` where
-     * it changed nothing, `D-DOC-066`. A read of only the section counted the
-     * second kind as unopened. It sent the next session to the entry it had
-     * just come out of.
-     *
-     * One spelling of the section, since the 51 labels that still stood as a
-     * bold paragraph changed. `bin/cli decisions:check` then began to fail on
-     * that spelling. A **Since then** named inside a sentence is a reference to
-     * one and not one, which is why the heading is what this matches.
+     * The heading is what this matches, in the one spelling `bin/cli
+     * decisions:check` holds since the 51 bold paragraphs changed. A **Since
+     * then** named inside a sentence is a reference to one and not one.
      *
      * @param list<string> $readings
      */

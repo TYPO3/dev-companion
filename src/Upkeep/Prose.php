@@ -243,13 +243,9 @@ final class Prose
      * Every markdown table this repository writes, widest cell first.
      *
      * The cell is what `D-DOC-001` measures. One that will not fit on a line
-     * means the content is a list rather than a table. What a table buys over a
-     * list is a column a reader can scan. A cell nobody can read on one line
-     * takes exactly that away. The row width is what the table takes once
-     * `bin/cli prose:format` has padded it.
-     *
-     * Reported and never failed on. Whether a cell can shrink is a judgement,
-     * and the exception has to say so where the writer takes it.
+     * means the content is a list rather than a table. The row width is what
+     * the table takes once `bin/cli prose:format` has padded it. Reported and
+     * never failed on, because whether a cell can shrink is a judgement.
      *
      * Markdown alone. A table in reStructuredText stands in drawn lines rather
      * than pipes. The two lines in `documentation/` that open with a pipe are a

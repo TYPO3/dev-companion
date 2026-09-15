@@ -104,23 +104,14 @@ final class Unresolved
      * Every open decision, oldest first, and whether somebody has been back.
      *
      * An open decision is not a defect the way an open requirement is. Most of
-     * them are simply still true, and some name a "Wrong if" only a forward run
-     * or an outside event could answer. What makes the oldest worth a name is
-     * that the repository around it has moved furthest since. So it is where a
-     * decision has most likely fallen behind without any notice.
+     * them are simply still true. The oldest is worth a name because the
+     * repository around it has moved furthest since.
      *
-     * `open` is two states, though, and a report of them as one made the pile
-     * look untouched. A read that settles the **Wrong if** either way changes
-     * the status. One that settles neither leaves it open with a **Since then**
-     * to show for it. Half of what this returns is of the second kind. So the
-     * read carries both and the caller names the oldest nobody has opened,
-     * which is the one a session can still do something about.
-     *
-     * `held` is what narrows that further, and it is why the return visit
-     * stopped as a scheduled task. A decision a test declares gets its read
-     * when somebody changes the behaviour, because the failure prints the
-     * entry, `D-DOC-044`. What remains for a reader is the entry nothing fires
-     * on, and the oldest of those is what the listing names, `D-DOC-054`.
+     * `open` is two states, and a report of them as one made the pile look
+     * untouched. So the read carries both and the caller names the oldest
+     * nobody has opened. `held` narrows that further: a decision a test
+     * declares gets its read when the failure prints the entry, `D-DOC-044`.
+     * What remains is the entry nothing fires on, `D-DOC-054`.
      *
      * @return array<int, array{id: string, date: string, title: string, revisited: bool, held: bool}>
      */

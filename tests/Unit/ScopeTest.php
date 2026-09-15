@@ -80,10 +80,10 @@ final class ScopeTest extends TestCase
     #[Test]
     public function whereNothingPlacesTheWorkTheAnswerSaysSo(): void
     {
-        // The third value. Without an installation, without a path with a shape
-        // of its own and without a word either way, the old boolean answered
-        // "not outside the core" — which every caller read as the core, and
-        // half of them were in their own repository.
+        // The third value. Without an installation, a path with a shape of its
+        // own or a word either way, the old boolean said "not outside the
+        // core". Every caller read that as the core, and half of them were in
+        // their own repository.
         Instance::discoverFrom(null);
 
         self::assertSame(Scope::Uncertain, Scope::of('', 'Improve the query performance'));
@@ -100,7 +100,7 @@ final class ScopeTest extends TestCase
         // "not TYPO3 core, a composer package under vendor bk2k" reads to a
         // substring search exactly like claiming to be the core. What decides
         // is the marker that describes the work, not the one that accompanies
-        // it — so the order of the signals is the whole answer here.
+        // it. So the order of the signals is the whole answer here.
         self::assertSame(Scope::Extension, Scope::of(
             '',
             'Raise the compatibility of the third-party extension bootstrap_package '
@@ -112,9 +112,9 @@ final class ScopeTest extends TestCase
     #[Test]
     public function aPathInsideAnExtensionIsRecognisedByItsShape(): void
     {
-        // No core file is named that way from the core root: everything there
-        // is below typo3/sysext/<key>/, and what is not is below Build/Scripts/
-        // or Build/Sources/ — a bare Build/ is any repository that compiles
+        // No core file has that path from the core root. Everything there is
+        // below typo3/sysext/<key>/, and what is not is below Build/Scripts/ or
+        // Build/Sources/. A bare Build/ is any repository that compiles
         // something, so it decides nothing.
         self::assertSame(Scope::Extension, Scope::of('Classes/DataProcessing/CardGroupProcessor.php'));
         self::assertSame(Scope::Extension, Scope::of('Configuration/TCA/Overrides/200_content_element.php'));
@@ -128,8 +128,8 @@ final class ScopeTest extends TestCase
     {
         // Build/Sources/ is the backend's Sass and TypeScript from the core
         // root — and from a site package's root it is that package's build
-        // setup. What says which is the manifest at the root, which is what a
-        // checkout's kind is read from.
+        // setup. What says which is the manifest at the root, which is where a
+        // checkout's kind comes from.
         Instance::discoverFrom($this->composerProject());
 
         self::assertTrue(Scope::of('Build/Sources/Sass/theme.scss')->isOutsideTheCore());
@@ -140,9 +140,9 @@ final class ScopeTest extends TestCase
      *
      * `feedback/2026-08-25-114802` ended in a core patch to three files below
      * `Build/Scripts/` with no skill invoked at any point. The brief answered
-     * `scope: "core"`, marked its checklist core-only and named the workflow for
-     * extensions: the route reads `Scope::isCoreWork()`, whose only core path
-     * was `typo3/sysext/` — `D-SKL-080`.
+     * `scope: "core"`, marked its checklist core-only and named the workflow
+     * for extensions. The route reads `Scope::isCoreWork()`, whose only core
+     * path was `typo3/sysext/` — `D-SKL-080`.
      */
     #[Decision('D-SKL-080')]
     #[Test]
@@ -160,7 +160,7 @@ final class ScopeTest extends TestCase
         self::assertSame($sysext->data['skills'], $scripts->data['skills']);
         self::assertContains('typo3-core-patch-development', $scripts->data['skills']);
 
-        // What the layout keeps that a marker of its own would not: from a root
+        // What the layout keeps that a marker of its own would not. From a root
         // that declares an extension, `Build/Scripts/` is that extension's own
         // build setup and the core's workflow is not the one to load.
         Instance::discoverFrom($this->extensionRepository());
@@ -176,15 +176,14 @@ final class ScopeTest extends TestCase
     {
         // What TYPO3_DEV_COMPANION_ROOT is for: a core contributor points it at
         // a site installation because that is where the registered icons and
-        // the shipped labels are. Reading the last signal off the same value
-        // made it move the boundary as well, and every unmarked question about
-        // the core checkout they were standing in came back as project work —
-        // `D-SCO-005`.
+        // the shipped labels are. The last signal read off the same value moved
+        // the boundary as well. Every unmarked question about the core checkout
+        // they stood in came back as project work — `D-SCO-005`.
         $site = $this->composerProject();
         putenv(Instance::ROOT_VARIABLE . '=' . $site);
         Instance::discoverFrom($this->coreCheckout());
 
-        // What it may move: the installation being read.
+        // What it may move: the installation under read.
         self::assertSame(realpath($site), Instance::root());
         self::assertContains('my_sitepackage', array_keys(Instance::packages()));
 
@@ -196,8 +195,8 @@ final class ScopeTest extends TestCase
     /**
      * The back half of `D-SCO-005`'s first **Wrong if**: a contributor standing
      * in `typo3/sysext/backend/` names the file the way their shell does. The
-     * package layout is what such a path looks like, and it was read as
-     * somebody's extension before the checkout was consulted at all.
+     * package layout is what such a path looks like, and it read as somebody's
+     * extension before the checkout came into it at all.
      */
     #[Requirement('R-SCO-001')]
     #[Test]
@@ -219,8 +218,8 @@ final class ScopeTest extends TestCase
         self::assertSame(Scope::Extension, Scope::of('Classes/Controller/EditDocumentController.php'));
 
         // With no installation to place the session, the shape is the only
-        // evidence in the call and still answers — the rule couldBeTheCore()
-        // already follows for Build/Sources/.
+        // evidence in the call and still answers. That is the rule
+        // couldBeTheCore() already follows for Build/Sources/.
         Instance::discoverFrom(sys_get_temp_dir());
         self::assertSame(Scope::Extension, Scope::of('Classes/Controller/EditDocumentController.php'));
     }
@@ -231,10 +230,10 @@ final class ScopeTest extends TestCase
     public function theNamedInstallationIsTheEvidenceWhereNothingElseIs(): void
     {
         // The other half of the same sentence. A client that starts this server
-        // away from the session's own directory breaks the walk-up, and
-        // D-DIS-006 says the variable is what such a setup states instead — so
-        // where the walk reaches no installation it is the only evidence there
-        // is, and it answers — `D-SCO-005`.
+        // away from the session's own directory breaks the walk-up. D-DIS-006
+        // says the variable is what such a setup states instead. So where the
+        // walk reaches no installation it is the only evidence there is, and it
+        // answers — `D-SCO-005`.
         putenv(Instance::ROOT_VARIABLE . '=' . $this->coreCheckout());
         Instance::discoverFrom(sys_get_temp_dir());
 
@@ -281,8 +280,8 @@ final class ScopeTest extends TestCase
     #[Test]
     public function theDeclaredExtensionKeyPlacesAPath(): void
     {
-        // The affordance the `paths` parameter documents — an extension key
-        // counts as a path — read off the manifest where there is no
+        // The affordance the `paths` parameter documents, that an extension key
+        // counts as a path. Read off the manifest where there is no
         // installation to know the key. It sits at the rung it did, so the
         // contribution workflow in the task text is still weaker (`R-SCO-001`)
         // — `D-SCO-012`.
@@ -297,7 +296,7 @@ final class ScopeTest extends TestCase
     public function aDotfileKeepsItsDotWhenAPathIsNormalised(): void
     {
         // `ltrim($path, './')` took the dot of the dotfile with the "./" it was
-        // meant to strip, so nothing could reach the `.ddev/` entry at all —
+        // meant to strip. So nothing could reach the `.ddev/` entry at all —
         // `D-SCO-012`.
         Instance::discoverFrom(null);
 
@@ -307,11 +306,11 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * The call the feedback recorded, in the arguments it was made with.
+     * The call the feedback recorded, with its arguments.
      *
      * What it got back was four `runTests.sh` suites and a
-     * `checkExtensionScannerRst`, into a repository whose `Build/` holds two
-     * phpunit configurations and a phpstan baseline — `D-SCO-012`.
+     * `checkExtensionScannerRst`. That went into a repository whose `Build/`
+     * holds two phpunit configurations and a phpstan baseline — `D-SCO-012`.
      */
     #[Requirement('R-SCO-002')]
     #[Decision('D-SCO-012')]
@@ -365,9 +364,9 @@ final class ScopeTest extends TestCase
     #[Test]
     public function theInstructionsFitWhatAClientKeeps(): void
     {
-        // The sentence below this one is why the length is held at all: both
-        // release runs of 2026-07-31 were handed instructions cut from 3662 to
-        // 2048 characters, and the half that fell off ended with "in English" —
+        // The sentence below this one is why the length has a hold at all. Both
+        // release runs of 2026-07-31 got instructions cut from 3662 to 2048
+        // characters. The half that fell off ended with "in English" —
         // `D-AUD-011`, `D-DIS-013`.
         self::assertLessThanOrEqual(Coverage::INSTRUCTIONS_BUDGET, mb_strlen(Coverage::instructions()));
 
@@ -381,11 +380,12 @@ final class ScopeTest extends TestCase
             'instructions where the skills are stale',
         );
 
-        // The prefix naming what was excluded is measured too, because it grows
-        // with the list and a caller may exclude most of the server. The last
-        // of the four is the largest assembly there is — 1960 characters, and
-        // 2045 where the notice comes too, measured on 2026-08-24 — because the
-        // prefix naming every tool is longer than the index it replaces.
+        // The measure takes the prefix that names the exclusions too, because
+        // it grows with the list and a caller may exclude most of the server.
+        // The last of the four is the largest assembly there is: 1960
+        // characters, and 2045 where the notice comes too, measured on
+        // 2026-08-24. The prefix that names every tool is longer than the index
+        // it replaces.
         putenv(ExcludedTools::VARIABLE . '=' . implode(',', array_column(Registry::definitions(), 'name')));
         self::assertLessThanOrEqual(
             Coverage::INSTRUCTIONS_BUDGET,
@@ -403,19 +403,18 @@ final class ScopeTest extends TestCase
     #[Test]
     public function theQueryLanguageIsStatedWhereTheCallingAgentReadsIt(): void
     {
-        // The one limitation the server cannot answer its way out of: the
-        // corpus is English and the matching is lexical, so a query in another
-        // language reaches the loanwords and nothing else. Telling the agent to
+        // The one limitation the server cannot answer its way out of. The
+        // corpus is English and the match is lexical, so a query in another
+        // language reaches the loanwords and nothing else. The instruction to
         // translate is the whole mitigation, which makes the sentence
-        // load-bearing rather than decorative — and a client is free not to
-        // surface the initialize instructions, so the orientation tool says it
-        // too.
+        // structural rather than decorative. A client is free not to surface
+        // the initialize instructions, so the orientation tool says it too.
         self::assertStringContainsString('in English', Coverage::instructions());
         self::assertStringContainsString('in English', Registry::call('typo3_server_scope', [])->text);
     }
 
     /**
-     * The instructions name the tool per question rather than the tools, which
+     * The instructions name the tool per question rather than the tools. That
      * is what a client that shows a name and no schema can act on —
      * `D-AUD-011`.
      */
@@ -434,17 +433,14 @@ final class ScopeTest extends TestCase
      * `R-ANS-032`, `D-AUD-011`. The question is what the client cannot show.
      *
      * Two sessions in two projects called nothing at all under a client that
-     * lists the tools by name and defers their schemas, so a name was the whole
+     * lists the tools by name and defers their schemas. So a name was the whole
      * of what either of them had to choose on.
      *
-     * The commit guide is the third of them, `feedback/2026-08-18-113357`: six
-     * commit messages written for a sitepackage repository with the convention
-     * derived from `git log`, because "TYPO3 commit message" read as the core's
-     * Gerrit convention. So the entry says whose repository it is for.
-     *
-     * It names the branches for `feedback/2026-08-25-105141`, which read the
-     * entry, judged the core checkout's own AGENTS.md sufficient and wrote a
-     * Releases: set the guide would have corrected.
+     * The commit guide is the third of them, `feedback/2026-08-18-113357`, six
+     * commit messages for a sitepackage with the convention from `git log`. So
+     * the entry says whose repository it is for, and names the branches for
+     * `feedback/2026-08-25-105141`, which wrote a Releases: set the guide would
+     * have corrected.
      */
     #[Requirement('R-ANS-032')]
     #[Decision('D-AUD-011')]
@@ -462,12 +458,12 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * `D-AUD-007`. The corpus is reached by a call, here as everywhere else.
+     * `D-AUD-007`. A call reaches the corpus, here as everywhere else.
      *
      * The clause this displaced named the resource scheme and warned that the
-     * client may not list it, which is the whole of what six sessions were
-     * given: `feedback/2026-08-18-113425` quotes it back and reports finishing
-     * without learning that any guide exists.
+     * client may not list it. That is the whole of what six sessions got.
+     * `feedback/2026-08-18-113425` quotes it back and reports that it finished
+     * and never learned that any guide exists.
      */
     #[Decision('D-AUD-007')]
     #[Test]
@@ -490,14 +486,14 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * A caller holding two names that both take its question has the
-     * descriptions and nothing else: the initialize index is six entries
-     * against a fixed budget and carries almost none of these tools.
+     * A caller with two names that both take its question has the descriptions
+     * and nothing else. The initialize index is six entries against a fixed
+     * budget and carries almost none of these tools.
      *
-     * Which two are such a pair is a reading rather than a property of the
-     * declarations — `D-ANS-072` says what was measured against making it a
-     * check — so the pairs somebody noticed are the rows below, one row per
-     * direction, and noticing one is a step of adding a tool.
+     * Which two are such a pair is a read rather than a property of the
+     * declarations; `D-ANS-072` says what the measurement found against a
+     * check. So the pairs somebody noticed are the rows below, one row per
+     * direction. To notice one is a step of the work that adds a tool.
      */
     #[Decision('D-ANS-072')]
     #[Decision('D-AUD-018')]
@@ -516,12 +512,12 @@ final class ScopeTest extends TestCase
     public static function toolsACallerCannotChooseBetween(): iterable
     {
         // Both names read as "how does this codebase do X", and the session
-        // that could not choose grepped its checkout instead — the pair
-        // `D-ANS-072` was written on, carrying most of the corpus.
+        // that could not choose grepped its checkout instead. That is the pair
+        // behind `D-ANS-072`, and it carries most of the corpus.
         yield 'the convention lookup names the procedure lookup' => ['typo3_hint_lookup', 'typo3_rule_lookup'];
         yield 'the procedure lookup names the convention lookup' => ['typo3_rule_lookup', 'typo3_hint_lookup'];
 
-        // What a table is made of against what is in it, the pair this server
+        // What a table consists of against what is in it, the pair this server
         // gained on 2026-09-01.
         yield 'the schema lookup names the record lookup' => ['typo3_schema_lookup', 'typo3_record_lookup'];
         yield 'the record lookup names the schema lookup' => ['typo3_record_lookup', 'typo3_schema_lookup'];
@@ -546,9 +542,9 @@ final class ScopeTest extends TestCase
         yield 'the suite guide names the script lookup' => ['typo3_test_run_guide', 'typo3_script_lookup'];
         yield 'the script lookup names the suite guide' => ['typo3_script_lookup', 'typo3_test_run_guide'];
 
-        // Both read as "what about this label": one searches what is
-        // registered, the other computes the reference from a path, including
-        // for a file that is not there yet.
+        // Both read as "what about this label". One searches the registry, the
+        // other computes the reference from a path, even for a file that is not
+        // there yet.
         yield 'the label lookup names the domain lookup' => ['typo3_label_lookup', 'typo3_translation_domain_lookup'];
         yield 'the domain lookup names the label lookup' => ['typo3_translation_domain_lookup', 'typo3_label_lookup'];
 
@@ -563,10 +559,10 @@ final class ScopeTest extends TestCase
         yield 'the tracker lookup names the review lookup' => ['typo3_forge_lookup', 'typo3_gerrit_lookup'];
         yield 'the review lookup names the tracker lookup' => ['typo3_gerrit_lookup', 'typo3_forge_lookup'];
 
-        // Both answer hints for a set of paths, and a brief that changed no
+        // Both answer hints for a set of paths. A brief that changed no
         // decision beside a hint answer that would have is
-        // `feedback/2026-08-25-105324`: the guide adds the checklist, and a
-        // caller holding paths alone has the lookup.
+        // `feedback/2026-08-25-105324`. The guide adds the checklist, and a
+        // caller with paths alone has the lookup.
         yield 'the task guide names the convention lookup' => ['typo3_task_guide', 'typo3_hint_lookup'];
         yield 'the convention lookup names the task guide' => ['typo3_hint_lookup', 'typo3_task_guide'];
     }
@@ -574,17 +570,17 @@ final class ScopeTest extends TestCase
     /**
      * The room that entry was paid out of, and the reason the index is data.
      *
-     * A caller that had excluded most of the server was still told which four
-     * tools to call — the case that binds `R-ANS-013`, spending the budget on
-     * an index of tools that caller does not have — `D-AUD-011`.
+     * A caller that had excluded most of the server still heard which four
+     * tools to call. That is the case that binds `R-ANS-013`, the budget spent
+     * on an index of tools that caller does not have — `D-AUD-011`.
      */
     #[Decision('D-AUD-011')]
     #[Test]
     public function theIndexNamesNoToolTheCallerExcluded(): void
     {
-        // Read before anything is excluded: the registry answers with the list
-        // as it is filtered, so asking it afterwards would leave out the two
-        // taken away here and hand them back in the second half.
+        // Read before any exclusion. The registry answers with the filtered
+        // list. A question afterwards would leave out the two taken away here
+        // and hand them back in the second half.
         $everyTool = implode(',', array_column(Registry::definitions(), 'name'));
 
         putenv(ExcludedTools::VARIABLE . '=typo3_icon_lookup,typo3_commit_message_guide');
@@ -608,11 +604,11 @@ final class ScopeTest extends TestCase
      * The entry point claims the work that ends before a patch.
      *
      * It used to say "The coding agent writes the patch; this server supplies
-     * the task knowledge and workflows around it", and a session asked whether a
-     * 2006 bug still reproduces read that as addressed to work it was
-     * deliberately not doing, skipping the guide and saying it would make the
-     * same call again from the same wording (`D-AUD-009`). Triage, reproduction
-     * and pricing a fix are three task shapes `scenarios/` holds cases for.
+     * the task knowledge and workflows around it". A session asked whether a
+     * 2006 bug still reproduces read that as addressed to work it did not do on
+     * purpose. It skipped the guide and said it would make the same call again
+     * from the same words (`D-AUD-009`). Triage, reproduction and pricing a fix
+     * are three task shapes `scenarios/` holds cases for.
      */
     #[Decision('D-AUD-009')]
     #[Test]
@@ -649,12 +645,12 @@ final class ScopeTest extends TestCase
     /**
      * `D-SKL-062`. The same imperative covers the acts, not only the opening.
      *
-     * A core patch was carried to green with zero calls to this server
-     * (`feedback/2026-08-24-133515`), and the acts it took were named in
-     * `TaskGuide::answer()` alone — which rides on an answer nobody asked for.
+     * A core patch went to green with zero calls to this server
+     * (`feedback/2026-08-24-133515`). The acts it took stood in
+     * `TaskGuide::answer()` alone, which rides on an answer nobody asked for.
      * The instructions are the channel a session that calls nothing still
-     * reads, so the acts are said here in the short form the budget allows and
-     * in the brief in full.
+     * reads. So the acts stand here in the short form the budget allows and in
+     * the brief in full.
      */
     #[Decision('D-AUD-012')]
     #[Decision('D-SKL-062')]
@@ -691,23 +687,23 @@ final class ScopeTest extends TestCase
     public function twoPathsOfDifferentAudienceInOneCallStayApart(): void
     {
         // META-03: an extension file and a core file in one session, because
-        // the bug may be in either. Folded into one string the second path was
-        // answered for by the first, and which one won was the order they
-        // arrived in.
+        // the bug may be in either. Folded into one string, the first path
+        // answered for the second, and the order of arrival decided which one
+        // won.
         $extension = 'packages/acme_events/Classes/Domain/Repository/EventRepository.php';
         $core = 'typo3/sysext/core/Classes/Database/Query/QueryBuilder.php';
 
-        // Both orderings of one call rather than two cases: what follows is
-        // about the same pair, and a provider would run it twice to hold a
-        // symmetry that is two lines here.
+        // Both orders of one call rather than two cases. What follows is about
+        // the same pair, and a provider would run it twice to hold a symmetry
+        // that is two lines here.
         foreach ([[$extension, $core], [$core, $extension]] as $paths) {
             $decided = array_column(Scope::ofEach($paths), 'scope', 'path');
             self::assertSame(Scope::Extension, $decided[$extension], 'the core path answered for the other');
             self::assertSame(Scope::Core, $decided[$core], 'the extension path answered for the other');
         }
 
-        // The suites are the core's own, so the core path keeps them and the
-        // extension path is named as the one they are not for.
+        // The suites are the core's own, so the core path keeps them. The brief
+        // names the extension path as the one they are not for.
         $suites = Registry::call('typo3_test_run_guide', [
             'query' => 'which tests do I run for this change',
             'paths' => [$extension, $core],
@@ -730,11 +726,11 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * The third tool of `META-03`, and the one that could not answer it: the
-     * brief was composed for one `area`, so the prompt reached it as one
-     * question. It takes the paths now and places each of them, which is
-     * `D-SCO-009` — the checklist, the checks and the discovery steps stay one
-     * list, and the brief names the paths the core's own are not for.
+     * The third tool of `META-03`, and the one that could not answer it. The
+     * brief was for one `area`, so the prompt reached it as one question. It
+     * takes the paths now and places each of them, which is `D-SCO-009`. The
+     * checklist, the checks and the discovery steps stay one list, and the
+     * brief names the paths the core's own are not for.
      */
     #[Requirement('R-AUD-002')]
     #[Decision('D-SCO-009')]
@@ -754,8 +750,8 @@ final class ScopeTest extends TestCase
         self::assertSame(Scope::Extension->value, $decided[$extension]);
         self::assertSame(Scope::Core->value, $decided[$core]);
 
-        // The core path is in the call, so the core's own steps are still
-        // stated — named as being for it and not for the other.
+        // The core path is in the call, so the brief still states the core's
+        // own steps, named as for it and not for the other.
         self::assertStringContainsString($extension . ' is outside the TYPO3 core', $guide->text);
         self::assertNotSame([], $guide->data['checks']);
         self::assertStringContainsString('# For ' . $extension, $guide->text);
@@ -763,8 +759,8 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * The same call with the core path taken out: nothing in it is the core's,
-     * so the brief drops the checks rather than naming who they are for —
+     * The same call with the core path taken out. Nothing in it is the core's,
+     * so the brief drops the checks rather than names who they are for —
      * `D-SCO-009`.
      */
     #[Decision('D-SCO-009')]
@@ -808,15 +804,15 @@ final class ScopeTest extends TestCase
      * made it with.
      *
      * Read on 2026-08-02 out of `scenarios/runs/REVIEW-01.json` (`E-SITE`,
-     * server `66813e3`) and `REVIEW-02.json` (`E-EXT`, server `b5555cb`): each
+     * server `66813e3`) and `REVIEW-02.json` (`E-EXT`, server `b5555cb`). Each
      * path handed to a tool that decides an audience, with the task text of the
-     * call it arrived in, because the text is a signal and a truncated one is a
-     * different question. `config/system/settings.php` appears in two calls of
-     * `REVIEW-01` and is listed under each.
+     * call it arrived in. The text is a signal and a cut one is a different
+     * question. `config/system/settings.php` appears in two calls of
+     * `REVIEW-01` and stands under each.
      *
      * Both runs are reviews of somebody's own repository, so the expected
      * answer is `outside-core` throughout. That is the finding rather than a
-     * simplification: no recorded run has ever been made in `E-CORE`.
+     * simplification: no recorded run has ever happened in `E-CORE`.
      *
      * @return iterable<string, array{0: string, 1: string}>
      */
@@ -895,16 +891,15 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * The half of `D-AUD-001`'s **Wrong if** that holds: on everything that has
-     * actually been recorded, the single signal answers what the combination
-     * answers.
+     * The half of `D-AUD-001`'s **Wrong if** that holds: on everything on
+     * record, the single signal answers what the combination answers.
      *
-     * It has to be said what that is worth. Both runs are reviews of somebody's
-     * own repository, so every one of these decisions is `outside-core`, which
-     * is what the sysext check returns for every path without the marker. The
-     * agreement is the corpus having one side rather than the two signals
-     * reading the same evidence, and the other half of the measurement is the
-     * test below.
+     * The case has to say what that is worth. Both runs are reviews of
+     * somebody's own repository, so every one of these decisions is
+     * `outside-core`. That is what the sysext check returns for every path
+     * without the marker. The agreement is a corpus with one side rather than
+     * two signals that read the same evidence. The other half of the
+     * measurement is the test below.
      */
     #[Test]
     #[DataProvider('everyAudienceTheRecordedRunsDecided')]
@@ -923,12 +918,12 @@ final class ScopeTest extends TestCase
      * silent.
      *
      * The first eleven are what `.checkouts/14.3` has at its root, read on
-     * 2026-08-02 — its nine entries other than `typo3/`, and the two below
+     * 2026-08-02. Its nine entries other than `typo3/`, and the two below
      * `Build/` that no other repository keeps there. That is everything a
      * contributor touches which is not below `typo3/sysext/`. The three calls
-     * after them are the commoner shape: `SITE-*` and `CORE-*` prompts are
-     * sentences, and a brief is asked for before there is a file to name — so
-     * what is named is a system extension key, or nothing at all.
+     * after them are the commoner shape. `SITE-*` and `CORE-*` prompts are
+     * sentences, and the request for a brief comes before there is a file to
+     * name. So the call names a system extension key, or nothing at all.
      *
      * @return iterable<string, array{0: string, 1: string}>
      */
@@ -951,17 +946,17 @@ final class ScopeTest extends TestCase
      * The half that does not, and the reason the combining stays.
      *
      * Every row here is core work, and the sysext check calls every one of them
-     * outside the core — the marker is absent from all of them, and absence is
-     * the only thing that signal has to go on. What that costs is concrete:
+     * outside the core. The marker is absent from all of them, and absence is
+     * the only thing that signal has to go on. What that costs is concrete.
      * `Build/Scripts/runTests.sh` is the script every suite in
-     * `typo3_test_run_guide` invokes, and the contributor standing in the
-     * repository that has it would be told it is not theirs to run. The three
-     * path-less calls cost the same thing for the same reason, before there is
-     * a file to name at all.
+     * `typo3_test_run_guide` invokes. The contributor in the repository that
+     * has it would hear it is not theirs to run. The three path-less calls cost
+     * the same thing for the same reason, before there is a file to name at
+     * all.
      *
-     * Two signals carry the rows: `Build/Scripts/` and `Build/Sources/` are the
-     * core's layout where the manifest allows it to be the core, and every
-     * other row is the installation — twice through a path it knows as a system
+     * Two signals carry the rows. `Build/Scripts/` and `Build/Sources/` are the
+     * core's layout where the manifest allows it to be the core. Every other
+     * row is the installation, twice through a path it knows as a system
      * extension key, otherwise through the kind of checkout it is. So this is
      * the test a simplification fails: collapse `audienceOf` to the marker and
      * all fourteen of these turn.
@@ -1002,8 +997,8 @@ final class ScopeTest extends TestCase
         // "push" and "submit" describe maintenance work as readily as they
         // describe Gerrit. Reading one of them as a patch submission put the
         // entire core contribution workflow into an answer about a third-party
-        // extension. Nothing here says which side this is, so the intent is
-        // offered under its condition rather than stated — `D-GUI-009`,
+        // extension. Nothing here says which side this is, so the intent comes
+        // under its condition rather than as a statement — `D-GUI-009`,
         // `D-SCO-002`.
         $result = Registry::call('typo3_task_guide', [
             'task' => 'Maintain and extend the third-party TYPO3 extension bk2k/bootstrap-package for '
@@ -1017,8 +1012,8 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * A path into the core is the positive evidence a core-only intent needs,
-     * so the same words that were demoted without one match strongly with it —
+     * A path into the core is the positive evidence a core-only intent needs.
+     * So the same words that ranked low without one match strongly with it —
      * `D-SCO-002`.
      */
     #[Requirement('R-SCO-003')]
@@ -1053,15 +1048,15 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * `D-SCO-002`'s own cost, in the sharpest form it has: the session sits in
-     * a core checkout, the brief is composed for the core, and the submission
-     * intent is still offered rather than stated. That is `D-SCO-005`'s
+     * `D-SCO-002`'s own cost, in the sharpest form it has. The session sits in
+     * a core checkout and the brief is for the core. The submission intent
+     * still comes as an offer rather than a statement. That is `D-SCO-005`'s
      * ordering — the installation is the weakest evidence there is, and the
      * text says nothing about where this patch goes.
      *
-     * What keeps it cheap is that nothing is withheld. Both Gerrit steps
-     * arrive whole, each carrying a condition the contributor answers without
-     * looking anything up, so the cost is a prefix rather than a lookup.
+     * What keeps it cheap is that nothing is withheld. Both Gerrit steps arrive
+     * whole, each with a condition the contributor answers with no lookup. So
+     * the cost is a prefix rather than a lookup.
      */
     #[Requirement('R-SCO-003')]
     #[Decision('D-SCO-002')]
@@ -1082,8 +1077,8 @@ final class ScopeTest extends TestCase
         // The core's own checklist is still stated as fact around it.
         self::assertContains('Confirm the target TYPO3 core branch and issue context.', $result->data['checklist']);
 
-        // The two steps that turn on where the patch goes are prefixed, not
-        // dropped: the rule is readable without asking a second time.
+        // The two steps that turn on where the patch goes get a prefix, not a
+        // drop: the rule stays readable without a second question.
         $conditional = array_values(array_filter(
             $result->data['checklist'],
             static fn(string $entry): bool => str_starts_with($entry, 'If the patch goes to the TYPO3 core itself:'),
@@ -1096,8 +1091,8 @@ final class ScopeTest extends TestCase
     /**
      * The other half of what keeps it cheap: the condition is not something the
      * reader has to live with. Where nothing placed the work at all the brief
-     * names the question it could not answer, and naming a path is what turns
-     * the same words into a stated submission — which
+     * names the question it could not answer. A named path is what turns the
+     * same words into a stated submission, which
      * `aCorePathStillMakesTheSameWordAPatchSubmission` holds from the far side
      * — `D-SCO-002`.
      */
@@ -1122,12 +1117,12 @@ final class ScopeTest extends TestCase
 
     /**
      * `SITE-01` asks for an honest boundary where the site configuration and
-     * the installation steps are, and the first hand reading of it on
-     * 2026-08-02 found that boundary stated nowhere a caller looks first: the
-     * `site-sets` hint says configuring one installation "stops being a
-     * convention and becomes that site's decision", and orientation named
-     * neither. What is covered stays covered — the set, and how its settings
-     * resolve against the site's own.
+     * the installation steps are. The first hand read of it on 2026-08-02 found
+     * that boundary stated nowhere a caller looks first. The `site-sets` hint
+     * says the configuration of one installation "stops being a convention and
+     * becomes that site's decision", and orientation named neither. What the
+     * scope covers stays covered: the set, and how its settings resolve against
+     * the site's own.
      */
     #[Test]
     public function decidingOneSitesConfigurationIsDeclinedInTheOrientation(): void
@@ -1142,9 +1137,9 @@ final class ScopeTest extends TestCase
         self::assertStringContainsString('docs.typo3.org', $declined[0]['instead']);
         self::assertStringContainsString('typo3_project_describe', $declined[0]['instead']);
 
-        // The neighbouring subject is not declined with it: a set is a
-        // convention, and the boundary runs between the mechanism and the
-        // values one installation puts in it.
+        // The subject beside it does not go with it. A set is a convention, and
+        // the boundary runs between the mechanism and the values one
+        // installation puts in it.
         self::assertNotNull(Hints::byId('site-sets'));
         self::assertStringContainsString(
             'site set',
@@ -1154,12 +1149,12 @@ final class ScopeTest extends TestCase
 
     /**
      * The declined subject holds one question this server does answer, and it
-     * is the one asked first: the interpreter is written into the environment
-     * file before anything is installed, and `php-versions` says which. The
-     * entry sent the caller outside for all of it.
+     * is the first one a caller asks. The interpreter goes into the environment
+     * file before any install, and `php-versions` says which. The entry sent
+     * the caller outside for all of it.
      *
      * `D-SKL-012` put the environment file a repository declares on the covered
-     * side and the payload never followed; `R-KNW-072` then landed the answer
+     * side and the payload never followed. `R-KNW-072` then landed the answer
      * inside the excluded topic. What stays declined is the operating around
      * it, which is the reading `D-KNW-010` and `D-KNW-049` both took.
      */
@@ -1203,12 +1198,11 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * Denials that are false about this server, in the words they were written
-     * in.
+     * Denials that are false about this server, in their own words.
      *
-     * The half that reads the installation is what makes each of them false —
-     * `typo3_project_describe` answers `kind: core-checkout` for a core checkout
-     * and reads the commands out of its `composer.json`, and
+     * The half that reads the installation is what makes each of them false.
+     * `typo3_project_describe` answers `kind: core-checkout` for a core
+     * checkout and reads the commands out of its `composer.json`.
      * `typo3_schema_lookup` answers a table as the container assembles it.
      *
      * @var array<string, string>
@@ -1251,12 +1245,12 @@ final class ScopeTest extends TestCase
     /**
      * The exclusion a session had already acted on before it read it.
      *
-     * `feedback/2026-08-18-080743` asks that this entry survive any rewrite: a
-     * whole session went on establishing what a class declares on two majors,
-     * and the boundary said that was not this server's. Praise tests an
-     * exclusion in no way — the session did what the `instead` prescribes before
-     * the answer arrived — so what holds it is an assertion, and the `why` was
-     * read against `src/` rather than believed. `D-FBK-018`.
+     * `feedback/2026-08-18-080743` asks that this entry survive any rewrite. A
+     * whole session went on what a class declares on two majors, and the
+     * boundary said that was not this server's. Praise tests an exclusion in no
+     * way, since the session did what the `instead` prescribes before the
+     * answer arrived. So what holds it is an assertion, and the `why` stands
+     * against `src/` rather than on trust. `D-FBK-018`.
      */
     #[Test]
     public function theExclusionForPhpSourceKeepsItsQualification(): void
@@ -1272,21 +1266,22 @@ final class ScopeTest extends TestCase
         self::assertStringContainsString('@internal', $excluded[0]['topic']);
         // The only half of an exclusion a caller acts on.
         self::assertStringContainsString('Read the class', $excluded[0]['instead']);
-        // The qualification a summarising rewrite drops first, and the one that
-        // keeps the sentence true: registration files are read, and tokenised —
-        // Extension::declarationsIn() takes TCA tables, content elements and
-        // plugin signatures out of them, PhpArray and FluidNamespaces take the
-        // keys of a configuration file, Instance::typo3Version() one constant.
+        // The qualification a summary drops first, and the one that keeps the
+        // sentence true. The server reads registration files, and tokenises
+        // them. Extension::declarationsIn() takes TCA tables, content elements
+        // and plugin signatures out of them, PhpArray and FluidNamespaces take
+        // the keys of a configuration file, Instance::typo3Version() one
+        // constant.
         self::assertStringContainsString('never for a signature or an annotation', $excluded[0]['why']);
-        // What is answered beside it, so the exclusion turns a caller away from
-        // one question rather than from this server.
+        // What answers beside it, so the exclusion turns a caller away from one
+        // question rather than from this server.
         foreach (['typo3_schema_lookup', 'typo3_changelog_lookup', 'typo3_hint_lookup'] as $tool) {
             self::assertStringContainsString($tool, $excluded[0]['instead']);
         }
     }
 
     /**
-     * How the claim reads when it names who it turns away: something is put
+     * How the claim reads when it names who it turns away. It puts something
      * beyond this server, and what it names is one of the audiences below.
      *
      * @var array<int, string>
@@ -1298,9 +1293,9 @@ final class ScopeTest extends TestCase
     ];
 
     /**
-     * The two audiences it keeps arriving at the expense of, in the words they
-     * are written in. R-AUD-001 names three and the core contributor is the one
-     * nobody ever excludes, so the third is not here.
+     * The two audiences it keeps at a cost, in their own words. R-AUD-001 names
+     * three and the core contributor is the one nobody ever excludes, so the
+     * third is not here.
      *
      * @var array<int, string>
      */
@@ -1309,9 +1304,9 @@ final class ScopeTest extends TestCase
     ];
 
     /**
-     * How it reads when it names nobody: the server is confined to the core and
-     * who that leaves out is left to the reader. Two of the three sentences
-     * D-SCO-006 found were written this way, which is why the audience words
+     * How it reads when it names nobody: the server stays inside the core and
+     * who that leaves out is the reader's to work out. Two of the three
+     * sentences D-SCO-006 found had this form, which is why the audience words
      * alone would not have caught them.
      *
      * @var array<int, string>
@@ -1322,9 +1317,8 @@ final class ScopeTest extends TestCase
     ];
 
     /**
-     * The claim in the wording it was actually found in, so the matcher below
-     * is tested against something rather than only against prose that is
-     * already correct.
+     * The claim in the words of its actual find, so the matcher below meets
+     * something rather than only prose that is already correct.
      *
      * @var array<int, string>
      */
@@ -1335,13 +1329,13 @@ final class ScopeTest extends TestCase
     ];
 
     /**
-     * The three audiences are named where the server describes itself.
+     * The server names the three audiences where it describes itself.
      *
-     * The other assertion says what may not be claimed, and that is all it can
-     * say across three hundred surfaces: a hint about backend CSS names the
-     * core and nothing else, correctly. Where a reader meets the server whole —
-     * the purpose, the instructions a client is handed, the readme — the demand
-     * is the affirmative one, and `R-AUD-001` is what it is.
+     * The other assertion says what no surface may claim, and that is all it
+     * can say across three hundred surfaces. A hint about backend CSS names the
+     * core and nothing else, correctly. Where a reader meets the server whole,
+     * the purpose, the instructions a client gets, the readme, the demand is
+     * the affirmative one. `R-AUD-001` is what it is.
      */
     #[Decision('D-SCO-006')]
     #[Requirement('R-AUD-001')]
@@ -1369,12 +1363,12 @@ final class ScopeTest extends TestCase
     /**
      * The same assertion as above, in the surfaces the not-covered list is not.
      *
-     * That list is where the claim was written down last, not where it lived:
-     * the same sentence stood in a knowledge document and in the notice every
-     * tool opens with, and each was corrected on its own. `D-SCO-006` named the
-     * three surfaces no test reads, and this is that test. What is matched is
-     * wording, which is as weak as wording always is, so the three sentences the
-     * decision recorded are run through the matcher first.
+     * That list is where the claim last stood, not where it lived. The same
+     * sentence stood in a knowledge document and in the notice every tool opens
+     * with, and each got its correction on its own. `D-SCO-006` named the three
+     * surfaces no test reads, and this is that test. The match reads words,
+     * which is as weak as words always are. So the three sentences the decision
+     * recorded go through the matcher first.
      */
     #[Decision('D-SCO-006')]
     #[Requirement('R-AUD-001')]
@@ -1401,9 +1395,9 @@ final class ScopeTest extends TestCase
     /**
      * The sentences of one surface that say the core is all of it.
      *
-     * Sentence by sentence rather than over the whole text, because every
-     * surface here names the core and names an extension, and only a sentence
-     * that does both in the one construction is the claim.
+     * Sentence by sentence rather than over the whole text. Every surface here
+     * names the core and names an extension, and only a sentence that does both
+     * in the one construction is the claim.
      *
      * @return array<int, string>
      */
@@ -1440,15 +1434,14 @@ final class ScopeTest extends TestCase
     /**
      * Everywhere this server states its own boundary in prose.
      *
-     * The explanations under the not-covered list are left out and their topics
-     * are not: a `why` is where a subject that really is outside gets its
-     * reason, and the sentence that says so has to be allowed to say it. The
-     * topic line is the claim itself, and it is the one field the test above
-     * already reads.
+     * The explanations under the not-covered list stay out and their topics do
+     * not. A `why` is where a subject that really is outside gets its reason.
+     * The sentence that says so has to be free to say it. The topic line is the
+     * claim itself, and it is the one field the test above already reads.
      *
-     * The knowledge documents are left out for the same reason — they are the
-     * core's own contribution material, where "this holds for the core
-     * repository" is true rather than the claim.
+     * The knowledge documents stay out for the same reason. They are the core's
+     * own contribution material, where "this holds for the core repository" is
+     * true rather than the claim.
      *
      * @return array<string, string>
      */
@@ -1467,8 +1460,8 @@ final class ScopeTest extends TestCase
             $surfaces['the routing entry "' . $entry['when'] . '"'] = $entry['when'] . ' ' . $entry['call'];
         }
 
-        // With and without an exclusion, because the prefix naming what was
-        // left out is the sentence closest to the claim of all of them. The
+        // With and without an exclusion, because the prefix that names the
+        // exclusions is the sentence closest to the claim of all of them. The
         // variable is forgotten again by forgetTheInstance().
         $surfaces['the instructions'] = Coverage::instructions();
         putenv(ExcludedTools::VARIABLE . '=typo3_rule_lookup,typo3_script_lookup,typo3_test_run_guide');
@@ -1508,7 +1501,7 @@ final class ScopeTest extends TestCase
         );
         self::assertStringContainsString('workflow="core"', self::followUp($core, 'typo3_commit_message_guide'));
 
-        // And outside the core the call is listed bare, because the default is
+        // And outside the core the call stands bare, because the default is
         // that repository's own case since `D-GUI-010`.
         $project = Registry::call('typo3_task_guide', [
             'task' => 'Add a search to the product plugin',
@@ -1517,11 +1510,11 @@ final class ScopeTest extends TestCase
         self::assertTrue(Scope::from($project->data['scope'])->isOutsideTheCore());
         self::assertStringContainsString('typo3_commit_message_guide', implode("\n", $project->data['checklist']));
 
-        // Both halves of the same answer, because they are read at different
-        // moments: the checklist while planning, the follow-up calls at the
-        // step itself. A call listed without the workflow is the default one,
-        // and the default is this repository's case — the core is what has to
-        // be stated (`D-GUI-010`).
+        // Both halves of the same answer, because a session reads them at
+        // different moments. The checklist at the plan, the follow-up calls at
+        // the step itself. A call listed without the workflow is the default
+        // one, and the default is this repository's case. The core is what
+        // needs a statement (`D-GUI-010`).
         self::assertStringNotContainsString(
             'workflow="core"',
             self::followUp($project, 'typo3_commit_message_guide')
@@ -1544,8 +1537,8 @@ final class ScopeTest extends TestCase
     #[Test]
     public function theBriefRoutesToTheToolsItsOwnSubjectsAreAnsweredBy(): void
     {
-        // Forty label keys were invented in one session while typo3_label_lookup
-        // was never called: the pointer was in the routing table and in the
+        // One session invented forty label keys and never called
+        // typo3_label_lookup. The pointer was in the routing table and in the
         // hint, both read once, and the moment of need was hours later. The
         // brief is what a caller comes back to, so it carries them.
         $labels = Registry::call('typo3_task_guide', [
@@ -1565,11 +1558,11 @@ final class ScopeTest extends TestCase
      * The brief carries the count where the count decides something.
      *
      * The tool shipped on 2026-09-01 named in `server-scope.json` and in no
-     * intent, so `typo3_task_guide` routed to it from nothing — including the
-     * two wordings the sighting itself was made of. Measured that day over
-     * seven task shapes: not one reached it. What it decides is where records
-     * are maintained, what renders them, and what default a new column takes on
-     * the rows already there — `D-AUD-018`,
+     * intent. So `typo3_task_guide` routed to it from nothing, the two
+     * phrasings of the sighting itself included. Measured that day over seven
+     * task shapes: not one reached it. What it decides is where editors
+     * maintain records, what renders them, and what default a new column takes
+     * on the rows already there. `D-AUD-018`,
      * `feedback/archive/2026-08-31-233952`.
      */
     #[Decision('D-AUD-018')]
@@ -1577,7 +1570,7 @@ final class ScopeTest extends TestCase
     public function theBriefRoutesToTheCountWhereTheCountDecidesSomething(): void
     {
         // The sighting's own words, which matched no intent at all before the
-        // three needles were added.
+        // three needles arrived.
         $complaint = Registry::call('typo3_task_guide', [
             'task' => 'the editors complain the record list takes minutes to open',
             'changeType' => 'feature',
@@ -1586,8 +1579,8 @@ final class ScopeTest extends TestCase
         self::assertContains('backend-module', array_column($complaint->data['intents'], 'id'));
         self::assertContains('typo3_record_lookup', array_column($complaint->data['nextTools'], 'tool'));
 
-        // And the task shape the sighting was worked as, where the count is
-        // what the content model is decided on.
+        // And the task shape the sighting took, where the count is what decides
+        // the content model.
         $element = Registry::call('typo3_task_guide', [
             'task' => 'build a content element for the animal records',
             'changeType' => 'feature',
@@ -1600,9 +1593,9 @@ final class ScopeTest extends TestCase
     #[Test]
     public function aBriefOutsideTheCoreKeepsNothingThatOnlyTheCoreHas(): void
     {
-        // Saying "this is outside the core" and then listing four runTests.sh
-        // suites, a changelog file below typo3/sysext/ and the core branch
-        // policy is not a partly right answer: the flag says the brief knew.
+        // "This is outside the core" and then four runTests.sh suites, a
+        // changelog file below typo3/sysext/ and the core branch policy. That
+        // is not a partly right answer. The flag says the brief knew.
         $result = Registry::call('typo3_task_guide', [
             'task' => 'Add a data processor and an upgrade wizard to my site package',
             'paths' => ['packages/my_sitepackage/Classes/DataProcessing/CsvProcessor.php'],
@@ -1629,8 +1622,8 @@ final class ScopeTest extends TestCase
     public function aTestFileNothingPlacesIsInTheRepositoryTheCallIsIn(): void
     {
         // `Tests/Functional/` is no layout marker, so the file a session writes
-        // is placed nowhere while the class it covers is placed in an
-        // extension. The pair is one piece of work in one repository.
+        // lands nowhere while the class it covers lands in an extension. The
+        // pair is one piece of work in one repository.
         Instance::discoverFrom(null);
 
         $paths = ['Classes/Parser/AbstractParser.php', 'Tests/Functional/Parser/ScssParserTest.php'];
@@ -1656,9 +1649,9 @@ final class ScopeTest extends TestCase
     #[Test]
     public function aPathNothingPlacesIsStillAnsweredFromTheCore(): void
     {
-        // The fallback the rule above narrows and may not take: where the call
-        // places nothing at all, the core's answer is the only one there is,
-        // and the notice says which question went unanswered — `D-SCO-008`.
+        // The fallback the rule above narrows and may not take. Where the call
+        // places nothing at all, the core's answer is the only one there is.
+        // The notice says which question stayed open — `D-SCO-008`.
         Instance::discoverFrom(null);
 
         $result = Registry::call('typo3_task_guide', [
@@ -1679,8 +1672,8 @@ final class ScopeTest extends TestCase
     {
         // The route is what the caller spends its next call on, so the first
         // entry decides. typo3_test_run_guide declines for a path outside the
-        // core, and the intent's own line for it named no core artefact, so the
-        // check that drops core-only routing read nothing (`D-SCO-015`).
+        // core, and the intent's own line for it named no core artefact. So the
+        // check that drops core-only routes read nothing (`D-SCO-015`).
         $result = Registry::call('typo3_task_guide', [
             'task' => 'Add functional regression tests for the SCSS parser',
             'paths' => ['Classes/Parser/AbstractParser.php'],
@@ -1696,8 +1689,8 @@ final class ScopeTest extends TestCase
             array_column($result->data['nextTools'], 'tool'),
             'the suites it answers with are core commands, so it has nothing for these paths'
         );
-        // The rendered rules carry a route of their own, so the whole answer is
-        // read rather than the list.
+        // The rendered rules carry a route of their own, so the case reads the
+        // whole answer rather than the list.
         self::assertStringNotContainsString('typo3_test_run_guide', $result->text);
     }
 
@@ -1706,8 +1699,8 @@ final class ScopeTest extends TestCase
     #[Test]
     public function aRuleSectionOutsideTheCoreSaysWhereAConventionIsBound(): void
     {
-        // Every rendered section opens with what a range is carried by where it
-        // is not the section's own, and half of that line was a core command.
+        // Every rendered section opens with what carries a range where it is
+        // not the section's own. Half of that line was a core command.
         $result = Registry::call('typo3_rule_lookup', [
             'query' => 'how do I write tests for my site package extension',
         ]);
@@ -1723,9 +1716,9 @@ final class ScopeTest extends TestCase
     public function anExtensionDeprecationIsCommittedUnderItsOwnRepositorysConvention(): void
     {
         // The core workflow demands a Forge issue and a Releases: trailer, and
-        // the deprecation intent routed it by name. Dropping that line has to
-        // leave the tool behind rather than take it: what carries the caller is
-        // the generic candidate for the same tool, in the project wording.
+        // the deprecation intent routed it by name. A drop of that line has to
+        // leave the tool behind rather than take it. What carries the caller is
+        // the generic candidate for the same tool, in the project words.
         $result = Registry::call('typo3_task_guide', [
             'task' => 'Deprecate the old renderer method and keep a fallback',
             'paths' => ['Classes/Parser/AbstractParser.php'],
@@ -1776,19 +1769,19 @@ final class ScopeTest extends TestCase
             array_values(array_unique(array_column($result->data['scopes'], 'scope'))),
         );
         self::assertSame([], $result->data['suites']);
-        // The script is named in the sentence that explains why nothing is
-        // returned; what must not appear is a command shaped to be run.
+        // The sentence that explains why nothing comes back names the script;
+        // what must not appear is a command shaped for a run.
         self::assertStringNotContainsString('CI=true', $result->text);
         self::assertStringStartsWith('This reads as work outside the TYPO3 core', $result->text);
     }
 
     /**
-     * `D-KNW-008`: the tooling row is crossed by routing, so the tool that owns
-     * a cell names the ids of the others when the caller is not in its column.
+     * `D-KNW-008`: routes cross the tool row. So the tool that owns a cell
+     * names the ids of the others when the caller is not in its column.
      * `phpstan` and `cgl` are suites of this guide, which makes static analysis
-     * one of the things an extension arrives here asking for — and until this
-     * sentence named it, the decline sent every one of them to the two testing
-     * cells, neither of which answers what goes into a phpstan.neon.
+     * one of the things an extension arrives here to ask for. Until this
+     * sentence named it, the decline sent every one of them to the two test
+     * cells. Neither of those answers what goes into a phpstan.neon.
      */
     /** @param array<int, string> $paths */
     #[Decision('D-KNW-008')]
@@ -1830,9 +1823,9 @@ final class ScopeTest extends TestCase
     #[Test]
     public function aRuleQueryIsPointedAtTheHintCorpusItBelongsIn(): void
     {
-        // Which of the two corpora holds a subject is this server's business:
-        // site sets are an hint, the Gerrit workflow is prose, and
-        // the question is phrased the same way either way.
+        // Which of the two corpora holds a subject is this server's business.
+        // Site sets are a hint, the Gerrit workflow is prose, and the question
+        // has the same form either way.
         $result = Registry::call('typo3_rule_lookup', ['query' => 'site set settings definitions']);
 
         self::assertContains('site-sets', array_column($result->data['alsoInHints'], 'id'));
@@ -1841,9 +1834,9 @@ final class ScopeTest extends TestCase
 
     /**
      * The prose corpus is the contribution process and the commit conventions
-     * at once, and only the first half stops at the core repository. Dropping
-     * the whole tool — which is what the project profile does — takes the
-     * second half with it, and a caller writing a commit message in their own
+     * at once, and only the first half stops at the core repository. A drop of
+     * the whole tool, which is what the project profile does, takes the second
+     * half with it. A caller who writes a commit message in their own
      * repository needs exactly that.
      */
     #[Test]
@@ -1852,20 +1845,19 @@ final class ScopeTest extends TestCase
         $result = Registry::call('typo3_rule_lookup', ['query' => 'commit message sitepackage']);
 
         self::assertTrue(Scope::from($result->data['scope'])->isOutsideTheCore());
-        // The commit conventions were this corpus's transferable half until the
-        // document was read: it is the core's process throughout — Resolves,
-        // Change-Id, the changelog files — and it was labelled as holding
-        // everywhere. Outside the core the prose now answers nothing here, and
-        // what a project caller needs is a tool rather than a second copy of
-        // this page.
+        // The commit conventions were this corpus's transferable half until
+        // somebody read the document. It is the core's process throughout,
+        // Resolves, Change-Id, the changelog files, and its label said it holds
+        // everywhere. Outside the core the prose now answers nothing here. What
+        // a project caller needs is a tool rather than a second copy of this
+        // page.
         self::assertSame([], $result->data['matches']);
         self::assertStringContainsString('typo3_commit_message_guide', $result->text);
-        // That a miss on the boundary is named is held by
-        // whatARuleAnswerWithheldIsNamed, on a query that
-        // still reaches both halves. This one no longer does: since D-ANS-037
-        // put the document title among the searched fields, a query naming the
-        // commit conventions is answered by that document's own sections
-        // before a core-only one is a candidate.
+        // whatARuleAnswerWithheldIsNamed holds that a miss on the boundary gets
+        // a name, on a query that still reaches both halves. This one no longer
+        // does. Since D-ANS-037 put the document title among the searched
+        // fields, that document's own sections answer a query that names the
+        // commit conventions. A core-only one is not a candidate before them.
         foreach ($result->data['withheldDocuments'] as $document) {
             self::assertTrue(
                 Documents::isCoreOnly($document['id']),
@@ -1876,16 +1868,15 @@ final class ScopeTest extends TestCase
 
     /**
      * A thinner answer that does not say what it left out reads as "nobody
-     * wrote this down", which is the one thing it does not mean.
+     * wrote this down". That is the one thing it does not mean.
      *
-     * The query is the one that clears the coverage floor with room —
-     * `Code Style` covers 0.612 of it against a floor of 0.5 — and it is chosen
-     * that way rather than for its wording. `review readiness for my site
-     * package` stood here at 0.508, and the four sections `R-KNW-057` added
-     * about the Gerrit push took it to 0.462 without touching the section it
-     * depends on: coverage is a share of the query's weight, and a term is
-     * weighed by how few sections carry it, so anything added anywhere moves it
-     * — `D-ANS-040`.
+     * The query is the one that clears the coverage floor with room: `Code
+     * Style` covers 0.612 of it against a floor of 0.5. That is why it is here,
+     * rather than for its words. `review readiness for my site package` stood
+     * here at 0.508. The four sections `R-KNW-057` added about the Gerrit push
+     * took it to 0.462 with no touch of the section it depends on. Coverage is
+     * a share of the query's weight, and a term weighs by how few sections
+     * carry it. So anything added anywhere moves it — `D-ANS-040`.
      */
     #[Decision('D-ANS-040')]
     #[Test]
@@ -1912,9 +1903,9 @@ final class ScopeTest extends TestCase
 
     /**
      * Which of the two a document is comes from the scope rather than from a
-     * second list, so a document the coverage does not announce has no scope to
-     * read — and is served as a resource and searched by the rule lookup all
-     * the same. `core/contribution/sources` was exactly that — `D-KNW-095`,
+     * second list. So a document the coverage does not announce has no scope to
+     * read. The server serves it as a resource and the rule lookup searches it
+     * all the same. `core/contribution/sources` was exactly that — `D-KNW-095`,
      * `D-VER-007`.
      */
     #[Decision('D-KNW-061')]
@@ -1940,13 +1931,13 @@ final class ScopeTest extends TestCase
                 $named,
                 $document['id'] . ' is served and searched, and no covered topic names it',
             );
-            // Four of the five cases are legitimate for a document; `uncertain`
-            // is what a path lands in when nothing placed it, and a topic that
-            // cannot say who its document answers for has not been thought
-            // through. What the scope decides is the sentence the resource is
-            // offered under, and only one of them may claim the document holds
-            // everywhere — that claim was the default until a document answered
-            // for a package alone.
+            // Four of the five cases are legitimate for a document. `uncertain`
+            // is what a path lands in when nothing placed it. A topic that
+            // cannot say who its document answers for is not thought through.
+            // What the scope decides is the sentence the resource comes under,
+            // and only one of them may claim the document holds everywhere.
+            // That claim was the default until a document answered for a
+            // package alone.
             $scope = $named[$document['id']];
             self::assertNotSame(Scope::Uncertain, $scope);
             self::assertSame(
@@ -1962,9 +1953,9 @@ final class ScopeTest extends TestCase
 
     /**
      * The same obligation for the second resource family, and it carries more
-     * here than it does for a document: what a skill is worth outside the core
-     * is read off the coverage and nowhere else, so a published skill no topic
-     * names is offered as core-only — to every extension author who picks it.
+     * here than it does for a document. What a skill is worth outside the core
+     * comes off the coverage and nowhere else. So a published skill no topic
+     * names goes out as core-only, to every extension author who picks it.
      */
     #[Requirement('R-ANS-022')]
     #[Test]
@@ -1996,9 +1987,9 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * The scripts stay stored as the core's own and the crossing happens where
-     * the answer is composed, so a project asking for them is answered with
-     * none — `D-KNW-008`.
+     * The scripts stay on record as the core's own and the cross happens where
+     * the answer forms. So a project that asks for them gets none —
+     * `D-KNW-008`.
      */
     #[Requirement('R-SCO-005')]
     #[Decision('D-KNW-008')]
@@ -2018,8 +2009,8 @@ final class ScopeTest extends TestCase
     #[Test]
     public function aScriptAnswerSaysWhichRepositoryItsCommandsRunIn(): void
     {
-        // Nothing in this query says either way, so the commands are offered
-        // under their condition rather than stated as the answer.
+        // Nothing in this query says either way, so the commands come under
+        // their condition rather than as the answer.
         $unstated = Registry::call('typo3_script_lookup', ['task' => 'php-cs-fixer and phpstan']);
         self::assertFalse(Scope::from($unstated->data['scope'])->isOutsideTheCore());
         self::assertNotSame([], $unstated->data['matches']);
@@ -2050,11 +2041,11 @@ final class ScopeTest extends TestCase
     /**
      * D-SCO-004's named loss, run: the contributor is inside the core, on a
      * sysext path, and the two backend UI sections go anyway. That is the
-     * decision working rather than failing — the corpus behind those two is the
-     * backend interface's Sass and its --typo3-* tokens, which
-     * fluid_styled_content does not render — so what the case actually tests is
-     * that the audience does not enter into it. `Scope::isOutsideCore` was the
-     * rejected lever, and a core path is where a reinstated one would show —
+     * decision at work rather than in failure. The corpus behind those two is
+     * the backend interface's Sass and its --typo3-* tokens, which
+     * fluid_styled_content does not render. So what the case tests is that the
+     * audience does not enter into it. `Scope::isOutsideCore` was the rejected
+     * lever, and a core path is where a reinstated one would show —
      * `D-KNW-033`.
      */
     #[Requirement('R-SCO-004')]
@@ -2083,10 +2074,10 @@ final class ScopeTest extends TestCase
 
     /**
      * The other half, and the one that decides whether the notice is an escape
-     * or an apology. Withholding is only defensible while the caller it was
-     * wrong for can undo it, so the words that undo it are asserted in the
-     * notice and then used: a notice naming an escape nobody can act on reads
-     * to the caller exactly like a refusal.
+     * or an apology. A withheld answer is only defensible while the caller it
+     * was wrong for can undo it. So the case asserts the words that undo it in
+     * the notice and then uses them. A notice that names an escape nobody can
+     * act on reads to the caller exactly like a refusal.
      */
     #[Requirement('R-SCO-004')]
     #[Test]
@@ -2109,8 +2100,8 @@ final class ScopeTest extends TestCase
             $result = Registry::call('typo3_hint_lookup', ['task' => $escaped]);
 
             self::assertSame([], $result->data['withheldCategories'], $escape . ' withheld a section anyway');
-            // Either of the two the notice named, because which one ranks into
-            // the answer is the matcher's business and the escape's promise is
+            // Either of the two the notice named. Which one ranks into the
+            // answer is the matcher's business, and the escape's promise is
             // that they are candidates again.
             self::assertNotSame(
                 [],
@@ -2160,7 +2151,7 @@ final class ScopeTest extends TestCase
         self::assertArrayNotHasKey('answeredBy', $result->data);
         self::assertNotSame('', $result->data['unsupported']['reason']);
         // Not an empty list of labels: an empty list is what an installation
-        // that has none answers with, and none was asked.
+        // that has none answers with, and the call asked none.
         self::assertArrayNotHasKey('labels', $result->data);
     }
 
@@ -2183,7 +2174,7 @@ final class ScopeTest extends TestCase
     #[Test]
     public function everyCoveredTopicSaysWhatItIsWorthOutsideTheCore(): void
     {
-        // The boundary runs through the middle of this server: the installation
+        // The boundary runs through the middle of this server. The installation
         // half is a property of TYPO3 installations, the conventions transfer,
         // and only the contribution process is core-only. A caller that has to
         // work that out per tool trusts either all of it or none of it.
@@ -2193,9 +2184,9 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * Routing a question shape at the tool that answers it is worth nothing if
-     * the name has moved, and the scope is where a caller reads the name —
-     * `D-ANS-010`.
+     * A route from a question shape to the tool that answers it is worth
+     * nothing if the name has moved. The scope is where a caller reads the name
+     * — `D-ANS-010`.
      */
     #[Requirement('R-DOC-001')]
     #[Decision('D-ANS-010')]
@@ -2276,10 +2267,10 @@ final class ScopeTest extends TestCase
     /**
      * What no selection may take away.
      *
-     * `R-SCO-009` keeps this tool out of the exclusion list because it is what
-     * tells a client why its tool list is shorter than the documentation says.
-     * A selection that could hide the same thing would be that hole reopened
-     * through the arguments, so the exclusion report is not one of the sections
+     * `R-SCO-009` keeps this tool out of the exclusion list. It is what tells a
+     * client why its tool list is shorter than the documentation says. A
+     * selection that could hide the same thing would be that hole open again
+     * through the arguments. So the exclusion report is not one of the sections
      * — `D-ANS-088`.
      */
     #[Decision('D-ANS-088')]
@@ -2292,8 +2283,8 @@ final class ScopeTest extends TestCase
 
         self::assertSame(['typo3_icon_lookup'], $narrow->data['excludedTools']['names']);
         self::assertStringContainsString('typo3_icon_lookup', $narrow->text);
-        // The purpose and the statement every client is handed at initialize
-        // time: the smallest complete account of the boundary there is.
+        // The purpose and the statement every client gets at initialize time:
+        // the smallest complete account of the boundary there is.
         self::assertNotSame('', $narrow->data['purpose']);
         self::assertStringContainsString('What to call for what:', $narrow->data['instructions']);
         // And the one mitigation for a corpus nothing else can answer for.
@@ -2301,9 +2292,9 @@ final class ScopeTest extends TestCase
     }
 
     /**
-     * Naming none is the whole answer, which is the default because a caller
-     * that does not know what this server covers cannot name the part it wants
-     * — `D-ANS-087` — `D-ANS-088`.
+     * No name is the whole answer, and that is the default. A caller that does
+     * not know what this server covers cannot name the part it wants —
+     * `D-ANS-087`, `D-ANS-088`.
      */
     #[Decision('D-ANS-088')]
     #[Test]

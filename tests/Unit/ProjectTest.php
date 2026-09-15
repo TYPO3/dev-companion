@@ -23,7 +23,7 @@ use TYPO3\DevCompanion\Upkeep\Fixture;
 /**
  * What the repository around the installation consists of.
  *
- * A recommendation is worth as much as its fit: a check that this project does
+ * A recommendation is worth as much as its fit. A check that this project does
  * not declare does not exist here, whatever the core does with the same name.
  */
 final class ProjectTest extends TestCase
@@ -201,10 +201,10 @@ final class ProjectTest extends TestCase
     public function aCheckoutWhoseLockedPackagesAreNotOnDiskIsToldWhatInstallsThem(): void
     {
         // The core checkout is the one where nothing below vendor/ is not the
-        // same thing as nothing installed: its system extensions are tracked
-        // files, so `installed` is true in a clone that has never run an
-        // install — and the suite run fails for the vendor rather than for the
-        // patch either way.
+        // same thing as nothing installed. Its system extensions are files in
+        // git, so `installed` is true in a clone that has never run an install.
+        // The suite run fails for the vendor rather than for the patch either
+        // way.
         $root = $this->coreCheckout('15.0.0-dev');
         $this->lock($root, [['name' => 'symfony/yaml', 'version' => '7.3.1']]);
         Instance::discoverFrom($root);
@@ -260,11 +260,11 @@ final class ProjectTest extends TestCase
     /**
      * The one call every task opens with says which guides exist.
      *
-     * Four sessions in one week finished without learning they do: one client
+     * Four sessions in one week finished and never learned they do. One client
      * rendered no resource listing and never called `typo3_server_scope`, which
      * names them, because the task looked legible without orientation.
-     * `D-ANS-061` decided the lever is the tool a session does call, and this is
-     * that argument one step earlier — the instructions open every task with
+     * `D-ANS-061` decided the lever is the tool a session does call, and this
+     * is that argument one step earlier. The instructions open every task with
      * `typo3_project_describe`, which was the one call that session made.
      */
     #[Decision('D-GUI-012')]
@@ -280,21 +280,21 @@ final class ProjectTest extends TestCase
             array_column($answer['guides'] ?? [], 'id'),
             'the inventory is not the documents there are',
         );
-        // Last in the answer. What this tool is called for is the installation,
+        // Last in the answer. A caller calls this tool for the installation,
         // and an inventory above those facts has traded one discovery problem
         // for another.
         self::assertSame('guides', array_key_last(array_diff_key($answer, ['answeredBy' => null])));
 
         // And every entry says what the caller has to be doing for it to be the
         // page to read, in the page's own words. An id and a title were what
-        // six sessions read from four surfaces before opening none of them, and
-        // three of those read this array — `D-GUI-012`.
+        // six sessions read from four surfaces before they opened none of them.
+        // Three of those read this array — `D-GUI-012`.
         self::assertSame(
             array_column(Documents::documents(), 'whenToUse', 'id'),
             array_column($answer['guides'] ?? [], 'when', 'id'),
         );
-        // And which call takes the id, because nothing joins the three names:
-        // the field is `guides`, the argument is a `documentId`, and the tool
+        // And which call takes the id, because nothing joins the three names.
+        // The field is `guides`, the argument is a `documentId`, and the tool
         // is neither.
         self::assertSame(
             ['typo3_rule_lookup'],
@@ -342,8 +342,8 @@ final class ProjectTest extends TestCase
     public function theAnswerSaysWhatRunsTheProject(): void
     {
         // A conformance audit reported "PHP version mismatch blocks all tests"
-        // from a host at 8.3.23 against a declared ^8.4, while the suite it
-        // meant runs in a container at 8.4 and was never blocked
+        // from a host at 8.3.23 against a declared ^8.4. The suite it meant
+        // runs in a container at 8.4 and nothing blocked it
         // (feedback/2026-07-31-193611). Two machines, one number in the answer
         // — `D-KNW-055`.
         $root = $this->composerProject('vendor', '14.3.5');
@@ -376,9 +376,10 @@ final class ProjectTest extends TestCase
             'providers' => [],
         ], $project['environment']);
 
-        // And the same thing where the payload is what is read: the sentence
-        // above the list is prose, and a caller acting on the field ran the
-        // declared command into Composer's platform check (`D-ANS-126`).
+        // And the same thing where the payload is what the caller reads. The
+        // sentence above the list is prose, and a caller that acted on the
+        // field ran the declared command into Composer's platform check
+        // (`D-ANS-126`).
         self::assertSame(
             ['ddev composer test:unit'],
             array_column($project['commands'], 'invocation'),
@@ -386,8 +387,8 @@ final class ProjectTest extends TestCase
 
         $text = Registry::call('typo3_project_describe', [])->text;
         self::assertStringContainsString('PHP ^8.4 declared and 8.4 in DDEV', $text);
-        // The command list is what a task is sent to run, and nothing beside
-        // it said the shell it has is not where these run.
+        // The command list is what a task goes to run, and nothing beside it
+        // said the shell it has is not where these run.
         self::assertStringContainsString('not in the shell you have', $text);
         self::assertStringContainsString('ddev composer', $text);
 
@@ -404,14 +405,13 @@ final class ProjectTest extends TestCase
     public function theDdevProjectNamesTheSiteItsFilesDeclare(): void
     {
         // A session that had this answer and nothing else spent four shell
-        // round trips finding the name and the hostname, and one wrong attempt
-        // in between (feedback/2026-08-10-101723). All of it is in the files.
-        //
-        // The rules are DDEV's own, from `ddev config --help` and the comments
-        // its config.yaml carries: --project-name defaults to the last part of
-        // the directory name, --project-tld to ddev.site, an
-        // additional_hostnames entry gets that same tld, and an
-        // additional_fqdns entry is served as written.
+        // round trips on the name and the hostname. One wrong attempt sat in
+        // between (feedback/2026-08-10-101723). All of it is in the files. The
+        // rules are DDEV's own, from `ddev config --help` and the comments its
+        // config.yaml carries. --project-name defaults to the last part of the
+        // directory name, --project-tld to ddev.site. An additional_hostnames
+        // entry gets that same tld, and an additional_fqdns entry serves as
+        // written.
         $root = $this->composerProject();
         $this->declare($root . '/.ddev/config.yaml', <<<'YAML'
             type: typo3
@@ -440,15 +440,15 @@ final class ProjectTest extends TestCase
     public function theFloorTheInstalledCoreDeclaresIsBesideTheProjectsOwn(): void
     {
         // A session asked to declare a 14.3 extension's own `php` constraint
-        // had this answer in hand and neither of its two PHP numbers was the
-        // one: the project declared none, and the DDEV container in front of it
-        // ran 8.4. Written from that, the extension would have claimed ^8.4
-        // against a core requiring ^8.2 — two minors narrower, with every check
-        // still green — so it was read out of the vendor tree by hand instead
-        // (feedback/2026-08-04-055638, D-KNW-055). The major does not carry it:
-        // 12.4 requires ^8.1, 13.4 and 14.3 both ^8.2, main ^8.5, read in
-        // .checkouts/ and in the installed package below .environments/ alike
-        // on 2026-08-04.
+        // had this answer in hand. Neither of its two PHP numbers was the one.
+        // The project declared none, and the DDEV container in front of it ran
+        // 8.4. Written from that, the extension would have claimed ^8.4 against
+        // a core that requires ^8.2, two minors narrower, with every check
+        // still green. So the session read it out of the vendor tree by hand
+        // instead (feedback/2026-08-04-055638, D-KNW-055). The major does not
+        // carry it. 12.4 requires ^8.1, 13.4 and 14.3 both ^8.2, main ^8.5,
+        // read in .checkouts/ and in the installed package below .environments/
+        // alike on 2026-08-04.
         $root = $this->composerProject('vendor', '14.3.5');
         $this->declare($root . '/vendor/typo3/cms-core/composer.json', json_encode([
             'name' => 'typo3/cms-core',
@@ -469,10 +469,10 @@ final class ProjectTest extends TestCase
             Registry::call('typo3_project_describe', [])->text,
         );
 
-        // The other shape: a project whose own floor is above the core's. Both
-        // are stated and neither is judged against the other — a tool that
-        // reported two declarations as disagreeing would be judging rather than
-        // answering, which is D-ANS-011.
+        // The other shape: a project whose own floor is above the core's. The
+        // answer states both and judges neither against the other. A tool that
+        // reported two declarations as a disagreement would judge rather than
+        // answer, which is D-ANS-011.
         $this->manifest($root, ['require' => ['php' => '^8.4', 'typo3/cms-core' => '^14.3']]);
         Instance::discoverFrom($root);
 
@@ -498,12 +498,12 @@ final class ProjectTest extends TestCase
     #[Test]
     public function theThreePhpNumbersAreRelated(): void
     {
-        // The exact project feedback/2026-08-17-211157 was written in: ^8.3
-        // declared, a core requiring ^8.2, a container at 8.4. Above the floor
-        // it could have declared, below the interpreter every command was run
-        // on, so no line of the package was ever executed on the version it
-        // claims to support — and the answer that held all three numbers said
-        // nothing about them relating (D-ANS-082).
+        // The exact project behind feedback/2026-08-17-211157: ^8.3 declared, a
+        // core that requires ^8.2, a container at 8.4. Above the floor it could
+        // have declared, below the interpreter every command ran on. So no line
+        // of the package ever ran on the version it claims to support. The
+        // answer that held all three numbers said nothing about how they relate
+        // (D-ANS-082).
         $root = $this->composerProject('vendor', '14.3.6');
         $this->declare($root . '/vendor/typo3/cms-core/composer.json', json_encode([
             'name' => 'typo3/cms-core',
@@ -538,9 +538,9 @@ final class ProjectTest extends TestCase
     public function aFloorTheEnvironmentRunsIsSaidToBeRun(): void
     {
         // Stated even where the three agree, for the reason ProjectDescribe
-        // states the core's number where it repeats the project's own: a line
-        // the answer drops when nothing is wrong cannot be told from one it
-        // never computed (D-ANS-082).
+        // states the core's number where it repeats the project's own. A line
+        // the answer drops when nothing is wrong looks like one it never
+        // computed (D-ANS-082).
         $root = $this->composerProject('vendor', '14.3.6');
         $this->declare($root . '/vendor/typo3/cms-core/composer.json', json_encode([
             'name' => 'typo3/cms-core',
@@ -569,8 +569,9 @@ final class ProjectTest extends TestCase
     public function aFloorTheCoreRefusesAndAnEnvironmentUnderItAreBothSaid(): void
     {
         // The two shapes the other way round, and the only one of the four that
-        // is a defect rather than a choice: a project promising a PHP its own
-        // installed core will not accept, in a container that runs it anyway.
+        // is a defect rather than a choice. A project that promises a PHP its
+        // own installed core will not accept, in a container that runs it
+        // anyway.
         $root = $this->composerProject('vendor', '14.3.6');
         $this->declare($root . '/vendor/typo3/cms-core/composer.json', json_encode([
             'name' => 'typo3/cms-core',
@@ -640,12 +641,11 @@ final class ProjectTest extends TestCase
     #[Test]
     public function aDeclaredCommandSaysWhetherItStartsOnThePhpThatWouldRunIt(): void
     {
-        // The shape feedback/2026-08-18-113412 reported: a `cgl:ci` marked a
-        // check a review may run, aborting in the platform check before the
-        // fixer started, because a package installed for development alone
-        // requires a PHP the interpreter in front of it does not have. What
-        // runs says about the sources; this says whether it gets that far
-        // (D-ANS-086).
+        // The shape feedback/2026-08-18-113412 reported. A `cgl:ci` marked as a
+        // check a review may run aborted in the platform check before the fixer
+        // started. A package installed for development alone requires a PHP the
+        // interpreter in front of it does not have. What runs says about the
+        // sources; this says whether it gets that far (D-ANS-086).
         $root = $this->composerProject('vendor', '14.3.6');
         $this->manifest($root, [
             'require' => ['php' => '^8.2'],
@@ -671,9 +671,9 @@ final class ProjectTest extends TestCase
     #[Test]
     public function aBoundTheInterpreterClearsIsSaidToBeCleared(): void
     {
-        // Stated for the reason every other number here is stated where nothing
-        // is wrong: an answer that goes quiet when the commands start cannot be
-        // told from one that never read the check.
+        // Stated for the reason every other number here stands where nothing is
+        // wrong. An answer that goes quiet when the commands start looks like
+        // one that never read the check.
         $root = $this->composerProject('vendor', '14.3.6');
         $this->manifest($root, ['require' => ['php' => '^8.2'], 'scripts' => ['cgl:ci' => 'php-cs-fixer check']]);
         $this->declare($root . '/.ddev/config.yaml', "name: sitepackage\ntype: typo3\nphp_version: \"8.4\"\n");
@@ -696,10 +696,10 @@ final class ProjectTest extends TestCase
     public function whereNothingConfiguresAnEnvironmentTheBoundIsStated(): void
     {
         // The commands run in the caller's shell, and this server does not read
-        // that shell: it is not the process this answer is composed in, and a
-        // version named from here would be the one failure the bound is
-        // reported against (D-ANS-086). So the bound is stated and the one
-        // command that settles it is named.
+        // that shell. It is not the process this answer comes from, and a
+        // version named from here would be the one failure the bound reports
+        // against (D-ANS-086). So the answer states the bound and names the one
+        // command that settles it.
         $root = $this->composerProject('vendor', '14.3.6');
         $this->manifest($root, ['require' => ['php' => '^8.2'], 'scripts' => ['cgl:ci' => 'php-cs-fixer check']]);
         $this->installedRequiring($root, 80400);
@@ -720,7 +720,7 @@ final class ProjectTest extends TestCase
     public function anInstallThatBoundsNothingIsSaidToBoundNothing(): void
     {
         // Composer leaves the file out where nothing requires a PHP version and
-        // deletes it where platform-check is off, so absent has to read as no
+        // deletes it where platform-check is off. So absent has to read as no
         // bound rather than as none found.
         $root = $this->composerProject('vendor', '14.3.6');
         $this->manifest($root, ['require' => ['php' => '^8.2'], 'scripts' => ['cgl:ci' => 'php-cs-fixer check']]);
@@ -739,10 +739,10 @@ final class ProjectTest extends TestCase
     public function theNodeThoseNpmCommandsRunOnIsStatedBesideThem(): void
     {
         // feedback/2026-08-18-113501: five sixths of a sitepackage maintenance
-        // session were Node, npm and GitHub Actions work, and the defect was
-        // the machine and CI running different releases of one Node major. The
-        // composer half of the command list has carried its interpreter since
-        // R-PRJ-008; the npm half beside it said nothing (D-SCO-013).
+        // session were Node, npm and GitHub Actions work. The defect was the
+        // machine and CI on different releases of one Node major. The composer
+        // half of the command list has carried its interpreter since R-PRJ-008;
+        // the npm half beside it said nothing (D-SCO-013).
         $root = $this->composerProject('vendor', '14.3.6');
         $this->declare($root . '/package.json', json_encode([
             'engines' => ['node' => '^24.0.0'],
@@ -785,9 +785,9 @@ final class ProjectTest extends TestCase
             'relation' => [
                 'declared' => '24',
                 'declaredBy' => '.nvmrc',
-                // Only the segments both files spell are compared: a pin naming
-                // a major and a workflow naming a patch level agree wherever
-                // the major does.
+                // The comparison reads only the segments both files write. A
+                // pin that names a major and a workflow that names a patch
+                // level agree wherever the major does.
                 'nvmrcAgainstEngines' => Project::SAME,
                 'inEnvironment' => Project::BELOW,
                 'ci' => '24.19.0',
@@ -802,8 +802,8 @@ final class ProjectTest extends TestCase
         self::assertStringContainsString('The environment runs 20, below it.', $text);
         self::assertStringContainsString('- .github/workflows/ci.yml — node-version: 24.19.0', $text);
         // What it may not claim, for the reason the PHP relation may not claim
-        // it: nothing here was run, and the interpreter the caller's own shell
-        // has is in none of these files.
+        // it. Nothing here ran, and the interpreter the caller's own shell has
+        // is in none of these files.
         self::assertStringContainsString('Nothing was run to find it out', $text);
     }
 
@@ -814,9 +814,9 @@ final class ProjectTest extends TestCase
     {
         // The third Wrong if of D-SCO-013: a resolved wrong number carries this
         // server's authority, which is worse than the silence it replaced. A
-        // matrix entry, a file and a step that states nothing are each handed
-        // back as the workflow writes them — and two workflows naming different
-        // versions are a disagreement no single relation states.
+        // matrix entry, a file and a step that states nothing each come back as
+        // the workflow writes them. Two workflows that name different versions
+        // are a disagreement no single relation states.
         $root = $this->composerProject('vendor', '14.3.6');
         $this->declare($root . '/package.json', json_encode([
             'engines' => ['node' => '>=20.9.0'],
@@ -876,10 +876,10 @@ final class ProjectTest extends TestCase
     public function aRepositoryThatDeclaresNoNodeIsSaidToDeclareNone(): void
     {
         // The silence is the finding: npm commands are in the list above, and
-        // what runs them is whatever the shell has. An .nvmrc naming an alias
-        // is the second state and not the same one — there is a file to open,
-        // and what it resolves to is nvm's download list rather than anything
-        // here.
+        // what runs them is whatever the shell has. An .nvmrc that names an
+        // alias is the second state and not the same one. There is a file to
+        // open, and what it resolves to is nvm's download list rather than
+        // anything here.
         $root = $this->composerProject('vendor', '14.3.6');
         $this->declare($root . '/package.json', json_encode([
             'scripts' => ['build' => 'grunt build'],
@@ -926,11 +926,10 @@ final class ProjectTest extends TestCase
     #[Test]
     public function theManifestBelowBuildIsReadWhereTheRepositoryKeepsItThere(): void
     {
-        // The TYPO3 layout keeps the frontend build one directory down, and
-        // the core has no root package.json at all on any covered branch: read
-        // from the root alone, such a repository had no npm command in the
-        // list and no Node under it, and nothing said which of the two it was
-        // (D-SCO-014).
+        // The TYPO3 layout keeps the frontend build one directory down, and the
+        // core has no root package.json at all on any covered branch. Read from
+        // the root alone, such a repository had no npm command in the list and
+        // no Node under it. Nothing said which of the two it was (D-SCO-014).
         $root = $this->composerProject('vendor', '14.3.6');
         $this->declare($root . '/Build/package.json', json_encode([
             'engines' => ['node' => '>=24.14.0 <25.0.0'],
@@ -941,7 +940,7 @@ final class ProjectTest extends TestCase
 
         $project = Project::describe();
 
-        // npm run reads the manifest of the directory it is called in, so the
+        // npm run reads the manifest of the directory it runs in, so the
         // command carries the prefix that points it at this one.
         self::assertSame(
             [['command' => 'npm --prefix Build run build', 'source' => 'Build/package.json',
@@ -966,10 +965,10 @@ final class ProjectTest extends TestCase
     #[Test]
     public function anNpmCommandOnACoreCheckoutNamesTheDispatcherThatOwnsIt(): void
     {
-        // The pointer stood in the paragraph above the list since 2026-08-04
-        // and a session read past it to the list, then reported the dispatcher
-        // as absent. The entries are the half a caller parses, so the mark is
-        // on the entry — `D-ANS-152`.
+        // The pointer stood in the paragraph above the list since 2026-08-04. A
+        // session read past it to the list, then reported the dispatcher as
+        // absent. The entries are the half a caller parses, so the mark is on
+        // the entry — `D-ANS-152`.
         $root = $this->coreCheckout('15.0.0-dev');
         $this->declare($root . '/Build/package.json', json_encode([
             'scripts' => ['build' => 'grunt', 'lint' => 'grunt lint'],
@@ -1012,11 +1011,11 @@ final class ProjectTest extends TestCase
     #[Test]
     public function twoManifestsDeclaringOneNameAreTwoCommandsThatCanBeToldApart(): void
     {
-        // What made the second location worth deciding rather than assuming: a
-        // repository declaring a build in both manifests would have had one
-        // name for two commands. The prefix is what settles which is meant, and
-        // it is what the core's own runTests.sh puts in front of its playwright
-        // scripts — `D-SCO-014`.
+        // What made the second location worth a decision rather than an
+        // assumption. A repository that declares a build in both manifests
+        // would have had one name for two commands. The prefix is what settles
+        // which is meant, and it is what the core's own runTests.sh puts in
+        // front of its playwright scripts — `D-SCO-014`.
         $root = $this->composerProject('vendor', '14.3.6');
         $this->declare($root . '/package.json', json_encode([
             'scripts' => ['build' => 'vite build'],
@@ -1033,9 +1032,9 @@ final class ProjectTest extends TestCase
             ['npm run build', 'npm --prefix Build run build'],
             array_column($project['commands'], 'command'),
         );
-        // The root manifest states no engines, so the one below it answers —
-        // and the answer names the file rather than leaving the caller to
-        // assume the root's.
+        // The root manifest states no engines, so the one below it answers. The
+        // answer names the file rather than leaves the caller to assume the
+        // root's.
         self::assertSame('Build/package.json', $project['node']['enginesIn']);
         self::assertSame('Build/package.json', $project['node']['relation']['declaredBy']);
     }
@@ -1045,7 +1044,7 @@ final class ProjectTest extends TestCase
     public function aVersionTheEnvironmentDoesNotStateIsNotAVersionItDoesNotHave(): void
     {
         // DDEV takes php_version as major.minor and falls back to the default
-        // of the DDEV that is installed — a number these files do not carry and
+        // of the installed DDEV. That is a number these files do not carry and
         // one release changes from the next. Guessing it here would be the one
         // failure this whole field exists against: a stated version that is not
         // the one running.
@@ -1075,11 +1074,11 @@ final class ProjectTest extends TestCase
     public function theAnswerStatesWhatTheEnvironmentRunsWithoutBeingAsked(): void
     {
         // A boot of a demo site read its schema update, its extension setup and
-        // its backend user out of .ddev/config.yaml by hand, beside an answer
-        // that had opened the same file for one PHP version and reported one
-        // composer script — feedback/2026-08-03-154501, R-PRJ-009. Every task
-        // type DDEV v1.25.1 supports is here, because which of them a hook uses
-        // decides where its command runs.
+        // its backend user out of .ddev/config.yaml by hand. That was beside an
+        // answer that had opened the same file for one PHP version and reported
+        // one composer script — feedback/2026-08-03-154501, R-PRJ-009. Every
+        // task type DDEV v1.25.1 supports is here, because which of them a hook
+        // uses decides where its command runs.
         $root = $this->composerProject();
         $this->declare($root . '/.ddev/config.yaml', <<<'YAML'
             name: site-new
@@ -1109,7 +1108,7 @@ final class ProjectTest extends TestCase
                 // around it rather than a task that states none.
                 ['stage' => 'post-start', 'command' => 'ls -lR /var/www/html', 'service' => 'web'],
                 // A block is several lines in one shell and nothing stops it at
-                // the first failure, so ";" is the join and "&&" would not be.
+                // the first failure. So ";" is the join and "&&" would not be.
                 ['stage' => 'post-import-db', 'command' => 'bin/typo3 extension:setup; bin/typo3 cache:flush', 'service' => 'web'],
                 ['stage' => 'post-import-db', 'command' => 'mysql -e "SELECT 1"', 'service' => 'db'],
                 ['stage' => 'post-pull', 'command' => 'ddev restart', 'service' => null],
@@ -1122,13 +1121,13 @@ final class ProjectTest extends TestCase
         self::assertStringContainsString('runs without being asked', $text);
         self::assertStringContainsString('- post-start, in the web container: composer install', $text);
         // The two that are not the web container, and the pair that would read
-        // as the same machine if only the command were carried.
+        // as the same machine if the answer carried the command alone.
         self::assertStringContainsString('- post-import-db, in the db container: mysql -e "SELECT 1"', $text);
         self::assertStringContainsString('- post-pull, on the host: ddev restart', $text);
 
         // A DDEV project that declares none says so. An answer that names no
-        // hook reads as "there is none" whether this looked or not, which is
-        // the silence the environment field already exists against.
+        // hook reads as "there is none" whether this looked or not. That is the
+        // silence the environment field already exists against.
         $bare = $this->composerProject();
         $this->declare($bare . '/.ddev/config.yaml', "name: bare\ntype: typo3\n");
         Instance::discoverFrom($bare);
@@ -1145,8 +1144,8 @@ final class ProjectTest extends TestCase
     public function aHookAConfigBesideTheBaseOneTakesAwayIsNotStillReported(): void
     {
         // DDEV merges hooks per stage across config.yaml and every
-        // config.*.yaml beside it, and override_config: true replaces instead —
-        // per stage, and only for the stages the file carrying it names.
+        // config.*.yaml beside it. override_config: true replaces instead, per
+        // stage, and only for the stages the file that carries it names.
         // Measured against DDEV v1.25.1 through `ddev debug configyaml` on
         // 2026-08-03. Reading the base file alone would state a lifecycle the
         // container does not run.
@@ -1168,7 +1167,7 @@ final class ProjectTest extends TestCase
             'a merged stage concatenates in filename order, which is the order the container runs it in',
         );
 
-        // The same project with the stage taken away again, which is what a
+        // The same project with the stage taken away again. That is what a
         // developer's own config.local.yaml is for and the one shape a merge
         // cannot express.
         $this->declare($root . '/.ddev/config.zzz.yaml', "override_config: true\nhooks:\n    post-start: []\n");
@@ -1187,8 +1186,8 @@ final class ProjectTest extends TestCase
     {
         // The other half of the demo site's import: pre-pull fetches the zip,
         // `ddev pull dump` copies the dump out of it, post-pull clears up. DDEV
-        // writes nine recipes of its own into every project, so listing them
-        // all would report ten integrations in a project that has one — and
+        // writes nine recipes of its own into every project. A list of them all
+        // would report ten integrations in a project that has one.
         // #ddev-generated is DDEV's own statement of which those are, the
         // signature it replaces the file by while the marker is there.
         $root = $this->composerProject();
@@ -1218,8 +1217,8 @@ final class ProjectTest extends TestCase
 
         $text = Registry::call('typo3_project_describe', [])->text;
         self::assertStringContainsString('- ddev pull dump (.ddev/providers/dump.yaml)', $text);
-        // A recipe with no push command is one nothing can be pushed upstream
-        // with, and the difference is worth the word.
+        // A recipe with no push command is one nothing can push upstream with,
+        // and the difference is worth the word.
         self::assertStringContainsString('- ddev pull live, ddev push live (.ddev/providers/live.yaml)', $text);
         self::assertStringNotContainsString('acquia', $text);
     }
@@ -1230,10 +1229,9 @@ final class ProjectTest extends TestCase
     public function anEnvironmentThatIsNotDdevIsSaidToBeUnread(): void
     {
         // A stated console is how a layout this server could not work out gets
-        // named at all, and it is evidence that the installation is reached
-        // somewhere other than this shell. Answering null there would say
-        // "these run where you are", which is the claim that went wrong —
-        // `D-KNW-055`.
+        // a name at all. It is evidence that the installation answers somewhere
+        // other than this shell. Answering null there would say "these run
+        // where you are", which is the claim that went wrong — `D-KNW-055`.
         $root = $this->composerProject();
         $this->manifest($root, ['scripts' => ['ci' => 'phpunit']]);
         putenv(Typo3Cli::CONSOLE_VARIABLE . '=docker compose exec web bin/typo3');
@@ -1267,14 +1265,14 @@ final class ProjectTest extends TestCase
     }
 
     /**
-     * Each site is named with the base and the root page it carries.
+     * Each site comes with the base and the root page it carries.
      *
      * Two feedback from one session name that pair as what gave a frontend 404
-     * its shape before a file was opened — `2026-08-18-074305` and
+     * its shape before the first file open. `2026-08-18-074305` and
      * `2026-08-18-074200`, on an installation whose second site had base `/`
-     * and a root page that was gone. `base` and `rootPageId` are required keys
-     * of `ProjectDescribe::outputSchema()`; the sentence that carries them was
-     * in no assertion.
+     * and a root page that was gone. `base` and `rootPageId` stand in the
+     * required list of `ProjectDescribe::outputSchema()`. The sentence that
+     * carries them was in no assertion.
      */
     #[Test]
     public function everySiteIsNamedWithTheBaseAndTheRootPageItCarries(): void
@@ -1328,14 +1326,14 @@ final class ProjectTest extends TestCase
     #[Test]
     public function theRepositoryIsDescribedBeforeAnythingIsInstalledInIt(): void
     {
-        // The clone of `github.com/TYPO3GmbH/blog` feedback/2026-08-18-070333
-        // was recorded in: no vendor directory, no .build/, no config/. The
-        // whole answer was gated on Composer's installed metadata, so the one
-        // call this server prescribes first came back with `no-installation`
-        // and nothing else — and the session read composer.json, package.json
-        // and .ddev/config.yaml out of the checkout by hand, in the state the
-        // installation workflow declares as its entry condition (`D-ANS-085`) —
-        // `D-DIS-019`.
+        // The clone of `github.com/TYPO3GmbH/blog` behind
+        // feedback/2026-08-18-070333: no vendor directory, no .build/, no
+        // config/. The whole answer stood behind Composer's installed metadata,
+        // so the one call this server prescribes first came back with
+        // `no-installation` and nothing else. The session read composer.json,
+        // package.json and .ddev/config.yaml out of the checkout by hand. That
+        // is the state the installation workflow declares as its entry
+        // condition (`D-ANS-085`) — `D-DIS-019`.
         $root = $this->temporaryDirectory();
         file_put_contents($root . '/composer.json', json_encode([
             'name' => 't3g/blog',
@@ -1362,9 +1360,9 @@ final class ProjectTest extends TestCase
             array_column($project['commands'], 'command'),
         );
 
-        // What the installed tree owns stays withheld, and the answer says
-        // which state it is in rather than leaving a null and an empty list to
-        // read as an installation that has neither.
+        // What the installed tree owns stays back. The answer says which state
+        // it is in rather than leaves a null and an empty list to read as an
+        // installation that has neither.
         self::assertNull($project['typo3Version']);
         self::assertNull($project['corePhpConstraint']);
         self::assertSame([], $project['extensions']);
@@ -1382,9 +1380,9 @@ final class ProjectTest extends TestCase
     public function aRepositoryThatSaysNothingAboutTypo3IsNotDescribedAsOne(): void
     {
         // The other half of the same rule. The walk goes up twelve directories,
-        // so admitting any composer.json would answer for whatever PHP
-        // repository a session happens to be standing below — and this tool is
-        // the one every task opens with — `D-DIS-019`.
+        // so any composer.json admitted would answer for whatever PHP
+        // repository a session happens to stand below. This tool is the one
+        // every task opens with — `D-DIS-019`.
         $root = $this->temporaryDirectory();
         file_put_contents($root . '/composer.json', json_encode([
             'name' => 'acme/toolkit',
@@ -1410,9 +1408,9 @@ final class ProjectTest extends TestCase
         self::assertStringContainsString('testing suites do not', $text);
         // Nothing here runs a core suite, so there is nothing to point at:
         // runTests.sh is not in this repository. Read of the half that is about
-        // this repository, because the guides below it are the same corpus in
-        // every answer and `core/testing/scripts` names that tool in the
-        // sentence saying it holds inside a core checkout.
+        // this repository. The guides below it are the same corpus in every
+        // answer. `core/testing/scripts` names that tool in the sentence that
+        // says it holds inside a core checkout.
         self::assertStringNotContainsString('typo3_test_run_guide', self::aboutThisRepository($text));
     }
 
@@ -1422,10 +1420,10 @@ final class ProjectTest extends TestCase
     public function whatACoreCheckoutDoesNotDeclareIsSaidWithTheToolThatHasIt(): void
     {
         // The four gerrit hook installers are the whole of what a core checkout
-        // declares, and the sentence beside them said the suites are not among
-        // them and named nothing that has them. A session read that, went
-        // looking by hand, and reported preferring a `Build/bin/phpunit` the
-        // checkout has no directory for — `D-ANS-031`.
+        // declares. The sentence beside them said the suites are not among them
+        // and named nothing that has them. A session read that, went looking by
+        // hand, and reported preferring a `Build/bin/phpunit` the checkout has
+        // no directory for — `D-ANS-031`.
         $root = $this->coreCheckout('15.0.0-dev');
         $this->manifest($root, ['scripts' => ['gerrit:setup' => 'Acme\\Scripts::install']]);
         Instance::discoverFrom($root);
@@ -1448,12 +1446,11 @@ final class ProjectTest extends TestCase
     }
 
     /**
-     * The same sentence for every repository that is not the core, which it
-     * had for none of them. A session in an extension repository spent eight
-     * round trips working out what `composer test:php:functional` needed —
-     * credentials, an account that may create a database per test class, and
-     * which PHP the run is on — while this answer listed the command and said
-     * none of it (`D-ANS-092`).
+     * The same sentence for every repository that is not the core, which it had
+     * for none of them. A session in an extension repository spent eight round
+     * trips on what `composer test:php:functional` needed. Credentials, an
+     * account that may create a database per test class, and which PHP the run
+     * is on. This answer listed the command and said none of it (`D-ANS-092`).
      */
     #[Decision('D-ANS-092')]
     #[Test]
@@ -1490,11 +1487,11 @@ final class ProjectTest extends TestCase
     #[Test]
     public function aDeclaredCommandSaysWhetherRunningItChangesTheSources(): void
     {
-        // Three recorded REVIEW-02 runs were told not to change files and ran
-        // none of the fifteen commands they were offered — among them a
-        // php-cs-fixer line and a phplint line that change nothing. A name
-        // cannot carry that: cgl and cgl:ci are the same tool one flag apart,
-        // so the body is what is read.
+        // Three recorded REVIEW-02 runs had the order to change no files and
+        // ran none of the fifteen commands on offer. Among them a php-cs-fixer
+        // line and a phplint line that change nothing. A name cannot carry
+        // that: cgl and cgl:ci are the same tool one flag apart, so the body is
+        // what the reader reads.
         $root = $this->composerProject();
         $this->manifest($root, ['scripts' => [
             'cgl' => ['php-cs-fixer --diff -v fix'],
@@ -1523,8 +1520,9 @@ final class ProjectTest extends TestCase
             // It runs the project's own code, and no declaration says what that
             // writes. Undeclared is not a quiet no.
             'composer test:php:unit' => Project::RUNS_UNDECLARED,
-            // A reference is followed, so a wrapper is worth what it wraps —
-            // and a script that reaches one undeclared line is undeclared.
+            // The reader follows a reference, so a wrapper is worth what it
+            // wraps. A script that reaches one line without a declaration has
+            // none itself.
             'composer lint' => Project::RUNS_AS_CHECK,
             'composer test' => Project::RUNS_UNDECLARED,
             'composer set-version' => Project::RUNS_AS_CHANGE,
@@ -1541,9 +1539,10 @@ final class ProjectTest extends TestCase
     #[Test]
     public function aCommandThatDeclaresNothingReadableIsNotCalledSafe(): void
     {
-        // The failure that matters is the other direction: a body nobody can
+        // The failure that matters is the other direction. A body nobody can
         // read reported as a check would send a review into a script that
-        // rewrites the checkout it was told to leave alone.
+        // rewrites the checkout. That is the checkout it had the order to leave
+        // alone.
         $root = $this->composerProject();
         $this->manifest($root, ['scripts' => [
             'shell' => ["find src -name '*.php' -print0 | xargs -0 -n1 php -l"],
@@ -1573,11 +1572,11 @@ final class ProjectTest extends TestCase
     #[Test]
     public function anEnvironmentAssignmentInFrontOfACommandIsNotTheCommand(): void
     {
-        // The `news` run of 2026-07-31 was offered six commands and told
-        // `unknown` about all six. `PHP_CS_FIXER_IGNORE_ENV=1` is the documented
-        // way to run the fixer on a PHP it does not claim support for yet, so
-        // the shape is common in exactly the repositories that span two majors —
-        // and read as the tool, it makes `cs` and `csfix` the same answer.
+        // The `news` run of 2026-07-31 got six commands on offer and `unknown`
+        // about all six. `PHP_CS_FIXER_IGNORE_ENV=1` is the documented way to
+        // run the fixer on a PHP it does not claim support for yet. So the
+        // shape is common in exactly the repositories that span two majors.
+        // Read as the tool it makes `cs` and `csfix` the same answer.
         $root = $this->composerProject();
         $this->manifest($root, ['scripts' => [
             'cs' => ['PHP_CS_FIXER_IGNORE_ENV=1 php ./.Build/bin/php-cs-fixer fix --dry-run -v --config ./Build/php-cs-fixer.php ./'],
@@ -1611,13 +1610,13 @@ final class ProjectTest extends TestCase
     #[Test]
     public function aCommandThatWritesIsNeverReportedAsACheck(): void
     {
-        // `D-EVI-003` is wrong if a run reports a checkout modified by a command
-        // marked `check` — and by the time a run reports it, the checkout it
-        // was told to leave alone is modified. So the writers are listed here
-        // instead. Each of them rewrites what it is pointed at, and `check` is
-        // the one answer none of them may have, because it is the answer a
-        // review acts on unasked. `unknown` is not a failure: a body nobody can
-        // read is allowed to be undecided.
+        // `D-EVI-003` is wrong if a run reports a checkout changed by a command
+        // marked `check`. By the time a run reports it, the checkout it had the
+        // order to leave alone has changed. So the writers stand here instead.
+        // Each of them rewrites what it points at. `check` is the one answer
+        // none of them may have, because it is the answer a review acts on
+        // without a question. `unknown` is not a failure: a body nobody can
+        // read may stay undecided.
         $writes = [
             'php-cs-fixer --diff -v fix',
             'php-cs-fixer fix --config Build/php-cs-fixer.php',
@@ -1640,7 +1639,7 @@ final class ProjectTest extends TestCase
             'git checkout -- .',
             'rm -rf var/cache',
             // The writer is not always in front. A line chains, every command
-            // on it runs, and an npm script chains by convention — read as its
+            // on it runs, and an npm script chains by convention. Read as its
             // first tool, each of these is the check that precedes the write.
             'phpstan analyse && php-cs-fixer fix',
             'php-cs-fixer fix --dry-run && rector process src',
@@ -1661,8 +1660,8 @@ final class ProjectTest extends TestCase
             array_keys(array_filter($answers, static fn(string $runs): bool => $runs === Project::RUNS_AS_CHECK)),
             'a command that rewrites the sources was offered to a task told not to change files',
         );
-        // The other direction of the same reading, so that "chained" does not
-        // become an answer of its own: a line that chains two checks is one.
+        // The other direction of the same read, so that "chained" does not
+        // become an answer of its own. A line that chains two checks is one.
         self::assertSame(
             Project::RUNS_AS_CHECK,
             Project::runs('phpstan analyse && phplint -c Build/phplint.yml'),
@@ -1698,8 +1697,8 @@ final class ProjectTest extends TestCase
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare($extension . '/Configuration/TCA/tx_acme_event.php', "<?php\nreturn ['ctrl' => []];\n");
-        // Numbered, because that is what fixes the order overrides load in —
-        // so the file name says nothing and the table has to be read.
+        // Numbered, because that is what fixes the order overrides load in. So
+        // the file name says nothing and the reader has to read the table.
         $this->declare(
             $extension . '/Configuration/TCA/Overrides/102_tt_content.php',
             "<?php\n\$GLOBALS['TCA']['tt_content']['columns']['header']['label'] = 'x';\n"
@@ -1751,8 +1750,8 @@ final class ProjectTest extends TestCase
         self::assertContains('ext_localconf.php', $result->data['files']);
         self::assertSame(Project::ORIGIN_PROJECT, $result->data['origin']);
 
-        // What is declared is here; what ext_localconf.php does at runtime is
-        // not, and the answer says so rather than letting it be assumed.
+        // The declarations are here; what ext_localconf.php does at runtime is
+        // not, and the answer says so rather than leaves it to an assumption.
         self::assertStringContainsString('not what it does at runtime', $result->text);
     }
 
@@ -1787,9 +1786,9 @@ final class ProjectTest extends TestCase
     public function everyDirectoryBelowClassesIsInTheAnswer(): void
     {
         // Thirteen recognised names left Classes/Utility/ in no line of the
-        // answer, and the audit that trusted the section never opened the one
-        // class that decided its question — R-ANS-020. A file lying directly
-        // in Classes/ was dropped the same way.
+        // answer. The audit that trusted the section never opened the one class
+        // that decided its question — R-ANS-020. A file directly in Classes/
+        // fell out the same way.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare($extension . '/Classes/EventListener/LoginTourEventListener.php', "<?php\n");
@@ -1825,7 +1824,7 @@ final class ProjectTest extends TestCase
     public function aFluidRootIsRenderedAsADirectory(): void
     {
         // The audited extension of feedback/2026-08-03-164651 declares no root
-        // at all: it appends its layout root to setLayoutRootPaths() while an
+        // at all. It appends its layout root to setLayoutRootPaths() while an
         // event runs, and got the line an extension that declares one gets.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
@@ -1846,9 +1845,9 @@ final class ProjectTest extends TestCase
     #[Test]
     public function theContentElementsAnExtensionAddsAreNamed(): void
     {
-        // "It extends tt_content" says where they are registered. What a
-        // sitepackage question is about is which ones — and both item shapes
-        // are in use, because an extension is written for the line it supports.
+        // "It extends tt_content" says where their registration is. What a
+        // sitepackage question is about is which ones. Both item shapes are in
+        // use, because an extension targets the line it supports.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare(
@@ -1904,7 +1903,7 @@ final class ProjectTest extends TestCase
         );
         self::assertSame(['tt_content'], $result->data['tcaOverrides']);
         // An item of another field is a value in that field, not a content
-        // element — not even when the TypoScript renders one under that name.
+        // element. Not even when the TypoScript renders one under that name.
         self::assertNotContains('acme_quiet', array_column($result->data['contentElements'], 'identifier'));
         self::assertStringContainsString('acme_teaser — renders through Teaser', $result->text);
         self::assertStringContainsString('at runtime, takes from a constant', $result->text);
@@ -1914,10 +1913,10 @@ final class ProjectTest extends TestCase
     #[Test]
     public function aContentElementRegisteredWithAddRecordTypeIsFoundAsWell(): void
     {
-        // The call that carries no table in front of it: since 13.4 the
+        // The call that carries no table in front of it. Since 13.4 the
         // registration is one addRecordType() whose table argument is the fifth
-        // and defaults to tt_content — and it is written in a file per element,
-        // so the file name is the one thing that must not be believed.
+        // and defaults to tt_content. It stands in a file per element, so the
+        // file name is the one thing the reader must not believe.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare(
@@ -1982,12 +1981,12 @@ final class ProjectTest extends TestCase
     #[Test]
     public function anExtbasePluginIsToldApartFromAnElementWithoutATemplate(): void
     {
-        // An audit of a real sitepackage on 2026-07-31 was told both of its
-        // plugins had "no templateName in this extension's TypoScript" and
-        // wrote a finding about two TypoScript files nobody was going to write:
+        // An audit of a real sitepackage on 2026-07-31 heard that both of its
+        // plugins had "no templateName in this extension's TypoScript". It
+        // wrote a finding about two TypoScript files nobody would write.
         // configurePlugin() generates the rendering definition, and the
-        // plugin's own templates are configured under plugin.tx_<signature> —
-        // D-ANS-015 — `D-ANS-018`.
+        // plugin's own templates stand under plugin.tx_<signature> — D-ANS-015
+        // — `D-ANS-018`.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare(
@@ -2052,10 +2051,10 @@ final class ProjectTest extends TestCase
     public function anIdentifierThatTookADetourThroughAVariableIsStillRead(): void
     {
         // A forward review of a real sitepackage on 2026-07-31 was told the
-        // extension had three content elements. It had four: the fourth wrote
+        // extension had three content elements. It had four. The fourth wrote
         // `$contentType = '…'` at the top of its override and used the variable
         // in the item, and the parser only saw literals. A tool that answers
-        // three when there are four is worse than one that declines — the
+        // three when there are four is worse than one that declines. The
         // session that trusts it concludes the template is dead code.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
@@ -2105,12 +2104,12 @@ final class ProjectTest extends TestCase
     {
         // A conformance audit of a real sitepackage described its two elements
         // least of all four, and those two were the ones whose FlexForm nothing
-        // opened: the file that says what the element is configured by was in
-        // no answer. All three bindings core writes are here, because an
-        // extension supporting two majors ships more than one of them — the
-        // third argument of addPiFlexFormValue() until v14.3, where it is
-        // deprecated, and the data structure argument of addPlugin() and
-        // registerPlugin() from v14.2 — `D-ANS-019`.
+        // opened. The file that says what configures the element was in no
+        // answer. All three bindings core writes are here, because an extension
+        // that supports two majors ships more than one of them. The third
+        // argument of addPiFlexFormValue() until v14.3, which deprecates it,
+        // and the data structure argument of addPlugin() and registerPlugin()
+        // from v14.2 — `D-ANS-019`.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare(
@@ -2154,15 +2153,15 @@ final class ProjectTest extends TestCase
     #[Test]
     public function aFlexFormBoundThroughACallThisDoesNotReadIsStillReported(): void
     {
-        // A binding is read by one parser and the identifiers by another, and
-        // the second does not recognise every call the first does. Where they
-        // disagree the binding is reported rather than dropped: a FlexForm read
-        // and then not mentioned is the same silence as one never opened.  The
-        // example used to be registerPlugin(), whose signature this reads out
-        // of a variable while the element list did not carry it. It carries it
-        // now — that half arrived on its own branch the same day — so the case
-        // is made with a content type nothing in the file registers, which is
-        // what is left of the disagreement this guards — `D-ANS-019`.
+        // One parser reads a binding and another the identifiers, and the
+        // second does not recognise every call the first does. Where they
+        // disagree the binding goes into the report rather than out. A FlexForm
+        // read and then not mentioned is the same silence as one never opened.
+        // The example used to be registerPlugin(), whose signature this reads
+        // out of a variable while the element list did not carry it. It carries
+        // it now, since that half arrived on its own branch the same day. So
+        // the case uses a content type nothing in the file registers, which is
+        // what remains of the disagreement this guards — `D-ANS-019`.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare(
@@ -2198,7 +2197,7 @@ final class ProjectTest extends TestCase
     public function aSiteSetIsAnsweredByTheFilesCoreReadsItFor(): void
     {
         // "Site sets: acme/site (Configuration/Sets/Acme/)" names the directory
-        // and says nothing about what is in it, so a route enhancer shipped in
+        // and says nothing about what is in it. So a route enhancer shipped in
         // a set was in no answer this server gives. Core reads the directory
         // for a fixed list of names, and which of them are there is what the
         // set carries — `D-ANS-019`.
@@ -2236,12 +2235,12 @@ final class ProjectTest extends TestCase
     #[Test]
     public function aFormSetIsAnsweredWithTheDefinitionsItStores(): void
     {
-        // Since v14.2 a directory below Configuration/Form/ carrying a
-        // config.yaml is collected from every active extension and registered
-        // nowhere, so nothing in the file tree says the form definitions beside
-        // it are loaded at all. The way before it registers a YAML file through
-        // this extension's own TypoScript, which is read from the same place
-        // the content element templates are — `D-ANS-019`.
+        // Since v14.2 the core collects a directory below Configuration/Form/
+        // with a config.yaml from every active extension, and nothing registers
+        // it. So nothing in the file tree says the form definitions beside it
+        // load at all. The way before it registers a YAML file through this
+        // extension's own TypoScript. That comes from the same place the
+        // content element templates do — `D-ANS-019`.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare(
@@ -2288,8 +2287,9 @@ final class ProjectTest extends TestCase
                     'name' => null,
                     'registeredBy' => 'typoscript',
                     'storagePaths' => ['EXT:my_sitepackage/Resources/Private/Legacy/'],
-                    // The storage is declared and the directory is not there:
-                    // a form nothing stores is the finding, not a shorter list.
+                    // The declaration names the storage and the directory is
+                    // not there: a form nothing stores is the finding, not a
+                    // shorter list.
                     'formDefinitions' => [],
                 ],
             ],
@@ -2306,11 +2306,11 @@ final class ProjectTest extends TestCase
     #[Test]
     public function aRegistrationBuiltInALoopIsNotDeterminable(): void
     {
-        // The `news` run of 2026-07-31 was told the extension registers 26
-        // icons, two of which are `provider` and `source`: its Icons.php builds
-        // the list in a foreach, and the literal describing a single icon sits
-        // at the same bracket depth as the returned one. Two plausible names are
-        // worse than none — a review comparing them against
+        // The `news` run of 2026-07-31 heard that the extension registers 26
+        // icons, two of which are `provider` and `source`. Its Icons.php builds
+        // the list in a foreach. The literal that describes a single icon sits
+        // at the same bracket depth as the returned one. Two plausible names
+        // are worse than none — a review comparing them against
         // Resources/Public/Icons reports two missing files nobody is missing.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
@@ -2353,9 +2353,10 @@ final class ProjectTest extends TestCase
             'a list only running the loop would give is not determinable, and an empty answer reads as that',
         );
         self::assertSame(['acme_events'], $result->data['backendModules']);
-        // An empty section is left out of the answer, so nothing above tells
+        // An empty section stays out of the answer. So nothing above tells
         // "there is no Icons.php" from "there is one and it is a foreach". The
-        // file that came back empty is named, and the one that was read is not.
+        // answer names the file that came back empty, and not the one the
+        // parser read.
         self::assertSame(['Configuration/Icons.php'], $result->data['notReadStatically']);
         self::assertStringContainsString('Nothing could be read statically from Configuration/Icons.php', $result->text);
     }
@@ -2365,9 +2366,9 @@ final class ProjectTest extends TestCase
     public function theFilesThatRegisterByRunningAreSaidToBeUnread(): void
     {
         // notReadStatically names a declaration file the parser could not
-        // follow, and `bootstrap_package` has none — so a session read its
-        // empty list as nothing more to read, while ext_localconf.php was
-        // registering a global Fluid namespace it was never told about.
+        // follow, and `bootstrap_package` has none. So a session read its empty
+        // list as nothing more to read, while ext_localconf.php registered a
+        // global Fluid namespace nothing told it about.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare(
@@ -2382,9 +2383,9 @@ final class ProjectTest extends TestCase
         $result = Registry::call('typo3_extension_describe', ['extension' => 'my_sitepackage']);
 
         self::assertSame([], $result->data['fluidNamespaces']);
-        // The file is not a casualty of the degradation: no reading of it ever
-        // produced a section, so it is said where the answer states its
-        // boundary rather than beside the files that came back empty.
+        // The file is not a casualty of the degradation. No read of it ever
+        // produced a section. So it stands where the answer states its boundary
+        // rather than beside the files that came back empty.
         self::assertSame([], $result->data['notReadStatically']);
         self::assertStringContainsString('ext_localconf.php is named above and read by nothing here', $result->text);
         self::assertStringContainsString('a global Fluid namespace it sets is in none of the lists above', $result->text);
@@ -2395,10 +2396,10 @@ final class ProjectTest extends TestCase
     public function whatTheInstallationHasBeatsWhatTheFilesCouldBeReadFor(): void
     {
         // The same extension the parser answered for, with the installation
-        // booted: the icons its loop builds, the table it adds from PHP and the
-        // content element whose value came out of a variable are all in TCA and
-        // in the registry, and each carries the EXT: reference that says whose
-        // they are. The file half of the answer is unchanged.
+        // booted. The icons its loop builds, the table it adds from PHP and the
+        // content element whose value came out of a variable. All are in TCA
+        // and in the registry. Each carries the EXT: reference that says whose
+        // they are. The file half of the answer stays the same.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare($extension . '/Configuration/TCA/tx_acme_event.php', "<?php\nreturn ['ctrl' => []];\n");
@@ -2444,7 +2445,7 @@ final class ProjectTest extends TestCase
     public function aPluginTheInstallationReportsIsStillToldApart(): void
     {
         // Where the answer comes from the booted installation, the CType list
-        // is one list for every extension and says nothing about what kind of
+        // is one list for every extension. It says nothing about what kind of
         // registration put an entry in it. The call that says so is in the
         // override file either way, which is the only place core allows it —
         // `D-ANS-018`.
@@ -2485,11 +2486,11 @@ final class ProjectTest extends TestCase
     public function whatAnExtensionDoesNotShipIsAnswered(): void
     {
         // Three forward reviews of the same site package missed that it has no
-        // manual, because there is no file to trip over: `find` cannot list a
+        // manual, because there is no file to trip over. `find` cannot list a
         // document nobody wrote. The same three read its XLF headers and none
         // reported the German source language. Both are facts about the files,
-        // both are cheap, and neither is discoverable by reading further — so
-        // they are told rather than left to be found — `D-KNW-055`.
+        // both are cheap, and no further read discovers either. So the answer
+        // says them rather than leaves them to a search — `D-KNW-055`.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare($extension . '/Tests/Unit/SomeTest.php', "<?php\n");
@@ -2522,15 +2523,15 @@ final class ProjectTest extends TestCase
         );
         self::assertStringContainsString('Ships: manual none, readme none, tests Unit, language files 1', $result->text);
         self::assertStringContainsString('source-language de, translated into de', $result->text);
-        // The fact is here; whether it is allowed to be German is not.
+        // The fact is here; whether German is acceptable is not.
         self::assertStringContainsString('not what it should declare', $result->text);
 
         // The absence, in the text as well as in the data. It was in the data
-        // alone until D-FBK-018: the three above are rendered present or absent
-        // and the language files were rendered only where there were some, so
-        // the one artifact the reporting session was praising was the one an
-        // extension shipping none said nothing about. The fixture's system
-        // extension is the package that ships none of the four.
+        // alone until D-FBK-018. The three above render present or absent, and
+        // the language files rendered only where there were some. So the one
+        // artifact the report praised was the one an extension with none said
+        // nothing about. The fixture's system extension is the package that
+        // ships none of the four.
         $bare = Registry::call('typo3_extension_describe', ['extension' => 'core']);
 
         self::assertSame(
@@ -2547,10 +2548,10 @@ final class ProjectTest extends TestCase
     public function anAbsentArtifactNamesTheWorkflowThatOwnsIt(): void
     {
         // A session read manual: null, readme: null and tests: [] twice, wrote
-        // three READMEs by hand and shipped no test at all — while holding the
-        // closing sentence of the skill it was following, which names both of
-        // these workflows. The name arrives on the object it was already
-        // looking at instead — D-SKL-053.
+        // three READMEs by hand and shipped no test at all. It held the last
+        // sentence of the skill it followed, which names both of these
+        // workflows. The name arrives on the object it was already looking at
+        // instead — D-SKL-053.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         Instance::discoverFrom($root);
@@ -2575,7 +2576,7 @@ final class ProjectTest extends TestCase
         );
 
         // Nothing where the extension ships all three, because the name hangs
-        // on the absence: an answer about registrations does not carry a route
+        // on the absence. An answer about registrations does not carry a route
         // to a workflow that has nothing left to do here.
         $this->declare($extension . '/Documentation/Index.rst', "=====\nTitle\n=====\n");
         $this->declare($extension . '/Tests/Unit/SomeTest.php', "<?php\n");
@@ -2593,11 +2594,11 @@ final class ProjectTest extends TestCase
      * The orientation answer carries the same verdict, unasked.
      *
      * `feedback/2026-08-24-140421` held `ExtensionDescribe::description()`
-     * complete and in context under a deferring client — the deprecated-files
-     * verdict named in full, the four files and the predicate each turns on —
-     * and made no call. Naming the call again was the alternative and it is the
-     * one that had already failed, so the verdict moves to the call the
-     * instructions open every task with.
+     * complete and in context under a client that defers schemas, and made no
+     * call. That is the deprecated-files verdict named in full, the four files
+     * and the predicate each turns on. A second name for the call was the
+     * alternative and it is the one that had already failed. So the verdict
+     * moves to the call the instructions open every task with.
      */
     #[Decision('D-ANS-009')]
     #[Test]
@@ -2605,8 +2606,9 @@ final class ProjectTest extends TestCase
     {
         $root = $this->composerProject();
         $this->declare($root . '/packages/my_sitepackage/ext_tables.php', "<?php\n");
-        // A dependency shipping the same file is its maintainer's to fix, so it
-        // is not read: what this block is for is what somebody here can change.
+        // A dependency that ships the same file is its maintainer's to fix, so
+        // the check does not read it. What this block is for is what somebody
+        // here can change.
         $this->declare($root . '/vendor/acme/other/ext_tables.php', "<?php\n");
         $installed = (array) json_decode((string) file_get_contents($root . '/vendor/composer/installed.json'), true);
         $installed['packages'][] = [
@@ -2627,8 +2629,8 @@ final class ProjectTest extends TestCase
         self::assertStringNotContainsString('other/ext_tables.php', $result->text);
         self::assertStringContainsString('From v15.0 nothing reads the file', $result->text);
 
-        // And where nothing fired, the block says so rather than being absent —
-        // an answer that volunteers deprecations read as a compatibility
+        // And where nothing fired, the block says so rather than goes absent.
+        // An answer that volunteers deprecations read as a compatibility
         // verdict is this entry's second **Wrong if**.
         $clean = $this->composerProject();
         Instance::discoverFrom($clean);
@@ -2643,13 +2645,13 @@ final class ProjectTest extends TestCase
     public function theDeprecatedFilesBlockNamesEveryPredicateItLookedAt(): void
     {
         // The audit of 2026-08-03 got this block for ext_emconf.php alone and
-        // could not tell from it that ext_tables.php had been checked too, so
-        // it confirmed the absent sibling by hand. The block closed on "these
-        // two entries whole" — a set of two rendered as one entry, naming
-        // neither file. What the check covers is a fixed list, so the sentence
-        // names it; a file that did not fire gets no line of its own, which
-        // under this heading would read as the compatibility verdict D-ANS-009
-        // keeps out of the empty case.
+        // could not tell from it that the check had covered ext_tables.php too.
+        // So it confirmed the absent sibling by hand. The block closed on
+        // "these two entries whole" — a set of two rendered as one entry,
+        // naming neither file. What the check covers is a fixed list, so the
+        // sentence names it. A file that did not fire gets no line of its own.
+        // Under this heading that would read as the compatibility verdict
+        // D-ANS-009 keeps out of the empty case.
         $root = $this->composerProject();
         $extension = $root . '/packages/my_sitepackage';
         $this->declare($extension . '/ext_emconf.php', "<?php\n\$EM_CONF[\$_EXTKEY] = [];\n");
@@ -2658,7 +2660,7 @@ final class ProjectTest extends TestCase
         $result = Registry::call('typo3_extension_describe', ['extension' => 'my_sitepackage']);
 
         // One entry, because the package ships none of the other three — the
-        // case that was reported.
+        // reported case.
         self::assertSame(['ext_emconf.php'], array_column($result->data['deprecatedFiles'], 'file'));
         self::assertStringContainsString(
             'Four predicates are checked: ext_tables.php, ext_emconf.php, ext_icon.svg/.png/.gif, and '
@@ -2690,8 +2692,8 @@ final class ProjectTest extends TestCase
      * and what it does not.
      *
      * The reported session rebuilt `tt_content.shortcut` and a `Generic`
-     * template and neither appeared anywhere in the answer, so a session
-     * inheriting the repository would read it as six elements and delete two
+     * template, and neither appeared anywhere in the answer. So a session that
+     * inherits the repository would read it as six elements and delete two
      * files nothing points at — `D-ANS-149`.
      */
     #[Decision('D-ANS-149')]
@@ -2777,9 +2779,9 @@ tt_content.shortcut {
     /**
      * The kind of file a repository ships and checks nothing of.
      *
-     * A sitepackage with one hand-written stylesheet and no linter for it had
-     * to be told so by its owner, and everything the finding needs was already
-     * in this answer — `D-ANS-148`.
+     * A sitepackage with one hand-written stylesheet and no linter for it
+     * needed its owner to say so. Everything the finding needs was already in
+     * this answer — `D-ANS-148`.
      */
     #[Decision('D-ANS-148')]
     #[Test]
@@ -2798,7 +2800,7 @@ tt_content.shortcut {
 
         $project = Project::describe();
 
-        // PHP is declared as checked and the stylesheet is not.
+        // PHP has a check on record and the stylesheet does not.
         self::assertSame(['CSS'], $project['uncheckedKinds']);
 
         $text = Registry::call('typo3_project_describe', [])->text;

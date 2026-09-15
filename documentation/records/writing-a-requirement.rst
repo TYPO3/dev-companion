@@ -23,7 +23,7 @@ quietly share a number.
 * `task-skills/ <../../requirements/task-skills/readme.md>`__ — What an
   installed workflow owes the task
 * `project/ <../../requirements/project/readme.md>`__ — The repository the
-  caller is standing in
+  caller stands in
 * `scope/ <../../requirements/scope/readme.md>`__ — Core conventions where they
   apply, and nowhere else
 * `guides/ <../../requirements/guides/readme.md>`__ — What a returned draft is

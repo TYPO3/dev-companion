@@ -68,7 +68,7 @@ installation's declared autoloader path into it, and hands it to
     <interpreter> -r 'eval(base64_decode("<payload>"));'
 
 
-Three details are load-bearing, and each of them cost a measurement:
+Three details carry weight, and each of them cost a measurement:
 
 * **The interpreter comes from the resolved console.** Directly it is the PHP
   that satisfied the installation's platform requirement. Under DDEV it is
@@ -100,7 +100,7 @@ State            What it means                                                  
 ===============  ================================================================  ===================================================================
 
 
-**Failsafe is the state worth knowing.** ``Bootstrap::init()`` turns it on when
+**Failsafe is the state to know.** ``Bootstrap::init()`` turns it on when
 ``checkIfEssentialConfigurationExists()`` fails, which is the ordinary condition
 of an extension repository. ``composer install`` has run, there is no
 ``settings.php``, and there is no database. Every registry still answers,
@@ -150,5 +150,5 @@ of the boot itself runs by hand against a set-up installation:
     '
 
 
-A site with an extension that registers dynamically is what makes the check
-worth running: if its identifiers are in the topic, the container answered.
+A site with an extension that registers at runtime is what makes the check worth
+a run. If its identifiers are in the topic, the container answered.

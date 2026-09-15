@@ -68,12 +68,12 @@ Renumbering one
 
     bin/cli decisions:renumber <decision> [<number>]
 
-Two sessions reading one ``main`` write one id, and the second one to come home
-moves. The dangerous half is the move rather than the collision, so the command
-splits the references in two. It rewrites everything whose own line names the
-entry's file: the entry, its name, every link, and the reference definitions the
-generated listings end with. It prints everything else with its file, its line
-and its text.
+Two sessions that read one ``main`` write one id, and the second one to come
+home moves. The dangerous half is the move rather than the collision, so the
+command splits the references in two. It rewrites everything whose own line
+names the entry's file: the entry, its name, every link, and the reference
+definitions the generated listings end with. It prints everything else with its
+file, its line and its text.
 
 **What it prints is what needs a read, one at a time.** A bare id says nothing
 about which entry it means, and both wrong pointers on record were one. A
@@ -160,7 +160,7 @@ What an entry holds
   shape. A read of the corpus for it on 2026-08-22 returned thirty-five titles
   of which one had drifted. The rest were the affirmative "A is B, not C", which
   states what is and then excludes. A check would report those thirty-four every
-  time, so what keeps this is somebody rereading the title before the commit.
+  time, so what keeps this is a second read of the title before the commit.
 * The **bold first sentence** is the decision. A reader who stops after it knows
   the decision. Everything under it is what settled it.
 * The sections are a fixed set, in that order: **Evidence**, **Decided**,
@@ -171,8 +171,8 @@ What an entry holds
   thing and a fifth rest on more than one assumption. That is why these are
   sections and not a bullet that repeats its own label.
 * ``readings`` lists the days somebody went back to the entry and found nothing
-  to change, newest last. A reading that did change something is a dated section
-  instead, and the two are never both written for one day.
+  to change, newest last. A read that did change something is a dated section
+  instead, and nobody writes both for one day.
 * ``coveredBy`` lists the tests that would catch a fired **Wrong if**, and it is
   **generated**. The test declares ``#[Decision('D-DIS-004')]`` and
   ``bin/cli decisions:cover`` writes the front matter from every such attribute.
@@ -185,7 +185,7 @@ What an entry holds
   does, the attribute is what turns the promise into something the suite keeps.
   It is also what a failed test prints, so the session that made it red lands
   here. A test that declares an id no entry has fails the check as well. Every
-  test an entry names in passing has to exist, see
+  test an entry names, even aside, has to exist, see
   ``DecisionsTest::everyTestADecisionNamesExists``.
 * It is front matter rather than a section because it is data. A listing counts
   it, a check reads it, and a failed test prints it. Where nothing can hold an
@@ -204,10 +204,10 @@ somebody went back and it held, **Revoked on ``<date>``** where it did not.
 boundary that moved. What does not fit is not prose to trim. It is a finding,
 and it belongs in **Decided**, in **Wrong if**, or in an entry of its own.
 
-**A reading that changed nothing is a date and no section.** It goes into
+**A read that changed nothing is a date and no section.** It goes into
 ``readings:`` in the front matter, newest last, because that is all such a read
 says. Somebody went back to the entry, and when. Going ``confirmed`` or
-``revoked`` is a change and keeps its section; every later reading of the same
+``revoked`` is a change and keeps its section; every later read of the same
 entry is a date under it.
 
 ``bin/cli decisions:check`` counts the sections over the measure and fails on
@@ -243,8 +243,8 @@ and the successor is what a reader builds on.
 The successor is a new entry rather than a rewrite of the old one, and the
 reason deserves precision. Its **Wrong if** is a different list. What can go
 wrong now is a book that moves, and what could go wrong before was a book that
-is missing. Rewriting the old entry would throw away the finding while keeping
-its number, and nothing afterwards could tell the two apart.
+is gone. A rewrite of the old entry would throw away the finding and keep its
+number, and nothing afterwards could tell the two apart.
 
 Revoking takes the tests with it. A test that declares a revoked entry claims to
 hold something this server says it no longer does. So
@@ -255,9 +255,9 @@ is the measure behind that. Of the eleven revoked entries a test declared, nine
 named a test the successor already carried and one named a test that disproves
 it.
 
-``confirmed`` stays what it is for: an entry whose statement survives the
-reading. A decision about the shape of an answer, or about which source answers
-a question, stays as true after a visit as before. That is the ordinary case.
+``confirmed`` stays what it is for: an entry whose statement survives the read.
+A decision about the shape of an answer, or about which source answers a
+question, stays as true after a visit as before. That is the ordinary case.
 
 What rests on one
 -----------------
@@ -276,7 +276,7 @@ Most decisions are open and stay that way, which is what makes the state easy to
 overlook. A **Wrong if** nobody reads is a promise, and nothing says when to
 keep it. ``bin/cli unresolved:list`` counts them and names the oldest nobody has
 been back to. Not because age disproves anything, but because that is the entry
-the repository has moved furthest away from since. Going back to one and adding
+the repository has moved furthest away from since. To go back to one and add
 **Confirmed on** or **Revoked on** is a legitimate task with no feature behind
 it.
 

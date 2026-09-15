@@ -11,7 +11,7 @@ What a caller can ask it, and where each answer comes from.
 * :doc:`resources/ <resources/index>` — the other surface a client gets, the one
   a user picks out of a list rather than calls mid-task.
 * :doc:`answer-sources` — the five sources an answer can come from, and what
-  each one needs to be running before it can.
+  each one needs up before it can.
 * :doc:`knowledge-base` — what ships in ``knowledge/``, which is where almost
   every answer comes from.
 * :doc:`versions` — how a statement that holds for some TYPO3 versions and not

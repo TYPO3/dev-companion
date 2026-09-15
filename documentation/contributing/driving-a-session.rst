@@ -14,8 +14,8 @@ true of the launch.
 
 * **The build that is current.** A client that also ships inside an editor keeps
   its own binary there. The one on ``PATH`` can be an old release pinned to a
-  model that has since retired. It then fails looking like the work failing
-  rather than the client being wrong, which is the expensive way round.
+  model that has since retired. It then fails, and the failure looks like the
+  work's rather than the client's, which is the expensive way round.
 * **A session id the caller chose.** That is what makes the transcript findable
   afterwards. A session started without one still does the work. Nobody can
   grade it, and for a forward run the grade is the point.
@@ -35,8 +35,8 @@ standard input, and ``TODO_SESSION_ID`` is in the environment. The command
 supplies the three things a command can supply, and the flags that pass them
 stay the client's. That is why the file is the machine's and gitignored.
 
-Approving the tool calls without asking is the point of a session nobody is
-watching. The permission layer switched off altogether is not the way to reach
+Approval of the tool calls without a question is the point of a session nobody
+watches. The permission layer switched off altogether is not the way to reach
 it. A client may refuse the launch outright, and a session that never started is
 not a result.
 

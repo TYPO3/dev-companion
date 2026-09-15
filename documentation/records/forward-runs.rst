@@ -7,7 +7,7 @@ a session carries one out.
 
 .. image:: ../images/forward-run.svg
     :zoomable:
-        :alt: A recorded scenario runs in a clean real project without steering.
+        :alt: A recorded scenario runs in a clean real project with no steer.
           It produces a transcript and a read of the working tree. A judge
           holds it to fixed criteria, and reusable findings leave as feedback
           or a contract case.
@@ -19,7 +19,7 @@ Running one
    with the skills published there as they are in this checkout right now. It
    need not be a person at the keyboard. A client driven non-interactively is
    the same evidence, as long as it gets the prompt and nothing else. What such
-   a launch has to get right — the session id the grading later needs among it —
+   a launch has to get right — the session id the judge later needs among it —
    is :doc:`../contributing/driving-a-session`.
    `todo/reference/ <../../todo/reference/>`_ says which checkout plays which
    environment on this machine, and how to reach the client there. A recorded
@@ -32,8 +32,8 @@ Running one
 3. Paste the prompt verbatim. Add nothing: no tool names, no hints that a TYPO3
    knowledge server is there, no correction when the agent goes the wrong way.
    What the agent does with an under-specified request is part of the measure.
-4. Let the review reach its own stopping point. Do not steer it toward a known
-   subsystem or finding.
+4. Let the review reach its own stop. Do not steer it toward a known subsystem
+   or finding.
 5. Run ``git status`` in the environment afterwards, and record what it says.
    The review itself may not write, which is
    `D-EVI-003 <../../decisions/evidence/evi-003-a-review-runs-the-checks-that-cannot-change-the-code.md>`_
@@ -43,11 +43,12 @@ Running one
    `D-DIS-005 <../../decisions/discovery/dis-005-a-registry-with-no-console-command-is-read-by-booting-the-installation.md>`_
    watches for. The registry lookups answer with a boot of the installation in a
    subprocess. A boot that writes outside the cache is the symptom that decision
-   named and cannot hold itself. Start from a clean tree so the reading means
-   something, and note what was already modified where it is not. The transcript
-   carries the other half of the same **Wrong if**. A lookup that answers
-   ``answeredBy: packages`` against an installation that was up and configured
-   is a boot that did not finish. A 90-second gap in front of it is the timeout.
+   named and cannot hold itself. Start from a clean tree so the read means
+   something, and note what somebody had modified where it is not. The
+   transcript carries the other half of the same **Wrong if**. A lookup that
+   answers ``answeredBy: packages`` against an installation that was up and
+   configured is a boot that did not finish. A 90-second gap in front of it is
+   the timeout.
 
 6. Grade against **What has to come out of it** and **How it fails**. Write the
    judgment and its evidence into the recorded run, together with the skills
@@ -66,7 +67,7 @@ The grade comes from the transcript, not from what the session felt like. The
 client stores it as JSONL, one file per session, so which skills activated and
 which tools the session called are evidence rather than recollection. A handful
 of the answer's findings are worth a second check against the checkout before
-the judgment. Grading an answer and grading a claim are two different things.
+the judgment. To grade an answer and to grade a claim are two different things.
 
 * **Judge against the criteria as written**, not against how much better this
   run was than the last. Three ``REVIEW-01`` runs in a row scored four of five
@@ -76,7 +77,7 @@ the judgment. Grading an answer and grading a claim are two different things.
 * **Judge the verdict a finding puts on top of its evidence.** A run can get
   every path, count and line right and still call a design decision a defect.
   ``REVIEW-02`` was ``partial`` on its first run and ``covered`` on its second
-  with the same reading underneath.
+  with the same read underneath.
 * **A tool a judgment quotes is one the trace carries.**
   ``bin/cli scenarios:check`` prints every tool name in a run's evidence that
   its own trace has no call for. It prints them under the table and outside the
@@ -122,7 +123,7 @@ one repository. File each answer where the recurring work already walks:
   it the model the run ran as, because what a run teaches about behaviour
   belongs to that model and not to the next one.
 * A new contract case, when the session exposes a repeatable task or failure
-  shape worth holding directly. That is the more valuable outcome of the two.
+  shape worth a direct hold. That is the more valuable outcome of the two.
 
 Whoever judged the run writes both of those, from the transcript. When the run
 happened in an agent whose transcript nobody here can read, the session is the
@@ -146,8 +147,8 @@ A run that hangs
 ----------------
 
 Treat it as a defect in this server until something else is proven. A client
-waiting on a tool call that will never return looks exactly like a client
-thinking hard, and neither side reports anything.
+that waits on a tool call that never returns looks exactly like a client that
+thinks hard, and neither side reports anything.
 
 Measure before theorising. Constant CPU time and a still ``rchar`` in
 ``/proc/<pid>/io`` mean idle rather than busy. No TCP socket in

@@ -8,8 +8,8 @@ What this server offers for a pick, and what a picker chooses by.
 ``Factory::skillReferences()`` the one template behind it;
 `Sdk\ResourceHandler <../../../src/Sdk/ResourceHandler.php>`_ and
 `Sdk\SkillReferenceHandler <../../../src/Sdk/SkillReferenceHandler.php>`_ answer
-a read. Everything offered is a file this package ships, so reading one reaches
-no installation and no network.
+a read. Everything offered is a file this package ships, so a read of one
+reaches no installation and no network.
 
 The :doc:`tool surface <../tools/index>` is the other thing a client gets. It
 has a page per tool because a tool has a schema and a recorded answer. This is
@@ -64,7 +64,7 @@ Which of them an entry holds for comes off ``knowledge/server-scope.json`` and
 nowhere else. A covered topic names every document and every published skill,
 and that topic's ``scope`` is what the description and the priority derive from.
 ``ScopeTest`` holds it in both directions, so a skill no topic names fails the
-suite rather than reaching an extension author as core-only.
+suite rather than reaches an extension author as core-only.
 
 ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` reaches the index and not the list.
 ``Coverage::offered()`` drops a topic nothing left can answer, so the index a
@@ -99,14 +99,14 @@ What a picker reads
   matter. In front of it stands the sentence that says it is a workflow to
   follow rather than a page to read. Neither stands a second time, so neither
   can drift from what it describes.
-* **``annotations.priority``** — the ordering, and nothing else. The index sits
+* **``annotations.priority``** — the order, and nothing else. The index sits
   above everything it lists. What holds wherever the caller works sits above
   what stops at the core. The references sit below all of them, because a reader
   reads one at the step that sends them to it. The numbers in ``Factory`` are a
   scale a picker sorts by, and the distance between two of them carries no
   meaning.
-* **``size``** — the bytes the handler really serves, so a client knows what
-  reading one costs. For the index that is the encoded JSON rather than a file
+* **``size``** — the bytes the handler really serves, so a client knows what a
+  read of one costs. For the index that is the encoded JSON rather than a file
   on disk, and ``ResourceSurfaceTest`` asserts every declared size against what
   a read returns.
 
@@ -130,7 +130,8 @@ description and two schemas that a class declares. The installed skill catalog
 at :doc:`../../usage/task-skills/index` is a generated page for the same reason.
 It is where a person compares and reads the published workflows before the
 install. ``bin/cli documentation:prepare`` copies the same Markdown the
-installer publishes into the site source and adds one embedding page per skill.
+installer publishes into the site source and adds one page per skill that embeds
+it.
 
 There is no document-resource catalog in the manual. Those entries already stand
 enumerated where they cannot go stale. The same functions build the

@@ -17,7 +17,7 @@ covers. Every check that needs the list reads it from there.
           check on both sides of the boundary.
 
 A statement that does not hold on all of them says so **as data, not as prose**.
-``since`` and ``until`` carry the major it starts and stops holding at, and the
+``since`` and ``until`` carry the major it starts and stops to hold at, and the
 answer renders that beside the sentence. A statement without either holds
 everywhere the knowledge base reaches, which is what most of them do.
 
@@ -44,8 +44,8 @@ and the failure is silent. Everything else on this page follows from it.
 * **Split a narrowed statement before binding it.** ``until`` says the sentence
   no longer holds. So a subject that survived under a new condition needs two
   statements. The unbound half that still describes it, and the bound half with
-  what arrived. Bound whole, the surviving half reads as removed, and the range
-  is contiguous either way so nothing sees it — ``D-VER-006``.
+  what arrived. Bound whole, the half that survives reads as removed, and the
+  range is contiguous either way so nothing sees it — ``D-VER-006``.
 * **Prose stays free of version numbers.** The bound is in the field, so the
   sentence does not need "since v14" in it. Nothing can filter, re-render or
   check a sentence that carries one. ``HintsTest`` enforces this.
@@ -63,8 +63,9 @@ and the failure is silent. Everything else on this page follows from it.
   ``Documentation/Changelog/``, the extension scanner matchers. What a given
   version deprecated is a list; how to find it is a procedure.
 * **No concrete changelog file names, no counts.** Both are a snapshot of one
-  checkout and go stale silently. Counts measured while writing a hint are
-  evidence for the author and belong in the commit message, not in the answer.
+  checkout and go stale silently. Counts measured while the author writes a hint
+  are evidence for the author and belong in the commit message, not in the
+  answer.
 * **"Check whether X" is not a hint, it is a check.** ``hints`` carries
   statements, ``checks`` carries commands that run. A check-shaped sentence with
   no command behind it tells the caller nothing it did not know already.

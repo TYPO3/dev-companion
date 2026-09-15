@@ -32,18 +32,18 @@ paraphrase. ``sys_file_reference``, the identifier of an icon, the name of the
 XLF resource your code loads, a class name out of the patch you review. All of
 those land. "that thing that shows the picture chooser" reaches nothing.
 
-Where a lookup came back empty and you know the subject exists, giving its name
-is usually the whole fix.
+Where a lookup came back empty and you know the subject exists, its name is
+usually the whole fix.
 
 Before it writes markup
 -----------------------
 
 Three answers come from the installation rather than from memory, and they are
 the three that fail at runtime on a guess. The markup and classes of a backend
-component, an icon identifier, and a label resource. Your agent is told to look
-each of them up before writing.
+component, an icon identifier, and a label resource. The server tells your agent
+to look each of them up before it writes.
 
-That is worth knowing because it is checkable. Backend markup that appeared with
+That is worth a note because it is checkable. Backend markup that appeared with
 no ``typo3_component_lookup`` behind it, an icon identifier nobody validated, a
 label key invented rather than looked up. An ask for the lookup afterwards costs
 one call, and it is the same call the agent should have made.
@@ -64,10 +64,10 @@ one checkout.
 A miss is an answer
 -------------------
 
-Where nothing matches, the server says so instead of producing something that
-reads like knowledge. That is the behaviour the whole thing rests on, and it is
-worth a read as information. The subject is outside what it covers, and your
-agent now works from its own knowledge and from the checkout.
+Where nothing matches, the server says so instead of an answer that reads like
+knowledge. That is the behaviour the whole thing rests on, and it is worth a
+read as information. The subject is outside what it covers, and your agent now
+works from its own knowledge and from the checkout.
 
 ``typo3_server_scope`` is where the boundary stands written out: what it covers,
 and what it deliberately declines to answer.

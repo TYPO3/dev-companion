@@ -102,8 +102,8 @@ where somebody remembered to look.
 As a dependency
 ---------------
 
-The package is on Packagist as ``typo3/dev-companion``, so the consuming project
-requires it and nothing else:
+The package is on Packagist as ``typo3/dev-companion``, so the project that uses
+it requires it and nothing else:
 
 .. code-block:: bash
 
@@ -118,8 +118,7 @@ commit where the project depends on it.
 That is the way in where the entry has to be shareable. A DDEV project, or a
 team where each checkout should carry the same one. The entry then names a path
 inside the project. Composer exposes the stdio entrypoint as
-``vendor/bin/typo3-dev-companion``. Install it from the consuming project's
-root:
+``vendor/bin/typo3-dev-companion``. Install it from that project's root:
 
 .. code-block:: bash
 
@@ -298,8 +297,8 @@ stays open rather than gets a fill:
   (`MCP servers <https://code.visualstudio.com/docs/copilot/customization/mcp-servers>`_)
 * **Codex** — a trusted project. Codex scopes MCP servers "to a project with
   ``.codex/config.toml`` (trusted projects only)", so the trust prompt for the
-  directory is what admits them. Whether a running session reads the file again
-  is not documented; ``codex mcp list`` reports what it has.
+  directory is what admits them. Whether a live session reads the file again has
+  no documentation; ``codex mcp list`` reports what it has.
   (`MCP <https://learn.chatgpt.com/docs/extend/mcp>`_)
 * **Zed** — a trusted worktree. The MCP page describes ``context_servers`` only
   in the file opened with ``zed: open settings file``. But the rest of the
@@ -463,8 +462,7 @@ which is the one part of it ``install`` and ``update`` leave alone:
   client does not get, see
   :ref:`which tools the client gets <installing-which-tools-are-offered>`.
 * ``TYPO3_DEV_COMPANION_SKILL_REFRESH`` — ``off`` reports stale skills instead
-  of putting them back —
-  :ref:`when they go stale <installing-when-they-go-stale>`.
+  of a repair — :ref:`when they go stale <installing-when-they-go-stale>`.
 
 .. _installing-which-tools-are-offered:
 
@@ -522,8 +520,8 @@ source.
 Removing it
 -----------
 
-Three things landed in the project, and no command takes them out again, so
-removing the server is deleting them by hand:
+Three things landed in the project, and no command takes them out again, so to
+remove the server is to delete them by hand:
 
 * the ``typo3-dev-companion`` entry in the client file the table under
   :ref:`naming the client <installing-clients>` names, and only that entry. The
@@ -556,7 +554,7 @@ inside the project. That goes through ``ddev exec`` where there is a DDEV
 configuration, and through ``${workspaceFolder}`` in VS Code and Cursor.
 Everywhere else it is this server's absolute path on the machine the install ran
 on. That is a value one machine is right about, in a file its own client
-documents as the shared, committed one. There the install says so; the reading
+documents as the shared, committed one. There the install says so; the read
 below is why there is nothing better to write.
 
 A relative path would have to resolve against the working directory the client
@@ -610,7 +608,7 @@ client most sessions use asks for by name:
 
 For the other nine a relative entry would be wrong on the machine that wrote it
 too. An absolute one is at least right there. So the install says it, per client
-and at the terminal, beside the line reporting the entry —
+and at the terminal, beside the line that reports the entry —
 `D-DIS-016 <../../decisions/discovery/dis-016-how-an-entrypoint-may-be-named-is-a-per-client-question.md>`_.
 
 None of this reaches a standalone checkout. ``${workspaceFolder}`` names a path

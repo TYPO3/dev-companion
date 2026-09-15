@@ -56,8 +56,8 @@ author last happened to see it. Before the first line:
   runs through tools this server does not own, a package tool, a registry, a CI
   runner, a test harness, read theirs. Which tools exist, and what each one does
   by default, is exactly the fact that moves after publication.
-* Read what the failing run actually did, call by call, rather than what its
-  report concluded. The gap the skill takes shape around is in the calls.
+* Read what the failed run did, call by call, rather than what its report
+  concluded. The gap the skill takes shape around is in the calls.
 
 None of that research goes into the skill, and
 :ref:`the rules <writing-a-skill-the-rules>` still hold. They decide what the
@@ -376,7 +376,7 @@ too, read off the bodies.
 Publishing it
 -------------
 
-Publishing is deleting the ``metadata`` declaration above, and
+To publish is to delete the ``metadata`` declaration above, and
 ``Installer::skills()`` is the directory minus what still carries it. There is
 no list to add the name to: one existed, and a list beside the file is a second
 place the same fact lives.
@@ -424,7 +424,7 @@ checkable and has its check. A skill does not only name a tool, it says what to
 read out of the answer. For the four calls the base fixes a test asserts those
 keys on the answer the tool really returns
 (`D-SKL-025 <../../decisions/task-skills/skl-025-a-routed-tool-is-called-and-held-to-what-it-reads.md>`_).
-What that leaves is prose going stale against a tool that kept every key.
+What that leaves is prose that goes stale against a tool that kept every key.
 `D-EVI-002 <../../decisions/evidence/evi-002-a-skill-crossing-is-read-rather-than-run.md>`_
 accepts that proxy for the skill crossing and says why no forward run will
 replace it. Everywhere else, what measures the behaviour is a case in

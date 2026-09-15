@@ -4,7 +4,7 @@ The bundled knowledge
 =====================
 
 Everything the tools and resources answer from ships in the package, in
-`knowledge/ <../../knowledge/>`_. It needs nothing running: no installation, no
+`knowledge/ <../../knowledge/>`_. It needs nothing up: no installation, no
 network, no database. What the server reads from an installation instead, and
 why, is :doc:`asking the installation <asking-the-installation>`.
 

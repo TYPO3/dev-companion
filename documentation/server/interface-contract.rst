@@ -34,7 +34,7 @@ What the draft says
   discovery surfaces, llms.txt style signals. They note that shared terminology
   would be desirable.
 
-Its precision is uneven where being wrong is most expensive. A tool name is
+Its precision is uneven where a wrong answer is most expensive. A tool name is
 local to one server's catalogue. A URI scheme is not. It is the one namespace in
 MCP that two servers in the same client share whether they meant to or not. The
 namespace the draft leaves unnamed is the one that actually collides.
@@ -64,18 +64,18 @@ Move the scheme and those links resolve nowhere.
 
 If a contract's uniform scheme turned out to be ``typo3://``, a conformant
 client could not tell a TCA resource from something else. The URI alone would
-not say. It would read ``typo3://guides`` expecting a machine-readable content
-model and get a documentation index. That is worse than a clean failure, because
-nothing errors — the model receives the wrong kind of document and proceeds. One
-sentence prevents it, and the draft already contains the template. Apply to
-schemes the rule it gives tool names, or fix an authority segment such as
-``typo3://tca/…`` for the mandatory part.
+not say. It would read ``typo3://guides`` in expectation of a machine-readable
+content model and get a documentation index. That is worse than a clean failure,
+because nothing errors — the model receives the wrong kind of document and
+proceeds. One sentence prevents it, and the draft already contains the template.
+Apply to schemes the rule it gives tool names, or fix an authority segment such
+as ``typo3://tca/…`` for the mandatory part.
 
 The tool prefix is the cheaper half. ``typo3.`` reads as a reservation of names
 that literally begin with ``typo3.``, dot included. So it does not reach a tool
 named ``typo3_rule_lookup``. On that read the 26 tools here stay as they are. It
-is a reading of one sentence — the draft states the prefix once and never gives
-the separator a rule.
+is a read of one sentence — the draft states the prefix once and never gives the
+separator a rule.
 
 The draft is also the first document to draw a line around what may present
 itself as TYPO3's MCP surface. That is where the package name meets it. This

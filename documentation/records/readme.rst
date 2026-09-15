@@ -3,7 +3,7 @@
 The records, and where they live
 ================================
 
-Four files hold four different kinds of thing, and keeping them apart is what
+Four files hold four different kinds of thing, and their separation is what
 keeps any of them readable. `AGENTS.md <../../AGENTS.md>`_ has the rules; this
 is what each one is for and how the work moves between them.
 
@@ -19,8 +19,8 @@ The pages that carry one of those steps out:
   the sections it consists of.
 * :doc:`decisions` and :doc:`writing-a-decision` — what one carries that a
   commit message cannot, and what a later session adds to its foot.
-* :doc:`forward-runs` — running a forward review, judging it, and reading one
-  that stopped without an error.
+* :doc:`forward-runs` — how to run a forward review, judge it, and read one that
+  stopped without an error.
 * :doc:`asking-for-a-debrief` — the prompt a session in somebody else's agent
   gets once the work ends, and why it asks what it asks.
 
@@ -32,8 +32,8 @@ Where a session starts
     bin/cli todo:next
 
 One todo, not the queue and not everything nothing has answered for. Context is
-not free: a session handed all of it reads for ten minutes and then starts by
-summarising what it read.
+not free: a session handed all of it reads for ten minutes and then starts with
+a summary of what it read.
 
 Due is two questions. Has the clock come round, which the todo's ``every:``
 answers. ``session``, or a number of days, so five sessions in an afternoon do
@@ -47,7 +47,7 @@ as it is. Not the work itself, which is what the queue is for.
 The queue comes first
 ---------------------
 
-For a while it did not, and the effect is worth writing down. A todo that recurs
+For a while it did not, and the effect is worth a record. A todo that recurs
 every session is due for as long as anything waits for a judgement, and ``next``
 asked the recurring ones first. Feedback arrives from every session everywhere
 while one session closes a handful. So every session opened on the same sighting
@@ -55,8 +55,8 @@ and no session reached the queue behind it. Entries sat in it untouched for as
 long as ``feedback/`` was not empty. That is always.
 
 The order is now: what has a clock, then the queue, then the sightings once the
-queue is empty. It follows from what a judgement is. Judging a feedback is
-deciding whether it becomes work; the queue is the work that decision produced.
+queue is empty. It follows from what a judgement is. To judge a feedback is to
+decide whether it becomes work. The queue is the work that decision produced.
 
 Since 2026-08-02 the feedback are *in* the queue rather than behind it. One card
 each, written as the feedback arrives at ``low``, which is below everything
@@ -68,7 +68,7 @@ remains *and* nothing has arrived without a judgement. A sighting left in place
 in order to judge more feedback decides twice and does nothing. The pile it
 decides over grows faster than any session can read it.
 
-The second half of the same problem is the size of the reading, and the board is
+The second half of the same problem is the size of the read, and the board is
 what solves it now. Every open feedback has one card, and ``bin/cli todo:next``
 hands over **one** of them, like any other todo. A fresh card is ``low``, so the
 oldest feedback without a judgement comes up once the decided work ends. A
@@ -98,7 +98,7 @@ stayed open. The repair is a card written into ``todo/open/``.
 
 What ``next`` can never do is a run of a feedback's own query against the server
 as it is now. A feedback is evidence about a version of this server that may no
-longer exist, and that reading is the session's.
+longer exist, and that read is the session's.
 
 Working the todo
 ----------------
@@ -227,11 +227,11 @@ produced an entry. How to write each one has a page of its own:
 * ``todo/`` — the order of the work, and where the last session stopped. The
   other files say what must be true, what somebody asked and what somebody
   assumed. None of them says what to do next. A session can end anywhere, and
-  the next one starts by reading this. One todo is one file. It names what it
-  serves and what the next concrete step is, and it goes when done rather than
-  gets a tick. Where it sits says whether it is the queue, what recurs, what
-  waits on an answer nothing here can give, or what stays as reference. A queued
-  one carries the priority that decides how soon. That is what
+  the next one starts with a read of this. One todo is one file. It names what
+  it serves and what the next concrete step is, and it goes when done rather
+  than gets a tick. Where it sits says whether it is the queue, what recurs,
+  what waits on an answer nothing here can give, or what stays as reference. A
+  queued one carries the priority that decides how soon. That is what
   ``bin/cli todo:next`` reads and what ``bin/cli todo:check`` holds.
 * ``knowledge/documents/`` and ``documentation/`` — the thing itself, where the
   other three would describe it instead. What the caller lacked is a document in
@@ -246,7 +246,7 @@ The three states that mean unfinished are legitimate. A principle no test can
 hold and a decision nothing has come back about are not defects, so no check may
 fail on them. That is exactly why nothing read them for as long as they existed.
 
-``bin/cli unresolved:list`` is that reading; ``bin/cli todo:next`` opens with it
+``bin/cli unresolved:list`` is that read; ``bin/cli todo:next`` opens with it
 and ``bin/cli repository:check`` closes with it. It names every requirement
 nothing answers for and says whether a queued todo names it. That comes from
 what the queue declares it serves. So the page that lists what deliberately

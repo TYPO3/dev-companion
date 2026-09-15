@@ -11,8 +11,8 @@ on.
 
 It is worth it where the queue holds work that does not overlap, which is most
 of what accumulates here. Entries that name a decision each and stand against
-different parts of the checkout. It is not worth doing for two todos about one
-file, and it is not worth doing for one.
+different parts of the checkout. It is not worth the cost for two todos about
+one file, and it is not worth it for one.
 
 .. image:: ../images/parallel-todos.svg
     :zoomable:
@@ -40,9 +40,9 @@ repository holds a todo in hand, not something a caller has to know. So
 ``todo:home`` and ``todo:drop`` take the id, and accept the worktree's directory
 name because it is there.
 
-What that buys is that taking a todo on and giving it back are not moves. A todo
-whose worktree came down is workable again with nothing to put back. A finished
-todo is a deletion the branch already carries.
+What that buys is that to take a todo on and to give it back are not moves. A
+todo whose worktree came down is workable again with nothing to put back. A
+finished todo is a deletion the branch already carries.
 
 Taking them on
 --------------
@@ -58,7 +58,8 @@ session gets the item behind them. Then the message the three sessions start
 with. What remains is to start them.
 
 Nothing moves and nothing goes into a commit. The queue is the same file it was
-— what changed is that three of its todos now have a worktree standing on them.
+— what changed is that three of its todos now have a worktree that stands on
+them.
 
 Where a session worked a todo before, the branch it derives to may still be
 there. The command passes it over and names it rather than reuses or deletes it,
@@ -69,13 +70,13 @@ What it prints besides the branches is an overlap, in the three ways two claims
 can have one. Nothing here knows which lines a step will touch, so all three are
 a warning to read before the worktrees exist rather than a refusal.
 
-Two claims **answering for** one entry are two sessions editing one file, and
-taking one of them is cheaper than merging both. Two that **name** one class are
-the same a step less certainly. A todo says where it is about to work, as a
-path, as ``Class::method()``, or as the bare name. The claim resolves all three
-to the file. Two that **stand on** one requirement or decision without service
-to it work from a single judgement. That is where a pair of steps that have to
-agree comes from.
+Two claims that **answer for** one entry are two sessions that edit one file.
+One of them is cheaper to take than both are to merge. Two that **name** one
+class are the same a step less certainly. A todo says where it is about to work,
+as a path, as ``Class::method()``, or as the bare name. The claim resolves all
+three to the file. Two that **stand on** one requirement or decision without
+service to it work from a single judgement. That is where a pair of steps that
+have to agree comes from.
 
 The last two are here because ``serves:`` alone missed the collision that cost
 the most. On 2026-08-02 two todos with different ``serves:`` keys each added a
@@ -83,13 +84,13 @@ handler for one token to one function. The rebase put them in sequence, each
 with a ``continue`` at its end, and nothing ever reached the second. Both had
 named ``R-ANS-012`` and both had named the class — one as
 ``Extension::describe()``, the other as ``src/Installation/Extension.php``.
-Neither is a declaration and neither had to be: it is a session saying where it
-is going, in the file the claim reads anyway.
+Neither is a declaration and neither had to be: it is a session that says where
+it goes, in the file the claim reads anyway.
 
 ``bin/cli todo:drop <id>`` is the way back out, for a todo nobody works. A
 session that never started, one somebody left, a claim taken by mistake. There
-is nothing to put back: the todo is where it always was, and the worktree coming
-down is what offers it again.
+is nothing to put back: the todo is where it always was, and the removal of the
+worktree is what offers it again.
 
 What it decides is the branch. One with commits stays, because it is the only
 place that work exists. One with none goes, because a branch nobody takes down
@@ -137,7 +138,7 @@ and not of the repository. :doc:`../contributing/driving-a-session` is where
 what the launch has to get right stands. Each session reports into
 ``.worktrees/.sessions/<name>.log``.
 
-That is the fourth step joining the other three, and it is here for the same
+That is the fourth step beside the other three, and it is here for the same
 reason they are. A step left over for somebody to carry out from a read is the
 one that breaks. The run of 2026-08-02 started every session in the directory
 that was already open. Three worktrees stood untouched while the sessions read a
@@ -184,8 +185,8 @@ Nothing about it is special. It reads what the todo serves, settles what the
 step turns on, and leaves the file true. That is all of :doc:`working-a-todo`,
 which the command names as usual.
 
-Five things are different, and all of them are consequences of ``main`` being
-elsewhere. The claim comes with them attached. This is why they are there:
+Five things are different, and all of them follow from ``main`` elsewhere. The
+claim comes with them attached. This is why they are there:
 
 * **Commit on the branch, never on ``main``.** That includes the todo file
   itself. A finished claim is a deletion in the branch, and the merge is what
@@ -232,7 +233,7 @@ A question mid-work
 
 A todo that turns out to need an answer nobody here can give is the normal case,
 not the exception. A session that works alone asks and waits. One of several
-cannot: waiting blocks a worktree on a person who is answering three others.
+cannot: a wait blocks a worktree on a person who answers three others.
 
 So it does not ask, it records. The question goes into the ``waitingOn:`` line
 on the todo itself, in the words of the ask, together with what the read already
@@ -249,16 +250,16 @@ back:
 
     git checkout <branch> -- todo/open/<id>-<name>.md
 
-That keeps ``main`` free of a half-finished change while still saying, in one
+That keeps ``main`` free of a half-finished change while it still says, in one
 place, what is open and where the work behind it is.
 
-**A todo carrying a question does not stay in the queue.** The next session
+**A todo that carries a question does not stay in the queue.** The next session
 would get it as ordinary work, and what it needs is a person.
 ``bin/cli todo:park`` moves every queued todo that names one into ``waiting/``.
 ``todo:home`` runs it in the worktree so the move reaches ``main`` in the commit
 the work is in.
 
-A worktree standing on a todo nobody is working is the other thing to look for.
+A worktree that stands on a todo nobody works is the other thing to look for.
 Nothing notices on its own. ``bin/cli todo:home`` with no argument prints what
 stands and whether anything on it waits for a commit, which is that read.
 
@@ -266,7 +267,7 @@ Bringing the branches home
 --------------------------
 
 **A finished run comes home now.** Checked, merged, worktree gone — and none of
-it waits for the sessions still going. Nine branches held back until the tenth
+it waits for the sessions still at work. Nine branches held back until the tenth
 reports are nine that each need a bigger rebase when they finally move. ``main``
 went on without them. The only thing the wait bought was a tidier moment. There
 is no batch here: there are ten sequences of the same steps, started whenever
@@ -281,9 +282,9 @@ their session ends.
 **That command is the whole of it**, the way ``todo:claim`` is the whole of the
 setup. It is here for the reason that one is. The steps have to happen in one
 order, and an order is the thing prose cannot hold anybody to. Asked with no
-name it reports what is standing and which of those has a tree nobody committed.
-It refuses in a worktree and it refuses off ``main``, because a fast-forward
-onto somebody's branch is the failure that looks like success.
+name it reports what stands and which of those has a tree nobody committed. It
+refuses in a worktree and it refuses off ``main``, because a fast-forward onto
+somebody's branch is the failure that looks like success.
 
 Nothing here decides that a session has ended, and nothing can: the todos are
 the caller's to name. What the command carries out for each of them is this, in
@@ -303,7 +304,7 @@ the worktree that todo sits in.
 and cannot be fast-forwarded as it stands. The rebase is what makes the merge a
 fast-forward, and ``--ff-only`` is what says so. Where it refuses, something is
 not what this procedure assumes, and that is worth a stop. What comes out is one
-sequence of commits on ``main`` rather than a merge commit per claim saying
+sequence of commits on ``main`` rather than a merge commit per claim that says
 nothing but that a claim existed.
 
 **The sequence belongs to one branch, and the next branch starts it again from
@@ -319,11 +320,11 @@ moment the session's work stands on what ``main`` has become, and it is the only
 run that says anything. One from before the rebase checked a tree that no longer
 exists. One at a time for the same reason — a suite that fails after three
 branches says nothing about which one broke it. The claims themselves never
-conflict, each session having touched one file in ``todo/`` and its own.
+conflict, because each session touched one file in ``todo/`` and its own.
 
-Where one branch fixes something the others are also failing on, that one goes
-first. Otherwise every merge behind it runs against a suite that was already
-red, which is the one thing this order exists to avoid.
+Where one branch fixes something the others also fail on, that one goes first.
+Otherwise every merge behind it runs against a suite that was already red, which
+is the one thing this order exists to avoid.
 
 **The rebase is also what makes the group listings writable, and they go onto
 the branch.** The listing at the foot of a group readme comes from every file in

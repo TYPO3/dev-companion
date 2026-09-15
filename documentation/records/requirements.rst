@@ -7,7 +7,7 @@ One thing that must be true of this server, with where the demand came from and
 what holds it to that. A test where there is one, ``not guarded`` where there is
 none.
 
-It has to keep holding while everything around it changes. That is what makes it
+It has to hold on while everything around it changes. That is what makes it
 worth a file of its own rather than a sentence in the change that established
 it. The change ends, the demand does not.
 
@@ -46,4 +46,4 @@ fail on **open** or **not guarded**, since both are legitimate.
 decision about each. That is a todo that names the id, or a ``judged:`` date
 that says a session read the entry and left it as it is. See
 :ref:`judging one <judging-a-requirement>`. Nothing in ``requirements/`` reaches
-the order of the work on its own; that listing is the whole of the coupling.
+the order of the work on its own; that listing is the whole of the tie.

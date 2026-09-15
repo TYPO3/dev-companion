@@ -8,8 +8,8 @@ Glossary
 * **catalog** — the component catalog in ``knowledge/catalog/``.
 * **checkout** — one TYPO3 core worktree below ``.checkouts/``, this
   repository's own, created by ``bin/cli checkouts:update``.
-* **contract case** — a targeted scenario in ``scenarios/contracts/``, naming
-  one task shape.
+* **contract case** — a targeted scenario in ``scenarios/contracts/``, which
+  names one task shape.
 * **decision** — what a change rested on, and what would show it wrong: one file
   in ``decisions/``.
 * **a feedback** — one report about this server, written by a session working
@@ -23,12 +23,11 @@ Glossary
 * **hold** — two senses, told apart by the preposition. A statement *holds on* a
   version or *for* a scope: it is true there. A test *holds* a rule and the rule
   is *held by* it: the test fails when the rule breaks.
-* **installation** — the TYPO3 a calling agent is working in, whose own facts
-  are read from it rather than bundled.
+* **installation** — the TYPO3 a caller works in. The server reads its own facts
+  from it rather than bundles them.
 * **judge** — to work out what should become of one open feedback, on evidence.
 * **knowledge** — everything below ``knowledge/``: what the tools answer from.
-* **record** — the verb a feedback comes into being by, and one of the six tool
-  verbs.
+* **record** — the verb a feedback arrives by, and one of the six tool verbs.
 * **requirement** — what must be true from now on, and what holds it there: one
   file in ``requirements/``.
 * **result** — what a tool hands back: the text and the same answer as data.
@@ -39,7 +38,7 @@ Glossary
 * **skill** — one canonical task workflow under ``skills/``, installed into
   somebody else's project.
 * **standalone checkout** — this repository as the Composer root package, where
-  feedback can be written.
+  a session can record feedback.
 * **todo** — one entry in the order of the work.
 * **tool** — one ``typo3_<subject>_<verb>`` this server offers its callers: the
   MCP primitive of that name, one class in ``src/Tool/``, listed in

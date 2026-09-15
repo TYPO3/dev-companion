@@ -3,7 +3,7 @@
 Working on the server itself
 ============================
 
-For someone changing this repository rather than using it. The conventions are
+For someone who changes this repository rather than uses it. The conventions are
 in `AGENTS.md <../../AGENTS.md>`_; these are the commands they rest on.
 
 .. image:: ../images/repository-map.svg
@@ -99,8 +99,8 @@ distribution at the version you ask for, the system extensions this server's
 console path asks for. The setup that writes the database, the admin user and a
 site configuration. Last the extension of the project's own, one table with rows
 in it, which a base distribution registers nothing of (``D-EVI-010``). Minutes
-on a cold Composer cache, seconds on a warm one, and running it again finishes
-one that stopped halfway.
+on a cold Composer cache, seconds on a warm one, and a second run finishes one
+that stopped halfway.
 
 There is one installation per covered version, each its own directory and its
 own DDEV project. The version named none is the covered stable one. Asked for
@@ -208,11 +208,11 @@ grid, a card and a surface take is
 `the theme's own manual <https://typo3.github.io/soul-design-system/guides-theme/directives.html>`_;
 nothing here renders any of them.
 
-Two things in ``guides.xml`` are load-bearing. ``theme="soul"`` selects a theme
-that has to exist first, and the extension element below it is what makes it
-exist. ``automatic-menu`` is the other. The rail and the trail are a ``toctree``
-in this renderer, which is a reStructuredText directive this markdown corpus
-cannot write. With it on, the same tree comes out of the directories instead. So
+Two things in ``guides.xml`` carry weight. ``theme="soul"`` selects a theme that
+has to exist first, and the extension element below it is what makes it exist.
+``automatic-menu`` is the other. The rail and the trail are a ``toctree`` in
+this renderer, which is a reStructuredText directive this markdown corpus cannot
+write. With it on, the same tree comes out of the directories instead. So
 **every directory of this documentation needs its own ``readme.md``**. A page
 whose directory has none attaches to nothing and lands in no menu at all, which
 ``SiteTest::everyDirectoryOfTheDocumentationHasItsOwnPage`` stops.

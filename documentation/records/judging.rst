@@ -7,13 +7,13 @@ session stood, and what to do about it is a judgement nobody has made yet. This
 page is that judgement. What a session asks of a feedback, in which order, on
 what evidence, and which of the answers it may give without a question first.
 
-**What the channel is for is deciding what to build.** The sessions that use
-this server are the only ones who find out what it does not answer. The corpus
-is the only place that knowledge lands. So a judgement that ends in no build has
-to earn that as much as one that ends in a new tool. The default is not caution,
-it is a decision. Where the evidence is here, a run, a transcript, several
-sessions with the same thing to say, the judgement decides. What waits is only
-what nobody in this repository can establish.
+**The channel is there to decide what to build.** The sessions that use this
+server are the only ones who find out what it does not answer. The corpus is the
+only place that knowledge lands. So a judgement that ends in no build has to
+earn that as much as one that ends in a new tool. The default is not caution, it
+is a decision. Where the evidence is here, a run, a transcript, several sessions
+with the same thing to say, the judgement decides. What waits is only what
+nobody in this repository can establish.
 
 :doc:`index` says where a feedback lives and what happens to it once a session
 has worked it off. This is the step between the two.
@@ -26,8 +26,8 @@ right:
 
 **Could anything about this server have prevented it?**
 
-Half the feedback this server receives is a session criticising its own work —
-it did not consider Extbase, it never activated the testing skill. Read as
+Half the feedback this server receives is a session's criticism of its own work.
+It did not consider Extbase, it never activated the testing skill. Read as
 self-criticism those are somebody else's laundry. Read as this section's
 question they are a list of gaps this server could have closed and did not. That
 is the most valuable half of the corpus.
@@ -59,13 +59,13 @@ Strengths
 ---------
 
 Some feedback report what worked. The ladder has no rung for them: every step
-names something missing, misplaced or misworded. So the question comes from the
+names something absent, misplaced or misworded. So the question comes from the
 other side: what is the strength evidence of?
 
 Not that a decision holds. A recorded run confirms a decision, not an account of
 one. What a strength carries is where a boundary runs. The costs reported around
 it are the other side of the same boundary, usually from the same debrief. That
-reading is what goes into ``decisions/``, and the commit that writes it archives
+read is what goes into ``decisions/``, and the commit that writes it archives
 the feedback —
 `D-FBK-018 <../../decisions/feedback/fbk-018-a-strength-is-evidence-about-a-boundary-not-about-a-decision.md>`_.
 
@@ -94,22 +94,21 @@ answer stays small.
 
 **The answer is not here.**
 
-Two halves, told apart by what is missing rather than by what the feedback asks
+Two halves, told apart by what is absent rather than by what the feedback asks
 for.
 
-**1a — the knowledge is missing.**
+**1a — the knowledge is absent.**
 ``bin/cli hints:probe "<the feedback's own query>"`` reaches nothing, and a
-search of ``knowledge/`` and ``skills/`` confirms it. Becomes the work of
-establishing what actually holds — against ``.checkouts/``, and the manual after
-it — and writing that. Never the feedback's own suggestion copied into
-``knowledge/``: its author was guessing about TYPO3 exactly as much as the
-judging run would be.
+search of ``knowledge/`` and ``skills/`` confirms it. Becomes the work to
+establish what holds, against ``.checkouts/`` and the manual after it, and to
+write that. Never the feedback's own suggestion copied into ``knowledge/``: its
+author guessed about TYPO3 exactly as much as the judge would.
 
-**1b — the shape is missing.** The answer is in principle available here, and
+**1b — the shape is absent.** The answer is in principle available here, and
 there is no way to get it in the form the task needed. **A tool answers a
-question, a skill orders a task.** Where a tool is missing, an answer cannot be
-had. Where a skill is missing, the answers are all available and nothing says in
-which order to ask for them.
+question, a skill orders a task.** Where a tool is absent, no answer exists.
+Where a skill is absent, the answers are all available and nothing says in which
+order to ask for them.
 
 Neither needs the feedback to ask for it, and it usually will not. The session
 that reports the cost does not know what this server could offer. What triggers
@@ -121,8 +120,8 @@ almost every feedback states them.
 *Missing tool.* The six verbs in `AGENTS.md <../../AGENTS.md>`_ make the
 diagnosis precise, since the verb is what tells a caller the shape of an answer.
 The bootstrap_package sweep is exactly this: ``typo3_changelog_lookup`` matches
-title words, and enumerating every deprecation of a version is a ``list``. Not a
-broken lookup — a missing verb.
+title words, and an enumeration of every deprecation of a version is a ``list``.
+Not a broken lookup — an absent verb.
 
 *Absent skill.* Three signals, and the third is the strongest because no single
 feedback carries it. A session that invented the right order itself. A session
@@ -230,9 +229,9 @@ follows copies it into ``knowledge/`` with a verified entry's authority.
 runs, transcripts, skill descriptions and the corpus. All of it is in this
 repository, all of it read rather than recalled. So a judgement that lands on 1b
 decides **that** the thing gets built and where its boundary runs. It leaves
-only what it will *say* about TYPO3 to the read. Withholding that half turns a
-domain thirty sessions have described into a todo asking whether the domain
-exists, queued at ``low`` behind the wording nits. ``D-SKL-005`` is what the
+only what it will *say* about TYPO3 to the read. Without that half, a domain
+thirty sessions have described turns into a todo that asks whether the domain
+exists. It queues at ``low`` behind the wording nits. ``D-SKL-005`` is what the
 rule cost. A core patch review that called this server nothing at all first came
 out as *establish whether a core review earns a skill*. The corpus that answers
 it sat unread on the same board.
@@ -258,8 +257,8 @@ priority the judgement sets. The feedback stays open until the commit that ships
 it archives it.
 
 What justifies it is the corpus, not the ask. One session's suggestion is a
-suggestion, and two sessions arriving at the same shape from different tasks is
-the thing itself.
+suggestion, and two sessions that arrive at the same shape from different tasks
+are the thing itself.
 
 The measure is what it takes off the caller. A question that costs a session
 four round trips is worth a tool that answers it in one. The maintenance that
@@ -341,7 +340,7 @@ Proposed
 
 *Needs an answer.*
 
-Nothing on the ladder produced a lever worth pulling, or the cost is out of
+Nothing on the ladder produced a lever worth a pull, or the cost is out of
 proportion to what it buys. That is a legitimate outcome and not one this
 process may reach on its own.
 
@@ -374,9 +373,9 @@ established still has to land, and three directories carry most of it:
 
 Some feedback fits none of the three, and what marks it is this: the session
 found a **structure** unclear rather than a statement. In which order the steps
-go, what a thing consists of, what one of them looks like. Written as a rule
-that is one sentence saying the shape should be clear; written as a document it
-is the shape.
+go, what a thing consists of, what one of them looks like. Written as a rule it
+is one sentence that says the shape should be clear. Written as a document it is
+the shape.
 
 Then the answer is a document, and who was lost decides which one.
 
@@ -384,8 +383,8 @@ Then the answer is a document, and who was lost decides which one.
   server hands out. A document in it declares what it is and when to reach for
   it, see
   `D-KNW-057 <../../decisions/knowledge/knw-057-a-document-declares-what-it-is-and-when-to-reach-for-it.md>`_.
-  This is step 1a landing as prose rather than as a hint: a hint states one
-  thing, and what was missing is a procedure.
+  This is step 1a that lands as prose rather than as a hint. A hint states one
+  thing, and what was absent is a procedure.
 * **``documentation/``** where a session working in this repository was. How to
   carry a procedure here out, grouped by subject.
 
@@ -394,7 +393,7 @@ draws. A ``documentation/`` page describes this repository, which the run has
 just read. So it goes into the same commit under the test *closed on the spot*
 sets: no contract moves, and nothing needs a lookup about TYPO3. A
 ``knowledge/documents/`` page states what holds about TYPO3, so it is *taken on*
-and the reading is the todo's first step.
+and the read is the todo's first step.
 
 The invariant is unchanged. A document written on the spot archives the
 feedback. One taken on leaves a todo that serves it, see
@@ -438,12 +437,12 @@ open, a todo serves it   judged, the work is queued  ``Todo::serves()``, which `
 =======================  ==========================  =================================================
 
 
-The middle state is the one worth being exact about. ``typo3_feedback_list``
-answers an agent somewhere else, and the archive is what that agent reads as
-``closed``. A feedback closed the moment somebody decided about it would tell a
-session its report is complete. The thing it reported would still be there. So
-the archive waits for the change, and ``Todo::unreadable()`` enforces it from
-the other side. It reports a todo that serves an archived feedback as a problem.
+The middle state is the one to be exact about. ``typo3_feedback_list`` answers
+an agent somewhere else, and the archive is what that agent reads as ``closed``.
+A feedback closed the moment somebody decided about it would tell a session its
+report is complete. The thing it reported would still be there. So the archive
+waits for the change, and ``Todo::unreadable()`` enforces it from the other
+side. It reports a todo that serves an archived feedback as a problem.
 
 **The invariant:** a commit that judges a feedback either archives it or leaves
 at least one todo that serves it. It leaves no card that still asks for the
@@ -453,8 +452,8 @@ session to read it starts from the feedback again and the judgement is lost.
 in the same commit.
 
 What no check can hold is whether the judgement reached ``decisions/``. A state
-check cannot see it, and a judgement may legitimately confirm an entry without
-changing a file. It stays the second **Wrong if** of
+check cannot see it, and a judgement may confirm an entry without a change to
+any file. It stays the second **Wrong if** of
 `D-FBK-012 <../../decisions/feedback/fbk-012-the-queue-comes-first-and-the-sighting-hands-over-one.md>`_,
 watched rather than held.
 

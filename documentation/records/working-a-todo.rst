@@ -1,8 +1,8 @@
 Working a todo
 ==============
 
-``bin/cli todo:next`` hands over one todo, and what happens between reading it
-and the commit is the work. This page is that part alone. What is due, what
+``bin/cli todo:next`` hands over one todo, and what happens between the read of
+it and the commit is the work. This page is that part alone. What is due, what
 recurs, and what a finished todo leaves behind is in :doc:`index`; nothing here
 repeats it.
 
@@ -48,12 +48,11 @@ end. Wrong means the step is already done, is impossible here, is two steps, or
 serves something that no longer stands. That is the rule the order already has.
 A change of order goes into the file before the work starts.
 
-Say what the reading found before changing anything, and say what it changed
-about the plan. A session that silently substitutes a different piece of work
-for the one it got leaves a queue behind. That queue no longer describes the
-repository for the next session. It leaves whoever queued the todo unable to
-disagree with the substitution, which is the only reason the file is prose in
-the first place.
+Say what the read found before any change, and say what it changed about the
+plan. A session that silently substitutes a different piece of work for the one
+it got leaves a queue behind. That queue no longer describes the repository for
+the next session. It leaves whoever queued the todo unable to disagree with the
+substitution, which is the only reason the file is prose in the first place.
 
 .. _working-a-todo-settled:
 
@@ -102,12 +101,12 @@ Asked, not guessed
 ------------------
 
 Not every question has a source. A question about the code, the version, a
-tool's behaviour or the current practice does, and finding it is
-:ref:`settling it <working-a-todo-settled>`. A question about what somebody
+tool's behaviour or the current practice does, and to find it is to
+:ref:`settle it <working-a-todo-settled>`. A question about what somebody
 **wants** does not. Which of two shapes the change should take when both hold,
 and whether a step is worth what it costs. What the todo meant where its
 paragraph reads two ways, and whether a finding is the one the ask was for.
-Nothing in the repository answers those, so no amount of further reading will —
+Nothing in the repository answers those, so no amount of further reads will —
 and the person who queued the todo is one message away.
 
 So where the research runs out and the choice would change the build, ask. Ask
@@ -124,7 +123,7 @@ why. "What do you want here?" hands the reading back.
 
 **The todo put back is one of the answers**, and the session offers it rather
 than waits for it. The person asked may not have the answer either, and that is
-not a smaller outcome than doing the work.
+not a smaller outcome than the work itself.
 
 Where the todo is still workable once the question is out of the way, it stays
 in the queue. **The priority is what says when.** Lower it where the session
@@ -171,11 +170,10 @@ and ``bin/cli todo:next`` prints the one that applies:
   ``requirements/`` by then and the commit is the record that it happened.
 * One that turns out half done shrinks to the part that remains, with the next
   concrete step rewritten: **trim** it. A todo nobody can start from is worse
-  than none, and "half done" includes the half that is waiting on an answer. One
-  put back unstarted is the same case, with one addition. It keeps its file,
-  gains the open question, and carries whichever priority the session now
-  believes it has. ``next`` would otherwise hand it to the next session
-  unchanged.
+  than none, and "half done" includes the half that waits on an answer. One put
+  back unstarted is the same case, with one addition. It keeps its file, gains
+  the open question, and carries whichever priority the session now believes it
+  has. ``next`` would otherwise hand it to the next session unchanged.
 * One nobody can start at all until somebody answers **moves to ``waiting/``**,
   with the question in its head. No session gets it, so the question has to be
   readable there by whoever can answer it.
@@ -196,5 +194,5 @@ choice made silently has exactly the shape of one that had nothing to choose.
 What can happen has happened. The page exists, ``bin/cli todo:next`` names it
 with every todo it hands over, and
 `R-FBK-009 <../../requirements/feedback/fbk-009-a-todo-is-worked-from-what-was-read.md>`_
-carries it with the reason. Whether the reading happened is the session's, and
-the session is the only one who will ever know.
+carries it with the reason. Whether the read happened is the session's, and the
+session is the only one who will ever know.

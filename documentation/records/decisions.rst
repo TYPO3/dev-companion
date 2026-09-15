@@ -7,7 +7,7 @@ A commit message says what changed and why. What it cannot carry is the part
 that may not survive. The assumption the change rests on, the evidence at hand
 at the time, and what would show the decision wrong.
 
-One entry is one decision worth revisiting, and a change nobody would need to
+One entry is one decision worth a second look, and a change nobody would need to
 reconsider does not get one. The commit that implements an entry writes it.
 Nothing here is a proposal stage, and by the time a decision exists the change
 it describes is in the code.

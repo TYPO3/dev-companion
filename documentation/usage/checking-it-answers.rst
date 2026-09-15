@@ -11,8 +11,8 @@ it.
 Nothing tells you. An agent with no server answers from the checkout and from
 what it already knows, same tone, same speed, same confidence. The sentence that
 is wrong looks exactly like the ones that are right. Two sessions went a whole
-task that way, each with a published skill beside it naming eleven tools that
-were not there. So the check is worth the minute, and the minute is one
+task that way, each with a published skill beside it that named eleven tools
+that were not there. So the check is worth the minute, and the minute is one
 question.
 
 Ask it something

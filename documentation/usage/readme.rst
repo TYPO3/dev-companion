@@ -24,14 +24,14 @@ Without ``--agent`` that writes the entry into ``.mcp.json`` and the skills into
 ``.agents/skills``, the two places a client finds without configuration for it.
 Name a client that reads elsewhere, ``--agent=cursor``, ``--agent=copilot``, and
 :ref:`the client table <installing-clients>` says which file each one gets. A
-project can require the package instead of pointing at a checkout; that and
+project can require the package instead of a pointer at a checkout; that and
 every other case is :doc:`installing`.
 
 2. Finish in the client
 -----------------------
 
 A file on disk registers nothing. The client has to read it, and most ask you to
-approve a project server before starting it. Claude Code reads ``.mcp.json``
+approve a project server before they start it. Claude Code reads ``.mcp.json``
 when a session starts, so restart the session and approve at the prompt. The
 install prints what your client needs under the line that reports the entry.
 :ref:`installing-finishing-in-the-client` has the same list with each client's

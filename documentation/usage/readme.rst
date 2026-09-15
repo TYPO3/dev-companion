@@ -10,8 +10,8 @@ names the page that has the detail.
 -------------
 
 One standalone checkout serves every project on the machine. ``install`` writes
-into the directory it is run in, so the last two lines are run from the root of
-the project the agent works in, never from the checkout:
+into the directory it runs in. So the last two lines run from the root of the
+project the agent works in, never from the checkout:
 
 .. code-block:: bash
 
@@ -21,11 +21,11 @@ the project the agent works in, never from the checkout:
     /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
 
 Without ``--agent`` that writes the entry into ``.mcp.json`` and the skills into
-``.agents/skills``, the two places a client finds without being configured for
-it. A client that reads elsewhere is named — ``--agent=cursor``,
-``--agent=copilot`` — and :ref:`the client table <installing-clients>` says
-which file each one gets. A project can require the package instead of pointing
-at a checkout; that and every other case is :doc:`installing`.
+``.agents/skills``, the two places a client finds without configuration for it.
+Name a client that reads elsewhere, ``--agent=cursor``, ``--agent=copilot``, and
+:ref:`the client table <installing-clients>` says which file each one gets. A
+project can require the package instead of pointing at a checkout; that and
+every other case is :doc:`installing`.
 
 2. Finish in the client
 -----------------------
@@ -33,7 +33,7 @@ at a checkout; that and every other case is :doc:`installing`.
 A file on disk registers nothing. The client has to read it, and most ask you to
 approve a project server before starting it. Claude Code reads ``.mcp.json``
 when a session starts, so restart the session and approve at the prompt. The
-install prints what your client needs under the line that reports the entry, and
+install prints what your client needs under the line that reports the entry.
 :ref:`installing-finishing-in-the-client` has the same list with each client's
 own documentation behind it.
 
@@ -54,24 +54,24 @@ it, and :doc:`checking-it-answers` is how to find out why.
 
 There is nothing more to drive. Describe the work in whatever language you speak
 to your agent in, and the server tells the agent at connect where to start.
-:doc:`working-with-it` is what that changes on your side of the conversation,
-and :doc:`task-skills/ <task-skills/index>` lists the workflows the install
+:doc:`working-with-it` is what that changes on your side of the conversation.
+:doc:`task-skills/ <task-skills/index>` lists the workflows the install
 published beside the server, with their complete instructions.
 
 Afterwards
 ----------
 
 * ``typo3-dev-companion update`` refreshes the skills and the entry after this
-  package moved; a server that finds stale copies puts them back on its own —
+  package moved. A server that finds stale copies puts them back on its own, see
   :ref:`installing-keeping-it-current`.
-* Which tools are offered, and the four environment variables the entry may
-  carry — :ref:`installing-what-the-entry-may-carry`.
+* Which tools the server offers, and the four environment variables the entry
+  may carry: :ref:`installing-what-the-entry-may-carry`.
 * Taking it out again — :ref:`installing-removing-it`.
 
 It is a local subprocess, started by the client over stdio, and it reads. It
-writes nothing into the TYPO3 installation it is pointed at — the one exception
-is the feedback channel, which writes into this server's own checkout and is
-offered from a standalone checkout alone.
+writes nothing into the TYPO3 installation it points at. The one exception is
+the feedback channel, which writes into this server's own checkout, and only a
+standalone checkout offers it.
 
 .. toctree::
     :hidden:

@@ -143,12 +143,12 @@ reuses it after:
     php -S localhost:8000 -t .site/html   # read it at http://localhost:8000/
 
 ``--watch`` is both of those in one terminal: it serves the site on the port
-``--port`` names, 8000 unless told otherwise, and renders again after every
-save below ``documentation/`` or ``skills/``, saying which file it saw, until
-Ctrl-C takes the server down with it. A render draws a bar over its steps, and
-one that failed on a half-typed directive is rendered over by the save that
-finishes it. The server reads the pages from disk on every request, so a reload
-is all the browser needs.
+``--port`` names, 8000 unless told otherwise, and renders again after every save
+below ``documentation/`` or ``skills/``, saying which file it saw, until Ctrl-C
+takes the server down with it. A render draws a bar over its steps, and one that
+failed on a half-typed directive is rendered over by the save that finishes it.
+The server reads the pages from disk on every request, so a reload is all the
+browser needs.
 
 
 ``bin/cli documentation:prepare`` is the first of its steps on its own — the

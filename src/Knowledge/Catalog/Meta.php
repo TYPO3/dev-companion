@@ -12,9 +12,9 @@ use TYPO3\DevCompanion\Paths;
  *
  * The catalogs are snapshots of a moving target: identifiers, label keys and
  * component classes change with every core release. Without the branch and
- * commit they were taken from, a miss is indistinguishable from "the catalog is
- * older than your checkout" — which is exactly the case where a confident
- * answer does the most damage.
+ * commit they came from, a miss looks like "the catalog is older than your
+ * checkout". That is exactly the case where a confident answer does the most
+ * damage.
  */
 final class Meta
 {
@@ -59,10 +59,10 @@ final class Meta
      * not the same TYPO3.
      *
      * The server knows both numbers and used to contrast them nowhere, so the
-     * skew stayed invisible unless the caller thought to ask for the pin: v15
-     * markup and a v15 custom-property contract were handed to a v13 backend
-     * as fact. Empty where the majors agree, or where there is no installation
-     * to compare with.
+     * skew stayed invisible unless the caller thought to ask for the pin. v15
+     * markup and a v15 custom-property contract went to a v13 backend as fact.
+     * Empty where the majors agree, or where there is no installation to
+     * compare with.
      */
     public static function skew(): string
     {

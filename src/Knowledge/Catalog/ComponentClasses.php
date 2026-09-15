@@ -10,15 +10,15 @@ use TYPO3\DevCompanion\Paths;
 /**
  * Where one backend class sits, and the majors that holds on.
  *
- * Derived by `bin/cli components:derive` from the `backend.css` each covered
- * branch commits, and read here rather than curated: the lists in an entry name
- * a class and cannot place it, which is how `table-fit` was borrowed onto the
- * wrong node — `D-CAT-008`.
+ * `bin/cli components:derive` derives it from the `backend.css` each covered
+ * branch commits, and this reads it rather than keeps it by hand. The lists in
+ * an entry name a class and cannot place it, which is how `table-fit` landed on
+ * the wrong node, `D-CAT-008`.
  *
  * A position is what the core's own selectors write and never a promise that
- * the class is required. Where no selector places a class, this answers
- * nothing, which is the honest reading for a modifier that carries no position
- * to get wrong.
+ * the class is a must. Where no selector places a class, this answers nothing,
+ * which is the honest reading for a modifier that carries no position to get
+ * wrong.
  */
 final class ComponentClasses
 {
@@ -28,8 +28,8 @@ final class ComponentClasses
     /**
      * Where the class sits relative to its component's root on that major:
      * `around` it, `on` it, or `below` it. Null where the stylesheet places it
-     * nowhere, and null where no major was named — a position that moved
-     * between two majors cannot be answered for both at once.
+     * nowhere, and null where the caller named no major. A position that moved
+     * between two majors has no one answer for both.
      */
     public static function position(string $class, ?int $target): ?string
     {
@@ -47,8 +47,8 @@ final class ComponentClasses
 
     /**
      * What the core styles inside the class on that major, out of the names the
-     * catalog knows. Inventory rather than structure: a progress bar written
-     * below a wrapper is styled if it is there and belongs there by nothing.
+     * catalog knows. Inventory rather than structure: a progress bar below a
+     * wrapper gets its style if it is there and belongs there by nothing.
      *
      * @return list<string>
      */
@@ -68,10 +68,10 @@ final class ComponentClasses
     }
 
     /**
-     * The majors the class itself is written on, as `since` and `until`. This
-     * is per class where the entry binds its whole list at once, so a class
-     * that was there all along is answered on a major its entry is withheld for
-     * — the range `D-CAT-006` reached for.
+     * The majors the class itself stands on, as `since` and `until`. This is
+     * per class where the entry binds its whole list at once. So a class that
+     * was there all along answers on a major its entry stays back for, the
+     * range `D-CAT-006` reached for.
      *
      * @return array{since: ?int, until: ?int}
      */

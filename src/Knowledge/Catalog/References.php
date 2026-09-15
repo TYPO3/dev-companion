@@ -12,15 +12,15 @@ use TYPO3\DevCompanion\Paths;
  *
  * A hint is a summary of an answer that exists somewhere in full, currently
  * passing and maintained by the people who wrote the subsystem. Three times in
- * one session the real answer was such a directory, and all three times it was
- * reached by accident — a hint per subject fixes the subject it was written
+ * one session the real answer was such a directory, and all three times the
+ * session reached it by accident. A hint per subject fixes the subject it is
  * for, and the next one repeats it.
  *
- * So the index is its own thing rather than a field on the hints: a subject with
- * no hint yet still has a reference, and "read X" is a better answer than a thin
- * hint. Paths are relative to a core checkout; what a Composer installation has
- * of it follows from `package`, and an entry with none exists only in the
- * repository.
+ * So the index is its own thing rather than a field on the hints. A subject
+ * with no hint yet still has a reference, and "read X" is a better answer than
+ * a thin hint. Paths are relative to a core checkout. What a Composer
+ * installation has of it follows from `package`, and an entry with none exists
+ * only in the repository.
  */
 final class References
 {
@@ -47,12 +47,12 @@ final class References
     }
 
     /**
-     * The entries that exist on the version being asked about.
+     * The entries that exist on the version in question.
      *
-     * Withholding rather than qualifying, for the same reason the component
-     * catalog does it: a path that is not on that branch wastes the read it
-     * asks for, and the caller has no way to tell that from having looked in
-     * the wrong place.
+     * Held back rather than qualified, for the same reason the component
+     * catalog does it. A path that is not on that branch wastes the read it
+     * asks for. The caller has no way to tell that from a look in the wrong
+     * place.
      *
      * @return array<int, array{id: string, path: string, package: ?string, reference: string, caveat: ?string, hint: ?string, since: ?int, until: ?int}>
      */

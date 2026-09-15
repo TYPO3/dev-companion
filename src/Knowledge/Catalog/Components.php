@@ -8,28 +8,28 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Paths;
 
 /**
- * Loads and ranks the curated TYPO3 backend component index from
- * catalog/component/entries.json. Where the active installation can be read,
+ * Loads and ranks the hand-kept TYPO3 backend component index from
+ * catalog/component/entries.json. Where the active installation answers,
  * InstalledComponents replaces its contract fields with evidence from the
  * installed backend CSS, JavaScript, and styleguide templates.
  *
- * The searchable index is hand-curated from the core sources; lookup can
- * enrich it from installed package files without loading TYPO3 into this
- * process. Search mirrors the term-scoring approach used by TestSuiteHints.
+ * The searchable index comes by hand from the core sources. A lookup can enrich
+ * it from installed package files and load no TYPO3 into this process. Search
+ * mirrors the term-scoring approach used by TestSuiteHints.
  *
- * An entry also carries the majors it was verified on, as `since`/`until` — the
- * same binding the hints use. The catalog is taken from one
- * revision, so without that a component whose custom-property contract does not
- * exist on the caller's LTS is handed over as fact; with it, the entry is
- * withheld and what to verify against is named instead.
+ * An entry also carries the majors it has a check on, as `since`/`until`, the
+ * same range the hints use. The catalog comes from one revision. Without that a
+ * component whose custom-property contract does not exist on the caller's LTS
+ * goes over as fact. With it, the entry stays back and what to verify against
+ * stands instead.
  */
 final class Components
 {
     /**
-     * Share of the query a component has to cover to be an answer to it, when
-     * the query did not name it outright. The same threshold the hints hold
-     * their prose matches to, for the same reason: below it the entry shares a
-     * word with the question rather than answering it.
+     * Share of the query a component has to cover to answer it, when the query
+     * did not name it outright. The same threshold the hints hold their prose
+     * matches to, for the same reason. Below it the entry shares a word with
+     * the question rather than answers it.
      */
     private const MIN_COVERAGE = 0.5;
 
@@ -60,11 +60,11 @@ final class Components
         }
 
         return array_map(static function (array $entry): array {
-            // One component can span several Sass files — the input controls
-            // are form-control, form-label, form-text and input-group at once,
-            // and naming only the first made the others look like they were not
-            // part of it. sassPath stays as the primary one for callers that
-            // read a single path.
+            // One component can span several Sass files. The input controls are
+            // form-control, form-label, form-text and input-group at once. The
+            // first name alone made the others look like they were not part of
+            // it. sassPath stays as the primary one for callers that read a
+            // single path.
             $sassPaths = array_map('strval', $entry['sassPaths'] ?? []);
             if ($sassPaths === [] && isset($entry['sassPath'])) {
                 $sassPaths = [(string) $entry['sassPath']];
@@ -83,9 +83,9 @@ final class Components
                 'examples' => array_map('strval', $entry['examples'] ?? []),
                 'sassPath' => $sassPaths[0] ?? null,
                 'sassPaths' => $sassPaths,
-                // Which module drives the component is curated; what that
-                // module reads off the markup is derived from the installed
-                // file — `D-ANS-139`.
+                // Which module drives the component comes by hand; what that
+                // module reads off the markup derives from the installed file,
+                // `D-ANS-139`.
                 'jsModule' => isset($entry['jsModule']) ? (string) $entry['jsModule'] : null,
                 'dataAttributes' => [],
                 'demoPath' => isset($entry['demoPath']) ? (string) $entry['demoPath'] : null,
@@ -108,11 +108,11 @@ final class Components
     }
 
     /**
-     * The entries split by whether they were verified on $target.
+     * The entries split by whether they have a check on $target.
      *
-     * Without a target nothing is withheld: the caller is told each entry's
-     * range instead, which is the honest answer when nobody said which version
-     * this is for.
+     * Without a target nothing stays back. The caller gets each entry's range
+     * instead, which is the honest answer when nobody said which version this
+     * is for.
      *
      * @param array<int, array<string, mixed>> $components
      * @return array{holds: array<int, array<string, mixed>>, withheld: array<int, array<string, mixed>>}
@@ -131,30 +131,25 @@ final class Components
     }
 
     /**
-     * The classes a withheld entry still covers on the target version.
+     * The classes a held-back entry still covers on the target version.
      *
-     * A caller that names a class is asking whether that class is there, not for
-     * the component to paste, and the two questions have different answers below
-     * an entry's binding — `D-CAT-006`. Only what the query named outright comes
-     * back: handing over the whole class list would be the entry again, minus the
-     * custom properties that withheld it.
-     *
-     * Nothing here for an entry whose contract came from the installation. That
-     * reading is the installed packages themselves, so a class they do not carry
-     * is absent rather than unverified, and there is no second range to consult.
+     * A caller that names a class asks whether that class is there, not for the
+     * component to paste, and the two questions have different answers below an
+     * entry's range, `D-CAT-006`. Only what the query named outright comes
+     * back. Nothing here for an entry whose contract came from the
+     * installation, because a class the installed packages do not carry is
+     * absent rather than unverified.
      *
      * The range is the class's own where `components:derive` wrote one, and the
-     * entry's whole list where it did not. Per class is what `D-CAT-006`
-     * reached for and declined to keep by hand: 17 of 26 entries hold classes
-     * whose ranges differ, so the aggregate withholds a class that was there
-     * all along — `D-CAT-008`.
+     * entry's whole list where it did not. 17 of 26 entries hold classes whose
+     * ranges differ, so the aggregate holds back a class that was there all
+     * along, `D-CAT-008`.
      *
      * @param array<int, array<string, mixed>> $withheld
      * @return array<int, array{
      *     class: string, component: string, title: string, position: ?string,
      *     stylesWithin: list<string>, sassPaths: array<int, string>,
      *     since: ?int, until: ?int, verifiedOn: string
-     * }>
      */
     public static function coveredClasses(array $withheld, ?string $query, ?int $target): array
     {
@@ -221,7 +216,7 @@ final class Components
 
     /**
      * Ranks components against a free-text query. Without a query, returns the
-     * full catalog for browsing.
+     * full catalog to browse.
      *
      * @return array<int, array<string, mixed>>
      */
@@ -249,11 +244,11 @@ final class Components
         }
 
         // What the query does not ask for is not an answer to it. A component
-        // the query names is one however the rest of it reads — "add a badge to
-        // the module header" is about the badge — and everything else has to
-        // cover half of what was asked. Without this a five-word question about
+        // the query names is one however the rest of it reads, "add a badge to
+        // the module header" is about the badge. Everything else has to cover
+        // half of the question. Without this a five-word question about
         // something nobody catalogued came back with three components that each
-        // shared one word with it, and a miss would have been the true answer.
+        // shared one word with it. A miss would have been the true answer.
         $asked = count($terms);
         $scored = array_values(array_filter($scored, static fn(array $entry): bool
             => in_array('name', $entry['component']['matchedIn'], true)
@@ -269,9 +264,9 @@ final class Components
             $scored = $complete;
         }
 
-        // As long as a component matched by its own name or keywords, do not
-        // spend result slots on ones that only appeared through a sub-component
-        // class or a word in their description.
+        // As long as a component matched by its own name or keywords, spend no
+        // result slots on the others. Those only appeared through a
+        // sub-component class or a word in their description.
         $direct = array_values(array_filter(
             $scored,
             static fn(array $entry): bool => array_intersect(['name', 'keywords'], $entry['component']['matchedIn']) !== []
@@ -295,10 +290,10 @@ final class Components
         $terms = [];
         foreach (preg_split('/\s+/', mb_strtolower($query)) ?: [] as $term) {
             $term = preg_replace('/[^a-z0-9-]/', '', $term) ?? '';
-            // Three characters, because a term is matched as a substring: "to"
-            // is carried by form-check-type-toggle, and a question phrased as a
-            // sentence then covers half of itself through its function words.
-            // No component name or class in the catalog is shorter.
+            // Three characters, because a term matches as a substring.
+            // form-check-type-toggle carries "to", and a question in the form
+            // of a sentence then covers half of itself through its function
+            // words. No component name or class in the catalog is shorter.
             if ($term !== '' && strlen($term) >= 3 && !in_array($term, self::STOPWORDS, true)) {
                 $terms[] = $term;
             }
@@ -332,9 +327,9 @@ final class Components
         $matched = 0;
         $why = [];
 
-        // The whole query naming the component or its root class outright is a
-        // different kind of answer from a word appearing somewhere in it:
-        // "status indicator" must reach status-indicator, not Badge.
+        // The whole query that names the component or its root class outright
+        // is a different kind of answer from a word somewhere in it. "status
+        // indicator" must reach status-indicator, not Badge.
         $phrase = implode(' ', $terms);
         if ($component['name'] === $phrase
             || $component['rootClass'] === $phrase
@@ -358,10 +353,10 @@ final class Components
                 ++$matched;
                 $why['sub-component classes'] = true;
             } elseif (str_contains($prose, $term)) {
-                // Scored but not counted as covered: a summary is written in
-                // ordinary words — "content", "container", "elements" — and a
-                // term found only there says the component was described with
-                // that word, not that it is what the word was asking for.
+                // Scored but not counted as covered. A summary consists of
+                // ordinary words, "content", "container", "elements". A term
+                // found only there says the description has that word, not that
+                // the component is what the word asked for.
                 $score += 1;
                 $why['description'] = true;
             }

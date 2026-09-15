@@ -9,9 +9,9 @@ namespace TYPO3\DevCompanion\Knowledge\Catalog;
  *
  * The styleguide wraps each copyable example in `sg:example`, so what a demo
  * says about a component is those blocks rather than the page around them. Two
- * callers read it: the component answer, where an installed styleguide replaces
- * the snapshot markup, and `bin/cli components:check`, which digests what each
- * checkout carries so a rewrite that leaves every class name in place is noticed
+ * callers read it. The component answer, where an installed styleguide replaces
+ * the snapshot markup. And `bin/cli components:check`, which digests what each
+ * checkout carries so a rewrite that leaves every class name in place shows up
  * (D-CAT-001).
  */
 final class DemoMarkup
@@ -21,7 +21,7 @@ final class DemoMarkup
      *
      * The styleguide renamed its templates from `.html` to `.fluid.html`, so an
      * entry records one spelling and a checkout of an older major carries the
-     * other. Said here once rather than as a field on each of the entries: the
+     * other. Said here once rather than as a field on each of the entries. The
      * rename is one fact about a release, not one fact per component.
      *
      * @return list<string>
@@ -41,12 +41,11 @@ final class DemoMarkup
      * answers with all of them; one that wraps nothing in `sg:example` answers
      * with none.
      *
-     * `$selector` is the curated index's say over which of them the component is
-     * actually shown in, because the root class does not decide that on its own
-     * — `D-CAT-003`. Selecting is narrowing, never widening: where no example
-     * carries the selector, none is returned rather than the first match
-     * standing in, and the caller keeps the curated markup and says it is a
-     * fallback.
+     * `$selector` is the hand-kept index's say over which of them shows the
+     * component. The root class does not decide that on its own, `D-CAT-003`. A
+     * selection narrows, never widens. Where no example carries the selector,
+     * none comes back rather than the first match as a stand-in. The caller
+     * keeps the hand-kept markup and says it is a fallback.
      *
      * @return array<int, string>
      */
@@ -81,10 +80,10 @@ final class DemoMarkup
      * Whether a snippet uses this component's root class, rather than merely
      * containing the word.
      *
-     * A custom element is named by its tag and everything else by a class
-     * attribute, so a demo that renders the component through a ViewHelper
-     * carries none of it — which is what tells the digest apart from the markup
-     * it is meant to hold.
+     * A custom element goes by its tag and everything else by a class
+     * attribute. So a demo that renders the component through a ViewHelper
+     * carries none of it. That is what tells the digest apart from the markup
+     * it holds.
      */
     public static function carries(string $markup, string $rootClass): bool
     {

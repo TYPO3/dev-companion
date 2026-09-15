@@ -6,35 +6,34 @@ namespace TYPO3\DevCompanion\Knowledge;
 
 /**
  * Drafts a TYPO3 commit message and checks it against the rules of the workflow
- * it was written for. Touches no checkout, and the one thing it reads is the
- * release lines a `Releases:` trailer is held against.
+ * it is for. Touches no checkout, and the one thing it reads is the release
+ * lines a `Releases:` trailer stands against.
  *
- * The draft is emitted ready to use, so everything the rules demand of a commit
- * message has to hold for what this class returns: an agent copies the block
- * verbatim, and a defect in it lands in the patch. That is why the body is
- * wrapped at 72 characters here instead of only being complained about.
+ * The draft comes out ready to use, so everything the rules demand of a commit
+ * message has to hold for what this class returns. An agent copies the block
+ * verbatim, and a defect in it lands in the patch. That is why the body wraps
+ * at 72 characters here instead of only gets a complaint.
  *
- * For the same reason the checks judge the draft rather than the input it was
- * built from. Whatever the draft is missing, it says so as a placeholder — and
- * a trailer this class fills in is never also reported as absent.
+ * For the same reason the checks judge the draft rather than the input behind
+ * it. Whatever the draft lacks, it says so as a placeholder. A trailer this
+ * class fills in never also reports as absent.
  */
 final class CommitMessage
 {
-    /** Column the body is wrapped at, per the TYPO3 commit message rules. */
+    /** Column the body wraps at, per the TYPO3 commit message rules. */
     public const BODY_WIDTH = 72;
 
     /**
      * What the draft writes where an answer belongs, and what it refuses to
      * read back as one.
      *
-     * A message handed in for checking carries whatever the caller left in it,
-     * and a placeholder that survived that far is still the unanswered field it
-     * was drafted as — so it is dropped before the checks run and the field
-     * reports as missing again. Otherwise the one moment a caller asks about
-     * the message they are actually going to commit is the moment this class
-     * calls it clean. No value is one anybody could have meant: no Forge issue
-     * is numbered ISSUE_NUMBER, no branch is called RELEASE_TARGET, and nobody
-     * signs off as YOUR_NAME.
+     * A message handed in for a check carries whatever the caller left in it. A
+     * placeholder that survived that far is still the unanswered field it
+     * started as. So it drops before the checks run and the field reports as
+     * absent again. Otherwise the one moment a caller asks about the message
+     * they will commit is the moment this class calls it clean. No value is one
+     * anybody could have meant. No Forge issue has the number ISSUE_NUMBER, no
+     * branch has the name RELEASE_TARGET, and nobody signs off as YOUR_NAME.
      */
     public const ISSUE_PLACEHOLDER = '#ISSUE_NUMBER';
     public const RELEASE_PLACEHOLDER = 'RELEASE_TARGET';
@@ -43,12 +42,12 @@ final class CommitMessage
     /**
      * The core's own workflow: Forge issues, release targets, Gerrit.
      *
-     * What a commit message looks like and what a commit message has to be
-     * accompanied by are two different rules, and only the first one travels.
-     * The subject keyword, the 52/72 limits and the wrapping are used in TYPO3
+     * What a commit message looks like and what has to come with a commit
+     * message are two different rules, and only the first one travels. The
+     * subject keyword, the 52/72 limits and the wrap are in use in TYPO3
      * projects and extensions throughout, and so are `Resolves:` and
      * `Related:`. What the core owns is the Forge issue behind them, the
-     * `Releases:` trailer and the changelog — `D-GUI-017`.
+     * `Releases:` trailer and the changelog, `D-GUI-017`.
      */
     public const WORKFLOW_CORE = 'core';
 
@@ -66,36 +65,39 @@ final class CommitMessage
      */
     private const PROJECT_KEYWORDS = ['BUGFIX', 'FEATURE', 'TASK', 'DOCS', 'SECURITY'];
 
-    /** Trailers this class understands; anything else is carried through as written. */
+    /**
+     * Trailers this class understands; anything else carries through as it
+     * stands.
+     */
     private const KNOWN_TRAILERS = ['resolves', 'related', 'releases'];
 
     /**
      * Trailers a core commit message may not carry.
      *
      * What an agent adds about itself, which the author field already says. The
-     * sign-off was refused beside them until the Association's board recommended
-     * the Developer Certificate of Origin and the maintainer made it required —
-     * `D-KNW-125`.
+     * sign-off met a refusal beside them until the Association's board
+     * recommended the Developer Certificate of Origin and the maintainer made
+     * it required, `D-KNW-125`.
      */
     private const REFUSED_TRAILERS = ['co-authored-by', 'claude-session'];
 
     /**
      * Prefixes that say the change is not offered for merge yet.
      *
-     * They stand before the keyword where `[!!!]` stands and are not keywords:
-     * a subject reads `[WIP][BUGFIX] …`. `[POC]` is written `[PoC]` as often as
-     * not, which is why they are matched without regard to case. What they mark
-     * is a state rather than a kind of change, so they come off before the patch
-     * is merged and no merged commit carries one.
+     * They stand before the keyword where `[!!!]` stands and are not keywords.
+     * A subject reads `[WIP][BUGFIX] …`. `[POC]` appears as `[PoC]` as often as
+     * not, which is why the match ignores case. What they mark is a state
+     * rather than a kind of change, so they come off before the merge and no
+     * merged commit carries one.
      */
     private const DRAFT_PREFIXES = ['WIP', 'POC'];
 
     /**
-     * A body counting what the change touched, which the core's own bodies do
-     * not — `D-KNW-155` measured how few.
+     * A body that counts what the change touched, which the core's own bodies
+     * do not. `D-KNW-155` measured how few.
      *
-     * Numerals only: a body spelling "sixty-eight files" is outside what was
-     * measured and outside what this matches.
+     * Numerals only: a body that spells "sixty-eight files" is outside the
+     * measurement and outside what this matches.
      */
     private const COUNTED_SCOPE = '/\b\d+\s+(files?|occurrences?|places?|spellings?|classes|methods|instances|usages|call sites)\b/i';
 
@@ -147,10 +149,10 @@ final class CommitMessage
             static fn(string $release): bool => $release !== self::RELEASE_PLACEHOLDER,
         ));
 
-        // A draft prefix the caller wrote is kept rather than corrected away:
-        // the answer is the message they are about to commit, and stripping the
-        // one word that says "not yet" would hand back a subject that offers the
-        // patch for merge. That it has to go before it is merged is a check.
+        // A draft prefix the caller wrote stays rather than gets a correction.
+        // The answer is the message they are about to commit. A strip of the
+        // one word that says "not yet" would hand back a subject that offers
+        // the patch for merge. That it has to go before the merge is a check.
         $drafts = '';
         foreach ($input['draftPrefixes'] ?? [] as $marker) {
             $drafts .= '[' . $marker . ']';
@@ -176,11 +178,11 @@ final class CommitMessage
         foreach ($relatedIssues as $related) {
             $trailers[] = 'Related: ' . $related;
         }
-        // A placeholder rather than a plausible default: which branches a change
-        // is released on is a decision, and a draft that quietly says "main" is
+        // A placeholder rather than a plausible default. Which branches a
+        // change goes out on is a decision. A draft that quietly says "main" is
         // one the caller cannot tell from one they made. Outside the core there
-        // is nothing to place it against, so it is left out entirely unless the
-        // caller named the releases themselves.
+        // is nothing to place it against, so it stays out unless the caller
+        // named the releases themselves.
         if ($isCore) {
             $trailers[] = 'Releases: ' . ($releases === [] ? self::RELEASE_PLACEHOLDER : implode(', ', $releases));
         } elseif ($releases !== []) {
@@ -226,8 +228,8 @@ final class CommitMessage
      * What the caller said about the change, or null where nobody said.
      *
      * `false` and "not supplied" are different answers to a classification the
-     * tool cannot derive, so the second is carried through rather than
-     * collapsed into the first — R-GUI-011.
+     * tool cannot derive. So the second carries through rather than folds into
+     * the first, R-GUI-011.
      */
     private static function classification(mixed $value): ?bool
     {
@@ -235,30 +237,30 @@ final class CommitMessage
     }
 
     /**
-     * The workflow a message is written for, defaulting to the core's.
+     * The workflow a message is for, the core's by default.
      *
-     * An unknown value is the core's too rather than an exception: the argument
-     * exists to take rules away, and a typo must not be a way to end up with
-     * fewer of them than the caller asked for.
+     * An unknown value is the core's too rather than an exception. The argument
+     * exists to take rules away. A typo must not be a way to end up with fewer
+     * of them than the caller asked for.
      */
     public static function workflow(mixed $workflow): string
     {
-        // Core is stated rather than fallen back to — `D-GUI-010`. Three
+        // Core stands as a statement rather than a fallback, `D-GUI-010`. Three
         // audiences reach this server and one of them has a Forge issue, so the
-        // unstated call is the project one, and the core routes name the
-        // argument where a contributor already is.
+        // unstated call is the project one. The core routes name the argument
+        // where a contributor already is.
         return strtolower(trim((string) $workflow)) === self::WORKFLOW_CORE
             ? self::WORKFLOW_CORE
             : self::WORKFLOW_PROJECT;
     }
 
     /**
-     * Splits an existing commit message into the parts create() works on, so a
-     * message written by hand (or amended on an existing patch set) can be
-     * checked as a whole instead of being reassembled from fields.
+     * Splits an existing commit message into the parts create() works on. So a
+     * message written by hand, or amended on a patch set that exists, passes
+     * the check as a whole. No second assembly from fields.
      *
-     * Trailers this class does not know — `Change-Id:` above all, which the
-     * commit hook owns and an amend must keep — are carried through untouched.
+     * Trailers this class does not know carry through untouched, `Change-Id:`
+     * above all, which the commit hook owns and an amend must keep.
      *
      * @return array{
      *     input: array{
@@ -287,16 +289,16 @@ final class CommitMessage
         }
 
         $keyword = '';
-        // A subject without [!!!] answers nothing: the caller may have
+        // A subject without [!!!] answers nothing. The caller may have
         // classified the change as not breaking, or never have classified it.
         $isBreaking = null;
         $draftPrefixes = [];
         $summary = $subject;
-        // The markers in front of the keyword are taken off one at a time, in
-        // whatever order the subject wrote them: [WIP][!!!][FEATURE] says what
-        // [!!!][WIP][FEATURE] says. Peeling them first is also what lets a
-        // subject that is nothing but a marker — [WIP] Livesearch — be reported
-        // as the missing keyword it is rather than as an unknown one.
+        // The markers in front of the keyword come off one at a time, in
+        // whatever order the subject has them. [WIP][!!!][FEATURE] says what
+        // [!!!][WIP][FEATURE] says. The peel first is also what lets a subject
+        // that is nothing but a marker report as the absent keyword it is.
+        // [WIP] Livesearch is one, and it is not an unknown keyword.
         $rest = $subject;
         $markers = '/^\[(' . implode('|', array_merge(['!!!'], self::DRAFT_PREFIXES)) . ')\]\s*/i';
         while (preg_match($markers, $rest, $marker) === 1) {
@@ -351,7 +353,7 @@ final class CommitMessage
 
         // Everything from the last trailer block to the end belongs to the
         // trailers. A line only counts as one when it carries a known trailer
-        // name or a hyphenated git-style one (Change-Id, Reviewed-by), so a
+        // name or a hyphenated git-style one (Change-Id, Reviewed-by). So a
         // body sentence like "Note: ..." stays body text.
         $trailerLines = [];
         while ($lines !== []) {
@@ -386,15 +388,16 @@ final class CommitMessage
                             implode(', ', array_map(ucfirst(...), self::KNOWN_TRAILERS)),
                         ),
                     ];
-                    // Dropped rather than carried through: the draft this
-                    // returns is committed as it stands, so a refused trailer
-                    // left in it would be the answer contradicting its own
-                    // check.
+                    // Dropped rather than carried through. The draft this
+                    // returns goes into the commit as it stands. A refused
+                    // trailer left in it would be the answer at odds with its
+                    // own check.
                     continue;
                 }
                 if ($key === 'signed-off-by' && $value === self::SIGN_OFF_PLACEHOLDER) {
-                    // The draft's own placeholder read back: an unsigned message
-                    // rather than a signed one, so it reports as missing again.
+                    // The draft's own placeholder read back: an unsigned
+                    // message rather than a signed one, so it reports as absent
+                    // again.
                     continue;
                 }
                 $extraTrailers[] = $trailer;
@@ -429,10 +432,10 @@ final class CommitMessage
     /**
      * What is wrong with the keyword, or null when nothing is.
      *
-     * Written once because both entry points need the same verdict: a message
-     * that is parsed carries its keyword in the subject, one that is assembled
-     * carries it as an argument, and a keyword the core reserves has to be
-     * refused on both paths.
+     * Written once because both entry points need the same verdict. A parsed
+     * message carries its keyword in the subject, an assembled one carries it
+     * as an argument. A keyword the core reserves has to meet a refusal on both
+     * paths.
      *
      * @return array{level: string, code: string, message: string}|null
      */
@@ -468,13 +471,13 @@ final class CommitMessage
      * the summary, and who writes the shorter one.
      *
      * The caller passes `summary` and the rule measures the subject the keyword
-     * makes of it, so a message naming one and counting the other reads as a
-     * claim about what was passed. A session shortened by the nine characters
-     * it was over, twice, before the arithmetic became visible — the feedback
-     * of 2026-08-05. The room is stated so the first answer is enough.
+     * makes of it. So a message that names one and counts the other reads as a
+     * claim about what the caller passed. A session cut the nine characters it
+     * was over, twice, before the arithmetic became visible, the feedback of
+     * 2026-08-05. The room stands in the answer so the first answer is enough.
      *
-     * The draft keeps the summary it was given, and the check says so and names
-     * the call that measures a replacement — `D-GUI-021`.
+     * The draft keeps the summary it got, and the check says so and names the
+     * call that measures a replacement, `D-GUI-021`.
      */
     private static function subjectLength(int $length, string $summary, int $limit, string $verdict): string
     {
@@ -501,13 +504,12 @@ final class CommitMessage
      * What is wrong with one branch in the `Releases:` trailer, or null when
      * nothing is.
      *
-     * The check says the line takes a patch and no more than that, and whether
-     * the defect is on it stays the author's reading — `D-ANS-058`. A branch
-     * nothing is known about is a warning rather than an error, because the list
-     * ages in one direction only. A maintained line further back than the
-     * ordinary reach is legitimate exactly where the severity earns it, so the
-     * check names what the trailer is then claiming rather than refusing it —
-     * `D-ANS-073`.
+     * The check says the line takes a patch and no more than that. Whether the
+     * defect is on it stays the author's read, `D-ANS-058`. A branch nobody
+     * knows is a warning rather than an error, because the list ages in one
+     * direction only. A maintained line further back than the ordinary reach is
+     * legitimate exactly where the severity earns it. So the check names what
+     * the trailer then claims rather than refuses it, `D-ANS-073`.
      *
      * @return array{level: string, code: string, message: string}|null
      */
@@ -623,13 +625,13 @@ final class CommitMessage
             $checks[] = ['level' => 'error', 'code' => 'missing-issue', 'message' => 'A Forge issue is required. Add a Resolves: #12345 line.'];
         }
 
-        // A change the subject marks as work in progress is not offered for
-        // merge, and the Forge issue is what merging requires. Demanding it of
-        // a draft is demanding a trailer of a message that is not asking for
-        // one: a session dropped it, kept "#xxxxxx" on its author's own
+        // A change the subject marks as work in progress is not up for merge,
+        // and the Forge issue is what a merge requires. A demand for it on a
+        // draft is a demand for a trailer on a message that does not ask for
+        // one. A session dropped it, kept "#xxxxxx" on its author's own
         // instruction, and reported the error as false against the change in
-        // front of it. The sign-off stays an error whatever the state, that
-        // rule being the maintainer's — `R-KNW-075`.
+        // front of it. The sign-off stays an error whatever the state, because
+        // that rule is the maintainer's, `R-KNW-075`.
         if ($isCore && $issues === [] && $isDraft) {
             $checks[] = [
                 'level' => 'info',
@@ -642,7 +644,7 @@ final class CommitMessage
 
         // What a reviewer takes out by hand. Measured over the 3396 commits on
         // main since 2025-01-01: twelve bodies name a count of what the change
-        // touched — `D-KNW-155`. Core only, which is where it was measured.
+        // touched, `D-KNW-155`. Core only, which is where the measurement ran.
         if ($isCore && $body !== '' && preg_match(self::COUNTED_SCOPE, $body, $counted) === 1) {
             $checks[] = [
                 'level' => 'info',
@@ -718,8 +720,8 @@ final class CommitMessage
             $checks[] = ['level' => 'warning', 'code' => 'summary-extension-prefix', 'message' => 'Avoid EXT:... in the summary when the changed files already show the system extension context.'];
         }
 
-        // Which half of the wrapping conflict this draft took, both ways round:
-        // what was joined here, what was left over the width below — R-GUI-007.
+        // Which half of the wrap conflict this draft took, both ways round.
+        // What joined here, what stayed over the width below, R-GUI-007.
         foreach ($joined as $run) {
             $checks[] = [
                 'level' => 'info',
@@ -734,9 +736,9 @@ final class CommitMessage
             ];
         }
 
-        // The level follows the tooling that enforces it: the core's
+        // The level follows the tools that enforce it. The core's
         // `Build/git-hooks/commit-msg` refuses the commit, and outside it no
-        // hook runs — D-GUI-003.
+        // hook runs, D-GUI-003.
         $overlong = self::overlongBodyLines($body);
         foreach ($overlong as $line) {
             $checks[] = [
@@ -774,7 +776,7 @@ final class CommitMessage
         }
 
         // The changelog and the release targets are the core's process, not the
-        // message's shape: both name a file and a role that exist in the core
+        // message's shape. Both name a file and a role that exist in the core
         // repository alone.
         if ($isCore && ($isBreaking === true || $isDeprecation === true)) {
             $checks[] = [
@@ -812,9 +814,9 @@ final class CommitMessage
         }
 
         // Beside whatever else the checks found rather than inside the
-        // clearance, because the message this was reported on returned five
-        // reflow infos and no clearance at all — R-GUI-011. A caller who named
-        // a deprecation has read the diff, so nothing is owed there.
+        // clearance. The message this came in on returned five reflow infos and
+        // no clearance at all, R-GUI-011. A caller who named a deprecation has
+        // read the diff, so the answer owes nothing there.
         if ($isCore && $isBreaking === null && $isDeprecation !== true) {
             $checks[] = [
                 'level' => 'info',
@@ -843,13 +845,13 @@ final class CommitMessage
 
     /**
      * Wraps the body at 72 characters, the width the core rules ask for, and
-     * says which runs of the caller's lines it joined to do it.
+     * says which runs of the caller's lines it joined for it.
      *
-     * Only prose is reflowed: fenced code, indented blocks and list items keep
-     * their structure, and a word longer than the width goes on a line of its
-     * own and is reported by the checks instead. A block is recognised by its
-     * indentation alone, and what lines a `...:` lead-in gathers is deliberately
-     * not guessed — `D-GUI-003`.
+     * Only prose reflows. Fenced code, indented blocks and list items keep
+     * their structure. A word longer than the width goes on a line of its own
+     * and the checks report it instead. Its indentation alone marks a block,
+     * and which lines a `...:` lead-in gathers stays a question on purpose,
+     * `D-GUI-003`.
      *
      * @return array{body: string, joined: array<int, array{first: int, last: int}>}
      */
@@ -960,8 +962,8 @@ final class CommitMessage
      * Where the hook's length gate runs, in the words both checks state it in.
      *
      * The width alone settles nothing for a caller whose own checkout writes
-     * the rule one character stricter, which is the reading three sessions
-     * worked from — `D-GUI-020`.
+     * the rule one character stricter. That is the read three sessions worked
+     * from, `D-GUI-020`.
      */
     private static function lineLengthBoundary(): string
     {
@@ -975,10 +977,10 @@ final class CommitMessage
     /**
      * Whether the body carries its argument as a list rather than as prose.
      *
-     * An item of four words or more is a sentence somebody wrote as a bullet;
-     * a shorter one names a class, a path or a rule the change touched, which
-     * is what a list in a body is for. Half of the lines, and only the first
-     * kind counted: over the thousand merged core commits carrying a body that
+     * An item of four words or more is a sentence somebody wrote as a bullet. A
+     * shorter one names a class, a path or a rule the change touched, which is
+     * what a list in a body is for. Half of the lines, and only the first kind
+     * counts. Over the thousand merged core commits with a body that
      * `D-GUI-026` measured, that fires on none of them.
      */
     private static function bodyIsWrittenAsAList(string $body): bool
@@ -998,7 +1000,7 @@ final class CommitMessage
     }
 
     /**
-     * Lines the wrapping could not bring below the width, with their position in
+     * Lines the wrap could not bring below the width, with their position in
      * the body.
      *
      * @return array<int, array{number: int, length: int}>

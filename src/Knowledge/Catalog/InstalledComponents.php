@@ -10,13 +10,13 @@ use TYPO3\DevCompanion\Installation\Instance;
 /**
  * Re-reads the component contract from the packages of the active installation.
  *
- * The bundled catalog remains the curated index — names, summaries, keywords,
- * and the mapping from one component to its styleguide demo — while the
- * installed backend CSS decides whether that component and its recorded class
- * and custom-property names actually exist. Where the styleguide package is
- * installed, the example the index selects replaces the snapshot markup
- * (`D-CAT-003`, `demoSelector`), and where no example shows it copyably the
- * entry says so with `demoDerives` and the curated markup stays.
+ * The bundled catalog remains the hand-kept index: names, summaries, keywords,
+ * and the map from one component to its styleguide demo. The installed backend
+ * CSS decides whether that component and its recorded class and custom-property
+ * names exist. Where the styleguide package is present, the example the index
+ * selects replaces the snapshot markup (`D-CAT-003`, `demoSelector`). Where no
+ * example shows it in a form to copy, the entry says so with `demoDerives` and
+ * the hand-kept markup stays.
  */
 final class InstalledComponents
 {
@@ -83,10 +83,10 @@ final class InstalledComponents
             }
 
             $component['markupSource'] = 'catalog';
-            // An entry that says its demo shows the component nowhere copyable
-            // is not read at all: the file is a page built out of the component
-            // rather than a gallery of it, so there is no example to select and
-            // taking one would only move which scaffolding is handed over. The
+            // An entry that says its demo shows the component nowhere in a form
+            // to copy gets no read at all. The file is a page built out of the
+            // component rather than a gallery of it. So there is no example to
+            // select, and one would only move which scaffold goes over. The
             // curated markup stays, labelled as the fallback it is.
             $demo = ($component['demoDerives'] ?? true) === false
                 ? null
@@ -201,16 +201,16 @@ final class InstalledComponents
     /**
      * The data attributes a component's own module reads off its markup.
      *
-     * The classes are the contract a component is styled by and these are the
-     * contract it is driven by, and only the first was answered: a session
+     * The classes are the contract that styles a component and these are the
+     * contract that drives it, and only the first had an answer. A session
      * wrote `data-bs-content` on a modal that reads `data-content`, and copied
      * a `data-on-change` that one extension's own module implements. Both
      * failed silently in a browser — `D-ANS-139`.
      *
-     * Which module belongs to the component is curated, because a file named
-     * after the component is the wrong rule: `pagination.js` in the search
-     * extension is not the backend's pagination. What it reads is derived from
-     * the installed file, so it moves with the version the way the classes do.
+     * Which module belongs to the component comes by hand, because a file with
+     * the component's name is the wrong rule. `pagination.js` in the search
+     * extension is not the backend's pagination. What it reads derives from the
+     * installed file, so it moves with the version the way the classes do.
      *
      * @param array<string, mixed>  $component
      * @param array<string, string> $packages

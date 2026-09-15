@@ -13,14 +13,14 @@ use TYPO3\DevCompanion\Paths;
  * one of them is worth to a given caller.
  *
  * A convention is not timeless. The one that is current on the development line
- * may not exist on the LTS a site runs, and handing it over anyway produces
- * code that fails at runtime, silently — a translation domain that resolves to
+ * may not exist on the LTS a site runs. A handover of it anyway produces code
+ * that fails at runtime, silently: a translation domain that resolves to
  * nothing, a content column nothing can address. So a statement carries the
  * majors it holds for, and the answer either drops it or renders the range
  * beside it.
  *
- * Which versions are covered is declared in knowledge/versions.json and read
- * from there by everything that needs the list.
+ * knowledge/versions.json declares the covered versions, and everything that
+ * needs the list reads it from there.
  */
 final class Versions
 {
@@ -28,17 +28,17 @@ final class Versions
      * One comparator of a Composer constraint: an optional operator, a major,
      * and an optional minor that may be a wildcard.
      *
-     * Shared by the two readings below so they cannot drift apart on a spelling
-     * — one asks which majors a constraint serves, the other what its lowest
-     * version is, and both are the same comparator read to a different depth.
+     * Shared by the two reads below so they cannot drift apart on a form. One
+     * asks which majors a constraint serves, the other what its lowest version
+     * is, and both are the same comparator read to a different depth.
      */
     private const COMPARATOR = '/^(\^|~|>=|<=|>|<|=|v)?\s*v?(\d+)(?:\.(\d+|\*|x))?/i';
 
     /**
-     * Never empty: a server that covers no version has no answer to give, and
-     * every reading that asks for the newest or the oldest would be reading
-     * `false`. The file is where that is settled, so the failure is the file
-     * being wrong rather than an answer built on nothing.
+     * Never empty. A server that covers no version has no answer to give, and
+     * every read that asks for the newest or the oldest would get `false`. The
+     * file is where that settles, so the failure is a wrong file rather than an
+     * answer built on nothing.
      *
      * @return non-empty-list<array{major: int, branch: string, status: string}>
      */
@@ -66,12 +66,12 @@ final class Versions
     }
 
     /**
-     * The version an answer is composed for: what the caller stated, else what
-     * the installation being read runs, else nothing.
+     * The version an answer composes for: what the caller stated, else what the
+     * installation at hand runs, else nothing.
      *
-     * Nothing is a legitimate state and not an error — a knowledge base with no
-     * installation around it still answers, and then every statement comes back
-     * with the range it holds for instead of being filtered by one.
+     * Nothing is a legitimate state and not an error. A knowledge base with no
+     * installation around it still answers. Then every statement comes back
+     * with the range it holds for instead of a filter by one.
      */
     public static function target(?string $stated = null): ?int
     {
@@ -84,19 +84,19 @@ final class Versions
      * The majors an answer has to hold on at once.
      *
      * One installation runs one version, and for a site project that is the
-     * whole question. An extension is the other case: it declares
+     * whole question. An extension is the other case. It declares
      * `"typo3/cms-core": "^13.4 || ^14.3"` and one codebase serves both, so a
-     * statement bound to either major is one the author needs — and the
-     * difference between them is not noise, it is the constraint the code lives
-     * under. Filtering such a repository to the major that happens to be
-     * installed answers as if the other one did not exist, and what comes back
-     * then reads as drift: the file kept for the older major, the interface not
-     * yet replaced, the suppressed deprecation.
+     * statement bound to either major is one the author needs. The difference
+     * between them is not noise, it is the constraint the code lives under. A
+     * filter of such a repository to the installed major answers as if the
+     * other one did not exist. What comes back then reads as drift: the file
+     * kept for the older major, the interface not yet replaced, the suppressed
+     * deprecation.
      *
-     * What the caller states still wins and stays a single major — somebody who
-     * says "14" is asking about 14. Only where nothing was stated does the
-     * declaration decide, and where there is no declaration this is the
-     * installed version, exactly as before.
+     * What the caller states still wins and stays a single major, because
+     * somebody who says "14" asks about 14. Only where the caller stated
+     * nothing does the declaration decide. Where there is no declaration this
+     * is the installed version, exactly as before.
      *
      * @return array<int, int>
      */
@@ -120,8 +120,8 @@ final class Versions
     /**
      * The covered majors a Composer constraint admits.
      *
-     * A constraint this cannot read yields nothing, and the caller falls back to
-     * the installed version — a wrong range would be worse than the single
+     * A constraint this cannot read yields nothing, and the caller falls back
+     * to the installed version. A wrong range would be worse than the single
      * version this has always used.
      *
      * @return array<int, int>
@@ -137,12 +137,12 @@ final class Versions
     /**
      * Whether a Composer constraint admits any release of a major.
      *
-     * Read by asking the constraint about one major rather than by parsing it
-     * into a range: the question is only ever "does this serve v13", and the
-     * answer is the same for every spelling that admits any 13.x. Which majors
-     * are worth asking about is the caller's — the covered ones for
-     * `typo3/cms-core`, the ones a Fluid engine could be spelled for in
-     * `bin/cli components:check`.
+     * Read with a question to the constraint about one major rather than a
+     * parse into a range. The question is only ever "does this serve v13", and
+     * the answer is the same for every form that admits any 13.x. Which majors
+     * are worth a question is the caller's: the covered ones for
+     * `typo3/cms-core`, the ones a Fluid engine could stand for in `bin/cli
+     * components:check`.
      */
     public static function admits(?string $constraint, int $major): bool
     {
@@ -163,8 +163,8 @@ final class Versions
     /**
      * Whether one alternative of a constraint admits any release of a major.
      *
-     * Every comparator in it has to, because within one alternative they are
-     * combined with and — `>=13.4 <15` is one alternative, not two.
+     * Every comparator in it has to, because within one alternative they
+     * combine with and. `>=13.4 <15` is one alternative, not two.
      */
     private static function alternativeAdmits(string $alternative, int $major): bool
     {
@@ -176,10 +176,10 @@ final class Versions
         }
 
         // Composer takes a space between an operator and its version, and a
-        // package in the wild writes it that way — `georgringer/news` requires
-        // php `>= 8.1 < 8.5`. Splitting on whitespace first would read that as
-        // four comparators, none of them a version, and the constraint would
-        // answer for no major at all.
+        // package in the wild writes it that way. `georgringer/news` requires
+        // php `>= 8.1 < 8.5`. A split on whitespace first would read that as
+        // four comparators, none of them a version. The constraint would answer
+        // for no major at all.
         $alternative = (string) preg_replace('/(>=|<=|>|<|=|\^|~)\s+/', '$1', $alternative);
 
         $comparators = preg_split('/[\s,]+/', $alternative) ?: [];
@@ -213,7 +213,7 @@ final class Versions
             '>=' => $major >= $stated,
             '>' => $major >= $stated,
             // An exclusive upper bound on x.0 excludes that major, and on any
-            // later minor it still admits it — <14.3 is served by 14.0.
+            // later minor it still admits it. 14.0 serves <14.3.
             '<' => $minor === null || $minor === '0' ? $major < $stated : $major <= $stated,
             '<=' => $major <= $stated,
             default => $major === $stated,
@@ -224,14 +224,14 @@ final class Versions
      * The lowest version a Composer constraint admits, as `major.minor`, or
      * null where it names none.
      *
-     * `admits()` one level down, and for a subject that is not TYPO3: a PHP
-     * constraint is compared to another and to the interpreter an environment
-     * runs, and `^8.3` against `^8.2` is a difference the major does not carry.
-     * The minor is the whole of the depth, because a floor is held against a
-     * DDEV `php_version`. Null rather than a number wherever the reading is not
-     * certain — a constraint with no lower bound, an alternative that states
-     * none, a comparator this does not read — because `D-ANS-082` is wrong if
-     * this states the wrong relation with the answer's authority.
+     * `admits()` one level down, and for a subject that is not TYPO3. A PHP
+     * constraint stands against another and against the interpreter an
+     * environment runs, and `^8.3` against `^8.2` is a difference the major
+     * does not carry. The minor is the whole of the depth, because a floor
+     * stands against a DDEV `php_version`. Null rather than a number wherever
+     * the read is not certain. A constraint with no lower bound, an alternative
+     * that states none, a comparator this does not read. `D-ANS-082` is wrong
+     * if this states the wrong relation with the answer's authority.
      */
     public static function floor(?string $constraint): ?string
     {
@@ -243,7 +243,7 @@ final class Versions
         $floor = null;
         foreach (preg_split('/\s*\|\|?\s*/', $constraint) ?: [] as $alternative) {
             $lowest = self::alternativeFloor(trim($alternative));
-            // An alternative admitting anything below is what the whole
+            // An alternative that admits anything below is what the whole
             // constraint admits, so there is no floor left to name.
             if ($lowest === null) {
                 return null;
@@ -257,9 +257,9 @@ final class Versions
     /**
      * The lowest version one alternative admits.
      *
-     * Its comparators are combined with and, so the floor is the highest lower
-     * bound among them — `>=7.1 <9.0` starts at 7.1, and the upper bound beside
-     * it states no floor of its own.
+     * Its comparators combine with and, so the floor is the highest lower bound
+     * among them. `>=7.1 <9.0` starts at 7.1, and the upper bound beside it
+     * states no floor of its own.
      */
     private static function alternativeFloor(string $alternative): ?string
     {
@@ -277,7 +277,7 @@ final class Versions
             if (preg_match(self::COMPARATOR, $comparator, $matches) !== 1) {
                 return null;
             }
-            // An upper bound is read and states nothing about the floor.
+            // An upper bound reads and states nothing about the floor.
             if (strtolower($matches[1]) === '<' || strtolower($matches[1]) === '<=') {
                 continue;
             }
@@ -304,9 +304,8 @@ final class Versions
     /**
      * Whether a statement bound to [since, until] holds on the target version.
      *
-     * Without a target nothing is filtered out: the caller is told the range
-     * instead, which is the honest answer when nobody said which version this
-     * is for.
+     * Without a target nothing filters out. The caller gets the range instead,
+     * which is the honest answer when nobody said which version this is for.
      */
     public static function holds(?int $since, ?int $until, ?int $target): bool
     {
@@ -318,8 +317,8 @@ final class Versions
     }
 
     /**
-     * How a bound statement says what it is bound to, or an empty string when
-     * it is bound to nothing.
+     * How a bound statement says what binds it, or an empty string when nothing
+     * does.
      *
      * Rendered beside the statement rather than woven into it, so the sentence
      * stays the same sentence on every version it holds for.
@@ -343,7 +342,7 @@ final class Versions
     }
 
     /**
-     * The branch a major is covered by, for pointing at what to verify against.
+     * The branch that covers a major, as a pointer at what to verify against.
      */
     public static function branch(int $major): ?string
     {

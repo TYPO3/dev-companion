@@ -12,11 +12,11 @@ use TYPO3\DevCompanion\Search\Text;
  *
  * One vocabulary for the whole server, where `binding`, `provenance`,
  * `audience` and an `outsideCore` boolean were four that nobody could line up.
- * `Any` and `Uncertain` belong to one side each: a statement can hold wherever
- * TYPO3 is written and a path cannot, because a path is one piece of work; a
- * path can be one nothing placed, which `R-AUD-002` asks to be said rather than
- * decided silently, and a statement nobody could place is one nobody should
- * have written.
+ * `Any` and `Uncertain` belong to one side each. A statement can hold wherever
+ * somebody writes TYPO3 and a path cannot, because a path is one piece of work.
+ * A path can be one nothing placed, which `R-AUD-002` asks the answer to say
+ * rather than decide silently. A statement nobody could place is one nobody
+ * should have written.
  */
 enum Scope: string
 {
@@ -29,7 +29,7 @@ enum Scope: string
     /** A package: a sitepackage, a project's own extension, or a third-party one. */
     case Extension = 'extension';
 
-    /** Holds wherever TYPO3 is written. Statements only. */
+    /** Holds wherever somebody writes TYPO3. Statements only. */
     case Any = 'any';
 
     /** Nothing in the call placed the work. Paths only. */
@@ -69,8 +69,8 @@ enum Scope: string
     /**
      * Paths and phrases that place a task inside core contribution.
      *
-     * Positive evidence, and deliberately narrow: it decides whether the core's
-     * own contribution process may be stated as applying, and the absence of an
+     * Positive evidence, and narrow on purpose. It decides whether an answer
+     * may state the core's own contribution process as due. The absence of an
      * extension or project marker is not evidence of anything.
      *
      * @var array<int, string>
@@ -80,18 +80,18 @@ enum Scope: string
         'typo3 core', 'core patch', 'core contribution',
         // The work that ends before a patch names the core as a tracker and a
         // checkout rather than as a patch. "Triage an old open core bug report"
-        // carried none of the three above, so a triage in a checkout
-        // `typo3_project_describe` had just called `core-checkout` was answered
-        // with the extension side of every intent it matched (`D-SKL-023`).
+        // carried none of the three above. So a triage in a checkout
+        // `typo3_project_describe` had just called `core-checkout` got the
+        // extension side of every intent it matched (`D-SKL-023`).
         'core issue', 'core bug', 'core checkout', 'core backlog', 'core tracker',
         // The tracker as people name it: "Forge 15984", not the host.
         'forge',
     ];
 
     /**
-     * Directories an extension is laid out in. A path that begins with one of
-     * them is inside a package, and no core file is ever named that way from
-     * the core root: there everything is below typo3/sysext/<key>/ or Build/.
+     * Directories that lay out an extension. A path that begins with one of
+     * them is inside a package, and no core file ever has that name from the
+     * core root. There everything is below typo3/sysext/<key>/ or Build/.
      *
      * @var array<int, string>
      */
@@ -102,10 +102,10 @@ enum Scope: string
 
     /**
      * The other half of that sentence, and only the half that holds. From the
-     * core root everything not below typo3/sysext/<key>/ is below Build/, but
-     * Build/ is not the core's alone — an extension that compiles anything
-     * ships one too. What no other repository has is what the core keeps in it:
-     * Build/Scripts/, which is runTests.sh and its neighbours, and
+     * core root everything not below typo3/sysext/<key>/ is below Build/. But
+     * Build/ is not the core's alone, because an extension that compiles
+     * anything ships one too. What no other repository has is what the core
+     * keeps in it. Build/Scripts/, which is runTests.sh and its neighbours, and
      * Build/Sources/, the backend's Sass and TypeScript sources.
      *
      * @var array<int, string>
@@ -113,8 +113,8 @@ enum Scope: string
     private const CORE_LAYOUT = ['build/scripts/', 'build/sources/'];
 
     /**
-     * Things that exist in the core repository and nowhere else. A line of
-     * advice naming one of them cannot be followed outside it.
+     * Things that exist in the core repository and nowhere else. Nobody can
+     * follow a line of advice that names one of them outside it.
      *
      * @var array<int, string>
      */
@@ -127,8 +127,8 @@ enum Scope: string
     /**
      * What every tool says first once it has recognised work outside the core.
      *
-     * One sentence in one place, because three tools now say it and a caller
-     * that learns to recognise it in one answer has to find it unchanged in the
+     * One sentence in one place. Three tools now say it, and a caller that
+     * learns to recognise it in one answer has to find it unchanged in the
      * next. Each tool appends what follows from it for its own payload.
      */
     public const OUTSIDE_CORE_NOTICE = 'This reads as work outside the TYPO3 core — a project or third-party '
@@ -149,9 +149,9 @@ enum Scope: string
         . 'nowhere else.';
 
     /**
-     * The scopes a path can be classified as, in the order a call's paths are
-     * grouped: core work first, then what nothing placed, then the project and
-     * the extensions in it.
+     * The scopes a path can fall in, in the order a call's paths group. Core
+     * work first, then what nothing placed, then the project and the extensions
+     * in it.
      *
      * @return array<int, self>
      */
@@ -180,15 +180,15 @@ enum Scope: string
      * The scope of one path: which kind of work an answer about it is for.
      *
      * The conventions here are the core's own and several of them do not exist
-     * outside it, so answering a project-extension question with a core patch
-     * checklist is worse than saying so. The evidence is structural where
-     * structure exists, because wording is the weakest of the signals:
+     * outside it. So a core patch checklist for a project-extension question is
+     * worse than a line that says so. The evidence is structural where
+     * structure exists, because words are the weakest of the signals.
      * "bootstrap_package" says everything about which repository this is and
-     * matches none of the phrases below. The order they are read in is
+     * matches none of the phrases below. The order of the read is
      * `R-SCO-001`'s.
      *
      * @param string $path one path, or '' where the call named none and only
-     *                     what was said about it can decide
+     *                     what the caller said about it can decide
      */
     public static function of(string $path, string $text = ''): self
     {
@@ -196,8 +196,8 @@ enum Scope: string
         $prose = mb_strtolower($text);
 
         // What this path says about itself. Nothing said about the call as a
-        // whole moves it, which is what keeps two paths of one call apart:
-        // folded into one string, the second path is answered for by the first.
+        // whole moves it, which is what keeps two paths of one call apart.
+        // Folded into one string, the first path answers for the second.
         if ($lowered !== '') {
             if (str_contains($lowered, 'typo3/sysext/')) {
                 return self::Core;
@@ -207,10 +207,9 @@ enum Scope: string
                     return self::Extension;
                 }
             }
-            // After the extension containers, not before: a sitepackage below
-            // packages/ has a Configuration/ of its own, and the site
-            // configuration this looks for is the one the project keeps outside
-            // any package.
+            // After the extension containers, not before. A sitepackage below
+            // packages/ has a Configuration/ of its own. The site configuration
+            // this looks for is the one the project keeps outside any package.
             foreach (self::PROJECT_WORK as $marker) {
                 if (str_starts_with($lowered, $marker)) {
                     return self::Project;
@@ -220,9 +219,9 @@ enum Scope: string
 
         // The same markers where the caller only wrote them down. A sysext path
         // is the only one strong enough to end the question outright. The prose
-        // ones are not, and cannot be: "not TYPO3 core, a composer package under
-        // vendor bk2k" names the core in order to rule it out, and reads to a
-        // substring search exactly like claiming it.
+        // ones are not, and cannot be. "Not TYPO3 core, a composer package
+        // under vendor bk2k" names the core in order to rule it out. To a
+        // substring search it reads exactly like a claim to it.
         if (str_contains($prose, 'typo3/sysext/')) {
             return self::Core;
         }
@@ -232,20 +231,19 @@ enum Scope: string
             }
         }
 
-        // What the path itself is still worth once no marker has decided: what
-        // the installation knows it as, then its shape. Both are read off the
-        // path alone, so neither says anything where the call named none.
+        // What the path itself is still worth once no marker has decided. What
+        // the installation knows it as, then its shape. Both come off the path
+        // alone, so neither says anything where the call named none.
         $systemExtension = null;
         if ($lowered !== '') {
             // A path that is the key of an installed package which is not a
-            // system extension. The installation is asked because only it
-            // knows: the same key is a system extension in one and a vendor
-            // package in the next. A path it has no package for says nothing,
-            // which is most of them — a file inside a package was placed by the
-            // markers above.
+            // system extension. The installation answers because only it knows:
+            // the same key is a system extension in one and a vendor package in
+            // the next. A path it has no package for says nothing, which is
+            // most of them. The markers above placed a file inside a package.
             $systemExtension = Instance::isSystemExtension($lowered);
             // The key the repository the session stands in declares for itself
-            // answers the same question from its own manifest, which is the one
+            // answers the same question from its own manifest. That is the one
             // source there is before `composer install` has run (`D-SCO-012`).
             if ($systemExtension === false || $lowered === Instance::startedInPackage()) {
                 return self::Extension;
@@ -263,11 +261,11 @@ enum Scope: string
             }
         }
 
-        // Naming a system extension by its key, or naming the contribution
-        // workflow, is evidence in the other direction. Both beat the weakest
-        // signal there is — which installation the session happens to sit in —
-        // and neither beats a marker above, because those describe the work
-        // while these only accompany it.
+        // A system extension named by its key, or the contribution workflow by
+        // name, is evidence in the other direction. Both beat the weakest
+        // signal there is, which installation the session happens to sit in.
+        // Neither beats a marker above, because those describe the work while
+        // these only accompany it.
         if ($systemExtension === true || self::isCoreWork([$path], $text)) {
             return self::Core;
         }
@@ -286,9 +284,9 @@ enum Scope: string
     }
 
     /**
-     * A path in the one form the markers are written in.
+     * A path in the one form the markers have.
      *
-     * The "./" a caller writes for "here" goes, and nothing else: trimming the
+     * The "./" a caller writes for "here" goes, and nothing else. A trim of the
      * two characters as a class ate the dot of a dotfile, so no path could ever
      * reach the `.ddev/` entry (`D-SCO-012`).
      */
@@ -312,19 +310,20 @@ enum Scope: string
     /**
      * Whether the repository this session sits in can be the core at all.
      *
-     * Build/Scripts/ and Build/Sources/ are the core's own from the core root,
-     * and from an extension's root they are that extension's build setup. What
-     * decides is the manifest rather than the directory name: the core declares
+     * Build/Scripts/ and Build/Sources/ are the core's own from the core root.
+     * From an extension's root they are that extension's build setup. What
+     * decides is the manifest rather than the directory name. The core declares
      * "type": "typo3-cms-core" in the composer.json at its root, which is what
-     * `Instance` reads a checkout's kind from, and a repository declaring
+     * `Instance` reads a checkout's kind from. A repository that declares
      * anything else has already said it is not the core.
      *
      * The repository the session sits in, rather than the installation named
-     * for reading — the two are the same until `TYPO3_DEV_COMPANION_ROOT` says otherwise.
+     * for the read. The two are the same until `TYPO3_DEV_COMPANION_ROOT` says
+     * otherwise.
      *
-     * Where nothing places the session at all, the shape is left standing — a
+     * Where nothing places the session at all, the shape stands. A
      * `Build/Sources/` path is then the only evidence there is. A repository
-     * whose root manifest declares an extension is placed, and there that
+     * whose root manifest declares an extension has a place, and there that
      * directory is the extension's own build setup.
      */
     private static function couldBeTheCore(): bool
@@ -335,15 +334,15 @@ enum Scope: string
     }
 
     /**
-     * Whether the session is standing in the core monorepo.
+     * Whether the session stands in the core monorepo.
      *
-     * The mirror of the gate above, for the other layout: `Classes/`,
-     * `Configuration/` and `Resources/` are what a package is laid out as, and
-     * from the core root nothing is named that way. So inside a core checkout
-     * such a path is one a contributor typed from the system extension directory
-     * they were standing in, and reading it as somebody's extension is the back
-     * half of `D-SCO-005`'s first **Wrong if**. Where the session sits in no
-     * installation the shape stands, being the only evidence in the call.
+     * The mirror of the gate above, for the other layout. `Classes/`,
+     * `Configuration/` and `Resources/` are what lays out a package, and from
+     * the core root nothing has that name. So inside a core checkout such a
+     * path is one a contributor typed from the system extension directory they
+     * stood in. A read of it as somebody's extension is the back half of
+     * `D-SCO-005`'s first **Wrong if**. Where the session sits in no
+     * installation the shape stands, as the only evidence in the call.
      */
     private static function isTheCoreCheckout(): bool
     {
@@ -365,15 +364,15 @@ enum Scope: string
     }
 
     /**
-     * Whether every path this call placed is outside the core, at least one
-     * having been placed at all.
+     * Whether every path this call placed is outside the core, with at least
+     * one placed at all.
      *
-     * A group that placed nothing takes the placement the rest of the call has:
-     * unknown falls back to the core where nothing else was placed
-     * (`D-SCO-008`), and to the repository the call is already in where
-     * something was (`D-SCO-016`). `Tests/Functional/` is no layout marker, so
-     * a test file beside the `Classes/` file it covers used to hold the whole
-     * answer in the core and hand over four suites that cannot run.
+     * A group that placed nothing takes the placement the rest of the call has.
+     * Unknown falls back to the core where nothing else has a place
+     * (`D-SCO-008`). It falls back to the repository the call is already in
+     * where something has (`D-SCO-016`). `Tests/Functional/` is no layout
+     * marker. So a test file beside the `Classes/` file it covers used to hold
+     * the whole answer in the core. It handed over four suites that cannot run.
      *
      * @param array<int, array{scope: self, paths: array<int, string>}> $groups
      */
@@ -416,10 +415,10 @@ enum Scope: string
     }
 
     /**
-     * A call's paths as the questions they actually are: one group per scope,
-     * core work first, then what nothing placed, then the project and the
-     * extensions in it. A call that named no path is one group all the same —
-     * what was said about it is then the whole of the evidence.
+     * A call's paths as the questions they are. One group per scope, core work
+     * first, then what nothing placed, then the project and the extensions in
+     * it. A call that named no path is one group all the same. What the caller
+     * said about it is then the whole of the evidence.
      *
      * @param array<int, string> $paths
      * @param array<int, array{path: string, scope: self}> $scopes
@@ -445,8 +444,8 @@ enum Scope: string
     /**
      * What every tool says once a call names paths of more than one scope.
      *
-     * The paths are named, because the whole point of splitting is that the
-     * caller can tell which half of the answer is about which of its files.
+     * The paths stand by name. The whole point of the split is that the caller
+     * can tell which half of the answer is about which of its files.
      *
      * @param array<int, string> $paths
      */
@@ -464,10 +463,10 @@ enum Scope: string
     /**
      * Whether a single step, check or checklist item is core-only.
      *
-     * The distinction the notice draws in prose has to be drawn in the payload
-     * too, and it is drawn per line rather than per section: a checklist mixes
-     * "reproduce the bug with a failing test" — true anywhere — with "add a
-     * changelog file under typo3/sysext/", which is a path that does not exist
+     * The distinction the notice draws in prose has to stand in the payload
+     * too, and it stands per line rather than per section. A checklist mixes
+     * "reproduce the bug with a failing test", true anywhere, with "add a
+     * changelog file under typo3/sysext/". That is a path that does not exist
      * in the repository the caller is in.
      */
     public static function isCoreOnly(string $text): bool
@@ -483,24 +482,18 @@ enum Scope: string
     }
 
     /**
-     * Whether anything in the task actually says this is core work.
+     * Whether anything in the task says this is core work.
      *
-     * A scope of `core` can be the last signal speaking — the checkout the
-     * session sits in — and most tasks say nothing either way: "review the TCA
-     * of an extension" is one of them. Where an answer would state the core's
-     * own process as applying, that is not enough, so this asks for the
-     * evidence rather than for the absence of the opposite.
+     * A scope of `core` can be the last signal that speaks, the checkout the
+     * session sits in, and most tasks say nothing either way. Where an answer
+     * would state the core's own process as due, that is not enough. So this
+     * asks for the evidence rather than for the absence of the opposite.
      *
-     * Each marker is read as the word it is, which is what the intent matcher
-     * beside this gate already does. Substring matching asked a marker to carry
-     * its own boundary — `forge ` with the space that keeps "forget" out — and
-     * a brief writing "from Forge," cleared neither gate (`D-SKL-078`).
-     *
-     * A path the layout puts in the core is that evidence too, and it is read
-     * per path rather than as a marker of its own: `Build/Scripts/` is the
-     * core's only from a root that could be the core, and the joined haystack
-     * below carries no such guard and would read the task text as well
-     * (`D-SKL-080`).
+     * Each marker reads as the word it is, because a substring match cleared
+     * neither gate on "from Forge," (`D-SKL-078`). A path the layout puts in
+     * the core is that evidence too, and it reads per path rather than as a
+     * marker of its own, because `Build/Scripts/` is the core's only from a
+     * root that could be the core (`D-SKL-080`).
      *
      * @param array<int, string> $paths
      */

@@ -10,15 +10,15 @@ use TYPO3\DevCompanion\Paths;
 /**
  * The custom elements the core declares, and which of them a package may use.
  *
- * An element cannot be attached to the wrong node, which is the whole of what
- * went wrong with a borrowed class name, so where one exists it is the answer
- * and the class is the way round it — `D-CAT-009`.
+ * An element cannot attach to the wrong node, which is the whole of what went
+ * wrong with a borrowed class name. So where one exists it is the answer and
+ * the class is the way round it, `D-CAT-009`.
  *
- * Only what a styleguide demo writes is offered. The core declares 137 and
- * demonstrates twelve; the rest are the backend's own and handing one over
- * would be the mistake this catalog is otherwise careful about. A tag survives
- * that reading where a class name does not, because a demo builds class names
- * in a loop and never builds a tag name.
+ * Only what a styleguide demo writes goes out. The core declares 137 and
+ * demonstrates twelve. The rest are the backend's own, and one of them in an
+ * answer would be the mistake this catalog is otherwise careful about. A tag
+ * survives that read where a class name does not. A demo builds class names in
+ * a loop and never builds a tag name.
  */
 final class CustomElements
 {

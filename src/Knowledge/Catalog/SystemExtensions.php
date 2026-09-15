@@ -10,15 +10,16 @@ use TYPO3\DevCompanion\Paths;
 /**
  * Which extensions the TYPO3 core ships, and on which of the covered versions.
  *
- * "Is this extension part of the core" is asked in both directions and answered
- * from memory in both: a community package cited as evidence of core direction,
- * and a system extension nobody knew existed. Neither is answerable from an
- * installation — the interesting case is an extension that is not installed,
- * which is exactly when the question comes up.
+ * "Is this extension part of the core" comes in both directions and gets an
+ * answer from memory in both. A community package cited as evidence of core
+ * direction, and a system extension nobody knew existed. Neither is answerable
+ * from an installation — the interesting case is an extension that is not
+ * installed, which is exactly when the question comes up.
  *
- * So it is a catalog rather than a lookup against the installation: read off one
- * checkout per covered version, with the range each key holds on, and
- * re-derivable by bin/cli system-extensions:check when a core release adds or drops one.
+ * So it is a catalog rather than a lookup against the installation. Read off
+ * one checkout per covered version, with the range each key holds on. bin/cli
+ * system-extensions:check derives it again when a core release adds or drops
+ * one.
  */
 final class SystemExtensions
 {
@@ -49,8 +50,8 @@ final class SystemExtensions
     /**
      * The entries a query names, on the version it asks about.
      *
-     * A query is matched against the extension key and the Composer package
-     * name before the description, because that is what a caller has in hand:
+     * A query matches against the extension key and the Composer package name
+     * before the description. That is what a caller has in hand:
      * "typo3/cms-content-blocks", "theme_camino", "impexp". Both spellings of
      * the same thing therefore find it — the key with underscores and the
      * package with dashes.

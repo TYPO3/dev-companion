@@ -16,14 +16,14 @@ namespace TYPO3\DevCompanion\Knowledge\Catalog;
  * This is a port of the core's own path-to-domain rules, kept here so the
  * catalog needs no core checkout. The class holding them below
  * TYPO3\CMS\Core\Localization\ has been both TranslationDomainMapper and
- * TranslationDomainResolver, so verify against whichever the branch has:
+ * TranslationDomainResolver, so verify against whichever the branch has.
  *
  * - domain format: package[.subdir...].resource
- * - "Resources/Private/Language/" is dropped from the path
+ * - "Resources/Private/Language/" comes off the path
  * - "Configuration/Sets/{Name}/labels.xlf" becomes "sets.{name}"
- * - directories are converted from UpperCamelCase to snake_case
+ * - directories turn from UpperCamelCase into snake_case
  * - "locallang.xlf" becomes "messages", "locallang_{suffix}.xlf" becomes "{suffix}"
- * - a locale prefix such as "de.locallang.xlf" is ignored
+ * - a locale prefix such as "de.locallang.xlf" does not count
  */
 final class TranslationDomain
 {
@@ -55,9 +55,9 @@ final class TranslationDomain
      * ("typo3/sysext/backend/Resources/Private/Language/locallang.xlf"), or
      * null when the path names no extension.
      *
-     * The derivation is computed, so it also answers for a file the catalog
-     * does not contain — including one a patch is about to add, which is
-     * exactly when the domain cannot be looked up anywhere.
+     * The derivation is a computation, so it also answers for a file the
+     * catalog does not contain. That includes one a patch is about to add,
+     * which is exactly when no lookup anywhere finds the domain.
      */
     public static function fromPath(string $path): ?string
     {

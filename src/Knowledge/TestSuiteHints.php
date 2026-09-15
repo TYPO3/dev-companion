@@ -39,14 +39,14 @@ final class TestSuiteHints
         return [
             'invocation' => [
                 // What has to be true before any suite runs, apart from what
-                // one of them takes: the container the script starts, and the
-                // `vendor/` the checkout may not have. A session poking at
-                // `runTests.sh` with `ls` and `command -v` was holding exactly
-                // these two questions (`D-AUD-009`).
+                // one of them takes. The container the script starts, and the
+                // `vendor/` the checkout may not have. A session that probed
+                // `runTests.sh` with `ls` and `command -v` held exactly these
+                // two questions (`D-AUD-009`).
                 'preconditions' => array_map('strval', $invocation['preconditions'] ?? []),
-                // The one note that is about work being lost rather than about
-                // a run failing, kept apart so the brief handing over a command
-                // can carry it too — `D-ANS-145`.
+                // The one note that is about lost work rather than about a
+                // failed run. Kept apart so the brief that hands over a command
+                // can carry it too, `D-ANS-145`.
                 'beforeYouRun' => (string) ($invocation['beforeYouRun'] ?? ''),
                 'notes' => array_map('strval', $invocation['notes'] ?? []),
                 'options' => array_map(static fn(array $o): array => [
@@ -90,11 +90,11 @@ final class TestSuiteHints
     /**
      * The suites that exist on a given major, by name.
      *
-     * This is what makes a check filterable without repeating the range on
+     * This is what makes a check filterable without a repeat of the range on
      * every one of them. A check is a runTests.sh invocation, the script
      * belongs to one branch of the core, and the suites it offers change
-     * between majors — so the range is declared once, on the suite, and every
-     * hint or intent that names it in `-s <suite>` inherits it.
+     * between majors. So the range stands once, on the suite, and every hint or
+     * intent that names it in `-s <suite>` inherits it.
      *
      * @return array<int, string>
      */
@@ -108,7 +108,7 @@ final class TestSuiteHints
      * the target version.
      *
      * A check that names a suite the caller's runTests.sh does not have is not
-     * a weaker answer than none, it is a wrong one: it sends them to debug
+     * a weaker answer than none, it is a wrong one. It sends them to debug
      * their checkout for a command this server invented for another branch.
      *
      * @param array<int, string> $checks
@@ -135,12 +135,12 @@ final class TestSuiteHints
      * The suites any change in one of these domains runs, whatever the task
      * says about itself.
      *
-     * This is what the hints used to carry as a `checks` list on
-     * every entry: twenty-eight of them named nothing but the functional suite
-     * and phpstan, which is not a property of the subject but of the domain it
-     * is written in. Declared once here, a task in a domain gets them without a
-     * matcher having to recognise the words "test" or "suite" in a sentence
-     * about TSconfig field labels.
+     * This is what the hints used to carry as a `checks` list on every entry.
+     * Twenty-eight of them named nothing but the functional suite and phpstan,
+     * which is not a property of the subject but of its domain. Declared once
+     * here, a task in a domain gets them without a matcher. None has to
+     * recognise the words "test" or "suite" in a sentence about TSconfig field
+     * labels.
      *
      * @param array<int, string> $domains
      * @return array<int, string>
@@ -158,11 +158,11 @@ final class TestSuiteHints
     }
 
     /**
-     * The other half of a narrowing: the domains no given path reached, and how
+     * The other half of a filter: the domains no given path reached, and how
      * many suites they hold on the target version.
      *
-     * Counted rather than listed, because the list is what the narrowing exists
-     * to avoid — `D-ANS-074`. Nothing narrowed means nothing withheld.
+     * Counted rather than listed, because the list is what the filter exists to
+     * avoid, `D-ANS-074`. No filter means nothing held back.
      *
      * @param array<int, string> $domains The domains the answer was narrowed to.
      * @return array{domains: array<int, string>, suites: int}
@@ -214,17 +214,17 @@ final class TestSuiteHints
             'description' => $hint['description'],
             'whenToUse' => $hint['whenToUse'],
             'domains' => $hint['domains'],
-            // Rendered the same way a statement's range is: beside the entry
-            // rather than inside it, so an unfiltered listing still says which
-            // branches actually have the suite.
+            // Rendered the same way a statement's range is, beside the entry
+            // rather than inside it. So an unfiltered listing still says which
+            // branches have the suite.
             'versions' => Versions::label($hint['since'], $hint['until']),
         ], array_values($hints));
     }
 
     /**
-     * Ranks suites against a query. When $domains is given, only suites touching
-     * one of those domains are considered — so a PHP-only task never gets a
-     * Sass build recommended.
+     * Ranks suites against a query. With $domains, only suites that touch one
+     * of those domains count, so a PHP-only task never gets a Sass build as a
+     * recommendation.
      *
      * @param array<int, string> $domains
      * @return array<int, Suite>
@@ -244,7 +244,7 @@ final class TestSuiteHints
 
         $terms = self::meaningfulTerms(trim($query ?? ''));
 
-        // No query (or only stopwords): list everything for browsing.
+        // No query (or only stopwords): list everything to browse.
         if ($terms === []) {
             return $hints;
         }

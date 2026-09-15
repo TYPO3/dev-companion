@@ -13,11 +13,11 @@ use TYPO3\DevCompanion\Search\TermSearch;
 /**
  * Reads and searches the bundled markdown knowledge documents.
  *
- * Search works on whole `##` sections, not on single lines: a section is
- * returned with its heading and its original formatting (code fences included),
- * so the answer stays readable and quotable. A section only counts as a match
- * when it covers enough of the query, so a lookup that found nothing relevant
- * says so instead of returning the nearest unrelated prose.
+ * Search works on whole `##` sections, not on single lines. A section comes
+ * back with its heading and its original format, code fences included, so the
+ * answer stays readable and quotable. A section only counts as a match when it
+ * covers enough of the query. So a lookup that found nothing relevant says so
+ * instead of returns the nearest unrelated prose.
  */
 final class Documents
 {
@@ -28,12 +28,12 @@ final class Documents
     private const MIN_COVERAGE = 0.5;
 
     /**
-     * A term in the heading weighs more than the same term in the body: a
+     * A term in the heading weighs more than the same term in the body. A
      * section titled "Design Tokens" is about design tokens, and one that
-     * mentions them in passing is not.
+     * mentions them in a clause is not.
      *
-     * The document title sits between the two, and it is what a caller naming
-     * the subject before the question is matched on — `D-ANS-037`.
+     * The document title sits between the two, and it is what a caller who
+     * names the subject before the question matches on, `D-ANS-037`.
      *
      * @var array<string, int>
      */
@@ -42,33 +42,36 @@ final class Documents
     /**
      * Section length that still counts for what its terms say.
      *
-     * A section is cut at MAX_SECTION_LENGTH, which is roughly this many words,
-     * so a section at that length is an ordinary one rather than an outlier and
-     * nothing here is long enough to contain a term by accident. The hint
+     * A section cuts at MAX_SECTION_LENGTH, which is roughly this many words.
+     * So a section at that length is an ordinary one rather than an outlier.
+     * Nothing here is long enough to contain a term by accident. The hint
      * corpus is the other case and sets its own reference.
      */
     private const UNDILUTED_WORDS = 400;
 
-    /** Longest section body returned verbatim before it is cut on a line boundary. */
+    /**
+     * Longest section body that comes back verbatim before a cut on a line
+     * boundary.
+     */
     private const MAX_SECTION_LENGTH = 2400;
 
     /**
      * How a section says which majors it holds for.
      *
-     * Two labelled lines directly under the heading, the shape a todo head is
-     * written in, so one habit covers both. They are data rather than a
-     * sentence — `D-VER-001` — and they are stripped before the body is handed
-     * over, because a section whose body is a file would otherwise carry them
-     * into the file the caller writes out.
+     * Two labelled lines directly under the heading, the shape of a todo head,
+     * so one habit covers both. They are data rather than a sentence,
+     * `D-VER-001`, and they come off before the body goes over. A section whose
+     * body is a file would otherwise carry them into the file the caller writes
+     * out.
      */
     private const BINDING = '/^\*\*(Since|Until):\*\*\s*(\d+)\s*$/';
 
     /**
-     * How a document is addressed from outside this process.
+     * A document's address from outside this process.
      *
-     * The corpus owns it rather than the SDK adapter, because the tools and the
-     * answer shapes need it too and neither may reach into `Sdk\` for a name.
-     * It was spelled by hand in three classes before `D-KNW-059`.
+     * The corpus owns it rather than the SDK adapter. The tools and the answer
+     * shapes need it too, and neither may reach into `Sdk\` for a name. It
+     * stood by hand in three classes before `D-KNW-059`.
      */
     public const URI_PREFIX = 'typo3://guides/';
 
@@ -89,10 +92,10 @@ final class Documents
     /**
      * How deep a document sits: the scope, one topic, one name — `D-KNW-058`.
      *
-     * The depth is what publishes a file rather than the directory alone. Lying
-     * below `knowledge/documents/` used to be the whole condition, and a readme
-     * laid beside the corpus became a resource without anybody deciding it; a
-     * readme laid inside a topic directory would do the same.
+     * The depth is what publishes a file rather than the directory alone. A
+     * place below `knowledge/documents/` used to be the whole condition, and a
+     * readme beside the corpus became a resource without a decision by anybody.
+     * A readme inside a topic directory would do the same.
      */
     private const DEPTH = 2;
 
@@ -101,8 +104,8 @@ final class Documents
      * one.
      *
      * The field is `guides`, the argument is a `documentId` and the call is
-     * this: no name joins the three, and a session that read the array as data
-     * had the route only in the sentence above it — `D-GUI-012`.
+     * this. No name joins the three, and a session that read the array as data
+     * had the route only in the sentence above it, `D-GUI-012`.
      */
     private const READ_BY = 'typo3_rule_lookup';
 
@@ -153,7 +156,7 @@ final class Documents
     /**
      * What a document declares about itself — `D-KNW-057`.
      *
-     * Absent fields come back empty rather than missing, so a caller reads one
+     * Absent fields come back empty rather than gone, so a caller reads one
      * shape whether the file declares anything or not.
      *
      * @return array{description: string, whenToUse: string, hints: array<int, string>}
@@ -161,7 +164,7 @@ final class Documents
     private static function declared(string $content): array
     {
         preg_match('/\A---\R(.*?)\R---\R/s', $content, $matches);
-        // Yaml rather than a value per key, the way a decision is read: a
+        // Yaml rather than a value per key, the way a decision reads. A
         // description is a sentence and a sentence carries colons.
         $declared = $matches === [] ? [] : Yaml::parse($matches[1]);
         $declared = is_array($declared) ? $declared : [];
@@ -176,7 +179,7 @@ final class Documents
     }
 
     /**
-     * The documents declaring themselves the long form of this hint.
+     * The documents that declare themselves the long form of this hint.
      *
      * @return array<int, array{id: string, title: string, path: string, description: string, whenToUse: string, hints: array<int, string>}>
      */
@@ -189,13 +192,13 @@ final class Documents
     }
 
     /**
-     * What a client reads to understand what it is being offered, for a
-     * document offered as a resource.
+     * What a client reads to understand the offer, for a document on offer as a
+     * resource.
      *
-     * A resource is picked out of a list rather than called mid-task, so the
-     * list is the whole of what the choice is made on — `R-ANS-022`. It says
-     * what the page is and when to reach for it, which the file declares, and
-     * who the answers oblige, which is the directory it sits in.
+     * A resource comes out of a list rather than a call mid-task, so the list
+     * is the whole of what the choice rests on, `R-ANS-022`. It says what the
+     * page is and when to reach for it, which the file declares. It says who
+     * the answers oblige, which is the directory it sits in.
      */
     public static function description(string $id): ?string
     {
@@ -217,10 +220,10 @@ final class Documents
 
         return $card . ' ' . match (self::scopeOf($id)) {
             Scope::Core => "The TYPO3 core's own process, which does not transfer to extension or site work.",
-            // Named rather than folded into the sentence below it: a document
-            // about setting a package up answers for the package, and telling a
-            // core contributor it holds for their work too is how the core's own
-            // harness gets rebuilt by hand.
+            // Named rather than folded into the sentence below it. A document
+            // about the setup of a package answers for the package. A line to a
+            // core contributor that it holds for their work too is how the
+            // core's own harness gets a rebuild by hand.
             Scope::Extension => 'Answers for a package rather than for the core repository, whose own harness is a different one.',
             Scope::Project => 'Answers for the repository around an installation rather than for the core repository.',
             default => 'Holds for core contribution, extension development and site work alike.',
@@ -228,17 +231,17 @@ final class Documents
     }
 
     /**
-     * One document as an answer names it: the call that reads it, what it is,
-     * and what the caller has to be doing for it to be the page to read.
+     * One document as an answer names it. The call that reads it, what it is,
+     * and what the caller has to do for it to be the page to read.
      *
-     * The orientation answer and a brief both carry these, so the mapping from
-     * what a document declares to what an answer says lives here rather than
-     * in each of them — `D-GUI-012`.
+     * The orientation answer and a brief both carry these. So the map from what
+     * a document declares to what an answer says lives here rather than in each
+     * of them, `D-GUI-012`.
      *
-     * The scope is said rather than left in the id. A session filtered the
+     * The scope stands in words rather than in the id. A session filtered the
      * listing on the prefix, read `core/` as "not mine" and worked out the
-     * procedure itself; it filtered correctly that time, and what it was doing
-     * is reading a path segment as data — `D-ANS-150`.
+     * procedure itself. It filtered correctly that time, and what it did was
+     * treat a path segment as data, `D-ANS-150`.
      *
      * @param array{id: string, title: string, whenToUse: string, ...} $document
      * @return array{id: string, title: string, when: string, scope: string, tool: string}
@@ -268,9 +271,9 @@ final class Documents
     /**
      * The `##` headings of one document, in the order the page carries them.
      *
-     * Deduplicated, because one subject bound to two ranges is two sections
-     * under one heading, and a reader counting the headings of `playwright.md`
-     * gets nine where its `##` lines are ten (`D-ANS-008`).
+     * Each once, because one subject bound to two ranges is two sections under
+     * one heading. A reader who counts the headings of `playwright.md` gets
+     * nine where its `##` lines are ten (`D-ANS-008`).
      *
      * @return array<int, string>
      */
@@ -298,8 +301,8 @@ final class Documents
 
     /**
      * Ranks whole document sections against a free-text query. Sections below
-     * the coverage threshold are dropped, and a section repeated across
-     * documents is returned once.
+     * the coverage threshold drop out, and a section that repeats across
+     * documents comes back once.
      *
      * @param array<int, string> $documentIds Restrict the search to these documents.
      * @param int|array<int, int>|null $target The major, or the majors a repository serves at once.
@@ -386,12 +389,12 @@ final class Documents
      * The sections that hold on the target, the way `Hints::forVersion()` keeps
      * a statement.
      *
-     * The target is one major, or the several a repository serves at once: a
-     * package declaring `^13.4 || ^14.3` has to see both variants of a file it
-     * ships on both, and the range beside each is what says which is which.
-     * Without a target nothing is filtered and every variant comes back with
-     * its range, which is the honest answer when nobody said which version this
-     * is for.
+     * The target is one major, or the several a repository serves at once. A
+     * package that declares `^13.4 || ^14.3` has to see both variants of a file
+     * it ships on both. The range beside each is what says which is which.
+     * Without a target nothing filters and every variant comes back with its
+     * range. That is the honest answer when nobody said which version this is
+     * for.
      *
      * @param array<int, array{heading: string, body: string, since: ?int, until: ?int}> $sections
      * @param int|array<int, int>|null $target
@@ -416,25 +419,24 @@ final class Documents
     }
 
     /**
-     * The most of a query some section still carries, as a query that can be
-     * asked outright.
+     * The most of a query some section still carries, as a query a caller can
+     * ask outright.
      *
      * What a miss here owes that the topic list cannot say: which words emptied
-     * it. A query longer than the topic it names is dropped by MIN_COVERAGE
-     * whole, so the section that answers part of it is unreachable and nothing
-     * in the answer points at it.
+     * it. MIN_COVERAGE drops a query longer than the topic it names whole. So
+     * the section that answers part of it is out of reach and nothing in the
+     * answer points at it.
      *
      * The matcher is this corpus's own, and the fields are the ones `search()`
-     * reads — a subset is only worth offering where the same call returns
-     * something for it. What is named back is the caller's own spelling of each
-     * term rather than the stem it was reduced to; both reach the same
-     * sections.
+     * reads. A subset is only worth an offer where the same call returns
+     * something for it. What comes back is the caller's own form of each term
+     * rather than the stem behind it; both reach the same sections.
      *
      * The count is what carries every word of the subset, which here is a floor
-     * rather than the length of the answer: `search()` keeps a section covering
-     * half the query's weight, so the re-query returns those sections and
-     * whatever else clears MIN_COVERAGE. It is one pass and it is comparable
-     * across the subsets, which is what the caller picks one by.
+     * rather than the length of the answer. `search()` keeps a section that
+     * covers half the query's weight, so the re-query returns those sections
+     * and whatever else clears MIN_COVERAGE. It is one pass and it is
+     * comparable across the subsets, which is what the caller picks one by.
      *
      * @param array<int, string> $documentIds Restrict to these documents.
      * @param int|array<int, int>|null $target The majors the same call searched.
@@ -465,17 +467,17 @@ final class Documents
 
     /**
      * Splits a document into its `##` sections. The heading line and the body
-     * are kept as written, so code fences and nested lists survive, and the
-     * binding lines below the heading are read off and removed.
+     * stay as they are, so code fences and nested lists survive. The range
+     * lines below the heading come off.
      *
      * @return array<int, array{heading: string, body: string, since: ?int, until: ?int}>
      */
     private static function sections(string $content): array
     {
-        // The front matter describes the document rather than answering a
-        // query — `D-KNW-057`. Left in, it matches words about a page instead
-        // of words in it, and it lands in the body of the section above the
-        // first heading, which is one this corpus returns.
+        // The front matter describes the document rather than answering a query
+        // — `D-KNW-057`. Left in, it matches words about a page instead of
+        // words in it. It lands in the body of the section above the first
+        // heading, which is one this corpus returns.
         $content = (string) preg_replace('/\A---\R.*?\R---\R/s', '', $content);
         $lines = preg_split('/\R/', $content) ?: [];
 
@@ -496,7 +498,7 @@ final class Documents
                 continue;
             }
 
-            // Skip the document title; it is carried separately.
+            // Skip the document title; it travels apart.
             if (!$inFence && preg_match('/^#\s+/', $line) === 1) {
                 continue;
             }
@@ -510,7 +512,7 @@ final class Documents
     /**
      * Appends the buffered section, unless it has no body: a heading with
      * nothing under it is not an answer. A section that is nothing but its
-     * binding is one of those, and it is dropped rather than returned empty.
+     * range is one of those, and it drops out rather than comes back empty.
      *
      * @param array<int, array{heading: string, body: string, since: ?int, until: ?int}> $sections
      * @param array<int, string> $buffer
@@ -535,10 +537,10 @@ final class Documents
     /**
      * The binding declared at the top of a section, and the section without it.
      *
-     * Only the run of lines before the first line of content is read, so a
-     * `**Since:**` written further down is body text and binds nothing — the
-     * declaration has one place, which is what keeps a reader from having to
-     * search a section for the range it holds on.
+     * Only the run of lines before the first line of content counts, so a
+     * `**Since:**` further down is body text and binds nothing. The declaration
+     * has one place, which is what spares a reader a search of a section for
+     * the range it holds on.
      *
      * @param array<int, string> $lines
      * @return array{since: ?int, until: ?int, lines: array<int, string>}
@@ -587,12 +589,12 @@ final class Documents
      * The fields that say how much a term separates one section from the next.
      *
      * The title is not one of them, because it is the same string in every
-     * section of its document: counting it there makes a term look common in
-     * proportion to how many sections that document happens to have, which is a
-     * fact about its length rather than about what the term distinguishes. It
-     * is enough to sink a query — `commit message sitepackage` answered with
-     * the commit conventions until the title of the document carrying them was
-     * counted against its own words.
+     * section of its document. A count of it there makes a term look common in
+     * proportion to how many sections that document happens to have. That is a
+     * fact about its length rather than about what the term tells apart. It is
+     * enough to sink a query. `commit message sitepackage` answered with the
+     * commit conventions until the title of the document with them counted
+     * against its own words.
      *
      * @param array<string, mixed> $candidate
      * @return array<string, string>
@@ -616,12 +618,12 @@ final class Documents
         $lastBreak = strrpos($cut, "\n");
         $cut = $lastBreak === false ? $cut : substr($cut, 0, $lastBreak);
 
-        // A cut that lands between the two fences of a code block hands over an
-        // opening ``` with nothing closing it, and every line the caller reads
-        // after that is inside a code block that never ends. Which byte the
-        // budget falls on is a property of the text above it, so this held only
-        // as long as nobody edited the document. The half-open fence goes with
-        // the cut.
+        // A cut that lands between the two fences of a code block hands over a
+        // first ``` with nothing to close it. Every line the caller reads after
+        // that is inside a code block that never ends. Which byte the budget
+        // falls on is a property of the text above it, so this held only as
+        // long as nobody edited the document. The half-open fence goes with the
+        // cut.
         if (substr_count($cut, '```') % 2 !== 0) {
             $fence = strrpos($cut, '```');
             $cut = $fence === false ? $cut : substr($cut, 0, $fence);

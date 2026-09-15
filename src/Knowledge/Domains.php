@@ -9,15 +9,15 @@ use TYPO3\DevCompanion\Search\Text;
 /**
  * Derives the technical domains a task touches from its paths and description.
  *
- * Used to keep answers inside the domain that was actually asked about: a PHP
- * bugfix should never get a Sass build recommended, and a task that only names
- * PHP paths should not be answered with backend TypeScript conventions.
+ * Keeps answers inside the domain of the question. A PHP bugfix should never
+ * get a Sass build as a recommendation. A task that only names PHP paths should
+ * not get backend TypeScript conventions.
  *
- * The asset domains are deliberately separate rather than one "frontend": a
+ * The asset domains stand apart on purpose rather than as one "frontend". A
  * TypeScript module, a Sass partial, and a Fluid template share a directory
- * tree but not a single convention, test suite, or reviewer. Folding them
- * together made every .ts path pull CSS conventions and every .scss path pull
- * TypeScript ones.
+ * tree but not a single convention, test suite, or reviewer. As one they made
+ * every .ts path pull CSS conventions and every .scss path pull TypeScript
+ * ones.
  */
 final class Domains
 {
@@ -25,10 +25,10 @@ final class Domains
     /**
      * TypeScript and the JavaScript it becomes, as one domain.
      *
-     * A `.js` file in the backend is the committed output of a `.ts` one, so a
-     * path to either detects as this and a hint about either is tagged with it.
+     * A `.js` file in the backend is the committed output of a `.ts` one. So a
+     * path to either detects as this and a hint about either carries it.
      * `javascript` was a category of its own until `D-KNW-034` and never a
-     * domain: nothing detected as it and no hint was ever filed under it.
+     * domain. Nothing detected as it and no hint ever sat under it.
      */
     public const TYPESCRIPT = 'typescript';
     public const TYPOSCRIPT = 'typoscript';
@@ -38,12 +38,12 @@ final class Domains
     public const XLIFF = 'xliff';
 
     /**
-     * The one a hint may be tagged with and no path ever detects as.
+     * The one a hint may carry and no path ever detects as.
      *
-     * `any` is a hint that holds wherever TYPO3 is written and is therefore
-     * selected by every query — the bucket every cross-domain hint used to fall
-     * into for want of a second tag. Nothing carries it since `D-KNW-033`, and
-     * `HintsTest` fails on the first one that does.
+     * `any` is a hint that holds wherever somebody writes TYPO3, and so every
+     * query selects it. That was the bucket every cross-domain hint used to
+     * fall into for want of a second tag. Nothing carries it since `D-KNW-033`,
+     * and `HintsTest` fails on the first one that does.
      */
     public const ANY = 'any';
 
@@ -64,17 +64,17 @@ final class Domains
             'php', 'class', 'service', 'datahandler', 'tca', 'formengine',
             'middleware', 'repository', 'controller', 'event listener', 'hook',
             'dependency injection', 'phpstan',
-            // Testing is PHP work here, and the bare word is not how it is
-            // said: `test` alone moved two of the 105 scenario prompts and hint
-            // titles into PHP and made one of them worse, because the term
-            // weights are taken over the candidates and a wider set reweighs
-            // everything in it. These are the phrasings of somebody who has no
-            // suite yet, which is the case the domain was missing (D-KNW-009).
+            // Tests are PHP work here, and the bare word is not how anybody
+            // says it. `test` alone moved two of the 105 scenario prompts and
+            // hint titles into PHP and made one of them worse. The term weights
+            // run over the candidates, and a wider set reweighs everything in
+            // it. These are the words of somebody who has no suite yet, which
+            // is the case the domain lacked (D-KNW-009).
             'unit test', 'functional test', 'test coverage', 'test suite',
             'automated test', 'set up tests', 'write tests',
             'backend module', 'module registration', 'backend route',
-            // Three subjects that are PHP work and were reachable only while
-            // their hints sat in the always-selected bucket: the icon registry,
+            // Three subjects that are PHP work and were in reach only while
+            // their hints sat in the always-selected bucket. The icon registry,
             // and what an upgrade or a deprecation costs (`D-KNW-033`).
             'icon', 'icons', 'upgrade', 'deprecated api',
         ],
@@ -83,10 +83,10 @@ final class Domains
             'backend ui',
         ],
         // The first seven are the vocabulary of somebody who already knows the
-        // answer is CSS. The rest is what a caller can actually see, and it is
-        // there because eight of the nineteen Backend CSS hints could not be
-        // reached by their own title: "Color and Surface Tokens" carried no CSS
-        // signal, fell back to PHP, and its own category was never a candidate.
+        // answer is CSS. The rest is what a caller can see. It is there because
+        // eight of the nineteen Backend CSS hints were out of reach through
+        // their own title. "Color and Surface Tokens" carried no CSS signal,
+        // fell back to PHP, and its own category was never a candidate.
         self::CSS => [
             'sass', 'scss', 'css', 'stylesheet', 'styling', 'frontend build',
             'backend ui',
@@ -102,23 +102,22 @@ final class Domains
             'layout shift', 'layout stability', 'text-overflow', 'ellipsis',
         ],
         self::FLUID => [
-            // The namespace prefix every Fluid tag carries. A caller reporting
-            // what a template did says `f:if`, `f:else`, `f:render` and never
-            // the word Fluid — and the domain then fell back to PHP, so no hint
-            // in this category was ever a candidate (`D-KNW-024`).
+            // The namespace prefix every Fluid tag carries. A caller who
+            // reports what a template did says `f:if`, `f:else`, `f:render` and
+            // never the word Fluid. The domain then fell back to PHP, so no
+            // hint in this category was ever a candidate (`D-KNW-024`).
             'f:',
             'fluid', 'viewhelper', 'view helper', 'partial', 'pageview',
-            // The root paths a template is resolved out of, asked for in the
-            // two spellings they are written in. `partial` already carries
-            // partialRootPaths by prefix; the other two carry no Fluid signal
-            // at all, and a question about which of them wins fell to PHP.
-            // The one phrasing a caller carries who is not asking about Fluid
-            // at all. The argument check names the ViewHelper it rejected and
-            // nothing else, and it is quoted from a PHP class being edited,
-            // where the paths say `php` correctly and the answer to the
-            // failure is filed here. `D-KNW-075` measured the alternative:
-            // tagging the hint `php` took five of twelve ordinary PHP tasks
-            // with it.
+            // The root paths a template resolves out of, in the two forms they
+            // take. `partial` already carries partialRootPaths by prefix. The
+            // other two carry no Fluid signal at all, and a question about
+            // which of them wins fell to PHP. The one form of words a caller
+            // carries who does not ask about Fluid at all. The argument check
+            // names the ViewHelper it rejected and nothing else. The quote
+            // comes from a PHP class under edit, where the paths say `php`
+            // correctly and the answer to the failure sits here. `D-KNW-075`
+            // measured the alternative: a `php` tag on the hint took five of
+            // twelve ordinary PHP tasks with it.
             'was registered with type',
             'templaterootpaths', 'layoutrootpaths', 'template root path',
             'page template', 'frontend template', 'content area', 'page layout',
@@ -139,35 +138,35 @@ final class Domains
         self::XLIFF => [
             'xlf', 'xliff', 'label', 'translation', 'locallang', 'wording',
             // What somebody calls the file before they know what is in it, and
-            // the verb they use for the work: `translation` did not match
+            // the verb they use for the work. `translation` did not match
             // "translate", which is how SKILL-04 asks for it.
             'language file', 'language files', 'translate', 'translated',
         ],
     ];
 
     /**
-     * Words for a thing that renders the website and is administered from the
-     * backend.
+     * Words for a thing that renders the website and has its administration in
+     * the backend.
      *
      * One of these says which thing the task is about, not which half of TYPO3
-     * it is in: an editor's content element is a Fluid template and a TCA
+     * it is in. An editor's content element is a Fluid template and a TCA
      * definition at once. So a task that names only the backend does not become
-     * Fluid and TypoScript work by carrying one, while a task that names the
-     * website half keeps both — `D-KNW-006`.
+     * Fluid and TypoScript work with one. A task that names the website half
+     * keeps both, `D-KNW-006`.
      *
      * @var array<int, string>
      */
     private const ADMINISTERED_FROM_THE_BACKEND = ['sitepackage', 'site package', 'content element'];
 
     /**
-     * The PHP testing phrasings a path in another domain takes back.
+     * The PHP test words a path in another domain takes back.
      *
-     * They are in the PHP list deliberately: that is how somebody with no suite
-     * yet asks, and the domain was missing exactly those callers (`D-KNW-009`).
-     * What they cannot survive is a path that says which layer is meant, which
-     * is `D-KNW-067`. Only these seven, and only against paths: every other PHP
-     * keyword names a PHP thing rather than a kind of work, so a `.ts` path
-     * beside the word `datahandler` really does touch both.
+     * They are in the PHP list on purpose. That is how somebody with no suite
+     * yet asks, and the domain lacked exactly those callers (`D-KNW-009`). What
+     * they cannot survive is a path that says which layer the caller means,
+     * which is `D-KNW-067`. Only these seven, and only against paths. Every
+     * other PHP keyword names a PHP thing rather than a kind of work. So a
+     * `.ts` path beside the word `datahandler` really does touch both.
      *
      * @var array<int, string>
      */
@@ -189,7 +188,7 @@ final class Domains
 
     /**
      * Words that place it in the backend after all. They win, because the
-     * frontend markers are the weaker signal: a backend module is named
+     * frontend markers are the weaker signal. A backend module has its name
      * outright, while "frontend" also appears in a sentence about the boundary
      * between the two.
      *
@@ -231,9 +230,9 @@ final class Domains
             }
         }
 
-        // Keywords are read from the description alone. A path carries its
-        // domain in its extension and its directory, and matching words inside
-        // it makes a file name mean something it does not: Classes/ViewHelpers/
+        // Keywords come from the description alone. A path carries its domain
+        // in its extension and its directory. A word match inside it makes a
+        // file name mean something it does not. Classes/ViewHelpers/
         // Format/ScssViewHelper.php is PHP, and every word in it is a PHP
         // identifier, not a topic.
         $description = mb_strtolower($text);
@@ -243,17 +242,17 @@ final class Domains
         $testedElsewhere = $pathDomains !== [] && !in_array(self::PHP, $pathDomains, true);
         foreach (self::KEYWORDS as $domain => $keywords) {
             foreach ($keywords as $keyword) {
-                // Asking for a test while every path is TypeScript or Sass is
-                // asking for that layer's tests, and the PHPUnit hints are then
-                // the larger half of an answer none of it applies to.
+                // A request for a test while every path is TypeScript or Sass
+                // is a request for that layer's tests. The PHPUnit hints are
+                // then the larger half of an answer none of it applies to.
                 if ($testedElsewhere && $domain === self::PHP && in_array($keyword, self::TESTING_PHRASINGS, true)) {
                     continue;
                 }
 
                 // A task that named only the backend named one of these for the
-                // thing it is about, so the website half it belongs to is not
-                // what was asked for. Explicit frontend terms below still add
-                // their respective domains.
+                // thing it is about. So the website half it belongs to is not
+                // the question. Explicit frontend terms below still add their
+                // respective domains.
                 if (
                     $backendOnly
                     && in_array($domain, [self::FLUID, self::TYPOSCRIPT], true)
@@ -278,7 +277,7 @@ final class Domains
             }
         }
 
-        // Without any signal, assume PHP: that is what most of the core is, and
+        // Without any signal, assume PHP. That is what most of the core is, and
         // an unrelated Sass or TypeScript recommendation is worse than a
         // slightly narrow one.
         if ($detected === []) {
@@ -291,9 +290,9 @@ final class Domains
     /**
      * Whether the subject explicitly names a backend module or its declaration.
      *
-     * This is narrower than merely saying "backend": a backend layout is
-     * frontend page configuration, while a backend module is PHP registration
-     * plus its own interface.
+     * This is narrower than "backend" alone. A backend layout is frontend page
+     * configuration, while a backend module is PHP registration plus its own
+     * interface.
      *
      * @param array<int, string> $paths
      */
@@ -309,10 +308,10 @@ final class Domains
      * The domains carried by paths alone: no free-text keywords, no PHP
      * fallback, and empty when the paths say nothing.
      *
-     * Free text is the wrong signal for narrowing a recommendation, because a
-     * negated mention reads exactly like a positive one — "without unrelated
-     * PHP or TypeScript suites" names both domains it rules out. A path cannot
-     * be negated that way.
+     * Free text is the wrong signal to narrow a recommendation, because a
+     * negated mention reads exactly like a positive one. "Without unrelated PHP
+     * or TypeScript suites" names both domains it rules out. Nobody can negate
+     * a path that way.
      *
      * @param array<int, string> $paths
      * @return array<int, string>
@@ -342,9 +341,9 @@ final class Domains
     }
 
     /**
-     * File paths named inside a free-text description, so a query that spells
-     * out the file it is about narrows the answer the same way an explicit
-     * paths argument would.
+     * File paths named inside a free-text description. So a query that names
+     * the file it is about narrows the answer the same way an explicit paths
+     * argument would.
      *
      * @return array<int, string>
      */
@@ -361,11 +360,11 @@ final class Domains
      * Whether the task is about what the website renders rather than about the
      * TYPO3 backend.
      *
-     * The CSS and TypeScript conventions this server holds are the backend's:
-     * its Sass sources, its `--typo3-*` custom properties, its light and dark
+     * The CSS and TypeScript conventions this server holds are the backend's.
+     * Its Sass sources, its `--typo3-*` custom properties, its light and dark
      * color schemes, its Bootstrap removal. For a theme extension they are not
-     * merely irrelevant, they are the opposite of correct, so the frontend has
-     * to be recognisable before an answer is composed.
+     * merely irrelevant, they are the opposite of correct. So the frontend has
+     * to be recognisable before an answer composes.
      *
      * @param array<int, string> $paths
      */
@@ -390,12 +389,12 @@ final class Domains
     /**
      * Whether the task names the backend and nothing on the website beside it.
      *
-     * The counterpart of namesTheFrontend(), and deliberately not its negation:
-     * there the backend markers win, because "frontend" also appears in a
-     * sentence about the boundary. A task that names both halves is asking for
-     * both, so here a frontend marker is what rules the case out — "build it in
-     * our site package, the element, its backend form and its frontend output"
-     * is not backend-only, and the sitepackage layout is half of its answer.
+     * The counterpart of namesTheFrontend(), and on purpose not its negation.
+     * There the backend markers win, because "frontend" also appears in a
+     * sentence about the boundary. A task that names both halves asks for both,
+     * so here a frontend marker is what rules the case out. "Build it in our
+     * site package, the element, its backend form and its frontend output" is
+     * not backend-only. The sitepackage layout is half of its answer.
      *
      * @param array<int, string> $paths
      */
@@ -418,8 +417,8 @@ final class Domains
     }
 
     /**
-     * The hint domains a task in the given domains is answered from. A hint
-     * tagged `any` always applies.
+     * The hint domains a task in the given domains answers from. A hint tagged
+     * `any` always applies.
      *
      * @param array<int, string> $domains
      * @return array<int, string>
@@ -442,10 +441,10 @@ final class Domains
         if (in_array(self::CSS, $domains, true)) {
             $selected[] = self::CSS;
         }
-        // The two that were detected and had nowhere to go. A label question was
+        // The two that detected and had nowhere to go. A label question
         // answered from `any` because no hint could say it is about XLIFF, and
-        // the same for a changelog — which is what kept `general.json` holding
-        // the subjects it did (`D-KNW-033`).
+        // the same for a changelog. That is what kept `general.json` with the
+        // subjects it had (`D-KNW-033`).
         if (in_array(self::XLIFF, $domains, true)) {
             $selected[] = self::XLIFF;
         }
@@ -457,8 +456,8 @@ final class Domains
     }
 
     /**
-     * The same, as the labels an answer prints. Only a report reads this — what
-     * selects a hint is the domain, and a label is what it is called afterwards.
+     * The same, as the labels an answer prints. Only a report reads this. What
+     * selects a hint is the domain, and a label is its name afterwards.
      *
      * @param array<int, string> $domains
      * @return array<int, string>

@@ -16,11 +16,10 @@ use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tool\GerritLookup;
 
 /**
- * The review server is somebody else's host, so what is held here is everything
- * this side does with what comes back: the prefix that has to come off, the
- * question the query actually asks, and the three ways an answer can fail to be
- * one. The live call is exercised by the recording, which is evidence rather
- * than a check.
+ * The review server is somebody else's host, so this holds everything this side
+ * does with what comes back. The prefix that has to come off, the question the
+ * query asks, and the three ways an answer can fail to be one. The record
+ * drives the live call, which is evidence rather than a check.
  */
 final class GerritTest extends TestCase
 {
@@ -42,7 +41,7 @@ final class GerritTest extends TestCase
 
     /**
      * One change of a backport pair, as `change:95169` answered it on
-     * 2026-08-14: the id both changes carry is in the number-form response, and
+     * 2026-08-14. The id both changes carry is in the number-form response, and
      * nothing in it names the other change.
      */
     private const NUMBERED = ")]}'\n"
@@ -52,7 +51,7 @@ final class GerritTest extends TestCase
         . '"current_revision":"65aa3ece11944bf20f6baeb52c13b39a2009150f"}]';
 
     /**
-     * The same pair as `change:I4b02…` answered it the same day — both changes,
+     * The same pair as `change:I4b02…` answered it the same day. Both changes,
      * the backport first, because Gerrit orders by last activity and the 13.4
      * change moved an hour after the one on `main`.
      */
@@ -67,14 +66,14 @@ final class GerritTest extends TestCase
         . '"current_revision":"65aa3ece11944bf20f6baeb52c13b39a2009150f"}]';
 
     /**
-     * What `message:<number>` really answers, measured against
-     * review.typo3.org on 2026-08-05: the change the issue is resolved by, and
-     * the change whose own number happens to be that of the issue.
+     * What `message:<number>` really answers, measured against review.typo3.org
+     * on 2026-08-05. The change that resolves the issue, and the change whose
+     * own number happens to be that of the issue.
      *
      * The second one is the false positive `feedback/2026-08-05-033826`
      * reported five of. Its message names issue 106318 and carries the queried
-     * number in the `Reviewed-on:` trailer alone, which is the trailer a merged
-     * change gains and which ends in the change's own number.
+     * number in the `Reviewed-on:` trailer alone. That is the trailer a merged
+     * change gains, and it ends in the change's own number.
      */
     private const BOTH = ")]}'\n"
         . '[{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[BUGFIX] Do not split paragraphs at inner linebreaks",'
@@ -88,8 +87,8 @@ final class GerritTest extends TestCase
 
     /**
      * Change 95375 as `change:95375` answered it on 2026-08-24 with
-     * `o=CURRENT_COMMIT`, its message trimmed to the first paragraph and the
-     * trailers: the patch `feedback/2026-08-24-100458` set out to review, whose
+     * `o=CURRENT_COMMIT`, its message cut to the first paragraph and the
+     * trailers. The patch `feedback/2026-08-24-100458` set out to review, whose
      * commit message names all three issues that session took four calls to
      * reach.
      */
@@ -101,11 +100,11 @@ final class GerritTest extends TestCase
 
     /**
      * Change 95385 as `change:95385` answered it on 2026-08-26 with
-     * `o=CURRENT_COMMIT` and `o=CURRENT_FILES`: the message trimmed to its
-     * first paragraph and its trailers, and four of its seven files, which is
-     * one of each shape a line count comes back in. Gerrit omits a count that
-     * is zero and both of them on a binary, and it sends the map in an order of
-     * its own — the fixture keeps that order.
+     * `o=CURRENT_COMMIT` and `o=CURRENT_FILES`. The message cut to its first
+     * paragraph and its trailers, and four of its seven files. That is one of
+     * each shape a line count comes back in. Gerrit omits a count that is zero
+     * and both of them on a binary. It sends the map in an order of its own,
+     * and the fixture keeps that order.
      */
     private const TOUCHING = ")]}'\n"
         . '[{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[TASK] Add image information to system resources",'
@@ -133,7 +132,7 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * Two files of change 95211 as it answered on 2026-08-26: a move that
+     * Two files of change 95211 as it answered on 2026-08-26. A move that
      * carries edits and a move that carries none, both with the path they came
      * from. That change moves 38 files out of one system extension into
      * another, which is the shape a rename arrives in at all.
@@ -155,7 +154,7 @@ final class GerritTest extends TestCase
 
     /**
      * What `/issues.json?issue_id=110493,110331,107080&status_id=*` answered on
-     * 2026-08-24, trimmed to the four fields that are read. One call for the
+     * 2026-08-24, cut to the four fields the reader takes. One call for the
      * whole set, which is the read a relation is already filled by.
      */
     private const TRACKED = '{"issues":['
@@ -166,7 +165,7 @@ final class GerritTest extends TestCase
         . '{"id":107080,"tracker":{"id":1,"name":"Bug"},"status":{"id":8,"name":"Under Review"},'
         . '"subject":"Form prototype not selectable with blank form"}],"total_count":3}';
 
-    /** The change, the tracker, and a chain nothing is stacked in. */
+    /** The change, the tracker, and a chain with nothing in it. */
     private static function naming(string $url): string
     {
         if (str_contains($url, 'forge.typo3.org')) {
@@ -179,10 +178,10 @@ final class GerritTest extends TestCase
     /**
      * The one the query was for, and not the one that shares its number.
      *
-     * Both skills that call this treat a hit as grounds to stop working, so a
+     * Both skills that call this treat a hit as grounds to stop work. So a
      * change that does not name the issue is the answer this tool must not
-     * give: a session reading one MERGED core change with a plausible subject
-     * has no signal at all that it is spurious — `D-ANS-055`.
+     * give. A session that reads one MERGED core change with a plausible
+     * subject has no signal at all that it is spurious — `D-ANS-055`.
      */
     #[Requirement('R-ANS-023')]
     #[Decision('D-ANS-055')]
@@ -199,8 +198,8 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The trailer that carries the number without meaning it is the one a
-     * merged change gains, and it ends in the change's own number — so reading
+     * The trailer that carries the number without the meaning is the one a
+     * merged change gains, and it ends in the change's own number. So a read of
      * the message as text would clear exactly the change the filter is for —
      * `D-ANS-055`.
      */
@@ -211,8 +210,8 @@ final class GerritTest extends TestCase
     {
         $gerrit = new Gerrit(static fn(): string => self::BOTH);
 
-        // 106318 is what the merged change actually resolves, and it is named
-        // in a trailer rather than in a URL.
+        // 106318 is what the merged change resolves, and it stands in a trailer
+        // rather than in a URL.
         $answer = $gerrit->changesForIssue('106318');
 
         self::assertSame([88556], array_column($answer['changes'], 'number'));
@@ -220,9 +219,9 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * Everything the server matched being a false positive is the truthful
-     * empty answer, which is what the caller acts on: nothing public names this
-     * issue — `D-ANS-055`.
+     * Everything the server matched as a false positive is the truthful empty
+     * answer, which is what the caller acts on. Nothing public names this issue
+     * — `D-ANS-055`.
      */
     #[Requirement('R-ANS-023')]
     #[Decision('D-ANS-055')]
@@ -240,8 +239,8 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A page of issues is one question, and each change is sorted onto the
-     * issue its commit message names.
+     * A page of issues is one question, and each change lands on the issue its
+     * commit message names.
      *
      * The alternative is a call per row, which is what keeps a backlog answer
      * from carrying the one signal a triage stops on (`D-ANS-069`). The filter
@@ -272,7 +271,7 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * What bounds a query is the URL rather than a documented limit, so a page
+     * What bounds a query is the URL rather than a documented limit. So a page
      * wider than one batch is more than one call — `D-ANS-069`.
      */
     #[Test]
@@ -290,17 +289,17 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The commit message is asked for by both forms and read by each for its
-     * own thing: the search holds what the server matched against what the
-     * message says (`D-ANS-055`), and a change lookup lifts the issues its
-     * trailers name out of it (`D-ANS-098`).
+     * Both forms ask for the commit message and each reads it for its own
+     * thing. The search holds what the server matched against what the message
+     * says (`D-ANS-055`). A change lookup lifts the issues its trailers name
+     * out of it (`D-ANS-098`).
      *
      * Only the change hands it back. An issue search answers up to 25 changes
-     * and asks whether a patch exists at all, which the prose does not decide;
-     * a caller that named one change is establishing that patch, and the
-     * trailers it would check are unreachable from the subject (`D-ANS-112`).
-     * Null is the shape of both silences, so a client reads one model rather
-     * than branching on whether the key is there.
+     * and asks whether a patch exists at all, which the prose does not decide.
+     * A caller that named one change establishes that patch, and the trailers
+     * it would check are out of reach from the subject (`D-ANS-112`). Null is
+     * the shape of both silences, so a client reads one model rather than
+     * branching on whether the key is there.
      */
     #[Decision('D-ANS-055')]
     #[Decision('D-ANS-098')]
@@ -330,12 +329,12 @@ final class GerritTest extends TestCase
 
     /**
      * The paths the patch set touches, which is the first of the four things a
-     * review is told to establish and was reachable only by fetching the change
-     * (`D-ANS-112`). A session triaging a shortlist fetched eight open changes
-     * into the user's own working checkout for what one query answers, and the
-     * user stopped it over that.
+     * review has to establish. It was reachable only through a fetch of the
+     * change (`D-ANS-112`). A session on a triage fetched eight open changes
+     * into the user's own working checkout for what one query answers. The user
+     * stopped it over that.
      *
-     * Sorted here rather than as it arrived: the map comes back in an order of
+     * Sorted here rather than as it arrived. The map comes back in an order of
      * Gerrit's own, and the two `Classes/` files sit apart in it.
      */
     #[Decision('D-ANS-112')]
@@ -370,9 +369,9 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A count Gerrit omits is no lines, and a file it counts nothing for is a
-     * binary rather than a file the patch set left alone — which is the one
-     * misreading a list of paths and numbers invites (`D-ANS-112`).
+     * A count Gerrit omits is no lines. A file it counts nothing for is a
+     * binary rather than a file the patch set left alone. That is the one wrong
+     * read a list of paths and numbers invites (`D-ANS-112`).
      */
     #[Decision('D-ANS-112')]
     #[Test]
@@ -388,15 +387,15 @@ final class GerritTest extends TestCase
             'binary' => true,
             'movedFrom' => null,
         ], $change['files'][3]);
-        // The other omission, on a file that is not binary: nothing was
-        // removed, and the review server says that by leaving the count out.
+        // The other omission, on a file that is not binary: the patch removed
+        // nothing, and the review server says that with no count at all.
         self::assertSame(12, $change['files'][2]['insertions']);
         self::assertSame(0, $change['files'][2]['deletions']);
     }
 
     /**
      * A moved file names where it came from, because that is the whole of what
-     * separates a rename from a delete and an add — and a review reading the
+     * separates a rename from a delete and an add. A review that reads the
      * second reports a subsystem as gone (`D-ANS-112`).
      */
     #[Decision('D-ANS-112')]
@@ -413,7 +412,7 @@ final class GerritTest extends TestCase
             $change['files'][0]['movedFrom'],
         );
         // A move that changed nothing in the file still carries both counts at
-        // zero, and it is a move rather than an untouched file all the same.
+        // zero. It is a move rather than an untouched file all the same.
         self::assertSame(0, $change['files'][1]['insertions']);
         self::assertSame(0, $change['files'][1]['deletions']);
     }
@@ -421,9 +420,9 @@ final class GerritTest extends TestCase
     /**
      * One line per path, saying what the patch does to it and what that costs.
      *
-     * The list is printed whole rather than paged: 200 open core changes read
-     * on 2026-08-26 touch 5 files at the median, and a cap would fall on the
-     * one thing the answer is here to carry (`D-ANS-112`).
+     * The list prints whole rather than in pages. 200 open core changes read on
+     * 2026-08-26 touch 5 files at the median. A cap would fall on the one thing
+     * the answer is here to carry (`D-ANS-112`).
      */
     #[Decision('D-ANS-112')]
     #[Test]
@@ -459,7 +458,7 @@ final class GerritTest extends TestCase
      * the answer on.
      *
      * A session read two changes of 137 and 200 files in one task and used none
-     * of the list, which is `D-ANS-112`'s second **Wrong if** — `D-ANS-151`.
+     * of the list. That is `D-ANS-112`'s second **Wrong if** — `D-ANS-151`.
      * Past forty files, the ninetieth percentile that entry measured, the count
      * and the directories stand instead.
      */
@@ -508,7 +507,10 @@ final class GerritTest extends TestCase
         ];
     }
 
-    /** A caller who asked for none is not told the paths could not be read. */
+    /**
+     * A caller who asked for none does not hear that the paths were out of
+     * reach.
+     */
     #[Decision('D-ANS-151')]
     #[Test]
     public function pathsTheCallerDeclinedAreNotReportedAsUnreadable(): void
@@ -518,7 +520,7 @@ final class GerritTest extends TestCase
 
     /**
      * A search asks for no paths, so silence there is not a claim that they
-     * could not be read — which the same silence on a change read by name is.
+     * were out of reach. The same silence on a change read by name is.
      */
     #[Decision('D-ANS-112')]
     #[Test]
@@ -532,9 +534,9 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The commit message whole, which is what a trailer is checked against and
-     * what `typo3_commit_message_guide` takes — the subject alone is not either
-     * (`D-ANS-112`). Nothing is printed where it did not come back, because the
+     * The commit message whole, which is what a trailer check reads and what
+     * `typo3_commit_message_guide` takes. The subject alone is not either
+     * (`D-ANS-112`). Nothing prints where it did not come back, because the
      * issues section says that once already.
      */
     #[Decision('D-ANS-112')]
@@ -552,9 +554,9 @@ final class GerritTest extends TestCase
 
     /**
      * A server that answered without the option is not a reason to drop
-     * everything or to hand back the false positive: the one rule that needs no
-     * message is that a change is not the answer to the issue whose number it
-     * carries as its own — `D-ANS-055`.
+     * everything or to hand back the false positive. The one rule that needs no
+     * message: a change is not the answer to the issue whose number it carries
+     * as its own — `D-ANS-055`.
      */
     #[Requirement('R-ANS-023')]
     #[Decision('D-ANS-055')]
@@ -583,7 +585,7 @@ final class GerritTest extends TestCase
 
         $answer = $gerrit->changesForIssue('#110348', 3);
 
-        // `message:` and not a bare term: the issue number is in the commit
+        // `message:` and not a bare term. The issue number is in the commit
         // message, where `Resolves:` put it, and a free-text search would also
         // match a change that merely mentions it.
         self::assertSame('message:110348', $answer['query']);
@@ -608,8 +610,8 @@ final class GerritTest extends TestCase
 
     /**
      * A change is a series of patch sets, and a review is of one of them. The
-     * commit is what a reviewer holds a local `HEAD` against; the number alone
-     * cannot say whether the two are the same thing, and neither is served
+     * commit is what a reviewer holds a local `HEAD` against. The number alone
+     * cannot say whether the two are the same thing, and neither comes back
      * unless the query asks for the current revision.
      */
     #[Requirement('R-ANS-021')]
@@ -635,8 +637,8 @@ final class GerritTest extends TestCase
      * a core clone fetches from the GitHub mirror, where it does not exist.
      *
      * The second case is the padding. Gerrit shards by the change number modulo
-     * 100 written as two digits, so 95108 is filed under `08` and a ref built
-     * by hand from the last digit alone resolves to nothing.
+     * 100 written as two digits. So 95108 sits under `08`, and a ref built by
+     * hand from the last digit alone resolves to nothing.
      */
     #[Decision('D-ANS-068')]
     #[Test]
@@ -657,7 +659,7 @@ final class GerritTest extends TestCase
     /**
      * A backport is a change of its own on the release branch, linked to the
      * original by the Change-Id and by nothing else — `D-ANS-080`. Which handle
-     * the caller holds decided until now whether it is in the answer at all:
+     * the caller holds decided until now whether it is in the answer at all.
      * `feedback/2026-08-12-092654` reviewed 95169 and learned of its 13.4
      * sibling from the tracker.
      */
@@ -690,12 +692,12 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * What `commit:cf227b18e20` answered on 2026-08-25, trimmed to the fields
-     * that are read and its message to one paragraph and the trailers.
+     * What `commit:cf227b18e20` answered on 2026-08-25, cut to the fields the
+     * reader takes and its message to one paragraph and the trailers.
      *
      * Change 89740, merged on `main`. Its `Releases:` line is the one the
-     * reporting session reached after four git calls per commit, and after
-     * telling the user a release set that line contradicts — `D-ANS-106`.
+     * session behind the report reached after four git calls per commit. It had
+     * told the user a release set that line contradicts — `D-ANS-106`.
      */
     private const FIXED = ")]}'\n"
         . '[{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[BUGFIX] Allow replacing files with different mime-type and extension",'
@@ -709,9 +711,8 @@ final class GerritTest extends TestCase
      * answered the same day, most recently moved first: the patch on `main` and
      * the two backports, each carrying the same trailer.
      *
-     * 90012 at `aaec618cf33` is the backport hash the session went to
-     * `git log origin/13.4 -S` for, and 90014 is the 12.4 change it never found
-     * at all.
+     * 90012 at `aaec618cf33` is the backport hash the session went to `git log
+     * origin/13.4 -S` for. 90014 is the 12.4 change it never found at all.
      */
     private const BACKPORTED = ")]}'\n"
         . '[{"project":"Packages/TYPO3.CMS","branch":"12.4","subject":"[BUGFIX] Allow replacing files with different mime-type and extension",'
@@ -753,8 +754,8 @@ final class GerritTest extends TestCase
      * a change number does — `D-ANS-106`.
      *
      * `feedback/2026-08-24-173131` held three hashes and had no way to ask
-     * about them: `change:` refuses one, so the session spent four git calls
-     * per commit and six where a backport was involved. One call answers the
+     * about them. `change:` refuses one, so the session spent four git calls
+     * per commit and six where a backport came into it. One call answers the
      * change, the two backports and the branch each of them targets.
      */
     #[Decision('D-ANS-106')]
@@ -771,8 +772,9 @@ final class GerritTest extends TestCase
         $answer = $gerrit->commit('cf227b18e20', 10);
 
         $queries = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '?q=')));
-        // The abbreviated hash as it was pasted, under the operator that takes
-        // one: `change:cc880c67777` answers HTTP 400 `Invalid change format`.
+        // The short hash as the session pasted it, under the operator that
+        // takes one: `change:cc880c67777` answers HTTP 400 `Invalid change
+        // format`.
         self::assertStringContainsString('q=commit%3Acf227b18e20', $queries[0]);
         self::assertStringContainsString('q=change%3AI7e09432feea63d481f356a074ac7e1eb4a422064', $queries[1]);
         self::assertSame([89740, 90014, 90012], array_column($answer['changes'], 'number'));
@@ -787,9 +789,9 @@ final class GerritTest extends TestCase
      * The trailer is in the message the answer already fetches, and it is the
      * authority the session reached last — `D-ANS-106`.
      *
-     * It cost that session a correction: it read `git branch -r --contains` on
-     * the `main` commit, told the user the fix was in 14.0 and 13.4, and took
-     * it back a turn later when the trailer said 12.4 as well.
+     * It cost that session a correction. It read `git branch -r --contains` on
+     * the `main` commit and told the user the fix was in 14.0 and 13.4. It took
+     * that back a turn later when the trailer said 12.4 as well.
      */
     #[Decision('D-ANS-106')]
     #[Test]
@@ -802,8 +804,8 @@ final class GerritTest extends TestCase
         self::assertSame(['main', '13.4', '12.4'], $answer['changes'][0]['releases']);
         // On every change the answer carries, because a backport states its own.
         self::assertSame(['main', '13.4', '12.4'], $answer['changes'][2]['releases']);
-        // No call of its own: the message it is read from is the one the issues
-        // beside it are read from, and the one the answer now carries whole.
+        // No call of its own. The message it comes from is the one the issues
+        // beside it come from, and the one the answer now carries whole.
         self::assertStringContainsString('Releases: main, 13.4, 12.4', $answer['changes'][0]['message']);
 
         // The issue direction reads the same message, so it carries it too —
@@ -818,9 +820,9 @@ final class GerritTest extends TestCase
      * read says nothing — `D-ANS-106`.
      *
      * The first is every change outside the core project, and change 95350 is
-     * one on it: it was abandoned with a message naming no branch. The second
-     * is the search by words and path, which asks for no message at all, and an
-     * empty list there would be this side inventing what it never read.
+     * one on it. Its abandon message names no branch. The second is the search
+     * by words and path, which asks for no message at all. An empty list there
+     * would be this side with an answer it never read.
      */
     #[Decision('D-ANS-106')]
     #[Test]
@@ -864,7 +866,7 @@ final class GerritTest extends TestCase
         self::assertStringContainsString('the author\'s claim', $said);
         self::assertStringContainsString('sharing a Change-Id', $said);
         // The version half, which is a second source and stays outside this
-        // answer rather than being inferred from a branch.
+        // answer rather than derives from a branch.
         self::assertStringContainsString('Which release carries it is neither', $said);
 
         // Nothing to print for a message that claims none, and nothing to say
@@ -875,7 +877,7 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A hash reaches the review server only where somebody pushed it, so an
+     * A hash reaches the review server only where somebody pushed it. So an
      * empty answer there is not "this commit is in no change" — `D-ANS-106`.
      */
     #[Requirement('R-ANS-027')]
@@ -896,8 +898,8 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The other handle asks the whole question in one query, so nothing is
-     * asked twice — including where that query answers one change, which is a
+     * The other handle asks the whole question in one query, so nothing goes
+     * out twice. That includes where that query answers one change, which is a
      * patch nobody has backported yet — `D-ANS-080`.
      */
     #[Decision('D-ANS-080')]
@@ -917,8 +919,8 @@ final class GerritTest extends TestCase
         });
 
         $pair = $shared->change('I4b0290760f14296feec6ab30ad49595899ca08f4', 10);
-        // Lower case, because a commit message is copied by hand and Gerrit
-        // matches the id either way.
+        // Lower case, because a caller copies a commit message by hand and
+        // Gerrit matches the id either way.
         $one = $alone->change('i4b0290760f14296feec6ab30ad49595899ca08f4', 10);
 
         self::assertSame(2, $asked);
@@ -927,10 +929,10 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * `n` is applied after the change that was named, not to the query that
-     * finds its siblings. Gerrit orders by last activity, so
-     * `change:I4b02…&n=1` answers the backport — a caller asking for one change
-     * by number would otherwise be handed the other one — `D-ANS-080`.
+     * `n` applies after the named change, not to the query that finds its
+     * siblings. Gerrit orders by last activity, so `change:I4b02…&n=1` answers
+     * the backport. A caller who asks for one change by number would otherwise
+     * get the other one — `D-ANS-080`.
      */
     #[Decision('D-ANS-080')]
     #[Test]
@@ -946,8 +948,8 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A second query that did not answer is not an absence of siblings, so the
-     * change the caller named stands rather than being replaced by nothing —
+     * A second query that did not answer is not an absence of siblings. So the
+     * change the caller named stands rather than gives way to nothing —
      * `D-ANS-080`.
      */
     #[Decision('D-ANS-080')]
@@ -968,11 +970,11 @@ final class GerritTest extends TestCase
     /**
      * The option is the server's to honour. A response without the revision
      * fields is still an answer about the change, so the patch set is absent
-     * rather than guessed — and zero is what the schema calls named none.
+     * rather than a guess. Zero is what the schema calls named none.
      *
-     * There is no ref either, because a ref names a patch set: null rather than
-     * a string carrying a zero, which would fetch nothing and read like a
-     * command to run — `D-ANS-068`.
+     * There is no ref either, because a ref names a patch set. Null rather than
+     * a string with a zero, which would fetch nothing and read like a command
+     * to run — `D-ANS-068`.
      */
     #[Requirement('R-ANS-021')]
     #[Decision('D-ANS-068')]
@@ -1000,8 +1002,8 @@ final class GerritTest extends TestCase
 
     /**
      * What `/changes/91563/revisions/current/related` answered on 2026-08-21,
-     * four of its fifteen entries: the top of the stack, the one merged part,
-     * the change that was asked about, and what it is built on.
+     * four of its fifteen entries. The top of the stack, the one merged part,
+     * the change in question, and what it stands on.
      *
      * 92323 is the entry the two revision numbers are two facts on — the chain
      * holds patch set 8 while the change stands at 10.
@@ -1028,20 +1030,20 @@ final class GerritTest extends TestCase
         . '"subject":"[TASK] Introduce JSON SchemaBuilder"},'
         . '"_change_number":93064,"_revision_number":16,"_current_revision_number":16,"status":"NEW"}]}';
 
-    /** The stacked change, with its chain where that is what was asked for. */
+    /** The stacked change, with its chain where the caller asked for it. */
     private static function stacked(string $url): string
     {
         return str_contains($url, '/related') ? self::RELATED : self::STACKED;
     }
 
     /**
-     * A change read alone says a feature exists; the stack under it says what
+     * A change read alone says a feature exists. The stack under it says what
      * the feature consists of and how far it has got — `D-ANS-094`.
      *
-     * `feedback/2026-08-21-074010` read 91563 and was handed the head of a
-     * fifteen-change stack with nothing saying there was more to read. The
-     * order is git parentage, child first, so the place of the change in the
-     * list is what says how much is stacked on it and how much it is built on.
+     * `feedback/2026-08-21-074010` read 91563 and got the head of a
+     * fifteen-change stack with nothing to say there was more to read. The
+     * order is git parentage, child first. So the place of the change in the
+     * list is what says how much stands on it and how much it stands on.
      */
     #[Decision('D-ANS-094')]
     #[Test]
@@ -1070,7 +1072,7 @@ final class GerritTest extends TestCase
 
     /**
      * The two revision numbers per entry are two facts, and the merged entry is
-     * where they come apart: the stack holds patch set 8 of change 92323 while
+     * where they come apart. The stack holds patch set 8 of change 92323 while
      * that change stands at 10.
      *
      * Acting on the patch set the chain names is the mistake carrying only that
@@ -1095,8 +1097,8 @@ final class GerritTest extends TestCase
     /**
      * By the number and not by the Change-Id. `/changes/<Change-Id>/…/related`
      * answered 404 `Multiple changes found` on 2026-08-21 for the backport pair
-     * `D-ANS-080` puts in this answer, so the handle the caller passed is not
-     * the handle this call can be made with — `D-ANS-094`.
+     * `D-ANS-080` puts in this answer. So the handle the caller passed is not
+     * the handle this call takes — `D-ANS-094`.
      */
     #[Decision('D-ANS-094')]
     #[Test]
@@ -1118,10 +1120,10 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A change nothing is stacked on and that is stacked on nothing. The review
-     * server answers `{"changes":[]}` for it — 20 bytes measured on 2026-08-21
-     * — and that is the ordinary case rather than a failure, so it is an empty
-     * chain and not a null one — `D-ANS-094`.
+     * A change with nothing on it and nothing under it. The review server
+     * answers `{"changes":[]}` for it, 20 bytes measured on 2026-08-21. That is
+     * the ordinary case rather than a failure, so it is an empty chain and not
+     * a null one — `D-ANS-094`.
      */
     #[Decision('D-ANS-094')]
     #[Test]
@@ -1137,10 +1139,9 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A chain that could not be read is not a change standing alone. Nothing in
-     * the change payload says whether there is one, so an empty list here would
-     * be this side inventing the answer the call failed to bring back —
-     * `D-ANS-094`.
+     * A chain out of reach is not a change that stands alone. Nothing in the
+     * change payload says whether there is one. So an empty list here would be
+     * this side with an answer the call failed to bring back — `D-ANS-094`.
      */
     #[Decision('D-ANS-094')]
     #[Test]
@@ -1157,7 +1158,7 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The stack is what the caller reads, so the text half says where the
+     * The stack is what the caller reads. So the text half says where the
      * change sits in it and which entries have moved on — `D-ANS-094`.
      */
     #[Decision('D-ANS-094')]
@@ -1176,21 +1177,20 @@ final class GerritTest extends TestCase
         // case rather than a finding.
         self::assertSame([], GerritLookup::chain(['chain' => []], true));
         // And an issue search asked for none of it, so silence there is not a
-        // claim that it could not be read.
+        // claim that it was out of reach.
         self::assertSame([], GerritLookup::chain(['chain' => null], false));
         self::assertStringContainsString('could not be read', implode("\n", GerritLookup::chain(['chain' => null], true)));
     }
 
     /**
      * A chain entry is the one record in this answer that arrived as a bare
-     * number, and the endpoint answers the project beside it — so the URL is
-     * built here from the same two fields a change URL is built from
-     * (`D-ANS-103`).
+     * number, and the endpoint answers the project beside it. So the URL forms
+     * here from the same two fields a change URL forms from (`D-ANS-103`).
      *
      * An entry naming no project falls back to the number alone, which the
      * review server resolves. The canonical path asserts a project and renders
-     * a page whether or not the change is there, so composing one out of
-     * nothing answers a caller with a page about nothing.
+     * a page whether or not the change is there. So one composed out of nothing
+     * answers a caller with a page about nothing.
      */
     #[Decision('D-ANS-103')]
     #[Test]
@@ -1204,8 +1204,8 @@ final class GerritTest extends TestCase
             $chain[1]['url'],
         );
 
-        // The same chain URL, so what was held for the first reading is what the
-        // second would be answered with.
+        // The same chain URL, so what stayed from the first read is what the
+        // second would get.
         Recent::forget();
         $unnamed = new Gerrit(static fn(string $url): string => str_contains($url, '/related')
             ? ")]}'\n" . '{"changes":[{"commit":{"subject":"[TASK] Something"},"_change_number":92323,'
@@ -1219,11 +1219,11 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * An agent repeating an id to a person renders it as a link, and a bare
+     * An agent that repeats an id to a person renders it as a link. A bare
      * number gives it nothing to render but a guess — `D-ANS-103`.
      *
      * Both lines print from a record that already holds the URL for the issues
-     * and now holds it for the chain, so what the two halves say is one thing.
+     * and now holds it for the chain. So what the two halves say is one thing.
      */
     #[Decision('D-ANS-103')]
     #[Test]
@@ -1249,7 +1249,7 @@ final class GerritTest extends TestCase
     /**
      * The two relations are told apart where both are in one answer. A stack is
      * different changes built on one another; a shared Change-Id is one patch
-     * on several branches, and reading the first as the second would say the
+     * on several branches. A read of the first as the second would say the
      * label was the whole of the work — `D-ANS-094`.
      */
     #[Decision('D-ANS-094')]
@@ -1272,8 +1272,8 @@ final class GerritTest extends TestCase
     /**
      * What a chain entry is evidence for, said where the caller reads it.
      *
-     * A review had the chain in its first answer, read it as "there is a
-     * follow-up", and reported four shapes the change above it explains —
+     * A review had the chain in its first answer and read it as "there is a
+     * follow-up". It reported four shapes the change above it explains —
      * `D-SKL-090`. The paragraph said what a chain is and stopped there.
      */
     #[Decision('D-SKL-090')]
@@ -1292,10 +1292,10 @@ final class GerritTest extends TestCase
      * carried neither — `D-ANS-098`.
      *
      * `feedback/2026-08-24-100458` walked change 95375 to change 95015 to issue
-     * #107080 to an abandoned patch that answered the question it had been
-     * asked twice. Its first call already held all three issues, inside a
-     * message this tool did not hand over, and the session read the second
-     * `Resolves:` line by eye and nearly missed it.
+     * #107080 to an abandoned patch that answered the question it had got
+     * twice. Its first call already held all three issues, inside a message
+     * this tool did not hand over. The session read the second `Resolves:` line
+     * by eye and nearly missed it.
      *
      * The two trailers are told apart because they are different claims: what
      * the patch closes, and what it touches.
@@ -1339,10 +1339,10 @@ final class GerritTest extends TestCase
      * trailer names none either — `D-ANS-098`.
      *
      * Both are on the review server as it stands. Patch set 46 of change 91563
-     * carries the line `Resolves: #` with nothing after it, and change 95350
-     * was abandoned with a message that names no issue at all — an issue
-     * nobody can look up is worse than none, and neither costs a call to the
-     * tracker to find that out.
+     * carries the line `Resolves: #` with nothing after it, and change 95350's
+     * abandon message names no issue at all. An issue nobody can look up is
+     * worse than none, and neither costs a call to the tracker to find that
+     * out.
      */
     #[Decision('D-ANS-098')]
     #[Test]
@@ -1394,7 +1394,7 @@ final class GerritTest extends TestCase
         // outside the core's own process ordinarily is.
         self::assertSame([], GerritLookup::issues(['issues' => []], true));
         // And an issue search asked for none of it, so silence there is not a
-        // claim that the message was read and named nothing.
+        // claim that a read of the message named nothing.
         self::assertSame([], GerritLookup::issues(['issues' => null], false));
         self::assertStringContainsString(
             'did not come back',
@@ -1407,7 +1407,7 @@ final class GerritTest extends TestCase
      * array beside a trailer requirement it never mentions.
      *
      * A session read that empty array as nothing to do and finished a patch
-     * still carrying `Resolves: #XXXXXX`, committed past the commit-msg hook
+     * still with `Resolves: #XXXXXX`. It committed past the commit-msg hook
      * with `--no-verify` — `D-ANS-153`.
      */
     #[Decision('D-ANS-153')]
@@ -1444,9 +1444,10 @@ final class GerritTest extends TestCase
      * The review half of change 93319, as review.typo3.org answered it on
      * 2026-08-14 with the labels, the accounts and the messages asked for.
      *
-     * Trimmed to what is read: the avatars, the reviewers and the revisions are
-     * three quarters of the 57.9 KB and nothing here looks at them. Verified
-     * runs to +2 on this server, which is why a +1 leaves it unsatisfied.
+     * Cut to what the reader takes. The avatars, the reviewers and the
+     * revisions are three quarters of the 57.9 KB and nothing here looks at
+     * them. Verified runs to +2 on this server, which is why a +1 leaves it
+     * unsatisfied.
      */
     private const REVIEWED = ")]}'\n"
         . '[{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[TASK] Add E2E tests for page creation",'
@@ -1482,8 +1483,8 @@ final class GerritTest extends TestCase
      * The votes are what the surface turns on, so they come with a change
      * nobody asked anything extra for — `D-ANS-079`.
      *
-     * A reviewer picking this change up needs two things the fields before this
-     * one cannot say: that the Verified+1 is not enough to submit on this
+     * A reviewer who picks this change up needs two things the fields before
+     * this one cannot say. That the Verified+1 is not enough to submit on this
      * server, and that Code-Review stands at nothing although somebody is on
      * it. Both are the label state rather than a count of patch sets.
      */
@@ -1517,8 +1518,8 @@ final class GerritTest extends TestCase
                 'label' => 'Code-Review',
                 'state' => 'NEED',
                 'satisfied' => false,
-                // A reviewer who was added and has not voted, which is not the
-                // same answer as nobody being on it.
+                // A reviewer on the change who has not voted, which is not the
+                // same answer as nobody on it.
                 'votes' => [['voter' => 'Benni Mack', 'value' => 0, 'on' => '']],
             ],
         ], $change['labels']);
@@ -1526,12 +1527,12 @@ final class GerritTest extends TestCase
 
     /**
      * The comments are a second endpoint, and a change that says it carries
-     * none is answered without asking it.
+     * none gets its answer without a call to it.
      *
      * 93319 is that change: `total_comment_count` is 0 and its whole review
      * history is in the messages. The count is in the payload of the call that
-     * was made anyway, so the second one is spent only where there is something
-     * to fetch.
+     * went out anyway. So the second one only goes where there is something to
+     * fetch.
      */
     #[Decision('D-ANS-079')]
     #[Test]
@@ -1552,9 +1553,9 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * What `/changes/95179/comments` answered on 2026-08-14, trimmed to the
-     * fields that are read. One of the three is unresolved and has a reply
-     * under it, which is the case the surface is about.
+     * What `/changes/95179/comments` answered on 2026-08-14, cut to the fields
+     * the reader takes. One of the three is open and has a reply under it,
+     * which is the case the surface is about.
      */
     private const COMMENTS = ")]}'\n"
         . '{"/PATCHSET_LEVEL":['
@@ -1572,7 +1573,7 @@ final class GerritTest extends TestCase
      * The same change, with comments on it and no messages asked for.
      *
      * The unresolved count is the one those three comments come to under the
-     * rule the review server states — one thread of the two, Mathias Brodala's,
+     * rule the review server states. One thread of the two, Mathias Brodala's,
      * whose last comment is Benjamin Kott's "sure! will check it later". A
      * tally of the flag says two, which is what `D-ANS-111` took out.
      */
@@ -1586,10 +1587,10 @@ final class GerritTest extends TestCase
      * A comment somebody replied to without resolving is two facts, and this
      * server hands over both rather than deciding between them.
      *
-     * `unresolved` alone would report a thread that was answered; the reply
-     * alone would drop one that was answered and left open on purpose. Change
-     * 95179 carries exactly that comment, which is why neither field is read
-     * here into an answer of "nobody answered" — `D-ANS-079`.
+     * `unresolved` alone would report a thread with an answer; the reply alone
+     * would drop one with an answer and left open on purpose. Change 95179
+     * carries exactly that comment, which is why neither field turns into an
+     * answer of "nobody answered" here — `D-ANS-079`.
      */
     #[Decision('D-ANS-079')]
     #[Test]
@@ -1606,8 +1607,8 @@ final class GerritTest extends TestCase
 
         self::assertContains('https://review.typo3.org/changes/95179/comments', $asked);
         self::assertSame(3, $change['commentCount']);
-        // Oldest first, across the files rather than within one: a thread is
-        // read in the order it was written.
+        // Oldest first, across the files rather than within one: a thread reads
+        // in the order of its writing.
         self::assertSame(
             ['Mathias Brodala', 'Benjamin Kott', 'Georg Ringer'],
             array_column($change['comments'], 'author'),
@@ -1622,14 +1623,14 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * What `/changes/91127/comments` answered on 2026-08-26, trimmed to the
-     * fields that are read and with the longest message cut.
+     * What `/changes/91127/comments` answered on 2026-08-26, cut to the fields
+     * the reader takes and with the longest message cut.
      *
      * The change `feedback/2026-08-24-183447` reviewed: seven comments in five
-     * threads, one of which carries `unresolved: true` — Oliver Klee's question
-     * of 2025-12-09, which Torben Hansen answered and Klee closed with "Ack.".
-     * The rows come back per file and unordered within one, which is what the
-     * chronological sort is for.
+     * threads, one of which carries `unresolved: true`. That is Oliver Klee's
+     * question of 2025-12-09, which Torben Hansen answered and Klee closed with
+     * "Ack.". The rows come back per file and unordered within one, which is
+     * what the chronological sort is for.
      */
     private const THREADED = ")]}'\n"
         . '{"/COMMIT_MSG":['
@@ -1677,14 +1678,14 @@ final class GerritTest extends TestCase
 
     /**
      * A comment says which thread it is in and what that thread stands at,
-     * rather than leaving both to be worked out from the reply ids.
+     * rather than leaves both to the reply ids.
      *
      * Gerrit stores a thread's state in its last comment and counts the open
-     * threads as `unresolved_comment_count`, so the flag on one comment is one
-     * writer's and nothing more. On this change the two come apart: Oliver
-     * Klee's question carries `true` and the thread it opened is settled, which
-     * is why a tally of the flags said one where the review server says none —
-     * `D-ANS-111`.
+     * threads as `unresolved_comment_count`. So the flag on one comment is one
+     * writer's and nothing more. On this change the two come apart. Oliver
+     * Klee's question carries `true` and the thread it opened has its answer.
+     * That is why a tally of the flags said one where the review server says
+     * none — `D-ANS-111`.
      */
     #[Decision('D-ANS-111')]
     #[Test]
@@ -1706,8 +1707,8 @@ final class GerritTest extends TestCase
             array_column(array_slice($comments, 0, 3), 'thread'),
         );
         self::assertCount(5, array_unique(array_column($comments, 'thread')));
-        // The head is flagged and its thread is settled, which is the reading
-        // the answer no longer leaves to the caller.
+        // The head carries the flag and its thread has its answer, which is the
+        // read the answer no longer leaves to the caller.
         self::assertTrue($comments[0]['unresolved']);
         self::assertFalse($comments[0]['threadUnresolved']);
         self::assertSame(
@@ -1722,10 +1723,10 @@ final class GerritTest extends TestCase
     /**
      * A reply whose parent is not in the answer opens a thread of its own.
      *
-     * That is what a comment answering a draft looks like from here — the draft
-     * is the writer's alone and this server reads Gerrit without credentials
-     * (`R-ANS-027`), so the reply arrives naming an id nothing here carries.
-     * Putting it in no thread would drop it from the listing.
+     * That is what a comment that answers a draft looks like from here. The
+     * draft is the writer's alone and this server reads Gerrit without
+     * credentials (`R-ANS-027`), so the reply arrives with an id nothing here
+     * carries. Putting it in no thread would drop it from the listing.
      */
     #[Decision('D-ANS-111')]
     #[Test]
@@ -1745,15 +1746,15 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The text half lists one thread at a time and says what each stands at,
-     * which is the ranking the reporting session made for itself out of the
+     * The text half lists one thread at a time and says what each stands at.
+     * That is the rank the session behind the report made for itself out of the
      * flags and the reply ids — `D-ANS-111`.
      *
-     * What each comment says is under the line naming who wrote it, and that is
-     * the half the listing exists for: `feedback/2026-08-25-105203` rewrote its
-     * review note and its `Releases:` recommendation off a backporting thread it
-     * would not have read otherwise (`D-ANS-079`). A heading and a state alone
-     * would say a thread is there and leave the reader to fetch it.
+     * What each comment says is under the line that names who wrote it, and
+     * that is the half the listing exists for. `feedback/2026-08-25-105203`
+     * rewrote its review note and its `Releases:` recommendation off a backport
+     * thread it would not have read otherwise (`D-ANS-079`). A heading and a
+     * state alone would say a thread is there and leave the reader to fetch it.
      */
     #[Decision('D-ANS-079')]
     #[Decision('D-ANS-111')]
@@ -1768,9 +1769,9 @@ final class GerritTest extends TestCase
         self::assertStringContainsString('### Comments (7 comments in 5 threads, none unresolved)', $said);
         self::assertStringContainsString("#### Resolved · Oliver Klee\n\n- Oliver Klee · patch set 4", $said);
         self::assertStringContainsString('#### Resolved · Benjamin Franzke · /COMMIT_MSG:27', $said);
-        // What was written, under the line that says who wrote it and on which
-        // patch set. The question and the answer both, since a thread read
-        // without the reply is the question standing open.
+        // The text, under the line that says who wrote it and on which patch
+        // set. The question and the answer both, since a thread read without
+        // the reply is the question standing open.
         self::assertStringContainsString(
             "- Oliver Klee · patch set 4\n  Is there any way this can be covered with a functional test?",
             $said,
@@ -1798,12 +1799,11 @@ final class GerritTest extends TestCase
 
     /**
      * None of it reaches the issue search. That question is whether a patch
-     * exists, it is answered with up to 25 changes, and the comments are a call
-     * each — so a hit says the review was not read rather than that there is
-     * none of it.
+     * exists, its answer is up to 25 changes, and the comments are a call each.
+     * So a hit says the review is unread rather than that there is none of it.
      *
-     * The issues its message names are left out for the other reason: the
-     * caller of a search is holding the issue number already (`D-ANS-098`).
+     * The issues its message names stay out for the other reason: the caller of
+     * a search holds the issue number already (`D-ANS-098`).
      */
     #[Decision('D-ANS-098')]
     #[Test]
@@ -1827,13 +1827,13 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The log is 57.9 KB against 14.3 KB on one change, so it is asked for —
-     * and the half a service user wrote is what "people" drops.
+     * The log is 57.9 KB against 14.3 KB on one change, so it is opt-in. The
+     * half a service user wrote is what "people" drops.
      *
      * The rule is the account rather than the message tag. Gerrit tags the
-     * messages it generates on an upload, but those are the uploader's own and
-     * carry the copy condition a rebase dropped a vote by, which is the one
-     * thing the log is worth fetching for.
+     * messages it generates on an upload, but those are the uploader's own.
+     * They carry the copy condition a rebase dropped a vote by, which is the
+     * one thing the log is worth a fetch for.
      */
     #[Decision('D-ANS-079')]
     #[Decision('D-ANS-121')]
@@ -1847,10 +1847,10 @@ final class GerritTest extends TestCase
             return self::reviewed($url);
         });
 
-        // The option is on every query a change read by name makes, since one
-        // fact in the log is about the change rather than about its review
-        // (`D-ANS-121`). What `messages` decides is what the caller is handed,
-        // and the default hands over none of the 57.9 KB.
+        // The option is on every query a change read by name makes. One fact in
+        // the log is about the change rather than about its review
+        // (`D-ANS-121`). What `messages` decides is what the caller gets, and
+        // the default hands over none of the 57.9 KB.
         self::assertNull($gerrit->change('93319')['changes'][0]['messages']);
         self::assertStringContainsString('o=MESSAGES', $asked[0]);
 
@@ -1864,19 +1864,18 @@ final class GerritTest extends TestCase
         $written = $gerrit->change('93319', 1, 'people')['changes'][0];
 
         self::assertSame(['Benni Mack', 'Benni Mack'], array_column($written['messages'], 'author'));
-        // Answered whichever way it was asked, so a zero here is the tag gone
-        // rather than a change no bot has been near.
+        // Answered whichever way the question came, so a zero here is the tag
+        // gone rather than a change no bot has been near.
         self::assertSame(1, $written['botMessageCount']);
     }
 
     /**
-     * Change 93689 as review.typo3.org answered it on 2026-08-27, trimmed to
-     * what is read.
+     * Change 93689 as review.typo3.org answered it on 2026-08-27, cut to what
+     * the reader takes.
      *
-     * Of the 867 open core changes read that day, the one carrying a conflict
-     * report on the patch set that is current: a 13.4 backport cherry-picked
-     * from 93657, standing at patch set 1 since April and never repaired
-     * (`D-ANS-121`).
+     * Of the 867 open core changes read that day, the one with a conflict
+     * report on the patch set that is current. A 13.4 backport cherry-picked
+     * from 93657, at patch set 1 since April and never repaired (`D-ANS-121`).
      */
     private const CONFLICTED = '{"project":"Packages/TYPO3.CMS","branch":"13.4",'
         . '"subject":"[BUGFIX] Introduce PackageSetup to unify extension setup","status":"NEW","_number":93689,'
@@ -1885,7 +1884,7 @@ final class GerritTest extends TestCase
         . '"cherry_pick_of_change":93657,"cherry_pick_of_patch_set":9,'
         . '"total_comment_count":1,"unresolved_comment_count":0,"labels":{},"submit_records":[]';
 
-    /** What `o=MESSAGES` adds to it, and the whole of where the fact is written. */
+    /** What `o=MESSAGES` adds to it, and the whole of where the fact stands. */
     private const REPORT = ',"messages":[{"author":{"_account_id":7298,"name":"Helmut Hummel"},'
         . '"tag":"autogenerated:gerrit:newWipPatchSet","date":"2026-04-16 11:33:28.000000000","_revision_number":1,'
         . '"message":"Patch Set 1: Cherry Picked from branch main.\n\nThe following files contain Git conflicts:\n'
@@ -1914,14 +1913,14 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * Whether the current patch set carries git conflict markers is answered
+     * Whether the current patch set carries git conflict markers has its answer
      * under the default, which is the answer that hid it — `D-ANS-121`.
      *
      * The report is the only place Gerrit writes the fact: the change payload
-     * carries no field for it and no revision does either. So the log is asked
-     * for on every change read by name, and the sentence is what is matched —
-     * a rebase through the web UI writes the same list under a first line of
-     * its own, and that is 13 of the 39 reports the core project carries.
+     * carries no field for it and no revision does either. So every change read
+     * by name asks for the log, and the sentence is what matches. A rebase
+     * through the web UI writes the same list under a first line of its own.
+     * That is 13 of the 39 reports the core project carries.
      */
     #[Decision('D-ANS-121')]
     #[Test]
@@ -1952,7 +1951,7 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * Change 95412 as review.typo3.org answered it on 2026-08-27: the backport
+     * Change 95412 as review.typo3.org answered it on 2026-08-27. The backport
      * `feedback/2026-08-25-110659` reviewed, merged at patch set 3 with the
      * conflict its patch set 1 landed with repaired.
      */
@@ -1980,12 +1979,12 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A report is held against the patch set it was written about, so a conflict
-     * somebody has already replaced is history — `D-ANS-121`.
+     * A report stands against the patch set it is about, so a conflict somebody
+     * has already replaced is history — `D-ANS-121`.
      *
-     * That is 7 of the 8 open core changes carrying such a message, and it is
-     * what the reported shape would have fired on: the field is about the change
-     * as it stands rather than about anything that ever happened to it.
+     * That is 7 of the 8 open core changes with such a message, and it is what
+     * the reported shape would have fired on. The field is about the change as
+     * it stands rather than about anything that ever happened to it.
      */
     #[Decision('D-ANS-121')]
     #[Test]
@@ -2010,9 +2009,9 @@ final class GerritTest extends TestCase
      * A search asks for no log and says nothing about conflicts, which is the
      * silence it keeps everywhere else — `D-ANS-121`.
      *
-     * It answers up to 25 changes and the enumeration reads up to 2000, and the
-     * option cost a median of 6.3 KB a change when it was measured. What a
-     * caller does with a hit is read it by name, which is where the fact is.
+     * It answers up to 25 changes and the enumeration reads up to 2000. The
+     * option cost a median of 6.3 KB a change at the measurement. What a caller
+     * does with a hit is a read by name, which is where the fact is.
      */
     #[Decision('D-ANS-121')]
     #[Test]
@@ -2032,11 +2031,11 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * Where a change was cherry-picked from is read off the two fields the
-     * payload carries unasked — `D-ANS-121`.
+     * Where a change was cherry-picked from comes off the two fields the
+     * payload carries without a question — `D-ANS-121`.
      *
-     * It is provenance and not a warning: 133 of 400 recent merged core changes
-     * are cherry-picks and 17 of those ever conflicted, so a reader acting on
+     * It is provenance and not a warning. 133 of 400 recent merged core changes
+     * are cherry-picks and 17 of those ever conflicted. So a reader who acts on
      * this field passes over ordinary backports.
      */
     #[Decision('D-ANS-103')]
@@ -2063,8 +2062,8 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The text half says which of the two a reader is looking at: a patch set
-     * that is broken rather than one nobody has reviewed — `D-ANS-121`.
+     * The text half says which of the two a reader looks at. A patch set that
+     * is broken rather than one nobody has reviewed — `D-ANS-121`.
      *
      * The reporting session read status NEW, patch set 1, no comments and empty
      * vote arrays, and concluded that nobody had looked at the change yet. Every
@@ -2102,7 +2101,7 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * Change 76606 as review.typo3.org answered it on 2026-08-25: abandoned two
+     * Change 76606 as review.typo3.org answered it on 2026-08-25. Abandoned two
      * years after the review that stopped it, and sent with an empty `labels`
      * object although `o=DETAILED_LABELS` asked for one.
      */
@@ -2145,21 +2144,21 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * An abandoned change is answered whole, by the number and by the issue its
+     * An abandoned change comes back whole, by the number and by the issue its
      * commit message names.
      *
-     * This is the one state a narrowing would quietly take away, and it is the
-     * state the answer is worth most in: what a rejected change carries is the
-     * argument against the approach, which exists nowhere else.
+     * This is the one state a filter would take away without a word, and it is
+     * the state the answer is worth most in. What a rejected change carries is
+     * the argument against the approach, which exists nowhere else.
      * `feedback/2026-08-24-173151` and `feedback/2026-08-24-183447` each read
-     * one and each dropped a patch it would otherwise have written — the first
+     * one and each dropped a patch it would otherwise have written. The first
      * on this very change, the second on 85224. `changesMatching()` takes a
      * `status:open` narrowing, so the shape that would drop them is already in
      * this class.
      *
-     * The vote is the other half. `o=DETAILED_LABELS` was asked and the review
-     * server sent no label state at all, so the Code-Review-1 survives in the
-     * message log alone — which `messages` is opt-in for.
+     * The vote is the other half. The query asked `o=DETAILED_LABELS` and the
+     * review server sent no label state at all. So the Code-Review-1 survives
+     * in the message log alone, which `messages` is opt-in for.
      */
     #[Decision('D-ANS-079')]
     #[Test]
@@ -2177,7 +2176,7 @@ final class GerritTest extends TestCase
         self::assertSame('ABANDONED', $change['status']);
         self::assertSame('wrong approach :(', $change['comments'][0]['message']);
         self::assertSame('/PATCHSET_LEVEL', $change['comments'][0]['file']);
-        // The review that stopped it is a message and not a vote: the label
+        // The review that stopped it is a message and not a vote. The label
         // state came back empty on a change nobody will vote on again.
         self::assertSame([], $change['labels']);
         self::assertStringContainsString(
@@ -2186,8 +2185,8 @@ final class GerritTest extends TestCase
         );
         self::assertStringNotContainsString('status:', implode(' ', $asked));
 
-        // The batched query a backlog row is filled from reaches it too, which
-        // is what makes the jump from an issue to the argument possible at all.
+        // The batched query that fills a backlog row reaches it too. That is
+        // what makes the jump from an issue to the argument possible at all.
         $found = $gerrit->changesForIssues([35069]);
 
         self::assertSame([76606], array_column($found[35069], 'number'));
@@ -2196,8 +2195,9 @@ final class GerritTest extends TestCase
 
     /**
      * Nothing public is not nothing. A change pushed as private answers this
-     * search with an empty list, so the caller is told what was searched rather
-     * than that no patch exists — the distinction the tool's own text carries.
+     * search with an empty list. So the caller hears what the search covered
+     * rather than that no patch exists, the distinction the tool's own text
+     * carries.
      */
     #[Test]
     public function aSearchThatMatchedNothingIsEmpty(): void
@@ -2216,7 +2216,7 @@ final class GerritTest extends TestCase
      *
      * `feedback/2026-08-07-132416` looked up the Change-Id its own commit
      * carried, got `{"status":"empty","changes":[]}`, and made "this was never
-     * pushed" the first finding of a review — recommending its author
+     * pushed" the first finding of a review. It recommended its author
      * coordinate with a contributor who was themselves. The change was private,
      * and this server reads Gerrit without credentials, so nothing in that
      * answer could have said otherwise.
@@ -2244,12 +2244,11 @@ final class GerritTest extends TestCase
      * Where the tracker settled it, the answer stops hedging.
      *
      * Gerrit Code Review posts a note on the issue for every patch set it
-     * receives, so a review URL there and nothing from the review server is not
-     * two possibilities — the change exists and this reader may not see it.
-     * That is the report's own last idea, and only the issue side of it is
-     * built: searching the tracker for a change number costs 2.5 seconds and
-     * answers two issues, one unrelated, and searching for a Change-Id answers
-     * nothing at all.
+     * receives. So a review URL there and nothing from the review server is not
+     * two possibilities: the change exists and this reader may not see it. That
+     * is the report's own last idea, and only the issue side of it exists. A
+     * tracker search for a change number costs 2.5 seconds and answers two
+     * issues, one unrelated. A search for a Change-Id answers nothing at all.
      */
     #[Requirement('R-ANS-027')]
     #[Test]
@@ -2279,13 +2278,14 @@ final class GerritTest extends TestCase
      * fetch it, and both of those are a workflow this server publishes.
      *
      * `feedback/2026-08-12-092545` is the session that shows what the answer
-     * was short of: no skill opened, `typo3_project_describe`'s schema was
-     * loaded and the tool never called, and this answer — the one call it did
-     * make — handed it the ref it then fetched the patch set with by hand.
+     * was short of. No skill opened, `typo3_project_describe`'s schema loaded
+     * and the tool never called. This answer, the one call it did make, handed
+     * it the ref it then fetched the patch set with by hand.
      *
      * `feedback/2026-08-24-122413` is the one that shows the names alone were
-     * short too: it read this tail on change 95179, opened neither skill, and
-     * both reviewed and rebased by hand. So the order is asserted beside them.
+     * short too. It read this tail on change 95179, opened neither skill, and
+     * both reviewed and rebased by hand. So the case asserts the order beside
+     * them.
      */
     #[Decision('D-SKL-038')]
     #[Test]
@@ -2303,10 +2303,10 @@ final class GerritTest extends TestCase
         self::assertStringNotContainsString('typo3_server_scope', $said);
 
         // The order itself, which is what a session that opens neither skill
-        // has to act on. Each of the three is a step the reporting session
-        // took by hand and took differently: it judged the diff without
-        // establishing the branch, it carried the patch onto a branch of its
-        // own naming, and it rebased onto current code as a matter of course.
+        // has to act on. Each of the three is a step the session behind the
+        // report took by hand and took differently. It judged the diff without
+        // the branch established, and it carried the patch onto a branch with a
+        // name of its own. It rebased onto current code as a matter of course.
         self::assertStringContainsString('the branch it targets', $said);
         self::assertStringContainsString('review/<change number>', $said);
         self::assertStringContainsString('no longer applies is the finding', $said);
@@ -2340,14 +2340,15 @@ final class GerritTest extends TestCase
         . '"current_revision":"e02be2c6672f09e8ca570924e13aff37efc89ff2"}]';
 
     /**
-     * The words, the path and the narrowing are composed into one query here,
-     * and the answer carries it so the caller can ask it again — `D-ANS-100`.
+     * The words, the path and the filter compose into one query here. The
+     * answer carries it so the caller can ask it again — `D-ANS-100`.
      *
-     * Every part of the form was measured against review.typo3.org on
-     * 2026-08-24. A word is quoted because Gerrit's parser reads punctuation
-     * before the index does; the path is matched whole, so the path itself and
-     * everything under it are two alternatives, and the second carries no `^`
-     * because that character is the marker for a regex rather than part of one.
+     * Every part of the form has a measurement against review.typo3.org from
+     * 2026-08-24. A word goes in quotes because Gerrit's parser reads
+     * punctuation before the index does. The path matches whole, so the path
+     * itself and everything under it are two alternatives. The second carries
+     * no `^` because that character is the marker for a regex rather than part
+     * of one.
      */
     #[Decision('D-ANS-100')]
     #[Test]
@@ -2377,7 +2378,7 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A path is matched as itself rather than as a pattern — `D-ANS-100`.
+     * A path matches as itself rather than as a pattern — `D-ANS-100`.
      *
      * An unescaped `.` matches any character, so a path naming `Import.php`
      * would answer changes touching `ImportXphp` as well.
@@ -2403,8 +2404,8 @@ final class GerritTest extends TestCase
      * A word is a value rather than syntax — `D-ANS-100`.
      *
      * `why does impexp fail?` answers `400 no viable alternative at character
-     * '?'` bare, and quoted it answers nothing: a search that matched, rather
-     * than a call that failed.
+     * '?'` bare, and in quotes it answers nothing. That is a search that
+     * matched, rather than a call that failed.
      */
     #[Decision('D-ANS-100')]
     #[Test]
@@ -2419,13 +2420,13 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The boundary is the issue search's, and the commit message is outside it:
-     * the 22 open changes on `typo3/sysext/impexp` came back at 34.4 KB with
+     * The boundary is the issue search's, and the commit message is outside it.
+     * The 22 open changes on `typo3/sysext/impexp` came back at 34.4 KB with
      * the current revision alone and at 54.2 KB with `o=CURRENT_COMMIT` beside
-     * it, measured on 2026-08-24 — `D-ANS-100`.
+     * it. Measured on 2026-08-24 — `D-ANS-100`.
      *
-     * So a hit says the review was not read rather than that there is none of
-     * it, and reading one by name is what answers that.
+     * So a hit says the review is unread rather than that there is none of it.
+     * A read by name is what answers that.
      */
     #[Decision('D-ANS-100')]
     #[Test]
@@ -2483,9 +2484,9 @@ final class GerritTest extends TestCase
      *
      * The words have a trap of their own beside the anonymous read.
      * `feedback/2026-08-24-110833` searched for `flatInversePageTree`, got
-     * nothing, and reported that nobody had ever attempted the fix — but the
-     * match is against the commit message rather than the diff: change 89000
-     * added `writePagesOrder`, and searching that name answers nothing while
+     * nothing, and reported that nobody had ever attempted the fix. But the
+     * match is against the commit message rather than the diff. Change 89000
+     * added `writePagesOrder`, and a search for that name answers nothing while
      * the words of its own subject answer it. Measured on 2026-08-24.
      */
     #[Decision('D-ANS-100')]
@@ -2523,8 +2524,8 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A captive portal answers 200 with HTML. Skipping to the first `[` would
-     * parse whatever followed it as a review, so anything that is not the API
+     * A captive portal answers 200 with HTML. A skip to the first `[` would
+     * parse whatever followed it as a review. So anything that is not the API
      * is a failure with a name.
      */
     #[Test]
@@ -2539,13 +2540,13 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * `R-ANS-035`. The change answer names a branch and named nothing else, and
-     * the session rewriting a `Releases:` trailer rebuilt the rest from
-     * `git branch -r` against a remote 59 commits behind
+     * `R-ANS-035`. The change answer names a branch and named nothing else. The
+     * session that rewrote a `Releases:` trailer rebuilt the rest from `git
+     * branch -r` against a remote 59 commits behind
      * (`feedback/2026-08-24-122348`).
      *
      * Held against `ReleaseLines` rather than against the branches it carries
-     * today: the file is a calendar, and a test naming 14.3 would fail on the
+     * today. The file is a calendar. A test that names 14.3 would fail on the
      * day 13.4 leaves regular support rather than on the day this placement
      * breaks.
      */
@@ -2567,14 +2568,14 @@ final class GerritTest extends TestCase
             self::assertSame(ReleaseLines::maintainedUntil($line['branch']), $line['maintainedUntil']);
         }
 
-        // The development line is the head of the list and has no such date,
-        // which is the one entry where a null is the answer rather than a gap.
+        // The development line is the head of the list and has no such date.
+        // That is the one entry where a null is the answer rather than a gap.
         self::assertSame(ReleaseLines::DEVELOPMENT, $answer['record']['branches'][0]['state']);
         self::assertNull($answer['record']['branches'][0]['maintainedUntil']);
 
-        // Every window is in the text as well, so the two halves say the same:
-        // a maintained line reads as an oversight or as a typo depending on when
-        // its support ends, and only the date carries that.
+        // Every window is in the text as well, so the two halves say the same.
+        // A maintained line reads as an oversight or as a typo according to
+        // when its support ends, and only the date carries that.
         foreach ($answer['record']['branches'] as $line) {
             if ($line['maintainedUntil'] !== null) {
                 self::assertStringContainsString($line['maintainedUntil'], $said);
@@ -2589,9 +2590,9 @@ final class GerritTest extends TestCase
 
     /**
      * `D-ANS-073`. The lines and their windows, never which of them this change
-     * belongs on: that reading is the author's claim about severity, and the
+     * belongs on. That read is the author's claim about severity, and the
      * answer hands over the tool that reads a trailer against them instead of
-     * making it.
+     * makes it.
      */
     #[Requirement('R-ANS-035')]
     #[Decision('D-ANS-073')]
@@ -2609,7 +2610,7 @@ final class GerritTest extends TestCase
 
     /**
      * The list comes from a file this server ships rather than from the review
-     * server, so it is answered on every path through the tool — an empty search
+     * server. So it comes back on every path through the tool, an empty search
      * and an unreachable host included. Its schema says so, which is what a
      * client validating `structuredContent` holds it to.
      */
@@ -2623,13 +2624,13 @@ final class GerritTest extends TestCase
 
     /**
      * Two rows of the open backlog as the review server sends them bare, in the
-     * shape `project:Packages/TYPO3.CMS status:open` answered on 2026-08-25:
-     * the six fields `D-ANS-107` is about, and no `labels` object, because
+     * shape `project:Packages/TYPO3.CMS status:open` answered on 2026-08-25.
+     * The six fields `D-ANS-107` is about, and no `labels` object, because
      * nothing asked for one.
      *
      * The younger change stands first, which is the order the review server
-     * answers in — by last activity — and the opposite of both orders the
-     * enumeration is asked for.
+     * answers in, by last activity. That is the opposite of both orders the
+     * enumeration takes.
      */
     private const OPEN = ")]}'\n"
         . '[{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[BUGFIX] Make CGL suites work in git worktrees",'
@@ -2644,14 +2645,14 @@ final class GerritTest extends TestCase
         . '"status":"NOT_READY","labels":[{"label":"Verified","status":"NEED"},{"label":"Code-Review","status":"REJECT"}]}]}]';
 
     /**
-     * The filters are arguments composed into one query here, never a Gerrit
-     * query passed through — `D-ANS-107`, which is what `D-ANS-100` decided for
-     * the words and the path.
+     * The filters are arguments that compose into one query here, never a
+     * Gerrit query passed through. `D-ANS-107`, which is what `D-ANS-100`
+     * decided for the words and the path.
      *
-     * Every operator in it was measured against review.typo3.org on 2026-08-25,
-     * anonymously and in one call each: `delta:<=60` cut the 855 open core
-     * changes to 329, `before:2025-01-01` to 54, and the whole almost-ready
-     * query below to 74.
+     * Every operator in it has a measurement against review.typo3.org from
+     * 2026-08-25, anonymous and in one call each. `delta:<=60` cut the 855 open
+     * core changes to 329, `before:2025-01-01` to 54, and the whole
+     * almost-ready query below to 74.
      */
     #[Decision('D-ANS-107')]
     #[Test]
@@ -2677,12 +2678,14 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A draft is not offered for review, and it is half the backlog: 411 of the
-     * 855 open core changes carried the flag on 2026-08-25, so an enumeration
-     * that keeps them answers mostly somebody else's unfinished work.
+     * A draft is not on offer for review, and it is half the backlog. 411 of
+     * the 855 open core changes carried the flag on 2026-08-25, so an
+     * enumeration that keeps them answers mostly somebody else's unfinished
+     * work.
      *
-     * It is in the query rather than behind an argument, and the query is in the
-     * answer, so nothing is narrowed that the caller cannot read — `D-ANS-107`.
+     * It is in the query rather than behind an argument, and the query is in
+     * the answer. So no filter applies that the caller cannot read —
+     * `D-ANS-107`.
      */
     #[Decision('D-ANS-107')]
     #[Test]
@@ -2696,7 +2699,7 @@ final class GerritTest extends TestCase
 
     /**
      * A person is one query rather than two reads, which is where this differs
-     * from the tracker: Gerrit's parser takes the alternation and Redmine ANDs
+     * from the tracker. Gerrit's parser takes the alternation and Redmine ANDs
      * its filters, so `D-ANS-089` had to union two answers by hand.
      */
     #[Decision('D-ANS-107')]
@@ -2723,9 +2726,9 @@ final class GerritTest extends TestCase
      * The ordering is this server's, over the set the filters matched.
      *
      * The review server sorts by last activity, indexes no created date and
-     * states no total for a query, so oldest-first cannot be asked of it at all
-     * — measured on 2026-08-25, where the whole open backlog was 855 changes,
-     * two calls and 1.1 MB. `D-ANS-107`.
+     * states no total for a query. So oldest-first is no question it can take
+     * at all. Measured on 2026-08-25, where the whole open backlog was 855
+     * changes, two calls and 1.1 MB. `D-ANS-107`.
      */
     #[Decision('D-ANS-107')]
     #[Test]
@@ -2739,18 +2742,18 @@ final class GerritTest extends TestCase
         // Pushed first, which is the reverse of what came back.
         self::assertSame([90384, 95413], array_column($oldest['changes'], 'number'));
         // Untouched longest, which on these two is the same order and is not on
-        // every set: the second was pushed a year later and moved a month ago.
+        // every set. The second went up a year later and moved a month ago.
         self::assertSame([90384, 95413], array_column($stale['changes'], 'number'));
         self::assertSame(2, $oldest['read']);
         self::assertTrue($oldest['complete']);
     }
 
     /**
-     * The whole matched set is read before it is ordered, and the answer says
-     * how many rows that was and whether it is all of them.
+     * The read takes the whole matched set before the sort. The answer says how
+     * many rows that was and whether it is all of them.
      *
      * A page is 500 rows and the review server sets `_more_changes` on the last
-     * of one it cut, which is the only thing that says there is more: it states
+     * of one it cut. That is the only thing that says there is more: it states
      * no total. A caller shown 25 of 855 that reads them as the backlog has
      * measured the limit — `D-ANS-107`.
      */
@@ -2766,9 +2769,9 @@ final class GerritTest extends TestCase
                 self::assertStringContainsString('&S=' . ($pages - 1) * 500, $url);
             }
 
-            // Every page says there is another, on its last row, which is
-            // where the review server puts the flag and the only thing that
-            // says the set goes on: it states no total.
+            // Every page says there is another, on its last row, which is where
+            // the review server puts the flag. That is the only thing that says
+            // the set goes on: it states no total.
             return str_replace('"_number":90384', '"_number":9038' . $pages . ',"_more_changes":true', self::OPEN);
         });
 
@@ -2782,9 +2785,8 @@ final class GerritTest extends TestCase
 
     /**
      * Six fields the review server sends on every row and this server dropped
-     * until `D-ANS-107`: the size, whether it still merges, when it was pushed,
-     * how many threads are unresolved, and what the submit rule makes of each
-     * label.
+     * until `D-ANS-107`. The size, whether it still merges, when it went up,
+     * how many threads are open, and what the submit rule makes of each label.
      *
      * The row widens for every direction rather than for the enumeration alone,
      * because the reading is the same wherever the change came from.
@@ -2812,10 +2814,10 @@ final class GerritTest extends TestCase
 
     /**
      * `submit_records` is on every row and the voters are not, so a search
-     * answers what each label stands at with `votes` null — a list of zeros
-     * there would read as nobody having voted, which is a different answer.
+     * answers what each label stands at with `votes` null. A list of zeros
+     * there would read as no votes at all, which is a different answer.
      *
-     * The per-voter tallies stay out of a search: `o=DETAILED_LABELS` is 0.9 KB
+     * The per-voter tallies stay out of a search. `o=DETAILED_LABELS` is 0.9 KB
      * a row, and a page of 500 is 666 KB bare against 1.14 MB with it, measured
      * on 2026-08-25 — `D-ANS-107`.
      */
@@ -2840,11 +2842,12 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * A change nobody may submit and a change nobody has voted on are the pair a
-     * triage acts on, and "not satisfied" was what this said for both.
+     * A change nobody may submit and a change nobody has voted on are the pair
+     * a triage acts on. "not satisfied" was what this said for both.
      *
-     * `REJECT` is a vote blocking the change and `NEED` is a rule the votes have
-     * not met, so the worse of them is what the label stands at — `D-ANS-107`.
+     * `REJECT` is a vote that blocks the change and `NEED` is a rule the votes
+     * have not met. So the worse of them is what the label stands at —
+     * `D-ANS-107`.
      */
     #[Decision('D-ANS-107')]
     #[Test]
@@ -2871,9 +2874,9 @@ final class GerritTest extends TestCase
      * What a page of the backlog is a page of, said before the rows.
      *
      * The size of the set leads, because a page read as the backlog is a triage
-     * that believes it has seen it. And age alone is the wrong shortlist: of the
-     * five oldest open core changes measured on 2026-08-25, three were over 250
-     * lines and three no longer merged — `D-ANS-107`.
+     * that believes it has seen it. And age alone is the wrong shortlist. Of
+     * the five oldest open core changes measured on 2026-08-25, three were over
+     * 250 lines and three no longer merged — `D-ANS-107`.
      */
     #[Decision('D-ANS-107')]
     #[Test]
@@ -2896,10 +2899,10 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The three readings a review candidate is picked by, on the line a page is
-     * scanned by. Nothing is printed for a field the review server stated
-     * nothing for, because a size of zero and an unstated size are different
-     * claims — `D-ANS-107`.
+     * The three reads that pick a review candidate, on the line a reader scans
+     * a page by. Nothing prints for a field the review server stated nothing
+     * for. A size of zero and an unstated size are different claims —
+     * `D-ANS-107`.
      */
     #[Decision('D-ANS-107')]
     #[Test]
@@ -2915,7 +2918,7 @@ final class GerritTest extends TestCase
         self::assertSame('+39 -6 · merges · pushed 2026-08-25', GerritLookup::standing($changes[1]));
 
         // A merged change carries no mergeability and an unstated size is not a
-        // zero, so neither is claimed.
+        // zero, so the answer claims neither.
         self::assertSame('', GerritLookup::standing([
             'insertions' => null,
             'deletions' => null,
@@ -2927,10 +2930,10 @@ final class GerritTest extends TestCase
     }
 
     /**
-     * The enumeration's own trap is the person filter. The review server answers
-     * a name it cannot place with an empty list and no error — measured on
-     * 2026-08-25, where `owner:zzzznotauser` came back HTTP 200 with `[]` — so
-     * "nobody by that name" arrives as "this person has nothing open".
+     * The enumeration's own trap is the person filter. The review server
+     * answers a name it cannot place with an empty list and no error. Measured
+     * on 2026-08-25, where `owner:zzzznotauser` came back HTTP 200 with `[]`.
+     * So "nobody by that name" arrives as "this person has nothing open".
      */
     #[Requirement('R-ANS-027')]
     #[Decision('D-ANS-107')]
@@ -2950,9 +2953,9 @@ final class GerritTest extends TestCase
     /**
      * The enumeration is its own argument and the filters narrow it.
      *
-     * `open` is a boolean narrowing `query` and `path`, and a boolean that grew
-     * the sibling tool's `"oldest" | "stale"` spelling would break every caller
-     * passing `true` — so the ways in are six and `backlog` is the sixth
+     * `open` is a boolean that narrows `query` and `path`. A boolean that grew
+     * the sibling tool's `"oldest" | "stale"` form would break every caller
+     * that passes `true`. So the ways in are six and `backlog` is the sixth
      * (`D-ANS-107`).
      */
     #[Decision('D-ANS-107')]
@@ -2976,8 +2979,8 @@ final class GerritTest extends TestCase
      * is: the open changes one person neither pushed nor voted on.
      *
      * Both operators go in together, because half of it is a set no report has
-     * asked for, and it composes with the filters that select rather than
-     * replacing them — `D-ANS-109`.
+     * asked for. It composes with the filters that select rather than replaces
+     * them — `D-ANS-109`.
      */
     #[Decision('D-ANS-109')]
     #[Test]
@@ -3003,10 +3006,10 @@ final class GerritTest extends TestCase
     /**
      * This filter's own trap is the inverse of the one the empty answer carries.
      *
-     * A name the review server cannot place takes nothing out: `-owner:` and
+     * A name the review server cannot place takes nothing out. `-owner:` and
      * `-reviewedby:` on `zzzznotauser` answered all 444 open core changes on
      * 2026-08-25, where `owner:` on the same word answers none. So the wide
-     * answer is where it has to be said — `D-ANS-109`.
+     * answer is where the text has to say it — `D-ANS-109`.
      */
     #[Decision('D-ANS-109')]
     #[Test]

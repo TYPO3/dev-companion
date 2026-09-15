@@ -19,30 +19,31 @@ use TYPO3\DevCompanion\Upkeep\Command\TodoHome;
  * holds.
  *
  * The four steps are each correct on their own and only mean anything in one
- * sequence: a suite run before the rebase checked a tree that no longer exists,
- * a worktree removed before the merge takes the only checkout the merge could
- * have run in, and a merge attempted after a failed rebase is a merge commit
- * where the procedure says there are none. Prose said all of that and could hold
- * nobody to it.
+ * sequence. A suite run before the rebase checked a tree that no longer exists.
+ * A worktree removed before the merge takes the only checkout the merge could
+ * have run in. Prose said all of that and could hold nobody to it.
  *
- * Every case here stops before the merge, deliberately: a run that merged would
- * fast-forward the checkout the suite is running in, which is a write into a
- * directory this repository keeps (`R-COD-003`). What can be held without
- * writing is the half that decides whether anything is written at all.
+ * Every case here stops before the merge, on purpose. A run that merged would
+ * fast-forward the checkout the suite runs in (`R-COD-003`). What a test can
+ * hold without a write is the half that decides whether anything gets written
+ * at all.
  */
 final class TodoHomeTest extends TestCase
 {
-    /** The worktree each case names, which exists only in what git is stubbed to say. */
+    /**
+     * The worktree each case names, which exists only in what the git stub
+     * says.
+     */
     private const NAME = 'a-claim-that-has-reported';
 
     private const BRANCH = 'todo/a-claim-that-has-reported';
 
     /**
-     * Every command the stub was asked for, in the order it was asked.
+     * Every command the stub got, in the order of the calls.
      *
-     * A property rather than a return value, because what a case asserts about
-     * is what was run *after* it was handed the stub: an array given back would
-     * be the copy that existed before the command ran.
+     * A property rather than a return value, because a case asserts on what ran
+     * *after* it handed the stub over. An array given back would be the copy
+     * that existed before the command ran.
      *
      * @var array<int, array<int, string>>
      */
@@ -59,9 +60,9 @@ final class TodoHomeTest extends TestCase
     }
 
     /**
-     * A session that died mid-write leaves a tree nothing below would carry:
-     * the rebase refuses it, and a merge that somehow got past would leave the
-     * half that is done on no branch at all. So it is read before the sequence
+     * A session that died mid-write leaves a tree nothing below would carry.
+     * The rebase refuses it, and a merge that somehow got past would leave the
+     * finished half on no branch at all. So the read comes before the sequence
      * starts rather than in the middle of it.
      */
     #[Test]
@@ -79,10 +80,10 @@ final class TodoHomeTest extends TestCase
     }
 
     /**
-     * A rebase that conflicts is put back rather than left standing. Half a
-     * rebase is a worktree in a state no session can be started against and no
-     * later call can recognise, and the caller finds out about it from the next
-     * command rather than from this one.
+     * A rebase that conflicts goes back rather than stays. Half a rebase is a
+     * worktree in a state no session can start against and no later call can
+     * recognise. The caller finds out about it from the next command rather
+     * than from this one.
      */
     #[Test]
     public function aRebaseThatConflictsIsAborted(): void
@@ -100,9 +101,8 @@ final class TodoHomeTest extends TestCase
 
     /**
      * The suite runs on what `main` has become and decides the merge. A red
-     * branch keeps its worktree, because the fix is written in it — removing it
-     * here would cost a fresh `composer install` to get back to the same
-     * failure.
+     * branch keeps its worktree, because the fix goes in there. A removal here
+     * would cost a fresh `composer install` to get back to the same failure.
      */
     #[Test]
     public function aRedSuiteStopsBeforeTheMergeAndKeepsTheWorktree(): void
@@ -119,10 +119,9 @@ final class TodoHomeTest extends TestCase
     }
 
     /**
-     * The suite is asked after the rebase and never before it, which is the one
-     * ordering a caller reading the page got wrong twice. A run from before is
-     * a run against a tree that no longer exists, and it is green about
-     * nothing.
+     * The suite runs after the rebase and never before it, which is the one
+     * order a caller who read the page got wrong twice. A run from before is a
+     * run against a tree that no longer exists, and it is green about nothing.
      */
     #[Test]
     public function theSuiteIsAskedAfterTheRebase(): void
@@ -143,7 +142,7 @@ final class TodoHomeTest extends TestCase
 
     /**
      * What the branch owes `main` goes into the branch's own commit, and the
-     * two steps around it are what put it there: the rebase is what lets a
+     * two steps around it are what put it there. The rebase is what lets a
      * worktree write a group listing at all, and the suite then runs on the
      * tree that merges. Committed onto `main` afterwards instead, it was 37 of
      * the 200 commits before 2026-08-18 — `D-FBK-011`.
@@ -173,9 +172,9 @@ final class TodoHomeTest extends TestCase
 
     /**
      * The link another branch wrote to a feedback this one archives is dead the
-     * moment the two are on one tree, and the tree that carries both is the
-     * rebased one. So the repair runs there, and before the suite that would
-     * otherwise fail the branch on a link its session never saw — `D-DOC-064`.
+     * moment the two are on one tree. The tree that carries both is the rebased
+     * one. So the repair runs there, and before the suite that would otherwise
+     * fail the branch on a link its session never saw — `D-DOC-064`.
      */
     #[Decision('D-DOC-064')]
     #[Test]
@@ -197,10 +196,9 @@ final class TodoHomeTest extends TestCase
     }
 
     /**
-     * A todo nobody has in hand is a caller working from a stale listing, and
-     * the four steps would otherwise be carried out against a directory git has
-     * never heard of. Nothing runs, and the message names where what is in hand
-     * is read from.
+     * A todo nobody has in hand is a caller on a stale listing. The four steps
+     * would otherwise run against a directory git has never heard of. Nothing
+     * runs, and the message names where the list of what is in hand comes from.
      */
     #[Test]
     public function aTodoNobodyHasInHandRunsNothing(): void
@@ -218,8 +216,8 @@ final class TodoHomeTest extends TestCase
     /**
      * The seam every case above stands on, asserted directly because it has
      * gone wrong twice and neither time in a checkout that would notice. A key
-     * is a word a command carries, so what the command carries and nobody chose
-     * — where this checkout sits — is not part of it.
+     * is a word a command carries. So what the command carries and nobody
+     * chose, where this checkout sits, is not part of it.
      */
     #[Test]
     public function whatACaseIsKeyedOnCarriesNoneOfTheCheckoutsOwnPath(): void
@@ -235,14 +233,14 @@ final class TodoHomeTest extends TestCase
     }
 
     /**
-     * git, as far as this command can see it: a checkout that is not a
-     * worktree, standing on `main`, with one worktree below `.worktrees/` whose
-     * branch is the claim's and whose tree is clean.
+     * git, as far as this command can see it. A checkout that is not a
+     * worktree, on `main`, with one worktree below `.worktrees/` whose branch
+     * is the claim's and whose tree is clean.
      *
      * Each case overrides the one answer it is about, keyed by the word its
-     * command carries, and everything it does not name is the run that would
-     * have gone through. So a case says what is different rather than restating
-     * the eight calls that come before the difference.
+     * command carries. Everything it does not name is the run that would have
+     * gone through. So a case says what is different rather than repeats the
+     * eight calls that come before the difference.
      *
      * @param array<string, string|array{0: int, 1: string}> $answers
      */
@@ -301,15 +299,15 @@ final class TodoHomeTest extends TestCase
     }
 
     /**
-     * What was run, with the checkout's own path taken out of it.
+     * What ran, with the checkout's own path taken out of it.
      *
-     * A case is keyed on a word the command carries, and half of what a command
-     * carries is where this checkout sits: git is handed `-C <path>`, and the
-     * index steps are run as `<php> <path>/bin/cli requirements:index`. So a
-     * checkout whose directory name contains a key answered every call keyed on
-     * it — in `.worktrees/nothing-enumerates-what-a-composer-install` the cases
-     * keyed on `composer` fired on `rev-parse --abbrev-ref HEAD`, which then
-     * reported `FAILURES!` as the branch name.
+     * A case keys on a word the command carries, and half of what a command
+     * carries is where this checkout sits. git gets `-C <path>`, and the index
+     * steps run as `<php> <path>/bin/cli requirements:index`. So a checkout
+     * whose directory name contains a key answered every call keyed on it. In
+     * `.worktrees/nothing-enumerates-what-a-composer-install` the cases keyed
+     * on `composer` fired on `rev-parse --abbrev-ref HEAD`, which then reported
+     * `FAILURES!` as the branch name.
      *
      * @param array<int, string> $command
      */
@@ -321,7 +319,7 @@ final class TodoHomeTest extends TestCase
             $argument = str_replace(Paths::root(), '', $argument);
 
             if ($argument === '') {
-                // The whole argument was the path, so the flag it was handed to
+                // The whole argument was the path, so the flag in front of it
                 // goes with it: `-C <root>` says nothing once the root is gone.
                 if (end($said) === '-C') {
                     array_pop($said);

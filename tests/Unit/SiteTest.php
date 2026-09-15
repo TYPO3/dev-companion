@@ -17,13 +17,13 @@ use TYPO3\DevCompanion\Upkeep\Site;
  * What the published copy of `documentation/` owes a reader who has no checkout.
  *
  * The corpus is the real one, because the defect this guards is a property of
- * these pages: they were written against a tree the site does not carry, and a
- * fixture of two invented files would say nothing about the hundred-odd links
- * that actually leave it.
+ * these pages. Their authors wrote them against a tree the site does not carry.
+ * A fixture of two invented files would say nothing about the hundred-odd links
+ * that leave it.
  */
 final class SiteTest extends TestCase
 {
-    /** `R-COD-003`: the copy is written where nothing keeps it. */
+    /** `R-COD-003`: the copy lands where nothing keeps it. */
     private string $target = '';
 
     protected function setUp(): void
@@ -38,8 +38,8 @@ final class SiteTest extends TestCase
 
     /**
      * The whole point of the copy. A link into `decisions/`, `requirements/`,
-     * `todo/`, `src/` or `AGENTS.md` is a path the site does not serve, and it
-     * is not a dead link on the site because it is not a relative link there at
+     * `todo/`, `src/` or `AGENTS.md` is a path the site does not serve. It is
+     * not a dead link on the site because it is not a relative link there at
      * all — `D-DOC-017`.
      */
     #[Decision('D-DOC-017')]
@@ -64,9 +64,9 @@ final class SiteTest extends TestCase
 
     /**
      * Whether a link written in one directory of the copy lands outside it,
-     * spelled out rather than asked of `Site`: what is held here is where the
-     * links point, and a resolver borrowed from the code under test would
-     * assert that the code agrees with itself.
+     * written out rather than asked of `Site`. This holds where the links
+     * point, and a resolver borrowed from the code under test would assert that
+     * the code agrees with itself.
      */
     private static function escapes(string $directory, string $path): bool
     {
@@ -107,7 +107,10 @@ final class SiteTest extends TestCase
         self::assertSame([], $dead);
     }
 
-    /** A link that left is the file on GitHub, on the branch the site is built from. */
+    /**
+     * A link that left is the file on GitHub, on the branch the site builds
+     * from.
+     */
     #[Test]
     public function aLinkOutOfTheTreeBecomesTheFileInTheRepository(): void
     {
@@ -121,7 +124,7 @@ final class SiteTest extends TestCase
         self::assertStringContainsString(Site::repository() . '/tree/main/scenarios/runs', $published);
     }
 
-    /** What a heading on such a file is called survives the rewrite. */
+    /** The name of a heading on such a file survives the rewrite. */
     #[Test]
     public function aHeadingNamedOnALinkThatLeftIsKept(): void
     {
@@ -135,11 +138,11 @@ final class SiteTest extends TestCase
      * A reference into another page of the corpus resolves, which is what the
      * move to reStructuredText bought — `D-DOC-029`.
      *
-     * Markdown could not do this. A link naming a heading in another page was
-     * discarded whole by the generator, text and all, so `Site` dropped the
+     * Markdown could not do this. The generator discarded a link that named a
+     * heading in another page whole, text and all. So `Site` dropped the
      * fragment and landed the reader at the top of the page instead. What
-     * replaces that is a label the renderer resolves and fails loudly on, and
-     * what fails loudly in a checkout with no renderer is this — `D-DOC-017`.
+     * replaces that is a label the renderer resolves and fails loudly on. What
+     * fails loudly in a checkout with no renderer is this — `D-DOC-017`.
      */
     #[Decision('D-DOC-017')]
     #[Decision('D-DOC-029')]
@@ -155,7 +158,7 @@ final class SiteTest extends TestCase
     }
 
     /**
-     * And a reference is left exactly as written, because the renderer is what
+     * And a reference stays exactly as written, because the renderer is what
      * resolves it. `Site` rewrites the links that leave the tree and nothing
      * else, which is the whole of what it does to a page now — `D-DOC-029`.
      */
@@ -174,9 +177,9 @@ final class SiteTest extends TestCase
     /**
      * A directory's own page is `readme.rst` here and `index.rst` there,
      * because a generator publishes the second as the directory itself. The
-     * links naming it already say `index`, since that is the name the renderer
-     * resolves a `:doc:` against — `D-DOC-026`, `D-DOC-029`, `D-DOC-018`,
-     * `D-DOC-017`.
+     * links that name it already say `index`, since that is the name the
+     * renderer resolves a `:doc:` against — `D-DOC-026`, `D-DOC-029`,
+     * `D-DOC-018`, `D-DOC-017`.
      */
     #[Decision('D-DOC-017')]
     #[Decision('D-DOC-026')]
@@ -196,14 +199,14 @@ final class SiteTest extends TestCase
     }
 
     /**
-     * `D-DOC-026`: the site is `documentation/` and nothing besides, so it opens
-     * on that directory's own page and the checkout's readme is a file the site
-     * does not carry.
+     * `D-DOC-026`: the site is `documentation/` and nothing besides. So it
+     * opens on that directory's own page, and the checkout's readme is a file
+     * the site does not carry.
      *
-     * `D-DOC-030`: and that page is the landing page, which the theme reads
-     * from a field list the parser only takes as metadata above the title. A
-     * field written below it is rendered as a definition list in the body, so
-     * the order is what makes the shape and not decoration.
+     * `D-DOC-030`: and that page is the front page, which the theme reads from
+     * a field list the parser only takes as metadata above the title. A field
+     * written below it renders as a definition list in the body, so the order
+     * is what makes the shape and not decoration.
      */
     #[Decision('D-DOC-026')]
     #[Decision('D-DOC-030')]
@@ -247,7 +250,10 @@ final class SiteTest extends TestCase
         self::assertSame($written, Site::page('documentation/contributing/glossary.rst', $written));
     }
 
-    /** The images the pages carry are copied, since a page without them says less. */
+    /**
+     * The copy takes the images the pages carry, since a page without them says
+     * less.
+     */
     #[Test]
     public function whatIsNotAPageIsCarriedOverUnchanged(): void
     {
@@ -258,7 +264,7 @@ final class SiteTest extends TestCase
         self::assertFileEquals($source, $this->target . '/images/system-overview.svg');
     }
 
-    /** A page that was renamed or deleted stops being served on the next build. */
+    /** A page under a new name or gone leaves the site on the next build. */
     #[Test]
     public function aFileTheDocumentationNoLongerHasIsTakenOutOfTheCopy(): void
     {
@@ -275,10 +281,10 @@ final class SiteTest extends TestCase
     /**
      * `D-DOC-024`: every directory the site serves has a page of its own.
      *
-     * The rail and the trail are built from the directories, and a page whose
-     * directory has no `readme.rst` is attached to nothing: the renderer says
-     * so as a warning nobody reads and the page is then in no menu at all. Six
-     * of them were unreachable that way — `D-DOC-025`, `D-DOC-029`.
+     * The rail and the trail derive from the directories, and a page whose
+     * directory has no `readme.rst` hangs on nothing. The renderer says so as a
+     * warning nobody reads, and the page is then in no menu at all. Six of them
+     * were unreachable that way — `D-DOC-025`, `D-DOC-029`.
      */
     #[Decision('D-DOC-024')]
     #[Decision('D-DOC-025')]
@@ -302,10 +308,10 @@ final class SiteTest extends TestCase
 
     /**
      * `D-DOC-031`: what the rail, the trail and the footer show for a page is a
-     * label, and four words is where one stops being that.
+     * label. Four words is where one is no longer that.
      *
-     * The heading is left free to be a sentence, so the two are counted apart:
-     * a page whose heading is longer says the short name in a
+     * The heading stays free to be a sentence, so the count treats the two
+     * apart. A page whose heading is longer says the short name in a
      * `:navigation-title:` above it.
      */
     #[Decision('D-DOC-031')]
@@ -326,15 +332,15 @@ final class SiteTest extends TestCase
 
     /**
      * `D-DOC-032`: what a contents list shows for a section is the heading
-     * itself, there being no second name a section can carry, so the heading is
-     * a label.
+     * itself, since a section carries no second name. So the heading is a
+     * label.
      *
-     * Five words where a page label gets four: a section may state a claim, and
+     * Five words where a page label gets four. A section may state a claim, and
      * the ones this corpus writes are of the form *judged, not executed*.
      *
-     * `server/tools/` is not read. Those pages are written by `ToolSurface` and
-     * `ToolAnswers` and held by `bin/cli tools:check`, and what heads a recorded
-     * answer there is the case it is of.
+     * `server/tools/` is not read. `ToolSurface` and `ToolAnswers` write those
+     * pages and `bin/cli tools:check` holds them. What heads a recorded answer
+     * there is the case it is of.
      */
     #[Decision('D-DOC-032')]
     #[Test]
@@ -378,7 +384,7 @@ final class SiteTest extends TestCase
         return $headings;
     }
 
-    /** What a page is shown as in a menu: its navigation title, or its heading. */
+    /** What a menu shows for a page: its navigation title, or its heading. */
     private static function label(string $rst): string
     {
         if (preg_match('/^:navigation-title:\s*(.+)$/m', $rst, $navigation) === 1) {
@@ -391,11 +397,11 @@ final class SiteTest extends TestCase
     }
 
     /**
-     * `D-DOC-023`: no drawing sets type below the floor.
+     * `D-DOC-023`: no image sets type below the floor.
      *
-     * 13px at drawn size is the system's, and a drawing is shown at two
-     * thirds of that size in the column it sits in. Two of them carried 12px
-     * labels, which nothing but a measurement would have caught.
+     * 13px at drawn size is the system's, and an image renders at two thirds of
+     * that size in the column it sits in. Two of them carried 12px labels,
+     * which nothing but a measurement would have caught.
      */
     #[Test]
     public function noDrawingSetsTypeBelowTheFloor(): void
@@ -431,7 +437,10 @@ final class SiteTest extends TestCase
         return $pages;
     }
 
-    /** What a watch compares is every file the copy is made from, the skills included, and nothing it wrote. */
+    /**
+     * What a watch compares is every file the copy derives from, the skills
+     * included, and nothing it wrote.
+     */
     #[Test]
     public function everyFileTheCopyIsMadeFromHasAStamp(): void
     {

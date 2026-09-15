@@ -55,10 +55,10 @@ final class VersionsTest extends TestCase
 
     /**
      * Whether this server knows the TYPO3 somebody runs is what decides whether
-     * they install it, and it is read in the two places somebody arrives at:
-     * the readme on GitHub and the front page of the site. So the sentence
-     * naming the lines is held to the declaration rather than to what was
-     * covered on the day it was written — `D-DOC-026`, `D-DOC-030`.
+     * they install it. They read it in the two places somebody arrives at: the
+     * readme on GitHub and the front page of the site. So this holds the
+     * sentence that names the lines to the declaration. Not to what the
+     * coverage was on the day somebody wrote it — `D-DOC-026`, `D-DOC-030`.
      */
     #[Decision('D-DOC-026')]
     #[Decision('D-DOC-030')]
@@ -81,17 +81,16 @@ final class VersionsTest extends TestCase
     #[Test]
     public function theOneVersionFactTheCodeCarriesIsOneOfTheDeclaredVersions(): void
     {
-        // D-DIS-004 puts the version translation domains arrived in into the code
-        // rather than the knowledge base, because the answer below it is
-        // withheld rather than qualified — and it is one number in one place so
-        // that a backport has one thing to make wrong. That number and
-        // knowledge/versions.json are declared apart and can drift apart: a
-        // covers list that stops carrying a major below SINCE leaves the
-        // withholding branch answering for versions this base no longer covers,
-        // and every behavioural test still passes because each names its own
-        // version string. So the number is read against the declared list here,
-        // and the two versions the behaviour is pinned at are derived from that
-        // list rather than written down a second time.
+        // D-DIS-004 puts the version translation domains arrived in into the
+        // code rather than the knowledge base. The answer below it stays back
+        // rather than gets a qualifier. It is one number in one place so that a
+        // backport has one thing to make wrong. That number and
+        // knowledge/versions.json stand apart and can drift apart. A covers
+        // list that drops a major below SINCE leaves the withhold branch to
+        // answer for versions this base no longer covers. Every behaviour test
+        // still passes because each names its own version string. So this reads
+        // the number against the declared list. The two versions the behaviour
+        // pins at derive from that list rather than stand a second time.
         $majors = Versions::majors();
 
         self::assertContains(
@@ -130,7 +129,7 @@ final class VersionsTest extends TestCase
      * both.
      *
      * `D-ANS-132`. The resolver and the `~labels` import map prefix arrived
-     * together, so the branch with no domain has nothing to import either and
+     * together. So the branch with no domain has nothing to import either, and
      * the field is absent there rather than null.
      */
     #[Decision('D-ANS-132')]
@@ -162,8 +161,8 @@ final class VersionsTest extends TestCase
     }
 
     /**
-     * A version string on a covered major, from the branch that major is
-     * verified against — so `main` becomes a number rather than a branch name.
+     * A version string on a covered major, from the branch a session verifies
+     * that major against. So `main` becomes a number rather than a branch name.
      */
     private function versionOn(int $major): string
     {
@@ -211,10 +210,10 @@ final class VersionsTest extends TestCase
     {
         // Translation domains do not exist below the version they arrived in,
         // and the domain string is syntactically fine there — the label just
-        // renders empty.
-        // The whole hint is bound: every statement of it arrived in 14, so on
-        // 13 there is nothing left of it and it is dropped rather than returned
-        // empty. That is the same rule one statement further.
+        // renders empty. The whole hint has the bound. Every statement of it
+        // arrived in 14. So on 13 there is nothing left of it, and the answer
+        // drops it rather than returns it empty. That is the same rule one
+        // statement further.
         self::assertNull(Hints::byId('translation-domain', 13));
 
         $onFourteen = implode("\n", array_column(
@@ -245,10 +244,10 @@ final class VersionsTest extends TestCase
     public function proseSaysWhereARangeItDoesNotCarryLives(string $tool, string $query): void
     {
         // A section carries its own range since `D-VER-005`, so the sentence no
-        // longer stands in for a binding. Two ranges are still somewhere else
-        // and a caller sent to the wrong one is sent nowhere: a runTests.sh
-        // command is bound to the suite in test-suite-hints.json, a convention
-        // to the statement in the hints.
+        // longer stands in for a bound. Two ranges are still somewhere else,
+        // and a caller sent to the wrong one goes nowhere. A runTests.sh
+        // command has its bound in the suite in test-suite-hints.json, a
+        // convention in the statement in the hints.
         $text = Registry::call($tool, ['query' => $query, 'task' => $query])->text;
 
         self::assertStringContainsString('A section carries the range it holds for', $text);
@@ -268,8 +267,8 @@ final class VersionsTest extends TestCase
     #[Test]
     public function theRangeIsNeverWrittenIntoTheSentence(): void
     {
-        // A version in the prose cannot be filtered, re-rendered or checked,
-        // and it is the thing that goes stale silently.
+        // No filter, render or check reaches a version in the prose, and it is
+        // the thing that goes stale without a word.
         foreach (Hints::load() as $hint) {
             foreach ($hint['hints'] as $statement) {
                 self::assertDoesNotMatchRegularExpression(
@@ -287,13 +286,13 @@ final class VersionsTest extends TestCase
     public function whoIsObligedIsWrittenAsDataToo(): void
     {
         // Same rule as the version range, for the other question a statement
-        // can answer differently per caller: an answer cannot filter or mark
-        // what is phrased inside the sentence. "core" was the only value for as
-        // long as the corpus wrote only that one, and the mirror is a data
-        // entry rather than a vocabulary change — `Scope::ofKnowledge()` has
-        // offered `project` and `extension` since `D-KNW-005`, and what writes
-        // them are the hints whose whole subject is a repository outside the
-        // core (`D-KNW-007`).
+        // can answer differently per caller. An answer cannot filter or mark
+        // what stands inside the sentence. "core" was the only value for as
+        // long as the corpus wrote only that one. The mirror is a data entry
+        // rather than a vocabulary change. `Scope::ofKnowledge()` has offered
+        // `project` and `extension` since `D-KNW-005`. What writes them are the
+        // hints whose whole subject is a repository outside the core
+        // (`D-KNW-007`).
         foreach (Hints::load() as $hint) {
             foreach (array_merge([$hint], $hint['hints']) as $entry) {
                 if (($entry['scope'] ?? null) !== null) {
@@ -307,9 +306,9 @@ final class VersionsTest extends TestCase
         }
 
         // The task intents answer the same question about the same caller and
-        // spelled it coreOnly: true, which is the same axis in a second
-        // vocabulary — and a boolean cannot carry the value a third audience
-        // would need. One name, one enforced value, both corpora.
+        // wrote it as coreOnly: true. That is the same axis in a second
+        // vocabulary. A boolean cannot carry the value a third audience would
+        // need. One name, one enforced value, both corpora.
         foreach (TaskIntents::load() as $intent) {
             if ($intent['scope'] !== null) {
                 self::assertSame(
@@ -325,9 +324,9 @@ final class VersionsTest extends TestCase
     #[Test]
     public function anExtensionThatServesTwoMajorsIsAnsweredForBoth(): void
     {
-        // One codebase, two majors: what arrived in 14 and what is still true
-        // on 13 are both rules its author has to hold, and the difference
-        // between them is the constraint the code is written around.
+        // One codebase, two majors. What arrived in 14 and what is still true
+        // on 13 are both rules its author has to hold. The difference between
+        // them is the constraint the code stands around.
         $root = $this->composerProject('vendor', '14.3.5');
         file_put_contents($root . '/composer.json', json_encode([
             'name' => 'acme/extension',
@@ -379,13 +378,13 @@ final class VersionsTest extends TestCase
     #[Test]
     public function aStatedMajorSaysWhichOtherOneItLeftOut(): void
     {
-        // How the widening is switched off in practice: a session reads 14.3.0
-        // out of typo3_project_describe and states it, because restating what the
-        // repository runs looks like the accurate thing to do. Narrowing is
-        // then correct — it was asked for — but invisible, and what comes back
-        // is the answer this filtering was changed to stop giving. So the
-        // answer names the major it was composed for, the ones the repository
-        // declares beside it, and that their statements are missing.
+        // How a session switches the wider answer off in practice. It reads
+        // 14.3.0 out of typo3_project_describe and states it, because a repeat
+        // of what the repository runs looks like the accurate thing to do. The
+        // narrow answer is then correct, since the caller asked for it, but
+        // invisible. What comes back is the answer this filter changed to stop.
+        // So the answer names the major it is for, the ones the repository
+        // declares beside it, and that their statements are absent.
         $root = $this->composerProject('vendor', '14.3.5');
         file_put_contents($root . '/composer.json', json_encode([
             'name' => 'acme/extension',
@@ -445,12 +444,12 @@ final class VersionsTest extends TestCase
     #[Test]
     public function aPinToOneMajorIsTellableFromAConstraintThatSpansTwo(): void
     {
-        // What `bin/cli versions:check` asks of the Fluid constraint in each core
-        // checkout, and the reason D-VER-003 needs no engine axis: the pin is what
-        // makes the TYPO3 major carry the engine, so a constraint that stops
-        // pinning has to be tellable from one that never did. Asked over engine
-        // majors rather than covered TYPO3 ones, which is the point of asking per
-        // major instead of parsing a range.
+        // What `bin/cli versions:check` asks of the Fluid constraint in each
+        // core checkout, and the reason D-VER-003 needs no engine axis. The pin
+        // is what makes the TYPO3 major carry the engine. So a constraint that
+        // no longer pins has to stand apart from one that never did. Asked over
+        // engine majors rather than covered TYPO3 ones, which is the point of a
+        // question per major instead of a parse of a range.
         $spans = static fn(string $constraint): array => array_values(array_filter(
             range(1, 20),
             static fn(int $major): bool => Versions::admits($constraint, $major),
@@ -471,18 +470,15 @@ final class VersionsTest extends TestCase
      * The range spellings three extension checkouts actually declare a TYPO3
      * major with, and the majors each one serves.
      *
-     * `D-VER-004` reads a supported range off the package's own declaration, and
-     * it is wrong if a spelling in the wild answers false for a major it does
-     * serve — a failure that surfaces as a statement missing from an answer
-     * rather than as an error, so nothing but a table like this one would catch
-     * it. Read on 2026-08-02 out of the three checkouts that play `E-EXT`, their
-     * root manifests and every `typo3/cms-*` requirement in the vendor trees they
-     * installed, and every expectation below is composer/semver's own answer for
-     * that spelling rather than a reading of it.
+     * `D-VER-004` is wrong if a form in the wild answers false for a major it
+     * does serve. Nothing but a table like this one would catch it. Read on
+     * 2026-08-02 out of the three checkouts that play `E-EXT`, their root
+     * manifests and every `typo3/cms-*` requirement in their vendor trees.
+     * Every expectation below is composer/semver's own answer for that form.
      *
      * Asked over majors rather than over the covered ones, because which majors
-     * a spelling serves is a property of the spelling: a version this knowledge
-     * base stops covering must not quietly rewrite the table.
+     * a form serves is a property of the form. A version this knowledge base
+     * stops covering must not rewrite the table without a word.
      *
      * @return iterable<string, array{string, array<int, int>}>
      */
@@ -498,13 +494,13 @@ final class VersionsTest extends TestCase
         yield 'an exact version on the older line' => ['13.4.33', [13]];
         // Not read off a typo3/cms-core requirement but off the php one beside
         // it, in georgringer/news: `>= 8.1 < 8.5`. Composer takes the space and
-        // this did not, so the same author spelling a core range that way would
-        // have been answered for the installed major alone.
+        // this did not. So the same author with a core range in that form would
+        // have got an answer for the installed major alone.
         yield 'an operator with a space after it, the way that manifest writes php' => ['>= 12.4.37 < 14', [12, 13]];
     }
 
     /**
-     * A supported range is a property of the package, so every spelling a real
+     * A supported range is a property of the package, so every form a real
      * manifest writes answers for the majors it serves — `D-VER-004`.
      */
     /** @param array<int, int> $majors */
@@ -522,20 +518,18 @@ final class VersionsTest extends TestCase
     }
 
     /**
-     * Every `require.php` spelling the four core checkouts declare, and the
-     * lowest version each one admits.
+     * Every `require.php` form the four core checkouts declare, and the lowest
+     * version each one admits.
      *
-     * `D-ANS-082` assumed that reading a PHP constraint at minor granularity
-     * covers what a manifest writes, and `D-VER-004` names the way that
-     * assumption failed one level up. So it is owed the same corpus — every
-     * `require.php` in the four checkouts and their vendor trees, read on
-     * 2026-08-18 — and every expectation is composer/semver's own answer for
-     * that spelling rather than a reading of it.
+     * `D-VER-004` names the way `D-ANS-082`'s assumption failed one level up.
+     * So it owes the same corpus: every `require.php` in the four checkouts and
+     * their vendor trees, read on 2026-08-18. Every expectation is
+     * composer/semver's own answer for that form rather than a read of it.
      *
      * The last four are not in that corpus and are the shapes `D-ANS-082` is
-     * wrong if this misreads. Three answer, and the hyphen range does not: a
-     * wrong floor carries the answer's authority where a missing one costs a
-     * sentence, so it is left unread the way `D-VER-004` left it.
+     * wrong if this misreads. Three answer, and the hyphen range does not. A
+     * wrong floor carries the answer's authority where an absent one costs a
+     * sentence, so it stays unread the way `D-VER-004` left it.
      *
      * @return iterable<string, array{string, ?string}>
      */
@@ -590,10 +584,10 @@ final class VersionsTest extends TestCase
     #[Test]
     public function theFloorIsReadOneLevelBelowTheMajorTheRestOfThisAnswers(): void
     {
-        // Why this exists at all: `admits()` reasons in majors, so the pair the
-        // reporting session had — `^8.3` declared against a core requiring
-        // `^8.2` — is a difference it cannot carry. Both are TYPO3-major 8 to
-        // it, and both would be the same answer.
+        // Why this exists at all. `admits()` reasons in majors, so the pair the
+        // session had, `^8.3` declared against a core that requires `^8.2`, is
+        // a difference it cannot carry. Both are TYPO3-major 8 to it, and both
+        // would be the same answer.
         self::assertSame(Versions::admits('^8.3', 8), Versions::admits('^8.2', 8));
         self::assertNotSame(Versions::floor('^8.3'), Versions::floor('^8.2'));
     }

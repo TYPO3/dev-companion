@@ -20,14 +20,14 @@ use TYPO3\DevCompanion\Upkeep\Renumber;
  * A decision really moved to another number, in a corpus of this case's own.
  *
  * The command's whole value is that it leaves nothing behind, so the cases that
- * matter are the accounting ones: every line naming the old id is either
- * rewritten or reported, and a renumber that dropped one would fail silently,
+ * matter are the ones that count. Every line that names the old id gets a
+ * rewrite or a report. A renumber that dropped one would fail without a word,
  * because the entry the stale reference now points at exists.
  *
- * The corpus is written rather than the repository's own, for `R-COD-003`: this
- * case renames files and rewrites them, and doing that to `decisions/` would
- * leave the checkout wrong wherever a run stops in the middle. It carries one of
- * each reference this repository writes.
+ * The corpus is a written one rather than the repository's own, for
+ * `R-COD-003`. This case renames files and rewrites them, and that on
+ * `decisions/` would leave the checkout wrong wherever a run stops in the
+ * middle. It carries one of each reference this repository writes.
  */
 final class RenumberTest extends TestCase
 {
@@ -40,9 +40,9 @@ final class RenumberTest extends TestCase
 
     /**
      * The corpus is a directory and not a checkout, so the git this now asks is
-     * stubbed rather than run — `R-COD-003`. Answering "no such ref" is the
-     * state every case but one is written against: nothing is settled from who
-     * wrote a line, and every ambiguous mention is reported.
+     * a stub rather than a run — `R-COD-003`. An answer of "no such ref" is the
+     * state every case but one stands on. Nothing settles from who wrote a
+     * line, and every ambiguous mention gets a report.
      */
     #[Before]
     public function answerNoRepository(): void
@@ -85,12 +85,12 @@ final class RenumberTest extends TestCase
     }
 
     /**
-     * The other move: the number stays and the title has been corrected, so the
-     * file goes where the title says and every path that named it goes with it
+     * The other move: the number stays and the title got its correction. So the
+     * file goes where the title says, and every path that named it goes with it
      * — `D-DOC-047`.
      *
-     * Every reference is rewritten rather than reported, which a renumbering
-     * may not do: two entries can share an id and no two share a file name.
+     * Every reference gets a rewrite rather than a report, which a renumber may
+     * not do. Two entries can share an id and no two share a file name.
      */
     #[Decision('D-DOC-047')]
     #[Test]
@@ -118,9 +118,9 @@ final class RenumberTest extends TestCase
     }
 
     /**
-     * A link path says which entry is meant, whichever of the two forms it is
-     * written in. The reference definition a generated listing ends with carries
-     * the path, so the usage above it is settled by the same file.
+     * A link path says which entry it means, in either of the two forms. The
+     * reference definition a generated listing ends with carries the path, so
+     * the same file settles the usage above it.
      */
     #[Test]
     public function aReferenceWhoseOwnLineNamesTheFileMovesWithIt(): void
@@ -147,10 +147,10 @@ final class RenumberTest extends TestCase
     }
 
     /**
-     * The one both mis-pointings on record were. A `restsOn:` is checked for
-     * existence and never for correctness, and a sentence naming an id is
-     * checked for neither — so moving either is a guess, and the entry it would
-     * land on is real whichever way the guess went — `D-DOC-015`.
+     * The one both mis-pointings on record were. A check reads a `restsOn:` for
+     * existence and never for correctness, and a sentence that names an id for
+     * neither. So a move of either is a guess, and the entry it would land on
+     * is real whichever way the guess went — `D-DOC-015`.
      */
     #[Decision('D-DOC-015')]
     #[Test]
@@ -180,11 +180,11 @@ final class RenumberTest extends TestCase
     /**
      * The half a person used to do by hand, four times in one day.
      *
-     * A todo card written by the session that wrote the entry names the id in
-     * prose and no link path, so nothing in the file says which of the two
-     * entries is meant. What says it is that `main` does not carry the line: the
-     * entry it would otherwise mean already had the number when the line was
-     * written — `D-FBK-046`.
+     * A todo card from the session that wrote the entry names the id in prose
+     * and no link path. So nothing in the file says which of the two entries it
+     * means. What says it is that `main` does not carry the line. The entry it
+     * would otherwise mean already had the number when the line arrived —
+     * `D-FBK-046`.
      */
     #[Decision('D-FBK-046')]
     #[Test]
@@ -195,8 +195,8 @@ final class RenumberTest extends TestCase
         mkdir(dirname($card), 0o777, true);
         file_put_contents($card, "# A fixture card\n\nJudged as `D-GUI-901`: the step below.\n");
 
-        // `main` carries the sibling entry naming the same id and not the card,
-        // which is the state a collision leaves behind.
+        // `main` carries the sibling entry that names the same id and not the
+        // card, which is the state a collision leaves behind.
         $git = self::createStub(CommandRunner::class);
         $git->method('run')->willReturnCallback(
             static fn(array $command): array => match (true) {
@@ -221,10 +221,10 @@ final class RenumberTest extends TestCase
     }
 
     /**
-     * The whole of what the command is worth. A line naming the old id is
-     * rewritten or reported and never neither, and once the call is over the
-     * lines still naming it are the reported ones exactly — so a person handed
-     * that list has been handed all of it — `D-DOC-015`.
+     * The whole of what the command is worth. A line that names the old id gets
+     * a rewrite or a report and never neither. Once the call is over, the lines
+     * that still name it are the reported ones exactly. So a person with that
+     * list has all of it — `D-DOC-015`.
      */
     #[Decision('D-DOC-015')]
     #[Test]
@@ -244,8 +244,8 @@ final class RenumberTest extends TestCase
         self::assertNotSame([], $before);
         self::assertSame([], array_intersect($moved, $named), 'a line was both moved and named');
         self::assertEqualsCanonicalizing(
-            // The entry's own two lines are reported where they are afterwards,
-            // which is the file under its new name.
+            // The report names the entry's own two lines where they are
+            // afterwards, which is the file under its new name.
             str_replace(self::OLD, self::NEW, $before),
             [...$moved, ...$named],
             'a line naming the id was neither moved nor named',
@@ -254,9 +254,9 @@ final class RenumberTest extends TestCase
     }
 
     /**
-     * The other half of leaving nothing behind: a path that no longer resolves.
+     * The other half of nothing left behind: a path that no longer resolves.
      * `links:check` would catch this one, which is why the command may not
-     * produce it — a renumber that needs a check to finish it is a renumber
+     * produce it. A renumber that needs a check to finish it is a renumber
      * somebody has to remember to finish — `D-DOC-015`.
      */
     #[Decision('D-DOC-015')]
@@ -276,9 +276,9 @@ final class RenumberTest extends TestCase
     }
 
     /**
-     * `D-GUI-901b` is the entry that was split off `D-GUI-901` and never a
-     * spelling of it — D-DOC-005. It is the case a search and replace over the
-     * id gets wrong without anything being ambiguous about it — `D-DOC-015`.
+     * `D-GUI-901b` is the entry that split off `D-GUI-901` and never a form of
+     * it — D-DOC-005. It is the case a search and replace over the id gets
+     * wrong with nothing ambiguous about it — `D-DOC-015`.
      */
     #[Decision('D-DOC-015')]
     #[Test]
@@ -308,9 +308,9 @@ final class RenumberTest extends TestCase
     }
 
     /**
-     * A renumbering that cannot be right is refused rather than half done. The
-     * group is the one that matters: the prefix names the directory, so moving
-     * it is a re-filing and what the entry is about moves with it.
+     * A renumber that cannot be right gets a refusal rather than half a run.
+     * The group is the one that matters. The prefix names the directory, so a
+     * move of it is a re-filing and what the entry is about moves with it.
      */
     #[Test]
     public function aMoveThatCannotBeRightIsRefused(): void
@@ -337,19 +337,19 @@ final class RenumberTest extends TestCase
 
     /**
      * The state the command exists for, and the one it got wrong twice on
-     * 2026-08-18: two files carry one id after a rebase, and the caller names
+     * 2026-08-18. Two files carry one id after a rebase, and the caller names
      * the branch's, because the entry already on `main` keeps its number. What
      * moved instead was whichever file sorted first, which was `main`'s both
-     * times, and nothing failed afterwards — both ids existed and both files
+     * times. Nothing failed afterwards, since both ids existed and both files
      * were real.
      */
     #[Test]
     public function theFileNamedIsTheOneThatMovesWhenTwoCarryTheId(): void
     {
         $root = $this->corpus();
-        // Sorting before the entry the case moves, which is how the wrong one
-        // was picked: `a-second` against `a-fixture` puts this one second, so
-        // the file that sorted first was the one nobody named.
+        // Sorted before the entry the case moves, which is how the command
+        // picked the wrong one. `a-second` against `a-fixture` puts this one
+        // second, so the file that sorted first was the one nobody named.
         $collision = $root . '/decisions/guides/gui-901-a-collision-cut-from-another-branch.md';
         file_put_contents($collision, "---\nid: D-GUI-901\ndate: 2026-08-18\nstatus: open\n---\n\n# D-GUI-901 — A collision cut from another branch\n\n**This entry carries the number the other one does too.**\n");
 
@@ -361,12 +361,12 @@ final class RenumberTest extends TestCase
     }
 
     /**
-     * The entry is recognised among the documents by being the same path, and
-     * the caller writes that path however they reached the file. Named in any
-     * other spelling than the one the corpus is read in, it was rewritten
-     * everywhere except in its own front matter and heading — which is the one
-     * place `decisions:check` reads, so the run looked finished and the entry
-     * carried a number no longer its own.
+     * The entry stands out among the documents as the same path, and the caller
+     * writes that path however they reached the file. Named in any other form
+     * than the one the corpus reads in, it got its rewrite everywhere except in
+     * its own front matter and heading. That is the one place `decisions:check`
+     * reads, so the run looked finished and the entry carried a number no
+     * longer its own.
      */
     #[Test]
     public function theEntryMovesWhateverSpellingOfItsPathTheCallerUsed(): void
@@ -382,7 +382,10 @@ final class RenumberTest extends TestCase
         );
     }
 
-    /** Every file naming one id, which is two only after a rebase merged two branches. */
+    /**
+     * Every file that names one id, which is two only after a rebase merged two
+     * branches.
+     */
     #[Test]
     public function anIdTwoFilesCarryNamesBothOfThem(): void
     {
@@ -402,7 +405,8 @@ final class RenumberTest extends TestCase
     }
 
     /**
-     * Every line naming the moved id, as `file:line`, over the whole corpus.
+     * Every line that names the moved id, as `file:line`, over the whole
+     * corpus.
      *
      * @return list<string>
      */

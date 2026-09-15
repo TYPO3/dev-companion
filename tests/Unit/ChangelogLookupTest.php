@@ -16,13 +16,13 @@ use TYPO3\DevCompanion\Tool\ChangelogLookup;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
- * Reaching a changelog entry by what a caller holds rather than by its title:
- * the identifier its body names, and the issue number it was filed under.
+ * The way to a changelog entry by what a caller holds rather than by its title.
+ * The identifier its body names, and the issue number in its name.
  *
- * The identifier corpus is three entries written in the two markups the core's
- * own changelog uses for one, because what that holds is a rule about markup —
- * `D-ANS-042`. The number is read off the file name, and `D-VER-009` is what a
- * sweep asks it for.
+ * The identifier corpus is three entries in the two markups the core's own
+ * changelog uses for one. What that holds is a rule about markup — `D-ANS-042`.
+ * The number comes off the file name, and `D-VER-009` is what a sweep asks it
+ * for.
  */
 final class ChangelogLookupTest extends TestCase
 {
@@ -30,8 +30,8 @@ final class ChangelogLookupTest extends TestCase
 
     /**
      * Nothing here reaches docs.typo3.org. The changelog lookup reads the
-     * versions above the installed major from the manual, and a unit test that
-     * let it would be measuring the host — `R-COD-003`.
+     * versions above the installed major from the manual. A unit test that let
+     * it would measure the host — `R-COD-003`.
      */
     #[Before]
     public function sealTheManual(): void
@@ -48,12 +48,12 @@ final class ChangelogLookupTest extends TestCase
     }
 
     /**
-     * A title says what stopped working; the migration says what to write.
+     * A title says what broke; the migration says what to write.
      *
      * A sweep of 75 deprecations returned the two that stopped a session's
-     * work and neither said what to write instead, so it read the two files
-     * out of the installed package for their Migration sections and used both
-     * heavily — `D-ANS-139`. The file was already open here.
+     * work, and neither said what to write instead. So the session read the two
+     * files out of the installed package for their Migration sections and used
+     * both — `D-ANS-139`. The file was already open here.
      */
     #[Decision('D-ANS-139')]
     #[Test]
@@ -86,8 +86,8 @@ final class ChangelogLookupTest extends TestCase
 
         $result = Registry::call('typo3_changelog_lookup', ['query' => 'getTemporaryImageWithText']);
 
-        // Breaking-101955 is titled about image generation and carries the
-        // method in a list of what it removed; Deprecation-46770 is the older
+        // Breaking-101955 has a title about image generation and carries the
+        // method in a list of what it removed. Deprecation-46770 is the older
         // markup, single backticks and no :php: role — `D-ANS-042`.
         self::assertSame(2, $result->data['matchCount']);
         self::assertStringContainsString('13.0/Breaking-101955-', (string) $result->data['entries'][0]['file']);
@@ -100,10 +100,10 @@ final class ChangelogLookupTest extends TestCase
     #[Test]
     public function aQueryTheNamesAnswerIsNotWidenedByTheBodies(): void
     {
-        // Breaking-101955 names GraphicalFunctions 44 times in the corpus this
-        // was measured against while being titled about image generation, which
-        // is the answer this order exists to keep out: the names answer, and
-        // the bodies are read only where they answered nothing — `D-ANS-042`.
+        // Breaking-101955 names GraphicalFunctions 44 times in the measured
+        // corpus while its title is about image generation. That is the answer
+        // this order exists to keep out. The names answer, and the lookup reads
+        // the bodies only where they answered nothing — `D-ANS-042`.
         Instance::discoverFrom($this->installationWithTheImageGenerationEntries());
 
         $result = Registry::call('typo3_changelog_lookup', ['query' => 'GraphicalFunctions']);
@@ -117,10 +117,10 @@ final class ChangelogLookupTest extends TestCase
     #[Test]
     public function aWordThatIsAlsoWrittenAsCodeIsNotAnIdentifier(): void
     {
-        // `crop()` is a real method and the index does not carry it: an
-        // identifier is a name written with a hump or an underscore, and
-        // without that rule every entry writing `preview` or `file` would
-        // answer the word — `D-ANS-042`.
+        // `crop()` is a real method and the index does not carry it. An
+        // identifier is a name with a hump or an underscore. Without that rule
+        // every entry that writes `preview` or `file` would answer the word —
+        // `D-ANS-042`.
         Instance::discoverFrom($this->installationWithTheImageGenerationEntries());
 
         $result = Registry::call('typo3_changelog_lookup', ['query' => 'crop']);
@@ -130,8 +130,7 @@ final class ChangelogLookupTest extends TestCase
 
     /**
      * A reviewer holds the identifier the diff removes, in whichever form the
-     * code spelled it, and the entry's own body is where it is written —
-     * `D-ANS-042`.
+     * code wrote it. The entry's own body is where it stands — `D-ANS-042`.
      */
     #[Decision('D-ANS-042')]
     #[Test]
@@ -154,10 +153,10 @@ final class ChangelogLookupTest extends TestCase
      * never mentioned, and the answer says so.
      *
      * `extendToSubpages` is the TCA column and the natural word for inherited
-     * frontend access restriction, and the changelog answers it with one 12.0
-     * Breaking removing an Indexed Search option that happens to spell it. The
-     * answer is arguably correct — that area was never reworked, and a
-     * changelog records change events — but returned flat beside nothing it
+     * frontend access restriction. The changelog answers it with one 12.0
+     * Breaking that removes an Indexed Search option of the same name. The
+     * answer is arguably correct, since nobody reworked that area and a
+     * changelog records change events. But returned flat beside nothing it
      * reads as evidence about the area (`feedback/2026-08-07-233553`).
      */
     #[Test]
@@ -179,8 +178,8 @@ final class ChangelogLookupTest extends TestCase
     }
 
     /**
-     * And never for `ext:core`, which most of what the changelog records is in:
-     * "every one of these is in ext:core" is a statement about the corpus
+     * And never for `ext:core`, which most of what the changelog records is in.
+     * "Every one of these is in ext:core" is a statement about the corpus
      * rather than about the query.
      */
     #[Test]
@@ -197,9 +196,9 @@ final class ChangelogLookupTest extends TestCase
      * The second question a dual-major sweep asks of every deprecation it got
      * back, and the call that answers it — `D-VER-009`.
      *
-     * The number is a word of every file name filed under it, so the siblings
-     * come back off the names and the version each carries is what says whether
-     * the replacement is on the lower declared major.
+     * The number is a word of every file name under it, so the siblings come
+     * back off the names. The version each carries is what says whether the
+     * replacement is on the lower declared major.
      */
     #[Test]
     public function anIssueNumberReachesEveryEntryFiledUnderIt(): void
@@ -214,18 +213,18 @@ final class ChangelogLookupTest extends TestCase
             array_column($result->data['entries'], 'type'),
         );
         self::assertSame(['14.2', '14.2', '14.2'], array_column($result->data['entries'], 'version'));
-        // Off the names, so nothing was opened to answer it.
+        // Off the names, so the answer opened nothing.
         self::assertSame('name', $result->data['matchedIn']);
     }
 
     /**
-     * The deprecations of one major come back in one call, carrying the tags a
+     * The deprecations of one major come back in one call, with the tags a
      * sweep used to spend a call apiece on — `D-ANS-093`.
      *
      * `feedback/2026-08-19-094403` composed that sweep out of eleven tag calls
-     * and reached 72 of the 75 deprecations of 14, at 1.7 times the payload of
-     * the one call that lists them. So `limit` carries the largest set the
-     * covered majors put under a version and a type, which is the 128
+     * and reached 72 of the 75 deprecations of 14. That cost 1.7 times the
+     * payload of the one call that lists them. So `limit` carries the largest
+     * set the covered majors put under a version and a type. That is the 128
      * deprecations of 12 counted in `.checkouts/12.4` on 2026-08-21.
      */
     #[Decision('D-ANS-093')]
@@ -260,8 +259,8 @@ final class ChangelogLookupTest extends TestCase
      * Sixty deprecations across two minors of one major, which is over the fifty
      * a single answer used to carry.
      *
-     * Half of them are tagged `ext:form` and half `ext:core`, because what the
-     * answer has to carry per entry is the tag the sweep is read by.
+     * Half of them carry `ext:form` and half `ext:core`, because what the
+     * answer has to carry per entry is the tag a sweep reads by.
      */
     private function installationWithSixtyDeprecationsOfOneMajor(): string
     {
@@ -292,9 +291,9 @@ final class ChangelogLookupTest extends TestCase
      * What the core filed under two issue numbers, each with the entry that
      * announced the replacement beside the deprecation.
      *
-     * The five are read off `.checkouts/14.3` on 2026-08-21, as excerpts: the
-     * three of #108557 in 14.2 and the two of #108524 in 14.1, which is what
-     * keeps the count above a corpus that only holds one number.
+     * The five come off `.checkouts/14.3` on 2026-08-21, as excerpts. The three
+     * of #108557 in 14.2 and the two of #108524 in 14.1. That is what keeps the
+     * count above a corpus that only holds one number.
      */
     private function installationWithTheEntriesOfTwoIssues(): string
     {
@@ -344,16 +343,16 @@ final class ChangelogLookupTest extends TestCase
     /**
      * A project whose core ships the three entries around one removed method.
      *
-     * Each is an excerpt of the entry it is named after, kept in the markup
-     * that entry writes: the `:php:` role of 13.0, the single backticks of 7.1,
-     * and a feature that only mentions the class in passing.
+     * Each is an excerpt of the entry it takes its name from, kept in the
+     * markup that entry writes. The `:php:` role of 13.0, the single backticks
+     * of 7.1, and a feature that only mentions the class by the way.
      */
     /**
      * A project whose core ships the three entries around one removed method.
      *
-     * Each is an excerpt of the entry it is named after, kept in the markup
-     * that entry writes: the `:php:` role of 13.0, the single backticks of 7.1,
-     * and a feature that only mentions the class in passing.
+     * Each is an excerpt of the entry it takes its name from, kept in the
+     * markup that entry writes. The `:php:` role of 13.0, the single backticks
+     * of 7.1, and a feature that only mentions the class by the way.
      */
     /**
      * Two deprecations, so a sweep is a sweep, and one with a Migration.

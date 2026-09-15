@@ -19,11 +19,11 @@ use TYPO3\DevCompanion\Tests\Support\Editorconfig;
 final class StructureTest extends TestCase
 {
     /**
-     * A second class in a file is invisible to PSR-4: the file is found through
-     * the first class's name, so the second one loads only where something has
-     * already loaded the first. It works in the file that wrote it and fails as
-     * a missing class from anywhere else, which is the kind of failure that
-     * arrives long after the commit — `D-COD-001`.
+     * A second class in a file is invisible to PSR-4. The autoloader finds the
+     * file through the first class's name, so the second one loads only where
+     * something has already loaded the first. It works in the file that wrote
+     * it and fails as an unknown class from anywhere else. That is the kind of
+     * failure that arrives long after the commit — `D-COD-001`.
      */
     #[Decision('D-COD-001')]
     #[Test]
@@ -55,19 +55,14 @@ final class StructureTest extends TestCase
     }
 
     /**
-     * A skipped test is how a test stops holding anything without stopping the
-     * suite, and the summary that reports it is the one nobody reads twice.
+     * A skipped test is how a test lets go of everything without a stop to the
+     * suite. The summary that reports it is the one nobody reads twice.
      *
-     * Every precondition this suite has is a property of this repository — it
-     * is a standalone checkout, its feedback archive is committed, its
-     * knowledge base is on disk — so each is an assertion instead, and a
-     * precondition that stopped being true is a failure with a sentence rather
-     * than a test that quietly went away. The two skips this replaced had both
-     * been true since the day they were written.
-     *
-     * A genuinely environment-dependent case would need a way past this. It
-     * would also need this paragraph rewritten, which is the point —
-     * `D-FBK-013`.
+     * Every precondition this suite has is a property of this repository: a
+     * standalone checkout, a feedback archive in git, a knowledge base on disk.
+     * So each is an assertion instead. A precondition that no longer holds is a
+     * failure with a sentence rather than a test that went away without a word
+     * — `D-FBK-013`.
      */
     #[Decision('D-FBK-013')]
     #[Test]
@@ -87,15 +82,15 @@ final class StructureTest extends TestCase
     }
 
     /**
-     * One place spells how a document is addressed — `D-KNW-059`.
+     * One place spells how a caller addresses a document — `D-KNW-059`.
      *
-     * The prefix was written by hand in `Result\Prose`, `Tool\HintLookup` and
-     * `Sdk\ResourceHandler` at once, and neither of the first two may reach
-     * into the SDK adapter for a name. `Documents::uri()` is what they call, so
-     * a namespace that moves again moves in one file.
+     * The prefix stood by hand in `Result\Prose`, `Tool\HintLookup` and
+     * `Sdk\ResourceHandler` at once. Neither of the first two may reach into
+     * the SDK adapter for a name. `Documents::uri()` is what they call, so a
+     * namespace that moves again moves in one file.
      *
-     * The source alone. A test that drives the wire spells the URI out on
-     * purpose: an expectation computed from the code under test asserts that
+     * The source alone. A test that drives the wire writes the URI out on
+     * purpose. An expectation computed from the code under test asserts that
      * the code equals itself.
      */
     #[Decision('D-KNW-059')]
@@ -115,9 +110,8 @@ final class StructureTest extends TestCase
     }
 
     /**
-     * One idiom for reading a directory, so a flat listing and a deep one are
-     * the same call and a tolerance is written where it is relied on —
-     * `D-COD-003`.
+     * One idiom for a directory read, so a flat listing and a deep one are the
+     * same call. A tolerance stands where something relies on it — `D-COD-003`.
      */
     #[Decision('D-COD-003')]
     #[Test]
@@ -144,21 +138,21 @@ final class StructureTest extends TestCase
      * A conflict a rebase left behind, in any file this repository keeps.
      *
      * Nothing else caught one. A resolution that drops a marker leaves a file
-     * that parses, lints and passes every test that does not happen to read it
-     * — the run of 2026-08-02 left a `>>>>>>>` in a decision, and `composer ci`
+     * that parses, lints and passes every test that does not happen to read it.
+     * The run of 2026-08-02 left a `>>>>>>>` in a decision, and `composer ci`
      * went green over it because no test opens that entry. It reached `main` in
      * a commit whose diff looked deliberate.
      *
      * It is here rather than in a `:check` command because this is the suite a
-     * branch runs in its own worktree after the rebase, which is the one moment
-     * a bad resolution exists and the only one where naming it is cheap. That
-     * is the same reason the group listings are deliberately *not* here: a
+     * branch runs in its own worktree after the rebase. That is the one moment
+     * a bad resolution exists and the only one where a name for it is cheap.
+     * That is the same reason the group listings are on purpose *not* here. A
      * listing is stale in every branch that adds an entry and correct once on
      * `main`, while a marker is wrong wherever it stands.
      *
      * The two arrow markers are enough on their own. `=======` is a heading
-     * underline in Markdown and a rule in half the documents here, so matching
-     * it would fail on prose that is doing its job, and no resolution takes out
+     * underline in Markdown and a rule in half the documents here. A match on
+     * it would fail on prose that does its job, and no resolution takes out
      * both arrows and leaves the middle.
      */
     #[Test]
@@ -189,14 +183,14 @@ final class StructureTest extends TestCase
     }
 
     /**
-     * `.editorconfig` is what an editor obeys while a file is being typed, and
+     * `.editorconfig` is what an editor obeys while somebody types a file, and
      * php-cs-fixer is what rewrites it afterwards. Where the two disagree, each
-     * undoes the other: a line typed at the stated indentation comes back
-     * reindented, and nobody looks for the argument in a config file.
+     * undoes the other. A line typed at the stated indentation comes back at
+     * another, and nobody looks for the argument in a config file.
      *
-     * The fixer states its indentation by not stating one — PER-CS 3.0 is four
-     * spaces and `Config` defaults to it — so this asks the config rather than
-     * the rule list.
+     * The fixer states its indentation by silence: PER-CS 3.0 is four spaces
+     * and `Config` defaults to it. So this asks the config rather than the rule
+     * list.
      */
     #[Test]
     public function editorconfigTypesPhpTheWayTheFixerRewritesIt(): void
@@ -223,14 +217,14 @@ final class StructureTest extends TestCase
     }
 
     /**
-     * Every file this repository writes and keeps, whatever it is written in.
+     * Every file this repository writes and keeps, whatever its language.
      *
      * A conflict lands wherever the two branches disagreed, and on this
-     * repository that is far more often a decision or a hint than a class — so
-     * the walk is by directory rather than by extension, and the exclusions are
-     * the three trees nobody here authors: `vendor/` and `.worktrees/` belong
-     * to other checkouts, and `.checkouts/` is 861 MB of TYPO3 whose own
-     * history carries conflict markers in test fixtures.
+     * repository that is far more often a decision or a hint than a class. So
+     * the walk is by directory rather than by extension. The exclusions are the
+     * three trees nobody here authors. `vendor/` and `.worktrees/` belong to
+     * other checkouts, and `.checkouts/` is 861 MB of TYPO3 whose own history
+     * carries conflict markers in test fixtures.
      *
      * @return array<int, string>
      */
@@ -263,8 +257,8 @@ final class StructureTest extends TestCase
 
     /**
      * Every class of this package, which is every PHP file below src/ except
-     * the ones that are deliberately not classes: the bootstrap, and the probe
-     * that runs inside somebody else's installation.
+     * the two that are no classes on purpose. The bootstrap, and the probe that
+     * runs inside somebody else's installation.
      *
      * @return array<int, string>
      */
@@ -282,15 +276,15 @@ final class StructureTest extends TestCase
     /**
      * Retrieval is lexical, and nothing here speaks to a database.
      *
-     * `D-ANS-003` decided both halves and nothing held either: an embedding
+     * `D-ANS-003` decided both halves and nothing held either. An embedding
      * library would arrive as a dependency, and a generic SQL or schema tool
-     * would arrive as a connection opened in this process. What the entry rests
-     * on is that version, scope, binding and source decide what may be
-     * returned, which a semantic match cannot see.
+     * would arrive as a connection open in this process. What the entry rests
+     * on is that version, scope, binding and source decide what an answer may
+     * return, which a semantic match cannot see.
      *
-     * The dependency list is asserted whole rather than searched for names a
-     * library might have. A sixth one is a deliberate act, and this is where it
-     * is read against the entry.
+     * The assertion reads the dependency list whole rather than searches it for
+     * names a library might have. A sixth one is a deliberate act, and this is
+     * where it meets the entry.
      */
     #[Decision('D-ANS-003')]
     #[Test]

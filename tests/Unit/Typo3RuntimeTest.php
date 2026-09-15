@@ -22,12 +22,12 @@ use TYPO3\DevCompanion\Upkeep\Fixture;
 /**
  * Asking the installation itself, and what happens on the three ways that fail.
  *
- * There is no real TYPO3 here — this repository has none and never will — so the
- * installations below carry an autoloader shaped like one. The probe is not
- * simulated for that: it is delivered to a real interpreter, boots what the
- * autoloader gives it, and answers as data, which is how the payload, the
- * declared autoloader path, the three states and the attribution evidence all
- * end up held by the same mechanism they run through.
+ * There is no real TYPO3 here — this repository has none and never will — so
+ * the installations below carry an autoloader shaped like one. Nothing
+ * simulates the probe for that. It goes to a real interpreter, boots what the
+ * autoloader gives it, and answers as data. That is how the same mechanism
+ * holds the payload, the declared autoloader path, the three states and the
+ * attribution evidence they run through.
  */
 final class Typo3RuntimeTest extends TestCase
 {
@@ -54,11 +54,11 @@ final class Typo3RuntimeTest extends TestCase
     #[Test]
     public function theProbeReachesAnInterpreterAndAnswersAsData(): void
     {
-        // The whole delivery in one assertion: the payload is base64-encoded
-        // into `php -r`, the opening tag is stripped, the subprocess starts in
-        // the installation root and prints one JSON object. What it reports
-        // here is the missing autoloader, because a fixture has no TYPO3 — that
-        // it reports anything at all is the mechanism working.
+        // The whole delivery in one assertion. The payload goes base64-encoded
+        // into `php -r` without its open tag, and the subprocess starts in the
+        // installation root and prints one JSON object. What it reports here is
+        // the absent autoloader, because a fixture has no TYPO3. That it
+        // reports anything at all is the mechanism at work.
         $this->discover($this->installationWithAConsole());
 
         $answer = Typo3Runtime::ask();
@@ -72,9 +72,9 @@ final class Typo3RuntimeTest extends TestCase
     #[Test]
     public function theAutoloaderIsTheOneTheInstallationDeclares(): void
     {
-        // Relative, and from the declared vendor directory: the extension
-        // testing setup puts it below .Build/, and inside a DDEV container no
-        // absolute path of this machine exists at all.
+        // Relative, and from the declared vendor directory. The extension test
+        // setup puts it below .Build/, and inside a DDEV container no absolute
+        // path of this machine exists at all.
         $this->discover($this->installationWithAConsole(['config' => ['vendor-dir' => '.Build/vendor']]));
 
         self::assertStringContainsString('.Build/vendor/autoload.php', Typo3Runtime::ask()['reason']);
@@ -85,8 +85,8 @@ final class Typo3RuntimeTest extends TestCase
     public function aStatedConsoleIsKeptAsTheWayInAndPointedAtPhp(): void
     {
         // A stated console is a transport plus a binary. The transport is the
-        // part this server could never have worked out, so it is kept and only
-        // the binary is exchanged.
+        // part this server could never have worked out, so it stays and only
+        // the binary changes.
         $this->root = $this->installationWithAConsole();
         putenv(Typo3Cli::CONSOLE_VARIABLE . '=' . PHP_BINARY . ' /some/where/typo3');
         $this->discover($this->root);
@@ -100,9 +100,9 @@ final class Typo3RuntimeTest extends TestCase
     {
         // `env` is a program, and this case is about the answer for a stated
         // console whose first word is one and still names no interpreter.
-        // Whether this machine has an `env` is not what it holds — read off
-        // the real `PATH` it passed here and failed on a machine carrying
-        // only PHP, with the answer for a program that does not exist.
+        // Whether this machine has an `env` is not what it holds. Read off the
+        // real `PATH`, it passed here and failed on a machine with only PHP.
+        // The answer there was the one for a program that does not exist.
         $ran = self::createStub(CommandRunner::class);
         $ran->method('locate')->willReturnCallback(
             static fn(string $name): ?string => $name === 'env' ? '/usr/bin/env' : null,
@@ -122,9 +122,9 @@ final class Typo3RuntimeTest extends TestCase
     #[Test]
     public function aBootedContainerAnswersWithTheTopicsAndTheirAttribution(): void
     {
-        // A TYPO3 shaped like the real one, so the real probe boots it: the
+        // A TYPO3 shaped like the real one, so the real probe boots it. The
         // registry answers with EXT: sources and the TCA with LLL:EXT: titles,
-        // which is what an entry is attributed by on the way back.
+        // which is what attributes an entry on the way back.
         $root = $this->installationWithAConsole();
         Fixture::bootsInto(
             $root,
@@ -148,11 +148,11 @@ final class Typo3RuntimeTest extends TestCase
 
     /**
      * A form data group is a graph, and what the caller wants is what it
-     * resolves to. The fixture's ordering service reverses rather than
-     * resolves, so what is held here is that the probe reports the service's
-     * answer and not the order the registry was written in — a passthrough
-     * could not tell those apart, and an ordering written into the probe would
-     * be the second implementation it exists to avoid.
+     * resolves to. The fixture's order service reverses rather than resolves.
+     * So this holds that the probe reports the service's answer and not the
+     * order of the registry. A passthrough could not tell those apart, and an
+     * order written into the probe would be the second implementation it exists
+     * to avoid.
      */
     #[Test]
     public function aFormDataGroupComesBackInTheOrderTheInstallationResolved(): void
@@ -186,11 +186,11 @@ final class Typo3RuntimeTest extends TestCase
     }
 
     /**
-     * The navigation component a module resolves to is inherited from its
-     * parent, and the registry is what resolves it. What is held here is that
-     * the probe reports that value: `web_list` declares none and comes back
-     * page-tree navigated, which is the answer no reading of a
-     * `Configuration/Backend/Modules.php` gives — `D-ANS-077`.
+     * The navigation component a module resolves to comes from its parent, and
+     * the registry is what resolves it. This holds that the probe reports that
+     * value. `web_list` declares none and comes back with page-tree navigation,
+     * which is the answer no read of a `Configuration/Backend/Modules.php`
+     * gives — `D-ANS-077`.
      */
     #[Test]
     public function aModuleComesBackWithItsNavigationComponent(): void
@@ -221,12 +221,12 @@ final class Typo3RuntimeTest extends TestCase
     }
 
     /**
-     * The half a registration file can be checked in without being installed.
+     * The half of a registration file a check reaches without an install.
      *
-     * Five registration mistakes in one session were each caught by an
-     * installation that had already been rebuilt, and the cycle was: edit,
-     * flush the cache, ask the registry — `D-FBK-055`. Parent, icon and labels
-     * fail when a user opens the module and never when the file is read.
+     * An installation that had already had its rebuild caught five registration
+     * mistakes in one session. The cycle was: edit, flush the cache, ask the
+     * registry — `D-FBK-055`. Parent, icon and labels fail when a user opens
+     * the module and never on a read of the file.
      */
     #[Decision('D-FBK-055')]
     #[Test]
@@ -276,11 +276,11 @@ final class Typo3RuntimeTest extends TestCase
     }
 
     /**
-     * The trans-unit the module title is read from, which the form decides.
+     * The trans-unit the module title comes from, which the form decides.
      *
      * `BaseModule` appends `mlang_tabs_tab` to an LLL reference and `title` to
-     * a domain, so a file that kept the older unit ids resolves and renders an
-     * empty title anyway — the file being there is not the answer.
+     * a domain. So a file that kept the older unit ids resolves and renders an
+     * empty title anyway. The presence of the file is not the answer.
      */
     #[Decision('D-FBK-055')]
     #[Test]
@@ -322,8 +322,8 @@ final class Typo3RuntimeTest extends TestCase
      * A domain below the version that resolves them names no file at all.
      *
      * `BaseModule` matches neither its LLL branch nor its domain branch there,
-     * which arrived with the domains themselves, so the module is left without
-     * a title — read in `.checkouts/13.4` against `.checkouts/14.3`.
+     * which arrived with the domains themselves. So the module has no title —
+     * read in `.checkouts/13.4` against `.checkouts/14.3`.
      */
     #[Decision('D-FBK-055')]
     #[Test]
@@ -383,8 +383,8 @@ final class Typo3RuntimeTest extends TestCase
     #[Test]
     public function withoutAConsoleTheReasonIsTheConsolesOwn(): void
     {
-        // Nothing is invented here: the console said why it could not be
-        // invoked, and that sentence is what the caller gets.
+        // Nothing here invents: the console said why the call failed, and that
+        // sentence is what the caller gets.
         $this->discover($this->installation());
 
         $answer = Typo3Runtime::ask();
@@ -407,11 +407,11 @@ final class Typo3RuntimeTest extends TestCase
     #[Test]
     public function aTopicWithAnArgumentIsReadOnlyWhereACallerAskedForIt(): void
     {
-        // What keeps the whole of TYPO3_CONF_VARS — around 50 kB of JSON on a
-        // 13.4 before an extension has added to it, measured on 2026-08-18
-        // against `.environments/e-site-13.4` — out of every reading taken for
-        // an icon or a module, and the resolution of one flex column out of the
-        // same readings.
+        // What keeps the whole of TYPO3_CONF_VARS out of every read taken for
+        // an icon or a module. And the resolution of one flex column out of the
+        // same reads. That is around 50 kB of JSON on a 13.4 before an
+        // extension has added to it, measured on 2026-08-18 against
+        // `.environments/e-site-13.4`.
         $root = $this->installationWithAConsole();
         Fixture::bootsInto(
             $root,
@@ -437,9 +437,9 @@ final class Typo3RuntimeTest extends TestCase
         );
         self::assertSame(['found' => false, 'value' => null], Typo3Runtime::configuration('SYS/nothingHere'));
 
-        // The second one is asked after the first, which is the ordering no
-        // caller has to keep: the reading taken for the path is discarded again
-        // rather than answered out of.
+        // The second one comes after the first, which is the order no caller
+        // has to keep. The read taken for the path goes away again rather than
+        // answers.
         $flexForm = Typo3Runtime::flexForm('tt_content', 'pi_flexform', []);
         self::assertIsArray($flexForm);
         self::assertSame('', $flexForm['failure']);
@@ -449,13 +449,13 @@ final class Typo3RuntimeTest extends TestCase
 
     /**
      * The probe and the callers that read it are two files, and a topic name is
-     * the only thing between them: one that nothing asks for is dead weight in
-     * a payload every reading carries, and one nothing writes makes a tool say
-     * the installation could not answer, which is what a caller acts on.
+     * the only thing between them. One that nothing asks for is dead weight in
+     * a payload every read carries. One nothing writes makes a tool say the
+     * installation could not answer, which is what a caller acts on.
      *
      * Nothing else here can hold the probe. It runs in the installation, so no
-     * test loads it — `D-COD-004` — and the readings above exercise it through
-     * a TYPO3 shaped like the real one rather than reading the file.
+     * test loads it — `D-COD-004`. The reads above drive it through a TYPO3
+     * shaped like the real one rather than read the file.
      */
     #[Test]
     public function everyTopicTheProbeWritesIsOneSomethingAsksFor(): void
@@ -481,9 +481,9 @@ final class Typo3RuntimeTest extends TestCase
     }
 
     /**
-     * It is delivered to the other side and run there, where nothing of this
-     * package exists. A reference to one of its classes is a fatal error in
-     * somebody else's installation rather than a failure here.
+     * It goes to the other side and runs there, where nothing of this package
+     * exists. A reference to one of its classes is a fatal error in somebody
+     * else's installation rather than a failure here.
      */
     #[Test]
     public function theProbeReachesNothingOfThisPackage(): void
@@ -523,7 +523,7 @@ final class Typo3RuntimeTest extends TestCase
     }
 
     /**
-     * An XLF below the core package, carrying one trans-unit per id.
+     * An XLF below the core package, with one trans-unit per id.
      *
      * @param array<int, string> $units
      */

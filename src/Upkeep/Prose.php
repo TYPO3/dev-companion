@@ -584,14 +584,15 @@ final class Prose
             foreach (preg_split('/\R(?=\s*(?:[-*]\s|\d+\.\s))/', $paragraph) ?: [] as $block) {
                 $line = trim((string) preg_replace('/\s+/', ' ', $block));
                 $line = trim((string) preg_replace('/^[-*]\s|^\d+\.\s/', '', $line));
-                // A heading, a table row, quoted material, and the link
-                // definitions a generated listing ends with.
-                if ($line === '' || in_array($line[0], ['#', '|', '>'], true) || preg_match('/^\[[^\]]+\]:\s/', $line) === 1) {
+                // A heading, a table row in either markup, quoted material,
+                // and the link definitions a generated listing ends with.
+                if ($line === '' || in_array($line[0], ['#', '|', '>', '='], true) || preg_match('/^\[[^\]]+\]:\s/', $line) === 1) {
                     continue;
                 }
-                // A bold sentence ends inside its markers, so `read.** A` is
-                // two sentences and not one of 33 words.
-                foreach (preg_split('/(?<=[.!?]|[.!?]\*\*)\s+/', $line) ?: [] as $sentence) {
+                // A bold or a quoted sentence ends inside its markers, so
+                // `read.** A` and `read." A` are two sentences and not one of
+                // 33 words.
+                foreach (preg_split('/(?<=[.!?]|[.!?]\*\*|[.!?]")\s+/', $line) ?: [] as $sentence) {
                     $sentence = trim($sentence);
                     // Four words is a heading in disguise, a label line, or the
                     // remains of one that was split on an abbreviation.

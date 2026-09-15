@@ -39,8 +39,8 @@ final class CatalogTest extends TestCase
     #[Test]
     public function theCatalogSaysHowItRelatesToTheInstallationBeingRead(): void
     {
-        // Both numbers were known and never contrasted, so v15 markup and a
-        // v15 custom-property contract were handed to a v13 backend as fact.
+        // Both numbers were on record and never in contrast, so a v13 backend
+        // got v15 markup and a v15 custom-property contract as fact.
         Instance::discoverFrom($this->composerProject('vendor', '13.4.33'));
 
         $result = Registry::call('typo3_snapshot_scope', []);
@@ -86,9 +86,9 @@ final class CatalogTest extends TestCase
     /**
      * `D-DIS-004`'s second **Wrong if**: a caller working on a version other
      * than the installation the server found. The answer here is one string
-     * that either works on a version or silently renders nothing, so which
-     * version it is composed for has to be the caller's to state — a backport
-     * branch read from a 14 installation gets the domain form and every label
+     * that either works on a version or renders nothing without a word. So
+     * which version it is for has to be the caller's to state. A backport
+     * branch read from a 14 installation gets the domain form, and every label
      * written with it renders empty.
      */
     #[Test]
@@ -256,8 +256,8 @@ final class CatalogTest extends TestCase
     {
         return [
             // Two more cases stood here, `dropzone` and `note`. Both entries
-            // came out with `D-CAT-009` — the styleguide demonstrates neither —
-            // and what they used to hold is asserted below as the miss it is
+            // came out with `D-CAT-009`, since the styleguide demonstrates
+            // neither. What they used to hold stands below as the miss it is
             // now.
             'status indicator, which returned Badge' => ['status indicator'],
         ];
@@ -265,9 +265,9 @@ final class CatalogTest extends TestCase
 
     /**
      * A surface the styleguide does not demonstrate is one the core keeps to
-     * itself, and the catalog answers nothing about it rather than answering
-     * with a warning — a marking that says "not public" and hands the class
-     * over anyway is read as the class.
+     * itself, and the catalog answers nothing about it rather than a warning. A
+     * mark that says "not public" and hands the class over anyway reads as the
+     * class.
      */
     #[Decision('D-CAT-009')]
     #[Test]
@@ -290,15 +290,14 @@ final class CatalogTest extends TestCase
     }
 
     /**
-     * An entry is in the catalog because the styleguide lists it, so it may not
-     * answer for a major the styleguide had not listed it on yet — that would
-     * be offering as public what nothing had said was — `D-CAT-009`.
+     * An entry is in the catalog because the styleguide lists it. So it may not
+     * answer for a major the styleguide had not listed it on yet. That would
+     * offer as public what nothing had said was — `D-CAT-009`.
      *
      * The floor is the oldest major any styleguide ships on. Below it the
-     * listing cannot be read at all, so what applies there is the selection
-     * made above it, and a class that exists on the older major is still
-     * answered: the caller borrowing it is the one this catalog was repaired
-     * for.
+     * listing is out of reach, so what applies there is the selection made
+     * above it. A class that exists on the older major still answers. The
+     * caller who borrows it is the one this catalog got its repair for.
      */
     #[Decision('D-CAT-009')]
     #[Test]
@@ -366,9 +365,9 @@ final class CatalogTest extends TestCase
     }
 
     /**
-     * Where the backend declares an element, that is the answer: an element
-     * carries its own position and cannot be attached to the wrong node, which
-     * is the whole of what went wrong with a borrowed class — `D-CAT-009`.
+     * Where the backend declares an element, that is the answer. An element
+     * carries its own position and cannot land on the wrong node. That is the
+     * whole of what went wrong with a borrowed class — `D-CAT-009`.
      */
     #[Decision('D-CAT-009')]
     #[Test]
@@ -407,10 +406,10 @@ final class CatalogTest extends TestCase
     }
 
     /**
-     * A class belongs to one component, because what is derived about it is
-     * derived relative to that component's root: the same name under two
-     * entries would be placed twice and differently, and the answer keyed by
-     * the class would carry whichever reading came last — `D-CAT-008`.
+     * A class belongs to one component, because what the derivation says about
+     * it is relative to that component's root. The same name under two entries
+     * would land twice and differently. The answer keyed by the class would
+     * carry whichever read came last — `D-CAT-008`.
      */
     #[Decision('D-CAT-008')]
     #[Test]
@@ -447,17 +446,18 @@ final class CatalogTest extends TestCase
     }
 
     /**
-     * The classes are what a component is styled by and the data attributes are
-     * what it is driven by, and only the first was answered.
+     * The classes are what styles a component and the data attributes are what
+     * drives it, and only the first got an answer.
      *
      * A session wrote `data-bs-content` on a modal that reads `data-content`
      * and shipped a `data-on-change` that one extension's own module
      * implements. Both failed silently in a browser — `D-ANS-139`.
      *
-     * The module is laid out here rather than read out of `.checkouts/`, which
-     * is gitignored and on no machine but the one that created it — `R-COD-003`.
-     * That the core's own modal reads these two is the decision's evidence;
-     * what is held here is the derivation, on both the module and its absence.
+     * The module stands here rather than comes out of `.checkouts/`. git
+     * ignores that directory, and it is on no machine but the one that created
+     * it — `R-COD-003`. That the core's own modal reads these two is the
+     * decision's evidence. This holds the derivation, on both the module and
+     * its absence.
      */
     #[Decision('D-ANS-139')]
     #[Test]
@@ -494,17 +494,16 @@ final class CatalogTest extends TestCase
     #[Test]
     public function aQueryTheCatalogWasNotWrittenForIsAMiss(): void
     {
-        // Three components came back for this, each on one word out of five:
+        // Three components came back for this, each on one word out of five.
         // Dropdown and Form Inputs through a keyword, Card because its summary
-        // is written in the words any question about content is written in.
+        // uses the words any question about content uses.
         self::assertSame([], Components::find('content element preview heading text'));
 
         // What the query names is still the answer, however the rest of the
         // sentence reads — the coverage rule is for what nobody named. The
-        // module chrome was catalogued after this case was written
-        // (`D-CAT-004`) and came out again with `D-CAT-009`, because the
-        // styleguide does not demonstrate it, so the sentence names one
-        // component now.
+        // module chrome went into the catalog after this case (`D-CAT-004`) and
+        // came out again with `D-CAT-009`, because the styleguide does not
+        // demonstrate it. So the sentence names one component now.
         $named = array_column(Components::find('add a badge to the module header'), 'name');
         self::assertContains('badge', $named);
         self::assertNotContains('module', $named);
@@ -514,10 +513,10 @@ final class CatalogTest extends TestCase
 
     /**
      * A miss that says "not in this snapshot" says how to check the snapshot in
-     * the same breath, rather than naming a second call for it — `D-CAT-010`.
-     * The catalog scope keeps the questions no answer carries: what each
-     * catalog holds, how many entries it has, and the system extension catalog,
-     * which no component answer reports on at all.
+     * the same breath. It names no second call for it — `D-CAT-010`. The
+     * catalog scope keeps the questions no answer carries. What each catalog
+     * holds, how many entries it has, and the system extension catalog, which
+     * no component answer reports on at all.
      */
     #[Decision('D-CAT-010')]
     #[Test]
@@ -533,9 +532,9 @@ final class CatalogTest extends TestCase
             'the miss sends the caller on a round trip for what it carries',
         );
 
-        // What the scope answers that no component answer does. The tool was
-        // proposed for retirement on the reading that it adds only a command
-        // and a count, which measured it against the component catalog alone.
+        // What the scope answers that no component answer does. A proposal to
+        // retire the tool read it as a command and a count and nothing more,
+        // which measured it against the component catalog alone.
         $scope = Registry::call('typo3_snapshot_scope', []);
         self::assertArrayHasKey('systemExtensions', $scope->data['scope']);
         self::assertArrayHasKey('systemExtensions', $scope->data['counts']);
@@ -598,8 +597,9 @@ final class CatalogTest extends TestCase
     #[Test]
     public function withoutATargetEachEntryCarriesItsRange(): void
     {
-        // Nobody said which version this is for, so nothing is withheld and the
-        // caller is told the range instead — the same rule the hints follow.
+        // Nobody said which version this is for, so nothing stays back and the
+        // caller gets the range instead. That is the same rule the hints
+        // follow.
         $result = Registry::call('typo3_component_lookup', ['query' => 'status indicator']);
 
         self::assertNull($result->data['targetVersion']);
@@ -655,9 +655,10 @@ final class CatalogTest extends TestCase
     #[Test]
     public function everyRecordedBindingNamesACoveredVersion(): void
     {
-        // A binding outside the covered range withholds an entry from every
-        // caller or from none, and both are silent — bin/cli components:check is what
-        // holds the numbers to the checkouts, this holds them to versions.json.
+        // A bound outside the covered range withholds an entry from every
+        // caller or from none, and both are silent. bin/cli components:check is
+        // what holds the numbers to the checkouts, this holds them to
+        // versions.json.
         $majors = Versions::majors();
         foreach (Components::load() as $component) {
             foreach (['since', 'until', 'classesSince', 'classesUntil'] as $bound) {
@@ -674,8 +675,8 @@ final class CatalogTest extends TestCase
     {
         // The class list is what the entry names minus its custom properties,
         // so it cannot start later than the entry does. A recorded range that
-        // says otherwise is a derivation nobody re-ran, and it would withhold a
-        // class on a version the entry itself is handed over on — `D-CAT-006`.
+        // says otherwise is a derivation nobody ran again. It would withhold a
+        // class on a version the entry itself goes out on — `D-CAT-006`.
         foreach (Components::load() as $component) {
             if ($component['classesSince'] === null || $component['since'] === null) {
                 continue;
@@ -693,9 +694,9 @@ final class CatalogTest extends TestCase
     public function aClassIsAnsweredOnAVersionItsOwnEntryIsWithheldOn(): void
     {
         // What `feedback/2026-08-19-090231` shipped unverified: a backend class
-        // borrowed by an extension's asset build. The entry is withheld because
-        // one of its eleven custom properties arrived later, and the caller was
-        // asking about the class rather than about the component — `D-CAT-006`.
+        // borrowed by an extension's asset build. The entry stays back because
+        // one of its eleven custom properties arrived later. The caller asked
+        // about the class rather than about the component — `D-CAT-006`.
         $result = Registry::call('typo3_component_lookup', ['query' => 'table-fit', 'targetVersion' => '13.4']);
 
         self::assertSame(0, $result->data['matchCount'], 'the component itself is still not handed over');
@@ -709,8 +710,8 @@ final class CatalogTest extends TestCase
         self::assertSame('around', $result->data['coveredClasses'][0]['position']);
         self::assertStringContainsString('written on the element wrapping the table', $result->text);
 
-        // And the two cannot be read as one another: what comes back is the name
-        // and where the core writes it, never something to paste.
+        // And nobody can read the two as one another: what comes back is the
+        // name and where the core writes it, never something to paste.
         self::assertStringNotContainsString('--typo3-table', $result->text);
         self::assertStringNotContainsString('<table', $result->text);
     }
@@ -719,8 +720,8 @@ final class CatalogTest extends TestCase
     #[Test]
     public function aQueryThatNamesNoClassOfAWithheldEntryIsAnsweredWithNothing(): void
     {
-        // The whole class list is not the answer to a question about one class:
-        // handing it over would be the entry again, minus what withheld it —
+        // The whole class list is not the answer to a question about one class.
+        // To hand it over would be the entry again, minus what withheld it —
         // `D-CAT-006`.
         $topic = Registry::call('typo3_component_lookup', ['query' => 'table', 'targetVersion' => '13.4']);
         self::assertSame(['table'], array_column($topic->data['coveredClasses'], 'class'), 'only the root class was named');
@@ -733,9 +734,9 @@ final class CatalogTest extends TestCase
     #[Test]
     public function aClassIsAnsweredOnAMajorItsEntrysListDoesNotReach(): void
     {
-        // `table-fit` is written on 12.4 and four of the table entry's other
-        // classes are not, so the list binds at 13 and the aggregate range said
-        // nothing to the caller who asked on 12 — which is the caller
+        // `table-fit` exists on 12.4 and four of the table entry's other
+        // classes do not. So the list binds at 13, and the aggregate range said
+        // nothing to the caller who asked on 12, which is the caller
         // `feedback/2026-08-19-090231` was. The range is the class's own now.
         $result = Registry::call('typo3_component_lookup', ['query' => 'table-fit', 'targetVersion' => '12.4']);
 
@@ -748,9 +749,9 @@ final class CatalogTest extends TestCase
     #[Test]
     public function aWrapperIsNotListedAmongTheModifiersOfWhatItWraps(): void
     {
-        // `table-fit` was curated into `modifiers` beside `table-striped`, and
-        // one goes on the table while the other goes around it. The lists keep
-        // every class the derivation has no opinion on.
+        // The curation put `table-fit` into `modifiers` beside `table-striped`,
+        // and one goes on the table while the other goes around it. The lists
+        // keep every class the derivation has no opinion on.
         $result = Registry::call('typo3_component_lookup', ['query' => 'table', 'targetVersion' => '14.3']);
         $table = $result->data['components'][0];
 
@@ -764,7 +765,7 @@ final class CatalogTest extends TestCase
     #[Test]
     public function whatIsStyledWithinAClassIsNotWhatItRequires(): void
     {
-        // A progress bar is styled below `.table-fit` from v14 and belongs
+        // A progress bar has styles below `.table-fit` from v14 and belongs
         // there by nothing, so the answer says which of the two it is.
         $result = Registry::call('typo3_component_lookup', ['query' => 'table-fit', 'targetVersion' => '14.3']);
         $covered = $result->data['coveredClasses'];
@@ -781,10 +782,10 @@ final class CatalogTest extends TestCase
     #[Test]
     public function everyEntryWithADemoRecordsWhatItRead(): void
     {
-        // The binding is derived from names, so a demo rewritten around the same
-        // classes reads as unchanged — bin/cli components:check compares these
-        // digests against the checkouts, this holds them to versions.json and to
-        // the entries that have a demo to digest at all.
+        // The bound derives from names, so a demo rewritten around the same
+        // classes reads as unchanged. bin/cli components:check compares these
+        // digests against the checkouts, this holds them to versions.json and
+        // to the entries that have a demo to digest at all.
         $majors = Versions::majors();
         foreach (Catalogs::read('component/entries') as $entry) {
             $digests = $entry['markupDigests'] ?? [];
@@ -823,10 +824,10 @@ final class CatalogTest extends TestCase
     {
         // The failure D-CAT-003 named as what would show it wrong: a demo page
         // that opens with scaffolding. Both examples below carry `card`, so the
-        // root class cannot tell them apart — the first is a settings form
-        // built out of a card, the second is the card. Handing over the first
-        // is handing over the page, and no more permissive extractor fixes
-        // that, because there is nothing about it to be permissive towards.
+        // root class cannot tell them apart. The first is a settings form built
+        // out of a card, the second is the card. To hand over the first is to
+        // hand over the page. No more permissive extractor fixes that, because
+        // there is nothing about it to be permissive towards.
         $template = <<<'HTML'
             <sg:example>
                 <form>
@@ -851,9 +852,9 @@ final class CatalogTest extends TestCase
         self::assertStringContainsString('card-title', $selected[0]);
         self::assertStringNotContainsString('<form>', implode("\n", $selected), 'the selected example, not the first one');
 
-        // Narrowing only. A selector nothing carries derives nothing, so the
-        // caller keeps the curated markup and labels it a fallback rather than
-        // silently falling back to the scaffolding the selector was written
+        // Narrowing only. A selector nothing carries derives nothing. So the
+        // caller keeps the curated markup with a fallback label rather than
+        // falls back without a word to the scaffold the selector stands
         // against.
         self::assertSame([], DemoMarkup::examples($template, 'card', 'card-image-badge'));
     }
@@ -874,9 +875,9 @@ final class CatalogTest extends TestCase
     /**
      * The other four demos D-CAT-003 read on 2026-08-02. They build the page
      * out of the component, so every example carries the root class and none of
-     * them is the component — there is nothing better to select, and selecting
-     * would only move which scaffolding is handed over. The entry says so, and
-     * the demo is then not read at all rather than read and filtered.
+     * them is the component. There is nothing better to select, and a selection
+     * would only move which scaffold goes out. The entry says so, and the demo
+     * is then not read at all rather than read and filtered.
      */
     #[Test]
     public function anEntryWhoseDemoShowsNothingCopyableKeepsItsCuratedMarkup(): void
@@ -918,9 +919,9 @@ final class CatalogTest extends TestCase
     }
 
     /**
-     * The two curated fields are alternatives: one picks the example the
-     * component is shown in, the other says there is none. An entry carrying
-     * both says which was meant to nobody.
+     * The two curated fields are alternatives: one picks the example that shows
+     * the component, the other says there is none. An entry carrying both says
+     * which was meant to nobody.
      */
     #[Test]
     public function anEntryThatDerivesNothingNamesADemoAndSelectsNothingInIt(): void
@@ -945,10 +946,10 @@ final class CatalogTest extends TestCase
     #[Test]
     public function onlyAnEntryWithADemoSelectsWithinIt(): void
     {
-        // A selector without a demo selects nothing and reads as a rule that is
-        // being applied; a selector no example could carry withholds the
-        // derived markup on every version at once, and that is the failure this
-        // field's fallback makes quiet.
+        // A selector without a demo selects nothing and reads as a rule in
+        // force. A selector no example could carry withholds the derived markup
+        // on every version at once, and that is the failure this field's
+        // fallback makes quiet.
         foreach (Catalogs::read('component/entries') as $entry) {
             $selector = $entry['demoSelector'] ?? null;
             if ($selector === null) {
@@ -963,9 +964,9 @@ final class CatalogTest extends TestCase
     #[Test]
     public function whetherAnExtensionIsPartOfTheCoreIsAnswerable(): void
     {
-        // It was answered from memory in both directions in one session: a
-        // community package cited as evidence of what the core does, and a
-        // system extension nobody knew was there.
+        // One session answered it from memory in both directions. A community
+        // package cited as evidence of what the core does, and a system
+        // extension nobody knew was there.
         $camino = Registry::call('typo3_system_extension_lookup', ['query' => 'typo3/theme-camino']);
         self::assertSame(1, $camino->data['matchCount']);
         self::assertSame('theme_camino', $camino->data['extensions'][0]['key']);
@@ -1010,9 +1011,9 @@ final class CatalogTest extends TestCase
     public function theCoresOwnWorkedExamplesAreIndexed(): void
     {
         // Three times in one session the real answer was a directory inside the
-        // core repository, and all three times it was reached by accident. A
-        // hint per subject fixes the subject it was written for; the index is
-        // for the next one.
+        // core repository, and all three times the session reached it by
+        // accident. A hint per subject fixes the subject it exists for; the
+        // index is for the next one.
         $everything = Registry::call('typo3_reference_list', []);
         self::assertGreaterThan(0, $everything->data['matchCount']);
 
@@ -1030,9 +1031,9 @@ final class CatalogTest extends TestCase
     #[Test]
     public function aWorkedExampleIsNamedBesideTheHintItIsAnExampleOf(): void
     {
-        // The layout hint and the theme it was written from were two answers
-        // that never met: the hint was read, the extension was found later by
-        // being told about it.
+        // The layout hint and the theme it came from were two answers that
+        // never met. The session read the hint, and found the extension later
+        // because somebody told it.
         $result = Registry::call('typo3_hint_lookup', [
             'task' => 'directory structure of a sitepackage extension',
             'targetVersion' => '14',
@@ -1080,7 +1081,7 @@ final class CatalogTest extends TestCase
 
     /**
      * The cases are the ones TranslationDomainMapperTest states in the core, so
-     * this port is held to the same rules as the original.
+     * this port stands under the same rules as the original.
      */
     #[Test]
     public function theTranslationDomainIsDerivedByTheCoreRules(): void
@@ -1103,9 +1104,9 @@ final class CatalogTest extends TestCase
     #[Test]
     public function aDomainIsDerivedForAFileThatDoesNotExistYet(): void
     {
-        // The point of computing rather than looking up: a file in any
-        // extension, and one a patch is about to add, both get an answer —
-        // which is exactly when it cannot be looked up anywhere.
+        // The point of a computation rather than a lookup. A file in any
+        // extension, and one a patch is about to add, both get an answer, which
+        // is exactly when no lookup anywhere can.
         $result = Registry::call('typo3_translation_domain_lookup', [
             'path' => 'packages/my_extension/Resources/Private/Language/NotYetWritten.xlf',
         ])->data;
@@ -1148,10 +1149,10 @@ final class CatalogTest extends TestCase
     }
 
     /**
-     * A suite the script runs but does not advertise is offered.
+     * A suite the script runs but does not advertise is on offer.
      *
      * 13.4 accepts `-s e2e-prepare` and names it only inside the `e2e` line of
-     * its usage text, so reading the usage block alone reported the hint that
+     * its usage text. So a read of the usage block alone reported the hint that
      * says the suite arrives with v13 as the thing that was wrong.
      */
     #[Test]

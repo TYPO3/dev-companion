@@ -21,7 +21,7 @@ use TYPO3\DevCompanion\Upkeep\Todo;
 
 /**
  * Feedback is the one part of the server that writes, so these tests write too.
- * Every feedback recorded here is removed again in tearDown; the marker in the
+ * tearDown removes every feedback recorded here again; the marker in the
  * observation makes a leftover recognizable.
  */
 final class FeedbackTest extends TestCase
@@ -55,12 +55,12 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * A feedback is prose an agent wrote, so the heading cut out of its first
-     * line has to be cut by characters. `substr()` counts bytes: an em dash
-     * landing across the boundary was written as its first byte or two, the
-     * file stopped being valid UTF-8, and `grep` then treated it as binary and
-     * matched nothing in it — which is how the one in the store was found,
-     * three weeks after it was recorded.
+     * A feedback is prose an agent wrote, so the cut that makes a heading out
+     * of its first line has to count characters. `substr()` counts bytes. An em
+     * dash across the boundary went out as its first byte or two, and the file
+     * was no longer valid UTF-8. `grep` then treated it as binary and matched
+     * nothing in it. That is how the one in the store came to light, three
+     * weeks after its record.
      */
     #[Test]
     public function aHeadingIsCutBetweenCharacters(): void
@@ -108,9 +108,9 @@ final class FeedbackTest extends TestCase
     #[Test]
     public function theDirectoryAFeedbackWasWrittenInIsReadBackWithIt(): void
     {
-        // Written into every feedback since it existed and readable only by
-        // opening one, which is how 35 reports out of one checkout were judged
-        // as 35 unrelated reports — `D-FBK-025`. `feedback:list` groups by it.
+        // In every feedback since the channel existed and readable only from
+        // inside one. That is how 35 reports out of one checkout got judged as
+        // 35 unrelated reports — `D-FBK-025`. `feedback:list` groups by it.
         Instance::discoverFrom('/home/somebody/projects/a-site');
 
         $file = $this->recordFeedback(['observation' => self::MARKER . ' read back with its directory']);
@@ -162,9 +162,9 @@ final class FeedbackTest extends TestCase
     #[Test]
     public function aNoteWithoutAModelSaysSo(): void
     {
-        // The write never fails on the attribution — the feedback is worth more
-        // than the name — but an unattributed one says it is unattributed,
-        // which a missing front-matter line cannot.
+        // The write never fails on the attribution, since the feedback is worth
+        // more than the name. But one without an attribution says so, which an
+        // absent front-matter line cannot.
         $file = $this->recordFeedback(['observation' => self::MARKER . ' recorded by nobody in particular']);
 
         self::assertStringContainsString(
@@ -178,10 +178,10 @@ final class FeedbackTest extends TestCase
     #[Test]
     public function theRecordedNoteIsReportedWhereItActuallyIs(): void
     {
-        // A relative path is relative to somewhere the caller has never been:
-        // one recorded from a site package was reported as feedback/<name>.md,
-        // looked for under that project, not found, and reported back as a
-        // failed write.
+        // A relative path is relative to somewhere the caller has never been.
+        // One recorded from a site package came back as feedback/<name>.md. The
+        // caller looked for it under that project, found nothing, and reported
+        // a failed write.
         $this->ownFeedbackStore();
         $result = Registry::call('typo3_feedback_record', [
             'observation' => self::MARKER . ' recorded through the tool',
@@ -198,8 +198,8 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * The card is what puts a report in front of the next session, and it used
-     * to be written by a command run from a pre-commit hook — so a feedback
+     * The card is what puts a report in front of the next session, and a
+     * command run from a pre-commit hook used to write it. So a feedback
      * recorded from anywhere else was on disk and on nobody's board until
      * somebody committed in this checkout (`D-FBK-045`).
      */
@@ -213,12 +213,12 @@ final class FeedbackTest extends TestCase
             'subject' => self::MARKER . ' the lookup found nothing',
         ]);
 
-        // The card's id is derived from the feedback and from nothing else, so
-        // the pair is found from either end without either name being looked up
-        // — `D-DOC-061`. It carries the day the report arrived, which is what
-        // the queue is ordered by.
-        // A feedback is named `<date>-<time>-<slug>`, so the day is read off it
-        // by position rather than by a pattern the card does not use.
+        // The card's id derives from the feedback and from nothing else, so
+        // either end finds the pair with no lookup of either name —
+        // `D-DOC-061`. It carries the day the report arrived, which is what
+        // orders the queue. A feedback's name is `<date>-<time>-<slug>`, so the
+        // day comes off it by position rather than by a pattern the card does
+        // not use.
         $name = basename($file, '.md');
         $day = substr($name, 2, 2) . substr($name, 5, 2) . substr($name, 8, 2);
 
@@ -235,8 +235,8 @@ final class FeedbackTest extends TestCase
     }
 
     /**
- * The caller is told where its report is waiting, not only where it was written
- * — `D-FBK-045`.
+     * The caller learns where its report waits, not only where the write landed
+     * — `D-FBK-045`.
  */
     #[Decision('D-FBK-045')]
     #[Test]
@@ -276,9 +276,9 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * The fourteen feedback of 2026-08-04 17:58 to 18:02, which arrived with the
-     * suggestion parameter inside the observation because each one had been
-     * closed with a tag named after itself — `D-FBK-044`.
+     * The fourteen feedback of 2026-08-04 17:58 to 18:02, which arrived with
+     * the suggestion parameter inside the observation. Each one ended in a tag
+     * named after itself — `D-FBK-044`.
      */
     #[Requirement('R-FBK-016')]
     #[Decision('D-FBK-044')]
@@ -294,7 +294,7 @@ final class FeedbackTest extends TestCase
 
     /**
      * The report about that failure is the one report this check must not
-     * refuse, and it is the only kind that names those markers at all —
+     * refuse. It is the only kind that names those markers at all —
      * `D-FBK-044`.
      */
     #[Requirement('R-FBK-016')]
@@ -311,10 +311,10 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * The feedback of 2026-07-31 praised typo3_configuration_lookup for
-     * returning the effective runtime value, and proved it by pasting the live
-     * encryption key of the audited site into a repository that is committed and
-     * pushed. The path and the shape were the finding; the 96 characters
+     * The feedback of 2026-07-31 praised typo3_configuration_lookup because it
+     * returns the effective runtime value. It proved that with the live
+     * encryption key of the audited site pasted into a repository under commit
+     * and push. The path and the shape were the finding; the 96 characters
      * established nothing further and left the installation that owns them.
      */
     #[Requirement('R-FBK-011')]
@@ -337,7 +337,7 @@ final class FeedbackTest extends TestCase
         // than the leak it prevents.
         self::assertStringContainsString('SYS/encryptionKey', $contents);
         self::assertStringContainsString('config/system/settings.php', $contents);
-        // The filename is built from the observation too, and it is the copy
+        // The filename derives from the observation too, and it is the copy
         // that would have survived every grep of the file itself.
         self::assertStringNotContainsString($key, $file);
     }
@@ -347,7 +347,7 @@ final class FeedbackTest extends TestCase
     public function everyFieldAFeedbackIsWrittenFromIsRead(): void
     {
         // The same value in the second field is how a session works around a
-        // guard on the first without meaning to: the query is where it says
+        // guard on the first without the intent to. The query is where it says
         // what it called, and the suggestion is where it says what to do about
         // it. All three are prose, and all three land in one file.
         $key = str_repeat('9f2b7c4d', 12);
@@ -372,7 +372,7 @@ final class FeedbackTest extends TestCase
     public function whatASessionQuotesAboutTheCoreIsLeftAlone(): void
     {
         // A rule that redacts a revision or a class name costs more than the
-        // leak it prevents: these are what feedback about core patches is made
+        // leak it prevents. Those are what feedback about core patches consist
         // of, and 64 characters is where the threshold clears the longest of
         // them.
         $quoted = 'reviewed 4c8b38b2dd07856c3e2666fbdfd77beead87ffe0 against '
@@ -440,8 +440,8 @@ final class FeedbackTest extends TestCase
     {
         // Marked rather than silent, and said rather than only marked. The
         // archive keeps a session's report because the report is the evidence,
-        // so an altered one has to say so — and the session that wrote it is
-        // the only reader who still knows what stood there.
+        // so an altered one has to say so. The session that wrote it is the
+        // only reader who still knows what stood there.
         $this->ownFeedbackStore();
         $result = Registry::call('typo3_feedback_record', [
             'observation' => self::MARKER . ' the key ' . str_repeat('9f2b7c4d', 12) . ' is the active one',
@@ -466,10 +466,10 @@ final class FeedbackTest extends TestCase
     /**
      * The observation of `feedback/2026-08-03-144316` is exactly 4000
      * characters and ends `the skill fixed the or`. What the cut took was the
-     * sentence naming the shape the session was reporting — the half the
-     * judgement of it turned on — and nothing said it had happened: not the
-     * file, not the answer. A cut is blinder than a redaction, which leaves the
-     * name of what it took standing beside its marker.
+     * sentence that named the shape the session reported, the half the
+     * judgement of it turned on. Nothing said it had happened: not the file,
+     * not the answer. A cut is blinder than a redaction, which leaves the name
+     * of what it took standing beside its marker.
      */
     #[Requirement('R-FBK-015')]
     #[Test]
@@ -484,8 +484,8 @@ final class FeedbackTest extends TestCase
             'model' => 'claude-opus-5',
         ]);
 
-        // One entry per field that was cut, in the order the fields are read,
-        // and each says how much of it went rather than only that some did.
+        // One entry per cut field, in the order of the fields, and each says
+        // how much of it went rather than only that some did.
         self::assertSame([
             'observation: 200 characters past the 4000-character limit',
             'query: 100 characters past the 4000-character limit',
@@ -507,9 +507,9 @@ final class FeedbackTest extends TestCase
     #[Test]
     public function aFieldExactlyOnTheCapIsNotMarked(): void
     {
-        // The case the marker must not reach: nothing was taken, so a marker
-        // would say something happened that did not — and a reader has no way
-        // to check it against what the session wrote.
+        // The case the marker must not reach. The cut took nothing, so a marker
+        // would say something happened that did not. A reader has no way to
+        // check it against what the session wrote.
         $this->ownFeedbackStore();
 
         $result = Registry::call('typo3_feedback_record', [
@@ -523,10 +523,10 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * The other cap, and the one the corpus hits: 115 of 440 recorded feedback
-     * were given a subject that was shortened, and nothing told any of them —
-     * `D-FBK-049`. The file cannot say it, because the `...` a listing shows is
-     * all a title may carry, so the answer is the only place it is said at all.
+     * The other cap, and the one the corpus hits. 115 of 440 recorded feedback
+     * got a shorter subject, and nothing told any of them — `D-FBK-049`. The
+     * file cannot say it, because the `...` a listing shows is all a title may
+     * carry. So the answer is the only place that says it at all.
      */
     #[Decision('D-FBK-049')]
     #[Requirement('R-FBK-015')]
@@ -545,7 +545,7 @@ final class FeedbackTest extends TestCase
         self::assertSame(['subject: 20 characters past the 100-character limit'], $result->data['cut']);
         self::assertStringContainsString('One field was longer than a stored field and cut', $result->text);
 
-        // The title is shortened where it always was, and gains no marker.
+        // The title gets its cut where it always did, and gains no marker.
         $contents = (string) file_get_contents((string) $result->data['path']);
         if (preg_match('/^# (.*)$/m', $contents, $heading) !== 1) {
             self::fail('the feedback was written without the heading it is read by');
@@ -556,9 +556,9 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * A fixture observation of exactly that many characters, in prose: a run of
-     * one repeated character is what Redaction takes for a hexadecimal value,
-     * and this case is about the length rule rather than that one.
+     * A fixture observation of exactly that many characters, in prose. A run of
+     * one repeated character is what Redaction takes for a hexadecimal value.
+     * This case is about the length rule rather than that one.
      */
     private static function observationOfLength(int $characters): string
     {
@@ -580,14 +580,14 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * The corpus is what the thresholds were settled against, so it is what
-     * says whether they still hold: 207 recorded feedback, one value among them
-     * that had to go, and every git revision, class path and changelog
-     * identifier beside it left standing.
+     * The corpus is what settled the thresholds, so it is what says whether
+     * they still hold. 207 recorded feedback, one value among them that had to
+     * go, and every git revision, class path and changelog identifier beside it
+     * still there.
      *
-     * A second file appearing here means one of two things, and both are worth
-     * stopping for: a rule got greedier, or a feedback carrying a live value
-     * was written by a hand rather than through the channel that guards it.
+     * A second file here means one of two things, and both are worth a stop. A
+     * rule got greedier, or a feedback with a live value came in by hand rather
+     * than through the channel that guards it.
      */
     #[Requirement('R-FBK-011')]
     #[Test]
@@ -618,15 +618,15 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * A session files one feedback per subject and files them in one breath, so
-     * they open on the same sentence — the one that says which session this
-     * is — and that sentence is longer than a filename has room for. Eight
-     * feedback of 2026-08-01 were named
-     * `debrief-of-the-typo3-14-testimonials-session` to the character, differing
-     * by their timestamp alone, and they were about eight different things.
+     * A session files one feedback per subject and files them in one breath. So
+     * they open on the same sentence, the one that says which session this is.
+     * That sentence is longer than a filename has room for. Eight feedback of
+     * 2026-08-01 had the name `debrief-of-the-typo3-14-testimonials-session` to
+     * the character, apart by their timestamp alone, and they were about eight
+     * different things.
      *
      * The first of a series keeps the opening, because nothing yet says it is
-     * one. Every feedback after it is named after what it alone says.
+     * one. Every feedback after it takes its name from what it alone says.
      */
     #[Decision('D-FBK-006')]
     #[Requirement('R-FBK-008')]
@@ -665,10 +665,10 @@ final class FeedbackTest extends TestCase
     #[Test]
     public function aNoteThatWasWorkedOffKeepsEverythingItSaid(): void
     {
-        // Closing a feedback used to mean deleting it, which left the agent that
-        // wrote it seeing the file simply stop existing — and left the closed
-        // half of the list as bare filenames, with the front matter that says
-        // what the feedback was about gone with the file.
+        // To close a feedback used to mean to delete it, which left the agent
+        // that wrote it to see the file vanish. It left the closed half of the
+        // list as bare filenames. The front matter that says what the feedback
+        // was about went with the file.
         $file = $this->recordFeedback([
             'observation' => self::MARKER . ' the archive keeps what the feedback said',
             'category' => 'tool-gap',
@@ -700,14 +700,14 @@ final class FeedbackTest extends TestCase
     #[Test]
     public function aNoteThatWasWorkedOffIsStillAnswerableFor(): void
     {
-        // What came of a feedback is the commit that archived it, which is the one
-        // thing the agent that reported the gap cannot see for itself: without
-        // it the same gap is reported again, and a request that shipped in the
-        // meantime is dropped silently.
-        // Built rather than found. Reading whatever this repository happens to
-        // have archived asserts the working tree, not the code: with 138 files
-        // in there it can never fail, and in a fresh clone of a checkout that
-        // had archived nothing it would have had nothing to say either.
+        // What came of a feedback is the commit that archived it. That is the
+        // one thing the agent that reported the gap cannot see for itself.
+        // Without it the same gap comes in again, and a request that shipped in
+        // the meantime goes without a word. Built rather than found. A read of
+        // whatever this repository happens to have archived asserts the working
+        // tree, not the code. With 138 files in there it can never fail. In a
+        // fresh clone of a checkout that had archived nothing it would have had
+        // nothing to say either.
         $archived = $this->archived('Answer label lookups with the translation domain');
 
         $closed = Channel::all('closed', null, 200);
@@ -732,9 +732,9 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * One archived feedback, as `bin/cli feedback:archive` leaves it: below
-     * feedback/archive/, with the commit that closed it written into its front
-     * matter, in this case's own store like every other fixture here.
+     * One archived feedback, as `bin/cli feedback:archive` leaves it. Below
+     * feedback/archive/, with the commit that closed it in its front matter, in
+     * this case's own store like every other fixture here.
      */
     private function archived(string $subject): string
     {
@@ -813,14 +813,15 @@ final class FeedbackTest extends TestCase
     /**
      * The recorder still takes a list, and the schema no longer offers one.
      *
-     * `tool` was declared `["string", "array"]` until `D-ANS-017`, and this case
-     * is what covered the second branch. It is below the wire — a client sending
-     * an array is now refused by the validator before `record()` is reached, and
-     * `StdioServerTest::aListOfToolNamesIsRefusedWithTheTypeItWanted`
-     * is where that is held. What is left here is the tolerance itself, for a
-     * caller standing in this package: a list that reached the recorder would
-     * otherwise be dropped without a word, which is the one failure the feedback
-     * behind that decision reported.
+     * `tool` had the declaration `["string", "array"]` until `D-ANS-017`, and
+     * this case is what covered the second branch. It is below the wire. The
+     * validator now refuses a client that sends an array before the call
+     * reaches `record()`, and
+     * `StdioServerTest::aListOfToolNamesIsRefusedWithTheTypeItWanted` holds
+     * that. What remains here is the tolerance itself, for a caller inside this
+     * package. A list that reached the recorder would otherwise go without a
+     * word, which is the one failure the feedback behind that decision
+     * reported.
      */
     #[Requirement('R-FBK-001')]
     #[Decision('D-ANS-017')]
@@ -856,11 +857,11 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * A skill is spelled `typo3-extension-health` in the listing a session
-     * reads it from, in `skills/`, and in the description that invites naming
-     * one here. Stored as `typo3extensionhealth` it was an identifier the
-     * project carries nowhere, and the grep that answers "what has been
-     * reported about this skill" found none of the seven feedback about it.
+     * A skill has the form `typo3-extension-health` in the listing a session
+     * reads it from, in `skills/`, and in the description that invites a name
+     * here. Stored as `typo3extensionhealth` it was an identifier the project
+     * carries nowhere. The grep that answers "what do the reports say about
+     * this skill" found none of the seven feedback about it.
      */
     #[Requirement('R-FBK-013')]
     #[Test]
@@ -883,10 +884,10 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * The observation is asked to open with the task, so every feedback from
-     * one session opens on the same words and the title derived from it says
-     * nothing that tells them apart. The subject is what only this one says,
-     * and it names both surfaces a maintainer triages on.
+     * The description asks the observation to open with the task. So every
+     * feedback from one session opens on the same words, and the title derived
+     * from it says nothing that tells them apart. The subject is what only this
+     * one says, and it names both surfaces a maintainer triages on.
      */
     #[Test]
     public function theSubjectNamesTheTitleAndTheFileWhereTheOpeningIsShared(): void
@@ -902,8 +903,8 @@ final class FeedbackTest extends TestCase
             'subject' => self::MARKER . ' what a re-read of get.typo3.org has to know',
         ]);
 
-        // The slug is cut to what a file name has room for, so what is held is
-        // that the two differ where they used to share an opening.
+        // The slug fits what a file name has room for, so this holds that the
+        // two differ where they used to share a first line.
         self::assertStringContainsString('a-release-branch-log', $first);
         self::assertStringContainsString('what-a-re-read', $second);
 
@@ -912,8 +913,8 @@ final class FeedbackTest extends TestCase
             '# ' . self::MARKER . ' a release branch log answers about shared history',
             $body,
         );
-        // The task line is what traces the report back to what exposed it, so
-        // naming the subject separately must not take it out of the report.
+        // The task line is what traces the report back to what exposed it. So a
+        // subject named apart must not take it out of the report.
         self::assertStringContainsString('task was to work off the open todos', $body);
     }
 
@@ -934,7 +935,7 @@ final class FeedbackTest extends TestCase
 
     /**
      * A name this server does not register is the only kind that carries
-     * capitals, and it is the kind that arrives because a session reached for
+     * capitals. It is the kind that arrives because a session reached for
      * somebody else's tool instead of one of these — `D-FBK-039`.
      */
     #[Requirement('R-FBK-013')]
@@ -964,9 +965,9 @@ final class FeedbackTest extends TestCase
     #[DataProvider('theSpellingsOneNameArrivesIn')]
     public function aNameIsFoundHoweverItsSeparatorsAreSpelled(string $spelling): void
     {
-        // What is stored is what the session wrote, so one name arrives in more
-        // than one spelling and the filter is where they meet — `D-ANS-006`
-        // applied to the one thing this store is filtered by — `D-FBK-039`.
+        // The store holds what the session wrote, so one name arrives in more
+        // than one form and the filter is where they meet. That is `D-ANS-006`
+        // applied to the one thing that filters this store — `D-FBK-039`.
         $file = $this->recordFeedback([
             'observation' => self::MARKER . ' named the skill with hyphens',
             'tool' => 'typo3-extension-health',
@@ -989,13 +990,14 @@ final class FeedbackTest extends TestCase
     }
 
     /**
-     * The corpus, because that is where the mangled names are: 43 of them were
-     * rewritten to the spelling the project uses when the stripping was fixed,
-     * and a name arriving mangled again is what this catches — `D-FBK-039`.
+     * The corpus, because that is where the mangled names are. The fix rewrote
+     * 43 of them to the form the project uses, and a name that arrives mangled
+     * again is what this catches — `D-FBK-039`.
      *
-     * Only a name that resolves to something this project has is judged. A
-     * feedback naming a tool that has since been renamed away, or naming its
-     * client's wrapper, is a session's report and is left as it was written.
+     * Only a name that resolves to something this project has gets a judgement.
+     * A feedback that names a tool since gone under a new name, or names its
+     * client's wrapper, is a session's report. It stays as the session wrote
+     * it.
      */
     #[Requirement('R-FBK-013')]
     #[Decision('D-FBK-039')]

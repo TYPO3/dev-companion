@@ -17,11 +17,10 @@ use TYPO3\DevCompanion\Tool\ForgeLookup;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
- * The tracker is somebody else's host, so what is held here is what this side
- * does with what comes back: the fields the answer is composed of, the journal
- * the decision sits in, the relation that names two issues and means one, the
- * title a search hit carries its triage state in, and the page a bot protection
- * answers 200 with.
+ * The tracker is somebody else's host, so this holds what this side does with
+ * what comes back. The fields of the answer, the journal the decision sits in,
+ * the relation that names two issues and means one. The title a search hit
+ * carries its triage state in, and the page a bot protection answers 200 with.
  */
 final class ForgeTest extends TestCase
 {
@@ -62,8 +61,8 @@ final class ForgeTest extends TestCase
     ];
 
     /**
-     * The issues those two hits are, as `/issues.json` answers a list of ids:
-     * fields where a search hit has a title, which is what makes the area, the
+     * The issues those two hits are, as `/issues.json` answers a list of ids.
+     * Fields where a search hit has a title, which is what makes the area, the
      * assignee and the two dates answerable at all.
      */
     private const FIELDS = [
@@ -138,15 +137,15 @@ final class ForgeTest extends TestCase
         self::assertSame('Resolved', $issue['status']);
         self::assertSame('Task', $issue['tracker']);
         self::assertSame('15.0', $issue['targetVersion']);
-        // The version an issue was reported against is a custom field, found by
-        // the name it carries rather than by a position in a list.
+        // The version of the report is a custom field, found by the name it
+        // carries rather than by a position in a list.
         self::assertSame('15', $issue['typo3Version']);
         self::assertSame('8.4', $issue['phpVersion']);
     }
 
     /**
-     * What decides an issue is in its journal — a closure, a "we will not do
-     * this", a reassignment — and never in the description, which is what the
+     * What decides an issue is in its journal: a closure, a "we will not do
+     * this", a reassignment. Never in the description, which is what the
      * reporter wrote before any of that happened.
      */
     #[Test]
@@ -162,10 +161,10 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The files are named, and the bytes are the caller's to read.
+     * The answer names the files, and the bytes are the caller's to read.
      *
-     * Redmine writes an inline image into a comment as `!name.jpg!`, so the
-     * text of such a comment is a bare filename referring to something the
+     * Redmine writes an inline image into a comment as `!name.jpg!`. So the
+     * text of such a comment is a bare filename that refers to something the
      * answer otherwise never mentions exists. On #88556 two attachments decided
      * the triage and the text alone was actively misleading
      * (`feedback/2026-08-05-033846`) — `D-ANS-057`.
@@ -215,10 +214,10 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A number and a word cost one issue read to evaluate, so a caller holding
-     * four of them evaluates none — and on 15984 the one that answered what a
-     * fix would cost was among them (`D-ANS-064`). What makes it a fix rather
-     * than a trade is that the whole set is filled in one call.
+     * A number and a word cost one issue read to evaluate, so a caller with
+     * four of them evaluates none. On 15984 the one that answered what a fix
+     * would cost was among them (`D-ANS-064`). What makes it a fix rather than
+     * a trade is that one call fills the whole set.
      */
     #[Requirement('R-ANS-029')]
     #[Test]
@@ -234,8 +233,8 @@ final class ForgeTest extends TestCase
         $relations = $forge->issue('110348')['issue']['relations'];
 
         // Three: the issue, the one bulk read that fills every relation, and
-        // the review server, which a single issue is asked of since
-        // `D-ANS-125` made `reviews` mean the same on both paths.
+        // the review server. A single issue goes there since `D-ANS-125` made
+        // `reviews` mean the same on both paths.
         self::assertCount(3, $asked);
         self::assertStringContainsString('issue_id=105403%2C105953', $asked[1]);
         self::assertStringContainsString('review.typo3.org', $asked[2]);
@@ -250,9 +249,9 @@ final class ForgeTest extends TestCase
 
     /**
      * The relation is where this answer names an issue by its number alone, and
-     * a person handed one has nothing to open — `D-ANS-103`. The record has held
-     * the URL since the relation was filled at all, and the line printed less
-     * than it printed from.
+     * a person handed one has nothing to open — `D-ANS-103`. The record has
+     * held the URL since the relation first had a fill, and the line printed
+     * less than it printed from.
      */
     #[Decision('D-ANS-103')]
     #[Test]
@@ -289,10 +288,10 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * An issue whose prose cites others, in the shape #76202 has: a forge URL
+     * An issue whose prose cites others, in the shape #76202 has. A forge URL
      * in the first line of the description, Redmine's own `#NNNN` in a comment,
-     * a number a relation already carries, a three-digit number that is no
-     * issue, an exception code that is ten digits, and a review URL in the
+     * a number a relation already carries. A three-digit number that is no
+     * issue, an exception code that is ten digits. And a review URL in the
      * report rather than in the journal.
      */
     private const CITING = [
@@ -342,9 +341,9 @@ final class ForgeTest extends TestCase
 
     /**
      * A reporter's "this is the 6.2 bug still in 7.6" is the claim the patch
-     * gets framed against, and it sits in a sentence while the answer says
-     * `relations: []` — `D-ANS-123`. So the citations are a field, resolved in
-     * the read the relations already make.
+     * stands against. It sits in a sentence while the answer says `relations:
+     * []` — `D-ANS-123`. So the citations are a field, resolved in the read the
+     * relations already make.
      */
     #[Decision('D-ANS-123')]
     #[Test]
@@ -360,7 +359,7 @@ final class ForgeTest extends TestCase
         $mentioned = $forge->issue('76202')['issue']['mentioned'];
 
         // The URL form and Redmine's own, and neither the exception code nor
-        // the three digits that answer for no issue. #105403 is left to the
+        // the three digits that answer for no issue. #105403 stays with the
         // relation, which says more about it than a citation does.
         self::assertSame([62553, 105953], array_column($mentioned, 'issue'));
         self::assertSame(['description', 'note'], array_column($mentioned, 'where'));
@@ -391,16 +390,16 @@ final class ForgeTest extends TestCase
         $reviews = $forge->issue('76202')['issue']['reviews'];
 
         self::assertSame([48211], array_column($reviews, 'change'));
-        // When the reference was written, which for a description is the day
-        // the issue was filed.
+        // The day of the reference, which for a description is the day of the
+        // issue.
         self::assertSame('2016-05-19T09:12:00Z', $reviews[0]['on']);
     }
 
     /**
      * The text half says it where `relations` is empty, which is the sentence
-     * the report was written about: a session read `relations: []` as nothing
-     * linked while the first line of the description named the issue its whole
-     * framing rested on — `D-ANS-123`.
+     * the report was about. A session read `relations: []` as nothing linked
+     * while the first line of the description named the issue its whole frame
+     * rested on — `D-ANS-123`.
      */
     #[Decision('D-ANS-123')]
     #[Test]
@@ -419,16 +418,16 @@ final class ForgeTest extends TestCase
             $result->text,
         );
         self::assertStringContainsString('Mentioned in the note: #105953', $result->text);
-        // What the field is not: the reporter's claim was wrong on the issue it
-        // was measured on, and reading a citation as a duplicate is the same
-        // failure in the other direction.
+        // What the field is not. The reporter's claim was wrong on the measured
+        // issue, and a citation read as a duplicate is the same failure in the
+        // other direction.
         self::assertStringContainsString('never pass this issue over as a duplicate', $result->text);
     }
 
     /**
-     * The journal of 15984, in the wording measured on 2026-08-08: the bot
-     * names both handles, a human names the number alone three months later,
-     * and one comment is a query for a topic rather than a change.
+     * The journal of 15984, in the words measured on 2026-08-08. The bot names
+     * both handles, and a human names the number alone three months later. One
+     * comment is a query for a topic rather than a change.
      */
     private const REVIEWED = [
         'id' => 15984,
@@ -442,7 +441,7 @@ final class ForgeTest extends TestCase
 
     /**
      * A change reference is in the payload already and only inside a sentence,
-     * where it reads as history rather than as a handle: the session that
+     * where it reads as history rather than as a handle. The session that
      * triaged this issue never loaded `typo3_gerrit_lookup`'s schema.
      */
     #[Requirement('R-ANS-029')]
@@ -457,7 +456,7 @@ final class ForgeTest extends TestCase
         self::assertSame([3, 1], array_column($reviews, 'patchSet'));
         self::assertSame('I98ea123ccdf1e370f28103546191b0a7234076f4', $reviews[0]['changeId']);
         self::assertSame('https://review.typo3.org/c/1186', $reviews[0]['url']);
-        // The last note naming it, which is how old the reference is — and the
+        // The last note that names it, which is how old the reference is. The
         // change id the bot gave it three months earlier is still on it.
         self::assertSame('2011-10-06T01:13:23Z', $reviews[1]['on']);
         self::assertSame('I459aa01a8aba89ce361accd3dd84ea0329c5d1e4', $reviews[1]['changeId']);
@@ -477,8 +476,8 @@ final class ForgeTest extends TestCase
 
     /**
      * A session read `reviews: []` on the issue it was about to patch and took
-     * it as evidence that nothing was in flight, having trusted the same field
-     * on enumerated rows an hour earlier — where it is the review server's
+     * it as evidence that nothing was in flight. It had trusted the same field
+     * on enumerated rows an hour earlier. There it is the review server's
      * answer rather than a parse of the text (`feedback/2026-08-27-145448`).
      */
     #[Decision('D-ANS-125')]
@@ -505,9 +504,9 @@ final class ForgeTest extends TestCase
 
     /**
      * The journal is the most valuable thing in the payload and it is also why
-     * a second issue cannot be afforded, and neither half is wrong
-     * (`D-ANS-064`). So the bound is asked for: a caller reading one issue
-     * keeps exactly what it had.
+     * a second issue costs too much. Neither half is wrong (`D-ANS-064`). So
+     * the bound is opt-in: a caller who reads one issue keeps exactly what it
+     * had.
      */
     #[Requirement('R-ANS-030')]
     #[Test]
@@ -524,8 +523,8 @@ final class ForgeTest extends TestCase
 
     /**
      * The patch-set pings are half the volume of 14858 and carry nothing a
-     * reader was going to use — the change numbers in them are a field of their
-     * own by the time they are dropped.
+     * reader would use. The change numbers in them are a field of their own by
+     * the time the drop happens.
      */
     #[Requirement('R-ANS-030')]
     #[Test]
@@ -537,7 +536,7 @@ final class ForgeTest extends TestCase
 
         self::assertSame(['Steffen Kamper', 'Markus Klein'], array_column($issue['notes'], 'author'));
         // The total is what the issue carries and not what came back, so the
-        // two counts together say what was dropped.
+        // two counts together say what the drop took.
         self::assertSame(4, $issue['noteCount']);
         self::assertSame(2, $issue['botNoteCount']);
         self::assertSame([1186, 2545], array_column($issue['reviews'], 'change'));
@@ -612,7 +611,7 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The words are what is searched for, and `issues=1` is what keeps a wiki
+     * The words are what the search reads, and `issues=1` is what keeps a wiki
      * page out of an answer whose entries are issue numbers.
      */
     #[Test]
@@ -630,16 +629,16 @@ final class ForgeTest extends TestCase
         self::assertStringContainsString('q=cache%20busting', $asked[0]);
         self::assertStringContainsString('issues=1', $asked[0]);
         self::assertStringContainsString('limit=3', $asked[0]);
-        // The query comes back as it was asked, because a caller holding two
-        // hits has to see which words produced them before concluding anything
+        // The query comes back as the caller asked it. A caller with two hits
+        // has to see which words produced them before it concludes anything
         // from how few there are.
         self::assertSame('cache busting', $answer['query']);
         self::assertSame('answered', $answer['status']);
     }
 
     /**
-     * The title carries the tracker and the triage state — `Bug #105403 (Under
-     * Review): …` — so a set of hits says what kind each one is and where it
+     * The title carries the tracker and the triage state: `Bug #105403 (Under
+     * Review): …`. So a set of hits says what kind each one is and where it
      * stands without a call per hit.
      */
     #[Test]
@@ -660,7 +659,7 @@ final class ForgeTest extends TestCase
 
     /**
      * A title in some other shape is a hit with less read off it, not a broken
-     * one: the number and the URL are fields of their own, and the title stands
+     * one. The number and the URL are fields of their own, and the title stands
      * as the subject.
      */
     #[Test]
@@ -681,9 +680,9 @@ final class ForgeTest extends TestCase
     /**
      * The fields a hit is not made of, read for the whole page in one call.
      *
-     * A record carrying them empty is a false statement rather than a missing
-     * one: 50 of 50 rows read as issues nobody has categorised and nothing has
-     * moved on, when every one of them had an area and a date
+     * A record with them empty is a false statement rather than an absent one.
+     * 50 of 50 rows read as issues nobody has categorised and nothing has moved
+     * on. Every one of them had an area and a date
      * (`feedback/2026-08-05-033902`). The search path is also where a triage
      * asks about age, which no title carries — `D-ANS-056`.
      */
@@ -740,10 +739,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * Nothing matching is an answer about the words. It is the reading
-     * `D-ANS-038` is written against — an empty search taken for "nobody
-     * reported this" — so it is `empty` rather than an absence with no cause,
-     * and never `unavailable`.
+     * Nothing matching is an answer about the words. It is the read `D-ANS-038`
+     * stands against, an empty search taken for "nobody reported this". So it
+     * is `empty` rather than an absence with no cause, and never `unavailable`.
      */
     #[Test]
     public function wordsThatMatchNothingAreEmpty(): void
@@ -764,10 +762,10 @@ final class ForgeTest extends TestCase
 
     /**
      * What the miss offers is the other way into the tracker and not another
-     * wording. Rewording is the loop the caller is already in: the session
-     * `D-ANS-038` was written on went round eight times and was settled by the
-     * enumeration on its ninth call, so the call it could have composed from
-     * what it already held is named in the answer.
+     * wording. A new form of words is the loop the caller is already in. The
+     * session behind `D-ANS-038` went round eight times, and the enumeration
+     * settled it on its ninth call. So the answer names the call it could have
+     * composed from what it already held.
      */
     #[Requirement('R-ANS-006')]
     #[Decision('D-ANS-038')]
@@ -786,9 +784,9 @@ final class ForgeTest extends TestCase
 
         self::assertSame('empty', $result->data['status']);
         self::assertStringContainsString('backlog "newest" with createdSince', $result->text);
-        // What that call delivers and no more. The promise it replaces was
-        // written from an area holding 26 open issues and overstates what a
-        // page of 50 settles above the bound (`D-ANS-116`).
+        // What that call delivers and no more. The promise it replaces came
+        // from an area with 26 open issues and overstates what a page of 50
+        // settles above the bound (`D-ANS-116`).
         self::assertStringContainsString('where total and the rows agree', $result->text);
         // The rule that makes an identifier query empty whatever else is in it,
         // which is the other half of what the caller does next
@@ -802,9 +800,9 @@ final class ForgeTest extends TestCase
      *
      * The query is the one `feedback/2026-08-24-163235` reported.
      * `RendererRegistry` and `FileRendererInterface` are both class names and
-     * the tracker knew one of them on 2026-08-25, so the rule the miss already
-     * states — an identifier empties a query — would have thrown away the word
-     * that answers.
+     * the tracker knew one of them on 2026-08-25. So the rule the miss already
+     * states, that an identifier empties a query, would have thrown away the
+     * word that answers.
      */
     #[Requirement('R-ANS-006')]
     #[Decision('D-ANS-038')]
@@ -842,8 +840,8 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * One word has nothing to tell apart and a long query is answered by
-     * passing fewer words, so neither spends a read.
+     * One word has nothing to tell apart and a long query answers to fewer
+     * words, so neither spends a read.
      */
     #[Decision('D-ANS-038')]
     #[Test]
@@ -862,9 +860,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A search that answered spends nothing on the words: every word of it is
-     * in an issue by definition, and the counts would name no better call —
-     * the six common words `feedback/2026-08-24-163235` reported as answering
+     * A search that answered spends nothing on the words. Every word of it is
+     * in an issue by definition, and the counts would name no better call. The
+     * six common words `feedback/2026-08-24-163235` reported as the answer to
      * one irrelevant issue reach between 337 and 4661 apiece.
      */
     #[Decision('D-ANS-038')]
@@ -877,7 +875,7 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The protection sits in front of the whole host, so the search meets the
+     * The protection sits in front of the whole host. So the search meets the
      * challenge page the issue read does, and answers it the same way.
      */
     #[Test]
@@ -909,10 +907,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The four calls an enumeration makes, answered by the URL that was asked
-     * for: the project carries the areas, the issues carry the page, the id
-     * list fills the relations of the whole page, and the review server says
-     * which rows have a change.
+     * The four calls an enumeration makes, answered by URL. The project carries
+     * the areas and the issues carry the page. The id list fills the relations
+     * of the whole page, and the review server says which rows have a change.
      *
      * @param list<string> $asked
      * @return \Closure(string): string
@@ -935,7 +932,7 @@ final class ForgeTest extends TestCase
         };
     }
 
-    /** The issue the first row of the page is filed against. */
+    /** The issue of the first row of the page. */
     private const RELATED_ROWS = [
         'issues' => [
             [
@@ -949,10 +946,10 @@ final class ForgeTest extends TestCase
     ];
 
     /**
-     * What one batched query answers, in the shape review.typo3.org sends: two
+     * What one batched query answers, in the shape review.typo3.org sends. Two
      * changes that name the first row, one of them given up, and the change
-     * whose own number is the second row's — which is the false positive the
-     * `message:` index answers with whatever it was asked.
+     * whose own number is the second row's. That is the false positive the
+     * `message:` index answers with whatever the question.
      */
     private const CHANGES = ")]}'\n"
         . '[{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[FEATURE] Make the copy mode configurable",'
@@ -1031,9 +1028,9 @@ final class ForgeTest extends TestCase
     /**
      * The filters go to the tracker and the entries come back as fields.
      *
-     * What this holds against the search above is where a triage state is read
-     * from: a search hit carries it in a title and an enumeration carries it in
-     * fields, which is why the two dates are answerable here at all —
+     * What this holds against the search above is where a triage state comes
+     * from. A search hit carries it in a title and an enumeration carries it in
+     * fields. That is why the two dates are answerable here at all —
      * `D-ANS-054`.
      */
     #[Decision('D-ANS-054')]
@@ -1067,10 +1064,9 @@ final class ForgeTest extends TestCase
      * The relations and the files come back with the page, and cost nothing
      * beyond the call already made.
      *
-     * A triage narrows a page of thirty to the few worth reading whole, and
-     * `D-ANS-069` measured what it was narrowing on: over 36 stale Bugs, 19
-     * carried a relation and 6 carried a file, and the answer dropped all of
-     * them.
+     * A triage narrows a page of thirty to the few worth a whole read, and
+     * `D-ANS-069` measured what it narrowed on. Over 36 stale Bugs, 19 carried
+     * a relation and 6 carried a file, and the answer dropped all of them.
      */
     #[Decision('D-ANS-069')]
     #[Test]
@@ -1092,9 +1088,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A relation on a row is judged the way a relation on an issue is, and by
-     * the same bulk read — `R-ANS-029`. One call for the whole page, whatever
-     * the rows carry between them.
+     * A relation on a row gets the same judgement as a relation on an issue,
+     * and by the same bulk read — `R-ANS-029`. One call for the whole page,
+     * whatever the rows carry between them.
      */
     #[Requirement('R-ANS-029')]
     #[Test]
@@ -1116,12 +1112,12 @@ final class ForgeTest extends TestCase
 
     /**
      * Whether somebody has already pushed a patch is the signal a triage stops
-     * on, and no row carried it: the change reference lives in the journal, and
-     * the index answers no journal however it is asked (`D-ANS-069`).
+     * on, and no row carried it. The change reference lives in the journal, and
+     * the index answers no journal whatever the question (`D-ANS-069`).
      *
-     * One query for the page and not one per row, and the false positive the
-     * `message:` index answers with — a change whose own number was asked for —
-     * is dropped by the rule a single-issue lookup already applies.
+     * One query for the page and not one per row. The false positive the
+     * `message:` index answers with, a change whose own number the question
+     * named, drops by the rule a single-issue lookup already applies.
      */
     #[Requirement('R-ANS-029')]
     #[Decision('D-ANS-069')]
@@ -1136,8 +1132,8 @@ final class ForgeTest extends TestCase
         $review = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, 'review.typo3.org')));
         self::assertCount(1, $review);
         self::assertStringContainsString('q=message%3A14858%20OR%20message%3A23633', $review[0]);
-        // The commit message is what the answer is held against, so it is asked
-        // for here as it is for a single issue.
+        // The commit message is what the answer stands against, so the query
+        // asks for it here as it does for a single issue.
         self::assertStringContainsString('o=CURRENT_COMMIT', $review[0]);
 
         self::assertSame([38419, 76606], array_column($results[0]['reviews'], 'change'));
@@ -1149,12 +1145,12 @@ final class ForgeTest extends TestCase
 
     /**
      * The state of a change is in the payload the batched query already
-     * answered, and a row that drops it costs the caller a call to learn that
-     * the one attempt on the issue was given up (`D-ANS-069`).
+     * answered. A row that drops it costs the caller a call to learn that the
+     * one attempt on the issue died (`D-ANS-069`).
      *
      * What it does not say is whether the issue is worth taking. The session
      * that raised this read the review under an `ABANDONED` and fixed the issue
-     * anyway, because what was rejected was the approach.
+     * anyway, because the rejection was of the approach.
      */
     #[Decision('D-ANS-069')]
     #[Test]
@@ -1172,9 +1168,8 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A page that answered is not turned into an outage by a second host that
-     * did not, which is what the two fills above already promise of the
-     * tracker's own.
+     * A second host that did not answer turns no page that did into an outage.
+     * That is what the two fills above already promise of the tracker's own.
      */
     #[Test]
     public function aReviewServerThatDidNotAnswerLeavesTheRowsAsTheyCameBack(): void
@@ -1210,16 +1205,16 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The neglected end is two questions and the answer keeps them apart:
-     * filed long ago is about the report, untouched for years is about the
-     * attention it got.
+     * The neglected end is two questions and the answer keeps them apart. Filed
+     * long ago is about the report, untouched for years is about the attention
+     * it got.
      *
      * `feedback/2026-08-26-223414` used both on one backlog and reports that
      * they returned materially different sets, which a re-run of its own calls
-     * shows: `stale` under `updatedBefore` reaches none of the issues `oldest`
+     * shows. `stale` under `updatedBefore` reaches none of the issues `oldest`
      * puts on its page that somebody touched last year. Only the `stale` half
-     * was asserted, and the arm that orders by filing date is a default nothing
-     * would have failed on.
+     * had an assertion. The arm that orders by the day of the report is a
+     * default nothing would have failed on.
      */
     #[Decision('D-ANS-054')]
     #[Test]
@@ -1253,9 +1248,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A day to count from is what turns that end into a set, and it is the
-     * narrowing left where an area cannot be one: an issue filed under no
-     * Category is in no area at all — `D-ANS-116`.
+     * A day to count from is what turns that end into a set. It is the filter
+     * that remains where an area cannot be one. An issue under no Category is
+     * in no area at all — `D-ANS-116`.
      *
      * Both ends of the field are one range and never two filters. The tracker
      * takes one value per field, so a second `created_on` would replace the
@@ -1277,10 +1272,10 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * Which way the rest of the set lies, said at the end that was asked about.
-     * What this page leaves out is older than its last row, so what closes the
-     * gap is a later day — and the sentence every other ordering carries points
-     * at an earlier one — `D-ANS-116`.
+     * Which way the rest of the set lies, said at the end the caller asked
+     * about. What this page leaves out is older than its last row, so what
+     * closes the gap is a later day. The sentence every other order carries
+     * points at an earlier one — `D-ANS-116`.
      */
     #[Decision('D-ANS-116')]
     #[Test]
@@ -1302,11 +1297,11 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * An issue filed under no Category is in no area, so a duplicate check
-     * narrowed by one answers about the filed-under-an-area part of the backlog
-     * while looking like an answer about the whole of it. #110533 — the issue
-     * the session that asked for this could not find — carries none, read from
-     * the tracker on 2026-08-27 — `D-ANS-116`.
+     * An issue under no Category is in no area. So a duplicate check narrowed
+     * by one answers about the part of the backlog under an area. It looks like
+     * an answer about the whole of it. #110533 — the issue the session that
+     * asked for this could not find — carries none, read from the tracker on
+     * 2026-08-27 — `D-ANS-116`.
      */
     #[Decision('D-ANS-116')]
     #[Test]
@@ -1322,10 +1317,10 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The workflow that owns a page of the backlog opens by saying that
-     * choosing from it is not the caller's, which is the one thing a duplicate
-     * check cannot hand over — so the recent end carries none of it
-     * (`D-ANS-116`), and the two orderings a triage reads carry it as they did
+     * The workflow that owns a page of the backlog opens with the word that the
+     * choice from it is not the caller's. That is the one thing a duplicate
+     * check cannot hand over. So the recent end carries none of it
+     * (`D-ANS-116`), and the two orders a triage reads carry it as they did
      * (`D-SKL-038`).
      */
     #[Decision('D-ANS-116')]
@@ -1339,9 +1334,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The page reads of an enumeration, which is what a filter was asserted
-     * against — the fill of a page's relations is `/issues.json` too, and it
-     * carries none of them.
+     * The page reads of an enumeration, which is what the filter assertion
+     * stood against. The fill of a page's relations is `/issues.json` too, and
+     * it carries none of them.
      *
      * @param list<string> $asked
      * @return list<string>
@@ -1358,11 +1353,12 @@ final class ForgeTest extends TestCase
      * `D-SKL-038`. A caller holding a page of the backlog is in one workflow,
      * and the readings that decide a row are `D-SKL-031`'s five.
      *
-     * `feedback/2026-08-24-173116` is the session that shows what the answer was
-     * short of: it enumerated the backlog here, chose ten candidates itself and
-     * found four of them already fixed, by reading code and by writing throwaway
-     * tests. `typo3-core-issue-triage` was published in its checkout and stayed
-     * shut, and the two calls the tail names are the two it says it never made.
+     * `feedback/2026-08-24-173116` is the session that shows what the answer
+     * was short of. It enumerated the backlog here, chose ten candidates itself
+     * and found four of them already fixed, with code reads and throwaway
+     * tests. `typo3-core-issue-triage` stood published in its checkout and
+     * stayed shut, and the two calls the tail names are the two it says it
+     * never made.
      */
     #[Decision('D-SKL-038')]
     #[Test]
@@ -1372,8 +1368,8 @@ final class ForgeTest extends TestCase
 
         self::assertNotNull($said);
         self::assertStringContainsString('typo3-core-issue-triage', $said);
-        // The five readings, cheapest first, which is what a row is decided on
-        // and what age is not.
+        // The five reads, cheapest first, which is what decides a row and what
+        // age does not.
         self::assertStringContainsString('already happened to it', $said);
         self::assertStringContainsString('The category, against the branch', $said);
         self::assertStringContainsString('Where the symptom appears', $said);
@@ -1383,8 +1379,8 @@ final class ForgeTest extends TestCase
         // the reporting session made neither of.
         self::assertStringContainsString('typo3_gerrit_lookup', $said);
         self::assertStringContainsString('typo3_changelog_lookup', $said);
-        // And not the tool that session proposed a statement be put in: naming
-        // one nobody invokes is what `D-ANS-061` ruled out.
+        // And not the tool that session proposed for a statement: a name nobody
+        // invokes is what `D-ANS-061` ruled out.
         self::assertStringNotContainsString('typo3_server_scope', $said);
 
         // The issue and the query forms enumerate nothing and take none of it.
@@ -1399,8 +1395,8 @@ final class ForgeTest extends TestCase
     /**
      * The tail stands under the rows and nowhere else.
      *
-     * A breakdown is the shape of a set rather than the candidates in it, and
-     * an issue read by number is the other question — `D-SKL-038`.
+     * A breakdown is the shape of a set rather than the candidates in it. An
+     * issue read by number is the other question — `D-SKL-038`.
      */
     #[Decision('D-SKL-038')]
     #[Test]
@@ -1419,8 +1415,8 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The first reading names the call the row does not spare, which is
-     * `D-ANS-069`'s first **Wrong if** and what it fired on:
+     * The first read names the call the row does not spare, which is
+     * `D-ANS-069`'s first **Wrong if** and what it fired on.
      * `feedback/2026-08-26-223414` read four `ABANDONED` rows off one page,
      * called them attempts that died and opened none of the changes. The state
      * is on the row; what the reading turns on is the argument under it.
@@ -1438,9 +1434,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The comment filter names the reading it narrows, because the words that
-     * invited it are what a caller matches its own call against — the session
-     * of `feedback/2026-08-26-223414` called its enumeration a sweep of
+     * The comment filter names the read it narrows, because the words that
+     * invited it are what a caller matches its own call against. The session of
+     * `feedback/2026-08-26-223414` called its enumeration a sweep of
      * candidates, passed `notes` with it, and credited a filter that never ran
      * (`D-FBK-018`).
      */
@@ -1455,9 +1451,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A date the tracker cannot read is dropped rather than sent. Redmine
-     * answers an unparseable filter with the unfiltered set, which is a set
-     * about everything wearing the shape of a set about one thing.
+     * A date the tracker cannot read stays out rather than goes over the wire.
+     * Redmine answers an unparseable filter with the unfiltered set, which is a
+     * set about everything wearing the shape of a set about one thing.
      */
     #[Test]
     public function onlyADateReachesTheDateFilter(): void
@@ -1472,10 +1468,10 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * Nobody types "RTE (rtehtmlarea + ckeditor)", so the caller's own word is
-     * matched against the project's names — at a word boundary, because a
-     * substring match answers "rte" with every category carrying "Reporter" —
-     * `D-ANS-054`.
+     * Nobody types "RTE (rtehtmlarea + ckeditor)", so the caller's own word
+     * matches against the project's names. At a word boundary, because a
+     * substring match answers "rte" with every category that carries "Reporter"
+     * — `D-ANS-054`.
      */
     #[Decision('D-ANS-054')]
     #[Test]
@@ -1519,9 +1515,9 @@ final class ForgeTest extends TestCase
     /**
      * The word a caller standing in a checkout holds.
      *
-     * Half the system extension keys name no area, and `impexp` is one: the
-     * catalog says where that extension's issues are filed, so the call reads
-     * them instead of answering the vocabulary (`D-ANS-142`).
+     * Half the system extension keys name no area, and `impexp` is one. The
+     * catalog says where that extension's issues go, so the call reads them
+     * instead of answers the vocabulary (`D-ANS-142`).
      */
     #[Decision('D-ANS-142')]
     #[Test]
@@ -1541,7 +1537,7 @@ final class ForgeTest extends TestCase
         self::assertSame(['Import/Export (T3D)'], $package['categoriesUsed']);
 
         // An extension whose issues land in the general areas carries none, and
-        // that word is answered with the vocabulary as before.
+        // that word gets the vocabulary as before.
         $unmapped = $forge->backlog('oldest', category: 'lowlevel', limit: 2);
         self::assertSame([], $unmapped['categoriesUsed']);
         self::assertContains('Frontend', $unmapped['categories']);
@@ -1550,10 +1546,10 @@ final class ForgeTest extends TestCase
     /**
      * The areas asked for rather than arrived at by a word that failed.
      *
-     * Somebody filling in the Category field of a new report wants the list and
-     * has no subject to narrow by, and the only route to it was a word wrong
-     * enough to name none — `D-KNW-113`. It reads no issue, because the
-     * enumeration is the answer and not a filter on one.
+     * Somebody at the Category field of a new report wants the list and has no
+     * subject to narrow by. The only route to it was a word wrong enough to
+     * name none — `D-KNW-113`. It reads no issue, because the enumeration is
+     * the answer and not a filter on one.
      */
     #[Decision('D-KNW-113')]
     #[Test]
@@ -1573,7 +1569,7 @@ final class ForgeTest extends TestCase
 
     /**
      * A project that did not answer is an outage and not a project with no
-     * areas, which is what an empty list read as the vocabulary would say.
+     * areas. That is what an empty list read as the vocabulary would say.
      */
     #[Decision('D-KNW-113')]
     #[Test]
@@ -1589,9 +1585,10 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A word naming no area is an answer about the word. Sent on unfiltered it
-     * would come back as the whole backlog, which reads as "everything is about
-     * the RTE" and is the one mistake this path can make — `D-ANS-054`.
+     * A word naming no area is an answer about the word. Sent on without a
+     * filter it would come back as the whole backlog. That reads as "everything
+     * is about the RTE" and is the one mistake this path can make —
+     * `D-ANS-054`.
      */
     #[Decision('D-ANS-054')]
     #[Test]
@@ -1609,7 +1606,7 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The areas are read from the project rather than written down here, so a
+     * The areas come from the project rather than from a list here. So a
      * category the core adds is one this can filter by without a release —
      * `D-ANS-054`.
      */
@@ -1648,9 +1645,9 @@ final class ForgeTest extends TestCase
     ];
 
     /**
-     * The tracker takes a numeric user id and answers no public user list, so
-     * the name a caller holds is resolved here or the question cannot be asked
-     * at all — `D-ANS-089`.
+     * The tracker takes a numeric user id and answers no public user list. So
+     * the name a caller holds resolves here or the question cannot go out at
+     * all — `D-ANS-089`.
      */
     #[Decision('D-ANS-089')]
     #[Test]
@@ -1674,9 +1671,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * Half a name is not a person. Merging two people into one backlog is a
-     * wrong answer nothing about it says is wrong, so neither is chosen and
-     * both are named — which is what a caller asks again with — `D-ANS-089`.
+     * Half a name is not a person. Two people merged into one backlog is a
+     * wrong answer nothing about it says is wrong. So the answer picks neither
+     * and names both, which is what a caller asks again with — `D-ANS-089`.
      */
     #[Decision('D-ANS-089')]
     #[Test]
@@ -1693,9 +1690,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A quarter of the reporters hold no membership — 24 of the 100 most
-     * recently filed issues on 2026-08-19 — so the members alone would answer
-     * "no such person" about people who have filed dozens — `D-ANS-089`.
+     * A quarter of the reporters hold no membership, 24 of the 100 newest
+     * issues on 2026-08-19. So the members alone would answer "no such person"
+     * about people who have filed dozens — `D-ANS-089`.
      */
     #[Decision('D-ANS-089')]
     #[Test]
@@ -1740,9 +1737,9 @@ final class ForgeTest extends TestCase
     ];
 
     /**
-     * A name nothing here carries is an answer about the name. Sent on
-     * unfiltered it would be the backlog of everybody, which is the mistake the
-     * word naming no area is guarded against making — `D-ANS-089`.
+     * A name nothing here carries is an answer about the name. Sent on without
+     * a filter it would be the backlog of everybody. That is the mistake the
+     * guard on a word that names no area exists for — `D-ANS-089`.
      */
     #[Decision('D-ANS-089')]
     #[Test]
@@ -1789,8 +1786,8 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The dimension the filter selects on is answered on the row as well, so a
-     * page says who is reporting it without a call per row — `D-ANS-089`.
+     * The dimension the filter selects on stands on the row as well. So a page
+     * says who reports it without a call per row — `D-ANS-089`.
      */
     #[Decision('D-ANS-089')]
     #[Test]
@@ -1829,9 +1826,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The members are read once and held: a membership is added when somebody
-     * joins, and a session filtering by person asks for the same names on every
-     * call it makes.
+     * The members come in once and stay. A membership arrives when somebody
+     * joins, and a session that filters by person asks for the same names on
+     * every call it makes.
      */
     #[Test]
     public function theMembersAreReadOncePerProcess(): void
@@ -1850,9 +1847,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * The tracker ANDs its filters, so the question somebody actually says —
-     * everything of this person's — is two reads and a merge here or two calls
-     * and a merge in the caller (`feedback/2026-08-19-134706`) — `D-ANS-090`.
+     * The tracker ANDs its filters. So the question somebody says, everything
+     * of this person's, is two reads and a merge here. Or two calls and a merge
+     * in the caller (`feedback/2026-08-19-134706`) — `D-ANS-090`.
      */
     #[Decision('D-ANS-090')]
     #[Test]
@@ -1885,9 +1882,9 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A merge keeps the end it was asked for. Both reads come back newest
-     * first, and a merge that ordered them the other way would answer the two
-     * oldest rows of a page the caller asked the newest of — `D-ANS-116`.
+     * A merge keeps the end the caller asked for. Both reads come back newest
+     * first. A merge in the other order would answer the two oldest rows of a
+     * page the caller asked the newest of — `D-ANS-116`.
      */
     #[Decision('D-ANS-116')]
     #[Test]
@@ -1931,8 +1928,8 @@ final class ForgeTest extends TestCase
 
     /**
      * A person's history has no other words to narrow it by, so a page of 50
-     * out of 621 leaves the rest reachable by nothing — what answers it is how
-     * the set is distributed (`feedback/2026-08-19-134651`) — `D-ANS-090`.
+     * out of 621 leaves the rest reachable by nothing. What answers it is the
+     * distribution of the set (`feedback/2026-08-19-134651`) — `D-ANS-090`.
      */
     #[Decision('D-ANS-090')]
     #[Test]
@@ -1963,8 +1960,8 @@ final class ForgeTest extends TestCase
             [
                 ['dimension' => 'status', 'buckets' => [['name' => 'Closed', 'count' => 2], ['name' => 'New', 'count' => 1]], 'withheldBuckets' => 0, 'withheldCount' => 0],
                 ['dimension' => 'tracker', 'buckets' => [['name' => 'Bug', 'count' => 2], ['name' => 'Task', 'count' => 1]], 'withheldBuckets' => 0, 'withheldCount' => 0],
-                // An issue filed under no area is a bucket rather than a row
-                // left out, so the areas add up to what was read.
+                // An issue under no area is a bucket rather than a row left
+                // out, so the areas add up to what the read took.
                 ['dimension' => 'category', 'buckets' => [['name' => 'Backend API', 'count' => 1], ['name' => 'Fluid', 'count' => 1], ['name' => 'none', 'count' => 1]], 'withheldBuckets' => 0, 'withheldCount' => 0],
                 ['dimension' => 'year', 'buckets' => [['name' => '2015', 'count' => 2], ['name' => '2024', 'count' => 1]], 'withheldBuckets' => 0, 'withheldCount' => 0],
             ],
@@ -1972,7 +1969,7 @@ final class ForgeTest extends TestCase
         );
     }
 
-    /** What a counted read answers: the fields the four dimensions are read off. */
+    /** What a counted read answers: the fields the four dimensions come off. */
     private const COUNTED = [
         'issues' => [
             [
@@ -2000,9 +1997,8 @@ final class ForgeTest extends TestCase
     ];
 
     /**
-     * A hundred rows is what one request answers, and a set larger than that is
-     * read page by page rather than counted off the first of them —
-     * `D-ANS-090`.
+     * A hundred rows is what one request answers. A set larger than that comes
+     * page by page rather than as a count off the first of them — `D-ANS-090`.
      */
     #[Decision('D-ANS-090')]
     #[Test]
@@ -2027,9 +2023,8 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * A read that stops is a shape of one end of the set, and a caller reading
-     * proportions off it would be reading them off the oldest thousand —
-     * `D-ANS-090`.
+     * A read that stops is a shape of one end of the set. A caller who reads
+     * proportions off it would read them off the oldest thousand — `D-ANS-090`.
      */
     #[Decision('D-ANS-090')]
     #[Test]
@@ -2089,7 +2084,7 @@ final class ForgeTest extends TestCase
 
     /**
      * The areas are 54 names, and on a call that passed no category they are 54
-     * names nobody asked for — three times over in one session
+     * names nobody asked for. Three times over in one session
      * (`feedback/2026-08-19-134717`) — `D-ANS-090`.
      */
     #[Decision('D-ANS-090')]
@@ -2101,8 +2096,8 @@ final class ForgeTest extends TestCase
 
         self::assertSame([], $forge->backlog('oldest', limit: 2)['categories']);
         self::assertSame([], $forge->backlog('oldest', category: 'rte', limit: 2)['categories'], 'a word that resolved to one area');
-        // The two it does the work on: a word naming none, and a word naming
-        // several, where what to ask instead is what the list answers.
+        // The two it does the work on: a word that names none, and a word that
+        // names several. What to ask instead is what the list answers.
         self::assertContains('Frontend', $forge->backlog('oldest', category: 'quantumflux', limit: 2)['categories']);
         self::assertContains('Frontend', $forge->backlog('oldest', category: 'backend', limit: 2)['categories']);
     }
@@ -2111,7 +2106,7 @@ final class ForgeTest extends TestCase
      * A row says where the code its own report names stands, which is the one
      * thing an untouched status cannot say — `D-ANS-122`.
      *
-     * The index answer carries the description and no journal, so this is read
+     * The index answer carries the description and no journal, so this comes
      * from the subject and the report and says nothing about the comments.
      */
     #[Decision('D-ANS-122')]
@@ -2134,7 +2129,7 @@ final class ForgeTest extends TestCase
 
         $cites = $forge->backlog('stale', limit: 1)['results'][0]['cites'];
 
-        // The subject is read with the description, and its bare name is the
+        // The read takes the subject with the description. Its bare name is the
         // only handle five of the 25 stale Bugs of `D-ANS-122` give at all.
         self::assertSame(
             ['TYPO3\CMS\Core\Utility\GeneralUtility', 'TYPO3\CMS\Core\Database\DatabaseConnection', 'ObjectAccess'],
@@ -2144,8 +2139,8 @@ final class ForgeTest extends TestCase
     }
 
     /**
-     * And an issue read whole is read for its comments too, where a
-     * reproduction regularly names the class the description never did.
+     * And a whole read of an issue takes its comments too, where a reproduction
+     * regularly names the class the description never did.
      */
     #[Decision('D-ANS-122')]
     #[Test]
@@ -2166,7 +2161,7 @@ final class ForgeTest extends TestCase
         $cites = $forge->issue('78607')['issue']['cites'];
 
         // The description names nothing and the subject's capitalised word is
-        // not code, so what is left is what the comment named.
+        // not code, so what remains is what the comment named.
         self::assertSame(['TYPO3\CMS\Core\Utility\GeneralUtility'], array_column($cites, 'name'));
         self::assertSame('typo3/sysext/core/Classes/Utility/GeneralUtility.php', $cites[0]['in'][0]['path']);
     }

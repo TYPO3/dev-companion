@@ -10,22 +10,23 @@
 
 **What the agent needs from this server**
 
-- What is covered, at which depth, and by which tool.
+- What the server covers, at which depth, and with which tool.
 - What is deliberately not covered, and what to use instead.
-- Which installation, if any, is being read, and whether its console is
+- Which installation, if any, the server reads, and whether its console is
   reachable.
 
 **What has to come out of it**
 
-- The answer separates three things that are usually mixed: what comes from the
-  bundled knowledge, what is asked of this installation, and what the agent has
-  to establish in the checkout itself.
-- The installation being read is named, along with how it was found.
-- The boundaries are stated as boundaries, not as "I can probably help with that
-  too".
+- The answer separates three things that usually mix. What comes from the
+  bundled knowledge, what the server asks this installation, and what the agent
+  has to establish in the checkout itself.
+- The answer names the installation the server reads, along with how it found
+  it.
+- The answer states the boundaries as boundaries, not as "I can probably help
+  with that too".
 
 **How it fails**
 
 - A capability list that describes TYPO3 rather than this server.
-- Silence about which installation is being read, so the user cannot tell
+- Silence about which installation the server reads, so the user cannot tell
   whether later answers were about their project at all.

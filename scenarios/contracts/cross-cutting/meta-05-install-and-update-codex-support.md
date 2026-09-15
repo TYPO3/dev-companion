@@ -21,15 +21,16 @@ settings · **Contract:** `held` — `R-DIS-012`
 
 **What has to come out of it**
 
-- Unrelated Codex configuration survives byte-for-byte in meaning, an existing
-  matching server entry is reused, and a different entry is declined.
+- Unrelated Codex configuration survives byte-for-byte in meaning. The installer
+  reuses a server entry that matches, and declines a different one.
 - Repeating install or update produces no duplicate entry and no unnecessary
   file change.
-- User-modified generated files are reported rather than silently replaced.
+- The installer reports a generated file the user modified rather than replaces
+  it silently.
 
 **How it fails**
 
-- The whole Codex configuration is regenerated from a template.
+- The installer regenerates the whole Codex configuration from a template.
 - Update overwrites a file whose current content is no longer the version this
   package generated.
-- The MCP entry is installed but the task skill is left stale.
+- The MCP entry lands but the task skill stays stale.

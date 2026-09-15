@@ -25,8 +25,8 @@
 
 - The core path gets the core conventions, the core checks and the submission
   route; the extension path gets the conventions that transfer and nothing else.
-- Where the audience genuinely cannot be decided, the answer says it is
-  uncertain rather than picking one silently (`R-AUD-002`).
+- Where nobody can decide the audience, the answer says it is uncertain rather
+  than picks one silently (`R-AUD-002`).
 
 **How it fails**
 
@@ -35,6 +35,6 @@
   (`R-SCO-001`).
 
 All three tools take a `paths` array and answer per path. `typo3_task_guide`
-composes one brief from them rather than two: the hints are matched per group
-and named per path, and the checklist, the checks and the discovery steps stay
-one list that says which paths the core's own steps are not for (`D-SCO-009`).
+composes one brief from them rather than two. It matches the hints per group and
+names them per path. The checklist, the checks and the discovery steps stay one
+list that says which paths the core's own steps are not for (`D-SCO-009`).

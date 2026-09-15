@@ -24,8 +24,8 @@
 **What has to come out of it**
 
 - The checklist it works off is a core checklist. It says which parts the agent
-  has to establish in the checkout itself rather than pretend to know them: the
-  changed files, the test that covers, the branch.
+  has to establish in the checkout itself rather than pretend to know them.
+  Those are the changed files, the test that covers, the branch.
 - The recommended test command targets the DataHandler tests, not four full
   suites.
 - The commit message is a valid TYPO3 core message and the checks reported on it

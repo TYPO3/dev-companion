@@ -14,21 +14,22 @@ under `packages/`, beside the one that environment already carries ·
 **What the agent needs from this server**
 
 - The file layout of an extension and what each required file is for.
-- TCA conventions for a new table, and how the schema is declared.
+- TCA conventions for a new table, and how to declare the schema.
 - Services and dependency injection, so the plugin is not built with
   `GeneralUtility::makeInstance` everywhere.
-- Where labels go, what the file is called, and what domain it resolves to.
-- How an icon for the record type is registered, and which identifier to use.
+- Where labels go, what name the file has, and what domain it resolves to.
+- How to register an icon for the record type, and which identifier to use.
 - Fluid conventions for the plugin template, and the namespaces available
   without declaring them.
 
 **What has to come out of it**
 
-- The answer is right for an extension, not for a system extension: paths under
+- The answer is right for an extension, not for a system extension. Paths under
   the package, no core-only steps, no checkout discovery instructions for a
   checkout that is not there.
-- The label domain for a file that does not exist yet is computed, not guessed.
-- The registered icon identifier is verified against the installation.
+- The label domain for a file that does not exist yet comes from a computation,
+  not a guess.
+- The answer verifies the registered icon identifier against the installation.
 
 **How it fails**
 

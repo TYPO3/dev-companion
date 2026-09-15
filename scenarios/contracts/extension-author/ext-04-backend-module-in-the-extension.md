@@ -14,14 +14,14 @@ of its own · **Contract:** `open`
 
 **What the agent needs from this server**
 
-- How a backend module is registered and what the registration file contains.
+- How to register a backend module and what the registration file contains.
 - Which modules are already registered in this installation, so the new one gets
   a place in the tree rather than a collision.
 - The backend UI components for the list, the buttons and the state markers,
   with their real markup.
 - Registered icons for the module and its actions.
-- Existing labels for the recurring wordings — save, delete, refresh — before
-  new ones are invented, and which language a new one is written in.
+- The labels that exist for the wordings that recur, save, delete, refresh,
+  before the agent invents new ones, and which language a new one takes.
 - The official module API documentation for the installation's version, far
   enough to write the controller from.
 
@@ -33,13 +33,13 @@ of its own · **Contract:** `open`
   agent verifies against the installation's TYPO3 version where they differ.
 - The backend look comes from core classes, not from custom CSS reimplementing
   them.
-- New labels follow the package's source-language convention, and a package that
-  already breaks it is reported rather than continued.
-- A value the module needs is configured at the reach it has — per site where it
-  differs per site, on the task where a task acts on it — rather than
-  instance-wide by default.
+- New labels follow the package's source-language convention, and the answer
+  reports a package that already breaks it rather than continues it.
+- A value the module needs sits at the reach it has. Per site where it differs
+  per site, on the task where a task acts on it. It does not sit instance-wide
+  by default.
 - The official manual for the installation's version answers what it describes,
-  and the installed core sources are read where it does not.
+  and the agent reads the installed core sources where it does not.
 
 **How it fails**
 
@@ -47,7 +47,7 @@ of its own · **Contract:** `open`
   module's styles.
 - Component markup from a newer core silently used on an older installation.
 - Documentation about the extension written into the project around it instead
-  of into the package the functionality is encapsulated in.
+  of into the package that holds the functionality.
 - The API re-derived from the installed core sources although the manual
-  describes it, or a runtime-only mistake made and then corrected from a test
+  describes it. Or a runtime-only mistake made and then corrected from a test
   rather than avoided from the lookups.

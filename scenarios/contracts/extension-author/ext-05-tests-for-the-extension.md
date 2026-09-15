@@ -14,23 +14,23 @@
 **What the agent needs from this server**
 
 - Testing conventions that transfer: what belongs in a unit test, what needs a
-  functional one, how fixtures are kept deterministic, and where tests sit.
+  functional one, how to keep fixtures deterministic, and where tests sit.
 - A workflow that inspects and proves the existing harness before changing it,
   then establishes or repairs only the layers the extension actually needs.
 - The extension-test configuration, bootstrap and database requirements that
-  exist outside the core repository, plus versioned documentation where the
+  exist outside the core repository. Plus versioned documentation where the
   installed framework or CI matrix has to decide.
 
 **What has to come out of it**
 
-- Existing tests, configuration, dependency constraints and commands are
-  preserved and extended instead of replaced by a parallel harness.
-- Unit and functional commands run locally before CI calls those same commands;
-  dependency versions and matrix combinations are resolved from the package
-  rather than copied from another extension.
-- Every established layer is proved by a meaningful test or an honestly empty
-  discovered suite. No core `runTests.sh` command and no vacuous green test is
-  offered.
+- The tests, configuration, dependency constraints and commands that exist
+  survive and grow instead of a parallel harness that replaces them.
+- Unit and functional commands run locally before CI calls those same commands.
+  Dependency versions and matrix combinations come from the package rather than
+  from a copy of another extension.
+- A meaningful test or an honestly empty discovered suite proves every
+  established layer. The answer offers no core `runTests.sh` command and no
+  vacuous green test.
 - Functional database prerequisites are separate from assertion failures, and
   credentials are not committed.
 
@@ -38,7 +38,7 @@
 
 - A core suite or copied configuration that cannot run in the extension.
 - CI YAML written before its local command has passed.
-- Existing working tests or scripts replaced because the task was treated as a
+- Tests or scripts that work replaced because the agent treated the task as a
   blank project.
 - `assertTrue(true)` presented as proof that the harness exercises the
   extension.

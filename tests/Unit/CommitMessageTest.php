@@ -67,7 +67,7 @@ final class CommitMessageTest extends TestCase
 
     /**
      * The body of `feedback/2026-08-02-144315`: four command lines at column 0,
-     * returned as one running paragraph with nothing saying so.
+     * returned as one continuous paragraph with nothing to say so.
      */
     #[Requirement('R-GUI-007')]
     #[Test]
@@ -112,7 +112,7 @@ final class CommitMessageTest extends TestCase
 
     /**
      * Each block is its own run, so the caller reads which lines went where
-     * rather than one report covering the whole body.
+     * rather than one report over the whole body.
      */
     #[Decision('D-GUI-003')]
     #[Requirement('R-GUI-007')]
@@ -135,9 +135,9 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * `Build/git-hooks/commit-msg`, `checkForLineLength()`, is
-     * `grep -q -E '^[^#].{72}'`: under the core workflow a line the guide left
-     * over the width is a commit the hook refuses — D-GUI-003.
+     * `Build/git-hooks/commit-msg`, `checkForLineLength()`, is `grep -q -E
+     * '^[^#].{72}'`. Under the core workflow a line the guide left over the
+     * width is a commit the hook refuses — D-GUI-003.
      */
     #[Requirement('R-GUI-007')]
     #[Test]
@@ -229,9 +229,9 @@ final class CommitMessageTest extends TestCase
      * what the change touched.
      *
      * `D-GUI-026`. A list is how a body enumerates classes, paths or rule
-     * names, and the core writes one that way in about a tenth of its bodies —
-     * so the shape reported is the item long enough to be a sentence, and the
-     * list of names beside a paragraph passes.
+     * names. The core writes one that way in about a tenth of its bodies. So
+     * the reported shape is the item long enough to be a sentence, and the list
+     * of names beside a paragraph passes.
      */
     #[Decision('D-GUI-026')]
     #[Test]
@@ -357,7 +357,7 @@ final class CommitMessageTest extends TestCase
      * The case of `feedback/2026-08-03-144432`: a whole core message checked
      * with no `isBreaking`, whose subject carries no `[!!!]` — R-GUI-011. The
      * subject cannot say which of "not breaking" and "nobody looked" it means,
-     * so `parse()` hands the field back unanswered.
+     * so `parse()` hands the field back without an answer.
      */
     #[Requirement('R-GUI-011')]
     #[Test]
@@ -414,15 +414,15 @@ final class CommitMessageTest extends TestCase
         self::assertStringContainsString('whose signature it narrows or widens', $message);
         self::assertStringContainsString('A widened visibility is not one of them', $message);
         // What each move owes is the corpus's to say, so the check enumerates
-        // the members and hands the obligations on — R-GUI-011 asks for the
-        // classification to be named and for no paragraph beside it.
+        // the members and hands the obligations on. R-GUI-011 asks for the
+        // classification by name and for no paragraph beside it.
         self::assertStringNotContainsString('extension scanner matcher', $message);
         self::assertStringContainsString('typo3_rule_lookup(query "breaking change")', $message);
         // And the branch that decides the type rather than the classification.
-        // Two sessions were stopped by this one paragraph: one read a widened
-        // visibility as unsubmittable, and the next widened a signature on an
-        // `@internal` class, settled it from the docblock with `sed`, and filed
-        // no entry at all where an Important is owed — `D-KNW-123`.
+        // This one paragraph stopped two sessions. One read a wider visibility
+        // as unsubmittable. The next widened a signature on an `@internal`
+        // class and settled it from the docblock with `sed`. It filed no entry
+        // at all where the core wants an Important — `D-KNW-123`.
         self::assertStringContainsString('a member marked @internal owes an Important entry', $message);
         self::assertStringContainsString('an entry is still owed', $message);
     }
@@ -453,8 +453,8 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * And nothing is invented for a project that named none: no trailer, and no
-     * check asking for one — `D-GUI-017`.
+     * And nothing invents one for a project that named none: no trailer, and no
+     * check that asks for one — `D-GUI-017`.
      */
     #[Requirement('R-AUD-003')]
     #[Decision('D-GUI-017')]
@@ -491,9 +491,9 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * An issue a project caller passed is carried as `Resolves:` the way the
-     * core's own is, because the trailer belongs to the issue rather than to
-     * the workflow — `D-GUI-017`.
+     * An issue a project caller passed goes in as `Resolves:` the way the
+     * core's own does. The trailer belongs to the issue rather than to the
+     * workflow — `D-GUI-017`.
      */
     #[Requirement('R-AUD-003')]
     #[Decision('D-GUI-017')]
@@ -594,10 +594,10 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * A subject the review server is full of — 36 of 200 open changes on
-     * 2026-08-03 — and the one this tool used to answer with `[KEYWORD]
-     * [BUGFIX] …`, having read `[WIP]` as the keyword and rewritten a correct
-     * subject into one that does not exist.
+     * A subject the review server is full of, 36 of 200 open changes on
+     * 2026-08-03. This tool used to answer it with `[KEYWORD] [BUGFIX] …`. It
+     * read `[WIP]` as the keyword and rewrote a correct subject into one that
+     * does not exist.
      */
     #[Test]
     public function aDraftPrefixIsNotAKeywordAndIsKept(): void
@@ -613,13 +613,13 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * The Forge issue is what merging requires, and a draft is not offered for
+     * The Forge issue is what a merge requires, and nobody offers a draft for
      * merge.
      *
-     * A session was handed missing-issue as an error on a change whose author
-     * had told it to keep the placeholder while the change is work in progress,
-     * and reported the finding as false against the repository in front of it.
-     * The sign-off stays an error whatever the state — `R-KNW-075`.
+     * A session got missing-issue as an error on a change under work in
+     * progress. Its author had told it to keep the placeholder. It reported the
+     * finding as false against the repository in front of it. The sign-off
+     * stays an error whatever the state — `R-KNW-075`.
      */
     #[Test]
     public function aDraftIsNotHeldToTheTrailerMergingRequires(): void
@@ -650,9 +650,9 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * What a reviewer takes out by hand, and what a session was corrected on
-     * five times without any of it being written down — `D-KNW-155` measured
-     * the convention over the core's own bodies.
+     * What a reviewer takes out by hand, and what a session got five
+     * corrections on with none of it on record. `D-KNW-155` measured the
+     * convention over the core's own bodies.
      */
     #[Decision('D-KNW-155')]
     #[Test]
@@ -696,7 +696,10 @@ final class CommitMessageTest extends TestCase
         self::assertSame('FEATURE', $parsed['input']['keyword']);
     }
 
-    /** The order is the subject's, and the breaking marker is read either way round. */
+    /**
+     * The order is the subject's, and the parser reads the breaking marker
+     * either way round.
+     */
     #[Test]
     #[DataProvider('theTwoOrdersADraftAndABreakingMarkerCanBeWrittenIn')]
     public function aDraftPrefixStandsBesideTheBreakingMarker(string $subject): void
@@ -748,9 +751,9 @@ final class CommitMessageTest extends TestCase
     /**
      * The two an agent writes about itself, and the workflow that keeps them.
      *
-     * A refused trailer comes off the draft rather than being reported beside
-     * it, because the draft is committed as it stands. The sign-off stood among
-     * them until the certificate became required — `D-KNW-125`.
+     * A refused trailer comes off the draft rather than into a report beside
+     * it, because the draft goes into the commit as it stands. The sign-off
+     * stood among them until the certificate became required — `D-KNW-125`.
      */
     #[Decision('D-KNW-125')]
     #[Test]
@@ -780,10 +783,10 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * The certificate is an attestation about provenance, so the draft names the
-     * obligation and leaves the identity to whoever commits — `D-KNW-125`. It is
-     * the shape `Resolves:` already has: a placeholder in the draft, an error
-     * beside it, and the placeholder read back as the unanswered field it was.
+     * The certificate is an attestation about provenance, so the draft names
+     * the obligation and leaves the identity to whoever commits — `D-KNW-125`.
+     * It is the shape `Resolves:` already has. A placeholder in the draft, an
+     * error beside it, and the placeholder read back as the open field it was.
      */
     #[Decision('D-KNW-125')]
     #[Test]
@@ -803,9 +806,9 @@ final class CommitMessageTest extends TestCase
         self::assertStringContainsString('git commit -s', $check['message'], 'nothing says how the line is written');
         self::assertStringContainsString('GPL v2', $check['message'], 'nothing says what signing it claims');
 
-        // Read back, the placeholder is an unsigned message rather than a signed
-        // one — otherwise the one moment somebody checks the message they are
-        // about to commit is the moment it reports clean.
+        // Read back, the placeholder is an unsigned message rather than a
+        // signed one. Otherwise the one moment somebody checks the message they
+        // are about to commit is the moment it reports clean.
         $parsed = CommitMessage::parse($result['message'], CommitMessage::WORKFLOW_CORE);
         self::assertSame([], $parsed['input']['extraTrailers']);
         $rechecked = CommitMessage::create($parsed['input'] + ['workflow' => CommitMessage::WORKFLOW_CORE]);
@@ -849,8 +852,8 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * The budget on its own left a session writing four candidate subjects and
-     * measuring them in a shell — `D-GUI-021`.
+     * The budget on its own left a session to write four candidate subjects and
+     * measure them in a shell — `D-GUI-021`.
      */
     #[Decision('D-GUI-021')]
     #[Test]
@@ -877,7 +880,7 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * The trailer the feedback was filed about came back clean, and a long dead
+     * The trailer the feedback was about came back clean, and a long dead
      * branch would have come back the same way — `D-ANS-058`.
      */
     #[Decision('D-ANS-058')]
@@ -903,9 +906,8 @@ final class CommitMessageTest extends TestCase
 
     /**
      * A branch the list has never heard of is a warning, because the list ages
-     * in one direction: a line that ends does so on a date it already carries,
-     * and a line that opens is a branch created after it was read —
-     * `D-ANS-058`.
+     * in one direction. A line that ends does so on a date it already carries.
+     * A line that opens is a branch created after the read — `D-ANS-058`.
      */
     #[Decision('D-ANS-073')]
     #[Decision('D-ANS-058')]
@@ -930,15 +932,15 @@ final class CommitMessageTest extends TestCase
 
     /**
      * `D-ANS-073`. A maintained line further back than the ordinary reach is
-     * neither an error nor nothing: a bug fix and a task go to the development
-     * line and the one back from it, and an older one is earned by the severity
-     * of the defect rather than by the defect being present there.
+     * neither an error nor nothing. A bug fix and a task go to the development
+     * line and the one back from it. The severity of the defect earns an older
+     * one, rather than the presence of the defect there.
      *
-     * The change type and the lines it does go to are asserted because that is
-     * the half a session acts on. Warning that 13.4 claims a severity says what
-     * to drop; "a BUGFIX is released on main, 14.3" says what to write instead,
-     * and a trim keeping the severity sentence alone leaves a caller told their
-     * trailer is wrong and not what the right one is.
+     * The case asserts the change type and the lines it does go to, because
+     * that is the half a session acts on. A warning that 13.4 claims a severity
+     * says what to drop; "a BUGFIX goes to main, 14.3" says what to write
+     * instead. A trim that keeps the severity sentence alone tells a caller
+     * their trailer is wrong and not what the right one is.
      */
     #[Decision('D-ANS-073')]
     #[Test]
@@ -964,7 +966,7 @@ final class CommitMessageTest extends TestCase
         self::assertStringContainsString('BUGFIX', $checks[0]['message']);
         self::assertStringContainsString(implode(', ', ReleaseLines::ordinary()), $checks[0]['message']);
 
-        // A feature is the release managers' call and never this warning.
+        // A feature is the release managers' call and never this warning's.
         $feature = CommitMessage::create([
             'keyword' => 'FEATURE',
             'summary' => 'Keep the line breaks',
@@ -999,9 +1001,8 @@ final class CommitMessageTest extends TestCase
     }
 
     /**
-     * The trailer belongs to the core repository alone, so a project that writes
-     * one is naming its own releases and there is nothing here to hold it
-     * against.
+     * The trailer belongs to the core repository alone. A project that writes
+     * one names its own releases, and there is nothing here to hold it against.
      */
     #[Test]
     public function outsideTheCoreNoBranchIsHeldAgainstTheLines(): void

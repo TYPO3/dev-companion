@@ -30,8 +30,8 @@ final class PackageSourcesTest extends TestCase
 
     /**
      * Nothing here reaches docs.typo3.org. The changelog lookup reads the
-     * versions above the installed major from the manual, and a unit test that
-     * let it would be measuring the host — `R-COD-003`.
+     * versions above the installed major from the manual. A unit test that let
+     * it would measure the host — `R-COD-003`.
      */
     #[Before]
     public function sealTheManual(): void
@@ -111,8 +111,8 @@ final class PackageSourcesTest extends TestCase
 
     /**
      * What an upgrade audit decides on, from the entry that states it —
-     * `D-ANS-020`. The wordings are the corpus's own and the clause wraps in
-     * the file, so the whole text is matched rather than a line.
+     * `D-ANS-020`. The words are the corpus's own and the clause wraps in the
+     * file, so the match reads the whole text rather than a line.
      */
     #[Decision('D-ANS-020')]
     #[Test]
@@ -147,11 +147,11 @@ final class PackageSourcesTest extends TestCase
     }
 
     /**
-     * An entry that states no removal is the ordinary case — 31 of the 75
-     * deprecations of 14 — and an empty field beside a populated one is read as
-     * "no removal planned", which is what `D-ANS-009` was built against. So the
-     * rule that covers the silence travels with the answer, as data and not
-     * only as text: `R-ANS-002` — `D-ANS-020`.
+     * An entry that states no removal is the ordinary case, 31 of the 75
+     * deprecations of 14. An empty field beside a filled one reads as "no
+     * removal planned", which is what `D-ANS-009` stands against. So the rule
+     * that covers the silence travels with the answer, as data and not only as
+     * text: `R-ANS-002` — `D-ANS-020`.
      */
     #[Decision('D-ANS-020')]
     #[Test]
@@ -167,19 +167,19 @@ final class PackageSourcesTest extends TestCase
         self::assertStringContainsString('keeps working until the next major release', $deprecation->data['removalRule']);
         self::assertStringContainsString('not a promise that no removal is planned', $deprecation->text);
 
-        // An answer carrying no deprecation has nothing for the rule to answer.
+        // An answer with no deprecation has nothing for the rule to answer.
         self::assertArrayNotHasKey('removalRule', Registry::call('typo3_changelog_lookup', ['type' => 'feature'])->data);
     }
 
     /**
-     * A removal clause in the prose is not this entry's removal by being there.
-     * Three shapes are in `.checkouts/14.3`: a Feature announcing what replaces
-     * a deprecated mechanism and stating that mechanism's removal, a 13.3
-     * deprecation whose subject "will be removed with v5", which is Fluid
-     * standalone, and an entry recounting what an earlier release already
-     * removed before naming its own. What tells them apart is the type of the
-     * entry, and that a removal is later than the version it was released in —
-     * `D-ANS-020`.
+     * A removal clause in the prose is not this entry's removal by its
+     * presence. Three shapes are in `.checkouts/14.3`. A Feature that announces
+     * what replaces a deprecated mechanism and states that mechanism's removal.
+     * A 13.3 deprecation whose subject "will be removed with v5", which is
+     * Fluid standalone. And an entry that recounts what an earlier release
+     * already removed before it names its own. What tells them apart is the
+     * type of the entry, and that a removal is later than the version of its
+     * release — `D-ANS-020`.
      */
     #[Decision('D-ANS-020')]
     #[Test]
@@ -220,8 +220,8 @@ final class PackageSourcesTest extends TestCase
 
     /**
      * The shape two sessions reported from two checkouts, and the one a caller
-     * actually types: the thing has a name with separators in it, and the
-     * changelog file spells that name apart. Every one of these has an entry in
+     * types. The thing has a name with separators in it, and the changelog file
+     * writes that name apart. Every one of these has an entry in
      * `.checkouts/14.3` and reached none of them — `D-ANS-006`.
      */
     #[Decision('D-ANS-006')]
@@ -242,15 +242,15 @@ final class PackageSourcesTest extends TestCase
         self::assertSame(['98453'], $reaches('SC_OPTIONS'));
         self::assertSame(['107784'], $reaches('backend_layout'));
         // The words themselves still reach it, and every term still has to be
-        // carried: nothing that matched before matches less.
+        // there: nothing that matched before matches less.
         self::assertSame(['109438'], $reaches('ext tables extensions'));
         self::assertSame([], $reaches('ext_tables.php scheduler'));
     }
 
     /**
-     * The sweep the deprecation feedback of 2026-07-31 asked for: a version's
+     * The sweep the deprecation feedback of 2026-07-31 asked for. A version's
      * deprecations are 75 entries and the words a reviewer guesses reach a
-     * handful, so what bounds it is the tag rather than the query. The tags are
+     * handful. So what bounds it is the tag rather than the query. The tags are
      * inside the files, so the filter reads what the version and type narrowed
      * to — 23 ms for one major's deprecations, measured.
      */
@@ -269,10 +269,9 @@ final class PackageSourcesTest extends TestCase
         self::assertSame(1, Registry::call('typo3_changelog_lookup', ['tag' => 'ext:FORM'])->data['matchCount']);
 
         // A tag nothing carries is a miss that says which ones exist, because
-        // the tag was never going to be guessed from the outside — and an
-        // extension key of the caller's own is exactly that case: the corpus
-        // names the system extension a change is in, never the package it
-        // affects.
+        // nobody guesses the tag from the outside. An extension key of the
+        // caller's own is exactly that case. The corpus names the system
+        // extension a change is in, never the package it affects.
         $miss = Registry::call('typo3_changelog_lookup', ['tag' => 'bootstrap_package']);
         self::assertSame(0, $miss->data['matchCount']);
         self::assertSame(['NotScanned', 'PHP-API', 'TCA', 'ext:core', 'ext:form', 'FullyScanned'], array_values(array_intersect(
@@ -283,11 +282,11 @@ final class PackageSourcesTest extends TestCase
     }
 
     /**
-     * What the second and third call of a sweep are read off rather than
-     * guessed, which `feedback/2026-08-03-164818` asks be kept. The tag list is
-     * held on a miss, where it is what to ask again with; on a hit it is in no
-     * assertion and not among the keys `outputSchema()` requires, so dropping
-     * it would break nothing and leave a caller bounding a sweep with the tags
+     * What the second and third call of a sweep read off rather than guess,
+     * which `feedback/2026-08-03-164818` asks to keep. The tag list has a hold
+     * on a miss, where it is what to ask again with. On a hit it is in no
+     * assertion and not among the keys `outputSchema()` requires. So a drop of
+     * it would break nothing and leave a caller to bound a sweep with the tags
      * it happened to see.
      */
     #[Test]
@@ -301,9 +300,9 @@ final class PackageSourcesTest extends TestCase
         $hit = Registry::call('typo3_changelog_lookup', ['type' => 'deprecation', 'tag' => 'ext:core']);
 
         self::assertSame(['1'], array_column($hit->data['entries'], 'issue'));
-        // Every tag the version and the type narrowed to, the one filtered by
-        // among them — not the tags of the entries that came back, which is
-        // the list a caller already has.
+        // Every tag the version and the type narrowed to, the filter's own
+        // among them. Not the tags of the entries that came back, which is the
+        // list a caller already has.
         self::assertSame(
             ['FullyScanned', 'NotScanned', 'PHP-API', 'TCA', 'ext:core', 'ext:form'],
             $hit->data['tags'],
@@ -312,9 +311,9 @@ final class PackageSourcesTest extends TestCase
 
     /**
      * The miss the feedback of 2026-07-31 arrived through: five words, each of
-     * them reaching entries on its own, and nothing carrying all five. What
-     * ends it is a query the caller can ask rather than five numbers, because
-     * two words had to go before anything matched — `D-ANS-016`.
+     * them reaches entries on its own, and nothing carries all five. What ends
+     * it is a query the caller can ask rather than five numbers, because two
+     * words had to go before anything matched — `D-ANS-016`.
      */
     #[Requirement('R-ANS-006')]
     #[Decision('D-ANS-016')]
@@ -331,20 +330,21 @@ final class PackageSourcesTest extends TestCase
         self::assertSame(0, $result->data['matchCount']);
         self::assertStringContainsString('No entry carries more than 3 of the 5 words', $result->text);
         self::assertStringContainsString('"form yaml registration" reaches 1 entry', $result->text);
-        // On the subset, which can be asked for, rather than on the per-word
-        // counts, which cannot: the smallest reach is the word to keep.
+        // On the subset, which a caller can ask for, rather than on the
+        // per-word counts, which a caller cannot. The smallest reach is the
+        // word to keep.
         self::assertSame(1, substr_count($result->text, 'ask again with the one that narrows best'));
     }
 
     /**
      * The same miss read by a client that renders `structuredContent` and drops
-     * the text block, which is what `R-ANS-002` is written against. The session
-     * `D-ANS-043` was decided on quoted `matchCount: 0` and the five fields
-     * beside it, reported that nothing came back to re-ask with, and went to
-     * `grep` — while the subset that returns the entry its review turned on was
-     * in the text of that same answer. So the counts and the subsets travel as
-     * data too, and which of the two count fields carries a number is what says
-     * whether it was taken inside the narrowing or outside it.
+     * the text block, which is what `R-ANS-002` stands against. The session
+     * behind `D-ANS-043` quoted `matchCount: 0` and the five fields beside it,
+     * reported that nothing came back to re-ask with, and went to `grep`. The
+     * subset that returns the entry its review turned on was in the text of
+     * that same answer. So the counts and the subsets travel as data too. Which
+     * of the two count fields carries a number is what says whether the count
+     * ran inside the filter or outside it.
      */
     #[Requirement('R-ANS-002')]
     #[Decision('D-ANS-043')]
@@ -360,7 +360,7 @@ final class PackageSourcesTest extends TestCase
         $query = ['query' => 'form set yaml registration deprecated'];
         $data = Registry::call('typo3_changelog_lookup', $query)->data;
 
-        // Every word, the ones reaching nothing included: a zero is what the
+        // Every word, the ones that reach nothing included: a zero is what the
         // text leaves out of its sentence and is the word to drop.
         self::assertSame([
             ['term' => 'form', 'matchCount' => 2],
@@ -372,9 +372,9 @@ final class PackageSourcesTest extends TestCase
         self::assertSame([['terms' => ['form', 'yaml', 'registration'], 'matchCount' => 1]], $data['termSubsets']);
         self::assertArrayNotHasKey('termCountsWithoutTheNarrowing', $data, 'nothing was narrowed away');
 
-        // Withheld beside a tag for the reason the text withholds it: the
-        // subsets are counted off the entry names and a tag is inside the file,
-        // so one offered here would promise entries this call does not return.
+        // Withheld beside a tag for the reason the text withholds it. The
+        // subsets count off the entry names and a tag is inside the file. So
+        // one on offer here would promise entries this call does not return.
         // The counts are not a promise and stay — `D-ANS-016`.
         $tagged = Registry::call('typo3_changelog_lookup', $query + ['tag' => 'ext:core'])->data;
         self::assertArrayNotHasKey('termSubsets', $tagged);
@@ -395,11 +395,11 @@ final class PackageSourcesTest extends TestCase
     /**
      * What the miss owes once the query it offered comes back empty too: the
      * corpus. A changelog records change events, so a mechanism nobody changed
-     * has no entry here — `D-ANS-010` — and `R-ANS-018` is that an answer
-     * saying something is absent names the tool that has it. After the offer
-     * and not in place of it: the reported miss did carry the entry, one subset
-     * away, and a sentence naming the manual first would have routed that
-     * session away from it — `D-ANS-043`.
+     * has no entry here — `D-ANS-010`. `R-ANS-018` is that an answer that says
+     * something is absent names the tool that has it. After the offer and not
+     * in place of it. The reported miss did carry the entry, one subset away. A
+     * sentence that named the manual first would have routed that session away
+     * from it — `D-ANS-043`.
      */
     #[Requirement('R-ANS-018')]
     #[Decision('D-ANS-043')]
@@ -421,8 +421,8 @@ final class PackageSourcesTest extends TestCase
             strpos($text, 'No entry carries more than'),
         );
 
-        // Nowhere else, because "that" is the offered query: a miss carrying
-        // none has nothing for the sentence to follow.
+        // Nowhere else, because "that" is the offered query: a miss with none
+        // has nothing for the sentence to follow.
         self::assertStringNotContainsString(
             'typo3_documentation_lookup',
             Registry::call('typo3_changelog_lookup', $query + ['tag' => 'ext:core'])->text,
@@ -431,11 +431,11 @@ final class PackageSourcesTest extends TestCase
 
     /**
      * The branch the session of 2026-08-24 landed in, which named no tool at
-     * all: `Subsets` skips a carried set the size of the query, so a miss of
-     * two words offers none whatever the changelog holds, and `R-ANS-018` was
-     * held over the offering branch alone. Both corpora, because nothing in a
-     * miss says which of the two shapes the question had and a caller with no
-     * re-query left cannot recover from the wrong one — `D-ANS-110`.
+     * all. `Subsets` skips a carried set the size of the query, so a miss of
+     * two words offers none whatever the changelog holds. `R-ANS-018` had its
+     * hold over the offer branch alone. Both corpora, because nothing in a miss
+     * says which of the two shapes the question had. A caller with no re-query
+     * left cannot recover from the wrong one — `D-ANS-110`.
      */
     #[Requirement('R-ANS-018')]
     #[Decision('D-ANS-110')]
@@ -485,7 +485,7 @@ final class PackageSourcesTest extends TestCase
     #[Test]
     public function aTagIsNotPromisedEntriesTheSameCallWouldNotReturn(): void
     {
-        // The peel reads file names and a tag is inside the file, so a subset
+        // The peel reads file names and a tag is inside the file. So a subset
         // counted without the tag would name entries this call does not return.
         $root = $this->composerProject();
         $this->changelogEntry($root, '14.0', 'Deprecation-1-FormYamlRegistration', 'Deprecation: #1 - Form YAML registration', ['ext:form']);
@@ -505,13 +505,13 @@ final class PackageSourcesTest extends TestCase
 
     /**
      * The miss the feedback of 2026-08-01 arrived through, and the sentence
-     * that cost it its call: `version: "15"` narrows the changelog to 28
-     * entries, "preview" is the one word of four that reaches anything inside
-     * them, and the reach line said so without saying where it was counted. The
-     * session read it as "the tool cannot reach that entry" and went to `grep`,
-     * where all four words reach without the version. So the filter is what the
-     * miss opens with, and the counts that stay are marked as taken inside it —
-     * `D-ANS-016`.
+     * that cost it its call. `version: "15"` narrows the changelog to 28
+     * entries, and "preview" is the one word of four that reaches anything
+     * inside them. The reach line said so and did not say where the count ran.
+     * The session read it as "the tool cannot reach that entry" and went to
+     * `grep`, where all four words reach without the version. So the filter is
+     * what the miss opens with, and the counts that stay carry the mark that
+     * they ran inside it — `D-ANS-016`.
      */
     #[Requirement('R-ANS-006')]
     #[Decision('D-ANS-016')]
@@ -534,8 +534,8 @@ final class PackageSourcesTest extends TestCase
             . 'Ask again without it.',
             $narrowed->text,
         );
-        // The count that stays says where it was taken, and the call to action
-        // is dropping the version rather than asking again inside it.
+        // The count that stays says where it ran, and the call to action is to
+        // drop the version rather than ask again inside it.
         self::assertStringContainsString('Inside version "15", on its own, "preview" reaches 1 entry.', $narrowed->text);
         self::assertStringNotContainsString('ask again with the one that narrows best', $narrowed->text);
         self::assertLessThan(
@@ -543,7 +543,7 @@ final class PackageSourcesTest extends TestCase
             strpos($narrowed->text, 'Narrowed to version "15"'),
         );
 
-        // The same query without the filter has no filter to name: nothing
+        // The same query without the filter has no filter to name. Nothing
         // carries all four words there either, and the words are the whole of
         // the reason.
         $unnarrowed = Registry::call('typo3_changelog_lookup', $query);
@@ -552,10 +552,10 @@ final class PackageSourcesTest extends TestCase
     }
 
     /**
-     * A version that narrows nothing away is not what emptied the answer, and
-     * the miss that says it is sends the caller to drop a filter that costs it
-     * nothing. What the sentence turns on is a word reaching outside the
-     * narrowing and nothing inside it, not that a narrowing was asked for —
+     * A version that narrows nothing away is not what emptied the answer. A
+     * miss that says it is sends the caller to drop a filter that costs it
+     * nothing. What the sentence turns on is a word that reaches outside the
+     * filter and nothing inside it. Not that the caller asked for a filter —
      * `D-ANS-016`.
      */
     #[Decision('D-ANS-016')]

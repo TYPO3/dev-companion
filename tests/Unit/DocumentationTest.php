@@ -88,13 +88,13 @@ final class DocumentationTest extends TestCase
 
     /**
      * The TCA reference states the machine-readable half of every property as a
-     * definition list, and only the terms were emitted.
+     * definition list, and the reader emitted only the terms.
      *
      * `feedback/2026-08-07-132457` read the `type=datetime` page for the
      * default of `nullable` per `dbType`, and got `**Type**`, `**Default**`,
-     * `**Path**` and `**Scope**` each named and each empty — which reads as the
-     * property having no documented default rather than as this reader having
-     * dropped it. The value it needed was one of those cells, and it read
+     * `**Path**` and `**Scope**` each named and each empty. That reads as a
+     * property with no documented default rather than as a value this reader
+     * dropped. The value it needed was one of those cells, and it read
      * `DateTimeFieldType` in the checkout instead.
      */
     #[Test]
@@ -125,7 +125,7 @@ final class DocumentationTest extends TestCase
         self::assertStringContainsString('**Type**: bool', $content);
         self::assertStringContainsString('**Default**: false', $content);
         self::assertStringContainsString('**Scope**: Proc.', $content);
-        // The property itself keeps its own line: its definition is the list
+        // The property itself keeps its own line. Its definition is the list
         // and the prose below it, which is not a value to join to a term.
         self::assertStringContainsString("**nullable**\n", $content);
         self::assertStringContainsString('saved as NULL', $content);
@@ -148,8 +148,8 @@ final class DocumentationTest extends TestCase
     #[Test]
     public function aTcaQuestionIsAnsweredFromTheTcaReference(): void
     {
-        // TYPO3 Explained documents everything around TCA and not TCA itself,
-        // so this used to come back as the events that carry "inline" and
+        // TYPO3 Explained documents everything around TCA and not TCA itself.
+        // So this used to come back as the events that carry "inline" and
         // "localization" in their class names.
         $answer = (new Documentation($this->manuals()))->lookup(
             ['TCA inline foreign_field foreign_sortby localization children'],
@@ -162,11 +162,11 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * A page titled after its subject and a page whose title is a long event
-     * class name carry the word equally well, and the class name carries five
-     * other words besides. While no title in the corpus was long enough to be
-     * diluted the two were worth the same, and the tie went to whichever manual
-     * was indexed first (`D-ANS-029`) — `D-ANS-032`.
+     * A page named after its subject and a page whose title is a long event
+     * class name carry the word equally well. The class name carries five other
+     * words besides. While no title in the corpus was long enough to weigh
+     * less, the two were worth the same. The tie went to whichever manual came
+     * first in the index (`D-ANS-029`) — `D-ANS-032`.
      */
     #[Decision('D-ANS-032')]
     #[Test]
@@ -179,13 +179,13 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * The manuals of the core are published under `/m/` and this one is not, so
-     * a search that built every base the same way reached three books, none of
-     * which documents a ViewHelper, and the question was answered from
-     * whichever of them carried the word (`D-ANS-023`). A base that is wrong is
-     * silent — the index does not answer and the book is simply absent — so
-     * what is held is that its pages are reached and reached at their own base
-     * — `D-ANS-026`.
+     * The host publishes the manuals of the core under `/m/` and this one
+     * elsewhere. So a search that built every base the same way reached three
+     * books, none of which documents a ViewHelper. Whichever of them carried
+     * the word answered the question (`D-ANS-023`). A base that is wrong is
+     * silent: the index does not answer and the book is absent. So this holds
+     * that the search reaches its pages, and reaches them at their own base —
+     * `D-ANS-026`.
      */
     #[Requirement('R-DOC-003')]
     #[Decision('D-ANS-026')]
@@ -213,10 +213,10 @@ final class DocumentationTest extends TestCase
     /**
      * And the page of the ViewHelper that gave its name to the question.
      *
-     * That book titles a page after the tag, so `Global/If.html` is called "if"
-     * and the only word of `f:if` that can reach it is two characters long.
-     * Every one of those was dropped before it was searched for, which is what
-     * left the query answered by `Global/Else.html` — the right family and the
+     * That book names a page after the tag. So `Global/If.html` has the title
+     * "if", and the only word of `f:if` that can reach it is two characters
+     * long. The floor dropped every one of those before the search, which is
+     * what left `Global/Else.html` as the answer. The right family and the
      * wrong page (`D-ANS-023`) — `D-ANS-028`.
      */
     #[Decision('D-ANS-028')]
@@ -233,10 +233,10 @@ final class DocumentationTest extends TestCase
 
     /**
      * And the book it belongs to, which is what neither the tokenizer nor the
-     * dilution reference reaches. Three pages of the corpus are titled `if`, so
-     * all three are undiluted, all three matched the title, and no field weight
-     * separates identical titles (`D-ANS-032`). The query says which book in
-     * the `f:` it is written in (`D-ANS-036`).
+     * dilution reference reaches. Three pages of the corpus have the title
+     * `if`. So all three weigh full, all three matched the title, and no field
+     * weight separates identical titles (`D-ANS-032`). The query says which
+     * book in the `f:` it carries (`D-ANS-036`).
      */
     #[Requirement('R-DOC-003')]
     #[Decision('D-ANS-036')]
@@ -258,7 +258,7 @@ final class DocumentationTest extends TestCase
     /**
      * A tag named after a word the stopword list holds reaches its page too.
      * `f:then` is one term or none, and the list is what it is because "then"
-     * says nothing in a sentence — which is not what it does behind a namespace
+     * says nothing in a sentence. That is not what it does behind a namespace
      * prefix (`D-ANS-047`).
      */
     #[Requirement('R-DOC-003')]
@@ -277,9 +277,9 @@ final class DocumentationTest extends TestCase
 
     /**
      * A book that did not answer routes nothing. The route is in front of the
-     * scoring, so a root that is down would otherwise leave such a query with
-     * no candidates and report "no match" for a reason the caller cannot see —
-     * `D-ANS-036`.
+     * score. So a root that is down would otherwise leave such a query with no
+     * candidates. It would report "no match" for a reason the caller cannot see
+     * — `D-ANS-036`.
      */
     #[Decision('D-ANS-036')]
     #[Test]
@@ -320,9 +320,9 @@ final class DocumentationTest extends TestCase
      * The property name a caller holds, which no table of contents carries.
      *
      * A session needed one sentence about `columnsOverrides` and spent three
-     * calls on it: the manual documenting that property is a handful of large
-     * pages, and the property is a section of one of them. The writer registers
-     * every such section, and this is what reads them — `D-ANS-144`.
+     * calls on it. The manual that documents that property is a handful of
+     * large pages, and the property is a section of one of them. The writer
+     * registers every such section, and this is what reads them — `D-ANS-144`.
      */
     #[Decision('D-ANS-144')]
     #[Test]
@@ -345,7 +345,7 @@ final class DocumentationTest extends TestCase
         );
 
         // A property named like an English word is a word of the sentence
-        // wherever it stands in one, and is offered for nothing but itself.
+        // wherever it stands in one, and answers for nothing but itself.
         $prose = $documentation->lookup(['the label of a record type in the backend'], '14.3', 3);
         self::assertNotContains('label', array_column($prose['results'], 'title'));
 
@@ -357,9 +357,9 @@ final class DocumentationTest extends TestCase
     #[Test]
     public function anApiIdentifierReachesThePageThatIsNotNamedAfterIt(): void
     {
-        // Nothing in a table of contents is called AssetCollector or
-        // FunctionalTestCase; the pages that answer them are titled after their
-        // subject, which is assets and functional testing — `D-ANS-065`.
+        // Nothing in a table of contents has the name AssetCollector or
+        // FunctionalTestCase. The pages that answer them carry the name of
+        // their subject, which is assets and functional tests — `D-ANS-065`.
         $documentation = new Documentation($this->manuals());
 
         self::assertContains(
@@ -374,7 +374,7 @@ final class DocumentationTest extends TestCase
 
     /**
      * The three queries of `D-ANS-021` came back `answered` with six results
-     * each, and nothing in them showed that the word naming the subject had
+     * each. Nothing in them showed that the word that names the subject had
      * reached none of the pages returned.
      */
     #[Decision('D-ANS-021')]
@@ -408,7 +408,7 @@ final class DocumentationTest extends TestCase
         self::assertSame(['fluid' => 'title', 'templa' => 'title'], $matched['Multi-language Fluid templates']);
     }
 
-    /** A page was not searched for, so it was matched on nothing. */
+    /** Nothing searched for a page, so nothing matched it. */
     #[Requirement('R-DOC-002')]
     #[Test]
     public function aPageReadBackCarriesNoMatch(): void
@@ -422,8 +422,8 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * And it covers no query either, which is null rather than zero: nothing
-     * was asked, so there is no share to report (`D-ANS-051`).
+     * And it covers no query either, which is null rather than zero. The caller
+     * asked nothing, so there is no share to report (`D-ANS-051`).
      */
     #[Decision('D-ANS-051')]
     #[Test]
@@ -439,7 +439,7 @@ final class DocumentationTest extends TestCase
 
     /**
      * How much of the question a result carries, on the result. The page whose
-     * title is the query covers all of it; the ones that carry one word of a
+     * title is the query covers all of it. The ones that carry one word of a
      * five-word question say so in a number rather than in a rank
      * (`D-ANS-051`).
      */
@@ -455,9 +455,9 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * The coverage reported is the one of the question the page is kept for,
-     * like the match beside it — not of whichever query was passed last. Both
-     * pages here are returned for the query that names them — `D-ANS-051`.
+     * The reported coverage is the one of the question the page stays for, like
+     * the match beside it. Not of whichever query came last. Both pages here
+     * come back for the query that names them — `D-ANS-051`.
      */
     #[Decision('D-ANS-046')]
     #[Decision('D-ANS-051')]
@@ -472,11 +472,12 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * A thin answer is labelled and not emptied. The floor the rule search
-     * drops a section below has no value here that both empties the six
-     * collisions `feedback/2026-08-03-164734` reported and returns the page
-     * that answers a three-word question, so this page keeps answering while
-     * the number says how little of the question it carries (`D-ANS-051`).
+     * A thin answer gets a label and not an empty list. The floor the rule
+     * search drops a section below has no value here that does both. One that
+     * empties the six collisions `feedback/2026-08-03-164734` reported and
+     * returns the page that answers a three-word question. So this page still
+     * answers while the number says how little of the question it carries
+     * (`D-ANS-051`).
      */
     #[Decision('D-ANS-051')]
     #[Test]
@@ -494,8 +495,8 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * And the caller is told in the text, because a share in a payload is not a
-     * warning: the answer this feedback reported as the expensive kind of wrong
+     * And the text tells the caller, because a share in a payload is not a
+     * warning. The answer this feedback reported as the expensive kind of wrong
      * one was six results in the shape a good answer has — `D-ANS-051`.
      */
     #[Decision('D-ANS-046')]
@@ -552,8 +553,8 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * The tables of contents as they are published, cut down to the pages this
-     * is about: the ones that answer, and the ones that used to be answered
+     * The tables of contents as the host publishes them, cut down to the pages
+     * this is about. The ones that answer, and the ones that used to answer
      * instead because they carry one of the words.
      */
     /**
@@ -586,7 +587,7 @@ final class DocumentationTest extends TestCase
             ],
             'typo3/reference-typoscript' => [
                 'ContentObjects/Case/Index.html' => 'CASE',
-                // The two pages `f:if` used to be answered with. That book
+                // The two pages `f:if` used to get as its answer. That book
                 // titles a function page after the function, so the corpus
                 // holds three pages titled `if` and only the book tells them
                 // apart.
@@ -632,9 +633,9 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * A Sphinx inventory carrying those pages, in the form docs.typo3.org
-     * publishes one: four comment lines and the objects behind them, compressed
-     * with zlib.
+     * A Sphinx inventory with those pages, in the form docs.typo3.org publishes
+     * one: four comment lines and the objects behind them, compressed with
+     * zlib.
      *
      * @param array<string, string> $pages      the path of each page, and its title
      * @param array<string, string> $properties  the anchored uri of each declared property, and its name
@@ -659,8 +660,8 @@ final class DocumentationTest extends TestCase
     /**
      * The index is the inventory, and the title it carries is the one the
      * manual states rather than the one its navigation abbreviated to. Read
-     * from the rendered root, this page was "Assets" and no question naming CSS
-     * or JavaScript reached it (`D-ANS-065`).
+     * from the rendered root, this page was "Assets" and no question that named
+     * CSS or JavaScript reached it (`D-ANS-065`).
      */
     #[Decision('D-ANS-065')]
     #[Test]
@@ -673,9 +674,9 @@ final class DocumentationTest extends TestCase
 
     /**
      * What the inventory lists and the manual has no page for. Sphinx renders
-     * the "content was removed" template as a document of its own, so it is in
+     * the template for removed content as a document of its own. So it is in
      * every inventory and in no navigation tree, and its two words are ordinary
-     * enough to be searched for — `D-ANS-065`.
+     * enough for a search — `D-ANS-065`.
      */
     #[Decision('D-ANS-065')]
     #[Test]
@@ -695,11 +696,10 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * A page where the inventory was asked for is a host that did not answer,
-     * not an index. That is what bot protection and a captive portal put a 200
-     * in front of (`D-ANS-034`), and the whole corpus would otherwise be one
-     * unparsed body away from an empty search that reads like a real one —
-     * `D-ANS-065`.
+     * A page where the inventory should be is a host that did not answer, not
+     * an index. That is what bot protection and a captive portal put a 200 in
+     * front of (`D-ANS-034`). The whole corpus would otherwise be one unparsed
+     * body away from an empty search that reads like a real one — `D-ANS-065`.
      */
     #[Decision('D-ANS-065')]
     #[Test]
@@ -739,19 +739,19 @@ final class DocumentationTest extends TestCase
         self::assertNotNull($answer['unavailable']);
         self::assertNotSame('', $answer['unavailable']['reason']);
         // Which of the two unavailable cases it is, because the remedies are
-        // opposite: this one is answered by asking again (D-ANS-007).
+        // opposite: a second call answers this one (D-ANS-007).
         self::assertSame('source-not-answering', $answer['unavailable']['cause']);
     }
 
     /**
      * What the shared call table rests on. Two of its entries ask
-     * docs.typo3.org for real so the recording has a filled answer to show, and
-     * `ToolContractTest` drives the same entries — so a host that is down has
-     * to come back as an answer rather than as a red build (`D-DOC-008`).
+     * docs.typo3.org for real so the record has a filled answer to show, and
+     * `ToolContractTest` drives the same entries. So a host that is down has to
+     * come back as an answer rather than as a red build (`D-DOC-008`).
      *
-     * The data half is what is held here, on both modes. The text half is the
-     * one branch every unavailable answer shares, and the entry that asks for
-     * TYPO3 999 already drives it without reaching anything.
+     * This holds the data half, on both modes. The text half is the one branch
+     * every unavailable answer shares, and the entry that asks for TYPO3 999
+     * already drives it and reaches nothing.
      */
     #[Decision('D-DOC-008')]
     #[Test]
@@ -782,13 +782,13 @@ final class DocumentationTest extends TestCase
 
     /**
      * The index is page titles and section paths, and a reporter writes the
-     * identifier the stack trace gave them. A session settled Forge #81619 by
-     * reducing `stdWrap_override` to the property `override` itself, and said
-     * that the step was its own — the feedback of 2026-08-05.
+     * identifier the stack trace gave them. A session settled Forge #81619 with
+     * a cut of `stdWrap_override` down to the property `override` itself. It
+     * said that the step was its own — the feedback of 2026-08-05.
      *
-     * Every name offered is a substring of what was typed. Splitting humps as
-     * well would answer `getByTag` with "tag", which is a suggestion nothing
-     * supports made in the voice of a reading.
+     * Every name on offer is a substring of what the caller typed. A split on
+     * humps as well would answer `getByTag` with "tag", which is a suggestion
+     * nothing supports in the voice of a read.
      */
     #[Test]
     public function aMissOnAnIdentifierNamesTheBareNamesInsideIt(): void
@@ -831,9 +831,9 @@ final class DocumentationTest extends TestCase
     }
 
     /**
-     * The other one, and the reason the field exists: a release outside the
-     * covered versions is permanent, and nothing is fetched to find that out —
-     * `D-ANS-007`.
+     * The other one, and the reason the field exists. A release outside the
+     * covered versions is permanent, and the answer needs no fetch to find that
+     * out — `D-ANS-007`.
      */
     #[Decision('D-ANS-007')]
     #[Test]

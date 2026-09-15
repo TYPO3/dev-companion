@@ -14,19 +14,19 @@ use TYPO3\DevCompanion\Upkeep\Environments;
 use TYPO3\DevCompanion\Upkeep\SiteExtension;
 
 /**
- * What `bin/cli environment:create` would do, held without doing it.
+ * What `bin/cli environment:create` would do, held without a run of it.
  *
- * No case here starts a container, and that is the same rule `D-DIS-007` was
- * written under: what fails in a build of this kind is the command that gets
- * run, and the command is readable without a docker daemon. A suite that
- * needed one would be a suite that does not run in CI, which is a suite that
- * holds nothing.
+ * No case here starts a container, and that is the same rule `D-DIS-007` stands
+ * under. What fails in a build of this kind is the command that runs, and a
+ * reader reads the command without a docker daemon. A suite that needed one
+ * would be a suite that does not run in CI, which is a suite that holds
+ * nothing.
  */
 final class EnvironmentsTest extends TestCase
 {
     /**
      * `scenarios/readme.md` defines the environments and this list says where
-     * each one comes from, so an environment added there and forgotten here is
+     * each one comes from. So an environment added there and forgotten here is
      * an id `environment:create` answers `null` for — `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
@@ -43,8 +43,8 @@ final class EnvironmentsTest extends TestCase
 
     /**
      * An environment this repository does not make is one somebody has to get
-     * hold of, and a refusal that does not say where from leaves them exactly
-     * where the machine-bound reference left them — `D-EVI-004`.
+     * hold of. A refusal that does not say where from leaves them exactly where
+     * the machine-bound reference left them — `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
     #[Test]
@@ -62,10 +62,10 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
-     * The installation is built at the version this server answers for. A
-     * repository that starts covering a new stable major and keeps making
-     * environments of the old one measures itself against the wrong TYPO3, and
-     * nothing about the environment would say so — `D-EVI-006`, `D-EVI-004`.
+     * The build is at the version this server answers for. A repository that
+     * starts to cover a new stable major and keeps its environments on the old
+     * one measures itself against the wrong TYPO3. Nothing about the
+     * environment would say so — `D-EVI-006`, `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
     #[Decision('D-EVI-006')]
@@ -86,13 +86,13 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
-     * One installation runs one version, so what a client on another covered
-     * line would be answered is shown by an installation of that line or by
-     * nothing. `SITE-02` names `E-SITE` on the previous major, which is the
-     * case a single installation cannot be run.
+     * One installation runs one version. So what a client on another covered
+     * line would get shows in an installation of that line or in nothing.
+     * `SITE-02` names `E-SITE` on the previous major, which is the case a
+     * single installation cannot run.
      *
-     * Every covered line, the development one included: it was the line whose
-     * answers about the next major nothing here could show, and a version
+     * Every covered line, the development one included. It was the line whose
+     * answers about the next major nothing here could show. A version
      * `versions.json` covers while `create` declines is the same gap under a
      * different name — `D-EVI-006`.
      */
@@ -115,7 +115,7 @@ final class EnvironmentsTest extends TestCase
     /**
      * A version argument is a thing somebody types wrong, and what the mistake
      * needs back is which versions there are. Nothing covered declines any
-     * more, so a refusal naming a covered line is this drifting apart from
+     * more, so a refusal that names a covered line is this adrift from
      * `knowledge/versions.json` — `D-EVI-006`.
      */
     #[Decision('D-EVI-006')]
@@ -139,18 +139,17 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
-     * The development line is a different build rather than a different
-     * version argument, and every part of that difference is here: the
-     * distribution has no release above the newest stable so it comes from
-     * `dev-main`, whose twenty-four `dev-main` requires need a minimum
-     * stability the default refuses, and the core there declares PHP `^8.5`
-     * where the released lines are pinned to 8.4.
+     * The development line is a different build rather than a different version
+     * argument, and every part of that difference is here. The distribution has
+     * no release above the newest stable, so it comes from `dev-main`. Its
+     * twenty-four `dev-main` requires need a minimum stability the default
+     * refuses. The core there declares PHP `^8.5` where the released lines pin
+     * 8.4.
      *
      * Asserted against the built command rather than against the constants,
-     * because a step that dropped one of the three comes out looking finished:
-     * the stability flag missing is a resolver error, but the PHP pin missing
-     * is an installation that builds and then answers as the wrong PHP —
-     * `D-EVI-006`.
+     * because a step that dropped one of the three looks finished. The
+     * stability flag absent is a resolver error. The PHP pin absent is an
+     * installation that builds and then answers as the wrong PHP — `D-EVI-006`.
      */
     #[Decision('D-EVI-006')]
     #[Test]
@@ -179,7 +178,7 @@ final class EnvironmentsTest extends TestCase
         }
 
         // Every released line keeps the pin and the caret, which is the half
-        // this could break without failing anywhere else.
+        // this could break with no failure anywhere else.
         foreach (Environments::branches() as $released) {
             if ($released === $branch) {
                 continue;
@@ -194,10 +193,10 @@ final class EnvironmentsTest extends TestCase
 
     /**
      * A build nobody asks a database of is on sqlite, and starts no database
-     * container. The two halves are one fact and have to move together: an
+     * container. The two halves are one fact and have to move together. An
      * installation left on a database driver with `--omit-containers=db` in
-     * front of it builds its containers, installs a hundred packages and dies
-     * at the setup step against a service that was never started.
+     * front of it builds its containers and installs a hundred packages. Then
+     * it dies at the setup step against a service nothing started.
      */
     #[Test]
     public function everyLineIsSetUpOnAFile(): void
@@ -220,22 +219,17 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
-     * Every database an installation can be made on, and the values the two
-     * tools take for it.
+     * Every database an installation can stand on, and the values the two tools
+     * take for it.
      *
-     * The tools disagree on every name, which is what this holds: `ddev config
-     * --database` takes a `type:version` and refuses a bare type, while
+     * The tools disagree on every name, which is what this holds. `ddev config
+     * --database` takes a `type:version` and refuses a bare type.
      * `vendor/bin/typo3 setup --driver` takes a connection type out of
-     * `SetupCommand::$connectionLabels` — `mysqli` for both MySQL lines,
-     * `postgres` for PostgreSQL — and not the DBAL driver it resolves to. A
-     * table that passed one where the other belongs configures cleanly and
+     * `SetupCommand::$connectionLabels` and not the DBAL driver it resolves to.
+     * A table that passed one where the other belongs configures cleanly and
      * fails minutes later, at the step that has already installed a hundred
-     * packages.
-     *
-     * The connection values are DDEV's own, measured on 2026-08-04 against
-     * v1.25.1 by building a project on each and reading it back: host `db`,
-     * database `db`, user `db`, password `db`, and only the port moves —
-     * `D-EVI-006`.
+     * packages. The connection values are DDEV's own, measured on 2026-08-04
+     * against v1.25.1 — `D-EVI-006`.
      *
      * @param array<int, string> $expected
      */
@@ -296,13 +290,12 @@ final class EnvironmentsTest extends TestCase
 
     /**
      * Every driver this offers is one both tools have, and a name neither of
-     * them takes is refused rather than configured.
+     * them takes gets a refusal rather than a configuration.
      *
-     * The version half is what this is written against. `ddev config` accepts
+     * The version half is what this stands against. `ddev config` accepts
      * `--database=mariadb:99.9` and writes it, and `ddev start` is where it
-     * fails — measured on 2026-08-04 against v1.25.1 — so a version that is
-     * wrong here costs the whole configure step before it says so —
-     * `D-EVI-006`.
+     * fails, measured on 2026-08-04 against v1.25.1. So a version that is wrong
+     * here costs the whole configure step before it says so — `D-EVI-006`.
      */
     #[Decision('D-EVI-006')]
     #[Test]
@@ -331,9 +324,9 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
-     * Each installation is registered under a name of its own, and lives in a
-     * directory of its own. One name for all of them is one installation for
-     * all of them, which is the state `D-EVI-006` was written against.
+     * Each installation has a name of its own, and lives in a directory of its
+     * own. One name for all of them is one installation for all of them, which
+     * is the state `D-EVI-006` stands against.
      */
     #[Decision('D-EVI-006')]
     #[Test]
@@ -358,14 +351,14 @@ final class EnvironmentsTest extends TestCase
 
     /**
      * An installation on a second database is a second installation, so it is
-     * its own DDEV project and its own directory — and the default one keeps
-     * the name it has.
+     * its own DDEV project and its own directory. The default one keeps the
+     * name it has.
      *
      * Both halves matter. Without the first, the MariaDB 13.4 and the sqlite
-     * 13.4 are one project, which is the state `D-EVI-006` was written against
-     * one version earlier. Without the second, every environment on this
-     * machine and every path `todo/reference/` names is renamed to say what
-     * asking for nothing already means.
+     * 13.4 are one project, which is the state `D-EVI-006` stands against one
+     * version earlier. Without the second, every environment on this machine
+     * and every path `todo/reference/` names gets a new name. It would say what
+     * a request for nothing already means.
      */
     #[Decision('D-EVI-006')]
     #[Test]
@@ -396,8 +389,8 @@ final class EnvironmentsTest extends TestCase
 
     /**
      * A build is minutes and a hundred packages and the containers are seconds.
-     * An environment that is kept between runs is only kept if asking for it
-     * again starts what is there — including out of the pause DDEV puts an idle
+     * An environment that stays between runs only stays if a second request
+     * starts what is there. That includes out of the pause DDEV puts an idle
      * project into by itself — `D-EVI-006`.
      */
     /** @param array<int, string>|null $expected */
@@ -425,9 +418,8 @@ final class EnvironmentsTest extends TestCase
     /**
      * `scenarios/readme.md` says an `E-SITE` is an installation whose console
      * has `language:domain:search`, and the base distribution does not require
-     * the extension that carries it. A build that dropped this step would come
-     * out looking finished and answer nothing the label lookup asks —
-     * `D-EVI-004`.
+     * the extension that carries it. A build that dropped this step would look
+     * finished and answer nothing the label lookup asks — `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
     #[Test]
@@ -442,12 +434,12 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
-     * The project's own extension is required out of `packages/`, its table is
-     * created and then filled, in that order.
+     * The build requires the project's own extension out of `packages/`,
+     * creates its table and then fills it, in that order.
      *
-     * A base distribution owns no package, so an installation made here
-     * answered nothing about what this project registers and the one call
-     * `typo3_record_lookup` exists for could be recorded nowhere —
+     * A base distribution owns no package. So an installation made here
+     * answered nothing about what this project registers. The one call
+     * `typo3_record_lookup` exists for had nowhere to go on record —
      * `D-EVI-010`.
      */
     #[Decision('D-EVI-010')]
@@ -470,12 +462,12 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
-     * The setup step ran non-interactively and died on a `TypeError` until
-     * `--server-type` was passed: 14.3.5 reads that option's default through
-     * the same fallback as its environment variable, hands the validator
-     * `false` where neither is set, and only asks the question where a person
-     * is there to answer it. Nothing about the option's own definition says so
-     * — `D-EVI-004`.
+     * The setup step ran without a terminal and died on a `TypeError` until
+     * `--server-type` came with it. 14.3.5 reads that option's default through
+     * the same fallback as its environment variable, and hands the validator
+     * `false` where neither has a value. It only asks the question where a
+     * person is there to answer it. Nothing about the option's own definition
+     * says so — `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
     #[Test]
@@ -505,15 +497,14 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
-     * The site the installation is created for is the one DDEV routes to it. A
-     * base URL naming another project is a frontend that answers nothing, and
-     * every case that opens a page in it fails for a reason none of them is
-     * about.
+     * The site the installation exists for is the one DDEV routes to it. A base
+     * URL that names another project is a frontend that answers nothing. Every
+     * case that opens a page in it fails for a reason none of them is about.
      *
-     * Every driver, because the name is where the second database was dropped:
-     * a build that asked DDEV for the default project name in a directory of
-     * its own was refused by `ddev config` for a project root it does not own,
-     * minutes before the installation it was after — `D-EVI-004`.
+     * Every driver, because the name is where the second database fell out. A
+     * build that asked DDEV for the default project name in a directory of its
+     * own got a refusal. `ddev config` refused a project root it does not own.
+     * That was minutes before the installation it was after — `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
     #[Test]
@@ -540,8 +531,8 @@ final class EnvironmentsTest extends TestCase
     /**
      * Every step is `ddev`, which is what keeps the build inside the containers
      * it declares. A `composer` or a `php` among them would run on whatever the
-     * machine happens to have, and the version the environment is of would stop
-     * being the one it was asked for — `D-EVI-004`.
+     * machine happens to have. The version of the environment would no longer
+     * be the one the caller asked for — `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
     #[Test]
@@ -555,11 +546,11 @@ final class EnvironmentsTest extends TestCase
 
     /**
      * The project name is global to the machine and the directory is per
-     * checkout, so a worktree that made an environment and was then removed
-     * leaves the name held for an approot that is gone. Measured on 2026-08-02:
+     * checkout. So a worktree that made an environment and then went away
+     * leaves the name on an approot that is gone. Measured on 2026-08-02.
      * `typo3-mcp-e-site` registered at a `.worktrees/` path DDEV itself
-     * reported as `project directory missing`, and `environment:create`
-     * refusing in the name of a checkout nobody could visit — `D-EVI-005`.
+     * reported as `project directory missing`. `environment:create` refused in
+     * the name of a checkout nobody could visit — `D-EVI-005`.
      */
     #[Decision('D-EVI-005')]
     #[Test]
@@ -581,12 +572,13 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
-     * `ddev stop --unlist` frees the name and is the wrong command. Stop is
-     * documented as non-destructive, and the database is a volume named after
-     * the project rather than after the directory — so the next build under the
-     * same name attaches to it and the setup step meets the tables the last
-     * installation left. `--force` does not reach that: it forces the settings
-     * file alone. `delete` takes the volume with the name — `D-EVI-005`.
+     * `ddev stop --unlist` frees the name and is the wrong command. The
+     * documentation says stop is non-destructive, and the database is a volume
+     * named after the project rather than after the directory. So the next
+     * build under the same name attaches to it, and the setup step meets the
+     * tables the last installation left. `--force` does not reach that: it
+     * forces the settings file alone. `delete` takes the volume with the name —
+     * `D-EVI-005`.
      */
     #[Decision('D-EVI-005')]
     #[Test]
@@ -604,7 +596,7 @@ final class EnvironmentsTest extends TestCase
     /**
      * A made environment is a TYPO3 installation and its database dump, and it
      * belongs in a commit as little as `.checkouts/` does. This is the one
-     * failure here that is unrecoverable rather than annoying — `D-EVI-004`.
+     * failure here that is unrecoverable rather than a nuisance — `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
     #[Test]
@@ -622,10 +614,10 @@ final class EnvironmentsTest extends TestCase
     #[Test]
     public function theGeneratedDatabaseBlockIsTakenOutAndTheRestIsKept(): void
     {
-        // What DDEV writes for a project running omit_containers: [db]. The
-        // block names a container that is not there, and it is merged over the
-        // connection settings.php carries, so the installation talks to
-        // nothing and the backend refuses every login without saying why.
+        // What DDEV writes for a project on omit_containers: [db]. The block
+        // names a container that is not there, and it merges over the
+        // connection settings.php carries. So the installation talks to
+        // nothing, and the backend refuses every login with no reason.
         $path = sys_get_temp_dir() . '/typo3-mcp-environment-' . bin2hex(random_bytes(6));
         mkdir($path . '/config/system', 0777, true);
         file_put_contents($path . '/config/system/additional.php', <<<'PHP'
@@ -663,10 +655,10 @@ final class EnvironmentsTest extends TestCase
 
         self::assertNotNull($said);
         self::assertStringNotContainsString("'DB' =>", $written);
-        // The whole block, not its first line. A pattern that ends at the
-        // first `],` in the file stops two levels in and leaves brackets
-        // behind that do not parse — which is what happened on 2026-08-04, and
-        // what the assertions below this one did not see.
+        // The whole block, not its first line. A pattern that ends at the first
+        // `],` in the file stops two levels in and leaves brackets behind that
+        // do not parse. That is what happened on 2026-08-04, and what the
+        // assertions below this one did not see.
         self::assertStringNotContainsString('Connections', $written);
         self::assertSame(
             substr_count($written, '['),

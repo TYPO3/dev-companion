@@ -15,21 +15,22 @@ use TYPO3\DevCompanion\Upkeep\Prose;
 use TYPO3\DevCompanion\Upkeep\Wrap;
 
 /**
- * That the prose rule is measured, and that the one place it is held holds.
+ * That the check measures the prose rule, and that the one place it holds
+ * holds.
  *
  * The measure itself reports rather than fails — a long sentence in a body can
- * be the right sentence. The opening of a requirement or a decision is the
- * exception, because a reader who stops after it is supposed to know what was
- * settled, and 47 of them had run past the point where anybody could.
+ * be the right sentence. The first sentence of a requirement or a decision is
+ * the exception. A reader who stops after it has to know what the entry
+ * settled. 47 of them had run past the point where anybody could.
  */
 final class ProseTest extends TestCase
 {
     /**
-     * `R-COD-002`. The half a caller pays for is reached at all.
+     * `R-COD-002`. The read reaches the half a caller pays for at all.
      *
-     * What is held is that the reading happens and reaches every tool, not that
-     * nothing runs long: `Prose::documents()` reads the markdown corpus and no
-     * file in `src/`.
+     * This holds that the read happens and reaches every tool, not that nothing
+     * runs long. `Prose::documents()` reads the markdown corpus and no file in
+     * `src/`.
      */
     #[Requirement('R-COD-002')]
     #[Test]
@@ -43,8 +44,8 @@ final class ProseTest extends TestCase
             self::assertContains($tool . ' description', $where, $tool . ' has no description in the payload');
         }
 
-        // The nested walk, not one level of it: a field inside items inside
-        // properties is read by the same client as the one at the top.
+        // The nested walk, not one level of it. The same client reads a field
+        // inside items inside properties as the one at the top.
         self::assertContains('typo3_gerrit_lookup output changes.number', $where);
         self::assertContains('typo3_gerrit_lookup output indistinguishable', $where);
 
@@ -67,12 +68,13 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * `D-DOC-035`. The comments are reached, and what they cost is a share.
+     * `D-DOC-035`. The read reaches the comments, and what they cost is a
+     * share.
      *
-     * The sentence measure reads markdown and no file in `src/`, so the third
-     * of the PHP that is comment was counted by nobody. What is held is that
-     * the reading happens over both halves of the corpus and that a retelling
-     * is a comment naming an entry, not that any number stays where it is.
+     * The sentence measure reads markdown and no file in `src/`, so nobody
+     * counted the third of the PHP that is comment. This holds that the read
+     * happens over both halves of the corpus and that a retold entry is a
+     * comment that names one. Not that any number stays where it is.
      */
     #[Decision('D-DOC-035')]
     #[Test]
@@ -90,12 +92,12 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * A comment resting on a decision names its id instead of repeating what
-     * it settled — AGENTS.md's rule, and the one the sentence measure cannot
-     * see: a retelling is within the measure on every sentence of it.
+     * A comment that rests on a decision names its id instead of repeats what
+     * it settled. That is AGENTS.md's rule, and the one the sentence measure
+     * cannot see: a retold entry is within the measure on every sentence of it.
      *
-     * Reported rather than failed on, so what is held is that the report finds
-     * the shape it claims to find — `D-DOC-035`.
+     * A report rather than a failure, so this holds that the report finds the
+     * shape it claims to find — `D-DOC-035`.
      */
     #[Decision('D-DOC-035')]
     #[Test]
@@ -118,9 +120,9 @@ final class ProseTest extends TestCase
     /**
      * `D-DOC-035`. What the markup costs is not what somebody wrote.
      *
-     * The count ran delimiter to delimiter until 2026-08-19, so an annotated
-     * docblock had seven of ten lines gone before a sentence was written and
-     * the report named the shape of a docblock rather than a retelling.
+     * The count ran delimiter to delimiter until 2026-08-19. So an annotated
+     * docblock had seven of ten lines gone before its first sentence. The
+     * report named the shape of a docblock rather than a retold entry.
      */
     #[Decision('D-DOC-035')]
     #[Test]
@@ -156,8 +158,8 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * `feedback/` is what this deliberately leaves out. A feedback is written
-     * by a session somewhere else, and measuring it against this repository's
+     * `feedback/` is what this deliberately leaves out. A session somewhere
+     * else writes a feedback, and a measure of it against this repository's
      * rule would report on the wrong author.
      */
     #[Test]
@@ -172,8 +174,8 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * What is measured is what a reader reads. A table row and a code block are
-     * neither sentences nor prose, and counting them would make the number say
+     * The measure reads what a reader reads. A table row and a code block are
+     * neither sentences nor prose. A count of them would make the number say
      * that the files with the most examples are the worst written.
      */
     #[Test]
@@ -202,7 +204,7 @@ final class ProseTest extends TestCase
      * than over an example.
      *
      * A rewrap that drops or reorders a word does not look like a bug when the
-     * diff is a hundred files of moved line breaks — it looks like an edit
+     * diff is a hundred files of moved line breaks. It looks like an edit
      * somebody made on purpose, and the next reader has no way to tell —
      * `D-DOC-029`.
      */
@@ -223,7 +225,7 @@ final class ProseTest extends TestCase
 
     /**
      * Run twice, it changes nothing the second time. Otherwise every commit
-     * that touches a file carries the formatter arguing with itself.
+     * that touches a file carries the formatter in an argument with itself.
      */
     #[Test]
     public function rewrappingASecondTimeChangesNothing(): void
@@ -238,10 +240,10 @@ final class ProseTest extends TestCase
     /**
      * Which formatter a file gets, asked the way `prose:format` asks it.
      *
-     * The corpus is two markups since `D-DOC-029`, and running the markdown
-     * reader over reStructuredText passes both tests above while holding
-     * nothing: it preserves the words and settles, and it does that by wrapping
-     * a heading whose rule is then the wrong length.
+     * The corpus is two markups since `D-DOC-029`, and the markdown reader over
+     * reStructuredText passes both tests above while it holds nothing. It
+     * preserves the words and settles, and it does that with a wrap of a
+     * heading whose rule is then the wrong length.
      */
     private static function rewrapped(string $document, string $contents): string
     {
@@ -250,7 +252,7 @@ final class ProseTest extends TestCase
 
     /**
      * What carries its meaning in a line break or a column, in the other
-     * markup: a heading and the rule under it, a directive and its indent, a
+     * markup. A heading and the rule under it, a directive and its indent, a
      * drawn table, a label — `D-DOC-029`.
      */
     #[Decision('D-DOC-029')]
@@ -271,9 +273,8 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * A literal and a role are spans a line break would break, and both are
-     * written with the backticks the markdown reader treats as one span —
-     * `D-DOC-029`.
+     * A literal and a role are spans a line break would break. Both carry the
+     * backticks the markdown reader treats as one span — `D-DOC-029`.
      */
     #[Decision('D-DOC-029')]
     #[Test]
@@ -291,8 +292,8 @@ final class ProseTest extends TestCase
     /**
      * What a line break would break if it landed inside it.
      *
-     * A code span reads as two spans with a stray backtick, and a link stops
-     * being a link. Both were what the throwaway scripts got wrong.
+     * A code span reads as two spans with a stray backtick, and a link is no
+     * longer a link. Both were what the throwaway scripts got wrong.
      */
     #[Test]
     public function aCodeSpanAndALinkAreNeverBrokenAcrossLines(): void
@@ -312,7 +313,7 @@ final class ProseTest extends TestCase
      * quote.
      *
      * A table is the one thing here the formatter does change, and it changes
-     * only the padding — which is the next case.
+     * only the pad — which is the next case.
      */
     #[Test]
     public function whatIsNotProseComesBackUnchanged(): void
@@ -323,12 +324,12 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * A table comes back padded to the width of each column's widest cell, so
-     * a column can be scanned in the state the file is written in — `D-DOC-001`.
+     * A table comes back padded to the width of each column's widest cell. So a
+     * reader can scan a column in the file as it stands — `D-DOC-001`.
      *
-     * The compact form and the padded one render identically, which is what
-     * made the compact one look like the cheaper choice: it is cheaper for
-     * whoever writes it once, against every reading of it in a diff, in a
+     * The compact form and the padded one render the same, which is what made
+     * the compact one look like the cheaper choice. It is cheaper for whoever
+     * writes it once. That stands against every read of it in a diff, in a
      * terminal and by a model that receives it as text.
      */
     #[Decision('D-DOC-001')]
@@ -344,11 +345,11 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * What opens with a pipe and is not a table is left where it stands: a
-     * table inside a fence, one row with nothing under it, a drawn diagram.
+     * What opens with a pipe and is not a table stays where it stands. A table
+     * inside a fence, one row with nothing under it, a drawn diagram.
      *
      * A separator row under the head is what says the rest are cells. Without
-     * it, padding would put a line break's meaning where the author did not —
+     * it, the pad would put a line break's meaning where the author did not —
      * `D-DOC-001`.
      */
     #[Decision('D-DOC-001')]
@@ -366,12 +367,12 @@ final class ProseTest extends TestCase
      * A list is what markdown reads as one, and a figure at the head of a line
      * is not.
      *
-     * The formatter decides where a paragraph ends, so reading a marker where
-     * markdown reads none reformats prose that nobody wrote as a list — and no
-     * word moves, so the corpus assertions above pass while it happens. The
-     * rule markdown uses is what separates the two: a bullet and a `1.` may
+     * The formatter decides where a paragraph ends, so a marker read where
+     * markdown reads none reformats prose that nobody wrote as a list. No word
+     * moves, so the corpus assertions above pass while it happens. The rule
+     * markdown uses is what separates the two. A bullet and a `1.` may
      * interrupt a paragraph, any other figure only as the next item of the list
-     * already running.
+     * already open.
      */
     #[Test]
     #[DataProvider('linesThatOpenAnItemAndLinesThatOnlyLookLikeIt')]
@@ -420,10 +421,10 @@ final class ProseTest extends TestCase
                 "- The first of them, long enough that it has to be wrapped somewhere near 5432.\n"
                 . '  Nothing on that path reads it.',
             ],
-            // What `1830ee9` did to `typo3-core-patch-development`: steps 4, 5
-            // and 6 stood under a sub-bullet of step 3, and read against that
-            // bullet alone each of them is a figure at the head of a line. The
-            // list they belong to is the one at their own indent, which is open
+            // What `1830ee9` did to `typo3-core-patch-development`. Steps 4, 5
+            // and 6 stood under a sub-bullet of step 3. Read against that
+            // bullet alone, each of them is a figure at the head of a line. The
+            // list they belong to is the one at their own indent. It is open
             // the whole time and two levels up from the paragraph above them.
             'a step after a nested bullet is the outer list\'s next item' => [
                 "3. The step, with a reading under it:\n"
@@ -480,10 +481,9 @@ final class ProseTest extends TestCase
     /**
      * The formatter writes no line past the column that was not already there.
      *
-     * Stated that way round rather than as a ceiling, because the lines it
-     * leaves alone are allowed to be wide — a table, a fenced command, a link
-     * definition — and a test that knew which those are would be the formatter
-     * written twice.
+     * Stated that way round rather than as a ceiling. The lines it leaves alone
+     * may be wide: a table, a fenced command, a link definition. A test that
+     * knew which those are would be the formatter written twice.
      */
     #[Test]
     public function noLinePastTheColumnIsTheFormattersDoing(): void
@@ -494,7 +494,7 @@ final class ProseTest extends TestCase
 
             foreach (self::overTheColumn(Wrap::document($contents)) as $line) {
                 // A line with nowhere to break is a line of its own, however
-                // wide: cutting a URL or a code span in half is worse.
+                // wide: a URL or a code span cut in half is worse.
                 if (!self::isBreakable($line)) {
                     continue;
                 }
@@ -504,7 +504,7 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * Whether a line has a space the formatter was allowed to break at — one
+     * Whether a line has a space the formatter may break at. That is one
      * outside a code span and outside a link, which are the two spans a break
      * would destroy.
      */
@@ -529,13 +529,13 @@ final class ProseTest extends TestCase
         ));
     }
 
-    /** The words of a document, with the wrapping taken out. */
+    /** The words of a document, with the wrap taken out. */
     private static function words(string $markdown): string
     {
         return trim((string) preg_replace('/\s+/', ' ', $markdown));
     }
     /**
-     * The names a reader has to take apart are read out, two-claim ones first.
+     * The names a reader has to take apart come out, two-claim ones first.
      *
      * Nothing fails on it, for the reason the title report does not: a long
      * name can be the honest one — `D-DOC-051`.

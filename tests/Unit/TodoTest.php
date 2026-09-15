@@ -25,10 +25,10 @@ final class TodoTest extends TestCase
     use QueuedTodo;
 
     /**
-     * A todo is read by a session that has read nothing else, and the files
-     * look identical from the outside. Where one sits is what keeps "not
-     * queued, and deliberately so" from reading as the next piece of work, and
-     * the front matter it opens with is the rest of what a reader is owed.
+     * A session that has read nothing else reads a todo, and the files look
+     * identical from the outside. Where one sits is what keeps "not queued, and
+     * on purpose" from a read as the next piece of work. The front matter it
+     * opens with is the rest of what a reader needs.
      */
     #[Decision('D-DOC-062')]
     #[Test]
@@ -45,9 +45,9 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * `bin/cli todo:next` performs the readings a session owes rather than naming
-     * them, so exactly one todo has to run each. None and the command silently
-     * stops doing half its job; two and it does it twice.
+     * `bin/cli todo:next` performs the reads a session owes rather than names
+     * them, so exactly one todo has to run each. None and the command drops
+     * half its job without a word; two and it does it twice.
      */
     #[Test]
     public function theStandingReadingsAreRunOnce(): void
@@ -61,16 +61,15 @@ final class TodoTest extends TestCase
 
     /**
      * The board is where a feedback waits, so one that is on none is one no
-     * session will be handed, and nothing prints the pile any more: such a
-     * feedback is invisible rather than merely far down a list.
+     * session will get. Nothing prints the pile any more. Such a feedback is
+     * invisible rather than merely far down a list.
      *
      * It holds the state of the board rather than what writes it. A feedback
      * arrives with its card, so what this catches is one that came in some
-     * other way, and the answer is a card written into `todo/open/` by hand.
-     * One assertion over the set rather than one per feedback, because an empty
-     * `feedback/` is a state the board is legitimately in (`D-FBK-013`) and a
-     * loop asserts nothing there — `D-FBK-045`, `D-FBK-016`, `D-FBK-017`,
-     * `D-FBK-022`.
+     * other way. The answer is a card written into `todo/open/` by hand. One
+     * assertion over the set rather than one per feedback. An empty `feedback/`
+     * is a state the board is legitimately in (`D-FBK-013`) and a loop asserts
+     * nothing there — `D-FBK-045`, `D-FBK-016`, `D-FBK-017`, `D-FBK-022`.
      */
     #[Requirement('R-FBK-007')]
     #[Decision('D-FBK-016')]
@@ -90,12 +89,12 @@ final class TodoTest extends TestCase
 
     /**
      * The same relation from above, which is the half nothing that writes a
-     * card can see: a feedback gets exactly one, at the moment it arrives, and
-     * nothing looks back at it when a later judgement folds that feedback onto
-     * another todo. What is left is a
-     * card asking for a judgement somebody has made, ten lines away in a listing
-     * and sharing no word with it — which is one claimed session, spent
-     * arriving where the repository already was (`D-FBK-040`).
+     * card can see. A feedback gets exactly one, at the moment it arrives.
+     * Nothing looks back at it when a later judgement folds that feedback onto
+     * another todo. What remains is a card that asks for a judgement somebody
+     * has made, ten lines away in a listing and with no word in common. That is
+     * one claimed session, spent to arrive where the repository already was
+     * (`D-FBK-040`).
      */
     #[Decision('D-FBK-040')]
     #[Requirement('R-FBK-014')]
@@ -110,16 +109,16 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * What tells the two apart is the step, and the step is a constant: every
-     * card carries the same sentence, because judging one feedback is the same
-     * work whichever it is, and a judgement is what replaces it. So a body
-     * still equal to `Card::STEP` is a card nobody has judged, and beside a
-     * todo that serves the same feedback it is the one to delete.
+     * What tells the two apart is the step, and the step is a constant. Every
+     * card carries the same sentence, because the judgement of one feedback is
+     * the same work whichever it is. A judgement is what replaces it. So a body
+     * still equal to `Card::STEP` is a card nobody has judged. Beside a todo
+     * that serves the same feedback it is the one to delete.
      *
      * Both other readings are here because both are legitimate and neither may
-     * be reported: a card standing alone is the ordinary state of the board, and
-     * a feedback a judgement split across two todos is two pieces of work rather
-     * than a pair — what is wrong is an unjudged card beside a judged one, not
+     * reach the report. A card alone is the ordinary state of the board. A
+     * feedback a judgement split across two todos is two pieces of work rather
+     * than a pair. What is wrong is an unjudged card beside a judged one, not
      * two cards.
      */
     #[Decision('D-FBK-040')]
@@ -149,11 +148,10 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * A cadence measured in days is what keeps five sessions in an afternoon
-     * from asking the same question five times, and it can only do that if the
-     * date it counts from is one PHP can read. A todo in the queue carries no
-     * cadence at all: what comes round is never deleted, and the queue is what
-     * a commit empties.
+     * A cadence in days is what keeps five sessions in an afternoon from the
+     * same question five times. It can only do that if the date it counts from
+     * is one PHP can read. A todo in the queue carries no cadence at all: what
+     * comes round is never deleted, and the queue is what a commit empties.
      */
     #[Test]
     public function whatRecursOnAClockCarriesADateItCanBeCountedFrom(): void
@@ -179,12 +177,12 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * A todo that serves nothing is an idea, and one without a next concrete
-     * step is worse than no todo at all: a session that reads it cannot start.
-     * What it names has to be readable too — a feedback is deleted by the
-     * commit that closes it, and a todo still naming one is either finished or
-     * has a part left that nobody has trimmed it down to — `D-FBK-013`,
-     * `D-FBK-016`, `D-FBK-017`.
+     * A todo that serves nothing is an idea. One without a next concrete step
+     * is worse than no todo at all: a session that reads it cannot start. What
+     * it names has to be readable too. The commit that closes a feedback
+     * deletes it. A todo that still names one is either finished or has a part
+     * left that nobody has trimmed it down to — `D-FBK-013`, `D-FBK-016`,
+     * `D-FBK-017`.
      */
     #[Decision('D-FBK-002')]
     #[Decision('D-FBK-013')]
@@ -195,8 +193,8 @@ final class TodoTest extends TestCase
     {
         $todos = array_merge(Todo::recurring(), Todo::items(), Todo::waiting());
 
-        // Not the queue, which empties and is meant to: what is never empty is
-        // what recurs, because a recurring todo is never deleted.
+        // Not the queue, which empties and is meant to. What is never empty is
+        // what recurs, because nobody deletes a recurring todo.
         self::assertNotSame([], $todos, 'no todo of any kind is readable, and one of them comes round every session');
         foreach ($todos as $todo) {
             self::assertNotSame([], $todo['serves'], $todo['path'] . ' serves nothing');
@@ -213,13 +211,13 @@ final class TodoTest extends TestCase
     /**
      * The five kinds a `serves:` key may name, each checked against the place
      * that owns it rather than against a list kept in `Todo`. The pair that
-     * matters is the id whose shape is right and whose entry is not there: a
-     * session is sent to read what the todo serves, and an id nothing answers
-     * to is a reading that quietly does not happen.
+     * matters is the id whose shape is right and whose entry is not there. A
+     * session goes to read what the todo serves, and an id nothing answers to
+     * is a read that does not happen and says nothing.
      *
-     * A decision is one of the five because the work it carries is that entry's
-     * **Wrong if** gone back to, and `decisions/` says only that somebody is
-     * sorting the pile — `D-DOC-036`.
+     * A decision is one of the five because the work it carries is a return to
+     * that entry's **Wrong if**. `decisions/` says only that somebody sorts the
+     * pile — `D-DOC-036`.
      *
      * @param string|null $unreadable why it cannot be read, or null where it can
      */
@@ -258,11 +256,11 @@ final class TodoTest extends TestCase
 
     /**
      * A todo that waits is out of the queue and says what it waits on, which is
-     * the whole of what the state adds: `bin/cli todo:next` offers it to nobody, so
-     * the question it is blocked on is asked by no session again. What it took
-     * on still counts as taken on — a waiting todo that stopped answering for
-     * its requirement would put that requirement back among the unresolved for the
-     * next session to queue a second time.
+     * the whole of what the state adds. `bin/cli todo:next` offers it to
+     * nobody, so no session asks the question it waits on again. What it took
+     * on still counts as taken on. A todo in `waiting/` that no longer answered
+     * for its requirement would put that requirement back among the unresolved.
+     * The next session would queue it a second time.
      */
     #[Test]
     public function whatWaitsCarriesTheQuestionItWaitsOn(): void
@@ -279,13 +277,13 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * The queue is an order, not an assignment: `bin/cli todo:next` reads the
-     * same first item for everybody who asks, which is right while one session
+     * The queue is an order, not an assignment. `bin/cli todo:next` reads the
+     * same first item for everybody who asks. That is right while one session
      * works at a time and wrong the moment two do. What is in hand is out of
-     * the queue, so the second session is handed the item behind it rather than
-     * the same one — and it still answers for what it took on, because a
-     * requirement that fell back among the unresolved while somebody was working on
-     * it is one a second session queues all over again.
+     * the queue, so the second session gets the item behind it rather than the
+     * same one. It still answers for what it took on. A requirement that fell
+     * back among the unresolved while somebody worked on it is one a second
+     * session queues all over again.
      */
     #[Requirement('R-FBK-010')]
     #[Decision('D-DOC-060')]
@@ -305,11 +303,12 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * A worktree standing on no branch of a todo holds none.
+     * A worktree on no branch of a todo holds none.
      *
-     * The two cases it is told from are the ones that reach the same line: a
-     * detached worktree, which stands on no branch at all, and one on a branch
-     * no queued todo derives — a todo finished, or renamed since it was cut.
+     * The two cases that tell it are the ones that reach the same line. A
+     * detached worktree, which stands on no branch at all. And one on a branch
+     * no queued todo derives: a todo finished, or under a new name since the
+     * cut.
      */
     #[Decision('D-DOC-060')]
     #[Test]
@@ -329,13 +328,13 @@ final class TodoTest extends TestCase
      * The one move left in the queue, and the state it exists for.
      *
      * A session that hits a question nothing here can answer writes it onto its
-     * todo and ends. Left in `open/` the next session is offered it as ordinary
-     * work, and what it actually needs is a person.
+     * todo and ends. Left in `open/`, the next session gets it as ordinary
+     * work, and what it needs is a person.
      *
-     * Taking a todo on and finishing one write nothing this has to undo: the
-     * worktree says the first and a deletion says the second, so a todo nobody
-     * is working is back in the queue because the worktree came down rather
-     * than because a command put it back — `D-DOC-060`.
+     * A claim on a todo and the end of one write nothing this has to undo. The
+     * worktree says the first and a deletion says the second. So a todo nobody
+     * works on is back in the queue because the worktree came down. No command
+     * put it back — `D-DOC-060`.
      */
     #[Decision('D-DOC-060')]
     #[Decision('D-FBK-014')]
@@ -362,27 +361,25 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * `bin/cli todo:next` is where a session starts, and that has to keep being
-     * true where several sessions start at once. A worktree standing on a claim
-     * is handed that claim; a checkout standing on no claim is handed the
-     * queue, which is every session this repository had before there were two.
+     * `bin/cli todo:next` is where a session starts, and that has to stay true
+     * where several sessions start at once. A worktree on a claim gets that
+     * claim. A checkout on no claim gets the queue, which is every session this
+     * repository had before there were two.
      *
-     * The failure this holds off is a quiet one. A session handed the front of
-     * the queue instead of its own claim reads a real todo, starts real work,
-     * and is the second person doing it.
+     * The failure this holds off is a quiet one. A session that gets the front
+     * of the queue instead of its own claim reads a real todo and starts real
+     * work. It is the second person on it.
      *
-     * git is stubbed rather than asked, so the case says the same in a worktree
-     * standing on a real claim as it does on `main`. It used to ask whichever
-     * checkout the suite was in, and then had to assert around whatever that
-     * answered — `D-COD-004`.
+     * git is a stub rather than a call. So the case says the same on `main` as
+     * in a worktree on a real claim — `D-COD-004`.
      */
     #[Requirement('R-FBK-010')]
     #[Decision('D-COD-004')]
     #[Test]
     public function aWorktreeStandingOnAClaimIsHandedThatClaim(): void
     {
-        // The queue is made before the first read, so `claimed()` answers from
-        // this case's own rather than from whatever the checkout is carrying.
+        // The queue comes before the first read, so `claimed()` answers from
+        // this case's own rather than from whatever the checkout carries.
         $this->ownQueue();
 
         Checkouts::useRunner($this->gitSaying("todo/nothing-derives-this\n"));
@@ -398,16 +395,16 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * A worktree standing on no claim is the setup that went wrong, and the
-     * only thing that can say so is that it is a worktree at all.
+     * A worktree on no claim is the setup that went wrong. The only thing that
+     * can say so is that it is a worktree at all.
      *
      * What `linked()` does with git's two answers is the part that can be wrong
-     * and the part this holds: the directories are compared with trailing
-     * slashes off, and either call failing is read as "not a worktree" rather
-     * than as one. It used to answer by making a real worktree and a real
-     * branch in whichever checkout the suite was running in — `R-COD-003`. What
-     * a stub cannot say is whether the local git has `--path-format=absolute`
-     * at all, which is a property of the machine — `D-COD-004`.
+     * and the part this holds. The comparison reads the directories with the
+     * trailing slashes off, and either call's failure reads as "not a worktree"
+     * rather than as one. It used to answer with a real worktree and a real
+     * branch in whichever checkout the suite ran in — `R-COD-003`. What a stub
+     * cannot say is whether the local git has `--path-format=absolute` at all,
+     * which is a property of the machine — `D-COD-004`.
      *
      * @param array{0: int, 1: string} $own
      * @param array{0: int, 1: string} $shared
@@ -421,7 +418,7 @@ final class TodoTest extends TestCase
         $git = self::createStub(CommandRunner::class);
         // Two calls, in the order `linked()` makes them: its own git dir, then
         // the one it shares. `willReturnOnConsecutiveCalls` is what says that
-        // without repeating the argument lists the method signature has.
+        // without a repeat of the argument lists the method signature has.
         $git->method('run')->willReturnOnConsecutiveCalls(
             ['ok' => $own[0] === 0, 'exitCode' => $own[0], 'output' => $own[1], 'error' => ''],
             ['ok' => $shared[0] === 0, 'exitCode' => $shared[0], 'output' => $shared[1], 'error' => ''],
@@ -467,8 +464,8 @@ final class TodoTest extends TestCase
 
     /**
      * The priority decides, and the age decides the rest. Written as the one
-     * case where the two disagree: the newest todo is the highest one, so a
-     * queue read by age alone would hand it over last, and one read by priority
+     * case where the two disagree. The newest todo is the highest one, so a
+     * queue read by age alone would hand it over last. One read by priority
      * alone could not tell the two `low` ones apart — `D-FBK-015`.
      */
     #[Requirement('R-FBK-007')]
@@ -491,13 +488,13 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * Every todo in a stage says where it stands, and one that recurs does not:
-     * the clock is what orders an appointment, so a word beside it would answer
+     * Every todo in a stage says where it stands, and one that recurs does not.
+     * The clock is what orders an appointment, so a word beside it would answer
      * the same question twice.
      *
-     * The point of requiring it is that it can then be missed. While absence
-     * meant "nobody has judged this", a priority somebody forgot and one left
-     * off on purpose were the same file, and no check could name either.
+     * The point of a required one is that a check can then miss it. While
+     * absence meant "nobody has judged this", a priority somebody forgot and
+     * one left off on purpose were the same file. No check could name either.
      */
     #[Requirement('R-FBK-007')]
     #[Test]
@@ -513,13 +510,13 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * What the queue answers for is read from the queue alone. The page listing
-     * what is deliberately *not* queued names ids too, and counting those makes
-     * an entry nobody has taken on look taken on — which is the one thing
-     * `bin/cli unresolved:list` exists to say out loud. Nor does a recurring todo
-     * take anything on: it watches a directory, and the same directory being
-     * named by a queued todo is the difference between noticing that decisions
-     * are standing and sorting them.
+     * What the queue answers for comes from the queue alone. The page that
+     * lists what stays out of the queue on purpose names ids too. A count of
+     * those makes an entry nobody has taken on look taken on. That is the one
+     * thing `bin/cli unresolved:list` exists to say out loud. Nor does a
+     * recurring todo take anything on. It watches a directory. The same
+     * directory in a queued todo is the difference between a notice that
+     * decisions stand and a sort of them.
      */
     #[Test]
     public function onlyTheQueueAnswersForAnything(): void
@@ -540,13 +537,14 @@ final class TodoTest extends TestCase
 
     /**
      * A todo prints as an imperative paragraph, and the two things that decide
-     * whether the change is right happen before its first sentence: reading
-     * what it serves against what the code does now, and settling a question
-     * from a source instead of from recall. Neither leaves a trace — the diff
-     * of a todo worked from the checkouts is the diff of one worked from memory
-     * — so what can be held is that the procedure exists and that the command
-     * hands it over with the work rather than leaving it to be looked up.
-     * `R-FBK-009` says why; `D-FBK-007` says what it bets on — `D-DOC-025`.
+     * whether the change is right happen before its first sentence. A read of
+     * what it serves against what the code does now, and a question settled
+     * from a source instead of from recall. Neither leaves a trace, since the
+     * diff of a todo worked from the checkouts is the diff of one worked from
+     * memory. So what a test can hold is that the procedure exists. And that
+     * the command hands it over with the work rather than leaves it for a
+     * lookup. `R-FBK-009` says why; `D-FBK-007` says what it bets on —
+     * `D-DOC-025`.
      */
     #[Decision('D-FBK-007')]
     #[Requirement('R-FBK-009')]
@@ -558,8 +556,8 @@ final class TodoTest extends TestCase
 
         self::assertFileExists($page, Todo::PROCEDURE . ' is handed over with every todo and does not exist');
         // Listed on the page of the section it sits in, as the reference a
-        // reader standing there would follow. The map above those sections
-        // names the four and not the pages inside them.
+        // reader there would follow. The map above those sections names the
+        // four and not the pages inside them.
         self::assertStringContainsString(
             ':doc:`' . basename(Todo::PROCEDURE, '.rst') . '`',
             (string) file_get_contents(Paths::root() . '/' . dirname(Todo::PROCEDURE) . '/readme.rst'),
@@ -573,9 +571,9 @@ final class TodoTest extends TestCase
     }
 
     /**
-     * The same for the page a claim is handed over with. `bin/cli todo:claim`
-     * moves files and names branches, which is the half this repository owns;
-     * the worktree, what a question that arrives mid-work leaves behind and who
+     * The same for the page that comes with a claim. `bin/cli todo:claim` moves
+     * files and names branches, which is the half this repository owns. The
+     * worktree, what a question that arrives mid-work leaves behind and who
      * merges are not things a command can carry out. A claim taken without them
      * is a lock nobody knows how to release — `D-DOC-025`.
      */

@@ -19,20 +19,20 @@ use TYPO3\DevCompanion\Upkeep\Sources;
 /**
  * The shape of decisions/, as far as one branch can be right about it.
  *
- * What every entry is on its own — its id, its group, its date, its status, its
- * fields — is here, because a session working one todo can satisfy all of it.
- * What only the whole checkout can be right about is not: the listing at the
- * foot of a group readme is generated from every file in that group, and a
- * branch that adds one may not touch it (D-FBK-011). `bin/cli decisions:check`
- * holds that half, and the merge is what runs it.
+ * What every entry is on its own, its id, its group, its date, its status, its
+ * fields, is here. A session on one todo can satisfy all of it. What only the
+ * whole checkout can be right about is not. The listing at the foot of a group
+ * readme derives from every file in that group. A branch that adds one may not
+ * touch it (D-FBK-011). `bin/cli decisions:check` holds that half, and the
+ * merge is what runs it.
  */
 final class DecisionsTest extends TestCase
 {
     /**
-     * An id is the name a commit, a feedback and a later decision refer to this one
-     * by. It decides the group directory and the file name, so two entries
-     * cannot quietly share one — which is what the single document this
-     * replaces had no way of noticing.
+     * An id is the name a commit, a feedback and a later decision refer to this
+     * one by. It decides the group directory and the file name, so two entries
+     * cannot share one without a word. The single document this replaces had no
+     * way to notice that.
      */
     #[Test]
     public function everyDecisionIsFoundUnderTheIdItGoesBy(): void
@@ -41,9 +41,9 @@ final class DecisionsTest extends TestCase
         $duplicates = Decisions::duplicates();
 
         self::assertNotSame([], $decisions);
-        // The ids rather than the whole map: what a reader of this failure gets
-        // is the message, and PHPUnit's diff under it would repeat every path
-        // the message already names, in a tail `todo:home` cuts at 30 lines.
+        // The ids rather than the whole map. What a reader of this failure gets
+        // is the message. PHPUnit's diff under it would repeat every path the
+        // message already names, in a tail `todo:home` cuts at 30 lines.
         self::assertSame([], array_keys($duplicates), Decisions::collision($duplicates));
 
         foreach ($decisions as $id => $decision) {
@@ -62,10 +62,10 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * The collision is the one failure working in parallel predicts, and the
-     * message is all its reader gets — a size mismatch between two counts was
-     * what it used to be. Held here rather than by reading it, because the
-     * checkout it fails on is the one checkout where nothing collides.
+     * The collision is the one failure parallel work predicts, and the message
+     * is all its reader gets. A size mismatch between two counts was what it
+     * used to be. Held here rather than by a read of it, because the checkout
+     * it fails on is the one checkout where nothing collides.
      */
     #[Decision('D-FBK-046')]
     #[Test]
@@ -77,8 +77,8 @@ final class DecisionsTest extends TestCase
 
         self::assertStringContainsString('decisions/feedback/fbk-046-one.md', $collision);
         self::assertStringContainsString('decisions/feedback/fbk-046-two.md', $collision);
-        // The id is what the message cannot end on: the command refuses one two
-        // files claim, because it says which number is meant and not which of
+        // The id is what the message cannot end on. The command refuses one two
+        // files claim, because it says which number it means and not which of
         // them moves.
         self::assertStringContainsString('bin/cli decisions:renumber <the file this branch added>', $collision);
         self::assertStringNotContainsString('decisions:renumber D-FBK-046', $collision);
@@ -86,8 +86,8 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * The number is the only part of an id a listing sorts on, and three digits
-     * is what makes sorting it as text the same as sorting it as a number.
+     * The number is the only part of an id a listing sorts on. Three digits is
+     * what makes a sort as text the same as a sort as a number.
      * `Decisions::all()` compares ids as text, so unpadded it put `D-FBK-10`
      * between `D-FBK-1` and `D-FBK-2` in the generated readme as well —
      * `D-DOC-005`.
@@ -121,8 +121,8 @@ final class DecisionsTest extends TestCase
 
     /**
      * The bold first sentence is the decision, and a reader who stops there
-     * knows what was settled. The date is what makes the entry findable a year
-     * later, when the wording of the title is not what anybody remembers.
+     * knows what the entry settled. The date is what makes the entry findable a
+     * year later, when the words of the title are not what anybody remembers.
      */
     #[Test]
     public function everyDecisionOpensWithWhatWasDecided(): void
@@ -142,8 +142,8 @@ final class DecisionsTest extends TestCase
     /**
      * The fields are what a reader navigates an entry by, and they had drifted
      * into thirteen spellings of four things before this. The order carries
-     * meaning too: the evidence comes before what was decided on it, and
-     * everything below **Wrong if** arrived later than the entry did.
+     * meaning too: the evidence comes before the decision on it, and everything
+     * below **Wrong if** arrived later than the entry did.
      */
     #[Test]
     public function everyDecisionIsWrittenInTheFieldsTheFormatHas(): void
@@ -167,10 +167,9 @@ final class DecisionsTest extends TestCase
     /**
      * No dated section runs past the measure.
      *
-     * It was a report while the corpus was being compacted onto the rule, and
-     * the sweep ended on 2026-08-28 — so the check fails on one now, which is
-     * what keeps the next reading from being written as an account again
-     * (`D-DOC-066`).
+     * It was a report while the sweep compacted the corpus onto the rule, and
+     * the sweep ended on 2026-08-28. So the check fails on one now, which is
+     * what keeps the next read from an account again (`D-DOC-066`).
      */
     #[Decision('D-DOC-066')]
     #[Test]
@@ -187,12 +186,12 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * Every reading a file records is read out of it as a date.
+     * Every read a file records comes out of it as a date.
      *
      * A bare date is a `DateTimeImmutable` once the parser has been over it,
-     * and the reader kept only scalars — so the field `D-DOC-066` introduced
-     * was read as nothing, and an entry recorded the new way went on being
-     * reported as one nobody has opened.
+     * and the reader kept only scalars. So the field `D-DOC-066` introduced
+     * read as nothing, and an entry recorded the new way still reported as one
+     * nobody has opened.
      */
     #[Decision('D-DOC-066')]
     #[Test]
@@ -216,7 +215,7 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * The front matter as it was typed, which is where a reading is written.
+     * The front matter as typed, which is where a read stands.
      */
     private static function frontMatter(string $contents): string
     {
@@ -224,18 +223,18 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * What an entry pointing at this code owes is read out, never failed on.
+     * What an entry that points at this code owes comes out as a report, never
+     * as a failure.
      *
-     * A test named in `coveredBy` is the one coupling that holds: it
-     * fails when the behaviour moves, and `everyTestADecisionNamesExists`
-     * fails when the test goes with the code. The three entries found stale on
-     * 2026-08-22 named no such test, and the two whose code had moved under
-     * them named one and were right — so the reading is the absence of a test
-     * and not the age of the entry.
+     * A test named in `coveredBy` is the one tie that holds. It fails when the
+     * behaviour moves, and `everyTestADecisionNamesExists` fails when the test
+     * goes with the code. The three entries found stale on 2026-08-22 named no
+     * such test, and the two whose code had moved under them named one and were
+     * right. So the read is the absence of a test and not the age of the entry.
      *
      * Most entries here decide something about process and no test could keep
-     * them, which is why nothing may fail on this: a demand for a `coveredBy`
-     * would be answered with a name chosen to satisfy it — `D-DOC-043`.
+     * them, which is why nothing may fail on this. A demand for a `coveredBy`
+     * would get a name chosen to satisfy it — `D-DOC-043`.
      */
     #[Decision('D-DOC-043')]
     #[Decision('D-DOC-053')]
@@ -246,8 +245,8 @@ final class DecisionsTest extends TestCase
 
         self::assertNotSame([], $uncovered, 'every entry naming this code names a test, which the report would have to say instead');
 
-        // A revoked entry may not be declared by a test at all, so reporting it
-        // as missing one would ask for what `D-DOC-052` forbids — `D-DOC-053`.
+        // No test may declare a revoked entry at all. So a report of it as
+        // short of one would ask for what `D-DOC-052` forbids — `D-DOC-053`.
         foreach ($uncovered as $entry) {
             self::assertNotSame(
                 DecisionStatus::Revoked,
@@ -276,12 +275,12 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * The naming read from the failing end: which entries a test was holding.
+     * The names read from the failure end: which entries a test held.
      *
-     * This is what a session that made a test red is sent to, so it has to
-     * answer for every entry that names one. A test nothing names answers with
+     * This is what a session that made a test red goes to, so it has to answer
+     * for every entry that names one. A test nothing names answers with
      * nothing, which is the ordinary case and the one that must stay quiet —
-     * `D-DOC-043`, `D-DOC-044` is what prints it when a test fails.
+     * `D-DOC-043`. `D-DOC-044` is what prints it when a test fails.
      */
     #[Decision('D-DOC-043')]
     #[Decision('D-DOC-044')]
@@ -297,9 +296,9 @@ final class DecisionsTest extends TestCase
         $missed = [];
         foreach ($all as $decision) {
             foreach ($decision['tests'] as $test) {
-                // A name without a method is a class holding the entry
-                // throughout, which the attribute allows and the front matter
-                // writes as the bare class.
+                // A name without a method is a class that holds the entry
+                // throughout. The attribute allows that and the front matter
+                // writes it as the bare class.
                 [$class, $method] = array_pad(explode('::', $test), 2, '');
                 $held = Entry::restingOn($all, 'decisions', $class, $method);
                 if (!in_array($decision['id'], array_column($held, 'id'), true)) {
@@ -333,13 +332,13 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * The two ends are one source: the attribute is written and `coveredBy` is
-     * generated from it.
+     * The two ends are one source: the attribute stands in the test and
+     * `coveredBy` derives from it.
      *
-     * Both were written by hand until 2026-08-23, and the corpus is what that
-     * costs: 405 of the tests an entry named said nothing about the entry, so
-     * a session that changed the behaviour and fixed the test never learned
-     * which entry had rested on it — `D-DOC-048`.
+     * Both stood by hand until 2026-08-23, and the corpus is what that costs.
+     * 405 of the tests an entry named said nothing about the entry. So a
+     * session that changed the behaviour and fixed the test never learned which
+     * entry had rested on it — `D-DOC-048`.
      */
     #[Decision('D-DOC-048')]
     #[Test]
@@ -363,11 +362,11 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * A dated label is a section, and the spelling it had before `D-DOC-003` is
+     * A dated label is a section, and the form it had before `D-DOC-003` is
      * what nothing could read. 51 bold labels in 37 entries survived that move
-     * because no check saw them: the field order could not place one, so it sat
-     * wherever it was written, and four of them were bullets that
-     * `Unresolved::decisions()` did not count as a reading at all.
+     * because no check saw them. The field order could not place one, so it sat
+     * wherever the writer put it. Four of them were bullets that
+     * `Unresolved::decisions()` did not count as a read at all.
      */
     #[Test]
     public function noDatedLabelIsWrittenAsABoldParagraph(): void
@@ -395,11 +394,10 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * `confirmed` and `revoked` are claims about a later reading, and the line
+     * `confirmed` and `revoked` are claims about a later read, and the line
      * that carries it has to be in the file. The status names the **last** of
-     * them rather than the only one: an entry may be confirmed by one run and
-     * revoked by the next, and what a reader relies on is the latest —
-     * `D-DOC-003`.
+     * them rather than the only one. One run may confirm an entry and the next
+     * revoke it, and what a reader relies on is the latest — `D-DOC-003`.
      */
     #[Decision('D-DOC-003')]
     #[Test]
@@ -420,11 +418,11 @@ final class DecisionsTest extends TestCase
 
     /**
      * A test named in a decision is a claim that something would catch the
-     * **Wrong if** happening, and a renamed test turns it into a claim nobody
-     * answers for — which reads exactly like one that still holds. `coveredBy`
-     * is generated and cannot say a name the tests do not; what this reaches is
-     * every test named in passing, whose claim goes stale the same way —
-     * `D-DOC-003`.
+     * **Wrong if** when it comes. A test under a new name turns it into a claim
+     * nobody answers for, which reads exactly like one that still holds.
+     * `coveredBy` derives from the tests and cannot say a name they do not.
+     * What this reaches is every test named by the way, whose claim goes stale
+     * the same way — `D-DOC-003`.
      */
     #[Decision('D-DOC-003')]
     #[Test]
@@ -448,22 +446,14 @@ final class DecisionsTest extends TestCase
      * A decision nobody has been back to names no command the console lost.
      *
      * `Cli::knows()` answered this for a todo's `run:` key and for nothing
-     * else, so a deleted command stayed written down as the way to do the thing.
-     * `D-FBK-012` still had `bin/cli feedback:next` at the head of it 16 days
-     * after `D-FBK-016` deleted the command and the sighting that ran it, and
-     * nothing failed, because nothing asks.
+     * else, so a deleted command stayed on record as the way to do the thing.
+     * Nothing failed, because nothing asked — `D-DOC-037` has the case.
      *
-     * The head only — the statement and the paragraphs above the first section.
-     * Below it an entry is an account of what was decided and what was rejected,
-     * and the entry that removes a command names it there of necessity:
-     * `D-FBK-045` says `bin/cli todo:sync` is deleted, which is the sentence
-     * doing its job.
-     *
-     * And only where no dated section stands. One of those is somebody having
-     * been back and written what changed, which is the mechanism this
-     * repository already has for an entry that aged; a head left standing under
-     * one is a question about how a record is kept rather than a name nothing
-     * holds — `D-DOC-037`.
+     * The head only, the statement and the paragraphs above the first section.
+     * Below it an entry is an account of the decision and the rejected options,
+     * and the entry that removes a command names it there of necessity. And
+     * only where no dated section stands: a head left under one is a question
+     * about how to keep a record rather than a name nothing holds.
      */
     #[Decision('D-DOC-037')]
     #[Test]
@@ -509,8 +499,8 @@ final class DecisionsTest extends TestCase
     }
 
     /**
-     * A decision that names a requirement is reasoning from it. One that names
-     * a requirement nobody can read any more is reasoning from nothing.
+     * A decision that names a requirement reasons from it. One that names a
+     * requirement nobody can read any more reasons from nothing.
      */
     #[Test]
     public function everyRequirementADecisionNamesExists(): void

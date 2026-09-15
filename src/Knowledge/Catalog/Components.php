@@ -148,6 +148,7 @@ final class Components
      *     class: string, component: string, title: string, position: ?string,
      *     stylesWithin: list<string>, sassPaths: array<int, string>,
      *     since: ?int, until: ?int, verifiedOn: string
+     * }>
      */
     public static function coveredClasses(array $withheld, ?string $query, ?int $target): array
     {

@@ -492,8 +492,8 @@ enum Scope: string
      * Each marker reads as the word it is, because a substring match cleared
      * neither gate on "from Forge," (`D-SKL-078`). A path the layout puts in
      * the core is that evidence too, and it reads per path rather than as a
-     * marker of its own, because `Build/Scripts/` is the core's only from a
-     * root that could be the core (`D-SKL-080`).
+     * marker of its own. `Build/Scripts/` is the core's only from a root that
+     * could be the core (`D-SKL-080`).
      *
      * @param array<int, string> $paths
      */

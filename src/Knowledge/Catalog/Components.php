@@ -134,16 +134,14 @@ final class Components
      * The classes a held-back entry still covers on the target version.
      *
      * A caller that names a class asks whether that class is there, not for the
-     * component to paste, and the two questions have different answers below an
-     * entry's range, `D-CAT-006`. Only what the query named outright comes
+     * component to paste, `D-CAT-006`. Only what the query named outright comes
      * back. Nothing here for an entry whose contract came from the
      * installation, because a class the installed packages do not carry is
      * absent rather than unverified.
      *
      * The range is the class's own where `components:derive` wrote one, and the
      * entry's whole list where it did not. 17 of 26 entries hold classes whose
-     * ranges differ, so the aggregate holds back a class that was there all
-     * along, `D-CAT-008`.
+     * ranges differ, `D-CAT-008`.
      *
      * @param array<int, array<string, mixed>> $withheld
      * @return array<int, array{

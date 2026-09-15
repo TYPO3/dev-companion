@@ -101,11 +101,9 @@ final class TaskIntents
      * like one. Such a needle lives in matchWeak, and the intent it triggers
      * comes back as conditional rather than as recognized.
      *
-     * An id in $stated counts as recognized whatever the text says, which is
-     * how a caller who classifies the work reaches the intent that owns it. It
-     * is a parameter rather than a word appended to the text, because an
-     * appendix makes every intent with that word as a needle a strong match,
-     * `D-GUI-027`.
+     * An id in $stated counts as recognized whatever the text says. That is how
+     * a caller who classifies the work reaches the intent that owns it. It is a
+     * parameter rather than a word appended to the text, `D-GUI-027`.
      *
      * @param array<int, string> $stated Intent ids the call names outright.
      * @return array<int, array<string, mixed>>

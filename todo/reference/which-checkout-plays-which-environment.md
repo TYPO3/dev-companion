@@ -1,69 +1,69 @@
 # Which checkout plays which environment
 
 The standing answer to a question every run asks first. A scenario names a kind
-of directory; which one on this machine plays it belongs here, where it can go
-stale without taking a case with it. A forward run is a fresh MCP client session
-with the installed skills, and a session in this repository may neither activate
-those skills nor grade its own implementation as behavioral evidence.
+of directory. Which one on this machine plays it belongs here, where it can go
+stale without a case in tow. A forward run is a fresh MCP client session with
+the installed skills. A session in this repository may neither activate those
+skills nor grade its own implementation as behavioral evidence.
 
 Two of them are no longer a machine's business at all.
 `bin/cli environment:create` makes `E-SITE` and `E-NONE` below `.environments/`,
-so a case that needs an installation to answer from needs nothing off this page
-— `bin/cli environment:status` says what this checkout has. A case naming
-another covered version is `bin/cli environment:create E-SITE <version>`, which
+so a case that needs an installation to answer from needs nothing off this page.
+`bin/cli environment:status` says what this checkout has. A case that names
+another covered version is `bin/cli environment:create E-SITE <version>`. That
 is one installation per covered line rather than one page entry per machine
-(`D-EVI-006`). What stays here is what a scaffold cannot produce: the site
+(`D-EVI-006`). What stays here is what a scaffold cannot produce. The site
 package `REVIEW-01` reviews, the three extension checkouts whose real
 infrastructure is what they play (`D-EVI-004`), and the core checkout somebody
-works in, which is where a patch to review comes from.
+works in. The last is where a patch to review comes from.
 
 - **`E-CORE`** — `/home/benji/projects/typo3-cms`, the core repository itself:
   `main` at TYPO3 15.0.0-dev, PHP `^8.5` declared and 8.5 in DDEV, no extensions
-  and no sites. The server is not a dependency there, so it is installed from
-  this checkout the way `E-EXT` is — done on 2026-08-03, when the published
-  copies were a day behind the skills here, again on 2026-08-06 after the rename
+  and no sites. The server is not a dependency there, so the install comes from
+  this checkout the way `E-EXT`'s does. Done on 2026-08-03, when the published
+  copies were a day behind the skills here. Again on 2026-08-06 after the rename
   of `D-AUD-008`, which is what put the new binary in its `.mcp.json` and
-  replaced the state directory, and again on 2026-08-08. That last one took the
+  replaced the state directory. And again on 2026-08-08. That last one took the
   dead `typo3-cms-mcp` entry out of `.mcp.json` and the orphaned
-  `typo3-extension-release` out of `.claude/skills/`; neither the rename nor an
+  `typo3-extension-release` out of `.claude/skills/`. Neither the rename nor an
   `update` had removed them, because the rename replaced the state directory the
-  removal reads from. **It is worked in**, which is what it plays:
+  removal reads from. **Somebody works in it**, which is what it plays.
   `origin/main..main` carried an unpushed core patch and `.claude/worktrees/` a
-  branch with more when `REVIEW-03` was unblocked on 2026-08-03, so that review
-  finds a diff without one being made for it. `git status` there is never empty
-  — the generated `.gitignore` block is uncommitted, `.claude/` and
-  `opencode.json` are untracked — and a run notes that before it starts rather
-  than reading it afterwards as a session that wrote. The DDEV project was
-  paused on 2026-08-02, so a runtime lookup answers unsupported until it is
-  started. A GPT-5 mini session reviewed the GD/SVG placeholder patch here on
-  2026-08-01 (`feedback/2026-08-01-114526`): it was given a subsystem task
-  rather than the scenario prompt, so it is precedent for the environment and
-  not a run.
+  branch with more when `REVIEW-03` came unblocked on 2026-08-03. So that review
+  finds a diff nobody made for it. `git status` there is never empty. The
+  generated `.gitignore` block stands uncommitted, `.claude/` and
+  `opencode.json` untracked. A run notes that before it starts rather than reads
+  it afterwards as a session that wrote. The DDEV project has stood paused since
+  2026-08-02, so a runtime lookup answers unsupported until somebody starts it.
+  A GPT-5 mini session reviewed the GD/SVG placeholder patch here on 2026-08-01
+  (`feedback/2026-08-01-114526`). It got a subsystem task rather than the
+  scenario prompt, so it is precedent for the environment and not a run.
 - **`E-SITE`** — **gone from this machine as of 2026-08-06.**
   `/home/benji/projects/site-new` does not exist, so the site package
-  `REVIEW-01` reviews has no checkout and that review cannot be run until one is
-  made. What it was: site package below `extensions/printworks_sitepackage`,
-  TYPO3 14.3.5 under DDEV, with the server as a Composer dependency, refreshed
-  by `ddev exec php vendor/bin/typo3-dev-companion update --agent=claude`. A
-  replacement is the one entry here that also has to re-require the package
-  under its new name — `typo3/dev-companion` resolves from nowhere yet, so it is
-  a path repository onto this checkout until the vendor question is answered.
+  `REVIEW-01` reviews has no checkout and nobody can run that review until one
+  exists. What it was: site package below `extensions/printworks_sitepackage`,
+  TYPO3 14.3.5 under DDEV, with the server as a Composer dependency.
+  `ddev exec php vendor/bin/typo3-dev-companion update --agent=claude` refreshed
+  it. A replacement is the one entry here that also has to re-require the
+  package under its new name. `typo3/dev-companion` resolves from nowhere yet,
+  so it is a path repository onto this checkout until the vendor question has an
+  answer.
 - **`E-EXT`** — two checkouts play it, and which one a run needs is a property
-  of the run. In both the server is **not** a Composer dependency, so it is
-  reached from this checkout:
+  of the run. In both the server is **not** a Composer dependency, so the client
+  reaches it from this checkout.
   `php /home/benji/projects/typo3-cms-mcp/bin/typo3-dev-companion install --agent=claude`
   from the project root publishes the skills and writes the host-php
   `.mcp.json`. Repeat it after any skill change — the published skills are a
   copy and nothing reports it when they are older than the server. The generated
   ignore block in each `.gitignore` and the untracked `.mcp.json` are from that
   install and stay. **Both carry a current install as of 2026-08-08**, twelve
-  published skills each. What `.mcp.json` names is the checkout the install was
-  run from, so one run from a worktree points the client at that worktree until
-  the install is repeated from here — which is what the run of 2026-08-04 did,
-  and undid afterwards. Repeating it in `/home/benji/projects/syntax` that day
-  took the checkout from five published skills to nine. The ignore block it had
-  still names the five, and the ones that arrived carry a `.gitignore` of their
-  own, so the block being short of them leaves nothing untracked.
+  published skills each. What `.mcp.json` names is the checkout the install ran
+  from. So one run from a worktree points the client at that worktree until a
+  repeat of the install from here. That is what the run of 2026-08-04 did, and
+  undid afterwards. Repeating it in `/home/benji/projects/syntax` that day took
+  the checkout from five published skills to nine. The ignore block it had still
+  names the five, and the ones that arrived carry a `.gitignore` of their own.
+  So a block short of them leaves nothing untracked.
 
     What 2026-08-08 had to repair in both is the same thing, and it is what an
     `update` after a rename does not reach: the state directory is

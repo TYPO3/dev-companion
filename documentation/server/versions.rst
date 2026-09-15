@@ -12,9 +12,9 @@ covers. Every check that needs the list reads it from there.
 
 .. image:: ../images/version-binding.svg
     :zoomable:
-    :alt: TYPO3 12 through 15 form the covered timeline; unbound statements
-          apply to all of it, while since and until bind one statement and
-          require verification on both sides of the boundary.
+        :alt: TYPO3 12 through 15 form the covered timeline. Unbound statements
+          apply to all of it. Since and until bind one statement and demand a
+          check on both sides of the boundary.
 
 A statement that does not hold on all of them says so **as data, not as prose**.
 ``since`` and ``until`` carry the major it starts and stops holding at, and the

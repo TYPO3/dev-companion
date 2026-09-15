@@ -104,11 +104,11 @@ Working the todo
 ----------------
 
 Everything on this page is about the order of the work. One page of its own
-covers what a session reads before it changes the todo at the front, and why it
-judges the step rather than executes it. Also where it settles a question the
-work turns on instead of recalls it. Also what it asks because nothing here can
-answer it. That page is :doc:`working-a-todo`, which ``bin/cli todo:next`` names
-with every todo it hands over.
+covers what a session reads before it changes the todo at the front. It says why
+the session judges the step rather than executes it. Also where it settles a
+question the work turns on instead of recalls it. Also what it asks because
+nothing here can answer it. That page is :doc:`working-a-todo`, which
+``bin/cli todo:next`` names with every todo it hands over.
 
 Keeping the queue current
 -------------------------
@@ -153,8 +153,9 @@ strictly read-only and neither tool appears in ``tools/list``.
 
 .. image:: ../images/feedback-loop.svg
     :zoomable:
-    :alt: A real task exposes a gap, records one feedback, moves it through the
-          queue into a guarded improvement and verifies it in another real task.
+        :alt: A real task exposes a gap and records one feedback. The feedback moves
+          through the queue into a guarded improvement. Another real task
+          verifies it.
 
 Working a feedback off
 ----------------------

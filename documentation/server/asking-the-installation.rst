@@ -13,10 +13,10 @@ procedure.
 
 .. image:: ../images/installation-fallback.svg
     :zoomable:
-    :alt: One square per entry the registry could return: the console path and
-          the booted runtime return all of them, while the package-file fallback
-          returns every declared entry and none of the dynamically registered
-          ones, and the answer states that.
+        :alt: One square per entry the registry could return. The console path and
+          the booted runtime return all of them. The package-file fallback
+          returns every declared entry and none of the ones registered at
+          runtime, and the answer states that.
 
 The order
 ---------

@@ -85,9 +85,9 @@ answer stays small.
 
 .. image:: ../images/feedback-judging-ladder.svg
     :zoomable:
-    :alt: A feedback is diagnosed from gap through delivery, routing and wording
-          to a design decision, stopping at the first step supported by
-          repository evidence.
+        :alt: A session diagnoses a feedback from gap through delivery, routing and
+          wording to a design decision. It stops at the first step the
+          repository's evidence supports.
 
 1. Gap
 ~~~~~~
@@ -278,7 +278,7 @@ Closed on the spot
 *Autonomous.*
 
 Only where nothing remains to establish. The wording of a rule that is already
-there, a move of one to where the task passes, a routing line onto a skill that
+there. A move of one to where the task passes. A routing line onto a skill that
 exists. The change lands in the same run and the commit that makes it archives
 the feedback.
 
@@ -441,9 +441,9 @@ open, a todo serves it   judged, the work is queued  ``Todo::serves()``, which `
 The middle state is the one worth being exact about. ``typo3_feedback_list``
 answers an agent somewhere else, and the archive is what that agent reads as
 ``closed``. A feedback closed the moment somebody decided about it would tell a
-session its report is done. The thing it reported would still be there. So the
-archive waits for the change, and ``Todo::unreadable()`` enforces it from the
-other side. It reports a todo that serves an archived feedback as a problem.
+session its report is complete. The thing it reported would still be there. So
+the archive waits for the change, and ``Todo::unreadable()`` enforces it from
+the other side. It reports a todo that serves an archived feedback as a problem.
 
 **The invariant:** a commit that judges a feedback either archives it or leaves
 at least one todo that serves it. It leaves no card that still asks for the

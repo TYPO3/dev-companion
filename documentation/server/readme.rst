@@ -26,8 +26,8 @@ What a caller can ask it, and where each answer comes from.
 
 .. image:: ../images/answer-flow.svg
     :zoomable:
-    :alt: A task starts by reading the project and identifying its workflow,
-          then uses a specialist tool and returns the source, version, scope and
+        :alt: A task starts with a read of the project and names its workflow. Then
+          it uses a specialist tool and returns the source, version, scope and
           limits with the answer.
 
 The tools are the server. Everything else on this page is either the other

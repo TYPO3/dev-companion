@@ -16,8 +16,8 @@ file, and it is not worth doing for one.
 
 .. image:: ../images/parallel-todos.svg
     :zoomable:
-    :alt: A worktree per todo says which session has it, and one branch carries
-          each session's unfinished work; completed branches return one at a
+        :alt: A worktree per todo says which session has it, and one branch carries
+          each session's unfinished work. Completed branches return one at a
           time through rebase, checks and a fast-forward merge.
 
 The worktree and the branch

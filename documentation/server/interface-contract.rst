@@ -25,9 +25,9 @@ What the draft says
 
 * **Namespace and Tool Naming** reserves ``typo3.`` for the mandatory part of
   the contract and sends extensions to a prefix of their own.
-* **TCA as a Resource** requires the content model be "served as a resource
-  under a uniform scheme and MUST NOT be decomposed into a large number of
-  generated tools". It names no scheme, there or anywhere else.
+* **TCA as a Resource** demands the content model "served as a resource under a
+  uniform scheme". It "MUST NOT be decomposed into a large number of generated
+  tools". It names no scheme, there or anywhere else.
 * It names two implementations, hauptsacheNet/typo3-mcp-server and
   marekskopal/typo3-mcp-server, and does not name this package.
 * Its **Open Questions** ask how the contract relates to public, read-only
@@ -81,8 +81,8 @@ The draft is also the first document to draw a line around what may present
 itself as TYPO3's MCP surface. That is where the package name meets it. This
 package declares ``typo3/dev-companion`` in its ``composer.json`` and stands
 under that name on Packagist since 2026-08-14, in the ``typo3`` vendor the TYPO3
-Association owns. So the name has an owner, and a policy on that vendor would
-stand against a package that already carries it rather than against a request.
+Association owns. So the name has an owner. A policy on that vendor would stand
+against a package that already carries it rather than against a request.
 
 What adoption would cost
 ------------------------

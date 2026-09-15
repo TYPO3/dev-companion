@@ -11,9 +11,9 @@ has the cases it leaves out.
 
 .. image:: ../images/install-flow.svg
     :zoomable:
-    :alt: A standalone checkout or Composer dependency is installed into a
-          project, which writes client configuration, publishes skills, records
-          the setup and is then approved and verified in the client.
+        :alt: The installer puts a standalone checkout or a Composer dependency into
+          a project. That writes client configuration, publishes skills and
+          records the setup. The client then approves and verifies it.
 
 ``install`` and ``update`` write into the directory they run in, which is the
 project under setup. Every command below is therefore run from the root of the
@@ -286,7 +286,7 @@ stays open rather than gets a fill:
   (`quickstart <https://code.claude.com/docs/en/mcp-quickstart>`_,
   `reference <https://code.claude.com/docs/en/mcp>`_)
 * **Amp** — an approval. "MCP servers in workspace settings
-  (``.amp/settings.json``) require explicit approval before they can run", and
+  (``.amp/settings.json``) require explicit approval before they can run." And
   "in the CLI, you'll be prompted to approve workspace servers when they're
   first detected". ``amp mcp approve typo3-dev-companion`` does it without the
   prompt, and ``amp mcp doctor`` shows one ``awaiting approval``.
@@ -296,24 +296,24 @@ stays open rather than gets a fill:
   server and its capabilities before starting it." The experimental
   ``chat.mcp.autoStart`` restarts the server when the configuration changes.
   (`MCP servers <https://code.visualstudio.com/docs/copilot/customization/mcp-servers>`_)
-* **Codex** — a trusted project. MCP servers can be scoped "to a project with
+* **Codex** — a trusted project. Codex scopes MCP servers "to a project with
   ``.codex/config.toml`` (trusted projects only)", so the trust prompt for the
   directory is what admits them. Whether a running session reads the file again
   is not documented; ``codex mcp list`` reports what it has.
   (`MCP <https://learn.chatgpt.com/docs/extend/mcp>`_)
 * **Zed** — a trusted worktree. The MCP page describes ``context_servers`` only
-  in the file opened with ``zed: open settings file``, but the project file is
-  where the rest of the documentation puts it: "every worktree opened may
-  contain a ``.zed/settings.json`` file with extra configuration options that
-  may require installing and spawning language servers or MCP servers", and
-  Zed's own advisory for the vulnerability the trust model answers says "the Zed
-  IDE loads Model Context Protocol (MCP) configurations from the
+  in the file opened with ``zed: open settings file``. But the rest of the
+  documentation puts it in the project file, "every worktree opened may contain
+  a ``.zed/settings.json`` file with extra configuration options that may
+  require installing and spawning language servers or MCP servers". Zed's own
+  advisory for the vulnerability the trust model answers agrees. It says "the
+  Zed IDE loads Model Context Protocol (MCP) configurations from the
   ``settings.json`` file located within a project's ``.zed`` subdirectory". So
   the client reads the written entry, behind a gate the other clients do not
-  have. Restricted Mode, which every worktree starts in, prevents "project
+  have. Every worktree starts in Restricted Mode. That prevents "project
   settings (``.zed/settings.json``) from being parsed and applied" and "MCP
-  servers from being installed and spawned"; the title bar carries an
-  exclamation mark until the directory is trusted there or with
+  servers from being installed and spawned". The title bar carries an
+  exclamation mark until the user trusts the directory there or with
   ``workspace::ToggleWorktreeSecurity``. Whether a window that was already open
   reads a new file has no documentation. Read 2026-08-02, when the current
   release was v1.13.1; the trust model arrived in v0.218.2-pre.

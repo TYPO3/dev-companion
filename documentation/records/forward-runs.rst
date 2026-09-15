@@ -7,10 +7,10 @@ a session carries one out.
 
 .. image:: ../images/forward-run.svg
     :zoomable:
-    :alt: A recorded scenario runs in a clean real project without steering,
-          produces a transcript and working-tree reading, is judged against
-          fixed criteria and leaves reusable findings as feedback or a contract
-          case.
+        :alt: A recorded scenario runs in a clean real project without steering.
+          It produces a transcript and a read of the working tree. A judge
+          holds it to fixed criteria, and reusable findings leave as feedback
+          or a contract case.
 
 Running one
 -----------

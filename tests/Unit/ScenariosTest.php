@@ -60,8 +60,8 @@ final class ScenariosTest extends TestCase
     }
 
     /**
-     * One case is one file. A file holding a second prompt is a file where
-     * nobody can tell which criteria a judgment answered — and the runner would
+     * One case is one file. A file that holds a second prompt is a file where
+     * nobody can tell which criteria a judgment answered. The runner would
      * print two prompts under one id.
      */
     #[Requirement('R-FBK-004')]
@@ -81,8 +81,8 @@ final class ScenariosTest extends TestCase
 
     /**
      * A contract case is never run, so its state is a claim no session ever
-     * answers. What holds it therefore has to be named beside it — and a test
-     * named there that does not exist is worth less than saying nothing.
+     * answers. So the case has to name what holds it beside it. A test named
+     * there that does not exist is worth less than silence.
      */
     #[Requirement('R-FBK-004')]
     #[Test]
@@ -106,8 +106,8 @@ final class ScenariosTest extends TestCase
 
     /**
      * Every test method in this suite as `Class::method`, read from the files
-     * rather than from reflection: a case may name a test in any of the three
-     * directories, and loading them all to ask would be the heavier half.
+     * rather than from reflection. A case may name a test in any of the three
+     * directories, and a load of them all to ask would be the heavier half.
      *
      * @return array<int, string>
      */
@@ -127,15 +127,15 @@ final class ScenariosTest extends TestCase
     }
 
     /**
-     * The cases `D-GUI-015` measured, each held by the words it is written in
-     * rather than by a brief that names the answer. Adding this before the
-     * needles were curated would have fixed the miss into the suite, which is
-     * why the entry deferred it; the needles are curated, so the arrival is
-     * what is asserted from here.
+     * The cases `D-GUI-015` measured, each held by its own words rather than by
+     * a brief that names the answer. This before the needle curation would have
+     * fixed the miss into the suite, which is why the entry deferred it. The
+     * needles have their curation now, so the arrival is what the case asserts
+     * from here.
      *
      * One case may claim two rows. `SKILL-07` is a task that crosses from one
-     * workflow to another, and a row per half is what says the second one
-     * arrives too — `D-SKL-066` — `D-GUI-018`.
+     * workflow to another. A row per half is what says the second one arrives
+     * too — `D-SKL-066`, `D-GUI-018`.
      */
     #[Decision('D-GUI-015')]
     #[Decision('D-GUI-018')]
@@ -199,8 +199,8 @@ final class ScenariosTest extends TestCase
 
     /**
      * The two cases read alike from here, which is why the command reports them
-     * rather than failing: a judgment quoting a call the session never made,
-     * and one naming a tool in order to say it was never called.
+     * rather than fails. A judgment that quotes a call the session never made,
+     * and one that names a tool in order to say the session never called it.
      *
      * @param array<string, mixed> $run
      * @param array<int, string> $expected
@@ -250,16 +250,16 @@ final class ScenariosTest extends TestCase
     }
 
     /**
-     * The exit code says whether the case still needs reading by hand, because
-     * that is what the recurring todo reading them is due on — `D-FBK-012`. A
-     * contract case claims its state on a test, so one whose `Held by` says
+     * The exit code says whether the case still needs a read by hand. That is
+     * what the recurring todo that reads them is due on — `D-FBK-012`. A
+     * contract case claims its state on a test. So one whose `Held by` says
      * `not guarded` is the part no test reaches and a session has to stand in
-     * for; one that is fully held stops asking without anybody editing the todo.
+     * for. One that is fully held stops the question with no edit to the todo.
      *
      * Every case rather than two named ones, because a list of ids in a test is
-     * the same thing that went stale in the todo: it was written against the
-     * cases of its day and read for months afterwards as though it still named
-     * them — `D-EVI-007`.
+     * the same thing that went stale in the todo. Written against the cases of
+     * its day, it read for months afterwards as though it still named them —
+     * `D-EVI-007`.
      */
     #[Decision('D-EVI-007')]
     #[Test]
@@ -275,8 +275,8 @@ final class ScenariosTest extends TestCase
 
         self::assertSame($expected, $answered);
         // Named no case the command answers for all of them at once, which is
-        // what the todo runs: one case standing in for the rest goes quiet the
-        // day that case is guarded and the others are not.
+        // what the todo runs. One case that stands in for the rest goes quiet
+        // the day that case has a guard and the others do not.
         self::assertSame(
             in_array(1, $expected, true) ? 1 : 0,
             $application->doRun(new StringInput('scenarios:contract'), new BufferedOutput()),
@@ -314,9 +314,9 @@ final class ScenariosTest extends TestCase
     #[Test]
     public function aRunWhoseSessionHasNotHappenedYetIsOpen(): void
     {
-        // What `bin/cli scenarios:record` writes. A checker that fails on it stops
-        // the repository for as long as a run is open — which is the one time
-        // it has to stay usable.
+        // What `bin/cli scenarios:record` writes. A checker that fails on it
+        // stops the repository for as long as a run is open. That is the one
+        // time it has to stay usable.
         $skeleton = Scenarios::skeleton('REVIEW-01', 'testing', 'phpunit', '2026-07-30');
         $recorded = $this->record('REVIEW-01', static fn(): array => $skeleton);
 
@@ -328,9 +328,9 @@ final class ScenariosTest extends TestCase
     #[Test]
     public function aRecordedCallSaysWhatItAsked(): void
     {
-        // A bare name cannot answer what the runs are judged on: whether the
-        // conventions lookup was asked once per surface or once broadly,
-        // which version it was given, whether a returned id was followed. All
+        // A bare name cannot answer what the judgement of a run turns on.
+        // Whether the conventions lookup ran once per surface or once broadly,
+        // which version it got, whether the session followed a returned id. All
         // three are in the arguments and nowhere else in the record.
         $recorded = $this->record('REVIEW-01', static function (array $run): array {
             $run['toolTrace'] = [
@@ -347,8 +347,8 @@ final class ScenariosTest extends TestCase
             'scenarios/runs/REVIEW-01.json tool call 3 does not name the tool it called',
         ], $recorded['problems']);
 
-        // Recorded as a bare name, the way every run was written before the
-        // arguments were part of one.
+        // Recorded as a bare name, the way every run stood before the arguments
+        // were part of one.
         $named = $this->record('REVIEW-01', static function (array $run): array {
             $run['toolTrace'] = ['typo3_project_describe'];
 
@@ -419,8 +419,8 @@ final class ScenariosTest extends TestCase
     }
 
     /**
-     * One recorded run, written to a directory of this test's own: a fixture
-     * below scenarios/runs/ would be read as a real result of a real session.
+     * One recorded run, written to a directory of this test's own. A fixture
+     * below scenarios/runs/ would read as a real result of a real session.
      *
      * @param callable(array<string, mixed>): array<string, mixed> $spoil
      * @return array{file: string, run: array<string, mixed>, verdict: string, problems: array<int, string>}

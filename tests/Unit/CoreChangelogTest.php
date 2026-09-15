@@ -17,14 +17,14 @@ use TYPO3\DevCompanion\Tool\Registry;
  * The versions above the installed major, which the installation cannot ship.
  *
  * A package carries every changelog down to 7.0 and nothing above its own, so
- * the entries an upgrade is *to* are exactly the ones missing — 469 of them
- * over six directories for a 13.4 installation, measured 2026-08-08. They come
- * from the one changelog manual docs.typo3.org publishes, and what this holds
- * is the join: which side each entry came from, that neither shadows the other,
- * and that a host which cannot be reached is said rather than read as silence.
+ * the entries an upgrade is *to* are exactly the absent ones. 469 of them over
+ * six directories for a 13.4 installation, measured 2026-08-08. They come from
+ * the one changelog manual docs.typo3.org publishes, and this holds the join.
+ * Which side each entry came from, that neither shadows the other, and that the
+ * answer names an unreachable host rather than reads it as silence.
  *
  * Nothing here reaches that host. The seam is `CoreChangelog::useReader()` and
- * every body below is written here — `R-COD-003`.
+ * every body below stands here — `R-COD-003`.
  */
 final class CoreChangelogTest extends TestCase
 {
@@ -38,8 +38,8 @@ final class CoreChangelogTest extends TestCase
     }
 
     /**
-     * What the installation ships stops at its own major, so a version above it
-     * is answered from docs.typo3.org and the entry says where it came from —
+     * What the installation ships stops at its own major. So docs.typo3.org
+     * answers a version above it, and the entry says where it came from —
      * `D-ANS-067`.
      */
     #[Decision('D-ANS-067')]
@@ -64,8 +64,8 @@ final class CoreChangelogTest extends TestCase
 
     /**
      * A version the installation does ship is that installation's, whatever the
-     * manual says about it. The two are never both in one answer: an entry on
-     * disk is the code that is running, and the host publishes what the release
+     * manual says about it. The two are never both in one answer. An entry on
+     * disk is the code that runs, and the host publishes what the release
      * branch carries today — `D-ANS-067`.
      */
     #[Decision('D-ANS-067')]
@@ -85,10 +85,10 @@ final class CoreChangelogTest extends TestCase
 
     /**
      * Naming a version the installation ships is the one call that must stay
-     * local. It is the ordinary question — what did the release I am on change
-     * — and it would otherwise pay a round trip, or on a machine with no
-     * network a connect timeout, for entries the narrowing already excluded —
-     * `D-ANS-067`.
+     * local. It is the ordinary question, what did the release I am on change.
+     * It would otherwise pay a round trip for entries the version filter
+     * already excluded. On a machine with no network that is a connect timeout
+     * — `D-ANS-067`.
      */
     #[Decision('D-ANS-067')]
     #[Test]
@@ -111,8 +111,8 @@ final class CoreChangelogTest extends TestCase
 
     /**
      * A host that did not answer is a gap in this answer rather than in the
-     * changelog, and the difference is what a caller upgrading has to know:
-     * silence read as "there is nothing above your major" is the wrong answer
+     * changelog. The difference is what a caller on an upgrade has to know.
+     * Silence read as "there is nothing above your major" is the wrong answer
      * to the one question this exists for — `D-ANS-067`.
      */
     #[Decision('D-ANS-067')]
@@ -129,11 +129,10 @@ final class CoreChangelogTest extends TestCase
     }
 
     /**
-     * The inventory line carries the stated title and an installed entry's
-     * title is a file read away, so carrying it under the field a search reads
-     * would have let a manual entry answer in the pass where the installed one
-     * it should have found is still searched by its file name alone —
-     * `D-ANS-067`.
+     * The inventory line carries the stated title, and an installed entry's
+     * title is a file read away. Under the field a search reads, a manual entry
+     * would answer in the pass that reads file names alone. The installed one
+     * it should have found is still there by name only — `D-ANS-067`.
      */
     #[Decision('D-ANS-067')]
     #[Test]
@@ -148,9 +147,9 @@ final class CoreChangelogTest extends TestCase
 
         $result = Registry::call('typo3_changelog_lookup', ['query' => 'frobnicator']);
 
-        // Neither is named after the word, so both are reached in the pass that
-        // reads titles — and that pass reads both sides or it reads neither.
-        // Newest first, which is the order every answer here is in.
+        // Neither has the word in its name, so the pass that reads titles
+        // reaches both. That pass reads both sides or it reads neither. Newest
+        // first, which is the order every answer here is in.
         self::assertSame(
             ['15.0', '13.4'],
             array_column($result->data['entries'], 'version'),
@@ -159,7 +158,7 @@ final class CoreChangelogTest extends TestCase
     }
 
     /**
-     * A composer project shipping one changelog directory per version named,
+     * A composer project that ships one changelog directory per version named,
      * with an entry in each.
      *
      * @param array<string, string> $entries page path to stated title
@@ -193,11 +192,12 @@ final class CoreChangelogTest extends TestCase
     }
 
     /**
-     * What the host serves: a Sphinx inventory naming those pages, and the RST
-     * of each under `_sources`.
+     * What the host serves: a Sphinx inventory that names those pages, and the
+     * RST of each under `_sources`.
      *
-     * The inventory is written here rather than fetched, in the format the
-     * writer produces — four comment lines and then the objects, compressed.
+     * The inventory stands here rather than comes from a fetch, in the format
+     * the writer produces — four comment lines and then the objects,
+     * compressed.
      *
      * @param array<string, string> $pages page name to stated title
      */

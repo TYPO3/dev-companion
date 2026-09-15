@@ -15,11 +15,11 @@ use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 
 /**
- * What the answer to a question this server cannot be asked here says.
+ * What the answer to a question this server cannot take here says.
  *
  * The cause says what stopped the call. Whether that is a precondition the
- * session is about to satisfy or a dead end is the repository's state, and this
- * is where the two are told apart.
+ * session is about to satisfy or a dead end is the repository's state. This is
+ * where the two come apart.
  */
 final class UnsupportedTest extends TestCase
 {
@@ -38,11 +38,11 @@ final class UnsupportedTest extends TestCase
     #[Test]
     public function aRefusalBeforeTheInstallSaysThatTheStateEnds(): void
     {
-        // The state `feedback/2026-08-24-140259` was recorded in: an extension
-        // repository requiring `typo3/cms-core`, before `composer install` had
-        // run in it. `cause: no-installation` was read as permanent, and the
-        // two hours after it were answered out of a core checkout the session
-        // happened to have.
+        // The state behind `feedback/2026-08-24-140259`: an extension
+        // repository that requires `typo3/cms-core`, before `composer install`
+        // had run in it. The session read `cause: no-installation` as
+        // permanent, and a core checkout it happened to have answered the two
+        // hours after it.
         $root = $this->temporaryDirectory();
         file_put_contents($root . '/composer.json', json_encode([
             'name' => 'acme/usercentrics',
@@ -63,8 +63,8 @@ final class UnsupportedTest extends TestCase
     public function aRepositoryDeclaringNoTypo3IsNotToldAnInstallIsPending(): void
     {
         // The walk goes up twelve directories, so whatever PHP repository a
-        // session stands below is one this may not report an install pending
-        // in.
+        // session stands below is one this may not report as short of an
+        // install.
         $root = $this->temporaryDirectory();
         file_put_contents($root . '/composer.json', json_encode([
             'name' => 'acme/toolkit',
@@ -84,9 +84,9 @@ final class UnsupportedTest extends TestCase
     #[Test]
     public function anInstalledRepositoryIsNotToldAnInstallIsPending(): void
     {
-        // A console that does not answer is a state that ends without
-        // reinstalling anything, and a refusal that read as a prescription
-        // would have the caller install a repository already installed.
+        // A console that does not answer is a state that ends with no second
+        // install. A refusal that read as a prescription would have the caller
+        // install a repository that is already installed.
         $runner = self::createStub(CommandRunner::class);
         $runner->method('locate')->willReturn(null);
         Typo3Cli::useRunner($runner);
@@ -104,7 +104,7 @@ final class UnsupportedTest extends TestCase
     #[Test]
     public function aNamedRootThatCouldNotBeUsedClaimsNothingAboutTheRepository(): void
     {
-        // Nothing was searched for, so nothing was seen — the directory the
+        // The walk searched nothing, so it saw nothing — the directory the
         // session stands in included, whatever it declares.
         $root = $this->temporaryDirectory();
         file_put_contents($root . '/composer.json', json_encode([

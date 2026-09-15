@@ -14,10 +14,10 @@ use TYPO3\DevCompanion\Upkeep\Checkouts;
 /**
  * What a core checkout carries beyond what `checkouts:update` put there.
  *
- * `tools:record` refuses one that carries anything, because the recording is
+ * `tools:record` refuses one that carries anything, because the record is
  * evidence about the checkout that command makes — `D-DOC-034`. What can be
- * wrong here is the reading of git's answer, so that is what this holds; the
- * git call itself is the seam a test hands a runner to.
+ * wrong here is the read of git's answer, so that is what this holds. The git
+ * call itself is the seam a test hands a runner to.
  */
 final class CheckoutsTest extends TestCase
 {
@@ -32,9 +32,9 @@ final class CheckoutsTest extends TestCase
     public function everyEntryGitReportsIsCarried(): void
     {
         // What `composer install` leaves in a core checkout, as git reported it
-        // in .checkouts/14.3 on 2026-08-18. All six are ignored, which is why
-        // the status is asked with --ignored and why a plain one calls this
-        // tree clean — `D-DOC-034`.
+        // in .checkouts/14.3 on 2026-08-18. All six stand in the ignore list.
+        // That is why the status call carries --ignored and why a plain one
+        // calls this tree clean — `D-DOC-034`.
         $this->answering(0, "!! .cache/\n!! bin/\n!! index.php\n!! typo3/sysext/core/bin/\n!! typo3temp/\n!! vendor/\n");
 
         self::assertSame(
@@ -55,9 +55,9 @@ final class CheckoutsTest extends TestCase
     #[Test]
     public function aGitThatCannotAnswerReportsNoDifference(): void
     {
-        // Not a repository, or no git at all. Either way nothing was found to
-        // carry, and a refusal on that would stop a recording over a question
-        // that was never asked — `D-DOC-034`.
+        // Not a repository, or no git at all. Either way git found nothing to
+        // carry, and a refusal on that would stop a record over a question
+        // nobody asked — `D-DOC-034`.
         $this->answering(128, "fatal: not a git repository\n");
 
         self::assertSame([], Checkouts::beyondIndex('/somewhere/else'));
@@ -67,7 +67,7 @@ final class CheckoutsTest extends TestCase
     #[Test]
     public function bothKindsOfChangeAreCarried(): void
     {
-        // A tracked file somebody edited breaks the recording exactly as an
+        // A tracked file somebody edited breaks the record exactly as an
         // installed console does: neither is in what checkouts:update makes —
         // `D-DOC-034`.
         $this->answering(0, " M composer.json\n?? notes.md\n!! vendor/\n");

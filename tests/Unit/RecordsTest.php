@@ -15,15 +15,15 @@ use TYPO3\DevCompanion\Upkeep\Sources;
  * What the records claim about the code they name.
  *
  * A backticked name this repository owns is a claim that the thing exists now,
- * and four guards already say that of four kinds: a tool in `ToolNamingTest`,
- * a test method and a requirement id in `DecisionsTest`, a decision id and a
- * test in `bin/cli requirements:check`. This is the fifth, a member of one of
- * this repository's own classes, and it went unwatched — 24 of the 1673 such
+ * and four guards already say that of four kinds. A tool in `ToolNamingTest`, a
+ * test method and a requirement id in `DecisionsTest`, a decision id and a test
+ * in `bin/cli requirements:check`. This is the fifth, a member of one of this
+ * repository's own classes, and nothing watched it. 24 of the 1673 such
  * references were false on 2026-08-22, every one of them in `decisions/`.
  *
- * The escape is `D-DOC-040`'s and needs no list: a name being talked about
- * rather than pointed at is written plainly, which is what an entry recording
- * that a member is gone does.
+ * The escape is `D-DOC-040`'s and needs no list. A name under discussion rather
+ * than a pointer stands plain, which is what an entry that records a gone
+ * member does.
  */
 final class RecordsTest extends TestCase
 {
@@ -31,9 +31,10 @@ final class RecordsTest extends TestCase
     private const CORPORA = ['decisions', 'requirements', 'documentation', 'todo', 'skills', 'knowledge'];
 
     /**
-     * Members every class has without declaring one. A magic method is the
-     * language's, and the three enum readers are generated for a backed case
-     * list — `Scope::from()` is named by `D-KNW-005` and declared nowhere.
+     * Members every class has without a declaration. A magic method is the
+     * language's, and the language generates the three enum readers for a
+     * backed case list. `D-KNW-005` names `Scope::from()`, and no file declares
+     * it.
      */
     private const LANGUAGE_MEMBERS = ['from', 'tryFrom', 'cases', 'class'];
 
@@ -41,10 +42,10 @@ final class RecordsTest extends TestCase
      * A member the records name in backticks exists on the class they name.
      *
      * The two the corpus proved necessary are both about a name that looks like
-     * ours and is not: a magic method, and a class this repository shares a name
-     * with — `Site::__construct()` in `D-KNW-097` is TYPO3's `Site` and not the
-     * one below `src/Upkeep/`. Nothing tells those apart from the name, so a
-     * class we share is a hole `D-DOC-042` states rather than closes.
+     * ours and is not. A magic method, and a class this repository shares a
+     * name with: `Site::__construct()` in `D-KNW-097` is TYPO3's `Site` and not
+     * the one below `src/Upkeep/`. Nothing tells those apart from the name, so
+     * a class we share is a hole `D-DOC-042` states rather than closes.
      */
     #[Decision('D-DOC-042')]
     #[Test]

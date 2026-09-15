@@ -13,13 +13,16 @@ use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * The shapes every command prints in, held where the words are not: the mark,
+ * The shapes every command prints in, held where the words are not. The mark,
  * the colour, the blank line and the stream are what make two commands read as
  * one product — `D-DOC-067`.
  */
 final class VoiceTest extends TestCase
 {
-    /** The first heading opens the output and the second is set off from what came before it. */
+    /**
+     * The first heading opens the output and the second stands apart from what
+     * came before it.
+     */
     #[Decision('D-DOC-067')]
     #[Test]
     public function aHeadingAfterAnotherIsSetOffByABlankLine(): void
@@ -33,7 +36,10 @@ final class VoiceTest extends TestCase
         self::assertSame("First\n  one\n\nSecond\n", $output->fetch());
     }
 
-    /** The exit code is the verdict, and the failing sentence defaults to the fine one. */
+    /**
+     * The exit code is the verdict, and the failure sentence defaults to the
+     * fine one.
+     */
     #[Decision('D-DOC-067')]
     #[Test]
     public function aVerdictIsTheExitCodeWithItsMarkBeforeTheSentence(): void
@@ -76,7 +82,10 @@ final class VoiceTest extends TestCase
         self::assertSame("✗ D-X-001 has no title\n", $errors->fetch());
     }
 
-    /** What a caller writes is printed as written, a tag-shaped placeholder included. */
+    /**
+     * What a caller writes prints as written, a tag-shaped placeholder
+     * included.
+     */
     #[Decision('D-DOC-067')]
     #[Test]
     public function aPlaceholderInAngleBracketsIsPrintedAsWritten(): void
@@ -88,7 +97,10 @@ final class VoiceTest extends TestCase
         self::assertSame("bin/cli todo:home <id>\n", $output->fetch());
     }
 
-    /** A key is padded before it is coloured, so the column it heads still lines up. */
+    /**
+     * The pad comes before the colour, so the column a key heads still lines
+     * up.
+     */
     #[Decision('D-DOC-067')]
     #[Test]
     public function aKeyIsPaddedToItsColumnBeforeItIsColoured(): void
@@ -103,7 +115,10 @@ final class VoiceTest extends TestCase
         self::assertSame("  12.4   2026-09-05\n", $plain->fetch());
     }
 
-    /** A bar is drawn on a terminal and leaves no trace in a pipe, where a log would be a line per redraw. */
+    /**
+     * A bar draws on a terminal and leaves no trace in a pipe, where a log
+     * would be a line per redraw.
+     */
     #[Decision('D-DOC-067')]
     #[Test]
     public function aProgressBarIsDrawnOnATerminalAndNotInAPipe(): void
@@ -123,7 +138,10 @@ final class VoiceTest extends TestCase
         self::assertSame('', $pipe->fetch());
     }
 
-    /** One of a thing is named in the singular, and the plural is the regular one unless named. */
+    /**
+     * One of a thing takes the singular, and the plural is the regular one
+     * unless the caller names it.
+     */
     #[Test]
     public function aCountTakesTheFormItsNumberDoes(): void
     {

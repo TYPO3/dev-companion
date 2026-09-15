@@ -13,12 +13,13 @@ use TYPO3\DevCompanion\Http\Recent;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 
 /**
- * What is held from a host outside this machine, and what is fetched again.
+ * What stays from a host outside this machine, and what a second call fetches
+ * again.
  *
  * The two sources sit on opposite sides of one question: who can change the
- * answer. Nobody reaches the tracker through this server, so its answers are
- * held; the caller reaches the review server with its own git, and the answer
- * it changes there is the one it asks about next.
+ * answer. Nobody reaches the tracker through this server, so its answers stay.
+ * The caller reaches the review server with its own git, and the answer it
+ * changes there is the one it asks about next.
  */
 final class RecentTest extends TestCase
 {
@@ -34,8 +35,8 @@ final class RecentTest extends TestCase
     }
 
     /**
-     * The tracker is held the same way and by the same rule, because what is
-     * being spared is the round trip rather than the parsing — `D-ANS-049`.
+     * The tracker stays the same way and by the same rule, because what this
+     * spares is the round trip rather than the parse — `D-ANS-049`.
      */
     #[Decision('D-ANS-049')]
     #[Test]
@@ -49,14 +50,14 @@ final class RecentTest extends TestCase
         self::assertSame('answered', $first['status']);
         self::assertSame($first, $second);
         // Two hosts, one round trip each: the tracker, and the review server a
-        // single issue is asked of since `D-ANS-125`. Both are held, so the
-        // second call reads neither.
+        // single issue goes to since `D-ANS-125`. Both stay, so the second call
+        // reads neither.
         self::assertSame(2, $this->reads, 'the second answer came from what was held');
     }
 
     /**
-     * And what is held is read again once it is old, which is what keeps a
-     * triage from acting on a state that has moved — `D-ANS-049`.
+     * And a second read replaces what stays once it is old, which is what keeps
+     * a triage off a state that has moved — `D-ANS-049`.
      */
     #[Decision('D-ANS-049')]
     #[Test]
@@ -88,7 +89,7 @@ final class RecentTest extends TestCase
     }
 
     /**
-     * A change the review server answered for is held, so a second call inside
+     * A change the review server answered for stays, so a second call inside
      * the window costs nothing over the wire — `D-ANS-049`.
      */
     #[Decision('D-ANS-049')]
@@ -109,9 +110,9 @@ final class RecentTest extends TestCase
     #[Test]
     public function noChangeForAnIssueIsAskedEveryTime(): void
     {
-        // The caller falsifies this one itself by pushing, and asks again right
-        // afterwards. A held "there is none" is what sends somebody to write a
-        // patch that is already up — `D-ANS-049`.
+        // The caller falsifies this one itself with a push, and asks again
+        // right afterwards. A held "there is none" is what sends somebody to
+        // write a patch that is already up — `D-ANS-049`.
         $gerrit = new Gerrit($this->transport(")]}'\n[]"));
 
         $gerrit->changesForIssue('105403');
@@ -120,7 +121,9 @@ final class RecentTest extends TestCase
         self::assertSame(2, $this->reads);
     }
 
-    /** A transport that answers the same body every time and counts the asking. */
+    /**
+     * A transport that answers the same body every time and counts the calls.
+     */
     private function transport(string $body): \Closure
     {
         Recent::useClock(fn(): int => $this->now);

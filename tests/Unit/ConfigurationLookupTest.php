@@ -17,10 +17,10 @@ use TYPO3\DevCompanion\Upkeep\Fixture;
  * Where the effective configuration value comes from, and what stands in its
  * place where there was none to read.
  *
- * The source is the booted container on every covered line. `configuration:show`
- * arrived in TYPO3 14.2, so a console answer would leave 12.4 and 13.4 holding
- * "command is not defined" — which is the answer `D-ANS-077` rules out and what
- * these three cases exist to keep out of the tool.
+ * The source is the booted container on every covered line.
+ * `configuration:show` arrived in TYPO3 14.2, so a console answer would leave
+ * 12.4 and 13.4 with "command is not defined". That is the answer `D-ANS-077`
+ * rules out and what these three cases keep out of the tool.
  */
 final class ConfigurationLookupTest extends TestCase
 {
@@ -63,9 +63,9 @@ final class ConfigurationLookupTest extends TestCase
     #[Test]
     public function anInstallationThatCouldNotBeBootedIsNotReportedAsEmpty(): void
     {
-        // R-ANS-001. The boot fails because no autoloader was written, and the
-        // answer has to stay distinguishable from the case above it: `found`
-        // is a statement about an installation, and none was consulted.
+        // R-ANS-001. The boot fails because nothing wrote an autoloader, and
+        // the answer has to stay apart from the case above it. `found` is a
+        // statement about an installation, and the tool consulted none.
         $this->discover(null);
 
         $result = Registry::call('typo3_configuration_lookup', ['configurationPath' => 'SYS/fluid']);

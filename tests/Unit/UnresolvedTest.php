@@ -16,9 +16,9 @@ use TYPO3\DevCompanion\Upkeep\Unresolved;
 final class UnresolvedTest extends TestCase
 {
     /**
-     * The reading exists so that nothing unfinished can be invisible, which
-     * only holds if it is the whole of what is unfinished. A reading that
-     * shows some of it is worse than none: it reads as a complete list.
+     * The read exists so that nothing unfinished can be invisible, which only
+     * holds if it is the whole of the unfinished work. A read that shows some
+     * of it is worse than none: it reads as a complete list.
      */
     #[Test]
     public function everyRequirementNothingAnswersForIsInTheReading(): void
@@ -26,10 +26,10 @@ final class UnresolvedTest extends TestCase
         $expected = [];
         foreach (Requirements::all() as $requirement) {
             if (!Requirements::state($requirement)->isGuarded()) {
-                // The value rather than the case: the reading is printed, and
-                // it declares `state` as a string. Comparing the enum passed
-                // for as long as every requirement was guarded and the two
-                // empty arrays never said which side was right.
+                // The value rather than the case: the read prints, and it
+                // declares `state` as a string. A comparison of the enum passed
+                // for as long as every requirement had a guard. The two empty
+                // arrays never said which side was right.
                 $expected[$requirement['id']] = Requirements::state($requirement)->value;
             }
         }
@@ -43,18 +43,18 @@ final class UnresolvedTest extends TestCase
     }
 
     /**
-     * A queued todo naming the id is the whole coupling between what must
-     * be true and the order the work happens in. An entry nobody has queued is
-     * the case the reading exists for, so getting that flag backwards would
-     * hide exactly the entries it is meant to surface.
+     * A queued todo that names the id is the whole tie between what must be
+     * true and the order the work happens in. An entry nobody has queued is the
+     * case the read exists for. That flag backwards would hide exactly the
+     * entries it is meant to show.
      *
      * It is what the *queue* names, not what `todo/` contains. The directory
-     * also keeps the page listing what is deliberately not queued, and an id
-     * named there has been decided about in the opposite direction.
+     * also keeps the page that lists what stays out of the queue on purpose. An
+     * id named there has a decision in the opposite direction.
      *
-     * Read as two lists rather than entry by entry, because the reading is
-     * empty on any day every requirement is held, and a loop over nothing is a
-     * test that reports as passing while holding no such thing.
+     * Read as two lists rather than entry by entry. The read is empty on any
+     * day every requirement has a guard. A loop over nothing is a test that
+     * reports a pass while it holds no such thing.
      */
     #[Test]
     public function anEntryIsQueuedWhenAnItemNamesIt(): void
@@ -68,15 +68,15 @@ final class UnresolvedTest extends TestCase
     }
 
     /**
-     * The second answer, and the one the reading could not see until this was
-     * written: a requirement no test can hold is a legitimate state, so an
-     * entry whose **Held by** says so stays in the listing for good, and every
-     * session that ran `judge what nothing has answered for` re-derived the
-     * same judgement about the same entries.
+     * The second answer, and the one the read could not see before this. A
+     * requirement no test can hold is a legitimate state, so an entry whose
+     * **Held by** says so stays in the listing for good. Every session that ran
+     * `judge what nothing has answered for` derived the same judgement about
+     * the same entries again.
      *
-     * The date is carried through rather than folded into a flag, because the
-     * entry can be rewritten under the stamp and nothing catches that: what the
-     * reading can do is print the day the judgement was made — `D-DOC-038`.
+     * The date comes through rather than folds into a flag, because a session
+     * can rewrite the entry under the stamp and nothing catches that. What the
+     * read can do is print the day of the judgement — `D-DOC-038`.
      */
     #[Decision('D-DOC-038')]
     #[Test]
@@ -99,11 +99,11 @@ final class UnresolvedTest extends TestCase
 
     /**
      * `open` is two states and the report separates them, so the flag that
-     * separates them has to be the file's own. A reading that settles the
-     * **Wrong if** neither way leaves a **Since then** where it changed
-     * something and a `readings:` date where it changed nothing, and half the
-     * open entries carry one of the two — counted as unread, the pile reads as
-     * untouched and the oldest named is one somebody has already been back to.
+     * separates them has to be the file's own. A read that settles the **Wrong
+     * if** neither way leaves a **Since then** where it changed something and a
+     * `readings:` date where it changed nothing. Half the open entries carry
+     * one of the two. Counted as unread, the pile reads as untouched and the
+     * oldest named is one somebody has already been back to.
      *
      * Both spellings counted while the corpus had two. It has one since
      * `D-DOC-039`, which is the entry this holds and where the numbers are.
@@ -135,9 +135,9 @@ final class UnresolvedTest extends TestCase
     /**
      * Which open decisions still wait for a reader: the ones no test declares.
      *
-     * An entry a test holds is read by whoever makes that test fail, because
-     * the failure prints it. So `held` is what narrows a listing of 155 to the
-     * 35 a session can still be owed — `D-DOC-054`.
+     * Whoever makes a test fail reads the entry it holds, because the failure
+     * prints it. So `held` is what narrows a listing of 155 to the 35 a session
+     * can still owe — `D-DOC-054`.
      */
     #[Decision('D-DOC-054')]
     #[Test]

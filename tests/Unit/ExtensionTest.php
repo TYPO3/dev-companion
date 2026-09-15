@@ -13,12 +13,12 @@ use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 
 /**
- * What the extension answer says about the files core has stopped reading.
+ * What the extension answer says about the files the core no longer reads.
  *
  * Every predicate behind this turns on a file the extension ships rather than
- * on anything its code calls, so nothing a caller would search for reaches one
- * and the tool that reads the tree is the only thing that can — D-ANS-009,
- * which names each trigger site and the checkout it was read in.
+ * on anything its code calls. So nothing a caller would search for reaches one,
+ * and the tool that reads the tree is the only thing that can. D-ANS-009 names
+ * each trigger site and the checkout behind it.
  */
 final class ExtensionTest extends TestCase
 {
@@ -46,7 +46,7 @@ final class ExtensionTest extends TestCase
             'extra' => ['typo3/cms' => ['version' => '1.0.0', 'Package' => ['providesPackages' => []]]],
         ]);
 
-        // An empty providesPackages is what an extension shipping no Composer
+        // An empty providesPackages is what an extension with no Composer
         // packages of its own writes, and isComposerOnlyCapable() accepts it.
         self::assertSame([], $found);
     }
@@ -61,7 +61,7 @@ final class ExtensionTest extends TestCase
         ]);
 
         // The predicate is both fields rather than either, which is the half an
-        // extension author reads past: composer.json gains a version, the
+        // extension author reads past. composer.json gains a version, the
         // deprecation stays, and nothing says why — `D-ANS-009`.
         self::assertSame(['#108345'], array_column($version, 'changelog'));
         self::assertSame(['#108345'], array_column($provides, 'changelog'));
@@ -123,9 +123,9 @@ final class ExtensionTest extends TestCase
         );
 
         // getExtensionIcon() takes the first location that exists and reads the
-        // Resources one first, so the root file is never reached and costs
-        // nothing — reporting it would be a finding with no migration behind it
-        // — `D-ANS-009`.
+        // Resources one first, so it never reaches the root file and that costs
+        // nothing. A report of it would be a finding with no migration behind
+        // it — `D-ANS-009`.
         self::assertSame([], $found);
     }
 
@@ -153,13 +153,13 @@ final class ExtensionTest extends TestCase
             [],
         );
 
-        // Per file rather than per extension: the setup half is migrated and
-        // the constants half is still lost — `D-ANS-009`.
+        // Per file rather than per extension: the setup half has its migration
+        // and the constants half is still lost — `D-ANS-009`.
         self::assertSame(['ext_typoscript_constants.txt'], array_column($found, 'file'));
     }
 
     /**
-     * An extension shipping exactly those files, described.
+     * An extension that ships exactly those files, described.
      *
      * @param array<int, string> $files
      * @param array<string, mixed> $manifest what its composer.json declares beside the key

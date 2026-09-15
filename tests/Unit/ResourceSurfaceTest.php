@@ -20,13 +20,13 @@ use TYPO3\DevCompanion\Server\Installer;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 
 /**
- * The typo3:// resources as a host reads them, which is before anything of
- * this server has been called.
+ * The typo3:// resources as a host reads them, which is before any call to this
+ * server.
  *
- * A tool is called by the model mid-task and explains itself in its answer; a
- * resource is picked out of a list by the application or the user, who have the
+ * The model calls a tool mid-task and the tool explains itself in its answer.
+ * The application or the user picks a resource out of a list, and they have the
  * list and nothing else. `R-ANS-022` is what follows from that, and this holds
- * the fields the choice is made on.
+ * the fields the choice turns on.
  */
 #[Requirement('R-ANS-022')]
 final class ResourceSurfaceTest extends TestCase
@@ -49,10 +49,10 @@ final class ResourceSurfaceTest extends TestCase
     }
 
     /**
-     * The order is the whole of what a priority says, so it is what is held:
-     * the index above everything it lists, and what holds wherever the caller
-     * is working above what stops at the core. It runs over both families,
-     * because a picker sorts one list.
+     * The order is the whole of what a priority says, so it is what this holds.
+     * The index above everything it lists, and what holds wherever the caller
+     * works above what stops at the core. It runs over both families, because a
+     * picker sorts one list.
      */
     #[Test]
     public function whatAResourceIsWorthOutsideTheCoreDecidesWhereAPickerPutsIt(): void
@@ -100,10 +100,10 @@ final class ResourceSurfaceTest extends TestCase
             }
 
             // Everything outside the core used to be one case and is now
-            // several: a document may hold everywhere, or answer for a package
+            // several. A document may hold everywhere, or answer for a package
             // or for the repository around an installation and for neither of
             // the others. All of them still owe the card the same thing, which
-            // is a sentence naming who the answers oblige.
+            // is a sentence that names who the answers oblige.
             self::assertMatchesRegularExpression(
                 '/(Holds for|Answers for) /',
                 $description,
@@ -113,10 +113,10 @@ final class ResourceSurfaceTest extends TestCase
     }
 
     /**
-     * The same for the second family, plus the difference between the two: a
-     * document is prose to read and a skill is an order to follow, and the one
-     * place a host can be told which of the two it is picking up is the card
-     * it picks from — the card is all it has.
+     * The same for the second family, plus the difference between the two. A
+     * document is prose to read and a skill is an order to follow. The one
+     * place a host can learn which of the two it picks up is the card it picks
+     * from. The card is all it has.
      */
     #[Test]
     public function aSkillSaysThatItIsAWorkflowAndWhoItsStepsOblige(): void
@@ -139,8 +139,8 @@ final class ResourceSurfaceTest extends TestCase
 
     /**
      * What the skill says about itself is what it already said, so the two
-     * cannot come apart: a description written a second time here would be
-     * corrected in the front matter and stay wrong in the resource list.
+     * cannot come apart. A description written a second time here would get its
+     * correction in the front matter and stay wrong in the resource list.
      */
     #[Test]
     public function whatASkillIsOfferedAsIsWhatItsOwnFrontMatterSays(): void
@@ -159,10 +159,10 @@ final class ResourceSurfaceTest extends TestCase
     }
 
     /**
-     * A skill is offered because it is published, which is the list
+     * A skill is on offer because it is in the published list, which
      * `Server\Installer` writes into a client. A draft is a file in `skills/`
-     * that nobody may load yet — `typo3-development-installation`, `D-SKL-013`
-     * — and offering it as a resource would publish it by the back door.
+     * that nobody may load yet — `typo3-development-installation`, `D-SKL-013`.
+     * An offer of it as a resource would publish it by the back door.
      */
     #[Requirement('R-ANS-022')]
     #[Test]
@@ -188,11 +188,11 @@ final class ResourceSurfaceTest extends TestCase
     }
 
     /**
-     * What a workflow hands over at a step is addressable without being in the
-     * list a picker sorts. A checklist offered beside the workflow that owns it
-     * is an entry nobody can choose between, and it is read at the step that
-     * sends the reader to it — which is what the priority under all of them
-     * says for the client that does sort templates.
+     * What a workflow hands over at a step is addressable and stays out of the
+     * list a picker sorts. A checklist on offer beside the workflow that owns
+     * it is an entry nobody can choose between. The reader reads it at the step
+     * that sends them to it. That is what the priority under all of them says
+     * for the client that does sort templates.
      */
     #[Test]
     public function whatASkillHandsOverAtAStepIsOfferedAsATemplate(): void
@@ -244,10 +244,10 @@ final class ResourceSurfaceTest extends TestCase
     }
 
     /**
-     * The protocol's `audience` is the user of the client or the model reading
-     * the resource, and it is neither of the three audiences `R-AUD-001` names
-     * — those are not values it takes. Everything served here is for both
-     * roles, so the field says nothing and is left off.
+     * The protocol's `audience` is the user of the client or the model that
+     * reads the resource. It is none of the three audiences `R-AUD-001` names —
+     * those are not values it takes. Everything served here is for both roles,
+     * so the field says nothing and stays off.
      */
     #[Test]
     public function noResourceClaimsTheProtocolsAudienceForTheOneThisServerMeans(): void
@@ -259,16 +259,16 @@ final class ResourceSurfaceTest extends TestCase
 
     /**
      * The defect a body served on its own has, and the one nothing about a
-     * description can catch: every skill opens by sending the reader to
+     * description can catch. Every skill opens with a pointer to
      * `references/base.md`, which is a file in no skill in this checkout —
      * `Installer` writes it at publication. A client that never ran that
-     * install is exactly the client this family exists for, so the link has to
+     * install is exactly the client this family exists for. So the link has to
      * land on something it can read.
      *
-     * What is asserted is the resolution a reader performs, not a promise that
-     * it works: the target is resolved against the URI the body is served at,
-     * the way a relative reference is resolved against any other URI, and the
-     * result has to be a URI this server answers.
+     * The case asserts the resolution a reader performs, not a promise that it
+     * works. The target resolves against the URI of the body, the way a
+     * relative reference resolves against any other URI. The result has to be a
+     * URI this server answers.
      */
     #[Requirement('R-ANS-022')]
     #[Test]
@@ -313,9 +313,9 @@ final class ResourceSurfaceTest extends TestCase
     }
 
     /**
-     * One URI read the way the server reads it: the registered resources
-     * first, then the template — matched by the SDK's own compiled template
-     * rather than by a pattern written a second time here.
+     * One URI read the way the server reads it: the registered resources first,
+     * then the template. The SDK's own compiled template matches it rather than
+     * a pattern written a second time here.
      */
     private static function read(string $uri): string
     {

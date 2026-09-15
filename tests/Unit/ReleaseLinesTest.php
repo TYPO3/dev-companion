@@ -15,9 +15,9 @@ use TYPO3\DevCompanion\Tests\Support\Requirement;
  * Which branches take a patch, and what the list is worth on a day nobody read
  * it.
  *
- * The states are dates passing rather than a status somebody typed, which is
- * what the fixed days here are for: the same file has to answer differently in
- * 2026 and in 2031 without being touched — `D-ANS-058`.
+ * The states are dates that pass rather than a status somebody typed, which is
+ * what the fixed days here are for. The same file has to answer differently in
+ * 2026 and in 2031 with no edit — `D-ANS-058`.
  */
 final class ReleaseLinesTest extends TestCase
 {
@@ -47,9 +47,9 @@ final class ReleaseLinesTest extends TestCase
     }
 
     /**
-     * The list ages in one direction: what a stored window says will happen
-     * happens without anybody reading the file again, and only a branch created
-     * after it was read is missing from it — `D-ANS-058`.
+     * The list ages in one direction. What a stored window says will happen
+     * happens with no second read of the file. Only a branch created after the
+     * read is absent from it — `D-ANS-058`.
      */
     #[Decision('D-ANS-058')]
     #[Test]
@@ -66,9 +66,9 @@ final class ReleaseLinesTest extends TestCase
     }
 
     /**
-     * A finding says which of the two it is, because they are answered
-     * differently: an ELTS line has releases somebody else makes, and an ended
-     * one has none at all.
+     * A finding says which of the two it is, because each gets a different
+     * answer. An ELTS line has releases somebody else makes, and an ended one
+     * has none at all.
      */
     #[Test]
     public function theDescriptionNamesTheDateThatDecidedIt(): void
@@ -80,7 +80,7 @@ final class ReleaseLinesTest extends TestCase
         self::assertStringContainsString('end of its ELTS window on 2025-09-30', ReleaseLines::describe('9.5', $on));
     }
 
-    /** A branch nothing is known about is handed back as written, not dressed up. */
+    /** A branch nothing knows about comes back as written, not dressed up. */
     #[Test]
     public function anUnknownBranchIsDescribedAsItself(): void
     {
@@ -88,9 +88,9 @@ final class ReleaseLinesTest extends TestCase
     }
 
     /**
-     * The date `describe()` puts in a sentence, as data — `R-ANS-035` answers
-     * with both halves, and a reader of the second one would otherwise write the
-     * regex that takes it back out.
+     * The date `describe()` puts in a sentence, as data. `R-ANS-035` answers
+     * with both halves, and a reader of the second one would otherwise write
+     * the regex that takes it back out.
      */
     #[Requirement('R-ANS-035')]
     #[Test]
@@ -104,8 +104,9 @@ final class ReleaseLinesTest extends TestCase
     }
 
     /**
-     * The two are what a caller weighs an unknown branch against, so neither may
-     * be silently absent — `D-ANS-058` rests on the list being re-readable.
+     * The two are what a caller weighs an unknown branch against, so neither
+     * may be absent without a word. `D-ANS-058` rests on a list a caller can
+     * read again.
      */
     #[Test]
     public function theListSaysWhereItCameFromAndWhenItWasRead(): void

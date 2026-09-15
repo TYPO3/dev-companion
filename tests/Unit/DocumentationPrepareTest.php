@@ -14,12 +14,12 @@ use TYPO3\DevCompanion\Upkeep\Command\DocumentationPrepare;
 /**
  * `bin/cli documentation:prepare` writes the copy and reaches nothing else.
  *
- * That is the whole of what this repository does to a render — `D-DOC-028` —
- * so the case that matters is that one call needs no renderer, no theme and no
+ * That is the whole of what this repository does to a render — `D-DOC-028`. So
+ * the case that matters is that one call needs no renderer, no theme and no
  * network to leave a source tree behind.
  *
- * The directory is an argument for the same reason it always was: the suite
- * drives the command without writing into the `.site` of this checkout.
+ * The directory is an argument for the same reason as before: the suite drives
+ * the command and writes nothing into the `.site` of this checkout.
  */
 final class DocumentationPrepareTest extends TestCase
 {
@@ -36,8 +36,8 @@ final class DocumentationPrepareTest extends TestCase
     }
 
     /**
-     * One call writes the whole copy a renderer is pointed at, and says where
-     * it went, so nothing else here touches a render — `D-DOC-028`.
+     * One call writes the whole copy a renderer reads, and says where it went,
+     * so nothing else here touches a render — `D-DOC-028`.
      */
     #[Decision('D-DOC-028')]
     #[Test]
@@ -57,7 +57,7 @@ final class DocumentationPrepareTest extends TestCase
     }
 
     /**
- * A page the documentation no longer has stops being in the copy — `D-DOC-028`.
+     * A page the documentation no longer has leaves the copy — `D-DOC-028`.
  */
     #[Decision('D-DOC-028')]
     #[Test]

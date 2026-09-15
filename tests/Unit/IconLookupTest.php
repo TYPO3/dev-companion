@@ -19,7 +19,7 @@ use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
- * Where the identifiers this tool answers with may be used.
+ * Where a caller may use the identifiers this tool answers with.
  *
  * The registry is the backend's. An answer that does not say so is usable in a
  * frontend template, where none of it resolves.
@@ -81,8 +81,8 @@ final class IconLookupTest extends TestCase
      *
      * A concept query for "paw animal pet" came back as eleven icons the
      * caller's own extensions register, every one of them on the substring
-     * "animal", and the session read that as the tool answering by substring
-     * and stopped asking it concept questions — `D-ANS-139`.
+     * "animal". The session read that as a substring answer and stopped its
+     * concept questions — `D-ANS-139`.
      */
     #[Decision('D-ANS-139')]
     #[Test]
@@ -142,8 +142,8 @@ final class IconLookupTest extends TestCase
     /**
      * Several identifiers are one call, and each keeps its own verdict.
      *
-     * The cost this answers is ours: the initialize instructions say to
-     * validate every identifier before emitting it, so three icons in one
+     * The cost this answers is ours. The initialize instructions say to
+     * validate every identifier before it goes out, so three icons in one
      * template were three round trips — `D-ANS-078`.
      */
     #[Decision('D-ANS-078')]
@@ -194,9 +194,9 @@ final class IconLookupTest extends TestCase
     {
         // The registry the installation assembles is the one that knows what a
         // package builds in a loop. This project has no console to boot it
-        // with, so the files are read — and an answer that does not say so is
-        // read as the whole registry by a review that then reports icons as
-        // unregistered because it could not see them.
+        // with, so the tool reads the files. An answer that does not say so
+        // reads as the whole registry to a review. The review then reports
+        // icons as unregistered because it could not see them.
         Instance::discoverFrom($this->installationWithItsOwnIcon());
 
         $result = Registry::call('typo3_icon_lookup', ['query' => 'acme-product']);
@@ -205,7 +205,8 @@ final class IconLookupTest extends TestCase
         self::assertStringContainsString('read from the package files', $result->text);
         self::assertStringContainsString('has no TYPO3 console', $result->text, 'the reason travels with it');
         self::assertStringContainsString('builds in a loop', $result->text);
-        // The answer itself still stands: what was read is right, not complete.
+        // The answer itself still stands: what the tool read is right, not
+        // complete.
         self::assertTrue($result->data['exactMatch']);
     }
 
@@ -213,10 +214,10 @@ final class IconLookupTest extends TestCase
     #[Test]
     public function anIdentifierRegisteredSinceTheLastCallIsFound(): void
     {
-        // The registry is read once per call, not once per process. A caller
-        // registers an icon and asks about it in the same session, and a
-        // reading kept from before that edit answers that it is not registered
-        // — which is the one answer this tool exists to prevent — `D-DIS-011`.
+        // The tool reads the registry once per call, not once per process. A
+        // caller registers an icon and asks about it in the same session. A
+        // read kept from before that edit answers that it is not registered,
+        // which is the one answer this tool exists to prevent — `D-DIS-011`.
         $root = $this->installationWithItsOwnIcon();
         Instance::discoverFrom($root);
 

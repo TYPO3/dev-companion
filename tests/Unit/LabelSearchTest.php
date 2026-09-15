@@ -20,9 +20,9 @@ use TYPO3\DevCompanion\Tool\Registry;
 /**
  * What a label query means, and what an empty answer to one means.
  *
- * Both were wrong in the same call: "save document" could never match, because
- * the console searched for that string rather than for those words, and the
- * empty result it printed came back as an unreachable installation.
+ * Both were wrong in the same call. "save document" could never match, because
+ * the console searched for that string rather than for those words. The empty
+ * result it printed came back as an unreachable installation.
  */
 final class LabelSearchTest extends TestCase
 {
@@ -79,8 +79,8 @@ final class LabelSearchTest extends TestCase
     #[Test]
     public function aWordInsideATransUnitIdCountsWithoutABoundary(): void
     {
-        // An underscore is a word character, so anchoring the match would drop
-        // exactly the ids a caller searches by.
+        // An underscore is a word character, so an anchor on the match would
+        // drop exactly the ids a caller searches by.
         $labels = [['key' => 'labels.save_document', 'source' => 'Speichern']];
 
         self::assertCount(1, LabelSearch::carryingEvery($labels, LabelSearch::terms('document')));
@@ -103,8 +103,8 @@ final class LabelSearchTest extends TestCase
 
     /**
      * What the per-term counts cannot say: which words have to go. Two of these
-     * five had to, and the smallest reach — `yaml`, carried by both entries the
-     * query was after — is the one to keep rather than the one to drop —
+     * five had to. The smallest reach, `yaml`, carried by both entries the
+     * query was after, is the one to keep rather than the one to drop —
      * `D-ANS-016`.
      */
     #[Requirement('R-ANS-006')]
@@ -119,7 +119,8 @@ final class LabelSearchTest extends TestCase
         ];
 
         // Both of them, because the one a tie-break picks first here is the
-        // YAML loading feature rather than the deprecation being looked for.
+        // YAML loading feature rather than the deprecation the caller looked
+        // for.
         self::assertSame(
             [
                 ['terms' => ['form', 'yaml', 'registration'], 'matchCount' => 1],
@@ -130,9 +131,9 @@ final class LabelSearchTest extends TestCase
     }
 
     /**
-     * Every largest reaching subset is offered and the narrower one is first,
-     * because the caller reads the list from the top and the widest of them is
-     * the one that answers least — `D-ANS-016`.
+     * The answer offers every largest subset that reaches an entry, and the
+     * narrower one first. The caller reads the list from the top, and the
+     * widest of them is the one that answers least — `D-ANS-016`.
      */
     #[Decision('D-ANS-016')]
     #[Test]
@@ -157,7 +158,7 @@ final class LabelSearchTest extends TestCase
     public function whereNoTwoWordsMeetInOneEntryThereIsNoSubsetToOffer(): void
     {
         // A single word is what the per-term counts already say, so this adds
-        // nothing and says so rather than repeating them.
+        // nothing and says so rather than repeats them.
         $entries = [
             ['key' => 'Feature-1-Alpha', 'source' => 'Alpha'],
             ['key' => 'Feature-2-Beta', 'source' => 'Beta'],
@@ -189,12 +190,12 @@ final class LabelSearchTest extends TestCase
     {
         // The payload shares stdout with the title the same command prints
         // ahead of it, and the decoder starts at the first brace or bracket.
-        // What else can land on that stream is not established — the two
-        // obvious candidates were checked and neither reaches it. That is the
-        // point rather than a gap in it: exit 0 says nothing about the stream,
-        // so the tool may not read it as an installation that answered. Here
-        // the payload is intact and the decoder misses it, and read as "none"
-        // that is the one wrong answer nothing distinguishes from a right one.
+        // What else can land on that stream is open — a check of the two
+        // obvious candidates found that neither reaches it. That is the point
+        // rather than a gap in it. exit 0 says nothing about the stream, so the
+        // tool may not read it as an installation that answered. Here the
+        // payload is intact and the decoder misses it. Read as "none", that is
+        // the one wrong answer nothing distinguishes from a right one.
         $this->consoleThatPrints(
             "[note] something reached this stream ahead of the payload\n"
             . "\nLabels in active extensions\n===========================\n\n"
@@ -216,9 +217,9 @@ final class LabelSearchTest extends TestCase
     #[Test]
     public function aConsoleThatExitsWellAndSaysNothingIsUnanswered(): void
     {
-        // Same failure with nothing behind it to fall back on: what must not
-        // happen is a matchCount of 0 under answeredBy "installation", because
-        // that is the shape of an installation that really has no such label.
+        // Same failure with nothing behind it to fall back on. What must not
+        // happen is a matchCount of 0 under answeredBy "installation". That is
+        // the shape of an installation that really has no such label.
         $this->consoleThatPrints('');
 
         $result = Registry::call('typo3_label_lookup', ['query' => 'save document']);
@@ -267,7 +268,7 @@ final class LabelSearchTest extends TestCase
     /**
      * The guessed path of `feedback/2026-08-24-225129`: there is no Wizard.xlf,
      * and the file the session was after is Wizards/general.xlf. Every word
-     * came back at 0, which is what a misspelled word comes back as, so the
+     * came back at 0, which is what a misspelt word comes back as. So the
      * session read "this resource holds no such label" and wrote one —
      * `D-ANS-016`.
      */
@@ -302,16 +303,16 @@ final class LabelSearchTest extends TestCase
             $result->text,
         );
         self::assertStringContainsString('A path that exists nowhere answers exactly like', $result->text);
-        // The sentence the session acted on. Every word reaching 0 inside a
-        // resource that holds nothing is not a fact about the words.
+        // The sentence the session acted on. Every word at 0 inside a resource
+        // that holds nothing is not a fact about the words.
         self::assertStringNotContainsString('ask again with the one that narrows best', $result->text);
     }
 
     /**
      * A resource that holds part of the query is a resource that exists, so the
-     * listing that replaces a guessed path would be noise — and the word it
-     * does not reach is still the filter's doing, which is the sentence that
-     * stays — `D-ANS-016`.
+     * listing that replaces a guessed path would be noise. The word it does not
+     * reach is still the filter's work, which is the sentence that stays —
+     * `D-ANS-016`.
      */
     #[Decision('D-ANS-016')]
     #[Test]
@@ -339,10 +340,11 @@ final class LabelSearchTest extends TestCase
     }
 
     /**
-     * A resource that narrowed nothing away is not what emptied the answer, and
-     * a miss that says it is sends the caller to drop a filter that costs it
-     * nothing — the same rule the changelog miss is held to by
-     * `PackageSourcesTest::aFilterThatChangedNothingIsNotBlamedForTheMiss`.
+     * A resource that narrowed nothing away is not what emptied the answer. A
+     * miss that says it is sends the caller to drop a filter that costs it
+     * nothing.
+     * `PackageSourcesTest::aFilterThatChangedNothingIsNotBlamedForTheMiss`
+     * holds the changelog miss to the same rule.
      */
     #[Decision('D-ANS-016')]
     #[Test]
@@ -362,9 +364,9 @@ final class LabelSearchTest extends TestCase
 
     /**
      * Where no resource holds one, the empty list is the answer rather than a
-     * withheld field: the caller that reads it stops looking for a path and
-     * writes the label — which is the move the reported miss made on a query
-     * that did have one.
+     * withheld field. The caller that reads it stops its search for a path and
+     * writes the label. That is the move the reported miss made on a query that
+     * did have one.
      */
     #[Requirement('R-ANS-006')]
     #[Decision('D-ANS-016')]
@@ -444,12 +446,12 @@ final class LabelSearchTest extends TestCase
     }
 
     /**
-     * The backend ships two labels keyed `newPage`, and which of them a piece
-     * of markup renders decides what an assertion on that markup has to expect:
+     * The backend ships two labels keyed `newPage`. Which of them a piece of
+     * markup renders decides what an assertion on that markup has to expect.
      * `backend.pages_new:newPage` is "Page" and `backend.layout:newPage` is
      * "Create new page", in `.checkouts/14.3` as in `.checkouts/main`. Neither
      * the key nor the extension separates them. The resource does, and the
-     * domain half of the ref is derived from it, so an answer that dropped the
+     * domain half of the ref derives from it. So an answer that dropped the
      * file would still be right and no longer decidable —
      * `feedback/2026-08-13-214838`, which read the wrong guess off the key.
      */
@@ -479,9 +481,9 @@ final class LabelSearchTest extends TestCase
                 $result->data['labels'],
             ),
         );
-        // The text is what a client rendering it instead of the data shows, and
-        // `resource` is no required key of the record, so both halves are held
-        // here rather than one of them by the schema.
+        // The text is what a client that renders it instead of the data shows,
+        // and `resource` is no required key of the record. So this holds both
+        // halves rather than the schema one of them.
         self::assertStringContainsString(
             "\n  EXT:backend/Resources/Private/Language/locallang_pages_new.xlf",
             $result->text,
@@ -516,7 +518,7 @@ final class LabelSearchTest extends TestCase
 
     /**
      * The two branches a caller about to author a unit arrives on: nothing
-     * matched, and a neighbouring label that may or may not be reusable.
+     * matched, and a label nearby that may or may not be reusable.
      *
      * @return array<string, array{0: string}>
      */
@@ -653,9 +655,9 @@ final class LabelSearchTest extends TestCase
     #[Test]
     public function aConsoleThatCannotBootIsAnsweredFromTheFilesItWouldHaveRead(): void
     {
-        // An installed TYPO3 whose database has no schema yet: the console
-        // fails on the first query, and the labels are sitting in the XLF files
-        // of the same packages the icon lookup already reads.
+        // An installed TYPO3 whose database has no schema yet. The console
+        // fails on the first query, and the labels sit in the XLF files of the
+        // same packages the icon lookup already reads.
         $this->consoleThatFails('An exception occurred while executing a query: '
             . "Table 'db.tx_scheduler_task' doesn't exist");
         $this->labelFile('Resources/Private/Language/locallang.xlf', ['labels.save' => 'Save document']);
@@ -680,8 +682,8 @@ final class LabelSearchTest extends TestCase
         $this->consoleThatFails('An exception occurred while executing a query: '
             . "Table 'db.tx_scheduler_task' doesn't exist");
 
-        // Nothing to fall back on here — this package ships no labels — so the
-        // answer is unanswered, and says what to do about it.
+        // Nothing to fall back on here, because this package ships no labels.
+        // So the answer is the unsupported one, and says what to do about it.
         $result = Registry::call('typo3_label_lookup', ['query' => 'save']);
 
         self::assertArrayNotHasKey('answeredBy', $result->data);

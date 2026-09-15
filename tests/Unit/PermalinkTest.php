@@ -25,10 +25,10 @@ final class PermalinkTest extends TestCase
     }
 
     /**
-     * The TCA reference at `main`, in the four objects the reporting session's
-     * own question turns on: the property it looked for, the label Sphinx
-     * generates from that property's anchor, the section above it, and the page
-     * carrying all three.
+     * The TCA reference at `main`, in the four objects the report's own
+     * question turns on. The property it looked for, the label Sphinx generates
+     * from that property's anchor, the section above it, and the page that
+     * carries all three.
      *
      * @var array<int, array{0: string, 1: string, 2: string}>
      */
@@ -58,11 +58,11 @@ final class PermalinkTest extends TestCase
 
     /**
      * `t3tca:columns-onchange` and `t3tca:confval-columns-onchange` both answer
-     * 307 with the same anchor, and which one a patch should use is the review
-     * question the reporting session had to invent a rule for. The inventory
-     * tells them apart: the property is the `std:confval` the manual declares,
-     * the prefixed spelling is the label Sphinx generates from its anchor —
-     * `D-ANS-118`.
+     * 307 with the same anchor. Which one a patch should use is the review
+     * question the session that reported it had to invent a rule for. The
+     * inventory tells them apart. The property is the `std:confval` the manual
+     * declares, the prefixed form is the label Sphinx generates from its anchor
+     * — `D-ANS-118`.
      */
     #[Decision('D-ANS-118')]
     #[Test]
@@ -83,10 +83,10 @@ final class PermalinkTest extends TestCase
     /**
      * The identifier space is the inventory minus its pages.
      *
-     * `Documentation` reads `std:doc` and nothing else, because what it searches
-     * is a table of contents; this reads everything else, because that is what
-     * the permalink route accepts. `t3tca:Columns/Index` is a page of the TCA
-     * reference and answers 404 on the host — `D-ANS-119`.
+     * `Documentation` reads `std:doc` and nothing else, because what it
+     * searches is a table of contents. This reads everything else, because that
+     * is what the permalink route accepts. `t3tca:Columns/Index` is a page of
+     * the TCA reference and answers 404 on the host — `D-ANS-119`.
      */
     #[Decision('D-ANS-119')]
     #[Test]
@@ -102,11 +102,11 @@ final class PermalinkTest extends TestCase
     /**
      * The shortcodes that reach a manual and the ones that reach none.
      *
-     * A system extension is named by its Composer package in either spelling and
-     * needs no entry in the list, because the manual of a package is published
-     * under that package's own name. An extension outside the core is not
-     * answered for at all: its manual is versioned on its own releases, so a
-     * TYPO3 version would select the wrong branch of it — `D-ANS-120`.
+     * A system extension goes by its Composer package in either form and needs
+     * no entry in the list. The host publishes the manual of a package under
+     * that package's own name. An extension outside the core gets no answer at
+     * all. Its manual has versions per its own releases, so a TYPO3 version
+     * would select the wrong branch of it — `D-ANS-120`.
      *
      * @return iterable<string, array{0: string, 1: ?string}>
      */
@@ -134,7 +134,7 @@ final class PermalinkTest extends TestCase
 
     /**
      * A caller cannot tell a name that is not registered from a shortcode
-     * nothing here places, and the two ask for opposite reactions: the first is
+     * nothing here places, and the two ask for opposite reactions. The first is
      * a wrong link and the second is a manual this server does not answer for.
      */
     #[Decision('D-ANS-120')]
@@ -153,8 +153,8 @@ final class PermalinkTest extends TestCase
 
     /**
      * The host answers a branch it does not publish with a redirect to `main`
-     * and a 200, so an identifier can be reported as resolving for a release
-     * whose manual was never reached. The inventory says which branch actually
+     * and a 200. So an identifier can read as resolved for a release whose
+     * manual nothing reached. The inventory says which branch actually
      * answered, and the answer passes that on rather than the status —
      * `R-DOC-001`, `D-ANS-118`.
      */
@@ -169,8 +169,8 @@ final class PermalinkTest extends TestCase
         self::assertTrue($resolved['resolved']);
         self::assertSame('14.3', $resolved['branch'], 'the branch that was asked for');
         self::assertSame('main', $resolved['answeredBranch'], 'the branch the manual says it is');
-        // The URL is the one that exists rather than the one that was composed,
-        // so a caller pasting it lands where the answer was read.
+        // The URL is the one that exists rather than the composed one, so a
+        // caller who pastes it lands where the answer came from.
         self::assertStringContainsString('/reference-tca/main/en-us/', (string) $resolved['url']);
         self::assertStringContainsString(
             'this manual has no 14.3 branch',
@@ -193,10 +193,10 @@ final class PermalinkTest extends TestCase
     }
 
     /**
-     * The same table read the other way, on the URL the reporting session had in
-     * hand: `Columns/Properties/OnChange.html` is a 404 today and nothing on the
-     * page it left behind says where the subject went, so the words of the URL
-     * are matched against the names — `D-ANS-118`.
+     * The same table read the other way, on the URL the session that reported
+     * it had in hand. `Columns/Properties/OnChange.html` is a 404 today and
+     * nothing on the page it left behind says where the subject went. So the
+     * lookup matches the words of the URL against the names — `D-ANS-118`.
      */
     #[Decision('D-ANS-118')]
     #[Test]
@@ -273,8 +273,8 @@ final class PermalinkTest extends TestCase
     }
 
     /**
-     * The list is maintained here and nothing on the host publishes the set, so
-     * what keeps it true is each manual's own claim: the theme writes the
+     * The list lives here and nothing on the host publishes the set, so what
+     * keeps it true is each manual's own claim. The theme writes the
      * `interlink-shortcode` of the manual's `guides.xml` into every page it
      * renders — `D-ANS-120`.
      */

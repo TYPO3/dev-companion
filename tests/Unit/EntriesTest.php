@@ -13,11 +13,11 @@ use TYPO3\DevCompanion\Upkeep\Entries;
 use TYPO3\DevCompanion\Upkeep\Entry;
 
 /**
- * What is written down about a piece of this code, read before it is changed.
+ * What the records say about a piece of this code, read before the change.
  *
- * The attributes answer from the failing end and this is the other one, so what
- * it has to be is honest about its own reach: a name it does not find is a name
- * nobody wrote in backticks, never a statement that nothing was decided.
+ * The attributes answer from the failure end and this is the other one, so it
+ * has to be honest about its own reach. A name it does not find is a name
+ * nobody wrote in backticks, never a statement that nobody decided.
  */
 final class EntriesTest extends TestCase
 {
@@ -41,12 +41,12 @@ final class EntriesTest extends TestCase
     }
 
     /**
-     * The generated list replaces whatever the key was written with, in every
-     * shape an entry has ever carried it.
+     * The generated list replaces whatever the key came with, in every shape an
+     * entry has ever carried it.
      *
-     * `not guarded` is the one that was missed. The writer matched the empty and
-     * the `[]` forms alone, so an entry saying in words that nothing holds it
-     * fell through to the branch that adds a key — and came out with two
+     * `not guarded` is the one the writer missed. The writer matched the empty
+     * and the `[]` forms alone. So an entry that says in words that nothing
+     * holds it fell through to the branch that adds a key. It came out with two
      * `coveredBy:`, which is one document with two answers to one question. It
      * reached `main` on 2026-08-27 in `D-DOC-060`, written `not guarded` and
      * covered in the same run.
@@ -82,8 +82,8 @@ final class EntriesTest extends TestCase
      * What a person wrote to say nothing holds an entry stays in their words.
      *
      * `not guarded` and `[]` say the same thing to every reader here, and only
-     * one of them says somebody was asked and answered — so the generated half
-     * may not quietly replace it with the other.
+     * one of them says somebody got the question and answered. So the generated
+     * half may not replace it with the other without a word.
      */
     #[Decision('D-DOC-048')]
     #[Test]
@@ -105,8 +105,8 @@ final class EntriesTest extends TestCase
     }
 
     /**
-     * Every entry answered for a class names it, and a class nothing names is
-     * answered with nothing rather than with a guess.
+     * Every entry in the answer for a class names it, and a class nothing names
+     * gets nothing rather than a guess.
      */
     #[Decision('D-DOC-050')]
     #[Test]
@@ -128,7 +128,7 @@ final class EntriesTest extends TestCase
         self::assertSame([], Entries::naming([]));
     }
 
-    /** A test class is listed where it names the class and holds an entry. */
+    /** A test class appears where it names the class and holds an entry. */
     #[Decision('D-DOC-050')]
     #[Test]
     public function aTestIsListedWhereItNamesTheClassAndHoldsAnEntry(): void

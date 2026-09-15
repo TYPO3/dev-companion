@@ -15,12 +15,12 @@ use TYPO3\DevCompanion\Upkeep\Command\ProseFormat;
 use TYPO3\DevCompanion\Upkeep\Prose;
 
 /**
- * `D-DOC-063`. What a sweep may reach is what nobody is holding.
+ * `D-DOC-063`. What a sweep may reach is what nobody holds.
  *
- * Every case here leaves the sweep with nothing to rewrap, deliberately: a run
- * that had targets would rewrite the corpus of the checkout the suite is running
- * in (`R-COD-003`). What that holds is the half the decision is about — which
- * files a run considers — and the rewriting itself is `ProseTest`'s.
+ * Every case here leaves the sweep with nothing to rewrap, on purpose. A run
+ * that had targets would rewrite the corpus of the checkout the suite runs in
+ * (`R-COD-003`). What that holds is the half the decision is about, which files
+ * a run considers. The rewrap itself is `ProseTest`'s.
  */
 #[Decision('D-DOC-063')]
 final class ProseFormatTest extends TestCase
@@ -44,7 +44,7 @@ final class ProseFormatTest extends TestCase
 
     /**
      * The collision this closes from the branch's side. A claim that rewraps a
-     * card another claim is deleting meets that deletion on the rebase, and
+     * card another claim deletes meets that deletion on the rebase, and
      * `todo:home` stops on it — twice on 2026-08-27.
      */
     #[Test]
@@ -64,8 +64,8 @@ final class ProseFormatTest extends TestCase
 
     /**
      * The same collision from the checkout's side, which is the half a rule
-     * about worktrees alone would leave open: `main` rewraps a card, the claim
-     * holding it deletes it, and the rebase is a modify/delete conflict.
+     * about worktrees alone would leave open. `main` rewraps a card, the claim
+     * that holds it deletes it, and the rebase is a modify/delete conflict.
      */
     #[Test]
     public function whatAClaimIsHoldingIsLeftToTheClaim(): void
@@ -83,9 +83,9 @@ final class ProseFormatTest extends TestCase
     }
 
     /**
-     * A path is the caller's word and is answered as one: it narrows the run to
-     * what it matches, and matching nothing is the caller having named something
-     * this repository does not write prose in.
+     * A path is the caller's word and the command takes it as one. It narrows
+     * the run to what it matches, and a match of nothing means the caller named
+     * something this repository writes no prose in.
      */
     #[Test]
     public function aPathOutsideTheCorpusIsRefusedRatherThanSwept(): void
@@ -100,9 +100,8 @@ final class ProseFormatTest extends TestCase
     }
 
     /**
-     * git, as far as this command can see it: one worktree below `.worktrees/`
-     * standing on a claim, and this checkout being that worktree or the one it
-     * was cut from.
+     * git, as far as this command can see it. One worktree below `.worktrees/`
+     * on a claim, and this checkout as that worktree or the one it came from.
      *
      * @param array<string, string> $answers
      */

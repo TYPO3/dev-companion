@@ -17,10 +17,10 @@ use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
  * The code a ten-year-old report names, and where the installed packages put
  * it.
  *
- * Both halves are held here: the shapes a report writes a name in, which is the
- * side a stale issue is unreadable without, and the three verdicts a name comes
- * back with — where a wrong "gone" is the one failure this may not have, since
- * it discards a valid candidate unread.
+ * This holds both halves. The shapes a report writes a name in, which is the
+ * side a stale issue is unreadable without. And the three verdicts a name comes
+ * back with. A wrong "gone" is the one failure this may not have, since it
+ * discards a valid candidate unread.
  */
 #[Decision('D-ANS-122')]
 final class CitedCodeTest extends TestCase
@@ -113,8 +113,8 @@ final class CitedCodeTest extends TestCase
     {
         Instance::discoverFrom(null);
 
-        // Looking for either in the class file would report a name that is
-        // there as gone, which is the one verdict this may not get wrong.
+        // A search for either in the class file would report a name that is
+        // there as gone. That is the one verdict this may not get wrong.
         self::assertSame(
             [['name' => 'ReferenceIndex', 'kind' => CitedCode::UNQUALIFIED, 'method' => '']],
             array_map(
@@ -129,9 +129,9 @@ final class CitedCodeTest extends TestCase
     {
         Instance::discoverFrom(null);
 
-        // Eleven of the 25 stale Bugs read on 2026-08-27 are written about a
-        // TCA key, a TypoScript path or a table column, and answering those
-        // with a name would be an extraction inventing its own evidence.
+        // Eleven of the 25 stale Bugs read on 2026-08-27 are about a TCA key, a
+        // TypoScript path or a table column. A name as the answer to those
+        // would be an extraction that invents its own evidence.
         self::assertSame([], CitedCode::in('The TypoScript setting config.no_cache is ignored on this page.'));
     }
 
@@ -212,8 +212,8 @@ final class CitedCodeTest extends TestCase
         ]]);
         Instance::discoverFrom($root);
 
-        // #61923 is exactly this: makeCategorizable is gone on both branches
-        // while the class it sat on stands, so the row that says the class is
+        // #61923 is exactly this. makeCategorizable is gone on both branches
+        // while the class it sat on stands. So the row that says the class is
         // there says nothing a triage can use.
         $cited = CitedCode::in('\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::makeCategorizable() is called.');
 
@@ -228,8 +228,8 @@ final class CitedCodeTest extends TestCase
         Instance::discoverFrom($root);
 
         // The RTE button list of one CKEditor configuration read on 2026-08-27
-        // is eleven such words, and answering each of them "no installed
-        // package ships it" is a page of verdicts about English.
+        // is eleven such words. An answer of "no installed package ships it" to
+        // each is a page of verdicts about English.
         self::assertSame([], CitedCode::in("removeButtons:\n  - PasteFromWord\n  - HorizontalRule\n  - ShowBlocks"));
     }
 
@@ -239,8 +239,8 @@ final class CitedCodeTest extends TestCase
         $root = $this->coreCheckoutShipping(['core' => ['Classes/Persistence/ObjectStorage.php' => '']]);
         Instance::discoverFrom($root);
 
-        // The other half of the same rule: the package shipping one under that
-        // name is the report saying so, and #79571 gives no other handle.
+        // The other half of the same rule: the package that ships one under
+        // that name is the report's word, and #79571 gives no other handle.
         $cited = CitedCode::in('The ObjectStorage is empty afterwards.');
 
         self::assertSame('ObjectStorage', $cited[0]['name']);
@@ -256,8 +256,8 @@ final class CitedCodeTest extends TestCase
         ]);
         Instance::discoverFrom($root);
 
-        // Picking one of them is where a right-looking verdict lands on the
-        // wrong class, and three of the ten bare names read on 2026-08-27
+        // A pick of one of them is where a verdict that looks right lands on
+        // the wrong class. Three of the ten bare names read on 2026-08-27
         // matched two packages.
         $cited = CitedCode::in('The ActionController never reaches it.');
 
@@ -271,9 +271,9 @@ final class CitedCodeTest extends TestCase
         $root = $this->coreCheckoutShipping(['core' => ['Classes/Utility/GeneralUtility.php' => '']]);
         Instance::discoverFrom($root);
 
-        // Core removed DatabaseConnection, and a name belonging to an extension
-        // the caller never installed reads identically from here. #72962 is
-        // where the wording comes from.
+        // Core removed DatabaseConnection, and a name of an extension the
+        // caller never installed reads the same from here. #72962 is where the
+        // words come from.
         $cited = CitedCode::in('DB transactions via the DatabaseConnection class are instantiated per query.');
 
         self::assertSame(CitedCode::NOT_SHIPPED, $cited[0]['state']);

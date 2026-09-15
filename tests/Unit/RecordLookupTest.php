@@ -18,10 +18,10 @@ use TYPO3\DevCompanion\Tool\Registry;
  * What the count answers, and the boundary it answers inside.
  *
  * The count exists because a session held the number 3101 twice and drew
- * nothing from it, so the answer says what the number means for where the
- * records are edited. What it may be asked about is the other half: a table this
- * installation has TCA for, and the columns of a row beyond its fixed shape
- * are the caller's to name — `D-AUD-018`.
+ * nothing from it. So the answer says what the number means for where an editor
+ * edits the records. What a caller may ask it about is the other half. A table
+ * this installation has TCA for, and the columns of a row beyond its fixed
+ * shape are the caller's to name — `D-AUD-018`.
  */
 final class RecordLookupTest extends TestCase
 {
@@ -71,10 +71,10 @@ final class RecordLookupTest extends TestCase
      * A distribution in one call, where it was thirteen counted ones.
      *
      * A session established what 3,101 animals were by status and by which of
-     * three columns were empty with one counted call per value, and said six
-     * of the thirteen would have been this — `D-ANS-141`. The probe already
-     * grouped by page and by the two state flags, so the column the caller
-     * names is a third one on the same query.
+     * three columns were empty, with one counted call per value. It said six of
+     * the thirteen would have been this — `D-ANS-141`. The probe already
+     * grouped by page and by the two state flags. The column the caller names
+     * is a third one on the same query.
      */
     #[Decision('D-ANS-141')]
     #[Test]
@@ -104,7 +104,7 @@ final class RecordLookupTest extends TestCase
         self::assertStringContainsString('By status, 3 value(s):', $result->text);
         self::assertStringContainsString('- adopted: 3000 rows', $result->text);
 
-        // The pages are the same read and are answered as well.
+        // The pages are the same read and come back as well.
         self::assertSame(3070, $result->data['counts']['total']);
     }
 
@@ -154,10 +154,10 @@ final class RecordLookupTest extends TestCase
     }
 
     /**
-     * A table the core registers is read like a project's own.
+     * A table the core registers reads like a project's own.
      *
      * Six `ddev mysql` queries over `tt_content` and `pages` decided the markup
-     * of a replacement layout and the tool was never tried, because it refused
+     * of a replacement layout, and the session never tried the tool. It refused
      * both — `feedback/archive/2026-09-04-053618`, `D-AUD-018`.
      */
     #[Decision('D-AUD-018')]
@@ -196,8 +196,8 @@ final class RecordLookupTest extends TestCase
      * The columns a row carries beyond its fixed shape are the caller's.
      *
      * A session read ten `tt_content` columns out of the database by hand
-     * because nothing here would hand them over — `D-AUD-018`. Each name is
-     * checked against the table the way a filter's columns are, which is what
+     * because nothing here would hand them over — `D-AUD-018`. Each name gets
+     * the same check against the table as a filter's columns, which is what
      * lets it go into the SQL as an identifier.
      */
     #[Decision('D-AUD-018')]
@@ -246,8 +246,8 @@ final class RecordLookupTest extends TestCase
      * The one row that departs from the default, beside the distribution.
      *
      * A distribution says what the table holds; which of it is the exception is
-     * what a cleanup turns on, and the reported session's one `header_layout`
-     * row out of 137 was the site's only h1 — `D-AUD-018`.
+     * what a cleanup turns on. The reported session's one `header_layout` row
+     * out of 137 was the site's only h1 — `D-AUD-018`.
      */
     #[Decision('D-AUD-018')]
     #[Test]
@@ -279,7 +279,7 @@ final class RecordLookupTest extends TestCase
      * A column with no default has nothing to depart from, and says so.
      *
      * An empty departure list and a column TCA declares no default for read
-     * alike otherwise, and only one of them means every row is the convention.
+     * alike otherwise. Only one of them means every row is the convention.
      */
     #[Decision('D-AUD-018')]
     #[Test]
@@ -316,8 +316,8 @@ final class RecordLookupTest extends TestCase
 
         $result = Registry::call('typo3_record_lookup', ['table' => 'tx_acme_thing']);
 
-        // The count is the table's and the rows are the page of it that was
-        // read, and the answer says which is which.
+        // The count is the table's and the rows are the page of it the read
+        // took, and the answer says which is which.
         self::assertSame(3101, $result->data['matchCount']);
         self::assertSame([1, 2], array_column($result->data['records'], 'uid'));
         self::assertStringContainsString('The first 2 of them by uid, labelled by name', $result->text);
@@ -352,8 +352,8 @@ final class RecordLookupTest extends TestCase
 
         self::assertSame([['column' => 'status', 'value' => 'adopted']], $result->data['where']);
         self::assertStringContainsString("tx_acme_thing where status = 'adopted' holds 104 rows", $result->text);
-        // And the sentence about the editing surface is withheld, because 104
-        // of a filtered set says nothing about the page an editor opens.
+        // And the answer withholds the sentence about the edit surface, because
+        // 104 of a filtered set says nothing about the page an editor opens.
         self::assertStringContainsString('That is the filtered set', $result->text);
         self::assertStringNotContainsString('backend module', $result->text);
     }
@@ -369,7 +369,7 @@ final class RecordLookupTest extends TestCase
             'where' => ['quantumflux' => 1],
         ]);
 
-        // Nothing was read, so nothing reads as an empty table.
+        // The tool read nothing, so nothing reads as an empty table.
         self::assertSame(0, $result->data['matchCount']);
         self::assertNull($result->data['counts']);
         self::assertStringContainsString('has no column quantumflux', $result->text);
@@ -377,12 +377,11 @@ final class RecordLookupTest extends TestCase
     }
 
     /**
-     * A project installation with one extension of its own, and one reading of
-     * it.
+     * A project installation with one extension of its own, and one read of it.
      *
      * Three tables stand in the TCA and `cache_pages` stands in none, which is
-     * what makes the refusal a reading of the boundary: what TCA describes is
-     * read, and what it does not is the caches and the queues.
+     * what makes the refusal a read of the boundary. The tool reads what TCA
+     * describes, and what it does not is the caches and the queues.
      *
      * @param array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}> $groups
      * @param array<int, array<string, mixed>> $rows

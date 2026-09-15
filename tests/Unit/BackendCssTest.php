@@ -14,9 +14,9 @@ use TYPO3\DevCompanion\Upkeep\BackendCss;
 final class BackendCssTest extends TestCase
 {
     /**
-     * The case this was written for. `table-fit` is filed as a modifier of the
-     * table and is the element above it, and reading the class off its own name
-     * is what shipped it onto the wrong node.
+     * The case behind this test. The catalog files `table-fit` as a modifier of
+     * the table, and it is the element above it. A read of the class off its
+     * own name is what shipped it onto the wrong node.
      */
     #[Test]
     public function aWrapperIsPlacedAboveTheClassItWraps(): void
@@ -58,8 +58,8 @@ final class BackendCssTest extends TestCase
     /**
      * A class whose name begins with another class's name is a different class,
      * and the boundary is what the derivation reads. `.table-bordered` is not
-     * `.table`, and matching it as one placed every bordered table inside a
-     * wrapper that does not exist.
+     * `.table`, and a match as one placed every bordered table inside a wrapper
+     * that does not exist.
      */
     #[Test]
     public function aLongerNameIsNotTheClassItStartsWith(): void

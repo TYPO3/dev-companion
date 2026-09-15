@@ -18,12 +18,11 @@ use TYPO3\DevCompanion\Upkeep\Cli;
 /**
  * Holds `src/Upkeep/Command/` and the application to each other.
  *
- * One class is one command, and `Upkeep\Cli` is the only place one is switched
- * on — which is the arrangement that lets a class be written, reviewed and
- * merged without ever being reachable. These are the other direction: every
- * class in the directory is on the application, the application carries no
- * command that is not one of them, and each says what it is called, what it
- * does and what it takes.
+ * One class is one command, and `Upkeep\Cli` is the only place that switches
+ * one on. That arrangement lets a class pass review and merge and never be
+ * reachable. These are the other direction. Every class in the directory is on
+ * the application, and the application carries no command that is not one of
+ * them. Each says its name, what it does and what it takes.
  */
 final class UpkeepCommandTest extends TestCase
 {
@@ -56,8 +55,8 @@ final class UpkeepCommandTest extends TestCase
 
     /**
      * A class in the directory that nothing registers is a command nobody can
-     * run: it passes every check it has of its own, and the only way to notice
-     * is to go looking for it.
+     * run. It passes every check it has of its own, and the only way to notice
+     * is a search for it.
      *
      * @param class-string $class
      */
@@ -78,7 +77,7 @@ final class UpkeepCommandTest extends TestCase
     public function theApplicationCarriesNoCommandThisDirectoryDoesNotHave(): void
     {
         // The console brings `help`, `list` and `completion` of its own, and
-        // each of those is a Command subclass; what this repository registers
+        // each of those is a Command subclass. What this repository registers
         // is an invokable class the console wraps in a plain Command.
         $registered = array_filter(
             Cli::application()->all(),
@@ -94,7 +93,7 @@ final class UpkeepCommandTest extends TestCase
 
     /**
      * Every command is `<subject>:<verb>`, because that is what groups the list
-     * a caller reads: the subject is what the command is about, and a command
+     * a caller reads. The subject is what the command is about, and a command
      * without one sits loose above every group and belongs to nothing —
      * `D-FBK-041`.
      *
@@ -105,9 +104,9 @@ final class UpkeepCommandTest extends TestCase
     #[DataProvider('commandClasses')]
     public function everyCommandIsNamedSubjectThenVerb(string $class, string $name): void
     {
-        // A hyphen inside the subject is spelling rather than structure:
+        // A hyphen inside the subject is form rather than structure.
         // `system-extensions` is what this repository calls them everywhere
-        // else, and a second word invented to avoid the hyphen would be a third
+        // else. A second word invented to avoid the hyphen would be a third
         // name for one thing. The verb stays one word.
         self::assertMatchesRegularExpression('/^[a-z]+(-[a-z]+)*:[a-z]+$/', $name, 'a command is named <subject>:<verb>');
     }
@@ -126,16 +125,16 @@ final class UpkeepCommandTest extends TestCase
     }
 
     /**
-     * What a command takes is declared on the parameters of its `__invoke`, and
+     * A command declares what it takes on the parameters of its `__invoke`, and
      * the console reads its input definition off them. It reads them at one
-     * moment only — before anything has merged the application's own definition
-     * in — so a command that stops being asked at that moment keeps every
+     * moment only, before anything has merged the application's own definition
+     * in. So a command the console no longer asks at that moment keeps every
      * argument in its signature and accepts none of them. That failure reaches
      * the caller as "too many arguments" for an argument the help still lists.
      *
-     * Its own definition rather than the one it runs with: the application
+     * Its own definition rather than the one it runs with. The application
      * merges its own `command` argument into every command the first time one
-     * runs, and what is asked here is what this command declares.
+     * runs, and the question here is what this command declares.
      *
      * @param class-string $class
      */

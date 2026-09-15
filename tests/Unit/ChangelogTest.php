@@ -15,12 +15,12 @@ use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
- * Which field of a changelog entry a query is matched against.
+ * Which field of a changelog entry a query matches.
  *
  * The answer prints the title stated inside the file and the matcher never saw
- * it, so `Deprecation: #46770 - Deprecate
- * LocalImageProcessor::getTemporaryImageWithText` could be read off an answer
- * and not asked for — `D-ANS-030`. Where that read happens is `D-ANS-041`.
+ * it. So a caller could read `Deprecation: #46770 - Deprecate
+ * LocalImageProcessor::getTemporaryImageWithText` off an answer and not ask for
+ * it — `D-ANS-030`. Where that read happens is `D-ANS-041`.
  */
 final class ChangelogTest extends TestCase
 {
@@ -38,8 +38,8 @@ final class ChangelogTest extends TestCase
 
     /**
      * Nothing here reaches docs.typo3.org. The changelog lookup reads the
-     * versions above the installed major from the manual, and a unit test that
-     * let it would be measuring the host — `R-COD-003`.
+     * versions above the installed major from the manual. A unit test that let
+     * it would measure the host — `R-COD-003`.
      */
     #[Before]
     public function sealTheManual(): void
@@ -57,7 +57,7 @@ final class ChangelogTest extends TestCase
 
     /**
      * The file name carries the class and the title stated inside the file
-     * carries the method, so a scan over file names alone reaches neither —
+     * carries the method. A scan over file names alone reaches neither —
      * `D-ANS-041`.
      */
     #[Decision('D-ANS-030')]
@@ -81,9 +81,10 @@ final class ChangelogTest extends TestCase
     }
 
     /**
-     * The read costs 818 ms cold against the 48 ms the names cost, so it buys
-     * an answer where there was none and is not spent on one there already is.
-     * What that gives up is the entry a hit leaves out — `D-ANS-041`.
+     * The read costs 818 ms cold against the 48 ms the names cost. So it buys
+     * an answer where there was none, and the lookup spends it on no answer
+     * there already is. What that gives up is the entry a hit leaves out —
+     * `D-ANS-041`.
      */
     #[Decision('D-ANS-041')]
     #[Test]
@@ -98,8 +99,8 @@ final class ChangelogTest extends TestCase
     }
 
     /**
-     * The per-word counts a miss offers are taken over the titles the search
-     * read, so the word that reaches nothing is the one the caller drops —
+     * The per-word counts a miss offers come from the titles the search read.
+     * So the word that reaches nothing is the one the caller drops —
      * `D-ANS-041`.
      */
     #[Decision('D-ANS-041')]

@@ -16,18 +16,18 @@ use TYPO3\DevCompanion\Upkeep\Command\DocumentationPreview;
  * What `bin/cli documentation:preview` is for is the order, so the order is what
  * this holds.
  *
- * Each step is correct on its own and none of the orders is free: the renderer
- * publishes the copy rather than the sources, so a render before the copy is
- * written renders the previous one, and the theme's finish step reads the pages
- * the renderer has just written.
+ * Each step is correct on its own and none of the orders is free. The renderer
+ * publishes the copy rather than the sources, so a render before the copy write
+ * renders the previous one. The theme's finish step reads the pages the
+ * renderer has just written.
  *
  * Nothing here fetches a renderer or starts one. The constructor takes the
- * runner (`R-COD-003`), and what the cases assert on is the sequence the stub
- * was asked for.
+ * runner (`R-COD-003`), and the cases assert on the sequence of calls the stub
+ * got.
  */
 final class DocumentationPreviewTest extends TestCase
 {
-    /** Where the site is built, which is never the `.site` of this checkout. */
+    /** Where the build lands, which is never the `.site` of this checkout. */
     private string $into = '';
 
     /** @var list<string> every command the stub was asked for, in order */
@@ -36,7 +36,7 @@ final class DocumentationPreviewTest extends TestCase
     /** Which command the stub answers with a failure, or none. */
     private ?string $fails = null;
 
-    /** What the stub was asked to leave running, and whether it was stopped again. */
+    /** What the stub got the order to leave on, and whether a stop followed. */
     private string $served = '';
     private bool $stopped = false;
 
@@ -110,16 +110,15 @@ final class DocumentationPreviewTest extends TestCase
         self::assertIsInt($render);
         self::assertIsInt($finish);
         self::assertGreaterThan($render, $finish, 'the finish step read pages the renderer had not written');
-        // The copy is written by this process rather than by a command, so what
-        // says it ran first is the file the renderer was pointed at —
-        // `D-DOC-028`.
+        // This process writes the copy rather than a command, so what says it
+        // ran first is the file the renderer got — `D-DOC-028`.
         self::assertFileExists($this->into . '/source/index.rst');
         self::assertStringContainsString('read it: php -S', $output->fetch());
     }
 
     /**
- * A preview is run again after every paragraph, so the fetch happens once —
- * `D-DOC-028`.
+     * A preview runs again after every paragraph, so the fetch happens once —
+     * `D-DOC-028`.
  */
     #[Decision('D-DOC-028')]
     #[Test]
@@ -135,8 +134,8 @@ final class DocumentationPreviewTest extends TestCase
     }
 
     /**
- * A step that failed stops the rest and is quoted with what it said —
- * `D-DOC-028`.
+     * A step that failed stops the rest, and the report quotes what it said —
+     * `D-DOC-028`.
  */
     #[Decision('D-DOC-028')]
     #[Test]
@@ -163,7 +162,10 @@ final class DocumentationPreviewTest extends TestCase
         self::assertMatchesRegularExpression('/^\d\d:\d\d:\d\d documentation\/readme\.rst$/m', $printed);
     }
 
-    /** The watch serves what it renders, on the port it was given, and takes the server down with it. */
+    /**
+     * The watch serves what it renders, on the port the caller gave it, and
+     * takes the server down with it.
+     */
     #[Test]
     public function aWatchServesTheSiteAndStopsTheServerWithIt(): void
     {
@@ -176,7 +178,10 @@ final class DocumentationPreviewTest extends TestCase
         self::assertStringContainsString('http://localhost:8123/', $output->fetch());
     }
 
-    /** A port that is taken ends the watch with what the server said, rather than watching for nobody. */
+    /**
+     * A port in use ends the watch with what the server said, rather than a
+     * watch for nobody.
+     */
     #[Test]
     public function aPortThatIsTakenEndsTheWatchWithTheReason(): void
     {

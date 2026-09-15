@@ -11,7 +11,7 @@ use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tool\CommitMessageGuide;
 
 /**
- * What the caller reads, rather than what the class behind it returns: the
+ * What the caller reads, rather than what the class behind it returns. The
  * answer drops "no issues found" where something complained, and it may drop
  * nothing else — R-GUI-007.
  */
@@ -43,7 +43,7 @@ final class CommitMessageGuideTest extends TestCase
         $result = CommitMessageGuide::answer([
             'message' => "Fix the thing\n\nBody.\n\nResolves: #1\nReleases: main\n",
             // The changelog obligation this is about is the core's, and the
-            // core is stated since `D-GUI-010`.
+            // answer names the core since `D-GUI-010`.
             'workflow' => 'core',
         ]);
 
@@ -54,7 +54,7 @@ final class CommitMessageGuideTest extends TestCase
     }
 
     /**
-     * The line under the draft and the draft itself say the same thing: the
+     * The line under the draft and the draft itself say the same thing. The
      * project workflow demands no trailer, and writes the one the call passed —
      * `D-GUI-017`.
      */
@@ -73,8 +73,8 @@ final class CommitMessageGuideTest extends TestCase
     }
 
     /**
-     * What the length check sends the caller to do, done: the shorter summary
-     * takes the subject and the message it arrived beside keeps the rest, which
+     * What the length check sends the caller to do, done. The shorter summary
+     * takes the subject and the message it arrived beside keeps the rest. That
      * is the assembly one session did by hand — `D-GUI-021`.
      */
     #[Decision('D-GUI-021')]
@@ -99,8 +99,8 @@ final class CommitMessageGuideTest extends TestCase
     }
 
     /**
-     * The width is what the draft is wrapped to, and the boundary is what
-     * refuses a commit. Only the second settles a checkout whose own rule is one
+     * The width is what the draft wraps to, and the boundary is what refuses a
+     * commit. Only the second settles a checkout whose own rule is one
      * character stricter than the hook it cites — `D-GUI-020`.
      */
     #[Decision('D-GUI-020')]
@@ -157,8 +157,8 @@ final class CommitMessageGuideTest extends TestCase
 
     /**
      * The tool checks one message against a page it never named, and four
-     * sessions wanting that page read none of it — `R-ANS-028`. The pointer is
-     * the call, because a client that lists no resources cannot act on the
+     * sessions that wanted that page read none of it — `R-ANS-028`. The pointer
+     * is the call, because a client that lists no resources cannot act on the
      * address.
      */
     #[Requirement('R-ANS-028')]
@@ -189,8 +189,8 @@ final class CommitMessageGuideTest extends TestCase
 
     /**
      * The draft is the last act of a piece of work, and the session that reads
-     * it under momentum asked for nothing else — so the answer names the call
-     * that owns the rest of the work, for the workflow it was asked with.
+     * it under momentum asked for nothing else. So the answer names the call
+     * that owns the rest of the work, for the workflow of the call.
      */
     #[Decision('D-ANS-117')]
     #[Test]
@@ -208,11 +208,12 @@ final class CommitMessageGuideTest extends TestCase
 
         self::assertStringContainsString('typo3_task_guide — with the paths this commit touches', $core);
         self::assertStringContainsString('one step of the core patch workflow', $core);
-        // The other workflow is other work, so it is named as what it is.
+        // The other workflow is other work, so the answer names it as what it
+        // is.
         self::assertStringContainsString('typo3_task_guide — with the paths this commit touches', $project);
         self::assertStringContainsString('one step of work in your own repository', $project);
         self::assertStringNotContainsString('core patch workflow', $project);
-        // Under the pointer rather than over it: the page is a reading of the
+        // Under the pointer rather than over it: the page is a read of the
         // subject the caller is already in.
         self::assertLessThan(
             strpos($core, 'core/contribution/commit-messages'),

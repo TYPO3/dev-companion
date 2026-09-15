@@ -12,13 +12,13 @@ use TYPO3\DevCompanion\Tests\Support\Directory;
 use TYPO3\DevCompanion\Upkeep\PinnedPackage;
 
 /**
- * Which release of a package the core pins a statement about it was read in.
+ * Which release of a package the core pins a statement about it comes from.
  *
- * Each of them releases on its own cycle, so the statements are verified
- * against a tag rather than against a core branch, and which tag that is is
- * derived from the core's own pin — `D-KNW-106`. This holds the one step of
- * that derivation which needs no repository to try; everything else is a git
- * call, and `bin/cli versions:check` is where it is exercised.
+ * Each of them releases on its own cycle, so a session verifies the statements
+ * against a tag rather than against a core branch. Which tag that is derives
+ * from the core's own pin — `D-KNW-106`. This holds the one step of that
+ * derivation which needs no repository to try. Everything else is a git call,
+ * and `bin/cli versions:check` runs it.
  */
 final class PinnedPackageTest extends TestCase
 {
@@ -27,7 +27,7 @@ final class PinnedPackageTest extends TestCase
     public function aPinThatNamesOneReleaseLineIsThatLine(): void
     {
         // The harness pins the four covered branches carry today, and the
-        // engine pins beside them: 12.4 reads Fluid 2, 13.4 reads 4, and the
+        // engine pins beside them. 12.4 reads Fluid 2, 13.4 reads 4, and the
         // two newest read 5.
         self::assertSame('8', PinnedPackage::line('^8.3.1'));
         self::assertSame('9', PinnedPackage::line('^9.2.1'));
@@ -42,9 +42,9 @@ final class PinnedPackageTest extends TestCase
     #[Test]
     public function aPinThatNamesTwoLinesNamesNone(): void
     {
-        // The case the check exists for: a core major that admits two harnesses
-        // no longer says which one a statement bound to it was read in, and a
-        // line picked out of the two would be a guess wearing a version number.
+        // The case the check exists for. A core major that admits two harnesses
+        // no longer says which one a statement bound to it came from. A line
+        // picked out of the two would be a guess with a version number on.
         self::assertNull(PinnedPackage::line('^8.3.1 || ^9.0'));
         self::assertNull(PinnedPackage::line('>=8'));
         self::assertNull(PinnedPackage::line(''));
@@ -55,8 +55,8 @@ final class PinnedPackageTest extends TestCase
     public function eachPackageIsReadFromTheSectionTheCorePinsItIn(): void
     {
         // The harness is a development dependency of the core and the engine is
-        // a dependency of it, so a pairing that read one section for both would
-        // find no pin at all and create no worktree — quietly, because a branch
+        // a dependency of it. So a pair that read one section for both would
+        // find no pin at all and create no worktree, without a word. A branch
         // that pins nothing is a state this reports rather than fails on.
         $checkouts = sys_get_temp_dir() . '/typo3-dev-companion-pins-' . bin2hex(random_bytes(6));
         foreach (Versions::covered() as $version) {

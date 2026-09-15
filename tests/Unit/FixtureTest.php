@@ -17,14 +17,14 @@ use TYPO3\DevCompanion\Upkeep\Fixture;
 use TYPO3\DevCompanion\Upkeep\ToolCalls;
 
 /**
- * The installation this repository writes, held to what it is written for.
+ * The installation this repository writes, held to its purpose.
  *
- * The second half of a tool's page is recorded rather than checked, because it
- * needs an installation and no test run discovers one — `D-DOC-006`. This is the
- * exception the fixture creates: it is an installation this repository produces
- * itself, so a fixture that stopped booting fails here rather than in the next
- * recording quietly writing `unsupported` onto nine pages. What is held is that
- * it answers, not what it answers with, which is the recording's.
+ * The second half of a tool's page is a record rather than a check. It needs an
+ * installation and no test run discovers one — `D-DOC-006`. This is the
+ * exception the fixture creates. It is an installation this repository produces
+ * itself, so a fixture that no longer boots fails here rather than in the next
+ * record. That record would write `unsupported` onto nine pages without a word.
+ * This holds that it answers, not what it answers with, which is the record's.
  */
 final class FixtureTest extends TestCase
 {
@@ -38,8 +38,8 @@ final class FixtureTest extends TestCase
     }
 
     /**
-     * The fixture is an installation the recording is taken from, so it has to
-     * boot and answer through its own console rather than only look like one —
+     * The fixture is an installation the record comes from. So it has to boot
+     * and answer through its own console rather than only look like one —
      * `D-DOC-012`.
      */
     #[Decision('D-DOC-012')]
@@ -64,10 +64,9 @@ final class FixtureTest extends TestCase
      * Every call of an installation-backed tool comes back as an answer.
      *
      * `unsupported` is what those tools say where there was nothing to ask, and
-     * a second recording of it says what the first already said — the core
-     * checkout has no console and reports exactly that. So the property that
-     * makes this root worth recording against is that not one call falls to it
-     * — `D-DOC-012`.
+     * a second record of it says what the first already said. The core checkout
+     * has no console and reports exactly that. So the property that makes this
+     * root worth a record is that not one call falls to it — `D-DOC-012`.
      */
     #[Decision('D-DOC-012')]
     #[Test]
@@ -82,15 +81,15 @@ final class FixtureTest extends TestCase
             }
             // The one call this root cannot stand in for. It assembles the
             // installation's container a second time through the core's own
-            // builder, and a fixture that could answer it would have to be a
-            // TYPO3 rather than a shape of one — `D-DIS-023`.
+            // builder. A fixture that could answer it would have to be a TYPO3
+            // rather than a shape of one — `D-DIS-023`.
             if ($name === 'typo3_service_lookup') {
                 continue;
             }
             // And the three calls that reach the database. The fixture is a
             // shape of an installation and holds no rows to read, so what it
-            // stands in for here is the boundary — the other two calls of this
-            // tool are answered from it — `D-AUD-018`.
+            // stands in for here is the boundary. The other two calls of this
+            // tool answer from it — `D-AUD-018`.
             if (str_starts_with($label, 'records: ') && str_contains($label, 'table of this project')) {
                 continue;
             }
@@ -117,7 +116,7 @@ final class FixtureTest extends TestCase
         return false;
     }
 
-    /** Writes it and points every reading of an installation at it. */
+    /** Writes it and points every read of an installation at it. */
     private function standIn(): void
     {
         Instance::discoverFrom(Fixture::write());

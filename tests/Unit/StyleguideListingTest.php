@@ -47,8 +47,8 @@ final class StyleguideListingTest extends TestCase
     }
 
     /**
-     * The boundary this reads: a component the styleguide does not list is not
-     * for an extension to use, so a name that is absent has to come back absent
+     * The boundary this reads. A component the styleguide does not list is not
+     * for an extension to use. So a name that is absent has to come back absent
      * rather than fall through to something near it.
      */
     #[Decision('D-CAT-008')]

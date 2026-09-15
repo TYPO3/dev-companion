@@ -18,10 +18,10 @@ use TYPO3\DevCompanion\Tool\Registry;
  * The two sides of a table answer, and what stands in for the live one where
  * there is no schema to read.
  *
- * The derived side is the installation's and the live side is the database's,
- * and the answer has to stay usable where only the first is there — that is
- * the state the tool is asked in while the file creating the schema is being
- * written (`D-DIS-022`).
+ * The derived side is the installation's and the live side is the database's.
+ * The answer has to stay usable where only the first is there. That is the
+ * state a caller asks the tool in while it writes the file that creates the
+ * schema (`D-DIS-022`).
  */
 final class SchemaLookupTest extends TestCase
 {
@@ -98,8 +98,8 @@ final class SchemaLookupTest extends TestCase
     }
 
     /**
-     * The state the derived side was bounded for: the file that creates the
-     * schema is being written and there is no schema behind it yet. The answer
+     * The state the derived side has its bound for. The caller writes the file
+     * that creates the schema and there is no schema behind it yet. The answer
      * keeps the derived columns and says the other side was not readable.
      */
     #[Decision('D-DIS-022')]

@@ -12,16 +12,15 @@ use TYPO3\DevCompanion\Publication\Ter;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
- * The registry is somebody else's host, so what is held here is everything this
- * side does with what comes back: the wrapper the list arrives in, the order it
- * is put into, and the answers a caller must not read as one another — nothing
- * is published under this key, this is not a key, and the registry did not
- * answer.
+ * The registry is somebody else's host, so this holds everything this side does
+ * with what comes back. The wrapper the list arrives in, the order it takes,
+ * and the answers a caller must not read as one another. This key has nothing
+ * published, this is not a key, and the registry did not answer.
  *
  * Nothing here reaches that host. The seam is `Ter::useReader()`, and a
- * transport is a body without a status, so the one thing it cannot stand in for
- * is the `404` an unknown key is answered with. That mapping is stated in
- * `Ter::versions()` and driven live by the `ToolCalls` entry for it.
+ * transport is a body without a status. So the one thing it cannot stand in for
+ * is the `404` an unknown key gets. That mapping stands in `Ter::versions()`
+ * and the `ToolCalls` entry for it drives it live.
  */
 final class TerTest extends TestCase
 {
@@ -34,7 +33,7 @@ final class TerTest extends TestCase
     /**
      * Four versions as the API sends them, in the shape and the order
      * `extensions.typo3.org/api/v1/extension/blog/versions` answered on
-     * 2026-08-21: the whole list wrapped in an array of one, ordered by version
+     * 2026-08-21. The whole list wrapped in an array of one, ordered by version
      * number, and 11.0.0 uploaded years before the 10.0.4 above it.
      */
     private const RESPONSE = '[[{"title":"TYPO3 Blog Extension","number":"10.0.4","state":"stable","category":"fe",'
@@ -47,8 +46,8 @@ final class TerTest extends TestCase
         . '"dependencies":{"typo3":">=13.4.15 <=14.3.99"},"upload_date":1787237811}]]';
 
     /**
-     * The list is a level down from where the endpoint's name puts it, and
-     * reading it flat answers four versions as none.
+     * The list is a level down from where the endpoint's name puts it, and a
+     * flat read answers four versions as none.
      */
     #[Test]
     public function theListIsReadOutOfTheArrayItArrivesWrappedIn(): void
@@ -61,9 +60,9 @@ final class TerTest extends TestCase
     }
 
     /**
-     * Highest number first, whatever order the registry sent — and the days say
-     * that this is not the upload order, which is the reading a release audit
-     * gets wrong: 11.0.0 sits below 14.0.1 and was uploaded years earlier.
+     * Highest number first, whatever order the registry sent. The days say that
+     * this is not the upload order, which is the read a release audit gets
+     * wrong. 11.0.0 sits below 14.0.1 and went up years earlier.
      */
     #[Test]
     public function theVersionsAreOrderedByNumberAndSayWhenEachWasUploaded(): void
@@ -80,8 +79,8 @@ final class TerTest extends TestCase
     /**
      * The number a release audit is about, answered as what the registry holds.
      *
-     * `held` is the whole of the tool's own reading, so both sides of it are
-     * asserted: the version in the list, and one above it that nobody has
+     * `held` is the whole of the tool's own read, so the case asserts both
+     * sides of it. The version in the list, and one above it that nobody has
      * uploaded.
      */
     #[Test]
@@ -115,10 +114,10 @@ final class TerTest extends TestCase
     }
 
     /**
-     * A name of the wrong kind is answered without a read.
+     * A name of the wrong kind gets its answer without a read.
      *
-     * The registry answers `400` to one, and reporting that as "nothing is
-     * published" would tell a maintainer their release is missing. A Composer
+     * The registry answers `400` to one, and a report of that as "nothing is
+     * published" would tell a maintainer their release is absent. A Composer
      * package name is the way it arrives — the extension key is a field inside
      * that package rather than its name.
      *
@@ -170,10 +169,9 @@ final class TerTest extends TestCase
     }
 
     /**
-     * A key with nothing published under it is an answer, and the two ways that
-     * reads wrongly are said out loud: a package on Composer alone is never
-     * registered here, and a key can be registered before anything is uploaded
-     * to it.
+     * A key with nothing published under it is an answer, and the answer says
+     * the two ways that reads wrong out loud. A package on Composer alone never
+     * has a key here, and a key can exist before anything goes up to it.
      */
     #[Test]
     public function aKeyNothingIsPublishedUnderIsAnAnswer(): void
@@ -189,7 +187,7 @@ final class TerTest extends TestCase
     }
 
     /**
-     * A host that did not answer is not a registry holding nothing.
+     * A host that did not answer is not a registry that holds nothing.
      *
      * The transport reports no body, which is what a timeout, a DNS failure and
      * a 500 all reach this side as.
@@ -205,8 +203,9 @@ final class TerTest extends TestCase
     }
 
     /**
-     * And a caller asking about a version is told nothing about it rather than
-     * that it is not published — the two readings a release audit turns on.
+     * And a caller who asks about a version hears nothing about it rather than
+     * that it is not published. Those are the two readings a release audit
+     * turns on.
      */
     #[Test]
     public function aVersionIsUnansweredWhereNothingWasRead(): void

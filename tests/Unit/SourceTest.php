@@ -11,12 +11,12 @@ use TYPO3\DevCompanion\Tool\Registry;
 use TYPO3\DevCompanion\Tool\Source;
 
 /**
- * What a tool says it can be answered from, held to what it does.
+ * What a tool says its answer comes from, held to what it does.
  *
- * The declaration is read twice over — a client reads it at the foot of every
- * description, and typo3_server_scope groups the tools by it to say what is
- * worth calling with nothing running. Both are wrong in the same way if a tool
- * declares a source it never answers from, and neither reader can tell.
+ * Two readers take the declaration. A client reads it at the foot of every
+ * description. typo3_server_scope groups the tools by it to say what is worth a
+ * call with nothing on. Both are wrong in the same way if a tool declares a
+ * source it never answers from, and neither reader can tell.
  */
 final class SourceTest extends TestCase
 {
@@ -29,9 +29,8 @@ final class SourceTest extends TestCase
     }
 
     /**
-     * The declaration is one place and the description a client reads is
-     * generated from it, so a tool cannot claim a source it does not read —
-     * `D-ANS-048`.
+     * The declaration is one place and the description a client reads derives
+     * from it. So a tool cannot claim a source it does not read — `D-ANS-048`.
      */
     #[Decision('D-ANS-048')]
     #[Test]
@@ -53,10 +52,9 @@ final class SourceTest extends TestCase
     #[Test]
     public function theAnsweredByCasesAreTheDeclaredSources(): void
     {
-        // The field labels one answer, the declaration describes the tool, and
-        // a tool offering `packages` in the field while declaring it cannot be
-        // answered that way promises a fallback that will never arrive —
-        // `D-ANS-048`.
+        // The field labels one answer, the declaration describes the tool. A
+        // tool that offers `packages` in the field while it declares no such
+        // answer promises a fallback that will never arrive — `D-ANS-048`.
         foreach (Registry::definitions() as $definition) {
             $cases = $definition['outputSchema']['properties']['answeredBy']['enum'] ?? null;
             if ($cases === null) {
@@ -75,8 +73,8 @@ final class SourceTest extends TestCase
 
     /**
      * And the orientation answer groups the offered tools by the same
-     * declaration, with each source's meaning read off the enum rather than
-     * written twice — `D-ANS-048`.
+     * declaration. Each source's meaning comes off the enum rather than a
+     * second copy — `D-ANS-048`.
      */
     #[Decision('D-ANS-048')]
     #[Test]

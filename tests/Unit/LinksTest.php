@@ -11,15 +11,15 @@ use TYPO3\DevCompanion\Upkeep\Links;
 
 /**
  * The paths this repository writes between its own files are the one thing it
- * says about itself that nothing read back. Nineteen decision files were
- * renamed in one pass and 58 references rewritten with them; a missed one is a
- * link that goes nowhere and reports nothing.
+ * says about itself that nothing read back. One pass renamed nineteen decision
+ * files and rewrote 58 references with them. A missed one is a link that goes
+ * nowhere and reports nothing.
  */
 final class LinksTest extends TestCase
 {
     /**
-     * One reading over every corpus, because a path is a path whichever markup
-     * wrote it: the four sections of `documentation/` link to each other in
+     * One read over every corpus, because a path is a path whichever markup
+     * wrote it. The four sections of `documentation/` link to each other in
      * reStructuredText and everything around them in markdown — `D-DOC-025`,
      * `D-DOC-029`.
      */
@@ -42,8 +42,8 @@ final class LinksTest extends TestCase
 
     /**
      * The check above passes on a repository with no links at all, so this is
-     * what says it is reading them: one file, one link that resolves, one that
-     * does not, and the anchors and URLs that are deliberately not held.
+     * what says it reads them. One file, one link that resolves, one that does
+     * not, and the anchors and URLs it leaves alone on purpose.
      */
     #[Test]
     public function aPathThatIsNotThereIsFoundAndTheRestIsLeftAlone(): void
@@ -71,9 +71,9 @@ final class LinksTest extends TestCase
 
     /**
      * The one move this repository makes to a file other files name, and the
-     * one repair it has. A link to a report that has since been answered is
-     * rewritten to where the answer put it; a link to a name the archive never
-     * held stays dead, because nothing here knows where it meant to go.
+     * one repair it has. A link to a report with an answer since moves to where
+     * the answer put it. A link to a name the archive never held stays dead,
+     * because nothing here knows where it meant to go.
      */
     #[Decision('D-DOC-064')]
     #[Test]
@@ -134,7 +134,7 @@ final class LinksTest extends TestCase
     }
 
     /**
-     * What that reads, and what it may not read: the answer a tool page records
+     * What that reads, and what it may not read. The answer a tool page records
      * is markdown shown as itself, and every link in it is right where it
      * stands.
      */
@@ -165,11 +165,11 @@ final class LinksTest extends TestCase
     }
 
     /**
-     * The same for the other markup, where a path is written in five shapes.
+     * The same for the other markup, where a path has five shapes.
      *
-     * Two of them are options rather than link syntax — a card and a teaser say
-     * where they go with `:href:` and what they show with `:src:` — and they
-     * reached no check until the front page had six of them.
+     * Two of them are options rather than link syntax. A card and a teaser say
+     * where they go with `:href:` and what they show with `:src:`. They reached
+     * no check until the front page had six of them.
      */
     #[Test]
     public function aReStructuredTextPathIsFoundInEveryShapeThatCarriesOne(): void

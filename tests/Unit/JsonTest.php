@@ -16,13 +16,12 @@ use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Json;
 
 /**
- * The form the knowledge base's JSON is written in, and what formatting it may
- * not change.
+ * The form of the knowledge base's JSON, and what a format run may not change.
  *
- * A formatter is trusted the way a whitespace commit is trusted — nobody reads
- * the diff — so what is held here is not the indentation but everything the
- * indentation is not allowed to take with it: an empty object, the order the
- * keys were written in, a number as it was written.
+ * A reader trusts a formatter the way a reader trusts a whitespace commit:
+ * nobody reads the diff. So this holds not the indentation but everything the
+ * indentation may not take with it. An empty object, the order of the keys, a
+ * number as the writer typed it.
  */
 final class JsonTest extends TestCase
 {
@@ -45,10 +44,10 @@ final class JsonTest extends TestCase
     }
 
     /**
-     * The indentation is stated in `.editorconfig` and nowhere else. Every
-     * editor that opens one of these files obeys that file already, so a
-     * formatter disagreeing with it would undo the line somebody typed by hand
-     * — and each would keep undoing the other.
+     * `.editorconfig` states the indentation and nothing else does. Every
+     * editor that opens one of these files obeys that file already. So a
+     * formatter that disagreed with it would undo the line somebody typed by
+     * hand, and each would keep undoing the other.
      */
     #[Test]
     public function theIndentIsTheOneEditorconfigStates(): void
@@ -61,9 +60,9 @@ final class JsonTest extends TestCase
     }
 
     /**
-     * The one that would have gone unnoticed: decoded associatively, `{}` and
-     * `[]` are the same PHP value, and every empty object in the corpus comes
-     * back as an empty array.
+     * The one nobody would have noticed. Decoded associatively, `{}` and `[]`
+     * are the same PHP value, and every empty object in the corpus comes back
+     * as an empty array.
      */
     #[Test]
     public function anEmptyObjectDoesNotBecomeAnEmptyArray(): void
@@ -73,7 +72,7 @@ final class JsonTest extends TestCase
 
     /**
      * In server-scope.json and in the hints the order of the keys is the order
-     * an answer is read out in, so it is data and not layout.
+     * an answer reads out in. So it is data and not layout.
      */
     #[Test]
     public function theOrderTheKeysWereWrittenInIsKept(): void
@@ -141,9 +140,9 @@ final class JsonTest extends TestCase
 
     /**
      * The corpus, held to the form. A file edited by hand and left at whatever
-     * indentation the editor used is a diff that shows every line as changed,
-     * and the statement somebody meant to edit is somewhere in it — which is
-     * the failure this is here to prevent, and it is invisible in review.
+     * indentation the editor used is a diff that shows every line as changed.
+     * The statement somebody meant to edit is somewhere in it, which is the
+     * failure this prevents, and a review cannot see it.
      */
     #[Test]
     #[DataProvider('knowledgeFiles')]
@@ -168,7 +167,7 @@ final class JsonTest extends TestCase
     }
 
     /**
-     * A path is matched against the corpus rather than resolved into a file to
+     * A path matches against the corpus rather than resolves into a file to
      * write, so the command formats what it holds and nothing else.
      */
     #[Test]

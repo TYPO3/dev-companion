@@ -19,11 +19,11 @@ use TYPO3\DevCompanion\Upkeep\Fixture;
  * it.
  *
  * There is no real TYPO3 here, so what the installations below carry is a
- * `FlexFormTools` that answers rather than one that resolves — the probe is the
- * real one and is held to what it does with the answer: that the record it was
- * given reaches the resolution, that the exception is the answer where nothing
- * resolved, and that the schema TYPO3 v14 wants is passed on the signature that
- * wants it and never looked for on the one that does not.
+ * `FlexFormTools` that answers rather than one that resolves. The probe is the
+ * real one, and this holds what it does with the answer. The record it got
+ * reaches the resolution. The exception is the answer where nothing resolved.
+ * The schema TYPO3 v14 wants goes to the signature that wants it, and the probe
+ * never looks for it on the one that does not.
  */
 final class FlexFormLookupTest extends TestCase
 {
@@ -72,7 +72,8 @@ final class FlexFormLookupTest extends TestCase
         self::assertTrue($result->data['resolved']);
         self::assertSame('installation', $result->data['answeredBy']);
         // The identifier the installation produced, and the record value in it:
-        // the emulated row reached the resolution rather than being echoed back.
+        // the emulated row reached the resolution rather than came back as an
+        // echo.
         self::assertSame('acme_teaser', $result->data['decoded']['dataStructureKey']);
         self::assertSame('tca', $result->data['decoded']['type']);
         self::assertSame($result->data['identifier'], json_encode($result->data['decoded']));
@@ -85,7 +86,7 @@ final class FlexFormLookupTest extends TestCase
         self::assertTrue($sheet['fields'][0]['required']);
 
         // A section carries its container types and their fields, which is the
-        // one nesting a data structure has.
+        // one nested level a data structure has.
         $containers = $sheet['fields'][1]['containers'];
         self::assertSame(['slide'], array_column($containers, 'container'));
         self::assertSame(['settings.slide.title'], array_column($containers[0]['fields'], 'field'));
@@ -130,7 +131,7 @@ final class FlexFormLookupTest extends TestCase
         self::assertStringContainsString('The resolution said:', $result->text);
 
         // And what to retry with: the keys the column declares and the column
-        // the record type is read from.
+        // that carries the record type.
         self::assertSame(['default', 'acme_teaser', 'acme_map'], $result->data['declaration']['keys']);
         self::assertSame('CType', $result->data['declaration']['recordTypeField']);
         self::assertStringContainsString('pass that column in record', $result->text);
@@ -162,7 +163,7 @@ final class FlexFormLookupTest extends TestCase
 
     /**
      * The v14 signature wants a `TcaSchema` and throws on the default path
-     * without one, so a table its factory does not have is the case that shows
+     * without one. So a table its factory does not have is the case that shows
      * the probe asked the factory and passed what it got.
      */
     #[Test]
@@ -205,9 +206,9 @@ final class FlexFormLookupTest extends TestCase
     }
 
     /**
-     * `R-ANS-001`. An installation that could not be booted is not reported as
-     * a column with no structure: the whole answer is the reason, and none of
-     * the fields that state something about an installation is there.
+     * `R-ANS-001`. An installation that did not boot does not read as a column
+     * with no structure. The whole answer is the reason, and none of the fields
+     * that state something about an installation is there.
      */
     #[Test]
     public function anInstallationThatCouldNotBeBootedIsNotAnEmptyColumn(): void

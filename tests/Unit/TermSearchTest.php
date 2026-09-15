@@ -11,21 +11,20 @@ use TYPO3\DevCompanion\Search\Text;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 
 /**
- * Which words of a query are searched for at all.
+ * Which words of a query the search reads at all.
  *
  * The floor used to be three characters, and a ViewHelper named after an
- * English keyword fell under it: `Global/If.html` of the ViewHelper reference
- * is titled "if", and `f:if` left nothing to search for once the tokenizer had
- * run (`D-ANS-023`). What decided the floor is not what a short word is worth
- * but how it is matched, and below four characters it is matched as a whole
- * word.
+ * English keyword fell under it. `Global/If.html` of the ViewHelper reference
+ * has the title "if", and `f:if` left nothing to search for once the tokenizer
+ * had run (`D-ANS-023`). What decided the floor is not what a short word is
+ * worth but how it matches. Below four characters it matches as a whole word.
  */
 final class TermSearchTest extends TestCase
 {
     /**
-     * The floor is two characters, so `f:if` leaves something to search for;
-     * what a two-letter word costs is answered by the stop list rather than by
-     * the length — `D-ANS-028`.
+     * The floor is two characters, so `f:if` leaves something to search for.
+     * The stop list rather than the length answers what a two-letter word costs
+     * — `D-ANS-028`.
      */
     #[Decision('D-ANS-028')]
     #[Test]
@@ -37,7 +36,7 @@ final class TermSearchTest extends TestCase
 
     /**
      * A word behind a namespace prefix is the name of a thing rather than the
-     * English word it is spelled like, so the stopword list does not reach it —
+     * English word it looks like. So the stopword list does not reach it.
      * `f:or` and `f:then` otherwise have no term at all (`D-ANS-047`).
      */
     #[Decision('D-ANS-047')]
@@ -51,7 +50,7 @@ final class TermSearchTest extends TestCase
 
     /**
      * The colon has to touch both sides. A sentence puts a space after it, and
-     * that is what keeps the same word a stopword in prose — seven of the 41
+     * that is what keeps the same word a stopword in prose. Seven of the 41
      * scenario prompts say "or" or "then" in a sentence — `D-ANS-047`.
      */
     #[Decision('D-ANS-047')]
@@ -63,8 +62,8 @@ final class TermSearchTest extends TestCase
     }
 
     /**
-     * One letter is a whole word wherever it is spelled out, so it separates
-     * nothing — the `f` of `f:if` is the `f` of every other tag in the book —
+     * One letter is a whole word wherever it stands, so it separates nothing.
+     * The `f` of `f:if` is the `f` of every other tag in the book —
      * `D-ANS-028`.
      */
     #[Decision('D-ANS-028')]
@@ -75,9 +74,9 @@ final class TermSearchTest extends TestCase
     }
 
     /**
-     * The floor was doing the stopword list's work for words this short, and
-     * moving it means the list has to name them itself: "set it up from
-     * scratch" otherwise reaches Setting up backend user groups — `D-ANS-028`.
+     * The floor did the stopword list's work for words this short, and a move
+     * of it means the list has to name them itself. "set it up from scratch"
+     * otherwise reaches Setting up backend user groups — `D-ANS-028`.
      */
     #[Decision('D-ANS-028')]
     #[Test]
@@ -87,9 +86,9 @@ final class TermSearchTest extends TestCase
     }
 
     /**
-     * Below four characters a term is matched whole, which is the reason the
-     * floor could move at all: none of the prefix noise `PREFIX_FROM_LENGTH`
-     * guards against reaches a word this short — `D-ANS-028`.
+     * Below four characters a term matches whole, which is the reason the floor
+     * could move at all. None of the prefix noise `PREFIX_FROM_LENGTH` guards
+     * against reaches a word this short — `D-ANS-028`.
      */
     #[Decision('D-ANS-028')]
     #[Test]
@@ -101,13 +100,12 @@ final class TermSearchTest extends TestCase
     }
 
     /**
-     * A stem is asked for its prefix and a word is asked for its word, and
-     * which of the two a needle is, is what the caller knows (`D-ANS-050`).
+     * A stem gets its prefix and a word gets its word, and which of the two a
+     * needle is, is what the caller knows (`D-ANS-050`).
      *
-     * The same string proves both sides here: `stem()` cuts "testimonials" to
-     * "testim", which reaches the word it was cut from and nothing else,
-     * while `test` — a word, and the tests intent's own needle — does not
-     * reach it at all.
+     * The same string proves both sides here. `stem()` cuts "testimonials" to
+     * "testim", which reaches the word it came from and nothing else. `test`, a
+     * word and the tests intent's own needle, does not reach it at all.
      */
     #[Decision('D-ANS-050')]
     #[Test]
@@ -124,15 +122,15 @@ final class TermSearchTest extends TestCase
         self::assertTrue(TermSearch::carriesWord('deprecate the method', 'deprecat'));
         self::assertTrue(TermSearch::carriesWord('a deprecation in v14', 'deprecat'));
         // And a word it only starts, one layer down from the route: `boot` is
-        // what the extension boot files are written down under.
+        // the name the extension boot files stand under.
         self::assertFalse(TermSearch::carriesWord('bootstrap 5 in the theme', 'boot'));
         self::assertTrue(TermSearch::carriesWord('booting the installation', 'boot'));
     }
 
     /**
-     * The right side closes on a letter and not on a word character, so an
-     * identifier a needle is the head of is still reached — `D-ANS-006`'s side
-     * of the same question — `D-ANS-050`.
+     * The right side closes on a letter and not on a word character, so a
+     * needle still reaches an identifier it is the head of. That is
+     * `D-ANS-006`'s side of the same question — `D-ANS-050`.
      */
     #[Decision('D-ANS-050')]
     #[Test]

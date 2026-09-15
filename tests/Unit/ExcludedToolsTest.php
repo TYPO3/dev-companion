@@ -34,11 +34,11 @@ final class ExcludedToolsTest extends TestCase
     #[DataProvider('everyKindOfRepositoryAToolListIsAskedFrom')]
     public function theKindOfRepositoryNeverShortensTheToolList(string $kind): void
     {
-        // What the profile used to do here, and the reason it is gone: a
+        // What the profile used to do here, and the reason it is gone. A
         // Composer project cannot follow the core's contribution process, but
-        // whether a task is core work is a property of the task, and a caller
-        // writing a core patch from a site installation was left with an answer
-        // routing to a tool that had been taken away.
+        // whether a task is core work is a property of the task. A caller who
+        // wrote a core patch from a site installation got an answer that routed
+        // to a tool the profile had taken away.
         Instance::discoverFrom($this->rootOf($kind));
 
         $offered = $this->toolNames();
@@ -57,7 +57,10 @@ final class ExcludedToolsTest extends TestCase
         ];
     }
 
-    /** The roots are built per case, so the provider names one rather than making it. */
+    /**
+     * Each case builds its roots, so the provider names one rather than makes
+     * it.
+     */
     private function rootOf(string $kind): ?string
     {
         return match ($kind) {
@@ -77,9 +80,9 @@ final class ExcludedToolsTest extends TestCase
             'changeType' => 'bugfix',
         ]);
 
-        // The failure D-AUD-002 recorded from E-SITE: the answer is core work,
+        // The failure D-AUD-002 recorded from E-SITE. The answer is core work,
         // names the targeted runTests.sh invocation, and the client could not
-        // call the tool it was sent to.
+        // call the tool the answer sent it to.
         self::assertStringContainsString('typo3_test_run_guide', $guide->text);
         self::assertContains('typo3_test_run_guide', $this->toolNames());
     }
@@ -123,10 +126,10 @@ final class ExcludedToolsTest extends TestCase
     /**
      * What both client surfaces said before this: the name the caller wrote,
      * whether or not it took a tool away. Measured on 2026-08-04 with
-     * `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS=typo3_project_scope` — the
-     * instructions opened "typo3_project_scope is left out of your tool list"
-     * out of the budget `R-ANS-013` holds, while `typo3_project_describe` was
-     * in the list — `D-AUD-006`.
+     * `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS=typo3_project_scope`. The instructions
+     * opened "typo3_project_scope is left out of your tool list" out of the
+     * budget `R-ANS-013` holds, while `typo3_project_describe` was in the list
+     * — `D-AUD-006`.
      */
     #[Requirement('R-SCO-009')]
     #[Decision('D-AUD-006')]
@@ -157,8 +160,8 @@ final class ExcludedToolsTest extends TestCase
 
     /**
      * The other half: a name that took nothing away is still said, where the
-     * client reads it. `D-AUD-005` put the stderr line in and left this open,
-     * because a client is free to capture that stream and show it to nobody —
+     * client reads it. `D-AUD-005` put the stderr line in and left this open. A
+     * client is free to capture that stream and show it to nobody —
      * `D-AUD-006`.
      */
     #[Decision('D-AUD-006')]
@@ -196,15 +199,15 @@ final class ExcludedToolsTest extends TestCase
         putenv(ExcludedTools::VARIABLE . '=typo3_test_run_guide, typo3_rule_lookup, typo3_script_lookup');
 
         // The scope of a topic says which kind of work its answers are for. It
-        // never decided whether the topic is offered — that was the profile
-        // reading the repository where the task was meant.
+        // never decided whether the topic is on offer — that was the profile,
+        // which read the repository where the task was meant.
         self::assertContains(Scope::Any, array_column(Coverage::offered()['covers'], 'scope'));
     }
 
     /**
-     * The hole `a4470ee` fell into: `typo3_project_scope` was renamed, and the
-     * caller who had excluded it got the tool back under its new name with
-     * nothing said on either side. The name is reported now, and the exclusion
+     * The hole `a4470ee` fell into. `typo3_project_scope` got a new name, and
+     * the caller who had excluded it got the tool back under it with nothing
+     * said on either side. The server reports the name now, and the exclusion
      * beside it still takes its tool away — `D-AUD-005`.
      */
     #[Decision('D-AUD-005')]
@@ -239,10 +242,10 @@ final class ExcludedToolsTest extends TestCase
     }
 
     /**
-     * The other exception, and the one `453e439` read as a hole: the feedback
-     * tools are offered wherever the channel is and the variable does not reach
-     * them — R-SCO-009, D-FBK-042. What they write is this checkout, not the
-     * installation the server read.
+     * The other exception, and the one `453e439` read as a hole. The feedback
+     * tools are on offer wherever the channel is, and the variable does not
+     * reach them — R-SCO-009, D-FBK-042. What they write is this checkout, not
+     * the installation the server read.
      */
     #[Requirement('R-SCO-009')]
     #[Decision('D-FBK-042')]

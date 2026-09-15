@@ -14,19 +14,19 @@ use TYPO3\DevCompanion\Upkeep\ToolCalls;
 use TYPO3\DevCompanion\Upkeep\ToolSurface;
 
 /**
- * The tool reference against the registry it is rendered from.
+ * The tool reference against the registry it derives from.
  *
- * A generated page nothing reads back is a hand-written one that was generated
- * once. This is also where a tool that is offered and described nowhere outward
- * is caught, since the index below is the list: `readme.md` carried a
- * hand-written one until five tools had been added since anybody checked, and
- * what replaced it is generated rather than watched.
+ * A generated page nothing reads back is a hand-written one with one generation
+ * behind it. This is also where a tool on offer and described nowhere outward
+ * fails, since the index below is the list. `readme.md` carried a hand-written
+ * one until five tools had arrived since anybody checked, and a generator
+ * replaced it.
  */
 final class ToolSurfaceTest extends TestCase
 {
     /**
-     * The page is generated from the declarations rather than written beside
-     * them, schemas included, so neither half can go stale against the other —
+     * The page derives from the declarations rather than stands beside them,
+     * schemas included. So neither half can go stale against the other —
      * `D-DOC-016`, `D-DOC-011`.
      */
     #[Decision('D-DOC-033')]
@@ -49,9 +49,9 @@ final class ToolSurfaceTest extends TestCase
     /**
      * What the comparison above cannot say on its own: that the directory is
      * the whole surface and nothing besides. A renderer that dropped every tool
-     * would agree with a directory that had none, and a tool that left the
-     * registry leaves a page behind that reads like one it still offers —
-     * `D-DOC-029`, `D-SCO-011`, `D-KNW-035`, `D-DOC-007`.
+     * would agree with a directory that had none. A tool that left the registry
+     * leaves a page behind that reads like one it still offers — `D-DOC-029`,
+     * `D-SCO-011`, `D-KNW-035`, `D-DOC-007`.
      */
     #[Decision('D-DOC-007')]
     #[Decision('D-DOC-029')]
@@ -87,10 +87,10 @@ final class ToolSurfaceTest extends TestCase
      * Every page either carries what the tool answered or says why it has none.
      *
      * Neither happened for the two feedback tools. The head of the surface
-     * promised a recording for every tool, the renderer emitted nothing where
-     * there was none, and the promise was therefore false in the one direction
-     * a reader cannot check: an absent recording and a forgotten one look the
-     * same — `D-DOC-007`.
+     * promised a record for every tool, and the renderer emitted nothing where
+     * there was none. So the promise was false in the one direction a reader
+     * cannot check: an absent record and a forgotten one look the same —
+     * `D-DOC-007`.
      */
     #[Decision('D-DOC-007')]
     #[Test]
@@ -114,11 +114,11 @@ final class ToolSurfaceTest extends TestCase
     }
 
     /**
-     * The measurement reads the corpus that is already written, so a page whose
-     * shape changes takes the counter with it rather than reporting zero.
+     * The measurement reads the corpus that already stands, so a page whose
+     * shape changes takes the counter with it rather than reports zero.
      *
-     * The zero is the failure this holds against: the first parser read the
-     * `Data:` label before closing the text block above it, and every tool came
+     * The zero is the failure this holds against. The first parser read the
+     * `Data:` label before it closed the text block above it. Every tool came
      * back with no text at all and a total that still looked plausible.
      */
     #[Test]

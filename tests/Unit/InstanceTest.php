@@ -16,7 +16,7 @@ use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 
 /**
  * The one place this server reads something other than its own knowledge base,
- * and the rules that keep that from happening by accident.
+ * and the rules that keep that from an accident.
  */
 final class InstanceTest extends TestCase
 {
@@ -33,9 +33,9 @@ final class InstanceTest extends TestCase
     #[Test]
     public function withoutAnEntrypointHandingInADirectoryThereIsNoInstance(): void
     {
-        // The HTTP case: a request-serving endpoint never calls discoverFrom(),
-        // so no caller can be answered from whatever installation the document
-        // root happens to sit in.
+        // The HTTP case. An endpoint that serves requests never calls
+        // discoverFrom(), so no caller gets an answer from whatever
+        // installation the document root happens to sit in.
         Instance::discoverFrom(null);
 
         self::assertFalse(Instance::isAvailable());
@@ -76,7 +76,7 @@ final class InstanceTest extends TestCase
     #[Test]
     public function theTypo3VersionIsReadFromTheCorePackage(): void
     {
-        // It has to be available exactly when the console is not: an
+        // It has to be available exactly when the console is not. An
         // installation whose database has no schema still has a version, and
         // the version is what decides whether an answer holds for it.
         Instance::discoverFrom($this->composerProject('vendor', '13.4.33'));
@@ -98,7 +98,7 @@ final class InstanceTest extends TestCase
     #[Test]
     public function aProjectThatMovedItsVendorDirectoryIsStillFound(): void
     {
-        // The layout the TYPO3 extension testing setup produces. Reading the
+        // The layout the TYPO3 extension test setup produces. Reading the
         // default vendor/ instead walked past the installation entirely, and
         // every question only it can answer came back as if nothing existed.
         $root = $this->composerProject('.build/vendor');
@@ -120,8 +120,8 @@ final class InstanceTest extends TestCase
         ], JSON_THROW_ON_ERROR));
         Instance::discoverFrom($root);
 
-        // Without this the one package the agent is editing is the only one
-        // missing from the answers about its own installation.
+        // Without this the one package the agent edits is the only one absent
+        // from the answers about its own installation.
         self::assertSame(realpath($root), Instance::packages()['bootstrap_package'] ?? null);
     }
 
@@ -152,9 +152,9 @@ final class InstanceTest extends TestCase
 
         $origins = array_column(Project::describe()['extensions'], 'origin', 'key');
 
-        // Calling the fixture the project's own says "this is what is being
-        // worked on" about a package that exists to be loaded by a suite, and
-        // a review then audits it as if it were shipped.
+        // The fixture as the project's own says "this is the work in hand"
+        // about a package that exists for a suite to load. A review then audits
+        // it as if it were a release.
         self::assertSame(Project::ORIGIN_FIXTURE, $origins['demo_package'] ?? null);
         self::assertSame(Project::ORIGIN_PROJECT, $origins['bootstrap_package'] ?? null);
         self::assertSame(Project::ORIGIN_THIRD_PARTY, Project::origin('/app/.build/vendor/b13/container'));
@@ -165,11 +165,11 @@ final class InstanceTest extends TestCase
     public function aRootAlsoInstalledIntoVendorIsOnePackage(): void
     {
         // The extension checkout that requires itself through a path
-        // repository: Composer symlinks the root into the vendor directory and
+        // repository. Composer symlinks the root into the vendor directory and
         // lists it there, so the same extension arrives twice. Both entries
         // resolve to one realpath under one key, which is what makes them
-        // collapse — the vendor path would report the extension being edited as
-        // a dependency of the repository it is.
+        // collapse. The vendor path would report the extension under edit as a
+        // dependency of the repository it is.
         $root = $this->composerProject();
         file_put_contents($root . '/composer.json', json_encode([
             'name' => 'acme/bootstrap-package',
@@ -196,11 +196,11 @@ final class InstanceTest extends TestCase
     #[Test]
     public function aMonorepoRootIsCountedBesideThePackagesItHolds(): void
     {
-        // A repository that holds extensions rather than being one, and still
+        // A repository that holds extensions rather than is one, and still
         // declares a TYPO3 package type at its root. Nothing in the metadata
-        // says the root is a container, so it is counted like any other root —
-        // but under its own key, and the extension actually being edited keeps
-        // the directory Composer installed it in.
+        // says the root is a container, so it counts like any other root. But
+        // under its own key, and the extension under edit keeps the directory
+        // Composer installed it in.
         $root = $this->composerProject();
         file_put_contents($root . '/composer.json', json_encode([
             'name' => 'acme/typo3-extensions',
@@ -226,15 +226,16 @@ final class InstanceTest extends TestCase
         ));
         Instance::discoverFrom($root);
 
-        // An extension checkout whose dependencies were never installed has
-        // nothing to answer from, and saying so beats reporting an installation
-        // that holds a single package and no console — `D-DIS-019`.
+        // An extension checkout without its dependencies has nothing to answer
+        // from. To say so beats a report of an installation that holds a single
+        // package and no console — `D-DIS-019`.
         self::assertFalse(Instance::isAvailable());
         self::assertSame([], Instance::packages());
 
-        // What the same manifest is enough for: saying which extension this
+        // What the same manifest is enough for: to say which extension this
         // repository is, which places the work and reports nothing
-        // (`D-SCO-012`). The key is derived, because this one declares none.
+        // (`D-SCO-012`). The key derives from the name, because this one
+        // declares none.
         self::assertSame('bootstrap_package', Instance::startedInPackage());
         self::assertSame(Instance::KIND_EXTENSION_REPOSITORY, Instance::startedIn());
     }
@@ -251,20 +252,20 @@ final class InstanceTest extends TestCase
     {
         // The state the installation workflow starts in: a clone nobody has run
         // composer install in. Everything the project answer reads is in these
-        // files, and the walk goes up twelve directories — so what identifies a
+        // files, and the walk goes up twelve directories. So what identifies a
         // root has to be a declaration of TYPO3 rather than the presence of a
-        // composer.json, or the answer reports a TYPO3 project for whatever PHP
-        // repository the caller happens to be standing below (`D-ANS-085`) —
-        // `D-DIS-019`.
+        // composer.json. Otherwise the answer reports a TYPO3 project for
+        // whatever PHP repository the caller happens to stand below
+        // (`D-ANS-085`) — `D-DIS-019`.
         $root = $this->temporaryDirectory();
         file_put_contents($root . '/composer.json', json_encode($manifest, JSON_THROW_ON_ERROR));
         Instance::discoverFrom($root);
 
         self::assertSame($isProjectRoot ? realpath($root) : null, Instance::project()['root'] ?? null);
 
-        // And in neither case is it an installation. Nothing is installed below
-        // it, so the icon, label and package answers keep saying so rather than
-        // speaking for a checkout with no packages and no console.
+        // And in neither case is it an installation. Nothing stands installed
+        // below it. So the icon, label and package answers keep that up rather
+        // than speak for a checkout with no packages and no console.
         self::assertFalse(Instance::isAvailable());
     }
 
@@ -280,8 +281,8 @@ final class InstanceTest extends TestCase
                 'require' => ['php' => '^8.2', 'typo3/cms-core' => '^13.4.15 || ^14.3'],
                 'extra' => ['typo3/cms' => ['extension-key' => 'blog']],
             ], true],
-            // The base distribution every environment below .environments/ is
-            // built from: no package type and no extra block, and the packages
+            // The base distribution every environment below .environments/
+            // starts from. No package type and no extra block, and the packages
             // it requires are the whole of what says TYPO3 at all.
             'a site distribution' => [[
                 'name' => 'typo3/cms-base-distribution',
@@ -303,8 +304,9 @@ final class InstanceTest extends TestCase
                 'type' => 'library',
                 'require' => ['php' => '>=8.2', 'symfony/finder' => '^7.4'],
             ], false],
-            // Requiring one of TYPO3's tools is not requiring TYPO3, and it is
-            // the shape a rule matching the vendor name alone would claim.
+            // A requirement on one of TYPO3's tools is not a requirement on
+            // TYPO3. It is the shape a rule on the vendor name alone would
+            // claim.
             'a repository that requires TYPO3 tooling' => [[
                 'name' => 'acme/toolkit',
                 'type' => 'library',
@@ -318,11 +320,11 @@ final class InstanceTest extends TestCase
     #[Test]
     public function aPackageInsideAnInstalledProjectIsNotTheProjectRoot(): void
     {
-        // The installation is looked for over the whole walk before any
-        // declaration is, so the project a session stands in stays the answer
-        // from inside one of its own packages — where the manifest declares a
-        // TYPO3 package type and the environment, the sites and the document
-        // root are one directory up — `D-DIS-019`.
+        // The walk looks for the installation whole before it looks for any
+        // declaration. So the project a session stands in stays the answer from
+        // inside one of its own packages. There the manifest declares a TYPO3
+        // package type, and the environment, the sites and the document root
+        // are one directory up — `D-DIS-019`.
         $root = $this->composerProject();
         file_put_contents($root . '/packages/my_sitepackage/composer.json', json_encode(
             ['name' => 'acme/my-sitepackage', 'type' => 'typo3-cms-extension'],
@@ -346,9 +348,10 @@ final class InstanceTest extends TestCase
         putenv(Instance::ROOT_VARIABLE . '=' . $root . '/nowhere');
         Instance::discoverFrom($root);
 
-        // Describing the repository the walk finds would answer about something
-        // other than what the caller named, which is the failure the variable
-        // is reported through rather than searched past — `D-DIS-019`.
+        // A description of the repository the walk finds would answer about
+        // something other than what the caller named. That is the failure the
+        // answer reports through the variable rather than searches past —
+        // `D-DIS-019`.
         self::assertNull(Instance::project());
     }
 
@@ -356,7 +359,7 @@ final class InstanceTest extends TestCase
     #[Test]
     public function anInstallationNamedOutrightIsReadWithoutAnySearch(): void
     {
-        // The way out of every layout this server cannot walk to: a stack it
+        // The way out of every layout this server cannot walk to. A stack it
         // has never heard of, an installation in a subdirectory, a client that
         // starts the server beside the checkout rather than inside it.
         $root = $this->composerProject();
@@ -377,9 +380,9 @@ final class InstanceTest extends TestCase
         putenv(Instance::ROOT_VARIABLE . '=' . $root . '/nowhere');
         Instance::discoverFrom($root);
 
-        // Falling back to the discoverable one would answer about an
-        // installation other than the one the caller named, and the setting
-        // that was ignored would never be mentioned again.
+        // A fall back to the discoverable one would answer about an
+        // installation other than the one the caller named. Nothing would
+        // mention the ignored setting again.
         self::assertFalse(Instance::isAvailable());
         self::assertStringContainsString(Instance::ROOT_VARIABLE, Instance::misconfiguration());
     }
@@ -388,11 +391,11 @@ final class InstanceTest extends TestCase
     #[Test]
     public function anInstallationThatAppearsDuringTheSessionIsFound(): void
     {
-        // The stdio process lives as long as the agent session, and an agent
-        // that is told there is nothing to read runs composer install or starts
-        // the containers — because of that answer. Remembering the "nothing"
-        // outlives its reason, and the caller would have to restart the client
-        // to be given an answer that has been true for ten minutes.
+        // The stdio process lives as long as the agent session. An agent that
+        // hears there is nothing to read runs composer install or starts the
+        // containers, because of that answer. A kept "nothing" outlives its
+        // reason. The caller would have to restart the client to get an answer
+        // that has been true for ten minutes.
         $root = $this->temporaryDirectory();
         Instance::discoverFrom($root);
         self::assertFalse(Instance::isAvailable());

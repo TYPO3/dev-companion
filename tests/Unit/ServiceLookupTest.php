@@ -19,9 +19,9 @@ use TYPO3\DevCompanion\Tool\Registry;
  * container.
  *
  * The probe assembles the installation's own container, which the fixture root
- * cannot stand in for — `D-DIS-023`. So the seam here is the runner: the
- * reading is handed in whole, and what is held is the half that goes wrong
- * without an installation noticing, which is how the answer is built out of it.
+ * cannot stand in for — `D-DIS-023`. So the seam here is the runner. The read
+ * arrives whole. This holds the half that goes wrong without an installation to
+ * notice, which is how the tool builds the answer out of it.
  */
 final class ServiceLookupTest extends TestCase
 {
@@ -65,7 +65,7 @@ final class ServiceLookupTest extends TestCase
 
     /**
      * An interface reaches its implementation through an alias, and the lookup
-     * read definitions alone: fifteen of the thirty-nine ids carrying
+     * read definitions alone. Fifteen of the thirty-nine ids that carry
      * "interface" in `.environments/e-site-14.3` are aliases, and every one of
      * them answered "nothing matches".
      *
@@ -98,10 +98,10 @@ final class ServiceLookupTest extends TestCase
     }
 
     /**
-     * The second defect: a container that will not assemble was thrown on, and
-     * the one try wrapping the probe turned it into a reading that never
-     * happened — every other topic went with it, and the caller was told the
-     * installation could not be read rather than what is wrong with it.
+     * The second defect. A container that will not assemble threw, and the one
+     * try around the probe turned it into a read that never happened. Every
+     * other topic went with it, and the caller heard that the installation was
+     * unreadable rather than what is wrong with it.
      */
     #[Decision('D-DIS-023')]
     #[Test]

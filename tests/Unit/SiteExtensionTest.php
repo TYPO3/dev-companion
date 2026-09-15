@@ -14,11 +14,11 @@ use TYPO3\DevCompanion\Upkeep\SiteExtension;
 use TYPO3\DevCompanion\Upkeep\ToolCalls;
 
 /**
- * The extension a made `E-SITE` carries, held to what it is written for.
+ * The extension a made `E-SITE` carries, held to its purpose.
  *
  * Nothing here starts an installation: what the environment does with these
- * files is minutes of DDEV and is the recording's business. What is held is
- * that the files say what the answer rests on — `D-EVI-010`.
+ * files is minutes of DDEV and is the record's business. This holds that the
+ * files say what the answer rests on — `D-EVI-010`.
  */
 final class SiteExtensionTest extends TestCase
 {
@@ -43,8 +43,8 @@ final class SiteExtensionTest extends TestCase
     }
 
     /**
-     * The one thing the whole answer rests on: a table is this project's
-     * because the `EXT:` reference in its ctrl title says so, which is what
+     * The one thing the whole answer rests on. A table is this project's
+     * because the `EXT:` reference in its ctrl title says so. That is what
      * `Typo3Runtime::extensionIn` reads and the only attribution either side
      * has — `D-EVI-010`.
      */
@@ -65,9 +65,9 @@ final class SiteExtensionTest extends TestCase
     }
 
     /**
-     * One recorded call is answered from both roots, so the table the fixture
-     * registers and the table this environment fills are one table — the
-     * environment for real, the fixture as the boundary it holds instead.
+     * Both roots answer one recorded call, so the table the fixture registers
+     * and the table this environment fills are one table. The environment for
+     * real, the fixture as the boundary it holds instead.
      */
     #[Decision('D-EVI-010')]
     #[Test]

@@ -13,12 +13,12 @@ use TYPO3\DevCompanion\Search\Text;
 /**
  * The issue tracker a core patch starts from, read over its Redmine API.
  *
- * An answer is only an answer when it parses as the API: this host answers a
- * browser-shaped request with 200 and a challenge page, and reading that as
- * "no issue" would be the same mistake in the other direction. The `.json`
- * endpoint is asked for rather than the page, because the fields that decide
- * anything would be scraped anywhere else. Three ways in, because only one of
- * the three questions asked of one tracker starts from a number — `D-ANS-038`.
+ * An answer is only an answer when it parses as the API. This host answers a
+ * browser-shaped request with 200 and a challenge page. A read of that as "no
+ * issue" would be the same mistake in the other direction. The request goes to
+ * the `.json` endpoint rather than the page, because the fields that decide
+ * anything would come off a scrape anywhere else. Three ways in, because only
+ * one of the three questions to one tracker starts from a number, `D-ANS-038`.
  */
 final class Forge
 {
@@ -31,7 +31,7 @@ final class Forge
      * The `category` word that asks for the areas themselves.
      *
      * The tracker's own wildcard, which this file already passes it as
-     * `status_id`. No area is named for it, so it cannot take a subject's place.
+     * `status_id`. No area has that name, so it cannot take a subject's place.
      */
     public const EVERY_AREA = '*';
 
@@ -39,24 +39,24 @@ final class Forge
     private const AREAS_URL = self::HOST . '/projects/' . self::PROJECT . '.json?include=issue_categories';
 
     /**
-     * Seconds an answered read is held for.
+     * Seconds an answered read stays in the hold.
      *
      * Longer than the review server's, because nothing the caller does through
-     * this server changes what the tracker says: an issue's status, its target
+     * this server changes what the tracker says. An issue's status, its target
      * version and its comments move when somebody else works on them, at the
-     * pace people work. What this is against is a session walking a list of
-     * issues and asking the tracker the same thing a dozen times.
+     * pace people work. What this is against is a session that walks a list of
+     * issues and asks the tracker the same thing a dozen times.
      */
     public const HELD_FOR = 300;
 
     /**
-     * Seconds the project's own lists — its categories and its members — are
-     * held for.
+     * Seconds the project's own lists, its categories and its members, stay in
+     * the hold.
      *
      * Two orders of magnitude longer than an issue's, because they answer how
-     * the core is organised rather than what happened to one issue. A category
-     * is added when a subsystem is and a membership when somebody joins, which
-     * are things that happen between releases, while a session filtering by
+     * the core organises itself rather than what happened to one issue. A
+     * category arrives with a subsystem and a membership when somebody joins,
+     * which are things that happen between releases. A session that filters by
      * area or by person asks for the same names on every call it makes.
      */
     public const LISTS_HELD_FOR = 86400;
@@ -68,40 +68,40 @@ final class Forge
     private const NOTES = 15;
 
     /**
-     * The authors whose notes are a review server pinging the tracker.
+     * The authors whose notes are a review server's ping to the tracker.
      *
-     * A list and not a rule: these are the two the core project has seen, and a
-     * bot nobody has named here passes the filter. Which is why the count comes
-     * back whether or not it was asked for — a journal full of patch-set pings
-     * answering zero filtered is this list gone stale, visible without reading
-     * the journal to find out.
+     * A list and not a rule. These are the two the core project has seen, and a
+     * bot nobody has named here passes the filter. That is why the count comes
+     * back whether or not the caller asked for it. A journal full of patch-set
+     * pings that answers zero filtered is this list gone stale, visible without
+     * a read of the journal to find out.
      */
     private const BOTS = ['Gerrit Code Review', 'Mr. Hudson'];
 
     /**
      * The most hits a search answers with. The order is the tracker's own and
-     * nothing here ranks, so a caller who reaches the end of one asks again in
-     * other words rather than deeper — which is the answer to a set that looks
+     * nothing here ranks. So a caller who reaches the end of one asks again in
+     * other words rather than deeper. That is the answer to a set that looks
      * too narrow (`D-ANS-038`).
      */
     private const HITS = 25;
 
     /**
-     * The most words a miss is asked about one at a time, and beyond it nothing
-     * is asked at all.
+     * The most words a miss probes one at a time, and beyond it no probe at
+     * all.
      *
      * A read takes about two and a half seconds against forge.typo3.org,
-     * measured on 2026-08-25, so the probe is what a caller waits through on
+     * measured on 2026-08-25. So the probe is what a caller waits through on
      * the path that answered nothing. A query longer than this is one whose
-     * answer is to pass fewer words, which the miss says without reading
+     * answer is to pass fewer words, which the miss says without a read of
      * anything.
      */
     private const TERMS = 6;
 
     /**
      * The most issues an enumeration answers with. Higher than a search's,
-     * because a triage picks candidates out of the set it is shown and a set
-     * that has to be paged through is one nobody sees the shape of.
+     * because a triage picks candidates out of the set it sees. A set that has
+     * to come in pages is one nobody sees the shape of.
      */
     private const LISTED = 50;
 
@@ -112,26 +112,25 @@ final class Forge
     private const COUNTED = 100;
 
     /**
-     * The most pages of them a shape is counted over. Ten reads take about
-     * seven seconds against forge.typo3.org, measured on 2026-08-19, and what
-     * a set larger than a thousand owes the caller is the bound rather than
-     * the wait.
+     * The most pages of them a shape count runs over. Ten reads take about
+     * seven seconds against forge.typo3.org, measured on 2026-08-19. What a set
+     * larger than a thousand owes the caller is the bound rather than the wait.
      */
     private const COUNTED_PAGES = 10;
 
     /**
      * The most buckets a dimension answers with. The tail of an area count is
-     * twenty subsystems holding one issue each: 38 areas over the 621 issues
-     * one person had filed on 2026-08-19, of which the largest four held two
+     * twenty subsystems with one issue each. 38 areas over the 621 issues one
+     * person had filed on 2026-08-19, of which the largest four held two
      * thirds.
      */
     private const BUCKETS = 12;
 
     /**
      * The most pages of them read, whatever the project says it has. The count
-     * comes from the tracker and the loop ends on it; this is what keeps a
-     * count that is wrong from turning one call into a thousand. The core
-     * project had 185 members on 2026-08-19.
+     * comes from the tracker and the loop ends on it. This is what keeps a
+     * wrong count from a turn of one call into a thousand. The core project had
+     * 185 members on 2026-08-19.
      */
     private const MEMBER_PAGES = 5;
 
@@ -139,9 +138,9 @@ final class Forge
      * The tracker ids `/trackers.json` answered with on 2026-08-05.
      *
      * The API filters by id and nobody says "tracker 1", so the caller's word
-     * is translated here. Held as data rather than fetched: a twelfth tracker
-     * would cost every enumeration a second round trip to find out about, and
-     * what it costs to be missing is one filter nobody can ask for.
+     * turns into the id here. Held as data rather than fetched. A twelfth
+     * tracker would cost every enumeration a second round trip to find out
+     * about, and its absence costs one filter nobody can ask for.
      */
     private const TRACKERS = [
         'Bug' => 1,
@@ -160,9 +159,9 @@ final class Forge
     /**
      * The transport every instance built without one takes.
      *
-     * `ForgeLookup` builds its own, so a test driving the tool itself — its
-     * text half, which is where a caller reads what to do about a miss — has
-     * nowhere else to hand a transport in. `R-COD-003`.
+     * `ForgeLookup` builds its own, so a test that drives the tool itself has
+     * nowhere else to hand a transport in. That is its text half, which is
+     * where a caller reads what to do about a miss. `R-COD-003`.
      *
      * @var (\Closure(string): ?string)|null
      */
@@ -196,7 +195,7 @@ final class Forge
     }
 
     /**
-     * One issue, with what was decided about it.
+     * One issue, with the decision about it.
      *
      * @return array{status: 'answered'|'empty'|'unavailable', url: string, issue: ?array<string, mixed>, cause: ?string}
      */
@@ -206,9 +205,8 @@ final class Forge
         $url = self::HOST . '/issues/' . rawurlencode($number) . '.json?include=journals,relations,attachments';
 
         $answer = $this->api($url, 'issue');
-        // A tracker that says 404 has answered: there is no such issue, which
-        // is a different thing to tell a caller than that it could not be
-        // reached.
+        // A tracker that says 404 has answered. There is no such issue, which
+        // is a different thing to tell a caller than that it was out of reach.
         if ($answer['status'] === 404) {
             return ['status' => 'empty', 'url' => $url, 'issue' => null, 'cause' => null];
         }
@@ -231,15 +229,15 @@ final class Forge
      * The handles the issue's own text names and the changes the review server
      * holds for its number, as one list.
      *
-     * Neither half contains the other. A change discussed in a comment whose
-     * commit message never named the issue is missing from the review server's
-     * answer; a change that names the issue only in its commit message is
-     * missing from the text. An empty list means neither has one, which is what
-     * a caller was already reading it as — `D-ANS-125`.
+     * Neither half contains the other. A change under discussion in a comment
+     * whose commit message never named the issue is absent from the review
+     * server's answer. A change that names the issue only in its commit message
+     * is absent from the text. An empty list means neither has one, which is
+     * what a caller was already reading it as — `D-ANS-125`.
      *
-     * Deduplicated by change number, since a change named in a comment and
-     * found by commit message is one change; a handle that carries a Change-Id
-     * and no number has nothing to match on and stands as it came.
+     * Once per change number, since a change named in a comment and found by
+     * commit message is one change. A handle that carries a Change-Id and no
+     * number has nothing to match on and stands as it came.
      *
      * @param list<array<string, mixed>> $named what the notes carry
      * @return list<array<string, mixed>>
@@ -279,18 +277,16 @@ final class Forge
 
     /**
      * The issues these records name, filled with what decides whether to read
-     * one — the relations they are filed against, and the citations an issue's
-     * prose carries.
+     * one. The relations they stand against, and the citations an issue's prose
+     * carries.
      *
-     * One bulk read for everything handed in rather than one per reference
-     * (`D-ANS-064`), which is why a whole page goes through here at once. Where
-     * it cannot be reached the relations stand as they came back.
-     *
-     * A citation is the other way round: it is kept only where the read
-     * answered for the number, because three digits in a sentence are as often
-     * a version as an issue and the resolving read is what tells the two apart
-     * (`D-ANS-123`). So a tracker that did not answer drops them, which is the
-     * same answer as a number nobody filed.
+     * One bulk read for everything handed in rather than one per reference,
+     * `D-ANS-064`, which is why a whole page goes through here at once. Where
+     * it is out of reach the relations stand as they came back. A citation
+     * stays only where the read answered for the number. Three digits in a
+     * sentence are as often a version as an issue, `D-ANS-123`. So a tracker
+     * that did not answer drops them, which is the same answer as a number
+     * nobody filed.
      *
      * @param list<array<string, mixed>> $records
      * @return list<array<string, mixed>>
@@ -338,9 +334,9 @@ final class Forge
      * The changes the review server holds for these rows, one query per twelve.
      *
      * The state comes with the handle, because the batched query already
-     * answers it per change and dropping it made a caller pay a call for what
-     * was in the payload (`D-ANS-069`); where the review server cannot be
-     * reached the rows stand as they came back.
+     * answers it per change. Its loss made a caller pay a call for what was in
+     * the payload (`D-ANS-069`). Where the review server is out of reach the
+     * rows stand as they came back.
      *
      * @param list<array<string, mixed>> $results
      * @return list<array<string, mixed>>
@@ -404,19 +400,12 @@ final class Forge
      * What each word of an emptied query reaches on its own.
      *
      * This is the half of a miss nothing on this side can supply. Two class
-     * names look alike from here and the tracker knows one of them:
-     * `RendererRegistry` reached 5 issues on 2026-08-25 and
-     * `FileRendererInterface` reached none, so the advice to drop the
-     * identifiers would have dropped the word that answers (`D-ANS-038`).
-     *
-     * One read per word rather than one re-read of the query with the AND off.
-     * That re-read is a single call and answers something else: the union is
-     * ordered by issue number and its size is the commonest word's, so the same
-     * four words answered 14673 that day with none of the five in the first
-     * page of them.
-     *
-     * Asked on the miss alone, and each is held like any other read, so a
-     * session rewording around one term pays for it once.
+     * names look alike from here and the tracker knows one of them. So the
+     * advice to drop the identifiers would have dropped the word that answers,
+     * `D-ANS-038`. One read per word rather than one re-read of the query with
+     * the AND off. That re-read answers the union in issue number order at the
+     * commonest word's size. Run on the miss alone, and each stays in the hold
+     * like any other read.
      *
      * @return list<array{term: string, matchCount: int}>
      */
@@ -453,15 +442,15 @@ final class Forge
      * The fields a search hit is not made of, read for the whole page at once.
      *
      * `/search.json` answers with a title and a URL, so the area, the reporter,
-     * the assignee and the two dates are absent from every hit — and a record carrying them
-     * empty is a false statement rather than a missing one: it reads as an
+     * the assignee and the two dates are absent from every hit. A record with
+     * them empty is a false statement rather than an absent one. It reads as an
      * issue nobody has categorised, nobody holds and nothing has moved on. A
      * session took 50 of 50 rows that way on 2026-08-05
      * (`feedback/2026-08-05-033902`), and the search path is where a triage
      * asks about age.
      *
-     * Where it cannot be reached the hits stand as they came back. A search
-     * that answered is not turned into an outage by a second call that did not.
+     * Where it is out of reach the hits stand as they came back. A search that
+     * answered is not turned into an outage by a second call that did not.
      *
      * @param list<array<string, mixed>> $results
      * @return list<array<string, mixed>>
@@ -483,8 +472,8 @@ final class Forge
             $results[$at]['assignedTo'] = $read['assignedTo'];
             $results[$at]['createdOn'] = $read['createdOn'];
             $results[$at]['updatedOn'] = $read['updatedOn'];
-            // The tracker and the status are read off the title, which is the
-            // tracker's own wording and usually parses. Where it did not, they
+            // The tracker and the status come off the title, which is the
+            // tracker's own words and usually parses. Where it did not, they
             // are fields here.
             $results[$at]['tracker'] = $hit['tracker'] !== '' ? $hit['tracker'] : $read['tracker'];
             $results[$at]['status'] = $hit['status'] !== '' ? $hit['status'] : $read['status'];
@@ -501,7 +490,7 @@ final class Forge
      * message names from here too, which is what it is public for
      * (`D-ANS-098`).
      *
-     * An empty answer is what could not be reached, and every caller here reads
+     * An empty answer is what stayed out of reach, and every caller here reads
      * it as "leave what came back alone".
      *
      * @param list<mixed> $numbers
@@ -523,7 +512,7 @@ final class Forge
      *
      * `/issues.json` filtered by an id list answers subject, tracker, status,
      * area, author, assignee and both dates for the whole set in one request.
-     * `status_id=*` is what keeps a closed one in it — every caller here asks
+     * `status_id=*` is what keeps a closed one in it. Every caller here asks
      * about issues that are usually closed, and the default of that endpoint is
      * open ones.
      *
@@ -560,31 +549,17 @@ final class Forge
     }
 
     /**
-     * The issues of the core project, at whichever end of it was asked for.
+     * The issues of the core project, at whichever end of it the caller asked
+     * for.
      *
      * What this answers is the question a triage starts from and neither of the
-     * two above reaches: an issue nobody has looked at since 2015 is found by
-     * no number, because nobody holds it, and by no wording, because its
-     * wording is the one nobody thought of. So the filter is the way in — the
-     * tracker's own `status_id=open`, which is every status it has not marked
-     * closed and therefore includes `Postponed`.
-     *
-     * `newest` is the other end, where the question is whether a defect
-     * somebody has just found is already filed. `createdSince` is what makes
-     * that end a set rather than a page of one, and it narrows where an area
-     * cannot — `D-ANS-116`.
-     *
-     * `total` comes back with the page, because a caller shown 30 of something
-     * has to be able to see whether 30 was the set or the first screenful of
-     * it.
-     *
-     * The person filters are the other way in and the one a status widens for:
-     * what somebody still has open is a question about the backlog, what they
-     * have filed over the years is a question about a person, and only the
-     * second needs the closed issues in the set. `involving` is that question
-     * asked the way somebody says it out loud, which the tracker cannot be
-     * asked at all — it ANDs its filters, so a union is two reads and a merge
-     * (`D-ANS-090`).
+     * two above reaches. The issue nobody has looked at since 2015, which no
+     * number and no words find. So the filter is the way in, the tracker's own
+     * `status_id=open`. `newest` is the other end, and `createdSince` is what
+     * makes that end a set, `D-ANS-116`. `total` comes back with the page, so a
+     * caller can see whether 30 was the set or a first screenful. The person
+     * filters are the other way in, and `involving` is a union the tracker
+     * cannot answer, so it is two reads and a merge, `D-ANS-090`.
      *
      * @return array{status: 'answered'|'empty'|'unavailable', url: string, total: int, categories: list<string>, categoriesUsed: list<string>, people: list<array{filter: string, asked: string, name: string, id: int, candidates: list<string>}>, breakdown: ?array<string, mixed>, results: list<array<string, mixed>>, cause: ?string}
      */
@@ -604,10 +579,10 @@ final class Forge
     ): array {
         $categories = $this->categories();
         // The vocabulary asked for on purpose, and no issue read at all. Every
-        // other call is answered with the areas only where a word named none or
-        // several, which is what keeps 54 names off the answers nobody asked
-        // them of (`feedback/2026-08-19-134717`) — and left the enumeration
-        // reachable by a wrong word alone (`D-KNW-113`).
+        // other call gets the areas only where a word named none or several.
+        // That keeps 54 names off the answers nobody asked them of
+        // (`feedback/2026-08-19-134717`), and left the enumeration reachable by
+        // a wrong word alone (`D-KNW-113`).
         if ($category === self::EVERY_AREA) {
             return [
                 'status' => $categories === [] ? 'unavailable' : 'answered',
@@ -622,9 +597,9 @@ final class Forge
             ];
         }
         $used = $category === '' ? [] : self::named($categories, $category);
-        // A word naming no area is regularly a system extension key, which is
-        // what a caller standing in a checkout holds and what half the areas
-        // are not named after. The catalog carries the area for those, so
+        // A word that names no area is regularly a system extension key. That
+        // is what a caller in a checkout holds and what half the areas do not
+        // carry in their name. The catalog carries the area for those, so
         // "impexp" reads the issues under "Import/Export (T3D)" and
         // categoriesUsed says which area that was (`D-ANS-142`).
         if ($used === [] && $category !== '') {
@@ -680,9 +655,8 @@ final class Forge
             }
         }
 
-        // A date the tracker cannot read is answered with the unfiltered set,
-        // which is the wrong answer wearing a right one's shape. Only a date
-        // reaches the query.
+        // A date the tracker cannot read gets the unfiltered set, which is the
+        // wrong answer in a right one's shape. Only a date reaches the query.
         $filed = self::within($createdSince, $createdBefore);
         if ($filed !== '') {
             $filters['created_on'] = $filed;
@@ -691,16 +665,17 @@ final class Forge
             $filters['updated_on'] = '<=' . $updatedBefore;
         }
 
-        // Only where it can do the work it is answered for: correcting a word
+        // Only where it can do the work it answers for: a correction of a word
         // that named no area or several. On every other call it is 54 names the
         // caller did not ask for, three times over in one session
         // (`feedback/2026-08-19-134717`).
         $known = $category !== '' && count($used) !== 1 ? array_keys($categories) : [];
 
-        // What the index answers for nothing where it is asked for: the
-        // journal is the one thing it will not serve however it is asked, which
-        // is why the review server is a call of its own below. A counted read
-        // wants none of it — it is reading a thousand rows for four fields.
+        // What the index answers for nothing where the call asks for it. The
+        // journal is the one thing it will not serve however the call reads.
+        // That is why the review server is a call of its own below. A counted
+        // read wants none of it — it is reading a thousand rows for four
+        // fields.
         $page = $breakdown
             ? ['limit' => (string) self::COUNTED]
             : ['limit' => (string) max(1, min(self::LISTED, $limit)), 'include' => 'relations,attachments'];
@@ -711,9 +686,9 @@ final class Forge
         );
         $url = implode(' ', $reads);
 
-        // A word matching no category, and a name matching no person, would
-        // otherwise be answered with the unfiltered backlog — a set about
-        // everything wearing the shape of a set about one thing.
+        // A word that matches no category, and a name that matches no person,
+        // would otherwise get the unfiltered backlog. That is a set about
+        // everything in the shape of a set about one thing.
         $unresolved = array_filter($people, static fn(array $person): bool => $person['id'] === 0);
         if (($category !== '' && $used === []) || $unresolved !== []) {
             return ['status' => 'empty', 'url' => $url, 'total' => 0, 'categories' => $known, 'categoriesUsed' => $category !== '' ? $used : [], 'people' => $people, 'breakdown' => null, 'results' => [], 'cause' => null];
@@ -721,7 +696,7 @@ final class Forge
 
         $answer = $breakdown ? $this->shape($reads) : $this->page($reads, max(1, min(self::LISTED, $limit)), $filters['sort']);
         // Two reads answer one question, and their counts overlap by the issues
-        // this person both filed and holds. The tracker ANDs its filters, so
+        // this person both filed and holds. The tracker ANDs its filters. So
         // that overlap is a third read of one row and the only thing that makes
         // the union countable at all.
         if ($answer['rows'] !== null && count($reads) > 1) {
@@ -752,9 +727,9 @@ final class Forge
         $results = [];
         foreach ($answer['rows'] as $raw) {
             $row = self::entry($raw);
-            // The index answer carries the description and no journal, so a row
-            // is read for what its subject and its report name and says nothing
-            // about the comments — `D-ANS-122`.
+            // The index answer carries the description and no journal. So a row
+            // reads for what its subject and its report name and says nothing
+            // about the comments, `D-ANS-122`.
             $row['cites'] = CitedCode::in(
                 is_string($raw['subject'] ?? null) ? $raw['subject'] : '',
                 is_string($raw['description'] ?? null) ? $raw['description'] : '',
@@ -778,10 +753,10 @@ final class Forge
     /**
      * One page of each read, as one page of the union.
      *
-     * Where two reads answer one question, taking the first `limit` of each and
-     * the first `limit` of what they merge to is the first `limit` of the
-     * union: both come back in the same order, so nothing dropped from either
-     * page can sort ahead of what was kept.
+     * Where two reads answer one question, take the first `limit` of each and
+     * the first `limit` of the merge. That is the first `limit` of the union.
+     * Both come back in the same order, so nothing dropped from either page can
+     * sort ahead of what stayed.
      *
      * @param list<string> $reads
      * @return array{rows: ?list<array<string, mixed>>, total: int, complete: bool, cause: ?string}
@@ -812,9 +787,9 @@ final class Forge
      * of it.
      *
      * A person's history is one well-defined set with no other words to narrow
-     * it by, so a page of 50 out of 621 leaves the rest reachable by nothing
+     * it by. So a page of 50 out of 621 leaves the rest reachable by nothing
      * (`feedback/2026-08-19-134651`). What answers that question is how the set
-     * is distributed, and what that costs is reading it — a hundred rows to a
+     * distributes, and what that costs is a read of it. A hundred rows to a
      * request, bounded, and the answer says where the bound cut it.
      *
      * @param list<string> $reads
@@ -881,8 +856,8 @@ final class Forge
     }
 
     /**
-     * The rows in the order the tracker was asked for them, which a merge of
-     * two answers no longer carries.
+     * The rows in the order of the request to the tracker, which a merge of two
+     * answers no longer carries.
      *
      * @param array<int, array<string, mixed>> $rows
      * @return list<array<string, mixed>>
@@ -890,9 +865,9 @@ final class Forge
     private static function inOrder(array $rows, string $sort): array
     {
         $field = str_starts_with($sort, 'updated_on') ? 'updated_on' : 'created_on';
-        // Which way round, and not only which field: the recent end is the same
-        // sort read backwards, and a merge that ignores that keeps the oldest
-        // rows of a page the caller asked the newest of.
+        // Which way round, and not only which field. The recent end is the same
+        // sort read backwards. A merge that ignores that keeps the oldest rows
+        // of a page the caller asked the newest of.
         $direction = str_ends_with($sort, ':desc') ? -1 : 1;
         $sorted = array_values($rows);
         usort($sorted, static fn(array $one, array $other): int => $direction * strcmp(
@@ -904,12 +879,12 @@ final class Forge
     }
 
     /**
-     * How a set of issues is distributed, one list per dimension.
+     * How a set of issues distributes, one list per dimension.
      *
-     * The four a person's history is read by: what came of them, what kind of
-     * work they were, which part of the core, and when. Ordered by size and
-     * bounded, because the tail of an area count is twenty subsystems holding
-     * one issue each and what it says is already said by the head.
+     * The four a reader reads a person's history by. What came of them, what
+     * kind of work they were, which part of the core, and when. Ordered by size
+     * and bounded. The tail of an area count is twenty subsystems with one
+     * issue each, and the head already says what it says.
      *
      * @param list<array<string, mixed>> $rows
      * @return list<array{dimension: string, buckets: list<array{name: string, count: int}>, withheldBuckets: int, withheldCount: int}>
@@ -919,9 +894,9 @@ final class Forge
         $counts = ['status' => [], 'tracker' => [], 'category' => [], 'year' => []];
         foreach ($rows as $row) {
             foreach (['status', 'tracker', 'category'] as $dimension) {
-                // An issue nobody filed under an area is a bucket of its own,
-                // because leaving it out makes the areas add up to less than
-                // the set and nothing says why.
+                // An issue nobody filed under an area is a bucket of its own.
+                // Left out, the areas add up to less than the set and nothing
+                // says why.
                 $name = self::name($row[$dimension] ?? null);
                 $counts[$dimension][$name === '' ? 'none' : $name] ??= 0;
                 $counts[$dimension][$name === '' ? 'none' : $name]++;
@@ -964,9 +939,9 @@ final class Forge
      * The two ends of one date field as one filter, and empty where neither is
      * a day.
      *
-     * Both ends written as two filters would be one filter and the other
-     * silently gone: the tracker takes one value per field, and `><a|b` is its
-     * own way of saying a window, read from it in `D-ANS-116`.
+     * Both ends as two filters would be one filter and the other silently gone.
+     * The tracker takes one value per field, and `><a|b` is its own way to say
+     * a window, read from it in `D-ANS-116`.
      */
     private static function within(string $since, string $before): string
     {
@@ -987,11 +962,10 @@ final class Forge
      * The categories the core project files its issues under, name to id.
      *
      * Read from the project rather than written down here. A list in this file
-     * is one the core can add to without anything reporting it, and the
-     * addition is exactly the subsystem somebody would be filtering for — a
-     * category nobody can name is a filter that answers nothing and looks like
-     * an empty backlog. What keeps it from being a round trip per call is the
-     * hold, not a copy.
+     * is one the core can add to with no report from anything. The addition is
+     * exactly the subsystem somebody would filter for. A category nobody can
+     * name is a filter that answers nothing and looks like an empty backlog.
+     * What keeps it from being a round trip per call is the hold, not a copy.
      *
      * @return array<string, int>
      */
@@ -1011,18 +985,17 @@ final class Forge
     }
 
     /**
-     * The people the core project is worked by, name to id.
+     * The people who work the core project, name to id.
      *
      * The tracker filters by a numeric user id, and it serves no public user
-     * list: `/users.json` answers 401 without an administrator's credential. So
-     * a caller holding a name and nothing else cannot ask a question about a
-     * person at all, and the memberships of the project are the one place it
+     * list. `/users.json` answers 401 without an administrator's credential. So
+     * a caller with a name and nothing else cannot ask a question about a
+     * person at all. The memberships of the project are the one place it
      * answers names and ids together for nobody in particular.
      *
-     * It is who the project is worked by rather than everybody who has ever
-     * filed something — 24 of the 100 most recently filed issues were reported
-     * from outside it, measured on 2026-08-19, which is what `found()` is the
-     * fallback for.
+     * It is who works the project rather than everybody who has ever filed
+     * something. 24 of the 100 newest issues came from outside it, measured on
+     * 2026-08-19, which is what `found()` is the fallback for.
      *
      * @return array<string, int>
      */
@@ -1036,7 +1009,7 @@ final class Forge
             $answer = $this->api($url, 'memberships', self::LISTS_HELD_FOR);
             foreach ($answer['part'] ?? [] as $membership) {
                 // A membership is a person or a group, and only a person files
-                // and is assigned issues.
+                // and holds issues.
                 $user = is_array($membership) ? $membership['user'] ?? null : null;
                 if (is_array($user) && is_string($user['name'] ?? null) && is_numeric($user['id'] ?? null)) {
                     $people[$user['name']] = (int) $user['id'];
@@ -1052,10 +1025,10 @@ final class Forge
      * The person a name means, as the id the tracker filters by.
      *
      * Only a name carried whole decides, which is where this parts from the way
-     * an area is named: half of "backend ui" is still the backend, and half of
-     * "Andreas Kießling" is four other people called Andreas. A name reaching
-     * two of them resolves to neither and answers with both, because merging
-     * two people into one backlog is a wrong answer nothing about it says is
+     * an area gets its name. Half of "backend ui" is still the backend, and
+     * half of "Andreas Kießling" is four other people called Andreas. A name
+     * that reaches two of them resolves to neither and answers with both. Two
+     * people merged into one backlog is a wrong answer nothing about it says is
      * wrong.
      *
      * @return array{name: string, id: int, candidates: list<string>}
@@ -1085,10 +1058,10 @@ final class Forge
      *
      * What resolves somebody the project holds no membership for, which is a
      * quarter of the reporters. It is the step the session that asked for this
-     * filter took by hand: read an issue that person touched, and lift the id
-     * out of its author. Best effort and no more — a reporter nobody has
-     * written the name of stays unresolved, which is answered as such rather
-     * than as an empty backlog.
+     * filter took by hand. Read an issue that person touched, and lift the id
+     * out of its author. Best effort and no more. A reporter nobody has written
+     * the name of stays unresolved, and the answer says so rather than shows an
+     * empty backlog.
      *
      * @return array<string, int>
      */
@@ -1106,8 +1079,8 @@ final class Forge
 
         $people = [];
         foreach ($this->issuesOf($numbers) as $row) {
-            // Both sides of a row, because a name in an issue's text is as often
-            // the person it was handed to as the person who filed it.
+            // Both sides of a row. A name in an issue's text is as often the
+            // person who got it as the person who filed it.
             foreach ([$row['author'] ?? null, $row['assigned_to'] ?? null] as $party) {
                 if (is_array($party) && is_string($party['name'] ?? null) && is_numeric($party['id'] ?? null)) {
                     $people[$party['name']] = (int) $party['id'];
@@ -1123,16 +1096,16 @@ final class Forge
      * own spelling. Its areas and its people are both such a list.
      *
      * Nobody types "RTE (rtehtmlarea + ckeditor)". They type "rte", and they
-     * type "backend ui" for a name that carries neither word whole, so the
-     * words are matched one at a time and at a word boundary — a substring
-     * match answers "rte" with every category whose name contains "reporte" or
+     * type "backend ui" for a name that carries neither word whole. So the
+     * words match one at a time and at a word boundary. A substring match
+     * answers "rte" with every category whose name contains "reporte" or
      * "Renderer", and "kai" with everybody called Kaiser.
      *
-     * Carrying every word is preferred and carrying one is the fallback,
-     * because the first is what an exact name does and the second is what a
-     * half-remembered one does. Which entries that produced is answered back,
-     * since "backend ui" reaching three of them is a set the caller may want to
-     * narrow and cannot see from the issues alone.
+     * Every word carried wins and one word carried is the fallback. The first
+     * is what an exact name does and the second is what a half-remembered one
+     * does. Which entries that produced comes back too. "backend ui" that
+     * reaches three of them is a set the caller may want to narrow and cannot
+     * see from the issues alone.
      *
      * @param array<string, int> $entries
      * @return list<string>
@@ -1145,7 +1118,7 @@ final class Forge
     }
 
     /**
-     * The entries carrying every word, and the entries carrying some of them.
+     * The entries with every word, and the entries with some of them.
      *
      * @param array<string, int> $entries
      * @return array{list<string>, list<string>}
@@ -1176,11 +1149,11 @@ final class Forge
     }
 
     /**
-     * One read of the API, as the part of the answer that was asked for.
+     * One read of the API, as the part of the answer the call asked for.
      *
-     * The three states are the same whichever question was asked, and so is the
-     * one retry: a body that did not parse is the protection rather than an
-     * outage, and the way past it is a plainer agent rather than a more
+     * The three states are the same whichever question the call asked, and so
+     * is the one retry. A body that did not parse is the protection rather than
+     * an outage. The way past it is a plainer agent rather than a more
      * browser-like one. One, because a second failure is an answer about the
      * host rather than about the request.
      *
@@ -1212,7 +1185,7 @@ final class Forge
         ];
         // Only what the tracker actually answered. A 404 for an issue nobody
         // has filed yet and a body the protection replaced are both states of
-        // this minute, and holding either turns one bad minute into five.
+        // this minute. A hold on either turns one bad minute into five.
         if ($part !== null) {
             Recent::hold($url, $answer);
         }
@@ -1221,13 +1194,13 @@ final class Forge
     }
 
     /**
-     * The part of an API answer a call was asking for — the issue, the hits,
-     * the page of issues — or null for everything that is not one.
+     * The part of an API answer a call asked for, the issue, the hits, the page
+     * of issues. Null for everything that is not one.
      *
-     * The tracker's own count of what matched comes with it, because a page is
-     * not the set and only the envelope says which of the two the caller is
-     * holding. An answer carrying no count is one issue read whole, where the
-     * question does not arise.
+     * The tracker's own count of what matched comes with it. A page is not the
+     * set, and only the envelope says which of the two the caller has. An
+     * answer carrying no count is one issue read whole, where the question does
+     * not arise.
      *
      * @return array{part: array<mixed>, total: int}|null
      */
@@ -1244,14 +1217,14 @@ final class Forge
     }
 
     /**
-     * One hit, as the identity and the triage state a caller sorting a set of
+     * One hit, as the identity and the triage state a caller who sorts a set of
      * them needs.
      *
      * `title` arrives as `Bug #105403 (Under Review): f:image and cache busting
-     * issue`, so the tracker and the status are readable here rather than in a
-     * second call per hit. A title in some other shape is not a broken hit —
-     * the number and the URL are fields of their own — so what cannot be read
-     * off it is left empty and the whole title stands as the subject.
+     * issue`. So the tracker and the status are readable here rather than in a
+     * second call per hit. A title in some other shape is not a broken hit,
+     * because the number and the URL are fields of their own. So what does not
+     * come off it stays empty and the whole title stands as the subject.
      *
      * @param array<string, mixed> $entry
      * @return array<string, mixed>
@@ -1278,8 +1251,8 @@ final class Forge
             'tracker' => $tracker,
             'status' => $status,
             // A search hit is a title and a URL. The five below are fields of
-            // the issue, and `filled()` is what reads them for the whole page —
-            // what is left empty here is what that call could not reach.
+            // the issue, and `filled()` is what reads them for the whole page.
+            // What stays empty here is what that call could not reach.
             'category' => '',
             'reportedBy' => '',
             'assignedTo' => '',
@@ -1287,8 +1260,8 @@ final class Forge
             'updatedOn' => '',
             'url' => $url !== '' ? $url : self::HOST . '/issues/' . $issue,
             // Nothing asks the tracker or the review server about these for a
-            // search: a search answers which issues mention a wording, and the
-            // three are what a backlog row is chosen on.
+            // search. A search answers which issues mention some words, and the
+            // three are what a triage chooses a backlog row on.
             'relations' => [],
             'attachments' => [],
             'reviews' => [],
@@ -1299,9 +1272,9 @@ final class Forge
     /**
      * One issue of an enumeration, in the shape a search hit comes back in.
      *
-     * Everything here is a field, where a search hit has to be read out of its
-     * title — which is what makes the two dates answerable at all, and they say
-     * different things: filed long ago is about the report, untouched for years
+     * Everything here is a field, where a search hit has to come out of its
+     * title. That is what makes the two dates answerable at all, and they say
+     * different things. Filed long ago is about the report, untouched for years
      * is about the attention it got. The relations and the files come with the
      * page and decide which row is worth reading — `D-ANS-069`.
      *
@@ -1328,8 +1301,8 @@ final class Forge
             // Filled by `reviewed()`, which is one call for the page rather
             // than a field of the row.
             'reviews' => [],
-            // Filled by `open()` from the row the tracker sent, because only an
-            // enumerated row carries the description this is read out of.
+            // `open()` fills it from the row the tracker sent, because only an
+            // enumerated row carries the description this comes out of.
             'cites' => [],
         ];
     }
@@ -1364,17 +1337,17 @@ final class Forge
                 $written[] = $entry;
             }
         }
-        // Filtered before the slice, so dropping the pings is what lets more of
-        // what a person wrote fit inside the bound rather than only shortening
-        // the answer.
+        // Filtered before the slice. So the drop of the pings is what lets more
+        // of what a person wrote fit inside the bound rather than only cuts the
+        // answer.
         $shown = $wanted === 'people' ? $written : $notes;
 
         $own = (int) ($raw['id'] ?? $number);
         $description = is_string($raw['description'] ?? null) ? trim($raw['description']) : '';
         $relations = self::relationsOf($raw, $own);
-        // The description is a text like a note and is read as one. A review URL
-        // pasted into the report was dropped while the same URL in a comment was
-        // a handle, and 5 of the 100 newest open bugs carry one there
+        // The description is a text like a note and reads as one. A review URL
+        // pasted into the report dropped out while the same URL in a comment
+        // was a handle. 5 of the 100 newest open bugs carry one there
         // (`D-ANS-123`).
         $texts = [
             [
@@ -1408,8 +1381,8 @@ final class Forge
             // a patch-set ping older than the bound is still a handle.
             'reviews' => self::reviews($texts),
             // From every note rather than from the ones that come back, the way
-            // the changes are: what a report names its code in is as often the
-            // comment that reproduced it as the description — `D-ANS-122`.
+            // the changes are. What a report names its code in is as often the
+            // comment that reproduced it as the description, `D-ANS-122`.
             'cites' => CitedCode::in(
                 is_string($raw['subject'] ?? null) ? $raw['subject'] : '',
                 is_string($raw['description'] ?? null) ? $raw['description'] : '',
@@ -1422,7 +1395,7 @@ final class Forge
     }
 
     /**
-     * The issues a record is filed against, each named once.
+     * The issues a record stands against, each named once.
      *
      * A relation names both sides, and which of the two is the other issue
      * depends on who filed it. Taking one field blindly reports an issue as
@@ -1458,14 +1431,14 @@ final class Forge
      * The issues the report and the comments cite, which no relation carries.
      *
      * A relation is somebody's triage and a citation is the writer's own claim
-     * about prior art, which on an old report is regularly the load-bearing one
-     * and sits in the first line of a description while the answer says
+     * about prior art. On an old report the citation regularly carries the
+     * weight. It sits in the first line of a description while the answer says
      * `relations: []` (`D-ANS-123`). So the two are separate fields, and a
-     * number already filed as a relation is left to the relation, which says
+     * number already on file as a relation stays with the relation, which says
      * more about it.
      *
-     * Each once, in the order it was written, and a citation in both texts is a
-     * description: that is where the reporter framed the report.
+     * Each once, in the order of the text, and a citation in both texts is a
+     * description. That is where the reporter framed the report.
      *
      * @param list<array{author: string, on: string, note: string}> $notes
      * @param list<int>                                             $linked
@@ -1504,11 +1477,11 @@ final class Forge
     /**
      * The issue numbers one text cites, in the two forms people write them in.
      *
-     * A URL is the form the report this was written from used and the rare one:
-     * 5 of 200 open bugs read on 2026-08-27 carried one, against 29 of them
-     * carrying Redmine's own `#NNNN`. That form is bounded to what an issue
-     * number is — a TYPO3 exception code is ten digits, and two of them stand in
-     * the description of #76202 (`D-ANS-123`).
+     * A URL is the form the report behind this used and the rare one. 5 of 200
+     * open bugs read on 2026-08-27 carried one, against 29 of them with
+     * Redmine's own `#NNNN`. That form binds to what an issue number is. A
+     * TYPO3 exception code is ten digits, and two of them stand in the
+     * description of #76202 (`D-ANS-123`).
      *
      * @return list<int>
      */
@@ -1530,15 +1503,15 @@ final class Forge
      * The review changes the report and the journal name, as handles rather than
      * as prose.
      *
-     * They are in the payload already and only inside a sentence, which is where
-     * a triage stops reading them (`D-ANS-064`). Nothing is claimed about their
-     * state, which is one `typo3_gerrit_lookup` call away. Two passes, because
-     * the bot's note names the change id and the number together where a human's
-     * later note is a bare URL.
+     * They are in the payload already and only inside a sentence, which is
+     * where a triage stops reading them (`D-ANS-064`). The answer claims
+     * nothing about their state, which is one `typo3_gerrit_lookup` call away.
+     * Two passes, because the bot's note names the change id and the number
+     * together where a human's later note is a bare URL.
      *
      * @param list<array{author: string, on: string, note: string}> $notes The
-     *     description first and then the journal, in the order they were
-     *     written, so the date on a handle is the last text that named it.
+     *     description first and then the journal, in the order of the text,
+     *     so the date on a handle is the last text that named it.
      * @return list<array<string, mixed>>
      */
     private static function reviews(array $notes): array
@@ -1591,8 +1564,8 @@ final class Forge
      * A review URL carries the number in two shapes — `review.typo3.org/1186`
      * from before the move to the current server, and
      * `review.typo3.org/c/Packages/TYPO3.CMS/+/38419` since. A URL with neither
-     * is a query rather than a change: `review.typo3.org/#q,status:open+…`
-     * names a topic and no number, and matching digits anywhere in the URL
+     * is a query rather than a change. `review.typo3.org/#q,status:open+…`
+     * names a topic and no number, and a match on digits anywhere in the URL
      * would report it as change 3129.
      *
      * @return array{list<int>, string}
@@ -1616,18 +1589,17 @@ final class Forge
     /**
      * The files hanging off an issue, named rather than fetched.
      *
-     * On a bug report about rendering, the evidence is regularly a screenshot,
-     * and Redmine's inline syntax puts it into a comment as `!name.jpg!` — so
+     * On a bug report about a render, the evidence is regularly a screenshot,
+     * and Redmine's inline syntax puts it into a comment as `!name.jpg!`. So
      * the text of that comment is a bare filename and reads as an empty
-     * comment. On #88556 two of the seven attachments decided the triage: one
+     * comment. On #88556 two of the seven attachments decided the triage. One
      * showed the editor's source view, the other the reporter's literal
-     * database content, and a session that read only the text would have filed
-     * one wrong verdict for two different defects
-     * (`feedback/2026-08-05-033846`).
+     * database content. A session that read only the text would have filed one
+     * wrong verdict for two different defects (`feedback/2026-08-05-033846`).
      *
      * What comes back is the list and not the bytes. The URLs answer without a
-     * credential, an image is read by a caller that can read images, and this
-     * server transcribes nothing.
+     * credential, a caller that can read images reads an image, and this server
+     * transcribes nothing.
      *
      * @param array<string, mixed> $raw
      * @return list<array<string, mixed>>
@@ -1658,8 +1630,8 @@ final class Forge
     }
 
     /**
-     * A custom field is a list rather than a map, so it is found by the name it
-     * carries. The TYPO3 version an issue was reported against lives in one.
+     * A custom field is a list rather than a map, so the name it carries finds
+     * it. The TYPO3 version an issue reports against lives in one.
      *
      * @param array<string, mixed> $raw
      */

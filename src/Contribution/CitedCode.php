@@ -11,24 +11,18 @@ use TYPO3\DevCompanion\Installation\Instance;
  * The code a report's own text names, placed in the packages the installation
  * ships.
  *
- * A stale issue's status is untouched by definition, so nothing on the tracker
- * says that a 2015 report is about code that is gone. What says it is the code
- * the report names, and a page of 25 stale Bugs read on 2026-08-27 names it in
- * five shapes: a namespace with the leading backslash, without it and doubled
- * inside a PHP string, a `Class::method`, a core file path out of a pasted
- * stack trace, and a bare class name — which for five of those rows is the only
- * handle there is (`D-ANS-122`).
- *
- * What comes back is where a name stands and never whether the defect
- * reproduces. A name this cannot place is unplaced rather than gone: a wrong
- * "gone" discards a valid candidate unread, which costs more than the hand
- * reading it replaces. Which is also why a bare name is taken only where the
- * report marks it as code or an installed package ships one — a capitalised
- * word is a class as often as it is the label of a button.
+ * A stale issue's status stays untouched by definition, so nothing on the
+ * tracker says that a 2015 report is about code that is gone. What says it is
+ * the code the report names, in five shapes, `D-ANS-122`. What comes back is
+ * where a name stands and never whether the defect reproduces. A name this
+ * cannot place stays unplaced rather than gone, because a wrong "gone" discards
+ * a valid candidate unread. That is also why a bare name counts only where the
+ * report marks it as code or an installed package ships one. A capitalised word
+ * is a class as often as it is the label of a button.
  */
 final class CitedCode
 {
-    /** A class named with its namespace, which places it without guessing. */
+    /** A class named with its namespace, which places it without a guess. */
     public const QUALIFIED = 'qualified';
 
     /** A class named without one — the weak handle, and often the only one. */
@@ -40,17 +34,20 @@ final class CitedCode
     /** An installed package ships it, and the method named on it where one was. */
     public const SHIPPED = 'shipped';
 
-    /** No installed package ships it, which core having removed it and an extension nobody installed both look like. */
+    /**
+     * No installed package ships it, which is what a core removal and an
+     * extension nobody installed both look like.
+     */
     public const NOT_SHIPPED = 'notShipped';
 
     /** Nothing here could place it: no installed package owns the namespace, or there is no installation at all. */
     public const UNPLACED = 'unplaced';
 
     /**
-     * The most names one report is read for.
+     * The most names one report yields.
      *
      * A pasted stack trace names one file per frame, and what a triage reads is
-     * the first few. The strong handles are kept first, so the cut falls on the
+     * the first few. The strong handles come first, so the cut falls on the
      * bare names.
      */
     private const MOST = 20;
@@ -77,11 +74,11 @@ final class CitedCode
     /**
      * A bare class name: a capital, a lowercase run, and a further capital.
      *
-     * Two humps rather than one, because a sentence starts with a capitalised
-     * word and this runs over prose. What it costs is a one-word class name —
-     * `Example`, which the same reading found belonging to an example extension
-     * and matching two core test fixtures. What this shape alone does not
-     * settle is whether the word is code at all, which is `cued()`'s half.
+     * Two humps rather than one, because a sentence starts with a capital and
+     * this runs over prose. What it costs is a one-word class name. `Example`,
+     * which the same read found in an example extension and in two core test
+     * fixtures. What this shape alone does not settle is whether the word is
+     * code at all, which is `cued()`'s half.
      */
     private const BARE_NAMES = '~(?<![\w\\\\$])(?P<class>[A-Z][a-z0-9]+(?:[A-Z][A-Za-z0-9]*)+)(?![\w\\\\])~';
 
@@ -89,9 +86,9 @@ final class CitedCode
     private const FILES = '~typo3/sysext/(?P<extension>[a-z0-9_]+)/(?P<path>[A-Za-z0-9_./-]+\.[A-Za-z]{1,5})~';
 
     /**
-     * The product names that are spelled the way a class is.
+     * The product names in the form of a class.
      *
-     * Everything else the bare-name pattern picks out of prose is answered as
+     * Everything else the bare-name pattern picks out of prose comes back as
      * not shipped, which is true of it. These would be too, and they are the
      * ones a TYPO3 bug report writes often enough to be noise.
      */
@@ -114,7 +111,9 @@ final class CitedCode
      */
     private static array $index = [];
 
-    /** The installation that index was built from, so it is never carried into another. */
+    /**
+     * The installation that index came from, so it never travels into another.
+     */
     private static ?string $indexed = null;
 
     /**
@@ -134,8 +133,8 @@ final class CitedCode
                 ? ['state' => self::UNPLACED, 'in' => []]
                 : self::stands($cited, $packages);
             // A word the report neither marks as a class nor an installed
-            // package ships is as often prose: the button list of one RTE
-            // configuration read on 2026-08-27 is eleven of them, and reporting
+            // package ships is as often prose. The button list of one RTE
+            // configuration read on 2026-08-27 is eleven of them. A report of
             // those as not shipped is a verdict about English.
             if (!$cue && $stands['state'] !== self::SHIPPED) {
                 continue;
@@ -150,9 +149,9 @@ final class CitedCode
      * The names the text carries, strongest handle first and each of them once.
      *
      * `cue` is whether the text itself says the name is code. A namespace, a
-     * call and a file path say so by their shape; a bare name says so by the
-     * markup or the word around it, and where it says nothing the name stands
-     * only if an installed package ships one.
+     * call and a file path say so by their shape. A bare name says so by the
+     * markup or the word around it. Where it says nothing the name stands only
+     * if an installed package ships one.
      *
      * @return list<array{name: string, kind: string, method: string, cue: bool}>
      */
@@ -176,8 +175,8 @@ final class CitedCode
         }
 
         // The bare names last and against what is already there, because the
-        // same class is regularly written out once and referred to by its short
-        // name afterwards.
+        // same class regularly stands out once and by its short name
+        // afterwards.
         $carried = [];
         foreach ($named as $entry) {
             $segments = explode('\\', basename($entry['name'], '.php'));
@@ -195,11 +194,11 @@ final class CitedCode
     }
 
     /**
-     * The bare names the report itself says are code, by the name they are
-     * written under.
+     * The bare names the report itself says are code, by the name they stand
+     * under.
      *
-     * Two ways it says it, and both are in the page read on 2026-08-27: the
-     * tracker's own code markup, and the word that names what the thing is —
+     * Two ways it says it, and both are in the page read on 2026-08-27. The
+     * tracker's own code markup, and the word that names what the thing is,
      * "the DatabaseConnection class" in #72962, "Extbase RequestBuilder class"
      * in #82033.
      *
@@ -235,9 +234,9 @@ final class CitedCode
     /**
      * The text with the tracker's own markup off the names.
      *
-     * Redmine glues it to the token — `@PropertyMappingConfiguration@`,
-     * `_TcaColumnsOverrides_` — and an underscore is a word character, so a
-     * boundary never falls where the name starts.
+     * Redmine glues it to the token, `@PropertyMappingConfiguration@`,
+     * `_TcaColumnsOverrides_`. An underscore is a word character, so a boundary
+     * never falls where the name starts.
      */
     private static function readable(string $text): string
     {
@@ -295,8 +294,8 @@ final class CitedCode
             return ['state' => self::NOT_SHIPPED, 'in' => []];
         }
         // The class stands and the method named on it does not, which is a
-        // verdict of its own: the state is about the name that was cited and
-        // `in` says where the class it sat on is.
+        // verdict of its own. The state is about the cited name and `in` says
+        // where the class it sat on is.
         if ($cited['method'] !== '' && !self::declares($in, $cited['method'])) {
             return ['state' => self::NOT_SHIPPED, 'in' => $in];
         }
@@ -329,10 +328,10 @@ final class CitedCode
             return [['extension' => $key, 'path' => self::relative($file)]];
         }
 
-        // Where a package puts a namespace is the package's own to say — a test
-        // class sits beside `Classes/` rather than below it — so a path that
-        // missed is asked of that package's files before the name is reported
-        // as absent from it.
+        // Where a package puts a namespace is the package's own to say, a test
+        // class sits beside `Classes/` rather than below it. So a path that
+        // missed goes to that package's files before the name reports as absent
+        // from it.
         return array_values(array_filter(
             self::index($packages)[strtolower((string) end($segments))] ?? [],
             static fn(array $where): bool => $where['extension'] === $key,
@@ -386,10 +385,10 @@ final class CitedCode
     /**
      * Every class file below the packages, by the name of its file.
      *
-     * This is what places a bare name at all, and it is built once per
-     * installation and only where a bare name was cited. A file name matching
-     * two packages names both: picking one of them is where a right-looking
-     * verdict lands on the wrong class.
+     * This is what places a bare name at all, and it builds once per
+     * installation and only where a report cited a bare name. A file name that
+     * matches two packages names both. A pick of one of them is where a
+     * right-looking verdict lands on the wrong class.
      *
      * @param array<string, string> $packages
      * @return array<string, list<array{extension: string, path: string}>>
@@ -424,7 +423,7 @@ final class CitedCode
         return strtolower((string) preg_replace('~(?<!^)[A-Z]~', '_$0', $segment));
     }
 
-    /** Where the file is, from the installation root a caller is standing in. */
+    /** Where the file is, from the installation root a caller stands in. */
     private static function relative(string $file): string
     {
         $root = str_replace('\\', '/', (string) Instance::root());

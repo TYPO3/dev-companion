@@ -493,6 +493,42 @@ final class InstallerTest extends TestCase
         }
     }
 
+    /**
+     * The checkout that is the DDEV project. The root package links no binary
+     * of its own into the bin directory, so the entrypoint sits at `bin/`
+     * and nowhere the bin directory names — `D-DIS-024`.
+     *
+     * The class rather than the binary, because the binary the other tests
+     * start sits in this checkout, and this case needs it inside the project.
+     */
+    #[Requirement('R-DIS-015')]
+    #[Decision('D-DIS-024')]
+    #[Test]
+    public function theCheckoutThatIsTheDdevProjectStartsItsOwnEntrypointInTheContainer(): void
+    {
+        $directory = $this->directory();
+        self::assertTrue(mkdir($directory . '/.ddev'));
+        file_put_contents($directory . '/.ddev/config.yaml', "name: fixture\n");
+        $this->installEntrypoint($directory, 'bin');
+
+        try {
+            (new Installer($directory, $directory . '/bin/typo3-dev-companion'))->install(null);
+
+            $configuration = json_decode(
+                (string) file_get_contents($directory . '/.mcp.json'),
+                true,
+                flags: JSON_THROW_ON_ERROR,
+            );
+            self::assertSame([
+                'type' => 'stdio',
+                'command' => 'ddev',
+                'args' => ['exec', 'php', 'bin/typo3-dev-companion'],
+            ], $configuration['mcpServers']['typo3-dev-companion']);
+        } finally {
+            Directory::remove($directory);
+        }
+    }
+
     #[Requirement('R-DIS-015')]
     #[Test]
     public function aProjectThatNeverRequiredTheServerKeepsTheAbsolutePath(): void

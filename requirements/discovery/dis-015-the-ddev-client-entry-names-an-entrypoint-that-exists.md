@@ -5,13 +5,15 @@ status: held
 heldBy:
   - InstallerTest::aProjectThatNeverRequiredTheServerKeepsTheAbsolutePath
   - InstallerTest::ddevProjectNamesTheEntrypointAtTheBinDirectoryItDeclares
+  - InstallerTest::theCheckoutThatIsTheDdevProjectStartsItsOwnEntrypointInTheContainer
 ---
 
 # R-DIS-015 — The DDEV client entry names an entrypoint that exists
 
 **The DDEV client entry names this server's entrypoint at the `config.bin-dir`
-the project declares. A project that never required the server keeps the
-absolute host entrypoint instead.**
+the project declares, or at `bin/` where the project is this server's own
+checkout. A project that neither required the server nor is its checkout keeps
+the absolute host entrypoint instead.**
 
 The container sees the project directory, so a path that is not below it is a
 path that is not there.

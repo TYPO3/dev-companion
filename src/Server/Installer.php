@@ -756,10 +756,10 @@ final class Installer
      * What starts this server for one client, and the only place that decides
      * the path in an entry.
      *
-     * Three shapes, in the order they are available. A project that does not
-     * have this server as a dependency has none of the first two. No path
-     * inside it names a checkout somewhere else, so the host path is the only
-     * one that exists there.
+     * Three shapes, in the order they are available. A project that neither
+     * depends on this server nor is its checkout has none of the first two. No
+     * path inside it names a checkout somewhere else, so the host path is the
+     * only one that exists there.
      *
      * DDEV comes before the variable because it is not only a way to name the
      * path. The entry has to start the container's PHP, which sees the project
@@ -789,17 +789,13 @@ final class Installer
     /**
      * This server's entrypoint inside the project, relative to its root.
      *
-     * A DDEV project starts through the container PHP, and the container sees
-     * the project directory rather than the host. So the entrypoint has to
-     * stand relative to the root, at the bin directory the project declares.
-     * `vendor/bin` stood there without condition, which is right until a
-     * project moves it, and a TYPO3 extension repository routinely does
-     * (`"bin-dir": ".build/bin"`). The entry then pointed at a file that does
-     * not exist, and nothing said so until a client tried to start the server.
-     *
-     * Null means the server is not a dependency of this project at all. It runs
-     * from a checkout elsewhere, which the container cannot see either, so the
-     * absolute entrypoint is the only path that exists for it.
+     * A DDEV project starts through the container PHP, which sees the project
+     * directory rather than the host. So the path stands relative to the root:
+     * at the bin directory the project declares rather than at `vendor/bin`
+     * (`R-DIS-015`), or at `bin/` where the project is this checkout
+     * (`D-DIS-024`). Null means the server runs from a checkout elsewhere,
+     * which the container cannot see either, so only the absolute entrypoint
+     * exists for it.
      */
     private function installedEntrypoint(): ?string
     {
@@ -808,6 +804,10 @@ final class Installer
             if (is_file($this->project . '/' . $directory . '/' . self::SERVER)) {
                 return $directory . '/' . self::SERVER;
             }
+        }
+
+        if (str_starts_with($this->entrypoint, $this->project . '/')) {
+            return substr($this->entrypoint, strlen($this->project) + 1);
         }
 
         return null;

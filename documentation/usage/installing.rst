@@ -200,8 +200,11 @@ repositories use:
     }
 
 
-A DDEV project that never required the package gets the absolute path of the
-checkout instead. The container cannot see a checkout outside the project.
+This server's own checkout is a DDEV project too where it carries a
+``.ddev/config.yaml``, and ``install`` run in it names
+``bin/typo3-dev-companion`` the same way. A DDEV project that neither required
+the package nor is its checkout gets the absolute path of the checkout instead.
+The container cannot see a checkout outside the project.
 
 .. _installing-clients:
 
@@ -549,13 +552,13 @@ Which path the entry names
 --------------------------
 
 Three shapes, and which one a client gets is a property of that client. Where
-the project has this server as a Composer dependency, the entry names the path
-inside the project. That goes through ``ddev exec`` where there is a DDEV
-configuration, and through ``${workspaceFolder}`` in VS Code and Cursor.
-Everywhere else it is this server's absolute path on the machine the install ran
-on. That is a value one machine is right about, in a file its own client
-documents as the shared, committed one. There the install says so; the read
-below is why there is nothing better to write.
+the project has this server as a Composer dependency, or is its checkout, the
+entry names the path inside the project. That goes through ``ddev exec`` where
+there is a DDEV configuration, and through ``${workspaceFolder}`` in VS Code and
+Cursor. Everywhere else it is this server's absolute path on the machine the
+install ran on. That is a value one machine is right about, in a file its own
+client documents as the shared, committed one. There the install says so; the
+read below is why there is nothing better to write.
 
 A relative path would have to resolve against the working directory the client
 launches the process in. The MCP specification does not define one: the stdio

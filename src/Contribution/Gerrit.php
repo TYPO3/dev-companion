@@ -508,6 +508,11 @@ final class Gerrit
             // reports that answers zero here is a Gerrit that no longer tags
             // its service users. It is not a change no bot has been near.
             $answer['changes'][$index]['botMessageCount'] = count($found['messages']) - count($written);
+            $named = [];
+            foreach ($written as $message) {
+                $named = [...$named, ...self::numbersNamed($message['message'])];
+            }
+            $answer['changes'][$index]['namedInMessages'] = array_values(array_unique($named));
             // The log itself is still what `$messages` asks for. It is 50 KB in
             // a caller's context, and the fact above is the one thing that
             // moved out of it.
@@ -518,8 +523,89 @@ final class Gerrit
             };
         }
         $answer['changes'] = $this->issues($answer['changes']);
+        $answer['changes'] = $this->namedInMessages($answer['changes']);
 
         return $answer;
+    }
+
+    /**
+     * Every change, with the other changes its review log names.
+     *
+     * An alternative an author pushes as a separate change is stacked on
+     * nothing, so the chain is empty and a number in a message is the only
+     * link. Changes 95814, 95817 and 95818 name each other that way and share
+     * no topic (`D-ANS-156`). What people wrote is read, since a pipeline
+     * report names build numbers. A number the review server does not resolve
+     * to a change drops out, which keeps a Forge issue in the same digits out.
+     * One query for the whole set, as `issues()` reads the tracker.
+     *
+     * @param list<array<string, mixed>> $changes each with the numbers its log
+     *                                             names where the log came in
+     * @return list<array<string, mixed>>
+     */
+    private function namedInMessages(array $changes): array
+    {
+        $known = array_column($changes, 'number');
+        foreach ($changes as $change) {
+            $known = [...$known, ...array_column($change['chain'] ?? [], 'number')];
+        }
+
+        $wanted = [];
+        foreach ($changes as $index => $change) {
+            if (!is_array($change['namedInMessages'])) {
+                continue;
+            }
+            $named = array_values(array_diff($change['namedInMessages'], $known));
+            $changes[$index]['namedInMessages'] = $named;
+            $wanted = [...$wanted, ...$named];
+        }
+        if ($wanted === []) {
+            return $changes;
+        }
+
+        $terms = array_map(static fn(int $number): string => 'change:' . $number, array_unique($wanted));
+        $resolved = [];
+        foreach ($this->search(implode(' OR ', $terms), count($terms))['changes'] as $found) {
+            $resolved[$found['number']] = $found;
+        }
+        foreach ($changes as $index => $change) {
+            if (!is_array($change['namedInMessages'])) {
+                continue;
+            }
+            $entries = [];
+            foreach ($change['namedInMessages'] as $number) {
+                if (!isset($resolved[$number])) {
+                    continue;
+                }
+                $entries[] = [
+                    'number' => $number,
+                    'status' => $resolved[$number]['status'],
+                    'subject' => $resolved[$number]['subject'],
+                    'url' => $resolved[$number]['url'],
+                ];
+            }
+            $changes[$index]['namedInMessages'] = $entries;
+        }
+
+        return $changes;
+    }
+
+    /**
+     * The change numbers one message names, by review URL or as a bare number.
+     *
+     * A bare number with `#` in front is a Forge issue and stays out. One
+     * inside a review URL is read from the URL and not again from the digits,
+     * so a patch set number after the slash is not a change.
+     *
+     * @return list<int>
+     */
+    private static function numbersNamed(string $message): array
+    {
+        preg_match_all('~review\.typo3\.org/c/(?:[^\s/]+/)*\+/(\d+)~', $message, $inUrls);
+        $stripped = (string) preg_replace('~https?://\S+~', ' ', $message);
+        preg_match_all('~(?<![#\d.])\b(\d{5,6})\b(?![.\d])~', $stripped, $bare);
+
+        return array_values(array_unique(array_map(intval(...), [...$inUrls[1], ...$bare[1]])));
     }
 
     /**
@@ -1125,6 +1211,10 @@ final class Gerrit
             // Filled by `change()`, each from an endpoint of its own.
             'comments' => null,
             'chain' => null,
+            // `change()` fills it out of the review log, `D-ANS-156`. Null is
+            // a log that did not come back; the empty list is a log that names
+            // no other change.
+            'namedInMessages' => null,
             // `change()` fills it out of the commit message. So null is a
             // message that did not come back rather than a patch that names no
             // issue, which is the empty list.

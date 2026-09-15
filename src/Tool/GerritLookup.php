@@ -46,7 +46,7 @@ final class GerritLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. A clone carries what landed and says nothing about what is open. So this tool asks the review server rather than a checkout. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its message and paths, votes, comments, relation chain and its Change-Id siblings. It adds the Forge issues its trailers name and whether it carries conflict markers. Four of those decide what a session does and no checkout has them. chain, with chainedAt for the patch set each link sits on. mergeable, which predicts the conflict before the fetch. fetch.ref, which git fetch takes as it stands. And the commit message body. path is the way in for "does somebody already work on this file" and for "has anybody attempted this before". The earlier attempt comes back whatever its name was. You read the diff itself in a checkout: fetch.ref gets you there, and files says how much of the file list to carry. An empty answer says whether it means an absence, since a private change is invisible to an anonymous read. The issue itself is typo3_forge_lookup. This tool reads only: you review, vote and upload yourself.';
+        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. A clone carries what landed and says nothing about what is open. So this tool asks the review server rather than a checkout. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its message and paths, votes, comments, relation chain and its Change-Id siblings. It adds the Forge issues its trailers name, the other changes its review log names, and whether it carries conflict markers. Four of those decide what a session does and no checkout has them. chain, with chainedAt for the patch set each link sits on. mergeable, which predicts the conflict before the fetch. fetch.ref, which git fetch takes as it stands. And the commit message body. path is the way in for "does somebody already work on this file" and for "has anybody attempted this before". The earlier attempt comes back whatever its name was. You read the diff itself in a checkout: fetch.ref gets you there, and files says how much of the file list to carry. An empty answer says whether it means an absence, since a private change is invisible to an anonymous read. The issue itself is typo3_forge_lookup. This tool reads only: you review, vote and upload yourself.';
     }
 
     public static function inputSchema(): array
@@ -341,6 +341,21 @@ final class GerritLookup extends ReadOnlyTool
                         'chainedAt' => Schema::integer('The patch set of the entry that the chain stands on. Lower than patchSet means the stack holds the older one and that change has moved on since. Act on the entry by its number rather than on the patch set named here.'),
                         'url' => Schema::string('Where a person reads that change.'),
                     ], ['number', 'status', 'subject', 'thisChange', 'patchSet', 'chainedAt', 'url']),
+                ],
+                'namedInMessages' => [
+                    'type' => ['array', 'null'],
+                    'description' => 'The other changes the review log names, by number or by review URL, that are '
+                        . 'neither this change, its chain nor its Change-Id siblings. An alternative an author '
+                        . 'pushes as a separate change is stacked on nothing, so the chain is empty and a number '
+                        . 'in a message is the only link. Each entry is resolved against the review server, so a '
+                        . 'Forge issue in the same digits is not here. Read whatever messages asks for. Empty '
+                        . 'means the log names none. Null means the call did not read the log.',
+                    'items' => Schema::object([
+                        'number' => Schema::integer('The change number; pass it back as change to read it.'),
+                        'status' => Schema::string('NEW, MERGED or ABANDONED — that change\'s own state.'),
+                        'subject' => Schema::string('The commit subject of that change\'s current patch set.'),
+                        'url' => Schema::string('Where a person reads that change.'),
+                    ], ['number', 'status', 'subject', 'url']),
                 ],
                 'issues' => [
                     'type' => ['array', 'null'],
@@ -844,6 +859,7 @@ final class GerritLookup extends ReadOnlyTool
                     ...self::touches($entry, $byName, $files),
                     ...self::issues($entry, $byName),
                     ...self::chain($entry, $byName),
+                    ...self::namedInMessages($entry),
                     ...self::comments($entry, $byName),
                     ...self::log($entry, $messages),
                 ];
@@ -1176,6 +1192,34 @@ final class GerritLookup extends ReadOnlyTool
             $said[] = $related['url'];
             $lines[] = '- ' . implode(' · ', $said);
         }
+
+        return $lines;
+    }
+
+    /**
+     * The other changes the review log names, where the log came in.
+     *
+     * An alternative pushed as a separate change has no chain, and a reader
+     * who skipped the log would miss it (`D-ANS-156`). Nothing prints for a
+     * log that names none. Apart from `answer()` so a test can hold it without
+     * a review server.
+     *
+     * @param array<string, mixed> $entry
+     * @return list<string>
+     */
+    public static function namedInMessages(array $entry): array
+    {
+        if (($entry['namedInMessages'] ?? []) === [] || $entry['namedInMessages'] === null) {
+            return [];
+        }
+
+        $lines = ['', sprintf('### Named in the review log (%d changes)', count($entry['namedInMessages']))];
+        foreach ($entry['namedInMessages'] as $named) {
+            $lines[] = sprintf('- %d · %s · %s · %s', $named['number'], $named['status'], $named['subject'], $named['url']);
+        }
+        $lines[] = 'A change the log names by number is a relation somebody wrote rather than one Gerrit keeps: '
+            . 'an alternative, a follow-up or a precedent. It is not in the chain, and only the message that '
+            . 'names it says which.';
 
         return $lines;
     }

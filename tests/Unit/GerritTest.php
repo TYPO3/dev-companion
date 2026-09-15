@@ -3024,4 +3024,100 @@ final class GerritTest extends TestCase
         self::assertStringContainsString('the spelling reached nobody', $left);
         self::assertStringNotContainsString('reached nobody', $everybody);
     }
+
+    /**
+     * What `change:95814` answered on 2026-09-15, cut to the identity and the
+     * two messages that name the alternatives. The pipeline's message names a
+     * build number and the trailer names a Forge issue, neither of which is a
+     * change.
+     */
+    private const ALTERNATIVES = ")]}'\n"
+        . '[{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[FEATURE] Process system resource images without FAL",'
+        . '"status":"NEW","_number":95814,"change_id":"I5a1e3c8d9f0b2a4c6e8d0f2a4c6e8d0f2a4c6e8d",'
+        . '"current_revision_number":1,"current_revision":"7c3a8b1f2e4d6c8a0b2d4f6a8c0e2a4c6e8a0c2e","revisions":{'
+        . '"7c3a8b1f2e4d6c8a0b2d4f6a8c0e2a4c6e8a0c2e":{"_number":1,"commit":{'
+        . '"message":"[FEATURE] Process system resource images without FAL\n\nResolves: #107123\nReleases: main\nChange-Id: I5a1e3c8d9f0b2a4c6e8d0f2a4c6e8d0f2a4c6e8d\n"}}},'
+        . '"messages":['
+        . '{"author":{"name":"Author"},"date":"2026-09-14 10:00:00.000000000","_revision_number":1,"message":"Uploaded patch set 1."},'
+        . '{"author":{"name":"TYPO3 Bamboo","tags":["SERVICE_USER"]},"date":"2026-09-14 10:05:00.000000000","_revision_number":1,'
+        . '"message":"Patch Set 1: Verified-1\n\nBuild 20260914 failed, see https://ci.typo3.org/build/95000"},'
+        . '{"author":{"name":"Author"},"date":"2026-09-14 12:00:00.000000000","_revision_number":1,'
+        . '"message":"Patch Set 1:\n\nAlternative approach pushed for comparison: https://review.typo3.org/c/Packages/TYPO3.CMS/+/95817/2 consolidates the branching into one service. Please compare both; only one is meant to land."},'
+        . '{"author":{"name":"Author"},"date":"2026-09-14 13:00:00.000000000","_revision_number":1,'
+        . '"message":"Patch Set 1:\n\nThird alternative: 95818 dispatches on a capability interface. Please compare all three (95814, 95817, 95818); see also #107123."}'
+        . ']}]';
+
+    /**
+     * What `change:95817 OR change:95818` answered the same day, cut to what
+     * the entry takes. The Forge number is not in it, because the review server
+     * has no change under it.
+     */
+    private const SIBLINGS_BY_MESSAGE = ")]}'\n"
+        . '[{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[FEATURE] Process system resource images without FAL",'
+        . '"status":"NEW","_number":95818,"change_id":"I9d0c2b4a6e8f0a2c4e6a8c0e2a4c6e8a0c2e4a6c","current_revision_number":2},'
+        . '{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[FEATURE] Process system resource images without FAL",'
+        . '"status":"NEW","_number":95817,"change_id":"I2b4a6c8e0f2a4c6e8a0c2e4a6c8e0a2c4e6a8c0e","current_revision_number":2}]';
+
+    /**
+     * The alternative and its two siblings by message, with no chain and a
+     * tracker that answers nothing.
+     *
+     * @param list<string> $asked
+     */
+    private static function alternatives(string $url, array &$asked): string
+    {
+        $asked[] = $url;
+        if (str_contains($url, 'forge.typo3.org')) {
+            return '{"issues":[],"total_count":0}';
+        }
+        if (str_contains($url, '/related')) {
+            return ")]}'\n" . '{"changes":[]}';
+        }
+
+        return str_contains($url, rawurlencode('change:95817 OR change:95818')) ? self::SIBLINGS_BY_MESSAGE : self::ALTERNATIVES;
+    }
+
+    /**
+     * An alternative pushed as a separate change is stacked on nothing, so the
+     * chain is empty and the number in a message is the only link. The three
+     * changes of `feedback/2026-09-15-073817` name each other that way and
+     * share no topic — `D-ANS-156`.
+     */
+    #[Decision('D-ANS-156')]
+    #[Test]
+    public function theChangesAReviewLogNamesAreListedBesideTheChain(): void
+    {
+        $asked = [];
+        $gerrit = new Gerrit(static function (string $url) use (&$asked): string {
+            return self::alternatives($url, $asked);
+        });
+
+        $change = $gerrit->change('95814')['changes'][0];
+
+        self::assertSame([], $change['chain']);
+        // 95814 is the change itself, 95817 came out of a review URL with a
+        // patch set after it, 95818 out of bare digits. The build number, the
+        // CI URL and the Forge issue are not changes, and #107123 never reached
+        // the resolve query at all.
+        self::assertSame([95817, 95818], array_column($change['namedInMessages'], 'number'));
+        self::assertSame(['NEW', 'NEW'], array_column($change['namedInMessages'], 'status'));
+        self::assertSame(
+            'https://review.typo3.org/c/Packages/TYPO3.CMS/+/95817',
+            $change['namedInMessages'][0]['url'],
+        );
+        $resolve = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, 'change%3A95817')));
+        self::assertCount(1, $resolve, 'one query resolves the whole set');
+        self::assertStringNotContainsString('107123', $resolve[0]);
+        self::assertStringNotContainsString('20260914', $resolve[0]);
+
+        // Read whatever the log itself was asked for: the default leaves the
+        // log out and still lists what it names.
+        self::assertNull($change['messages']);
+
+        $said = implode("\n", GerritLookup::namedInMessages($change));
+        self::assertStringContainsString('### Named in the review log (2 changes)', $said);
+        self::assertStringContainsString('95817 · NEW · [FEATURE] Process system resource images without FAL', $said);
+        self::assertSame([], GerritLookup::namedInMessages(['namedInMessages' => []]));
+        self::assertSame([], GerritLookup::namedInMessages(['namedInMessages' => null]));
+    }
 }

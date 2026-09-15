@@ -15,17 +15,17 @@ narrowed by size, vote state, whether they still merge, branch, date and person.
 Every change carries its identity, status, current patch set, size, age and
 label state. One read by name adds its message and paths, votes, comments,
 relation chain and its Change-Id siblings. It adds the Forge issues its trailers
-name and whether it carries conflict markers. Four of those decide what a
-session does and no checkout has them. chain, with chainedAt for the patch set
-each link sits on. mergeable, which predicts the conflict before the fetch.
-fetch.ref, which git fetch takes as it stands. And the commit message body. path
-is the way in for "does somebody already work on this file" and for "has anybody
-attempted this before". The earlier attempt comes back whatever its name was.
-You read the diff itself in a checkout: fetch.ref gets you there, and files says
-how much of the file list to carry. An empty answer says whether it means an
-absence, since a private change is invisible to an anonymous read. The issue
-itself is typo3_forge_lookup. This tool reads only: you review, vote and upload
-yourself. Answers from: network.
+name, the other changes its review log names, and whether it carries conflict
+markers. Four of those decide what a session does and no checkout has them.
+chain, with chainedAt for the patch set each link sits on. mergeable, which
+predicts the conflict before the fetch. fetch.ref, which git fetch takes as it
+stands. And the commit message body. path is the way in for "does somebody
+already work on this file" and for "has anybody attempted this before". The
+earlier attempt comes back whatever its name was. You read the diff itself in a
+checkout: fetch.ref gets you there, and files says how much of the file list to
+carry. An empty answer says whether it means an absence, since a private change
+is invisible to an anonymous read. The issue itself is typo3_forge_lookup. This
+tool reads only: you review, vote and upload yourself. Answers from: network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 
@@ -314,6 +314,14 @@ Answers with
         # search asks for none, and a change lookup whose call did not answer says
         # so here rather than with an empty list.
         chain: array or null  # optional
+        # The other changes the review log names, by number or by review URL, that
+        # are neither this change, its chain nor its Change-Id siblings. An
+        # alternative an author pushes as a separate change is stacked on nothing,
+        # so the chain is empty and a number in a message is the only link. Each
+        # entry is resolved against the review server, so a Forge issue in the same
+        # digits is not here. Read whatever messages asks for. Empty means the log
+        # names none. Null means the call did not read the log.
+        namedInMessages: array or null  # optional
         # The Forge issues this change's commit message names in its Resolves: and
         # Related: trailers, each filled with what says whether to read it. That is
         # the join between the patch and the tracker, and where a second issue

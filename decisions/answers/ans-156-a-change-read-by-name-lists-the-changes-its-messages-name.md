@@ -3,7 +3,8 @@ id: D-ANS-156
 title: A change read by name lists the changes its messages name
 date: 2026-09-15
 status: open
-coveredBy: []
+coveredBy:
+  - GerritTest::theChangesAReviewLogNamesAreListedBesideTheChain
 ---
 
 # D-ANS-156 — A change read by name lists the changes its messages name
@@ -40,8 +41,7 @@ them was a number in free text.
 - **Taken on: the numbers a change's messages name.** Step 1b, a shape absent.
   The answer gains a list beside `chain`. Each entry is a change number the
   review server resolves to a subject and a status. A Forge number in the same
-  digits drops out there. It is queued rather than made here, because it touches
-  `src/` and the output schema.
+  digits drops out there.
 - **Proposed, and waiting on an answer: `against`.** A second change to compare
   the current patch sets with. The answer is the paths that differ, with their
   sizes. One session asked, and it says the fetch it made instead was the right
@@ -64,3 +64,10 @@ them was a number in free text.
 - The list names a change nobody meant, because a message quoted a number that
   resolves to an unrelated change. Then the resolution is not enough of a
   filter.
+
+## Since then
+
+Built the same day, in the session that judged it. The read of the review log
+found the two alternatives by one URL with a patch set after it and by bare
+digits, and the resolve query left the Forge issue and the build number out.
+`namedInMessages` is the field, and the text half prints it under the chain.

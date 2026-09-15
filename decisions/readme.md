@@ -102,7 +102,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-143`][D-ANS-143] — What a tool refuses is said to the caller that sent it · 2026-09-04
 - [`D-ANS-144`][D-ANS-144] — A declared property is reached by its own name · 2026-09-04
 - [`D-ANS-145`][D-ANS-145] — The answer that hands over a command carries what a run can take · 2026-09-04
-- [`D-ANS-146`][D-ANS-146] — What a brief still owes is said before the brief · 2026-09-04
+- [`D-ANS-146`][D-ANS-146] — What a brief still owes is said before the brief · 2026-09-04 · confirmed
 - [`D-ANS-147`][D-ANS-147] — What a session acts on is a fact the answer carried · 2026-09-04
 - [`D-ANS-148`][D-ANS-148] — The project answer names a kind of file no declared command checks · 2026-09-04
 - [`D-ANS-149`][D-ANS-149] — What an extension renders is a second question from what it registers · 2026-09-04
@@ -850,6 +850,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### task-skills
 
+- [`D-SKL-094`][D-SKL-094] — A review reads its change again before it reports · 2026-09-15
 - [`D-SKL-092`][D-SKL-092] — The client's own routing decides before a description does · 2026-09-09
 - [`D-SKL-093`][D-SKL-093] — The checkout workflow branches on a chain of more than one open change · 2026-09-09
 - [`D-SKL-091`][D-SKL-091] — The frame elements render in belongs to the skill that owns them · 2026-09-04
@@ -939,6 +940,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-094]: task-skills/skl-094-a-review-reads-its-change-again-before-it-reports.md
 [D-SKL-092]: task-skills/skl-092-the-clients-own-routing-decides-before-a-description-does.md
 [D-SKL-093]: task-skills/skl-093-the-checkout-workflow-branches-on-a-chain-of-more-than-one-open-change.md
 [D-SKL-091]: task-skills/skl-091-the-frame-elements-render-in-belongs-to-the-skill-that-owns-them.md

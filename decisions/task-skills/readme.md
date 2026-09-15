@@ -7,6 +7,7 @@ order it works.
 See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
+- [`D-SKL-094`][D-SKL-094] — A review reads its change again before it reports · 2026-09-15
 - [`D-SKL-092`][D-SKL-092] — The client's own routing decides before a description does · 2026-09-09
 - [`D-SKL-093`][D-SKL-093] — The checkout workflow branches on a chain of more than one open change · 2026-09-09
 - [`D-SKL-091`][D-SKL-091] — The frame elements render in belongs to the skill that owns them · 2026-09-04
@@ -96,6 +97,7 @@ one is added.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-094]: skl-094-a-review-reads-its-change-again-before-it-reports.md
 [D-SKL-092]: skl-092-the-clients-own-routing-decides-before-a-description-does.md
 [D-SKL-093]: skl-093-the-checkout-workflow-branches-on-a-chain-of-more-than-one-open-change.md
 [D-SKL-091]: skl-091-the-frame-elements-render-in-belongs-to-the-skill-that-owns-them.md

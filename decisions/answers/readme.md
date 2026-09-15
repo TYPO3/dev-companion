@@ -14,7 +14,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-143`][D-ANS-143] — What a tool refuses is said to the caller that sent it · 2026-09-04
 - [`D-ANS-144`][D-ANS-144] — A declared property is reached by its own name · 2026-09-04
 - [`D-ANS-145`][D-ANS-145] — The answer that hands over a command carries what a run can take · 2026-09-04
-- [`D-ANS-146`][D-ANS-146] — What a brief still owes is said before the brief · 2026-09-04
+- [`D-ANS-146`][D-ANS-146] — What a brief still owes is said before the brief · 2026-09-04 · confirmed
 - [`D-ANS-147`][D-ANS-147] — What a session acts on is a fact the answer carried · 2026-09-04
 - [`D-ANS-148`][D-ANS-148] — The project answer names a kind of file no declared command checks · 2026-09-04
 - [`D-ANS-149`][D-ANS-149] — What an extension renders is a second question from what it registers · 2026-09-04

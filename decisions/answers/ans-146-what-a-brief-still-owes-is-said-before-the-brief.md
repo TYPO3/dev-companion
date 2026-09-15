@@ -2,7 +2,7 @@
 id: D-ANS-146
 title: What a brief still owes is said before the brief
 date: 2026-09-04
-status: open
+status: confirmed
 coveredBy:
   - HintsTest::aBriefNamesTheHintsItLeftBehind
 ---
@@ -61,3 +61,13 @@ from, and a session read past them.
   rather than a sentence.
 - The line becomes a run of notices at the head of every brief, which would make
   it the payload it moved out of.
+
+## Confirmed on 2026-09-15
+
+[`feedback/2026-09-15-073730`](../../feedback/archive/2026-09-15-073730-the-review-skill-s-order-found-the-blocking.md)
+is the other side. The brief named four omitted ids, the session fetched them
+before it read the diff, and one of them decided the review. The hint said which
+suite covers an `EXT:` path in `f:image`. That suite failed on the patch before
+CI voted, and the patch's own tests were green. The session calls the ids the
+most valuable calls it made.
+

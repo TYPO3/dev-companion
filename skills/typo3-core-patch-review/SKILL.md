@@ -252,6 +252,13 @@ own.
 
 ## Report
 
+Call `typo3_gerrit_lookup` again before you write, where time has passed since
+you read the change. How much is enough depends on how active the patch is, and
+on a busy one it is hours. Votes, messages and alternatives pushed as separate
+changes arrive on the server with no signal in the checkout. One review read its
+change on the first day. It found the CI vote and two alternatives on the
+second, by a call made for another reason.
+
 Order by what stops the patch, and say why each one stops it:
 
 1. what blocks the submission of the patch at all;

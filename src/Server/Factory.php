@@ -21,9 +21,9 @@ use TYPO3\DevCompanion\Sdk\ToolHandler;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
- * Builds the MCP server on the official mcp/sdk, wiring the existing knowledge
- * base to the SDK tool and resource handlers. Transport-agnostic,
- * so the stdio entrypoint is only one possible consumer of this definition.
+ * Builds the MCP server on the official mcp/sdk, and wires the knowledge base
+ * to the SDK tool and resource handlers. Transport-agnostic, so the stdio
+ * entrypoint is only one possible consumer of this definition.
  */
 final class Factory
 {
@@ -32,23 +32,23 @@ final class Factory
 
     /**
      * How much of a session's context a resource is worth, on the scale the
-     * spec gives `annotations.priority`: 1 is "most important", meaning
-     * effectively required, and 0 is entirely optional. A picker sorts by it,
-     * so what carries meaning is the order rather than the number.
+     * spec gives `annotations.priority`. 1 is "most important", which means
+     * required in effect, and 0 is entirely optional. A picker sorts by it, so
+     * what carries the meaning is the order rather than the number.
      *
-     * The index says what all the others are and is the one to take where only
-     * one is taken. Below it, what holds whatever the caller is working on is
-     * worth more than what holds inside a core checkout alone — `R-AUD-001`.
+     * The index says what all the others are and is the one to take where a
+     * picker takes only one. Below it, what holds whatever the caller works on
+     * is worth more than what holds inside a core checkout alone, `R-AUD-001`.
      * That audience is the whole of the axis, so a document and a skill that
-     * both hold anywhere are offered at the same height.
+     * both hold anywhere stand at the same height.
      */
     private const INDEX_PRIORITY = 1.0;
     private const TRANSFERABLE_PRIORITY = 0.8;
     private const CORE_ONLY_PRIORITY = 0.4;
 
     /**
-     * Under both, because a reference is worth reading at the step that sends
-     * the reader to it and not before — which is also why they are a template
+     * Under both, because a reference is worth a read at the step that sends
+     * the reader to it and not before. That is also why they are a template
      * rather than entries in the list a picker sorts.
      */
     private const REFERENCE_PRIORITY = 0.2;
@@ -65,8 +65,8 @@ final class Factory
 
         foreach (Registry::definitions() as $definition) {
             // The two schemas as the SDK spells them. A tool declares them as
-            // JSON Schema and `tests/Contract/` is what holds it to that; the
-            // shape below is the SDK's reading of the same thing, and nothing
+            // JSON Schema and `tests/Contract/` is what holds it to that. The
+            // shape below is the SDK's read of the same thing, and nothing
             // between here and the tool carries it.
             /** @var array{type: 'object', properties: array<string, mixed>, required: array<string>|null} $inputSchema */
             $inputSchema = $definition['inputSchema'];
@@ -112,11 +112,10 @@ final class Factory
         );
 
         // Where the channel it ends in is, which is what `Registry` gates the
-        // two feedback tools on: a session that cannot record a feedback has no
-        // use for the questions. A prompt rather than a tool, because a tool
-        // stands in the model's list from the first call and the session would
-        // learn while it is still working that it will be debriefed —
-        // `D-FBK-048`.
+        // two feedback tools on. A session that cannot record a feedback has no
+        // use for the questions. A prompt rather than a tool. A tool stands in
+        // the model's list from the first call, and the session would learn
+        // while it still works that a debrief comes, `D-FBK-048`.
         if (Channel::isAvailable()) {
             $builder->addPrompt(
                 static fn(): array => ['user' => (string) file_get_contents(Paths::debrief())],
@@ -137,18 +136,17 @@ final class Factory
     }
 
     /**
-     * What this server offers to be picked, and what the choice is made on.
+     * What this server offers a picker, and what the choice rests on.
      *
-     * A tool is called by the model in the middle of a task and can explain
-     * itself in its answer; a resource is picked out of a list by the host
-     * application or by the user, so `description`, `annotations.priority` and
-     * `size` are what it is chosen by rather than decoration — `R-ANS-022`. Two
-     * families, because the knowledge documents are mostly the core's own
-     * process and the skills mostly extension and site work, which is what
-     * leaves all three audiences of `R-AUD-001` something to pick. Two fields of
-     * the spec stay absent: `annotations.audience` means the client's user
-     * rather than those three, and `lastModified` is in no
-     * `Mcp\Schema\Annotations` of mcp/sdk v0.8.0.
+     * The model calls a tool in the middle of a task and the tool can explain
+     * itself in its answer. The host application or the user picks a resource
+     * out of a list, so `description`, `annotations.priority` and `size` are
+     * what the choice rests on, `R-ANS-022`. Two families, because the
+     * knowledge documents are mostly the core's own process and the skills
+     * mostly extension and site work. That leaves all three audiences of
+     * `R-AUD-001` something to pick. Two fields of the spec stay absent.
+     * `annotations.audience` means the client's user, and `lastModified` is in
+     * no `Mcp\Schema\Annotations` of mcp/sdk v0.8.0.
      *
      * @return array<int, ResourceDefinition>
      */
@@ -170,11 +168,11 @@ final class Factory
         foreach (Documents::documents() as $document) {
             $resources[] = new ResourceDefinition(
                 uri: Documents::uri($document['id']),
-                // The id is a path since `D-KNW-058` and a resource name may not
-                // be: the SDK holds a name to alphanumerics, underscores and
-                // hyphens, and rejects the definition outright. Only the URI is
-                // free-form, so the separator is flattened here and the address
-                // keeps its segments.
+                // The id is a path since `D-KNW-058` and a resource name may
+                // not be. The SDK holds a name to alphanumerics, underscores
+                // and hyphens, and rejects the definition outright. Only the
+                // URI is free-form, so the separator flattens here and the
+                // address keeps its segments.
                 name: str_replace('/', '-', $document['id']),
                 title: $document['title'],
                 description: Documents::description($document['id']),
@@ -207,13 +205,13 @@ final class Factory
      * What a skill's body sends the reader to, offered as the one shape they
      * share rather than as a list entry each.
      *
-     * A skill is a directory: its body is short routing and the file it hands
-     * over at a step is beside it, `references/base.md` above all, which is in
-     * every one of them and is a file in none of them until the skill is
-     * published. Served under `typo3://skill/{id}/SKILL.md`, those links
-     * resolve to exactly the URIs this template answers — so a client that
-     * never ran the install can follow the workflow it picked instead of
-     * reading an instruction that points at nothing.
+     * A skill is a directory. Its body is short routing and the file it hands
+     * over at a step is beside it. `references/base.md` above all, which is in
+     * every one of them and a file in none of them until publication. Served
+     * under `typo3://skill/{id}/SKILL.md`, those links resolve to exactly the
+     * URIs this template answers. So a client that never ran the install can
+     * follow the workflow it picked instead of an instruction that points at
+     * nothing.
      */
     public static function skillReferences(): ResourceTemplate
     {

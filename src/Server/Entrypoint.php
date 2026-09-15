@@ -11,18 +11,20 @@ use TYPO3\DevCompanion\Installation\Instance;
  * What `bin/typo3-dev-companion` runs.
  *
  * With no argument it speaks MCP over stdin and stdout, which is how a client
- * launches it. Everything else is somebody at a terminal, and starting the
- * transport for them would look like a hang — so every other word ends in a
+ * launches it. Everything else is somebody at a terminal, and a transport
+ * started for them would look like a hang. So every other word ends in a
  * message and an exit code.
  *
- * This is also the one place that hands a working directory to `Instance`: the
- * client starts this process inside the session it is working in, so an
- * installation found from it is the one being worked on. Nothing else may do it
- * — `R-DIS-001`.
+ * This is also the one place that hands a working directory to `Instance`. The
+ * client starts this process inside the session it works in, so an installation
+ * found from it is the one under work. Nothing else may do it, `R-DIS-001`.
  */
 final class Entrypoint
 {
-    /** Set this to `off` and a stale publication is reported rather than put back. */
+    /**
+     * Set this to `off` and a stale publication goes into the report rather
+     * than back in place.
+     */
     public const REFRESH = 'TYPO3_DEV_COMPANION_SKILL_REFRESH';
 
     /** @param array<int, string> $arguments what the shell passed, without the binary */
@@ -57,12 +59,12 @@ final class Entrypoint
      * An excluded name that took no tool away, said on stderr before the
      * transport starts.
      *
-     * stdout is the protocol from the next line on, so stderr is the one channel
-     * a started server has left, and `src/bootstrap.php` says the other startup
-     * problem there too. It is a warning and the server starts: the list is read
-     * once out of an environment nobody validates it against, and a name gone
-     * stale under a rename would otherwise take every tool down with it —
-     * `D-AUD-005`. The two reasons are said apart because what somebody has to
+     * stdout is the protocol from the next line on, so stderr is the one
+     * channel a started server has left. `src/bootstrap.php` says the other
+     * startup problem there too. It is a warning and the server starts. The
+     * list comes once out of an environment nobody validates it against. A name
+     * gone stale under a rename would otherwise take every tool down with it,
+     * `D-AUD-005`. The two reasons stand apart because what somebody has to
      * change differs, and `typo3_server_scope` says the same thing in-band.
      */
     private static function reportExclusionsThatTookNothingAway(): void
@@ -92,28 +94,17 @@ final class Entrypoint
 
     /**
      * The task skills in this project that are no longer the ones this server
-     * publishes, put back — and said on both channels a starting server has.
+     * publishes, put back. Said on both channels a server has at start.
      *
-     * Saying it was the whole of this and it was not enough: every mechanism
-     * that answered the notice needed somebody to act on it, and on the machine
-     * that prompted `D-DIS-021` twelve projects had drifted with nobody
-     * noticing. A server starting is the one thing that happens in a project
-     * without anybody deciding to, so it is what carries the refresh.
-     *
-     * Both channels still speak, because both readers still have something to
-     * do. stderr gets the long form for whoever is at the terminal; the
+     * A server start is the one thing that happens in a project without a
+     * decision by anybody, so it is what carries the refresh, `D-DIS-021`.
+     * stderr gets the long form for whoever is at the terminal. The
      * instructions get the one sentence the budget has room for, because a
-     * skill the client loaded when the session opened is the copy that was
-     * there before this ran.
-     *
-     * A refresh that fails leaves the notice exactly as it was. It writes into
-     * somebody else's project, so it may not be the thing that stops a server
-     * from starting.
-     *
-     * The directory is the one this process was started in, which is where
-     * `install` writes and therefore where the record is. Walking up for one
-     * would find a parent project's, and the entry a client starts this from
-     * names the project it belongs to.
+     * skill the client loaded at the start of the session is the copy from
+     * before this ran. A refresh that fails leaves the notice as it was,
+     * because a write into somebody else's project may not stop a server. The
+     * directory is the one this process started in, where `install` writes and
+     * so where the record is.
      */
     private static function refreshSkillsNobodyHasUpdated(string $binary): string
     {
@@ -143,11 +134,11 @@ final class Entrypoint
     }
 
     /**
-     * Whether a stale publication is put back or only reported.
+     * Whether a stale publication goes back in place or only into the report.
      *
      * Off is for whoever wants the copies in their project to move when they
-     * say so and not before — a review of what a release changed, or a project
-     * where the skills are read as part of a diff. The notice is what they keep.
+     * say so and not before. A review of what a release changed, or a project
+     * where the skills are part of a diff. The notice is what they keep.
      */
     private static function refreshIsWanted(): bool
     {
@@ -158,7 +149,7 @@ final class Entrypoint
 
     /**
      * Writes the client configuration and the task skills into the directory
-     * this was run in, which is the project being set up.
+     * this ran in, which is the project under setup.
      *
      * @param array<int, string> $arguments
      */

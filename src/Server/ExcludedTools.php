@@ -7,13 +7,13 @@ namespace TYPO3\DevCompanion\Server;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
- * The tools a caller has asked not to be offered.
+ * The tools a caller has asked to keep out of the offer.
  *
- * The only subtraction this server makes, and the caller makes it. What was here
- * before decided per checkout instead, which is reasoning that holds for the
- * repository and not for the task — `R-AUD-002`. Which half of an answer is
- * worth having is said in the answer, per topic and per path, because
- * withholding a tool costs the caller the doorway and leaves it the knowledge.
+ * The only subtraction this server makes, and the caller makes it. What was
+ * here before decided per checkout instead, which is a reason that holds for
+ * the repository and not for the task, `R-AUD-002`. Which half of an answer is
+ * worth its place stands in the answer, per topic and per path. A tool held
+ * back costs the caller the doorway and leaves it the knowledge.
  */
 final class ExcludedTools
 {
@@ -21,25 +21,25 @@ final class ExcludedTools
     public const VARIABLE = 'TYPO3_DEV_COMPANION_EXCLUDE_TOOLS';
 
     /**
-     * The one tool that cannot be excluded: it is what tells a client why the
-     * list is shorter than the documentation says, and a client that has lost
-     * it cannot tell a configured server from a broken one.
+     * The one tool no caller can exclude. It is what tells a client why the
+     * list is shorter than the documentation says. A client that has lost it
+     * cannot tell a configured server from a broken one.
      */
     private const ALWAYS_OFFERED = 'typo3_server_scope';
 
     /**
-     * Whether the registry is being asked what it would offer with nothing
-     * excluded, in which case the filter answers empty — see partition(),
-     * which is the only thing that sets it.
+     * Whether the question to the registry is what it would offer with nothing
+     * excluded, in which case the filter answers empty. See partition(), which
+     * is the only thing that sets it.
      */
     private static bool $asking = false;
 
     /**
-     * The partition, against the variable it was computed from.
+     * The partition, against the variable it came from.
      *
-     * Computing it asks the registry twice, and the registry asks every tool
-     * for its schemas — while `all()` is read several times per answer, and
-     * from a variable a test changes between two of them. So it is remembered
+     * The computation asks the registry twice, and the registry asks every tool
+     * for its schemas. `all()` runs several times per answer, and from a
+     * variable a test changes between two of them. So it stays in memory
      * against the raw string rather than against nothing.
      *
      * @var array{raw: string, excluded: array<int, string>, unknown: array<int, string>, offeredAnyway: array<int, string>}|null
@@ -56,9 +56,9 @@ final class ExcludedTools
      * The tools that are really gone, so an answer can name them rather than
      * let a client wonder where a tool went.
      *
-     * What the caller wrote is not that list: a name no tool answers to and one
-     * that names a tool the filter does not reach were both reported here as
-     * excluded, telling a client it has lost a capability it has — out of the
+     * What the caller wrote is not that list. A name no tool answers to and one
+     * that names a tool the filter does not reach both came back here as
+     * excluded. That told a client it has lost a capability it has, out of the
      * instruction budget `R-ANS-013` holds.
      *
      * @return array<int, string>
@@ -71,10 +71,10 @@ final class ExcludedTools
     /**
      * The names in the list that no tool of this server answers to.
      *
-     * Such a name takes nothing away, and there is nothing in the list itself
-     * to tell it from one that does: a renamed tool leaves its old name behind
-     * looking exactly like a name that was never right, and the caller gets the
-     * tool back without either side saying so. That is what `a4470ee` did to
+     * Such a name takes nothing away, and nothing in the list itself tells it
+     * from one that does. A renamed tool leaves its old name behind, which
+     * looks exactly like a name that was never right. The caller gets the tool
+     * back with no word from either side. That is what `a4470ee` did to
      * `typo3_project_scope` and `typo3_extension_scope`.
      *
      * @return array<int, string>
@@ -88,9 +88,9 @@ final class ExcludedTools
      * The names in the list that this server offers anyway.
      *
      * The three `R-SCO-009` names as what a caller cannot take away, reached
-     * from the other side: `typo3_server_scope`, which is dropped here, and the
-     * two feedback tools, which `Registry::offered()` appends past the filter
-     * (`D-FBK-042`). Nothing is computed from that list.
+     * from the other side. `typo3_server_scope`, which drops out here, and the
+     * two feedback tools, which `Registry::offered()` adds past the filter
+     * (`D-FBK-042`). Nothing computes from that list.
      *
      * @return array<int, string>
      */
@@ -102,11 +102,11 @@ final class ExcludedTools
     /**
      * Every name the caller wrote, in one of three states.
      *
-     * The registry is asked twice and the two lists are compared: what it
-     * offers with the filter, and what it offers with this class answering
-     * empty. A name missing from the second is one no tool answers to; a name
-     * in the first is one the filter did not reach; the rest are gone, which is
-     * the only claim a client can act on.
+     * The registry answers twice and the two lists stand against each other.
+     * What it offers with the filter, and what it offers with this class as an
+     * empty answer. A name absent from the second is one no tool answers to. A
+     * name in the first is one the filter did not reach. The rest are gone,
+     * which is the only claim a client can act on.
      *
      * @return array{raw: string, excluded: array<int, string>, unknown: array<int, string>, offeredAnyway: array<int, string>}
      */
@@ -141,10 +141,10 @@ final class ExcludedTools
     }
 
     /**
-     * What the tool list is filtered by, which is what the caller wrote.
+     * What filters the tool list, which is what the caller wrote.
      *
-     * `typo3_server_scope` is taken out here rather than in the report: the
-     * caller who named it is told it was offered anyway, and the filter never
+     * `typo3_server_scope` comes out here rather than in the report. The caller
+     * who named it hears it stayed in the offer anyway, and the filter never
      * sees it.
      *
      * @return array<int, string>
@@ -162,7 +162,7 @@ final class ExcludedTools
     }
 
     /**
-     * The names the caller wrote, in the order they were written.
+     * The names the caller wrote, in the caller's order.
      *
      * @return array<int, string>
      */

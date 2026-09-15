@@ -19,32 +19,32 @@ final class Installer
      * The same fact as `outdated()` states, in the length the initialize
      * instructions have room for.
      *
-     * Short because it competes for a budget that is already spent: what a
-     * client keeps is 2048 characters, the prefix naming excluded tools can
-     * take most of what is left, and `R-ANS-013` holds the whole assembly to
-     * it. So this says the one thing that has to be acted on and leaves what
+     * Short because it competes for a budget that is already spent. What a
+     * client keeps is 2048 characters, and the prefix that names excluded tools
+     * can take most of what remains. `R-ANS-013` holds the whole assembly to
+     * it. So this says the one thing somebody has to act on and leaves what
      * differs to the line on stderr, which no budget bounds.
      */
     public const NOTICE = 'The task skills installed in this project are stale; run typo3-dev-companion update. ';
     /**
      * The same fact once the server has acted on it, in the same budget.
      *
-     * What is left for the agent to do is not a command but a doubt: a skill it
-     * loaded before this ran is the copy that was there, and the client read
-     * that directory when the session opened rather than now.
+     * What remains for the agent to do is not a command but a doubt. A skill it
+     * loaded before this ran is the copy that was there. The client read that
+     * directory when the session opened rather than now.
      */
     public const REFRESHED = 'The task skills here were stale and have just been refreshed; reload any you loaded. ';
     /**
-     * What a directory this package owns says to git about itself: everything
-     * below it, this file included, so the directory is invisible and no line
-     * about it is owed to anybody else's file.
+     * What a directory this package owns says to git about itself. Everything
+     * below it, this file included, so the directory is invisible and it owes
+     * no line to anybody else's file.
      */
     private const IGNORE_ALL = "*\n";
     /**
-     * The setup that names no client: the entry every client reads, and the
+     * The setup that names no client. The entry every client reads, and the
      * skills at the path the clients that agreed on one share. It is a client
-     * of the installation like any other and is recorded like one — it is only
-     * `--agent=` that does not take it, because it is nobody's name.
+     * of the installation like any other and the record treats it like one.
+     * Only `--agent=` does not take it, because it is nobody's name.
      */
     private const GENERIC = 'generic';
     /** @var array{skills: string, mcp: array{format: string, path: string, key: string}} */
@@ -56,13 +56,13 @@ final class Installer
      * What a client resolves to the project root in `command` and `args`, where
      * its own documentation says it resolves anything there at all.
      *
-     * Two of the eleven do, and both spell it this way — `D-DIS-016`, with the
+     * Two of the eleven do, and both spell it this way, `D-DIS-016`, with the
      * table in `documentation/usage/installing.rst`. It is the whole of what
-     * makes a shareable entry possible: a plain relative path would resolve
+     * makes a shareable entry possible. A plain relative path would resolve
      * against the working directory the client spawns the process in, which the
      * MCP specification does not define. `.mcp.json` carries no such value even
-     * though Claude Code expands one, because `${CLAUDE_PROJECT_DIR}` is set in
-     * the spawned server's environment rather than in the client's own.
+     * though Claude Code expands one. `${CLAUDE_PROJECT_DIR}` stands in the
+     * spawned server's environment rather than in the client's own.
      */
     private const WORKSPACE = '${workspaceFolder}';
     /** @var array<string, array{skills: string, mcp?: array{format: string, path: string, key: string, shape?: string, root?: string}}> */
@@ -130,25 +130,25 @@ final class Installer
         ],
     ];
     /**
-     * What the client still needs before a tool in the entry just written can
-     * be called, said beside the line that reports the entry.
+     * What the client still needs before a caller can call a tool in the entry
+     * just written, said beside the line that reports the entry.
      *
-     * Writing the file registers the server with nothing. A client that scopes
-     * project servers behind an approval has not been asked yet, and a session
-     * that was already open when the file was written is running against the
-     * configuration it started with — both end with an entry that is entirely
-     * correct and no tool in the session, which is where two sessions in one
-     * project went. Which of the two applies is the client's property and not
-     * this package's, so it is said per client and at the terminal, because the
-     * person who can finish the install is looking at one at that moment.
+     * The file alone registers the server with nothing. A client that scopes
+     * project servers behind an approval has not heard the question yet. A
+     * session that was already open at the write runs against the configuration
+     * it started with. Both end with an entry that is entirely correct and no
+     * tool in the session, which is where two sessions in one project went.
+     * Which of the two applies is the client's property and not this package's.
+     * So it stands per client and at the terminal, because the person who can
+     * finish the install looks at one at that moment.
      *
      * Each line is what that client's own documentation says, read on
      * 2026-08-02 and sourced per client in
      * `documentation/usage/installing.rst`. A client whose documentation does
-     * not answer says that rather than the likely answer: the sentence is acted
-     * on by somebody who cannot check it, and there a guess is indistinguishable
-     * from a fact. The two clients that need nothing say that too — "nothing is
-     * left" is the answer a reader most needs to be able to trust.
+     * not answer says that rather than the likely answer. Somebody who cannot
+     * check the sentence acts on it, and there a guess looks the same as a
+     * fact. The two clients that need nothing say that too. "Nothing remains"
+     * is the answer a reader most needs to trust.
      *
      * @var array<string, string>
      */
@@ -200,21 +200,17 @@ final class Installer
     ) {}
 
     /**
-     * The skills this server publishes, which is also where a skill starts
-     * existing for its readers. An answer that names one names it from here —
-     * `knowledge/task-intents.json` routes a task to the skill that owns it,
-     * and a name this does not carry is one nobody can load.
+     * The skills this server publishes, which is also where a skill starts to
+     * exist for its readers. `knowledge/task-intents.json` routes a task to the
+     * skill that owns it, and a name this does not carry is one nobody can
+     * load.
      *
      * It is the directory rather than a list beside it. A list is a second
      * place the same fact lives, and the two disagree in the direction nobody
-     * notices: a name in the list whose directory nobody wrote is published as
-     * a missing skill, and a directory the list forgot is loadable by nobody.
-     * So a skill exists for its readers as soon as its directory does —
-     * `D-SKL-087`.
-     *
-     * Sorted, because it is written into `.typo3-dev-companion/state.json` and
-     * compared against what the last run left; a listing whose order moved
-     * would read as a change.
+     * notices. So a skill exists for its readers as soon as its directory does,
+     * `D-SKL-087`. Sorted, because it goes into
+     * `.typo3-dev-companion/state.json` and a listing whose order moved would
+     * read as a change.
      *
      * @return array<int, string>
      */
@@ -233,17 +229,17 @@ final class Installer
     /**
      * What a publication of this set would write, as one string.
      *
-     * The record holds the names of what was published, and a name is what does
-     * not move when a skill is rewritten: a body edited in this package leaves
-     * a project with the old workflow under the current name, and every listing
-     * on both sides keeps saying the same twelve words. So the record holds this
-     * beside them, and a run that finds it different from what the package would
+     * The record holds the names of the published set, and a name is what does
+     * not move on a rewrite of a skill. A body edited in this package leaves a
+     * project with the old workflow under the current name. Every listing on
+     * both sides keeps to the same twelve words. So the record holds this
+     * beside them. A run that finds it different from what the package would
      * write now is the run that says so.
      *
-     * It covers what decides the published bytes: each skill's own files, and
-     * `skills/base.md`, which is copied into every one of them. The `.gitignore`
-     * each published directory carries is a constant of this class and moves
-     * only when this class does.
+     * It covers what decides the published bytes. Each skill's own files, and
+     * `skills/base.md`, which goes into every one of them as a copy. The
+     * `.gitignore` each published directory carries is a constant of this class
+     * and moves only when this class does.
      */
     public static function digest(): string
     {
@@ -262,16 +258,16 @@ final class Installer
 
     /**
      * Whether what a project has is what this server publishes now, said as the
-     * line somebody can act on — null where there is nothing to say.
+     * line somebody can act on. Null where there is nothing to say.
      *
      * A published skill is a copy, so it goes stale the moment this package
-     * moves and nothing on either side notices: the client loads the file it
-     * finds, and a tool name that has since been renamed fails at the call
-     * rather than at the load. The record is what this reads, so a project this
-     * package never installed into is silent rather than wrong. Two things make
-     * it speak — a skills directory that no longer holds what was published
-     * there (`R-DIS-024` has those ignoring themselves) and a digest that no
-     * longer matches, which a record written before the digest existed counts as.
+     * moves and nothing on either side notices. The client loads the file it
+     * finds, and a tool name renamed since fails at the call rather than at the
+     * load. The record is what this reads, so a project this package never
+     * installed into is silent rather than wrong. Two things make it speak. A
+     * skills directory that no longer holds what went there (`R-DIS-024` has
+     * those ignore themselves). And a digest that no longer matches, which a
+     * record from before the digest existed counts as.
      */
     public static function outdated(string $project): ?string
     {
@@ -299,10 +295,10 @@ final class Installer
 
     /**
      * The skills directories a recorded client reads that no longer hold what
-     * was published into them.
+     * went into them.
      *
      * One `is_dir` per recorded skill rather than a comparison of what is in
-     * it: the question here is whether the publication is still there at all,
+     * it. The question here is whether the publication is still there at all,
      * and what its files say is the digest's half.
      *
      * @param array{skills: list<string>, agents: list<string>, digest: string} $state
@@ -330,18 +326,17 @@ final class Installer
 
     /**
      * Which of the named skills a project holds an older copy of, in the order
-     * they were asked for.
+     * of the ask.
      *
-     * `outdated()` answers for the publication and is delivered once, before a
-     * task is known; a session is handed a skill name at the moment it is about
-     * to load the file, and that is the last thing this server controls
-     * (`D-SKL-086`). So this compares the copy rather than the record: what a
-     * project has on disk against what this package would write there now,
-     * which is the one reading that survives a record written by an older
-     * release.
+     * `outdated()` answers for the publication and goes out once, before any
+     * task. A session gets a skill name at the moment it is about to load the
+     * file. That is the last thing this server controls (`D-SKL-086`). So this
+     * compares the copy rather than the record. What a project has on disk
+     * against what this package would write there now. That is the one read
+     * that survives a record from an older release.
      *
-     * Silent where nothing was published, for `outdated()`'s reason — a project
-     * this package never installed into is not behind on anything.
+     * Silent where nothing went out, for `outdated()`'s reason. A project this
+     * package never installed into is not behind on anything.
      *
      * @param array<int, string> $skills
      * @return array<int, string>
@@ -377,10 +372,10 @@ final class Installer
     }
 
     /**
-     * What publishing one skill would write, as one string.
+     * What a publication of one skill would write, as one string.
      *
      * The base is the copy's rather than the skill's own, because that is what
-     * lands there, and the `.gitignore` is left out of both sides: it is a
+     * lands there. The `.gitignore` stays out of both sides, because it is a
      * constant of this class and moves only when this class does.
      */
     private static function skillDigest(string $skill): string
@@ -400,7 +395,10 @@ final class Installer
         return hash_final($digest);
     }
 
-    /** The same reading of a published copy, which carries a `.gitignore` the source has not. */
+    /**
+     * The same read of a published copy, which carries a `.gitignore` the
+     * source has not.
+     */
     private static function publishedDigest(string $copy): string
     {
         $digest = hash_init('sha256');
@@ -444,11 +442,11 @@ final class Installer
      * Bring the clients installed here up to date.
      *
      * Without an agent that is every client `.typo3-dev-companion/state.json`
-     * records, because a project is usually worked on by more than one and
-     * naming them one at a time meant remembering which of them the project had.
-     * A project with nothing installed is told so and is not a failure — this is
-     * the command a project wires into Composer's `post-update-cmd`, where a
-     * non-zero exit fails the whole run (`R-DIS-024`, `D-DIS-014`).
+     * records. More than one usually works on a project, and their names one at
+     * a time meant a memory of which of them the project had. A project with
+     * nothing installed hears so and is not a failure. This is the command a
+     * project wires into Composer's `post-update-cmd`, where a non-zero exit
+     * fails the whole run (`R-DIS-024`, `D-DIS-014`).
      */
     public function update(?string $agent): string
     {
@@ -462,20 +460,18 @@ final class Installer
     }
 
     /**
-     * Republish what the record says was published here, and touch nothing
-     * else.
+     * Publish again what the record says went out here, and touch nothing else.
      *
      * The copies go stale on every release and the answer was always a command
-     * somebody had to run — `D-DIS-014` chose the Composer hook, and its second
-     * **Wrong if** is this machine: a standalone checkout moves without any
-     * `composer update`, so the hook never fires and the notice is read by
-     * whoever happens to be at the terminal. What runs unattended in every
-     * project is a server starting, and this is what it does there —
-     * `D-DIS-021`.
+     * somebody had to run. `D-DIS-014` chose the Composer hook, and its second
+     * **Wrong if** is this machine. A standalone checkout moves without any
+     * `composer update`, so the hook never fires and whoever happens to be at
+     * the terminal reads the notice. What runs unattended in every project is a
+     * server start, and this is what it does there, `D-DIS-021`.
      *
-     * It adds nothing. The clients are the recorded ones and no client entry is
-     * written: this only puts back what an explicit `install` already asked
-     * for. A project with no record is untouched, as it was.
+     * It adds nothing. The clients are the recorded ones and no client entry
+     * goes out. This only puts back what an explicit `install` already asked
+     * for. A project with no record stays untouched, as it was.
      */
     public function refresh(): string
     {
@@ -483,22 +479,22 @@ final class Installer
     }
 
     /**
-     * What both commands do, for the clients they were given.
+     * What both commands do, for the clients they got.
      *
-     * They are the same work: the entry each client reads, the skills at the
+     * They are the same work. The entry each client reads, the skills at the
      * path it reads them from, and the record of both. `install` names one
-     * client, `update` the ones already recorded — and the entry is written on
+     * client, `update` the ones already on record. The entry goes out on
      * either, because what belongs in it is a property of the project rather
-     * than of the run. A project that required this server after it was first
-     * installed, or that gained a DDEV configuration since, needs a different
-     * entry than the one that is there; an update that only checked it left the
-     * project with a message and no command that would fix it, because
+     * than of the run. A project that required this server after its first
+     * install needs a different entry than the one that is there. So does one
+     * that gained a DDEV configuration since. An update that only checked it
+     * left the project with a message and no command that would fix it.
      * `install` refuses an entry it did not just write.
      *
      * `$entries` is false for the one caller that is not a command somebody
-     * typed: `refresh()` republishes copies that have drifted and leaves the
-     * client configuration alone, because an entry is written where somebody
-     * asked for a client and never where a server merely started.
+     * typed. `refresh()` publishes drifted copies again and leaves the client
+     * configuration alone. An entry goes out where somebody asked for a client
+     * and never where a server merely started.
      *
      * @param list<string> $names
      */
@@ -529,8 +525,8 @@ final class Installer
      * What the run leaves behind: the clients installed here, in the directory
      * that ignores itself.
      *
-     * The record is written once per run rather than per client, because it is
-     * one file for the whole project. Writing it inside the loop would let the
+     * The record goes out once per run rather than per client, because it is
+     * one file for the whole project. A write inside the loop would let the
      * first client of a run decide what the second one sees.
      *
      * @param array{skills: list<string>, agents: list<string>, digest: string} $state
@@ -590,16 +586,16 @@ final class Installer
     /**
      * That the entry just written is true on this machine and nowhere else.
      *
-     * Every file it goes into is documented by its own client as the shared,
-     * committed one, and the command in this entry is an absolute host path. So
-     * it is said rather than fixed, and said where the person who can act on it
-     * is looking.
+     * Every file it goes into has its own client's documentation as the shared,
+     * committed one. The command in this entry is an absolute host path. So it
+     * stands as a line rather than a fix, and where the person who can act on
+     * it looks.
      *
-     * Two things spare a client the sentence, both replacing the host path with
-     * one the project can share: `ddev exec`, and a client that resolves
-     * `self::WORKSPACE`. Where neither is available nothing else can be written,
-     * so this is the answer rather than the fallback — `D-DIS-016` is the
-     * reading, per client.
+     * Two things spare a client the sentence, both with a path the project can
+     * share instead of the host path. `ddev exec`, and a client that resolves
+     * `self::WORKSPACE`. Where neither is available nothing else can go out, so
+     * this is the answer rather than the fallback. `D-DIS-016` is the read, per
+     * client.
      */
     private const HOST_SPECIFIC = 'The command in this entry is this checkout\'s absolute path, valid on '
         . 'this machine only, while the file it is in is the one that client documents as shared and '
@@ -608,12 +604,12 @@ final class Installer
     /**
      * The step left, indented under the entry it belongs to.
      *
-     * Under, rather than as a line of its own, because the run writes an entry
-     * per client and a sentence about one of them floating among nine successes
-     * would have to name which. It is said on every run and not only on the run
-     * that wrote the file: what is left is a property of the client and the
-     * session, and neither is changed by this command having found the entry
-     * already correct.
+     * Under, rather than as a line of its own. The run writes an entry per
+     * client, and a sentence about one of them afloat among nine successes
+     * would have to name which. It stands on every run and not only on the run
+     * that wrote the file. What remains is a property of the client and the
+     * session, and neither changes when this command finds the entry already
+     * correct.
      */
     private function remaining(string $agent, ?string $root): string
     {
@@ -629,9 +625,9 @@ final class Installer
      * Whether the entry names this checkout rather than a path inside the
      * project.
      *
-     * Asked of what was written rather than of the conditions that decided it,
-     * so the sentence and the entry cannot come apart: a client that gains a
-     * shareable shape stops being told to ignore the file in the same edit.
+     * Read off the written entry rather than off the conditions that decided
+     * it, so the sentence and the entry cannot come apart. A client that gains
+     * a shareable shape stops to hear "ignore the file" in the same edit.
      */
     private function hostSpecific(?string $root): bool
     {
@@ -682,10 +678,10 @@ final class Installer
      * What an entry already there keeps: every field this package does not
      * write itself.
      *
-     * The command and the shape around it are a property of the project and are
-     * rewritten on every run. The rest is the caller's, and `env` is why this
-     * exists: a `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS` written into the entry by
-     * hand was replaced away by the next install — `D-AUD-005`.
+     * The command and the shape around it are a property of the project and go
+     * out afresh on every run. The rest is the caller's, and `env` is why this
+     * exists. A `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS` in the entry by hand
+     * vanished under the next install, `D-AUD-005`.
      *
      * @return array<array-key, mixed>
      */
@@ -702,11 +698,11 @@ final class Installer
      * Whether the entry that is already there is this server's.
      *
      * That is the line between an entry this installer may rewrite and one it
-     * must leave alone, and it is drawn at the server being started rather than
-     * at the exact command: which command starts this server is a property of
-     * the project, and it changes when the project requires the package or
-     * gains a DDEV configuration. An entry that names something else is
-     * somebody's own and is refused, whatever key it sits under.
+     * must leave alone. It runs at the started server rather than at the exact
+     * command. Which command starts this server is a property of the project,
+     * and it changes when the project requires the package or gains a DDEV
+     * configuration. An entry that names something else is somebody's own and
+     * meets a refusal, whatever key it sits under.
      *
      * @param list<string> $words
      */
@@ -757,18 +753,18 @@ final class Installer
     }
 
     /**
-     * What starts this server for one client, and the only place the path in an
-     * entry is decided.
+     * What starts this server for one client, and the only place that decides
+     * the path in an entry.
      *
      * Three shapes, in the order they are available. A project that does not
-     * have this server as a dependency has none of the first two: no path
+     * have this server as a dependency has none of the first two. No path
      * inside it names a checkout somewhere else, so the host path is the only
      * one that exists there.
      *
-     * DDEV comes before the variable because it is not only a way of naming the
-     * path: the entry has to start the container's PHP, which sees the project
-     * directory rather than the host, and a `${...}` expanded to a host path
-     * would name a directory that container has never had.
+     * DDEV comes before the variable because it is not only a way to name the
+     * path. The entry has to start the container's PHP, which sees the project
+     * directory rather than the host. A `${...}` expanded to a host path would
+     * name a directory that container has never had.
      *
      * @param ?string $root what this client resolves to the project root, null
      *     where its documentation says it resolves nothing there
@@ -793,17 +789,17 @@ final class Installer
     /**
      * This server's entrypoint inside the project, relative to its root.
      *
-     * A DDEV project is started through the container PHP, and the container
-     * sees the project directory rather than the host — so the entrypoint has
-     * to be named relative to the root, at the bin directory the project
-     * declares. `vendor/bin` was written unconditionally, which is right until
-     * a project moves it, and a TYPO3 extension repository routinely does
+     * A DDEV project starts through the container PHP, and the container sees
+     * the project directory rather than the host. So the entrypoint has to
+     * stand relative to the root, at the bin directory the project declares.
+     * `vendor/bin` stood there without condition, which is right until a
+     * project moves it, and a TYPO3 extension repository routinely does
      * (`"bin-dir": ".build/bin"`). The entry then pointed at a file that does
      * not exist, and nothing said so until a client tried to start the server.
      *
-     * Null means the server is not a dependency of this project at all — it is
-     * being run from a checkout elsewhere, which the container cannot see
-     * either, so the absolute entrypoint is the only path that exists for it.
+     * Null means the server is not a dependency of this project at all. It runs
+     * from a checkout elsewhere, which the container cannot see either, so the
+     * absolute entrypoint is the only path that exists for it.
      */
     private function installedEntrypoint(): ?string
     {
@@ -844,10 +840,9 @@ final class Installer
      * kept where the caller wrote it.
      *
      * The two lines this package owns are `command` and `args`. Everything else
-     * in the section is the caller's — `env` above all, since it is the only
-     * place a TOML client can carry `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`, and it
-     * was being deleted by the `install` that was supposed to keep the entry
-     * current (`D-AUD-006`).
+     * in the section is the caller's, `env` above all. It is the only place a
+     * TOML client can carry `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`, and the
+     * `install` meant to keep the entry current deleted it (`D-AUD-006`).
      *
      * @param int $number which line of the file the section header is, so a
      *     refusal can name the line in the file rather than in the section
@@ -867,9 +862,9 @@ final class Installer
             }
             $body[$index] = ['name' => $name, 'text' => $line];
         }
-        // An entry starting something else is somebody's own, and which command
-        // it starts is the only thing that says so — the caller's own keys say
-        // nothing about whose server this is.
+        // An entry that starts something else is somebody's own, and which
+        // command it starts is the only thing that says so. The caller's own
+        // keys say nothing about whose server this is.
         if ($words !== [] && !$this->namesThisServer($words)) {
             throw new \RuntimeException(
                 $relativePath . ' already has a different typo3-dev-companion server; refusing to replace it',
@@ -877,7 +872,7 @@ final class Installer
         }
 
         // Each of the two goes back where the caller has it, so the section
-        // keeps its order; one the section does not carry goes under the
+        // keeps its order. One the section does not carry goes under the
         // header, which is where a section this writes from scratch has it.
         $ours = $this->ownTomlLines($key);
         $unwritten = $ours;
@@ -899,11 +894,11 @@ final class Installer
     /**
      * The key a line in a section assigns, null where it assigns none.
      *
-     * A blank line and a comment carry no key and are kept as they are. Every
-     * other line has to be a whole `key = value`: this path rewrites two lines
-     * of a section and keeps the rest by copying them, and a value continued on
-     * the next line would be copied without the key that opens it. Refusing is
-     * what is left, because the alternative on record is deleting it.
+     * A blank line and a comment carry no key and stay as they are. Every other
+     * line has to be a whole `key = value`. This path rewrites two lines of a
+     * section and keeps the rest as copies. A value that continues on the next
+     * line would come across without the key that opens it. A refusal is what
+     * remains, because the alternative on record is a deletion.
      */
     private function tomlKey(string $line, string $relativePath, string $key, int $number): ?string
     {
@@ -1013,16 +1008,16 @@ final class Installer
         $this->copyDirectory($source, $target);
         // The order every skill starts in, written once and carried into each
         // of them. A copy rather than a shared file, because a published skill
-        // lands in somebody else's project on its own: a reference pointing out
-        // of its own directory would resolve here and nowhere it is used.
+        // lands in somebody else's project on its own. A reference that points
+        // out of its own directory would resolve here and nowhere it is in use.
         $this->write(
             $target . '/' . self::BASE,
             (string) file_get_contents(Paths::root() . '/skills/' . basename(self::BASE)),
         );
         // The directory says to git what it is, rather than the project's own
-        // `.gitignore` saying it on its behalf. Everything in here is written
-        // by this package and replaced whole on the next run, and the skills
-        // beside it — the project's own — are not covered by a word of it.
+        // `.gitignore` on its behalf. Everything in here comes from this
+        // package and goes out whole again on the next run. The skills beside
+        // it, the project's own, stand outside every word of it.
         $this->write($target . '/.gitignore', self::IGNORE_ALL);
 
         return 'Published ' . $skill . ' in ' . $target . '.';
@@ -1041,9 +1036,9 @@ final class Installer
      * What the last run left here: the skills it published, and the clients it
      * published them for.
      *
-     * A file written before clients were recorded has no `agents`, and so does
+     * A file from before the record held clients has no `agents`, and so has
      * one from a project set up with the generic `.mcp.json` alone. Both are an
-     * empty list rather than an error — nothing is wrong there, there is just
+     * empty list rather than an error. Nothing is wrong there, there is just
      * nothing an `update` without an agent could act on.
      *
      * @return array{skills: list<string>, agents: list<string>, digest: string}
@@ -1071,10 +1066,10 @@ final class Installer
             static fn(mixed $agent): bool => is_string($agent)
                 && (isset(self::AGENTS[$agent]) || $agent === self::GENERIC),
         ));
-        // Absent in a state file written before the publication was recorded
-        // as anything but names, and absent is not current there: what is in
-        // the project was never established, and `outdated()` says so rather
-        // than reading silence as a match.
+        // Absent in a state file from before the record held anything but
+        // names, and absent is not current there. What is in the project never
+        // had a check, and `outdated()` says so rather than reads silence as a
+        // match.
         $digest = is_string($state['digest'] ?? null) ? $state['digest'] : '';
 
         return ['skills' => $skills, 'agents' => $agents, 'digest' => $digest];
@@ -1109,10 +1104,10 @@ final class Installer
         if (!is_dir($path)) {
             return;
         }
-        // The finder walks a directory before what is in it, so reversed it
-        // hands over the deepest entry first — which is the order the entries
-        // can be removed in. A symlink to a directory is unlinked rather than
-        // descended into, the way the walk itself leaves it alone.
+        // The finder walks a directory before what is in it, so in reverse it
+        // hands over the deepest entry first. That is the order for a removal
+        // of the entries. A symlink to a directory goes as a link rather than
+        // as a descent, the way the walk itself leaves it alone.
         $entries = Finder::create()->in($path)->ignoreDotFiles(false)->ignoreVCS(false)->reverseSorting();
         foreach ($entries as $entry) {
             $removed = $entry->isDir() && !$entry->isLink()
@@ -1127,7 +1122,9 @@ final class Installer
         }
     }
 
-    /** Whether the file changed; a file that already says this is left alone. */
+    /**
+     * Whether the file changed; a file that already says this stays as it is.
+     */
     private function write(string $path, string $contents): bool
     {
         $directory = dirname($path);

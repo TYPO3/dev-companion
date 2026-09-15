@@ -5,13 +5,14 @@
 
 Search or read the official live TYPO3 documentation for a covered TYPO3 line.
 It searches four manuals: TYPO3 Explained, TypoScript Explained, the TCA
-Reference and the Fluid ViewHelper Reference. Search with several short English
-queries; every result carries a canonical URL. Pass one of those URLs back as
-page with the same targetVersion to receive that page as text, headings and code
-examples included. A query that names a Fluid tag such as f:if gets its answer
-from the ViewHelper reference alone. Ask without the prefix for the other
-manuals' Fluid chapters. This reaches docs.typo3.org, unlike the bundled
-convention lookups. Answers from: network.
+Reference and the Fluid ViewHelper Reference, by page title, heading, path and
+the names each declares. Search with several short English queries; every result
+carries a canonical URL, with the anchor of the heading where one answered. Pass
+one of those URLs back as page with the same targetVersion to receive that page
+as text, headings and code examples included. A query that names a Fluid tag
+such as f:if gets its answer from the ViewHelper reference alone. Ask without
+the prefix for the other manuals' Fluid chapters. This reaches docs.typo3.org,
+unlike the bundled convention lookups. Answers from: network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 
@@ -55,10 +56,10 @@ Answers with
     source: string
     queries: [string]
     # Present on a miss where a query has the shape of a PHP identifier. This index
-    # is page titles, section paths and what each manual declares by name: its
-    # properties, the classes, interfaces and methods it documents, and the console
-    # commands. A class the manual does not declare has no page with its title,
-    # while the property or ViewHelper it belongs to does.
+    # is page titles, their headings, section paths and what each manual declares by
+    # name: its properties, the classes, interfaces and methods it documents, and
+    # the console commands. A class the manual does not declare has no page with its
+    # title, while the property or ViewHelper it belongs to does.
     insteadOf:  # optional
       - # The query that reads as a code identifier.
         query: string
@@ -72,6 +73,8 @@ Answers with
         document: string
         documentTitle: string
         documentVersion: string
+        # The heading that answered, where the question reached the page through
+        # one; then the URL carries its anchor. Otherwise the page title.
         section: string
         # Short route into the source, empty only when the tool could not read the
         # result page after its index matched.
@@ -92,8 +95,9 @@ Answers with
         matched:
           - # The query word, reduced to the stem the search used.
             term: string
-            # One of: title, path, manual. Where the word matched: the page title,
-            # the section path it sits in, or the name of the manual.
+            # One of: title, path, manual, section. Where the word matched: the page
+            # title, the section path it sits in, the name of the manual, or a
+            # heading of the page.
             field: string
     # Why the source answered nothing, where status says unavailable. Null
     # otherwise.

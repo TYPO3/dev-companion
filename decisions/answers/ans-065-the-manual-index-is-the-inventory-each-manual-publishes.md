@@ -112,3 +112,13 @@ named CSS or JavaScript reached it.
 - The longer stated titles cost more ranks than they buy. The functional testing
   chapter already answers with a sibling page rather than its index. A second
   query that does the same is the pattern rather than the exception.
+
+## Since then
+
+On 2026-09-15 the index reads two more roles out of the same inventory.
+`D-ANS-158` admits the classes, methods and commands a manual declares, for a
+query word in code form. `D-ANS-159` scores every page with its best heading.
+What this searches is still the inventory, and the read costs no second
+artefact. Neither **Wrong if** above has happened: every manual publishes the
+inventory, and the stated titles cost no rank the sweep of `D-ANS-159` would
+show.

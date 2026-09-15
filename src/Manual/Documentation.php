@@ -96,6 +96,18 @@ final class Documentation
      */
     private const UNDILUTED_WORDS = 3;
 
+    /**
+     * The headings of a page, which the inventory lists with the anchor of
+     * each. A page is worth its title and its best heading, so a question the
+     * title does not carry reaches the page whose section does. What the
+     * heading is worth beside the title, and what it does to the seven ranked
+     * questions, is `D-ANS-159`.
+     */
+    private const HEADING = 'std:title';
+
+    /** How much of a heading's own score a page takes beside its own. */
+    private const HEADING_WEIGHT = 0.5;
+
     /** What this reader prints as a block of its own, which is also what makes a `dd` more than a value. */
     private const BLOCKS = './/h1|.//h2|.//h3|.//h4|.//h5|.//h6|.//p|.//pre|.//li|.//dt|.//dd';
 
@@ -186,6 +198,7 @@ final class Documentation
                     'matched' => [],
                     'title' => $page['title'],
                     'url' => $page['url'],
+                    'section' => $page['title'],
                     'document' => $document,
                     'documentTitle' => $manual['title'],
                     'searchable' => [
@@ -193,6 +206,7 @@ final class Documentation
                         'path' => self::split($page['path']),
                         'manual' => $manual['title'],
                     ],
+                    'headings' => $page['headings'] ?? [],
                 ];
             }
         }
@@ -206,8 +220,11 @@ final class Documentation
 
         // The score weighs every manual against every other manual's pages.
         // What makes a term worth something is how few of all the pages there
-        // are carry it.
-        $searchable = array_column($pages, 'searchable');
+        // are carry it, in a title, a path or a heading.
+        $searchable = array_map(
+            static fn(array $page): array => $page['searchable'] + ['headings' => implode("\n", $page['headings'])],
+            array_values($pages),
+        );
         foreach ($queries as $query) {
             $book = self::book($query, $indexed);
             $weights = TermSearch::weights(TermSearch::terms(self::split($query)), $searchable);
@@ -215,6 +232,7 @@ final class Documentation
             $scores = [];
             $covered = [];
             $matched = [];
+            $sections = [];
             foreach ($pages as $key => $page) {
                 if ($book !== null && $page['document'] !== $book) {
                     continue;
@@ -224,6 +242,11 @@ final class Documentation
                     $weights,
                     self::FIELD_WEIGHTS,
                     self::UNDILUTED_WORDS,
+                );
+                [$scores[$key], $covered[$key], $matched[$key], $sections[$key]] = self::withHeading(
+                    $page['headings'],
+                    $weights,
+                    [$scores[$key], $covered[$key], $matched[$key]],
                 );
             }
 
@@ -249,6 +272,7 @@ final class Documentation
                 $pages[$key]['score'] = $relative;
                 $pages[$key]['matched'] = $matched[$key];
                 $pages[$key]['coverage'] = $askedFor > 0.0 ? $covered[$key] / $askedFor : 0.0;
+                $pages[$key]['section'] = $sections[$key] ?? $pages[$key]['title'];
             }
         }
 
@@ -259,17 +283,21 @@ final class Documentation
             // An anchor names a section, and only the rendered page carries
             // the ids a section is found by. So a property is read from the
             // HTML, and a page from what the host publishes it as.
-            $anchor = (string) parse_url($candidate['url'], PHP_URL_FRAGMENT);
+            $url = $candidate['url'];
+            if (is_array($candidate['section'])) {
+                $url .= '#' . $candidate['section']['anchor'];
+            }
+            $anchor = (string) parse_url($url, PHP_URL_FRAGMENT);
             $page = $anchor === ''
-                ? $this->fetch(self::base($candidate['document'], $targetVersion), $candidate['url'])
-                : $this->html($candidate['url']);
+                ? $this->fetch(self::base($candidate['document'], $targetVersion), $url)
+                : $this->html($url);
             $results[] = [
                 'title' => $candidate['title'],
-                'url' => $candidate['url'],
+                'url' => $url,
                 'document' => $candidate['document'],
                 'documentTitle' => $candidate['documentTitle'],
                 'documentVersion' => $targetVersion,
-                'section' => $candidate['title'],
+                'section' => is_array($candidate['section']) ? $candidate['section']['title'] : $candidate['section'],
                 'excerpt' => match (true) {
                     $page === null => '',
                     isset($page['markdown']) => self::lead($page['markdown']),
@@ -469,13 +497,18 @@ final class Documentation
     }
 
     /**
-     * The pages of one manual, each with the title the host published it under.
+     * The pages of one manual, each with the title the host published it under
+     * and the headings it carries.
      *
      * Null is a manual that did not answer and has not answered before, which
      * is `Inventory`'s whole error vocabulary. An empty list is a book that
      * answered and lists no page.
      *
-     * @return list<array{title: string, path: string, url: string}>|null
+     * A heading is one the inventory lists under the page with an anchor, and
+     * that is not the page's own title again: Sphinx lists the first heading
+     * of every page as a section too.
+     *
+     * @return list<array{title: string, path: string, url: string, headings: array<string, string>}>|null
      */
     private function index(string $base): ?array
     {
@@ -485,7 +518,6 @@ final class Documentation
         }
 
         $pages = [];
-        $seen = [];
         foreach ($inventory['objects'] as $object) {
             if ($object['role'] !== self::PAGE) {
                 continue;
@@ -494,15 +526,69 @@ final class Documentation
             // its own — three pages of the ViewHelper reference at 14.3. The
             // document name is what the navigation showed for them.
             $title = $object['display'] === '<Unknown>' ? $object['name'] : $object['display'];
-            $url = $base . $object['uri'];
-            if ($object['uri'] === self::NOT_A_PAGE || $title === '' || isset($seen[$url])) {
+            if ($object['uri'] === self::NOT_A_PAGE || $title === '' || isset($pages[$object['uri']])) {
                 continue;
             }
-            $seen[$url] = true;
-            $pages[] = ['title' => $title, 'path' => $object['uri'], 'url' => $url];
+            $pages[$object['uri']] = ['title' => $title, 'path' => $object['uri'], 'url' => $base . $object['uri'], 'headings' => []];
+        }
+        foreach ($inventory['objects'] as $object) {
+            [$path, $anchor] = explode('#', $object['uri'], 2) + [1 => ''];
+            if ($object['role'] !== self::HEADING || $anchor === '' || !isset($pages[$path])) {
+                continue;
+            }
+            if (mb_strtolower($object['display']) === mb_strtolower($pages[$path]['title'])) {
+                continue;
+            }
+            $pages[$path]['headings'][$anchor] = $object['display'];
         }
 
-        return $pages;
+        return array_values($pages);
+    }
+
+    /**
+     * The page's score with its best heading added, and that heading where it
+     * carries the question better than the page's own title does.
+     *
+     * The heading is scored as a title, over the terms the page carries
+     * nowhere else, and the page takes the best one. The best rather than the
+     * sum, because a long page carries a heading for every word of a question
+     * and would win on length. The section comes back only where the heading
+     * outscores the page, so a question the title answers sends the caller to
+     * the page and not into it.
+     *
+     * @param array<string, string> $headings the anchor of each heading, and its text
+     * @param array<string, float> $weights
+     * @param array{0: int, 1: float, 2: array<string, string>} $page
+     * @return array{0: int, 1: float, 2: array<string, string>, 3: array{anchor: string, title: string}|null}
+     */
+    private static function withHeading(array $headings, array $weights, array $page): array
+    {
+        [$score, $covered, $matched] = $page;
+        // Only the terms the page carries nowhere yet. A heading that repeats
+        // the title's word says nothing the title did not, and a page with
+        // more sections would win on repetition.
+        $remaining = array_diff_key($weights, $matched);
+        $best = null;
+        foreach ($remaining === [] ? [] : $headings as $anchor => $heading) {
+            $scored = TermSearch::score(['title' => self::split($heading)], $remaining, ['title' => self::FIELD_WEIGHTS['title']], self::UNDILUTED_WORDS);
+            if ($scored[0] > ($best[0] ?? 0)) {
+                $best = [...$scored, 'anchor' => $anchor, 'title' => $heading];
+            }
+        }
+        if ($best === null) {
+            return [$score, $covered, $matched, null];
+        }
+
+        foreach ($best[2] as $term => $field) {
+            $matched[$term] = 'section';
+        }
+
+        return [
+            $score + (int) round($best[0] * self::HEADING_WEIGHT),
+            $covered + $best[1],
+            $matched,
+            $best[0] > $score ? ['anchor' => $best['anchor'], 'title' => $best['title']] : null,
+        ];
     }
 
     /**
@@ -699,7 +785,13 @@ final class Documentation
         if (preg_match('/^[\w.:-]+$/u', $anchor) === 1
             && self::first($xpath, sprintf('//*[@id="%s"]', $anchor)) !== null
         ) {
+            // A heading's anchor is an empty `<a>` at the top of its section,
+            // and a property's is the section itself. So the prose is inside
+            // the named element or inside the section around it.
             $within = sprintf('//*[@id="%s"]', $anchor);
+            if (self::first($xpath, $within . '//p') === null && self::first($xpath, $within . '/ancestor::section[1]//p') !== null) {
+                $within .= '/ancestor::section[1]';
+            }
         }
 
         $parts = [];

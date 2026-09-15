@@ -44,7 +44,7 @@ final class DocumentationLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Search or read the official live TYPO3 documentation for a covered TYPO3 line. It searches four manuals: TYPO3 Explained, TypoScript Explained, the TCA Reference and the Fluid ViewHelper Reference. Search with several short English queries; every result carries a canonical URL. Pass one of those URLs back as page with the same targetVersion to receive that page as text, headings and code examples included. A query that names a Fluid tag such as f:if gets its answer from the ViewHelper reference alone. Ask without the prefix for the other manuals\' Fluid chapters. This reaches docs.typo3.org, unlike the bundled convention lookups.';
+        return 'Search or read the official live TYPO3 documentation for a covered TYPO3 line. It searches four manuals: TYPO3 Explained, TypoScript Explained, the TCA Reference and the Fluid ViewHelper Reference, by page title, heading, path and the names each declares. Search with several short English queries; every result carries a canonical URL, with the anchor of the heading where one answered. Pass one of those URLs back as page with the same targetVersion to receive that page as text, headings and code examples included. A query that names a Fluid tag such as f:if gets its answer from the ViewHelper reference alone. Ask without the prefix for the other manuals\' Fluid chapters. This reaches docs.typo3.org, unlike the bundled convention lookups.';
     }
 
 
@@ -96,7 +96,7 @@ final class DocumentationLookup extends ReadOnlyTool
                 'query' => Schema::string('The query that reads as a code identifier.'),
                 'ask' => Schema::listOf(Schema::string(), 'The bare names to ask with instead, most specific first.'),
             ], ['query', 'ask']), 'Present on a miss where a query has the shape of a PHP identifier. This index is '
-                . 'page titles, section paths and what each manual declares by name: its properties, the classes, '
+                . 'page titles, their headings, section paths and what each manual declares by name: its properties, the classes, '
                 . 'interfaces and methods it documents, and the console commands. A class the manual does not '
                 . 'declare has no page with its title, while the property or ViewHelper it belongs to does.'),
             'results' => Schema::listOf(Schema::object([
@@ -105,7 +105,7 @@ final class DocumentationLookup extends ReadOnlyTool
                 'document' => Schema::string('Official document identifier.'),
                 'documentTitle' => Schema::string(),
                 'documentVersion' => Schema::string(),
-                'section' => Schema::string(),
+                'section' => Schema::string('The heading that answered, where the question reached the page through one; then the URL carries its anchor. Otherwise the page title.'),
                 'excerpt' => Schema::string('Short route into the source, empty only when the tool could not read the result page after its index matched.'),
                 'content' => Schema::string('The selected page as text in page mode; empty in search mode.'),
                 'coverage' => [
@@ -118,7 +118,7 @@ final class DocumentationLookup extends ReadOnlyTool
                 ],
                 'matched' => Schema::listOf(Schema::object([
                     'term' => Schema::string('The query word, reduced to the stem the search used.'),
-                    'field' => ['type' => 'string', 'enum' => ['title', 'path', 'manual'], 'description' => 'Where the word matched: the page title, the section path it sits in, or the name of the manual.'],
+                    'field' => ['type' => 'string', 'enum' => ['title', 'path', 'manual', 'section'], 'description' => 'Where the word matched: the page title, the section path it sits in, the name of the manual, or a heading of the page.'],
                 ], ['term', 'field']), 'What this page matched on. Every query word absent from it reached this page nowhere. So a result whose match consists of the words around the subject is an aimed answer rather than one about the subject. Ask again with the subject alone. Empty in page mode.'),
             ], ['title', 'url', 'document', 'documentTitle', 'documentVersion', 'section', 'excerpt', 'content', 'coverage', 'matched'])),
             'unavailable' => Schema::unavailable([
@@ -182,7 +182,7 @@ final class DocumentationLookup extends ReadOnlyTool
             $insteadOf = $answer['mode'] === 'page' ? [] : self::insteadOf($answer['queries']);
             if ($insteadOf !== []) {
                 $answer['insteadOf'] = $insteadOf;
-                $lines[] = 'This index is page titles, section paths and what a manual declares by name: '
+                $lines[] = 'This index is page titles, their headings, section paths and what a manual declares by name: '
                     . 'properties, documented classes and methods, console commands. Nothing declares this name, '
                     . 'while the property or ViewHelper it belongs to may have a page. Ask again with:';
                 foreach ($insteadOf as $instead) {
@@ -201,9 +201,9 @@ final class DocumentationLookup extends ReadOnlyTool
             // everything except the word that names the subject is one of these
             // six and not an answer. Said per result, because that is where the
             // caller reads it (`R-DOC-002`).
-            $lines[] = 'Matched against page titles, section paths and what a manual declares by name, never '
-                . 'the text of a page. A declared property, class, method or console command is offered for a '
-                . 'query word written the way code is, or for a query that is nothing but its name.';
+            $lines[] = 'Matched against page titles, their headings, section paths and what a manual declares '
+                . 'by name, never the text of a page. A declared property, class, method or console command is '
+                . 'offered for a query word written the way code is, or for a query that is nothing but its name.';
             $covered = array_map(
                 static fn(array $result): float => (float) ($result['coverage'] ?? 0.0),
                 $answer['results'],

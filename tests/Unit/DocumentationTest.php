@@ -535,6 +535,91 @@ final class DocumentationTest extends TestCase
         self::assertSame($base . 'ApiOverview/CommandControllers/ListCommands.html#console-command-cache-flushtags', $command['url']);
     }
 
+    /**
+     * The inventory lists every heading of a page with its anchor. A page is
+     * worth its title and its best heading, so the question a title does not
+     * carry reaches the page whose section does. The answer names that
+     * section, sends the caller to its anchor, and says the words matched
+     * there — `D-ANS-159`, `R-DOC-002`.
+     */
+    #[Decision('D-ANS-159')]
+    #[Requirement('R-DOC-002')]
+    #[Test]
+    public function aQuestionTheTitleDoesNotCarryReachesThePageWhoseHeadingDoes(): void
+    {
+        $base = 'https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/';
+        $index = $this->inventory(
+            [
+                'Administration/Installation/SystemRequirements/Index.html' => 'System requirements for running TYPO3',
+                'Administration/Deployment/Configuration/Index.html' => 'Configuration per environment',
+                'ApiOverview/Events/Index.html' => 'Events and hooks',
+            ],
+            [],
+            [
+                ['std:title', 'Administration/Installation/SystemRequirements/Index.html#htaccess', 'Apache .htaccess configuration file'],
+                ['std:title', 'Administration/Installation/SystemRequirements/Index.html#php', 'PHP'],
+                // The page's own title again, which Sphinx lists as a section too.
+                ['std:title', 'Administration/Deployment/Configuration/Index.html#configuration', 'Configuration per environment'],
+            ],
+        );
+        $documentation = new Documentation(static fn(string $url): ?string => match (true) {
+            str_ends_with($url, 'objects.inv') => str_contains($url, 'reference-coreapi') ? $index : null,
+            default => '<html><article role="main"><p>The page opens on requirements.</p>'
+                . '<section id="apache"><a id="htaccess"></a><h4>Apache</h4><p>This file configures the rewrite rules.</p></section></article></html>',
+        });
+
+        $answer = $documentation->lookup(['apache htaccess configuration'], '14.3', 2);
+
+        $first = $answer['results'][0];
+        self::assertSame('System requirements for running TYPO3', $first['title']);
+        self::assertSame('Apache .htaccess configuration file', $first['section']);
+        self::assertSame($base . 'Administration/Installation/SystemRequirements/Index.html#htaccess', $first['url']);
+        self::assertContains(['term' => 'apache', 'field' => 'section'], $first['matched']);
+        // The excerpt is the section's own prose, read from around its anchor.
+        self::assertStringContainsString('rewrite rules', $first['excerpt']);
+        self::assertStringNotContainsString('opens on requirements', $first['excerpt']);
+
+        // A page whose title answers the question is sent to as a page: its
+        // section is its title, and the URL carries no anchor.
+        $second = $answer['results'][1];
+        self::assertSame('Configuration per environment', $second['title']);
+        self::assertSame('Configuration per environment', $second['section']);
+        self::assertSame($base . 'Administration/Deployment/Configuration/Index.html', $second['url']);
+    }
+
+    /**
+     * A heading that repeats the title's word says nothing the title did not.
+     * So the page with the repeating heading is not the better answer, which
+     * is what kept `f:if` on the If ViewHelper rather than on the one whose
+     * section is titled "then / else" — `D-ANS-159`.
+     */
+    #[Decision('D-ANS-159')]
+    #[Test]
+    public function aHeadingThatRepeatsTheTitleAddsNothing(): void
+    {
+        $index = $this->inventory(
+            [
+                'Global/If.html' => 'If ViewHelper <f:if>',
+                'Global/Security/IfAuthenticated.html' => 'IfAuthenticated ViewHelper <f:security.ifAuthenticated>',
+                'Global/Then.html' => 'Then ViewHelper <f:then>',
+            ],
+            [],
+            [
+                ['std:title', 'Global/Security/IfAuthenticated.html#if-then', 'if with then'],
+                ['std:title', 'Global/Security/IfAuthenticated.html#if-else', 'if with else'],
+            ],
+        );
+        $documentation = new Documentation(static fn(string $url): string => str_ends_with($url, 'objects.inv')
+            ? $index
+            : '<html><article role="main"><p>What this page says.</p></article></html>');
+
+        $answer = $documentation->lookup(['f:if'], '14.3', 2);
+
+        self::assertSame('If ViewHelper <f:if>', $answer['results'][0]['title']);
+        self::assertSame('IfAuthenticated ViewHelper <f:security.ifAuthenticated>', $answer['results'][1]['section']);
+        self::assertNotContains('section', array_column($answer['results'][1]['matched'], 'field'));
+    }
+
     #[Decision('D-ANS-065')]
     #[Test]
     public function anApiIdentifierReachesThePageThatIsNotNamedAfterIt(): void

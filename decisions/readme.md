@@ -96,6 +96,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-156`][D-ANS-156] — A change read by name lists the changes its messages name · 2026-09-15
 - [`D-ANS-157`][D-ANS-157] — A manual page is read as the Markdown the host publishes beside it · 2026-09-15
 - [`D-ANS-158`][D-ANS-158] — A declared class, method or command is reached by its own name · 2026-09-15
+- [`D-ANS-159`][D-ANS-159] — A page is worth its title and its best heading · 2026-09-15
 - [`D-ANS-151`][D-ANS-151] — The file list on a change answer is asked for rather than sent · 2026-09-09
 - [`D-ANS-152`][D-ANS-152] — The core answer's npm entries say which dispatcher owns them · 2026-09-09
 - [`D-ANS-153`][D-ANS-153] — The route to prior art runs through the review server · 2026-09-09
@@ -250,6 +251,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-ANS-156]: answers/ans-156-a-change-read-by-name-lists-the-changes-its-messages-name.md
 [D-ANS-157]: answers/ans-157-a-manual-page-is-read-as-the-markdown-the-host-publishes-beside-it.md
 [D-ANS-158]: answers/ans-158-a-declared-class-method-or-command-is-reached-by-its-own-name.md
+[D-ANS-159]: answers/ans-159-a-page-is-worth-its-title-and-its-best-heading.md
 [D-ANS-151]: answers/ans-151-the-file-list-on-a-change-answer-is-asked-for-rather-than-sent.md
 [D-ANS-152]: answers/ans-152-the-core-answers-npm-entries-say-which-dispatcher-owns-them.md
 [D-ANS-153]: answers/ans-153-the-route-to-prior-art-runs-through-the-review-server.md

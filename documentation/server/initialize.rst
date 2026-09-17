@@ -143,8 +143,8 @@ The tool list
 
 ``tools/list`` carries 31 tools. Each entry is the ``name``, ``description``,
 ``inputSchema``, ``outputSchema`` and ``annotations`` the tool's own page under
-:doc:`tools/ <tools/index>` states. On the wire the entries weigh 305,846 bytes:
-32,027 of description, 47,494 of ``inputSchema`` and 220,681 of
+:doc:`tools/ <tools/index>` states. On the wire the entries weigh 309,554 bytes:
+32,027 of description, 47,522 of ``inputSchema`` and 224,361 of
 ``outputSchema``.
 
 The resource template

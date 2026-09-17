@@ -49,15 +49,14 @@ Answers with
       cause: string
       # What stopped it, in the words the attempt produced.
       reason: string
-      # One of: installed, not-installed, undeclared, null. The state of the
-      # repository the caller stands in, which the cause does not say. installed:
-      # packages sit below the root the discovery found, so the caller lacks no
-      # install. not-installed: the repository declares TYPO3 and has no packages
-      # below it yet, so this call answers once composer install has run.
-      # undeclared: nothing in the directories the discovery walked declares TYPO3,
-      # so an install here answers nothing. Null where the discovery looked at
-      # nothing: a named root the server could not use, or an entrypoint that handed
-      # no directory in.
+      # One of: installed, not-installed, undeclared. The state of the repository
+      # the caller stands in, which the cause does not say. installed: packages sit
+      # below the root the discovery found, so the caller lacks no install.
+      # not-installed: the repository declares TYPO3 and has no packages below it
+      # yet, so this call answers once composer install has run. undeclared: nothing
+      # in the directories the discovery walked declares TYPO3, so an install here
+      # answers nothing. Null where the discovery looked at nothing: a named root
+      # the server could not use, or an entrypoint that handed no directory in.
       repositoryState: string or null  # optional
       # What the reason means where the message alone does not say it. A console
       # that starts and then fails on a missing table has a database without a

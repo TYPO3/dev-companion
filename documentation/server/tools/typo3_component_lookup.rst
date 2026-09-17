@@ -138,10 +138,10 @@ Answers with
         # The withheld entry it belongs to.
         component: string
         title: string
-        # One of: around, on, below, null. Where the class sits relative to the
-        # component root on this version, read off the core stylesheet. around wraps
-        # it, on is the root element itself, below is an element inside it. Null
-        # where no selector places it, which is not a licence to put it anywhere.
+        # One of: around, on, below. Where the class sits relative to the component
+        # root on this version, read off the core stylesheet. around wraps it, on is
+        # the root element itself, below is an element inside it. Null where no
+        # selector places it, which is not a licence to put it anywhere.
         position: string or null
         # What the core styles inside this class on this version: what it may hold,
         # never what it requires.

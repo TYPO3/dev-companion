@@ -245,7 +245,26 @@ Answers with
         # hunks calls rewritten. Null means the call did not read the paths, which
         # is a search and an issue search. An empty list is a patch set that touches
         # nothing.
-        files: array or null  # optional
+        files:  # optional
+          - # The path as the review server spells it, from the repository root.
+            path: string
+            # One of: modified, added, deleted, renamed, copied, rewritten. What the
+            # patch set does to this file. renamed and copied name where the file
+            # came from in movedFrom. rewritten is a change so large that the review
+            # server no longer relates the two versions.
+            action: string
+            # Lines added in this file. Zero on a binary, where there are no lines
+            # to count.
+            insertions: integer
+            # Lines removed in this file.
+            deletions: integer
+            # Whether the file is binary, which is what makes the two zero counts
+            # beside it mean nothing. An image or a fixture archive is not an
+            # untouched file.
+            binary: boolean
+            # The path the rename or the copy took this file from, null on every
+            # other action.
+            movedFrom: string or null
         # Whether the current patch set still merges into its target branch. It is
         # the review server's own last computation and not a merge run now. So false
         # says to expect a rebase and proves nothing. Null where it computed none,
@@ -259,7 +278,7 @@ Answers with
         # as a fresh patch set. Empty means the current patch set carries none; a
         # report on an earlier one is history and is not here. Null means the call
         # did not read the review log, which is a search and an enumeration.
-        conflicts: array or null  # optional
+        conflicts: [string] or null  # optional
         # The change and patch set this one is a cherry-pick of, null where somebody
         # pushed it rather than cherry-picked it. It is provenance and no alarm.
         # Most backports are cherry-picks and almost none of them conflicted, so
@@ -288,7 +307,37 @@ Answers with
         # on every row, since the review server states it unasked. The call reads
         # the voters behind it for one change, so votes is null on a search and a
         # list there.
-        labels: array or null  # optional
+        labels:  # optional
+          - # Code-Review and Verified are the two the core project votes with.
+            label: string
+            # What the submit rule makes of this label. OK where the rule holds,
+            # NEED where it still wants a vote. REJECT where a vote blocks it,
+            # IMPOSSIBLE where no available vote could satisfy it. NEED is not
+            # "nobody has voted". A change at Code-Review+1 where the rule asks for
+            # +2 stands there too, and the votes beside it say which. The pair to
+            # tell apart is NEED against REJECT — a change that waits for a
+            # reviewer, and one somebody has already turned down. Empty where no
+            # rule names the label; where several rules name it, the most
+            # consequential of their states is here.
+            state: string
+            # Whether the submit rule counts this label as met — the state beside
+            # it read as a boolean. False is the ordinary state of an open change,
+            # and null means no rule asks for it. The votes say what it stands at.
+            # The range is the project's own, and Verified runs to +2 here, so a +1
+            # is not the top of it.
+            satisfied: boolean or null
+            # Everyone on the label, those with no vote included. Null where the
+            # call did not read the voters, which is every hit a search or an
+            # enumeration answers. A list with zeros in it means nobody has voted, a
+            # different answer. Pass the change number back as change for them.
+            votes:
+              - voter: string
+                # What this voter holds now. Zero is a reviewer somebody added and
+                # who has not voted. A vote a later patch set dropped is absent
+                # rather than zero, and only the review log says it was ever there.
+                value: integer
+                # When the vote came in, empty where none did.
+                on: string
         # How many comments the change carries, which the review server states
         # whether or not the call read them.
         commentCount: integer  # optional
@@ -304,7 +353,38 @@ Answers with
         # the call did not read them. A search asks for none, and a change lookup
         # whose comment call did not answer says so here rather than with an empty
         # list. Hold it against commentCount.
-        comments: array or null  # optional
+        comments:  # optional
+          - # What the inReplyTo of a reply names.
+            id: string
+            author: string
+            on: string
+            # The patch set the comment sits on. One older than the current patch
+            # set is a comment about code that may since have changed. It is still
+            # open until somebody answers it.
+            patchSet: integer
+            # The file it sits on. /PATCHSET_LEVEL is a comment on the change itself
+            # rather than on a place in it.
+            file: string
+            # Null on a comment about the change rather than about a line.
+            line: integer or null
+            # The flag on this one comment, as its own writer left it. It is not
+            # what the thread stands at; that is threadUnresolved beside it. The two
+            # differ on every comment somebody resolved with a reply.
+            unresolved: boolean
+            # The id of the comment this answers, null where it starts a thread.
+            inReplyTo: string or null
+            # The id of the comment this thread starts with, which is this comment's
+            # own id where it starts one. Comments with the same one are one thread,
+            # and they stand in the order their writers wrote them.
+            thread: string
+            # Whether the thread this comment sits in is open: the unresolved flag
+            # on that thread's last comment. Gerrit stores a thread's state there
+            # and counts the open ones as unresolvedCommentCount, so every comment
+            # in a thread carries the same value here. It is a flag somebody set
+            # rather than a judgement that the question has an answer.
+            threadUnresolved: boolean
+            # The comment as its writer wrote it.
+            message: string
         # The relation chain this change sits in, child first: the changes stacked
         # on it, then itself, then the changes under it. This is the other relation
         # and not the Change-Id one. A chain is different changes built on one
@@ -313,7 +393,27 @@ Answers with
         # alone, the ordinary case. Null means the call did not read the chain. A
         # search asks for none, and a change lookup whose call did not answer says
         # so here rather than with an empty list.
-        chain: array or null  # optional
+        chain:  # optional
+          - # The entry's change number; pass it back as change to read it.
+            number: integer
+            # NEW, MERGED or ABANDONED — the entry's own state, not the state of
+            # the change this answer is about. A MERGED entry says that part of the
+            # stack landed.
+            status: string
+            # The commit subject of the patch set the chain names.
+            subject: string
+            # Whether this entry is the change the answer is about. Its place in the
+            # list says how much stands on it and how much it stands on.
+            thisChange: boolean
+            # The patch set the entry stands at now.
+            patchSet: integer
+            # The patch set of the entry that the chain stands on. Lower than
+            # patchSet means the stack holds the older one and that change has moved
+            # on since. Act on the entry by its number rather than on the patch set
+            # named here.
+            chainedAt: integer
+            # Where a person reads that change.
+            url: string
         # The other changes the review log names, by number or by review URL, that
         # are neither this change, its chain nor its Change-Id siblings. An
         # alternative an author pushes as a separate change is stacked on nothing,
@@ -321,14 +421,40 @@ Answers with
         # entry is resolved against the review server, so a Forge issue in the same
         # digits is not here. Read whatever messages asks for. Empty means the log
         # names none. Null means the call did not read the log.
-        namedInMessages: array or null  # optional
+        namedInMessages:  # optional
+          - # The change number; pass it back as change to read it.
+            number: integer
+            # NEW, MERGED or ABANDONED — that change's own state.
+            status: string
+            # The commit subject of that change's current patch set.
+            subject: string
+            # Where a person reads that change.
+            url: string
         # The Forge issues this change's commit message names in its Resolves: and
         # Related: trailers, each filled with what says whether to read it. That is
         # the join between the patch and the tracker, and where a second issue
         # nobody mentioned elsewhere shows. Empty means the message names none. Null
         # means the call did not read the message. A search asks for none of this,
         # and a read of one hit by name answers it.
-        issues: array or null  # optional
+        issues:  # optional
+          - # The issue number; pass it to typo3_forge_lookup as issue to read it
+            # whole.
+            issue: integer
+            # What the issue is about, so a caller judges it without a read. Empty
+            # where the tracker did not answer the one call that fills the whole
+            # set.
+            subject: string
+            # Bug, Feature, Task.
+            tracker: string
+            # Where the issue stands, which is the tracker's own state and not the
+            # state of this change.
+            status: string
+            # Where a person reads it.
+            url: string
+            # resolves where the message carries Resolves:, related where it carries
+            # Related:. The two are different claims: what the patch closes, and
+            # what it touches.
+            trailer: string
         # The branches this change's commit message names in its Releases: trailer,
         # spelled as the trailer spells them. It is the author's claim about which
         # branches the patch belongs on, written before it went to any of them. The
@@ -338,10 +464,21 @@ Answers with
         # carries no such trailer, which every change outside the core project is.
         # Null means the call did not read the message, which is a search by words
         # or path.
-        releases: array or null  # optional
+        releases: [string] or null  # optional
         # The review log, oldest first, where messages asked for it. Null otherwise,
         # which is the default and every hit a search answers.
-        messages: array or null  # optional
+        messages:  # optional
+          - author: string
+            on: string
+            # The patch set the message is about.
+            patchSet: integer
+            # Whether a service user wrote it, read off the account rather than off
+            # its name. On the core project that is the CI with a pipeline report.
+            bot: boolean
+            # The message as it stands. The upload of a patch set carries the votes
+            # it dropped and the copy condition that dropped them, and nothing else
+            # writes that down.
+            message: string
         # How many of the log a service user wrote, which messages: "people" is what
         # drops. Answered whichever value messages has. A log full of pipeline
         # reports that answers zero here means Gerrit no longer tags its service

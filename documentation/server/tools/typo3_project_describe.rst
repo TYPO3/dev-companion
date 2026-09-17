@@ -119,14 +119,14 @@ Answers with
       # The same, read off corePhpConstraint. Null where the tool found no core
       # package to read one from.
       coreFloor: string or null
-      # One of: below, same, above, null. Where floor sits against coreFloor. below:
-      # the project declares support for a PHP its own installed core refuses, so
-      # the promise cannot hold. same: it declares what the core requires. above: it
+      # One of: below, same, above. Where floor sits against coreFloor. below: the
+      # project declares support for a PHP its own installed core refuses, so the
+      # promise cannot hold. same: it declares what the core requires. above: it
       # declares more than the core needs, which is a range the project narrowed
       # itself and can widen without a change to a dependency. Null where coreFloor
       # is.
       againstCore: string or null
-      # One of: below, same, above, null. Where the PHP environment.php states sits
+      # One of: below, same, above. Where the PHP environment.php states sits
       # against floor. same: the declared floor is the version the commands run on.
       # above: the environment runs higher, so the floor is a version nothing
       # configured here ever executes — a claim no check tests. below: the
@@ -138,7 +138,7 @@ Answers with
       # installedPhpBound as major.minor, which is the depth the environment states
       # its own version at. Null where the install bounds nothing.
       bound: string or null
-      # One of: below, same, above, null. Where the PHP environment.php states sits
+      # One of: below, same, above. Where the PHP environment.php states sits
       # against bound. It is the only one of these three that says whether a command
       # runs at all rather than what it runs on. below: every command in the list
       # below aborts in Composer's platform check before its own tool starts,
@@ -216,23 +216,23 @@ Answers with
         # engines.node is a range, and only its lowest version could stand in a
         # comparison.
         declaredBy: string
-        # One of: below, same, above, null. Where the pin sits against the lowest
-        # version engines.node admits. below: the pinned Node is one this package
-        # says it does not run on. Null where either is absent or spelled in a way
-        # this will not read.
+        # One of: below, same, above. Where the pin sits against the lowest version
+        # engines.node admits. below: the pinned Node is one this package says it
+        # does not run on. Null where either is absent or spelled in a way this will
+        # not read.
         nvmrcAgainstEngines: string or null
-        # One of: below, same, above, null. Where the Node the environment states
-        # sits against declared. Null where no environment states one.
+        # One of: below, same, above. Where the Node the environment states sits
+        # against declared. Null where no environment states one.
         inEnvironment: string or null
         # The Node the workflows set up, where they all state the same one. Null
         # where none states a version outright, or where they disagree. Which of
         # them applies is then the workflow's own condition, and ci above carries
         # each statement.
         ci: string or null
-        # One of: below, same, above, null. Where that version sits against
-        # declared. The comparison takes the segments both spell, so an .nvmrc with
-        # a major and a workflow with a patch level agree wherever the major does.
-        # The release difference inside one major is a thing no file here states.
+        # One of: below, same, above. Where that version sits against declared. The
+        # comparison takes the segments both spell, so an .nvmrc with a major and a
+        # workflow with a patch level agree wherever the major does. The release
+        # difference inside one major is a thing no file here states.
         inCi: string or null
     # The environment this repository configures to run itself in, read from that
     # environment's own files. Null means nothing here configures one that this
@@ -438,15 +438,14 @@ Answers with
       cause: string
       # What stopped it, in the words the attempt produced.
       reason: string
-      # One of: installed, not-installed, undeclared, null. The state of the
-      # repository the caller stands in, which the cause does not say. installed:
-      # packages sit below the root the discovery found, so the caller lacks no
-      # install. not-installed: the repository declares TYPO3 and has no packages
-      # below it yet, so this call answers once composer install has run.
-      # undeclared: nothing in the directories the discovery walked declares TYPO3,
-      # so an install here answers nothing. Null where the discovery looked at
-      # nothing: a named root the server could not use, or an entrypoint that handed
-      # no directory in.
+      # One of: installed, not-installed, undeclared. The state of the repository
+      # the caller stands in, which the cause does not say. installed: packages sit
+      # below the root the discovery found, so the caller lacks no install.
+      # not-installed: the repository declares TYPO3 and has no packages below it
+      # yet, so this call answers once composer install has run. undeclared: nothing
+      # in the directories the discovery walked declares TYPO3, so an install here
+      # answers nothing. Null where the discovery looked at nothing: a named root
+      # the server could not use, or an entrypoint that handed no directory in.
       repositoryState: string or null  # optional
       # What the reason means where the message alone does not say it. A console
       # that starts and then fails on a missing table has a database without a

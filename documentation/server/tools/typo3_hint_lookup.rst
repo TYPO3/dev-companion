@@ -102,7 +102,7 @@ Answers with
         title: string
         # PHP, TypeScript, JavaScript, CSS, or General.
         category: string
-        # One of: core, project, extension, null. Which kind of work the whole hint
+        # One of: core, project, extension. Which kind of work the whole hint
         # obliges. "core" means a condition of a patch to the TYPO3 core and a
         # convention anywhere else. The backend's own design system, the changelog
         # artifact and the paths of the mono repository are that case. "project" and
@@ -123,14 +123,14 @@ Answers with
             # The same range as a sentence, empty when the statement binds to no
             # version.
             versions: string
-            # One of: core, project, extension, null. Which kind of work this
-            # statement obliges. "core" means a condition of a patch to the TYPO3
-            # core and a convention anywhere else. The backend's own design system,
-            # the changelog artifact and the paths of the mono repository are that
-            # case. "project" and "extension" are the mirror. They say what the
-            # repository around an installation, or a package on its own, has to do,
-            # and what is context inside the core. Null, the ordinary case, means it
-            # holds wherever somebody writes TYPO3: an API that throws throws in a
+            # One of: core, project, extension. Which kind of work this statement
+            # obliges. "core" means a condition of a patch to the TYPO3 core and a
+            # convention anywhere else. The backend's own design system, the
+            # changelog artifact and the paths of the mono repository are that case.
+            # "project" and "extension" are the mirror. They say what the repository
+            # around an installation, or a package on its own, has to do, and what
+            # is context inside the core. Null, the ordinary case, means it holds
+            # wherever somebody writes TYPO3: an API that throws throws in a
             # sitepackage too.
             scope: string or null
     # How much of the task the closest hint above carries, between 0 and 1, where 1

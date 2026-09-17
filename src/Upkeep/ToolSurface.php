@@ -437,19 +437,19 @@ final class ToolSurface
     /** @param array<string, mixed> $field */
     private static function type(array $field): string
     {
-        $field = self::branch($field);
-        $type = (string) ($field['type'] ?? 'object');
-        if ($type === 'array') {
-            $type = '[' . self::type((array) ($field['items'] ?? [])) . ']';
+        if (isset($field['anyOf'])) {
+            return implode(' or ', array_map(static fn(mixed $branch): string => self::type((array) $branch), (array) $field['anyOf']));
         }
+        $type = (string) ($field['type'] ?? 'object');
 
-        return $type . (isset($field['anyOf']) ? ' or null' : '');
+        return $type === 'array' && isset($field['items']) ? '[' . self::type((array) $field['items']) . ']' : $type;
     }
 
     /**
-     * A nullable field's branch, with the description beside it and the
-     * `anyOf` kept as the mark — `Schema::nullable()`. Any other field as it
-     * is.
+     * A field with `anyOf` branches, read as its first branch with the
+     * description beside it. That is the type of a nullable field
+     * (`Schema::nullable()`) and the string of a scalar one. The `anyOf` stays
+     * on it, so `type()` still prints every branch.
      *
      * @param array<string, mixed> $field
      * @return array<string, mixed>
@@ -457,11 +457,8 @@ final class ToolSurface
     private static function branch(array $field): array
     {
         $branches = (array) ($field['anyOf'] ?? []);
-        if (count($branches) !== 2 || ($branches[1]['type'] ?? null) !== 'null') {
-            return $field;
-        }
 
-        return (array) $branches[0] + $field;
+        return $branches === [] ? $field : (array) $branches[0] + $field;
     }
 
     /**

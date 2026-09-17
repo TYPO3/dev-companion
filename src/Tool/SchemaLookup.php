@@ -60,7 +60,7 @@ final class SchemaLookup extends ReadOnlyTool
                 'name' => Schema::string(),
                 'type' => Schema::string('The Doctrine type the core declares it as: integer, string, text, datetime, json, blob.'),
                 'notnull' => ['type' => 'boolean'],
-                'default' => ['description' => 'The default the core gives it, null where it declares none.'],
+                'default' => Schema::scalar('The default the core gives it, null where it declares none.'),
                 'length' => Schema::nullable(['type' => 'integer', 'description' => 'Length where the type carries one.']),
             ], ['name', 'type', 'notnull']), 'Empty where the call named no table.'),
             'tables' => Schema::listOf(Schema::object([
@@ -74,7 +74,7 @@ final class SchemaLookup extends ReadOnlyTool
                     'name' => Schema::string(),
                     'type' => Schema::string('The Doctrine type the column has, read from the connection.'),
                     'notnull' => ['type' => 'boolean'],
-                    'default' => ['description' => 'The default the column carries, null where it has none.'],
+                    'default' => Schema::scalar('The default the column carries, null where it has none.'),
                     'length' => Schema::nullable(['type' => 'integer', 'description' => 'Length where the type carries one.']),
                 ], ['name', 'type', 'notnull'])),
                 'indexes' => Schema::listOf(Schema::object([

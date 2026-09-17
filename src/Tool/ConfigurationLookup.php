@@ -47,7 +47,7 @@ final class ConfigurationLookup extends ReadOnlyTool
         return Schema::installationAnswer([
             'configurationPath' => Schema::string('The TYPO3_CONF_VARS path the call read.'),
             'found' => ['type' => 'boolean', 'description' => 'Whether the installation has a value at that path. Present only where the call asked one. False is a statement about an installation, and where there was none to ask, unsupported stands in place of this answer.'],
-            'value' => ['description' => 'The effective runtime value, of whatever shape the configuration has.'],
+            'value' => Schema::any('The effective runtime value, of whatever shape the configuration has.'),
             'resolvedOrder' => Schema::listOf(Schema::object([
                 'index' => ['type' => 'integer', 'description' => 'Position in the run, counted from zero.'],
                 'provider' => Schema::string('Fully qualified class name of the form data provider.'),

@@ -536,6 +536,33 @@ final class Schema
         return $description === '' ? ['type' => 'string'] : ['type' => 'string', 'description' => $description];
     }
 
+    /**
+     * A string, a number, a boolean or null: what a database column, a
+     * declared default or an echoed argument holds. Spelled out, because a
+     * schema that constrains nothing is what a client refuses — `D-ANS-161`.
+     *
+     * @return array<string, mixed>
+     */
+    public static function scalar(string $description): array
+    {
+        return ['description' => $description, 'anyOf' => [
+            ['type' => 'string'], ['type' => 'number'], ['type' => 'boolean'], ['type' => 'null'],
+        ]];
+    }
+
+    /**
+     * Any JSON value at all, said as the six types rather than as nothing.
+     *
+     * @return array<string, mixed>
+     */
+    public static function any(string $description): array
+    {
+        return ['description' => $description, 'anyOf' => [
+            ['type' => 'string'], ['type' => 'number'], ['type' => 'boolean'], ['type' => 'null'],
+            ['type' => 'array'], ['type' => 'object'],
+        ]];
+    }
+
     /** @return array<string, mixed> */
     public static function nullableString(string $description = ''): array
     {

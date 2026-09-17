@@ -63,7 +63,7 @@ final class FlexFormLookup extends ReadOnlyTool
             'type' => Schema::string('The TCA type of this field, or "section" for a repeatable section.'),
             'renderType' => Schema::string('Empty where the type has no render type.'),
             'required' => ['type' => 'boolean'],
-            'default' => ['description' => 'The default the field declares, null where it declares none or where it is not scalar.'],
+            'default' => Schema::scalar('The default the field declares, null where it declares none or where it is not scalar.'),
             'items' => Schema::listOf(Schema::object([
                 'value' => Schema::string(),
                 'label' => Schema::string(),

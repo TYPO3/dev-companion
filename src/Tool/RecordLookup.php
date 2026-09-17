@@ -93,7 +93,7 @@ final class RecordLookup extends ReadOnlyTool
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
             'where' => Schema::listOf(Schema::object([
                 'column' => Schema::string(),
-                'value' => ['description' => 'The value the column matched against, exactly as the call passed it.'],
+                'value' => Schema::scalar('The value the column matched against, exactly as the call passed it.'),
             ], ['column', 'value']), 'The filter the read ran under, echoed so a count reported onwards carries what it counted. A list rather than a map keyed by column, because an empty map is [] in JSON and a schema that says object refuses it. A client reads one shape either way. Empty where the read covered the whole table.'),
             'counts' => Schema::nullable(Schema::object([
                 'total' => Schema::integer('Every row that matches, whatever state it is in.'),
@@ -102,17 +102,17 @@ final class RecordLookup extends ReadOnlyTool
                 'deleted' => Schema::integer('Rows the delete field marks. They are still in the table until the garbage collection runs.'),
             ], ['total', 'live', 'hidden', 'deleted'], 'Null where the call read no table.')),
             'groups' => Schema::listOf(Schema::object([
-                'value' => ['description' => 'The value of the grouped column, as the database stores it. Null is a row that has none, which on a select column is the empty string rather than null.'],
+                'value' => Schema::scalar('The value of the grouped column, as the database stores it. Null is a row that has none, which on a select column is the empty string rather than null.'),
                 'total' => Schema::integer('Rows with that value, deleted and hidden included.'),
                 'live' => Schema::integer(),
                 'hidden' => Schema::integer(),
                 'deleted' => Schema::integer(),
             ], ['value', 'total', 'live', 'hidden', 'deleted']), 'One entry per distinct value of the grouped column, the fullest first. A value with no rows is not here: the distribution is what the table holds, and you read a status nothing carries off its absence. Empty where groupBy was not passed.'),
-            'groupDefault' => ['description' => 'What the grouped column\'s TCA declares as its default, so you read a value as the convention or as a departure from it. Null where groupBy was not passed and where the column declares no default, which is not the same answer as a default of zero.'],
+            'groupDefault' => Schema::scalar('What the grouped column\'s TCA declares as its default, so you read a value as the convention or as a departure from it. Null where groupBy was not passed and where the column declares no default, which is not the same answer as a default of zero.'),
             'departing' => Schema::listOf(Schema::object([
                 'uid' => Schema::integer('What the backend edits the row by.'),
                 'pid' => Schema::integer(),
-                'value' => ['description' => 'What that row carries instead of the default.'],
+                'value' => Schema::scalar('What that row carries instead of the default.'),
             ], ['uid', 'pid', 'value']), 'The rows whose grouped column is not the TCA default, by uid, capped at one page of the record list. This is the half of a distribution that decides something. A value one row in a hundred carries is what a cleanup drops and then breaks. Empty where groupBy was not passed, where the column declares no default, and where every row carries it.'),
             'pages' => Schema::listOf(Schema::object([
                 'pid' => Schema::integer('The page the rows sit on. Zero is the root, which is where records that belong to no page end up.'),
@@ -131,7 +131,7 @@ final class RecordLookup extends ReadOnlyTool
                 'hidden' => ['type' => 'boolean'],
                 'values' => Schema::listOf(Schema::object([
                     'column' => Schema::string(),
-                    'value' => ['description' => 'What the row stores in that column, as the database has it.'],
+                    'value' => Schema::scalar('What the row stores in that column, as the database has it.'),
                 ], ['column', 'value']), 'The columns the call named, in the order it named them. A list rather than a map keyed by column, for the reason where gives. Empty where the call named none.'),
             ], ['uid', 'pid', 'label', 'changed', 'created', 'deleted', 'hidden', 'values']), 'The rows read, ordered by uid. Empty where count is true, where the call named no table, and where nothing matched.'),
             'countable' => Schema::listOf(Schema::object([

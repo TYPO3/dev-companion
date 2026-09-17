@@ -220,6 +220,52 @@ final class ToolContractTest extends TestCase
         return $found;
     }
 
+    /**
+     * Every field of every schema says what it is.
+     *
+     * A field with a description and nothing else is the object spelling of
+     * `true`. It accepts any value, and some clients refuse the tool over it.
+     * A value that can be several things says which, `Schema::scalar()` and
+     * `Schema::any()` — `D-ANS-161`.
+     */
+    #[Decision('D-ANS-161')]
+    #[Test]
+    public function everyFieldSaysWhatItIs(): void
+    {
+        $bare = [];
+        foreach (Registry::definitions() as $definition) {
+            foreach (['inputSchema', 'outputSchema'] as $side) {
+                array_push($bare, ...self::bareFields($definition[$side], $definition['name'] . ' ' . $side));
+            }
+        }
+
+        self::assertSame([], $bare, 'a field constrains nothing, which a client may refuse');
+    }
+
+    /**
+     * Every field below the schema with no keyword but its description, by its
+     * path.
+     *
+     * @param array<string, mixed> $schema
+     * @return list<string>
+     */
+    private static function bareFields(array $schema, string $path): array
+    {
+        $found = [];
+        foreach ((array) ($schema['properties'] ?? []) as $name => $field) {
+            $field = (array) $field;
+            if (array_diff(array_keys($field), ['description']) === []) {
+                $found[] = $path . '.' . $name;
+            }
+            foreach ([$field, ...(array) ($field['anyOf'] ?? [])] as $branch) {
+                $branch = (array) $branch;
+                array_push($found, ...self::bareFields((array) ($branch['items'] ?? $branch), $path . '.' . $name));
+            }
+        }
+
+        return $found;
+    }
+
     #[Test]
     public function onlyTheFeedbackToolWrites(): void
     {

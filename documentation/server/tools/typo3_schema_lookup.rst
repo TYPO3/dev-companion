@@ -55,7 +55,7 @@ Answers with
         type: string
         notnull: boolean
         # The default the core gives it, null where it declares none.
-        default: object  # optional
+        default: string or number or boolean or null  # optional
         # Length where the type carries one.
         length: integer or null  # optional
     # Every table TYPO3 derives columns for. Returned on a call that named none, and
@@ -79,7 +79,7 @@ Answers with
           type: string
           notnull: boolean
           # The default the column carries, null where it has none.
-          default: object  # optional
+          default: string or number or boolean or null  # optional
           # Length where the type carries one.
           length: integer or null  # optional
       indexes:

@@ -85,7 +85,7 @@ Answers with
     where:  # optional
       - column: string
         # The value the column matched against, exactly as the call passed it.
-        value: object
+        value: string or number or boolean or null
     # Null where the call read no table.
     counts:  # optional
       # Every row that matches, whatever state it is in.
@@ -105,7 +105,7 @@ Answers with
       - # The value of the grouped column, as the database stores it. Null is a row
         # that has none, which on a select column is the empty string rather than
         # null.
-        value: object
+        value: string or number or boolean or null
         # Rows with that value, deleted and hidden included.
         total: integer
         live: integer
@@ -115,7 +115,7 @@ Answers with
     # the convention or as a departure from it. Null where groupBy was not passed
     # and where the column declares no default, which is not the same answer as a
     # default of zero.
-    groupDefault: object  # optional
+    groupDefault: string or number or boolean or null  # optional
     # The rows whose grouped column is not the TCA default, by uid, capped at one
     # page of the record list. This is the half of a distribution that decides
     # something. A value one row in a hundred carries is what a cleanup drops and
@@ -126,7 +126,7 @@ Answers with
         uid: integer
         pid: integer
         # What that row carries instead of the default.
-        value: object
+        value: string or number or boolean or null
     # One entry per page that holds a matched row, the fullest first. Empty where
     # the call read no table.
     pages:  # optional
@@ -158,7 +158,7 @@ Answers with
         values:
           - column: string
             # What the row stores in that column, as the database has it.
-            value: object
+            value: string or number or boolean or null
     # Every table this tool will read in this installation, which is every one TCA
     # describes.
     countable:  # optional

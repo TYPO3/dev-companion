@@ -42,7 +42,7 @@ Answers with
     # none to ask, unsupported stands in place of this answer.
     found: boolean  # optional
     # The effective runtime value, of whatever shape the configuration has.
-    value: object  # optional
+    value: string or number or boolean or null or array or object  # optional
     # The order the providers actually run in, present only where the path names one
     # form data group and the installation answered. The registry under it is a
     # dependency graph, so this is what it resolves to rather than what the files

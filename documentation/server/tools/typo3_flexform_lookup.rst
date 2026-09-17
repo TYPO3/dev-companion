@@ -80,7 +80,7 @@ Answers with
             required: boolean  # optional
             # The default the field declares, null where it declares none or where
             # it is not scalar.
-            default: object  # optional
+            default: string or number or boolean or null  # optional
             # The selectable items, where the field has any.
             items:  # optional
               - value: string
@@ -106,7 +106,7 @@ Answers with
                     required: boolean  # optional
                     # The default the field declares, null where it declares none or
                     # where it is not scalar.
-                    default: object  # optional
+                    default: string or number or boolean or null  # optional
                     # The selectable items, where the field has any.
                     items:  # optional
                       - value: string

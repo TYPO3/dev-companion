@@ -5,6 +5,9 @@ The server
 
 What a caller can ask it, and where each answer comes from.
 
+* :doc:`initialize` — what a client gets at ``initialize`` and in the lists it
+  fetches right after: the result as the server sends it, the instructions in
+  their wording, the prompts, and what the tool list weighs.
 * :doc:`tools/ <tools/index>` — every tool, one page each. What it is for, what
   it takes, which fields it answers with, and what one call to it came back
   with.
@@ -38,6 +41,7 @@ every answer names its source, its version bound and what it left out.
 .. toctree::
     :hidden:
 
+    initialize
     tools/index
     resources/index
     answer-sources

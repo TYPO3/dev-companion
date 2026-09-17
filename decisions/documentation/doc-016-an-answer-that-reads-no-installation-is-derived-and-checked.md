@@ -6,7 +6,7 @@ status: open
 coveredBy:
   - CoreFixtureTest::everyAnswerThatDoesNotMoveWithARootIsDerivedFromOne
   - CoreFixtureTest::theWrittenCheckoutIsReadAsOneAndSaysWhichTypo3ItIs
-  - ToolSurfaceTest::everyPageIsWhatTheRegistryDeclares
+  - ToolSurfaceTest::everyPageIsWhatTheServerDeclares
 ---
 
 # D-DOC-016 — An answer that reads no installation is derived and checked

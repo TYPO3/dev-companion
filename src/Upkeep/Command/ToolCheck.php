@@ -13,8 +13,8 @@ use TYPO3\DevCompanion\Upkeep\ToolSurface;
 use TYPO3\DevCompanion\Upkeep\Voice;
 
 /**
- * Whether the tool reference still says what the registry declares, and how far
- * behind the recorded half of it is.
+ * Whether the tool reference and the initialize page still say what the server
+ * declares, and how far behind the recorded half is.
  *
  * A generated page nothing reads back is a hand-written one with one generation
  * behind it. A tool added, a description rewritten or a schema field gained
@@ -23,7 +23,7 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  */
 #[AsCommand(
     name: 'tools:check',
-    description: 'hold the tool reference to what the registry declares, and say how old its recorded half is',
+    description: 'hold the tool reference and the initialize page to the server, and say how old the recorded half is',
 )]
 final class ToolCheck
 {
@@ -44,7 +44,7 @@ final class ToolCheck
         }
 
         foreach ($stale as $file) {
-            Voice::problem($output, $file . ' is not what the registry declares — run bin/cli tools:index');
+            Voice::problem($output, $file . ' is not what the server declares — run bin/cli tools:index');
         }
         $verdict = Voice::verdict($output, count($stale), sprintf('%d tools, %s', count(Registry::definitions()), Voice::count(count($stale), 'problem')));
         self::howOldTheRecordingIs($output);

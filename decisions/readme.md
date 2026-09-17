@@ -1128,6 +1128,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### documentation
 
+- [`D-DOC-071`][D-DOC-071] — The initialize page is read off a session in the same process · 2026-09-17
 - [`D-DOC-070`][D-DOC-070] — This repository writes in ASD-STE100 · 2026-09-14
 - [`D-DOC-069`][D-DOC-069] — AGENTS.md states the three patch rules this corpus breaks · 2026-09-10
 - [`D-DOC-068`][D-DOC-068] — The register this server writes in is copied into its callers' patches · 2026-09-09
@@ -1191,6 +1192,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DOC-008`][D-DOC-008] — The calls that reach outside stay in the shared table · 2026-08-02 · confirmed
 - [`D-DOC-001`][D-DOC-001] — A table is written so it reads unrendered · 2026-08-01 · confirmed
 
+[D-DOC-071]: documentation/doc-071-the-initialize-page-is-read-off-a-session-in-the-same-process.md
 [D-DOC-070]: documentation/doc-070-this-repository-writes-in-asd-ste100.md
 [D-DOC-069]: documentation/doc-069-agents-md-states-the-three-patch-rules-this-corpus-breaks.md
 [D-DOC-068]: documentation/doc-068-the-register-this-server-writes-in-is-copied-into-its-callers-patches.md

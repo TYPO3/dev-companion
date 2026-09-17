@@ -23,7 +23,7 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  */
 #[AsCommand(
     name: 'tools:index',
-    description: 'rewrite the tool reference and answer-source page from the registry',
+    description: 'rewrite the tool reference, the answer-source page and the initialize page from the server',
 )]
 final class ToolIndex
 {

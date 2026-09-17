@@ -27,13 +27,15 @@ final class ToolSurfaceTest extends TestCase
     /**
      * The page derives from the declarations rather than stands beside them,
      * schemas included. So neither half can go stale against the other —
-     * `D-DOC-016`, `D-DOC-011`.
+     * `D-DOC-016`, `D-DOC-011`. The initialize page derives from a session
+     * against the built server, and this holds it the same way — `D-DOC-071`.
      */
     #[Decision('D-DOC-033')]
     #[Decision('D-DOC-011')]
     #[Decision('D-DOC-016')]
+    #[Decision('D-DOC-071')]
     #[Test]
-    public function everyPageIsWhatTheRegistryDeclares(): void
+    public function everyPageIsWhatTheServerDeclares(): void
     {
         foreach (ToolSurface::pages() as $file => $contents) {
             $named = substr($file, strlen(Paths::root()) + 1);
@@ -41,7 +43,7 @@ final class ToolSurfaceTest extends TestCase
             self::assertSame(
                 $contents,
                 (string) file_get_contents($file),
-                $named . ' is not what the registry declares — run bin/cli tools:index',
+                $named . ' is not what the server declares — run bin/cli tools:index',
             );
         }
     }

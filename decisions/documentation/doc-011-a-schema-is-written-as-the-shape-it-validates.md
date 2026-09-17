@@ -4,7 +4,7 @@ title: A schema is written as the shape it validates
 date: 2026-08-03
 status: open
 coveredBy:
-  - ToolSurfaceTest::everyPageIsWhatTheRegistryDeclares
+  - ToolSurfaceTest::everyPageIsWhatTheServerDeclares
 ---
 
 # D-DOC-011 — A schema is written as the shape it validates

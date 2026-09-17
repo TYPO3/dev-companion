@@ -94,7 +94,9 @@ final class ToolSurface
      *
      * Both `tools:index` and `tools:record` write the surface and then delete
      * what is not in what they wrote. So the other removes a page only one of
-     * them knows about. There is one list of them and both read it.
+     * them knows about. There is one list of them and both read it. The
+     * initialize page is here because the same check holds it, and because a
+     * change to a description moves the weight it states.
      *
      * @return array<string, string>
      */
@@ -103,6 +105,7 @@ final class ToolSurface
         return [
             self::index() => self::indexPage(),
             dirname(self::directory()) . '/' . self::SOURCES_PAGE . '.rst' => self::sourcesPage(),
+            Handshake::file() => Handshake::page(),
         ];
     }
 

@@ -122,9 +122,11 @@ final class ToolAnswers
      * client's and differs between them, while the byte count is the same
      * number for everybody and moves the same way.
      *
-     * Text and data count apart because they cost differently. A client renders
-     * the text and may never read the data, and a field nobody reads is the
-     * cheapest thing to take out.
+     * Text and data count apart because a client hands the model one of
+     * them, and which one is the client's — `D-EVI-011`. The data counts as
+     * the compact JSON a client re-encodes it to, not as the pretty print the
+     * record keeps it in. The record's indentation is a third of its bytes
+     * and reaches no model.
      *
      * @return list<array{tool: string, calls: int, text: int, data: int, total: int}>
      */
@@ -140,10 +142,10 @@ final class ToolAnswers
             $text = 0;
             $data = 0;
             $calls = 0;
-            foreach (self::blocksIn(self::recordedIn($file->getPathname())) as [$label, $bytes]) {
+            foreach (self::blocksIn(self::recordedIn($file->getPathname())) as [$label, $block]) {
                 $calls += $label === 'Text' ? 1 : 0;
-                $text += $label === 'Text' ? $bytes : 0;
-                $data += $label === 'Data' ? $bytes : 0;
+                $text += $label === 'Text' ? strlen($block) : 0;
+                $data += $label === 'Data' ? strlen(ToolSurface::compact((array) json_decode($block, true))) : 0;
             }
 
             $measured[] = [
@@ -161,26 +163,26 @@ final class ToolAnswers
     }
 
     /**
-     * The `Text:` and `Data:` blocks of a recorded section, each with what it
-     * weighs once the four spaces the directive indents it by are off.
+     * The `Text:` and `Data:` blocks of a recorded section, each as it stands
+     * once the four spaces the directive indents it by are off.
      *
      * `Called with:` stays out: the arguments are the caller's own and cost
      * this server nothing to answer with.
      *
-     * @return list<array{0: string, 1: int}>
+     * @return list<array{0: string, 1: string}>
      */
     private static function blocksIn(string $section): array
     {
         $blocks = [];
         $label = '';
-        $bytes = 0;
+        $block = '';
         $inside = false;
 
         foreach (preg_split('/\\R/', $section) ?: [] as $line) {
             // Closing comes first: `Data:` ends the text block above it, and a
             // read of the label before the close threw those bytes away.
             if ($inside && $line !== '' && !str_starts_with($line, '    ')) {
-                $blocks[] = [$label, $bytes];
+                $blocks[] = [$label, $block];
                 $inside = false;
                 $label = '';
             }
@@ -190,15 +192,15 @@ final class ToolAnswers
             }
             if (str_starts_with($line, '.. code-block::')) {
                 $inside = $label !== '';
-                $bytes = 0;
+                $block = '';
                 continue;
             }
             if ($inside) {
-                $bytes += strlen(substr($line, 4)) + 1;
+                $block .= substr($line, 4) . "\n";
             }
         }
         if ($inside) {
-            $blocks[] = [$label, $bytes];
+            $blocks[] = [$label, $block];
         }
 
         return $blocks;

@@ -60,6 +60,7 @@ final class UpkeepTest extends TestCase
             'todo:waiting' => [['todo:waiting']],
             'todo:check' => [['todo:check']],
             'tools:check' => [['tools:check']],
+            'tools:measure' => [['tools:measure']],
             'feedback:list' => [['feedback:list']],
             'checkouts:status' => [['checkouts:status']],
             'todo:next' => [['todo:next']],

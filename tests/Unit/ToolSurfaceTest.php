@@ -122,6 +122,9 @@ final class ToolSurfaceTest extends TestCase
      * The zero is the failure this holds against. The first parser read the
      * `Data:` label before it closed the text block above it. Every tool came
      * back with no text at all and a total that still looked plausible.
+     *
+     * The data half counts as the compact JSON a client hands the model, so
+     * it is below what the pretty-printed record weighs — `D-EVI-011`.
      */
     #[Test]
     public function whatAToolAnswersWithIsCountedInBothHalves(): void
@@ -143,5 +146,51 @@ final class ToolSurfaceTest extends TestCase
         $sorted = $totals;
         rsort($sorted);
         self::assertSame($sorted, $totals, 'the report does not open on what costs the most');
+
+        // Every JSON block of every page, the arguments included, as the
+        // record keeps it: indented, one field per line. The compact count
+        // has to come in under that, or it counted the indentation.
+        $recorded = 0;
+        foreach (ToolSurface::written() as $file) {
+            preg_match_all('/^\.\. code-block:: json\n\n((?:    .*\n|\n)+)/m', (string) file_get_contents($file->getPathname()), $blocks);
+            $recorded += array_sum(array_map('strlen', $blocks[1]));
+        }
+        self::assertGreaterThan(0, $recorded, 'no page carries a JSON block to count against');
+        self::assertLessThan($recorded, array_sum(array_column($measured, 'data')), 'the data half counts the indentation of the record, which reaches no model');
+    }
+
+    /**
+     * Every definition counts in both halves, and the report opens on the
+     * largest output schema. That is the half a caller asks about, because
+     * it is the larger one on `tools/list` and reaches no model in either
+     * client read — `D-EVI-011`.
+     */
+    #[Test]
+    public function whatAToolDeclaresIsCountedInBothHalves(): void
+    {
+        $measured = ToolSurface::measured();
+
+        self::assertCount(count(Registry::definitions()), $measured);
+        foreach ($measured as $tool) {
+            self::assertGreaterThan(0, $tool['declared'], $tool['tool'] . ' declares nothing');
+            self::assertGreaterThan(0, $tool['outputSchema'], $tool['tool'] . ' declares no output schema');
+        }
+
+        $schemas = array_column($measured, 'outputSchema');
+        $sorted = $schemas;
+        rsort($sorted);
+        self::assertSame($sorted, $schemas, 'the report does not open on the largest schema');
+    }
+
+    /**
+     * The compact form is what `JSON.stringify` writes: no space, the
+     * slashes and the unicode as they stand. What mcp/sdk escapes on the
+     * wire is decoded again before a client hands anything over, so a count
+     * that kept the escapes would count what no model reads.
+     */
+    #[Test]
+    public function theCompactFormIsWhatAClientHandsTheModel(): void
+    {
+        self::assertSame('{"path":"a/b","name":"ü"}', ToolSurface::compact(['path' => 'a/b', 'name' => 'ü']));
     }
 }

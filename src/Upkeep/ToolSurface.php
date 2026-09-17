@@ -59,6 +59,52 @@ final class ToolSurface
     }
 
     /**
+     * What each tool's definition weighs on `tools/list`, the output schema
+     * apart, largest schema first.
+     *
+     * Bytes of compact JSON, for the reason `ToolAnswers::measured()` gives.
+     * The two halves count apart because a client hands the model one of
+     * them. The name, the description and the input schema are the tool
+     * definition the model chooses by. The output schema is the contract the
+     * client validates the data half against, and neither client read on
+     * 2026-09-17 sends it on — `D-EVI-011`.
+     *
+     * @return list<array{tool: string, declared: int, outputSchema: int}>
+     */
+    public static function measured(): array
+    {
+        $measured = [];
+        foreach (Registry::definitions() as $definition) {
+            $measured[] = [
+                'tool' => $definition['name'],
+                'declared' => strlen(self::compact([
+                    'name' => $definition['name'],
+                    'description' => $definition['description'],
+                    'inputSchema' => $definition['inputSchema'],
+                ])),
+                'outputSchema' => strlen(self::compact($definition['outputSchema'] ?? [])),
+            ];
+        }
+
+        usort($measured, static fn(array $a, array $b): int => $b['outputSchema'] <=> $a['outputSchema']);
+
+        return $measured;
+    }
+
+    /**
+     * A value as a client hands it to the model: compact, the slashes and the
+     * unicode as they stand, which is what `JSON.stringify` produces. mcp/sdk
+     * escapes both on the wire, and the client decodes that before anything
+     * reads it. So the wire is not the number that costs.
+     *
+     * @param array<string, mixed> $value
+     */
+    public static function compact(array $value): string
+    {
+        return (string) json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * Every page as it would come out now, keyed by its file.
      *
      * The recorded half carries over as it stands. It came out of an

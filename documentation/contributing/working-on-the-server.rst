@@ -70,8 +70,10 @@ trim starts at the top of a list rather than at whichever tool somebody noticed.
 It calls nothing and fails on nothing. A long answer can be the right one, and a
 split of a tool in two would answer a counter that failed.
 
-Which half a client hands the model is the client's. ``bin/cli tools:tokens``
-measures it in Claude Code: it runs ``claude -p`` three times through
+Which half a client hands the model is the client's, and ``D-EVI-011`` measured
+two. Claude Code hands over the data and drops the text. opencode hands over the
+text. Neither hands over the output schema. ``bin/cli tools:tokens`` measures it
+again in Claude Code: it runs ``claude -p`` three times through
 ``bin/cli tools:proxy``, which relays the server with ``structuredContent`` or
 ``outputSchema`` taken away, and reads what the ``tool_result`` carried and what
 it cost off the trace. It costs money and half a minute, and it needs ``claude``

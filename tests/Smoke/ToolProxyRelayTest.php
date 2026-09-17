@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Tests\Smoke;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Paths;
+use TYPO3\DevCompanion\Tests\Support\Decision;
 
 /**
  * Drives `bin/cli tools:proxy` the way a client does: a subprocess that
@@ -14,6 +15,7 @@ use TYPO3\DevCompanion\Paths;
  * comes back is the server's answer with the named half gone, and the
  * handshake as the server gave it.
  */
+#[Decision('D-EVI-011')]
 final class ToolProxyRelayTest extends TestCase
 {
     #[Test]

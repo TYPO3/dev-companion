@@ -6,6 +6,7 @@ namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Upkeep\Command\ToolProxy;
 
 /**
@@ -15,6 +16,7 @@ use TYPO3\DevCompanion\Upkeep\Command\ToolProxy;
  * The relay itself is a subprocess with two pipes, and `tests/Smoke/` drives
  * that. This holds the rewrite, which is the half a measurement rests on.
  */
+#[Decision('D-EVI-011')]
 final class ToolProxyTest extends TestCase
 {
     #[Test]

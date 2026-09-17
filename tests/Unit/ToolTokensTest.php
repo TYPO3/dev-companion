@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\BufferedOutput;
 use TYPO3\DevCompanion\Process\CommandRunner;
+use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Upkeep\Command\ToolTokens;
 
 /**
@@ -15,6 +16,7 @@ use TYPO3\DevCompanion\Upkeep\Command\ToolTokens;
  * `claude -p --output-format stream-json` writes. The run itself costs money
  * and needs the client, so nothing here starts one — `R-COD-003`.
  */
+#[Decision('D-EVI-011')]
 final class ToolTokensTest extends TestCase
 {
     /**

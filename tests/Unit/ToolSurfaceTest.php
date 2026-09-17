@@ -126,6 +126,7 @@ final class ToolSurfaceTest extends TestCase
      * The data half counts as the compact JSON a client hands the model, so
      * it is below what the pretty-printed record weighs — `D-EVI-011`.
      */
+    #[Decision('D-EVI-011')]
     #[Test]
     public function whatAToolAnswersWithIsCountedInBothHalves(): void
     {
@@ -165,6 +166,7 @@ final class ToolSurfaceTest extends TestCase
      * it is the larger one on `tools/list` and reaches no model in either
      * client read — `D-EVI-011`.
      */
+    #[Decision('D-EVI-011')]
     #[Test]
     public function whatAToolDeclaresIsCountedInBothHalves(): void
     {
@@ -188,6 +190,7 @@ final class ToolSurfaceTest extends TestCase
      * wire is decoded again before a client hands anything over, so a count
      * that kept the escapes would count what no model reads.
      */
+    #[Decision('D-EVI-011')]
     #[Test]
     public function theCompactFormIsWhatAClientHandsTheModel(): void
     {

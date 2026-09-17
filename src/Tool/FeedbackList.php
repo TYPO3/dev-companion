@@ -56,15 +56,15 @@ final class FeedbackList extends ReadOnlyTool
                 'tool' => Schema::string('The tools the feedback is about, comma-separated. Empty when it names none.'),
                 'tools' => Schema::listOf(Schema::string(), 'The same names as a list, to filter or group by without a parse.'),
                 'title' => Schema::string(),
-                'closedBy' => [
-                    'type' => ['object', 'null'],
+                'closedBy' => Schema::nullable([
+                    'type' => 'object',
                     'description' => 'The commit that worked the feedback off. Null while the feedback is open.',
                     'properties' => [
                         'commit' => Schema::string(),
                         'date' => Schema::string(),
                         'subject' => Schema::string('The commit subject: what came of the feedback.'),
                     ],
-                ],
+                ]),
             ], ['file', 'date', 'category', 'status', 'model', 'tool', 'tools', 'title', 'closedBy'])),
         ], ['count', 'notes']);
     }

@@ -61,21 +61,21 @@ final class SchemaLookup extends ReadOnlyTool
                 'type' => Schema::string('The Doctrine type the core declares it as: integer, string, text, datetime, json, blob.'),
                 'notnull' => ['type' => 'boolean'],
                 'default' => ['description' => 'The default the core gives it, null where it declares none.'],
-                'length' => ['type' => ['integer', 'null'], 'description' => 'Length where the type carries one.'],
+                'length' => Schema::nullable(['type' => 'integer', 'description' => 'Length where the type carries one.']),
             ], ['name', 'type', 'notnull']), 'Empty where the call named no table.'),
             'tables' => Schema::listOf(Schema::object([
                 'table' => Schema::string(),
                 'columnCount' => Schema::integer(),
                 'relationTable' => ['type' => 'boolean', 'description' => 'True where TYPO3 creates the table itself for an MM relation. No ext_tables.sql declares one at all.'],
             ], ['table', 'columnCount', 'relationTable']), 'Every table TYPO3 derives columns for. Returned on a call that named none, and on one whose name is not among them.'),
-            'actual' => ['type' => ['object', 'null']] + Schema::object([
+            'actual' => Schema::nullable(Schema::object([
                 'present' => ['type' => 'boolean', 'description' => 'Whether the database has the table at all.'],
                 'columns' => Schema::listOf(Schema::object([
                     'name' => Schema::string(),
                     'type' => Schema::string('The Doctrine type the column has, read from the connection.'),
                     'notnull' => ['type' => 'boolean'],
                     'default' => ['description' => 'The default the column carries, null where it has none.'],
-                    'length' => ['type' => ['integer', 'null'], 'description' => 'Length where the type carries one.'],
+                    'length' => Schema::nullable(['type' => 'integer', 'description' => 'Length where the type carries one.']),
                 ], ['name', 'type', 'notnull'])),
                 'indexes' => Schema::listOf(Schema::object([
                     'name' => Schema::string(),
@@ -83,12 +83,12 @@ final class SchemaLookup extends ReadOnlyTool
                     'unique' => ['type' => 'boolean'],
                     'primary' => ['type' => 'boolean'],
                 ], ['name', 'columns', 'unique', 'primary'])),
-            ], ['present', 'columns', 'indexes'], 'What the database has for the named table, read from the connection that table maps to. Null where the call named no table, or where the tool could not read the schema. That is a project that is down, or an installation whose tables nobody created.'),
-            'updates' => ['type' => ['array', 'null']] + Schema::listOf(Schema::object([
+            ], ['present', 'columns', 'indexes'], 'What the database has for the named table, read from the connection that table maps to. Null where the call named no table, or where the tool could not read the schema. That is a project that is down, or an installation whose tables nobody created.')),
+            'updates' => Schema::nullable(Schema::listOf(Schema::object([
                 'connection' => Schema::string('The TYPO3 database connection the change is on.'),
                 'change' => Schema::string('The change type in TYPO3\'s own vocabulary — create_table, add, change, change_currentValue, drop, drop_table, change_table — which is also the argument `typo3 database:updateschema` takes.'),
                 'tables' => Schema::listOf(Schema::string(), 'The tables that change names.'),
-            ], ['connection', 'change', 'tables']), 'What TYPO3 would change to make the database match the schema its active extensions and its TCA declare. Empty where the two match, and null where the tool could not read a schema. Where the call named a table, only that table\'s changes are here.'),
+            ], ['connection', 'change', 'tables']), 'What TYPO3 would change to make the database match the schema its active extensions and its TCA declare. Empty where the two match, and null where the tool could not read a schema. Where the call named a table, only that table\'s changes are here.')),
         ], ['table', 'matchCount', 'answeredBy', 'columns', 'tables', 'actual', 'updates'], ['table']);
     }
 

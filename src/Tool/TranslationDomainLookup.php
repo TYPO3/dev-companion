@@ -66,7 +66,7 @@ final class TranslationDomainLookup extends ReadOnlyTool
     {
         return Schema::object([
             'path' => Schema::string('The XLF path the domain comes from.'),
-            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the answer is for, stated by the caller or read from the installation. Null means neither said, and the domain comes back unqualified: it is the form from ' . self::SINCE . ' onwards, and nothing placed this call on a version.'],
+            'targetVersion' => Schema::nullable(['type' => 'integer', 'description' => 'The TYPO3 major the answer is for, stated by the caller or read from the installation. Null means neither said, and the domain comes back unqualified: it is the form from ' . self::SINCE . ' onwards, and nothing placed this call on a version.']),
             'domain' => Schema::nullableString('The translation domain it resolves to. Null when the path names no extension, and also when the version the answer is for is too old to resolve domains at all. There the full LLL:EXT: reference is the answer.'),
             'domainOnNewerVersions' => Schema::nullableString('Set only in that second case: what the domain would be on a version that has them. It is not usable on this installation.'),
             'moduleImport' => Schema::nullableString('The specifier a backend JavaScript module imports the same domain under: import labels from \'~labels/<domain>\', read with labels.get(). Returned where the answer carries a domain, and absent where it carries none. The import map prefix arrived with the domains themselves, so there is nothing to write on a version below them.'),

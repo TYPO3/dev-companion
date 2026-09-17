@@ -178,8 +178,8 @@ final class ForgeLookup extends ReadOnlyTool
                 'id' => Schema::integer('The tracker\'s own user id, which is what it filters by and the only thing it takes. Zero where the name resolved to nobody.'),
                 'candidates' => Schema::listOf(Schema::string(), 'The people the name could have meant, where it reached more than one. A name that reaches two resolves to neither and the tool reads nothing. Two people merged into one backlog is a wrong answer nothing says is wrong. Ask again with one of these. Empty where the name resolved, and where nothing here carries it. That is a name this server cannot place rather than a person who has filed nothing.'),
             ], ['filter', 'asked', 'name', 'id', 'candidates']), 'What reportedBy, assignedTo and involving resolved to, one entry per name the call carried, in that order. The tool resolves a name against the core project\'s members. Where they hold no membership, it resolves it against the reporters and assignees of the issues that carry the name. Empty where the call passed no name.'),
-            'breakdown' => [
-                'type' => ['object', 'null'],
+            'breakdown' => Schema::nullable([
+                'type' => 'object',
                 'description' => 'How the matched set spreads, where breakdown is true. Null otherwise, and null where nothing matched.',
                 'properties' => [
                     'read' => Schema::integer('How many issues the counts are over. Equal to total where the read covered the whole set.'),
@@ -195,9 +195,9 @@ final class ForgeLookup extends ReadOnlyTool
                     ], ['dimension', 'buckets', 'withheldBuckets', 'withheldCount']), 'One entry per dimension, always the four.'),
                 ],
                 'required' => ['read', 'complete', 'counts'],
-            ],
-            'issue' => [
-                'type' => ['object', 'null'],
+            ]),
+            'issue' => Schema::nullable([
+                'type' => 'object',
                 'description' => 'The issue, where status says answered and the call named a number. Null otherwise.',
                 'properties' => [
                     'id' => Schema::integer(),
@@ -233,7 +233,7 @@ final class ForgeLookup extends ReadOnlyTool
                     ], ['author', 'on', 'note']), 'The most recent comments, oldest first. A closure, a reassignment and a "we will not do this" are here rather than in the description.'),
                 ],
                 'required' => ['id', 'subject', 'status', 'tracker', 'priority', 'assignedTo', 'targetVersion', 'typo3Version', 'phpVersion', 'createdOn', 'updatedOn', 'url', 'description', 'relations', 'mentioned', 'attachments', 'reviews', 'cites', 'noteCount', 'botNoteCount', 'notes'],
-            ],
+            ]),
             'results' => Schema::listOf(Schema::object([
                 'issue' => Schema::integer('The issue number, which is what this tool reads whole.'),
                 'subject' => Schema::string(),

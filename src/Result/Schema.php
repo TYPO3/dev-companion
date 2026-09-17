@@ -67,9 +67,9 @@ final class Schema
                     . 'without a reinstall.',
             ],
             'reason' => self::string('What stopped it, in the words the attempt produced.'),
-            'repositoryState' => [
-                'type' => ['string', 'null'],
-                'enum' => ['installed', 'not-installed', 'undeclared', null],
+            'repositoryState' => self::nullable([
+                'type' => 'string',
+                'enum' => ['installed', 'not-installed', 'undeclared'],
                 'description' => 'The state of the repository the caller stands in, which the cause does not say. '
                     . 'installed: packages sit below the root the discovery found, so the caller lacks no '
                     . 'install. not-installed: the repository declares TYPO3 and has no packages below it yet, so '
@@ -77,7 +77,7 @@ final class Schema
                     . 'the discovery walked declares TYPO3, so an install here answers nothing. Null where the '
                     . 'discovery looked at nothing: a named root the server could not use, or an entrypoint that '
                     . 'handed no directory in.',
-            ],
+            ]),
             'diagnosis' => self::string('What the reason means where the message alone does not say it. A console that starts and then fails on a missing table has a database without a schema, not a broken installation. Empty where the server knows nothing beyond the reason.'),
             'searched' => self::listOf(self::string(), 'Every directory the discovery walked, in order. "Nothing found" and "the server started somewhere else" read the same, and only this list tells them apart. Empty where the discovery never ran.'),
             'misconfiguration' => self::nullableString('The setting the server could not use. Null where the caller set nothing.'),
@@ -112,8 +112,8 @@ final class Schema
             $meanings[] = $cause . ': ' . $meaning;
         }
 
-        return [
-            'type' => ['object', 'null'],
+        return self::nullable([
+            'type' => 'object',
             'description' => $description !== ''
                 ? $description
                 : 'Why the source answered nothing, where status says unavailable. Null otherwise.',
@@ -126,7 +126,7 @@ final class Schema
                 'reason' => self::string(),
             ],
             'required' => ['cause', 'reason'],
-        ];
+        ]);
     }
 
     /**
@@ -259,9 +259,9 @@ final class Schema
      */
     public static function obliges(string $subject): array
     {
-        return [
-            'type' => ['string', 'null'],
-            'enum' => ['core', 'project', 'extension', null],
+        return self::nullable([
+            'type' => 'string',
+            'enum' => ['core', 'project', 'extension'],
             'description' => sprintf(
                 'Which kind of work %s obliges. "core" means a condition of a patch to the TYPO3 core and a '
                 . 'convention anywhere else. The backend\'s own design system, the changelog artifact and the paths '
@@ -271,7 +271,7 @@ final class Schema
                 . 'API that throws throws in a sitepackage too.',
                 $subject,
             ),
-        ];
+        ]);
     }
 
     /** @return array<string, mixed> */
@@ -284,8 +284,8 @@ final class Schema
             'scope' => self::obliges('the whole hint'),
             'hints' => self::listOf(self::object([
                 'text' => self::string('The statement itself. It reads the same on every version it holds for; the range is beside it, never inside it.'),
-                'since' => ['type' => ['integer', 'null'], 'description' => 'First TYPO3 major this holds on. Null means as far back as this knowledge base reaches.'],
-                'until' => ['type' => ['integer', 'null'], 'description' => 'Last TYPO3 major this holds on. Null means it still holds.'],
+                'since' => self::nullable(['type' => 'integer', 'description' => 'First TYPO3 major this holds on. Null means as far back as this knowledge base reaches.']),
+                'until' => self::nullable(['type' => 'integer', 'description' => 'Last TYPO3 major this holds on. Null means it still holds.']),
                 'versions' => self::string('The same range as a sentence, empty when the statement binds to no version.'),
                 'scope' => self::obliges('this statement'),
             ], ['text', 'since', 'until', 'versions', 'scope'])),
@@ -463,8 +463,8 @@ final class Schema
     public static function verifiedOn(): array
     {
         return [
-            'since' => ['type' => ['integer', 'null'], 'description' => 'The first TYPO3 major this entry holds on, or null when it holds on every covered version.'],
-            'until' => ['type' => ['integer', 'null'], 'description' => 'The last TYPO3 major this entry holds on, or null when nothing has replaced it.'],
+            'since' => self::nullable(['type' => 'integer', 'description' => 'The first TYPO3 major this entry holds on, or null when it holds on every covered version.']),
+            'until' => self::nullable(['type' => 'integer', 'description' => 'The last TYPO3 major this entry holds on, or null when nothing has replaced it.']),
             'verifiedOn' => self::string('The same range as a sentence, empty when the entry holds on every covered version.'),
         ];
     }
@@ -539,12 +539,26 @@ final class Schema
     /** @return array<string, mixed> */
     public static function nullableString(string $description = ''): array
     {
-        $schema = ['type' => ['string', 'null']];
-        if ($description !== '') {
-            $schema['description'] = $description;
+        return self::nullable(self::string($description));
+    }
+
+    /**
+     * The schema, or null. Two `anyOf` branches, because several MCP clients
+     * read `type` as one string and refuse or drop a list there — `D-ANS-160`.
+     * The description stands beside the branches, where it describes both.
+     *
+     * @param array<string, mixed> $schema
+     * @return array<string, mixed>
+     */
+    public static function nullable(array $schema): array
+    {
+        $nullable = [];
+        if (isset($schema['description'])) {
+            $nullable['description'] = $schema['description'];
+            unset($schema['description']);
         }
 
-        return $schema;
+        return $nullable + ['anyOf' => [$schema, ['type' => 'null']]];
     }
 
     /** @return array<string, mixed> */

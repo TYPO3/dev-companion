@@ -51,7 +51,7 @@ final class SnapshotScope extends ReadOnlyTool
             'verifyCommand' => Schema::string(),
             'scope' => Schema::object([], [], 'One entry per catalog that says what it contains.'),
             'counts' => Schema::object([], [], 'One entry per catalog with its number of entries.'),
-            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the coverage report is for, stated by the caller or read from the installation. Null means the whole catalog answers.'],
+            'targetVersion' => Schema::nullable(['type' => 'integer', 'description' => 'The TYPO3 major the coverage report is for, stated by the caller or read from the installation. Null means the whole catalog answers.']),
             'verifiedCount' => Schema::integer('How many components somebody verified on that version.'),
             'componentSource' => ['type' => 'string', 'enum' => ['installation', 'catalog']],
             'withheld' => Schema::withheldComponents(),

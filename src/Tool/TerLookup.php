@@ -87,10 +87,10 @@ final class TerLookup extends ReadOnlyTool
             'page' => Schema::string('Where a person reads the extension\'s own page in the registry. Empty where the key is not one the registry takes.'),
             'extension' => Schema::string('The key the call named, lowercased, as the call sent it.'),
             'extensionVersion' => Schema::string('The version number the call asked about, as the call passed it. Empty where it passed none.'),
-            'held' => [
-                'type' => ['boolean', 'null'],
+            'held' => Schema::nullable([
+                'type' => 'boolean',
                 'description' => 'Whether the registry has published that exact number. Null where the call named no version, and null where the call read nothing at all. A false here is the registry\'s answer, never a question that failed. It is a fact about the registry and not a judgement that the number is free to release.',
-            ],
+            ]),
             'total' => Schema::integer('How many versions the registry holds under the key in total, of which versions carries at most limit. Zero where it holds none.'),
             'versions' => Schema::listOf(Schema::object([
                 'number' => Schema::string('The version as the registry has it.'),

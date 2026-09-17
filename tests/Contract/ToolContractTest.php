@@ -159,8 +159,8 @@ final class ToolContractTest extends TestCase
      * declared in a second tool is also that entry's third **Wrong if**. So a
      * session that means to try one deletes this case and says so.
      *
-     * Output schemas are not held here, because every union in them is
-     * `[X, "null"]` rather than an alternative a caller has to produce.
+     * Output schemas are not held here, because every union in them is a
+     * nullable field rather than an alternative a caller has to produce.
      */
     #[Decision('D-ANS-017')]
     #[Test]
@@ -169,14 +169,55 @@ final class ToolContractTest extends TestCase
         $unions = [];
         foreach (Registry::definitions() as $definition) {
             foreach ($definition['inputSchema']['properties'] ?? [] as $argument => $schema) {
-                if (is_array($schema['type'] ?? null)) {
-                    $unions[] = $definition['name'] . ' /' . $argument
-                        . ' => [' . implode(', ', $schema['type']) . ']';
+                if (is_array($schema['type'] ?? null) || isset($schema['anyOf'])) {
+                    $unions[] = $definition['name'] . ' /' . $argument;
                 }
             }
         }
 
         self::assertSame([], $unions, 'an argument a client has to produce declares two types');
+    }
+
+    /**
+     * No `type` in either schema is a list, however deep it sits.
+     *
+     * A field that may be null is two `anyOf` branches, which is what
+     * `Schema::nullable()` writes. The list is legal JSON Schema, and several
+     * MCP clients read `type` as one string and refuse the tool or drop the
+     * constraint over it — `D-ANS-160`.
+     */
+    #[Decision('D-ANS-160')]
+    #[Test]
+    public function noSchemaDeclaresTypeAsAList(): void
+    {
+        $lists = [];
+        foreach (Registry::definitions() as $definition) {
+            foreach (['inputSchema', 'outputSchema'] as $side) {
+                array_push($lists, ...self::typeLists($definition[$side], $definition['name'] . ' ' . $side));
+            }
+        }
+
+        self::assertSame([], $lists, 'a schema declares type as a list, which a client may read as one string');
+    }
+
+    /**
+     * Every `type` below the schema that is a list, by its path. A property
+     * named `type` is an object, and stays out.
+     *
+     * @param array<string, mixed> $schema
+     * @return list<string>
+     */
+    private static function typeLists(array $schema, string $path): array
+    {
+        $type = $schema['type'] ?? null;
+        $found = is_array($type) && array_is_list($type) ? [$path . ' => [' . implode(', ', $type) . ']'] : [];
+        foreach ($schema as $key => $value) {
+            if (is_array($value)) {
+                array_push($found, ...self::typeLists($value, $path . '.' . $key));
+            }
+        }
+
+        return $found;
     }
 
     #[Test]

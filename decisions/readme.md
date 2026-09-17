@@ -94,6 +94,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-160`][D-ANS-160] — A nullable field is two anyOf branches · 2026-09-17
 - [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15
 - [`D-ANS-156`][D-ANS-156] — A change read by name lists the changes its messages name · 2026-09-15
 - [`D-ANS-157`][D-ANS-157] — A manual page is read as the Markdown the host publishes beside it · 2026-09-15
@@ -249,6 +250,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-160]: answers/ans-160-a-nullable-field-is-two-anyof-branches.md
 [D-ANS-155]: answers/ans-155-a-read-on-a-php-without-curl-names-the-extension.md
 [D-ANS-156]: answers/ans-156-a-change-read-by-name-lists-the-changes-its-messages-name.md
 [D-ANS-157]: answers/ans-157-a-manual-page-is-read-as-the-markdown-the-host-publishes-beside-it.md

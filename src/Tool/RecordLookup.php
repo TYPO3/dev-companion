@@ -71,7 +71,7 @@ final class RecordLookup extends ReadOnlyTool
                 'where' => [
                     'type' => 'object',
                     'description' => 'Exact values to narrow by, one per column: {"pid": 2, "status": "adopted"}. You can name every column of the table, pid and uid among them. A column the table does not have gets an answer that says so rather than an empty result. Exact equality only — there is no operator, no wildcard and no range, which is what keeps this a lookup rather than a query language.',
-                    'additionalProperties' => ['type' => ['string', 'number', 'boolean']],
+                    'additionalProperties' => ['anyOf' => [['type' => 'string'], ['type' => 'number'], ['type' => 'boolean']]],
                 ],
                 'count' => ['type' => 'boolean', 'description' => 'True to answer with the numbers alone and read no row. Use it where the question is how much is in there rather than what.', 'default' => false],
                 'groupBy' => ['type' => 'string', 'description' => 'One column to count per distinct value of, for example "CType", "header_layout" or "status". The answer then carries one line per value with how many rows carry it. That is the distribution a call per value asks thirteen times for. It also carries the column\'s TCA default and the uid and pid of the rows that depart from it, capped. That says whether a value is the site\'s convention or its one exception. Combines with where, which narrows the count. A column the table does not have gets an answer that says so.'],
@@ -95,12 +95,12 @@ final class RecordLookup extends ReadOnlyTool
                 'column' => Schema::string(),
                 'value' => ['description' => 'The value the column matched against, exactly as the call passed it.'],
             ], ['column', 'value']), 'The filter the read ran under, echoed so a count reported onwards carries what it counted. A list rather than a map keyed by column, because an empty map is [] in JSON and a schema that says object refuses it. A client reads one shape either way. Empty where the read covered the whole table.'),
-            'counts' => ['type' => ['object', 'null']] + Schema::object([
+            'counts' => Schema::nullable(Schema::object([
                 'total' => Schema::integer('Every row that matches, whatever state it is in.'),
                 'live' => Schema::integer('Rows that are neither hidden nor deleted.'),
                 'hidden' => Schema::integer('Rows the disable field hides. Zero where the table declares no such field.'),
                 'deleted' => Schema::integer('Rows the delete field marks. They are still in the table until the garbage collection runs.'),
-            ], ['total', 'live', 'hidden', 'deleted'], 'Null where the call read no table.'),
+            ], ['total', 'live', 'hidden', 'deleted'], 'Null where the call read no table.')),
             'groups' => Schema::listOf(Schema::object([
                 'value' => ['description' => 'The value of the grouped column, as the database stores it. Null is a row that has none, which on a select column is the empty string rather than null.'],
                 'total' => Schema::integer('Rows with that value, deleted and hidden included.'),

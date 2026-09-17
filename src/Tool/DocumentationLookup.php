@@ -108,14 +108,14 @@ final class DocumentationLookup extends ReadOnlyTool
                 'section' => Schema::string('The heading that answered, where the question reached the page through one; then the URL carries its anchor. Otherwise the page title.'),
                 'excerpt' => Schema::string('Short route into the source, empty only when the tool could not read the result page after its index matched.'),
                 'content' => Schema::string('The selected page as text in page mode; empty in search mode.'),
-                'coverage' => [
-                    'type' => ['number', 'null'],
+                'coverage' => Schema::nullable([
+                    'type' => 'number',
                     'description' => 'Share of the query\'s weight this page carries, 0 to 1, for the query it '
                         . 'answers. Below 0.5 the page carries some words of the question and not its subject, '
                         . 'and the answer says so above the results. The page comes back anyway. Over a table of '
                         . 'contents the page that answers a three-word question covers about a third of it. Null in '
                         . 'page mode, where the call searched for nothing.',
-                ],
+                ]),
                 'matched' => Schema::listOf(Schema::object([
                     'term' => Schema::string('The query word, reduced to the stem the search used.'),
                     'field' => ['type' => 'string', 'enum' => ['title', 'path', 'manual', 'section'], 'description' => 'Where the word matched: the page title, the section path it sits in, the name of the manual, or a heading of the page.'],

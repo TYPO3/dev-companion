@@ -98,7 +98,7 @@ final class ExtensionDescribe extends ReadOnlyTool
         return Schema::installationAnswer([
             'key' => Schema::string('The extension key the call named.'),
             'path' => Schema::nullableString('Absolute path of the extension. Null when the installation does not have it.'),
-            'origin' => ['type' => ['string', 'null'], 'enum' => ['system', 'project', 'third-party', 'fixture', null], 'description' => 'system: TYPO3\'s own. project: inside the repository. third-party: installed as a dependency. fixture: below a Tests/ directory, so it belongs to the test setup.'],
+            'origin' => Schema::nullable(['type' => 'string', 'enum' => ['system', 'project', 'third-party', 'fixture'], 'description' => 'system: TYPO3\'s own. project: inside the repository. third-party: installed as a dependency. fixture: below a Tests/ directory, so it belongs to the test setup.']),
             'composerName' => Schema::nullableString('The Composer package name it declares.'),
             'description' => Schema::nullableString('What its composer.json says it is.'),
             'requires' => Schema::listOf(Schema::object([

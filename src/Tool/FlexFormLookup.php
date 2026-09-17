@@ -75,7 +75,7 @@ final class FlexFormLookup extends ReadOnlyTool
             'field' => Schema::string('The column asked about.'),
             'resolved' => ['type' => 'boolean', 'description' => 'Whether the installation resolved the column to a data structure. False means the answer is the failure or the declaration beside it, never that the column has none.'],
             'identifier' => Schema::string('The data structure identifier as TYPO3 produced it: the JSON string that resolves to this structure without the record again. Empty where nothing resolved.'),
-            'decoded' => ['type' => ['object', 'null'], 'description' => 'The same identifier as an object. The default carries type, tableName, fieldName and dataStructureKey; a listener may return another shape entirely.'],
+            'decoded' => Schema::nullable(['type' => 'object', 'description' => 'The same identifier as an object. The default carries type, tableName, fieldName and dataStructureKey; a listener may return another shape entirely.']),
             'sheets' => Schema::listOf(Schema::object([
                 'sheet' => Schema::string('The sheet key the values sit under. A structure that declares no sheets gets sDEF here, which the parse adds.'),
                 'title' => Schema::string(),

@@ -179,14 +179,14 @@ final class GerritLookup extends ReadOnlyTool
                 'number' => Schema::integer('Change number, the digits its review URL ends with.'),
                 'changeId' => Schema::string('The Change-Id its commit message carries, empty where the server named none. It survives an amend and a rebase onto another branch, so it is what to hold the commit in front of you against. Changes that share one are the same patch on more than one branch, and change with this id reads all of them.'),
                 'subject' => Schema::string(),
-                'message' => [
-                    'type' => ['string', 'null'],
+                'message' => Schema::nullable([
+                    'type' => 'string',
                     'description' => 'The commit message of the current patch set, whole: the subject, the body and every '
                         . 'trailer. It is the change\'s own account of itself and what typo3_commit_message_guide '
                         . 'takes as its argument. A caller with the subject alone cannot check a trailer. '
                         . 'Null means the call did not read it, which is a search by words or by path. An issue search reads '
                         . 'it to decide which hits name the issue and answers null all the same.',
-                ],
+                ]),
                 'status' => Schema::string('NEW while it is open, MERGED once it landed, ABANDONED once somebody gave it up.'),
                 'branch' => Schema::string('The branch the change targets.'),
                 'patchSet' => Schema::integer('The patch set that is current on the server, counted from 1. Zero where the server named none.'),
@@ -194,15 +194,15 @@ final class GerritLookup extends ReadOnlyTool
                 'project' => Schema::string('The Gerrit project the push went to.'),
                 'updated' => Schema::string('When the change last moved.'),
                 'created' => Schema::string('The push date, which says how long the change has waited. A change pushed years ago and touched last week is in work; one where the two dates are far apart is not.'),
-                'insertions' => [
-                    'type' => ['integer', 'null'],
+                'insertions' => Schema::nullable([
+                    'type' => 'integer',
                     'description' => 'Lines the current patch set adds. Null where the review server stated none. '
                         . 'With deletions this is the size a reviewer picks a change by. It is the diff of the '
                         . 'whole change rather than of what remains to read.',
-                ],
-                'deletions' => ['type' => ['integer', 'null'], 'description' => 'Lines the current patch set removes. Null where the review server stated none.'],
-                'files' => [
-                    'type' => ['array', 'null'],
+                ]),
+                'deletions' => Schema::nullable(['type' => 'integer', 'description' => 'Lines the current patch set removes. Null where the review server stated none.']),
+                'files' => Schema::nullable([
+                    'type' => 'array',
                     'description' => 'Every path the current patch set touches, sorted by path, with what the patch '
                         . 'does to each. It is the changed paths a review establishes first and the argument '
                         . 'typo3_hint_lookup and typo3_test_run_guide take, so you triage a change without a '
@@ -222,18 +222,18 @@ final class GerritLookup extends ReadOnlyTool
                         'insertions' => Schema::integer('Lines added in this file. Zero on a binary, where there are no lines to count.'),
                         'deletions' => Schema::integer('Lines removed in this file.'),
                         'binary' => ['type' => 'boolean', 'description' => 'Whether the file is binary, which is what makes the two zero counts beside it mean nothing. An image or a fixture archive is not an untouched file.'],
-                        'movedFrom' => ['type' => ['string', 'null'], 'description' => 'The path the rename or the copy took this file from, null on every other action.'],
+                        'movedFrom' => Schema::nullable(['type' => 'string', 'description' => 'The path the rename or the copy took this file from, null on every other action.']),
                     ], ['path', 'action', 'insertions', 'deletions', 'binary', 'movedFrom']),
-                ],
-                'mergeable' => [
-                    'type' => ['boolean', 'null'],
+                ]),
+                'mergeable' => Schema::nullable([
+                    'type' => 'boolean',
                     'description' => 'Whether the current patch set still merges into its target branch. It is the '
                         . 'review server\'s own last computation and not a merge run now. So false says to '
                         . 'expect a rebase and proves nothing. Null where it computed none, which is not "it '
                         . 'does not merge".',
-                ],
-                'conflicts' => [
-                    'type' => ['array', 'null'],
+                ]),
+                'conflicts' => Schema::nullable([
+                    'type' => 'array',
                     'description' => 'The files Gerrit reported git conflicts in at the creation of the current patch '
                         . 'set, so the markers sit in committed lines there. The patch is broken rather than '
                         . 'merely unreviewed, and nothing else in this answer says so. A change created with the '
@@ -242,9 +242,9 @@ final class GerritLookup extends ReadOnlyTool
                         . 'set carries none; a report on an earlier one is history and is not here. Null means the '
                         . 'call did not read the review log, which is a search and an enumeration.',
                     'items' => Schema::string(),
-                ],
-                'cherryPickOf' => [
-                    'type' => ['object', 'null'],
+                ]),
+                'cherryPickOf' => Schema::nullable([
+                    'type' => 'object',
                     'description' => 'The change and patch set this one is a cherry-pick of, null where somebody '
                         . 'pushed it rather than cherry-picked it. It is provenance and no alarm. Most '
                         . 'backports are cherry-picks and almost none of them conflicted, so conflicts beside '
@@ -255,10 +255,10 @@ final class GerritLookup extends ReadOnlyTool
                         'url' => Schema::string('Where a person reads that change.'),
                     ],
                     'required' => ['change', 'patchSet', 'url'],
-                ],
+                ]),
                 'url' => Schema::string('Where a person reads the review.'),
-                'fetch' => [
-                    'type' => ['object', 'null'],
+                'fetch' => Schema::nullable([
+                    'type' => 'object',
                     'description' => 'How to get this patch set into a checkout. Null where the server named no '
                         . 'patch set, since a ref names one.',
                     'properties' => [
@@ -266,24 +266,24 @@ final class GerritLookup extends ReadOnlyTool
                         'remote' => Schema::string('What to fetch that ref from. It is the review server rather than origin: a core clone fetches from the GitHub mirror, and refs/changes is not there.'),
                     ],
                     'required' => ['ref', 'remote'],
-                ],
-                'labels' => [
-                    'type' => ['array', 'null'],
+                ]),
+                'labels' => Schema::nullable([
+                    'type' => 'array',
                     'description' => 'What the change stands at, one entry per label. The state of each label is on '
                         . 'every row, since the review server states it unasked. The call reads the voters behind it '
                         . 'for one change, so votes is null on a search and a list there.',
                     'items' => Schema::object([
                         'label' => Schema::string('Code-Review and Verified are the two the core project votes with.'),
                         'state' => Schema::string('What the submit rule makes of this label. OK where the rule holds, NEED where it still wants a vote. REJECT where a vote blocks it, IMPOSSIBLE where no available vote could satisfy it. NEED is not "nobody has voted". A change at Code-Review+1 where the rule asks for +2 stands there too, and the votes beside it say which. The pair to tell apart is NEED against REJECT — a change that waits for a reviewer, and one somebody has already turned down. Empty where no rule names the label; where several rules name it, the most consequential of their states is here.'),
-                        'satisfied' => [
-                            'type' => ['boolean', 'null'],
+                        'satisfied' => Schema::nullable([
+                            'type' => 'boolean',
                             'description' => 'Whether the submit rule counts this label as met — the state beside it '
                                 . 'read as a boolean. False is the ordinary state of an open change, and null means '
                                 . 'no rule asks for it. The votes say what it stands at. The range is the '
                                 . 'project\'s own, and Verified runs to +2 here, so a +1 is not the top of it.',
-                        ],
-                        'votes' => [
-                            'type' => ['array', 'null'],
+                        ]),
+                        'votes' => Schema::nullable([
+                            'type' => 'array',
                             'description' => 'Everyone on the label, those with no vote included. Null where the call did '
                                 . 'not read the voters, which is every hit a search or an enumeration answers. A '
                                 . 'list with zeros in it means nobody has voted, a different answer. Pass the '
@@ -293,13 +293,13 @@ final class GerritLookup extends ReadOnlyTool
                                 'value' => Schema::integer('What this voter holds now. Zero is a reviewer somebody added and who has not voted. A vote a later patch set dropped is absent rather than zero, and only the review log says it was ever there.'),
                                 'on' => Schema::string('When the vote came in, empty where none did.'),
                             ], ['voter', 'value', 'on']),
-                        ],
+                        ]),
                     ], ['label', 'state', 'satisfied', 'votes']),
-                ],
+                ]),
                 'commentCount' => Schema::integer('How many comments the change carries, which the review server states whether or not the call read them.'),
                 'unresolvedCommentCount' => Schema::integer('How many of the threads those comments form are open, which the review server states whether or not the call read them. It counts threads and not comments, so it is smaller than the number of comments with the flag wherever somebody replied. It is the flag as each thread\'s last writer left it rather than a count of unanswered questions. On a change to pick up it is the work still owed to the last reviewer.'),
-                'comments' => [
-                    'type' => ['array', 'null'],
+                'comments' => Schema::nullable([
+                    'type' => 'array',
                     'description' => 'The comments on the change, oldest first, each with the thread it is in and '
                         . 'what that thread stands at. Empty means it carries none. Null means the call did not '
                         . 'read them. A search asks for none, and a change lookup whose comment call did not '
@@ -311,16 +311,16 @@ final class GerritLookup extends ReadOnlyTool
                         'on' => Schema::string(),
                         'patchSet' => Schema::integer('The patch set the comment sits on. One older than the current patch set is a comment about code that may since have changed. It is still open until somebody answers it.'),
                         'file' => Schema::string('The file it sits on. /PATCHSET_LEVEL is a comment on the change itself rather than on a place in it.'),
-                        'line' => ['type' => ['integer', 'null'], 'description' => 'Null on a comment about the change rather than about a line.'],
+                        'line' => Schema::nullable(['type' => 'integer', 'description' => 'Null on a comment about the change rather than about a line.']),
                         'unresolved' => ['type' => 'boolean', 'description' => 'The flag on this one comment, as its own writer left it. It is not what the thread stands at; that is threadUnresolved beside it. The two differ on every comment somebody resolved with a reply.'],
-                        'inReplyTo' => ['type' => ['string', 'null'], 'description' => 'The id of the comment this answers, null where it starts a thread.'],
+                        'inReplyTo' => Schema::nullable(['type' => 'string', 'description' => 'The id of the comment this answers, null where it starts a thread.']),
                         'thread' => Schema::string('The id of the comment this thread starts with, which is this comment\'s own id where it starts one. Comments with the same one are one thread, and they stand in the order their writers wrote them.'),
                         'threadUnresolved' => ['type' => 'boolean', 'description' => 'Whether the thread this comment sits in is open: the unresolved flag on that thread\'s last comment. Gerrit stores a thread\'s state there and counts the open ones as unresolvedCommentCount, so every comment in a thread carries the same value here. It is a flag somebody set rather than a judgement that the question has an answer.'],
                         'message' => Schema::string('The comment as its writer wrote it.'),
                     ], ['id', 'author', 'on', 'patchSet', 'file', 'line', 'unresolved', 'inReplyTo', 'thread', 'threadUnresolved', 'message']),
-                ],
-                'chain' => [
-                    'type' => ['array', 'null'],
+                ]),
+                'chain' => Schema::nullable([
+                    'type' => 'array',
                     'description' => 'The relation chain this change sits in, child first: the changes stacked on '
                         . 'it, then itself, then the changes under it. This is the other relation and not '
                         . 'the Change-Id one. A chain is different changes built on one another, and a shared '
@@ -341,9 +341,9 @@ final class GerritLookup extends ReadOnlyTool
                         'chainedAt' => Schema::integer('The patch set of the entry that the chain stands on. Lower than patchSet means the stack holds the older one and that change has moved on since. Act on the entry by its number rather than on the patch set named here.'),
                         'url' => Schema::string('Where a person reads that change.'),
                     ], ['number', 'status', 'subject', 'thisChange', 'patchSet', 'chainedAt', 'url']),
-                ],
-                'namedInMessages' => [
-                    'type' => ['array', 'null'],
+                ]),
+                'namedInMessages' => Schema::nullable([
+                    'type' => 'array',
                     'description' => 'The other changes the review log names, by number or by review URL, that are '
                         . 'neither this change, its chain nor its Change-Id siblings. An alternative an author '
                         . 'pushes as a separate change is stacked on nothing, so the chain is empty and a number '
@@ -356,9 +356,9 @@ final class GerritLookup extends ReadOnlyTool
                         'subject' => Schema::string('The commit subject of that change\'s current patch set.'),
                         'url' => Schema::string('Where a person reads that change.'),
                     ], ['number', 'status', 'subject', 'url']),
-                ],
-                'issues' => [
-                    'type' => ['array', 'null'],
+                ]),
+                'issues' => Schema::nullable([
+                    'type' => 'array',
                     'description' => 'The Forge issues this change\'s commit message names in its Resolves: and '
                         . 'Related: trailers, each filled with what says whether to read it. That is the join '
                         . 'between the patch and the tracker, and where a second issue nobody mentioned elsewhere '
@@ -368,9 +368,9 @@ final class GerritLookup extends ReadOnlyTool
                         self::trailerIssue(),
                         array_keys(self::trailerIssue()),
                     ),
-                ],
-                'releases' => [
-                    'type' => ['array', 'null'],
+                ]),
+                'releases' => Schema::nullable([
+                    'type' => 'array',
                     'description' => 'The branches this change\'s commit message names in its Releases: trailer, '
                         . 'spelled as the trailer spells them. It is the author\'s claim about which branches the '
                         . 'patch belongs on, written before it went to any of them. The pushed half is the changes '
@@ -379,9 +379,9 @@ final class GerritLookup extends ReadOnlyTool
                         . 'the message carries no such trailer, which every change outside the core project is. '
                         . 'Null means the call did not read the message, which is a search by words or path.',
                     'items' => Schema::string(),
-                ],
-                'messages' => [
-                    'type' => ['array', 'null'],
+                ]),
+                'messages' => Schema::nullable([
+                    'type' => 'array',
                     'description' => 'The review log, oldest first, where messages asked for it. Null otherwise, '
                         . 'which is the default and every hit a search answers.',
                     'items' => Schema::object([
@@ -391,17 +391,17 @@ final class GerritLookup extends ReadOnlyTool
                         'bot' => ['type' => 'boolean', 'description' => 'Whether a service user wrote it, read off the account rather than off its name. On the core project that is the CI with a pipeline report.'],
                         'message' => Schema::string('The message as it stands. The upload of a patch set carries the votes it dropped and the copy condition that dropped them, and nothing else writes that down.'),
                     ], ['author', 'on', 'patchSet', 'bot', 'message']),
-                ],
-                'botMessageCount' => [
-                    'type' => ['integer', 'null'],
+                ]),
+                'botMessageCount' => Schema::nullable([
+                    'type' => 'integer',
                     'description' => 'How many of the log a service user wrote, which messages: "people" is what '
                         . 'drops. Answered whichever value messages has. A log full of pipeline reports that answers '
                         . 'zero here means Gerrit no longer tags its service users. It does not mean a change '
                         . 'no bot has been near. Null where the call did not read the log.',
-                ],
+                ]),
             ]), 'The changes that matched, newest activity first — oldest or longest untouched first where backlog asked for an enumeration. A change named by change or commit comes with the changes that share its Change-Id. That is how you reach a backport on a release branch.'),
-            'backlog' => [
-                'type' => ['object', 'null'],
+            'backlog' => Schema::nullable([
+                'type' => 'object',
                 'description' => 'What the enumeration read, where backlog asked for one; null on every other way '
                     . 'in. The review server states no total for a query and offers no created date to sort by. '
                     . 'So this server reads the matched set whole and orders it, which is what these two numbers '
@@ -412,7 +412,7 @@ final class GerritLookup extends ReadOnlyTool
                     'complete' => ['type' => 'boolean', 'description' => 'Whether read is the whole matched set. False where the read stopped at the bound, and then the order covers one end of the set rather than all of it. Narrow the filters before you read the page as the oldest changes there are.'],
                 ],
                 'required' => ['order', 'read', 'complete'],
-            ],
+            ]),
             'releaseLines' => Schema::object([
                 'branches' => Schema::listOf(Schema::object([
                     'branch' => Schema::string('The branch, spelled as a Releases: trailer spells it and as the branch field of a change above does.'),
@@ -440,13 +440,13 @@ final class GerritLookup extends ReadOnlyTool
             // two answers apart. One with nothing to qualify, and one from a
             // server too old to qualify anything. This field exists precisely
             // because one level down that distinction went wrong.
-            'indistinguishable' => [
-                'type' => ['string', 'null'],
+            'indistinguishable' => Schema::nullable([
+                'type' => 'string',
                 'description' => 'Why an empty answer does not mean an absence, or null where it does. This '
                     . 'server reads the review server without credentials. So a change that is private or work in '
                     . 'progress is invisible to it and looks exactly like one nobody pushed. Null means empty '
                     . 'really does mean nothing matched.',
-            ],
+            ]),
         ], ['status', 'source', 'query', 'changes', 'backlog', 'releaseLines', 'unavailable', 'indistinguishable']);
     }
 

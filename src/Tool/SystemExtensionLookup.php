@@ -50,14 +50,14 @@ final class SystemExtensionLookup extends ReadOnlyTool
     {
         return Schema::object([
             'query' => Schema::string(),
-            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the answer is for, stated by the caller or read from the installation. Null means every covered version is in the answer and each entry carries its own range.'],
+            'targetVersion' => Schema::nullable(['type' => 'integer', 'description' => 'The TYPO3 major the answer is for, stated by the caller or read from the installation. Null means every covered version is in the answer and each entry carries its own range.']),
             'matchCount' => Schema::integer('How many system extensions matched. Zero means the name is not one of them on the versions asked about, not that no such package exists.'),
             'extensions' => Schema::listOf(Schema::object([
                 'key' => Schema::string('The extension key, which is the name of the directory below typo3/sysext.'),
                 'package' => Schema::string('The Composer package name to require it by, where an installation does not have it already.'),
                 'description' => Schema::string('What it is for.'),
-                'since' => ['type' => ['integer', 'null'], 'description' => 'First covered major that ships it. Null means every covered major does.'],
-                'until' => ['type' => ['integer', 'null'], 'description' => 'Last covered major that ships it. Null means it is still shipped on the newest one.'],
+                'since' => Schema::nullable(['type' => 'integer', 'description' => 'First covered major that ships it. Null means every covered major does.']),
+                'until' => Schema::nullable(['type' => 'integer', 'description' => 'Last covered major that ships it. Null means it is still shipped on the newest one.']),
                 'shippedOn' => Schema::string('The range in words, empty when the core ships it everywhere this knowledge base reaches.'),
             ], ['key', 'package', 'description', 'since', 'until', 'shippedOn'])),
             'coveredVersions' => Schema::listOf(Schema::integer(), 'The TYPO3 majors this answer derives from.'),

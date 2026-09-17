@@ -50,7 +50,7 @@ final class ComponentLookup extends ReadOnlyTool
     {
         return Schema::object([
             'query' => Schema::nullableString(),
-            'targetVersion' => ['type' => ['integer', 'null'], 'description' => 'The TYPO3 major the answer is for, stated by the caller or read from the installation. Null means the answer withheld nothing and every entry carries the versions somebody verified it on.'],
+            'targetVersion' => Schema::nullable(['type' => 'integer', 'description' => 'The TYPO3 major the answer is for, stated by the caller or read from the installation. Null means the answer withheld nothing and every entry carries the versions somebody verified it on.']),
             'matchCount' => Schema::integer('How many components hold on the target version. Ones withheld for it are in withheld, not here.'),
             'components' => Schema::listOf(Schema::object([
                 'name' => Schema::string(),
@@ -80,7 +80,7 @@ final class ComponentLookup extends ReadOnlyTool
                 'class' => Schema::string('A class the query named outright.'),
                 'component' => Schema::string('The withheld entry it belongs to.'),
                 'title' => Schema::string(),
-                'position' => ['type' => ['string', 'null'], 'enum' => ['around', 'on', 'below', null], 'description' => 'Where the class sits relative to the component root on this version, read off the core stylesheet. around wraps it, on is the root element itself, below is an element inside it. Null where no selector places it, which is not a licence to put it anywhere.'],
+                'position' => Schema::nullable(['type' => 'string', 'enum' => ['around', 'on', 'below'], 'description' => 'Where the class sits relative to the component root on this version, read off the core stylesheet. around wraps it, on is the root element itself, below is an element inside it. Null where no selector places it, which is not a licence to put it anywhere.']),
                 'stylesWithin' => Schema::listOf(Schema::string(), 'What the core styles inside this class on this version: what it may hold, never what it requires.'),
                 'sassPaths' => Schema::listOf(Schema::string(), 'Where the core writes it.'),
             ] + Schema::verifiedOn(), ['class', 'component', 'title', 'position', 'stylesWithin', 'sassPaths', 'verifiedOn']), 'Classes the query named that somebody verified on the target version although not their entry, each with where it sits. No markup and no custom properties, because those are what withheld the entry.'),

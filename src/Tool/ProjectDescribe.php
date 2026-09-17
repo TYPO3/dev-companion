@@ -100,21 +100,21 @@ final class ProjectDescribe extends ReadOnlyTool
             'coreConstraint' => Schema::nullableString('What it requires of typo3/cms-core.'),
             'corePhpConstraint' => Schema::nullableString('What the installed typo3/cms-core requires of PHP, out of that package\'s own composer.json — the lowest a package here may declare it supports. Neither of the other two PHP numbers: not what this project declares, and not what environment.php runs. Not derivable from the TYPO3 major either — v13.4 and v14.3 both require ^8.2, v12.4 requires ^8.1. Null where the tool found no core package to read.'),
             'installedPhpBound' => Schema::nullableString('The lowest PHP the packages installed below this root accept, read out of composer/platform_check.php below the vendor directory this project declares. The one number here that is not a declaration: composer install writes it over every package it installed, and the autoloader includes it. So an interpreter under it aborts there before any command\'s own tool starts. The commands list marks what each one does to the sources and says nothing about that. No manifest field carries it, and a fixer required for development alone raises it above everything this project itself declares. Null means no bound: Composer leaves the file out where nothing requires a PHP version and deletes it where platform-check is off. Null is also what nothing installed yet answers, which installed is what says.'),
-            'phpRelation' => [
-                'type' => ['object', 'null'],
+            'phpRelation' => Schema::nullable([
+                'type' => 'object',
                 'description' => 'How the four PHP numbers above stand to each other, which none of them says on its own. Derived from the constraints, the bound and the environment as the files spell them. Nothing ran on any of these versions, so this is what the project claims and not evidence that any of it works. Null where phpConstraint names no floor: the project requires no PHP, or spells it in a way this will not claim to read. A constraint it cannot read costs this object rather than buys a wrong relation. installedPhpBound stands on its own either way.',
                 'properties' => [
                     'floor' => Schema::string('The lowest PHP phpConstraint admits, as major.minor. What the project promises to run on, and the number to hold its own commands against.'),
                     'coreFloor' => Schema::nullableString('The same, read off corePhpConstraint. Null where the tool found no core package to read one from.'),
-                    'againstCore' => ['type' => ['string', 'null'], 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE, null], 'description' => 'Where floor sits against coreFloor. below: the project declares support for a PHP its own installed core refuses, so the promise cannot hold. same: it declares what the core requires. above: it declares more than the core needs, which is a range the project narrowed itself and can widen without a change to a dependency. Null where coreFloor is.'],
-                    'inEnvironment' => ['type' => ['string', 'null'], 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE, null], 'description' => 'Where the PHP environment.php states sits against floor. same: the declared floor is the version the commands run on. above: the environment runs higher, so the floor is a version nothing configured here ever executes — a claim no check tests. below: the environment runs a PHP the project says it does not support. Null where there is no environment or it states no version. The comparison takes the floors alone, so a version over what the constraint\'s own upper bound allows reads here like one inside it.'],
+                    'againstCore' => Schema::nullable(['type' => 'string', 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE], 'description' => 'Where floor sits against coreFloor. below: the project declares support for a PHP its own installed core refuses, so the promise cannot hold. same: it declares what the core requires. above: it declares more than the core needs, which is a range the project narrowed itself and can widen without a change to a dependency. Null where coreFloor is.']),
+                    'inEnvironment' => Schema::nullable(['type' => 'string', 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE], 'description' => 'Where the PHP environment.php states sits against floor. same: the declared floor is the version the commands run on. above: the environment runs higher, so the floor is a version nothing configured here ever executes — a claim no check tests. below: the environment runs a PHP the project says it does not support. Null where there is no environment or it states no version. The comparison takes the floors alone, so a version over what the constraint\'s own upper bound allows reads here like one inside it.']),
                     'bound' => Schema::nullableString('installedPhpBound as major.minor, which is the depth the environment states its own version at. Null where the install bounds nothing.'),
-                    'environmentAgainstBound' => ['type' => ['string', 'null'], 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE, null], 'description' => 'Where the PHP environment.php states sits against bound. It is the only one of these three that says whether a command runs at all rather than what it runs on. below: every command in the list below aborts in Composer\'s platform check before its own tool starts, whatever runs says about it. The check then has to run somewhere else. same or above: nothing in that file stops them. Null where there is no bound to clear, or no environment that states the version that would clear it. Where this repository configures no environment, the shell you run them in is the interpreter and nothing here reads it.'],
+                    'environmentAgainstBound' => Schema::nullable(['type' => 'string', 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE], 'description' => 'Where the PHP environment.php states sits against bound. It is the only one of these three that says whether a command runs at all rather than what it runs on. below: every command in the list below aborts in Composer\'s platform check before its own tool starts, whatever runs says about it. The check then has to run somewhere else. same or above: nothing in that file stops them. Null where there is no bound to clear, or no environment that states the version that would clear it. Where this repository configures no environment, the shell you run them in is the interpreter and nothing here reads it.']),
                 ],
                 'required' => ['floor', 'coreFloor', 'againstCore', 'inEnvironment', 'bound', 'environmentAgainstBound'],
-            ],
-            'node' => [
-                'type' => ['object', 'null'],
+            ]),
+            'node' => Schema::nullable([
+                'type' => 'object',
                 'description' => 'Which Node the npm commands below run on, from the four files that state one. Those are engines.node in a package.json, an .nvmrc beside it, the actions/setup-node steps below .github/workflows/, and the nodejs_version a DDEV project states. The composer half of that command list has its interpreter in environment and the npm half had none. A version difference between the machine and CI is what a build breaks on. The tool reads the first two wherever this repository keeps its manifest. That is the root, or Build/ where the frontend build sits one directory down. That is the layout the core has, and enginesIn and nvmrcIn name the file each came from. Null where this repository has no package.json anywhere and nothing states a Node, which is a repository with no npm surface to run.',
                 'properties' => [
                     'engines' => Schema::nullableString('What package.json requires of Node in engines.node, as spelled. A range: it says which versions the package admits, never which one a command runs on. Null where no manifest here states one, which is the ordinary case.'),
@@ -128,24 +128,24 @@ final class ProjectDescribe extends ReadOnlyTool
                         'states' => Schema::string('The value as the workflow writes it, empty where from is none.'),
                         'version' => Schema::nullableString('The version that value names outright. Null where it does not. That is a ${{ }} expression, a matrix entry, a file that names it, an lts alias, or a range that takes the newest. Not resolved — the workflow is one file for you to read, and a resolved wrong number would carry this answer\'s authority.'),
                     ], ['workflow', 'from', 'states', 'version']), 'Every actions/setup-node step below .github/workflows/, one entry per distinct statement rather than per job. A matrix of five jobs on the same version is one fact. Empty means no workflow here sets Node up, so nothing states which Node CI runs these commands on.'),
-                    'relation' => [
-                        'type' => ['object', 'null'],
+                    'relation' => Schema::nullable([
+                        'type' => 'object',
                         'description' => 'How those numbers stand to each other, in the same three words phpRelation uses. Null where neither .nvmrc nor engines.node names a version this will read. There is then nothing this repository declares to hold the others against, and the numbers above still stand.',
                         'properties' => [
                             'declared' => Schema::string('The Node this repository declares for itself, and what the other two stand against.'),
                             'declaredBy' => Schema::string('Which file that came from, relative to the project root — the nvmrcIn or the enginesIn above. The .nvmrc wins where both state one: the pin is what a version manager selects and therefore what a run executes on. engines.node is a range, and only its lowest version could stand in a comparison.'),
-                            'nvmrcAgainstEngines' => ['type' => ['string', 'null'], 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE, null], 'description' => 'Where the pin sits against the lowest version engines.node admits. below: the pinned Node is one this package says it does not run on. Null where either is absent or spelled in a way this will not read.'],
-                            'inEnvironment' => ['type' => ['string', 'null'], 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE, null], 'description' => 'Where the Node the environment states sits against declared. Null where no environment states one.'],
+                            'nvmrcAgainstEngines' => Schema::nullable(['type' => 'string', 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE], 'description' => 'Where the pin sits against the lowest version engines.node admits. below: the pinned Node is one this package says it does not run on. Null where either is absent or spelled in a way this will not read.']),
+                            'inEnvironment' => Schema::nullable(['type' => 'string', 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE], 'description' => 'Where the Node the environment states sits against declared. Null where no environment states one.']),
                             'ci' => Schema::nullableString('The Node the workflows set up, where they all state the same one. Null where none states a version outright, or where they disagree. Which of them applies is then the workflow\'s own condition, and ci above carries each statement.'),
-                            'inCi' => ['type' => ['string', 'null'], 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE, null], 'description' => 'Where that version sits against declared. The comparison takes the segments both spell, so an .nvmrc with a major and a workflow with a patch level agree wherever the major does. The release difference inside one major is a thing no file here states.'],
+                            'inCi' => Schema::nullable(['type' => 'string', 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE], 'description' => 'Where that version sits against declared. The comparison takes the segments both spell, so an .nvmrc with a major and a workflow with a patch level agree wherever the major does. The release difference inside one major is a thing no file here states.']),
                         ],
                         'required' => ['declared', 'declaredBy', 'nvmrcAgainstEngines', 'inEnvironment', 'ci', 'inCi'],
-                    ],
+                    ]),
                 ],
                 'required' => ['engines', 'enginesIn', 'nvmrc', 'nvmrcIn', 'environment', 'ci', 'relation'],
-            ],
-            'environment' => [
-                'type' => ['object', 'null'],
+            ]),
+            'environment' => Schema::nullable([
+                'type' => 'object',
                 'description' => 'The environment this repository configures to run itself in, read from that environment\'s own files. Null means nothing here configures one that this server reads, and it reads .ddev/config.yaml and TYPO3_DEV_COMPANION_CONSOLE. So the commands below run wherever the caller runs them.',
                 'properties' => [
                     'via' => ['type' => 'string', 'enum' => ['ddev', 'override'], 'description' => 'ddev: the repository carries a .ddev/config.yaml. override: nothing in the files says so, and TYPO3_DEV_COMPANION_CONSOLE names a command that reaches this installation somewhere other than the caller\'s own shell.'],
@@ -167,7 +167,7 @@ final class ProjectDescribe extends ReadOnlyTool
                     ], ['name', 'source', 'operations']), 'The pull and push recipes below .ddev/providers/ that this repository wrote, which is where its database and files come from. DDEV writes its own recipes into every project and marks them #ddev-generated. The list leaves those out, because they say what DDEV puts everywhere rather than what this project decided.'),
                 ],
                 'required' => ['via', 'php', 'node', 'source', 'project', 'hostnames', 'entered', 'hooks', 'providers'],
-            ],
+            ]),
             'extensions' => Schema::listOf(Schema::object([
                 'key' => Schema::string(),
                 'path' => Schema::string('Relative to the project root.'),
@@ -177,7 +177,7 @@ final class ProjectDescribe extends ReadOnlyTool
             'sites' => Schema::listOf(Schema::object([
                 'identifier' => Schema::string(),
                 'base' => Schema::string(),
-                'rootPageId' => ['type' => ['integer', 'null']],
+                'rootPageId' => Schema::nullable(['type' => 'integer']),
                 'sets' => Schema::listOf(Schema::string(), 'The site sets this site depends on, by their composer-style name.'),
                 'languages' => Schema::listOf(Schema::string()),
             ], ['identifier', 'base', 'rootPageId', 'sets', 'languages'])),

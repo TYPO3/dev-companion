@@ -512,7 +512,8 @@ the guide rather than in a second copy in the prompt.
 the feedback channel exists. It takes no arguments and asks the session that has
 just finished what this server did for it and what it lacked. The same gate
 holds the two feedback tools, so a project that installed the server as a
-dependency lists none of the three.
+dependency lists none of the three. How a client runs one, and what Claude Code
+makes of a summary with a space in it: :ref:`working-with-it-the-prompts`.
 
 Task skills have one source, below ``skills/``. They contain routing and order,
 not a second copy of tool answers; client installation publishes them from that

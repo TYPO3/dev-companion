@@ -72,6 +72,58 @@ works from its own knowledge and from the checkout.
 ``typo3_server_scope`` is where the boundary stands written out: what it covers,
 and what it deliberately declines to answer.
 
+.. _working-with-it-the-prompts:
+
+The MCP prompts
+---------------
+
+A tool is what your agent calls in the middle of a task. An MCP prompt is what
+you pick by name, and the client puts its text into the conversation as your own
+message. ``prompts/list`` carries the ones this server offers, with their
+descriptions and arguments, see
+:doc:`the initialize page <../server/initialize>`.
+
+* ``commit_message`` takes a ``summary``, and ``keyword``, ``workflow`` and
+  ``issue`` where you give them. It calls ``typo3_commit_message_guide`` with
+  the four and hands you the checked draft as the guide wrote it. The rules
+  stand in the guide, so the prompt is a shorter route to the same answer.
+* ``debrief`` takes nothing. It puts the questions of
+  :doc:`asking for a debrief <../records/asking-for-a-debrief>` to the session
+  that has just finished. Only a standalone checkout lists it, because only
+  there is the channel the answers go into.
+
+How a client offers one is the client's. Claude Code lists each MCP prompt under
+``/`` as ``/typo3-dev-companion:commit_message (MCP)``, and
+``/mcp__typo3-dev-companion__commit_message`` runs the same. It hands what
+follows the command to the arguments in the order the server declares them, and
+it splits that text on whitespace. So each argument is one word, and it drops a
+surplus word::
+
+    /mcp__typo3-dev-companion__commit_message Rename the scope enum
+
+hands ``Rename`` as the summary, ``the`` as the keyword, ``scope`` as the
+workflow and ``enum`` as the issue. A summary with a space in it does not fit
+through that command. Ask your agent for the draft instead. Every task skill
+routes it to ``typo3_commit_message_guide``, which takes the summary as one
+string. A client that asks for each argument in a field of its own, Claude
+Desktop and the MCP Inspector among them, takes the summary as it is.
+
+``debrief`` has no argument, so every client runs it the same. Run it after the
+work, in a message of its own. A session that knows the questions are coming
+makes calls to have an answer for them, and the debrief then reports a run that
+did not happen.
+
+Nothing in this repository runs either prompt as part of its own work. A forward
+run pastes ``documentation/records/debrief.txt`` into the session by hand,
+because it runs in a client this checkout cannot reach. The prompt reads that
+same file, so the paste and the prompt cannot drift apart. The task skills name
+``typo3_commit_message_guide`` and never the prompt. The model reads a skill at
+the start of a task, and a person picks a prompt after it,
+`D-FBK-048 <../../decisions/feedback/fbk-048-the-debrief-is-offered-as-a-prompt-where-the-channel-is.md>`_.
+What holds them is ``StdioServerTest``, which drives ``prompts/list`` and
+``prompts/get`` over the wire, and ``bin/cli tools:index``, which prints the
+list into the initialize page.
+
 What it never does
 ------------------
 

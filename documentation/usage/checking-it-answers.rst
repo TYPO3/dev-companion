@@ -133,3 +133,11 @@ from a client that never started it:
 Run it from the project you installed into. The server has no directory of its
 own. Where it started decides what it reads, which is the same reason the wrong
 work directory produces answers about the wrong site.
+
+The MCP Inspector asks the same two lines with a form around them. Set its
+protocol era to ``Legacy``, which is its default. The server speaks the
+handshake revision ``2025-11-25`` over stdio and no newer one. ``Modern`` and
+``Auto`` open with ``server/discover`` instead of ``initialize``. The SDK
+answers that with an error that carries no request id, so the Inspector waits
+for an answer that never comes and fails. That is not a server that cannot
+start.

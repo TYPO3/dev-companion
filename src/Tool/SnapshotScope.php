@@ -23,6 +23,11 @@ final class SnapshotScope extends ReadOnlyTool
         return 'typo3_snapshot_scope';
     }
 
+    public static function title(): string
+    {
+        return 'Report the component contract source';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

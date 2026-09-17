@@ -3,6 +3,8 @@
 ``typo3_script_lookup``
 =======================
 
+*Find notes for core scripts*
+
 Find notes for TYPO3 core scripts and commands. That is how you start
 Build/Scripts/runTests.sh and what it needs first, what an argument after --
 reaches and which options one run takes. It is the commands per subject, and

@@ -3,6 +3,8 @@
 ``typo3_snapshot_scope``
 ========================
 
+*Report the component contract source*
+
 Report whether component contracts come from the active installation or the
 bundled fallback. It says which TYPO3 core revision the fallback catalogs come
 from, what they cover, and how to re-check them. Call this to judge whether a

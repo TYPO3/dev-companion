@@ -3,6 +3,8 @@
 ``typo3_configuration_lookup``
 ==============================
 
+*Read an effective configuration value*
+
 Read an effective TYPO3_CONF_VARS value from the installation you work in. That
 is the value as it is at runtime after every extension has had its say, not the
 shipped default. Use it for configuration whose assembled shape matters, such as

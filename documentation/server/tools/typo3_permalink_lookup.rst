@@ -3,6 +3,8 @@
 ``typo3_permalink_lookup``
 ==========================
 
+*Validate documentation permalinks*
+
 Validate docs.typo3.org permalink identifiers and turn old documentation URLs
 into the identifiers that replace them. Pass identifiers such as
 t3coreapi:extension-scanner, or a system extension by its Composer package name

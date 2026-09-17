@@ -38,6 +38,11 @@ final class GerritLookup extends ReadOnlyTool
         return 'typo3_gerrit_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Find a patch under review';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

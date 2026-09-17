@@ -53,6 +53,11 @@ final class ForgeLookup extends ReadOnlyTool
         return 'typo3_forge_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Read the issue tracker';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

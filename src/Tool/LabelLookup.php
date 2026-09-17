@@ -59,6 +59,11 @@ final class LabelLookup extends ReadOnlyTool
         return 'typo3_label_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Search the registered labels';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

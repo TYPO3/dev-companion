@@ -141,11 +141,11 @@ The prompts
 The tool list
 -------------
 
-``tools/list`` carries 31 tools. Each entry is the ``name``, ``description``,
-``inputSchema``, ``outputSchema`` and ``annotations`` the tool's own page under
-:doc:`tools/ <tools/index>` states. On the wire the entries weigh 310,399 bytes:
-32,027 of description, 47,522 of ``inputSchema`` and 225,206 of
-``outputSchema``.
+``tools/list`` carries 31 tools. Each entry is the ``name``, ``title``,
+``description``, ``inputSchema``, ``outputSchema`` and ``annotations`` the
+tool's own page under :doc:`tools/ <tools/index>` states. On the wire the
+entries weigh 311,603 bytes: 32,027 of description, 47,522 of ``inputSchema``
+and 225,206 of ``outputSchema``.
 
 The resource template
 ---------------------

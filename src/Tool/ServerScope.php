@@ -46,6 +46,11 @@ final class ServerScope extends ReadOnlyTool
         return 'typo3_server_scope';
     }
 
+    public static function title(): string
+    {
+        return 'Orientation for this server';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

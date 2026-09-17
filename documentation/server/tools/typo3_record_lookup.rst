@@ -3,6 +3,8 @@
 ``typo3_record_lookup``
 =======================
 
+*Read a table's rows*
+
 Read the rows of any table this installation has TCA for. That is pages,
 tt_content, a table of one of this project's own extensions, or one a dependency
 brings. It answers how many there are, which page they sit on, and whether they

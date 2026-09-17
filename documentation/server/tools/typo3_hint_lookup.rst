@@ -3,6 +3,8 @@
 ``typo3_hint_lookup``
 =====================
 
+*Find hints for a path*
+
 Return hints for TYPO3 core paths or task topics, grouped by section. A hint is
 a convention at the code itself: what to write at a path, which idiom a
 subsystem uses, what a finding costs. A procedure in steps is typo3_rule_lookup

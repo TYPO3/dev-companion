@@ -3,6 +3,8 @@
 ``typo3_label_lookup``
 ======================
 
+*Search the registered labels*
+
 Search the labels registered in the TYPO3 installation you work in and the XLF
 files below project config/sites. Reuse is local to the translation resource the
 code at hand already uses. Pass resource whenever you know it, and do not

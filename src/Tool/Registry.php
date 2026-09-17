@@ -78,6 +78,7 @@ final class Registry
     /**
      * @return array<int, array{
      *     name: string,
+     *     title: string,
      *     description: string,
      *     answersFrom: array<int, string>,
      *     inputSchema: array<string, mixed>,
@@ -92,6 +93,7 @@ final class Registry
         // the sentence a client reads.
         return array_map(static fn(string $tool): array => [
             'name' => $tool::name(),
+            'title' => $tool::title(),
             'description' => rtrim($tool::description()) . ' ' . Source::clause($tool::answersFrom()),
             'answersFrom' => array_map(
                 static fn(Source $source): string => $source->value,

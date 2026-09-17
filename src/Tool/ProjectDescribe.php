@@ -61,6 +61,11 @@ final class ProjectDescribe extends ReadOnlyTool
         return 'typo3_project_describe';
     }
 
+    public static function title(): string
+    {
+        return 'Describe the project';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

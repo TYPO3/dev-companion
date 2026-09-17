@@ -51,6 +51,11 @@ final class RecordLookup extends ReadOnlyTool
         return 'typo3_record_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Read a table\'s rows';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

@@ -3,6 +3,8 @@
 ``typo3_component_lookup``
 ==========================
 
+*Look up backend UI components*
+
 Look up TYPO3 backend UI components by name or topic. The searchable index is a
 curated subset of what the core itself files as a component. That is the Sass
 partials under Build/Sources/Sass/component/ and the custom elements under

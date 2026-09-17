@@ -3,6 +3,8 @@
 ``typo3_fluid_namespace_list``
 ==============================
 
+*List the global Fluid namespaces*
+
 List the Fluid ViewHelper namespaces that are global in the TYPO3 installation
 you work in. So a template knows which prefixes it may use without a
 declaration. A template has to declare every other namespace with an xmlns

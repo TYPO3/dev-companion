@@ -3,6 +3,8 @@
 ``typo3_task_guide``
 ====================
 
+*Compose a task checklist*
+
 Answers what one change owes, which a repository's own conventions file cannot.
 That file states its rules once for every task. This narrows them to the kind of
 change, the paths and the TYPO3 majors in front of you. It goes down to whether

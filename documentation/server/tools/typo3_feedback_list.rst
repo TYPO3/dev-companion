@@ -3,6 +3,8 @@
 ``typo3_feedback_list``
 =======================
 
+*List the recorded feedback*
+
 List the feedback typo3_feedback_record recorded, newest first, so a session can
 work them off. Filter by status, by category, or by the tool a feedback is
 about. The archive keeps a feedback a session worked off, so status="closed"

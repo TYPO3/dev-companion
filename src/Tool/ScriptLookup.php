@@ -24,6 +24,11 @@ final class ScriptLookup extends ReadOnlyTool
         return 'typo3_script_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Find notes for core scripts';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

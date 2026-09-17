@@ -3,6 +3,8 @@
 ``typo3_feedback_record``
 =========================
 
+*Record feedback about this server*
+
 Leave feedback about a gap, wrong answer, or missing capability of this
 knowledge server. Leave it about what it did well too, because what worked is
 what nobody may break later. The server stores it as markdown in its own

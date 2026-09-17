@@ -36,6 +36,11 @@ final class DocumentationLookup extends ReadOnlyTool
         return 'typo3_documentation_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Search the official manuals';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

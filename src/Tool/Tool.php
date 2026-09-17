@@ -30,6 +30,16 @@ interface Tool
     /** typo3_<subject>_<verb>, with the verb from the closed list ToolNamingTest holds. */
     public static function name(): string;
 
+    /**
+     * What a client shows a person for this tool, in plain words.
+     *
+     * A listing, a permission dialog and the Inspector show it; the model
+     * reads the description and most clients never hand it the title. So it
+     * says the subject in words somebody outside TYPO3 reads at a glance, and
+     * it does not recite the name.
+     */
+    public static function title(): string;
+
     /** What a client chooses this tool by. It is the only documentation most of them read. */
     public static function description(): string;
 

@@ -3,6 +3,8 @@
 ``typo3_reference_list``
 ========================
 
+*List the core's worked examples*
+
 List the worked examples the TYPO3 core ships of its own conventions, and what
 each one is a reference for. That is the theme extension, the styleguide, the
 Extbase fixture extension, the content element render, the browser test suite,

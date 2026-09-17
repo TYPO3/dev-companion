@@ -3,6 +3,8 @@
 ``typo3_ter_lookup``
 ====================
 
+*Read an extension's published versions*
+
 Read what the TYPO3 Extension Repository has published under an extension key,
 live from extensions.typo3.org. Pass extension with the key, the one
 extra.typo3/cms.extension-key declares and not the Composer package name. Every

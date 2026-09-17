@@ -71,6 +71,11 @@ final class ExtensionDescribe extends ReadOnlyTool
         return 'typo3_extension_describe';
     }
 
+    public static function title(): string
+    {
+        return 'Describe an installed extension';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

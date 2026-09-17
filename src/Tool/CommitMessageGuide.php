@@ -64,6 +64,11 @@ final class CommitMessageGuide extends ReadOnlyTool
         return 'typo3_commit_message_guide';
     }
 
+    public static function title(): string
+    {
+        return 'Draft or check a commit message';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

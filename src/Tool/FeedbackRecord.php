@@ -25,6 +25,11 @@ final class FeedbackRecord implements Tool
         return 'typo3_feedback_record';
     }
 
+    public static function title(): string
+    {
+        return 'Record feedback about this server';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

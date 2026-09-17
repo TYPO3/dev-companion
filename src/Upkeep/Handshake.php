@@ -134,11 +134,12 @@ final class Handshake
 
         return [
             Wrap::text(sprintf(
-                '%s carries %d tools. Each entry is the %s, %s, %s, %s and %s the tool\'s own page under %s '
+                '%s carries %d tools. Each entry is the %s, %s, %s, %s, %s and %s the tool\'s own page under %s '
                 . 'states. On the wire the entries weigh %s bytes: %s of description, %s of %s and %s of %s.',
                 Rst::literal('tools/list'),
                 count($tools),
                 Rst::literal('name'),
+                Rst::literal('title'),
                 Rst::literal('description'),
                 Rst::literal('inputSchema'),
                 Rst::literal('outputSchema'),

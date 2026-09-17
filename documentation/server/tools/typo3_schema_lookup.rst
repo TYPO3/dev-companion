@@ -3,6 +3,8 @@
 ``typo3_schema_lookup``
 =======================
 
+*List a table's columns*
+
 List the columns TYPO3 derives for a table from its TCA. That is uid, pid, the
 timestamps, the delete and disable fields, the language and versioning columns,
 and one column per TCA field. Each comes with the Doctrine type it gets, whether

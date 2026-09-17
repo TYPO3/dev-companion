@@ -3,6 +3,8 @@
 ``typo3_backend_module_lookup``
 ===============================
 
+*List the backend modules*
+
 List the backend modules registered in the TYPO3 installation you work in. Each
 comes with the extension that declares it, its place in the module tree, its
 labels and its access level. Each comes with the route it answers on and every

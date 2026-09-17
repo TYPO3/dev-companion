@@ -22,6 +22,11 @@ final class FluidNamespaceList extends ReadOnlyTool
         return 'typo3_fluid_namespace_list';
     }
 
+    public static function title(): string
+    {
+        return 'List the global Fluid namespaces';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

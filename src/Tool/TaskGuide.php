@@ -342,6 +342,11 @@ final class TaskGuide extends ReadOnlyTool
         return 'typo3_task_guide';
     }
 
+    public static function title(): string
+    {
+        return 'Compose a task checklist';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

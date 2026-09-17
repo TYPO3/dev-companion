@@ -3,6 +3,8 @@
 ``typo3_forge_lookup``
 ======================
 
+*Read the issue tracker*
+
 Reads the TYPO3 issue tracker at forge.typo3.org through the bot protection the
 core's own AGENTS.md warns a hand-written request about. It tells a tracker that
 did not answer from a search that matched nothing. Read it before you write a

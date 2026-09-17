@@ -74,7 +74,7 @@ final class Factory
             $outputSchema = $definition['outputSchema'];
             $tool = new Tool(
                 $definition['name'],
-                null,
+                $definition['title'],
                 $inputSchema,
                 $definition['description'],
                 new ToolAnnotations(

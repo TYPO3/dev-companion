@@ -3,6 +3,8 @@
 ``typo3_translation_domain_lookup``
 ===================================
 
+*Compute a translation domain*
+
 Compute the translation domain an XLF file resolves to, from its path. The
 domain is the canonical way to reference a label (backend.alt_doc:key) in TCA,
 LanguageService::sL() and f:translate, and nothing registers it. It follows from

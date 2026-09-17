@@ -21,6 +21,11 @@ final class TestRunGuide extends ReadOnlyTool
         return 'typo3_test_run_guide';
     }
 
+    public static function title(): string
+    {
+        return 'Plan a core test run';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

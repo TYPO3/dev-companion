@@ -3,6 +3,8 @@
 ``typo3_extension_describe``
 ============================
 
+*Describe an installed extension*
+
 Describe what one installed extension registers. That is the tables its TCA
 defines and extends. The content elements it adds to tt_content, with the
 template each renders through and the FlexForm each binds. Its backend modules

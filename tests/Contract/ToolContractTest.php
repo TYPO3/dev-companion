@@ -75,6 +75,30 @@ final class ToolContractTest extends TestCase
     }
 
     /**
+     * A title is for the person a client lists the tool to, and it stays short
+     * enough for a listing and a permission dialog. A title that recites the
+     * name in plain words says nothing the name did not, which is the defect
+     * `AGENTS.md` names for a title that repeats its statement.
+     */
+    #[Test]
+    public function everyToolCarriesATitleAPersonReadsAtAGlance(): void
+    {
+        foreach (Registry::definitions() as $definition) {
+            $name = $definition['name'];
+            $title = $definition['title'];
+
+            self::assertNotSame('', $title, $name . ' has no title');
+            self::assertLessThanOrEqual(6, str_word_count($title), $name . ' has a title over six words');
+            self::assertStringEndsNotWith('.', $title, $name . ' ends its title with a period');
+            self::assertNotSame(
+                str_replace('_', ' ', substr($name, strlen('typo3_'))),
+                strtolower($title),
+                $name . ' recites its name as the title',
+            );
+        }
+    }
+
+    /**
      * A client that defers these tools searches a name, a description and the
      * argument descriptions for the subject a task is about, and reads nothing
      * else this server sends. The tool with the widest corpus named two of its

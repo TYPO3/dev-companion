@@ -3,6 +3,8 @@
 ``typo3_system_extension_lookup``
 =================================
 
+*List the system extensions*
+
 Answer whether an extension is part of the TYPO3 core, and on which versions. It
 lists the system extensions of every covered TYPO3 line, by extension key and
 Composer package name. Each comes with what it is for and the range the core

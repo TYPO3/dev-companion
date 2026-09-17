@@ -24,6 +24,11 @@ final class PermalinkLookup extends ReadOnlyTool
         return 'typo3_permalink_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Validate documentation permalinks';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

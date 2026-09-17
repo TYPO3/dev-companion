@@ -29,6 +29,11 @@ final class SchemaLookup extends ReadOnlyTool
         return 'typo3_schema_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'List a table\'s columns';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

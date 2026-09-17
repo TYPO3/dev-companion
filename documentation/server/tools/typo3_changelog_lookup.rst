@@ -3,6 +3,8 @@
 ``typo3_changelog_lookup``
 ==========================
 
+*Search the core changelog*
+
 Search the TYPO3 changelog: one entry per breaking change, deprecation, feature
 and important note, in the version of its release. This reads the entries. An
 entry for a core patch of your own is the other direction, and it is

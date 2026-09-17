@@ -39,6 +39,11 @@ final class TerLookup extends ReadOnlyTool
         return 'typo3_ter_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Read an extension\'s published versions';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

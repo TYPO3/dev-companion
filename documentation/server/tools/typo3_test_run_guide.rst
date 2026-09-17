@@ -3,6 +3,8 @@
 ``typo3_test_run_guide``
 ========================
 
+*Plan a core test run*
+
 Say what this core checkout needs before a test can run at all, and which
 Build/Scripts/runTests.sh commands to run once it can. Ask it before you check
 for vendor/bin/phpunit by hand. The suites run in containers, so the shell's PHP

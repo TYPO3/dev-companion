@@ -116,7 +116,7 @@ final class ToolSurface
      * earlier table left on its page. The written reason and a recorded answer
      * would otherwise contradict each other on one page.
      *
-     * @param array{name: string, description: string, answersFrom: array<int, string>, inputSchema: array<string, mixed>, annotations: array<string, bool>, outputSchema: array<string, mixed>|null} $definition
+     * @param array{name: string, title: string, description: string, answersFrom: array<int, string>, inputSchema: array<string, mixed>, annotations: array<string, bool>, outputSchema: array<string, mixed>|null} $definition
      */
     public static function page(array $definition, string $recorded): string
     {
@@ -186,7 +186,7 @@ final class ToolSurface
      * the guides and lookups. A reader with one tool name in hand cannot
      * reconstruct it, so on the site the name is the index.
      *
-     * @return array<int, array{name: string, description: string, answersFrom: array<int, string>, inputSchema: array<string, mixed>, annotations: array<string, bool>, outputSchema: array<string, mixed>|null}>
+     * @return array<int, array{name: string, title: string, description: string, answersFrom: array<int, string>, inputSchema: array<string, mixed>, annotations: array<string, bool>, outputSchema: array<string, mixed>|null}>
      */
     private static function alphabetical(): array
     {
@@ -210,7 +210,7 @@ final class ToolSurface
     }
 
     /**
-     * @param array{name: string, description: string, answersFrom: array<int, string>, inputSchema: array<string, mixed>, annotations: array<string, bool>, outputSchema: array<string, mixed>|null} $definition
+     * @param array{name: string, title: string, description: string, answersFrom: array<int, string>, inputSchema: array<string, mixed>, annotations: array<string, bool>, outputSchema: array<string, mixed>|null} $definition
      */
     private static function head(array $definition): string
     {
@@ -219,6 +219,8 @@ final class ToolSurface
             // is the tool's own name: a reference nobody has to look up.
             ...Rst::label($definition['name']),
             ...Rst::heading(Rst::literal($definition['name'])),
+            '*' . $definition['title'] . '*',
+            '',
             self::wrap($definition['description']),
             '',
             self::annotations($definition['annotations']),

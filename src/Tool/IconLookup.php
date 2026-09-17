@@ -48,6 +48,11 @@ final class IconLookup extends ReadOnlyTool
         return 'typo3_icon_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Validate or find icon identifiers';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

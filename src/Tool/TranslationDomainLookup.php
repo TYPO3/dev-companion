@@ -39,6 +39,11 @@ final class TranslationDomainLookup extends ReadOnlyTool
         return 'typo3_translation_domain_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Compute a translation domain';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

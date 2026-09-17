@@ -3,6 +3,8 @@
 ``typo3_service_lookup``
 ========================
 
+*Find a container service*
+
 Find what the dependency injection container of the TYPO3 installation you work
 in assembles. That is which class stands behind a service id or an interface,
 whether it is public, shared and autowired, and the tags it carries. It is what

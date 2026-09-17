@@ -3,6 +3,8 @@
 ``typo3_rule_lookup``
 =====================
 
+*Search the rules and procedures*
+
 Search the TYPO3 rules and procedures this server carries, by topic. The core
 contribution process is most of it. That is the commit message conventions,
 which branches take a patch today, and the changelog entry each change type

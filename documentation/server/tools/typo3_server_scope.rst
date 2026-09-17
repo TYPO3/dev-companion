@@ -3,6 +3,8 @@
 ``typo3_server_scope``
 ======================
 
+*Orientation for this server*
+
 Orientation for this server: what it covers and at which depth, what it
 deliberately does not cover, and which tool to call when. Start here when it is
 unclear whether this server can answer a question at all, or which of the

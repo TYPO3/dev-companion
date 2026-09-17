@@ -3,6 +3,8 @@
 ``typo3_commit_message_guide``
 ==============================
 
+*Draft or check a commit message*
+
 Draft and check a TYPO3 commit message. A person who wants to know what the
 commit did reads the message. So write it in plain English and only as long as
 that answer needs; the diff carries the detail. Either assemble one from parts

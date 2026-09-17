@@ -3,6 +3,8 @@
 ``typo3_icon_lookup``
 =====================
 
+*Validate or find icon identifiers*
+
 Validate or find icon identifiers in the TYPO3 backend icon registry of the
 installation you work in. Pass identifiers to confirm several at once. Each
 comes back registered or not, in one call, which is what to use when you already

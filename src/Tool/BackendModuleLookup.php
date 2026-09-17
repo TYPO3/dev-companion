@@ -27,6 +27,11 @@ final class BackendModuleLookup extends ReadOnlyTool
         return 'typo3_backend_module_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'List the backend modules';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

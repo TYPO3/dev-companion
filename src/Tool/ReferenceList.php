@@ -19,6 +19,11 @@ final class ReferenceList extends ReadOnlyTool
         return 'typo3_reference_list';
     }
 
+    public static function title(): string
+    {
+        return 'List the core\'s worked examples';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

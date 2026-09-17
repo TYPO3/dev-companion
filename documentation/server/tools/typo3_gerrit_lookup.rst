@@ -3,6 +3,8 @@
 ``typo3_gerrit_lookup``
 =======================
 
+*Find a patch under review*
+
 Whether a TYPO3 core patch already exists and what state its review is in, read
 from review.typo3.org. A clone carries what landed and says nothing about what
 is open. So this tool asks the review server rather than a checkout. Six ways

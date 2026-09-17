@@ -3,6 +3,8 @@
 ``typo3_documentation_lookup``
 ==============================
 
+*Search the official manuals*
+
 Search or read the official live TYPO3 documentation for a covered TYPO3 line.
 It searches four manuals: TYPO3 Explained, TypoScript Explained, the TCA
 Reference and the Fluid ViewHelper Reference, by page title, heading, path and

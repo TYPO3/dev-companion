@@ -32,6 +32,11 @@ final class HintLookup extends ReadOnlyTool
         return 'typo3_hint_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Find hints for a path';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

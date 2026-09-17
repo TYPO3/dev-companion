@@ -19,6 +19,11 @@ final class FeedbackList extends ReadOnlyTool
         return 'typo3_feedback_list';
     }
 
+    public static function title(): string
+    {
+        return 'List the recorded feedback';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

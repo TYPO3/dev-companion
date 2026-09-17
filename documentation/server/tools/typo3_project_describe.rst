@@ -3,6 +3,8 @@
 ``typo3_project_describe``
 ==========================
 
+*Describe the project*
+
 Describe the repository this server started in and the TYPO3 installation it has
 made. It answers the TYPO3 and PHP constraints, with the floor the installed
 core requires and how the PHP numbers stand to each other. It says whether the

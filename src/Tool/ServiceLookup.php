@@ -27,6 +27,11 @@ final class ServiceLookup extends ReadOnlyTool
         return 'typo3_service_lookup';
     }
 
+    public static function title(): string
+    {
+        return 'Find a container service';
+    }
+
     /** @return array<int, Source> */
     public static function answersFrom(): array
     {

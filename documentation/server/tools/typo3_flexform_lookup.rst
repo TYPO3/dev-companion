@@ -3,6 +3,8 @@
 ``typo3_flexform_lookup``
 =========================
 
+*Resolve a FlexForm data structure*
+
 Resolve one TCA field of type=flex to the data structure the installation uses.
 That is the identifier TYPO3 produces for it, that identifier decoded, and every
 sheet and field of the structure with label, type and items. This is what the

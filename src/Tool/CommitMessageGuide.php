@@ -97,9 +97,12 @@ final class CommitMessageGuide extends ReadOnlyTool
                 'isDeprecation' => ['type' => 'boolean', 'description' => 'Whether this is a deprecation. Left out, it is an assumption the same way and the checks say so.'],
                 'workInProgress' => ['type' => 'boolean', 'description' => 'Whether the change is still in work and not up for merge. True writes [WIP] before the keyword, where [!!!] goes, and the Forge issue is no error then: the merge is what requires the trailer. The sign-off stays required whatever the state. A message passed as message says this in its own subject and needs no argument; the checks read [WIP] and [PoC] there the same way.'],
             ],
+            // `anyOf` rather than `oneOf`: a call may carry a message and the
+            // arguments that amend it. A client that offers the branches as a
+            // choice labels each by its title, and "Option 1" without one.
             'anyOf' => [
-                ['required' => ['message']],
-                ['required' => ['keyword', 'summary']],
+                ['title' => 'Check a message', 'required' => ['message']],
+                ['title' => 'Draft from keyword and summary', 'required' => ['keyword', 'summary']],
             ],
         ];
     }

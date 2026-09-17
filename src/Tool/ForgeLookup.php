@@ -157,9 +157,9 @@ final class ForgeLookup extends ReadOnlyTool
                 ],
             ],
             'oneOf' => [
-                ['required' => ['issue']],
-                ['required' => ['query']],
-                ['required' => ['backlog']],
+                ['title' => 'Read an issue', 'required' => ['issue']],
+                ['title' => 'Search', 'required' => ['query']],
+                ['title' => 'Enumerate the backlog', 'required' => ['backlog']],
             ],
         ];
     }

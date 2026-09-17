@@ -50,8 +50,8 @@ final class RuleLookup extends ReadOnlyTool
                 'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the answer has to hold on, for example "13.4" or "14". The answer leaves out a section bound to another major. Defaults to every major this repository declares typo3/cms-core for, or to the installation this server started in. Where there is neither, every section comes back with the range it holds for. Ignored for documentId, which returns the document as written.'],
             ],
             'oneOf' => [
-                ['required' => ['query']],
-                ['required' => ['documentId']],
+                ['title' => 'Search', 'required' => ['query']],
+                ['title' => 'Read a document', 'required' => ['documentId']],
             ],
         ];
     }

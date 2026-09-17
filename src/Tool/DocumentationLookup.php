@@ -83,8 +83,8 @@ final class DocumentationLookup extends ReadOnlyTool
             // simply required already names the absent one.
             'additionalProperties' => false,
             'oneOf' => [
-                ['required' => ['queries']],
-                ['required' => ['page']],
+                ['title' => 'Search', 'required' => ['queries']],
+                ['title' => 'Read a page', 'required' => ['page']],
             ],
         ];
     }

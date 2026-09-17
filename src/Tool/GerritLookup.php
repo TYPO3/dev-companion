@@ -164,12 +164,12 @@ final class GerritLookup extends ReadOnlyTool
             // passes both would otherwise match two branches and fail the rule
             // it satisfies.
             'oneOf' => [
-                ['required' => ['issue']],
-                ['required' => ['change']],
-                ['required' => ['commit']],
-                ['required' => ['query']],
-                ['required' => ['path'], 'not' => ['required' => ['query']]],
-                ['required' => ['backlog']],
+                ['title' => 'Changes for a Forge issue', 'required' => ['issue']],
+                ['title' => 'Read a change', 'required' => ['change']],
+                ['title' => 'Read a change by commit', 'required' => ['commit']],
+                ['title' => 'Search', 'required' => ['query']],
+                ['title' => 'Changes that touch a path', 'required' => ['path'], 'not' => ['required' => ['query']]],
+                ['title' => 'Enumerate the backlog', 'required' => ['backlog']],
             ],
         ];
     }

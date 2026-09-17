@@ -572,8 +572,8 @@ final class StdioServerTest extends TestCase
         self::assertNotNull($documentation, 'the tool that carries the alternative is not offered');
         self::assertSame(['targetVersion'], $documentation['inputSchema']['required']);
         self::assertSame(
-            [['required' => ['queries']], ['required' => ['page']]],
-            $documentation['inputSchema']['oneOf'],
+            [['queries'], ['page']],
+            array_column($documentation['inputSchema']['oneOf'], 'required'),
             'the alternative no longer reaches a client that reads oneOf',
         );
     }

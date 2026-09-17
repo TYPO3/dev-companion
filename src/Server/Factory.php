@@ -219,9 +219,9 @@ final class Factory
             uriTemplate: ResourceHandler::SKILL_REFERENCE_TEMPLATE,
             name: 'typo3-skill-reference',
             title: 'What a TYPO3 task workflow hands over at a step',
-            description: 'The files a skill under typo3://skill/ links to: the order every task starts in, the '
-                . 'checklist it works through, and the implementation guide for the layer it settled on. Read the '
-                . 'one its body sends you to, at the step that sends you.',
+            description: 'What a skill under typo3://skill/ links to: the order every task starts in, its '
+                . 'checklist, and the implementation guide for the layer it settled on. Read the one its body '
+                . 'sends you to, at the step that sends you.',
             mimeType: 'text/markdown',
             annotations: new Annotations(priority: self::REFERENCE_PRIORITY),
         );

@@ -141,8 +141,7 @@ final class ToolSurface
      * Both `tools:index` and `tools:record` write the surface and then delete
      * what is not in what they wrote. So the other removes a page only one of
      * them knows about. There is one list of them and both read it. The
-     * initialize page is here because the same check holds it, and because a
-     * change to a description moves the weight it states.
+     * initialize page is here because the same check holds it.
      *
      * @return array<string, string>
      */
@@ -582,6 +581,6 @@ final class ToolSurface
 
     private static function wrap(string $text, string $continuation = ''): string
     {
-        return Wrap::text($text, $continuation);
+        return Wrap::rstText($text, $continuation);
     }
 }

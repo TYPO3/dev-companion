@@ -5,7 +5,7 @@ What a writer assumed about their form belongs here.
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
-- [`D-DOC-071`][D-DOC-071] — The initialize page is read off a session in the same process · 2026-09-17
+- [`D-DOC-072`][D-DOC-072] — The initialize page names the report that weighs the tool list · 2026-09-17
 - [`D-DOC-070`][D-DOC-070] — This repository writes in ASD-STE100 · 2026-09-14
 - [`D-DOC-069`][D-DOC-069] — AGENTS.md states the three patch rules this corpus breaks · 2026-09-10
 - [`D-DOC-068`][D-DOC-068] — The register this server writes in is copied into its callers' patches · 2026-09-09
@@ -69,7 +69,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-DOC-008`][D-DOC-008] — The calls that reach outside stay in the shared table · 2026-08-02 · confirmed
 - [`D-DOC-001`][D-DOC-001] — A table is written so it reads unrendered · 2026-08-01 · confirmed
 
-[D-DOC-071]: doc-071-the-initialize-page-is-read-off-a-session-in-the-same-process.md
+[D-DOC-072]: doc-072-the-initialize-page-names-the-report-that-weighs-the-tool-list.md
 [D-DOC-070]: doc-070-this-repository-writes-in-asd-ste100.md
 [D-DOC-069]: doc-069-agents-md-states-the-three-patch-rules-this-corpus-breaks.md
 [D-DOC-068]: doc-068-the-register-this-server-writes-in-is-copied-into-its-callers-patches.md
@@ -135,6 +135,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 ### Revoked, and kept as the record
 
+- [`D-DOC-071`][D-DOC-071] — The initialize page is read off a session in the same process · 2026-09-17 → D-DOC-072
 - [`D-DOC-041`][D-DOC-041] — An entry outgrown by its own history is read out · 2026-08-22 → D-DOC-066
 - [`D-DOC-018`][D-DOC-018] — The site opens on the readme · 2026-08-09 → D-DOC-026
 - [`D-DOC-019`][D-DOC-019] — The site's stylesheet and script are built files · 2026-08-09 → D-DOC-024
@@ -143,6 +144,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-DOC-023`][D-DOC-023] — The site is built to the TYPO3 Support App design system · 2026-08-09 → D-DOC-024
 - [`D-DOC-002`][D-DOC-002] — The prose rule is measured, and only the lead fails on it · 2026-08-01 → D-DOC-070
 
+[D-DOC-071]: doc-071-the-initialize-page-is-read-off-a-session-in-the-same-process.md
 [D-DOC-041]: doc-041-an-entry-outgrown-by-its-own-history-is-read-out.md
 [D-DOC-018]: doc-018-the-site-opens-on-the-readme.md
 [D-DOC-019]: doc-019-the-sites-stylesheet-and-script-are-built-files.md

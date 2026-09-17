@@ -554,6 +554,12 @@ final class Wrap
         return implode("\n", self::lines($text, '', $continuation));
     }
 
+    /** The same for a generator that writes reStructuredText, so a literal stays whole. */
+    public static function rstText(string $text, string $continuation = ''): string
+    {
+        return implode("\n", self::lines($text, '', $continuation, self::RST_UNBREAKABLE));
+    }
+
     /** A run of text whose first and following lines stand at the same indent. */
     public static function indented(string $text, string $indent): string
     {

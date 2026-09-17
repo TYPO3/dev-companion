@@ -2,9 +2,8 @@
 id: D-DOC-071
 title: The initialize page is read off a session in the same process
 date: 2026-09-17
-status: open
-coveredBy:
-  - ToolSurfaceTest::everyPageIsWhatTheServerDeclares
+status: revoked
+revokedBy: D-DOC-072
 ---
 
 # D-DOC-071 — The initialize page is read off a session in the same process
@@ -60,3 +59,14 @@ the two prompts.
 - Regenerating the page after an edit to a description becomes the step sessions
   skip. Then the weight moves out of the page and into a report, beside
   `bin/cli tools:measure`.
+
+## Revoked on 2026-09-17
+
+The second **Wrong if** fired on the day the entry was written. The weight moved
+four times in one afternoon, once per edit to an input schema, and each move was
+a diff in a page no edit had meant to touch. The maintainer had asked for no
+such churn before the page existed, and `D-DOC-009` says the same for every
+count of something that grows.
+
+The page is still read off a session in the same process, and `D-DOC-072`
+carries that with the weight taken out of it.

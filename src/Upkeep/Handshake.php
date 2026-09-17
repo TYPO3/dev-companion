@@ -11,12 +11,12 @@ use TYPO3\DevCompanion\Server\Factory;
 /**
  * The page on what a client gets at `initialize`, and in the lists it fetches
  * right after: the result as the server sends it, the instructions in their
- * wording, the prompts, and what the tool list weighs.
+ * wording, the prompts, and the tool list as a count.
  *
  * Rendered from a session run against `Factory::create()` in this process,
  * because the result is the SDK's and no class here spells it out. The
  * capabilities come from what the builder detects, the protocol version from
- * the negotiation, and both would be a copy anywhere else — `D-DOC-071`. The
+ * the negotiation, and both would be a copy anywhere else — `D-DOC-072`. The
  * prose above the marker is written by hand and carries over.
  */
 final class Handshake
@@ -55,12 +55,12 @@ final class Handshake
                 $result,
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
             )),
-            Wrap::text(
+            Wrap::rstText(
                 'The fourth member is ' . Rst::literal('instructions') . ', and it reads:',
             ),
             '',
             ...Rst::code('text', $instructions),
-            Wrap::text(sprintf(
+            Wrap::rstText(sprintf(
                 '%s characters of the %s a client keeps, %s.',
                 number_format(mb_strlen($instructions)),
                 number_format(Coverage::INSTRUCTIONS_BUDGET),
@@ -100,7 +100,7 @@ final class Handshake
                 $required === [] => 'Takes ' . self::joined($optional) . ', each optional.',
                 default => 'Takes ' . self::joined($required) . ', and ' . self::joined($optional) . ' where given.',
             };
-            $lines[] = Wrap::text(sprintf(
+            $lines[] = Wrap::rstText(sprintf(
                 '- %s — %s. %s %s',
                 Rst::literal((string) $prompt['name']),
                 (string) $prompt['title'],
@@ -114,28 +114,18 @@ final class Handshake
     }
 
     /**
-     * What the list weighs, member by member. `D-AUD-019` measured it once by
-     * hand and found the reason every client defers these tools; this is that
-     * measurement at every regeneration.
+     * The list as a count. Its weight is `tools:measure`'s — `D-DOC-072`.
      *
      * @return list<string>
      */
     private static function tools(): array
     {
         $tools = self::listed('tools/list', 'tools');
-        $bytes = ['description' => 0, 'inputSchema' => 0, 'outputSchema' => 0];
-        $whole = 0;
-        foreach ($tools as $tool) {
-            foreach (array_keys($bytes) as $member) {
-                $bytes[$member] += strlen((string) json_encode($tool[$member] ?? null));
-            }
-            $whole += strlen((string) json_encode($tool));
-        }
 
         return [
-            Wrap::text(sprintf(
+            Wrap::rstText(sprintf(
                 '%s carries %d tools. Each entry is the %s, %s, %s, %s, %s and %s the tool\'s own page under %s '
-                . 'states. On the wire the entries weigh %s bytes: %s of description, %s of %s and %s of %s.',
+                . 'states. %s prints what each entry weighs on the wire, and what all of them weigh together.',
                 Rst::literal('tools/list'),
                 count($tools),
                 Rst::literal('name'),
@@ -145,12 +135,7 @@ final class Handshake
                 Rst::literal('outputSchema'),
                 Rst::literal('annotations'),
                 Rst::doc('tools/', 'tools/index'),
-                number_format($whole),
-                number_format($bytes['description']),
-                number_format($bytes['inputSchema']),
-                Rst::literal('inputSchema'),
-                number_format($bytes['outputSchema']),
-                Rst::literal('outputSchema'),
+                Rst::literal('bin/cli tools:measure'),
             )),
             '',
         ];
@@ -163,7 +148,7 @@ final class Handshake
     {
         $lines = [];
         foreach (self::listed('resources/templates/list', 'resourceTemplates') as $template) {
-            $lines[] = Wrap::text(sprintf(
+            $lines[] = Wrap::rstText(sprintf(
                 '- %s — %s. %s',
                 Rst::literal((string) $template['uriTemplate']),
                 (string) $template['title'],

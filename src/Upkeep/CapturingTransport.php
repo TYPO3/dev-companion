@@ -14,7 +14,7 @@ use Mcp\Server\Transport\BaseTransport;
  * drive a server rather than to read one. This one keeps them, and drains the
  * queue the protocol puts a session's answers into after each request. So a
  * generator reads the `initialize` result as a client gets it, with nothing
- * started on the machine — `D-DOC-071`.
+ * started on the machine — `D-DOC-072`.
  *
  * @extends BaseTransport<list<string>>
  */

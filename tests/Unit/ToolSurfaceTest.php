@@ -33,7 +33,7 @@ final class ToolSurfaceTest extends TestCase
     #[Decision('D-DOC-033')]
     #[Decision('D-DOC-011')]
     #[Decision('D-DOC-016')]
-    #[Decision('D-DOC-071')]
+    #[Decision('D-DOC-072')]
     #[Test]
     public function everyPageIsWhatTheServerDeclares(): void
     {

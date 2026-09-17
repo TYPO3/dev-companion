@@ -143,9 +143,9 @@ The tool list
 
 ``tools/list`` carries 31 tools. Each entry is the ``name``, ``title``,
 ``description``, ``inputSchema``, ``outputSchema`` and ``annotations`` the
-tool's own page under :doc:`tools/ <tools/index>` states. On the wire the
-entries weigh 311,603 bytes: 32,027 of description, 47,522 of ``inputSchema``
-and 225,206 of ``outputSchema``.
+tool's own page under :doc:`tools/ <tools/index>` states.
+``bin/cli tools:measure`` prints what each entry weighs on the wire, and what
+all of them weigh together.
 
 The resource template
 ---------------------

@@ -13,7 +13,13 @@ typo3_task_guide. Where the paths read as a project or third-party extension the
 hints still come back, because the conventions transfer. The "Backend CSS" and
 "Backend TypeScript and JavaScript" sections describe the TYPO3 backend
 interface. The answer withholds them, with the reason, where the task names the
-frontend. Answers from: knowledge.
+frontend. The subjects are assets, authentication, backend css, backend modules,
+backend ui, caching, configuration, console commands, content elements,
+datahandler, dataprocessors, di, distribution, documentation, events, extbase,
+extension, fal, fluid, form, icons, labels, page rendering, persistence, php,
+project, public api, records, routing, security, site sets, sitepackage, tca,
+testing, typo3 tsconfig, typoscript condition providers, typoscript conditions,
+upgrade. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

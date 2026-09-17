@@ -139,6 +139,26 @@ final class Hints
     public const MAX_MEAN_BODY_WORDS = 340;
 
     /**
+     * The subjects the hints cover, one per file below knowledge/hints/.
+     *
+     * The description of typo3_hint_lookup lists them, because a client that
+     * defers the tool searches its description for the subject and nothing
+     * else this server sends — `D-AUD-019`. Read off the directory, so the
+     * list cannot say anything the corpus does not.
+     *
+     * @return array<int, string>
+     */
+    public static function subjects(): array
+    {
+        $subjects = [];
+        foreach (Finder::create()->files()->in(Paths::knowledge() . '/hints')->depth(0)->name('*.json')->sortByName() as $file) {
+            $subjects[] = str_replace('-', ' ', $file->getFilenameWithoutExtension());
+        }
+
+        return $subjects;
+    }
+
+    /**
      * @param int|array<int, int>|null $target
      * @return array<int, Hint>
      */

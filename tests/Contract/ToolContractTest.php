@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
+use TYPO3\DevCompanion\Knowledge\Hints;
 use TYPO3\DevCompanion\Result\Unsupported;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
@@ -70,6 +71,31 @@ final class ToolContractTest extends TestCase
                 $definition['annotations']['openWorldHint'],
                 $name . ' has the wrong open-world annotation',
             );
+        }
+    }
+
+    /**
+     * A client that defers these tools searches a name, a description and the
+     * argument descriptions for the subject a task is about, and reads nothing
+     * else this server sends. The tool with the widest corpus named two of its
+     * subjects there, both to withhold them — `D-AUD-019`.
+     */
+    #[Decision('D-AUD-019')]
+    #[Test]
+    public function everyHintSubjectStandsInTheTextAClientSearchesAToolBy(): void
+    {
+        $searchable = '';
+        foreach (Registry::definitions() as $definition) {
+            $searchable .= ' ' . $definition['name'] . ' ' . $definition['description'];
+            foreach ((array) ($definition['inputSchema']['properties'] ?? []) as $argument => $schema) {
+                $searchable .= ' ' . $argument . ' ' . (string) ($schema['description'] ?? '');
+            }
+        }
+
+        $subjects = Hints::subjects();
+        self::assertNotSame([], $subjects);
+        foreach ($subjects as $subject) {
+            self::assertStringContainsStringIgnoringCase($subject, $searchable, 'no tool names ' . $subject . ' where a client searches');
         }
     }
 

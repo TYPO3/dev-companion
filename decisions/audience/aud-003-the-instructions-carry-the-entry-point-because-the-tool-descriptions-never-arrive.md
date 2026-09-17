@@ -82,3 +82,12 @@ because the descriptions came off the files here.
 descriptions are in the transcript's own attachments, against 23 calls that are
 22 `Bash` and one `Read`. An entry point carries a task where a skill is there
 to receive it, and in `E-CORE` there is none. `D-SKL-005` carries that half.
+
+## Confirmed on 2026-09-17
+
+The cause of the deferral has a source. The API's tool search documentation
+tells a client to defer from ten tools or 10k tokens of definitions. This server
+sends 31 tools and about 20k tokens before any `outputSchema`. The same page
+says the search reads the description. So the description is a channel after
+all, for the session that knows a subject and no tool name. `D-AUD-019` takes
+that half.

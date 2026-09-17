@@ -74,8 +74,8 @@ the session read two clients' code and then measured both.
   the typed function a code-mode client builds.
 - **What follows for the text half is a question for the maintainer** rather
   than this entry. A Claude Code session reads the data half alone, at 22
-  percent more tokens than the text it never sees. `todo/waiting/` carries the
-  question with the options.
+  percent more tokens than the text it never sees. `D-ANS-162` carries the
+  answer.
 - **The proxy rewrites; the server does not switch.** A measurement that changes
   the thing it measures is not one.
 
@@ -93,7 +93,7 @@ the session read two clients' code and then measured both.
 ## Wrong if
 
 - A Claude Code release hands the model the text block beside the data. Then a
-  session pays both halves, and the question in `todo/waiting/` changes shape.
+  session pays both halves, and `D-ANS-162` accepted the cost of one.
   `bin/cli tools:tokens` shows it as a `tool_result` that is text where it was
   JSON, or as a cost that grew by the text's share.
 - A client folds `outputSchema` into the description it sends the model. Then
@@ -102,3 +102,9 @@ the session read two clients' code and then measured both.
 - The ratio between the halves flips for the tools that matter. It is per tool:
   `typo3_test_run_guide` records 67,715 bytes of text against 65,866 of data.
   `tools:measure` prints both, worst first.
+
+## Since then
+
+The maintainer answered the question on the day: the session reads what it acts
+on best, and that is the data, at the cost measured here. `D-ANS-162` records it
+and the waiting todo went with it.

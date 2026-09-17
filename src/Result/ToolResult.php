@@ -9,10 +9,12 @@ namespace TYPO3\DevCompanion\Result;
  * as data.
  *
  * Both halves describe one result and come from the same values, so they cannot
- * drift apart. The text stays the primary answer, because it carries the
- * emphasis, the caveats and the words that make a lookup usable. The data is
- * what a client composes with. Identifiers, commands, paths, scores and levels,
- * with no parse of headings and code fences back out of prose.
+ * drift apart. The data is the answer a session acts on: identifiers, commands,
+ * paths, scores and levels, with no parse of headings and code fences back out
+ * of prose. A client hands the model one half, and the one that hands over the
+ * data hands over the preferred one — `D-ANS-162`. The text is the same answer
+ * for a client that hands over text, with the emphasis and the caveats a
+ * reader wants in prose.
  */
 final class ToolResult
 {

@@ -6,6 +6,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 - [`D-ANS-160`][D-ANS-160] — A nullable field is two anyOf branches · 2026-09-17
 - [`D-ANS-161`][D-ANS-161] — A field of no fixed type names the types it takes · 2026-09-17
+- [`D-ANS-162`][D-ANS-162] — The data half is the one a session reads · 2026-09-17
 - [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15
 - [`D-ANS-156`][D-ANS-156] — A change read by name lists the changes its messages name · 2026-09-15
 - [`D-ANS-157`][D-ANS-157] — A manual page is read as the Markdown the host publishes beside it · 2026-09-15
@@ -163,6 +164,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 [D-ANS-160]: ans-160-a-nullable-field-is-two-anyof-branches.md
 [D-ANS-161]: ans-161-a-field-of-no-fixed-type-names-the-types-it-takes.md
+[D-ANS-162]: ans-162-the-data-half-is-the-one-a-session-reads.md
 [D-ANS-155]: ans-155-a-read-on-a-php-without-curl-names-the-extension.md
 [D-ANS-156]: ans-156-a-change-read-by-name-lists-the-changes-its-messages-name.md
 [D-ANS-157]: ans-157-a-manual-page-is-read-as-the-markdown-the-host-publishes-beside-it.md

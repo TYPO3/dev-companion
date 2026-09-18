@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Sdk;
 
+use Mcp\Exception\ResourceNotFoundException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
@@ -129,7 +130,7 @@ final class Skills
     public static function reference(string $id, string $reference): string
     {
         if (!in_array($reference, self::references($id), true)) {
-            throw new \RuntimeException(sprintf('Unknown reference of the %s skill: %s', $id, $reference));
+            throw new ResourceNotFoundException(ResourceHandler::skillReferenceUri($id, $reference));
         }
 
         return (string) file_get_contents($reference === self::BASE
@@ -141,7 +142,7 @@ final class Skills
     private static function published(string $id): string
     {
         if (!in_array($id, Installer::skills(), true)) {
-            throw new \RuntimeException(sprintf('Unknown task skill: %s', $id));
+            throw new ResourceNotFoundException(ResourceHandler::skillUri($id));
         }
 
         return Paths::root() . '/skills/' . $id . '/SKILL.md';

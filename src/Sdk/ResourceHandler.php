@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Sdk;
 
+use Mcp\Exception\ResourceNotFoundException;
 use Mcp\Server\ClientGateway;
 use Mcp\Server\Handler\ResourceHandlerInterface;
 use TYPO3\DevCompanion\Knowledge\Coverage;
@@ -72,7 +73,7 @@ final class ResourceHandler implements ResourceHandlerInterface
             return Documents::read($id);
         }
 
-        throw new \RuntimeException(sprintf('Unknown resource: %s', $uri));
+        throw new ResourceNotFoundException($uri);
     }
 
     /**

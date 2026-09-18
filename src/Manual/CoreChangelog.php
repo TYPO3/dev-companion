@@ -155,25 +155,26 @@ final class CoreChangelog
 
     /**
      * The stated removal and the migration of one entry, out of the Markdown
-     * docs.typo3.org publishes beside its page.
+     * docs.typo3.org renders, or null where it did not answer.
      *
-     * The title and the tags came with the listing, and the page repeats them
-     * in its front matter. What the page adds is the body, rendered: every
-     * include resolved and every role a link, where the RST on disk is the
-     * source the build ran on.
+     * The page is the body, rendered: every include resolved and every role a
+     * link, where the RST on disk is the source the build ran on. So it is the
+     * body of every shown entry, whichever side listed it, and the RST on disk
+     * is what remains offline.
      *
-     * @param array{path: string, version: string, type: string, stated: string, tags: list<string>} $entry
-     * @return array{title: string, tags: array<int, string>, removal: string, migration: string}
+     * @param array{version: string, key: string, type: string} $entry
+     * @return array{removal: string, migration: string}|null
      */
-    public function read(array $entry): array
+    public function rendered(array $entry): ?array
     {
-        $body = $this->page(self::BASE . $entry['path'] . '.md');
+        if (self::$unreachable) {
+            return null;
+        }
+        $body = $this->page(self::BASE . 'Changelog/' . $entry['version'] . '/' . $entry['key'] . '.md');
 
-        return [
-            'title' => $entry['stated'],
-            'tags' => $entry['tags'],
-            'removal' => $body === null ? '' : Changelog::removal($body, $entry),
-            'migration' => $body === null ? '' : self::section($body, 'Migration'),
+        return $body === null ? null : [
+            'removal' => Changelog::removal($body, $entry),
+            'migration' => self::section($body, 'Migration'),
         ];
     }
 

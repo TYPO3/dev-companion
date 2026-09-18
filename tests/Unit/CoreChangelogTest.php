@@ -258,6 +258,31 @@ final class CoreChangelogTest extends TestCase
     }
 
     /**
+     * An entry the installation listed is shown from the page docs.typo3.org
+     * rendered as well, because the RST on disk is the source the build ran
+     * on. The listing side says where the entry came from, and the body says
+     * what the build made of it — `D-ANS-165`.
+     */
+    #[Decision('D-ANS-165')]
+    #[Test]
+    public function anInstalledEntryIsShownFromThePageDocsTypo3OrgRendered(): void
+    {
+        Instance::discoverFrom($this->installationAt('11.5', [
+            '11.5/Deprecation-2-SomethingOlder' => 'Deprecation: #2 - Something older',
+        ]));
+        $this->manualPublishing([
+            '11.5/Deprecation-2-SomethingOlder' => 'Deprecation: #2 - Something older',
+        ]);
+
+        $result = Registry::call('typo3_changelog_lookup', ['query' => 'something older']);
+
+        $entry = $result->data['entries'][0];
+        self::assertSame('installation', $entry['publishedIn'], '11 is below what the knowledge covers, so no listing was asked');
+        self::assertSame('16.0', $entry['removal']);
+        self::assertStringStartsWith('Use [the other one]', $entry['migration'], 'the body is the rendered page');
+    }
+
+    /**
      * A shown entry is read as the Markdown docs.typo3.org rendered, which is the
      * page with every include resolved, and not as the RST it was built from.
      * The migration is its own section there, and the removal is stated in

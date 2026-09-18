@@ -10,6 +10,7 @@ coveredBy:
   - CoreChangelogTest::aTagFilterReadsNoManualEntryItDrops
   - CoreChangelogTest::aVersionDocsTypo3OrgDoesNotListComesFromTheInstallation
   - CoreChangelogTest::aVersionDocsTypo3OrgListsComesFromItWhateverTheInstallationShips
+  - CoreChangelogTest::anInstalledEntryIsShownFromThePageDocsTypo3OrgRendered
   - CoreChangelogTest::docsTypo3OrgNotAnsweringLeavesTheInstallationToAnswer
   - CoreChangelogTest::docsTypo3OrgThatDidNotAnswerIsNotAskedAgainInThisProcess
   - CoreChangelogTest::oneListingPerCoveredMajorIsRead
@@ -64,6 +65,11 @@ nobody pulled today.
   down to 7.0. It is also a major docs.typo3.org did not answer for. Offline
   that is the whole changelog the installation ships, and the answer says that
   the versions above it are unread rather than absent.
+- **A shown entry's body is the rendered page whichever side listed it.** The
+  RST on disk is the source the build ran on, includes unresolved and every role
+  as markup, and the page is its result. So the removal and the migration come
+  from docs.typo3.org for an entry the installation listed as well, and from the
+  RST only where docs.typo3.org did not answer.
 - **The identifier search stays on disk.** It reads the body of every entry in
   the narrowed set, `D-ANS-042`, and the listing carries no body. The answer
   says it reaches the entries the installation ships.

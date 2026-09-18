@@ -639,11 +639,12 @@ final class ChangelogLookup extends ReadOnlyTool
     }
 
     /**
-     * The title, the tags and the stated removal of one entry, from the side
-     * that publishes it.
+     * The title, the tags, the stated removal and the migration of one entry.
      *
-     * docs.typo3.org serves the page the build rendered from the RST, and the
-     * disk has the RST. Two readers, one shape, and this decides which.
+     * The title and the tags come from the side that listed the entry. The
+     * body comes from the page docs.typo3.org rendered, whichever side listed
+     * it, because the RST on disk is the source the build ran on and not its
+     * result. Offline, the RST on disk is what there is — `D-ANS-165`.
      *
      * @param array<string, mixed> $entry
      * @return array{title: string, tags: array<int, string>, removal: string, migration: string}
@@ -652,13 +653,16 @@ final class ChangelogLookup extends ReadOnlyTool
     {
         $version = (string) $entry['version'];
         $type = (string) $entry['type'];
+        $rendered = $manual->rendered(['version' => $version, 'key' => (string) $entry['key'], 'type' => $type]);
 
         if ($entry['publishedIn'] === 'manual') {
-            /** @var array{path: string, stated: string, tags: list<string>} $entry */
-            return $manual->read(['path' => $entry['path'], 'version' => $version, 'type' => $type, 'stated' => $entry['stated'], 'tags' => $entry['tags']]);
+            /** @var array{stated: string, tags: list<string>} $entry */
+            return ['title' => $entry['stated'], 'tags' => $entry['tags']] + ($rendered ?? ['removal' => '', 'migration' => '']);
         }
 
-        return Changelog::read(['file' => (string) $entry['file'], 'version' => $version, 'type' => $type]);
+        $read = Changelog::read(['file' => (string) $entry['file'], 'version' => $version, 'type' => $type]);
+
+        return $rendered === null ? $read : array_replace($read, $rendered);
     }
 
     /**

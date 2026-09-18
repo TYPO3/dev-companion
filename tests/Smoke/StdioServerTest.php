@@ -421,6 +421,47 @@ final class StdioServerTest extends TestCase
         );
     }
 
+    /**
+     * The same family as the Skills extension declares it, on the wire a host
+     * that speaks the extension reads. The host issues `skills/list` only after
+     * the declaration, verifies every file it then reads against the manifest,
+     * and stops on a URI that names no skill. So the case is the declaration,
+     * the digest against the read, and the error code the spec fixes.
+     */
+    #[Decision('D-ANS-163')]
+    #[Test]
+    public function theSkillsExtensionListsEachWorkflowWithTheManifestAHostVerifiesAReadBy(): void
+    {
+        $body = 'typo3://skill/typo3-extension-testing/SKILL.md';
+        $responses = $this->session([
+            $this->request(2, 'skills/list', []),
+            $this->request(3, 'skills/get', ['uri' => $body]),
+            $this->request(4, 'resources/read', ['uri' => $body]),
+            $this->request(5, 'skills/get', ['uri' => 'typo3://skill/nobody-published-this/SKILL.md']),
+        ]);
+
+        self::assertSame(['io.modelcontextprotocol/skills' => []], $responses[1]['result']['capabilities']['extensions']);
+
+        $list = $responses[2]['result'];
+        self::assertSame('complete', $list['resultType']);
+        self::assertArrayHasKey('ttlMs', $list);
+        self::assertArrayHasKey('cacheScope', $list);
+        self::assertSame(Installer::skills(), array_map(
+            static fn(array $skill): string => $skill['frontmatter']['name'],
+            $list['skills'],
+        ));
+
+        $entry = $responses[3]['result']['skill'];
+        self::assertContains($entry, $list['skills'], 'skills/get answers with another entry than the list');
+        $read = $responses[4]['result']['contents'][0]['text'];
+        self::assertSame($body, $entry['resources'][0]['uri']);
+        self::assertSame('sha256:' . hash('sha256', $read), $entry['resources'][0]['digest']);
+        self::assertSame(strlen($read), $entry['resources'][0]['size']);
+        self::assertContains(dirname($body) . '/references/base.md', array_column($entry['resources'], 'uri'));
+
+        self::assertSame(-32602, $responses[5]['error']['code']);
+    }
+
     #[Test]
     public function invalidArgumentsAreRejectedBeforeTheToolRuns(): void
     {

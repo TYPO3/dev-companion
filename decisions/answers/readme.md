@@ -4,6 +4,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-ANS-163`][D-ANS-163] — The Skills extension is served over the typo3:// resources · 2026-09-18
 - [`D-ANS-160`][D-ANS-160] — A nullable field is two anyOf branches · 2026-09-17
 - [`D-ANS-161`][D-ANS-161] — A field of no fixed type names the types it takes · 2026-09-17
 - [`D-ANS-162`][D-ANS-162] — The data half is the one a session reads · 2026-09-17
@@ -162,6 +163,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-163]: ans-163-the-skills-extension-is-served-over-the-typo3-resources.md
 [D-ANS-160]: ans-160-a-nullable-field-is-two-anyof-branches.md
 [D-ANS-161]: ans-161-a-field-of-no-fixed-type-names-the-types-it-takes.md
 [D-ANS-162]: ans-162-the-data-half-is-the-one-a-session-reads.md

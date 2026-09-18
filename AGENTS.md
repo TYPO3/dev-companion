@@ -59,7 +59,7 @@ src/Http/Fetch.php # the one way this server reads a host outside itself: the ti
 src/Search/        # the lexical matching every prose and label lookup goes through
 src/Feedback/      # the feedback channel; a development tool, offered from a standalone checkout alone
 src/Feedback/Card.php  # the todo a feedback arrives with
-src/Sdk/           # the adapters onto mcp/sdk: tool dispatch and the typo3:// resources, documents and skills
+src/Sdk/           # the adapters onto mcp/sdk: tool dispatch, the typo3:// resources, and the Skills extension over the skill ones
 src/Paths.php      # where this checkout keeps things; the one class both halves share
 src/bootstrap.php  # locates the Composer autoloader
 src/Upkeep/        # what `bin/cli` runs on this repository, and nothing the server answers with

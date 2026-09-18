@@ -18,6 +18,7 @@ use TYPO3\DevCompanion\Sdk\SkillReferenceHandler;
 use TYPO3\DevCompanion\Sdk\Skills;
 use TYPO3\DevCompanion\Server\Factory;
 use TYPO3\DevCompanion\Server\Installer;
+use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 
 /**
@@ -147,11 +148,8 @@ final class ResourceSurfaceTest extends TestCase
     public function whatASkillIsOfferedAsIsWhatItsOwnFrontMatterSays(): void
     {
         foreach (Skills::skills() as $skill) {
-            $frontMatter = [];
-            preg_match('/^description:[ \t]*(\S.*)$/m', Skills::read($skill['id']), $frontMatter);
-
             self::assertStringContainsString(
-                trim($frontMatter[1] ?? 'no description in the front matter'),
+                Skills::frontMatter($skill['id'])['description'],
                 (string) Skills::description($skill['id']),
                 $skill['id'] . ' is described twice, and the two can disagree',
             );
@@ -291,6 +289,42 @@ final class ResourceSurfaceTest extends TestCase
                     self::read(dirname($uri) . '/' . $target),
                     $skill['id'] . ' sends its reader to ' . $target . ', which resolves to nothing served',
                 );
+            }
+        }
+    }
+
+    /**
+     * What the Skills extension lists is what a host verifies a read against.
+     * Every file a skill consists of, once, with the digest and the size of
+     * the bytes the read returns. The front matter whole, because the host
+     * compares it field by field with the body it reads. And the name equal
+     * to the segment above `SKILL.md`, which is what the spec binds a skill's
+     * identity to.
+     */
+    #[Decision('D-ANS-163')]
+    #[Test]
+    public function theManifestOfASkillIsComputedFromTheBytesAReadReturns(): void
+    {
+        foreach (Skills::skills() as $skill) {
+            $manifest = Skills::manifest($skill['id']);
+            self::assertSame(ResourceHandler::skillUri($skill['id']), $manifest['uri']);
+            self::assertSame(basename(dirname($manifest['uri'])), $manifest['frontmatter']['name']);
+
+            $listed = array_column($manifest['resources'], 'uri');
+            self::assertSame($listed, array_unique($listed), $skill['id'] . ' lists a file twice');
+            self::assertSame(
+                [$manifest['uri'], ...array_map(
+                    static fn(string $reference): string => ResourceHandler::skillReferenceUri($skill['id'], $reference),
+                    Skills::references($skill['id']),
+                )],
+                $listed,
+                $skill['id'] . ' lists other files than it serves',
+            );
+
+            foreach ($manifest['resources'] as $resource) {
+                $served = self::read($resource['uri']);
+                self::assertSame('sha256:' . hash('sha256', $served), $resource['digest'], $resource['uri']);
+                self::assertSame(strlen($served), $resource['size'], $resource['uri']);
             }
         }
     }

@@ -19,8 +19,10 @@ The four members
   ``StdioServerTest`` holds that.
 * **``capabilities``** — what the SDK detects from what
   `Factory <../../src/Server/Factory.php>`_ registered: tools, resources with
-  ``subscribe``, prompts, logging and completions. No list carries
-  ``listChanged``, because nothing here changes a list while a session runs.
+  ``subscribe``, prompts, logging and completions. Under ``extensions`` stands
+  the Skills extension, and :doc:`resources/ <resources/index>` says what it
+  adds. No list carries ``listChanged``, because nothing here changes a list
+  while a session runs.
 * **``serverInfo``** — the name and the version ``Factory`` declares.
 * **``instructions``** — the statement
   `Coverage <../../src/Knowledge/Coverage.php>`_ assembles from
@@ -95,7 +97,10 @@ The initialize result
             "resources": {
                 "subscribe": true
             },
-            "tools": {}
+            "tools": {},
+            "extensions": {
+                "io.modelcontextprotocol/skills": {}
+            }
         },
         "serverInfo": {
             "name": "typo3-dev-companion",

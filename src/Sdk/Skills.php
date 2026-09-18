@@ -60,7 +60,7 @@ final class Skills
      */
     public static function name(string $id): string
     {
-        return self::field($id, 'name');
+        return self::frontMatter($id)['name'];
     }
 
     /**
@@ -79,7 +79,7 @@ final class Skills
             return null;
         }
 
-        return self::WHAT_IT_IS . ' ' . self::field($id, 'description') . ' ' . (self::isCoreOnly($id)
+        return self::WHAT_IT_IS . ' ' . self::summary($id) . ' ' . (self::isCoreOnly($id)
             ? "The TYPO3 core's own workflow, which does not transfer to extension or site work."
             : "Not the core's own workflow: it is followed in whichever repository the work is in.");
     }
@@ -184,6 +184,22 @@ final class Skills
      */
     private static function summary(string $id): string
     {
+        return self::frontMatter($id)['description'];
+    }
+
+    /**
+     * The front matter as a YAML reader receives it, whole.
+     *
+     * Whole because the Skills extension hands every field on unchanged, and a
+     * host compares them one by one against the body it then reads. A field
+     * picked out here by a regex would be a second parser for the same block.
+     * The block comes out first, so a line of the body that opens with the
+     * same word does not read as the declaration.
+     *
+     * @return array<string, mixed>&array{name: string, description: string}
+     */
+    public static function frontMatter(string $id): array
+    {
         if (preg_match('/\A---\R(.*?)\R---\R/s', self::read($id), $block) !== 1) {
             throw new \RuntimeException(sprintf('The %s skill has no front matter.', $id));
         }
@@ -198,28 +214,57 @@ final class Skills
             ));
         }
 
-        $summary = is_array($matter) ? ($matter['description'] ?? null) : null;
-        if (!is_string($summary) || $summary === '') {
-            throw new \RuntimeException(sprintf('The %s skill declares no description.', $id));
+        foreach (['name', 'description'] as $field) {
+            $value = is_array($matter) ? ($matter[$field] ?? null) : null;
+            if (!is_string($value) || $value === '') {
+                throw new \RuntimeException(sprintf('The %s skill declares no %s.', $id, $field));
+            }
         }
 
-        return $summary;
+        /** @var array<string, mixed>&array{name: string, description: string} $matter */
+        return $matter;
     }
 
     /**
-     * One field of the front matter, which stands on one line in all of them.
-     * The block comes out first, so a line of the body that opens with the same
-     * word does not read as the declaration.
+     * The skill as the Skills extension lists it: its front matter, and every
+     * file it consists of with the digest and the size of the bytes a read
+     * returns.
+     *
+     * The manifest is computed from what `read()` and `reference()` serve
+     * rather than from the directory, because `references/base.md` is in no
+     * directory here. A host verifies each file against this before it uses
+     * it, so the digest has to be of the bytes that go over the wire.
+     *
+     * @return array{
+     *     uri: string,
+     *     frontmatter: array<string, mixed>,
+     *     resources: array<int, array{uri: string, digest: string, size: int}>,
+     * }
      */
-    private static function field(string $id, string $field): string
+    public static function manifest(string $id): array
     {
-        if (preg_match('/\A---\R(.*?)\R---\R/s', self::read($id), $block) !== 1) {
-            throw new \RuntimeException(sprintf('The %s skill has no front matter.', $id));
-        }
-        if (preg_match('/^' . $field . ':[ \t]*(\S.*)$/m', $block[1], $matches) !== 1) {
-            throw new \RuntimeException(sprintf('The %s skill declares no %s.', $id, $field));
+        $resources = [self::manifestEntry(ResourceHandler::skillUri($id), self::read($id))];
+        foreach (self::references($id) as $reference) {
+            $resources[] = self::manifestEntry(
+                ResourceHandler::skillReferenceUri($id, $reference),
+                self::reference($id, $reference),
+            );
         }
 
-        return trim($matches[1]);
+        return [
+            'uri' => ResourceHandler::skillUri($id),
+            'frontmatter' => self::frontMatter($id),
+            'resources' => $resources,
+        ];
+    }
+
+    /** @return array{uri: string, digest: string, size: int} */
+    private static function manifestEntry(string $uri, string $bytes): array
+    {
+        return [
+            'uri' => $uri,
+            'digest' => 'sha256:' . hash('sha256', $bytes),
+            'size' => strlen($bytes),
+        ];
     }
 }

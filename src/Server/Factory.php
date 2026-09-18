@@ -17,6 +17,7 @@ use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Sdk\ResourceHandler;
 use TYPO3\DevCompanion\Sdk\SkillReferenceHandler;
 use TYPO3\DevCompanion\Sdk\Skills;
+use TYPO3\DevCompanion\Sdk\SkillsExtension;
 use TYPO3\DevCompanion\Sdk\ToolHandler;
 use TYPO3\DevCompanion\Tool\Registry;
 
@@ -131,6 +132,7 @@ final class Factory
             $builder->add($resource, $resourceHandler);
         }
         $builder->add(self::skillReferences(), new SkillReferenceHandler());
+        $builder->enableExtension(new SkillsExtension());
 
         return $builder->build();
     }

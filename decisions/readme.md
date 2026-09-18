@@ -94,6 +94,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-163`][D-ANS-163] — The Skills extension is served over the typo3:// resources · 2026-09-18
 - [`D-ANS-160`][D-ANS-160] — A nullable field is two anyOf branches · 2026-09-17
 - [`D-ANS-161`][D-ANS-161] — A field of no fixed type names the types it takes · 2026-09-17
 - [`D-ANS-162`][D-ANS-162] — The data half is the one a session reads · 2026-09-17
@@ -252,6 +253,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-163]: answers/ans-163-the-skills-extension-is-served-over-the-typo3-resources.md
 [D-ANS-160]: answers/ans-160-a-nullable-field-is-two-anyof-branches.md
 [D-ANS-161]: answers/ans-161-a-field-of-no-fixed-type-names-the-types-it-takes.md
 [D-ANS-162]: answers/ans-162-the-data-half-is-the-one-a-session-reads.md

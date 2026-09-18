@@ -91,6 +91,29 @@ each published directory by ``Installer`` and served here from that same file
 (`D-SKL-001 <../../../decisions/task-skills/skl-001-the-order-a-task-starts-in-is-one-file.md>`_).
 So the resource is the file a client would have had if it had run the install.
 
+The Skills extension
+--------------------
+
+**A host that speaks ``io.modelcontextprotocol/skills`` sees the workflows as
+skills; every other host sees them as the resources above.** The declaration
+goes out in the ``initialize`` capabilities. A host may not tell a skill from a
+page by its URI. `Sdk\SkillsExtension <../../../src/Sdk/SkillsExtension.php>`_
+declares it and answers its two methods,
+`D-ANS-163 <../../../decisions/answers/ans-163-the-skills-extension-is-served-over-the-typo3-resources.md>`_.
+
+* **``skills/list``** — every published skill, as the URI of its body, its front
+  matter whole, and a manifest. The manifest names each file with the SHA-256
+  and the byte size of what a read returns. ``references/base.md`` is in it,
+  hashed from the file the read serves.
+* **``skills/get``** — one entry by the URI of its body, for a host that holds
+  the URI without the list. A URI that names no skill is ``-32602``.
+
+The reads stay ``resources/read`` on the body and on each reference. The
+extension adds the manifest a host verifies each read against, and the identity
+it binds an approval to. The scheme stays ``typo3://``. The specification
+prefers ``skill://`` and permits another, and the declaration is what makes a
+resource a skill.
+
 What a picker reads
 -------------------
 
@@ -158,3 +181,9 @@ What holds it
   ``StdioServerTest::aTaskWorkflowIsServedWithWhatItSendsItsReaderTo`` — the
   list and both families as they go over the wire, including the reference a
   body sends its reader to.
+* ``ResourceSurfaceTest::theManifestOfASkillIsComputedFromTheBytesAReadReturns``
+  and
+  ``StdioServerTest::theSkillsExtensionListsEachWorkflowWithTheManifestAHostVerifiesAReadBy``
+  — that the manifest names every file of a skill once, with the digest and the
+  size of what a read returns, and that the declaration and the error code reach
+  the wire.

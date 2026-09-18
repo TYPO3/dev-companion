@@ -18,7 +18,7 @@ abstract class ReadOnlyTool implements Tool
      * Whether the answer comes from a host this package does not own, which is
      * the one annotation that varies. The tools that reach one are the manuals
      * and their permalinks, the tracker, the review server, the registry, and
-     * the changelog above the installed major.
+     * the changelog.
      */
     protected const OPEN_WORLD = false;
 

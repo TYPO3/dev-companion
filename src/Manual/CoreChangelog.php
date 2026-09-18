@@ -6,56 +6,55 @@ namespace TYPO3\DevCompanion\Manual;
 
 use TYPO3\DevCompanion\Http\Fetch;
 use TYPO3\DevCompanion\Installation\Changelog;
+use TYPO3\DevCompanion\Knowledge\Versions;
 
 /**
- * The changelog docs.typo3.org publishes, which is where the installation's own
- * copy stops.
+ * The changelog docs.typo3.org publishes, which is the source of an entry.
  *
- * A package ships every changelog down to 7.0 and nothing above its own major.
- * So the entries a caller upgrades *to* are the ones its installation cannot
- * show it. There is one manual and it has no versions: every version in the URL
- * of `/c/typo3/cms-core/` redirects to `main`. So the version a caller asks for
- * filters the entry names here and never reaches the URL, and nothing reads per
- * version (`D-ANS-067`). What it costs is one inventory read, held under its
- * entity tag, and one `_sources` read per entry an answer shows.
+ * docs.typo3.org renders the changelog after every merge, so it is ahead of
+ * what a package ships and ahead of a checkout nobody pulled today. There is one
+ * manual and it has no versions: every version in the URL of
+ * `/c/typo3/cms-core/` redirects to `main`. What it publishes beside the pages
+ * is one listing per major, as JSON, and every page as the Markdown the build
+ * rendered from the RST (`D-ANS-165`). One read per covered major, held under
+ * its entity tag and revalidated per call, and one page read per entry an
+ * answer shows, held the same way.
  */
 final class CoreChangelog
 {
     /**
-     * The manual the host publishes the core's changelog as. It is the
+     * The manual docs.typo3.org publishes the core's changelog as. It is the
      * `cms-core` extension manual under `/c/`, not one of the books under `/m/`
      * — TYPO3 Explained indexes no changelog entry at all.
      */
     private const BASE = 'https://docs.typo3.org/c/typo3/cms-core/main/en-us/';
 
-    private const INVENTORY = 'objects.inv';
-
     /**
-     * The RST of a rendered page, byte for byte. Sphinx writes it beside the
-     * HTML from the same build, `.. index::` and all, so the same parser reads
-     * the entries this hands on and the files on disk.
-     */
-    private const SOURCES = '_sources/';
-
-    /**
-     * The inventory as it was last read, with the tag it came under.
+     * Each major's listing as it was last read, with the tag it came under.
      *
      * Static because the tool builds an instance per call and the manual is one
      * artefact for the process. `Documentation` holds its indexes the same way
      * and for the same reason.
      *
-     * @var array{etag: string, entries: list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, url: string, path: string}>}|null
+     * @var array<int, array{etag: string, entries: list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string}>}>
      */
-    private static ?array $index = null;
+    private static array $index = [];
 
     /**
-     * Whether the host has already failed to answer in this process.
+     * Each page as it was last read, under its URL, with the tag it came under.
      *
-     * A changelog lookup is the tool a session calls most, and it used to touch
-     * nothing outside the machine. A call to a host that is not there costs the
-     * connect timeout, so this asks once. A session that starts offline pays
-     * three seconds once rather than three seconds a question, and answers from
-     * the installation for the rest of it.
+     * @var array<string, array{etag: string, body: string}>
+     */
+    private static array $pages = [];
+
+    /**
+     * Whether docs.typo3.org has already failed to answer in this process.
+     *
+     * A changelog lookup is the tool a session calls most. A call to a server
+     * that is not there costs the connect timeout, so this asks once. A session
+     * that starts offline pays three seconds once rather than three seconds a
+     * question, and answers from the installation for the rest of it. A 404
+     * for one major is an answer, and the next major is asked for.
      */
     private static bool $unreachable = false;
 
@@ -73,82 +72,109 @@ final class CoreChangelog
     /**
      * What a test hands in, so nothing it drives reaches docs.typo3.org.
      *
-     * What this holds goes with it. Another reader is another host, and entries
-     * kept across the two would answer for a changelog nobody read.
+     * What this holds goes with it. Another reader is another server, and
+     * entries kept across the two would answer for a changelog nobody read.
      *
      * @param (\Closure(string): ?string)|null $reader
      */
     public static function useReader(?\Closure $reader): void
     {
         self::$transport = $reader;
-        self::$index = null;
+        self::$index = [];
+        self::$pages = [];
         self::$unreachable = false;
     }
 
     /**
-     * Every entry the host publishes, in the shape the installation's own
-     * entries have.
+     * Every entry docs.typo3.org publishes, per covered major.
      *
-     * The type, the issue and the version are in the page name, and the stated
-     * title is the other half of the inventory line. It is the same title
-     * `Changelog::read()` finds inside the file, so it costs no read here. Both
-     * are searchable, which is what lets a search compose an answer without one
-     * entry read.
+     * The majors are the ones `knowledge/versions.json` covers, because nothing
+     * on docs.typo3.org lists them for less than the whole table of contents. A
+     * major it did not answer for is null under its number, which is a
+     * different thing from a major it publishes nothing for. The answer tells
+     * the caller that the gap is unread rather than that there is none.
      *
-     * Null is a host that did not answer, which is a different thing from a
-     * host that published nothing. The answer tells the caller that the gap is
-     * unread rather than that there is none.
-     *
-     * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, url: string, path: string}>|null
+     * @return array<int, list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string}>|null>
      */
-    public function entries(): ?array
+    public function entries(): array
     {
-        $held = self::$index;
+        $read = [];
+        foreach (Versions::majors() as $major) {
+            $read[$major] = $this->major($major);
+        }
+
+        return $read;
+    }
+
+    /**
+     * The listing of one major, in the shape the installation's own entries
+     * have.
+     *
+     * A listing this holds is asked for again under its tag, and a 304 is the
+     * held one. So the second call of a session pays one round trip and no
+     * payload for a listing that is still current, and a render after a merge
+     * arrives with the next call.
+     *
+     * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string}>|null
+     */
+    private function major(int $major): ?array
+    {
+        $held = self::$index[$major] ?? null;
         if ($held === null && self::$unreachable) {
             return null;
         }
 
         $response = $this->reader->read(
-            self::BASE . self::INVENTORY,
+            self::BASE . 'Changelog-' . $major . '.json',
             $held === null ? [] : ['If-None-Match: ' . $held['etag']],
         );
 
         if ($held !== null && $response['status'] === 304) {
             return $held['entries'];
         }
+
+        // A server that gave nothing at all is not asked for the next major.
+        // One that answered with something that is no listing is there, and
+        // has no listing for this major: the knowledge covers a major
+        // docs.typo3.org has not opened, or the other way round.
         if ($response['body'] === null) {
             self::$unreachable = $held === null;
 
             return $held['entries'] ?? null;
         }
-
-        $entries = self::listed($response['body']);
+        $entries = self::listed(Fetch::decode($response['body']));
         if ($entries === null) {
-            self::$unreachable = $held === null;
-
             return $held['entries'] ?? null;
         }
         if (is_string($response['etag']) && $response['etag'] !== '') {
-            self::$index = ['etag' => $response['etag'], 'entries' => $entries];
+            self::$index[$major] = ['etag' => $response['etag'], 'entries' => $entries];
         }
 
         return $entries;
     }
 
     /**
-     * The title, the tags and the stated removal of one entry, out of the RST
-     * the host publishes beside its page.
+     * The stated removal and the migration of one entry, out of the Markdown
+     * docs.typo3.org publishes beside its page.
      *
-     * @param array{path: string, version: string, type: string} $entry
+     * The title and the tags came with the listing, and the page repeats them
+     * in its front matter. What the page adds is the body, rendered: every
+     * include resolved and every role a link, where the RST on disk is the
+     * source the build ran on.
+     *
+     * @param array{path: string, version: string, type: string, stated: string, tags: list<string>} $entry
      * @return array{title: string, tags: array<int, string>, removal: string, migration: string}
      */
     public function read(array $entry): array
     {
-        $source = $this->reader->get(self::BASE . self::SOURCES . preg_replace('/\.html$/', '', $entry['path']) . '.rst.txt');
+        $body = $this->page(self::BASE . $entry['path'] . '.md');
 
-        return $source === null
-            ? ['title' => '', 'tags' => [], 'removal' => '', 'migration' => '']
-            : Changelog::parse($source, $entry);
+        return [
+            'title' => $entry['stated'],
+            'tags' => $entry['tags'],
+            'removal' => $body === null ? '' : Changelog::removal($body, $entry),
+            'migration' => $body === null ? '' : self::section($body, 'Migration'),
+        ];
     }
 
     /** Where a caller reads the entry itself. */
@@ -157,48 +183,97 @@ final class CoreChangelog
         return self::BASE . 'Changelog/' . $version . '/' . $key . '.html';
     }
 
-    /**
-     * The changelog pages of a Sphinx inventory, as entries.
-     *
-     * Only `std:doc` and only under `Changelog/`. The manual carries a handful
-     * of pages that are not entries. Every other role is an addressable object
-     * inside a page rather than a page.
-     *
-     * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, url: string, path: string}>|null
-     */
-    private static function listed(string $inventory): ?array
+    /** One page, held under its tag and asked for again the way a listing is. */
+    private function page(string $url): ?string
     {
-        $listing = @zlib_decode(explode("\n", $inventory, 5)[4] ?? '');
-        if (!is_string($listing)) {
+        $held = self::$pages[$url] ?? null;
+        $response = $this->reader->read($url, $held === null ? [] : ['If-None-Match: ' . $held['etag']]);
+        if ($held !== null && $response['status'] === 304) {
+            return $held['body'];
+        }
+        if ($response['body'] === null) {
+            return $held['body'] ?? null;
+        }
+        if (is_string($response['etag']) && $response['etag'] !== '') {
+            self::$pages[$url] = ['etag' => $response['etag'], 'body' => $response['body']];
+        }
+
+        return $response['body'];
+    }
+
+    /**
+     * One section of a rendered page, whole.
+     *
+     * A heading is `## Migration {#migration}`, and the section runs to the
+     * next heading of the same level or to the end. The anchor the renderer
+     * appends is not part of the name.
+     */
+    private static function section(string $markdown, string $heading): string
+    {
+        $section = [];
+        $inside = false;
+        foreach (preg_split('/\R/', $markdown) ?: [] as $line) {
+            if (preg_match('/^## +(.+?)(?: *\{#[^}]*\})? *$/', $line, $named) === 1) {
+                if ($inside) {
+                    break;
+                }
+                $inside = trim($named[1]) === $heading;
+                continue;
+            }
+            if ($inside) {
+                $section[] = $line;
+            }
+        }
+
+        return trim(implode("\n", $section));
+    }
+
+    /**
+     * The entries of one major's listing.
+     *
+     * The type, the issue, the version and the tags are fields of the listing.
+     * The stated title is the page title, which is the same title
+     * `Changelog::read()` finds inside the file on disk. So a title and a tag
+     * cost no read here, which is what lets a search and a tag filter compose
+     * an answer without one entry read.
+     *
+     * @param array<mixed>|null $listing
+     * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string}>|null
+     */
+    private static function listed(?array $listing): ?array
+    {
+        if (!is_array($listing['entries'] ?? null)) {
             return null;
         }
 
         $entries = [];
-        foreach (explode("\n", $listing) as $line) {
-            if (preg_match('/^(.+?) +std:doc +-?\d+ +(\S+) +(.*)$/', $line, $object) !== 1) {
+        foreach ($listing['entries'] as $entry) {
+            if (!is_array($entry)) {
                 continue;
             }
-            [, $name, $path, $title] = $object;
-            if (preg_match('#^Changelog/([^/]+)/(Breaking|Deprecation|Feature|Important)-(\d+)-(.+)$#', $name, $page) !== 1) {
+            $type = ucfirst(strtolower((string) ($entry['type'] ?? '')));
+            $path = (string) ($entry['path'] ?? '');
+            $version = (string) ($entry['typo3-version'] ?? '');
+            if (!in_array($type, Changelog::TYPES, true) || $version === '' || preg_match('#^Changelog/[^/]+/([^/]+)$#', $path, $page) !== 1) {
                 continue;
             }
-            [, $version, $type, $issue, $spelled] = $page;
-            $key = $type . '-' . $issue . '-' . $spelled;
+            $key = $page[1];
             $entries[] = [
                 'type' => $type,
-                'issue' => $issue,
+                'issue' => (string) ($entry['issue'] ?? ''),
                 'version' => $version,
                 'key' => $key,
-                'source' => Changelog::words($spelled),
+                'source' => Changelog::words(explode('-', $key, 3)[2] ?? $key),
                 // "Deprecation: #110148 - Experimental backend ViewHelpers" is
-                // what the line carries, and the two fields in front of it are
+                // what the title carries, and the two fields in front of it are
                 // fields of their own here. It is `stated` and not `title`
                 // because a search reads `title` and the installation's entries
                 // gain theirs only from a file read. Under that name it would
                 // match a manual entry in the pass where the search still reads
                 // the installed one by its file name alone.
-                'stated' => $title === '-' ? '' : trim((string) preg_replace('/^(?:Breaking|Deprecation|Feature|Important):\s*(?:#\d+\s*-\s*)?/', '', $title)),
-                'url' => self::url($version, $key),
+                'stated' => trim((string) preg_replace('/^(?:Breaking|Deprecation|Feature|Important):\s*(?:#\d+\s*-\s*)?/', '', (string) ($entry['title'] ?? ''))),
+                'tags' => array_values(array_filter(array_map('strval', is_array($entry['tags'] ?? null) ? $entry['tags'] : []))),
+                'url' => self::BASE . $path . '.html',
                 'path' => $path,
             ];
         }

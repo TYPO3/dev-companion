@@ -12,6 +12,7 @@ use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Knowledge\Hints;
+use TYPO3\DevCompanion\Manual\CoreChangelog;
 use TYPO3\DevCompanion\Result\Unsupported;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
@@ -61,8 +62,7 @@ final class ToolContractTest extends TestCase
                     'typo3_permalink_lookup',
                     'typo3_forge_lookup',
                     'typo3_gerrit_lookup',
-                    // The versions above the installed major, which the
-                    // installation cannot ship — `D-ANS-067`.
+                    // The changelog as the host renders it — `D-ANS-165`.
                     'typo3_changelog_lookup',
                     // What the extension registry has published, which the
                     // repository under audit cannot say — `D-FBK-051`.
@@ -369,6 +369,9 @@ final class ToolContractTest extends TestCase
         // discovery walked.
         Instance::discoverFrom(sys_get_temp_dir());
         Typo3Cli::forget();
+        // The changelog answers from docs.typo3.org without an installation,
+        // `D-ANS-165`. Sealed, so this is the case where neither answers.
+        CoreChangelog::useReader(static fn(string $url): ?string => null);
 
         foreach (self::installationBackedSchemas() as $name => $schema) {
             self::assertArrayHasKey($name, self::UNANSWERABLE_CALLS, $name . ' answers from the installation and is not driven here');
@@ -400,6 +403,7 @@ final class ToolContractTest extends TestCase
             );
             self::assertArrayNotHasKey('answeredBy', $data, $name . ' names a source where none answered');
         }
+        CoreChangelog::useReader(null);
     }
 
     /**

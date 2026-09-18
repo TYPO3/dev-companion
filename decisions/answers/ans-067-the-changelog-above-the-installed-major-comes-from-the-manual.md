@@ -2,13 +2,9 @@
 id: D-ANS-067
 title: The changelog above the installed major comes from the manual
 date: 2026-08-08
-status: open
-coveredBy:
-  - CoreChangelogTest::aHostThatDoesNotAnswerIsSaid
-  - CoreChangelogTest::aManualTitleDoesNotShadowTheInstalledEntryAQueryIsAbout
-  - CoreChangelogTest::aVersionTheInstallationShipsIsNeverTakenFromTheManual
-  - CoreChangelogTest::anEntryAboveTheInstalledMajorComesFromTheManual
-  - CoreChangelogTest::askingForAnInstalledVersionReachesNoHostAtAll
+status: revoked
+revokedBy: D-ANS-165
+coveredBy: []
 ---
 
 # D-ANS-067 — The changelog above the installed major comes from the manual
@@ -113,3 +109,14 @@ contribute nothing, exactly as the decided line about identifiers in a body says
 they would. An ungated manual half would have answered that session the same
 nothing. What it needed instead is
 [`D-ANS-105`](ans-105-the-unsupported-answer-says-what-would-make-it-answerable.md).
+
+## Revoked on 2026-09-18
+
+By
+[`D-ANS-165`](ans-165-the-changelog-is-read-from-docs-typo3-org-and-the-installation-answers-the-rest.md).
+docs.typo3.org renders the changelog after every merge and publishes every page
+as Markdown. So it is the source, and the installation answers what
+docs.typo3.org did not list. The two sides and the sentence that names an
+unreachable docs.typo3.org stand there. Two things no longer hold. The gate by
+named version, which reached no server for a version the installation ships, and
+the installation as the side that answers first.

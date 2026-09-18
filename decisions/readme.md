@@ -95,6 +95,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### answers
 
 - [`D-ANS-163`][D-ANS-163] — The Skills extension is served over the typo3:// resources · 2026-09-18
+- [`D-ANS-165`][D-ANS-165] — The changelog is read from docs.typo3.org and the installation answers the rest · 2026-09-18
 - [`D-ANS-160`][D-ANS-160] — A nullable field is two anyOf branches · 2026-09-17
 - [`D-ANS-161`][D-ANS-161] — A field of no fixed type names the types it takes · 2026-09-17
 - [`D-ANS-162`][D-ANS-162] — The data half is the one a session reads · 2026-09-17
@@ -191,7 +192,6 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-064`][D-ANS-064] — An issue answer holds what a triage needs · 2026-08-08
 - [`D-ANS-065`][D-ANS-065] — The manual index is the inventory each manual publishes · 2026-08-08
 - [`D-ANS-066`][D-ANS-066] — One handle serves every read of one Fetch · 2026-08-08
-- [`D-ANS-067`][D-ANS-067] — The changelog above the installed major comes from the manual · 2026-08-08
 - [`D-ANS-069`][D-ANS-069] — A backlog row carries the review server and not the journal · 2026-08-08
 - [`D-ANS-060`][D-ANS-060] — A bare word in `appliesTo` reaches a path segment · 2026-08-07
 - [`D-ANS-061`][D-ANS-061] — An answer that names a document hands it over · 2026-08-07
@@ -254,6 +254,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-163]: answers/ans-163-the-skills-extension-is-served-over-the-typo3-resources.md
+[D-ANS-165]: answers/ans-165-the-changelog-is-read-from-docs-typo3-org-and-the-installation-answers-the-rest.md
 [D-ANS-160]: answers/ans-160-a-nullable-field-is-two-anyof-branches.md
 [D-ANS-161]: answers/ans-161-a-field-of-no-fixed-type-names-the-types-it-takes.md
 [D-ANS-162]: answers/ans-162-the-data-half-is-the-one-a-session-reads.md
@@ -350,7 +351,6 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-ANS-064]: answers/ans-064-an-issue-answer-holds-what-a-triage-needs.md
 [D-ANS-065]: answers/ans-065-the-manual-index-is-the-inventory-each-manual-publishes.md
 [D-ANS-066]: answers/ans-066-one-handle-serves-every-read-of-one-fetch.md
-[D-ANS-067]: answers/ans-067-the-changelog-above-the-installed-major-comes-from-the-manual.md
 [D-ANS-069]: answers/ans-069-a-backlog-row-carries-the-review-server-and-not-the-journal.md
 [D-ANS-060]: answers/ans-060-a-bare-word-in-appliesto-reaches-a-path-segment.md
 [D-ANS-061]: answers/ans-061-an-answer-that-names-a-document-hands-it-over.md
@@ -1302,6 +1302,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DOC-020`][D-DOC-020] — The site is rendered by one command that installs what it needs · 2026-08-09 → D-DOC-028
 - [`D-DOC-021`][D-DOC-021] — The site is searched in a dialog opened with Ctrl-K · 2026-08-09 → D-DOC-024
 - [`D-DOC-023`][D-DOC-023] — The site is built to the TYPO3 Support App design system · 2026-08-09 → D-DOC-024
+- [`D-ANS-067`][D-ANS-067] — The changelog above the installed major comes from the manual · 2026-08-08 → D-ANS-165
 - [`D-DIS-015`][D-DIS-015] — The installed entrypoint is named relatively wherever it exists · 2026-08-08 → D-DIS-016
 - [`D-SKL-027`][D-SKL-027] — A draft declares itself under this server's own metadata key · 2026-08-08 → D-SKL-087
 - [`D-SKL-015`][D-SKL-015] — A step is skipped only where it has already run · 2026-08-04 → D-SKL-034
@@ -1350,6 +1351,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-DOC-020]: documentation/doc-020-the-site-is-rendered-by-one-command-that-installs-what-it-needs.md
 [D-DOC-021]: documentation/doc-021-the-site-is-searched-in-a-dialog-opened-with-ctrl-k.md
 [D-DOC-023]: documentation/doc-023-the-site-is-built-to-the-typo3-support-app-design-system.md
+[D-ANS-067]: answers/ans-067-the-changelog-above-the-installed-major-comes-from-the-manual.md
 [D-DIS-015]: discovery/dis-015-the-installed-entrypoint-is-named-relatively-wherever-it-exists.md
 [D-SKL-027]: task-skills/skl-027-a-draft-declares-itself-under-this-servers-own-metadata-key.md
 [D-SKL-015]: task-skills/skl-015-a-step-is-skipped-only-where-it-has-already-run.md

@@ -271,7 +271,7 @@ final class Changelog
      *
      * @param array{version: string, type: string} $entry
      */
-    private static function removal(string $contents, array $entry): string
+    public static function removal(string $contents, array $entry): string
     {
         if ($entry['type'] !== 'Deprecation') {
             return '';

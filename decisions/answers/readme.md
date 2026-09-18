@@ -5,6 +5,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-ANS-163`][D-ANS-163] — The Skills extension is served over the typo3:// resources · 2026-09-18
+- [`D-ANS-165`][D-ANS-165] — The changelog is read from docs.typo3.org and the installation answers the rest · 2026-09-18
 - [`D-ANS-160`][D-ANS-160] — A nullable field is two anyOf branches · 2026-09-17
 - [`D-ANS-161`][D-ANS-161] — A field of no fixed type names the types it takes · 2026-09-17
 - [`D-ANS-162`][D-ANS-162] — The data half is the one a session reads · 2026-09-17
@@ -101,7 +102,6 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-064`][D-ANS-064] — An issue answer holds what a triage needs · 2026-08-08
 - [`D-ANS-065`][D-ANS-065] — The manual index is the inventory each manual publishes · 2026-08-08
 - [`D-ANS-066`][D-ANS-066] — One handle serves every read of one Fetch · 2026-08-08
-- [`D-ANS-067`][D-ANS-067] — The changelog above the installed major comes from the manual · 2026-08-08
 - [`D-ANS-069`][D-ANS-069] — A backlog row carries the review server and not the journal · 2026-08-08
 - [`D-ANS-060`][D-ANS-060] — A bare word in `appliesTo` reaches a path segment · 2026-08-07
 - [`D-ANS-061`][D-ANS-061] — An answer that names a document hands it over · 2026-08-07
@@ -164,6 +164,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-163]: ans-163-the-skills-extension-is-served-over-the-typo3-resources.md
+[D-ANS-165]: ans-165-the-changelog-is-read-from-docs-typo3-org-and-the-installation-answers-the-rest.md
 [D-ANS-160]: ans-160-a-nullable-field-is-two-anyof-branches.md
 [D-ANS-161]: ans-161-a-field-of-no-fixed-type-names-the-types-it-takes.md
 [D-ANS-162]: ans-162-the-data-half-is-the-one-a-session-reads.md
@@ -260,7 +261,6 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 [D-ANS-064]: ans-064-an-issue-answer-holds-what-a-triage-needs.md
 [D-ANS-065]: ans-065-the-manual-index-is-the-inventory-each-manual-publishes.md
 [D-ANS-066]: ans-066-one-handle-serves-every-read-of-one-fetch.md
-[D-ANS-067]: ans-067-the-changelog-above-the-installed-major-comes-from-the-manual.md
 [D-ANS-069]: ans-069-a-backlog-row-carries-the-review-server-and-not-the-journal.md
 [D-ANS-060]: ans-060-a-bare-word-in-appliesto-reaches-a-path-segment.md
 [D-ANS-061]: ans-061-an-answer-that-names-a-document-hands-it-over.md
@@ -325,12 +325,14 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 ### Revoked, and kept as the record
 
 - [`D-ANS-081`][D-ANS-081] — A symptom is answered across the domain it was observed in · 2026-08-18 → D-ANS-084
+- [`D-ANS-067`][D-ANS-067] — The changelog above the installed major comes from the manual · 2026-08-08 → D-ANS-165
 - [`D-ANS-034`][D-ANS-034] — A source outside this package answers JSON, or it did not answer · 2026-08-03 → D-ANS-096
 - [`D-ANS-023`][D-ANS-023] — A ViewHelper question is answered by widening the manual index · 2026-08-02 → D-ANS-026
 - [`D-ANS-027`][D-ANS-027] — The Extbase fork is placed where a caller who has not chosen passes · 2026-08-02 → D-ANS-039
 - [`D-ANS-001`][D-ANS-001] — The unanswered result keeps its shape and gains a reason · 2026-07-29 → D-ANS-005
 
 [D-ANS-081]: ans-081-a-symptom-is-answered-across-the-domain-it-was-observed-in.md
+[D-ANS-067]: ans-067-the-changelog-above-the-installed-major-comes-from-the-manual.md
 [D-ANS-034]: ans-034-a-source-outside-this-package-answers-json-or-it-did-not-answer.md
 [D-ANS-023]: ans-023-a-viewhelper-question-is-answered-by-widening-the-manual-index.md
 [D-ANS-027]: ans-027-the-extbase-fork-is-placed-where-a-caller-who-has-not-chosen-passes.md

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tool;
 
 use TYPO3\DevCompanion\Installation\Changelog;
+use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Manual\CoreChangelog;
 use TYPO3\DevCompanion\Result\Miss;
 use TYPO3\DevCompanion\Result\Schema;
@@ -13,15 +14,17 @@ use TYPO3\DevCompanion\Result\Unsupported;
 use TYPO3\DevCompanion\Search\LabelSearch;
 
 /**
- * What a TYPO3 version changed, from the changelog that installation ships.
+ * What a TYPO3 version changed, from the changelog docs.typo3.org renders.
  *
  * The one question the knowledge base cannot answer from conventions. What a
- * given release broke, deprecated or added is a list, and the list is on disk
- * in every installation.
+ * given release broke, deprecated or added is a list. docs.typo3.org renders
+ * it after every merge, and every installation ships the source of it on
+ * disk, which is where the answer comes from when docs.typo3.org does not
+ * answer.
  */
 final class ChangelogLookup extends ReadOnlyTool
 {
-    /** The versions above the installed major come from docs.typo3.org. */
+    /** The entries come from docs.typo3.org, and from disk only where it did not answer. */
     protected const OPEN_WORLD = true;
 
     /**
@@ -58,7 +61,7 @@ final class ChangelogLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Search the TYPO3 changelog: one entry per breaking change, deprecation, feature and important note, in the version of its release. This reads the entries. An entry for a core patch of your own is the other direction, and it is typo3_rule_lookup with documentId "core/contribution/changelog". Answers "what did this version deprecate", "what changed about X", "which release introduced Y". This is the first stop when you build on a major you have not built on recently. What separates a current answer from a two-major-old one stands here and almost nowhere else. A deprecation carries the version it stops to work in where the entry states one, and the rule that answers the rest beside it. The tool reads the versions the installation ships from the core package on disk. It reads the ones above its own major from docs.typo3.org, which is what an upgrade to a version you have not installed asks for. An entry has to carry every word of the query; narrow further with type and version. A version and a type with the query omitted list whole under a raised limit. That is the deprecation sweep of one major in a single call. A method or class you found in the code is a query of its own. An identifier reaches the entries that name it, whether or not the change has its title. That holds inside the installed versions, which are the ones whose text is on disk.';
+        return 'Search the TYPO3 changelog: one entry per breaking change, deprecation, feature and important note, in the version of its release. This reads the entries. An entry for a core patch of your own is the other direction, and it is typo3_rule_lookup with documentId "core/contribution/changelog". Answers "what did this version deprecate", "what changed about X", "which release introduced Y". This is the first stop when you build on a major you have not built on recently. What separates a current answer from a two-major-old one stands here and almost nowhere else. A deprecation carries the version it stops to work in where the entry states one, and the rule that answers the rest beside it. The tool reads the entries from docs.typo3.org, which renders them after every merge, so a version you have not installed and a change merged today are both in reach. Where docs.typo3.org does not answer, it reads the core package on disk. An entry has to carry every word of the query; narrow further with type and version. A version and a type with the query omitted list whole under a raised limit. That is the deprecation sweep of one major in a single call. A method or class you found in the code is a query of its own. An identifier reaches the entries that name it, whether or not the change has its title. That holds inside the versions the installation ships, which are the ones whose text is on disk.';
     }
 
     public static function inputSchema(): array
@@ -90,9 +93,10 @@ final class ChangelogLookup extends ReadOnlyTool
                 'removal' => Schema::string('The version a Deprecation states the deprecated thing stops to work in, which is what an upgrade decides on. Empty on the other three types, and on a deprecation whose entry states none. That is most of a major and does not mean "no removal planned"; removalRule answers it there.'),
                 'migration' => Schema::string('What to write instead, as the entry\'s own Migration section states it, code blocks included. Carried where the call reached one entry, by an issue number or a query that matched one. A sweep of seventy-five is a list of titles and not seventy-five migrations. Empty on every entry of a longer answer, and on an entry whose file states no migration.'),
                 'tags' => Schema::listOf(Schema::string(), 'Index tags. FullyScanned or PartiallyScanned means the extension scanner has a matcher for it.'),
-                'file' => Schema::string('Where to read the description and the migration: an EXT: reference where the installation ships the entry, and a docs.typo3.org URL where it does not.'),
-                'publishedIn' => Schema::string('Which side the entry came from. "installation" is the core package on disk, which is the version that installation runs. "manual" is docs.typo3.org, which is every version above the installed major. That is what an upgrade reads, and it moves for a major without a release yet.'),
-            ], ['type', 'version', 'issue', 'title', 'removal', 'migration', 'tags', 'file', 'publishedIn'])),
+                'file' => Schema::string('Where to read the description and the migration: an EXT: reference where the installation ships the entry, and the docs.typo3.org URL where it does not.'),
+                'url' => Schema::string('The entry as docs.typo3.org renders it, on every entry.'),
+                'publishedIn' => Schema::string('Which side the entry came from. "manual" is docs.typo3.org, which renders the changelog after every merge and is the ordinary source. "installation" is the core package on disk, read where docs.typo3.org did not answer or does not list the version. An entry for a major without a release yet moves either way.'),
+            ], ['type', 'version', 'issue', 'title', 'removal', 'migration', 'tags', 'file', 'url', 'publishedIn'])),
             'termCounts' => Schema::termCounts('What each word of the query reaches on its own, inside the version and the type the call named. A word at 0 is the one that emptied the answer: a misspelt word, or nothing here carries its name. Returned on a miss that carried words. These are counts and not a query; termSubsets is what you ask outright.'),
             'termCountsWithoutTheNarrowing' => Schema::termCounts('The same words counted over the whole changelog rather than inside the version and the type. Returned only where a word reaches there and nothing inside the narrowed set. Then the filter emptied this answer rather than the words: ask again without it.'),
             'termSubsets' => Schema::listOf(Schema::object([
@@ -100,8 +104,8 @@ final class ChangelogLookup extends ReadOnlyTool
                 'matchCount' => Schema::integer('Entries that carry every word of this subset, inside the same version and type.'),
             ], ['terms', 'matchCount']), 'The largest parts of the query that do reach entries, narrowest first. Every one of them, because the one a tie-break puts first is not always the one you look for. Withheld where the call names a tag. The count runs off the entry names and a tag sits inside the file. So a subset offered there promises entries the same call does not return.'),
             'removalRule' => Schema::string('When a deprecation stops to work where the entry itself does not say. Returned where the answer carries a deprecation.'),
-            'versions' => Schema::listOf(Schema::string(), 'The versions this installation ships changelog entries for, newest first.'),
-            'versionsFromTheManual' => Schema::listOf(Schema::string(), 'The versions above those, read from docs.typo3.org, newest first. Absent where the host did not answer, which is the one case this answer lacks a version rather than the changelog.'),
+            'versions' => Schema::listOf(Schema::string(), 'The versions this installation ships changelog entries for, newest first. Empty where no installation was found.'),
+            'versionsFromTheManual' => Schema::listOf(Schema::string(), 'The versions read from docs.typo3.org, newest first, inside the version and the type the call named. Absent where docs.typo3.org did not answer, which is the one case this answer lacks a version rather than the changelog.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
         ], ['query', 'matchCount', 'entries', 'versions', 'answeredBy'], ['query']);
     }
@@ -172,46 +176,54 @@ final class ChangelogLookup extends ReadOnlyTool
         $tag = trim((string) ($args['tag'] ?? ''));
         $limit = (int) ($args['limit'] ?? 20);
 
-        if (Changelog::directory() === null) {
+        $terms = LabelSearch::terms($query);
+        $installed = Changelog::versions();
+
+        // One listing per covered major from docs.typo3.org, and null under a
+        // major it did not answer for. A version an answered listing carries
+        // is docs.typo3.org's, because it renders the changelog after every
+        // merge and a package or a checkout is behind it. Every other version
+        // on disk is the installation's: the ones below what the knowledge
+        // covers, and the ones under a major docs.typo3.org did not answer for.
+        // Offline, that is
+        // the whole changelog the installation ships — `D-ANS-165`.
+        $manual = new CoreChangelog();
+        $listings = $manual->entries();
+        $answered = array_filter($listings, static fn(?array $entries): bool => $entries !== null);
+        $unread = array_keys(array_diff_key($listings, $answered));
+        $all = [];
+        $fromHost = [];
+        foreach ($answered as $entries) {
+            foreach ($entries as $entry) {
+                $fromHost[$entry['version']] = true;
+                $all[] = $entry + ['publishedIn' => 'manual'];
+            }
+        }
+        foreach (Changelog::entries() as $entry) {
+            if (!isset($fromHost[$entry['version']])) {
+                $all[] = $entry + ['publishedIn' => 'installation', 'url' => CoreChangelog::url($entry['version'], $entry['key'])];
+            }
+        }
+        if ($all === [] && $installed === []) {
             return Unsupported::because(
-                'no TYPO3 installation was found whose core package ships the changelog',
+                $answered === []
+                    ? 'no TYPO3 installation was found whose core package ships the changelog, and docs.typo3.org did not answer'
+                    : 'no TYPO3 installation was found whose core package ships the changelog, and docs.typo3.org lists nothing',
                 ['query' => $query],
             );
         }
 
-        $terms = LabelSearch::terms($query);
-        $installed = Changelog::versions();
-        $narrowed = array_map(
-            static fn(array $entry): array => $entry + ['publishedIn' => 'installation'],
-            Changelog::entries($type, $version),
-        );
+        $narrowed = array_values(array_filter($all, static function (array $entry) use ($type, $version): bool {
+            if ($version !== '' && !str_starts_with($entry['version'], $version)) {
+                return false;
+            }
 
-        // What the installation ships stops at its own major, and the versions
-        // above it are the ones an upgrade asks about. They come from the
-        // manual, and only where the installation has no directory of its own
-        // for them. A version it ships is the version it runs, and the two must
-        // never both be in one answer. Not where the caller named a version
-        // this installation ships. That answer is complete on disk. The tool a
-        // session calls most should not pay a round trip for entries the filter
-        // has already excluded. On a machine with no network that is a connect
-        // timeout.
-        $manual = new CoreChangelog();
-        $asksBeyond = $version === '' || !self::ships($installed, $version);
-        $published = $asksBeyond ? $manual->entries() : [];
+            return $type === '' || $entry['type'] === ucfirst(strtolower($type));
+        }));
         $ahead = [];
-        if ($published !== null) {
-            foreach ($published as $entry) {
-                if (in_array($entry['version'], $installed, true)) {
-                    continue;
-                }
-                if ($version !== '' && !str_starts_with($entry['version'], $version)) {
-                    continue;
-                }
-                if ($type !== '' && $entry['type'] !== ucfirst(strtolower($type))) {
-                    continue;
-                }
+        foreach ($narrowed as $entry) {
+            if ($entry['publishedIn'] === 'manual') {
                 $ahead[] = $entry['version'];
-                $narrowed[] = $entry + ['publishedIn' => 'manual'];
             }
         }
         $ahead = array_values(array_unique($ahead));
@@ -230,12 +242,12 @@ final class ChangelogLookup extends ReadOnlyTool
         // writes, which the name leaves out. The counts and subsets a miss
         // prints run over the same enriched entries, so they say what the
         // search covered. The manual's half of that read is free and its other
-        // half is not. The inventory line already carries the stated title, so
-        // a title search costs nothing there. The identifiers are in the body.
-        // A read of 469 of them over the network is six seconds for a fallback
-        // that runs on a miss. So the search reads a manual entry by its title
-        // and never by its identifiers. The answer says so where that is what
-        // the caller did.
+        // half is not. The listing already carries the stated title, so a title
+        // search costs nothing there. The identifiers are in the body. A read
+        // of thousands of them over the network is the wrong side of a minute
+        // for a fallback that runs on a miss. So the search reads a manual
+        // entry by its title and never by its identifiers, and an installed
+        // one by both. The answer says so where that is what the caller did.
         $read = false;
         if ($matching === [] && $terms !== []) {
             $narrowed = array_map(
@@ -253,18 +265,20 @@ final class ChangelogLookup extends ReadOnlyTool
             $read = $matching !== [];
         }
 
-        // The tags are inside the file, so a filter by one costs a read of
-        // every entry that survived the type and the version. That is 23 ms for
-        // the deprecations of one major, six hundred for the whole changelog.
-        // That read is why it is a field of its own rather than more words in
-        // the query. It bounds one question rather than a sweep. A major comes
-        // back whole from the version and the type under a raised `limit`,
-        // which `D-ANS-093` measured against eleven tag calls.
+        // An installed entry's tags are inside the file, so a filter by one
+        // costs a read of every entry that survived the type and the version.
+        // That is 23 ms for the deprecations of one major, six hundred for the
+        // whole changelog. That read is why it is a field of its own rather
+        // than more words in the query. It bounds one question rather than a
+        // sweep. A major comes back whole from the version and the type under
+        // a raised `limit`, which `D-ANS-093` measured against eleven tag
+        // calls. A manual entry carries its tags in the listing, so its half
+        // of the filter reads nothing — `D-ANS-165`.
         $tags = [];
         if ($tag !== '') {
             $carrying = [];
             foreach ($matching as $entry) {
-                $carried = self::body($entry, $manual)['tags'];
+                $carried = self::tags($entry);
                 foreach ($carried as $carriedTag) {
                     $tags[$carriedTag] = true;
                 }
@@ -300,6 +314,7 @@ final class ChangelogLookup extends ReadOnlyTool
                 'file' => $entry['publishedIn'] === 'manual'
                     ? $entry['url']
                     : 'EXT:core/Documentation/Changelog/' . $entry['version'] . '/' . $entry['key'] . '.rst',
+                'url' => $entry['url'],
                 'publishedIn' => $entry['publishedIn'],
             ];
         }, $shown);
@@ -328,7 +343,7 @@ final class ChangelogLookup extends ReadOnlyTool
             if ($narrowing !== [] && $terms !== []) {
                 $inside = array_column($counts, 'matchCount', 'term');
                 $reaching = array_values(array_filter(
-                    LabelSearch::perTermCounts(Changelog::entries(), $terms),
+                    LabelSearch::perTermCounts($all, $terms),
                     static fn(array $term): bool => $term['matchCount'] > 0,
                 ));
                 $emptied = array_filter(
@@ -405,7 +420,7 @@ final class ChangelogLookup extends ReadOnlyTool
                     . 'targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with '
                     . 'documentId "core/contribution/changelog".';
             }
-            $lines[] = self::covers($versions, $ahead, $asksBeyond, $published === null);
+            $lines[] = self::covers($versions, $ahead, $listings);
 
             // What the miss worked out is a field as well as a line. A session
             // read `matchCount: 0` and the five fields beside it. It reported
@@ -426,7 +441,7 @@ final class ChangelogLookup extends ReadOnlyTool
                 'versions' => $versions,
                 'answeredBy' => 'packages',
             ];
-            if ($asksBeyond && $published !== null) {
+            if ($answered !== []) {
                 $data['versionsFromTheManual'] = $ahead;
             }
             if ($counts !== []) {
@@ -501,19 +516,24 @@ final class ChangelogLookup extends ReadOnlyTool
         // A hit says nothing about what it could not see, and that is the one
         // silence this must not leave. Entries came back, so the answer looks
         // complete, while the versions an upgrade is about never came in.
-        if ($asksBeyond && $published === null) {
-            $lines[] = 'docs.typo3.org did not answer, so nothing above ' . ($versions[0] ?? 'this installation')
-                . ' is in this answer — those versions are missing from it rather than from the changelog.';
+        if ($answered === []) {
+            $lines[] = 'docs.typo3.org did not answer, so this answer comes from the installation alone: nothing '
+                . 'above ' . ($versions[0] ?? 'what it ships') . ' is in it, and that is missing from this answer '
+                . 'rather than from the changelog.';
+        } elseif ($unread !== []) {
+            $lines[] = self::unanswered($unread);
+        }
+        if ($installed === []) {
+            $lines[] = 'No TYPO3 installation was found, so this answer comes from docs.typo3.org alone and an '
+                . 'identifier search reaches nothing.';
         }
         // Only where the answer actually carries one. A caller who reads
         // entries from its own installation reads what it runs, and the
         // sentence would be about nothing.
         if (in_array('manual', array_column($entries, 'publishedIn'), true)) {
-            $lines[] = 'Entries above ' . ($versions[0] ?? 'this installation') . ' come from docs.typo3.org rather '
-                . 'than from this installation: they are what the host publishes today, they are linked by URL '
-                . 'instead of by EXT: path, and for a major that is not released yet they are still being written. '
-                . 'An identifier search does not reach them — their text is not on disk, so they are searched by '
-                . 'name and by the title the manual states.';
+            $lines[] = 'An entry marked manual is what docs.typo3.org renders today, after every merge, and it '
+                . 'links by URL. For a major that is not released yet it is still being written. An identifier '
+                . 'search reaches only the entries this installation ships, whose text is on disk.';
         }
 
         $data = [
@@ -525,7 +545,7 @@ final class ChangelogLookup extends ReadOnlyTool
             'versions' => $versions,
             'answeredBy' => 'packages',
         ];
-        if ($asksBeyond && $published !== null) {
+        if ($answered !== []) {
             $data['versionsFromTheManual'] = $ahead;
         }
         if (in_array('Deprecation', array_column($entries, 'type'), true)) {
@@ -537,70 +557,93 @@ final class ChangelogLookup extends ReadOnlyTool
     }
 
     /**
-     * Whether the installation has a directory of its own for the question.
-     *
-     * By prefix, the way the version filter itself narrows. "13.4" ships where
-     * `13.4` or `13.4.x` is on disk, and "14" does not where nothing there
-     * starts with it.
-     *
-     * @param array<int, string> $installed
-     */
-    private static function ships(array $installed, string $version): bool
-    {
-        foreach ($installed as $shipped) {
-            if (str_starts_with($shipped, $version)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * What this answer could see, and where each half came from.
      *
-     * The two are never one list. A caller who acts on an entry above its own
-     * major reads what the host publishes today. For a major without a release
-     * that is a target that moves. An answer that presented both as "the
-     * changelog" would hide exactly the distinction the upgrade turns on.
+     * The two are never one list. An entry from docs.typo3.org is what it
+     * renders today, and for a major without a release that is a target that
+     * moves. An
+     * entry from disk is the source the installation ships. An answer that
+     * presented both as "the changelog" would hide the distinction an upgrade
+     * turns on.
      *
      * @param array<int, string> $installed
      * @param array<int, string> $ahead
+     * @param array<int, array<int, mixed>|null> $listings docs.typo3.org per covered major, null where it did not answer
      */
-    private static function covers(array $installed, array $ahead, bool $asked, bool $unreachable): string
+    private static function covers(array $installed, array $ahead, array $listings): string
     {
-        $line = sprintf(
-            'This installation ships %s.',
-            $installed === [] ? 'no changelog at all' : implode(', ', array_slice($installed, 0, 8)) . ' and older',
+        $unread = array_keys(array_filter($listings, static fn(?array $entries): bool => $entries === null));
+        $ships = $installed === []
+            ? 'No TYPO3 installation was found, so nothing comes from disk and an identifier search reaches nothing.'
+            : sprintf('This installation ships %s and older.', implode(', ', array_slice($installed, 0, 8)));
+        if (count($unread) === count($listings)) {
+            return $ships . ' docs.typo3.org did not answer, so this answer comes from the installation alone. The '
+                . 'versions above what it ships are missing from this answer rather than from the changelog — ask '
+                . 'again, or read them at https://docs.typo3.org.';
+        }
+        $published = $ahead === []
+            ? 'docs.typo3.org lists nothing inside those filters.'
+            : sprintf(
+                '%s %s read from docs.typo3.org — what it renders today, after every merge, which for a major '
+                . 'that is not released yet is still being written.',
+                implode(', ', $ahead),
+                count($ahead) === 1 ? 'is' : 'are',
+            );
+
+        return $published . ' ' . $ships . ($unread === [] ? '' : ' ' . self::unanswered($unread));
+    }
+
+    /**
+     * The majors docs.typo3.org did not answer for, where it answered others.
+     *
+     * A major read per listing can be missing on its own, and a hit that
+     * carries the others looks complete without this sentence.
+     *
+     * @param array<int, int> $unread
+     */
+    private static function unanswered(array $unread): string
+    {
+        return sprintf(
+            'docs.typo3.org did not answer for %s, so %s from this installation where it ships %s, and %s missing '
+            . 'from this answer rather than from the changelog where it does not.',
+            implode(' and ', $unread),
+            count($unread) === 1 ? 'that major comes' : 'those majors come',
+            count($unread) === 1 ? 'it' : 'them',
+            count($unread) === 1 ? 'it is' : 'they are',
         );
-        if (!$asked) {
-            return $line . ' The version asked for is one of them, so nothing was read from docs.typo3.org — ask '
-                . 'without the version filter, or for one above the installed major, to reach what is published '
-                . 'there.';
-        }
-        if ($unreachable) {
-            return $line . ' docs.typo3.org did not answer, so the versions above its own major are missing from '
-                . 'this answer rather than from the changelog — ask again, or read them at https://docs.typo3.org.';
-        }
-        if ($ahead === []) {
-            return $line . ' Nothing above that is published yet.';
+    }
+
+    /**
+     * The tags one entry carries, from the side that publishes it.
+     *
+     * A manual entry brought them in its listing, and an installed one keeps
+     * them inside the file — `D-ANS-165`.
+     *
+     * @param array<string, mixed> $entry
+     * @return array<int, string>
+     */
+    private static function tags(array $entry): array
+    {
+        if ($entry['publishedIn'] === 'manual') {
+            /** @var array<int, string> $tags */
+            $tags = $entry['tags'];
+
+            return $tags;
         }
 
-        return $line . sprintf(
-            ' Above that, %s %s read from docs.typo3.org — what the host publishes today, which for a major that '
-            . 'is not released yet is still being written.',
-            implode(', ', $ahead),
-            count($ahead) === 1 ? 'is' : 'are',
-        );
+        return Changelog::read([
+            'file' => (string) $entry['file'],
+            'version' => (string) $entry['version'],
+            'type' => (string) $entry['type'],
+        ])['tags'];
     }
 
     /**
      * The title, the tags and the stated removal of one entry, from the side
      * that publishes it.
      *
-     * One parser reads both, because the host serves the same RST the package
-     * ships. What differs is the delivery, and that is the whole of what this
-     * decides.
+     * docs.typo3.org serves the page the build rendered from the RST, and the
+     * disk has the RST. Two readers, one shape, and this decides which.
      *
      * @param array<string, mixed> $entry
      * @return array{title: string, tags: array<int, string>, removal: string, migration: string}
@@ -610,9 +653,12 @@ final class ChangelogLookup extends ReadOnlyTool
         $version = (string) $entry['version'];
         $type = (string) $entry['type'];
 
-        return $entry['publishedIn'] === 'manual'
-            ? $manual->read(['path' => (string) $entry['path'], 'version' => $version, 'type' => $type])
-            : Changelog::read(['file' => (string) $entry['file'], 'version' => $version, 'type' => $type]);
+        if ($entry['publishedIn'] === 'manual') {
+            /** @var array{path: string, stated: string, tags: list<string>} $entry */
+            return $manual->read(['path' => $entry['path'], 'version' => $version, 'type' => $type, 'stated' => $entry['stated'], 'tags' => $entry['tags']]);
+        }
+
+        return Changelog::read(['file' => (string) $entry['file'], 'version' => $version, 'type' => $type]);
     }
 
     /**

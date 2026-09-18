@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Installation\Instance;
+use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Manual\CoreChangelog;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
@@ -19,11 +20,12 @@ use TYPO3\DevCompanion\Tool\Registry;
  * A package carries every changelog down to 7.0 and nothing above its own, so
  * the entries an upgrade is *to* are exactly the absent ones. 469 of them over
  * six directories for a 13.4 installation, measured 2026-08-08. They come from
- * the one changelog manual docs.typo3.org publishes, and this holds the join.
- * Which side each entry came from, that neither shadows the other, and that the
- * answer names an unreachable host rather than reads it as silence.
+ * the one changelog manual docs.typo3.org publishes, and since `D-ANS-165` so
+ * does everything else it renders. This holds the join: which side each entry
+ * came from, that neither shadows the other, and that the answer names an
+ * unreachable docs.typo3.org rather than reads it as silence.
  *
- * Nothing here reaches that host. The seam is `CoreChangelog::useReader()` and
+ * Nothing here reaches docs.typo3.org. The seam is `CoreChangelog::useReader()` and
  * every body below stands here — `R-COD-003`.
  */
 final class CoreChangelogTest extends TestCase
@@ -38,13 +40,13 @@ final class CoreChangelogTest extends TestCase
     }
 
     /**
-     * What the installation ships stops at its own major. So docs.typo3.org
-     * answers a version above it, and the entry says where it came from —
-     * `D-ANS-067`.
+     * docs.typo3.org renders the changelog after every merge, so a version it lists
+     * comes from it whatever the installation ships for that version. The
+     * entry says where it came from and links by URL — `D-ANS-165`.
      */
-    #[Decision('D-ANS-067')]
+    #[Decision('D-ANS-165')]
     #[Test]
-    public function anEntryAboveTheInstalledMajorComesFromTheManual(): void
+    public function aVersionDocsTypo3OrgListsComesFromItWhateverTheInstallationShips(): void
     {
         Instance::discoverFrom($this->installationAt('13.4'));
         $this->manualPublishing([
@@ -52,94 +54,243 @@ final class CoreChangelogTest extends TestCase
             '15.0/Deprecation-110148-ExperimentalBackendViewHelpers' => 'Deprecation: #110148 - Experimental backend ViewHelpers',
         ]);
 
-        $result = Registry::call('typo3_changelog_lookup', ['query' => 'backend viewhelpers']);
-
-        self::assertSame(1, $result->data['matchCount']);
-        $entry = $result->data['entries'][0];
-        self::assertSame('15.0', $entry['version']);
-        self::assertSame('manual', $entry['publishedIn'], 'the installation ships nothing above 13.4');
-        self::assertStringStartsWith('https://docs.typo3.org/', $entry['file'], 'an entry not on disk has no EXT: path');
-        self::assertSame(['15.0'], $result->data['versionsFromTheManual']);
-    }
-
-    /**
-     * A version the installation does ship is that installation's, whatever the
-     * manual says about it. The two are never both in one answer. An entry on
-     * disk is the code that runs, and the host publishes what the release
-     * branch carries today — `D-ANS-067`.
-     */
-    #[Decision('D-ANS-067')]
-    #[Test]
-    public function aVersionTheInstallationShipsIsNeverTakenFromTheManual(): void
-    {
-        Instance::discoverFrom($this->installationAt('13.4'));
-        $this->manualPublishing([
-            '13.4/Deprecation-1-SomethingOld' => 'Deprecation: #1 - Something old',
-        ]);
-
         $result = Registry::call('typo3_changelog_lookup', ['query' => 'something old']);
 
         self::assertSame(1, $result->data['matchCount']);
-        self::assertSame('installation', $result->data['entries'][0]['publishedIn']);
+        $entry = $result->data['entries'][0];
+        self::assertSame('13.4', $entry['version']);
+        self::assertSame('manual', $entry['publishedIn'], 'docs.typo3.org is ahead of the package that ships the same version');
+        self::assertStringStartsWith('https://docs.typo3.org/', $entry['file']);
+        self::assertSame($entry['file'], $entry['url']);
+        self::assertSame(['15.0', '13.4'], $result->data['versionsFromTheManual'], 'what docs.typo3.org lists inside the filters');
+        self::assertSame(['13.4'], $result->data['versions'], 'what the installation ships is still said');
     }
 
     /**
-     * Naming a version the installation ships is the one call that must stay
-     * local. It is the ordinary question, what did the release I am on change.
-     * It would otherwise pay a round trip for entries the version filter
-     * already excluded. On a machine with no network that is a connect timeout
-     * — `D-ANS-067`.
+     * A version docs.typo3.org does not list is the installation's. That is every
+     * version below what the knowledge covers, which a package ships down to
+     * 7.0 — `D-ANS-165`.
      */
-    #[Decision('D-ANS-067')]
+    #[Decision('D-ANS-165')]
     #[Test]
-    public function askingForAnInstalledVersionReachesNoHostAtAll(): void
+    public function aVersionDocsTypo3OrgDoesNotListComesFromTheInstallation(): void
     {
-        Instance::discoverFrom($this->installationAt('13.4'));
-        $asked = [];
-        CoreChangelog::useReader(function (string $url) use (&$asked): ?string {
-            $asked[] = $url;
+        Instance::discoverFrom($this->installationAt('11.5', [
+            '11.5/Deprecation-2-SomethingOlder' => 'Deprecation: #2 - Something older',
+        ]));
+        $this->manualPublishing([
+            '15.0/Deprecation-3-SomethingNew' => 'Deprecation: #3 - Something new',
+        ]);
 
-            return null;
-        });
+        $result = Registry::call('typo3_changelog_lookup', ['query' => 'something older']);
 
-        $result = Registry::call('typo3_changelog_lookup', ['version' => '13.4']);
-
-        self::assertSame([], $asked, 'the answer is complete on disk');
-        self::assertArrayNotHasKey('versionsFromTheManual', $result->data, 'nothing was read, so nothing is claimed');
-        self::assertStringNotContainsString('docs.typo3.org did not answer', $result->text, 'nothing was asked, so nothing failed');
+        self::assertSame(1, $result->data['matchCount']);
+        $entry = $result->data['entries'][0];
+        self::assertSame('installation', $entry['publishedIn']);
+        self::assertSame('EXT:core/Documentation/Changelog/11.5/Deprecation-2-SomethingOlder.rst', $entry['file']);
+        self::assertStringStartsWith('https://docs.typo3.org/', $entry['url'], 'docs.typo3.org address is on every entry');
     }
 
     /**
-     * A host that did not answer is a gap in this answer rather than in the
-     * changelog. The difference is what a caller on an upgrade has to know.
-     * Silence read as "there is nothing above your major" is the wrong answer
-     * to the one question this exists for — `D-ANS-067`.
+     * A server that did not answer is a gap in this answer rather than in the
+     * changelog. The installation answers with what it ships, and the answer
+     * says that the versions above it are unread rather than absent —
+     * `D-ANS-165`.
      */
-    #[Decision('D-ANS-067')]
+    #[Decision('D-ANS-165')]
     #[Test]
-    public function aHostThatDoesNotAnswerIsSaid(): void
+    public function docsTypo3OrgNotAnsweringLeavesTheInstallationToAnswer(): void
     {
         Instance::discoverFrom($this->installationAt('13.4'));
         CoreChangelog::useReader(static fn(string $url): ?string => null);
 
         $result = Registry::call('typo3_changelog_lookup', ['query' => 'something old']);
 
+        self::assertSame(1, $result->data['matchCount']);
+        self::assertSame('installation', $result->data['entries'][0]['publishedIn']);
         self::assertStringContainsString('docs.typo3.org did not answer', $result->text);
         self::assertArrayNotHasKey('versionsFromTheManual', $result->data);
     }
 
     /**
-     * The inventory line carries the stated title, and an installed entry's
+     * docs.typo3.org is asked once per process where it does not answer. A session
+     * that starts offline pays the connect timeout once rather than once a
+     * question — `D-ANS-165`.
+     */
+    #[Decision('D-ANS-165')]
+    #[Test]
+    public function docsTypo3OrgThatDidNotAnswerIsNotAskedAgainInThisProcess(): void
+    {
+        Instance::discoverFrom($this->installationAt('13.4'));
+        $asked = 0;
+        CoreChangelog::useReader(function (string $url) use (&$asked): ?string {
+            $asked++;
+
+            return null;
+        });
+
+        Registry::call('typo3_changelog_lookup', ['query' => 'something old']);
+        Registry::call('typo3_changelog_lookup', ['query' => 'something old']);
+
+        self::assertSame(1, $asked);
+    }
+
+    /**
+     * docs.typo3.org lists a major on its own, so one can be missing while the
+     * others came in. The installation answers for it where it ships it, and
+     * the answer names the major — `D-ANS-165`.
+     */
+    #[Decision('D-ANS-165')]
+    #[Test]
+    public function aMajorDocsTypo3OrgDidNotAnswerForComesFromTheInstallationWhereItShipsIt(): void
+    {
+        Instance::discoverFrom($this->installationAt('14.0', [
+            '14.0/Feature-4-SomethingNew' => 'Feature: #4 - Something new',
+        ]));
+        $this->manualPublishing([
+            '15.0/Feature-5-SomethingNewer' => 'Feature: #5 - Something newer',
+        ], silent: [14]);
+
+        $result = Registry::call('typo3_changelog_lookup', ['type' => 'feature']);
+
+        self::assertSame(
+            ['15.0' => 'manual', '14.0' => 'installation'],
+            array_column($result->data['entries'], 'publishedIn', 'version'),
+        );
+        self::assertSame(['15.0'], $result->data['versionsFromTheManual']);
+        self::assertStringContainsString('did not answer for 14', $result->text);
+    }
+
+    /**
+     * Without an installation docs.typo3.org answers alone, and the answer says that
+     * nothing comes from disk. That is the session before `composer install`,
+     * which `D-ANS-105` could only tell what would make it answerable —
+     * `D-ANS-165`.
+     */
+    #[Decision('D-ANS-165')]
+    #[Test]
+    public function withoutAnInstallationDocsTypo3OrgAnswersAlone(): void
+    {
+        Instance::discoverFrom(sys_get_temp_dir());
+        $this->manualPublishing([
+            '15.0/Deprecation-3-SomethingNew' => 'Deprecation: #3 - Something new',
+        ]);
+
+        $result = Registry::call('typo3_changelog_lookup', ['query' => 'something new']);
+
+        self::assertSame(1, $result->data['matchCount']);
+        self::assertSame('manual', $result->data['entries'][0]['publishedIn']);
+        self::assertSame([], $result->data['versions']);
+        self::assertStringContainsString('No TYPO3 installation was found', $result->text);
+    }
+
+    /**
+     * Without an installation and without docs.typo3.org there is nothing to
+     * answer from, and the answer is the unsupported one — `D-ANS-165`.
+     */
+    #[Decision('D-ANS-165')]
+    #[Test]
+    public function withoutAnInstallationAndWithoutDocsTypo3OrgTheQuestionIsUnsupported(): void
+    {
+        Instance::discoverFrom(sys_get_temp_dir());
+        CoreChangelog::useReader(static fn(string $url): ?string => null);
+
+        $result = Registry::call('typo3_changelog_lookup', ['query' => 'something new']);
+
+        self::assertArrayHasKey('unsupported', $result->data);
+        self::assertStringContainsString('docs.typo3.org did not answer', $result->data['unsupported']['reason']);
+    }
+
+    /**
+     * The listings read are one per covered major, whatever the installation
+     * ships. docs.typo3.org lists them nowhere for less than its whole table of
+     * contents — `D-ANS-165`.
+     */
+    #[Decision('D-ANS-165')]
+    #[Test]
+    public function oneListingPerCoveredMajorIsRead(): void
+    {
+        Instance::discoverFrom($this->installationAt('13.4'));
+        $asked = [];
+        CoreChangelog::useReader(function (string $url) use (&$asked): string {
+            $asked[] = $url;
+
+            return (string) json_encode(['major' => 0, 'entries' => []]);
+        });
+
+        Registry::call('typo3_changelog_lookup', ['query' => 'anything']);
+
+        $expected = [];
+        foreach (Versions::majors() as $major) {
+            $expected[] = 'https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog-' . $major . '.json';
+        }
+        self::assertSame($expected, $asked);
+    }
+
+    /**
+     * A manual entry brings its tags in the listing, so the tag filter reads
+     * no entry it drops. The one it keeps is read for what the answer shows
+     * of it — `D-ANS-165`.
+     */
+    #[Decision('D-ANS-165')]
+    #[Test]
+    public function aTagFilterReadsNoManualEntryItDrops(): void
+    {
+        Instance::discoverFrom($this->installationAt('13.4'));
+        $asked = $this->manualPublishing([
+            '15.0/Deprecation-5-InFluid' => 'Deprecation: #5 - Something in Fluid',
+            '15.0/Deprecation-6-InCore' => 'Deprecation: #6 - Something in core',
+        ], tags: [
+            '15.0/Deprecation-5-InFluid' => ['ext:fluid'],
+            '15.0/Deprecation-6-InCore' => ['ext:core'],
+        ]);
+
+        $result = Registry::call('typo3_changelog_lookup', ['type' => 'deprecation', 'tag' => 'ext:fluid']);
+
+        self::assertSame(['5'], array_column($result->data['entries'], 'issue'));
+        self::assertSame(['PHP-API', 'ext:core', 'ext:fluid'], $result->data['tags'], 'the tags offered are read off the listing, beside the installed entry\'s');
+        $pages = array_values(array_filter($asked(), static fn(string $url): bool => str_ends_with($url, '.md')));
+        self::assertSame(
+            ['https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-5-InFluid.md'],
+            $pages,
+            'the dropped entry was never read',
+        );
+    }
+
+    /**
+     * A shown entry is read as the Markdown docs.typo3.org rendered, which is the
+     * page with every include resolved, and not as the RST it was built from.
+     * The migration is its own section there, and the removal is stated in
+     * the text — `D-ANS-165`.
+     */
+    #[Decision('D-ANS-165')]
+    #[Test]
+    public function aShownEntryIsReadAsTheMarkdownDocsTypo3OrgRenders(): void
+    {
+        Instance::discoverFrom($this->installationAt('13.4'));
+        $this->manualPublishing([
+            '15.0/Deprecation-5-InFluid' => 'Deprecation: #5 - Something in Fluid',
+        ]);
+
+        $result = Registry::call('typo3_changelog_lookup', ['query' => 'in fluid']);
+
+        $entry = $result->data['entries'][0];
+        self::assertSame('16.0', $entry['removal']);
+        self::assertSame("Use [the other one](https://docs.typo3.org/other) instead.\n\n```php\n\$other->run();\n```", $entry['migration']);
+    }
+
+    /**
+     * The listing carries the stated title, and an installed entry's
      * title is a file read away. Under the field a search reads, a manual entry
      * would answer in the pass that reads file names alone. The installed one
-     * it should have found is still there by name only — `D-ANS-067`.
+     * it should have found is still there by name only — `D-ANS-165`.
      */
-    #[Decision('D-ANS-067')]
+    #[Decision('D-ANS-165')]
     #[Test]
     public function aManualTitleDoesNotShadowTheInstalledEntryAQueryIsAbout(): void
     {
-        Instance::discoverFrom($this->installationAt('13.4', [
-            '13.4/Breaking-2-RenamedSomething' => 'Breaking: #2 - The frobnicator was removed',
+        Instance::discoverFrom($this->installationAt('11.5', [
+            '11.5/Breaking-2-RenamedSomething' => 'Breaking: #2 - The frobnicator was removed',
         ]));
         $this->manualPublishing([
             '15.0/Feature-3-SomethingElse' => 'Feature: #3 - A frobnicator for the backend',
@@ -151,7 +302,7 @@ final class CoreChangelogTest extends TestCase
         // reaches both. That pass reads both sides or it reads neither. Newest
         // first, which is the order every answer here is in.
         self::assertSame(
-            ['15.0', '13.4'],
+            ['15.0', '11.5'],
             array_column($result->data['entries'], 'version'),
             'the installed entry is not lost to the manual answering one pass earlier',
         );
@@ -192,48 +343,80 @@ final class CoreChangelogTest extends TestCase
     }
 
     /**
-     * What the host serves: a Sphinx inventory that names those pages, and the
-     * RST of each under `_sources`.
+     * What docs.typo3.org serves: one listing per covered major that names those
+     * pages, and the Markdown of each page beside it.
      *
-     * The inventory stands here rather than comes from a fetch, in the format
-     * the writer produces — four comment lines and then the objects,
-     * compressed.
+     * A covered major the fixture publishes nothing for answers with an empty
+     * listing, and one named silent answers the way a server without a listing
+     * for it does, with a page that is none. The closure returned says what
+     * was asked.
      *
      * @param array<string, string> $pages page name to stated title
+     * @param array<string, array<int, string>> $tags page name to the index tags it carries
+     * @param array<int, int> $silent the majors docs.typo3.org does not answer for
+     * @return \Closure(): array<int, string>
      */
-    private function manualPublishing(array $pages): void
+    private function manualPublishing(array $pages, array $tags = [], array $silent = []): \Closure
     {
-        $lines = [];
-        $sources = [];
+        $listings = [];
+        $rendered = [];
         foreach ($pages as $name => $title) {
-            $lines[] = sprintf('Changelog/%s std:doc -1 Changelog/%s.html %s', $name, $name, $title);
-            $sources['Changelog/' . $name . '.rst.txt'] = implode("\n", [
-                str_repeat('=', mb_strlen($title)),
-                $title,
-                str_repeat('=', mb_strlen($title)),
+            [$version] = explode('/', $name, 2);
+            $carried = $tags[$name] ?? ['Fluid', 'FullyScanned'];
+            // "15.0/Deprecation-5-InFluid" spells its type and issue.
+            [$type, $issue] = explode('-', explode('/', $name, 2)[1], 3);
+            $listings[(int) $version][] = [
+                'path' => 'Changelog/' . $name,
+                'title' => $title,
+                'type' => strtolower($type),
+                'issue' => (int) $issue,
+                'typo3-version' => $version,
+                'tags' => $carried,
+            ];
+            $rendered['Changelog/' . $name . '.md'] = implode("\n", [
+                '---',
+                'title: ' . json_encode($title),
+                'typo3-version: "' . $version . '"',
+                'type: "' . strtolower($type) . '"',
+                'tags: ' . json_encode($carried),
+                '---',
                 '',
-                'Description',
+                '# ' . $title . ' {#anchor}',
                 '',
-                '..  index:: Fluid, FullyScanned',
+                '## Description {#description}',
+                '',
+                'What changed. It will be removed in v16.0.',
+                '',
+                '## Migration {#migration}',
+                '',
+                'Use [the other one](https://docs.typo3.org/other) instead.',
+                '',
+                '```php',
+                '$other->run();',
+                '```',
                 '',
             ]);
         }
 
-        $inventory = "# Sphinx inventory version 2\n# Project: cms-core\n# Version: main\n"
-            . "# The remainder of this file is compressed using zlib.\n"
-            . (string) gzcompress(implode("\n", $lines));
-
-        CoreChangelog::useReader(static function (string $url) use ($inventory, $sources): ?string {
-            if (str_ends_with($url, 'objects.inv')) {
-                return $inventory;
+        $asked = [];
+        CoreChangelog::useReader(static function (string $url) use ($listings, $rendered, $silent, &$asked): ?string {
+            $asked[] = $url;
+            if (preg_match('/Changelog-(\\d+)\\.json$/', $url, $major) === 1) {
+                return in_array((int) $major[1], $silent, true)
+                    ? '<html>Not Found</html>'
+                    : (string) json_encode(['major' => (int) $major[1], 'entries' => $listings[(int) $major[1]] ?? []]);
             }
-            foreach ($sources as $path => $rst) {
-                if (str_ends_with($url, '_sources/' . $path)) {
-                    return $rst;
+            foreach ($rendered as $path => $markdown) {
+                if (str_ends_with($url, '/' . $path)) {
+                    return $markdown;
                 }
             }
 
             return null;
         });
+
+        return static function () use (&$asked): array {
+            return $asked;
+        };
     }
 }

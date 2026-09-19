@@ -147,3 +147,18 @@ above built both, before the judgement.
 Re-run in the feedback's own words, the empty answer now opens with "which is
 not that nobody reported it". It counts each word, names the narrowest, and
 names the call to compose.
+
+## Since then
+
+Read on 2026-09-19 against `feedback/2026-09-18-093205`. A triage found its
+issue family in one read of 90056, relations and notes included, and settled
+that no fourth issue exists with the backlog by category. What cost it was the
+lexical AND: "pagetree filter reset highlight" answered zero, and the session
+proposed that the answer drop the rarest word itself. Measured the same day:
+every three-word subset of that query answers 1 to 6 issues and none of them is
+90056, and "highlight" alone answers 420 without it. The wording that reached
+it, "pagetree search clear selected", is the issue's own vocabulary, which no
+subset of the first query carries. So the zero answer stays as `f1e047d1` built
+it, the per-term counts and the backlog route, and the suggestion has its answer
+in the measure.
+

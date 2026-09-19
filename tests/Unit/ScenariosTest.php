@@ -287,28 +287,28 @@ final class ScenariosTest extends TestCase
     #[Test]
     public function aRunAddsUpToTheVerdictItsJudgmentsMake(): void
     {
-        $missed = $this->record('REVIEW-01', static function (array $run): array {
+        $missed = $this->record('REVIEW-03', static function (array $run): array {
             $run['outcomes'][0]['met'] = false;
 
             return $run;
         });
 
-        self::assertSame('covered', $this->record('REVIEW-01', static fn(array $run): array => $run)['verdict']);
+        self::assertSame('covered', $this->record('REVIEW-03', static fn(array $run): array => $run)['verdict']);
         self::assertSame('partial', $missed['verdict']);
     }
 
     #[Test]
     public function aHalfJudgedRunIsNotAResult(): void
     {
-        $recorded = $this->record('REVIEW-01', static function (array $run): array {
+        $recorded = $this->record('REVIEW-03', static function (array $run): array {
             $run['outcomes'] = array_map(static fn(): array => ['met' => null, 'evidence' => ''], $run['outcomes']);
 
             return $run;
         });
 
         self::assertSame('', $recorded['verdict']);
-        self::assertContains('scenarios/runs/REVIEW-01.json leaves outcomes 1 unjudged', $recorded['problems']);
-        self::assertContains('scenarios/runs/REVIEW-01.json gives no evidence for outcomes 1', $recorded['problems']);
+        self::assertContains('scenarios/runs/REVIEW-03.json leaves outcomes 1 unjudged', $recorded['problems']);
+        self::assertContains('scenarios/runs/REVIEW-03.json gives no evidence for outcomes 1', $recorded['problems']);
     }
 
     #[Test]
@@ -317,8 +317,8 @@ final class ScenariosTest extends TestCase
         // What `bin/cli scenarios:record` writes. A checker that fails on it
         // stops the repository for as long as a run is open. That is the one
         // time it has to stay usable.
-        $skeleton = Scenarios::skeleton('REVIEW-01', 'testing', 'phpunit', '2026-07-30');
-        $recorded = $this->record('REVIEW-01', static fn(): array => $skeleton);
+        $skeleton = Scenarios::skeleton('REVIEW-03', 'testing', 'phpunit', '2026-07-30');
+        $recorded = $this->record('REVIEW-03', static fn(): array => $skeleton);
 
         self::assertTrue(Scenarios::isOpen($recorded['run']));
         self::assertSame('', $recorded['verdict']);
@@ -332,7 +332,7 @@ final class ScenariosTest extends TestCase
         // Whether the conventions lookup ran once per surface or once broadly,
         // which version it got, whether the session followed a returned id. All
         // three are in the arguments and nowhere else in the record.
-        $recorded = $this->record('REVIEW-01', static function (array $run): array {
+        $recorded = $this->record('REVIEW-03', static function (array $run): array {
             $run['toolTrace'] = [
                 ['tool' => 'typo3_project_describe', 'arguments' => []],
                 ['tool' => 'typo3_hint_lookup'],
@@ -343,20 +343,20 @@ final class ScenariosTest extends TestCase
         });
 
         self::assertSame([
-            'scenarios/runs/REVIEW-01.json tool call 2, typo3_hint_lookup, does not say what it was called with',
-            'scenarios/runs/REVIEW-01.json tool call 3 does not name the tool it called',
+            'scenarios/runs/REVIEW-03.json tool call 2, typo3_hint_lookup, does not say what it was called with',
+            'scenarios/runs/REVIEW-03.json tool call 3 does not name the tool it called',
         ], $recorded['problems']);
 
         // Recorded as a bare name, the way every run stood before the arguments
         // were part of one.
-        $named = $this->record('REVIEW-01', static function (array $run): array {
+        $named = $this->record('REVIEW-03', static function (array $run): array {
             $run['toolTrace'] = ['typo3_project_describe'];
 
             return $run;
         });
 
         self::assertSame(
-            ['scenarios/runs/REVIEW-01.json tool call 1 does not name the tool it called'],
+            ['scenarios/runs/REVIEW-03.json tool call 1 does not name the tool it called'],
             $named['problems'],
         );
     }
@@ -364,11 +364,11 @@ final class ScenariosTest extends TestCase
     #[Test]
     public function aRunContradictsAReviewWhoseMarkIsNotWhatTheJudgmentsAddUpTo(): void
     {
-        $review = Scenarios::load()['REVIEW-01'];
-        // Judged into whichever result REVIEW-01 does not currently claim, so
+        $review = Scenarios::load()['REVIEW-03'];
+        // Judged into whichever result REVIEW-03 does not currently claim, so
         // this stays a contradiction whatever its mark says today.
         $met = !in_array($review['status'], ['covered', 'boundary'], true);
-        $recorded = $this->record('REVIEW-01', static function (array $run) use ($met): array {
+        $recorded = $this->record('REVIEW-03', static function (array $run) use ($met): array {
             foreach (['outcomes' => 'met', 'failures' => 'avoided'] as $section => $key) {
                 $run[$section] = array_map(
                     static fn(array $entry): array => [$key => $met, 'evidence' => $entry['evidence']],
@@ -381,7 +381,7 @@ final class ScenariosTest extends TestCase
 
         self::assertContains(
             sprintf(
-                'scenarios/runs/REVIEW-01.json says REVIEW-01 is `%s`, and %s stands at `%s`',
+                'scenarios/runs/REVIEW-03.json says REVIEW-03 is `%s`, and %s stands at `%s`',
                 $met ? 'covered' : 'gap',
                 $review['file'],
                 $review['status'],
@@ -393,7 +393,7 @@ final class ScenariosTest extends TestCase
     #[Test]
     public function aRunJudgedAgainstOlderCriteriaIsNotReadAsCurrent(): void
     {
-        $recorded = $this->record('REVIEW-01', static function (array $run): array {
+        $recorded = $this->record('REVIEW-03', static function (array $run): array {
             $run['criteria'] = 'aaaaaaaaaaaa';
 
             return $run;
@@ -406,7 +406,7 @@ final class ScenariosTest extends TestCase
     #[Test]
     public function aRunOfNoForwardReviewIsNotARun(): void
     {
-        $recorded = $this->record('REVIEW-01', static function (array $run): array {
+        $recorded = $this->record('REVIEW-03', static function (array $run): array {
             $run['scenario'] = 'REVIEW-99';
 
             return $run;
@@ -421,6 +421,10 @@ final class ScenariosTest extends TestCase
     /**
      * One recorded run, written to a directory of this test's own. A fixture
      * below scenarios/runs/ would read as a real result of a real session.
+     *
+     * It rests on `REVIEW-03`, because this judges every criterion met and
+     * that review stands at `covered`. `REVIEW-01` carried it until 2026-09-19,
+     * when it went to `unrun` for want of a site checkout.
      *
      * @param callable(array<string, mixed>): array<string, mixed> $spoil
      * @return array{file: string, run: array<string, mixed>, verdict: string, problems: array<int, string>}

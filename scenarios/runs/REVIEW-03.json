@@ -1,141 +1,151 @@
 {
     "scenario": "REVIEW-03",
-    "date": "2026-08-03",
-    "server": "0a179ca",
+    "date": "2026-09-19",
+    "server": "af5841e8",
     "client": "claude-code",
     "environment": "E-CORE",
-    "criteria": "134f6741a434",
+    "criteria": "e8685940c1c9",
     "skills": [
         "typo3-core-patch-review"
     ],
     "toolTrace": [
         {
-            "tool": "typo3_project_scope",
+            "tool": "typo3_project_describe",
             "arguments": {}
         },
         {
-            "tool": "typo3_forge_lookup",
+            "tool": "typo3_task_guide",
             "arguments": {
-                "issue": "110359"
+                "task": "Review uncommitted working tree changes to the frontend RequestHandler and its functional test before they are pushed to Gerrit",
+                "paths": [
+                    "typo3/sysext/frontend/Classes/Http/RequestHandler.php",
+                    "typo3/sysext/frontend/Tests/Functional/Http/RequestHandlerTest.php",
+                    "Build/clip-tmp.mjs",
+                    "Build/top-tmp.mjs"
+                ],
+                "changeType": "audit",
+                "targetVersion": "15"
+            }
+        },
+        {
+            "tool": "typo3_hint_lookup",
+            "arguments": {
+                "id": "project-build-and-scripts"
             }
         },
         {
             "tool": "typo3_gerrit_lookup",
             "arguments": {
-                "change": "Id53f1068d3866128320487df9ec59530d94a4aa1"
+                "query": "htmlTag_setParams",
+                "limit": 10
             }
         },
         {
-            "tool": "typo3_task_guide",
+            "tool": "typo3_gerrit_lookup",
             "arguments": {
-                "task": "Review a core patch that moves file source resolution from Extbase ImageService into ResourceFactory and adds a new public method",
-                "area": "core Resource / extbase Service / fluid ViewHelpers",
-                "changeType": "audit",
-                "targetVersion": "15.0",
-                "paths": [
-                    "typo3/sysext/core/Classes/Resource/ResourceFactory.php",
-                    "typo3/sysext/extbase/Classes/Service/ImageService.php",
-                    "typo3/sysext/fluid/Classes/ViewHelpers/ImageViewHelper.php",
-                    "typo3/sysext/backend/Classes/ViewHelpers/ThumbnailViewHelper.php",
-                    "typo3/sysext/core/Tests/Functional/Resource/ResourceFactoryTest.php"
-                ]
+                "path": "typo3/sysext/frontend/Classes/Http/RequestHandler.php",
+                "open": true,
+                "limit": 10
+            }
+        },
+        {
+            "tool": "typo3_forge_lookup",
+            "arguments": {
+                "query": "htmlTag_setParams",
+                "limit": 15
+            }
+        },
+        {
+            "tool": "typo3_rule_lookup",
+            "arguments": {
+                "query": "breaking change deprecation",
+                "targetVersion": "15"
+            }
+        },
+        {
+            "tool": "typo3_rule_lookup",
+            "arguments": {
+                "query": "changelog entry",
+                "targetVersion": "15"
+            }
+        },
+        {
+            "tool": "typo3_changelog_lookup",
+            "arguments": {
+                "type": "deprecation",
+                "tag": "TypoScript",
+                "limit": 60
+            }
+        },
+        {
+            "tool": "typo3_changelog_lookup",
+            "arguments": {
+                "type": "breaking",
+                "tag": "TypoScript",
+                "limit": 60
+            }
+        },
+        {
+            "tool": "typo3_documentation_lookup",
+            "arguments": {
+                "queries": [
+                    "htmlTag_setParams",
+                    "htmlTag_stdWrap",
+                    "config.htmlTag attributes"
+                ],
+                "targetVersion": "14"
             }
         },
         {
             "tool": "typo3_test_run_guide",
             "arguments": {
                 "paths": [
-                    "typo3/sysext/core/Classes/Resource/ResourceFactory.php",
-                    "typo3/sysext/extbase/Classes/Service/ImageService.php",
-                    "typo3/sysext/fluid/Classes/ViewHelpers/ImageViewHelper.php",
-                    "typo3/sysext/fluid/Classes/ViewHelpers/Uri/ImageViewHelper.php",
-                    "typo3/sysext/backend/Classes/ViewHelpers/ThumbnailViewHelper.php",
-                    "typo3/sysext/core/Tests/Functional/Resource/ResourceFactoryTest.php",
-                    "typo3/sysext/extbase/Tests/Unit/Service/ImageScriptServiceTest.php"
+                    "typo3/sysext/frontend/Classes/Http/RequestHandler.php",
+                    "typo3/sysext/frontend/Tests/Functional/Http/RequestHandlerTest.php"
                 ],
-                "targetVersion": "15.0"
-            }
-        },
-        {
-            "tool": "typo3_rule_lookup",
-            "arguments": {
-                "query": "changelog entry"
-            }
-        },
-        {
-            "tool": "typo3_rule_lookup",
-            "arguments": {
-                "query": "breaking change"
-            }
-        },
-        {
-            "tool": "typo3_commit_message_guide",
-            "arguments": {
-                "message": "[TASK] Resolve file sources in ResourceFactory\n\nTurning a loosely typed image source - as supplied by a Fluid\ntemplate - into a File or FileReference lived in Extbase's\nImageService, even though nothing about it is Extbase specific.\n\nResourceFactory->resolveFileObject() takes over: it passes through\nFile and FileReference, unwraps domain objects via\ngetOriginalResource(), and resolves UIDs, combined identifiers,\n\"EXT:\" paths, legacy storage-0 paths and \"t3://file\" URNs. In\ncontrast to retrieveFileOrFolderObject() it never returns a folder\nand throws instead of returning null, which is what the callers\nneed.\n\n\"t3://file\" is link syntax, so the LinkService is now injected into\nthe ResourceFactory to resolve it. This does not introduce a\ncircular service dependency: LinkService only requires an event\ndispatcher, and none of the registered link handlers declares a\nconstructor. Note that a third party link handler injecting the\nResourceFactory would recurse.\n\nf:image, f:uri.image and the backend ThumbnailViewHelper use the\nfactory directly now, so no image ViewHelper depends on\nImageService anymore. ImageService->getImage() delegates and the\nservice is down to a single constructor argument.\n\nThe backend \"../\" prefix stripping is dropped along the way. It\ncompensated for links relative to the /typo3/ directory, which\ndoes not exist since v13.\n\nResolves: #110359\nReleases: main\nChange-Id: Id53f1068d3866128320487df9ec59530d94a4aa1",
-                "workflow": "core"
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "query": "typo3 directory backend entry point",
-                "limit": 15
-            }
-        },
-        {
-            "tool": "typo3_gerrit_lookup",
-            "arguments": {
-                "issue": "110359",
-                "limit": 10
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "query": "ResourceFactory",
-                "limit": 20
+                "targetVersion": "15"
             }
         }
     ],
     "outcomes": [
         {
             "met": true,
-            "evidence": "The skill is the session's first call, `references/base.md` and `references/checklist.md` are calls 2 and 3, and `typo3_project_scope` follows before a file of the checkout is opened. The patch is established at calls 7 to 10 before any rule is asked for: status with the branch, the working-tree diff, the full commit message, and `git show --stat`. Every lookup then takes an argument out of that reading \u2014 `typo3_forge_lookup` the `Resolves:` number, `typo3_gerrit_lookup` the `Change-Id`, `typo3_task_guide` and `typo3_test_run_guide` the changed paths, `typo3_commit_message_guide` the message verbatim. The subsystem is followed where each finding needs it: `UriBuilder` for what the backend still routes under, `LinkService` and the seven registered handlers, the three ViewHelpers' catch blocks and their argument registrations, and `SetRegistry` for the lazy-autowire precedent."
+            "evidence": "The first calls were typo3_project_describe, git diff and git status, then typo3_task_guide with the two changed paths and changeType audit; the rule lookups, the changelog lookups by tag and the documentation lookup came after the diff was read. The answer opens with the tree at 088d17cc272 on main, the target 15.0, the subsystem (frontend RequestHandler::generateHtmlTag()) and the functional test beside it."
         },
         {
             "met": true,
-            "evidence": "Nine findings, each with a path and a line, each tied to a rule and a consequence, and each attributed. The blocking one refutes the commit message against the checkout: the message says the `/typo3/` directory does not exist since v13, and `UriBuilder.php:199` still builds its backend `RequestContext` as `new RequestContext('/typo3/')`. The run separates the half of the claim that holds \u2014 the `typo3/` filesystem directory holds only `sysext/` \u2014 from the half that decides the finding. Finding 2.2 is the sharper one and is the shape this review exists for: `getImageFromSourceString()` is removed from a class that is neither final nor `@internal` and carries `#[Autoconfigure(public: true)]`, and the consequence is split, because an extension overriding it loses its override in silence while one reading the removed property fatals loudly. Four claims were re-checked against the checkout while judging and all four hold: the `RequestContext`, the class attributes, zero remaining references to the removed method, and `#[Autowire(lazy: true)]` on `SetRegistry`. One defect, and it is in the citation rather than the content: two hints are quoted as `typo3_hint_lookup` and no such call was made \u2014 `typo3_task_guide` returned them, `fluid-viewhelpers` and `core-tests` included. The rules are quoted correctly and did come from this server; a reader re-running them would call the wrong tool."
+            "evidence": "1.1 ties RequestHandler.php:867-870 to the breaking-change rule from core/contribution/commit-messages and names the consequence: a site with htmlTag_setParams = none silently gets lang back, htmlTag_stdWrap has no replacement. 2.1 names tsref.xml:341 and :376-385 and typoscript.ts:459 against the precedent commit d08605405ab; 2.2 names :854 and the deleted test case that pinned the old semantics. Spot-checked in the checkout: all three lines and the precedent commit exist."
         },
         {
             "met": true,
-            "evidence": "Met, for the first time in four recorded runs. The answer carries the line the rule now asks for \u2014 \"Suites `typo3_test_run_guide` returned for these paths that I did not run: full `unit`, full `functional`, `cglGit`, `lintPhp`, `lintServicesYaml`, `lintYaml`, `lintHtml`, `checkComposer`, `checkE\u2026`\" \u2014 and the `Tests` row of the surface table repeats it as \"Full `unit`/`functional` not run (named above)\". Narrowest first still holds: targeted functional against `ResourceFactoryTest`, targeted functional against the ViewHelper classes, then `cgl -n`, `checkIntegrityPhp` and `phpstan`, all through `CI=true ./Build/Scripts/runTests.sh` with what each printed quoted. The three runs before this one omitted the list at three different skill lengths with the rule present each time; what changed is that it is now an act with a named object rather than a property the report should have (`D-SKL-009`)."
+            "evidence": "It ran runTests.sh -s functional -d sqlite -- RequestHandlerTest.php first (20 tests OK), then cgl -n, checkIntegrityPhp and phpstan, and §4 names by suite what it did not run: full functional, unit, checkRst, checkExtensionScannerRst, build, e2e, with the reason for each."
         },
         {
             "met": true,
-            "evidence": "All five are raised and each is anchored in this diff. Public API twice \u2014 the added public `resolveFileObject()` against the `Feature` rule with `Feature-72904` as precedent in the same class, and the removed `protected getImageFromSourceString()` against what a breaking change owes, with the run stating why the extension scanner cannot find it and why that does not make \"no entry\" an option. Compatibility: `main` in the commit, on Gerrit and locally, and #110359 targeting 15.0. Review readiness is answered from the issue and from the review server together, and the series question is settled rather than left open: a second `typo3_gerrit_lookup`, by issue, returns this change only, so the patch has to stand on its own and the changelog cannot be deferred to a part 3. Nothing is raised that the diff does not carry."
+            "evidence": "Commit shape is marked not applicable yet because nothing is committed, the changelog and the documentation follow-up are raised because the diff removes two documented TypoScript options and adds one, and public PHP API is checked and found unchanged. Security gets one line at the escaping the diff touches and nothing beyond it."
         },
         {
             "met": true,
-            "evidence": "Four ranked sections with the order argued, and the boundaries stated where a finding cannot be closed. Finding 2.5 lays out the three scalar cases in a table, separates the two that are a probably-intended widening from the `TypeError` that escapes every catch block, and then says outright that no core call site could be established and that it is ranked on consequence per the rubric \u2014 which is the rubric's own instruction rather than a hedge. The placement question about `ResourceFactory` gaining a broad resolver next to `Important-107735`'s removals is named as a question for the core team and not as a defect. Nothing was rewritten and nothing was written at all: no `Write` call anywhere in the session, and `git status` in the checkout after the run is the `M .gitignore` and `?? opencode.json` that `todo/reference/` records as this environment's standing state."
+            "evidence": "Four tiers, blocks submission first, then what a reviewer sends back, then worth a change, then checked and found correct, with raised-and-dropped at the end. git status after the run is identical to before; the two untracked helper files were copied into the session's own scratchpad outside the checkout and compared, not moved."
         }
     ],
     "failures": [
         {
             "avoided": true,
-            "evidence": "The diff is read at calls 7 to 10 before any rule is fetched, and the reading goes past the diff wherever a finding needs it \u2014 `UriBuilder`, `LinkService` and its seven handlers, `SetRegistry`, the ViewHelper catch blocks and argument registrations. Where the commit message makes a claim it is tested rather than repeated: the circularity claim is confirmed handler by handler and reported as holding, and the `/typo3/` justification is refuted against the router."
+            "evidence": "Every finding carries a line of the diff or of the checkout, and §4 reports what the code does from reading :832-871 against the caller :353-404, not from what RequestHandler used to do."
         },
         {
             "avoided": true,
-            "evidence": "Two targeted `typo3_rule_lookup` queries and no contribution guide is emitted. Five suites ran, chosen from what `typo3_test_run_guide` returned, the narrowest naming a single test file \u2014 and the ones that were not run are now named rather than the whole list being either run or ignored."
+            "evidence": "The checks are the ones the diff touches: the breaking-change rule, the changelog entry, the tsref and the parser keyword list. The two changelog lookups by tag TypoScript were the widest calls, and the answer used them for the deprecate-first precedents alone rather than as a checklist."
         },
         {
             "avoided": true,
-            "evidence": "The checkout is treated as core throughout: Gerrit trailers read as such, the change confirmed on the review server by its `Change-Id` and its subject, `Releases: main` against a branch one commit ahead of `origin/main`, the owed entries placed under the core's changelog rules, and every check run through `Build/Scripts/runTests.sh`. The working-tree finding names why `opencode.json` in particular has no business in a core patch: it carries a machine-local absolute path."
+            "evidence": "Core conventions applied to a core patch: [!!!] before the keyword, a Breaking and a Feature RST on one issue, Releases: main only because a breaking change reaches no release line. No extension or site rule appears."
         },
         {
             "avoided": true,
-            "evidence": "No file in the checkout changed, no commit was amended, nothing was pushed, and no `Write` call was made. `git status` in `/home/benji/projects/typo3-cms` after the run is what it was before it."
+            "evidence": "git status before and after the run are byte-identical; the only write went to /tmp under the session's own scratchpad. The suites it ran are the dry ones, cgl with -n included."
         }
     ],
-    "notes": "The fifth recorded `REVIEW-03` run and the third on the same patch. Session `18f4a59b-4c58-44a0-91fd-0295d5b268a3`, 2026-08-03 13:34-13:44 CEST, `claude-opus-5`, Claude Code 2.1.220, one prompt on standard input and no steering. 44 calls, 11 of them to this server. The run it replaces is in commit f260b35. Same commit `9f6c6eb9093`, same working tree, same criteria digest; the skill is the variable, published at 13:32 from server `0a179ca`.\n\nThe rewrite landed. `D-SKL-009` reworded the unrun-suites rule from a property the report should have into an act with a named object, and this run wrote the list out \u2014 the first of four to do so, after three that read the old sentence at 1009, 1165 and 1562 words and produced nothing. Its first **Wrong if** does not hold, and the placement hypothesis it kept in reserve is not needed.\n\nIts second does not hold either, and the reason is better than the decision assumed. `typo3_hint_lookup` stayed uncalled after the paragraph beside it was removed, so that paragraph was not what displaced it. The answer shows why: the two hints the review quotes came back inside `typo3_task_guide` \u2014 `fluid-viewhelpers` and `core-tests`, \"isolated logic is a unit test\", \"ViewHelpers are covered by functional tests under Tests/Functional/ViewHelpers/\" \u2014 so the separate call is redundant on this task rather than lost. Three runs made it, two did not, and nothing in the answers of the two says they were poorer for it.\n\nThat leaves the one defect worth carrying forward: those hints are cited in the report as `typo3_hint_lookup`, which was never called. The content is right and came from this server, so it is a mislabelled source rather than a fabricated rule \u2014 but the checklist asks a finding to name the lookup that owns its rule, and a reader following that citation would call a tool that did not answer it. Nothing in the skill or the checklist says the guide carries hints of its own, which is where the mislabelling most likely comes from.\n\nWhat the routing keeps buying, three runs in. The series question is settled here rather than raised: a second `typo3_gerrit_lookup`, by issue this time, returns change 95070 alone, so no part 3 is pending and the missing changelog entry cannot be deferred to one. The run before it had to leave that open.\n\nWhere this run and the one before it differ on the blocking finding, both are right about the message being wrong and they arrive by different evidence \u2014 the fourth run through `PathUtility::getCanonicalPath()` keeping a leading `..`, this one through `UriBuilder` still routing the backend under `/typo3/`. This run also reaches a second blocker the other missed entirely, the removed `protected` method on a public non-final class, and states the silent half of its consequence.\n\n`typo3_project_describe` was called `typo3_project_scope` when this run was recorded, and the trace above names it by that spelling."
+    "notes": "The sixth recorded REVIEW-03 run and the first after the rewrite of 2026-09-19 that has each review name the failures every review shares. Session 251bd7dc-f046-4ef4-9c49-2141963e2088, 2026-09-19 20:08-20:13 UTC, claude-opus-5, Claude Code 2.1.278 driven headless from a command line with the prompt on standard input and no steering, the way documentation/contributing/driving-a-session.rst says. 29 tool calls, 12 to this server, the skill activated at the first turn. The run it replaces is in commit a4470ee6e. The environment is /home/benji/projects/typo3-cms at 088d17cc272 on main with the maintainer's own uncommitted change in RequestHandler.php and its functional test, which is what the prompt reviews, plus two untracked Playwright helpers in Build/ the review set apart as unrelated. The server that answered is the checkout main stands on, af5841e8; this branch differs from it in the scenario files alone. Every tool a finding cites stands in the trace: typo3_rule_lookup for the breaking-change rule, typo3_documentation_lookup for the two confval anchors in TypoScript Explained, typo3_gerrit_lookup and typo3_forge_lookup for the absence of a change and an issue. What stands out against the run of 2026-08-03: the hints the report quotes are labelled with the call that answered them, and typo3_hint_lookup was called once, by id, for project-build-and-scripts."
 }

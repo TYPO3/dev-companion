@@ -123,7 +123,7 @@ of it. The tail is the neglected end's, and the enumeration gained another.
 The third **Wrong if** has fired. Three sessions on 2026-09-09 read a `change`
 answer with this tail, which has stood in it since 2026-08-24, and none of them
 opened a skill.
-[`feedback/2026-09-09-182500`](../../feedback/2026-09-09-182500-three-matching-typo3-core-patch-skills-stayed.md)
+[`feedback/2026-09-09-182500`](../../feedback/archive/2026-09-09-182500-three-matching-typo3-core-patch-skills-stayed.md)
 counts its own. Two calls to `typo3_gerrit_lookup`, one to
 `typo3_project_describe`, none to `typo3_task_guide`, no activation. That is
 across a review of a 137-file patch and five amends of its commit message. So

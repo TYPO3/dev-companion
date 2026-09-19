@@ -792,6 +792,81 @@ final class InstallerTest extends TestCase
     }
 
     /**
+     * The block in the project's instruction file, which is the one channel
+     * that reaches a session before its first turn without a call. The file
+     * is somebody else's, so the run owns what stands between the marks and
+     * nothing outside them — `D-SKL-033`.
+     */
+    #[Decision('D-SKL-033')]
+    #[Test]
+    public function installWritesItsBlockIntoTheInstructionFileAndNothingElse(): void
+    {
+        $directory = $this->directory();
+        file_put_contents($directory . '/AGENTS.md', "# Ours\n\nQuery Forge with curl.\n");
+
+        try {
+            $stderr = '';
+            self::assertSame(0, $this->install($directory, $stderr), $stderr);
+            $written = (string) file_get_contents($directory . '/AGENTS.md');
+            self::assertStringStartsWith("# Ours\n\nQuery Forge with curl.\n\n" . Installer::BLOCK_START, $written);
+            self::assertStringEndsWith(Installer::BLOCK_END . "\n", $written);
+            self::assertStringContainsString('typo3_forge_lookup', $written);
+
+            // A hand edit between the marks goes back to what the package
+            // writes, and a line after them stays.
+            file_put_contents($directory . '/AGENTS.md', str_replace(
+                'typo3_forge_lookup',
+                'nothing',
+                $written,
+            ) . "\nAfter.\n");
+            self::assertSame(0, $this->execute($directory, ['update'], $stderr), $stderr);
+            self::assertSame($written . "\nAfter.\n", file_get_contents($directory . '/AGENTS.md'));
+        } finally {
+            Directory::remove($directory);
+        }
+    }
+
+    /**
+     * Which file the block goes into is the client's documentation, read on
+     * 2026-09-19. Claude Code reads `AGENTS.md` only where no `CLAUDE.md` is
+     * there, and Antigravity reads `.agents/rules/` and no root file.
+     */
+    #[Decision('D-SKL-033')]
+    #[DataProvider('instructionFiles')]
+    #[Test]
+    public function theBlockGoesWhereTheClientReads(string $agent, string $existing, string $expected): void
+    {
+        $directory = $this->directory();
+        if ($existing !== '') {
+            file_put_contents($directory . '/' . $existing, "# Ours\n");
+        }
+
+        try {
+            $stderr = '';
+            self::assertSame(0, $this->execute($directory, ['install', '--agent=' . $agent], $stderr), $stderr);
+            self::assertStringContainsString(Installer::BLOCK_START, (string) file_get_contents($directory . '/' . $expected));
+            foreach (['AGENTS.md', 'CLAUDE.md'] as $other) {
+                if ($other !== $expected) {
+                    self::assertFileDoesNotExist($directory . '/' . $other);
+                }
+            }
+        } finally {
+            Directory::remove($directory);
+        }
+    }
+
+    /** @return array<string, array{string, string, string}> */
+    public static function instructionFiles(): array
+    {
+        return [
+            'Claude Code with a CLAUDE.md reads that alone' => ['claude', 'CLAUDE.md', 'CLAUDE.md'],
+            'Claude Code without one reads AGENTS.md' => ['claude', '', 'AGENTS.md'],
+            'Antigravity reads a rules file of its own' => ['antigravity', '', '.agents/rules/typo3-dev-companion.md'],
+            'Codex reads AGENTS.md' => ['codex', '', 'AGENTS.md'],
+        ];
+    }
+
+    /**
      * What the ignores are for, asked of git rather than of the files.
      *
      * Everything else here reads what the install wrote. This reads what git
@@ -830,6 +905,7 @@ final class InstallerTest extends TestCase
             self::assertSame([
                 '?? .claude/skills/my-own-skill.md',
                 '?? .mcp.json',
+                '?? AGENTS.md',
                 '?? composer.json',
             ], $reported, $output);
         } finally {

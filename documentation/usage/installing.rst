@@ -219,28 +219,55 @@ skills at its native project path and, where it supports one, its native MCP
 configuration. ``--agent=`` does not take ``generic``, because it is nobody's
 name.
 
-===========  ===============  ===========================  ===================
-Client       ``--agent=``     MCP entry                    Skills
-===========  ===============  ===========================  ===================
-none named   —                ``.mcp.json``                ``.agents/skills``
-Claude Code  ``claude``       ``.mcp.json``                ``.claude/skills``
-Codex        ``codex``        ``.codex/config.toml``       ``.agents/skills``
-VS Code      ``copilot``      ``.vscode/mcp.json``         ``.github/skills``
-Cursor       ``cursor``       ``.cursor/mcp.json``         ``.cursor/skills``
-Amp          ``amp``          ``.amp/settings.json``       ``.agents/skills``
-Zed          ``zed``          ``.zed/settings.json``       ``.agents/skills``
-Kiro         ``kiro``         ``.kiro/settings/mcp.json``  ``.kiro/skills``
-Droid        ``factory``      ``.factory/mcp.json``        ``.factory/skills``
-Junie        ``junie``        ``.junie/mcp/mcp.json``      ``.junie/skills``
-opencode     ``opencode``     ``opencode.json``            ``.agents/skills``
-Grok         ``grok``         ``.grok/config.toml``        ``.grok/skills``
-Antigravity  ``antigravity``  none                         ``.agents/skills``
-Pi           ``pi``           none                         ``.pi/skills``
-===========  ===============  ===========================  ===================
+===========  ===============  ===========================  ===================  =====================================================
+Client       ``--agent=``     MCP entry                    Skills               Instruction block
+===========  ===============  ===========================  ===================  =====================================================
+none named   —                ``.mcp.json``                ``.agents/skills``   ``AGENTS.md``
+Claude Code  ``claude``       ``.mcp.json``                ``.claude/skills``   ``CLAUDE.md`` where one is, else ``AGENTS.md``
+Codex        ``codex``        ``.codex/config.toml``       ``.agents/skills``   ``AGENTS.md``
+VS Code      ``copilot``      ``.vscode/mcp.json``         ``.github/skills``   ``AGENTS.md``
+Cursor       ``cursor``       ``.cursor/mcp.json``         ``.cursor/skills``   ``AGENTS.md``
+Amp          ``amp``          ``.amp/settings.json``       ``.agents/skills``   ``AGENTS.md``
+Zed          ``zed``          ``.zed/settings.json``       ``.agents/skills``   ``AGENTS.md``
+Kiro         ``kiro``         ``.kiro/settings/mcp.json``  ``.kiro/skills``     ``AGENTS.md``
+Droid        ``factory``      ``.factory/mcp.json``        ``.factory/skills``  ``AGENTS.md``
+Junie        ``junie``        ``.junie/mcp/mcp.json``      ``.junie/skills``    ``.junie/AGENTS.md`` where one is, else ``AGENTS.md``
+opencode     ``opencode``     ``opencode.json``            ``.agents/skills``   ``AGENTS.md``
+Grok         ``grok``         ``.grok/config.toml``        ``.grok/skills``     ``AGENTS.md``
+Antigravity  ``antigravity``  none                         ``.agents/skills``   ``.agents/rules/typo3-dev-companion.md``
+Pi           ``pi``           none                         ``.pi/skills``       ``AGENTS.md``
+===========  ===============  ===========================  ===================  =====================================================
 
 
 Antigravity and Pi receive skills only, so for them there is no entry and
 nothing to finish. ``typo3-dev-companion help`` prints the same identifiers.
+
+.. _installing-the-instruction-block:
+
+The instruction block
+~~~~~~~~~~~~~~~~~~~~~
+
+``install`` and ``update`` also write a block into the file the client reads
+before a session's first turn, which the last column names. It stands between
+``<!-- typo3-dev-companion: start -->`` and
+``<!-- typo3-dev-companion: end -->``. It says that the server and its
+``typo3-*`` skills are here, that a task starts with ``typo3_project_describe``
+and the skill that covers it, and which questions go to the server whatever
+route another instruction in the same file prescribes. Four sessions in one
+checkout had the skills listed and the tools named and activated nothing,
+because the checkout's own ``AGENTS.md`` carried a ``curl`` route for the
+question a tool here answers,
+`D-SKL-033 <../../decisions/task-skills/skl-033-whether-a-skill-is-activated-is-the-clients-and-the-models.md>`_.
+
+The two commands own what stands between the marks and nothing outside them. A
+file without the marks gets the block at its end, and a project without the file
+gets the file. Which file is the client's own documentation, read on 2026-09-19:
+``AGENTS.md`` is the one the clients share, Claude Code reads it only where no
+``CLAUDE.md`` is in the project or above it, Junie reads ``.junie/AGENTS.md``
+before it, and Antigravity reads ``.agents/rules/`` and no file at the root. To
+take the block out, delete from the start mark to the end mark; the next
+``update`` writes it again, so take the client out of the record first or run no
+``update``.
 
 The VS Code switch
 ~~~~~~~~~~~~~~~~~~
@@ -524,13 +551,15 @@ source.
 Removing it
 -----------
 
-Three things landed in the project, and no command takes them out again, so to
+Four things landed in the project, and no command takes them out again, so to
 remove the server is to delete them by hand:
 
 * the ``typo3-dev-companion`` entry in the client file the table under
   :ref:`naming the client <installing-clients>` names, and only that entry. The
   file may carry other servers;
 * one directory per published skill in the skills directory the table names;
+* the block between the two marks in the instruction file the table names,
+  :ref:`installing-the-instruction-block`;
 * ``.typo3-dev-companion/``, where the record sits.
 
 Neither command touches the project's ``.gitignore``. Every directory this

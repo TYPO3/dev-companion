@@ -6,6 +6,8 @@ status: open
 readings:
   - 2026-09-09
 coveredBy:
+  - InstallerTest::installWritesItsBlockIntoTheInstructionFileAndNothingElse
+  - InstallerTest::theBlockGoesWhereTheClientReads
   - SkillTest::everyDescriptionIsWrittenToALengthOfItsOwn
 ---
 
@@ -67,6 +69,17 @@ fire, so the wording is not what remains to suspect.
   take it on this evidence. The `instructions` reach a session that way already,
   they were in this one's context from the first turn, and they bought thirteen
   calls of nothing.
+- **Taken on 2026-09-19, on four sessions.** Three more on 2026-09-09 with the
+  skills listed, the instructions in context and no activation, and what beat
+  them was the checkout's own `AGENTS.md`, with a `curl` route for the question
+  `typo3_forge_lookup` answers. The maintainer chose the installer's own block
+  over a printed snippet and over writing nothing. `install` and `update` write
+  it between two marks into the file the client reads, `AGENTS.md` for most, and
+  rewrite what stands between the marks and nothing else. It says what the
+  skills are, where a task starts, and which questions go to the server whatever
+  route the file beside it prescribes. Which file each client reads is its own
+  documentation, read the same day, and the table in
+  `documentation/usage/installing.rst` carries it.
 
 ## Assumed
 

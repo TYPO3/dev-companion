@@ -32,9 +32,9 @@ capability takes it for what the server does, and three of them were not.
   extensions of `D-ANS-163` into a caller's capabilities too.
 - The `keyword` and `workflow` arguments of the `commit_message` prompt take the
   sets `CommitMessage::PROJECT_KEYWORDS` and `CommitMessage::WORKFLOWS`. The SDK
-  reads a `#[CompletionProvider]` on a closure parameter, which is its main path
-  for a completion. With it the two answer `TASK` for `T` and both workflows for
-  an empty value.
+  reads a `#[CompletionProvider]` on a handler's parameter, which is its main
+  path for a completion. With it the two answer `TASK` for `T` and both
+  workflows for an empty value.
 
 ## Decided
 

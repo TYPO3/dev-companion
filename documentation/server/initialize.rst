@@ -26,7 +26,9 @@ The four members
   ``listChanged``, because nothing here changes a list while a session runs.
   Nothing carries ``logging`` or ``subscribe``, because no log message and no
   resource update ever leaves this server.
-* **``serverInfo``** — the name and the version ``Factory`` declares.
+* **``serverInfo``** — the name, the version, the title, the description and the
+  site ``Factory`` declares, and the mark at two optical sizes as ``data:``
+  URIs, because a stdio server has no origin a client could fetch one from.
 * **``instructions``** — the statement
   `Coverage <../../src/Knowledge/Coverage.php>`_ assembles from
   ``knowledge/server-scope.json``. The four parts of it are the opening, the
@@ -104,9 +106,32 @@ The initialize result
         },
         "serverInfo": {
             "name": "typo3-dev-companion",
-            "version": "0.3.0"
+            "version": "0.3.0",
+            "description": "Guides a coding agent through TYPO3 implementation, review and verification with version-bound knowledge and the facts of the project it runs in.",
+            "icons": [
+                {
+                    "src": "data:image/svg+xml;base64,…",
+                    "mimeType": "image/svg+xml",
+                    "sizes": [
+                        "16x16"
+                    ]
+                },
+                {
+                    "src": "data:image/svg+xml;base64,…",
+                    "mimeType": "image/svg+xml",
+                    "sizes": [
+                        "32x32"
+                    ]
+                }
+            ],
+            "websiteUrl": "https://typo3.github.io/dev-companion/",
+            "title": "TYPO3 Dev Companion"
         }
     }
+
+The two icon sources stand shortened. Each is one of the signets the site draws,
+``images/signet-s.svg`` and ``images/signet-l.svg``, as base64 in a ``data:``
+URI.
 
 The fourth member is ``instructions``, and it reads:
 

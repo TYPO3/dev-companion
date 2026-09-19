@@ -231,10 +231,11 @@ whose directory has none attaches to nothing and lands in no menu at all, which
 The mark is this repository's own drawing and lives with the pages, as
 ``images/signet-s.svg``, ``-m`` and ``-l``. A signet gets a new drawing per
 optical size rather than a scale, and a browser picks between them by the slot
-it needs. Each follows the form the system asks of artwork, one ``var()`` with a
-hex fallback per shape, and the whole drawing under one ``id``. So a mark
-referenced into the page carries the page's own ink and the file still renders
-on its own.
+it needs. ``Server\Factory`` sends ``-s`` and ``-l`` to a client at
+``initialize`` as the server's icons, so a client lists it under the same mark.
+Each follows the form the system asks of artwork, one ``var()`` with a hex
+fallback per shape, and the whole drawing under one ``id``. So a mark referenced
+into the page carries the page's own ink and the file still renders on its own.
 
 One thing the local preview cannot show is the type. The faces are
 ``font-display: optional``, so a browser uses one only where it is already in

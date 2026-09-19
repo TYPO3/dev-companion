@@ -122,4 +122,13 @@ final class Paths
     {
         return self::root() . '/documentation/records/debrief.txt';
     }
+
+    /**
+     * The mark at one of its three optical sizes, `s`, `m` or `l`, which the
+     * site draws and `initialize` sends a client as the server's icon.
+     */
+    public static function signet(string $size): string
+    {
+        return self::root() . '/documentation/images/signet-' . $size . '.svg';
+    }
 }

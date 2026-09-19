@@ -88,6 +88,12 @@ final class StdioServerTest extends TestCase
 
         self::assertSame('typo3-dev-companion', $result['result']['serverInfo']['name']);
         self::assertSame(self::PROTOCOL_VERSION, $result['result']['protocolVersion']);
+        // What a client shows a person beside the name: the title, the site,
+        // and the mark as a `data:` URI, since a stdio server has no origin.
+        self::assertSame('TYPO3 Dev Companion', $result['result']['serverInfo']['title']);
+        self::assertSame('https://typo3.github.io/dev-companion/', $result['result']['serverInfo']['websiteUrl']);
+        self::assertSame(['16x16'], $result['result']['serverInfo']['icons'][0]['sizes']);
+        self::assertStringStartsWith('data:image/svg+xml;base64,', $result['result']['serverInfo']['icons'][0]['src']);
         self::assertStringContainsString('checkout', $result['result']['instructions']);
         // Held here as well as in ScopeTest, because this is the string a
         // client gets. What the SDK puts on the wire is what a client
@@ -262,6 +268,11 @@ final class StdioServerTest extends TestCase
     {
         $prompts = $this->session([$this->request(2, 'prompts/list')])[2]['result']['prompts'];
         self::assertContains('commit_message', array_column($prompts, 'name'));
+        // Every argument says what it is, which the SDK reads off the
+        // handler's `@param` tags and a slash-command client shows.
+        foreach ($prompts[0]['arguments'] as $argument) {
+            self::assertNotSame('', $argument['description'] ?? '', $argument['name'] . ' says nothing');
+        }
 
         $result = $this->session([$this->request(2, 'prompts/get', [
             'name' => 'commit_message',

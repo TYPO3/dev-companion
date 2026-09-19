@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Server;
 
-use Mcp\Capability\Attribute\CompletionProvider;
 use Mcp\Schema\Annotations;
+use Mcp\Schema\Icon;
 use Mcp\Schema\ResourceDefinition;
 use Mcp\Schema\ResourceTemplate;
 use Mcp\Schema\ServerCapabilities;
@@ -13,10 +13,10 @@ use Mcp\Schema\Tool;
 use Mcp\Schema\ToolAnnotations;
 use Mcp\Server;
 use TYPO3\DevCompanion\Feedback\Channel;
-use TYPO3\DevCompanion\Knowledge\CommitMessage;
 use TYPO3\DevCompanion\Knowledge\Coverage;
 use TYPO3\DevCompanion\Knowledge\Documents;
 use TYPO3\DevCompanion\Paths;
+use TYPO3\DevCompanion\Sdk\Prompts;
 use TYPO3\DevCompanion\Sdk\ResourceHandler;
 use TYPO3\DevCompanion\Sdk\SkillReferenceHandler;
 use TYPO3\DevCompanion\Sdk\Skills;
@@ -33,6 +33,10 @@ final class Factory
 {
     public const SERVER_NAME = 'typo3-dev-companion';
     public const SERVER_VERSION = '0.3.0';
+    public const SERVER_TITLE = 'TYPO3 Dev Companion';
+    public const SERVER_DESCRIPTION = 'Guides a coding agent through TYPO3 implementation, review and verification '
+        . 'with version-bound knowledge and the facts of the project it runs in.';
+    public const SERVER_WEBSITE = 'https://typo3.github.io/dev-companion/';
 
     /**
      * How much of a session's context a resource is worth, on the scale the
@@ -64,7 +68,14 @@ final class Factory
     public static function create(string $notice = ''): Server
     {
         $builder = Server::builder()
-            ->setServerInfo(self::SERVER_NAME, self::SERVER_VERSION)
+            ->setServerInfo(
+                self::SERVER_NAME,
+                self::SERVER_VERSION,
+                self::SERVER_DESCRIPTION,
+                self::icons(),
+                self::SERVER_WEBSITE,
+                self::SERVER_TITLE,
+            )
             ->setInstructions(Coverage::instructions($notice))
             ->setCapabilities(self::capabilities());
 
@@ -94,25 +105,7 @@ final class Factory
         }
 
         $builder->addPrompt(
-            static function (
-                string $summary,
-                #[CompletionProvider(values: CommitMessage::PROJECT_KEYWORDS)]
-                string $keyword = 'TASK',
-                #[CompletionProvider(values: CommitMessage::WORKFLOWS)]
-                string $workflow = 'core',
-                string $issue = '',
-            ): array {
-                $arguments = [
-                    'summary' => $summary,
-                    'keyword' => $keyword,
-                    'workflow' => $workflow,
-                ];
-                if ($issue !== '') {
-                    $arguments['issue'] = $issue;
-                }
-
-                return ['user' => Registry::call('typo3_commit_message_guide', $arguments)->text];
-            },
+            [Prompts::class, 'commitMessage'],
             name: 'commit_message',
             title: 'Draft a TYPO3 commit message',
             description: 'Turn a summary into the checked commit-message draft already provided by typo3_commit_message_guide.',
@@ -125,7 +118,7 @@ final class Factory
         // while it still works that a debrief comes, `D-FBK-048`.
         if (Channel::isAvailable()) {
             $builder->addPrompt(
-                static fn(): array => ['user' => (string) file_get_contents(Paths::debrief())],
+                [Prompts::class, 'debrief'],
                 name: 'debrief',
                 title: 'Debrief the session that has just finished',
                 description: 'Ask a finished session what this server did for it and what it lacked, and have it '
@@ -141,6 +134,29 @@ final class Factory
         $builder->enableExtension(new SkillsExtension());
 
         return $builder->build();
+    }
+
+    /**
+     * The mark a client shows beside the server's name, at the two optical
+     * sizes the site uses for its favicon.
+     *
+     * A `data:` URI, because a stdio server has no origin a client may fetch
+     * an icon from, and the specification names that form beside https.
+     *
+     * @return array<int, Icon>
+     */
+    private static function icons(): array
+    {
+        $icons = [];
+        foreach (['s' => '16x16', 'l' => '32x32'] as $size => $pixels) {
+            $icons[] = new Icon(
+                'data:image/svg+xml;base64,' . base64_encode((string) file_get_contents(Paths::signet($size))),
+                'image/svg+xml',
+                [$pixels],
+            );
+        }
+
+        return $icons;
     }
 
     /**

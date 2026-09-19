@@ -48,6 +48,11 @@ final class Handshake
         $result = json_decode(self::session()[1])->result;
         $instructions = (string) $result->instructions;
         unset($result->instructions);
+        // The icon bytes are the two signets the site itself draws, and a
+        // page that printed them base64 would be two lines nobody reads.
+        foreach ($result->serverInfo->icons ?? [] as $icon) {
+            $icon->src = substr((string) $icon->src, 0, strpos((string) $icon->src, ',') + 1) . '…';
+        }
 
         $lines = [
             ...Rst::heading('The initialize result', 1),
@@ -55,6 +60,12 @@ final class Handshake
                 $result,
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
             )),
+            Wrap::rstText(
+                'The two icon sources stand shortened. Each is one of the signets the site draws, '
+                . Rst::literal('images/signet-s.svg') . ' and ' . Rst::literal('images/signet-l.svg')
+                . ', as base64 in a ' . Rst::literal('data:') . ' URI.',
+            ),
+            '',
             Wrap::rstText(
                 'The fourth member is ' . Rst::literal('instructions') . ', and it reads:',
             ),

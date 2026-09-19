@@ -75,6 +75,25 @@ final class ToolContractTest extends TestCase
     }
 
     /**
+     * A misspelt argument is a rejection that names it, not an answer to a call
+     * nobody made. Open, the validator dropped the argument and the tool
+     * answered as if it was never sent, `D-ANS-053`.
+     * `StdioServerTest::aCallNamingAnArgumentTheToolDoesNotHaveIsRejectedByThatName`
+     * is the same thing over the wire.
+     */
+    #[Decision('D-ANS-053')]
+    #[Test]
+    public function everyToolRejectsAnArgumentItDoesNotHave(): void
+    {
+        foreach (Registry::definitions() as $definition) {
+            self::assertFalse(
+                $definition['inputSchema']['additionalProperties'] ?? null,
+                $definition['name'] . ' takes an argument it does not declare',
+            );
+        }
+    }
+
+    /**
      * A title is for the person a client lists the tool to, and it stays short
      * enough for a listing and a permission dialog. A title that recites the
      * name in plain words says nothing the name did not, which is the defect

@@ -99,7 +99,10 @@ final class Registry
                 static fn(Source $source): string => $source->value,
                 $tool::answersFrom(),
             ),
-            'inputSchema' => $tool::inputSchema(),
+            // Closed against an argument nothing here knows, for every tool at
+            // once. Open, the validator drops a misspelt parameter and the tool
+            // answers as if it was never sent, `D-ANS-053`.
+            'inputSchema' => $tool::inputSchema() + ['additionalProperties' => false],
             'annotations' => $tool::annotations(),
             'outputSchema' => $tool::outputSchema(),
         ], self::offered());

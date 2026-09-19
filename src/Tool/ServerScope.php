@@ -82,7 +82,6 @@ final class ServerScope extends ReadOnlyTool
                         . 'The withheld field says what each part left out would have held.',
                 ],
             ],
-            'additionalProperties' => false,
         ];
     }
 

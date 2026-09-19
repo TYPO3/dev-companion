@@ -5,6 +5,7 @@ date: 2026-08-04
 status: open
 coveredBy:
   - StdioServerTest::aCallNamingAnArgumentTheToolDoesNotHaveIsRejectedByThatName
+  - ToolContractTest::everyToolRejectsAnArgumentItDoesNotHave
 ---
 
 # D-ANS-053 — A rejected call names the argument that was not understood
@@ -73,3 +74,11 @@ A measurement of both candidates against this checkout over stdio settled on the
 first. The unqualified call gets the two branches, neither of which the caller
 asked about. With the property declaration the same call names the property it
 refuses. So the assumption holds. This tool declares it and no other does.
+
+Read again on 2026-09-19: `typo3_hint_lookup` with `{"topic": 42, "bogus": 1}`
+answered `isError: false`, as a call without arguments. A tool whose arguments
+are all optional names nothing when one is misspelt. So the declaration stands
+on every tool, in `Registry::definitions()`, and
+`ToolContractTest::everyToolRejectsAnArgumentItDoesNotHave` holds it. The second
+assumption is settled from the specification: a client's metadata travels in
+`params._meta`, and nothing writes into `arguments`.

@@ -79,7 +79,6 @@ final class PermalinkLookup extends ReadOnlyTool
                 ],
             ],
             'required' => ['targetVersion'],
-            'additionalProperties' => false,
         ];
     }
 

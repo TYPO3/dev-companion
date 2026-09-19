@@ -71,3 +71,15 @@ suite covers an `EXT:` path in `f:image`. That suite failed on the patch before
 CI voted, and the patch's own tests were green. The session calls the ids the
 most valuable calls it made.
 
+## Since then
+
+Read on 2026-09-19 against `feedback/2026-09-18-093224`. The brief named three
+omitted ids and the session queried the same paths again instead, because the
+step in `typo3-core-patch-development` that sent it there said "with the
+concrete paths" and nothing about the ids. So the first **Wrong if** did not
+fire: the lever was the skill's sentence, step 4 of the ladder, and it now says
+by id for what the brief left out and by path for what it did not see. The same
+feedback's other half, a guessed path the guide placed as core and said nothing
+about, is the guide as its description states it: it reads no checkout. A path
+is placed by its shape, and whether the file exists is the caller's `ls`.
+

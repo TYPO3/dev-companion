@@ -61,6 +61,12 @@ installation the report came from.
 - The document names no `-s` suite. Which suites exist is per branch and lives
   in `test-suite-hints.json`, which `KnowledgeTest` holds prose to.
 
+- The page ends where the request reaches the site, and says so since
+  2026-09-19. A session ran it end to end on first use, the wildcard host and
+  the harness placement included, and found the one thing it had to look up
+  elsewhere was the backend login of a worktree that inherited its database.
+  That is the add-on's business, `feedback/2026-09-18-093214`, `D-FBK-018`.
+
 ## Assumed
 
 - That the router's aliases are DDEV's behaviour rather than this machine's

@@ -149,9 +149,11 @@ rather than repair it.
 
 ## Make the change
 
-Ask `typo3_hint_lookup` with the concrete paths for the conventions of each
-subsystem you touch, before you write rather than after. A convention you fetch
-afterwards confirms what you already wrote.
+Ask `typo3_hint_lookup` for the conventions of each subsystem you touch, before
+you write rather than after. A convention you fetch afterwards confirms what you
+already wrote. Ask by id for the hints the brief left out, which `omittedHints`
+names, and with the concrete paths only for a path the brief did not see. The
+same paths queried again answer the same hints.
 
 Where the change touches a source below `Build/Sources/`, the generated file
 beside it is part of the patch. `typo3_rule_lookup` with

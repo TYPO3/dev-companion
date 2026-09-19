@@ -71,6 +71,10 @@ ROUTER=$(docker inspect -f '{{ (index .NetworkSettings.Networks "ddev_default").
 docker run --rm --network ddev_default --add-host <hostname>:${ROUTER} <image> <command>
 ```
 
+This page ends where the request reaches the site. How you log in to the backend
+of a worktree that inherited its database is the business of the DDEV add-on
+that made the worktree, and that add-on's own profile names the account command.
+
 ## Where the Harness and Its Output Go
 
 Node resolves a dependency from the directory of the file that imports it,

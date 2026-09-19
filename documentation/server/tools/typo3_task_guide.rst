@@ -357,6 +357,8 @@ Text:
     - Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.
     - Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query "breaking change").
     - A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.
+    - A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.
+    - A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.
 
     ## Events and Extension Points
     Hints:
@@ -707,6 +709,20 @@ Data:
                         "until": null,
                         "versions": "",
                         "scope": "core"
+                    },
+                    {
+                        "text": "A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
                     }
                 ]
             },
@@ -899,7 +915,24 @@ Text:
     - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
     Hints:
-    - No hint matched this task text. That means no convention was recognized, not that none applies: call typo3_hint_lookup again with the concrete file paths once they are known.
+    The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
+    These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.
+
+    ### PHP
+
+    ## Changing a Public Method Signature
+    Hints:
+    - A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.
+    - Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — "Declaration of Sub::start() must be compatible with Base::start()" — and nothing in the class being edited names it.
+    - Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.
+    - The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.
+    - The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.
+    - So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.
+    - Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.
+    - Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query "breaking change").
+    - A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.
+    - A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.
+    - A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.
 
     Rules that apply to this task:
 
@@ -1018,7 +1051,93 @@ Data:
                 "tool": "typo3_rule_lookup"
             }
         ],
-        "hints": [],
+        "hints": [
+            {
+                "id": "public-api-surface",
+                "title": "Changing a Public Method Signature",
+                "category": "PHP",
+                "scope": null,
+                "hints": [
+                    {
+                        "text": "A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — \"Declaration of Sub::start() must be compatible with Base::start()\" — and nothing in the class being edited names it.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": "core"
+                    },
+                    {
+                        "text": "The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": "core"
+                    },
+                    {
+                        "text": "The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": "core"
+                    },
+                    {
+                        "text": "So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": "core"
+                    },
+                    {
+                        "text": "Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query \"breaking change\").",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": "core"
+                    },
+                    {
+                        "text": "A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": "core"
+                    },
+                    {
+                        "text": "A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    }
+                ]
+            }
+        ],
         "omittedHints": [],
         "rules": [
             {

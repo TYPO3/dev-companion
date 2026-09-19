@@ -377,7 +377,7 @@ Text:
     Running it: unknown — the body does not say what it does to the checkout.
 
     JavaScript unit tests for the built backend modules.
-    Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.
+    Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. No targeted form goes through runTests.sh: this target passes nothing through, and -s npm runs in the Node image without a browser, so a run test -- --group there stops at ChromePathNotSetError. A targeted run is npm run test -- --group <package> in Build/ on a machine with Chrome, and --files narrows nothing because the config declares groups. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.
 
     ## checkGruntClean
     Command from the TYPO3 core root:
@@ -816,7 +816,7 @@ Data:
                 "runs": "unknown",
                 "targeted": null,
                 "description": "JavaScript unit tests for the built backend modules.",
-                "whenToUse": "Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.",
+                "whenToUse": "Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. No targeted form goes through runTests.sh: this target passes nothing through, and -s npm runs in the Node image without a browser, so a run test -- --group there stops at ChromePathNotSetError. A targeted run is npm run test -- --group <package> in Build/ on a machine with Chrome, and --files narrows nothing because the config declares groups. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.",
                 "domains": [
                     "typescript"
                 ],

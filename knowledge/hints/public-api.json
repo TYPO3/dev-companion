@@ -3,7 +3,8 @@
     "id": "public-api-surface",
     "title": "Changing a Public Method Signature",
     "domains": [
-      "php"
+      "php",
+      "typescript"
     ],
     "appliesTo": [
       "public method signature",
@@ -14,7 +15,10 @@
       "add a parameter",
       "overriding a method",
       "is this breaking",
-      "backport"
+      "backport",
+      "TypeScript member",
+      "JavaScript module API",
+      "protected property"
     ],
     "hints": [
       "A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.",
@@ -43,7 +47,9 @@
       {
         "text": "A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.",
         "scope": "core"
-      }
+      },
+      "A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.",
+      "A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none."
     ]
   },
   {

@@ -93,11 +93,14 @@ anywhere in the corpus.
 
 ## Since then
 
-Read on 2026-09-19 against `feedback/2026-09-18-093132`: a session had the hint
-and still worked out in the checkout how a component that fetches is tested, at
-four full suite runs. Step 1a. The shape was absent rather than misplaced, and
-`bin/cli hints:probe` on the fetch and the stub reached `unit-test-doubles`
-alone. Two statements went in the same day, both read on 13.4, 14.3 and main:
-the core's own `ajax-request-test.ts` stubs `window.fetch`, and
-`AjaxResponse.resolve()` reads `Content-Type`. The `oneEvent` typing and the
-hang on a failed Lit assertion need a run, and `T-260918-1c0a` carries that.
+Read on 2026-09-19 against two feedback of 2026-09-18. `093132`: a session had
+the hint and worked out in the checkout how a component that fetches is tested,
+at four full suite runs. `093139`: the same session ran the whole suite five
+times because the hint said the target passes nothing through and named no way
+past it. Both step 1a. Four statements went in the same day. The core's own
+`ajax-request-test.ts` stubs `window.fetch`, and `AjaxResponse.resolve()` reads
+`Content-Type`, read on 13.4, 14.3 and main. Measured in the container of
+`.checkouts/main`: `-s npm -- run test -- --files <one file>` ran every group's
+files, `--group core` narrowed and stopped at `ChromePathNotSetError`, because
+that target runs without a browser. `T-260918-1c0a` carries the `oneEvent`
+typing and the hang on a failed Lit assertion, which need a run with Chrome.

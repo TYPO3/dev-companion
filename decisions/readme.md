@@ -418,6 +418,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### knowledge
 
+- [`D-KNW-160`][D-KNW-160] — What the core owes for a changed TypeScript member is stated in the corpus · 2026-09-19
 - [`D-KNW-157`][D-KNW-157] — A processed image is keyed twice and cleared by three actions · 2026-09-15
 - [`D-KNW-158`][D-KNW-158] — A timing probe is a page beside the rendering probe · 2026-09-15
 - [`D-KNW-159`][D-KNW-159] — A hint that names a suite carries its path · 2026-09-15
@@ -569,6 +570,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-028`][D-KNW-028] — How a file becomes a processed one is a subject this server owns · 2026-08-02
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
+[D-KNW-160]: knowledge/knw-160-what-the-core-owes-for-a-changed-typescript-member-is-stated-in-the-corpus.md
 [D-KNW-157]: knowledge/knw-157-a-processed-image-is-keyed-twice-and-cleared-by-three-actions.md
 [D-KNW-158]: knowledge/knw-158-a-timing-probe-is-a-page-beside-the-rendering-probe.md
 [D-KNW-159]: knowledge/knw-159-a-hint-that-names-a-suite-carries-its-path.md

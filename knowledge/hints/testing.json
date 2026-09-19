@@ -233,13 +233,17 @@
       "test a module",
       "cover the module",
       "AjaxRequest",
-      "fetch"
+      "fetch",
+      "--group",
+      "--files",
+      "targeted run"
     ],
     "hints": [
       "The core's JavaScript unit tests live at Build/Sources/TypeScript/<package>/tests/, mirroring the module path below that package, one file per module named with a -test.ts suffix.",
       "Build/web-test-runner.config.mjs makes one group per package under Build/Sources/TypeScript that has a tests/ directory, over tests/**/*.ts. A package without that directory is discovered as nothing, so the first test in one is invisible until the directory exists.",
       "Only backend, core and the rte-ckeditor package carry that directory; form, install, dashboard, filelist and the rest carry none. A suite named for a path in one of those runs over no file, and the first test there creates the group as well as the test. `ls Build/Sources/TypeScript/*/tests` is the check on the branch in hand.",
-      "The runner is @web/test-runner, and runTests.sh -s unitJavascript runs it in a container as npm run test inside Build/. That target passes no arguments through, so a targeted or watching run means calling the runner in Build/ directly; npm run watch:test is the same runner with --watch.",
+      "The runner is @web/test-runner, and runTests.sh -s unitJavascript runs it in a container as npm ci and npm run test inside Build/. That target passes no arguments through, and no targeted run goes through runTests.sh at all: -s npm runs in the Node image without a browser, so runTests.sh -s npm -- run test -- --group core starts the group's files and stops at ChromePathNotSetError. A targeted run is the runner called in Build/ on a machine with Chrome, npm run test -- --group <package> for one package's files; npm run watch:test is the same runner with --watch.",
+      "wtr --files narrows nothing here, because the config declares groups and a group's own files win: --files with one test file still ran every group's files. --group <package> is the one narrowing the config honours, and a single file is a test the session runs alone by moving the others out of the way or by a .only on its suite.",
       "The import map in that config points @typo3/core/, @typo3/backend/ and every other package prefix at typo3/sysext/<ext>/Resources/Public/JavaScript/. A test therefore exercises the built output, not the TypeScript source, and a source change is invisible to it until the branch is built.",
       {
         "text": "The config serves ~labels/ from a middleware returning { get: key => key }, so a module that reads labels needs no fixture and asserts the key it asked for.",

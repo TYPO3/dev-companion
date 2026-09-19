@@ -6,6 +6,7 @@ status: open
 coveredBy:
   - CommitMessageGuideTest::theCoreAnswerNamesWhereTheHooksLengthBoundaryRuns
   - CommitMessageGuideTest::theOverlongLineCheckCarriesTheBoundaryItself
+  - CommitMessageTest::aCoreBodyWrapsOneColumnUnderTheHookAndAProjectBodyAtIt
 ---
 
 # D-GUI-020 — The commit guide states the longest line the hook accepts
@@ -95,3 +96,15 @@ boundary at all.
 - A session reads the stated boundary and still hand-measures to a margin. Then
   what stopped the three sessions was not the absent sentence, and the lever is
   somewhere else on the ladder.
+
+## Since then
+
+The third **Wrong if** fired on 2026-09-19, `feedback/2026-09-18-093147`. A
+session read the stated boundary, committed a draft with a line of exactly 72,
+found it with `awk` against the checkout's `AGENTS.md` and amended. So the
+sentence settles which rule runs and not which rule a session obeys. The
+maintainer took the wrap the first bullet under **Decided** rejected: a core
+body wraps at `CommitMessage::CORE_WRAP_WIDTH`, 71, and a project body at the
+hook's 72. The boundary sentence stays as it was, and `body-line-too-long` still
+fires at the hook's line alone. The core's `AGENTS.md` is still one character
+stricter than the hook it cites, and a patch there is the core's.

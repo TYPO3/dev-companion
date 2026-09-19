@@ -1,7 +1,8 @@
 ---
 date: 2026-09-18T09:31:47+00:00
 category: wrong-answer
-status: open
+status: closed
+closed: 2026-09-19
 model: claude-opus-5[1m]
 tool: typo3_commit_message_guide
 directory: /home/benji/projects/typo3-cms

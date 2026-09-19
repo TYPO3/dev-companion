@@ -20,8 +20,16 @@ namespace TYPO3\DevCompanion\Knowledge;
  */
 final class CommitMessage
 {
-    /** Column the body wraps at, per the TYPO3 commit message rules. */
+    /** The longest line the core's commit hook accepts, and the column a project body wraps at. */
     public const BODY_WIDTH = 72;
+
+    /**
+     * The column a core body wraps at. One under the hook, because the core's
+     * own `AGENTS.md` says no line may reach 72, and a session that reads both
+     * measures to the stricter one and amends a draft the hook took. The
+     * maintainer chose the column over that amend on 2026-09-19, `D-GUI-020`.
+     */
+    public const CORE_WRAP_WIDTH = 71;
 
     /**
      * What the draft writes where an answer belongs, and what it refuses to
@@ -162,7 +170,10 @@ final class CommitMessage
         }
         $prefix = $drafts . ($isBreaking === true ? '[!!!]' : '') . '[' . ($keyword === '' ? 'KEYWORD' : $keyword) . ']';
         $subject = $prefix . ' ' . $summary;
-        $wrapped = self::wrapBody(isset($input['body']) ? (string) $input['body'] : '');
+        $wrapped = self::wrapBody(
+            isset($input['body']) ? (string) $input['body'] : '',
+            $workflow === self::WORKFLOW_CORE ? self::CORE_WRAP_WIDTH : self::BODY_WIDTH,
+        );
         $body = $wrapped['body'];
 
         $parts = [$subject];
@@ -734,7 +745,7 @@ final class CommitMessage
                     . '%d characters. Indent them to keep the line breaks you wrote.',
                     $run['first'],
                     $run['last'],
-                    self::BODY_WIDTH,
+                    $isCore ? self::CORE_WRAP_WIDTH : self::BODY_WIDTH,
                 ),
             ];
         }
@@ -847,8 +858,8 @@ final class CommitMessage
     }
 
     /**
-     * Wraps the body at 72 characters, the width the core rules ask for, and
-     * says which runs of the caller's lines it joined for it.
+     * Wraps the body at the width the workflow asks for, and says which runs
+     * of the caller's lines it joined for it.
      *
      * Only prose reflows. Fenced code, indented blocks and list items keep
      * their structure. A word longer than the width goes on a line of its own
@@ -858,7 +869,7 @@ final class CommitMessage
      *
      * @return array{body: string, joined: array<int, array{first: int, last: int}>}
      */
-    private static function wrapBody(string $body): array
+    private static function wrapBody(string $body, int $width): array
     {
         $lines = preg_split('/\R/', trim($body)) ?: [];
 
@@ -871,30 +882,31 @@ final class CommitMessage
             $line = rtrim($line);
 
             if (str_starts_with(ltrim($line), '```')) {
-                self::flushParagraph($output, $paragraph, $joined);
+                self::flushParagraph($output, $paragraph, $joined, $width);
                 $inFence = !$inFence;
                 $output[] = $line;
                 continue;
             }
 
             if ($inFence || preg_match('/^\s/', $line) === 1) {
-                self::flushParagraph($output, $paragraph, $joined);
+                self::flushParagraph($output, $paragraph, $joined, $width);
                 $output[] = $line;
                 continue;
             }
 
             if (trim($line) === '') {
-                self::flushParagraph($output, $paragraph, $joined);
+                self::flushParagraph($output, $paragraph, $joined, $width);
                 $output[] = '';
                 continue;
             }
 
             if (preg_match('/^([-*+]\s+|\d+[.)]\s+)(.*)$/', $line, $matches) === 1) {
-                self::flushParagraph($output, $paragraph, $joined);
+                self::flushParagraph($output, $paragraph, $joined, $width);
                 $output[] = self::wrapParagraph(
                     $matches[2],
                     $matches[1],
                     str_repeat(' ', mb_strlen($matches[1])),
+                    $width,
                 );
                 continue;
             }
@@ -902,7 +914,7 @@ final class CommitMessage
             $paragraph[] = ['number' => $index + 1, 'text' => $line];
         }
 
-        self::flushParagraph($output, $paragraph, $joined);
+        self::flushParagraph($output, $paragraph, $joined, $width);
 
         return ['body' => rtrim(implode("\n", $output)), 'joined' => $joined];
     }
@@ -915,7 +927,7 @@ final class CommitMessage
      * @param array<int, array{number: int, text: string}> $paragraph
      * @param array<int, array{first: int, last: int}> $joined
      */
-    private static function flushParagraph(array &$output, array &$paragraph, array &$joined): void
+    private static function flushParagraph(array &$output, array &$paragraph, array &$joined, int $width): void
     {
         if ($paragraph === []) {
             return;
@@ -928,12 +940,12 @@ final class CommitMessage
             ];
         }
 
-        $output[] = self::wrapParagraph(implode(' ', array_column($paragraph, 'text')), '', '');
+        $output[] = self::wrapParagraph(implode(' ', array_column($paragraph, 'text')), '', '', $width);
         $paragraph = [];
     }
 
     /** Greedy word wrap that never splits a word. */
-    private static function wrapParagraph(string $text, string $firstPrefix, string $continuationPrefix): string
+    private static function wrapParagraph(string $text, string $firstPrefix, string $continuationPrefix, int $width): string
     {
         $lines = [];
         $current = null;
@@ -946,7 +958,7 @@ final class CommitMessage
                 $current = $firstPrefix . $word;
                 continue;
             }
-            if (mb_strlen($current) + 1 + mb_strlen($word) <= self::BODY_WIDTH) {
+            if (mb_strlen($current) + 1 + mb_strlen($word) <= $width) {
                 $current .= ' ' . $word;
                 continue;
             }

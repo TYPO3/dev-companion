@@ -30,22 +30,34 @@ final class CommitMessageTest extends TestCase
         self::assertStringContainsString("\nReleases: main, 13.4", $result['message']);
     }
 
+    /**
+     * A core body stops one column short of the hook. The hook accepts 72,
+     * and the core's own `AGENTS.md` says no line may reach it, so a session
+     * that reads both amended a draft the hook took — `D-GUI-020`. A project
+     * body has no such file over it and takes the hook's own width.
+     */
+    #[Decision('D-GUI-020')]
     #[Test]
-    public function proseIsWrappedAtSeventyTwoCharacters(): void
+    public function aCoreBodyWrapsOneColumnUnderTheHookAndAProjectBodyAtIt(): void
     {
-        $result = CommitMessage::create([
-            'keyword' => 'BUGFIX',
-            'summary' => 'Fix it',
-            'issue' => '1',
-            'body' => 'The import preview filtered hidden records because the query applied '
-                . 'the default restrictions, which the preview never asked for.',
-            'workflow' => CommitMessage::WORKFLOW_CORE,
-        ]);
-
-        foreach ($this->bodyLines($result['message']) as $line) {
-            self::assertLessThanOrEqual(72, mb_strlen($line), 'unwrapped line: ' . $line);
+        // Eleven five-letter words and one six-letter word: 72 characters on
+        // one line, which the hook takes and the core's AGENTS.md refuses.
+        $body = str_repeat('abcde ', 11) . 'abcdef';
+        foreach ([CommitMessage::WORKFLOW_CORE => 71, CommitMessage::WORKFLOW_PROJECT => 72] as $workflow => $width) {
+            $result = CommitMessage::create([
+                'keyword' => 'BUGFIX',
+                'summary' => 'Fix it',
+                'issue' => '1',
+                'body' => $body,
+                'workflow' => $workflow,
+            ]);
+            $longest = 0;
+            foreach ($this->bodyLines($result['message']) as $line) {
+                $longest = max($longest, mb_strlen($line));
+            }
+            self::assertSame($width === 72 ? 72 : 65, $longest, $workflow . ' wrapped at the wrong column');
+            self::assertSame([], $this->checksWithCode($result['checks'], 'body-line-too-long'));
         }
-        self::assertSame([], $this->checksWithCode($result['checks'], 'body-line-too-long'));
     }
 
     #[Test]

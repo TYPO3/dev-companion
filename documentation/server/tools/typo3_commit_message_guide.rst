@@ -9,21 +9,22 @@ Draft and check a TYPO3 commit message. A person who wants to know what the
 commit did reads the message. So write it in plain English and only as long as
 that answer needs; the diff carries the detail. Either assemble one from parts
 (keyword plus summary) or pass a message you have to check and correct it. The
-returned draft is ready to commit. Its body wraps at 72 characters. The checks
-name every run of lines the wrap joined and every line it could not bring under
-the width. Defaults to a repository of your own. There the subject and body
-conventions apply, and nothing demands a Forge issue, a Releases: trailer or a
-changelog. The draft still writes the issues you pass as Resolves: and Related:
-trailers there. That is the form a TYPO3 repository on GitHub links a commit to
-what it closes by. Pass workflow="core" for a patch against the TYPO3 core,
-which requires the Forge issue and the Releases: trailer. Where the call carries
-none, the answer names the branches for that trailer. That is the lines that
-take a patch today, and the ones a change of this shape goes to. A change still
-in work says so with workInProgress or with [WIP] in its own subject. The Forge
-issue is no error there, since the merge is what requires the trailer. A core
-body that counts what the change touched, so many files or so many spellings,
-gets a check that says so. The core's own bodies do not count. Answers from:
-knowledge.
+returned draft is ready to commit. Its body wraps at 72 characters, and at 71
+for workflow="core", one under the hook, because the core's own AGENTS.md says
+no line may reach 72. The checks name every run of lines the wrap joined and
+every line it could not bring under the width. Defaults to a repository of your
+own. There the subject and body conventions apply, and nothing demands a Forge
+issue, a Releases: trailer or a changelog. The draft still writes the issues you
+pass as Resolves: and Related: trailers there. That is the form a TYPO3
+repository on GitHub links a commit to what it closes by. Pass workflow="core"
+for a patch against the TYPO3 core, which requires the Forge issue and the
+Releases: trailer. Where the call carries none, the answer names the branches
+for that trailer. That is the lines that take a patch today, and the ones a
+change of this shape goes to. A change still in work says so with workInProgress
+or with [WIP] in its own subject. The Forge issue is no error there, since the
+merge is what requires the trailer. A core body that counts what the change
+touched, so many files or so many spellings, gets a check that says so. The
+core's own bodies do not count. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -72,8 +73,9 @@ Takes
     # come from the ELTS partners rather than from a patch to that branch.
     releases: [string]  # optional
     # Optional commit body, for what the diff does not say: why you made the change,
-    # what it rests on. The draft wraps it at 72 characters. Indent a block to keep
-    # the line breaks you wrote, and keep those lines under the width yourself.
+    # what it rests on. The draft wraps it at 72 characters, at 71 for
+    # workflow="core". Indent a block to keep the line breaks you wrote, and keep
+    # those lines under the width yourself.
     body: string  # optional
     # Whether this is a breaking change that requires [!!!]. Left out, the checks
     # say the classification is an assumption: it is a property of the diff, which

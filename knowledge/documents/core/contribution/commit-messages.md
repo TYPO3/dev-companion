@@ -74,8 +74,9 @@ the shortest line that matches.
 - The checkout's own `AGENTS.md` puts it as "no line of the message may reach 72
   characters". That is one character stricter than the hook it cites. Where you
   read the two together, the hook is what refuses a commit.
-- `typo3_commit_message_guide` wraps to that width. So the hook takes a draft it
-  returns with no `body-line-too-long` check as it stands.
+- `typo3_commit_message_guide` wraps a core body at 71, one under the hook. So a
+  draft it returns with no `body-line-too-long` check passes the hook and the
+  checkout's `AGENTS.md` alike.
 - The check is the same on every maintained branch. So the branch a patch
   targets does not change it.
 

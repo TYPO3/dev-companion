@@ -25,9 +25,11 @@ request before `initialize` with the request's own id. On `v0.8.1`
 the MCP Inspector on `Auto` or `Modern`, waits for an answer nobody sends and
 never falls back to the handshake. The SDK's own client falls back on an error
 that carries the id. A release that fixes it lifts the `Legacy` note in
-`documentation/usage/checking-it-answers.rst`. `D-DIS-006` rests on the same
-release notes with no undeprecated way for a client to state where the session
-is. Read them for that too. It serves no single requirement because it serves
-the precondition of all of them. Every answer this server gives travels over the
-protocol version the SDK speaks. On the day a client stops to offer that
-version, every requirement fails at once and not one of them says so.
+`documentation/usage/checking-it-answers.rst`. A fourth is smaller:
+`Server\Protocol::doProcessInput()` answers an unknown method with `-32600`,
+where JSON-RPC defines `-32601`, read on 2026-09-19. `D-DIS-006` rests on the
+same release notes with no undeprecated way for a client to state where the
+session is. Read them for that too. It serves no single requirement because it
+serves the precondition of all of them. Every answer this server gives travels
+over the protocol version the SDK speaks. On the day a client stops to offer
+that version, every requirement fails at once and not one of them says so.

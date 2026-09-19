@@ -86,8 +86,8 @@ final class CommitMessageGuide extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'message' => ['type' => 'string', 'minLength' => 1, 'description' => 'A complete commit message to check, subject and trailers included. The draft keeps unknown trailers such as Change-Id, so an amended patch set stays valid. The exception is workflow="core", which takes Co-Authored-By and an agent\'s own session trailer off the draft and says so: a core commit message carries neither. A core message without Signed-off-by is an error there. The core requires the certificate, and the draft carries a placeholder because only whoever commits can sign it.'],
-                'workflow' => ['type' => 'string', 'enum' => ['core', 'project'], 'default' => 'project', 'description' => 'Which rules to apply. "project", the default, is any repository of your own. The checks read the keyword, the 52/72 character limits and the wrap. They demand and invent no trailer, the draft writes the issues you pass out all the same, and they allow [SECURITY]. "core": a patch against the TYPO3 core, with the Forge issue and the Releases: trailer required.'],
-                'keyword' => ['type' => 'string', 'enum' => ['BUGFIX', 'FEATURE', 'TASK', 'DOCS', 'SECURITY'], 'description' => 'TYPO3 commit message keyword. [SECURITY] belongs to the TYPO3 Security Team, and only workflow="project" accepts it.'],
+                'workflow' => ['type' => 'string', 'enum' => CommitMessage::WORKFLOWS, 'default' => 'project', 'description' => 'Which rules to apply. "project", the default, is any repository of your own. The checks read the keyword, the 52/72 character limits and the wrap. They demand and invent no trailer, the draft writes the issues you pass out all the same, and they allow [SECURITY]. "core": a patch against the TYPO3 core, with the Forge issue and the Releases: trailer required.'],
+                'keyword' => ['type' => 'string', 'enum' => CommitMessage::PROJECT_KEYWORDS, 'description' => 'TYPO3 commit message keyword. [SECURITY] belongs to the TYPO3 Security Team, and only workflow="project" accepts it.'],
                 'summary' => ['type' => 'string', 'minLength' => 1, 'description' => 'Summary text without the TYPO3 keyword prefix. Say what the commit did, in words a reader understands from the log alone.'],
                 'issue' => ['type' => 'string', 'description' => 'The issue this commit resolves, with or without # in front. That is the Forge issue number for a core patch, the number in your own tracker otherwise. The draft writes it as a Resolves: trailer in either workflow. For more than one, write the message out and pass it as message, which keeps every trailer it carries.'],
                 'relatedIssues' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Issues this commit relates to and does not resolve, read as issue is and written as Related: trailers.'],
@@ -118,7 +118,7 @@ final class CommitMessageGuide extends ReadOnlyTool
             ], ['level', 'code', 'message'])),
             'workflow' => [
                 'type' => 'string',
-                'enum' => ['core', 'project'],
+                'enum' => CommitMessage::WORKFLOWS,
                 'description' => 'Which rules the draft follows and the checks read it against. "core" adds the Forge '
                     . 'issue and the Releases: trailer and demands them. "project" applies the subject and body '
                     . 'rules and writes only the trailers the call carried.',

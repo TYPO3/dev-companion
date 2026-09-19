@@ -17,12 +17,15 @@ The four members
 * **``protocolVersion``** — the newest revision the stdio transport speaks. A
   client that offers a newer one gets this one back rather than a refusal, and
   ``StdioServerTest`` holds that.
-* **``capabilities``** — what the SDK detects from what
-  `Factory <../../src/Server/Factory.php>`_ registered: tools, resources with
-  ``subscribe``, prompts, logging and completions. Under ``extensions`` stands
-  the Skills extension, and :doc:`resources/ <resources/index>` says what it
-  adds. No list carries ``listChanged``, because nothing here changes a list
-  while a session runs.
+* **``capabilities``** — what `Factory <../../src/Server/Factory.php>`_
+  declares, which is what the server does: tools, resources, prompts, and the
+  completion of the two closed arguments of the ``commit_message`` prompt,
+  `D-ANS-166 <../../decisions/answers/ans-166-initialize-declares-the-capabilities-the-server-honours.md>`_.
+  Under ``extensions`` stands the Skills extension, and
+  :doc:`resources/ <resources/index>` says what it adds. No list carries
+  ``listChanged``, because nothing here changes a list while a session runs.
+  Nothing carries ``logging`` or ``subscribe``, because no log message and no
+  resource update ever leaves this server.
 * **``serverInfo``** — the name and the version ``Factory`` declares.
 * **``instructions``** — the statement
   `Coverage <../../src/Knowledge/Coverage.php>`_ assembles from
@@ -91,12 +94,9 @@ The initialize result
     {
         "protocolVersion": "2025-11-25",
         "capabilities": {
-            "logging": {},
             "completions": {},
             "prompts": {},
-            "resources": {
-                "subscribe": true
-            },
+            "resources": {},
             "tools": {},
             "extensions": {
                 "io.modelcontextprotocol/skills": {}

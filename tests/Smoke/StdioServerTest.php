@@ -99,6 +99,36 @@ final class StdioServerTest extends TestCase
     }
 
     /**
+     * What the capabilities say is what the server does. The SDK's detection
+     * had declared logging, completions and a subscription for every server it
+     * builds, and this one sent no log message and no resource update. The
+     * completion it keeps is the one it answers — `D-ANS-166`.
+     */
+    #[Decision('D-ANS-166')]
+    #[Test]
+    public function theCapabilitiesSayWhatTheServerDoes(): void
+    {
+        $capabilities = $this->call([$this->request(1, 'initialize', [
+            'protocolVersion' => self::PROTOCOL_VERSION,
+            'capabilities' => new \stdClass(),
+            'clientInfo' => ['name' => 'phpunit', 'version' => '1'],
+        ])])[1]['result']['capabilities'];
+
+        self::assertSame(
+            ['completions', 'prompts', 'resources', 'tools', 'extensions'],
+            array_keys($capabilities),
+        );
+        self::assertSame([], $capabilities['resources']);
+
+        $completion = $this->session([$this->request(2, 'completion/complete', [
+            'ref' => ['type' => 'ref/prompt', 'name' => 'commit_message'],
+            'argument' => ['name' => 'keyword', 'value' => 'T'],
+        ])])[2]['result']['completion'];
+
+        self::assertSame(['TASK'], $completion['values']);
+    }
+
+    /**
      * A client that has moved on to the revision this transport cannot speak
      * gets the newest one it can, rather than a refusal.
      *

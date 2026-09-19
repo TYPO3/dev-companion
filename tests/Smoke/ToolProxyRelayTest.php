@@ -34,7 +34,7 @@ final class ToolProxyRelayTest extends TestCase
 
         self::assertSame('typo3-dev-companion', $responses[1]['result']['serverInfo']['name']);
         // What the server said, as it said it: an object that stays one.
-        self::assertSame([], $responses[1]['result']['capabilities']['logging']);
+        self::assertSame([], $responses[1]['result']['capabilities']['tools']);
 
         self::assertNotSame([], $responses[2]['result']['tools']);
         foreach ($responses[2]['result']['tools'] as $tool) {

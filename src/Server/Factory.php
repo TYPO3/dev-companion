@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Server;
 
+use Mcp\Capability\Attribute\CompletionProvider;
 use Mcp\Schema\Annotations;
 use Mcp\Schema\ResourceDefinition;
 use Mcp\Schema\ResourceTemplate;
+use Mcp\Schema\ServerCapabilities;
 use Mcp\Schema\Tool;
 use Mcp\Schema\ToolAnnotations;
 use Mcp\Server;
 use TYPO3\DevCompanion\Feedback\Channel;
+use TYPO3\DevCompanion\Knowledge\CommitMessage;
 use TYPO3\DevCompanion\Knowledge\Coverage;
 use TYPO3\DevCompanion\Knowledge\Documents;
 use TYPO3\DevCompanion\Paths;
@@ -62,7 +65,8 @@ final class Factory
     {
         $builder = Server::builder()
             ->setServerInfo(self::SERVER_NAME, self::SERVER_VERSION)
-            ->setInstructions(Coverage::instructions($notice));
+            ->setInstructions(Coverage::instructions($notice))
+            ->setCapabilities(self::capabilities());
 
         foreach (Registry::definitions() as $definition) {
             // The two schemas as the SDK spells them. A tool declares them as
@@ -92,7 +96,9 @@ final class Factory
         $builder->addPrompt(
             static function (
                 string $summary,
+                #[CompletionProvider(values: CommitMessage::PROJECT_KEYWORDS)]
                 string $keyword = 'TASK',
+                #[CompletionProvider(values: CommitMessage::WORKFLOWS)]
                 string $workflow = 'core',
                 string $issue = '',
             ): array {
@@ -135,6 +141,29 @@ final class Factory
         $builder->enableExtension(new SkillsExtension());
 
         return $builder->build();
+    }
+
+    /**
+     * What `initialize` declares, which is what the server does and nothing
+     * beside it.
+     *
+     * The SDK's own detection declares `logging`, `completions` and
+     * `resources.subscribe` for every server. This one sends no log message
+     * and no resource update, and the 2026-07-28 revision deprecates logging.
+     * Completion it does: the two arguments of the `commit_message` prompt
+     * with a closed set carry a provider. The extensions the builder folds in
+     * on its own, `D-ANS-166`.
+     */
+    private static function capabilities(): ServerCapabilities
+    {
+        return new ServerCapabilities(
+            tools: true,
+            resources: true,
+            resourcesSubscribe: false,
+            prompts: true,
+            logging: false,
+            completions: true,
+        );
     }
 
     /**

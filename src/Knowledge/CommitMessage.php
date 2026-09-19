@@ -54,6 +54,9 @@ final class CommitMessage
     /** Any other repository: the same message rules, and only the trailers the caller passed. */
     public const WORKFLOW_PROJECT = 'project';
 
+    /** Both, as a schema enumerates them and a completion offers them. */
+    public const WORKFLOWS = [self::WORKFLOW_CORE, self::WORKFLOW_PROJECT];
+
     /** Keywords a contributor may use; [SECURITY] belongs to the Security Team. */
     private const KEYWORDS = ['BUGFIX', 'FEATURE', 'TASK', 'DOCS'];
 
@@ -63,7 +66,7 @@ final class CommitMessage
      * core nobody holds that reservation, and a repository that updates a
      * vulnerable dependency has the same word for it.
      */
-    private const PROJECT_KEYWORDS = ['BUGFIX', 'FEATURE', 'TASK', 'DOCS', 'SECURITY'];
+    public const PROJECT_KEYWORDS = ['BUGFIX', 'FEATURE', 'TASK', 'DOCS', 'SECURITY'];
 
     /**
      * Trailers this class understands; anything else carries through as it

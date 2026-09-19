@@ -316,6 +316,13 @@ final class StdioServerTest extends TestCase
         );
     }
 
+    /**
+     * The text block is the answer as prose and not the data again. The
+     * specification's SHOULD asks for the serialized JSON there, and
+     * `D-ANS-167` says why this server answers a text-reading client with
+     * prose instead.
+     */
+    #[Decision('D-ANS-167')]
     #[Test]
     public function aToolCallReturnsTextAndStructuredContent(): void
     {
@@ -327,6 +334,7 @@ final class StdioServerTest extends TestCase
         self::assertFalse($result['isError']);
         self::assertSame('text', $result['content'][0]['type']);
         self::assertNotSame('', $result['content'][0]['text']);
+        self::assertNull(json_decode($result['content'][0]['text']), 'the text block is prose, not the data');
         self::assertGreaterThan(0, $result['structuredContent']['matchCount']);
         self::assertNotSame([], $result['structuredContent']['components']);
     }

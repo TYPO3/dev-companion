@@ -93,14 +93,13 @@ anywhere in the corpus.
 
 ## Since then
 
-Read on 2026-09-19 against two feedback of 2026-09-18. `093132`: a session had
-the hint and worked out in the checkout how a component that fetches is tested,
-at four full suite runs. `093139`: the same session ran the whole suite five
-times because the hint said the target passes nothing through and named no way
-past it. Both step 1a. Four statements went in the same day. The core's own
-`ajax-request-test.ts` stubs `window.fetch`, and `AjaxResponse.resolve()` reads
-`Content-Type`, read on 13.4, 14.3 and main. Measured in the container of
-`.checkouts/main`: `-s npm -- run test -- --files <one file>` ran every group's
-files, `--group core` narrowed and stopped at `ChromePathNotSetError`, because
-that target runs without a browser. `T-260918-1c0a` carries the `oneEvent`
-typing and the hang on a failed Lit assertion, which need a run with Chrome.
+Read on 2026-09-19 against two feedback of 2026-09-18, `093132` and `093139`:
+one session paid nine full suite runs because the hint said nothing about a
+component that fetches and named no way past a target that passes nothing
+through. Both step 1a, and five statements went in the same day. The core's own
+`ajax-request-test.ts` stubs `window.fetch`, `AjaxResponse.resolve()` reads
+`Content-Type`, and the `oneEvent` typing declares a third parameter the runtime
+has not, read on 13.4, 14.3 and main. Measured in the container: `--files`
+narrows nothing where the config declares groups, `-s npm` runs without a
+browser, and a failing assertion on an element runs into the mocha timeout, a
+file of them into `testsFinishTimeout` with no failure shown.

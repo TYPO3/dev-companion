@@ -231,7 +231,9 @@
       "custom element",
       "lit",
       "test a module",
-      "cover the module"
+      "cover the module",
+      "AjaxRequest",
+      "fetch"
     ],
     "hints": [
       "The core's JavaScript unit tests live at Build/Sources/TypeScript/<package>/tests/, mirroring the module path below that package, one file per module named with a -test.ts suffix.",
@@ -246,7 +248,9 @@
       "Assertions come from @open-wc/testing, the suite and case functions are mocha's, declared with import type { } from 'mocha'. sinon, axe-core and @web/test-runner-commands are in the same import map.",
       "The modules this layer holds export a class, pure functions, or an object whose methods take their state as arguments, so a test constructs or calls them directly. A collaborator is replaced by stubbing a method on an imported object, as `stub(Icons, 'getIcon')` does. The config loads no module-mocking plugin, so a binding no export reaches cannot be replaced at all.",
       "The older backend modules built on module-level state are the shape it does not hold. EXT:form's form-editor view-model keeps its app and its component references in module-level lets that only `bootstrap()` assigns, and that function runs the whole component setup against the DOM. So no exported function of it can be called on its own, and a missing test on such a module is a cost a review states rather than a change it demands.",
-      "This layer sees a module's own state transitions and nothing around them. A defect that only exists inside the real backend — position, stacking, the ancestor chain a component is mounted in — cannot appear in it; browser-tests is the layer that has one."
+      "This layer sees a module's own state transitions and nothing around them. A defect that only exists inside the real backend — position, stacking, the ancestor chain a component is mounted in — cannot appear in it; browser-tests is the layer that has one.",
+      "A module that fetches through AjaxRequest is tested with window.fetch stubbed, which is how the core's own Build/Sources/TypeScript/core/tests/ajax/ajax-request-test.ts does it: sinon's stub(window, 'fetch') returns a Promise of a Response, the stub receives the Request the module built, and the request and response classes run for real. A stub on AjaxRequest.prototype.get skips the URL the module built and reads its private url field instead.",
+      "A fake Response the module resolves through AjaxResponse.resolve() carries a Content-Type of application/json, because resolve() reads that header to decide between json() and text(); a call of resolve('json') decides without it."
     ]
   },
   {

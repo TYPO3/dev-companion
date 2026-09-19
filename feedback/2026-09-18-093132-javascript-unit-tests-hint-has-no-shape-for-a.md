@@ -11,6 +11,12 @@ directory: /home/benji/projects/typo3-cms
 
 ## Observation
 
+Trimmed on 2026-09-19 to what is still open. Points 1 and 2 are in the
+`javascript-unit-tests` hint since that day: the core's own test stubs
+`window.fetch`, and `AjaxResponse.resolve()` reads `Content-Type`. Points 3 and
+4 remain, because neither holds without a run of the suite.
+
+
 Task: write a JS unit test that reproduces the tree filter reset defect in Build/Sources/TypeScript/backend/tree/tree.ts.
 The javascript-unit-tests hint told me where the file goes, that tests run on built output, and that sinon stubs a method on an imported object. That was correct and I used it. It stopped before the part that cost the session four full suite runs. I had to work out four things in the checkout:
 1. Tree fetches through new AjaxRequest(url).get() inside the method, so the stub goes on AjaxRequest.prototype.get, and the fake reads this.url, a private field, to dispatch on the request.

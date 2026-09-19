@@ -90,3 +90,14 @@ anywhere in the corpus.
   was the whole question and the package list is noise beside it.
 - The runner gains a module-mock plugin, at which point a bootstrap-wired module
   comes in reach and the second statement is what goes stale.
+
+## Since then
+
+Read on 2026-09-19 against `feedback/2026-09-18-093132`: a session had the hint
+and still worked out in the checkout how a component that fetches is tested, at
+four full suite runs. Step 1a. The shape was absent rather than misplaced, and
+`bin/cli hints:probe` on the fetch and the stub reached `unit-test-doubles`
+alone. Two statements went in the same day, both read on 13.4, 14.3 and main:
+the core's own `ajax-request-test.ts` stubs `window.fetch`, and
+`AjaxResponse.resolve()` reads `Content-Type`. The `oneEvent` typing and the
+hang on a failed Lit assertion need a run, and `T-260918-1c0a` carries that.

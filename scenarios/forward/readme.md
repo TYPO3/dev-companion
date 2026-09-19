@@ -30,10 +30,10 @@ rather than these:
 - **The invented requirement**, in two of the three: a missing feature nobody
   asked for, or a recommendation reported as a verified defect.
 
-The three lists still carry their own wordings rather than naming these. What a
-review words as its criteria is what its recorded run stands judged against, so
-a rewrite of one resets that run. Measured on 2026-09-01, and the trade is three
-forward runs against three sentences.
+Each review names these by their names here and words only what is its own. What
+a review words as its criteria is what its recorded run stands judged against,
+so the rewrite of 2026-09-19 reset the three runs. The maintainer chose that
+over waiting for a re-run that comes for another reason.
 
 ## Status of a forward review
 

@@ -27,11 +27,11 @@
 
 **How it fails**
 
-- It returns an exhaustive generic TYPO3 checklist instead of reviewing this
-  project.
-- It invents missing features or requirements that neither the checkout nor the
-  user asked for.
+- **The corpus instead of this thing**, as
+  [what every review has failed at](readme.md#what-every-review-has-failed-at)
+  states it.
+- **The invented requirement**, as the same list states it.
 - It treats an incomplete parser or unavailable runtime source as proof that a
   feature is absent.
-- It recommends core-only paths or commands for the project.
-- It changes files during a review-only request.
+- **Another context's conventions**, as the same list states it.
+- **Changing files under a review-only request**, as the same list states it.

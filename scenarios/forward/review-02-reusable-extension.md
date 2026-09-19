@@ -23,8 +23,11 @@
 
 **How it fails**
 
-- It assumes every extension needs every TYPO3 subsystem or repository file.
+- **The corpus instead of this thing**, as
+  [what every review has failed at](readme.md#what-every-review-has-failed-at)
+  states it.
 - It guesses compatibility from the installed major while ignoring declared
   support constraints.
-- It copies core contribution commands or another extension's CI setup.
-- It reports recommendations as verified defects or begins changing files.
+- **Another context's conventions**, as the same list states it.
+- **The invented requirement** and **changing files under a review-only
+  request**, as the same list states them.

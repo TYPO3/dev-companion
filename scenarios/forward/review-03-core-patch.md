@@ -21,8 +21,8 @@
 **How it fails**
 
 - It reviews TYPO3 from memory without reading the diff.
-- It emits the entire contribution guide or every test suite regardless of the
-  changed subsystem.
-- It mistakes release-branch, extension, or site-project conventions for the
-  active core patch.
-- It changes files, amends commits, or pushes during the review.
+- **The corpus instead of this thing**, as
+  [what every review has failed at](readme.md#what-every-review-has-failed-at)
+  states it.
+- **Another context's conventions**, as the same list states it.
+- **Changing files under a review-only request**, as the same list states it.

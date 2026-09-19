@@ -10,7 +10,7 @@ arrival; that a session given a focused prompt actually writes the whole list
 and reads only part of it is **not guarded**, because no recorded run has ever
 been given a focused prompt. This case is what measures it.
 
-**Read 2026-09-02:** the skill still writes the surface list before it opens a file. It still marks what the request left out **not requested** on that same list. It still closes on it with assessed, unassessed and not requested kept apart and none of the three read as clean. Repaired on 2026-08-19: `review only` and `security review` became needles of the `audit` intent. The prompt below reached no skill at all, so the measure of the narrow review came after a route that does not happen (`D-GUI-015`).
+**Read 2026-09-02, again 2026-09-19:** the skill still writes the surface list before it opens a file. It still marks what the request left out **not requested** on that same list. It still closes on it with assessed, unassessed and not requested kept apart and none of the three read as clean. Repaired on 2026-08-19: `review only` and `security review` became needles of the `audit` intent. The prompt below reached no skill at all, so the measure of the narrow review came after a route that does not happen (`D-GUI-015`).
 
 > Go over the security of this extension — anything an editor or a visitor
 > could reach that we have not thought about. Just security for now, with

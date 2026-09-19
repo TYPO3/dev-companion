@@ -12,7 +12,7 @@ follows the value instead of stopping at the opt-out is **not guarded** — a
 sentence and a lookup are the kind of hold a reorganization satisfies while the
 behavior goes. This case is what measures the rest.
 
-**Read 2026-09-02:** the finding gate in `typo3-extension-health/references/checklist.md` still carries every clause this case stands against. The sink named and its code read, and a ViewHelper that hands its children on as path rather than end. The opt-out that prevents a double encode, and the unverified finding that names the unread class. Nothing guards whether a review follows the value, as before.
+**Read 2026-09-02, again 2026-09-19:** the finding gate in `typo3-extension-health/references/checklist.md` still carries every clause this case stands against. The sink named and its code read, and a ViewHelper that hands its children on as path rather than end. The opt-out that prevents a double encode, and the unverified finding that names the unread class. Nothing guards whether a review follows the value, as before.
 
 > Before we hand this extension over to a new maintainer, check whether any
 > editor-supplied value reaches the frontend unescaped. Report what you find

@@ -11,7 +11,7 @@ of the words below, which is what the two briefs above cannot. That a session
 checks the core dispatches the event before it writes a listener for it is **not
 guarded**, and this case measures it.
 
-**Read 2026-09-02:** the `event-listener` intent still opens on the check this case measures. Find the event the core really dispatches before you write a listener for it. One bound to an event nothing dispatches never runs and raises nothing. Repaired on 2026-08-19: the prompt below reached nothing, so the goal became three needles of its own. Those are `without overriding`, `instead of overriding`, `do not want to override`, and the prompt confirms the intent since (`D-GUI-015`).
+**Read 2026-09-02, again 2026-09-19:** the `event-listener` intent still opens on the check this case measures. Find the event the core really dispatches before you write a listener for it. One bound to an event nothing dispatches never runs and raises nothing. Repaired on 2026-08-19: the prompt below reached nothing, so the goal became three needles of its own. Those are `without overriding`, `instead of overriding`, `do not want to override`, and the prompt confirms the intent since (`D-GUI-015`).
 
 > Our extension has to add a line to the mail that the core sends after a
 > registration. I do not want to override the class that sends it.

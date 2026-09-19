@@ -13,7 +13,7 @@ that the brief asks for it by name, but that a session passes
 `missing-issue` error besides. Measured on 2026-08-02 and recorded on
 [`D-GUI-002`](../../../decisions/guides/gui-002-the-commit-workflow-is-asked-for-not-inferred.md).
 
-**Read 2026-09-02:** the 2026-08-02 measurement still does not reproduce. With the workflow left out the guide answers `workflow: "project"`. The draft carries no `Releases:` trailer, the only check is `no-issues-found`, and the answer says the Forge issue and that trailer do not apply. The sign-off a core commit owes
+**Read 2026-09-02, again 2026-09-19:** the 2026-08-02 measurement still does not reproduce. With the workflow left out the guide answers `workflow: "project"`. The draft carries no `Releases:` trailer, the only check is `no-issues-found`, and the answer says the Forge issue and that trailer do not apply. The sign-off a core commit owes
 arrived since the last reading and does not reach this workflow either. Nothing
 guards that a session names the workflow at all, and that costs it nothing.
 

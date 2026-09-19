@@ -5,7 +5,7 @@
 `CommitMessageTest::deprecationRulesAreEnforced`; what an upgrade wizard looks
 like is the thin part `R-KNW-001` names and is not guarded
 
-**Read 2026-09-02:** `R-KNW-001` is `held`, and
+**Read 2026-09-02, again 2026-09-19:** `R-KNW-001` is `held`, and
 `bin/cli hints:probe "upgrade wizard for a deprecated api"` still reaches
 `upgrade-wizards` through the curated vocabulary, behind `deprecated-apis` and
 `installation-upgrade`. So the thin part has a hint to reach. Nothing guards

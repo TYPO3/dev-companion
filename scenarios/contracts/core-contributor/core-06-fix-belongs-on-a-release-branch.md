@@ -6,7 +6,7 @@
 `CatalogTest::aComponentNotVerifiedOnTheTargetIsDeclined`;
 that a release-branch patch changes trailer and refspec is not guarded
 
-**Read 2026-09-02, and repaired:** the state above said `open` because `R-AUD-004` was. That requirement is `held`, so the state is `held` and the parenthesis behind it is gone. The corpus `R-KNW-057` holds answers the push. `core/contribution/gerrit-workflow` gives the refspec and the rule that a push goes to a release branch only where the bug is not on `main`. `core/contribution/commit-messages` says `Releases:` names the branches a patch targets. What stays unguarded is that a session changes trailer and refspec when
+**Read 2026-09-02 and repaired, again 2026-09-19:** the state above said `open` because `R-AUD-004` was. That requirement is `held`, so the state is `held` and the parenthesis behind it is gone. The corpus `R-KNW-057` holds answers the push. `core/contribution/gerrit-workflow` gives the refspec and the rule that a push goes to a release branch only where the bug is not on `main`. `core/contribution/commit-messages` says `Releases:` names the branches a patch targets. What stays unguarded is that a session changes trailer and refspec when
 the patch goes to the branch directly.
 
 > This bug only exists on 13.4, on main the code was rewritten and the problem is

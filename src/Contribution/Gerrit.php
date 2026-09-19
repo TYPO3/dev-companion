@@ -135,8 +135,10 @@ final class Gerrit
      * Composed here rather than passed through, so what reaches the server is a
      * query this side can state and the caller can rerun. Every part of the
      * form had a measurement, and each is a query that fails without a failure.
-     * The quotes, the two alternatives a path becomes, and the `^` that is
-     * Gerrit's marker rather than part of the pattern are all `D-ANS-100`.
+     * The quotes and the `^` that is Gerrit's marker rather than part of the
+     * pattern are `D-ANS-100`. The path and what is under it are one group
+     * rather than two alternatives, because the server's own firewall answers
+     * 403 to an alternation whose path ends in `tree`, read on 2026-09-19.
      */
     private static function matching(string $words, string $path, bool $open): string
     {
@@ -147,7 +149,7 @@ final class Gerrit
         $file = trim(trim($path), '/');
         if ($file !== '') {
             $whole = self::escaped($file);
-            $terms[] = 'file:' . self::quoted('^' . $whole . '/.*|' . $whole);
+            $terms[] = 'file:' . self::quoted('^' . $whole . '(/.*)?');
         }
         if ($terms === []) {
             return '';

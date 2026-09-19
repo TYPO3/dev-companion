@@ -82,7 +82,7 @@ final class GerritLookup extends ReadOnlyTool
                 'path' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'A path in the repository, for example "typo3/sysext/impexp" or "typo3/sysext/impexp/Classes/Import.php". Answers the changes that touch it, the path itself and everything under it. With open it asks whether somebody works on a file now, before you write a patch for it. Without open it reaches the abandoned and merged changes too, where an earlier attempt at the same fix sits. Combine with query to narrow one by the other. Not with issue, change, commit or backlog.',
+                    'description' => 'A path in the repository, for example "typo3/sysext/impexp" or "typo3/sysext/impexp/Classes/Import.php". Answers the changes that touch it, the path itself and everything under it. A change matches by the paths its own patch set touches, so a directory the branch has since renamed still answers the changes from before the rename, and nothing here says whether the path exists on the branch today. With open it asks whether somebody works on a file now, before you write a patch for it. Without open it reaches the abandoned and merged changes too, where an earlier attempt at the same fix sits. Combine with query to narrow one by the other. Not with issue, change, commit or backlog.',
                 ],
                 'open' => [
                     'type' => 'boolean',

@@ -98,12 +98,12 @@ stand open on a file, and whether anybody ever tried a fix.
 
 Built on 2026-08-24, with a measurement of what the composition costs. A hit at
 this boundary is 1.6 KB, and the commit message left out, which nothing on this
-path reads, saves 0.9 KB a hit.
-
-The form the two arguments come to rests on a measurement rather than an
-assumption. Each part of it is a query that fails without a failure. The match
-takes a path whole, so the path itself and what is under it are two
-alternatives. The second carries no anchor because that character is the
-server's marker for a regex rather than part of one. The value stands in quotes,
-because without them the alternation belongs to the server's own parser and
-silently answers nothing.
+path reads, saves 0.9 KB a hit. The form the two arguments come to rests on
+measurement, and each part is a query that fails without a failure. The value
+stands in quotes, because unquoted the pattern belongs to the server's own
+parser and silently answers nothing. The path and what is under it are one
+group, `^path(/.*)?`, since 2026-09-19. The two alternatives it was built as met
+the server's firewall: `file:"^a/tree/.*|a/tree"` answers 403 and the group 200,
+bisected against `feedback/2026-09-18-093119`, where a path that ends in `tree`
+answered `source-not-answering` every time. The argument's description now says
+a change matches by the paths its own patch set touches.

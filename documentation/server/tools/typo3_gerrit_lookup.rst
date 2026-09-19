@@ -68,11 +68,14 @@ Takes
     query: string  # optional
     # A path in the repository, for example "typo3/sysext/impexp" or
     # "typo3/sysext/impexp/Classes/Import.php". Answers the changes that touch it,
-    # the path itself and everything under it. With open it asks whether somebody
-    # works on a file now, before you write a patch for it. Without open it reaches
-    # the abandoned and merged changes too, where an earlier attempt at the same fix
-    # sits. Combine with query to narrow one by the other. Not with issue, change,
-    # commit or backlog.
+    # the path itself and everything under it. A change matches by the paths its own
+    # patch set touches, so a directory the branch has since renamed still answers
+    # the changes from before the rename, and nothing here says whether the path
+    # exists on the branch today. With open it asks whether somebody works on a file
+    # now, before you write a patch for it. Without open it reaches the abandoned
+    # and merged changes too, where an earlier attempt at the same fix sits. Combine
+    # with query to narrow one by the other. Not with issue, change, commit or
+    # backlog.
     path: string  # optional
     # Narrow a search to the changes still under review. False, the default, reaches
     # every state, which "has anybody ever tried this" needs, since an abandoned or

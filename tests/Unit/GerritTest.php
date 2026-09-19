@@ -2364,7 +2364,7 @@ final class GerritTest extends TestCase
         $answer = $gerrit->changesMatching('impexp translation', 'typo3/sysext/impexp', true, 25);
 
         self::assertSame(
-            'status:open "impexp" "translation" file:"^typo3/sysext/impexp/.*|typo3/sysext/impexp"',
+            'status:open "impexp" "translation" file:"^typo3/sysext/impexp(/.*)?"',
             $answer['query'],
         );
         self::assertSame([95393, 89000], array_column($answer['changes'], 'number'));
@@ -2390,12 +2390,12 @@ final class GerritTest extends TestCase
         $gerrit = new Gerrit(static fn(): string => self::MATCHED);
 
         self::assertSame(
-            'file:"^typo3/sysext/impexp/Classes/Import\\\\.php/.*|typo3/sysext/impexp/Classes/Import\\\\.php"',
+            'file:"^typo3/sysext/impexp/Classes/Import\\\\.php(/.*)?"',
             $gerrit->changesMatching('', 'typo3/sysext/impexp/Classes/Import.php')['query'],
         );
         // A path the caller wrote with slashes around it names the same place.
         self::assertSame(
-            'file:"^typo3/sysext/impexp/.*|typo3/sysext/impexp"',
+            'file:"^typo3/sysext/impexp(/.*)?"',
             $gerrit->changesMatching('', '/typo3/sysext/impexp/')['query'],
         );
     }

@@ -3,6 +3,8 @@ id: D-FBK-054
 title: The server answers what is registered and a person answers what it looks like
 date: 2026-09-02
 status: open
+readings:
+  - 2026-09-19
 ---
 
 # D-FBK-054 — The server answers what is registered and a person answers what it looks like

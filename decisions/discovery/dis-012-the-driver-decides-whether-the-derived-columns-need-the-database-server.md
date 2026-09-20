@@ -91,3 +91,7 @@ reads more precisely than the third bullet. The check map is what "has a check
 for" means. The wider map beside it carries a removal mark with no check
 registered for any of its three. The second bullet is the one no environment
 here can produce, since every one is `pdo_sqlite`.
+
+On 2026-09-20 the `unavailable` it decided on reached the caller through
+`SchemaLookup` alone, and `RecordLookup` read the same topic as a table with no
+columns. `D-DIS-025` holds both readers to the reason.

@@ -5,6 +5,7 @@ because it looks exactly like an installation that has nothing to say.
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-DIS-025`][D-DIS-025] — A failed derivation is a reason and never an empty column list · 2026-09-20
 - [`D-DIS-024`][D-DIS-024] — The checkout that is the DDEV project starts through the container · 2026-09-15
 - [`D-DIS-022`][D-DIS-022] — The schema the database has is answered and the rows are not · 2026-09-01
 - [`D-DIS-023`][D-DIS-023] — The container is assembled a second time to be read · 2026-09-01
@@ -25,6 +26,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-DIS-001`][D-DIS-001] — The root package counts as an installed package · 2026-07-29 · confirmed
 - [`D-DIS-004`][D-DIS-004] — The version comes from the core package, not from the console · 2026-07-29 · confirmed
 
+[D-DIS-025]: dis-025-a-failed-derivation-is-a-reason-and-never-an-empty-column-list.md
 [D-DIS-024]: dis-024-the-checkout-that-is-the-ddev-project-starts-through-the-container.md
 [D-DIS-022]: dis-022-the-schema-the-database-has-is-answered-and-the-rows-are-not.md
 [D-DIS-023]: dis-023-the-container-is-assembled-a-second-time-to-be-read.md

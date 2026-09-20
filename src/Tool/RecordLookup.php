@@ -230,8 +230,22 @@ final class RecordLookup extends ReadOnlyTool
             );
         }
 
-        $named = $where + array_fill_keys($columns, null);
-        $unknown = self::unknownColumns($table, $groupBy === '' ? $named : $named + [$groupBy => null]);
+        $named = array_map(strval(...), array_keys(
+            $where + array_fill_keys($columns, null) + ($groupBy === '' ? [] : [$groupBy => null]),
+        ));
+        $known = $named === [] ? [] : self::derivedColumns($table);
+        if (is_string($known)) {
+            return Unsupported::because(
+                sprintf(
+                    'the installation booted and could not derive the columns of %s, and a named column is '
+                    . 'checked against those before it goes into the read: %s',
+                    $table,
+                    $known,
+                ),
+                $echo,
+            );
+        }
+        $unknown = array_values(array_diff($named, $known));
         if ($unknown !== []) {
             return ToolResult::create(
                 sprintf(
@@ -365,7 +379,8 @@ final class RecordLookup extends ReadOnlyTool
     }
 
     /**
-     * The filter's columns the table does not have.
+     * The columns TYPO3 derives for the table, or why there are none to check
+     * against.
      *
      * Checked here rather than left to the database, because a column name goes
      * into the SQL as an identifier where the value beside it binds. What TYPO3
@@ -373,28 +388,24 @@ final class RecordLookup extends ReadOnlyTool
      * column per TCA field plus the technical ones. That is the same answer
      * `typo3_schema_lookup` hands the caller to write the filter from.
      *
-     * @param array<mixed, mixed> $where
-     * @return array<int, string>
+     * A derivation that failed is a reason and never an empty list. Read as
+     * one, every named column was "not a column" and every table answered
+     * zero rows, on an installation that had thousands — `D-DIS-025`.
+     *
+     * @return array<int, string>|string
      */
-    private static function unknownColumns(string $table, array $where): array
+    private static function derivedColumns(string $table): array|string
     {
-        if ($where === []) {
-            return [];
-        }
-
         $derived = Typo3Runtime::topic('derivedColumns');
-        $columns = is_array($derived['tables'][$table]['columns'] ?? null)
-            ? array_column($derived['tables'][$table]['columns'], 'name')
-            : [];
-
-        $unknown = [];
-        foreach (array_keys($where) as $column) {
-            if (!in_array((string) $column, $columns, true)) {
-                $unknown[] = (string) $column;
-            }
+        if (is_array($derived) && isset($derived['unavailable'])) {
+            return (string) $derived['unavailable'];
+        }
+        $columns = $derived['tables'][$table]['columns'] ?? null;
+        if (!is_array($columns)) {
+            return 'the derivation came back without ' . $table;
         }
 
-        return $unknown;
+        return array_map(strval(...), array_column($columns, 'name'));
     }
 
     /**

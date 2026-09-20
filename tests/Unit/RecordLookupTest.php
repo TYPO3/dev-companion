@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Installation\Instance;
@@ -377,6 +378,43 @@ final class RecordLookupTest extends TestCase
     }
 
     /**
+     * A derivation that failed is a reason, never an empty column list.
+     *
+     * Read as an empty list, every named column was "not a column" and every
+     * table of a populated installation answered zero rows with nothing wrong
+     * in it — `D-DIS-025`.
+     *
+     * @param array<string, mixed> $derived
+     */
+    #[Decision('D-DIS-025')]
+    #[DataProvider('derivationsNothingCanBeCheckedAgainst')]
+    #[Test]
+    public function aDerivationThatFailedIsReportedRatherThanReadAsNoColumns(array $derived): void
+    {
+        $this->reading([['pid' => 2, 'deleted' => false, 'hidden' => false, 'rows' => 470]], derived: $derived);
+
+        $result = Registry::call('typo3_record_lookup', [
+            'table' => 'tt_content',
+            'groupBy' => 'CType',
+            'count' => true,
+        ]);
+
+        self::assertArrayHasKey('unsupported', $result->data);
+        self::assertArrayNotHasKey('matchCount', $result->data);
+        self::assertStringContainsString('could not derive the columns of tt_content', $result->text);
+        self::assertStringNotContainsString('has no column', $result->text);
+    }
+
+    /** @return array<string, array{0: array<string, mixed>}> */
+    public static function derivationsNothingCanBeCheckedAgainst(): array
+    {
+        return [
+            'the enrichment threw' => [['unavailable' => 'ArgumentCountError: Too few arguments to function DefaultTcaSchema::__construct()']],
+            'the table is absent from it' => [['tables' => []]],
+        ];
+    }
+
+    /**
      * A project installation with one extension of its own, and one read of it.
      *
      * Three tables stand in the TCA and `cache_pages` stands in none, which is
@@ -386,8 +424,9 @@ final class RecordLookupTest extends TestCase
      * @param array<int, array{pid: int, deleted: bool, hidden: bool, rows: int}> $groups
      * @param array<int, array<string, mixed>> $rows
      * @param array<int, array{uid: int, pid: int, value: mixed}> $departing
+     * @param array<string, mixed>|null $derived what stands in for the derived columns, where the installation's own do not
      */
-    private function reading(array $groups, array $rows = [], mixed $default = null, array $departing = []): void
+    private function reading(array $groups, array $rows = [], mixed $default = null, array $departing = [], ?array $derived = null): void
     {
         $this->root = sys_get_temp_dir() . '/typo3-dev-companion-records-' . bin2hex(random_bytes(6));
         mkdir($this->root . '/packages/acme_thing', 0o777, true);
@@ -420,7 +459,7 @@ final class RecordLookupTest extends TestCase
                         'tt_content' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:tt_content',
                         'be_users' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:be_users',
                     ],
-                    'derivedColumns' => ['tables' => [
+                    'derivedColumns' => $derived ?? ['tables' => [
                         'tx_acme_thing' => [
                             'columns' => [
                                 ['name' => 'uid', 'type' => 'integer', 'notnull' => true],

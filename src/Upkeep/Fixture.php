@@ -160,6 +160,7 @@ final class Fixture
             }
             PHP : '';
 
+        $major = (int) explode('.', self::typo3Version())[0];
         self::put($root . '/vendor/autoload.php', <<<PHP
             <?php
             namespace {
@@ -174,6 +175,13 @@ final class Fixture
                 \$GLOBALS['TYPO3_CONF_VARS'] = \$GLOBALS['FAKE']['configuration'];
                 \$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']
                     = \$GLOBALS['FAKE']['formDataGroups'];
+            }
+            namespace TYPO3\\CMS\\Core\\Information {
+                // What the probe asks before it hands the schema class its
+                // tables, since 12.4 reads them in another shape.
+                class Typo3Version {
+                    public function getMajorVersion(): int { return {$major}; }
+                }
             }
             namespace TYPO3\\CMS\\Core\\Utility {
                 // Traversal and nothing else. The core's own is what runs

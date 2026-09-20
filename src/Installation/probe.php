@@ -317,6 +317,12 @@ try {
         foreach (array_keys($tca) as $table) {
             $tables[(string) $table] = new Doctrine\DBAL\Schema\Table((string) $table);
         }
+        // 12.4 addresses the incoming tables by position and every later major
+        // by name, so the list a major does not read is the one that breaks it.
+        // The name on each definition is what both answer with.
+        if ((new TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() < 13) {
+            $tables = array_values($tables);
+        }
         // Built by hand, because the class is a private service. What its
         // constructor takes moved on main, where it stopped to default its
         // dependencies, and `makeInstance` builds it with none, `D-DIS-025`.

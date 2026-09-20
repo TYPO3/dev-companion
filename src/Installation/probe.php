@@ -317,11 +317,21 @@ try {
         foreach (array_keys($tca) as $table) {
             $tables[(string) $table] = new Doctrine\DBAL\Schema\Table((string) $table);
         }
+        // Built by hand, because the class is a private service. What its
+        // constructor takes moved on main, where it stopped to default its
+        // dependencies, and `makeInstance` builds it with none, `D-DIS-025`.
+        // The container supplies each one the constructor declares.
+        $dependencies = [];
+        $constructor = (new ReflectionClass(TYPO3\CMS\Core\Database\Schema\DefaultTcaSchema::class))
+            ->getConstructor();
+        foreach ($constructor === null ? [] : $constructor->getParameters() as $dependency) {
+            $type = $dependency->getType();
+            $dependencies[] = $type instanceof ReflectionNamedType ? $container->get($type->getName()) : null;
+        }
         $derived = [];
-        $enriched = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            TYPO3\CMS\Core\Database\Schema\DefaultTcaSchema::class,
-        )->enrich($tables);
-        foreach ($enriched as $table => $definition) {
+        $enriched = (new TYPO3\CMS\Core\Database\Schema\DefaultTcaSchema(...$dependencies))->enrich($tables);
+        foreach ($enriched as $definition) {
+            $table = $definition->getName();
             $columns = [];
             foreach ($definition->getColumns() as $column) {
                 $default = $column->getDefault();

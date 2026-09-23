@@ -149,9 +149,9 @@ The answer carries exactly one of these sets of fields:
 Answered
 --------
 
-Recorded on 2026-09-15 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
-fills the whole surface. Answered against core-checkout, TYPO3 14.3.7-dev, the
+fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
 14.3 core checkout below .checkouts/. Its console is out of reach:
 <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3
 exists. Its dependencies are not installed — vendor/autoload.php is not there
@@ -181,7 +181,7 @@ Text:
 
 .. code-block:: text
 
-    106 label(s) in <installation> match "save" — showing the first 25:
+    109 label(s) in <installation> match "save" — showing the first 25:
     - backend.alt_doc:buttons.confirm.duplicate_record_changed.yes
       "Yes, save and duplicate this record"
       EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
@@ -233,6 +233,15 @@ Text:
     - backend.alt_doc:label.confirm.close_without_save.content
       "You currently have unsaved changes which will be discarded if you close without saving."
       EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+    - backend.alt_doc:label.confirm.add_record_unsaved_parent.title
+      "Save before creating a new record?"
+      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+    - backend.alt_doc:label.confirm.add_record_unsaved_parent.content
+      "This record has not been saved yet, so a new related record could not be linked back to it. Save it first to create and link a new record, or discard your changes to cancel."
+      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+    - backend.alt_doc:buttons.confirm.add_record_unsaved_parent.save
+      "Save and continue"
+      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
     - backend.alt_doc:label.alert.save_with_error.title
       "You have errors in your form!"
       EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
@@ -248,15 +257,6 @@ Text:
     - backend.alt_doc:notification.record_saved.title.plural
       "Records saved"
       EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:notification.record_saved.message
-      "Record "%s" has been successfully saved."
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:notification.mass_saving.message
-      "%s records have been successfully saved."
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.mfa:save.failure
-      "Could not update MFA provider %s. Please try again."
-      EXT:backend/Resources/Private/Language/locallang_mfa.xlf
 
     Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.
 
@@ -273,7 +273,7 @@ Data:
     {
         "query": "save",
         "resource": null,
-        "matchCount": 106,
+        "matchCount": 109,
         "labels": [
             {
                 "ref": "backend.alt_doc:buttons.confirm.duplicate_record_changed.yes",
@@ -395,6 +395,27 @@ Data:
                 "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
             },
             {
+                "ref": "backend.alt_doc:label.confirm.add_record_unsaved_parent.title",
+                "domain": "backend.alt_doc",
+                "key": "label.confirm.add_record_unsaved_parent.title",
+                "source": "Save before creating a new record?",
+                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+            },
+            {
+                "ref": "backend.alt_doc:label.confirm.add_record_unsaved_parent.content",
+                "domain": "backend.alt_doc",
+                "key": "label.confirm.add_record_unsaved_parent.content",
+                "source": "This record has not been saved yet, so a new related record could not be linked back to it. Save it first to create and link a new record, or discard your changes to cancel.",
+                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+            },
+            {
+                "ref": "backend.alt_doc:buttons.confirm.add_record_unsaved_parent.save",
+                "domain": "backend.alt_doc",
+                "key": "buttons.confirm.add_record_unsaved_parent.save",
+                "source": "Save and continue",
+                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+            },
+            {
                 "ref": "backend.alt_doc:label.alert.save_with_error.title",
                 "domain": "backend.alt_doc",
                 "key": "label.alert.save_with_error.title",
@@ -428,33 +449,12 @@ Data:
                 "key": "notification.record_saved.title.plural",
                 "source": "Records saved",
                 "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:notification.record_saved.message",
-                "domain": "backend.alt_doc",
-                "key": "notification.record_saved.message",
-                "source": "Record \"%s\" has been successfully saved.",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:notification.mass_saving.message",
-                "domain": "backend.alt_doc",
-                "key": "notification.mass_saving.message",
-                "source": "%s records have been successfully saved.",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.mfa:save.failure",
-                "domain": "backend.mfa",
-                "key": "save.failure",
-                "source": "Could not update MFA provider %s. Please try again.",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_mfa.xlf"
             }
         ],
         "terms": [
             {
                 "term": "save",
-                "matchCount": 106
+                "matchCount": 109
             }
         ],
         "resourceDiagnostics": [
@@ -502,25 +502,6 @@ Data:
                     "EXT:redirects/Resources/Private/Templates/QrCode/Overview.fluid.html",
                     "EXT:redirects/Resources/Private/Templates/ShortUrl/Overview.fluid.html",
                     "EXT:webhooks/Resources/Private/Templates/Management/Overview.fluid.html"
-                ],
-                "warnings": []
-            },
-            {
-                "resource": "EXT:backend/Resources/Private/Language/locallang_mfa.xlf",
-                "location": "package",
-                "conventionalName": true,
-                "referenced": true,
-                "references": [
-                    "EXT:backend/Classes/Controller/MfaAjaxController.php",
-                    "EXT:backend/Classes/Controller/MfaConfigurationController.php",
-                    "EXT:backend/Classes/Controller/MfaSetupController.php",
-                    "EXT:backend/Resources/Private/Partials/Mfa/SetupInstructions.fluid.html",
-                    "EXT:backend/Resources/Private/Templates/Mfa/Auth.fluid.html",
-                    "EXT:backend/Resources/Private/Templates/Mfa/Edit.fluid.html",
-                    "EXT:backend/Resources/Private/Templates/Mfa/Overview.fluid.html",
-                    "EXT:backend/Resources/Private/Templates/Mfa/Setup.fluid.html",
-                    "EXT:backend/Resources/Private/Templates/Mfa/Standalone/Selection.fluid.html",
-                    "EXT:backend/Resources/Private/Templates/Mfa/Standalone/Setup.fluid.html"
                 ],
                 "warnings": []
             }

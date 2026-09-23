@@ -70,8 +70,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-15 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/. Its
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.8-dev, the 14.3 core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -99,7 +99,7 @@ Text:
 
     Reference a label in it as "backend.alt_doc:<trans-unit id>" — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
     A backend JavaScript module writes the same value as an import: import labels from "~labels/backend.alt_doc", then labels.get("<trans-unit id>").
-    Composed for the installation here, TYPO3 14.3.7-dev. State targetVersion where the label is being written for another branch.
+    Composed for the installation here, TYPO3 14.3.8-dev. State targetVersion where the label is being written for another branch.
     Which trans-units the file actually holds is a property of your checkout: read the file, and remember that an installation can override it through LANG/resourceOverrides.
 
 Data:
@@ -135,7 +135,7 @@ Text:
 
     Reference a label in it as "core.messages:<trans-unit id>" — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
     A backend JavaScript module writes the same value as an import: import labels from "~labels/core.messages", then labels.get("<trans-unit id>").
-    Composed for the installation here, TYPO3 14.3.7-dev. State targetVersion where the label is being written for another branch.
+    Composed for the installation here, TYPO3 14.3.8-dev. State targetVersion where the label is being written for another branch.
     Which trans-units the file actually holds is a property of your checkout: read the file, and remember that an installation can override it through LANG/resourceOverrides.
 
 Data:

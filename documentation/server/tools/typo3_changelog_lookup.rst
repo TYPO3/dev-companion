@@ -208,7 +208,7 @@ The answer carries exactly one of these sets of fields:
 Answered
 --------
 
-Recorded on 2026-09-18 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
 fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
 14.3 core checkout below .checkouts/. Its console is out of reach:
@@ -251,9 +251,9 @@ Text:
     ### User settings {#user-settings}
 
     User settings previously registered via
-    `TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings()` in
+    `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings()` in
     `ext_tables.php` should now be registered via
-    `TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserSetting()` in
+    `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserSetting()` in
     `Configuration/TCA/Overrides/be_users.php`.
 
     Before:
@@ -326,7 +326,7 @@ Text:
     can be removed from the extension.
 
     The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
-    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches only the entries this installation ships, whose text is on disk.
+    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
     A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
 Data:
@@ -345,7 +345,7 @@ Data:
                 "issue": "109438",
                 "title": "ext_tables.php in extensions",
                 "removal": "15.0",
-                "migration": "Move all registration from `ext_tables.php` to the appropriate\nconfiguration files.\n\n### User settings {#user-settings}\n\nUser settings previously registered via\n`TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addFieldsToUserSettings()` in\n`ext_tables.php` should now be registered via\n`TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addUserSetting()` in\n`Configuration/TCA/Overrides/be_users.php`.\n\nBefore:\n\n**ext_tables.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\n$GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [\n    'type' => 'check',\n    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n];\nExtensionManagementUtility::addFieldsToUserSettings(\n    'myCustomSetting',\n    'after:emailMeAtLogin'\n);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/be_users.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\nExtensionManagementUtility::addUserSetting(\n    'myCustomSetting',\n    [\n        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n        'config' => [\n            'type' => 'check',\n            'renderType' => 'checkboxToggle',\n        ],\n    ],\n    'after:emailMeAtLogin'\n);\n```\n\n### Page doktype allowed record types {#page-doktype-allowed-record-types}\n\nPage doktypes previously registered via `PageDoktypeRegistry->add()` in\n`ext_tables.php` should now use the TCA option\n`allowedRecordTypes` in `Configuration/TCA/Overrides/pages.php`.\n\nBefore:\n\n**ext_tables.php**\n\n```php\n\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\n    \\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry::class\n)->add(116, [\n    'allowedTables' => ['tt_content', 'my_custom_record'],\n]);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/pages.php**\n\n```php\n$GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [\n    'tt_content',\n    'my_custom_record',\n];\n```\n\nOnce all registrations have been moved, the `ext_tables.php` file\ncan be removed from the extension.",
+                "migration": "Move all registration from `ext_tables.php` to the appropriate\nconfiguration files.\n\n### User settings {#user-settings}\n\nUser settings previously registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addFieldsToUserSettings()` in\n`ext_tables.php` should now be registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addUserSetting()` in\n`Configuration/TCA/Overrides/be_users.php`.\n\nBefore:\n\n**ext_tables.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\n$GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [\n    'type' => 'check',\n    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n];\nExtensionManagementUtility::addFieldsToUserSettings(\n    'myCustomSetting',\n    'after:emailMeAtLogin'\n);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/be_users.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\nExtensionManagementUtility::addUserSetting(\n    'myCustomSetting',\n    [\n        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n        'config' => [\n            'type' => 'check',\n            'renderType' => 'checkboxToggle',\n        ],\n    ],\n    'after:emailMeAtLogin'\n);\n```\n\n### Page doktype allowed record types {#page-doktype-allowed-record-types}\n\nPage doktypes previously registered via `PageDoktypeRegistry->add()` in\n`ext_tables.php` should now use the TCA option\n`allowedRecordTypes` in `Configuration/TCA/Overrides/pages.php`.\n\nBefore:\n\n**ext_tables.php**\n\n```php\n\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\n    \\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry::class\n)->add(116, [\n    'allowedTables' => ['tt_content', 'my_custom_record'],\n]);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/pages.php**\n\n```php\n$GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [\n    'tt_content',\n    'my_custom_record',\n];\n```\n\nOnce all registrations have been moved, the `ext_tables.php` file\ncan be removed from the extension.",
                 "tags": [
                     "PHP-API",
                     "NotScanned",
@@ -454,9 +454,9 @@ Text:
     ### User settings {#user-settings}
 
     User settings previously registered via
-    `TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings()` in
+    `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings()` in
     `ext_tables.php` should now be registered via
-    `TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserSetting()` in
+    `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserSetting()` in
     `Configuration/TCA/Overrides/be_users.php`.
 
     Before:
@@ -529,7 +529,7 @@ Text:
     can be removed from the extension.
 
     The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
-    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches only the entries this installation ships, whose text is on disk.
+    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
     A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
 Data:
@@ -548,7 +548,7 @@ Data:
                 "issue": "109438",
                 "title": "ext_tables.php in extensions",
                 "removal": "15.0",
-                "migration": "Move all registration from `ext_tables.php` to the appropriate\nconfiguration files.\n\n### User settings {#user-settings}\n\nUser settings previously registered via\n`TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addFieldsToUserSettings()` in\n`ext_tables.php` should now be registered via\n`TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addUserSetting()` in\n`Configuration/TCA/Overrides/be_users.php`.\n\nBefore:\n\n**ext_tables.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\n$GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [\n    'type' => 'check',\n    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n];\nExtensionManagementUtility::addFieldsToUserSettings(\n    'myCustomSetting',\n    'after:emailMeAtLogin'\n);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/be_users.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\nExtensionManagementUtility::addUserSetting(\n    'myCustomSetting',\n    [\n        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n        'config' => [\n            'type' => 'check',\n            'renderType' => 'checkboxToggle',\n        ],\n    ],\n    'after:emailMeAtLogin'\n);\n```\n\n### Page doktype allowed record types {#page-doktype-allowed-record-types}\n\nPage doktypes previously registered via `PageDoktypeRegistry->add()` in\n`ext_tables.php` should now use the TCA option\n`allowedRecordTypes` in `Configuration/TCA/Overrides/pages.php`.\n\nBefore:\n\n**ext_tables.php**\n\n```php\n\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\n    \\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry::class\n)->add(116, [\n    'allowedTables' => ['tt_content', 'my_custom_record'],\n]);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/pages.php**\n\n```php\n$GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [\n    'tt_content',\n    'my_custom_record',\n];\n```\n\nOnce all registrations have been moved, the `ext_tables.php` file\ncan be removed from the extension.",
+                "migration": "Move all registration from `ext_tables.php` to the appropriate\nconfiguration files.\n\n### User settings {#user-settings}\n\nUser settings previously registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addFieldsToUserSettings()` in\n`ext_tables.php` should now be registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addUserSetting()` in\n`Configuration/TCA/Overrides/be_users.php`.\n\nBefore:\n\n**ext_tables.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\n$GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [\n    'type' => 'check',\n    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n];\nExtensionManagementUtility::addFieldsToUserSettings(\n    'myCustomSetting',\n    'after:emailMeAtLogin'\n);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/be_users.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\nExtensionManagementUtility::addUserSetting(\n    'myCustomSetting',\n    [\n        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n        'config' => [\n            'type' => 'check',\n            'renderType' => 'checkboxToggle',\n        ],\n    ],\n    'after:emailMeAtLogin'\n);\n```\n\n### Page doktype allowed record types {#page-doktype-allowed-record-types}\n\nPage doktypes previously registered via `PageDoktypeRegistry->add()` in\n`ext_tables.php` should now use the TCA option\n`allowedRecordTypes` in `Configuration/TCA/Overrides/pages.php`.\n\nBefore:\n\n**ext_tables.php**\n\n```php\n\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\n    \\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry::class\n)->add(116, [\n    'allowedTables' => ['tt_content', 'my_custom_record'],\n]);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/pages.php**\n\n```php\n$GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [\n    'tt_content',\n    'my_custom_record',\n];\n```\n\nOnce all registrations have been moved, the `ext_tables.php` file\ncan be removed from the extension.",
                 "tags": [
                     "PHP-API",
                     "NotScanned",
@@ -648,7 +648,7 @@ Text:
       https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109412-FormYamlConfigurationRegistration.html — YAML, Frontend, Backend, FullyScanned, ext:form
 
     Read the file for the description and the migration, or ask again for the one entry by its issue number, which carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
-    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches only the entries this installation ships, whose text is on disk.
+    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
     A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
 Data:
@@ -1172,7 +1172,7 @@ Text:
       https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109412-FormYamlConfigurationRegistration.html — YAML, Frontend, Backend, FullyScanned, ext:form
 
     Read the file for the description and the migration, or ask again for the one entry by its issue number, which carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
-    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches only the entries this installation ships, whose text is on disk.
+    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
     A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
 Data:

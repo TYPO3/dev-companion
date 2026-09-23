@@ -105,9 +105,9 @@ The answer carries exactly one of these sets of fields:
 Answered
 --------
 
-Recorded on 2026-09-15 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
-fills the whole surface. Answered against core-checkout, TYPO3 14.3.7-dev, the
+fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
 14.3 core checkout below .checkouts/. Its console is out of reach:
 <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3
 exists. Its dependencies are not installed — vendor/autoload.php is not there

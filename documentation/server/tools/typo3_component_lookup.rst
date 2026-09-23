@@ -207,8 +207,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-15 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/. Its
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.8-dev, the 14.3 core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -252,7 +252,7 @@ Text:
     - table — Tables
     - tree — Trees
 
-    Component contract: installed TYPO3 14.3.7-dev packages. Names, summaries, keywords, and fallback markup come from the curated catalog; classes and custom properties come from EXT:backend/Resources/Public/Css/backend.css, and an installed styleguide example replaces the fallback markup where available.
+    Component contract: installed TYPO3 14.3.8-dev packages. Names, summaries, keywords, and fallback markup come from the curated catalog; classes and custom properties come from EXT:backend/Resources/Public/Css/backend.css, and an installed styleguide example replaces the fallback markup where available.
 
 Data:
 
@@ -298,8 +298,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/FlashMessages.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -329,8 +329,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Avatar.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": null,
                 "until": null,
                 "verifiedOn": ""
@@ -371,8 +371,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Badges.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -404,8 +404,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Breadcrumbs.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 14,
                 "until": null,
                 "verifiedOn": "TYPO3 v14 and newer"
@@ -453,8 +453,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Buttons.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -481,7 +481,7 @@ Data:
                     "Build/Sources/Sass/component/_button-group.scss"
                 ],
                 "markupSource": "catalog",
-                "contractVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
                 "describesVersion": "15.0",
                 "since": 14,
                 "until": null,
@@ -531,8 +531,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Cards.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -578,7 +578,7 @@ Data:
                     "Build/Sources/Sass/component/_dropdown.scss"
                 ],
                 "markupSource": "catalog",
-                "contractVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
                 "describesVersion": "15.0",
                 "since": 13,
                 "until": null,
@@ -698,8 +698,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Form.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 14,
                 "until": null,
                 "verifiedOn": "TYPO3 v14 and newer"
@@ -743,8 +743,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Checkboxes.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 14,
                 "until": null,
                 "verifiedOn": "TYPO3 v14 and newer"
@@ -781,8 +781,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Infobox.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -824,7 +824,7 @@ Data:
                     "Build/Sources/Sass/component/forms/_input-group.scss"
                 ],
                 "markupSource": "catalog",
-                "contractVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
                 "describesVersion": "15.0",
                 "since": 13,
                 "until": null,
@@ -853,8 +853,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/ListGroups.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 14,
                 "until": null,
                 "verifiedOn": "TYPO3 v14 and newer"
@@ -925,8 +925,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Modal.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 14,
                 "until": null,
                 "verifiedOn": "TYPO3 v14 and newer"
@@ -958,8 +958,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Navs.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 14,
                 "until": null,
                 "verifiedOn": "TYPO3 v14 and newer"
@@ -986,8 +986,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Pagination.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -1050,7 +1050,7 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Panels.fluid.html"
                 ],
                 "markupSource": "catalog",
-                "contractVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
                 "describesVersion": "15.0",
                 "since": 14,
                 "until": null,
@@ -1071,8 +1071,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/ProgressIndicators.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -1097,8 +1097,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Select.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -1136,7 +1136,7 @@ Data:
                     "Build/Sources/Sass/component/_status-indicator.scss"
                 ],
                 "markupSource": "catalog",
-                "contractVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
                 "describesVersion": "15.0",
                 "since": 14,
                 "until": null,
@@ -1189,8 +1189,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Tables.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 14,
                 "until": null,
                 "verifiedOn": "TYPO3 v14 and newer"
@@ -1261,8 +1261,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Trees.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -1279,7 +1279,7 @@ Data:
             "commit": "4c8b38b2dd07856c3e2666fbdfd77beead87ffe0",
             "verifiedAt": "2026-07-28",
             "verifyCommand": "bin/cli components:paths /path/to/typo3-core-checkout",
-            "installedVersion": "14.3.7-dev",
+            "installedVersion": "14.3.8-dev",
             "skew": null
         }
     }
@@ -1358,7 +1358,7 @@ Text:
 
     Answered from installed TYPO3 v14 package evidence; an indexed component absent there is withheld.
 
-    Component contract: installed TYPO3 14.3.7-dev packages. Names, summaries, keywords, and fallback markup come from the curated catalog; classes and custom properties come from EXT:backend/Resources/Public/Css/backend.css, and an installed styleguide example replaces the fallback markup where available.
+    Component contract: installed TYPO3 14.3.8-dev packages. Names, summaries, keywords, and fallback markup come from the curated catalog; classes and custom properties come from EXT:backend/Resources/Public/Css/backend.css, and an installed styleguide example replaces the fallback markup where available.
 
 Data:
 
@@ -1454,8 +1454,8 @@ Data:
                     "EXT:styleguide/Resources/Private/Templates/Backend/Components/Badges.fluid.html"
                 ],
                 "markupSource": "installation",
-                "contractVersion": "14.3.7-dev",
-                "describesVersion": "14.3.7-dev",
+                "contractVersion": "14.3.8-dev",
+                "describesVersion": "14.3.8-dev",
                 "since": 13,
                 "until": null,
                 "verifiedOn": "TYPO3 v13 and newer"
@@ -1491,7 +1491,7 @@ Data:
             "commit": "4c8b38b2dd07856c3e2666fbdfd77beead87ffe0",
             "verifiedAt": "2026-07-28",
             "verifyCommand": "bin/cli components:paths /path/to/typo3-core-checkout",
-            "installedVersion": "14.3.7-dev",
+            "installedVersion": "14.3.8-dev",
             "skew": null
         }
     }
@@ -1512,7 +1512,7 @@ Text:
 .. code-block:: text
 
     No TYPO3 component matched "quantumflux". Try a component name (badge, card), a class (input-group), or a topic (search box). The installed packages were checked, but the searchable component index remains curated; inspect the installed backend CSS for an uncatalogued class.
-    Component contract: installed TYPO3 14.3.7-dev packages. Names, summaries, keywords, and fallback markup come from the curated catalog; classes and custom properties come from EXT:backend/Resources/Public/Css/backend.css, and an installed styleguide example replaces the fallback markup where available.
+    Component contract: installed TYPO3 14.3.8-dev packages. Names, summaries, keywords, and fallback markup come from the curated catalog; classes and custom properties come from EXT:backend/Resources/Public/Css/backend.css, and an installed styleguide example replaces the fallback markup where available.
 
 Data:
 
@@ -1534,7 +1534,7 @@ Data:
             "commit": "4c8b38b2dd07856c3e2666fbdfd77beead87ffe0",
             "verifiedAt": "2026-07-28",
             "verifyCommand": "bin/cli components:paths /path/to/typo3-core-checkout",
-            "installedVersion": "14.3.7-dev",
+            "installedVersion": "14.3.8-dev",
             "skew": null
         }
     }

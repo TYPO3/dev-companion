@@ -114,8 +114,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-15 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/. Its
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.8-dev, the 14.3 core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.

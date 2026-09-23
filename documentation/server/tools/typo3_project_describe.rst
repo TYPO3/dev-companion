@@ -476,9 +476,9 @@ The answer carries exactly one of these sets of fields:
 Answered
 --------
 
-Recorded on 2026-09-15 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
-fills the whole surface. Answered against core-checkout, TYPO3 14.3.7-dev, the
+fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
 14.3 core checkout below .checkouts/. Its console is out of reach:
 <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3
 exists. Its dependencies are not installed — vendor/autoload.php is not there
@@ -506,7 +506,7 @@ Text:
 
 .. code-block:: text
 
-    <installation> — core-checkout, TYPO3 14.3.7-dev, PHP ^8.2, and the installed core requires ^8.2 — the lowest a package here may declare
+    <installation> — core-checkout, TYPO3 14.3.8-dev, PHP ^8.2, and the installed core requires ^8.2 — the lowest a package here may declare
 
     There is a composer.lock here and no Composer metadata below the vendor directory it declares, so the packages it names are not on disk at all. Run "CI=true ./Build/Scripts/runTests.sh -s composerInstall" before any suite here. What a run reports otherwise is the absent install rather than the code.
 
@@ -559,6 +559,7 @@ Text:
     - core/testing/exercising-asset-publishing (core) — Exercising Asset Publishing in a Functional Test. When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.
     - core/testing/proving-a-rendering (core) — Proving What a Rendering Change Renders. When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.
     - core/testing/scripts (core) — TYPO3 Core Script Help. When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.
+    - core/testing/timing-a-code-path (core) — Timing a Code Path Between Two Revisions. When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.
     - extension/compatibility/a-declared-major-that-is-not-installed (extension) — Settling an API Question on a Declared Major That Is Not Installed. When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.
     - extension/compatibility/running-on-a-declared-major-that-is-not-installed (extension) — Running a Package on a Declared Major That Is Not Installed. When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.
     - extension/documentation/manual (extension) — Setting Up an Extension Manual. When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.
@@ -579,7 +580,7 @@ Data:
             "state": "not-installed",
             "packages": []
         },
-        "typo3Version": "14.3.7-dev",
+        "typo3Version": "14.3.8-dev",
         "phpConstraint": "^8.2",
         "coreConstraint": null,
         "corePhpConstraint": "^8.2",
@@ -894,6 +895,13 @@ Data:
                 "tool": "typo3_rule_lookup"
             },
             {
+                "id": "core/testing/timing-a-code-path",
+                "title": "Timing a Code Path Between Two Revisions",
+                "when": "When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.",
+                "scope": "core",
+                "tool": "typo3_rule_lookup"
+            },
+            {
                 "id": "extension/compatibility/a-declared-major-that-is-not-installed",
                 "title": "Settling an API Question on a Declared Major That Is Not Installed",
                 "when": "When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.",
@@ -996,6 +1004,7 @@ Text:
     - core/testing/exercising-asset-publishing (core) — Exercising Asset Publishing in a Functional Test. When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.
     - core/testing/proving-a-rendering (core) — Proving What a Rendering Change Renders. When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.
     - core/testing/scripts (core) — TYPO3 Core Script Help. When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.
+    - core/testing/timing-a-code-path (core) — Timing a Code Path Between Two Revisions. When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.
     - extension/compatibility/a-declared-major-that-is-not-installed (extension) — Settling an API Question on a Declared Major That Is Not Installed. When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.
     - extension/compatibility/running-on-a-declared-major-that-is-not-installed (extension) — Running a Package on a Declared Major That Is Not Installed. When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.
     - extension/documentation/manual (extension) — Setting Up an Extension Manual. When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.
@@ -1221,6 +1230,13 @@ Data:
                 "id": "core/testing/scripts",
                 "title": "TYPO3 Core Script Help",
                 "when": "When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.",
+                "scope": "core",
+                "tool": "typo3_rule_lookup"
+            },
+            {
+                "id": "core/testing/timing-a-code-path",
+                "title": "Timing a Code Path Between Two Revisions",
+                "when": "When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.",
                 "scope": "core",
                 "tool": "typo3_rule_lookup"
             },

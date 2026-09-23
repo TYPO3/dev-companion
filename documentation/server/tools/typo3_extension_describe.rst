@@ -327,9 +327,9 @@ The answer carries exactly one of these sets of fields:
 Answered
 --------
 
-Recorded on 2026-09-15 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
-fills the whole surface. Answered against core-checkout, TYPO3 14.3.7-dev, the
+fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
 14.3 core checkout below .checkouts/. Its console is out of reach:
 <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3
 exists. Its dependencies are not installed — vendor/autoload.php is not there
@@ -376,7 +376,7 @@ Text:
     Fluid root directories it ships: Resources/Private/Templates/, Resources/Private/Partials/, Resources/Private/Layouts/
     Each is a directory that is there rather than a root something declared. An Extbase controller of this extension falls back to these three; every other view is pointed at a root by TypoScript or by a call while the request runs, and neither of those is in this list.
 
-    Classes: Attribute (3), Authentication (4), Backend (22), Breadcrumb (6), Clipboard (2), CodeEditor (6), Command (8), Configuration (5), Context (2), ContextMenu (7), Controller (90), Date (3), DependencyInjection (3), Domain (5), Dto (9), ElementBrowser (6), Event (1), EventListener (4), Exception (8), Form (203), History (4), Hooks (2), Http (4), LinkHandler (9), Localization (11), LoginProvider (4), Middleware (12), Module (17), Preview (5), RecordList (10), Resource (2), Routing (15), Search (22), Security (18), Service (2), Sidebar (7), Template (41), Toolbar (4), Tree (21), Upgrades (3), User (1), UserFunctions (1), Utility (1), View (36), ViewHelpers (15), Wizard (8), 2 directly in Classes/ — 674 PHP files in total.
+    Classes: Attribute (3), Authentication (4), Backend (22), Breadcrumb (6), Clipboard (2), CodeEditor (6), Command (8), Configuration (5), Context (2), ContextMenu (7), Controller (90), Date (3), DependencyInjection (3), Domain (5), Dto (9), ElementBrowser (6), Event (1), EventListener (4), Exception (8), Form (203), History (4), Hooks (2), Http (4), LinkHandler (9), Localization (11), LoginProvider (4), Middleware (12), Module (17), Preview (5), RecordList (10), Resource (2), Routing (15), Search (22), Security (18), Service (2), Sidebar (7), Template (41), Toolbar (4), Tree (21), Upgrades (3), User (1), UserFunctions (1), Utility (1), View (38), ViewHelpers (15), Wizard (8), 2 directly in Classes/ — 676 PHP files in total.
     Every directory below Classes/ is named here, and each count is every PHP file below that directory, its own subdirectories included. The total is what `find Classes -name '*.php' | wc -l` gives.
 
     Requires: ext-intl *, ext-libxml *, psr/event-dispatcher ^1.0, typo3/cms-core 14.3.*@dev
@@ -822,7 +822,7 @@ Data:
                 },
                 {
                     "name": "View",
-                    "files": 36
+                    "files": 38
                 },
                 {
                     "name": "ViewHelpers",
@@ -834,7 +834,7 @@ Data:
                 }
             ],
             "looseFiles": 2,
-            "total": 674
+            "total": 676
         },
         "files": [
             "ext_localconf.php",

@@ -144,8 +144,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-15 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/. Its
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.8-dev, the 14.3 core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -220,6 +220,10 @@ Text:
     Which of the three file system publishers a test instance actually runs and why the application context does not decide it, why publishing is a no-op for any package whose path lies under the public path, and which of three states at the publishing target raises a real failure rather than a silent success. From TYPO3 14, where the SystemResource namespace arrived. What a package registers as a public resource is a hint rather than this page.
     Tools: typo3_rule_lookup, typo3_hint_lookup
     Source: typo3://guides/core/testing/exercising-asset-publishing (core)
+    ## Timing a code path between a patch and its parent, where a review asks what a change costs at runtime
+    The throwaway functional test that calls one path many times and prints what a call cost: the warm-up call outside the loop, hrtime() and the per-call division, the same probe run on the patch and on its parent so the finding is a ratio, and the three things the number leaves out — the SQLite default, the per-process runtime cache, and one process without load. It says nothing about what the path does, which the probe is for.
+    Tools: typo3_rule_lookup, typo3_hint_lookup
+    Source: typo3://guides/core/testing/timing-a-code-path (core)
     ## The PHPUnit configuration an extension runs its own tests with
     The two files a package writes into Build/, whole and ready to write out, one variant per PHPUnit the paired typo3/testing-framework release admits. Beside them: which two attributes a copy has to correct and why the bootstrap is referenced rather than copied, the environment a functional run reads its connection from, and what a finished suite leaves behind. It does not set the harness up for you and it names no dependency constraint — which release resolves is the solver's answer, not this document's.
     Tools: typo3_rule_lookup, typo3_hint_lookup
@@ -337,9 +341,9 @@ Text:
     Tools: typo3_project_describe, typo3_extension_describe
     Source: the discovered project — read from the installation being worked in, not from a bundled snapshot. (any)
     ## What a TYPO3 version broke, deprecated, added or noted
-    One entry per change, searched by words, type and version. The versions the installation ships come from the core package on disk; the versions above its own major come from the changelog docs.typo3.org publishes, which is what an upgrade to a version nobody has installed is asking for. Each entry says which of the two it came from, because a version that is not released yet is still being written.
+    One entry per change, searched by words, type and version. The entries come from the changelog docs.typo3.org renders after every merge, so a version nobody has installed and a change merged today are both in reach. The core package on disk answers what docs.typo3.org does not list, and everything where it does not answer. Each entry says which of the two it came from, because a version that is not released yet is still being written.
     Tools: typo3_changelog_lookup
-    Source: the discovered installation for what it ships, and docs.typo3.org for the versions above its own major. Not a bundled snapshot either way. (any)
+    Source: docs.typo3.org for every covered major, and the discovered installation for what docs.typo3.org does not list or where it does not answer. Not a bundled snapshot either way. (any)
     ## Which versions of an extension the TYPO3 Extension Repository has published
     The registry's own API, read live by extension key: every published version with its number, its state, the day it was uploaded, the TYPO3 majors it declares and the constraints.depends.typo3 it was released with, highest number first — and, where a version is named, whether the registry already holds that number. It is the question a release audit cannot answer from the repository it is auditing, because ext_emconf.php names the released version afterwards as much as before. It reports what is published and judges no version free to release, and it reads nothing inside the package: a key nothing is published under is an answer rather than a statement that no such extension exists.
     Tools: typo3_ter_lookup
@@ -397,6 +401,7 @@ Text:
     - Holding a commit hash and asking which branches carry that fix — closing an issue as fixed, or saying where a backport went. A clone answers it in several git calls per commit, and the Releases: trailer that settles it is what it reaches last. → typo3_gerrit_lookup with commit, which answers the change that hash is a patch set of, the backports sharing its Change-Id with the branch each of them targets, and the branches every commit message's Releases: trailer claims
     - Reviewing a TYPO3 core patch — the current changes in a core checkout, a commit, or a change fetched from Gerrit — rather than a project or an extension → typo3_gerrit_lookup with the Change-Id or the change number for what the patch is — the paths it touches, the branch it targets, its commit message and the issue it names — then typo3_rule_lookup per obligation the diff raises, typo3_changelog_lookup for the precedent, typo3_test_run_guide with the changed paths, then typo3_commit_message_guide with workflow="core"
     - Settling a finding on what a rendering contains rather than on what a diff says — TypoScript defaults, TypoScript declared in an ext_localconf.php or anything below lib.parseFunc, and equally a PHP change to the frontend request pipeline, an error handler or a page renderer caller whose effect is only visible in the response → typo3_rule_lookup with documentId="core/testing/proving-a-rendering" for the throwaway functional test that renders one page, prints what came out, and marks each region so the response says which part changed
+    - Settling a finding on what a change costs at runtime — a review that asks about performance, a loop or a cache a patch adds or removes — rather than on what it renders → typo3_rule_lookup with documentId="core/testing/timing-a-code-path" for the throwaway functional test that times one call on the patch and on its parent, and what that number leaves out
     - Writing a core patch: taking a Forge issue on, fixing a core bug, deprecating or removing core API, or amending a patch after review → typo3_task_guide with the paths you are changing, then typo3_hint_lookup with the same ones, typo3_test_run_guide for the suites that can fail, and typo3_rule_lookup for the Gerrit workflow
     - Starting a core task and looking for the applicable conventions and checks → typo3_task_guide
     - About to invent a layout, a directory structure or a test harness — the core has probably worked one out already → typo3_reference_list
@@ -588,6 +593,16 @@ Data:
                     "typo3_hint_lookup"
                 ],
                 "source": "typo3://guides/core/testing/exercising-asset-publishing",
+                "scope": "core"
+            },
+            {
+                "topic": "Timing a code path between a patch and its parent, where a review asks what a change costs at runtime",
+                "depth": "The throwaway functional test that calls one path many times and prints what a call cost: the warm-up call outside the loop, hrtime() and the per-call division, the same probe run on the patch and on its parent so the finding is a ratio, and the three things the number leaves out — the SQLite default, the per-process runtime cache, and one process without load. It says nothing about what the path does, which the probe is for.",
+                "tools": [
+                    "typo3_rule_lookup",
+                    "typo3_hint_lookup"
+                ],
+                "source": "typo3://guides/core/testing/timing-a-code-path",
                 "scope": "core"
             },
             {
@@ -877,11 +892,11 @@ Data:
             },
             {
                 "topic": "What a TYPO3 version broke, deprecated, added or noted",
-                "depth": "One entry per change, searched by words, type and version. The versions the installation ships come from the core package on disk; the versions above its own major come from the changelog docs.typo3.org publishes, which is what an upgrade to a version nobody has installed is asking for. Each entry says which of the two it came from, because a version that is not released yet is still being written.",
+                "depth": "One entry per change, searched by words, type and version. The entries come from the changelog docs.typo3.org renders after every merge, so a version nobody has installed and a change merged today are both in reach. The core package on disk answers what docs.typo3.org does not list, and everything where it does not answer. Each entry says which of the two it came from, because a version that is not released yet is still being written.",
                 "tools": [
                     "typo3_changelog_lookup"
                 ],
-                "source": "the discovered installation for what it ships, and docs.typo3.org for the versions above its own major. Not a bundled snapshot either way.",
+                "source": "docs.typo3.org for every covered major, and the discovered installation for what docs.typo3.org does not list or where it does not answer. Not a bundled snapshot either way.",
                 "scope": "any"
             },
             {
@@ -1012,6 +1027,10 @@ Data:
             {
                 "when": "Settling a finding on what a rendering contains rather than on what a diff says — TypoScript defaults, TypoScript declared in an ext_localconf.php or anything below lib.parseFunc, and equally a PHP change to the frontend request pipeline, an error handler or a page renderer caller whose effect is only visible in the response",
                 "call": "typo3_rule_lookup with documentId=\"core/testing/proving-a-rendering\" for the throwaway functional test that renders one page, prints what came out, and marks each region so the response says which part changed"
+            },
+            {
+                "when": "Settling a finding on what a change costs at runtime — a review that asks about performance, a loop or a cache a patch adds or removes — rather than on what it renders",
+                "call": "typo3_rule_lookup with documentId=\"core/testing/timing-a-code-path\" for the throwaway functional test that times one call on the patch and on its parent, and what that number leaves out"
             },
             {
                 "when": "Writing a core patch: taking a Forge issue on, fixing a core bug, deprecating or removing core API, or amending a patch after review",

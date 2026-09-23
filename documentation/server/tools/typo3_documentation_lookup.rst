@@ -114,8 +114,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-15 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 14.3.7-dev, the 14.3 core checkout below .checkouts/. Its
+Recorded on 2026-09-23 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.8-dev, the 14.3 core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -144,22 +144,22 @@ Text:
 
     Official TYPO3 documentation for 14.3.
     Source: https://docs.typo3.org
-    Matched against page titles, section paths and the property names a manual declares, never the text of a page. A property is offered for a query word written the way code is, or for a query that is nothing but its name.
+    Matched against page titles, their headings, section paths and what a manual declares by name, never the text of a page. A declared property, class, method or console command is offered for a query word written the way code is, or for a query that is nothing but its name.
 
     ## Page title API
     typo3/reference-coreapi · 14.3 · https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/ApiOverview/Seo/PageTitleApi.html
-    Matched on: page (title), title (title) — covers 86% of the query.
-    In order to keep setting the page titles in control, you can use the page title API. The API uses page title providers to define the page title based on page record and the content on the page. Based on the priority of the providers, the \TYPO3\CMS\Core\PageTitle\PageTitleProviderManager will check the providers if a title is given by the provider. Besides the providers shipped by the Core, you can add own providers. An integrator can define the priority of the providers for his project. New in version 14.0
-
-    ## ModuleProvider
-    typo3/reference-coreapi · 14.3 · https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/ApiOverview/Backend/BackendModules/ModuleProviderAPI.html
-    Matched on: provid (title) — covers 36% of the query.
-    The ModuleProvider API allows extension authors to work with the registered modules. This API is the central point to retrieve modules, since it automatically performs necessary access checks and prepares specific structures, for example for the use in menus. This is the central point to retrieve modules from the ModuleRegistry, while performing the necessary access checks, which ModuleRegistry does not deal with. Simple wrapper for the registry, which just checks if a module is registered. Does NOT perform any access checks.
+    Matched on: page (title), title (title) — covers 83% of the query.
+    In order to keep setting the page titles in control, you can use the page title API. The API uses *page title providers* to define the page title based on page record and the content on the page. Based on the priority of the providers, the `\TYPO3\CMS\Core\PageTitle\PageTitleProviderManager` will check the providers if a title is given by the provider. Besides the providers shipped by the Core, you can add own providers. An integrator can define the priority of the providers for his project. <!-- TODO: no Markdown rendering for "versionadded" -->
 
     ## Page.title ViewHelper <f:page.title>
     typo3/view-helper-reference · 14.3 · https://docs.typo3.org/other/typo3/view-helper-reference/14.3/en-us/Global/Page/Title.html
-    Matched on: page (title), title (title) — covers 47% of the query.
-    New in version 14.0 The ViewHelper allows setting the page title directly from Fluid templates. This is especially useful for Extbase plugins that need to set a page title in their detail views without having to implement their own custom page title provider. The ViewHelper can also be used with static content: Go to the source code of this ViewHelper: Page\TitleViewHelper.php (GitHub). The ViewHelper integrates seamlessly with TYPO3's existing page title provider system and respects the configured provider priorities.
+    Matched on: page (title), title (title) — covers 45% of the query.
+    The ViewHelper allows setting the page title directly from Fluid templates. This is especially useful for Extbase plugins that need to set a page title in their detail views without having to implement their own custom [page title provider](https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/ApiOverview/Seo/PageTitleApi.html#pagetitle). The ViewHelper can also be used with static content: Go to the source code of this ViewHelper: [Page\\TitleViewHelper.php (GitHub)](https://github.com/TYPO3/typo3/blob/main/typo3/sysext/fluid/Classes/ViewHelpers/Page/TitleViewHelper.php).
+
+    ## PAGEVIEW
+    typo3/reference-typoscript · 14.3 · https://docs.typo3.org/m/typo3/reference-typoscript/14.3/en-us/ContentObjects/Pageview/Index.html
+    Matched on: page (title), title (section) — covers 54% of the query.
+    This content object has very specific conventions and defaults, that requires (and allows) less configuration as compared to using [FLUIDTEMPLATE](https://docs.typo3.org/permalink/t3tsref:cobj-template@14.3). The benefit is that following these conventions means less boilerplate code to maintain. If you follow these conventions, a few directories and files must follow the structure outlined below. To ensure proper rendering, the following requirements and fallback mechanisms apply: The following variables are available by default in the Fluid template.
 
 Data:
 
@@ -182,9 +182,9 @@ Data:
                 "documentTitle": "TYPO3 Explained",
                 "documentVersion": "14.3",
                 "section": "Page title API",
-                "excerpt": "In order to keep setting the page titles in control, you can use the page title API. The API uses page title providers to define the page title based on page record and the content on the page. Based on the priority of the providers, the \\TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderManager will check the providers if a title is given by the provider. Besides the providers shipped by the Core, you can add own providers. An integrator can define the priority of the providers for his project. New in version 14.0",
+                "excerpt": "In order to keep setting the page titles in control, you can use the page title API. The API uses *page title providers* to define the page title based on page record and the content on the page. Based on the priority of the providers, the `\\TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderManager` will check the providers if a title is given by the provider. Besides the providers shipped by the Core, you can add own providers. An integrator can define the priority of the providers for his project. <!-- TODO: no Markdown rendering for \"versionadded\" -->",
                 "content": "",
-                "coverage": 0.862,
+                "coverage": 0.826,
                 "matched": [
                     {
                         "term": "page",
@@ -192,23 +192,6 @@ Data:
                     },
                     {
                         "term": "title",
-                        "field": "title"
-                    }
-                ]
-            },
-            {
-                "title": "ModuleProvider",
-                "url": "https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/ApiOverview/Backend/BackendModules/ModuleProviderAPI.html",
-                "document": "typo3/reference-coreapi",
-                "documentTitle": "TYPO3 Explained",
-                "documentVersion": "14.3",
-                "section": "ModuleProvider",
-                "excerpt": "The ModuleProvider API allows extension authors to work with the registered modules. This API is the central point to retrieve modules, since it automatically performs necessary access checks and prepares specific structures, for example for the use in menus. This is the central point to retrieve modules from the ModuleRegistry, while performing the necessary access checks, which ModuleRegistry does not deal with. Simple wrapper for the registry, which just checks if a module is registered. Does NOT perform any access checks.",
-                "content": "",
-                "coverage": 0.361,
-                "matched": [
-                    {
-                        "term": "provid",
                         "field": "title"
                     }
                 ]
@@ -220,9 +203,9 @@ Data:
                 "documentTitle": "Fluid ViewHelper Reference",
                 "documentVersion": "14.3",
                 "section": "Page.title ViewHelper <f:page.title>",
-                "excerpt": "New in version 14.0 The ViewHelper allows setting the page title directly from Fluid templates. This is especially useful for Extbase plugins that need to set a page title in their detail views without having to implement their own custom page title provider. The ViewHelper can also be used with static content: Go to the source code of this ViewHelper: Page\\TitleViewHelper.php (GitHub). The ViewHelper integrates seamlessly with TYPO3's existing page title provider system and respects the configured provider priorities.",
+                "excerpt": "The ViewHelper allows setting the page title directly from Fluid templates. This is especially useful for Extbase plugins that need to set a page title in their detail views without having to implement their own custom [page title provider](https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/ApiOverview/Seo/PageTitleApi.html#pagetitle). The ViewHelper can also be used with static content: Go to the source code of this ViewHelper: [Page\\\\TitleViewHelper.php (GitHub)](https://github.com/TYPO3/typo3/blob/main/typo3/sysext/fluid/Classes/ViewHelpers/Page/TitleViewHelper.php).",
                 "content": "",
-                "coverage": 0.466,
+                "coverage": 0.447,
                 "matched": [
                     {
                         "term": "page",
@@ -231,6 +214,27 @@ Data:
                     {
                         "term": "title",
                         "field": "title"
+                    }
+                ]
+            },
+            {
+                "title": "PAGEVIEW",
+                "url": "https://docs.typo3.org/m/typo3/reference-typoscript/14.3/en-us/ContentObjects/Pageview/Index.html",
+                "document": "typo3/reference-typoscript",
+                "documentTitle": "TypoScript Explained",
+                "documentVersion": "14.3",
+                "section": "PAGEVIEW",
+                "excerpt": "This content object has very specific conventions and defaults, that requires (and allows) less configuration as compared to using [FLUIDTEMPLATE](https://docs.typo3.org/permalink/t3tsref:cobj-template@14.3). The benefit is that following these conventions means less boilerplate code to maintain. If you follow these conventions, a few directories and files must follow the structure outlined below. To ensure proper rendering, the following requirements and fallback mechanisms apply: The following variables are available by default in the Fluid template.",
+                "content": "",
+                "coverage": 0.54,
+                "matched": [
+                    {
+                        "term": "page",
+                        "field": "title"
+                    },
+                    {
+                        "term": "title",
+                        "field": "section"
                     }
                 ]
             }
@@ -260,51 +264,66 @@ Text:
     ## Page title API
     typo3/reference-coreapi · 14.3 · https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/ApiOverview/Seo/PageTitleApi.html
 
-    # Page title API
+    # Page title API {#pagetitle}
 
-    In order to keep setting the page titles in control, you can use the page title API. The API uses page title providers to define the page title based on page record and the content on the page.
+    In order to keep setting the page titles in control, you can use the page title
+    API. The API uses *page title providers* to define the page title based on
+    page record and the content on the page.
 
-    Based on the priority of the providers, the \TYPO3\CMS\Core\PageTitle\PageTitleProviderManager will check the providers if a title is given by the provider.
+    Based on the priority of the providers, the
+    `\TYPO3\CMS\Core\PageTitle\PageTitleProviderManager` will check the
+    providers if a title is given by the provider.
 
-    Besides the providers shipped by the Core, you can add own providers. An integrator can define the priority of the providers for his project.
+    Besides the providers shipped by the Core, you can add own providers. An
+    integrator can define the priority of the providers for his project.
 
-    New in version 14.0
+    <!-- TODO: no Markdown rendering for "versionadded" -->
 
     The page title can also be set via the Page.title ViewHelper <f:page.title>.
 
-    See also
+    > [!NOTE]
+    > **See also**
+    >
+    > The page title is further influenced by
+    > [Properties of 'config'](https://docs.typo3.org/m/typo3/reference-typoscript/14.3/en-us/TopLevelObjects/Config.html#setup-config-pagetitle) and
+    > [websiteTitle](https://docs.typo3.org/permalink/t3coreapi:sitehandling-basics-websitetitle@14.3).
 
-    The page title is further influenced by Properties of 'config' and websiteTitle.
+    **Table of contents**
 
-    Table of contents
+    -   [List of page title providers shipped by the Core](https://docs.typo3.org/permalink/t3coreapi:list-of-page-title-providers-shipped-by-the-core@14.3)
+    -   [Create your own page title provider](https://docs.typo3.org/permalink/t3coreapi:create-your-own-page-title-provider@14.3)
+    -   [Define the priority of PageTitleProviders](https://docs.typo3.org/permalink/t3coreapi:define-the-priority-of-pagetitleproviders-1@14.3)
 
-    - List of page title providers shipped by the Core SeoTitlePageTitleProvider RecordTitleProvider RecordPageTitleProvider
+    ## List of page title providers shipped by the Core {#page-title-provider-list}
 
-    - Create your own page title provider Example: set the page title from your extension's controller Example: use values from the site configuration in the page title
+    The TYPO3 Core ships the following page title providers by default, listed from
+    highest to lowest priority.
 
-    - Define the priority of PageTitleProviders
+    ### `SeoTitlePageTitleProvider` {#page-title-provider-seo}
 
-    ## List of page title providers shipped by the Core
+    System extension [`typo3/cms-seo`](https://packagist.org/packages/typo3/cms-seo) ships
+    the `\TYPO3\CMS\Seo\PageTitle\SeoTitlePageTitleProvider`. It is only
+    available if the extension is installed. It has the identifier `seo`.
 
-    The TYPO3 Core ships the following page title providers by default, listed from highest to lowest priority.
+    When an editor has set a value for the SEO title in the page properties of the
+    page, this provider will provide that title.
 
-    ### SeoTitlePageTitleProvider
+    If you have not installed the SEO system
+    extension, the field and provider are not available.
 
-    System extension typo3/cms-seo ships the \TYPO3\CMS\Seo\PageTitle\SeoTitlePageTitleProvider . It is only available if the extension is installed. It has the identifier seo.
+    ### `RecordTitleProvider` {#page-title-provider-record-title}
 
-    When an editor has set a value for the SEO title in the page properties of the page, this provider will provide that title.
+    <!-- TODO: no Markdown rendering for "versionadded" -->
 
-    If you have not installed the SEO system extension, the field and provider are not available.
-
-    ### RecordTitleProvider
-
-    New in version 14.0
-
-    The fallback provider with the lowest priority is the \TYPO3\CMS\Core\PageTitle\RecordTitleProvider . It has the identifier recordTitle.
+    The fallback provider with the lowest priority is the
+    `\TYPO3\CMS\Core\PageTitle\RecordTitleProvider`. It has the identifier
+    `recordTitle`.
 
     This provider can be used by third-party extensions to set the page title.
 
-    ```
+    **my_extension/Classes/Controller/ItemController.php**
+
+    ```php
     <?php
 
     declare(strict_types=1);
@@ -329,27 +348,41 @@ Text:
         return $this->htmlResponse();
       }
     }
-    ```
-
-    ### RecordPageTitleProvider
-
-    The fallback provider with the lowest priority is the \TYPO3\CMS\Core\PageTitle\RecordPageTitleProvider . It has the identifier record.
-
-    When no other title is set by a provider, this provider will return the title of the page as defined in the page properties.
-
-    ## Create your own page title provider
-
-    Extension developers may want to have an own provider for page titles. For example, if you have an extension with records and a detail view, the title of the page record will not be the correct title. To make sure to display the correct page title, you have to create your own page title provider. It is quite easy to create one.
-
-    New in version 14.0
-
-    In many use cases, the provider RecordTitleProvider can be used instead of writing a custom page title provider.
-
-    ### Example: set the page title from your extension's controller
-
-    First, create a PHP class in your extension that implements the \TYPO3\CMS\Core\PageTitle\PageTitleProviderInterface , for example by extending \TYPO3\CMS\Core\PageTitle\AbstractPageTitleProvider . Within this method you can create your own logic to define the correct title.
 
     ```
+
+    ### `RecordPageTitleProvider` {#page-title-provider-record}
+
+    The fallback provider with the lowest priority is the
+    `\TYPO3\CMS\Core\PageTitle\RecordPageTitleProvider`. It has the identifier
+    `record`.
+
+    When no other title is set by a provider, this provider will return the title
+    of the page as defined in the page properties.
+
+    ## Create your own page title provider {#page-title-provider-custom}
+
+    Extension developers may want to have an own provider for page titles. For
+    example, if you have an extension with records and a detail view, the title of
+    the page record will not be the correct title. To make sure to display the
+    correct page title, you have to create your own page title provider. It is
+    quite easy to create one.
+
+    <!-- TODO: no Markdown rendering for "versionadded" -->
+
+    In many use cases, the provider RecordTitleProvider
+    can be used instead of writing a custom page title provider.
+
+    ### Example: set the page title from your extension's controller {#page-title-provider-custom-example}
+
+    First, create a PHP class in your extension that implements the
+    `\TYPO3\CMS\Core\PageTitle\PageTitleProviderInterface`, for example by
+    extending `\TYPO3\CMS\Core\PageTitle\AbstractPageTitleProvider`.  Within
+    this method you can create your own logic to define the correct title.
+
+    **EXT:my_extension/Classes/PageTitle/MyOwnPageTitleProvider.php**
+
+    ```php
     <?php
 
     declare(strict_types=1);
@@ -365,11 +398,14 @@ Text:
         $this->title = $title;
       }
     }
-    ```
-
-    Usage example in an Extbase controller:
 
     ```
+
+    Usage example in an [Extbase](https://docs.typo3.org/permalink/t3coreapi:extbase-extension-framework@14.3) controller:
+
+    **EXT:my_extension/Classes/Controller/SomeController.php**
+
+    ```php
     <?php
 
     use MyVendor\MySitepackage\PageTitle\MyOwnPageTitleProvider;
@@ -389,11 +425,14 @@ Text:
         return $this->htmlResponse();
       }
     }
+
     ```
 
     Configure the new page title provider in your TypoScript setup:
 
-    ```
+    **EXT:my_sitepackage/Configuration/Sets/MySitepackage/setup.typoscript**
+
+    ```typoscript
     config {
       pageTitleProviders {
         sitepackage {
@@ -402,13 +441,17 @@ Text:
         }
       }
     }
-    ```
-
-    ### Example: use values from the site configuration in the page title
-
-    If you want to use data from the site configuration, for example the site title, you can implement a page title provider as follows:
 
     ```
+
+    ### Example: use values from the site configuration in the page title {#page-title-provider-custom-site-config}
+
+    If you want to use data from the [site configuration](https://docs.typo3.org/permalink/t3coreapi:sitehandling@14.3), for
+    example the site title, you can implement a page title provider as follows:
+
+    **EXT:my_sitepackage/Classes/PageTitle/WebsiteTitleProvider.php**
+
+    ```php
     <?php
 
     declare(strict_types=1);
@@ -455,15 +498,21 @@ Text:
         return $pageInformation;
       }
     }
+
     ```
 
-    The class must be set to public, because we inject the class SiteFinder as dependency.
+    The class must be set to [public](https://docs.typo3.org/permalink/t3coreapi:what-to-make-public@14.3), because
+    we [inject](https://docs.typo3.org/permalink/t3coreapi:dependencyinjection@14.3) the class `SiteFinder` as
+    dependency.
 
-    Then flush the cache in System > Maintenance > Flush TYPO3 and PHP Cache.
+    Then **flush the cache** in **System > Maintenance > Flush TYPO3
+    and PHP Cache**.
 
     Configure the new page title provider to be used in your TypoScript setup:
 
-    ```
+    **EXT:my_sitepackage/Configuration/Sets/MySitepackage/setup.typoscript**
+
+    ```typoscript
     config {
       pageTitleProviders {
         sitepackage {
@@ -473,19 +522,30 @@ Text:
         }
       }
     }
+
     ```
 
-    The registered page title providers are called after each other in the configured order. The first provider that returns a non-empty value is used, the providers later in the order are ignored.
+    The registered page title providers are called after each other in the
+    configured order. The first provider that returns a non-empty value is used,
+    the providers later in the order are ignored.
 
-    Therefore our custom provider should be loaded before record, the default provider which always returns a value. If the system extension typo3/cms-seo is loaded the default SEO Title has a particular format, you can change this by loading your custom provider before seo.
+    Therefore our custom provider should be loaded before `record`, the
+    default provider which always returns a value. If the system extension
+    [`typo3/cms-seo`](https://packagist.org/packages/typo3/cms-seo) is loaded the default **SEO Title** has a particular format,
+    you can change this by loading your custom provider before `seo`.
 
-    ## Define the priority of PageTitleProviders
+    ## Define the priority of `PageTitleProviders` {#define-the-priority-of-pagetitleproviders}
 
-    The priority of the providers is set by the TypoScript property config.pageTitleProviders. This way an integrator is able to set the priorities for their project and can even have conditions in place.
+    The priority of the providers is set by the TypoScript property
+    [config.pageTitleProviders](https://docs.typo3.org/m/typo3/reference-typoscript/14.3/en-us/TopLevelObjects/Config.html#confval-config-pagetitleproviders).
+    This way an integrator is able to set
+    the priorities for their project and can even have conditions in place.
 
     By default, the Core has the following setup:
 
-    ```
+    **EXT:my_extension/Configuration/Sets/MyExtension/setup.typoscript**
+
+    ```typoscript
     config.pageTitleProviders {
       record.provider = TYPO3\CMS\Core\PageTitle\RecordPageTitleProvider
       recordTitle {
@@ -493,23 +553,36 @@ Text:
         before = record
       }
     }
-    ```
-
-    The sorting of the providers is based on the before and after parameters. If you want a provider to be handled before a specific other provider, just set that provider in the before , do the same with after .
-
-    For example, if you want the RecordTitleProvider to take priority over the SeoTitlePageTitleProvider you can change the order via TypoScript:
 
     ```
+
+    The sorting of the providers is based on the `before` and
+    `after` parameters. If you want a provider to be handled before a
+    specific other provider, just set that provider in the `before`,
+    do the same with `after`.
+
+    For example, if you want the `RecordTitleProvider`
+    to take priority over the `SeoTitlePageTitleProvider`
+    you can change the order via TypoScript:
+
+    **EXT:my_extension/Configuration/Sets/MyExtension/setup.typoscript**
+
+    ```typoscript
     config.pageTitleProviders {
       recordTitle {
         before = seo
       }
     }
+
     ```
 
-    First the SeoTitlePageTitleProvider (because it will be handled before record ) and, if this providers did not provide a title, the RecordPageTitleProvider will be checked.
+    First the `SeoTitlePageTitleProvider` (because it will be handled before
+    `record`) and, if this providers did not provide a title, the
+    `RecordPageTitleProvider` will be checked.
 
-    You can override these settings within your own installation. You can add as many providers as you want. Be aware that if a provider returns a non-empty value, all provider with a lower priority will not be checked.
+    You can override these settings within your own installation. You can add as
+    many providers as you want. Be aware that if a provider returns a non-empty
+    value, all provider with a lower priority will not be checked.
 
 Data:
 
@@ -529,8 +602,8 @@ Data:
                 "documentTitle": "TYPO3 Explained",
                 "documentVersion": "14.3",
                 "section": "Page title API",
-                "excerpt": "# Page title API\n\nIn order to keep setting the page titles in control, you can use the page title API. The API uses page title providers to define the page title based on page record and the content on the page.\n\nBased on the priority of the providers, the \\TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderManager will check the providers if a title is given by the provider.\n\nBesides the providers shipped by the Core, you can add own providers. An integrator can define the priority of the providers for his project.\n\nNew in version 14.0\n\nThe page title can also be set via the Page.title ViewHelper <f:page.title>.\n\nSee also\n\nThe page title is further influenced by Properties of 'config' and websiteTit",
-                "content": "# Page title API\n\nIn order to keep setting the page titles in control, you can use the page title API. The API uses page title providers to define the page title based on page record and the content on the page.\n\nBased on the priority of the providers, the \\TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderManager will check the providers if a title is given by the provider.\n\nBesides the providers shipped by the Core, you can add own providers. An integrator can define the priority of the providers for his project.\n\nNew in version 14.0\n\nThe page title can also be set via the Page.title ViewHelper <f:page.title>.\n\nSee also\n\nThe page title is further influenced by Properties of 'config' and websiteTitle.\n\nTable of contents\n\n- List of page title providers shipped by the Core SeoTitlePageTitleProvider RecordTitleProvider RecordPageTitleProvider\n\n- Create your own page title provider Example: set the page title from your extension's controller Example: use values from the site configuration in the page title\n\n- Define the priority of PageTitleProviders\n\n## List of page title providers shipped by the Core\n\nThe TYPO3 Core ships the following page title providers by default, listed from highest to lowest priority.\n\n### SeoTitlePageTitleProvider\n\nSystem extension typo3/cms-seo ships the \\TYPO3\\CMS\\Seo\\PageTitle\\SeoTitlePageTitleProvider . It is only available if the extension is installed. It has the identifier seo.\n\nWhen an editor has set a value for the SEO title in the page properties of the page, this provider will provide that title.\n\nIf you have not installed the SEO system extension, the field and provider are not available.\n\n### RecordTitleProvider\n\nNew in version 14.0\n\nThe fallback provider with the lowest priority is the \\TYPO3\\CMS\\Core\\PageTitle\\RecordTitleProvider . It has the identifier recordTitle.\n\nThis provider can be used by third-party extensions to set the page title.\n\n```\n<?php\n\ndeclare(strict_types=1);\n\nnamespace MyVendor\\MyExtension\\Controller;\n\nuse MyVendor\\MyExtension\\Domain\\Model\\Item;\nuse Psr\\Http\\Message\\ResponseInterface;\nuse TYPO3\\CMS\\Core\\PageTitle\\RecordTitleProvider;\nuse TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController;\n\nfinal class ItemController extends ActionController\n{\n  public function __construct(\n    private readonly RecordTitleProvider $recordTitleProvider,\n  ) {}\n\n  public function showAction(Item $item): ResponseInterface\n  {\n    $this->recordTitleProvider->setTitle($item->getTitle());\n    $this->view->assign('item', $item);\n    return $this->htmlResponse();\n  }\n}\n```\n\n### RecordPageTitleProvider\n\nThe fallback provider with the lowest priority is the \\TYPO3\\CMS\\Core\\PageTitle\\RecordPageTitleProvider . It has the identifier record.\n\nWhen no other title is set by a provider, this provider will return the title of the page as defined in the page properties.\n\n## Create your own page title provider\n\nExtension developers may want to have an own provider for page titles. For example, if you have an extension with records and a detail view, the title of the page record will not be the correct title. To make sure to display the correct page title, you have to create your own page title provider. It is quite easy to create one.\n\nNew in version 14.0\n\nIn many use cases, the provider RecordTitleProvider can be used instead of writing a custom page title provider.\n\n### Example: set the page title from your extension's controller\n\nFirst, create a PHP class in your extension that implements the \\TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderInterface , for example by extending \\TYPO3\\CMS\\Core\\PageTitle\\AbstractPageTitleProvider . Within this method you can create your own logic to define the correct title.\n\n```\n<?php\n\ndeclare(strict_types=1);\n\nnamespace MyVendor\\MySitepackage\\PageTitle;\n\nuse TYPO3\\CMS\\Core\\PageTitle\\AbstractPageTitleProvider;\n\nfinal class MyOwnPageTitleProvider extends AbstractPageTitleProvider\n{\n  public function setTitle(string $title): void\n  {\n    $this->title = $title;\n  }\n}\n```\n\nUsage example in an Extbase controller:\n\n```\n<?php\n\nuse MyVendor\\MySitepackage\\PageTitle\\MyOwnPageTitleProvider;\nuse Psr\\Http\\Message\\ResponseInterface;\nuse TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController;\n\nfinal class SomeController extends ActionController\n{\n  public function __construct(\n    private readonly MyOwnPageTitleProvider $titleProvider,\n  ) {}\n\n  public function someAction(): ResponseInterface\n  {\n    $this->titleProvider->setTitle('Title from controller action');\n    // do something\n    return $this->htmlResponse();\n  }\n}\n```\n\nConfigure the new page title provider in your TypoScript setup:\n\n```\nconfig {\n  pageTitleProviders {\n    sitepackage {\n      provider = MyVendor\\MySitepackage\\PageTitle\\MyOwnPageTitleProvider\n      before = record\n    }\n  }\n}\n```\n\n### Example: use values from the site configuration in the page title\n\nIf you want to use data from the site configuration, for example the site title, you can implement a page title provider as follows:\n\n```\n<?php\n\ndeclare(strict_types=1);\n\nnamespace MyVendor\\MySitepackage\\PageTitle;\n\nuse Psr\\Http\\Message\\ServerRequestInterface;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure;\nuse TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderInterface;\nuse TYPO3\\CMS\\Core\\Site\\SiteFinder;\nuse TYPO3\\CMS\\Frontend\\Page\\PageInformation;\n\n#[Autoconfigure(public: true)]\nfinal readonly class WebsiteTitleProvider implements PageTitleProviderInterface\n{\n  private ServerRequestInterface $request;\n\n  public function __construct(\n    private SiteFinder $siteFinder,\n  ) {}\n\n  public function getTitle(): string\n  {\n    $site = $this->siteFinder->getSiteByPageId($this->getPageInformation()->getId());\n    $titles = [\n      $this->getPageInformation()->getPageRecord()['title'] ?? '',\n      $site->getAttribute('websiteTitle'),\n    ];\n\n    return implode(' - ', $titles);\n  }\n\n  public function setRequest(ServerRequestInterface $request): void\n  {\n    $this->request = $request;\n  }\n\n  private function getPageInformation(): PageInformation\n  {\n    $pageInformation = $this->request->getAttribute('frontend.page.information');\n    if (!$pageInformation instanceof PageInformation) {\n      throw new \\Exception('Current frontend page information not available', 1730098625);\n    }\n    return $pageInformation;\n  }\n}\n```\n\nThe class must be set to public, because we inject the class SiteFinder as dependency.\n\nThen flush the cache in System > Maintenance > Flush TYPO3 and PHP Cache.\n\nConfigure the new page title provider to be used in your TypoScript setup:\n\n```\nconfig {\n  pageTitleProviders {\n    sitepackage {\n      provider = MyVendor\\MySitepackage\\PageTitle\\WebsiteTitleProvider\n      before = record\n      after = seo\n    }\n  }\n}\n```\n\nThe registered page title providers are called after each other in the configured order. The first provider that returns a non-empty value is used, the providers later in the order are ignored.\n\nTherefore our custom provider should be loaded before record, the default provider which always returns a value. If the system extension typo3/cms-seo is loaded the default SEO Title has a particular format, you can change this by loading your custom provider before seo.\n\n## Define the priority of PageTitleProviders\n\nThe priority of the providers is set by the TypoScript property config.pageTitleProviders. This way an integrator is able to set the priorities for their project and can even have conditions in place.\n\nBy default, the Core has the following setup:\n\n```\nconfig.pageTitleProviders {\n  record.provider = TYPO3\\CMS\\Core\\PageTitle\\RecordPageTitleProvider\n  recordTitle {\n    provider = TYPO3\\CMS\\Core\\PageTitle\\RecordTitleProvider\n    before = record\n  }\n}\n```\n\nThe sorting of the providers is based on the before and after parameters. If you want a provider to be handled before a specific other provider, just set that provider in the before , do the same with after .\n\nFor example, if you want the RecordTitleProvider to take priority over the SeoTitlePageTitleProvider you can change the order via TypoScript:\n\n```\nconfig.pageTitleProviders {\n  recordTitle {\n    before = seo\n  }\n}\n```\n\nFirst the SeoTitlePageTitleProvider (because it will be handled before record ) and, if this providers did not provide a title, the RecordPageTitleProvider will be checked.\n\nYou can override these settings within your own installation. You can add as many providers as you want. Be aware that if a provider returns a non-empty value, all provider with a lower priority will not be checked.",
+                "excerpt": "# Page title API {#pagetitle}\n\nIn order to keep setting the page titles in control, you can use the page title\nAPI. The API uses *page title providers* to define the page title based on\npage record and the content on the page.\n\nBased on the priority of the providers, the\n`\\TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderManager` will check the\nproviders if a title is given by the provider.\n\nBesides the providers shipped by the Core, you can add own providers. An\nintegrator can define the priority of the providers for his project.\n\n<!-- TODO: no Markdown rendering for \"versionadded\" -->\n\nThe page title can also be set via the Page.title ViewHelper <f:page.title>.\n\n> [!NOTE]\n> **See also**\n>\n> The p",
+                "content": "# Page title API {#pagetitle}\n\nIn order to keep setting the page titles in control, you can use the page title\nAPI. The API uses *page title providers* to define the page title based on\npage record and the content on the page.\n\nBased on the priority of the providers, the\n`\\TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderManager` will check the\nproviders if a title is given by the provider.\n\nBesides the providers shipped by the Core, you can add own providers. An\nintegrator can define the priority of the providers for his project.\n\n<!-- TODO: no Markdown rendering for \"versionadded\" -->\n\nThe page title can also be set via the Page.title ViewHelper <f:page.title>.\n\n> [!NOTE]\n> **See also**\n>\n> The page title is further influenced by\n> [Properties of 'config'](https://docs.typo3.org/m/typo3/reference-typoscript/14.3/en-us/TopLevelObjects/Config.html#setup-config-pagetitle) and\n> [websiteTitle](https://docs.typo3.org/permalink/t3coreapi:sitehandling-basics-websitetitle@14.3).\n\n**Table of contents**\n\n-   [List of page title providers shipped by the Core](https://docs.typo3.org/permalink/t3coreapi:list-of-page-title-providers-shipped-by-the-core@14.3)\n-   [Create your own page title provider](https://docs.typo3.org/permalink/t3coreapi:create-your-own-page-title-provider@14.3)\n-   [Define the priority of PageTitleProviders](https://docs.typo3.org/permalink/t3coreapi:define-the-priority-of-pagetitleproviders-1@14.3)\n\n## List of page title providers shipped by the Core {#page-title-provider-list}\n\nThe TYPO3 Core ships the following page title providers by default, listed from\nhighest to lowest priority.\n\n### `SeoTitlePageTitleProvider` {#page-title-provider-seo}\n\nSystem extension [`typo3/cms-seo`](https://packagist.org/packages/typo3/cms-seo) ships\nthe `\\TYPO3\\CMS\\Seo\\PageTitle\\SeoTitlePageTitleProvider`. It is only\navailable if the extension is installed. It has the identifier `seo`.\n\nWhen an editor has set a value for the SEO title in the page properties of the\npage, this provider will provide that title.\n\nIf you have not installed the SEO system\nextension, the field and provider are not available.\n\n### `RecordTitleProvider` {#page-title-provider-record-title}\n\n<!-- TODO: no Markdown rendering for \"versionadded\" -->\n\nThe fallback provider with the lowest priority is the\n`\\TYPO3\\CMS\\Core\\PageTitle\\RecordTitleProvider`. It has the identifier\n`recordTitle`.\n\nThis provider can be used by third-party extensions to set the page title.\n\n**my_extension/Classes/Controller/ItemController.php**\n\n```php\n<?php\n\ndeclare(strict_types=1);\n\nnamespace MyVendor\\MyExtension\\Controller;\n\nuse MyVendor\\MyExtension\\Domain\\Model\\Item;\nuse Psr\\Http\\Message\\ResponseInterface;\nuse TYPO3\\CMS\\Core\\PageTitle\\RecordTitleProvider;\nuse TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController;\n\nfinal class ItemController extends ActionController\n{\n  public function __construct(\n    private readonly RecordTitleProvider $recordTitleProvider,\n  ) {}\n\n  public function showAction(Item $item): ResponseInterface\n  {\n    $this->recordTitleProvider->setTitle($item->getTitle());\n    $this->view->assign('item', $item);\n    return $this->htmlResponse();\n  }\n}\n\n```\n\n### `RecordPageTitleProvider` {#page-title-provider-record}\n\nThe fallback provider with the lowest priority is the\n`\\TYPO3\\CMS\\Core\\PageTitle\\RecordPageTitleProvider`. It has the identifier\n`record`.\n\nWhen no other title is set by a provider, this provider will return the title\nof the page as defined in the page properties.\n\n## Create your own page title provider {#page-title-provider-custom}\n\nExtension developers may want to have an own provider for page titles. For\nexample, if you have an extension with records and a detail view, the title of\nthe page record will not be the correct title. To make sure to display the\ncorrect page title, you have to create your own page title provider. It is\nquite easy to create one.\n\n<!-- TODO: no Markdown rendering for \"versionadded\" -->\n\nIn many use cases, the provider RecordTitleProvider\ncan be used instead of writing a custom page title provider.\n\n### Example: set the page title from your extension's controller {#page-title-provider-custom-example}\n\nFirst, create a PHP class in your extension that implements the\n`\\TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderInterface`, for example by\nextending `\\TYPO3\\CMS\\Core\\PageTitle\\AbstractPageTitleProvider`.  Within\nthis method you can create your own logic to define the correct title.\n\n**EXT:my_extension/Classes/PageTitle/MyOwnPageTitleProvider.php**\n\n```php\n<?php\n\ndeclare(strict_types=1);\n\nnamespace MyVendor\\MySitepackage\\PageTitle;\n\nuse TYPO3\\CMS\\Core\\PageTitle\\AbstractPageTitleProvider;\n\nfinal class MyOwnPageTitleProvider extends AbstractPageTitleProvider\n{\n  public function setTitle(string $title): void\n  {\n    $this->title = $title;\n  }\n}\n\n```\n\nUsage example in an [Extbase](https://docs.typo3.org/permalink/t3coreapi:extbase-extension-framework@14.3) controller:\n\n**EXT:my_extension/Classes/Controller/SomeController.php**\n\n```php\n<?php\n\nuse MyVendor\\MySitepackage\\PageTitle\\MyOwnPageTitleProvider;\nuse Psr\\Http\\Message\\ResponseInterface;\nuse TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController;\n\nfinal class SomeController extends ActionController\n{\n  public function __construct(\n    private readonly MyOwnPageTitleProvider $titleProvider,\n  ) {}\n\n  public function someAction(): ResponseInterface\n  {\n    $this->titleProvider->setTitle('Title from controller action');\n    // do something\n    return $this->htmlResponse();\n  }\n}\n\n```\n\nConfigure the new page title provider in your TypoScript setup:\n\n**EXT:my_sitepackage/Configuration/Sets/MySitepackage/setup.typoscript**\n\n```typoscript\nconfig {\n  pageTitleProviders {\n    sitepackage {\n      provider = MyVendor\\MySitepackage\\PageTitle\\MyOwnPageTitleProvider\n      before = record\n    }\n  }\n}\n\n```\n\n### Example: use values from the site configuration in the page title {#page-title-provider-custom-site-config}\n\nIf you want to use data from the [site configuration](https://docs.typo3.org/permalink/t3coreapi:sitehandling@14.3), for\nexample the site title, you can implement a page title provider as follows:\n\n**EXT:my_sitepackage/Classes/PageTitle/WebsiteTitleProvider.php**\n\n```php\n<?php\n\ndeclare(strict_types=1);\n\nnamespace MyVendor\\MySitepackage\\PageTitle;\n\nuse Psr\\Http\\Message\\ServerRequestInterface;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure;\nuse TYPO3\\CMS\\Core\\PageTitle\\PageTitleProviderInterface;\nuse TYPO3\\CMS\\Core\\Site\\SiteFinder;\nuse TYPO3\\CMS\\Frontend\\Page\\PageInformation;\n\n#[Autoconfigure(public: true)]\nfinal readonly class WebsiteTitleProvider implements PageTitleProviderInterface\n{\n  private ServerRequestInterface $request;\n\n  public function __construct(\n    private SiteFinder $siteFinder,\n  ) {}\n\n  public function getTitle(): string\n  {\n    $site = $this->siteFinder->getSiteByPageId($this->getPageInformation()->getId());\n    $titles = [\n      $this->getPageInformation()->getPageRecord()['title'] ?? '',\n      $site->getAttribute('websiteTitle'),\n    ];\n\n    return implode(' - ', $titles);\n  }\n\n  public function setRequest(ServerRequestInterface $request): void\n  {\n    $this->request = $request;\n  }\n\n  private function getPageInformation(): PageInformation\n  {\n    $pageInformation = $this->request->getAttribute('frontend.page.information');\n    if (!$pageInformation instanceof PageInformation) {\n      throw new \\Exception('Current frontend page information not available', 1730098625);\n    }\n    return $pageInformation;\n  }\n}\n\n```\n\nThe class must be set to [public](https://docs.typo3.org/permalink/t3coreapi:what-to-make-public@14.3), because\nwe [inject](https://docs.typo3.org/permalink/t3coreapi:dependencyinjection@14.3) the class `SiteFinder` as\ndependency.\n\nThen **flush the cache** in **System > Maintenance > Flush TYPO3\nand PHP Cache**.\n\nConfigure the new page title provider to be used in your TypoScript setup:\n\n**EXT:my_sitepackage/Configuration/Sets/MySitepackage/setup.typoscript**\n\n```typoscript\nconfig {\n  pageTitleProviders {\n    sitepackage {\n      provider = MyVendor\\MySitepackage\\PageTitle\\WebsiteTitleProvider\n      before = record\n      after = seo\n    }\n  }\n}\n\n```\n\nThe registered page title providers are called after each other in the\nconfigured order. The first provider that returns a non-empty value is used,\nthe providers later in the order are ignored.\n\nTherefore our custom provider should be loaded before `record`, the\ndefault provider which always returns a value. If the system extension\n[`typo3/cms-seo`](https://packagist.org/packages/typo3/cms-seo) is loaded the default **SEO Title** has a particular format,\nyou can change this by loading your custom provider before `seo`.\n\n## Define the priority of `PageTitleProviders` {#define-the-priority-of-pagetitleproviders}\n\nThe priority of the providers is set by the TypoScript property\n[config.pageTitleProviders](https://docs.typo3.org/m/typo3/reference-typoscript/14.3/en-us/TopLevelObjects/Config.html#confval-config-pagetitleproviders).\nThis way an integrator is able to set\nthe priorities for their project and can even have conditions in place.\n\nBy default, the Core has the following setup:\n\n**EXT:my_extension/Configuration/Sets/MyExtension/setup.typoscript**\n\n```typoscript\nconfig.pageTitleProviders {\n  record.provider = TYPO3\\CMS\\Core\\PageTitle\\RecordPageTitleProvider\n  recordTitle {\n    provider = TYPO3\\CMS\\Core\\PageTitle\\RecordTitleProvider\n    before = record\n  }\n}\n\n```\n\nThe sorting of the providers is based on the `before` and\n`after` parameters. If you want a provider to be handled before a\nspecific other provider, just set that provider in the `before`,\ndo the same with `after`.\n\nFor example, if you want the `RecordTitleProvider`\nto take priority over the `SeoTitlePageTitleProvider`\nyou can change the order via TypoScript:\n\n**EXT:my_extension/Configuration/Sets/MyExtension/setup.typoscript**\n\n```typoscript\nconfig.pageTitleProviders {\n  recordTitle {\n    before = seo\n  }\n}\n\n```\n\nFirst the `SeoTitlePageTitleProvider` (because it will be handled before\n`record`) and, if this providers did not provide a title, the\n`RecordPageTitleProvider` will be checked.\n\nYou can override these settings within your own installation. You can add as\nmany providers as you want. Be aware that if a provider returns a non-empty\nvalue, all provider with a lower priority will not be checked.",
                 "coverage": null,
                 "matched": []
             }

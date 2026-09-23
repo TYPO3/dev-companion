@@ -33,7 +33,8 @@ final class InstallerTest extends TestCase
             $stderr = '';
             self::assertSame(0, $this->install($directory, $stderr), $stderr);
             $first = (string) file_get_contents($directory . '/.mcp.json');
-            self::assertSame(0, $this->install($directory, $stderr), $stderr);
+            $again = $this->install($directory, $stderr);
+            self::assertSame(0, $again, $stderr);
             self::assertSame($first, file_get_contents($directory . '/.mcp.json'));
 
             $configuration = json_decode($first, true, flags: JSON_THROW_ON_ERROR);

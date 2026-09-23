@@ -221,7 +221,8 @@ final class ScopeTest extends TestCase
         // evidence in the call and still answers. That is the rule
         // couldBeTheCore() already follows for Build/Sources/.
         Instance::discoverFrom(sys_get_temp_dir());
-        self::assertSame(Scope::Extension, Scope::of('Classes/Controller/EditDocumentController.php'));
+        $unplaced = Scope::of('Classes/Controller/EditDocumentController.php');
+        self::assertSame(Scope::Extension, $unplaced);
     }
 
     #[Requirement('R-SCO-001')]

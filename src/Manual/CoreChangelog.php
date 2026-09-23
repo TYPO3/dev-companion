@@ -18,7 +18,8 @@ use TYPO3\DevCompanion\Knowledge\Versions;
  * is one listing per major, as JSON, and every page as the Markdown the build
  * rendered from the RST (`D-ANS-165`). One read per covered major, held under
  * its entity tag and revalidated per call, and one page read per entry an
- * answer shows, held the same way.
+ * answer shows, held the same way. The class index is the third read, and only
+ * a search that the names and titles did not answer makes it (`D-ANS-168`).
  */
 final class CoreChangelog
 {
@@ -46,6 +47,13 @@ final class CoreChangelog
      * @var array<string, array{etag: string, body: string}>
      */
     private static array $pages = [];
+
+    /**
+     * The identifiers the class index names per page, as it was last read.
+     *
+     * @var array{etag: string, names: array<string, list<string>>}|null
+     */
+    private static ?array $classes = null;
 
     /**
      * Whether docs.typo3.org has already failed to answer in this process.
@@ -82,6 +90,7 @@ final class CoreChangelog
         self::$transport = $reader;
         self::$index = [];
         self::$pages = [];
+        self::$classes = null;
         self::$unreachable = false;
     }
 
@@ -176,6 +185,72 @@ final class CoreChangelog
             'removal' => Changelog::removal($body, $entry),
             'migration' => self::section($body, 'Migration'),
         ];
+    }
+
+    /**
+     * The PHP classes and members each page names, under its path, or null
+     * where docs.typo3.org published no class index.
+     *
+     * The index lists a class once per page that writes it, as a role or in a
+     * `use` line, with the member where one follows. Each is read as one
+     * inline literal. So the rule `Changelog::named()` applies to a body
+     * applies here: a word with a hump or an underscore, and the case merged
+     * that the index keeps apart in `\TYPO3\CMS\core\…` — `D-ANS-168`.
+     *
+     * @return array<string, list<string>>|null
+     */
+    public function identifiers(): ?array
+    {
+        $held = self::$classes;
+        if ($held === null && self::$unreachable) {
+            return null;
+        }
+
+        $response = $this->reader->read(
+            self::BASE . 'classes.json',
+            $held === null ? [] : ['If-None-Match: ' . $held['etag']],
+        );
+        if ($held !== null && $response['status'] === 304) {
+            return $held['names'];
+        }
+
+        $names = self::indexed(Fetch::decode($response['body']));
+        if ($names === null) {
+            return $held['names'] ?? null;
+        }
+        if (is_string($response['etag']) && $response['etag'] !== '') {
+            self::$classes = ['etag' => $response['etag'], 'names' => $names];
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param array<mixed>|null $index
+     * @return array<string, list<string>>|null
+     */
+    private static function indexed(?array $index): ?array
+    {
+        if (!is_array($index['classes'] ?? null)) {
+            return null;
+        }
+
+        $literals = [];
+        foreach ($index['classes'] as $class => $entry) {
+            foreach (is_array($entry['places'] ?? null) ? $entry['places'] : [] as $place) {
+                if (is_array($place) && is_string($place['path'] ?? null)) {
+                    $literals[$place['path']][] = '`' . $class . (string) ($place['member'] ?? '') . '`';
+                }
+            }
+        }
+
+        return array_map(
+            static fn(array $written): array => array_values(array_unique(array_map(
+                'strtolower',
+                Changelog::named(implode(' ', $written)),
+            ))),
+            $literals,
+        );
     }
 
     /** Where a caller reads the entry itself. */

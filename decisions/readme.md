@@ -96,6 +96,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-168`][D-ANS-168] — A PHP identifier reaches a manual changelog entry through the class index · 2026-09-23
 - [`D-ANS-166`][D-ANS-166] — Initialize declares the capabilities the server honours · 2026-09-19
 - [`D-ANS-167`][D-ANS-167] — The text block is prose rather than the serialized data · 2026-09-19
 - [`D-ANS-163`][D-ANS-163] — The Skills extension is served over the typo3:// resources · 2026-09-18
@@ -257,6 +258,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-168]: answers/ans-168-a-php-identifier-reaches-a-manual-changelog-entry-through-the-class-index.md
 [D-ANS-166]: answers/ans-166-initialize-declares-the-capabilities-the-server-honours.md
 [D-ANS-167]: answers/ans-167-the-text-block-is-prose-rather-than-the-serialized-data.md
 [D-ANS-163]: answers/ans-163-the-skills-extension-is-served-over-the-typo3-resources.md

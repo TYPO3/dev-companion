@@ -224,7 +224,10 @@ final class CoreChangelogTest extends TestCase
         foreach (Versions::majors() as $major) {
             $expected[] = 'https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog-' . $major . '.json';
         }
-        self::assertSame($expected, $asked);
+        self::assertSame($expected, array_values(array_filter(
+            $asked,
+            static fn(string $url): bool => preg_match('/Changelog-\\d+\.json$/', $url) === 1,
+        )));
     }
 
     /**
@@ -334,6 +337,93 @@ final class CoreChangelogTest extends TestCase
     }
 
     /**
+     * A class or a method an entry on docs.typo3.org names reaches it through
+     * the class index, in any spelling a caller has it — `D-ANS-168`.
+     */
+    #[Decision('D-ANS-168')]
+    #[Test]
+    public function aClassOrMethodReachesAManualEntryThroughTheClassIndex(): void
+    {
+        Instance::discoverFrom($this->installationAt('13.4'));
+        $this->manualPublishing([
+            '15.0/Breaking-7-RemovedImageGeneration' => 'Breaking: #7 - Removed image generation',
+            '15.0/Feature-8-SomethingElse' => 'Feature: #8 - Something else',
+        ], classes: [
+            '\\TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions' => [
+                ['path' => 'Changelog/15.0/Breaking-7-RemovedImageGeneration', 'anchor' => 'description', 'kind' => 'role', 'member' => '->getTemporaryImageWithText()'],
+            ],
+        ]);
+
+        foreach (['getTemporaryImageWithText', 'GraphicalFunctions::getTemporaryImageWithText()', 'graphicalfunctions'] as $query) {
+            $result = Registry::call('typo3_changelog_lookup', ['query' => $query]);
+
+            self::assertSame(['7'], array_column($result->data['entries'], 'issue'), $query);
+            self::assertSame('body', $result->data['matchedIn'], $query);
+        }
+    }
+
+    /**
+     * The class index answers to the rule the body read answers to: a name
+     * without a hump or an underscore is a word, and an example class spelled
+     * `Item` reaches nothing by it — `D-ANS-168`, `D-ANS-042`.
+     */
+    #[Decision('D-ANS-168')]
+    #[Test]
+    public function aClassNameWithoutAHumpIsNoIdentifierInTheClassIndex(): void
+    {
+        Instance::discoverFrom($this->installationAt('13.4'));
+        $this->manualPublishing([
+            '15.0/Feature-8-SomethingElse' => 'Feature: #8 - Something else',
+        ], classes: [
+            '\\MyExtension\\Domain\\Model\\Item' => [
+                ['path' => 'Changelog/15.0/Feature-8-SomethingElse', 'anchor' => 'description', 'kind' => 'use'],
+            ],
+        ]);
+
+        $result = Registry::call('typo3_changelog_lookup', ['query' => 'item']);
+
+        self::assertSame(0, $result->data['matchCount']);
+    }
+
+    /**
+     * A query the names answer reads no class index, so a hit costs what it
+     * cost before the index existed — `D-ANS-168`.
+     */
+    #[Decision('D-ANS-168')]
+    #[Test]
+    public function aQueryTheNamesAnswerReadsNoClassIndex(): void
+    {
+        Instance::discoverFrom($this->installationAt('13.4'));
+        $asked = $this->manualPublishing([
+            '15.0/Deprecation-3-SomethingNew' => 'Deprecation: #3 - Something new',
+        ]);
+
+        Registry::call('typo3_changelog_lookup', ['query' => 'something new']);
+
+        self::assertSame([], array_values(array_filter($asked(), static fn(string $url): bool => str_ends_with($url, '/classes.json'))));
+    }
+
+    /**
+     * Where docs.typo3.org lists the entries and publishes no class index, an
+     * identifier search reached the entries on disk alone, and the answer says
+     * so rather than reads as a miss about the identifier — `D-ANS-168`.
+     */
+    #[Decision('D-ANS-168')]
+    #[Test]
+    public function aMissingClassIndexIsNamedInTheAnswer(): void
+    {
+        Instance::discoverFrom($this->installationAt('13.4'));
+        $this->manualPublishing([
+            '15.0/Feature-8-SomethingElse' => 'Feature: #8 - Something else',
+        ], classes: null);
+
+        $result = Registry::call('typo3_changelog_lookup', ['query' => 'getTemporaryImageWithText']);
+
+        self::assertSame(0, $result->data['matchCount']);
+        self::assertStringContainsString('published no class index', $result->text);
+    }
+
+    /**
      * A composer project that ships one changelog directory per version named,
      * with an entry in each.
      *
@@ -373,15 +463,17 @@ final class CoreChangelogTest extends TestCase
      *
      * A covered major the fixture publishes nothing for answers with an empty
      * listing, and one named silent answers the way a server without a listing
-     * for it does, with a page that is none. The closure returned says what
-     * was asked.
+     * for it does, with a page that is none. The class index names the classes
+     * given, and null is a server that publishes none. The closure returned
+     * says what was asked.
      *
      * @param array<string, string> $pages page name to stated title
      * @param array<string, array<int, string>> $tags page name to the index tags it carries
      * @param array<int, int> $silent the majors docs.typo3.org does not answer for
+     * @param array<string, list<array<string, string>>>|null $classes class name to the places it is named in
      * @return \Closure(): array<int, string>
      */
-    private function manualPublishing(array $pages, array $tags = [], array $silent = []): \Closure
+    private function manualPublishing(array $pages, array $tags = [], array $silent = [], ?array $classes = []): \Closure
     {
         $listings = [];
         $rendered = [];
@@ -424,8 +516,13 @@ final class CoreChangelogTest extends TestCase
         }
 
         $asked = [];
-        CoreChangelog::useReader(static function (string $url) use ($listings, $rendered, $silent, &$asked): ?string {
+        CoreChangelog::useReader(static function (string $url) use ($listings, $rendered, $silent, $classes, &$asked): ?string {
             $asked[] = $url;
+            if (str_ends_with($url, '/classes.json')) {
+                return $classes === null
+                    ? '<html>Not Found</html>'
+                    : (string) json_encode(['classes' => array_map(static fn(array $places): array => ['places' => $places], $classes)]);
+            }
             if (preg_match('/Changelog-(\\d+)\\.json$/', $url, $major) === 1) {
                 return in_array((int) $major[1], $silent, true)
                     ? '<html>Not Found</html>'

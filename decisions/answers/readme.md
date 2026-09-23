@@ -4,6 +4,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-ANS-168`][D-ANS-168] — A PHP identifier reaches a manual changelog entry through the class index · 2026-09-23
 - [`D-ANS-166`][D-ANS-166] — Initialize declares the capabilities the server honours · 2026-09-19
 - [`D-ANS-167`][D-ANS-167] — The text block is prose rather than the serialized data · 2026-09-19
 - [`D-ANS-163`][D-ANS-163] — The Skills extension is served over the typo3:// resources · 2026-09-18
@@ -165,6 +166,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-168]: ans-168-a-php-identifier-reaches-a-manual-changelog-entry-through-the-class-index.md
 [D-ANS-166]: ans-166-initialize-declares-the-capabilities-the-server-honours.md
 [D-ANS-167]: ans-167-the-text-block-is-prose-rather-than-the-serialized-data.md
 [D-ANS-163]: ans-163-the-skills-extension-is-served-over-the-typo3-resources.md

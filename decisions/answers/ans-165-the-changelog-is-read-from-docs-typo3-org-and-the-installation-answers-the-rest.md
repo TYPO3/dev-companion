@@ -113,3 +113,10 @@ nobody pulled today.
 - docs.typo3.org withdraws the listing or the Markdown while it keeps the
   inventory and the sources. Then every manual read fails, and the readers this
   replaced are in the history of `src/Manual/CoreChangelog.php`.
+
+## Since then
+
+- The bullet "The identifier search stays on disk" no longer describes the
+  server. A PHP class or member reaches an entry from docs.typo3.org through
+  the class index it publishes, `D-ANS-168`. Every other identifier still
+  reaches the entries on disk alone.

@@ -42,6 +42,10 @@ final class ChangelogLookup extends ReadOnlyTool
         . 'states a removal version overrides that, and some state one more than a major away. An empty removal '
         . 'is what the entry states, not a promise that no removal is planned.';
 
+    /** What an identifier search could not see where the class index did not come in. */
+    private const UNINDEXED = 'docs.typo3.org published no class index, so an identifier reached no entry read '
+        . 'from docs.typo3.org, only the ones on disk.';
+
     public static function name(): string
     {
         return 'typo3_changelog_lookup';
@@ -61,7 +65,7 @@ final class ChangelogLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Search the TYPO3 changelog: one entry per breaking change, deprecation, feature and important note, in the version of its release. This reads the entries. An entry for a core patch of your own is the other direction, and it is typo3_rule_lookup with documentId "core/contribution/changelog". Answers "what did this version deprecate", "what changed about X", "which release introduced Y". This is the first stop when you build on a major you have not built on recently. What separates a current answer from a two-major-old one stands here and almost nowhere else. A deprecation carries the version it stops to work in where the entry states one, and the rule that answers the rest beside it. The tool reads the entries from docs.typo3.org, which renders them after every merge, so a version you have not installed and a change merged today are both in reach. Where docs.typo3.org does not answer, it reads the core package on disk. An entry has to carry every word of the query; narrow further with type and version. A version and a type with the query omitted list whole under a raised limit. That is the deprecation sweep of one major in a single call. A method or class you found in the code is a query of its own. An identifier reaches the entries that name it, whether or not the change has its title. That holds inside the versions the installation ships, which are the ones whose text is on disk.';
+        return 'Search the TYPO3 changelog: one entry per breaking change, deprecation, feature and important note, in the version of its release. This reads the entries. An entry for a core patch of your own is the other direction, and it is typo3_rule_lookup with documentId "core/contribution/changelog". Answers "what did this version deprecate", "what changed about X", "which release introduced Y". This is the first stop when you build on a major you have not built on recently. What separates a current answer from a two-major-old one stands here and almost nowhere else. A deprecation carries the version it stops to work in where the entry states one, and the rule that answers the rest beside it. The tool reads the entries from docs.typo3.org, which renders them after every merge, so a version you have not installed and a change merged today are both in reach. Where docs.typo3.org does not answer, it reads the core package on disk. An entry has to carry every word of the query; narrow further with type and version. A version and a type with the query omitted list whole under a raised limit. That is the deprecation sweep of one major in a single call. A method or class you found in the code is a query of its own. An identifier reaches the entries that name it, whether or not the change has its title. A PHP class or method does so in every version, by the class index docs.typo3.org publishes. Any other identifier, a constant or a configuration key, does so only where the installation answers for the version, from the text on disk.';
     }
 
     public static function inputSchema(): array
@@ -243,17 +247,21 @@ final class ChangelogLookup extends ReadOnlyTool
         // prints run over the same enriched entries, so they say what the
         // search covered. The manual's half of that read is free and its other
         // half is not. The listing already carries the stated title, so a title
-        // search costs nothing there. The identifiers are in the body. A read
-        // of thousands of them over the network is the wrong side of a minute
-        // for a fallback that runs on a miss. So the search reads a manual
-        // entry by its title and never by its identifiers, and an installed
-        // one by both. The answer says so where that is what the caller did.
+        // search costs nothing there. The identifiers are in the body, and a
+        // read of thousands of bodies over the network is the wrong side of a
+        // minute. The class index is one read for all of them, and it names
+        // the PHP classes and members alone — `D-ANS-168`.
         $read = false;
+        $indexed = [];
         if ($matching === [] && $terms !== []) {
+            $indexed = $manual->identifiers();
             $narrowed = array_map(
-                static function (array $entry): array {
+                static function (array $entry) use ($indexed): array {
                     if ($entry['publishedIn'] === 'manual') {
-                        return $entry + ['title' => $entry['stated']];
+                        return $entry + [
+                            'title' => $entry['stated'],
+                            'identifiers' => implode(' ', $indexed[$entry['path']] ?? []),
+                        ];
                     }
 
                     /** @var array{file: string} $entry */
@@ -421,6 +429,9 @@ final class ChangelogLookup extends ReadOnlyTool
                     . 'documentId "core/contribution/changelog".';
             }
             $lines[] = self::covers($versions, $ahead, $listings);
+            if ($indexed === null && $answered !== []) {
+                $lines[] = self::UNINDEXED;
+            }
 
             // What the miss worked out is a field as well as a line. A session
             // read `matchCount: 0` and the five fields beside it. It reported
@@ -524,8 +535,8 @@ final class ChangelogLookup extends ReadOnlyTool
             $lines[] = self::unanswered($unread);
         }
         if ($installed === []) {
-            $lines[] = 'No TYPO3 installation was found, so this answer comes from docs.typo3.org alone and an '
-                . 'identifier search reaches nothing.';
+            $lines[] = 'No TYPO3 installation was found, so this answer comes from docs.typo3.org alone. An '
+                . 'identifier search reaches the PHP classes and methods its class index names.';
         }
         // Only where the answer actually carries one. A caller who reads
         // entries from its own installation reads what it runs, and the
@@ -533,7 +544,10 @@ final class ChangelogLookup extends ReadOnlyTool
         if (in_array('manual', array_column($entries, 'publishedIn'), true)) {
             $lines[] = 'An entry marked manual is what docs.typo3.org renders today, after every merge, and it '
                 . 'links by URL. For a major that is not released yet it is still being written. An identifier '
-                . 'search reaches only the entries this installation ships, whose text is on disk.';
+                . 'search reaches it by the PHP classes and methods it names, and by no other identifier.';
+        }
+        if ($indexed === null && $answered !== []) {
+            $lines[] = self::UNINDEXED;
         }
 
         $data = [
@@ -574,7 +588,7 @@ final class ChangelogLookup extends ReadOnlyTool
     {
         $unread = array_keys(array_filter($listings, static fn(?array $entries): bool => $entries === null));
         $ships = $installed === []
-            ? 'No TYPO3 installation was found, so nothing comes from disk and an identifier search reaches nothing.'
+            ? 'No TYPO3 installation was found, so nothing comes from disk.'
             : sprintf('This installation ships %s and older.', implode(', ', array_slice($installed, 0, 8)));
         if (count($unread) === count($listings)) {
             return $ships . ' docs.typo3.org did not answer, so this answer comes from the installation alone. The '

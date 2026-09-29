@@ -70,3 +70,14 @@ the installation shipped.
 - The index grows a field for constants or configuration keys. Then the
   **Left alone** bullet is a read away.
 - The cold read shows up as latency on a miss that used to be cheap.
+
+## Since then
+
+- **render-guides#1464, merged 2026-09-24**, changes both files. A place lists
+  its `members` instead of one `member`, and `role` and `use` become `inline`
+  and `code`. Each entry in `Changelog-<major>.json` now carries a `classes`
+  map. `CoreChangelog::indexed()` reads both member shapes, so the redeploy
+  breaks nothing. On 2026-09-29, docs.typo3.org still served the old shape.
+- When the listing carries `classes`, the identifiers are one field of an entry
+  the lookup already reads. At that point `classes.json` is a read too many.
+  `T-260929-c1a5` waits for that.

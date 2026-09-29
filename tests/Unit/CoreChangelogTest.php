@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Installation\Instance;
@@ -339,10 +340,13 @@ final class CoreChangelogTest extends TestCase
     /**
      * A class or a method an entry on docs.typo3.org names reaches it through
      * the class index, in any spelling a caller has it — `D-ANS-168`.
+     *
+     * @param array<string, mixed> $place
      */
     #[Decision('D-ANS-168')]
+    #[DataProvider('placesNamingAMember')]
     #[Test]
-    public function aClassOrMethodReachesAManualEntryThroughTheClassIndex(): void
+    public function aClassOrMethodReachesAManualEntryThroughTheClassIndex(array $place): void
     {
         Instance::discoverFrom($this->installationAt('13.4'));
         $this->manualPublishing([
@@ -350,7 +354,7 @@ final class CoreChangelogTest extends TestCase
             '15.0/Feature-8-SomethingElse' => 'Feature: #8 - Something else',
         ], classes: [
             '\\TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions' => [
-                ['path' => 'Changelog/15.0/Breaking-7-RemovedImageGeneration', 'anchor' => 'description', 'kind' => 'role', 'member' => '->getTemporaryImageWithText()'],
+                ['path' => 'Changelog/15.0/Breaking-7-RemovedImageGeneration'] + $place,
             ],
         ]);
 
@@ -360,6 +364,18 @@ final class CoreChangelogTest extends TestCase
             self::assertSame(['7'], array_column($result->data['entries'], 'issue'), $query);
             self::assertSame('body', $result->data['matchedIn'], $query);
         }
+    }
+
+    /**
+     * A place that names a member, in the shape docs.typo3.org publishes today
+     * and in the one render-guides#1464 writes.
+     *
+     * @return iterable<string, array{0: array<string, mixed>}>
+     */
+    public static function placesNamingAMember(): iterable
+    {
+        yield 'one member per place' => [['anchor' => 'description', 'kind' => 'role', 'member' => '->getTemporaryImageWithText()']];
+        yield 'the members of a section in one place' => [['anchor' => 'breaking-7', 'section' => 'description', 'kind' => 'inline', 'members' => ['->getTemporaryImageWithText()']]];
     }
 
     /**

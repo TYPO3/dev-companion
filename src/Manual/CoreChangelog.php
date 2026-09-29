@@ -238,8 +238,17 @@ final class CoreChangelog
         $literals = [];
         foreach ($index['classes'] as $class => $entry) {
             foreach (is_array($entry['places'] ?? null) ? $entry['places'] : [] as $place) {
-                if (is_array($place) && is_string($place['path'] ?? null)) {
-                    $literals[$place['path']][] = '`' . $class . (string) ($place['member'] ?? '') . '`';
+                if (!is_array($place) || !is_string($place['path'] ?? null)) {
+                    continue;
+                }
+                // `member` is one member per place, `members` is the list
+                // render-guides#1464 writes instead. Reading both lets the
+                // lookup keep working through the redeploy.
+                $members = is_array($place['members'] ?? null) && $place['members'] !== []
+                    ? $place['members']
+                    : [$place['member'] ?? ''];
+                foreach ($members as $member) {
+                    $literals[$place['path']][] = '`' . $class . (string) $member . '`';
                 }
             }
         }

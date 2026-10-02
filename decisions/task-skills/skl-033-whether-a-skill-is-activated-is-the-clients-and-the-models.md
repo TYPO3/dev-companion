@@ -6,8 +6,6 @@ status: open
 readings:
   - 2026-09-09
 coveredBy:
-  - InstallerTest::installWritesItsBlockIntoTheInstructionFileAndNothingElse
-  - InstallerTest::theBlockGoesWhereTheClientReads
   - SkillTest::everyDescriptionIsWrittenToALengthOfItsOwn
 ---
 
@@ -73,13 +71,16 @@ fire, so the wording is not what remains to suspect.
   skills listed, the instructions in context and no activation, and what beat
   them was the checkout's own `AGENTS.md`, with a `curl` route for the question
   `typo3_forge_lookup` answers. The maintainer chose the installer's own block
-  over a printed snippet and over writing nothing. `install` and `update` write
+  over a printed snippet and over writing nothing. `install` and `update` wrote
   it between two marks into the file the client reads, `AGENTS.md` for most, and
-  rewrite what stands between the marks and nothing else. It says what the
+  rewrote what stands between the marks and nothing else. It said what the
   skills are, where a task starts, and which questions go to the server whatever
   route the file beside it prescribes. Which file each client reads is its own
   documentation, read the same day, and the table in
-  `documentation/usage/installing.rst` carries it.
+  `documentation/usage/installing.rst` carried it.
+- **Undone on 2026-10-02.** The maintainer decided that this server writes
+  nothing into a project's instruction file, `D-DIS-026`. So the third **Wrong
+  if** points at a file the project's owner writes.
 
 ## Assumed
 

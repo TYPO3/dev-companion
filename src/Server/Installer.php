@@ -27,6 +27,13 @@ final class Installer
      */
     public const NOTICE = 'The task skills installed in this project are stale; run typo3-dev-companion update. ';
     /**
+     * What stands there instead where `install` never ran in the project. The
+     * instructions tell a session to activate a typo3-* skill, which it cannot
+     * do with none in its listing, `D-DIS-029`. No longer than `NOTICE`, which
+     * the budget is measured with.
+     */
+    public const ABSENT = 'No task skills are installed in this project; run typo3-dev-companion install. ';
+    /**
      * The same fact once the server has acted on it, in the same budget.
      *
      * What remains for the agent to do is not a command but a doubt. A skill it
@@ -269,12 +276,20 @@ final class Installer
      * those ignore themselves). And a digest that no longer matches, which a
      * record from before the digest existed counts as.
      */
-    public static function outdated(string $project): ?string
+    /** Whether `install` never recorded a client or a skill in the project. */
+    public static function absent(string $project): bool
     {
         $state = self::readState($project);
-        if ($state['agents'] === [] && $state['skills'] === []) {
+
+        return $state['agents'] === [] && $state['skills'] === [];
+    }
+
+    public static function outdated(string $project): ?string
+    {
+        if (self::absent($project)) {
             return null;
         }
+        $state = self::readState($project);
 
         $reasons = [];
         foreach (self::unpublished($project, $state) as $path) {

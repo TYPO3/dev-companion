@@ -231,6 +231,33 @@ final class StdioServerTest extends TestCase
         self::assertStringNotContainsString('refreshed', $settled['result']['instructions']);
     }
 
+    /**
+     * The instructions tell a session to activate a typo3-* skill. In a
+     * project where `install` never ran, the listing has none, and the session
+     * could not tell why — `D-DIS-029`.
+     */
+    #[Decision('D-DIS-029')]
+    #[Test]
+    public function aProjectWithoutSkillsIsToldHowToGetThem(): void
+    {
+        $this->temporaryRoot = sys_get_temp_dir() . '/typo3-dev-companion-absent-' . bin2hex(random_bytes(8));
+        self::assertTrue(mkdir($this->temporaryRoot));
+        $initialize = [$this->request(1, 'initialize', [
+            'protocolVersion' => self::PROTOCOL_VERSION,
+            'capabilities' => new \stdClass(),
+            'clientInfo' => ['name' => 'phpunit', 'version' => '1'],
+        ])];
+
+        $stderr = null;
+        $absent = $this->call($initialize, $this->temporaryRoot, $stderr)[1];
+        self::assertStringStartsWith(Installer::ABSENT, $absent['result']['instructions']);
+        self::assertStringContainsString('no task skills are installed in ' . $this->temporaryRoot, (string) $stderr);
+
+        self::assertSame(0, $this->install($this->temporaryRoot));
+        $installed = $this->call($initialize, $this->temporaryRoot, $stderr)[1];
+        self::assertStringNotContainsString(Installer::ABSENT, $installed['result']['instructions']);
+    }
+
     private function install(string $directory): int
     {
         $process = proc_open(

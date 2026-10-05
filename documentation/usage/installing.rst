@@ -401,9 +401,11 @@ One short sentence goes into the instructions a client gets at initialize. A
 skill the client loaded when the session opened is the copy that was there
 before.
 
-A project with no record stays as it is, and a refresh that fails leaves the
-notice as it was and the server starts anyway. Why the server does it rather
-than a command somebody runs is
+A project with no record stays as it is. Its instructions open with one sentence
+that no task skills are installed there and that ``install`` adds them,
+`D-DIS-029 <../../decisions/discovery/dis-029-a-project-without-skills-is-told-at-the-start.md>`_.
+A refresh that fails leaves the notice as it was and the server starts anyway.
+Why the server does it rather than a command somebody runs is
 `D-DIS-021 <../../decisions/discovery/dis-021-a-stale-publication-is-put-back-where-the-server-starts.md>`_.
 On the machine that prompted it, twelve projects had heard the notice at every
 session start for weeks.

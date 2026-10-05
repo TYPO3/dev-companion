@@ -1,7 +1,8 @@
 ---
 date: 2026-09-28T11:23:30+00:00
 category: idea
-status: open
+status: closed
+closed: 2026-10-05
 model: claude-opus-5[1m]
 tool: none, activated, server, instruction, about, typo3-, skills
 directory: /home/lina/projects/typo3/manuals/coreapi

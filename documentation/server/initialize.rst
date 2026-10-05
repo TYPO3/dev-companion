@@ -52,6 +52,9 @@ Three things change the text from one start to the next:
   stale, ``Installer`` puts them back and opens the instructions with one
   sentence that says so,
   `D-DIS-021 <../../decisions/discovery/dis-021-a-stale-publication-is-put-back-where-the-server-starts.md>`_.
+  Where ``install`` never ran in the project, the sentence says that no task
+  skills are installed and names the command,
+  `D-DIS-029 <../../decisions/discovery/dis-029-a-project-without-skills-is-told-at-the-start.md>`_.
 * **The exclusion in front of the routing.** Where
   ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` names tools, the instructions say which
   are left out and drop every index entry that routed to one,

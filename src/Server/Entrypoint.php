@@ -103,11 +103,18 @@ final class Entrypoint
      * client loaded its skills before this ran. A refresh that fails leaves the
      * notice as it was, because a write into somebody else's project may not
      * stop a server. The directory is the one this process started in, where
-     * `install` writes and so where the record is.
+     * `install` writes and so where the record is. A project without a record
+     * gets the notice that it has no skills at all, `D-DIS-029`.
      */
     private static function refreshSkillsNobodyHasUpdated(string $binary): string
     {
         $project = getcwd() ?: '';
+        if (Installer::absent($project)) {
+            fwrite(STDERR, 'typo3-dev-companion: no task skills are installed in ' . $project
+                . ', so no typo3-* skill is in a client\'s listing. Run typo3-dev-companion install there.' . "\n");
+
+            return Installer::ABSENT;
+        }
         $outdated = Installer::outdated($project);
         if ($outdated === null) {
             return '';

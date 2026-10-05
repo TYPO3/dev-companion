@@ -135,3 +135,7 @@ and the draft kept it. The list of refused trailers now carries `Assisted-by:`
 and `Generated-by:` too, and the check message says that merged commits by other
 people break the rule.
 [`D-KNW-161`](knw-161-every-agent-trailer-comes-off-a-core-draft.md) records it.
+
+The page's sign-off rate had gone stale under a reviewer who rated a finding by
+it. It now dates the turn to 2026-08-23, gives both rates as measured on
+2026-10-05, and names the command that measures them again.

@@ -157,10 +157,12 @@ beyond those five.
   The one line in `Build/git-hooks/commit-msg` that names `Signed-off-by:`
   deletes it. The official Contribution Guide's appendix lists the trailers and
   stops before it, and `CONTRIBUTING.md` is silent.
-- The merged history is the practice the rule replaces. It carries the sign-off
-  on about one commit in a hundred on `main`.
-  `git log -500 --format=%b | grep -c '^Signed-off-by:'` counts that. So a
-  reviewer strikes a patch without one, and no check rejects it.
+- The merged history turned when the core's `AGENTS.md` reached `main` on
+  2026-08-23. The sign-off went from two commits in a hundred to about half, on
+  2026-10-05.
+  `git log --since=2026-08-23 --format=%b origin/main | grep -c '^Signed-off-by:'`
+  against `git rev-list --count --since=2026-08-23 origin/main` measures it. So
+  a reviewer strikes a patch without one, and no check rejects it.
 
 ## What The Commit Hook Writes
 

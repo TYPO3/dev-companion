@@ -1732,10 +1732,17 @@ final class KnowledgeTest extends TestCase
             $body,
             'the one file in the checkout that asks for the trailer is not named as agreeing',
         );
+        // A rate with no date went stale under a reviewer who rated a finding by
+        // it. The boundary and the command stay, and the number carries its day.
         self::assertStringContainsString(
-            'about one commit in a hundred on `main`',
+            'reached `main` on 2026-08-23',
             $body,
             'the practice the rule replaces is left out, which is what a caller counts for themselves',
+        );
+        self::assertStringContainsString(
+            'git rev-list --count --since=2026-08-23 origin/main',
+            $body,
+            'the rate stands without the command that measures it again',
         );
     }
 
@@ -1925,7 +1932,9 @@ final class KnowledgeTest extends TestCase
             'targetVersion' => '15.0',
         ]);
 
-        self::assertSame(
+        // The two rank close, and which comes first moves with a sentence in
+        // either. What the case holds is that both match.
+        self::assertEqualsCanonicalizing(
             ['The Trailers A Core Commit Carries', 'What The Commit Hook Writes'],
             $reported->data['matchedHeadings'],
             'two sections of one page match, so the page is handed over',

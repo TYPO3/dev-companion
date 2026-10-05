@@ -38,16 +38,17 @@ works in. The last is where a patch to review comes from.
   A GPT-5 mini session reviewed the GD/SVG placeholder patch here on 2026-08-01
   (`feedback/2026-08-01-114526`). It got a subsystem task rather than the
   scenario prompt, so it is precedent for the environment and not a run.
-- **`E-SITE`** — **gone from this machine as of 2026-08-06.**
-  `/home/benji/projects/site-new` does not exist, so the site package
-  `REVIEW-01` reviews has no checkout and nobody can run that review until one
-  exists. What it was: site package below `extensions/printworks_sitepackage`,
-  TYPO3 14.3.5 under DDEV, with the server as a Composer dependency.
-  `ddev exec php vendor/bin/typo3-dev-companion update --agent=claude` refreshed
-  it. A replacement is the one entry here that also has to re-require the
-  package under its new name. `typo3/dev-companion` resolves from nowhere yet,
-  so it is a path repository onto this checkout until the vendor question has an
-  answer.
+- **`E-SITE`** — `/home/benji/projects/site-events`, named by the maintainer on
+  2026-10-05. Site package below `extensions/events_sitepackage`, a second
+  project extension `sessionplaner_extended`, TYPO3 14.3.7 under DDEV project
+  `events-site` on PHP 8.4, and twenty sites. Branch `develop`, clean on
+  2026-10-05. The server is **not** a Composer dependency: `.mcp.json` names
+  this checkout's entrypoint on host PHP, from an `install --agent=claude`. Its
+  published skills read stale on 2026-10-05, so the first server start there
+  puts them back. The DDEV project stood paused that day, and a runtime lookup
+  answers unsupported until somebody starts it. It replaces
+  `/home/benji/projects/site-new`, gone since 2026-08-06, which had
+  `printworks_sitepackage` on TYPO3 14.3.5.
 - **`E-EXT`** — two checkouts play it, and which one a run needs is a property
   of the run. In both the server is **not** a Composer dependency, so the client
   reaches it from this checkout.

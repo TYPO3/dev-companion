@@ -117,10 +117,10 @@ next day, and no session has met any of the corrections yet.
 
 ## Since then
 
-The second **Wrong if** has fired four times, each from a task shape this entry
-did not have in view. The fourth is the first where the skipped prescription is
-`skills/base.md`'s deprecation sweep rather than a build step. Each got its
-correction at its own point of use, as the three corrections before them did,
-and `D-SKL-085` is the latest. So the corpus is more than one build. The
-question the entry defers is still the closing gate itself, which the maintainer
-answered *wait* to on 2026-08-19 and again on 2026-08-27.
+The second **Wrong if** fired four times, from task shapes this entry did not
+have in view, the last in the deprecation sweep of `skills/base.md`. Each got
+its correction at its own point of use, and `D-SKL-085` is the latest. The
+maintainer answered *wait* to the gate on 2026-08-19, 2026-08-27, 2026-09-10,
+2026-09-19 and 2026-10-05, and parked it on the last date. `T-260817-0cb1` is
+gone, and `feedback/2026-08-17-212218` is archived with this answer. The first
+**Wrong if** reopens it, as a feedback whose card builds the gate.

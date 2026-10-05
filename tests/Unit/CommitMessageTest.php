@@ -751,6 +751,31 @@ final class CommitMessageTest extends TestCase
         self::assertContains('body-blank-line', array_column($parsed['checks'], 'code'));
     }
 
+    /**
+     * A reviewer reads the checks rather than a diff of the draft, so a draft
+     * that moves a trailer says so. On `main` 198 of the last 200 commits put
+     * `Resolves:` before `Releases:`, read on 2026-10-05 — `D-KNW-165`.
+     */
+    #[Decision('D-KNW-165')]
+    #[Test]
+    public function aDraftThatMovesATrailerSaysSo(): void
+    {
+        $moved = CommitMessage::parse(
+            "[TASK] Do a thing\n\nBody.\n\nReleases: main, 14.3\nResolves: #1\n",
+            CommitMessage::WORKFLOW_CORE,
+        );
+        $reordered = array_values(array_filter(
+            $moved['checks'],
+            static fn(array $check): bool => $check['code'] === 'trailers-reordered',
+        ));
+        self::assertCount(1, $reordered);
+        self::assertSame('info', $reordered[0]['level']);
+        self::assertStringContainsString('Resolves: before Releases:', $reordered[0]['message']);
+
+        $kept = CommitMessage::parse("[TASK] Do a thing\n\nBody.\n\nResolves: #1\nReleases: main\n", CommitMessage::WORKFLOW_CORE);
+        self::assertNotContains('trailers-reordered', array_column($kept['checks'], 'code'));
+    }
+
     #[Test]
     public function aColonSentenceAtTheEndOfTheBodyIsNotATrailer(): void
     {

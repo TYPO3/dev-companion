@@ -8,6 +8,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-162`][D-KNW-162] — The e2e suite passes a spec through where the script does · 2026-10-05
 - [`D-KNW-163`][D-KNW-163] — A probe that counts rows takes the restrictions off · 2026-10-05
 - [`D-KNW-164`][D-KNW-164] — A speed claim is checked by counting its cause · 2026-10-05
+- [`D-KNW-165`][D-KNW-165] — A draft that moves a trailer says so · 2026-10-05
 - [`D-KNW-160`][D-KNW-160] — What the core owes for a changed TypeScript member is stated in the corpus · 2026-09-19
 - [`D-KNW-157`][D-KNW-157] — A processed image is keyed twice and cleared by three actions · 2026-09-15
 - [`D-KNW-158`][D-KNW-158] — A timing probe is a page beside the rendering probe · 2026-09-15
@@ -164,6 +165,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 [D-KNW-162]: knw-162-the-e2e-suite-passes-a-spec-through-where-the-script-does.md
 [D-KNW-163]: knw-163-a-probe-that-counts-rows-takes-the-restrictions-off.md
 [D-KNW-164]: knw-164-a-speed-claim-is-checked-by-counting-its-cause.md
+[D-KNW-165]: knw-165-a-draft-that-moves-a-trailer-says-so.md
 [D-KNW-160]: knw-160-what-the-core-owes-for-a-changed-typescript-member-is-stated-in-the-corpus.md
 [D-KNW-157]: knw-157-a-processed-image-is-keyed-twice-and-cleared-by-three-actions.md
 [D-KNW-158]: knw-158-a-timing-probe-is-a-page-beside-the-rendering-probe.md

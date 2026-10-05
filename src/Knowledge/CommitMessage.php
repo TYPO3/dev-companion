@@ -389,6 +389,7 @@ final class CommitMessage
         $relatedIssues = [];
         $releases = [];
         $extraTrailers = [];
+        $order = [];
         foreach ($trailerLines as $trailer) {
             [$name, $value] = array_map('trim', explode(':', $trailer, 2));
             $key = strtolower($name);
@@ -421,6 +422,7 @@ final class CommitMessage
                 $extraTrailers[] = $trailer;
                 continue;
             }
+            $order[] = $key;
             match ($key) {
                 'resolves' => $issues[] = $value,
                 'related' => $relatedIssues[] = $value,
@@ -429,6 +431,28 @@ final class CommitMessage
                     explode(',', $value)
                 ), static fn(string $release): bool => $release !== '')),
             };
+        }
+
+        // The draft writes the three in one order, which is the order merged
+        // core commits carry them. A reviewer reads the checks rather than a
+        // diff of the draft, so a move says so.
+        $given = array_values(array_unique($order));
+        $drafted = array_values(array_intersect(self::KNOWN_TRAILERS, $given));
+        if ($given !== $drafted) {
+            $named = static fn(array $keys): string => implode(' before ', array_map(
+                static fn(string $key): string => ucfirst($key) . ':',
+                $keys,
+            ));
+            $checks[] = [
+                'level' => 'info',
+                'code' => 'trailers-reordered',
+                'message' => sprintf(
+                    'The draft puts %s%s. The message had %s.',
+                    $named($drafted),
+                    $workflow === self::WORKFLOW_CORE ? ', the order merged core commits carry them in' : '',
+                    $named($given),
+                ),
+            ];
         }
 
         return [

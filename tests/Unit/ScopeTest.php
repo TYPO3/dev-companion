@@ -2268,7 +2268,7 @@ final class ScopeTest extends TestCase
 
         // And it is legibly a part rather than the whole, in both halves.
         self::assertSame(
-            ['covers', 'doesNotCover', 'checkoutDiscovery', 'routing', 'versions', 'answersFrom'],
+            ['covers', 'doesNotCover', 'checkoutDiscovery', 'routing', 'versions', 'answersFrom', 'upstream'],
             array_column($narrow->data['withheld'], 'section'),
         );
         self::assertStringContainsString('Left out, because this call named sections', $narrow->text);
@@ -2318,6 +2318,7 @@ final class ScopeTest extends TestCase
         $whole = Registry::call('typo3_server_scope', []);
         $named = Registry::call('typo3_server_scope', ['sections' => [
             'covers', 'doesNotCover', 'checkoutDiscovery', 'routing', 'versions', 'answersFrom', 'installation',
+            'upstream',
         ]]);
 
         self::assertSame($whole->text, $named->text);

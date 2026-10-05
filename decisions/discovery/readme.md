@@ -9,6 +9,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-DIS-028`][D-DIS-028] — A DDEV container is entered only by its own project · 2026-10-05
 - [`D-DIS-029`][D-DIS-029] — A project without skills is told at the start · 2026-10-05
 - [`D-DIS-030`][D-DIS-030] — A process older than its code says so in every answer · 2026-10-05
+- [`D-DIS-031`][D-DIS-031] — A checkout behind its upstream says so in every answer · 2026-10-05
 - [`D-DIS-026`][D-DIS-026] — The project's instruction files belong to the project · 2026-10-02
 - [`D-DIS-025`][D-DIS-025] — A failed derivation is a reason and never an empty column list · 2026-09-20
 - [`D-DIS-024`][D-DIS-024] — The checkout that is the DDEV project starts through the container · 2026-09-15
@@ -35,6 +36,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 [D-DIS-028]: dis-028-a-ddev-container-is-entered-only-by-its-own-project.md
 [D-DIS-029]: dis-029-a-project-without-skills-is-told-at-the-start.md
 [D-DIS-030]: dis-030-a-process-older-than-its-code-says-so-in-every-answer.md
+[D-DIS-031]: dis-031-a-checkout-behind-its-upstream-says-so-in-every-answer.md
 [D-DIS-026]: dis-026-the-projects-instruction-files-belong-to-the-project.md
 [D-DIS-025]: dis-025-a-failed-derivation-is-a-reason-and-never-an-empty-column-list.md
 [D-DIS-024]: dis-024-the-checkout-that-is-the-ddev-project-starts-through-the-container.md

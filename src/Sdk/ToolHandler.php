@@ -9,6 +9,7 @@ use Mcp\Schema\Result\CallToolResult;
 use Mcp\Server\ClientGateway;
 use Mcp\Server\Handler\ToolHandlerInterface;
 use TYPO3\DevCompanion\Server\CodeAge;
+use TYPO3\DevCompanion\Server\Upstream;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
@@ -48,9 +49,11 @@ final class ToolHandler implements ToolHandlerInterface
         }
 
         // In front of the answer, because what follows may be the old one and
-        // a tool the answer names may be missing, `D-DIS-030`.
+        // a tool the answer names may be missing, `D-DIS-030`, `D-DIS-031`.
+        $notices = array_filter([CodeAge::isStale() ? CodeAge::NOTICE : '', Upstream::notice()]);
+
         return new CallToolResult(
-            [new TextContent(CodeAge::isStale() ? CodeAge::NOTICE . "\n\n" . $result->text : $result->text)],
+            [new TextContent($notices === [] ? $result->text : implode("\n", $notices) . "\n\n" . $result->text)],
             structuredContent: $result->data,
         );
     }

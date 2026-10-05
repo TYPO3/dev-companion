@@ -133,6 +133,29 @@ Answers with
         root: string
         # Environment variable that names the console command.
         console: string
+    upstream:  # optional
+      # One of: current, behind, unknown, unavailable, off, not-a-checkout. current:
+      # nothing on the upstream branch is missing here. behind: commits are, and
+      # every answer says so. unknown: no read yet, or the checkout stands on a
+      # commit the upstream does not have. unavailable: the last read failed, and
+      # lastAnswered says when one last worked. off: the variable turned the read
+      # off. not-a-checkout: the server runs from an install without a git
+      # directory.
+      state: string
+      # Where the upstream is.
+      repository: string
+      # The commit this checkout stands on.
+      revision: string or null
+      # How many commits the upstream branch has that this checkout lacks. Null
+      # where nothing counted them.
+      behind: integer or null
+      # When the start last asked, in UTC. The answer is kept an hour and shared by
+      # every session of this checkout.
+      checkedAt: string or null
+      # When a read last worked.
+      lastAnswered: string or null
+      # Environment variable that turns the read off.
+      variable: string
     # The parts this call did not ask for. A field named here is absent from this
     # answer rather than empty, so a narrowed answer does not read as the whole one.
     # Empty where sections was not passed, which is the whole orientation.

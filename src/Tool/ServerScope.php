@@ -12,6 +12,7 @@ use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Result\Schema;
 use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Server\ExcludedTools;
+use TYPO3\DevCompanion\Server\Upstream;
 
 /**
  * What this server covers, what it deliberately does not, and which tool to
@@ -39,6 +40,7 @@ final class ServerScope extends ReadOnlyTool
         'versions' => 'the TYPO3 versions this knowledge binds to',
         'answersFrom' => 'which source answers which tool, in the state this machine is in',
         'installation' => 'which installation is being read, and whether its console answers',
+        'upstream' => 'whether this server\'s checkout is behind the repository it comes from',
     ];
 
     public static function name(): string
@@ -147,6 +149,15 @@ final class ServerScope extends ReadOnlyTool
                     'console' => Schema::string('Environment variable that names the console command.'),
                 ], ['root', 'console']),
             ], ['found', 'searched', 'packageCount', 'console']),
+            'upstream' => Schema::object([
+                'state' => ['type' => 'string', 'enum' => Upstream::STATES, 'description' => 'current: nothing on the upstream branch is missing here. behind: commits are, and every answer says so. unknown: no read yet, or the checkout stands on a commit the upstream does not have. unavailable: the last read failed, and lastAnswered says when one last worked. off: the variable turned the read off. not-a-checkout: the server runs from an install without a git directory.'],
+                'repository' => Schema::string('Where the upstream is.'),
+                'revision' => Schema::nullableString('The commit this checkout stands on.'),
+                'behind' => Schema::nullable(Schema::integer('How many commits the upstream branch has that this checkout lacks. Null where nothing counted them.')),
+                'checkedAt' => Schema::nullableString('When the start last asked, in UTC. The answer is kept an hour and shared by every session of this checkout.'),
+                'lastAnswered' => Schema::nullableString('When a read last worked.'),
+                'variable' => Schema::string('Environment variable that turns the read off.'),
+            ], ['state', 'repository', 'revision', 'behind', 'checkedAt', 'lastAnswered', 'variable']),
             'withheld' => Schema::listOf(Schema::object([
                 'section' => Schema::string(),
                 'holds' => Schema::string('What that part of the answer would have carried.'),
@@ -256,9 +267,9 @@ final class ServerScope extends ReadOnlyTool
         }
 
         $lines[] = '';
-        $lines[] = 'Every lookup and guide is read-only. typo3_documentation_lookup reads the official, versioned '
-            . 'manuals at docs.typo3.org; apart from that and the installation named above, nothing is fetched, '
-            . 'executed, or looked up online.';
+        $lines[] = 'Every lookup and guide is read-only. The tools that answer from the network read the hosts '
+            . 'their descriptions name, and the start asks GitHub whether this checkout is behind; apart from those '
+            . 'and the installation named above, nothing is fetched, executed, or looked up online.';
         if (Channel::isAvailable()) {
             // The one write stands next to the read-only claim, not after it. A
             // blanket "everything is read only" followed by a tool that creates
@@ -277,6 +288,24 @@ final class ServerScope extends ReadOnlyTool
                 $lines[] = $entry['meaning'];
                 $lines[] = 'Tools: ' . implode(', ', $entry['tools']);
             }
+        }
+
+        if (in_array('upstream', $sections, true)) {
+            $upstream = Upstream::report();
+            $lines[] = '';
+            $lines[] = match ($upstream['state']) {
+                'behind' => Upstream::notice(),
+                'current' => sprintf('This checkout is current with github.com/%s, read at %s.', Upstream::REPOSITORY, (string) $upstream['checkedAt']),
+                'unavailable' => sprintf(
+                    'Whether this checkout is behind github.com/%s is not known: the read at %s failed, and the last one that worked was %s.',
+                    Upstream::REPOSITORY,
+                    (string) $upstream['checkedAt'],
+                    $upstream['lastAnswered'] ?? 'never',
+                ),
+                'off' => sprintf('Whether this checkout is behind its upstream is not read: %s is off.', Upstream::VARIABLE),
+                'not-a-checkout' => 'This server runs from an install without a git directory, so nothing here compares it with its upstream.',
+                default => sprintf('Whether this checkout is behind github.com/%s is not known: it stands on a commit the upstream does not have, or nothing has asked yet.', Upstream::REPOSITORY),
+            };
         }
 
         $withheld = self::withheld($sections);
@@ -409,6 +438,10 @@ final class ServerScope extends ReadOnlyTool
             ...isset($wanted['answersFrom']) ? ['answersFrom' => self::answersFromReport()] : [],
             ...isset($wanted['installation'])
                 ? ['installation' => self::installationReport($console, $reason, $caveat)]
+                : [],
+            ...isset($wanted['upstream'])
+                ? ['upstream' => ['repository' => 'https://github.com/' . Upstream::REPOSITORY]
+                    + Upstream::report() + ['variable' => Upstream::VARIABLE]]
                 : [],
             'withheld' => self::withheld($sections),
         ];

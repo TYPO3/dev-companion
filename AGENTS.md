@@ -40,6 +40,7 @@ src/Server/Factory.php     # builds the mcp/sdk server from the tool definitions
 src/Server/Installer.php   # writes the client setup, publishes the skills, puts back a publication that has gone stale
 src/Server/ExcludedTools.php  # what TYPO3_DEV_COMPANION_EXCLUDE_TOOLS takes away
 src/Server/CodeAge.php  # whether the running process is older than the code in its checkout
+src/Server/Upstream.php  # whether the checkout is behind the repository it comes from
 src/Tool/          # one class per tool: its description, its schemas, its answer
 src/Tool/Tool.php  # the interface each one implements; ReadOnlyTool carries the annotations
 src/Tool/Registry.php  # every tool this server has, and the only place one is switched on

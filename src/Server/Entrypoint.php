@@ -39,6 +39,10 @@ final class Entrypoint
         if ($command === null) {
             Instance::discoverFrom(getcwd() ?: null);
             CodeAge::markStart();
+            Upstream::check();
+            if (Upstream::notice() !== '') {
+                fwrite(STDERR, 'typo3-dev-companion: ' . Upstream::notice() . "\n");
+            }
             self::reportExclusionsThatTookNothingAway();
             Factory::create(self::refreshSkillsNobodyHasUpdated($binary))->run(new StdioTransport());
 

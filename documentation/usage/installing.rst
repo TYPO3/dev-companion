@@ -363,6 +363,14 @@ moment, and a pull or a ``composer update`` does not reach it. Every answer then
 opens with a sentence that says so, and a restart of the MCP server is the fix,
 `D-DIS-030 <../../decisions/discovery/dis-030-a-process-older-than-its-code-says-so-in-every-answer.md>`_.
 
+A checkout learns of nothing upstream by itself, and this package moves every
+day. So a server started from a git checkout asks GitHub once at the start
+whether its commit is behind ``main``. Every session of the checkout shares the
+answer for an hour. While it is behind, every answer opens with how far behind
+it is and the pull that ends it. ``typo3_server_scope`` reports the state under
+``upstream``, and ``TYPO3_DEV_COMPANION_UPSTREAM_CHECK=off`` turns the read off,
+`D-DIS-031 <../../decisions/discovery/dis-031-a-checkout-behind-its-upstream-says-so-in-every-answer.md>`_.
+
 A published skill is a copy, so it goes stale the moment this package moves.
 ``update`` is what refreshes it, along with the client entry:
 

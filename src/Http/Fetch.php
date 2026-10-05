@@ -48,8 +48,13 @@ final class Fetch
      */
     private ?\CurlHandle $handle = null;
 
-    /** @param (\Closure(string): ?string)|null $transport */
-    public function __construct(?\Closure $transport = null)
+    /**
+     * @param (\Closure(string): ?string)|null $transport
+     * @param int|null $timeout seconds for the whole request, where a caller
+     *                          waits on it at a moment nobody chose, such as the
+     *                          server start
+     */
+    public function __construct(?\Closure $transport = null, private readonly ?int $timeout = null)
     {
         $this->transport = $transport;
     }
@@ -181,8 +186,8 @@ final class Fetch
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_MAXREDIRS => self::MAX_REDIRECTS,
-            CURLOPT_CONNECTTIMEOUT => self::CONNECT_TIMEOUT,
-            CURLOPT_TIMEOUT => self::TIMEOUT,
+            CURLOPT_CONNECTTIMEOUT => min(self::CONNECT_TIMEOUT, $this->timeout ?? self::CONNECT_TIMEOUT),
+            CURLOPT_TIMEOUT => $this->timeout ?? self::TIMEOUT,
             CURLOPT_USERAGENT => $agent ?: 'typo3-dev-companion/' . Factory::SERVER_VERSION,
             CURLOPT_HTTPHEADER => $headers,
             // The empty string is every encoding this build of curl can undo,

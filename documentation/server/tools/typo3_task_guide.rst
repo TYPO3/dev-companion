@@ -350,6 +350,8 @@ Text:
     Hints:
     - A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.
     - Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — "Declaration of Sub::start() must be compatible with Base::start()" — and nothing in the class being edited names it.
+    - A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.
+    - The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.
     - Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.
     - The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.
     - The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.
@@ -662,6 +664,20 @@ Data:
                         "scope": null
                     },
                     {
+                        "text": "A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": "core"
+                    },
+                    {
                         "text": "Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.",
                         "since": null,
                         "until": null,
@@ -924,6 +940,8 @@ Text:
     Hints:
     - A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.
     - Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — "Declaration of Sub::start() must be compatible with Base::start()" — and nothing in the class being edited names it.
+    - A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.
+    - The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.
     - Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.
     - The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.
     - The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.
@@ -1071,6 +1089,20 @@ Data:
                         "until": null,
                         "versions": "",
                         "scope": null
+                    },
+                    {
+                        "text": "A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": "core"
                     },
                     {
                         "text": "Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.",

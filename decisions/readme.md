@@ -439,6 +439,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-163`][D-KNW-163] — A probe that counts rows takes the restrictions off · 2026-10-05
 - [`D-KNW-164`][D-KNW-164] — A speed claim is checked by counting its cause · 2026-10-05
 - [`D-KNW-165`][D-KNW-165] — A draft that moves a trailer says so · 2026-10-05
+- [`D-KNW-166`][D-KNW-166] — A changed constructor is settled on who calls it · 2026-10-05
 - [`D-KNW-160`][D-KNW-160] — What the core owes for a changed TypeScript member is stated in the corpus · 2026-09-19
 - [`D-KNW-157`][D-KNW-157] — A processed image is keyed twice and cleared by three actions · 2026-09-15
 - [`D-KNW-158`][D-KNW-158] — A timing probe is a page beside the rendering probe · 2026-09-15
@@ -596,6 +597,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-KNW-163]: knowledge/knw-163-a-probe-that-counts-rows-takes-the-restrictions-off.md
 [D-KNW-164]: knowledge/knw-164-a-speed-claim-is-checked-by-counting-its-cause.md
 [D-KNW-165]: knowledge/knw-165-a-draft-that-moves-a-trailer-says-so.md
+[D-KNW-166]: knowledge/knw-166-a-changed-constructor-is-settled-on-who-calls-it.md
 [D-KNW-160]: knowledge/knw-160-what-the-core-owes-for-a-changed-typescript-member-is-stated-in-the-corpus.md
 [D-KNW-157]: knowledge/knw-157-a-processed-image-is-keyed-twice-and-cleared-by-three-actions.md
 [D-KNW-158]: knowledge/knw-158-a-timing-probe-is-a-page-beside-the-rendering-probe.md

@@ -1,7 +1,8 @@
 ---
 date: 2026-10-05T10:50:18+00:00
 category: idea
-status: open
+status: closed
+closed: 2026-10-05
 model: claude-opus-5-5
 tool: typo3_test_run_guide, typo3_commit_message_guide, typo3_hint_lookup
 directory: /home/benji/projects/typo3-cms

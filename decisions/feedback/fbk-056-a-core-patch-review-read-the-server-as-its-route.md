@@ -41,3 +41,13 @@ plain call rather than a flag.**
 
 - A session reports that the re-read of a change before its report missed a new
   patch set because the answer was too long to compare.
+
+## Since then
+
+A second review the same day, of change 96354, reports the same strengths and
+three more. The `cglGit` worktree warning, the terminal `e2e-prepare` needs and
+the `older-release-line` warning each changed what it did. It asked for tests on
+them, and each already has one:
+`KnowledgeTest::aSuiteThatAsksGitForItsFilesNamesWhereItDoesNotHold`,
+`KnowledgeTest::aSuiteThatWaitsForAKeypressSaysItNeedsATerminal` and
+`CommitMessageTest::aMaintainedLineFurtherBackSaysWhatItClaims`.

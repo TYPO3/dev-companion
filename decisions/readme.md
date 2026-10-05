@@ -436,6 +436,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 - [`D-KNW-161`][D-KNW-161] — Every agent trailer comes off a core draft · 2026-10-05
 - [`D-KNW-162`][D-KNW-162] — The e2e suite passes a spec through where the script does · 2026-10-05
+- [`D-KNW-163`][D-KNW-163] — A probe that counts rows takes the restrictions off · 2026-10-05
 - [`D-KNW-160`][D-KNW-160] — What the core owes for a changed TypeScript member is stated in the corpus · 2026-09-19
 - [`D-KNW-157`][D-KNW-157] — A processed image is keyed twice and cleared by three actions · 2026-09-15
 - [`D-KNW-158`][D-KNW-158] — A timing probe is a page beside the rendering probe · 2026-09-15
@@ -590,6 +591,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 [D-KNW-161]: knowledge/knw-161-every-agent-trailer-comes-off-a-core-draft.md
 [D-KNW-162]: knowledge/knw-162-the-e2e-suite-passes-a-spec-through-where-the-script-does.md
+[D-KNW-163]: knowledge/knw-163-a-probe-that-counts-rows-takes-the-restrictions-off.md
 [D-KNW-160]: knowledge/knw-160-what-the-core-owes-for-a-changed-typescript-member-is-stated-in-the-corpus.md
 [D-KNW-157]: knowledge/knw-157-a-processed-image-is-keyed-twice-and-cleared-by-three-actions.md
 [D-KNW-158]: knowledge/knw-158-a-timing-probe-is-a-page-beside-the-rendering-probe.md

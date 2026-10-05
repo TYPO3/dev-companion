@@ -1,7 +1,8 @@
 ---
 date: 2026-10-05T09:42:11+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-10-05
 model: claude-opus-5-5
 tool: core-tests, hint, typo3_rule_lookup
 directory: /home/benji/projects/typo3-cms

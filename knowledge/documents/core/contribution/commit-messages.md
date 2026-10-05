@@ -143,9 +143,12 @@ beyond those five.
   AI-generated code of 2026-07-20. The board recommends the certificate as what
   makes a contributor's provenance representation explicit and auditable. The
   board put it as a recommendation to consider; this project requires it.
-- Nobody sets `Co-Authored-By:`, and nobody sets a trailer that names the agent
-  or the session a patch came from. Who held the keyboard is the author field
-  and the review, not a line in the message.
+- A core patch carries no `Co-Authored-By:`, `Assisted-by:` or `Generated-by:`,
+  and no trailer that names the agent or the session it came from. Who held the
+  keyboard is the author field and the review, not a line in the message.
+- Not every contributor works by this rule. Merged commits on `main` carry
+  `Co-authored-by:` now and then. That is no precedent for a patch you write. In
+  a review of somebody else's patch, name the trailer as a finding.
 - A change to any of this is the maintainer's call. A session that believes it
   owes a trailer asks before it writes one. It does not read the answer out of
   whichever file it happens to hold.

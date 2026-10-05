@@ -1708,9 +1708,14 @@ final class KnowledgeTest extends TestCase
             'the rule names no source, which is what sends a session to the checkout instead',
         );
         self::assertStringContainsString(
-            'Nobody sets `Co-Authored-By:`',
+            'A core patch carries no `Co-Authored-By:`, `Assisted-by:` or `Generated-by:`',
             $body,
             'the trailer an agent writes about itself is left out of the rule',
+        );
+        self::assertStringContainsString(
+            'That is no precedent for a patch you write',
+            $body,
+            'the merged history that breaks the rule reads as permission to break it — D-KNW-161',
         );
         self::assertStringContainsString(
             "A change to any of this is the maintainer's call",

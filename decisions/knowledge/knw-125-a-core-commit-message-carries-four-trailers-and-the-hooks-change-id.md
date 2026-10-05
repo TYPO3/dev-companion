@@ -127,3 +127,11 @@ correction has two places to be wrong.
 - Somebody drafts a core commit under `workflow="project"` and the checks never
   run. Then the rule sits behind an argument the caller chooses, which is the
   half no test can hold.
+
+## Since then
+
+On 2026-10-05 a review passed an `Assisted-by:` line the refusal did not name,
+and the draft kept it. The list of refused trailers now carries `Assisted-by:`
+and `Generated-by:` too, and the check message says that merged commits by other
+people break the rule.
+[`D-KNW-161`](knw-161-every-agent-trailer-comes-off-a-core-draft.md) records it.

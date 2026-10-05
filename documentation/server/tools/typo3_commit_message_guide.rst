@@ -37,11 +37,11 @@ Takes
 
     # A complete commit message to check, subject and trailers included. The draft
     # keeps unknown trailers such as Change-Id, so an amended patch set stays valid.
-    # The exception is workflow="core", which takes Co-Authored-By and an agent's
-    # own session trailer off the draft and says so: a core commit message carries
-    # neither. A core message without Signed-off-by is an error there. The core
-    # requires the certificate, and the draft carries a placeholder because only
-    # whoever commits can sign it.
+    # The exception is workflow="core", which takes Co-Authored-By, Assisted-by,
+    # Generated-by and an agent's own session trailer off the draft and reports each
+    # as an error: a core commit message carries none of them. A core message
+    # without Signed-off-by is an error there. The core requires the certificate,
+    # and the draft carries a placeholder because only whoever commits can sign it.
     message: string  # optional
     # One of: core, project. Which rules to apply. "project", the default, is any
     # repository of your own. The checks read the keyword, the 52/72 character

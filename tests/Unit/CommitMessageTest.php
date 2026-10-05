@@ -768,15 +768,17 @@ final class CommitMessageTest extends TestCase
      * stood among them until the certificate became required — `D-KNW-125`.
      */
     #[Decision('D-KNW-125')]
+    #[Decision('D-KNW-161')]
     #[Test]
     public function aCoreDraftRefusesTheTrailersTheProjectDoesNotSet(): void
     {
         $message = "[BUGFIX] Keep the identifier out of the client\n\nBody.\n\nResolves: #1\nReleases: main\n"
-            . "Signed-off-by: A <a@b.c>\nCo-Authored-By: B <b@b.c>\nClaude-Session: https://example.test/x\n";
+            . "Signed-off-by: A <a@b.c>\nCo-Authored-By: B <b@b.c>\nClaude-Session: https://example.test/x\n"
+            . "Assisted-by: Claude Code (Claude Opus 5.5) <noreply@anthropic.com>\nGenerated-by: an agent\n";
 
         $core = CommitMessage::parse($message, CommitMessage::WORKFLOW_CORE);
         self::assertSame(
-            ['refused-trailer', 'refused-trailer'],
+            ['refused-trailer', 'refused-trailer', 'refused-trailer', 'refused-trailer'],
             array_values(array_filter(
                 array_column($core['checks'], 'code'),
                 static fn(string $code): bool => $code === 'refused-trailer',
@@ -791,7 +793,7 @@ final class CommitMessageTest extends TestCase
         $project = CommitMessage::parse($message, CommitMessage::WORKFLOW_PROJECT);
         self::assertNotContains('refused-trailer', array_column($project['checks'], 'code'));
         self::assertNotContains('missing-sign-off', array_column($project['checks'], 'code'), 'the certificate is asked of a core patch');
-        self::assertCount(3, $project['input']['extraTrailers']);
+        self::assertCount(5, $project['input']['extraTrailers']);
     }
 
     /**

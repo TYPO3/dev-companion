@@ -88,9 +88,11 @@ final class CommitMessage
      * What an agent adds about itself, which the author field already says. The
      * sign-off met a refusal beside them until the Association's board
      * recommended the Developer Certificate of Origin and the maintainer made
-     * it required, `D-KNW-125`.
+     * it required, `D-KNW-125`. A list of names rather than a list of what may
+     * stay, because the merged history carries `Reverts:` and the security
+     * team's trailers too, `D-KNW-161`.
      */
-    private const REFUSED_TRAILERS = ['co-authored-by', 'claude-session'];
+    private const REFUSED_TRAILERS = ['co-authored-by', 'claude-session', 'assisted-by', 'generated-by'];
 
     /**
      * Prefixes that say the change is not offered for merge yet.
@@ -396,10 +398,12 @@ final class CommitMessage
                         'level' => 'error',
                         'code' => 'refused-trailer',
                         'message' => sprintf(
-                            'The %s: line is off the draft. A core commit message carries %s and the Change-Id the '
-                                . 'hook writes, and nothing else — whatever the checkout you are working in says.',
+                            'The %s: line is off the draft. A core commit carries no trailer that names the agent or '
+                                . 'the session it came from, whatever the checkout you are working in says. Merged '
+                                . 'commits by people who do not follow the rule carry one now and then, and that is no '
+                                . 'precedent for a draft. typo3_rule_lookup with documentId '
+                                . 'core/contribution/commit-messages has the rule.',
                             $name,
-                            implode(', ', array_map(ucfirst(...), self::KNOWN_TRAILERS)),
                         ),
                     ];
                     // Dropped rather than carried through. The draft this

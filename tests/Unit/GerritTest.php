@@ -1071,6 +1071,24 @@ final class GerritTest extends TestCase
     }
 
     /**
+     * The order says which change sits below, and a session read the list
+     * without that and went to git log for the parent. The field says it per
+     * entry — `D-ANS-170`.
+     */
+    #[Decision('D-ANS-170')]
+    #[Test]
+    public function aChainEntrySaysWhetherItIsAboveOrBelowTheChange(): void
+    {
+        $gerrit = new Gerrit(static fn(string $url): string => self::stacked($url));
+
+        $change = $gerrit->change('91563')['changes'][0];
+
+        self::assertSame(['above', 'above', 'this', 'below'], array_column($change['chain'], 'place'));
+        $text = implode("\n", GerritLookup::chain($change, true));
+        self::assertStringContainsString('93064 · NEW · [TASK] Introduce JSON SchemaBuilder · this change stands on it', $text);
+    }
+
+    /**
      * The two revision numbers per entry are two facts, and the merged entry is
      * where they come apart. The stack holds patch set 8 of change 92323 while
      * that change stands at 10.
@@ -1235,8 +1253,8 @@ final class GerritTest extends TestCase
             ->change('95375')['changes'][0];
 
         self::assertStringContainsString(
-            '- 92323 · MERGED · [TASK] Avoid `json_encode()` workarounds in Settings API · chained at patch set 8, '
-                . 'now at 10 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323',
+            '- 92323 · MERGED · [TASK] Avoid `json_encode()` workarounds in Settings API · stacked on this change · '
+                . 'chained at patch set 8, now at 10 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323',
             implode("\n", GerritLookup::chain($stacked, true)),
         );
         self::assertStringContainsString(

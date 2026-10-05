@@ -419,6 +419,10 @@ Answers with
             chainedAt: integer
             # Where a person reads that change.
             url: string
+            # Where the entry stands against the change the answer is about: above
+            # is stacked on it, below is what it stands on, this is the change
+            # itself. Empty where the chain does not hold the change.
+            place: string
         # The other changes the review log names, by number or by review URL, that
         # are neither this change, its chain nor its Change-Id siblings. An
         # alternative an author pushes as a separate change is stacked on nothing,
@@ -554,8 +558,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-09-23 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 14.3.8-dev, the 14.3 core checkout below .checkouts/. Its
+Recorded on 2026-10-05 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -1303,7 +1307,7 @@ Text:
     Patch set 51 · e8afbaededd6d65822fef58013d16fc5668bbf04
     Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/63/91563/51
     Last moved: 2026-09-22 10:22:59.000000000
-    +2171 -153 · merges · pushed 2025-11-11
+    +2171 -153 · no longer merges · pushed 2025-11-11
     Releases: main
     Verified: needs a vote · core-ci +1
     Code-Review: needs a vote · core-ci 0
@@ -1364,24 +1368,24 @@ Text:
     - modified typo3/sysext/core/composer.json · +1 -0
 
     ### Relation chain (18 changes, 16 stacked on this one and 1 under it)
-    - 93599 · NEW · [WIP][TASK] Migrate resource endpoints to Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93599
-    - 92721 · ABANDONED · [WIP][BUGFIX] Fix referrer for login redirect · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92721
-    - 88507 · NEW · [WIP][FEATURE] AI suggest demo using tools API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507
-    - 93527 · MERGED · [WIP][BUGFIX] Avoid invalidly showing login form when opening a shared link · chained at patch set 3, now at 9 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527
-    - 92197 · NEW · [WIP][FEATURE] Provide Record Actions · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92197
-    - 92196 · NEW · [WIP][TASK] Add record serializer · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196
-    - 95448 · MERGED · [FEATURE] Add `patch()` to ajax-request · chained at patch set 1, now at 3 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448
-    - 92724 · ABANDONED · [WIP][FEATURE] Implement OAuth authorization server · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724
-    - 92323 · MERGED · [TASK] Avoid `json_encode()` workarounds in Settings API · chained at patch set 8, now at 10 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323
-    - 92191 · NEW · [WIP][TASK] Migrate PageTree to Action API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92191
-    - 92322 · NEW · [WIP][TASK] Migrate dashboard to Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92322
-    - 92224 · NEW · [WIP][FEATURE] Implement MCP Server based on Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92224
-    - 92223 · NEW · [WIP][FEATURE] Provide AI Tool provider based on Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92223
-    - 91486 · NEW · [WIP][FEATURE] Implement API Hub · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91486
-    - 93423 · NEW · [WIP][TASK] Implement standalone redirect route option · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423
-    - 91666 · NEW · [WIP][FEATURE] Provide OpenAPI spec w/ Swagger UI for Actions API · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91666
+    - 93599 · NEW · [WIP][TASK] Migrate resource endpoints to Actions API · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93599
+    - 92721 · ABANDONED · [WIP][BUGFIX] Fix referrer for login redirect · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92721
+    - 88507 · NEW · [WIP][FEATURE] AI suggest demo using tools API · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507
+    - 93527 · MERGED · [WIP][BUGFIX] Avoid invalidly showing login form when opening a shared link · stacked on this change · chained at patch set 3, now at 9 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527
+    - 92197 · NEW · [WIP][FEATURE] Provide Record Actions · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92197
+    - 92196 · NEW · [WIP][TASK] Add record serializer · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196
+    - 95448 · MERGED · [FEATURE] Add `patch()` to ajax-request · stacked on this change · chained at patch set 1, now at 3 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448
+    - 92724 · ABANDONED · [WIP][FEATURE] Implement OAuth authorization server · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724
+    - 92323 · MERGED · [TASK] Avoid `json_encode()` workarounds in Settings API · stacked on this change · chained at patch set 8, now at 10 · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323
+    - 92191 · NEW · [WIP][TASK] Migrate PageTree to Action API · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92191
+    - 92322 · NEW · [WIP][TASK] Migrate dashboard to Actions API · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92322
+    - 92224 · NEW · [WIP][FEATURE] Implement MCP Server based on Actions API · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92224
+    - 92223 · NEW · [WIP][FEATURE] Provide AI Tool provider based on Actions API · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92223
+    - 91486 · NEW · [WIP][FEATURE] Implement API Hub · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91486
+    - 93423 · NEW · [WIP][TASK] Implement standalone redirect route option · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423
+    - 91666 · NEW · [WIP][FEATURE] Provide OpenAPI spec w/ Swagger UI for Actions API · stacked on this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91666
     - 91563 · NEW · [WIP][FEATURE] Introduce Action API · this change · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563
-    - 93064 · NEW · [WIP][TASK] Introduce JSON SchemaBuilder and Schema based Hydrator · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93064
+    - 93064 · NEW · [WIP][TASK] Introduce JSON SchemaBuilder and Schema based Hydrator · this change stands on it · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93064
 
     The paths above are what the current patch set touches, and they are the argument the work after this takes: `typo3_hint_lookup` for the conventions of each subsystem in the list, `typo3_test_run_guide` for the suites that can fail on them. What is not here is the diff — the hunks are what a fetch is for, and a shortlist is triaged without fetching anything.
 
@@ -1697,7 +1701,7 @@ Data:
                 "created": "2025-11-11 17:18:39.000000000",
                 "insertions": 2171,
                 "deletions": 153,
-                "mergeable": true,
+                "mergeable": false,
                 "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563",
                 "fetch": {
                     "ref": "refs/changes/63/91563/51",
@@ -1740,7 +1744,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 6,
                         "chainedAt": 6,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93599"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93599",
+                        "place": "above"
                     },
                     {
                         "number": 92721,
@@ -1749,7 +1754,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 5,
                         "chainedAt": 5,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92721"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92721",
+                        "place": "above"
                     },
                     {
                         "number": 88507,
@@ -1758,7 +1764,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 15,
                         "chainedAt": 15,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507",
+                        "place": "above"
                     },
                     {
                         "number": 93527,
@@ -1767,7 +1774,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 9,
                         "chainedAt": 3,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527",
+                        "place": "above"
                     },
                     {
                         "number": 92197,
@@ -1776,7 +1784,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 12,
                         "chainedAt": 12,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92197"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92197",
+                        "place": "above"
                     },
                     {
                         "number": 92196,
@@ -1785,7 +1794,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 12,
                         "chainedAt": 12,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196",
+                        "place": "above"
                     },
                     {
                         "number": 95448,
@@ -1794,7 +1804,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 3,
                         "chainedAt": 1,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448",
+                        "place": "above"
                     },
                     {
                         "number": 92724,
@@ -1803,7 +1814,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 6,
                         "chainedAt": 6,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724",
+                        "place": "above"
                     },
                     {
                         "number": 92323,
@@ -1812,7 +1824,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 10,
                         "chainedAt": 8,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323",
+                        "place": "above"
                     },
                     {
                         "number": 92191,
@@ -1821,7 +1834,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 26,
                         "chainedAt": 26,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92191"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92191",
+                        "place": "above"
                     },
                     {
                         "number": 92322,
@@ -1830,7 +1844,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 16,
                         "chainedAt": 16,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92322"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92322",
+                        "place": "above"
                     },
                     {
                         "number": 92224,
@@ -1839,7 +1854,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 25,
                         "chainedAt": 25,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92224"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92224",
+                        "place": "above"
                     },
                     {
                         "number": 92223,
@@ -1848,7 +1864,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 22,
                         "chainedAt": 22,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92223"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92223",
+                        "place": "above"
                     },
                     {
                         "number": 91486,
@@ -1857,7 +1874,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 36,
                         "chainedAt": 36,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91486"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91486",
+                        "place": "above"
                     },
                     {
                         "number": 93423,
@@ -1866,7 +1884,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 12,
                         "chainedAt": 12,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423",
+                        "place": "above"
                     },
                     {
                         "number": 91666,
@@ -1875,7 +1894,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 28,
                         "chainedAt": 28,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91666"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91666",
+                        "place": "above"
                     },
                     {
                         "number": 91563,
@@ -1884,7 +1904,8 @@ Data:
                         "thisChange": true,
                         "patchSet": 51,
                         "chainedAt": 51,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563",
+                        "place": "this"
                     },
                     {
                         "number": 93064,
@@ -1893,7 +1914,8 @@ Data:
                         "thisChange": false,
                         "patchSet": 21,
                         "chainedAt": 21,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93064"
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93064",
+                        "place": "below"
                     }
                 ],
                 "namedInMessages": [],
@@ -1955,7 +1977,7 @@ Text:
 
     TYPO3 core review server: https://review.typo3.org
     Query: project:"Packages/TYPO3.CMS" status:open -is:wip delta:<=60 label:Code-Review>=1 -label:Code-Review<=-1 -label:Verified<=-1 is:mergeable
-    3 of 46 open core changes, oldest pushed first.
+    3 of 36 open core changes, oldest pushed first.
     This is a page and not the set, and limit stops at 25. What comes after it is reached by a narrower filter — a smaller maxSize, a branch, an earlier updatedBefore — rather than by a larger limit, because more of one order is more of the same end.
     Age is a candidate and never a finding. The oldest changes are regularly the largest and the ones that no longer merge, so maxSize and mergeable are what turn this order into a shortlist — and what a change is actually waiting on is read by passing its number back as change, which answers the votes with their voters and the comments with their threads.
     `typo3-core-patch-review` is the workflow a change picked off this page opens, and `typo3-core-patch-checkout` is what gets the patch set into a checkout. Open the one this task is before reading a diff.
@@ -1980,13 +2002,13 @@ Text:
     Verified: needs a vote
     Code-Review: needs a vote
 
-    ## [BUGFIX] Avoid translate button if nothing to translate (NEW)
-    Change 89554 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/89554
-    Change-Id: I49ffb7593917fbf53c08734c96ab8bde5caf37cc
-    Patch set 4
-    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/54/89554/4
-    Last moved: 2026-09-20 09:10:48.000000000
-    +1 -0 · merges · pushed 2025-05-27
+    ## [BUGFIX] Mount a page moved in workspaces as pagetree treeroot (NEW)
+    Change 91372 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91372
+    Change-Id: I14122cd8cbafe8ca0bf66757b51496388a47fc88
+    Patch set 5
+    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/72/91372/5
+    Last moved: 2026-10-02 10:20:14.000000000
+    +52 -3 · merges · pushed 2025-10-30
     Verified: needs a vote
     Code-Review: needs a vote
 
@@ -2098,24 +2120,24 @@ Data:
                 "cherryPickOf": null
             },
             {
-                "number": 89554,
+                "number": 91372,
                 "message": null,
                 "files": null,
-                "changeId": "I49ffb7593917fbf53c08734c96ab8bde5caf37cc",
-                "subject": "[BUGFIX] Avoid translate button if nothing to translate",
+                "changeId": "I14122cd8cbafe8ca0bf66757b51496388a47fc88",
+                "subject": "[BUGFIX] Mount a page moved in workspaces as pagetree treeroot",
                 "status": "NEW",
                 "branch": "main",
-                "patchSet": 4,
+                "patchSet": 5,
                 "commit": "",
                 "project": "Packages/TYPO3.CMS",
-                "updated": "2026-09-20 09:10:48.000000000",
-                "created": "2025-05-27 05:37:27.000000000",
-                "insertions": 1,
-                "deletions": 0,
+                "updated": "2026-10-02 10:20:14.000000000",
+                "created": "2025-10-30 17:43:17.000000000",
+                "insertions": 52,
+                "deletions": 3,
                 "mergeable": true,
-                "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/89554",
+                "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91372",
                 "fetch": {
-                    "ref": "refs/changes/54/89554/4",
+                    "ref": "refs/changes/72/91372/5",
                     "remote": "https://review.typo3.org/Packages/TYPO3.CMS"
                 },
                 "labels": [
@@ -2132,7 +2154,7 @@ Data:
                         "votes": null
                     }
                 ],
-                "commentCount": 2,
+                "commentCount": 0,
                 "unresolvedCommentCount": 0,
                 "comments": null,
                 "chain": null,
@@ -2147,7 +2169,7 @@ Data:
         ],
         "backlog": {
             "order": "oldest",
-            "read": 46,
+            "read": 36,
             "complete": true
         },
         "releaseLines": {

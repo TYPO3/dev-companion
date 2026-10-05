@@ -345,7 +345,8 @@ final class GerritLookup extends ReadOnlyTool
                         'patchSet' => Schema::integer('The patch set the entry stands at now.'),
                         'chainedAt' => Schema::integer('The patch set of the entry that the chain stands on. Lower than patchSet means the stack holds the older one and that change has moved on since. Act on the entry by its number rather than on the patch set named here.'),
                         'url' => Schema::string('Where a person reads that change.'),
-                    ], ['number', 'status', 'subject', 'thisChange', 'patchSet', 'chainedAt', 'url']),
+                        'place' => Schema::string('Where the entry stands against the change the answer is about: above is stacked on it, below is what it stands on, this is the change itself. Empty where the chain does not hold the change.'),
+                    ], ['number', 'status', 'subject', 'thisChange', 'patchSet', 'chainedAt', 'url', 'place']),
                 ]),
                 'namedInMessages' => Schema::nullable([
                     'type' => 'array',
@@ -1188,8 +1189,14 @@ final class GerritLookup extends ReadOnlyTool
             )];
         foreach ($entry['chain'] as $related) {
             $said = [sprintf('%d · %s · %s', $related['number'], $related['status'], $related['subject'])];
-            if ($related['thisChange']) {
-                $said[] = 'this change';
+            $place = match ($related['place'] ?? '') {
+                'above' => 'stacked on this change',
+                'this' => 'this change',
+                'below' => 'this change stands on it',
+                default => '',
+            };
+            if ($place !== '') {
+                $said[] = $place;
             }
             if (self::behind($related)) {
                 $said[] = sprintf('chained at patch set %d, now at %d', $related['chainedAt'], $related['patchSet']);

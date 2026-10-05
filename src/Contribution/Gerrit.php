@@ -963,6 +963,17 @@ final class Gerrit
             ];
         }
 
+        // The order says the same, and a session read the list without it.
+        $at = array_search(true, array_column($chain, 'thisChange'), true);
+        foreach ($chain as $index => $entry) {
+            $chain[$index]['place'] = match (true) {
+                $at === false => '',
+                $index < $at => 'above',
+                $index === $at => 'this',
+                default => 'below',
+            };
+        }
+
         Recent::hold($url, $chain);
 
         return $chain;

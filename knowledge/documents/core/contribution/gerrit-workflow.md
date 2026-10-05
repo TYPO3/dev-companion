@@ -342,6 +342,19 @@ go to `main` and to the one line back from it. An older maintained line takes
 priority bug fixes and grave or security-relevant defects. So when you name one,
 you claim something about the severity and not only about where the defect is.
 
+Whether a change reaches each branch its `Releases:` line names is one git call
+per branch. It writes nothing into the checkout. With the patch set fetched:
+
+```bash
+git merge-tree --write-tree --name-only --merge-base FETCH_HEAD~1 origin/<branch> FETCH_HEAD
+```
+
+It exits with 1 where anything conflicts, and it names each such path.
+`CONFLICT (modify/delete)` is a file the branch does not have.
+`CONFLICT (content)` is a hunk the branch changed differently. The review server
+answers mergeability for the target branch alone. Its `mergeable_into` stays
+empty for every other branch, because this project names no branch order.
+
 A backport is a cherry-pick of the merged commit onto the release branch. It
 usually starts from Gerrit's "Cherry pick" action. The `Change-Id` of the
 original change stays unchanged; that lets Gerrit link the backport to it. You

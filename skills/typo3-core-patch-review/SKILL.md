@@ -256,6 +256,10 @@ The branch the patch targets decides which conventions apply and which findings
 matter. So a patch whose stated target its diff does not fit is a finding of its
 own.
 
+Every branch in `Releases:` is a claim the review checks. One `git merge-tree`
+per branch says whether the patch reaches it. `typo3_rule_lookup` with
+`documentId="core/contribution/gerrit-workflow"` has the call.
+
 ## Report
 
 Call `typo3_gerrit_lookup` again before you write, where time has passed since

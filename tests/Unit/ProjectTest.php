@@ -37,6 +37,7 @@ final class ProjectTest extends TestCase
         // would decide the environment of every test after this one.
         putenv(Typo3Cli::CONSOLE_VARIABLE);
         putenv('IS_DDEV_PROJECT');
+        putenv('DDEV_PROJECT');
         Instance::discoverFrom(null);
         Typo3Cli::forget();
         Typo3Runtime::forget();
@@ -395,10 +396,34 @@ final class ProjectTest extends TestCase
         // Inside the container the shell is the environment, so a `ddev` in
         // front of it would name a binary that is not there.
         putenv('IS_DDEV_PROJECT=true');
+        putenv('DDEV_PROJECT=site-new');
         self::assertSame(
             ['composer test:unit'],
             array_column(Project::describe()['commands'], 'invocation'),
         );
+    }
+
+    /**
+     * DDEV sets `IS_DDEV_PROJECT` in every web container. A server started in
+     * the container of another project said it was inside this one, and
+     * dropped the `ddev` in front of each command — `D-DIS-028`.
+     */
+    #[Decision('D-DIS-028')]
+    #[Test]
+    public function theContainerOfAnotherDdevProjectIsNotThisProjectsShell(): void
+    {
+        $root = $this->composerProject('vendor', '14.3.5');
+        $this->manifest($root, ['scripts' => ['test:unit' => 'phpunit -c Build/phpunit/UnitTests.xml']]);
+        $this->declare($root . '/.ddev/config.yaml', "name: reference-tca\ntype: php\nphp_version: \"8.5\"\n");
+        Instance::discoverFrom($root);
+        putenv('IS_DDEV_PROJECT=true');
+        putenv('DDEV_PROJECT=dev-companion');
+
+        $project = Project::describe();
+
+        self::assertFalse($project['environment']['entered']);
+        self::assertSame(['ddev composer test:unit'], array_column($project['commands'], 'invocation'));
+        self::assertStringNotContainsString('already inside', Registry::call('typo3_project_describe', [])->text);
     }
 
     #[Test]

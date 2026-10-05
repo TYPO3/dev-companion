@@ -185,10 +185,11 @@ final class Project
                 'source' => $ddev['source'],
                 'project' => $ddev['project'],
                 'hostnames' => $ddev['hostnames'],
-                // DDEV sets this inside the web container, and there the shell
-                // the caller has is the environment. Telling it to put `ddev`
-                // in front of a command would name a binary that is not there.
-                'entered' => filter_var(getenv('IS_DDEV_PROJECT'), FILTER_VALIDATE_BOOL),
+                // Inside this project's web container the shell the caller has
+                // is the environment. Telling it to put `ddev` in front of a
+                // command would name a binary that is not there. The container
+                // of another project is not that shell, `D-DIS-028`.
+                'entered' => Typo3Cli::enclosingDdevProject() === $ddev['project'],
                 'hooks' => $ddev['hooks'],
                 'providers' => self::ddevProviders($root),
             ];
@@ -231,6 +232,12 @@ final class Project
         $tokens = preg_split('/\s+/', trim($commandLine)) ?: [];
 
         return ($tokens[0] ?? '') === '' ? null : trim($tokens[0], '"\'');
+    }
+
+    /** The name of the DDEV project at `$root`, by the rules `ddev()` reads it with. */
+    public static function ddevProject(string $root): string
+    {
+        return (string) self::ddev($root)['project'];
     }
 
     /**

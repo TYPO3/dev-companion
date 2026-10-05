@@ -31,6 +31,7 @@ final class Typo3CliTest extends TestCase
     {
         putenv(Typo3Cli::CONSOLE_VARIABLE);
         putenv('IS_DDEV_PROJECT');
+        putenv('DDEV_PROJECT');
         Instance::discoverFrom(null);
         Typo3Cli::useRunner(null);
         Typo3Cli::forget();
@@ -615,6 +616,7 @@ final class Typo3CliTest extends TestCase
         mkdir($root . '/.ddev');
         file_put_contents($root . '/.ddev/config.yaml', "name: fixture\ntype: typo3\n");
         putenv('IS_DDEV_PROJECT=true');
+        putenv('DDEV_PROJECT=fixture');
         $this->discover($root);
 
         self::assertTrue(Typo3Cli::isAvailable());
@@ -624,6 +626,29 @@ final class Typo3CliTest extends TestCase
         $scope = Registry::call('typo3_server_scope', []);
         self::assertNull($scope->data['installation']['console']['caveat']);
         self::assertStringNotContainsString('Reachable is not the same as ready', $scope->text);
+    }
+
+    /**
+     * The container of another DDEV project runs another PHP and reaches
+     * another database. The console still runs there, and the caveat names
+     * both projects and the way out — `D-DIS-028`.
+     */
+    #[Decision('D-DIS-028')]
+    #[Test]
+    public function aConsoleInsideAnotherDdevProjectSaysWhichProjectItIsIn(): void
+    {
+        $root = $this->installation();
+        mkdir($root . '/bin');
+        file_put_contents($root . '/bin/typo3', "#!/usr/bin/env php\n<?php\n");
+        mkdir($root . '/.ddev');
+        file_put_contents($root . '/.ddev/config.yaml', "name: fixture\ntype: typo3\n");
+        putenv('IS_DDEV_PROJECT=true');
+        putenv('DDEV_PROJECT=dev-companion');
+        $this->discover($root);
+
+        self::assertSame(Typo3Cli::VIA_PHP, Typo3Cli::resolve()['via'] ?? null);
+        self::assertStringContainsString('inside the DDEV project dev-companion', Typo3Cli::caveat());
+        self::assertStringContainsString('the DDEV project fixture', Typo3Cli::caveat());
     }
 
     #[Test]

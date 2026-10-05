@@ -190,6 +190,21 @@ final class Typo3Cli
         return self::$resolved = $invocation;
     }
 
+    /**
+     * The DDEV project whose web container this process runs in, or null
+     * outside every one. DDEV sets `IS_DDEV_PROJECT` in each web container, so
+     * only `DDEV_PROJECT` says which project that is. Read in a container of
+     * DDEV v1.25.4 on 2026-10-05, where it is the `name` of `.ddev/config.yaml`.
+     */
+    public static function enclosingDdevProject(): ?string
+    {
+        $project = getenv('DDEV_PROJECT');
+
+        return filter_var(getenv('IS_DDEV_PROJECT'), FILTER_VALIDATE_BOOL) && is_string($project) && $project !== ''
+            ? $project
+            : null;
+    }
+
     public static function isAvailable(): bool
     {
         return self::resolve() !== null;
@@ -547,9 +562,19 @@ final class Typo3Cli
         // nested DDEV binary in the web container, on purpose. The direct PHP
         // process is already the project's declared runtime and reaches its
         // services. The absent host-side binary read as a stopped project adds
-        // a false database caveat to an otherwise ready console.
-        if (filter_var(getenv('IS_DDEV_PROJECT'), FILTER_VALIDATE_BOOL)) {
-            return [null, ''];
+        // a false database caveat to an otherwise ready console. That holds in
+        // this project's container alone, `D-DIS-028`.
+        $enclosing = self::enclosingDdevProject();
+        if ($enclosing !== null) {
+            $project = Project::ddevProject($root);
+
+            return $enclosing === $project ? [null, ''] : [null, sprintf(
+                'this server runs inside the DDEV project %s, and the installation is the DDEV project %s, '
+                . 'which no container reaches — start the server from %s on the host to answer from the installation',
+                $enclosing,
+                $project,
+                $root
+            )];
         }
         if (self::locateBinary('ddev') === null) {
             return [null, 'the installation is a DDEV project but ddev is not installed on this machine'];

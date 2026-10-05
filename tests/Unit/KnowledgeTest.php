@@ -906,6 +906,7 @@ final class KnowledgeTest extends TestCase
             'browser-check' => 'Look at the change in the browser on the installation that shows it',
             'coding-standards' => 'Set up php-cs-fixer with the TYPO3 coding standards',
             'reporting' => 'Write the issue title and the issue description for a core bug nobody has filed yet',
+            'performance' => 'Check whether the patch makes the setup command faster, as its message claims',
             'submission' => 'Push the patch to Gerrit for review',
             'patch-checkout' => 'Check out the patch from review and see whether it still applies',
             'triage' => 'Triage an old open core bug report and say whether it still happens',

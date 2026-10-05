@@ -294,6 +294,7 @@
     "skill": "typo3-extension-testing",
     "skillCore": "typo3-core-patch-development",
     "guide": "project/testing/playwright",
+    "condition": "only if the task writes or changes a browser spec",
     "match": [
       "playwright",
       "browser test",
@@ -314,6 +315,11 @@
     "tools": [
       "typo3_hint_lookup id=browser-tests, for the layout the core's own suite established and what a backend spec has to locate through",
       "typo3_hint_lookup id=browser-tests-outside-core, for the site a suite outside the core runs against"
+    ],
+    "paths": [
+      "playwright",
+      ".spec.ts",
+      "/Acceptance/"
     ]
   },
   {
@@ -421,6 +427,36 @@
       "typo3_rule_lookup with documentId=core/contribution/reporting-an-issue, for the fields, the markup and the order the description is written in",
       "typo3_forge_lookup with category=\"*\" for the areas the Category field takes, in the tracker's own spelling",
       "typo3_forge_lookup with query in the words of the symptom, for whether somebody has reported it already"
+    ]
+  },
+  {
+    "id": "performance",
+    "title": "Checking whether a change is faster or slower",
+    "guideCore": "core/testing/timing-a-code-path",
+    "changesNothing": true,
+    "scope": "core",
+    "condition": "if the question is how fast a code path runs",
+    "match": [
+      "speed up",
+      "speedup",
+      "speed-up",
+      "performance",
+      "faster",
+      "slower",
+      "benchmark"
+    ],
+    "matchWeak": [
+      "timing",
+      "how long"
+    ],
+    "rulesQuery": "",
+    "checklist": [
+      "Check a speed claim at its cause before the clock: count the expensive call on both sides, measure where the author measured, and give each part of the change its share.",
+      "Report the number with the database, the count of calls and the ratio, and say what the run leaves out."
+    ],
+    "checks": [],
+    "tools": [
+      "typo3_rule_lookup with documentId=core/testing/timing-a-code-path, for the probe, the two runs and what a number leaves out"
     ]
   },
   {
@@ -788,6 +824,11 @@
       "setup",
       "installing typo3",
       "development installation"
+    ],
+    "paths": [
+      "config/system/",
+      ".ddev/",
+      "composer.json"
     ],
     "condition": "only if the task is setting an installation up rather than working on the code in one",
     "rulesQuery": "",

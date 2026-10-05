@@ -3,7 +3,8 @@ id: D-KNW-164
 title: A speed claim is checked by counting its cause
 date: 2026-10-05
 status: open
-coveredBy: []
+coveredBy:
+  - HintsTest::aSpeedUpUnderReviewIsRoutedToTheTimingPage
 ---
 
 # D-KNW-164 — A speed claim is checked by counting its cause
@@ -39,3 +40,9 @@ setup as the harness for a console command that setup runs.**
 
 - A review of a speed claim still times the whole command first and reports the
   claim as wrong from it.
+
+## Since then
+
+The page stayed out of a brief for a speed-up, `guides: []`, until a session
+reported it. A core intent `performance` now routes "speed up", "performance",
+"faster" and the like to it. It changes nothing, so a review brief carries it.

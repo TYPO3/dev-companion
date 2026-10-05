@@ -4,7 +4,9 @@ title: A word match is held to the paths its work touches
 date: 2026-10-05
 status: open
 coveredBy:
+  - HintsTest::aSpeedUpUnderReviewIsRoutedToTheTimingPage
   - HintsTest::aWordMatchWhoseFilesThePathsDoNotNameIsConditional
+  - HintsTest::everyIntentThatCanComeBackWeakStatesItsCondition
 ---
 
 # D-GUI-028 — A word match is held to the paths its work touches
@@ -42,3 +44,13 @@ intent is `weak`. `tca-field` declares `Configuration/TCA/` and
 
 - A session adds a field, names only files outside the TCA, and skips the field
   items because they came back `weak`.
+
+## Since then
+
+A second report came the same day, which is what the third decision waited for.
+A review of a speed-up got `installation-setup` from "typo3 setup" and
+`browser-tests` from "e2e" in its task, with the items of both.
+`installation-setup` now declares `config/system/`, `.ddev/` and
+`composer.json`, and `browser-tests` declares `playwright`, `.spec.ts` and
+`/Acceptance/`. `browser-tests` also gained the condition it lacked, and a test
+holds every intent that can come back weak to one.

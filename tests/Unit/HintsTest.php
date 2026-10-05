@@ -7711,6 +7711,53 @@ final class HintsTest extends TestCase
         self::assertSame('strong', $brief([])['tca-field'] ?? null, 'no paths, so nothing to hold the word to');
     }
 
+    /**
+     * Every item of a weak intent stands behind its condition. An intent that
+     * can come back weak and states none put an item behind a bare colon
+     * (`D-GUI-028`).
+     */
+    #[Decision('D-GUI-028')]
+    #[Test]
+    public function everyIntentThatCanComeBackWeakStatesItsCondition(): void
+    {
+        foreach (TaskIntents::load() as $intent) {
+            if ($intent['matchWeak'] === [] && $intent['paths'] === [] && $intent['scope'] !== Scope::Core) {
+                continue;
+            }
+            self::assertNotSame('', $intent['condition'], $intent['id'] . ' can come back weak and states no condition');
+        }
+    }
+
+    /**
+     * A speed-up under review, with "typo3 setup" and "e2e" in its task. The
+     * timing page is what it needed, and the setup and spec items were the
+     * subject rather than the work (`D-GUI-028`, `D-KNW-164`).
+     */
+    #[Decision('D-GUI-028')]
+    #[Decision('D-KNW-164')]
+    #[Test]
+    public function aSpeedUpUnderReviewIsRoutedToTheTimingPage(): void
+    {
+        $result = Registry::call('typo3_task_guide', [
+            'task' => 'Review patch: speed up e2e install by applying SQLite initCommands in typo3 setup command',
+            'changeType' => 'audit',
+            'targetVersion' => '14',
+            'paths' => [
+                'Build/Scripts/setupAcceptanceComposer.sh',
+                'typo3/sysext/install/Classes/Command/SetupCommand.php',
+            ],
+        ]);
+
+        $intents = array_column($result->data['intents'], 'confidence', 'id');
+        self::assertSame('strong', $intents['performance'] ?? null);
+        self::assertSame('weak', $intents['installation-setup'] ?? null);
+        self::assertSame('weak', $intents['browser-tests'] ?? null);
+        self::assertContains('core/testing/timing-a-code-path', array_column($result->data['guides'], 'id'));
+        foreach ($result->data['checklist'] as $item) {
+            self::assertStringStartsNotWith(':', $item, 'an item stands behind an empty condition');
+        }
+    }
+
     #[Test]
     public function aWordThatOnlyNamesTheSubjectMatchesConditionally(): void
     {

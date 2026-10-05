@@ -29,3 +29,10 @@ worktree tool that one checkout prescribes is that checkout's business.**
 
 - A session follows such a tool past what the skill's undo covers, and leaves a
   branch or a worktree behind that it reports as removed.
+
+## Since then
+
+A second review the same day reached the same tool from the side of
+`typo3-core-patch-review`, which hands the checkout to this skill. It followed
+the checkout's own rule and skipped the skill. The answer stands for both
+skills: neither names a worktree tool outside git.

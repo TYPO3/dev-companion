@@ -9,14 +9,21 @@ heldBy:
 
 # R-KNW-067 — The e2e answer states the price of a Playwright-only change
 
-**The e2e entries state that nothing passes through to Playwright. So a change
-to one spec costs the whole suite, and that run is what a review reports.**
+**The e2e entries state what a Playwright-only change costs. Where `runTests.sh`
+passes a spec through, it costs that spec. Where it does not, it costs the whole
+suite, and that run is what a review reports.**
 
-Every e2e case builds its Playwright command from the project alone and reaches
-no `"$@"`. `-s unit`, `-s functional`, `-s npm`, `-s composer` and `-s phpstan`
-all hand on what follows `--`. So the passthrough a caller knows from the other
-suites is absent here, and absent in a way nothing in the invocation notes says.
-The note that describes `--` is for the suites that have it.
+`4d2b838490` on `main` and `a740212999` on `14.3`, both of 2026-09-23, hand the
+positional arguments to Playwright as `PLAYWRIGHT_TEST_ARGS`. `13.4` does not.
+So the suite entry names the variable a reader finds in the script, and a hint
+bound to the majors that have it gives the targeted form.
+
+Before those commits every e2e case built its Playwright command from the
+project alone and reached no `"$@"`. `-s unit`, `-s functional`, `-s npm`,
+`-s composer` and `-s phpstan` all hand on what follows `--`. So the passthrough
+a caller knows from the other suites is absent here, and absent in a way nothing
+in the invocation notes says. The note that describes `--` is for the suites
+that have it.
 
 A session with a two-file diff in hand reads that gap as a question and answers
 it with whatever the entry offers. The entry offered a local Playwright run.

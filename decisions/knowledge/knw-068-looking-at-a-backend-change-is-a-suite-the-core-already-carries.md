@@ -74,17 +74,12 @@ corrections before the developer asked whether it had actually looked.
 
 ## Since then
 
-Two feedback from one session land on the `whenToUse` rather than on the suite.
-The **Assumed** is the half that failed. The local route has a precondition this
-entry never names, and the session hit it as a browser build that was not on the
-host. The clause is true and is the wrong sentence to hang a route on, because a
-Playwright-only diff costs the whole suite.
-
-The second feedback is step 1a and the first **Wrong if** fired as written. The
-suite blocks on a read from `/dev/tty`, so a headless session loses the instance
-and reads SUCCESS. The condition and the false green sit in the entry that
-offers the command.
-
-A later headless run corrected the mechanism rather than the outcome. What
-leaves containers up is the cleanup a run ended before. The entries carry the
-two commands that turn a half-finished run into an instance that works.
+Two feedbacks from one session landed on the `whenToUse`. The **Assumed**
+failed: the local route needs browsers on the host, and a Playwright-only diff
+costs the whole suite anyway. The first **Wrong if** fired as written: the suite
+reads from `/dev/tty`, so a headless session loses the instance and reads
+SUCCESS. A later run showed that the cleanup a run ended before is what leaves
+containers up, and the entries name the two commands that recover. On 2026-09-23
+the script began to forward a spec path on `main` and `14.3`, so "passes nothing
+through" holds on `13.4` alone —
+[`D-KNW-162`](knw-162-the-e2e-suite-passes-a-spec-through-where-the-script-does.md).

@@ -2323,6 +2323,7 @@ final class KnowledgeTest extends TestCase
      * of their own, while the container path never asks.
      */
     #[Requirement('R-KNW-067')]
+    #[Decision('D-KNW-162')]
     #[Test]
     public function theE2eAnswerStatesThePriceOfAPlaywrightOnlyChange(): void
     {
@@ -2331,6 +2332,16 @@ final class KnowledgeTest extends TestCase
         $e2e = $suites['e2e']['whenToUse'];
         self::assertStringContainsString('passes through', $e2e, 'the e2e entry does not say what it takes');
         self::assertStringContainsString('whole suite', $e2e, 'the e2e entry does not say what a narrow change costs');
+        // The script forwards a spec path on the majors that carry
+        // 4d2b838490, so the entry names what to read rather than a claim
+        // that holds on one branch — D-KNW-162.
+        self::assertStringContainsString('PLAYWRIGHT_TEST_ARGS', $e2e, 'the e2e entry names nothing to read in the script');
+        $targeted = static fn(int $major): bool => str_contains(
+            Registry::call('typo3_hint_lookup', ['id' => 'browser-tests', 'targetVersion' => $major . '.0'])->text,
+            'runTests.sh -s e2e <spec path>',
+        );
+        self::assertTrue($targeted(14), 'a major whose script forwards a spec path gets no targeted form');
+        self::assertFalse($targeted(13), 'a major whose script forwards nothing is offered a spec path');
 
         $prepare = $suites['e2e-prepare']['whenToUse'];
         self::assertStringContainsString(

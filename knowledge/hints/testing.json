@@ -297,6 +297,11 @@
         "since": 13
       },
       {
+        "text": "In the core checkout one spec runs on its own: `CI=true ./Build/Scripts/runTests.sh -s e2e <spec path>`. The script hands what follows the options to Playwright before --project, a --grep pattern as well, and the login setup runs first as the dependency it is. The whole suite is what a review reports; the one spec is how a change to it is seen to fail and pass.",
+        "since": 14,
+        "scope": "core"
+      },
+      {
         "text": "Below e2e/ it is one directory per module, and the accessibility scan is a module among them rather than a suite beside them.",
         "since": 14
       },

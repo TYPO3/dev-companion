@@ -393,7 +393,7 @@ Text:
     Running it: unknown — the body does not say what it does to the checkout.
 
     End-to-end tests driving a real backend with Playwright.
-    Use for editor or administrator workflows that only break in the assembled backend. Nothing passes through to Playwright — no test path, no filter, whatever follows `--` — so the run is every spec of the project. A change to a single spec file costs the whole suite, and that run is the one a review reports.
+    Use for editor or administrator workflows that only break in the assembled backend. Where the e2e branch of Build/Scripts/runTests.sh sets PLAYWRIGHT_TEST_ARGS, a spec path or a --grep pattern after the options reaches Playwright, and that spec runs after the login setup alone. Where it does not, nothing passes through, the run is every spec of the project, and a change to one spec file costs the whole suite.
 
     ## e2e-prepare
     Command from the TYPO3 core root:
@@ -840,7 +840,7 @@ Data:
                 "runs": "unknown",
                 "targeted": null,
                 "description": "End-to-end tests driving a real backend with Playwright.",
-                "whenToUse": "Use for editor or administrator workflows that only break in the assembled backend. Nothing passes through to Playwright — no test path, no filter, whatever follows `--` — so the run is every spec of the project. A change to a single spec file costs the whole suite, and that run is the one a review reports.",
+                "whenToUse": "Use for editor or administrator workflows that only break in the assembled backend. Where the e2e branch of Build/Scripts/runTests.sh sets PLAYWRIGHT_TEST_ARGS, a spec path or a --grep pattern after the options reaches Playwright, and that spec runs after the login setup alone. Where it does not, nothing passes through, the run is every spec of the project, and a change to one spec file costs the whole suite.",
                 "domains": [
                     "php",
                     "typescript",

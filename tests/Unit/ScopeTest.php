@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -28,12 +29,19 @@ final class ScopeTest extends TestCase
 {
     use TemporaryInstallation;
 
+    #[Before]
+    public function askNoDdevOfThisMachine(): void
+    {
+        $this->withoutDdev();
+    }
+
     #[After]
     public function forgetTheInstance(): void
     {
         putenv(Instance::ROOT_VARIABLE);
         Instance::discoverFrom(null);
         putenv(ExcludedTools::VARIABLE);
+        Typo3Cli::useRunner(null);
     }
 
     #[Requirement('R-SCO-001')]

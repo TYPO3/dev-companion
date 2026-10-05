@@ -275,6 +275,11 @@ Answers with
       # True when this server already runs inside that environment. Then its shell
       # is that environment and a declared command needs nothing in front of it.
       entered: boolean
+      # Whether that DDEV project runs now, as "ddev describe -j" answers, which
+      # starts nothing. A tool that answers from the installation needs it up. False
+      # means "ddev start" in this repository comes first. Null where the
+      # environment is not DDEV, or where no ddev on this machine answered.
+      running: boolean or null
       # What this environment runs unasked, from .ddev/config.yaml and every
       # .ddev/config.*.yaml beside it. The commands list is what a caller may run;
       # these fire on their own at the stage each names. An environment that

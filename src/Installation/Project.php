@@ -108,7 +108,7 @@ final class Project
      *     installedPhpBound: ?string,
      *     phpRelation: array{floor: string, coreFloor: ?string, againstCore: ?string, inEnvironment: ?string, bound: ?string, environmentAgainstBound: ?string}|null,
      *     node: array{engines: ?string, enginesIn: ?string, nvmrc: ?string, nvmrcIn: ?string, environment: ?string, ci: array<int, array{workflow: string, from: string, states: string, version: ?string}>, relation: array{declared: string, declaredBy: string, nvmrcAgainstEngines: ?string, inEnvironment: ?string, ci: ?string, inCi: ?string}|null}|null,
-     *     environment: array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null,
+     *     environment: array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null,
      *     extensions: array<int, array{key: string, path: string, origin: string, deprecatedFiles: array<int, array{file: string, changelog: string, predicate: string, cost: string}>}>,
      *     sites: array<int, array{identifier: string, base: string, rootPageId: ?int, sets: array<int, string>, languages: array<int, string>}>,
      *     commands: array<int, array{command: string, source: string, declares: string, runs: string, runThrough: string|null}>,
@@ -167,16 +167,19 @@ final class Project
      * constrains and the one its container runs. The commands below make that
      * worse rather than better, as the ones a task runs. Read from the
      * environment's own files, so `R-PRJ-001` still holds on a fresh clone and
-     * nothing starts to find out (`R-DIS-006`). A stopped project reads exactly
-     * like a live one here. The interpreter is half of it, and what the
-     * environment runs by itself is `R-PRJ-009`.
+     * nothing starts to find out (`R-DIS-006`). Whether a DDEV project runs is
+     * the one thing read from DDEV, and null where nothing answers it,
+     * `D-ANS-169`. The interpreter is half of it, and what the environment runs
+     * by itself is `R-PRJ-009`.
      *
-     * @return array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null
+     * @return array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null
      */
     private static function environment(string $root): ?array
     {
         if (is_file($root . '/.ddev/config.yaml')) {
             $ddev = self::ddev($root);
+            $entered = Typo3Cli::enclosingDdevProject() === $ddev['project'];
+            $state = $entered ? null : Typo3Cli::ddevState($root);
 
             return [
                 'via' => Typo3Cli::VIA_DDEV,
@@ -189,7 +192,8 @@ final class Project
                 // is the environment. Telling it to put `ddev` in front of a
                 // command would name a binary that is not there. The container
                 // of another project is not that shell, `D-DIS-028`.
-                'entered' => Typo3Cli::enclosingDdevProject() === $ddev['project'],
+                'entered' => $entered,
+                'running' => $entered ? true : ($state === null || $state['status'] === '' ? null : $state['status'] === 'running'),
                 'hooks' => $ddev['hooks'],
                 'providers' => self::ddevProviders($root),
             ];
@@ -213,6 +217,7 @@ final class Project
                 'project' => null,
                 'hostnames' => [],
                 'entered' => false,
+                'running' => null,
                 // A command line names a way in and no files, so there is
                 // nothing here to read a lifecycle out of.
                 'hooks' => [],

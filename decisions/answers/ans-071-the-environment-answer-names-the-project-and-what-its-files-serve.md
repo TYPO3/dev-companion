@@ -78,3 +78,13 @@ declared base to check its own assumption and reports that the site answers at
 that collide on one base. There this tool's answer is what the session calls the
 single most useful thing it had. So nobody has tested the mark with an action
 past it, which is what the bullet waits for.
+
+## Since then
+
+On 2026-10-05 the boundary moved for one fact. `feedback/2026-09-28-112243` lost
+three calls to a stopped project the answer had named without its state. So
+`typo3_project_describe` now reads `ddev describe -j` for `running`, and a
+stopped project no longer reads like a live one. The ports and the router's
+address stay outside the answer.
+[`D-ANS-169`](ans-169-the-project-answer-says-whether-its-ddev-project-runs.md)
+records it.

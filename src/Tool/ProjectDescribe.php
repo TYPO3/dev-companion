@@ -160,6 +160,7 @@ final class ProjectDescribe extends ReadOnlyTool
                     'project' => Schema::nullableString('The DDEV project name, which is what every ddev command takes and what names the containers: ddev-<project>-web and ddev-<project>-db. Where no file states it, DDEV uses the directory name and so does this. Null where the environment is not DDEV.'),
                     'hostnames' => Schema::listOf(Schema::string(), 'The hostnames those files declare for the site: <project>.ddev.site, every additional_hostnames entry with the same top-level domain, and every additional_fqdns entry as written. What the configuration declares, not what runs. The ports the router binds and its address on the container network are not in these files, and `ddev describe -j` is what carries them. Empty where the environment is not DDEV.'),
                     'entered' => ['type' => 'boolean', 'description' => 'True when this server already runs inside that environment. Then its shell is that environment and a declared command needs nothing in front of it.'],
+                    'running' => Schema::nullable(['type' => 'boolean', 'description' => 'Whether that DDEV project runs now, as "ddev describe -j" answers, which starts nothing. A tool that answers from the installation needs it up. False means "ddev start" in this repository comes first. Null where the environment is not DDEV, or where no ddev on this machine answered.']),
                     'hooks' => Schema::listOf(Schema::object([
                         'stage' => Schema::string('The DDEV stage it fires at: post-start, post-import-db, pre-pull and the rest.'),
                         'command' => Schema::string('What that stage runs, as the file states it. A block of several lines comes with ";" between them, which is what the shell does with it.'),
@@ -171,7 +172,7 @@ final class ProjectDescribe extends ReadOnlyTool
                         'operations' => Schema::listOf(Schema::string(), 'pull, push, or both — which of the two the recipe declares commands for. A recipe with no push commands is one you cannot push upstream with.'),
                     ], ['name', 'source', 'operations']), 'The pull and push recipes below .ddev/providers/ that this repository wrote, which is where its database and files come from. DDEV writes its own recipes into every project and marks them #ddev-generated. The list leaves those out, because they say what DDEV puts everywhere rather than what this project decided.'),
                 ],
-                'required' => ['via', 'php', 'node', 'source', 'project', 'hostnames', 'entered', 'hooks', 'providers'],
+                'required' => ['via', 'php', 'node', 'source', 'project', 'hostnames', 'entered', 'running', 'hooks', 'providers'],
             ]),
             'extensions' => Schema::listOf(Schema::object([
                 'key' => Schema::string(),
@@ -474,7 +475,7 @@ final class ProjectDescribe extends ReadOnlyTool
      * machines. Empty where there is one machine, so the line an ordinary
      * project answers with does not change.
      *
-     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
+     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      */
     private static function runtime(?array $environment): string
     {
@@ -532,7 +533,7 @@ final class ProjectDescribe extends ReadOnlyTool
      * already says so.
      *
      * @param array{state: string, packages: array<int, array{package: string, locked: ?string, installed: ?string}>} $lock
-     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
+     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      * @return array<int, string>
      */
     private static function lock(array $lock, string $kind, ?array $environment): array
@@ -588,7 +589,7 @@ final class ProjectDescribe extends ReadOnlyTool
      * the script that runs its suites. A Composer project that configures DDEV
      * installs them in that project rather than in the caller's own shell.
      *
-     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
+     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      */
     private static function install(string $kind, ?array $environment): string
     {
@@ -611,7 +612,7 @@ final class ProjectDescribe extends ReadOnlyTool
      * wrong looks the same as one it never computed.
      *
      * @param array{floor: string, coreFloor: ?string, againstCore: ?string, inEnvironment: ?string, bound: ?string, environmentAgainstBound: ?string}|null $relation
-     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
+     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      */
     private static function relation(?array $relation, ?array $environment, ?string $bound): string
     {
@@ -692,7 +693,7 @@ final class ProjectDescribe extends ReadOnlyTool
      * builds for. That is the finding `feedback/2026-07-31-193611` reported as
      * a version mismatch that blocked nothing.
      *
-     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
+     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      */
     private static function whereTheyRun(?array $environment, ?string $bound): string
     {
@@ -778,7 +779,7 @@ final class ProjectDescribe extends ReadOnlyTool
      * where a silence about Node says something rather than hides it.
      *
      * @param array{engines: ?string, enginesIn: ?string, nvmrc: ?string, nvmrcIn: ?string, environment: ?string, ci: array<int, array{workflow: string, from: string, states: string, version: ?string}>, relation: array{declared: string, declaredBy: string, nvmrcAgainstEngines: ?string, inEnvironment: ?string, ci: ?string, inCi: ?string}|null}|null $node
-     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
+     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      * @return array<int, string>
      */
     private static function node(?array $node, ?array $environment): array
@@ -902,9 +903,10 @@ final class ProjectDescribe extends ReadOnlyTool
      *
      * The live half has a name rather than a guess. Bound ports and a container
      * address are not in these files, and `R-DIS-006` is why nothing here
-     * starts anything to find out.
+     * starts anything to find out. Whether the project runs is read, because
+     * the next call that needs it fails without it, `D-ANS-169`.
      *
-     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
+     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      */
     private static function site(?array $environment): string
     {
@@ -920,7 +922,13 @@ final class ProjectDescribe extends ReadOnlyTool
             (string) $environment['project'],
             (string) $environment['project'],
             implode(', ', $environment['hostnames']),
-        );
+        ) . match (true) {
+            $environment['entered'] => '',
+            $environment['running'] === true => ' It runs now, so a tool that answers from the installation reaches it.',
+            $environment['running'] === false => ' It is not running now. Start it with "ddev start" in this repository'
+                . ' before a tool that answers from the installation, or that tool answers with less or not at all.',
+            default => ' No ddev on this machine answered whether it runs now.',
+        };
     }
 
     /**
@@ -930,7 +938,7 @@ final class ProjectDescribe extends ReadOnlyTool
      * `R-PRJ-009`. Said even where there are none, because an answer that names
      * no hook reads as "there is none" whether this looked or not.
      *
-     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
+     * @param array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null $environment
      * @return array<int, string>
      */
     private static function lifecycle(?array $environment): array

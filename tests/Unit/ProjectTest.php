@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -13,6 +14,7 @@ use TYPO3\DevCompanion\Installation\Project;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Installation\Typo3Runtime;
 use TYPO3\DevCompanion\Knowledge\Documents;
+use TYPO3\DevCompanion\Process\CommandRunner;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
@@ -30,6 +32,12 @@ final class ProjectTest extends TestCase
 {
     use TemporaryInstallation;
 
+    #[Before]
+    public function askNoDdevOfThisMachine(): void
+    {
+        $this->withoutDdev();
+    }
+
     #[After]
     public function forgetTheInstance(): void
     {
@@ -39,6 +47,7 @@ final class ProjectTest extends TestCase
         putenv('IS_DDEV_PROJECT');
         putenv('DDEV_PROJECT');
         Instance::discoverFrom(null);
+        Typo3Cli::useRunner(null);
         Typo3Cli::forget();
         Typo3Runtime::forget();
     }
@@ -373,6 +382,7 @@ final class ProjectTest extends TestCase
             'project' => 'site-new',
             'hostnames' => ['site-new.ddev.site'],
             'entered' => false,
+            'running' => null,
             'hooks' => [],
             'providers' => [],
         ], $project['environment']);
@@ -401,6 +411,44 @@ final class ProjectTest extends TestCase
             ['composer test:unit'],
             array_column(Project::describe()['commands'], 'invocation'),
         );
+    }
+
+    /**
+     * The answer named the DDEV project and not that it was stopped. The next
+     * lookup refused three times before the session ran `ddev describe` itself
+     * — `D-ANS-169`.
+     */
+    #[Decision('D-ANS-169')]
+    #[Test]
+    #[DataProvider('ddevStates')]
+    public function theAnswerSaysWhetherTheDdevProjectRuns(string $status, ?bool $running, string $said): void
+    {
+        $root = $this->composerProject('vendor', '14.3.5');
+        $this->declare($root . '/.ddev/config.yaml', "name: reference-coreapi\ntype: php\n");
+        Instance::discoverFrom($root);
+        $ddev = self::createStub(CommandRunner::class);
+        $ddev->method('locate')->willReturn('/usr/local/bin/ddev');
+        $ddev->method('run')->willReturn([
+            'ok' => true,
+            'exitCode' => 0,
+            'output' => sprintf('{"raw": {"status": "%s", "php_version": "8.5"}}', $status),
+            'error' => '',
+        ]);
+        Typo3Cli::useRunner($ddev);
+
+        self::assertSame($running, Project::describe()['environment']['running']);
+        self::assertStringContainsString($said, Registry::call('typo3_project_describe', [])->text);
+    }
+
+    /** @return array<string, array{string, ?bool, string}> */
+    public static function ddevStates(): array
+    {
+        return [
+            'running' => ['running', true, 'It runs now'],
+            'stopped' => ['stopped', false, 'Start it with "ddev start"'],
+            'paused' => ['paused', false, 'It is not running now'],
+            'an answer that is not one' => ['', null, 'No ddev on this machine answered'],
+        ];
     }
 
     /**
@@ -1270,6 +1318,7 @@ final class ProjectTest extends TestCase
             'project' => null,
             'hostnames' => [],
             'entered' => false,
+            'running' => null,
             'hooks' => [],
             'providers' => [],
         ], Project::describe()['environment']);

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Support;
 
 use PHPUnit\Framework\Attributes\After;
+use TYPO3\DevCompanion\Installation\Typo3Cli;
+use TYPO3\DevCompanion\Process\CommandRunner;
+use TYPO3\DevCompanion\Process\SystemRunner;
 
 /**
  * Builds the two installation layouts on disk and takes them away again.
@@ -28,6 +31,30 @@ trait TemporaryInstallation
             Directory::remove($root);
         }
         $this->temporaryRoots = [];
+    }
+
+    /**
+     * This machine as `Typo3Cli` sees it, minus `ddev`.
+     *
+     * A layout here carries a `.ddev/config.yaml`, and the project answer asks
+     * `ddev describe -j` where one is on the `PATH`. That answer is this
+     * machine's, so the test would read whatever runs here, `R-COD-003`. A test
+     * about a DDEV state hands in a runner of its own after this.
+     */
+    private function withoutDdev(): void
+    {
+        $system = new SystemRunner();
+        $runner = self::createStub(CommandRunner::class);
+        $runner->method('locate')->willReturnCallback(
+            static fn(string $name): ?string => $name === 'ddev' ? null : $system->locate($name),
+        );
+        $runner->method('run')->willReturnCallback(
+            static function (array $command, ?string $directory = null, ?int $timeout = null, bool $stdin = false) use ($system): array {
+                /** @var list<string> $command */
+                return $system->run($command, $directory, $timeout, $stdin);
+            },
+        );
+        Typo3Cli::useRunner($runner);
     }
 
     /**

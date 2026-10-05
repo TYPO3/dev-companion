@@ -205,6 +205,31 @@ final class Typo3Cli
             : null;
     }
 
+    /**
+     * What `ddev describe -j` says of the DDEV project at `$root`: its status,
+     * such as `running`, `paused` or `stopped`, and the PHP its container runs.
+     * Both are empty where the answer is not one. Null where this machine has
+     * no `ddev`. The read starts nothing, `R-DIS-006`, and nothing keeps it,
+     * `R-DIS-009`.
+     *
+     * @return array{status: string, php: string}|null
+     */
+    public static function ddevState(string $root): ?array
+    {
+        if (self::locateBinary('ddev') === null) {
+            return null;
+        }
+
+        $described = self::execute(['ddev', 'describe', '-j'], $root);
+        $decoded = $described['ok'] ? json_decode($described['output'], true) : null;
+        $raw = is_array($decoded) && is_array($decoded['raw'] ?? null) ? $decoded['raw'] : [];
+
+        return [
+            'status' => is_string($raw['status'] ?? null) ? $raw['status'] : '',
+            'php' => is_scalar($raw['php_version'] ?? null) ? (string) $raw['php_version'] : '',
+        ];
+    }
+
     public static function isAvailable(): bool
     {
         return self::resolve() !== null;
@@ -576,19 +601,11 @@ final class Typo3Cli
                 $root
             )];
         }
-        if (self::locateBinary('ddev') === null) {
+        $described = self::ddevState($root);
+        if ($described === null) {
             return [null, 'the installation is a DDEV project but ddev is not installed on this machine'];
         }
-
-        $described = self::execute(['ddev', 'describe', '-j'], $root);
-        $status = '';
-        $php = '';
-        if ($described['ok']) {
-            $decoded = json_decode($described['output'], true);
-            $raw = is_array($decoded) ? ($decoded['raw'] ?? []) : [];
-            $status = is_array($raw) ? (string) ($raw['status'] ?? '') : '';
-            $php = is_array($raw) ? (string) ($raw['php_version'] ?? '') : '';
-        }
+        ['status' => $status, 'php' => $php] = $described;
 
         if ($status !== 'running') {
             return [null, sprintf(

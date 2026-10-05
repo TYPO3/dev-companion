@@ -358,6 +358,11 @@ Where a session has the entry and still offers no ``typo3_`` tool,
 Keeping it current
 ------------------
 
+A running server is a copy too. The client started it with the code of that
+moment, and a pull or a ``composer update`` does not reach it. Every answer then
+opens with a sentence that says so, and a restart of the MCP server is the fix,
+`D-DIS-030 <../../decisions/discovery/dis-030-a-process-older-than-its-code-says-so-in-every-answer.md>`_.
+
 A published skill is a copy, so it goes stale the moment this package moves.
 ``update`` is what refreshes it, along with the client entry:
 

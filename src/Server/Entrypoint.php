@@ -38,6 +38,7 @@ final class Entrypoint
 
         if ($command === null) {
             Instance::discoverFrom(getcwd() ?: null);
+            CodeAge::markStart();
             self::reportExclusionsThatTookNothingAway();
             Factory::create(self::refreshSkillsNobodyHasUpdated($binary))->run(new StdioTransport());
 

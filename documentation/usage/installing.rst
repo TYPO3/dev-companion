@@ -126,9 +126,10 @@ inside the project. Composer exposes the stdio entrypoint as
 
 
 ``vendor/bin/typo3-dev-companion help`` lists both commands and every client
-they accept. Anything else fails with that same text. Without an argument the
-entrypoint is the MCP transport itself and waits on stdin, which at a terminal
-looks exactly like a hang.
+they accept. Anything else fails with that same text. ``install --help`` prints
+it too, and so does ``update --help``. Neither writes anything on an option it
+does not take. Without an argument the entrypoint is the MCP transport itself
+and waits on stdin, which at a terminal looks exactly like a hang.
 
 The entry names the entrypoint inside the project where the client can resolve
 that, and this server's absolute path everywhere else:

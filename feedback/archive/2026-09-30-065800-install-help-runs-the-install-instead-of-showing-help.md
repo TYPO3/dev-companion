@@ -1,7 +1,8 @@
 ---
 date: 2026-09-30T06:58:00+00:00
 category: bug
-status: open
+status: closed
+closed: 2026-10-05
 model: claude-opus-5-5
 tool: bin/typo3-dev-companion install
 directory: /home/lina/projects/typo3/tools/dev-companion

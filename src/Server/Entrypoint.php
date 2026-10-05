@@ -161,11 +161,21 @@ final class Entrypoint
             return 1;
         }
 
+        // Both write into the directory they run in. So an argument they do not
+        // know ends the run before the first write rather than being passed over.
         $agent = null;
         foreach ($arguments as $argument) {
-            if (str_starts_with($argument, '--agent=')) {
-                $agent = substr($argument, strlen('--agent='));
+            if (in_array($argument, ['--help', '-h'], true)) {
+                fwrite(STDOUT, self::usage());
+
+                return 0;
             }
+            if (!str_starts_with($argument, '--agent=')) {
+                fwrite(STDERR, 'typo3-dev-companion: ' . $command . ' takes no "' . $argument . "\".\n\n" . self::usage());
+
+                return 2;
+            }
+            $agent = substr($argument, strlen('--agent='));
         }
 
         try {

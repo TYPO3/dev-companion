@@ -52,6 +52,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### discovery
 
+- [`D-DIS-027`][D-DIS-027] — An argument install does not take ends the run before a write · 2026-10-05
 - [`D-DIS-026`][D-DIS-026] — The project's instruction files belong to the project · 2026-10-02
 - [`D-DIS-025`][D-DIS-025] — A failed derivation is a reason and never an empty column list · 2026-09-20
 - [`D-DIS-024`][D-DIS-024] — The checkout that is the DDEV project starts through the container · 2026-09-15
@@ -74,6 +75,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DIS-001`][D-DIS-001] — The root package counts as an installed package · 2026-07-29 · confirmed
 - [`D-DIS-004`][D-DIS-004] — The version comes from the core package, not from the console · 2026-07-29 · confirmed
 
+[D-DIS-027]: discovery/dis-027-an-argument-install-does-not-take-ends-the-run-before-a-write.md
 [D-DIS-026]: discovery/dis-026-the-projects-instruction-files-belong-to-the-project.md
 [D-DIS-025]: discovery/dis-025-a-failed-derivation-is-a-reason-and-never-an-empty-column-list.md
 [D-DIS-024]: discovery/dis-024-the-checkout-that-is-the-ddev-project-starts-through-the-container.md

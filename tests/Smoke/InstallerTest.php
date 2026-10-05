@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Tests\Smoke;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Server\Installer;
 use TYPO3\DevCompanion\Tests\Support\Decision;
@@ -106,6 +107,43 @@ final class InstallerTest extends TestCase
         } finally {
             Directory::remove($directory);
         }
+    }
+
+    /**
+     * `install --help` once installed into the directory it ran in, which was
+     * the checkout of this server — `D-DIS-027`.
+     *
+     * @param list<string> $arguments
+     */
+    #[Decision('D-DIS-027')]
+    #[Test]
+    #[DataProvider('argumentsThatWriteNothing')]
+    public function anArgumentTheCommandDoesNotTakeWritesNothing(array $arguments, int $status, string $said): void
+    {
+        $directory = $this->directory();
+
+        try {
+            $stderr = '';
+            $stdout = '';
+            self::assertSame($status, $this->execute($directory, $arguments, $stderr, $stdout), $stderr);
+            self::assertStringContainsString($said, $stdout . $stderr);
+            self::assertStringContainsString('Usage: typo3-dev-companion', $stdout . $stderr);
+            self::assertFalse((new Finder())->in($directory)->ignoreDotFiles(false)->hasResults());
+        } finally {
+            Directory::remove($directory);
+        }
+    }
+
+    /** @return array<string, array{list<string>, int, string}> */
+    public static function argumentsThatWriteNothing(): array
+    {
+        return [
+            'install --help' => [['install', '--help'], 0, 'install [--agent=<client>]'],
+            'update -h' => [['update', '-h'], 0, 'install [--agent=<client>]'],
+            'help after an agent' => [['install', '--agent=claude', '--help'], 0, 'install [--agent=<client>]'],
+            'an option nobody defined' => [['install', '--dry-run'], 2, 'install takes no "--dry-run"'],
+            'an agent without its value' => [['update', '--agent'], 2, 'update takes no "--agent"'],
+        ];
     }
 
     #[Requirement('R-SKL-005')]

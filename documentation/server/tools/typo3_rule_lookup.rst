@@ -312,7 +312,7 @@ Data:
                 "body": "- A deprecation must not use `[!!!]`.\n- A deprecation may only use `[TASK]` or `[FEATURE]`.\n- A deprecation must have a changelog RST file.\n- A deprecation needs migration guidance and may need extension scanner\n  considerations.\n- All of the above is the author's side. The reader's side works the other way\n  round. It asks what a given version deprecated, and what that means for code\n  that uses it. The Extension Scanner in the Install Tool checks an installation\n  against two directories. Those are the changelog files below\n  `Documentation/Changelog/` of the core package, and the matchers below the\n  install package's `Configuration/ExtensionScanner/Php/`. Both ship with a\n  Composer installation.",
                 "versions": "",
                 "coverage": 1,
-                "score": 118,
+                "score": 119,
                 "truncated": false
             },
             {
@@ -423,7 +423,7 @@ Text:
     - Exercising Asset Publishing in a Functional Test: The Symlink Publisher Is Active, and Not Because of the Context, Publishing Does Nothing for a Package Inside the Public Path, A Regular File at the Target Is What Fails, What the Test Instance Pins
     - Proving What a Rendering Change Renders: The Probe, Putting the Snippet Into TypoScript, Reading What It Rendered, Saying Which Part of the Response Changed, Printing What a Service Holds Mid-Request, Why the userFunc Carries an Attribute, Where lib.parseFunc_RTE Comes From, Running It, Removing the Probe
     - TYPO3 Core Script Help: Invoking runTests.sh, Common Commands, When a Suite Fails for the Install Rather Than the Code, The Pre-Commit Hook, Script Notes
-    - Timing a Code Path Between Two Revisions: The Probe, The Same Number Twice, What the Number Leaves Out, Removing the Probe
+    - Timing a Code Path Between Two Revisions: The Probe, The Same Number Twice, A Claim in the Commit Message, A Command the Test Setup Runs, What the Number Leaves Out, Removing the Probe
     - Settling an API Question on a Declared Major That Is Not Installed: Which Majors the Question Is About, What the Changelog Settles and What It Does Not, Reading the Branch, What Reading Proves, and What It Does Not
     - Running a Package on a Declared Major That Is Not Installed: Ask What CI Already Covers, Before You Install Anything, A Composer Root of Its Own, What It Writes, and What the Installation Keeps, What the Second Root Resolves Differently, Whether the Database Survives, Which Checks Are Worth a Second Run There, What the Second Root Does Not Give, What It Leaves Behind
     - Setting Up an Extension Manual: Documentation/guides.xml, Documentation/Index.rst, The two conventional files, Rendering it before you publish it
@@ -686,6 +686,8 @@ Data:
                 "topics": [
                     "The Probe",
                     "The Same Number Twice",
+                    "A Claim in the Commit Message",
+                    "A Command the Test Setup Runs",
                     "What the Number Leaves Out",
                     "Removing the Probe"
                 ]

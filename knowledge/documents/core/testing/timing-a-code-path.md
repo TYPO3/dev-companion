@@ -71,6 +71,32 @@ CI=true ./Build/Scripts/runTests.sh -s functional -d sqlite -- typo3/sysext/core
 Name the file after `--`. You run a probe again after every change to it and
 after every move of the tree.
 
+## A Claim in the Commit Message
+
+A message that states a before and an after names a cause as well. That is an
+expensive call the patch makes less often. Check the cause before the clock,
+because a time is one machine's view of it.
+
+- **Count the expensive call on both sides.** The count is the claim. Count from
+  the probe rather than with a counter in the class under review, which would be
+  a second change in the diff you review. A side effect the call leaves counts
+  as well: distinct salted hashes in the database are hash calls. A probe that
+  counts rows takes the query restrictions off first, as the `core-tests` hint
+  says.
+- **Measure where the author measured.** The message names the environment of
+  its numbers. Where it names none, measure on SQLite and on MariaDB and report
+  both. A number from another database does not refute the claim.
+- **Give each cause its share.** A patch that changes two things gets each one
+  turned off once. The report then says what each part bought.
+
+## A Command the Test Setup Runs
+
+A change to a console command that an installation runs once, such as setup or
+generated demo data, has a harness the probe cannot give. The `core-tests` hint
+names it where the branch has it: the instance a browser suite installs, with a
+time on every line the setup prints. The gap between two lines is what the
+command between them cost.
+
 ## What the Number Leaves Out
 
 The number is one process on one machine against one database. Each of those is
@@ -84,6 +110,9 @@ a caveat the report carries.
   wrote, so a loop measures the cached path. Where the uncached one is the
   question, flush that cache inside the loop and measure the flush beside it. Or
   time the first call alone.
+- **The test instance hashes as production does.** The testing framework sets no
+  `passwordHashing`, so a password goes through the hasher the core's default
+  configuration names. `configurationToUseInTestInstance` sets another one.
 - **One process, no concurrency.** Nothing here says what the path costs under
   load, with a warm opcache, or with a lock in the way.
 

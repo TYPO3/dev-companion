@@ -237,6 +237,12 @@ how you get the output out of a run that would otherwise print nothing. It says
 one marker per region, so the response says which part of it changed. It says
 what a service holds while the request still runs.
 
+**A speed claim in the message is checked at its cause.** A before and an after
+name an expensive call that the patch makes less often. Count that call on both
+sides before you time anything. Measure where the author measured. Turn each
+part of the patch off once, so each cause gets its share. `typo3_rule_lookup`
+with `documentId="core/testing/timing-a-code-path"` says how.
+
 ## Commit shape and target branch
 
 `typo3_commit_message_guide` with `workflow="core"`, the message and the change

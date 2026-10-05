@@ -59,6 +59,11 @@
       {
         "text": "A functional test that loads EXT:core/Tests/Functional/Fixtures/Frontend/JsonRenderer.typoscript can observe nothing the PageRenderer assembles. That file is the shared base the SiteHandling and DataScenarios tests build their site on, with a fixture of their own layered over it, and it sets config.disableAllHeaderCode = 1 — so RequestHandler::generatePageContent() returns the body before the renderer is populated. No assertion in such a test can fail on a meta tag, a stylesheet, a script or the page title, whatever the change did to them, and a test about any of those needs a TypoScript fixture that does not include that base. frontend-render-pipeline-state is where that phase sits.",
         "scope": "core"
+      },
+      {
+        "text": "A console command the browser suite's setup runs, typo3 setup, dataset:import or styleguide:generate, is timed by that setup. Build/Scripts/setupAcceptanceComposer.sh installs the e2e instance on SQLite, so one e2e run with a time on every line measures each command: pipe it through `perl -MTime::HiRes=time -ne 'printf \"%.2f %s\", time, $_'`. typo3_test_run_guide has the e2e invocation, and it says whether the branch passes one spec through to keep the run near a minute. The gap between two setup lines is what the command between them cost.",
+        "since": 13,
+        "scope": "core"
       }
     ]
   },

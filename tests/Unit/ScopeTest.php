@@ -626,6 +626,7 @@ final class ScopeTest extends TestCase
      * are three task shapes `scenarios/` holds cases for.
      */
     #[Decision('D-AUD-009')]
+    #[Decision('D-AUD-020')]
     #[Test]
     public function theEntryPointClaimsTheWorkThatEndsBeforeAPatch(): void
     {
@@ -636,6 +637,9 @@ final class ScopeTest extends TestCase
         // What it says instead of who writes the patch, in the place where it
         // is about reading rather than about the subject.
         self::assertStringContainsString('yours to read in the checkout', $instructions);
+        // A session that checked source claims in the vendor directory did not
+        // know whether this server answers them — `D-AUD-020`.
+        self::assertStringContainsString('how the core implements something', $instructions);
     }
 
     /**

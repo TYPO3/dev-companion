@@ -7,13 +7,15 @@
 
 List the backend modules registered in the TYPO3 installation you work in. Each
 comes with the extension that declares it, its place in the module tree, its
-labels and its access level. Each comes with the route it answers on and every
-sub-route it registers. It carries the navigation component as the module tree
-resolves it, which is the value a Configuration/Backend/Modules.php cannot give
-you. A module inherits it from its parent, so a read of the registration files
-says a module has no page tree when it has one. A project extension's modules
-are in it, because the tool boots and asks the installation rather than reads a
-snapshot. Answers from: installation.
+labels and its access level. Each comes with the route identifier it answers on
+and every sub-route identifier it registers, as the registry composed them. That
+is the evidence for how a module's route names are built, which a read of the
+code that builds them only infers. It carries the navigation component as the
+module tree resolves it, which is the value a Configuration/Backend/Modules.php
+cannot give you. A module inherits it from its parent, so a read of the
+registration files says a module has no page tree when it has one. A project
+extension's modules are in it, because the tool boots and asks the installation
+rather than reads a snapshot. Answers from: installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

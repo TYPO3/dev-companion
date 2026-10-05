@@ -140,7 +140,7 @@ The fourth member is ``instructions``, and it reads:
 
 .. code-block:: text
 
-    Start every task with typo3_project_describe. It answers the installation's TYPO3 version, the extensions that are the project's own, the sites it configures, and the commands the repository declares. A check you recommend that the repository does not declare is a wrong answer however sensible it sounds. Then call typo3_task_guide for the workflow the task belongs to. Call it again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch. It also answers a triage of the backlog, whether a report still reproduces, and what a fix costs. What changed, which branch you are on, and whether a path still exists are yours to read in the checkout.
+    Start every task with typo3_project_describe. It answers the TYPO3 version, the project's own extensions, its sites, and the commands the repository declares. A check you recommend that the repository does not declare is a wrong answer however sensible it sounds. Then call typo3_task_guide for the workflow the task belongs to. Call it again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch. It also answers a triage of the backlog, whether a report still reproduces, and what a fix costs. What changed, which branch you are on, whether a path still exists, and how the core implements something are yours to read in the checkout.
 
     What to call for what:
     - backend markup or a CSS class: typo3_component_lookup with the targetVersion
@@ -158,7 +158,7 @@ The fourth member is ``instructions``, and it reads:
 
     typo3_server_scope says what it covers, by which tool, and which installation it reads. Every tool here is read-only except typo3_feedback_record, which creates a new markdown feedback under feedback/ and writes nothing else.
 
-1,959 characters of the 2,048 a client keeps, ``Coverage::INSTRUCTIONS_BUDGET``.
+1,952 characters of the 2,048 a client keeps, ``Coverage::INSTRUCTIONS_BUDGET``.
 
 The prompts
 -----------

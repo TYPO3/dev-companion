@@ -4,6 +4,7 @@
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-AUD-020`][D-AUD-020] — How the core implements something is read in the checkout · 2026-10-05
 - [`D-AUD-019`][D-AUD-019] — A lookup's description names the subjects it covers · 2026-09-17
 - [`D-AUD-018`][D-AUD-018] — Records are read and the boundary is the TCA the installation has · 2026-09-04
 - [`D-AUD-014`][D-AUD-014] — A description opens with what the caller's own route cannot do · 2026-08-27
@@ -20,6 +21,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-AUD-003`][D-AUD-003] — The instructions carry the entry point, because the tool descriptions never arrive · 2026-07-31 · confirmed
 - [`D-AUD-001`][D-AUD-001] — The outward description stays core-first until there is non-core knowledge · 2026-07-29 · confirmed
 
+[D-AUD-020]: aud-020-how-the-core-implements-something-is-read-in-the-checkout.md
 [D-AUD-019]: aud-019-a-lookups-description-names-the-subjects-it-covers.md
 [D-AUD-018]: aud-018-records-are-read-and-the-boundary-is-the-tca-the-installation-has.md
 [D-AUD-014]: aud-014-a-description-opens-with-what-the-callers-own-route-cannot-do.md

@@ -1,7 +1,8 @@
 ---
 date: 2026-09-28T11:23:08+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-10-05
 model: claude-opus-5[1m]
 tool: typo3_backend_module_lookup, typo3_changelog_lookup, typo3_component_lookup
 directory: /home/lina/projects/typo3/manuals/coreapi

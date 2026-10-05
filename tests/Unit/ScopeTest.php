@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
-use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +19,7 @@ use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Server\ExcludedTools;
 use TYPO3\DevCompanion\Server\Installer;
 use TYPO3\DevCompanion\Tests\Support\Decision;
+use TYPO3\DevCompanion\Tests\Support\MachineWithoutDdev;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 use TYPO3\DevCompanion\Tool\Registry;
@@ -27,13 +27,8 @@ use TYPO3\DevCompanion\Tool\Registry;
 #[Requirement('R-KNW-022')]
 final class ScopeTest extends TestCase
 {
+    use MachineWithoutDdev;
     use TemporaryInstallation;
-
-    #[Before]
-    public function askNoDdevOfThisMachine(): void
-    {
-        $this->withoutDdev();
-    }
 
     #[After]
     public function forgetTheInstance(): void
@@ -41,7 +36,6 @@ final class ScopeTest extends TestCase
         putenv(Instance::ROOT_VARIABLE);
         Instance::discoverFrom(null);
         putenv(ExcludedTools::VARIABLE);
-        Typo3Cli::useRunner(null);
     }
 
     #[Requirement('R-SCO-001')]

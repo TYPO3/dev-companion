@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
-use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +15,7 @@ use TYPO3\DevCompanion\Installation\Typo3Runtime;
 use TYPO3\DevCompanion\Knowledge\Documents;
 use TYPO3\DevCompanion\Process\CommandRunner;
 use TYPO3\DevCompanion\Tests\Support\Decision;
+use TYPO3\DevCompanion\Tests\Support\MachineWithoutDdev;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 use TYPO3\DevCompanion\Tool\ProjectDescribe;
@@ -30,13 +30,8 @@ use TYPO3\DevCompanion\Upkeep\Fixture;
  */
 final class ProjectTest extends TestCase
 {
+    use MachineWithoutDdev;
     use TemporaryInstallation;
-
-    #[Before]
-    public function askNoDdevOfThisMachine(): void
-    {
-        $this->withoutDdev();
-    }
 
     #[After]
     public function forgetTheInstance(): void
@@ -47,7 +42,6 @@ final class ProjectTest extends TestCase
         putenv('IS_DDEV_PROJECT');
         putenv('DDEV_PROJECT');
         Instance::discoverFrom(null);
-        Typo3Cli::useRunner(null);
         Typo3Cli::forget();
         Typo3Runtime::forget();
     }

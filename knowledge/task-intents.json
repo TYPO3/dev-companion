@@ -941,6 +941,10 @@
       "add a field",
       "new field"
     ],
+    "paths": [
+      "Configuration/TCA/",
+      "ext_tables.sql"
+    ],
     "condition": "only if the task adds or changes a field on a table that already exists; a new table, and the content element or backend module that owns one, are the neighbouring categories",
     "rulesQuery": "",
     "checklist": [

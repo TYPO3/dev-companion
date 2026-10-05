@@ -7681,6 +7681,36 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('Keep the cleanup mechanical', implode("\n", $result->data['checklist']));
     }
 
+    /**
+     * The review of a generator that fills TCA tables, with "TCA" in its
+     * task and no TCA file in its paths.
+     *
+     * The word confirmed the field intent, and seven items about columns and
+     * showitem came back as recognized work. The paths say the change touches
+     * no table definition. A TCA file among them confirms it again
+     * (`D-GUI-028`).
+     */
+    #[Decision('D-GUI-028')]
+    #[Test]
+    public function aWordMatchWhoseFilesThePathsDoNotNameIsConditional(): void
+    {
+        $brief = static fn(array $paths): array => array_column(Registry::call('typo3_task_guide', [
+            'task' => 'Review a core patch that speeds up styleguide TCA demo data generation',
+            'changeType' => 'audit',
+            'targetVersion' => '14',
+            'paths' => $paths,
+        ])->data['intents'], 'confidence', 'id');
+
+        self::assertSame('weak', $brief([
+            'typo3/sysext/styleguide/Classes/TcaDataGenerator/AbstractGenerator.php',
+            'typo3/sysext/styleguide/Classes/TcaDataGenerator/FieldGenerator/TypePassword.php',
+        ])['tca-field'] ?? null);
+        self::assertSame('strong', $brief([
+            'typo3/sysext/styleguide/Configuration/TCA/tx_styleguide_elements_basic.php',
+        ])['tca-field'] ?? null);
+        self::assertSame('strong', $brief([])['tca-field'] ?? null, 'no paths, so nothing to hold the word to');
+    }
+
     #[Test]
     public function aWordThatOnlyNamesTheSubjectMatchesConditionally(): void
     {

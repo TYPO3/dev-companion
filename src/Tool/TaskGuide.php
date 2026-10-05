@@ -457,10 +457,11 @@ final class TaskGuide extends ReadOnlyTool
 
         $coreWork = Scope::isCoreWork($paths, $task);
         $statedIntent = self::CHANGE_TYPE_INTENT[$changeType] ?? '';
-        $intents = TaskIntents::scoped(
-            TaskIntents::detect($task, $statedIntent === '' ? [] : [$statedIntent]),
-            $scope,
-            $coreWork
+        $statedIntents = $statedIntent === '' ? [] : [$statedIntent];
+        $intents = TaskIntents::heldToPaths(
+            TaskIntents::scoped(TaskIntents::detect($task, $statedIntents), $scope, $coreWork),
+            $paths,
+            $statedIntents,
         );
         // A stated change type is the caller's own classification and it keeps
         // the skeleton. "Review the patch that deprecates X" is author's work

@@ -41,7 +41,7 @@ final class TaskIntents
     ];
 
     /**
-     * @return array<int, array{id: string, title: string, skill: string, skillCore: string, guide: string, guideCore: string, owes: array<int, string>, changesNothing: bool, scope: ?Scope, match: array<int, string>, matchWeak: array<int, string>, condition: string, rulesQuery: string, checklist: array<int, string>, checks: array<int, string>, tools: array<int, string>}>
+     * @return array<int, array{id: string, title: string, skill: string, skillCore: string, guide: string, guideCore: string, owes: array<int, string>, changesNothing: bool, scope: ?Scope, match: array<int, string>, matchWeak: array<int, string>, paths: array<int, string>, condition: string, rulesQuery: string, checklist: array<int, string>, checks: array<int, string>, tools: array<int, string>}>
      */
     public static function load(): array
     {
@@ -84,6 +84,9 @@ final class TaskIntents
             'scope' => isset($entry['scope']) ? Scope::from((string) $entry['scope']) : null,
             'match' => array_map('strval', $entry['match'] ?? []),
             'matchWeak' => array_map('strval', $entry['matchWeak'] ?? []),
+            // Path fragments of the files this kind of work touches. Empty
+            // where the work is not bound to a kind of file.
+            'paths' => array_map('strval', $entry['paths'] ?? []),
             'condition' => (string) ($entry['condition'] ?? ''),
             'rulesQuery' => (string) ($entry['rulesQuery'] ?? ''),
             'checklist' => array_map('strval', $entry['checklist'] ?? []),
@@ -193,6 +196,42 @@ final class TaskIntents
         }
 
         return $scoped;
+    }
+
+    /**
+     * The detected intents, with a word match held to the paths the caller
+     * named.
+     *
+     * An intent that declares the files its work touches is a word and nothing
+     * more where the caller named paths and none of them is such a file. "TCA"
+     * in the review of a generator that fills tables named the subject and not
+     * the work, `D-GUI-028`. An intent the caller stated keeps its match.
+     *
+     * @param array<int, array<string, mixed>> $intents
+     * @param array<int, string> $paths
+     * @param array<int, string> $stated
+     * @return array<int, array<string, mixed>>
+     */
+    public static function heldToPaths(array $intents, array $paths, array $stated): array
+    {
+        if ($paths === []) {
+            return $intents;
+        }
+        foreach ($intents as $index => $intent) {
+            if ($intent['paths'] === [] || $intent['confidence'] !== 'strong' || in_array($intent['id'], $stated, true)) {
+                continue;
+            }
+            foreach ($paths as $path) {
+                foreach ($intent['paths'] as $fragment) {
+                    if (str_contains($path, $fragment)) {
+                        continue 3;
+                    }
+                }
+            }
+            $intents[$index]['confidence'] = 'weak';
+        }
+
+        return $intents;
     }
 
     /**

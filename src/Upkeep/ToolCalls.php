@@ -150,6 +150,20 @@ final class ToolCalls
                 'query' => 'cache busting',
                 'limit' => 3,
             ]],
+            'issue report: a bug drafted from its parts' => ['typo3_issue_report_guide', [
+                'subject' => 'Styleguide TCA generator hashes every demo password again',
+                'problem' => 'styleguide:generate -c tca hashes the same demo password once per record.',
+                'stepsToReproduce' => ['Install EXT:styleguide', 'Run @vendor/bin/typo3 styleguide:generate -c tca@'],
+                'typo3Version' => '14',
+                'phpVersion' => '8.4',
+                'category' => 'styleguide',
+                'isRegression' => false,
+                'searchFor' => 'styleguide password',
+            ]],
+            'issue report: Markdown where the tracker reads Textile' => ['typo3_issue_report_guide', [
+                'subject' => 'Something renders wrong',
+                'description' => "## Problem\n\nThe `Foo::bar()` call fails.\n\n```php\nfoo();\n```",
+            ]],
             'forge: nothing matches these words' => ['typo3_forge_lookup', [
                 'query' => 'quantumflux transponder',
             ]],

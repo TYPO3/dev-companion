@@ -70,6 +70,7 @@ versions rather than to an installation.
 :doc:`typo3_commit_message_guide <tools/typo3_commit_message_guide>`,
 :doc:`typo3_component_lookup <tools/typo3_component_lookup>`,
 :doc:`typo3_hint_lookup <tools/typo3_hint_lookup>`,
+:doc:`typo3_issue_report_guide <tools/typo3_issue_report_guide>`,
 :doc:`typo3_reference_list <tools/typo3_reference_list>`,
 :doc:`typo3_rule_lookup <tools/typo3_rule_lookup>`,
 :doc:`typo3_script_lookup <tools/typo3_script_lookup>`,
@@ -92,6 +93,7 @@ answers as empty.
 :doc:`typo3_documentation_lookup <tools/typo3_documentation_lookup>`,
 :doc:`typo3_forge_lookup <tools/typo3_forge_lookup>`,
 :doc:`typo3_gerrit_lookup <tools/typo3_gerrit_lookup>`,
+:doc:`typo3_issue_report_guide <tools/typo3_issue_report_guide>`,
 :doc:`typo3_permalink_lookup <tools/typo3_permalink_lookup>`,
 :doc:`typo3_ter_lookup <tools/typo3_ter_lookup>`.
 

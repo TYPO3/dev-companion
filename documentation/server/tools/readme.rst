@@ -127,6 +127,13 @@ Each page names the sources that can answer that tool, under its annotations and
         Validate or find icon identifiers in the TYPO3 backend icon registry of
         the installation you work in.
 
+    .. card:: :doc:`typo3_issue_report_guide <typo3_issue_report_guide>`
+        :label: Guide
+        :action: Open reference
+
+        Draft a new issue for the TYPO3 Core project on forge.typo3.org, for a
+        bug or a task found on the way.
+
     .. card:: :doc:`typo3_label_lookup <typo3_label_lookup>`
         :label: Lookup
         :action: Open reference
@@ -251,6 +258,7 @@ Each page names the sources that can answer that tool, under its annotations and
     typo3_gerrit_lookup
     typo3_hint_lookup
     typo3_icon_lookup
+    typo3_issue_report_guide
     typo3_label_lookup
     typo3_permalink_lookup
     typo3_project_describe

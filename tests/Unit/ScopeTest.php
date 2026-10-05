@@ -549,6 +549,8 @@ final class ScopeTest extends TestCase
         // Both read as "how do I run the core's tests": the guide answers which
         // suite and what it does, the lookup the script's own notes.
         yield 'the suite guide names the script lookup' => ['typo3_test_run_guide', 'typo3_script_lookup'];
+        yield 'the issue draft names the issue lookup' => ['typo3_issue_report_guide', 'typo3_forge_lookup'];
+        yield 'the issue lookup names the issue draft' => ['typo3_forge_lookup', 'typo3_issue_report_guide'];
         yield 'the script lookup names the suite guide' => ['typo3_script_lookup', 'typo3_test_run_guide'];
 
         // Both read as "what about this label". One searches the registry, the

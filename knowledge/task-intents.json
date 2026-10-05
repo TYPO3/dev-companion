@@ -424,6 +424,7 @@
     ],
     "checks": [],
     "tools": [
+      "typo3_issue_report_guide, which drafts the report, searches for duplicates and returns the tracker's form with every field filled in",
       "typo3_rule_lookup with documentId=core/contribution/reporting-an-issue, for the fields, the markup and the order the description is written in",
       "typo3_forge_lookup with category=\"*\" for the areas the Category field takes, in the tracker's own spelling",
       "typo3_forge_lookup with query in the words of the symptom, for whether somebody has reported it already"

@@ -120,8 +120,9 @@
     },
     {
       "topic": "What a new core issue carries: the fields of a Bug, where the area comes from, who sets the target version, and the markup the description renders as",
-      "depth": "Curated prose for the authoring direction, with the areas left to the tracker that administers them. Which trackers the core project offers, the field set of a Bug and the one field it does not go without, and the order a report is written in. The description renders Textile: the syntax is named, and so are the three things Markdown habits get silently rewritten into. Filing the issue stays the caller's — it needs an account and this server holds none.",
+      "depth": "Curated prose for the authoring direction, with the areas left to the tracker that administers them. Which trackers the core project offers, the field set of a Bug and the one field it does not go without, and the order a report is written in. The description renders Textile: the syntax is named, and so are the three things Markdown habits get silently rewritten into. typo3_issue_report_guide drafts the issue, checks it and opens the tracker's form with every field filled in. Filing it stays the caller's — it needs an account and this server holds none.",
       "tools": [
+        "typo3_issue_report_guide",
         "typo3_rule_lookup",
         "typo3_forge_lookup"
       ],
@@ -565,7 +566,7 @@
     },
     {
       "when": "Writing the title and the description of a core bug report, or filling in the new-issue form on forge.typo3.org — including the issue a patch's Resolves: trailer will point at, which is written before the patch is pushed",
-      "call": "typo3_rule_lookup with documentId=\"core/contribution/reporting-an-issue\" for the fields and the Textile the description renders as, then typo3_forge_lookup with category=\"*\" for the areas the Category field takes, and for whether it is already reported typo3_forge_lookup with query in the words of the symptom and again with backlog=\"newest\", createdSince from the day the defect could first have been reported and limit=50 — a wording reaches only the issues worded that way, and reading the subjects of everything filed since is what settles a negative"
+      "call": "typo3_issue_report_guide with the subject, the description or its parts and the TYPO3 major, which drafts it, searches for duplicates and returns the tracker's form filled in; typo3_rule_lookup with documentId=\"core/contribution/reporting-an-issue\" for why each field is what it is, and typo3_forge_lookup with backlog=\"newest\" and createdSince where the search matched nothing — a wording reaches only the issues worded that way"
     },
     {
       "when": "Taking a Forge issue on, before believing what it describes — an issue can be stale, already fixed, or closed on a decision that is not in its description",

@@ -10,6 +10,11 @@ hints: []
 
 Source: https://forge.typo3.org/projects/typo3cms-core
 
+`typo3_issue_report_guide` drafts the report this page describes. It checks it,
+searches for duplicates, and returns a link to the tracker's form with every
+field filled in. Filing it stays yours, because the form needs an account. This
+page says why each field is what it is.
+
 You file a core issue on the Redmine at forge.typo3.org, in the TYPO3 Core
 project. You need an account, and the form is behind the login. So this page
 reads what a report carries off the issues people filed rather than off the

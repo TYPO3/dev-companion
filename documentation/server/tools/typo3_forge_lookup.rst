@@ -24,7 +24,8 @@ never uses reaches it from nowhere. That is why "has anybody attempted this
 before" goes to typo3_gerrit_lookup by repository path. The change comes back
 whatever its name, and the issue with it, off the trailers its commit message
 carries. The patch for an issue on review.typo3.org is typo3_gerrit_lookup. This
-tool reads only, with no credential: you comment, assign and close yourself.
+tool reads only, with no credential: you comment, assign and close yourself. A
+new issue is typo3_issue_report_guide, which drafts it and fills in the form.
 Answers from: network, packages.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``

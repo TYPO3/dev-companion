@@ -61,6 +61,8 @@ final class ToolContractTest extends TestCase
                     // identifiers rather than for the pages — `D-ANS-119`.
                     'typo3_permalink_lookup',
                     'typo3_forge_lookup',
+                    // Its duplicate search and the tracker's own lists — `D-ANS-171`.
+                    'typo3_issue_report_guide',
                     'typo3_gerrit_lookup',
                     // The changelog as the host renders it — `D-ANS-165`.
                     'typo3_changelog_lookup',

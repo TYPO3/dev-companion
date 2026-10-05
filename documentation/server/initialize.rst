@@ -174,7 +174,7 @@ The prompts
 The tool list
 -------------
 
-``tools/list`` carries 31 tools. Each entry is the ``name``, ``title``,
+``tools/list`` carries 32 tools. Each entry is the ``name``, ``title``,
 ``description``, ``inputSchema``, ``outputSchema`` and ``annotations`` the
 tool's own page under :doc:`tools/ <tools/index>` states.
 ``bin/cli tools:measure`` prints what each entry weighs on the wire, and what

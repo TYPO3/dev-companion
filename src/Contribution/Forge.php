@@ -38,6 +38,8 @@ final class Forge
     /** Where the project answers its own areas, which is the only read `*` does. */
     private const AREAS_URL = self::HOST . '/projects/' . self::PROJECT . '.json?include=issue_categories';
 
+    private const VERSIONS_URL = self::HOST . '/projects/' . self::PROJECT . '/versions.json';
+
     /**
      * Seconds an answered read stays in the hold.
      *
@@ -982,6 +984,32 @@ final class Forge
         }
 
         return $categories;
+    }
+
+    /**
+     * The versions the core project schedules a fix into, name to id, the open
+     * ones alone.
+     *
+     * The form's Target version takes an id, and a person names it by what the
+     * form shows. Read rather than written down for the reason `categories()`
+     * gives: the project opens versions as majors arrive.
+     *
+     * @return array<string, int>
+     */
+    public function versions(): array
+    {
+        $answer = $this->api(self::VERSIONS_URL, 'versions', self::LISTS_HELD_FOR);
+
+        $versions = [];
+        $listed = $answer['part'];
+        foreach (is_array($listed) ? $listed : [] as $version) {
+            if (is_array($version) && ($version['status'] ?? '') === 'open'
+                && is_string($version['name'] ?? null) && is_numeric($version['id'] ?? null)) {
+                $versions[$version['name']] = (int) $version['id'];
+            }
+        }
+
+        return $versions;
     }
 
     /**

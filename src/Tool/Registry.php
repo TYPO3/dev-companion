@@ -38,6 +38,7 @@ final class Registry
         DocumentationLookup::class,
         PermalinkLookup::class,
         ForgeLookup::class,
+        IssueReportGuide::class,
         GerritLookup::class,
         ComponentLookup::class,
         SystemExtensionLookup::class,

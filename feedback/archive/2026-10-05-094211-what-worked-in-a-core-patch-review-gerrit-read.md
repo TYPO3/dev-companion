@@ -1,7 +1,8 @@
 ---
 date: 2026-10-05T09:42:11+00:00
 category: idea
-status: open
+status: closed
+closed: 2026-10-05
 model: claude-opus-5-5
 tool: typo3_gerrit_lookup, typo3_test_run_guide, typo3_rule_lookup, typo3_project_describe, typo3-core-patch-review
 directory: /home/benji/projects/typo3-cms

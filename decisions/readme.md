@@ -902,6 +902,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### task-skills
 
+- [`D-SKL-095`][D-SKL-095] — The checkout skill knows no worktree tool but git · 2026-10-05
 - [`D-SKL-094`][D-SKL-094] — A review reads its change again before it reports · 2026-09-15
 - [`D-SKL-092`][D-SKL-092] — The client's own routing decides before a description does · 2026-09-09
 - [`D-SKL-093`][D-SKL-093] — The checkout workflow branches on a chain of more than one open change · 2026-09-09
@@ -992,6 +993,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-095]: task-skills/skl-095-the-checkout-skill-knows-no-worktree-tool-but-git.md
 [D-SKL-094]: task-skills/skl-094-a-review-reads-its-change-again-before-it-reports.md
 [D-SKL-092]: task-skills/skl-092-the-clients-own-routing-decides-before-a-description-does.md
 [D-SKL-093]: task-skills/skl-093-the-checkout-workflow-branches-on-a-chain-of-more-than-one-open-change.md
@@ -1084,6 +1086,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### feedback
 
+- [`D-FBK-056`][D-FBK-056] — A core patch review read the server as its route · 2026-10-05
 - [`D-FBK-054`][D-FBK-054] — The server answers what is registered and a person answers what it looks like · 2026-09-02
 - [`D-FBK-055`][D-FBK-055] — A registration file is checked after the cache flush or not at all · 2026-09-02
 - [`D-FBK-053`][D-FBK-053] — A migrated memory is judged against the source its rule has · 2026-09-01
@@ -1126,6 +1129,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-FBK-002`][D-FBK-002] — The order of the work is declared, not inferred · 2026-07-31 · confirmed
 - [`D-FBK-004`][D-FBK-004] — A feedback asks the caller which model is recording it · 2026-07-31 · confirmed
 
+[D-FBK-056]: feedback/fbk-056-a-core-patch-review-read-the-server-as-its-route.md
 [D-FBK-054]: feedback/fbk-054-the-server-answers-what-is-registered-and-a-person-answers-what-it-looks-like.md
 [D-FBK-055]: feedback/fbk-055-a-registration-file-is-checked-after-the-cache-flush-or-not-at-all.md
 [D-FBK-053]: feedback/fbk-053-a-migrated-memory-is-judged-against-the-source-its-rule-has.md

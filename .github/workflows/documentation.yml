@@ -22,6 +22,9 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    # The build takes a minute or two. A renderer that hangs held a runner for
+    # four hours on 2026-10-02 before GitHub cancelled the job.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
 
@@ -30,7 +33,7 @@ jobs:
       # lowest supported version buys nothing here.
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           coverage: none
 
       # The theme's finish step is one bundled file and installs nothing, so
@@ -52,13 +55,18 @@ jobs:
       # checkout, so nothing about it reaches this package's own dependencies.
       # The theme brings phpDocumentor Guides with it, and the finish step is
       # the one bundled file it ships.
+      #
+      # doctrine/lexer 3.0.3 changed resetPosition() to take a character offset.
+      # The reStructuredText parser in phpdocumentor/guides 1.10.1 still passes a
+      # token index, and it loops on contributing/glossary.rst. Remove the pin
+      # when a guides release reads the new semantics.
       - name: Render the site
         env:
           RENDERER: ${{ runner.temp }}/renderer
         run: |
           mkdir -p "$RENDERER"
           composer init --working-dir="$RENDERER" --no-interaction --name=typo3/dev-companion-render
-          composer require --working-dir="$RENDERER" --no-interaction --no-progress typo3/soul-guides-theme
+          composer require --working-dir="$RENDERER" --no-interaction --no-progress typo3/soul-guides-theme doctrine/lexer:3.0.2
           "$RENDERER"/vendor/bin/guides --no-progress -c documentation
           node "$RENDERER"/vendor/typo3/soul-guides-theme/resources/dist/soul-finish.js .site/html
 

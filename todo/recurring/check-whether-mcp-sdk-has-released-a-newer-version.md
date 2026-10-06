@@ -22,7 +22,7 @@ over stdio. Either moves the constant. Watch for a third: one that answers a
 request before `initialize` with the request's own id. On `v0.8.1`
 `Server\Protocol::resolveSession()` answers it with `-32600` and no `id`, read
 on 2026-09-17. `Server\HandshakeStdioTransport` answers a `2026-07-28` request,
-`server/discover` among them, in its place since 2026-10-06 (`D-ANS-171`). A
+`server/discover` among them, in its place since 2026-10-06 (`D-ANS-172`). A
 release that does either itself retires that class. A fourth is smaller:
 `Server\Protocol::doProcessInput()` answers an unknown method with `-32600`,
 where JSON-RPC defines `-32601`, read on 2026-09-19. `D-DIS-006` rests on the

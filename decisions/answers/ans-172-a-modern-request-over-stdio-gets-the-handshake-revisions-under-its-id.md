@@ -1,5 +1,5 @@
 ---
-id: D-ANS-171
+id: D-ANS-172
 title: A modern request over stdio gets the handshake revisions under its id
 date: 2026-10-06
 status: open
@@ -7,7 +7,7 @@ coveredBy:
   - StdioServerTest::aClientOpeningWithServerDiscoverIsToldWhichRevisionsToFallBackTo
 ---
 
-# D-ANS-171 — A modern request over stdio gets the handshake revisions under its id
+# D-ANS-172 — A modern request over stdio gets the handshake revisions under its id
 
 **`Server\HandshakeStdioTransport` answers a request in the `2026-07-28`
 envelope with `-32022`, the handshake revisions and the request's own id. The

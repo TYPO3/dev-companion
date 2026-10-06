@@ -4,7 +4,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
-- [`D-ANS-171`][D-ANS-171] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06
+- [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06
 - [`D-ANS-169`][D-ANS-169] — The project answer says whether its DDEV project runs · 2026-10-05
 - [`D-ANS-170`][D-ANS-170] — A chain entry says where it stands · 2026-10-05
 - [`D-ANS-171`][D-ANS-171] — A core issue is drafted and handed over as the filled form · 2026-10-05
@@ -170,7 +170,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
-[D-ANS-171]: ans-171-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
+[D-ANS-172]: ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
 [D-ANS-169]: ans-169-the-project-answer-says-whether-its-ddev-project-runs.md
 [D-ANS-170]: ans-170-a-chain-entry-says-where-it-stands.md
 [D-ANS-171]: ans-171-a-core-issue-is-drafted-and-handed-over-as-the-filled-form.md

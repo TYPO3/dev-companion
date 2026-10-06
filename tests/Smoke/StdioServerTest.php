@@ -163,7 +163,7 @@ final class StdioServerTest extends TestCase
      * fall back to, under its own id. Antigravity's client closed the
      * connection on the id-less error the SDK sends there.
      */
-    #[Decision('D-ANS-171')]
+    #[Decision('D-ANS-172')]
     #[Test]
     public function aClientOpeningWithServerDiscoverIsToldWhichRevisionsToFallBackTo(): void
     {

@@ -19,7 +19,7 @@ use Symfony\Component\Uid\Uuid;
  * `server/discover` with an error that carries no id. A client then has nothing
  * to fall back from. This answers what HTTP answers where nothing serves the
  * modern era: the unsupported revision, the handshake revisions, and the
- * request's own id — `D-ANS-171`.
+ * request's own id — `D-ANS-172`.
  */
 final class HandshakeStdioTransport extends StdioTransport
 {

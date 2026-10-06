@@ -40,31 +40,33 @@ final class IssueReportGuide extends ReadOnlyTool
 
     public static function inputSchema(): array
     {
+        $properties = [
+            'subject' => ['type' => 'string', 'minLength' => 1, 'description' => 'The title. Name the subsystem and what it does wrong; a triage reads this line instead of the report.'],
+            'tracker' => ['type' => 'string', 'enum' => array_keys(IssueReport::TRACKERS), 'default' => 'Bug', 'description' => 'Bug for something broken. The core project offers these five and no other.'],
+            'description' => ['type' => 'string', 'description' => 'The whole description as Textile. Left out, the draft composes it from problem, stepsToReproduce, cause and suggestedFix.'],
+            'problem' => ['type' => 'string', 'description' => 'The symptom, in the words it showed in: an exception message, a wrong value, a rendering that differs from the expected one. Textile.'],
+            'stepsToReproduce' => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => 'One step per entry, from a state somebody else can reach. The draft writes them as an ordered list.'],
+            'cause' => ['type' => 'string', 'description' => 'The class and method the defect is in, and what it does wrong. Textile.'],
+            'suggestedFix' => ['type' => 'string', 'description' => 'A diff. The draft wraps it in <pre><code class="diff"> so the tracker keeps the removed lines.'],
+            'typo3Version' => ['type' => 'string', 'description' => 'The TYPO3 major you saw it on, such as 14. A full release number is cut to its major. A Bug does not go without it.'],
+            'phpVersion' => ['type' => 'string', 'description' => 'The PHP major and minor you saw it on, such as 8.4. Optional.'],
+            'category' => ['type' => 'string', 'description' => 'The area, in the tracker\'s own spelling. typo3_forge_lookup with category in your own words answers that spelling.'],
+            'priority' => ['type' => 'string', 'enum' => array_keys(IssueReport::PRIORITIES), 'description' => 'Left out, the form keeps its default, Should have, which nearly every report carries.'],
+            'fixedVersion' => ['type' => 'string', 'description' => 'The form\'s Target version, by the name the form shows, such as next-patchlevel. It is the schedule\'s call, so set it where you take the fix on yourself.'],
+            'isRegression' => ['type' => 'boolean', 'description' => 'Whether an earlier release did not have the defect.'],
+            'complexity' => ['type' => 'string', 'enum' => IssueReport::COMPLEXITIES, 'description' => 'A guess at the fix. Optional.'],
+            'tags' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Free tags. The draft adds dev-companion to every report.'],
+            'parentIssue' => ['type' => 'integer', 'minimum' => 1, 'description' => 'The issue this one is a part of.'],
+            'searchFor' => ['type' => 'string', 'description' => 'Two or three words of the symptom for the duplicate search. Every word has to be in the same issue, so a whole subject rarely matches. Defaults to the subject.'],
+        ];
+
         return [
             'type' => 'object',
-            'properties' => [
-                'subject' => ['type' => 'string', 'minLength' => 1, 'description' => 'The title. Name the subsystem and what it does wrong; a triage reads this line instead of the report.'],
-                'tracker' => ['type' => 'string', 'enum' => array_keys(IssueReport::TRACKERS), 'default' => 'Bug', 'description' => 'Bug for something broken. The core project offers these five and no other.'],
-                'description' => ['type' => 'string', 'description' => 'The whole description as Textile. Left out, the draft composes it from problem, stepsToReproduce, cause and suggestedFix.'],
-                'problem' => ['type' => 'string', 'description' => 'The symptom, in the words it showed in: an exception message, a wrong value, a rendering that differs from the expected one. Textile.'],
-                'stepsToReproduce' => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => 'One step per entry, from a state somebody else can reach. The draft writes them as an ordered list.'],
-                'cause' => ['type' => 'string', 'description' => 'The class and method the defect is in, and what it does wrong. Textile.'],
-                'suggestedFix' => ['type' => 'string', 'description' => 'A diff. The draft wraps it in <pre><code class="diff"> so the tracker keeps the removed lines.'],
-                'typo3Version' => ['type' => 'string', 'description' => 'The TYPO3 major you saw it on, such as 14. A full release number is cut to its major. A Bug does not go without it.'],
-                'phpVersion' => ['type' => 'string', 'description' => 'The PHP major and minor you saw it on, such as 8.4. Optional.'],
-                'category' => ['type' => 'string', 'description' => 'The area, in the tracker\'s own spelling. typo3_forge_lookup with category in your own words answers that spelling.'],
-                'priority' => ['type' => 'string', 'enum' => array_keys(IssueReport::PRIORITIES), 'description' => 'Left out, the form keeps its default, Should have, which nearly every report carries.'],
-                'fixedVersion' => ['type' => 'string', 'description' => 'The form\'s Target version, by the name the form shows, such as next-patchlevel. It is the schedule\'s call, so set it where you take the fix on yourself.'],
-                'isRegression' => ['type' => 'boolean', 'description' => 'Whether an earlier release did not have the defect.'],
-                'complexity' => ['type' => 'string', 'enum' => IssueReport::COMPLEXITIES, 'description' => 'A guess at the fix. Optional.'],
-                'tags' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Free tags. The draft adds dev-companion to every report.'],
-                'parentIssue' => ['type' => 'integer', 'minimum' => 1, 'description' => 'The issue this one is a part of.'],
-                'searchFor' => ['type' => 'string', 'description' => 'Two or three words of the symptom for the duplicate search. Every word has to be in the same issue, so a whole subject rarely matches. Defaults to the subject.'],
-            ],
+            'properties' => $properties,
             'required' => ['subject'],
             'anyOf' => [
-                ['title' => 'With a written description', 'required' => ['description']],
-                ['title' => 'With the description in parts', 'required' => ['problem']],
+                Schema::branch('With a written description', $properties, ['description']),
+                Schema::branch('With the description in parts', $properties, ['problem']),
             ],
         ];
     }

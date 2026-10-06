@@ -563,6 +563,29 @@ final class Schema
         ]];
     }
 
+    /**
+     * One branch of an input `anyOf`: the object a caller sends on that way
+     * in. It is typed and defines what its `required` names, because Gemini
+     * refuses a branch that does neither — `D-ANS-174`. A property keeps its
+     * type alone here; the description stands once, at the root.
+     *
+     * @param array<string, array<string, mixed>> $properties
+     * @param list<string> $required
+     * @return array<string, mixed>
+     */
+    public static function branch(string $title, array $properties, array $required): array
+    {
+        return [
+            'title' => $title,
+            'type' => 'object',
+            'properties' => array_map(
+                static fn(string $name): array => ['type' => $properties[$name]['type']],
+                array_combine($required, $required),
+            ),
+            'required' => $required,
+        ];
+    }
+
     /** @return array<string, mixed> */
     public static function nullableString(string $description = ''): array
     {

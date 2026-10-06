@@ -82,27 +82,29 @@ final class CommitMessageGuide extends ReadOnlyTool
 
     public static function inputSchema(): array
     {
+        $properties = [
+            'message' => ['type' => 'string', 'minLength' => 1, 'description' => 'A complete commit message to check, subject and trailers included. The draft keeps unknown trailers such as Change-Id, so an amended patch set stays valid. The exception is workflow="core", which takes Co-Authored-By, Assisted-by, Generated-by and an agent\'s own session trailer off the draft and reports each as an error: a core commit message carries none of them. A core message without Signed-off-by is an error there. The core requires the certificate, and the draft carries a placeholder because only whoever commits can sign it.'],
+            'workflow' => ['type' => 'string', 'enum' => CommitMessage::WORKFLOWS, 'default' => 'project', 'description' => 'Which rules to apply. "project", the default, is any repository of your own. The checks read the keyword, the 52/72 character limits and the wrap. They demand and invent no trailer, the draft writes the issues you pass out all the same, and they allow [SECURITY]. "core": a patch against the TYPO3 core, with the Forge issue and the Releases: trailer required.'],
+            'keyword' => ['type' => 'string', 'enum' => CommitMessage::PROJECT_KEYWORDS, 'description' => 'TYPO3 commit message keyword. [SECURITY] belongs to the TYPO3 Security Team, and only workflow="project" accepts it.'],
+            'summary' => ['type' => 'string', 'minLength' => 1, 'description' => 'Summary text without the TYPO3 keyword prefix. Say what the commit did, in words a reader understands from the log alone.'],
+            'issue' => ['type' => 'string', 'description' => 'The issue this commit resolves, with or without # in front. That is the Forge issue number for a core patch, the number in your own tracker otherwise. The draft writes it as a Resolves: trailer in either workflow. For more than one, write the message out and pass it as message, which keeps every trailer it carries.'],
+            'relatedIssues' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Issues this commit relates to and does not resolve, read as issue is and written as Related: trailers.'],
+            'releases' => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => 'Target releases, for example main or 13.4. Left out, the draft carries a RELEASE_TARGET placeholder and the checks name the lines that take a patch today. The tool guesses no release branch. It holds each one you pass against those lines. A branch out of regular support is an error, since ELTS releases come from the ELTS partners rather than from a patch to that branch.'],
+            'body' => ['type' => 'string', 'description' => 'Optional commit body, for what the diff does not say: why you made the change, what it rests on. The draft wraps it at 72 characters, at 71 for workflow="core". Indent a block to keep the line breaks you wrote, and keep those lines under the width yourself.'],
+            'isBreaking' => ['type' => 'boolean', 'description' => 'Whether this is a breaking change that requires [!!!]. Left out, the checks say the classification is an assumption: it is a property of the diff, which this tool never sees.'],
+            'isDeprecation' => ['type' => 'boolean', 'description' => 'Whether this is a deprecation. Left out, it is an assumption the same way and the checks say so.'],
+            'workInProgress' => ['type' => 'boolean', 'description' => 'Whether the change is still in work and not up for merge. True writes [WIP] before the keyword, where [!!!] goes, and the Forge issue is no error then: the merge is what requires the trailer. The sign-off stays required whatever the state. A message passed as message says this in its own subject and needs no argument; the checks read [WIP] and [PoC] there the same way.'],
+        ];
+
         return [
             'type' => 'object',
-            'properties' => [
-                'message' => ['type' => 'string', 'minLength' => 1, 'description' => 'A complete commit message to check, subject and trailers included. The draft keeps unknown trailers such as Change-Id, so an amended patch set stays valid. The exception is workflow="core", which takes Co-Authored-By, Assisted-by, Generated-by and an agent\'s own session trailer off the draft and reports each as an error: a core commit message carries none of them. A core message without Signed-off-by is an error there. The core requires the certificate, and the draft carries a placeholder because only whoever commits can sign it.'],
-                'workflow' => ['type' => 'string', 'enum' => CommitMessage::WORKFLOWS, 'default' => 'project', 'description' => 'Which rules to apply. "project", the default, is any repository of your own. The checks read the keyword, the 52/72 character limits and the wrap. They demand and invent no trailer, the draft writes the issues you pass out all the same, and they allow [SECURITY]. "core": a patch against the TYPO3 core, with the Forge issue and the Releases: trailer required.'],
-                'keyword' => ['type' => 'string', 'enum' => CommitMessage::PROJECT_KEYWORDS, 'description' => 'TYPO3 commit message keyword. [SECURITY] belongs to the TYPO3 Security Team, and only workflow="project" accepts it.'],
-                'summary' => ['type' => 'string', 'minLength' => 1, 'description' => 'Summary text without the TYPO3 keyword prefix. Say what the commit did, in words a reader understands from the log alone.'],
-                'issue' => ['type' => 'string', 'description' => 'The issue this commit resolves, with or without # in front. That is the Forge issue number for a core patch, the number in your own tracker otherwise. The draft writes it as a Resolves: trailer in either workflow. For more than one, write the message out and pass it as message, which keeps every trailer it carries.'],
-                'relatedIssues' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Issues this commit relates to and does not resolve, read as issue is and written as Related: trailers.'],
-                'releases' => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => 'Target releases, for example main or 13.4. Left out, the draft carries a RELEASE_TARGET placeholder and the checks name the lines that take a patch today. The tool guesses no release branch. It holds each one you pass against those lines. A branch out of regular support is an error, since ELTS releases come from the ELTS partners rather than from a patch to that branch.'],
-                'body' => ['type' => 'string', 'description' => 'Optional commit body, for what the diff does not say: why you made the change, what it rests on. The draft wraps it at 72 characters, at 71 for workflow="core". Indent a block to keep the line breaks you wrote, and keep those lines under the width yourself.'],
-                'isBreaking' => ['type' => 'boolean', 'description' => 'Whether this is a breaking change that requires [!!!]. Left out, the checks say the classification is an assumption: it is a property of the diff, which this tool never sees.'],
-                'isDeprecation' => ['type' => 'boolean', 'description' => 'Whether this is a deprecation. Left out, it is an assumption the same way and the checks say so.'],
-                'workInProgress' => ['type' => 'boolean', 'description' => 'Whether the change is still in work and not up for merge. True writes [WIP] before the keyword, where [!!!] goes, and the Forge issue is no error then: the merge is what requires the trailer. The sign-off stays required whatever the state. A message passed as message says this in its own subject and needs no argument; the checks read [WIP] and [PoC] there the same way.'],
-            ],
+            'properties' => $properties,
             // `anyOf` rather than `oneOf`: a call may carry a message and the
             // arguments that amend it. A client that offers the branches as a
             // choice labels each by its title, and "Option 1" without one.
             'anyOf' => [
-                ['title' => 'Check a message', 'required' => ['message']],
-                ['title' => 'Draft from keyword and summary', 'required' => ['keyword', 'summary']],
+                Schema::branch('Check a message', $properties, ['message']),
+                Schema::branch('Draft from keyword and summary', $properties, ['keyword', 'summary']),
             ],
         ];
     }

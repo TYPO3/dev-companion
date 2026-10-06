@@ -246,6 +246,42 @@ final class ToolContractTest extends TestCase
     }
 
     /**
+     * Every branch of an input `anyOf` is an object that defines what it
+     * requires, with the type the root declares for it.
+     */
+    #[Decision('D-ANS-174')]
+    #[Test]
+    public function everyBranchOfAnInputAnyOfDefinesWhatItRequires(): void
+    {
+        $declaring = [];
+        foreach (Registry::definitions() as $definition) {
+            $schema = $definition['inputSchema'];
+            if (!isset($schema['anyOf'])) {
+                continue;
+            }
+            $declaring[] = $definition['name'];
+
+            foreach ((array) $schema['anyOf'] as $branch) {
+                $at = $definition['name'] . ' / ' . ($branch['title'] ?? '?');
+                self::assertSame('object', $branch['type'] ?? null, $at);
+                foreach ((array) ($branch['required'] ?? []) as $argument) {
+                    self::assertSame(
+                        $schema['properties'][$argument]['type'] ?? null,
+                        $branch['properties'][$argument]['type'] ?? null,
+                        $at . ' requires ' . $argument . ' and does not define it',
+                    );
+                }
+            }
+        }
+
+        self::assertSame(
+            ['typo3_issue_report_guide', 'typo3_commit_message_guide'],
+            $declaring,
+            'the input-side anyOf this holds are not the ones that exist',
+        );
+    }
+
+    /**
      * No `type` in either schema is a list, however deep it sits.
      *
      * A field that may be null is two `anyOf` branches, which is what

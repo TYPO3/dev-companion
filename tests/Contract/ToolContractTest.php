@@ -224,6 +224,28 @@ final class ToolContractTest extends TestCase
     }
 
     /**
+     * A Forge issue number goes in as an integer, in every tool that takes one.
+     */
+    #[Decision('D-ANS-173')]
+    #[Test]
+    #[DataProvider('forgeIssueArguments')]
+    public function aForgeIssueNumberIsAnInteger(string $tool, string $argument): void
+    {
+        $schema = array_column(Registry::definitions(), 'inputSchema', 'name')[$tool]['properties'][$argument] ?? [];
+
+        self::assertSame('integer', $schema['type'] ?? null, $tool . ' /' . $argument);
+        self::assertSame(1, $schema['minimum'] ?? null, $tool . ' /' . $argument);
+    }
+
+    /** @return iterable<string, array{string, string}> */
+    public static function forgeIssueArguments(): iterable
+    {
+        yield 'the issue read' => ['typo3_forge_lookup', 'issue'];
+        yield 'the changes for an issue' => ['typo3_gerrit_lookup', 'issue'];
+        yield 'the parent of a drafted issue' => ['typo3_issue_report_guide', 'parentIssue'];
+    }
+
+    /**
      * No `type` in either schema is a list, however deep it sits.
      *
      * A field that may be null is two `anyOf` branches, which is what

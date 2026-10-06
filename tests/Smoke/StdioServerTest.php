@@ -629,7 +629,7 @@ final class StdioServerTest extends TestCase
     public function aPhpWithoutCurlIsRefusedWithTheExtensionNamed(): void
     {
         $answers = $this->session([
-            $this->request(2, 'tools/call', ['name' => 'typo3_forge_lookup', 'arguments' => ['issue' => '110348']]),
+            $this->request(2, 'tools/call', ['name' => 'typo3_forge_lookup', 'arguments' => ['issue' => 110348]]),
             $this->request(3, 'tools/call', ['name' => 'typo3_server_scope', 'arguments' => new \stdClass()]),
         ], php: ['-d', 'disable_functions=curl_init']);
 

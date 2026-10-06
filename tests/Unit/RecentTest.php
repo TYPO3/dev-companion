@@ -44,8 +44,8 @@ final class RecentTest extends TestCase
     {
         $forge = new Forge($this->transport('{"issue": {"id": 105403, "subject": "f:image and cache busting"}}'));
 
-        $first = $forge->issue('105403');
-        $second = $forge->issue('105403');
+        $first = $forge->issue(105403);
+        $second = $forge->issue(105403);
 
         self::assertSame('answered', $first['status']);
         self::assertSame($first, $second);
@@ -65,9 +65,9 @@ final class RecentTest extends TestCase
     {
         $forge = new Forge($this->transport('{"issue": {"id": 105403, "subject": "f:image and cache busting"}}'));
 
-        $forge->issue('105403');
+        $forge->issue(105403);
         $this->now += Forge::HELD_FOR;
-        $forge->issue('105403');
+        $forge->issue(105403);
 
         // Two reads per call, both of them stale by then.
         self::assertSame(4, $this->reads);
@@ -81,8 +81,8 @@ final class RecentTest extends TestCase
         // minute. Held, one bad minute would be five — `D-ANS-049`.
         $forge = new Forge($this->transport('<html>are you a robot</html>'));
 
-        $forge->issue('105403');
-        $second = $forge->issue('105403');
+        $forge->issue(105403);
+        $second = $forge->issue(105403);
 
         self::assertSame('unavailable', $second['status']);
         self::assertSame(4, $this->reads, 'both calls read, and each retried with the plain agent');
@@ -98,8 +98,8 @@ final class RecentTest extends TestCase
     {
         $gerrit = new Gerrit($this->transport(")]}'\n" . '[{"_number": 90210, "subject": "[BUGFIX] Do the thing", "project": "Packages/TYPO3.CMS"}]'));
 
-        $first = $gerrit->changesForIssue('105403');
-        $second = $gerrit->changesForIssue('105403');
+        $first = $gerrit->changesForIssue(105403);
+        $second = $gerrit->changesForIssue(105403);
 
         self::assertSame('answered', $first['status']);
         self::assertSame($first, $second);
@@ -115,8 +115,8 @@ final class RecentTest extends TestCase
         // write a patch that is already up — `D-ANS-049`.
         $gerrit = new Gerrit($this->transport(")]}'\n[]"));
 
-        $gerrit->changesForIssue('105403');
-        $gerrit->changesForIssue('105403');
+        $gerrit->changesForIssue(105403);
+        $gerrit->changesForIssue(105403);
 
         self::assertSame(2, $this->reads);
     }

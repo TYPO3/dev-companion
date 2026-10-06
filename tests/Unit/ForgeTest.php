@@ -131,7 +131,7 @@ final class ForgeTest extends TestCase
     {
         $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::ISSUE]));
 
-        $issue = $forge->issue('#110348')['issue'];
+        $issue = $forge->issue(110348)['issue'];
 
         self::assertSame('Rework AdminPanel "imagesOnPage" feature', $issue['subject']);
         self::assertSame('Resolved', $issue['status']);
@@ -153,7 +153,7 @@ final class ForgeTest extends TestCase
     {
         $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::ISSUE]));
 
-        $issue = $forge->issue('110348')['issue'];
+        $issue = $forge->issue(110348)['issue'];
 
         self::assertSame(2, $issue['noteCount']);
         self::assertSame(['Gerrit Code Review', 'Benni Mack'], array_column($issue['notes'], 'author'));
@@ -181,7 +181,7 @@ final class ForgeTest extends TestCase
             return (string) json_encode(['issue' => self::ISSUE]);
         });
 
-        $attachments = $forge->issue('110348')['issue']['attachments'];
+        $attachments = $forge->issue(110348)['issue']['attachments'];
 
         self::assertStringContainsString('include=journals,relations,attachments', $asked[0]);
         self::assertSame(['ckeditor-3-p-tags.png', 'db_field_value.jpg'], array_column($attachments, 'filename'));
@@ -207,7 +207,7 @@ final class ForgeTest extends TestCase
     {
         $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::ISSUE]));
 
-        $relations = $forge->issue('110348')['issue']['relations'];
+        $relations = $forge->issue(110348)['issue']['relations'];
 
         self::assertSame([105403, 105953], array_column($relations, 'issue'));
         self::assertSame(['relates', 'duplicates'], array_column($relations, 'relation'));
@@ -230,7 +230,7 @@ final class ForgeTest extends TestCase
             return (string) json_encode(str_contains($url, 'issue_id=') ? self::RELATED : ['issue' => self::ISSUE]);
         });
 
-        $relations = $forge->issue('110348')['issue']['relations'];
+        $relations = $forge->issue(110348)['issue']['relations'];
 
         // Three: the issue, the one bulk read that fills every relation, and
         // the review server. A single issue goes there since `D-ANS-125` made
@@ -261,7 +261,7 @@ final class ForgeTest extends TestCase
             str_contains($url, 'issue_id=') ? self::RELATED : ['issue' => self::ISSUE],
         ));
 
-        $relations = $forge->issue('110348')['issue']['relations'];
+        $relations = $forge->issue(110348)['issue']['relations'];
 
         self::assertSame(
             'Relation: duplicates #105953 — Task · New · Rework AdminPanel · https://forge.typo3.org/issues/105953',
@@ -281,7 +281,7 @@ final class ForgeTest extends TestCase
             ? null
             : (string) json_encode(['issue' => self::ISSUE]));
 
-        $relations = $forge->issue('110348')['issue']['relations'];
+        $relations = $forge->issue(110348)['issue']['relations'];
 
         self::assertSame([105403, 105953], array_column($relations, 'issue'));
         self::assertSame(['', ''], array_column($relations, 'subject'));
@@ -356,7 +356,7 @@ final class ForgeTest extends TestCase
             return (string) json_encode(str_contains($url, 'issue_id=') ? self::CITED : ['issue' => self::CITING]);
         });
 
-        $mentioned = $forge->issue('76202')['issue']['mentioned'];
+        $mentioned = $forge->issue(76202)['issue']['mentioned'];
 
         // The URL form and Redmine's own, and neither the exception code nor
         // the three digits that answer for no issue. #105403 stays with the
@@ -387,7 +387,7 @@ final class ForgeTest extends TestCase
             str_contains($url, 'issue_id=') ? self::CITED : ['issue' => self::CITING],
         ));
 
-        $reviews = $forge->issue('76202')['issue']['reviews'];
+        $reviews = $forge->issue(76202)['issue']['reviews'];
 
         self::assertSame([48211], array_column($reviews, 'change'));
         // The day of the reference, which for a description is the day of the
@@ -409,7 +409,7 @@ final class ForgeTest extends TestCase
             str_contains($url, 'issue_id=') ? self::CITED : ['issue' => ['relations' => []] + self::CITING],
         ));
 
-        $result = Registry::call('typo3_forge_lookup', ['issue' => '76202']);
+        $result = Registry::call('typo3_forge_lookup', ['issue' => 76202]);
 
         self::assertSame([], $result->data['issue']['relations']);
         self::assertStringContainsString(
@@ -450,7 +450,7 @@ final class ForgeTest extends TestCase
     {
         $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
 
-        $reviews = $forge->issue('15984')['issue']['reviews'];
+        $reviews = $forge->issue(15984)['issue']['reviews'];
 
         self::assertSame([1186, 2545], array_column($reviews, 'change'));
         self::assertSame([3, 1], array_column($reviews, 'patchSet'));
@@ -488,7 +488,7 @@ final class ForgeTest extends TestCase
             ? self::CHANGES_FOR_15984
             : (string) json_encode(['issue' => self::REVIEWED]));
 
-        $reviews = $forge->issue('15984')['issue']['reviews'];
+        $reviews = $forge->issue(15984)['issue']['reviews'];
 
         // 1186 is in both halves and is one change; 2545 only the prose has;
         // 90210 only the review server has.
@@ -514,7 +514,7 @@ final class ForgeTest extends TestCase
     {
         $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
 
-        $issue = $forge->issue('15984')['issue'];
+        $issue = $forge->issue(15984)['issue'];
 
         self::assertCount(4, $issue['notes']);
         self::assertSame(4, $issue['noteCount']);
@@ -532,7 +532,7 @@ final class ForgeTest extends TestCase
     {
         $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
 
-        $issue = $forge->issue('15984', 'people')['issue'];
+        $issue = $forge->issue(15984, 'people')['issue'];
 
         self::assertSame(['Steffen Kamper', 'Markus Klein'], array_column($issue['notes'], 'author'));
         // The total is what the issue carries and not what came back, so the
@@ -553,7 +553,7 @@ final class ForgeTest extends TestCase
     {
         $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
 
-        self::assertNotContains(3129, array_column($forge->issue('15984')['issue']['reviews'], 'change'));
+        self::assertNotContains(3129, array_column($forge->issue(15984)['issue']['reviews'], 'change'));
     }
 
     /** The two relations of the fixture, as `/issues.json` answers a list of ids. */
@@ -590,7 +590,7 @@ final class ForgeTest extends TestCase
             return '<!doctype html><title>Making sure you are not a bot!</title>';
         });
 
-        $answer = $forge->issue('110348');
+        $answer = $forge->issue(110348);
 
         self::assertSame('unavailable', $answer['status']);
         self::assertSame('source-not-parseable', $answer['cause']);
@@ -604,7 +604,7 @@ final class ForgeTest extends TestCase
     {
         $forge = new Forge(fn(): ?string => null);
 
-        $answer = $forge->issue('110348');
+        $answer = $forge->issue(110348);
 
         self::assertSame('unavailable', $answer['status']);
         self::assertSame('source-not-answering', $answer['cause']);
@@ -1407,7 +1407,7 @@ final class ForgeTest extends TestCase
 
         $page = Registry::call('typo3_forge_lookup', ['backlog' => 'oldest', 'limit' => 2]);
         $shape = Registry::call('typo3_forge_lookup', ['backlog' => 'oldest', 'limit' => 2, 'breakdown' => true]);
-        $issue = Registry::call('typo3_forge_lookup', ['issue' => '14858']);
+        $issue = Registry::call('typo3_forge_lookup', ['issue' => 14858]);
 
         self::assertStringContainsString('typo3-core-issue-triage', $page->text);
         self::assertStringNotContainsString('typo3-core-issue-triage', $shape->text);
@@ -2158,7 +2158,7 @@ final class ForgeTest extends TestCase
             ]],
         ]]));
 
-        $cites = $forge->issue('78607')['issue']['cites'];
+        $cites = $forge->issue(78607)['issue']['cites'];
 
         // The description names nothing and the subject's capitalised word is
         // not code, so what remains is what the comment named.

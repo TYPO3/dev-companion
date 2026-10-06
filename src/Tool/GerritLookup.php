@@ -60,9 +60,9 @@ final class GerritLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'issue' => [
-                    'type' => 'string',
-                    'minLength' => 1,
-                    'description' => 'Forge issue number, with or without the # in front, for example "105403". Searches every change whose commit message names it, which is where Resolves: and Related: put it. Not with change, commit, query, path or backlog.',
+                    'type' => 'integer',
+                    'minimum' => 1,
+                    'description' => 'Forge issue number, for example 105403. Searches every change whose commit message names it, which is where Resolves: and Related: put it. Not with change, commit, query, path or backlog.',
                 ],
                 'change' => [
                     'type' => 'string',
@@ -657,7 +657,7 @@ final class GerritLookup extends ReadOnlyTool
      *
      * @return array{author: string, url: string}|null
      */
-    private static function reviewPostedOnIssue(string $issue): ?array
+    private static function reviewPostedOnIssue(int $issue): ?array
     {
         $answer = (new Forge())->issue($issue);
         if ($answer['status'] !== 'answered' || !is_array($answer['issue'])) {
@@ -698,7 +698,7 @@ final class GerritLookup extends ReadOnlyTool
 
     public static function answer(array $args): ToolResult
     {
-        $issue = is_string($args['issue'] ?? null) ? trim($args['issue']) : '';
+        $issue = is_int($args['issue'] ?? null) ? $args['issue'] : 0;
         $change = is_string($args['change'] ?? null) ? trim($args['change']) : '';
         $commit = is_string($args['commit'] ?? null) ? trim($args['commit']) : '';
         $query = is_string($args['query'] ?? null) ? trim($args['query']) : '';
@@ -725,7 +725,7 @@ final class GerritLookup extends ReadOnlyTool
         // carry the search where the caller gave both, because their caveat is
         // the wider one.
         $direction = match (true) {
-            $issue !== '' => 'issue',
+            $issue > 0 => 'issue',
             $change !== '' => 'change',
             $commit !== '' => 'commit',
             $backlog !== '' => 'backlog',

@@ -190,7 +190,7 @@ final class GerritTest extends TestCase
     {
         $gerrit = new Gerrit(static fn(): string => self::BOTH);
 
-        $answer = $gerrit->changesForIssue('88556');
+        $answer = $gerrit->changesForIssue(88556);
 
         self::assertSame([95108], array_column($answer['changes'], 'number'));
         self::assertSame(1, $answer['dropped']);
@@ -212,7 +212,7 @@ final class GerritTest extends TestCase
 
         // 106318 is what the merged change resolves, and it stands in a trailer
         // rather than in a URL.
-        $answer = $gerrit->changesForIssue('106318');
+        $answer = $gerrit->changesForIssue(106318);
 
         self::assertSame([88556], array_column($answer['changes'], 'number'));
         self::assertSame(1, $answer['dropped']);
@@ -230,7 +230,7 @@ final class GerritTest extends TestCase
     {
         $gerrit = new Gerrit(static fn(): string => self::BOTH);
 
-        $answer = $gerrit->changesForIssue('95108');
+        $answer = $gerrit->changesForIssue(95108);
 
         self::assertSame('empty', $answer['status']);
         self::assertSame([], $answer['changes']);
@@ -314,7 +314,7 @@ final class GerritTest extends TestCase
             return str_contains($url, 'forge.typo3.org') ? '{"issues":[],"total_count":0}' : self::BOTH;
         });
 
-        $searched = $gerrit->changesForIssue('88556');
+        $searched = $gerrit->changesForIssue(88556);
         $named = $gerrit->change('95108');
 
         $queries = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '?q=')));
@@ -567,7 +567,7 @@ final class GerritTest extends TestCase
             . '[{"_number":88556,"branch":"main","status":"MERGED","subject":"[BUGFIX] Parallel execution"},'
             . '{"_number":95108,"branch":"main","status":"NEW","subject":"[BUGFIX] Do not split paragraphs"}]');
 
-        $answer = $gerrit->changesForIssue('88556');
+        $answer = $gerrit->changesForIssue(88556);
 
         self::assertSame([95108], array_column($answer['changes'], 'number'));
         self::assertSame(1, $answer['dropped']);
@@ -583,7 +583,7 @@ final class GerritTest extends TestCase
             return self::RESPONSE;
         });
 
-        $answer = $gerrit->changesForIssue('#110348', 3);
+        $answer = $gerrit->changesForIssue(110348, 3);
 
         // `message:` and not a bare term. The issue number is in the commit
         // message, where `Resolves:` put it, and a free-text search would also
@@ -599,7 +599,7 @@ final class GerritTest extends TestCase
     {
         $gerrit = new Gerrit(static fn(): string => self::RESPONSE);
 
-        $change = $gerrit->changesForIssue('110348')['changes'][0];
+        $change = $gerrit->changesForIssue(110348)['changes'][0];
 
         self::assertSame(95040, $change['number']);
         self::assertSame('MERGED', $change['status']);
@@ -651,7 +651,7 @@ final class GerritTest extends TestCase
             'remote' => 'https://review.typo3.org/Packages/TYPO3.CMS',
         ], $change['fetch']);
 
-        $sharded = (new Gerrit(static fn(): string => self::BOTH))->changesForIssue('88556')['changes'][0];
+        $sharded = (new Gerrit(static fn(): string => self::BOTH))->changesForIssue(88556)['changes'][0];
 
         self::assertSame('refs/changes/08/95108/1', $sharded['fetch']['ref']);
     }
@@ -810,7 +810,7 @@ final class GerritTest extends TestCase
 
         // The issue direction reads the same message, so it carries it too —
         // which is the direction a triage holding an issue number is in.
-        $searched = (new Gerrit(static fn(): string => self::BOTH))->changesForIssue('88556')['changes'][0];
+        $searched = (new Gerrit(static fn(): string => self::BOTH))->changesForIssue(88556)['changes'][0];
 
         self::assertSame(['main', '14.3', '13.4'], $searched['releases']);
     }
@@ -1834,7 +1834,7 @@ final class GerritTest extends TestCase
             return self::BOTH;
         });
 
-        $change = $gerrit->changesForIssue('88556')['changes'][0];
+        $change = $gerrit->changesForIssue(88556)['changes'][0];
 
         self::assertCount(1, $asked);
         self::assertStringNotContainsString('o=DETAILED_LABELS', $asked[0]);
@@ -2222,7 +2222,7 @@ final class GerritTest extends TestCase
     {
         $gerrit = new Gerrit(static fn(): string => ")]}'\n[]");
 
-        $answer = $gerrit->changesForIssue('105403');
+        $answer = $gerrit->changesForIssue(105403);
 
         self::assertSame('empty', $answer['status']);
         self::assertSame([], $answer['changes']);
@@ -2535,7 +2535,7 @@ final class GerritTest extends TestCase
     {
         $gerrit = new Gerrit(static fn(): ?string => null);
 
-        $answer = $gerrit->changesForIssue('110348');
+        $answer = $gerrit->changesForIssue(110348);
 
         self::assertSame('unavailable', $answer['status']);
         self::assertSame('source-not-answering', $answer['cause']);
@@ -2551,7 +2551,7 @@ final class GerritTest extends TestCase
     {
         $gerrit = new Gerrit(static fn(): string => '<!doctype html><title>Sign in</title>');
 
-        $answer = $gerrit->changesForIssue('110348');
+        $answer = $gerrit->changesForIssue(110348);
 
         self::assertSame('unavailable', $answer['status']);
         self::assertSame('source-not-parseable', $answer['cause']);

@@ -38,10 +38,10 @@ Takes
 
 .. code-block:: yaml
 
-    # Forge issue number, with or without the # in front, for example "110348".
-    # Reads that one issue whole, comments included; narrow those with notes when
-    # you read many. Not with query or backlog.
-    issue: string  # optional
+    # Forge issue number, for example 110348. Reads that one issue whole, comments
+    # included; narrow those with notes when you read many. Not with query or
+    # backlog.
+    issue: integer  # optional
     # Words to search the tracker for, for example "image cache busting". A
     # full-text search over subject, description and comments, which is the one way
     # to find a duplicate nobody has linked. Every word has to be in the same issue.

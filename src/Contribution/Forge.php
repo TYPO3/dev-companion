@@ -201,10 +201,9 @@ final class Forge
      *
      * @return array{status: 'answered'|'empty'|'unavailable', url: string, issue: ?array<string, mixed>, cause: ?string}
      */
-    public function issue(string $issue, string $notes = 'all'): array
+    public function issue(int $number, string $notes = 'all'): array
     {
-        $number = ltrim(trim($issue), '#');
-        $url = self::HOST . '/issues/' . rawurlencode($number) . '.json?include=journals,relations,attachments';
+        $url = self::HOST . '/issues/' . $number . '.json?include=journals,relations,attachments';
 
         $answer = $this->api($url, 'issue');
         // A tracker that says 404 has answered. There is no such issue, which
@@ -1339,7 +1338,7 @@ final class Forge
      * @param array<string, mixed> $raw
      * @return array<string, mixed>
      */
-    private static function issueOf(array $raw, string $number, string $wanted = 'all'): array
+    private static function issueOf(array $raw, int $number, string $wanted = 'all'): array
     {
         $journals = is_array($raw['journals'] ?? null) ? $raw['journals'] : [];
         $notes = [];

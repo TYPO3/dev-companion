@@ -77,9 +77,9 @@ final class ForgeLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'issue' => [
-                    'type' => 'string',
-                    'minLength' => 1,
-                    'description' => 'Forge issue number, with or without the # in front, for example "110348". Reads that one issue whole, comments included; narrow those with notes when you read many. Not with query or backlog.',
+                    'type' => 'integer',
+                    'minimum' => 1,
+                    'description' => 'Forge issue number, for example 110348. Reads that one issue whole, comments included; narrow those with notes when you read many. Not with query or backlog.',
                 ],
                 'query' => [
                     'type' => 'string',
@@ -457,7 +457,7 @@ final class ForgeLookup extends ReadOnlyTool
     /** @param array<string, mixed> $args */
     public static function answer(array $args): ToolResult
     {
-        $issue = is_string($args['issue'] ?? null) ? trim($args['issue']) : '';
+        $issue = is_int($args['issue'] ?? null) ? $args['issue'] : 0;
         $query = is_string($args['query'] ?? null) ? trim($args['query']) : '';
         $backlog = is_string($args['backlog'] ?? null) ? trim($args['backlog']) : '';
         $limit = is_int($args['limit'] ?? null) ? $args['limit'] : 15;
@@ -465,7 +465,7 @@ final class ForgeLookup extends ReadOnlyTool
         $assignedTo = is_string($args['assignedTo'] ?? null) ? trim($args['assignedTo']) : '';
         $involving = is_string($args['involving'] ?? null) ? trim($args['involving']) : '';
 
-        if ($issue !== '') {
+        if ($issue > 0) {
             return self::read($issue, is_string($args['notes'] ?? null) ? trim($args['notes']) : 'all');
         }
         // A person filter narrows the enumeration and the schema says so. One
@@ -493,7 +493,7 @@ final class ForgeLookup extends ReadOnlyTool
     }
 
     /** One issue, whole, which is what a number asks for. */
-    private static function read(string $issue, string $notes): ToolResult
+    private static function read(int $issue, string $notes): ToolResult
     {
         $answer = (new Forge())->issue($issue, $notes);
 

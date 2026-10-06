@@ -74,9 +74,9 @@ final class Gerrit
      *
      * @return Answer
      */
-    public function changesForIssue(string $issue, int $limit = 10): array
+    public function changesForIssue(int $issue, int $limit = 10): array
     {
-        $number = ltrim(trim($issue), '#');
+        $number = (string) $issue;
         $answer = $this->search('message:' . $number, $limit, self::CURRENT_COMMIT);
 
         $named = [];

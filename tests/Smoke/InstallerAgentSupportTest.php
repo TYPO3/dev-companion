@@ -24,7 +24,7 @@ final class InstallerAgentSupportTest extends TestCase
         'factory' => ['skills' => '.factory/skills', 'mcp' => '.factory/mcp.json'],
         'kiro' => ['skills' => '.kiro/skills', 'mcp' => '.kiro/settings/mcp.json'],
         'opencode' => ['skills' => '.agents/skills', 'mcp' => 'opencode.json'],
-        'antigravity' => ['skills' => '.agents/skills'],
+        'antigravity' => ['skills' => '.agents/skills', 'mcp' => '.agents/plugins/typo3-dev-companion/mcp_config.json'],
         'zed' => ['skills' => '.agents/skills', 'mcp' => '.zed/settings.json'],
         'pi' => ['skills' => '.pi/skills'],
         'grok' => ['skills' => '.grok/skills', 'mcp' => '.grok/config.toml'],

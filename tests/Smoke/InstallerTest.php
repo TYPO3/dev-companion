@@ -909,6 +909,40 @@ final class InstallerTest extends TestCase
         }
     }
 
+    /**
+     * Antigravity reads no `.mcp.json`, so its entry goes into a plugin. The
+     * client starts a plugin's server in the plugin directory, where no
+     * project is found, so the entry names the project as `cwd`. That path is
+     * this machine's, and git never sees the directory that carries it.
+     */
+    #[Decision('D-DIS-032')]
+    #[Test]
+    public function antigravityGetsAPluginThatStartsTheServerInTheProject(): void
+    {
+        $directory = $this->directory();
+        $output = '';
+        self::assertSame(0, $this->git($directory, ['init', '--quiet'], $output), $output);
+        file_put_contents($directory . '/composer.json', "{}\n");
+
+        try {
+            $stderr = '';
+            self::assertSame(0, $this->execute($directory, ['install', '--agent=antigravity'], $stderr), $stderr);
+
+            $plugin = $directory . '/.agents/plugins/typo3-dev-companion';
+            $manifest = json_decode((string) file_get_contents($plugin . '/plugin.json'), true);
+            self::assertIsArray($manifest);
+            self::assertSame('typo3-dev-companion', $manifest['name']);
+            $configuration = json_decode((string) file_get_contents($plugin . '/mcp_config.json'), true);
+            self::assertIsArray($configuration);
+            self::assertSame($directory, $configuration['mcpServers']['typo3-dev-companion']['cwd']);
+
+            self::assertSame(0, $this->git($directory, ['status', '--porcelain', '-uall'], $output), $output);
+            self::assertSame(['?? composer.json'], array_values(array_filter(explode("\n", $output))), $output);
+        } finally {
+            Directory::remove($directory);
+        }
+    }
+
     /** @param list<string> $arguments */
     private function git(string $directory, array $arguments, string &$output): int
     {

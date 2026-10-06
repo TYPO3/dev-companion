@@ -72,6 +72,11 @@ final class Installer
      * spawned server's environment rather than in the client's own.
      */
     private const WORKSPACE = '${workspaceFolder}';
+    /**
+     * Where Antigravity loads a project plugin from. Its MCP entry starts the
+     * server in this directory unless the entry names a `cwd`, `D-DIS-032`.
+     */
+    private const PLUGIN = '.agents/plugins/' . self::SERVER;
     /** @var array<string, array{skills: string, mcp?: array{format: string, path: string, key: string, shape?: string, root?: string}}> */
     private const AGENTS = [
         'amp' => [
@@ -125,7 +130,18 @@ final class Installer
             'skills' => '.agents/skills',
             'mcp' => ['format' => 'json', 'path' => 'opencode.json', 'key' => 'mcp', 'shape' => 'opencode'],
         ],
-        'antigravity' => ['skills' => '.agents/skills'],
+        // A workspace plugin rather than `.agents/mcp_config.json`, which the
+        // client reads too. The plugin is a directory this package owns whole,
+        // so it ignores itself and the absolute `cwd` never reaches a commit.
+        'antigravity' => [
+            'skills' => '.agents/skills',
+            'mcp' => [
+                'format' => 'json',
+                'path' => self::PLUGIN . '/mcp_config.json',
+                'key' => 'mcpServers',
+                'shape' => 'antigravity',
+            ],
+        ],
         'zed' => [
             'skills' => '.agents/skills',
             'mcp' => ['format' => 'json', 'path' => '.zed/settings.json', 'key' => 'context_servers'],
@@ -196,6 +212,10 @@ final class Installer
             . 'started: trust this directory at the exclamation mark in the title bar, or with '
             . 'workspace::ToggleWorktreeSecurity. Whether a window that was already open reads '
             . 'the file again is not documented.',
+        'antigravity' => 'Antigravity loads a plugin from .agents/plugins in the project it works in. '
+            . 'The entry names this directory as its cwd and the plugin directory ignores itself in git. '
+            . 'Its documentation does not say whether a session that was already open reads a new '
+            . 'plugin; /mcp lists the servers it has.',
         'grok' => 'Grok reads mcp_servers from a project .grok/config.toml, walking up to the git '
             . 'root. Its documentation does not say whether a running session reads the file '
             . 'again; grok mcp doctor reports what it has.',
@@ -594,8 +614,27 @@ final class Installer
         $written = $mcp['format'] === 'toml'
             ? $this->installTomlConfiguration($mcp['path'], $mcp['key'])
             : $this->installJsonConfiguration($agent, $mcp);
+        $plugin = ($mcp['shape'] ?? null) === 'antigravity';
+        if ($plugin) {
+            $this->writePlugin();
+        }
 
-        return $written . $this->remaining($agent, $mcp['root'] ?? null);
+        return $written . $this->remaining($agent, $mcp['root'] ?? null, $plugin);
+    }
+
+    /**
+     * The manifest that makes the directory a plugin, and the line that keeps
+     * it out of git. `name` is the one field the CLI requires.
+     */
+    private function writePlugin(): void
+    {
+        $directory = $this->project . '/' . self::PLUGIN;
+        $this->writeJson($directory . '/plugin.json', [
+            '$schema' => 'https://antigravity.google/schemas/v1/plugin.json',
+            'name' => self::SERVER,
+            'description' => Factory::SERVER_DESCRIPTION,
+        ]);
+        $this->write($directory . '/.gitignore', self::IGNORE_ALL);
     }
 
     /**
@@ -626,9 +665,10 @@ final class Installer
      * session, and neither changes when this command finds the entry already
      * correct.
      */
-    private function remaining(string $agent, ?string $root): string
+    private function remaining(string $agent, ?string $root, bool $ignored): string
     {
-        $lines = array_filter([self::REMAINING[$agent] ?? '', $this->hostSpecific($root) ? self::HOST_SPECIFIC : '']);
+        $hostSpecific = !$ignored && $this->hostSpecific($root);
+        $lines = array_filter([self::REMAINING[$agent] ?? '', $hostSpecific ? self::HOST_SPECIFIC : '']);
 
         return implode('', array_map(
             static fn(string $line): string => "\n  " . wordwrap($line, 74, "\n  "),
@@ -754,14 +794,22 @@ final class Installer
     }
 
     /**
+     * Antigravity starts a plugin's server in the plugin directory and
+     * documents no variable for the project, so its entry names the project
+     * root as its documented `cwd`.
+     *
      * @return array{type: string, command: string, args: list<string>}
      *     |array{type: string, enabled: bool, command: list<string>}
+     *     |array{command: string, args: list<string>, cwd: string}
      */
     private function jsonServer(?string $shape = null, ?string $root = null): array
     {
         ['command' => $command, 'args' => $args] = $this->startedBy($root);
         if ($shape === 'opencode') {
             return ['type' => 'local', 'enabled' => true, 'command' => [$command, ...$args]];
+        }
+        if ($shape === 'antigravity') {
+            return ['command' => $command, 'args' => $args, 'cwd' => $this->project];
         }
 
         return ['type' => 'stdio', 'command' => $command, 'args' => $args];

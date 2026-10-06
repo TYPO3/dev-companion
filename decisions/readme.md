@@ -54,6 +54,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### discovery
 
+- [`D-DIS-032`][D-DIS-032] — Antigravity gets a workspace plugin that starts the server in the project · 2026-10-06
 - [`D-DIS-027`][D-DIS-027] — An argument install does not take ends the run before a write · 2026-10-05
 - [`D-DIS-028`][D-DIS-028] — A DDEV container is entered only by its own project · 2026-10-05
 - [`D-DIS-029`][D-DIS-029] — A project without skills is told at the start · 2026-10-05
@@ -81,6 +82,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DIS-001`][D-DIS-001] — The root package counts as an installed package · 2026-07-29 · confirmed
 - [`D-DIS-004`][D-DIS-004] — The version comes from the core package, not from the console · 2026-07-29 · confirmed
 
+[D-DIS-032]: discovery/dis-032-antigravity-gets-a-workspace-plugin-that-starts-the-server-in-the-project.md
 [D-DIS-027]: discovery/dis-027-an-argument-install-does-not-take-ends-the-run-before-a-write.md
 [D-DIS-028]: discovery/dis-028-a-ddev-container-is-entered-only-by-its-own-project.md
 [D-DIS-029]: discovery/dis-029-a-project-without-skills-is-told-at-the-start.md

@@ -235,12 +235,15 @@ Droid        ``factory``      ``.factory/mcp.json``        ``.factory/skills``
 Junie        ``junie``        ``.junie/mcp/mcp.json``      ``.junie/skills``
 opencode     ``opencode``     ``opencode.json``            ``.agents/skills``
 Grok         ``grok``         ``.grok/config.toml``        ``.grok/skills``
-Antigravity  ``antigravity``  none                         ``.agents/skills``
+Antigravity  ``antigravity``  a plugin, see below          ``.agents/skills``
 Pi           ``pi``           none                         ``.pi/skills``
 ===========  ===============  ===========================  ===================
 
 
-Antigravity and Pi receive skills only, so for them there is no entry and
+Antigravity reads no ``.mcp.json``. Its entry goes into a workspace plugin,
+``.agents/plugins/typo3-dev-companion/``, with ``plugin.json`` and
+``mcp_config.json``. The plugin directory ignores itself in git, like a
+published skill. Pi receives skills only, so for Pi there is no entry and
 nothing to finish. ``typo3-dev-companion help`` prints the same identifiers.
 
 The VS Code switch
@@ -344,6 +347,12 @@ stays open rather than gets a fill:
   the written entry does not. Whether a session that was already open reads the
   file again has no documentation.
   (`MCP servers <https://opencode.ai/docs/mcp-servers/>`_)
+* **Antigravity** — unestablished. A plugin in ``.agents/plugins/`` "activates
+  only when working in that project". Neither page says whether a session that
+  was already open reads a new plugin, or whether anything gates it. ``/mcp``
+  lists the servers a session has. Read 2026-10-06.
+  (`plugins <https://antigravity.google/docs/plugins/>`_,
+  `MCP <https://antigravity.google/docs/mcp/>`_)
 * **Grok** — unestablished. A project ``.grok/config.toml`` does contribute
   ``[mcp_servers]``, up to the git root. Whether a session that runs reads it
   again, and whether anything gates it, has no documentation.
@@ -607,10 +616,11 @@ Kiro         not documented                                         ``${VAR}`` s
 Junie        not documented                                         not documented
 Zed          not documented                                         not documented
 Droid        not documented                                         expansion "does not apply to ``command``, ``args``, or ``url``"
+Antigravity  ``cwd``, else the plugin's own directory               not documented
 ===========  =====================================================  ===============================================================
 
 
-One client documents the workspace as the default, and three offer a ``cwd`` to
+One client documents the workspace as the default, and four offer a ``cwd`` to
 set. Two resolve a variable that names the project root, and one refuses
 expansion in those fields outright. Claude Code is the sharpest of them. It sets
 ``CLAUDE_PROJECT_DIR`` in the spawned server's environment "so your server can
@@ -640,6 +650,10 @@ For the other nine a relative entry would be wrong on the machine that wrote it
 too. An absolute one is at least right there. So the install says it, per client
 and at the terminal, beside the line that reports the entry —
 `D-DIS-016 <../../decisions/discovery/dis-016-how-an-entrypoint-may-be-named-is-a-per-client-question.md>`_.
+
+Antigravity gets the absolute path as ``cwd`` too. It stands in a plugin
+directory that ignores itself, so the install has nothing to add —
+`D-DIS-032 <../../decisions/discovery/dis-032-antigravity-gets-a-workspace-plugin-that-starts-the-server-in-the-project.md>`_.
 
 None of this reaches a standalone checkout. ``${workspaceFolder}`` names a path
 inside the project, and a server that runs from somewhere else has none. There

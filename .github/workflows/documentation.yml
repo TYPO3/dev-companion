@@ -60,19 +60,13 @@ jobs:
       # The reStructuredText parser in phpdocumentor/guides 1.10.1 still passes a
       # token index, and it loops on contributing/glossary.rst. Remove the pin
       # when a guides release reads the new semantics.
-      #
-      # phpdocumentor/guides 1.11.0 made asset() return the path and no longer
-      # copy the file. So the signets guides.xml names never reach the output,
-      # and the finish step fails on every page that links them. guides-cli
-      # 1.11 requires guides 1.11, so both stay below it. Remove the pin when
-      # the theme or a guides release copies the signet again.
       - name: Render the site
         env:
           RENDERER: ${{ runner.temp }}/renderer
         run: |
           mkdir -p "$RENDERER"
           composer init --working-dir="$RENDERER" --no-interaction --name=typo3/dev-companion-render
-          composer require --working-dir="$RENDERER" --no-interaction --no-progress typo3/soul-guides-theme doctrine/lexer:3.0.2 'phpdocumentor/guides:<1.11' 'phpdocumentor/guides-cli:<1.11'
+          composer require --working-dir="$RENDERER" --no-interaction --no-progress typo3/soul-guides-theme doctrine/lexer:3.0.2
           "$RENDERER"/vendor/bin/guides --no-progress -c documentation
           node "$RENDERER"/vendor/typo3/soul-guides-theme/resources/dist/soul-finish.js .site/html
 

@@ -61,11 +61,21 @@
       "table does not exist",
       "table was not created",
       "successfully set up",
-      "cached TCA"
+      "cached TCA",
+      "CREATE TABLE",
+      "fixture extension"
     ],
     "hints": [
       {
         "text": "ext_tables.sql carries only the delta the schema analyzer needs — the tables and columns TCA does not already describe. It is not a schema dump, and a column TCA defines does not belong in it.",
+        "since": 13
+      },
+      {
+        "text": "A TCA table needs no CREATE TABLE at all. SchemaMigrator adds an empty one for every table TCA defines, and DefaultTcaSchema then adds its columns.",
+        "since": 13
+      },
+      {
+        "text": "A column that ext_tables.sql declares replaces the column TYPO3 derives, because DefaultTcaSchema skips every column the file already has. So a declaration added to be safe overrides the derived type with a guess. A plain int for a type=file column drops the UNSIGNED the derived column carries. Where it is unclear what TYPO3 derives, typo3_schema_lookup answers it before the file is written.",
         "since": 13
       },
       {

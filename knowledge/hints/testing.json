@@ -143,11 +143,17 @@
       "Test extension path",
       "which does not exist",
       "load an extension in a test",
-      "package collection"
+      "package collection",
+      "fixture extension",
+      "test extension"
     ],
     "hints": [
       "$testExtensionsToLoad takes paths relative to the document root, not to the project root: in a Composer installation with a public/ web directory, \"extensions/my_sitepackage\" is looked for below public/ and fails with \"Test extension path ... not found\". Name the extension key or the Composer package name instead — those are resolved against the installed packages, and that is the form a project wants.",
-      "Every TYPO3 extension the extension under test requires has to be loaded as well, in $coreExtensionsToLoad or $testExtensionsToLoad. A missing one fails at setup with 'Package \"x\" depends on package \"y\" which does not exist' — thrown by the testing framework's own package collection, not by the installation, so it is a test-only failure — and the list to mirror is the extension's own require entries. That makes every requirement a change to every test class: the moment the extension requires one more, each class whose list does not name it fails at setup, including the classes that have nothing to do with what was added."
+      "Every TYPO3 extension the extension under test requires has to be loaded as well, in $coreExtensionsToLoad or $testExtensionsToLoad. A missing one fails at setup with 'Package \"x\" depends on package \"y\" which does not exist' — thrown by the testing framework's own package collection, not by the installation, so it is a test-only failure — and the list to mirror is the extension's own require entries. That makes every requirement a change to every test class: the moment the extension requires one more, each class whose list does not name it fails at setup, including the classes that have nothing to do with what was added.",
+      {
+        "text": "A test extension's ext_tables.sql declares what any extension's does: only what TCA does not describe. The testing framework builds the test database through the core's SchemaMigrator, so a test extension's TCA tables get the derived columns too. typo3_schema_lookup does not see a table that only a test instance loads. DefaultTcaSchema in vendor/typo3/cms-core is what derives each column there.",
+        "since": 13
+      }
     ]
   },
   {

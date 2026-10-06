@@ -14,13 +14,15 @@ NULL, and what it stores when nothing writes to it. Those are also exactly the
 columns an ext_tables.sql does not have to declare, so this is what you check a
 redundant declaration against. It asks the booted installation about a table
 that is in it. So it answers nothing about a table that exists only inside a
-functional test, and nothing about a TCA type in the abstract. It describes what
-TYPO3 creates, never what the database has now, and it says so rather than
-answers empty when it cannot boot. It is about the shape of the table and not
-about what is in it. How many rows one of this project's own tables holds and
-what they are is typo3_record_lookup. A type=flex column is one column here and
-a data structure elsewhere: what this installation resolves it to, sheet by
-sheet, is typo3_flexform_lookup. Answers from: installation.
+functional test, and nothing about a TCA type in the abstract. A functional test
+derives the same columns, so a test extension leaves them out of its
+ext_tables.sql too. It describes what TYPO3 creates, never what the database has
+now, and it says so rather than answers empty when it cannot boot. It is about
+the shape of the table and not about what is in it. How many rows one of this
+project's own tables holds and what they are is typo3_record_lookup. A type=flex
+column is one column here and a data structure elsewhere: what this installation
+resolves it to, sheet by sheet, is typo3_flexform_lookup. Answers from:
+installation.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 

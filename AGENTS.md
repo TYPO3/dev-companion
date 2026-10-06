@@ -37,6 +37,7 @@ src/               # grouped by what a class is: only Paths and the bootstrap si
 src/Server/        # starting this server and setting a project up for it
 src/Server/Entrypoint.php  # what `bin/typo3-dev-companion` runs: the commands, the usage, the transport
 src/Server/Factory.php     # builds the mcp/sdk server from the tool definitions
+src/Server/HandshakeStdioTransport.php  # the SDK's stdio transport, with the id kept on a 2026-07-28 request it refuses
 src/Server/Installer.php   # writes the client setup, publishes the skills, puts back a publication that has gone stale
 src/Server/ExcludedTools.php  # what TYPO3_DEV_COMPANION_EXCLUDE_TOOLS takes away
 src/Server/CodeAge.php  # whether the running process is older than the code in its checkout

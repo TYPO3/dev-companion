@@ -110,6 +110,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-171`][D-ANS-171] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06
 - [`D-ANS-169`][D-ANS-169] — The project answer says whether its DDEV project runs · 2026-10-05
 - [`D-ANS-170`][D-ANS-170] — A chain entry says where it stands · 2026-10-05
 - [`D-ANS-171`][D-ANS-171] — A core issue is drafted and handed over as the filled form · 2026-10-05
@@ -275,6 +276,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-171]: answers/ans-171-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
 [D-ANS-169]: answers/ans-169-the-project-answer-says-whether-its-ddev-project-runs.md
 [D-ANS-170]: answers/ans-170-a-chain-entry-says-where-it-stands.md
 [D-ANS-171]: answers/ans-171-a-core-issue-is-drafted-and-handed-over-as-the-filled-form.md

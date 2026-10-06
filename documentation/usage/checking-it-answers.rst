@@ -137,7 +137,7 @@ work directory produces answers about the wrong site.
 The MCP Inspector asks the same two lines with a form around them. Set its
 protocol era to ``Legacy``, which is its default. The server speaks the
 handshake revision ``2025-11-25`` over stdio and no newer one. ``Modern`` and
-``Auto`` open with ``server/discover`` instead of ``initialize``. The SDK
-answers that with an error that carries no request id, so the Inspector waits
-for an answer that never comes and fails. That is not a server that cannot
-start.
+``Auto`` open with ``server/discover`` instead of ``initialize``. The server
+answers that with ``-32022`` and the revisions it does speak. ``Modern`` stops
+there, which is not a server that cannot start. ``Auto`` can fall back to
+``initialize`` on that answer.

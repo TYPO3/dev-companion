@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Tests\Smoke;
 
+use Mcp\Schema\JsonRpc\Error;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Installation\Instance;
@@ -155,6 +156,34 @@ final class StdioServerTest extends TestCase
 
         self::assertSame(self::PROTOCOL_VERSION, $result['result']['protocolVersion']);
         self::assertArrayNotHasKey('error', $result);
+    }
+
+    /**
+     * A client that opens with `server/discover` gets the revisions it can
+     * fall back to, under its own id. Antigravity's client closed the
+     * connection on the id-less error the SDK sends there.
+     */
+    #[Decision('D-ANS-171')]
+    #[Test]
+    public function aClientOpeningWithServerDiscoverIsToldWhichRevisionsToFallBackTo(): void
+    {
+        $responses = $this->call([
+            $this->request(1, 'server/discover', ['_meta' => [
+                'io.modelcontextprotocol/clientCapabilities' => new \stdClass(),
+                'io.modelcontextprotocol/clientInfo' => ['name' => 'phpunit', 'version' => '1'],
+                'io.modelcontextprotocol/protocolVersion' => '2026-07-28',
+            ]]),
+            $this->request(2, 'initialize', [
+                'protocolVersion' => self::PROTOCOL_VERSION,
+                'capabilities' => new \stdClass(),
+                'clientInfo' => ['name' => 'phpunit', 'version' => '1'],
+            ]),
+        ]);
+
+        self::assertSame(1, $responses[1]['id']);
+        self::assertSame(Error::UNSUPPORTED_PROTOCOL_VERSION, $responses[1]['error']['code']);
+        self::assertContains(self::PROTOCOL_VERSION, $responses[1]['error']['data']['supported']);
+        self::assertSame(self::PROTOCOL_VERSION, $responses[2]['result']['protocolVersion']);
     }
 
     /**

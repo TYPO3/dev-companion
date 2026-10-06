@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Server;
 
-use Mcp\Server\Transport\StdioTransport;
 use TYPO3\DevCompanion\Installation\Instance;
 
 /**
@@ -44,7 +43,7 @@ final class Entrypoint
                 fwrite(STDERR, 'typo3-dev-companion: ' . Upstream::notice() . "\n");
             }
             self::reportExclusionsThatTookNothingAway();
-            Factory::create(self::refreshSkillsNobodyHasUpdated($binary))->run(new StdioTransport());
+            Factory::create(self::refreshSkillsNobodyHasUpdated($binary))->run(new HandshakeStdioTransport());
 
             return 0;
         }

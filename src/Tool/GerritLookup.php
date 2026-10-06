@@ -775,7 +775,7 @@ final class GerritLookup extends ReadOnlyTool
             'source' => Gerrit::HOST,
             'query' => $answer['query'],
             'changes' => $answer['changes'],
-            'backlog' => $direction === 'backlog' ? [
+            'backlog' => $direction === 'backlog' && isset($answer['read'], $answer['complete']) ? [
                 'order' => $backlog,
                 'read' => $answer['read'],
                 'complete' => $answer['complete'],

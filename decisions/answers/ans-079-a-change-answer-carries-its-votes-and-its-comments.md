@@ -164,18 +164,13 @@ What came of it is `D-ANS-111`. Every comment says which thread it is in and
 what that thread stands at, and the count in the heading is threads rather than
 flags.
 
-## Read on 2026-10-06
+## Since then
 
-A strength reported from outside, and it marks where the change answer ends.
+On 2026-10-06 a strength from outside marked where the change answer ends.
 `feedback/archive/2026-10-06-164516-typo3-gerrit-lookup-provides-complete-patch-set.md`
-is a Gemini 3.8 Flash review of change 93806 in a core checkout. One call to
-`typo3_gerrit_lookup` gave it the commit, the touched paths, the review comments
-and the fetch ref. The session triaged without a local fetch. The same call,
-re-run on 2026-10-06, answers patch set 12 with the votes per label and the
-fetch ref.
-
-The cost the same debrief reports stands on the other side of that answer. The
-session passed two of the touched paths to `typo3_hint_lookup` and got 0%. So
-the change answer delivers the paths, and the corpus they lead to has nothing
-for `Database/Schema/` and `Database/Platform/`. `T-261006-551e` carries that
-gap.
+reviewed change 93806 and triaged it from one call, without a fetch. The re-run
+answers patch set 12 with the votes and the fetch ref. The same debrief passed
+two touched paths to `typo3_hint_lookup` and got 0%. So the paths arrive, and
+the corpus had nothing for the core's `Database/Schema/` and
+`Database/Platform/` until `core-tca-derived-schema` and
+`core-database-platforms`.

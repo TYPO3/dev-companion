@@ -1,0 +1,93 @@
+[
+  {
+    "id": "core-tca-derived-schema",
+    "title": "DefaultTcaSchema and the Columns It Derives",
+    "domains": [
+      "php"
+    ],
+    "scope": "core",
+    "appliesTo": [
+      "Classes/Database/Schema/",
+      "DefaultTcaSchema",
+      "SchemaMigrator",
+      "ConnectionMigrator",
+      "derived column",
+      "generated column",
+      "database analyzer",
+      "update suggestions"
+    ],
+    "hints": [
+      "DefaultTcaSchema::enrich() adds the columns and indexes that TCA implies to the tables parsed from ext_tables.sql, and creates the MM tables. SchemaMigrator calls it directly. No event or listener sits between the two, so a change to a derived column is a change to this class.",
+      "A column that ext_tables.sql declares wins. Every add in DefaultTcaSchema is guarded by isColumnDefinedForTable() or isIndexDefinedForTable(). So a changed derived type reaches only a column that no ext_tables.sql declares, and a core table that still declares the column keeps its old type.",
+      {
+        "text": "Only the field types category, datetime, slug, json and uuid derive a column. Every other column of an extension table stands in ext_tables.sql.",
+        "until": 12
+      },
+      {
+        "text": "Most field types derive a column: group, select, inline, number, check, file, text, link, password, color and more. The ctrl section derives the management columns, such as uid, pid, tstamp, the delete and enable fields, the language fields and the workspace fields.",
+        "since": 13
+      },
+      {
+        "text": "DefaultTcaSchema reads $GLOBALS['TCA'] directly, and DefaultTcaSchemaTest sets $GLOBALS['TCA'] before it builds the subject.",
+        "until": 13
+      },
+      {
+        "text": "DefaultTcaSchema reads TCA through the capabilities and field types of TcaSchemaFactory. DefaultTcaSchemaTest builds the subject from a TcaSchemaFactory that it prepares from a TCA array.",
+        "since": 14
+      },
+      "A test in core/Tests/Unit/Database/Schema/DefaultTcaSchemaTest.php calls enrich() on a bare Doctrine Table. It then compares getColumn(...)->toArray() with an expected Column. So each derived column is one test with the exact type, length, default and notnull it expects.",
+      {
+        "text": "The only platform-dependent column in DefaultTcaSchema is type=number with a scale. It is a VARCHAR on SQLite and a DECIMAL elsewhere, because pdo_sqlite returns a float. The unit test fixes the platform with mockDefaultConnectionPlatformInConnectionPool().",
+        "since": 13
+      },
+      {
+        "text": "CleanSchemaMigrationForAllSystemExtensionTest sets up every system extension and fails on any update suggestion that remains. So a derived type that differs from what a system extension declares fails there.",
+        "since": 13
+      },
+      "An installation receives a changed derived type through the database analyzer. ConnectionMigrator turns the difference into a change suggestion, and the platform of the connection writes the ALTER statement. So a type change is tested against every DBMS: Build/Scripts/runTests.sh -s functional -d <sqlite|mariadb|mysql|postgres>, with -i for a database version."
+    ]
+  },
+  {
+    "id": "core-database-platforms",
+    "title": "The Core's Own Database Platforms",
+    "domains": [
+      "php"
+    ],
+    "scope": "core",
+    "appliesTo": [
+      "Classes/Database/Platform/",
+      "PostgreSQLPlatform",
+      "MySQLPlatform",
+      "MariaDBPlatform",
+      "SQLitePlatform",
+      "PlatformInformation",
+      "CustomPlatformDriverMiddleware",
+      "CustomPlatformDriverDecorator",
+      "database platform"
+    ],
+    "hints": [
+      {
+        "text": "Classes/Database/Platform/ holds PlatformInformation and nothing else. The core has no platform class of its own, and the ALTER statements are the Doctrine platform's.",
+        "until": 12
+      },
+      {
+        "text": "Each class in Classes/Database/Platform/ extends the Doctrine platform of the same name. CustomPlatformDriverMiddleware, registered in DB globalDriverMiddlewares, wraps the driver in CustomPlatformDriverDecorator. That decorator swaps each known Doctrine platform for the core's subclass, and an unknown platform stays Doctrine's.",
+        "since": 13
+      },
+      {
+        "text": "So SQL that a Doctrine platform writes wrong for TYPO3 is corrected in the subclass, never at the caller. Every query and every ALTER statement of the database analyzer then gets the correction.",
+        "since": 13
+      },
+      {
+        "text": "Platform/Traits/ shares a correction across platforms. MySQLCompatibleAlterTablePlatformAwareTrait adds the engine, row format, charset and collation to ALTER TABLE on MySQL and MariaDB. MySQLDefaultValueDeclarationSQLOverrideTrait writes a default on TEXT, JSON and BLOB as an expression on MySQL. GetColumnDeclarationSQLCommentTypeAwareTrait keeps the type comment on a GUID column.",
+        "since": 13
+      },
+      {
+        "text": "The core's SQLitePlatform declares JSON and UUID as column types of its own, so no type comment marks them. A column comment breaks ALTER TABLE ADD COLUMN on SQLite.",
+        "since": 13
+      },
+      "PlatformInformation holds static limits per DBMS: the charset, the longest identifier and the number of bind parameters one statement takes. A patch that builds a long identifier or a large IN() list reads the limit from there.",
+      "A change to a platform class changes the SQL of every installation on that DBMS. Its functional test therefore runs on that DBMS: Build/Scripts/runTests.sh -s functional -d <mariadb|mysql|postgres|sqlite> -i <version>."
+    ]
+  }
+]

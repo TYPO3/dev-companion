@@ -17,11 +17,11 @@ hints still come back, because the conventions transfer. The "Backend CSS" and
 interface. The answer withholds them, with the reason, where the task names the
 frontend. The subjects are assets, authentication, backend css, backend modules,
 backend ui, caching, configuration, console commands, content elements,
-datahandler, dataprocessors, di, distribution, documentation, events, extbase,
-extension, fal, fluid, form, icons, labels, page rendering, persistence, php,
-project, public api, records, routing, security, site sets, sitepackage, tca,
-testing, typo3 tsconfig, typoscript condition providers, typoscript conditions,
-upgrade. Answers from: knowledge.
+database, datahandler, dataprocessors, di, distribution, documentation, events,
+extbase, extension, fal, fluid, form, icons, labels, page rendering,
+persistence, php, project, public api, records, routing, security, site sets,
+sitepackage, tca, testing, typo3 tsconfig, typoscript condition providers,
+typoscript conditions, upgrade. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -246,6 +246,7 @@ Text:
     - site-label-language — Core Labels on a Non-English Site (Labels)
     - fal-testing — Covering FAL Behaviour (PHP)
     - extension-schema-sql — Declaring Tables and Columns (PHP)
+    - core-tca-derived-schema — DefaultTcaSchema and the Columns It Derives (PHP)
     - deprecated-apis — Deprecated APIs (PHP)
     - extension-documentation — Documenting a Project Extension (Documentation)
     - form-framework — EXT:form Configuration and Runtime (PHP)
@@ -285,6 +286,7 @@ Text:
     - tca-formengine — TCA, FormEngine, and Backend Forms (PHP)
     - php-value-checks — Testing a Value Rather Than Its Falsiness (PHP)
     - content-element-preview — The Backend Preview of a Content Element (Fluid)
+    - core-database-platforms — The Core's Own Database Platforms (PHP)
     - core-exception-codes — The Exception Code Every Core Throw Carries (PHP)
     - extension-declarative-files — The Files an Extension Is Configured By (PHP)
     - extension-repository-tests — The Instance an Extension Suite Builds Itself (PHP)
@@ -573,6 +575,11 @@ Data:
                 "category": "PHP"
             },
             {
+                "id": "core-tca-derived-schema",
+                "title": "DefaultTcaSchema and the Columns It Derives",
+                "category": "PHP"
+            },
+            {
                 "id": "deprecated-apis",
                 "title": "Deprecated APIs",
                 "category": "PHP"
@@ -766,6 +773,11 @@ Data:
                 "id": "content-element-preview",
                 "title": "The Backend Preview of a Content Element",
                 "category": "Fluid"
+            },
+            {
+                "id": "core-database-platforms",
+                "title": "The Core's Own Database Platforms",
+                "category": "PHP"
             },
             {
                 "id": "core-exception-codes",
@@ -1617,6 +1629,7 @@ Text:
     - fal-testing — Covering FAL Behaviour (PHP)
     - datahandler-basics — DataHandler Is the Write Path for Records (PHP)
     - extension-schema-sql — Declaring Tables and Columns (PHP)
+    - core-tca-derived-schema — DefaultTcaSchema and the Columns It Derives (PHP)
     - deprecated-apis — Deprecated APIs (PHP)
     - extension-documentation — Documenting a Project Extension (Documentation)
     - form-framework — EXT:form Configuration and Runtime (PHP)
@@ -1657,6 +1670,7 @@ Text:
     - datahandler-testing — Testing DataHandler Behaviour (PHP)
     - php-value-checks — Testing a Value Rather Than Its Falsiness (PHP)
     - content-element-preview — The Backend Preview of a Content Element (Fluid)
+    - core-database-platforms — The Core's Own Database Platforms (PHP)
     - core-exception-codes — The Exception Code Every Core Throw Carries (PHP)
     - extension-declarative-files — The Files an Extension Is Configured By (PHP)
     - extension-repository-tests — The Instance an Extension Suite Builds Itself (PHP)
@@ -1846,6 +1860,11 @@ Data:
             {
                 "id": "extension-schema-sql",
                 "title": "Declaring Tables and Columns",
+                "category": "PHP"
+            },
+            {
+                "id": "core-tca-derived-schema",
+                "title": "DefaultTcaSchema and the Columns It Derives",
                 "category": "PHP"
             },
             {
@@ -2047,6 +2066,11 @@ Data:
                 "id": "content-element-preview",
                 "title": "The Backend Preview of a Content Element",
                 "category": "Fluid"
+            },
+            {
+                "id": "core-database-platforms",
+                "title": "The Core's Own Database Platforms",
+                "category": "PHP"
             },
             {
                 "id": "core-exception-codes",

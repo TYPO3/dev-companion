@@ -3061,6 +3061,9 @@ final class HintsTest extends TestCase
 
         self::assertContains('upgrade-wizards', $reached('Classes/Updates/AccordionElementUpdate.php'));
         self::assertContains('frontend-dataprocessors', $reached('Classes/DataProcessing/CsvFileProcessor.php'));
+        // A core review passed these two and got 0%, `T-261006-551e`.
+        self::assertSame('core-tca-derived-schema', $reached('typo3/sysext/core/Classes/Database/Schema/DefaultTcaSchema.php')[0] ?? null);
+        self::assertSame('core-database-platforms', $reached('typo3/sysext/core/Classes/Database/Platform/PostgreSQLPlatform.php')[0] ?? null);
     }
 
     #[Requirement('R-KNW-003')]

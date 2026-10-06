@@ -1,7 +1,8 @@
 ---
 date: 2026-10-06T16:44:42+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-10-06
 model: Gemini 3.8 Flash
 tool: typo3_hint_lookup
 directory: /home/benji/projects/typo3-cms

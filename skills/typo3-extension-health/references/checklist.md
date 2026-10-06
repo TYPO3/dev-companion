@@ -11,8 +11,9 @@ of an optional subsystem is not a defect.
   the supported TYPO3 and PHP range.
 - Registration and runtime: services, events, middleware, plugins, content
   elements, backend modules, routes, permissions, and effective configuration.
-- Persistence: TCA, schema, relations, DataHandler use, repositories, fixtures,
-  and upgrade paths.
+- Persistence: TCA, schema, ext_tables.sql declarations of columns the core
+  derives, relations, DataHandler use, repositories, fixtures, and upgrade
+  paths.
 - Rendering: site sets, TypoScript, TSconfig, Fluid roots and namespaces,
   templates, translations, and public assets.
 - Security: authorization boundaries, state-changing requests, output-context

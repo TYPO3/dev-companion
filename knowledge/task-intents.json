@@ -89,7 +89,8 @@
       "Ask it per symbol rather than per package. A class that stands on both branches can have gained a method on the newer one, a return type can be nullable on one side, and a constant can hold a different set of entries.",
       "The lowest declared major decides every shape in the package. A registration form, attribute or API introduced later cannot replace one that still has to work there, so a runtime branch on the version is what the declared range requires rather than debt to clean up.",
       "Prove every combination the declaration claims rather than the one the installation supplies. A cell that will not resolve is the finding, and a cell nobody ran is named as unrun — the matrix is the claim the package makes about itself.",
-      "Dropping a major is the user's decision and never one taken to make the code simpler. Widening to a new one keeps every version currently declared unless the request says otherwise."
+      "Dropping a major is the user's decision and never one taken to make the code simpler. Widening to a new one keeps every version currently declared unless the request says otherwise.",
+      "A dropped major can leave only majors where TCA derives the columns. Then every ext_tables.sql declaration of a derived column is redundant, and the same change takes it out. typo3_schema_lookup lists per table what the core derives, and names the update a removal causes."
     ],
     "checks": [],
     "tools": [
@@ -993,6 +994,7 @@
       "Name the table and the type before the field. A column in the columns section exists in the schema and appears in no form until a type's showitem puts it there, and a table with several types shows a different form per type — so \"add the field\" is two edits, and the second is the one people forget.",
       "Read what the table already has rather than adding beside it: typo3_extension_describe reports what this extension registers, and a field whose job is already done by an existing column is a second way to store one thing.",
       "Settle the database column with typo3_schema_lookup rather than by writing ext_tables.sql first. It lists what TYPO3 derives from the TCA itself, with the Doctrine type, the NOT NULL and the default — which is also exactly what an ext_tables.sql does not have to declare, so a redundant declaration is found there instead of in a review.",
+      "Read an ext_tables.sql the extension already has against typo3_schema_lookup for each table it declares, and take out every table and column the core derives. A package that also declares a major where TCA derives nothing keeps them; typo3_hint_lookup with id=extension-schema-sql says which majors derive. Call typo3_schema_lookup again after the removal: an update it names means the hand-written type differed from the derived one, and the commit says so.",
       "Pass the XLF resource used at the consuming code to typo3_label_lookup before wording the field's label. A match in another resource is not reusable there, and a guessed label key fails only at runtime.",
       "The conventions are typo3_hint_lookup with id=tca-formengine for the form side and id=tca-schema-api for what the schema API answers about a field; a datetime column has its own, id=tca-datetime-storage, because what it stores and when it is null is not what the type name suggests."
     ],

@@ -2,12 +2,10 @@
 id: D-KNW-125
 title: A core commit message carries four trailers and the hook's Change-Id
 date: 2026-08-25
-status: open
+status: revoked
 revokes: [D-KNW-110]
-coveredBy:
-  - CommitMessageTest::aCoreDraftAsksForTheSignOffItCannotWrite
-  - CommitMessageTest::aCoreDraftRefusesTheTrailersTheProjectDoesNotSet
-  - KnowledgeTest::theTrailerAnswerStatesTheRuleAndWhatLeavesItUnenforced
+revokedBy: D-KNW-167
+coveredBy: []
 ---
 
 # D-KNW-125 — A core commit message carries four trailers and the hook's Change-Id
@@ -139,3 +137,12 @@ people break the rule.
 The page's sign-off rate had gone stale under a reviewer who rated a finding by
 it. It now dates the turn to 2026-08-23, gives both rates as measured on
 2026-10-05, and names the command that measures them again.
+
+## Revoked on 2026-10-07
+
+The maintainer made the sign-off optional. A contributor may set it, and no
+check asks for it. So the placeholder and the `missing-sign-off` error this
+entry decided are gone, and `D-KNW-167` is what a reader builds on.
+
+No **Wrong if** fired. The rule moved on the maintainer's word, which is the
+case `R-KNW-075` exists for.

@@ -630,8 +630,7 @@ final class CommitMessageTest extends TestCase
      *
      * A session got missing-issue as an error on a change under work in
      * progress. Its author had told it to keep the placeholder. It reported the
-     * finding as false against the repository in front of it. The sign-off
-     * stays an error whatever the state — `R-KNW-075`.
+     * finding as false against the repository in front of it.
      */
     #[Test]
     public function aDraftIsNotHeldToTheTrailerMergingRequires(): void
@@ -644,7 +643,6 @@ final class CommitMessageTest extends TestCase
 
         self::assertNotContains('missing-issue', $codes);
         self::assertContains('issue-owed-before-merge', $codes);
-        self::assertContains('missing-sign-off', $codes);
     }
 
     /** Without the marker the same message owes the trailer as an error. */
@@ -789,10 +787,9 @@ final class CommitMessageTest extends TestCase
      * The two an agent writes about itself, and the workflow that keeps them.
      *
      * A refused trailer comes off the draft rather than into a report beside
-     * it, because the draft goes into the commit as it stands. The sign-off
-     * stood among them until the certificate became required — `D-KNW-125`.
+     * it, because the draft goes into the commit as it stands. The sign-off is
+     * not among them — `D-KNW-167`.
      */
-    #[Decision('D-KNW-125')]
     #[Decision('D-KNW-161')]
     #[Test]
     public function aCoreDraftRefusesTheTrailersTheProjectDoesNotSet(): void
@@ -813,25 +810,21 @@ final class CommitMessageTest extends TestCase
 
         $redrafted = CommitMessage::create($core['input'] + ['workflow' => CommitMessage::WORKFLOW_CORE]);
         self::assertStringContainsString('Signed-off-by: A <a@b.c>', $redrafted['message'], 'the certificate is struck off the draft');
-        self::assertNotContains('missing-sign-off', array_column($redrafted['checks'], 'code'));
 
         $project = CommitMessage::parse($message, CommitMessage::WORKFLOW_PROJECT);
         self::assertNotContains('refused-trailer', array_column($project['checks'], 'code'));
-        self::assertNotContains('missing-sign-off', array_column($project['checks'], 'code'), 'the certificate is asked of a core patch');
         self::assertCount(5, $project['input']['extraTrailers']);
     }
 
     /**
-     * The certificate is an attestation about provenance, so the draft names
-     * the obligation and leaves the identity to whoever commits — `D-KNW-125`.
-     * It is the shape `Resolves:` already has. A placeholder in the draft, an
-     * error beside it, and the placeholder read back as the open field it was.
+     * The certificate is the contributor's to give, so a core draft neither
+     * asks for it nor moves one the message carries — `D-KNW-167`.
      */
-    #[Decision('D-KNW-125')]
+    #[Decision('D-KNW-167')]
     #[Test]
-    public function aCoreDraftAsksForTheSignOffItCannotWrite(): void
+    public function aCoreDraftKeepsASignOffAndAsksForNone(): void
     {
-        $result = CommitMessage::create([
+        $unsigned = CommitMessage::create([
             'keyword' => 'TASK',
             'summary' => 'Do a thing',
             'issue' => '1',
@@ -839,22 +832,14 @@ final class CommitMessageTest extends TestCase
             'workflow' => CommitMessage::WORKFLOW_CORE,
         ]);
 
-        self::assertStringEndsWith("\nSigned-off-by: " . CommitMessage::SIGN_OFF_PLACEHOLDER, $result['message']);
-        $check = $this->checksWithCode($result['checks'], 'missing-sign-off')[0];
-        self::assertSame('error', $check['level']);
-        self::assertStringContainsString('git commit -s', $check['message'], 'nothing says how the line is written');
-        self::assertStringContainsString('GPL v2', $check['message'], 'nothing says what signing it claims');
+        self::assertStringNotContainsString('Signed-off-by', $unsigned['message'], 'the draft writes a trailer nobody asked for');
+        self::assertContains('no-issues-found', array_column($unsigned['checks'], 'code'), 'an unsigned message reports a defect');
 
-        // Read back, the placeholder is an unsigned message rather than a
-        // signed one. Otherwise the one moment somebody checks the message they
-        // are about to commit is the moment it reports clean.
-        $parsed = CommitMessage::parse($result['message'], CommitMessage::WORKFLOW_CORE);
-        self::assertSame([], $parsed['input']['extraTrailers']);
-        $rechecked = CommitMessage::create($parsed['input'] + ['workflow' => CommitMessage::WORKFLOW_CORE]);
-        self::assertContains('missing-sign-off', array_column($rechecked['checks'], 'code'));
+        $trailers = "Resolves: #1\nReleases: main\nSigned-off-by: A <a@b.c>\nChange-Id: I0123456789abcdef0123456789abcdef01234567";
+        $parsed = CommitMessage::parse("[TASK] Do a thing\n\n" . $trailers . "\n", CommitMessage::WORKFLOW_CORE);
+        $signed = CommitMessage::create($parsed['input'] + ['workflow' => CommitMessage::WORKFLOW_CORE]);
 
-        $project = CommitMessage::create(['keyword' => 'TASK', 'summary' => 'Do a thing', 'workflow' => CommitMessage::WORKFLOW_PROJECT]);
-        self::assertStringNotContainsString('Signed-off-by', $project['message'], 'the certificate belongs to the core workflow');
+        self::assertStringEndsWith("\n\n" . $trailers, $signed['message'], 'the sign-off moved or went');
     }
 
     #[Test]

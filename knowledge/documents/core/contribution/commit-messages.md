@@ -126,23 +126,21 @@ the shortest line that matches.
 
 ## The Trailers A Core Commit Carries
 
-A core commit message carries `Resolves:`, `Related:`, `Releases:`,
-`Signed-off-by:` and the `Change-Id:` the hook writes. It carries no trailer
-beyond those five.
+A core commit message carries `Resolves:`, `Related:`, `Releases:` and the
+`Change-Id:` the hook writes. A contributor may add `Signed-off-by:`. It carries
+no trailer beyond those five.
 
-- `Signed-off-by:` is on every TYPO3 core patch. `git commit -s` writes it from
-  your git identity. `git config format.signOff true` makes that the default.
+- `Signed-off-by:` is optional. `git commit -s` writes it from your git
+  identity, after `Releases:` and before the `Change-Id:`.
   `git commit --amend -s` adds it to a patch set that went out without one.
+- In a review, a patch without a sign-off is no finding. A patch with one keeps
+  it where it stands.
 - The line is the Developer Certificate of Origin rather than a second author
   field. When you sign it, you say two things. The project may publish the
   contribution under GPL v2, and it violates nobody else's rights.
-- That warranty is yours whatever wrote the code. An AI tool does not divide it
-  and does not diminish it. A contribution nobody stands behind is one nobody
-  merges.
-- The rule comes from the TYPO3 Association board's statement on GPL and
-  AI-generated code of 2026-07-20. The board recommends the certificate as what
-  makes a contributor's provenance representation explicit and auditable. The
-  board put it as a recommendation to consider; this project requires it.
+- The TYPO3 Association board's statement on GPL and AI-generated code of
+  2026-07-20 recommends the certificate. The board put it as a recommendation to
+  consider, and this project does not require it.
 - A core patch carries no `Co-Authored-By:`, `Assisted-by:` or `Generated-by:`,
   and no trailer that names the agent or the session it came from. Who held the
   keyboard is the author field and the review, not a line in the message.
@@ -161,8 +159,8 @@ beyond those five.
   2026-08-23. The sign-off went from two commits in a hundred to about half, on
   2026-10-05.
   `git log --since=2026-08-23 --format=%b origin/main | grep -c '^Signed-off-by:'`
-  against `git rev-list --count --since=2026-08-23 origin/main` measures it. So
-  a reviewer strikes a patch without one, and no check rejects it.
+  against `git rev-list --count --since=2026-08-23 origin/main` measures it. No
+  check rejects a patch without one.
 
 ## What The Commit Hook Writes
 

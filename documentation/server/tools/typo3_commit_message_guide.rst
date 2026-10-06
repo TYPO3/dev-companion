@@ -39,9 +39,8 @@ Takes
     # keeps unknown trailers such as Change-Id, so an amended patch set stays valid.
     # The exception is workflow="core", which takes Co-Authored-By, Assisted-by,
     # Generated-by and an agent's own session trailer off the draft and reports each
-    # as an error: a core commit message carries none of them. A core message
-    # without Signed-off-by is an error there. The core requires the certificate,
-    # and the draft carries a placeholder because only whoever commits can sign it.
+    # as an error: a core commit message carries none of them. A Signed-off-by line
+    # stays on the draft, and a core message without one is no error.
     message: string  # optional
     # One of: core, project. Which rules to apply. "project", the default, is any
     # repository of your own. The checks read the keyword, the 52/72 character
@@ -86,9 +85,9 @@ Takes
     isDeprecation: boolean  # optional
     # Whether the change is still in work and not up for merge. True writes [WIP]
     # before the keyword, where [!!!] goes, and the Forge issue is no error then:
-    # the merge is what requires the trailer. The sign-off stays required whatever
-    # the state. A message passed as message says this in its own subject and needs
-    # no argument; the checks read [WIP] and [PoC] there the same way.
+    # the merge is what requires the trailer. A message passed as message says this
+    # in its own subject and needs no argument; the checks read [WIP] and [PoC]
+    # there the same way.
     workInProgress: boolean  # optional
 
 Answers with

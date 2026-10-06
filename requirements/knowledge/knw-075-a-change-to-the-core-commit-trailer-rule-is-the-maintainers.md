@@ -2,7 +2,7 @@
 id: R-KNW-075
 title: "A change to the core commit trailer rule is the maintainer's"
 status: open
-restsOn: [D-KNW-125]
+restsOn: [D-KNW-167]
 heldBy: not guarded
 judged: 2026-08-28
 ---
@@ -13,9 +13,9 @@ judged: 2026-08-28
 session that would change it asks the maintainer first.**
 
 No checkout derives the rule. It rested for four weeks on the opposite of what
-the core's own `AGENTS.md` says, and it now agrees with that file. Neither state
-was readable off the files, because what moved was a board recommendation
-published outside every checkout (`D-KNW-125`).
+the core's own `AGENTS.md` says, then agreed with that file, and now leaves the
+sign-off open. No state was readable off the files, because each move was the
+maintainer's (`D-KNW-167`).
 
 What follows is that nothing derives the trailer list. It comes out of
 `core/contribution/commit-messages` and out of `typo3_commit_message_guide`,
@@ -32,6 +32,9 @@ Exercised on 2026-08-25, which is what the requirement is for. The maintainer
 brought the TYPO3 Association board's statement on GPL and AI-generated code and
 reversed the sign-off rule. Two sessions had reported the check as wrong against
 the core's `AGENTS.md` and neither could have reached that source (`D-KNW-125`).
+
+Exercised again on 2026-10-07. The maintainer made the sign-off optional, and
+the session that recorded it asked for nothing beyond the ruling (`D-KNW-167`).
 
 ## Held by
 

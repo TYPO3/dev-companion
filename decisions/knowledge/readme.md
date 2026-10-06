@@ -4,6 +4,7 @@ Where a statement sits, what verifies it when the core cannot, and what a packag
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-KNW-167`][D-KNW-167] — A core commit message may carry a sign-off and owes none · 2026-10-07
 - [`D-KNW-161`][D-KNW-161] — Every agent trailer comes off a core draft · 2026-10-05
 - [`D-KNW-162`][D-KNW-162] — The e2e suite passes a spec through where the script does · 2026-10-05
 - [`D-KNW-163`][D-KNW-163] — A probe that counts rows takes the restrictions off · 2026-10-05
@@ -52,7 +53,6 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-122`][D-KNW-122] — A procedure document is routed by the evidence a task needs · 2026-08-25
 - [`D-KNW-123`][D-KNW-123] — The corpus tells a widened signature apart from a widened visibility · 2026-08-25
 - [`D-KNW-124`][D-KNW-124] — Frontend render pipeline state is a gap this server owns · 2026-08-25
-- [`D-KNW-125`][D-KNW-125] — A core commit message carries four trailers and the hook's Change-Id · 2026-08-25
 - [`D-KNW-107`][D-KNW-107] — Which side of a backend module resolves a resource path is a subject this server owns · 2026-08-24 · confirmed
 - [`D-KNW-108`][D-KNW-108] — Where an impexp import puts the records it writes is a subject this server owns · 2026-08-24
 - [`D-KNW-111`][D-KNW-111] — The changelog procedure is a guide of its own · 2026-08-24
@@ -162,6 +162,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-028`][D-KNW-028] — How a file becomes a processed one is a subject this server owns · 2026-08-02
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
+[D-KNW-167]: knw-167-a-core-commit-message-may-carry-a-sign-off-and-owes-none.md
 [D-KNW-161]: knw-161-every-agent-trailer-comes-off-a-core-draft.md
 [D-KNW-162]: knw-162-the-e2e-suite-passes-a-spec-through-where-the-script-does.md
 [D-KNW-163]: knw-163-a-probe-that-counts-rows-takes-the-restrictions-off.md
@@ -210,7 +211,6 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 [D-KNW-122]: knw-122-a-procedure-document-is-routed-by-the-evidence-a-task-needs.md
 [D-KNW-123]: knw-123-the-corpus-tells-a-widened-signature-apart-from-a-widened-visibility.md
 [D-KNW-124]: knw-124-frontend-render-pipeline-state-is-a-gap-this-server-owns.md
-[D-KNW-125]: knw-125-a-core-commit-message-carries-four-trailers-and-the-hooks-change-id.md
 [D-KNW-107]: knw-107-which-side-of-a-backend-module-resolves-a-resource-path-is-a-subject-this-server-owns.md
 [D-KNW-108]: knw-108-where-an-impexp-import-puts-the-records-it-writes-is-a-subject-this-server-owns.md
 [D-KNW-111]: knw-111-the-changelog-procedure-is-a-guide-of-its-own.md
@@ -322,6 +322,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 ### Revoked, and kept as the record
 
+- [`D-KNW-125`][D-KNW-125] — A core commit message carries four trailers and the hook's Change-Id · 2026-08-25 → D-KNW-167
 - [`D-KNW-109`][D-KNW-109] — Whether a core commit owes a sign-off is a subject this server owns · 2026-08-24 → D-KNW-110
 - [`D-KNW-110`][D-KNW-110] — A core commit message carries three trailers and the hook's Change-Id · 2026-08-24 → D-KNW-125
 - [`D-KNW-040`][D-KNW-040] — What asserts a rendered output is a subject this server owns · 2026-08-03 → D-KNW-044
@@ -332,6 +333,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-001`][D-KNW-001] — Sitepackage work is answered from the General category · 2026-07-29 → D-KNW-006
 - [`D-KNW-002`][D-KNW-002] — A hint about typo3/testing-framework is verified against tags, not against the checkouts · 2026-07-29 → D-KNW-106
 
+[D-KNW-125]: knw-125-a-core-commit-message-carries-four-trailers-and-the-hooks-change-id.md
 [D-KNW-109]: knw-109-whether-a-core-commit-owes-a-sign-off-is-a-subject-this-server-owns.md
 [D-KNW-110]: knw-110-a-core-commit-message-carries-three-trailers-and-the-hooks-change-id.md
 [D-KNW-040]: knw-040-what-asserts-a-rendered-output-is-a-subject-this-server-owns.md

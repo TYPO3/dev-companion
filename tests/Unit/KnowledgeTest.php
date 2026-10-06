@@ -1663,12 +1663,11 @@ final class KnowledgeTest extends TestCase
      * The trailers a core commit message carries, and the two it does not.
      *
      * `feedback/2026-08-24-110851` asked for the sign-off and got one unrelated
-     * page back. The certificate is a requirement since `D-KNW-125`, so the
-     * page has to state the obligation, what the signature claims, and where
-     * the rule comes from. A caller who reads only the merged history finds the
-     * practice the rule replaces.
+     * page back. The certificate is optional since `D-KNW-167`, so the page has
+     * to say so, how the line is written, and what the signature claims. A
+     * caller in a core checkout reads its `AGENTS.md` demand first.
      */
-    #[Decision('D-KNW-125')]
+    #[Decision('D-KNW-167')]
     #[Test]
     public function theTrailerAnswerStatesTheRuleAndWhatLeavesItUnenforced(): void
     {
@@ -1684,7 +1683,7 @@ final class KnowledgeTest extends TestCase
         // Unwrapped, since each of them crosses a line break.
         $body = (string) preg_replace('/\s+/', ' ', Documents::read('core/contribution/commit-messages'));
         self::assertStringContainsString(
-            '`Signed-off-by:` is on every TYPO3 core patch',
+            '`Signed-off-by:` is optional',
             $body,
             'the rule the maintainer settled is not stated',
         );
@@ -1699,9 +1698,9 @@ final class KnowledgeTest extends TestCase
             'nothing says what signing the certificate claims',
         );
         self::assertStringContainsString(
-            'An AI tool does not divide it',
+            'In a review, a patch without a sign-off is no finding',
             $body,
-            'the warranty is stated without the case the board wrote the recommendation for',
+            'a reviewer is left to report the absent trailer as a defect',
         );
         self::assertStringContainsString(
             '2026-07-20',

@@ -94,3 +94,8 @@ workflow was a markdown resource to every host, whatever its shape.
 - A host loads one workflow twice, once from the install and once from the
   extension, and the two disagree after a release. Then the install and the
   resource need one version marker a host can compare.
+
+## Since then
+
+`D-ANS-175` serves `2026-07-28` over stdio. The declaration now also goes out in
+the answer to `server/discover`, where the specification puts it.

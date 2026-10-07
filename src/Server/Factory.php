@@ -77,7 +77,10 @@ final class Factory
                 self::SERVER_TITLE,
             )
             ->setInstructions(Coverage::instructions($notice))
-            ->setCapabilities(self::capabilities());
+            ->setCapabilities(self::capabilities())
+            // The one transport is stdio, which carries the request metadata
+            // in `_meta` and has no header to check it against.
+            ->setHeaderValidator(false);
 
         foreach (Registry::definitions() as $definition) {
             // The two schemas as the SDK spells them. A tool declares them as
@@ -160,8 +163,8 @@ final class Factory
     }
 
     /**
-     * What `initialize` declares, which is what the server does and nothing
-     * beside it.
+     * What `initialize` and `server/discover` declare, which is what the server
+     * does and nothing beside it.
      *
      * The SDK's own detection declares `logging`, `completions` and
      * `resources.subscribe` for every server. This one sends no log message

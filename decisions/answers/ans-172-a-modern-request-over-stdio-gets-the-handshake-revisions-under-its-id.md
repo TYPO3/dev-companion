@@ -2,9 +2,9 @@
 id: D-ANS-172
 title: A modern request over stdio gets the handshake revisions under its id
 date: 2026-10-06
-status: open
-coveredBy:
-  - StdioServerTest::aClientOpeningWithServerDiscoverIsToldWhichRevisionsToFallBackTo
+status: revoked
+revokedBy: D-ANS-175
+coveredBy: []
 ---
 
 # D-ANS-172 — A modern request over stdio gets the handshake revisions under its id
@@ -58,3 +58,13 @@ Antigravity's Go client cannot read that answer and closes the connection.
   prototype did.
 - An SDK release serves the modern era over stdio or answers with the id itself.
   Then the class goes and `Entrypoint` takes the SDK's transport again.
+
+## Revoked on 2026-10-07
+
+By
+[`D-ANS-175`](ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md).
+The maintainer chose the first option this entry declined, and the server serves
+the modern era over stdio. The Skills extension declares itself in
+`server/discover`, and the refusal kept every host that reads it there from the
+skills. The prototype's finding on `subscriptions/listen` stands, and
+`D-ANS-175` answers it with the acknowledgement alone.

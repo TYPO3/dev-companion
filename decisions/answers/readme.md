@@ -4,7 +4,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
-- [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06
+- [`D-ANS-175`][D-ANS-175] — Stdio serves the modern revision through the SDK's dispatcher · 2026-10-07
 - [`D-ANS-173`][D-ANS-173] — A Forge issue number goes in as an integer · 2026-10-06
 - [`D-ANS-174`][D-ANS-174] — A branch of an input anyOf defines what it requires · 2026-10-06
 - [`D-ANS-169`][D-ANS-169] — The project answer says whether its DDEV project runs · 2026-10-05
@@ -172,7 +172,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
-[D-ANS-172]: ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
+[D-ANS-175]: ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md
 [D-ANS-173]: ans-173-a-forge-issue-number-goes-in-as-an-integer.md
 [D-ANS-174]: ans-174-a-branch-of-an-input-anyof-defines-what-it-requires.md
 [D-ANS-169]: ans-169-the-project-answer-says-whether-its-ddev-project-runs.md
@@ -342,6 +342,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 ### Revoked, and kept as the record
 
+- [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06 → D-ANS-175
 - [`D-ANS-081`][D-ANS-081] — A symptom is answered across the domain it was observed in · 2026-08-18 → D-ANS-084
 - [`D-ANS-067`][D-ANS-067] — The changelog above the installed major comes from the manual · 2026-08-08 → D-ANS-165
 - [`D-ANS-034`][D-ANS-034] — A source outside this package answers JSON, or it did not answer · 2026-08-03 → D-ANS-096
@@ -349,6 +350,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-027`][D-ANS-027] — The Extbase fork is placed where a caller who has not chosen passes · 2026-08-02 → D-ANS-039
 - [`D-ANS-001`][D-ANS-001] — The unanswered result keeps its shape and gains a reason · 2026-07-29 → D-ANS-005
 
+[D-ANS-172]: ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
 [D-ANS-081]: ans-081-a-symptom-is-answered-across-the-domain-it-was-observed-in.md
 [D-ANS-067]: ans-067-the-changelog-above-the-installed-major-comes-from-the-manual.md
 [D-ANS-034]: ans-034-a-source-outside-this-package-answers-json-or-it-did-not-answer.md

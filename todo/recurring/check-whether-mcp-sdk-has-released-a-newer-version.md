@@ -14,20 +14,18 @@ specification, the protocol version negotiation this todo watched for (PR #403),
 and the extensions framework MCP Apps sits on. What that left where it was is
 the revision this server speaks. `2026-07-28` replaced `initialize` with
 per-request metadata and `server/discover`, which the SDK serves from
-`StreamableHttpTransport` alone. So a stdio transport keeps the newest handshake
-revision, `2025-11-25`, and `PROTOCOL_VERSION` in
-`tests/Smoke/StdioServerTest.php` with it. The release to watch for now is one
-that adds a handshake revision above that, or one that serves the modern era
-over stdio. Either moves the constant. Watch for a third: one that answers a
-request before `initialize` with the request's own id. On `v0.8.1`
+`StreamableHttpTransport` alone. `Server\StdioTransport` connects that
+dispatcher over stdio itself since 2026-10-07 (`D-ANS-175`). The release to
+watch for now is one that carries php-sdk#537, which retires that class. One
+that adds a handshake revision above `2025-11-25` moves `PROTOCOL_VERSION` in
+`tests/Smoke/StdioServerTest.php`. Watch for a third: one that answers a request
+before `initialize` with the request's own id. On `v0.8.1`
 `Server\Protocol::resolveSession()` answers it with `-32600` and no `id`, read
-on 2026-09-17. `Server\HandshakeStdioTransport` answers a `2026-07-28` request,
-`server/discover` among them, in its place since 2026-10-06 (`D-ANS-172`). A
-release that does either itself retires that class. A fourth is smaller:
-`Server\Protocol::doProcessInput()` answers an unknown method with `-32600`,
-where JSON-RPC defines `-32601`, read on 2026-09-19. `D-DIS-006` rests on the
-same release notes with no undeprecated way for a client to state where the
-session is. Read them for that too. It serves no single requirement because it
-serves the precondition of all of them. Every answer this server gives travels
-over the protocol version the SDK speaks. On the day a client stops to offer
-that version, every requirement fails at once and not one of them says so.
+on 2026-09-17. A fourth is smaller: `Server\Protocol::doProcessInput()` answers
+an unknown method with `-32600`, where JSON-RPC defines `-32601`, read on
+2026-09-19. `D-DIS-006` rests on the same release notes with no undeprecated way
+for a client to state where the session is. Read them for that too. It serves no
+single requirement because it serves the precondition of all of them. Every
+answer this server gives travels over the protocol version the SDK speaks. On
+the day a client stops to offer that version, every requirement fails at once
+and not one of them says so.

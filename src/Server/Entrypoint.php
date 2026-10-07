@@ -43,7 +43,7 @@ final class Entrypoint
                 fwrite(STDERR, 'typo3-dev-companion: ' . Upstream::notice() . "\n");
             }
             self::reportExclusionsThatTookNothingAway();
-            Factory::create(self::refreshSkillsNobodyHasUpdated($binary))->run(new HandshakeStdioTransport());
+            Factory::create(self::refreshSkillsNobodyHasUpdated($binary))->run(new StdioTransport());
 
             return 0;
         }

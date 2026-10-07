@@ -112,7 +112,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
-- [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06
+- [`D-ANS-175`][D-ANS-175] — Stdio serves the modern revision through the SDK's dispatcher · 2026-10-07
 - [`D-ANS-173`][D-ANS-173] — A Forge issue number goes in as an integer · 2026-10-06
 - [`D-ANS-174`][D-ANS-174] — A branch of an input anyOf defines what it requires · 2026-10-06
 - [`D-ANS-169`][D-ANS-169] — The project answer says whether its DDEV project runs · 2026-10-05
@@ -280,7 +280,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
-[D-ANS-172]: answers/ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
+[D-ANS-175]: answers/ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md
 [D-ANS-173]: answers/ans-173-a-forge-issue-number-goes-in-as-an-integer.md
 [D-ANS-174]: answers/ans-174-a-branch-of-an-input-anyof-defines-what-it-requires.md
 [D-ANS-169]: answers/ans-169-the-project-answer-says-whether-its-ddev-project-runs.md
@@ -1346,6 +1346,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### Revoked, and kept as the record
 
+- [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06 → D-ANS-175
 - [`D-DOC-071`][D-DOC-071] — The initialize page is read off a session in the same process · 2026-09-17 → D-DOC-072
 - [`D-AUD-016`][D-AUD-016] — A count is answered and the row behind it stays with the installation · 2026-09-01 → D-AUD-017
 - [`D-AUD-017`][D-AUD-017] — Records are read and the boundary is the table they are in · 2026-09-01 → D-AUD-018
@@ -1396,6 +1397,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SCO-004`][D-SCO-004] — The frontend is recognised by name · 2026-07-29
 - [`D-VER-002`][D-VER-002] — The prose is not bound; it says which half it is · 2026-07-29 → D-VER-005
 
+[D-ANS-172]: answers/ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
 [D-DOC-071]: documentation/doc-071-the-initialize-page-is-read-off-a-session-in-the-same-process.md
 [D-AUD-016]: audience/aud-016-a-count-is-answered-and-the-row-behind-it-stays-with-the-installation.md
 [D-AUD-017]: audience/aud-017-records-are-read-and-the-boundary-is-the-table-they-are-in.md

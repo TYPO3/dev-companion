@@ -134,10 +134,8 @@ Run it from the project you installed into. The server has no directory of its
 own. Where it started decides what it reads, which is the same reason the wrong
 work directory produces answers about the wrong site.
 
-The MCP Inspector asks the same two lines with a form around them. Set its
-protocol era to ``Legacy``, which is its default. The server speaks the
-handshake revision ``2025-11-25`` over stdio and no newer one. ``Modern`` and
-``Auto`` open with ``server/discover`` instead of ``initialize``. The server
-answers that with ``-32022`` and the revisions it does speak. ``Modern`` stops
-there, which is not a server that cannot start. ``Auto`` can fall back to
-``initialize`` on that answer.
+The MCP Inspector asks the same two lines with a form around them. Its protocol
+era ``Legacy``, the default, opens with ``initialize``. The server answers with
+the handshake revision ``2025-11-25``. ``Modern`` and ``Auto`` open with
+``server/discover`` instead. The server answers with ``2026-07-28`` and the same
+capabilities.

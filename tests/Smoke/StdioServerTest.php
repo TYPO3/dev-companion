@@ -23,11 +23,11 @@ use TYPO3\DevCompanion\Tests\Support\Requirement;
  */
 final class StdioServerTest extends TestCase
 {
-    /**
-     * The newest revision reachable through the `initialize` handshake, which
-     * is the only era a stdio transport serves.
-     */
+    /** The newest revision reachable through the `initialize` handshake. */
     private const PROTOCOL_VERSION = '2025-11-25';
+
+    /** The revision a request claims in its `_meta`, with no handshake. */
+    private const MODERN_VERSION = '2026-07-28';
 
     /**
      * What a feedback recorded from here says about itself, so tearDown finds
@@ -136,20 +136,15 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * A client that has moved on to the revision this transport cannot speak
-     * gets the newest one it can, rather than a refusal.
-     *
-     * `2026-07-28` replaced `initialize` with per-request metadata and
-     * `server/discover`, which mcp/sdk serves from `StreamableHttpTransport`
-     * alone. So the negotiation it gained with that revision is the whole of
-     * what keeps such a client in contact with this server. It is the one thing
-     * every answer here travels over.
+     * A client that offers the modern revision through `initialize` gets the
+     * newest handshake one, rather than a refusal. `2026-07-28` has no
+     * `initialize`, so a client reaches it by a request that claims it.
      */
     #[Test]
-    public function aClientOfferingARevisionThisTransportCannotSpeakIsAnsweredWithOneItCan(): void
+    public function anInitializeOfferingTheModernRevisionIsAnsweredWithAHandshakeOne(): void
     {
         $result = $this->call([$this->request(1, 'initialize', [
-            'protocolVersion' => '2026-07-28',
+            'protocolVersion' => self::MODERN_VERSION,
             'capabilities' => new \stdClass(),
             'clientInfo' => ['name' => 'phpunit', 'version' => '1'],
         ])])[1];
@@ -159,31 +154,67 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * A client that opens with `server/discover` gets the revisions it can
-     * fall back to, under its own id. Antigravity's client closed the
-     * connection on the id-less error the SDK sends there.
+     * A client that opens with `server/discover` is served the modern
+     * revision, and the Skills extension is declared where that revision
+     * looks for it. A notification before it gets no answer. The handshake
+     * dispatcher had answered one with an error that carries no id. A
+     * subscription is acknowledged, and a handshake after the first request
+     * is told which revisions the connection speaks.
      */
-    #[Decision('D-ANS-172')]
+    #[Decision('D-ANS-175')]
     #[Test]
-    public function aClientOpeningWithServerDiscoverIsToldWhichRevisionsToFallBackTo(): void
+    public function aClientOpeningWithServerDiscoverIsServedTheModernRevision(): void
     {
+        $meta = ['_meta' => [
+            'io.modelcontextprotocol/clientCapabilities' => new \stdClass(),
+            'io.modelcontextprotocol/clientInfo' => ['name' => 'phpunit', 'version' => '1'],
+            'io.modelcontextprotocol/protocolVersion' => self::MODERN_VERSION,
+        ]];
         $responses = $this->call([
-            $this->request(1, 'server/discover', ['_meta' => [
-                'io.modelcontextprotocol/clientCapabilities' => new \stdClass(),
-                'io.modelcontextprotocol/clientInfo' => ['name' => 'phpunit', 'version' => '1'],
-                'io.modelcontextprotocol/protocolVersion' => '2026-07-28',
-            ]]),
-            $this->request(2, 'initialize', [
+            (string) json_encode(['jsonrpc' => '2.0', 'method' => 'notifications/cancelled', 'params' => ['requestId' => 9]]),
+            $this->request(1, 'server/discover', $meta),
+            $this->request(2, 'skills/list', $meta),
+            $this->request(3, 'tools/call', $meta + ['name' => 'typo3_server_scope', 'arguments' => new \stdClass()]),
+        ]);
+
+        self::assertArrayNotHasKey(0, $responses, 'the server answered a line that carries no id');
+        self::assertContains(self::MODERN_VERSION, $responses[1]['result']['supportedVersions']);
+        self::assertSame(['io.modelcontextprotocol/skills' => []], $responses[1]['result']['capabilities']['extensions']);
+        self::assertSame(Installer::skills(), array_map(
+            static fn(array $skill): string => $skill['frontmatter']['name'],
+            $responses[2]['result']['skills'],
+        ));
+        self::assertArrayHasKey('structuredContent', $responses[3]['result']);
+
+        $responses = $this->call([
+            $this->request(4, 'subscriptions/listen', $meta + ['notifications' => new \stdClass()]),
+            $this->request(5, 'initialize', [
                 'protocolVersion' => self::PROTOCOL_VERSION,
                 'capabilities' => new \stdClass(),
                 'clientInfo' => ['name' => 'phpunit', 'version' => '1'],
             ]),
         ]);
 
-        self::assertSame(1, $responses[1]['id']);
-        self::assertSame(Error::UNSUPPORTED_PROTOCOL_VERSION, $responses[1]['error']['code']);
-        self::assertContains(self::PROTOCOL_VERSION, $responses[1]['error']['data']['supported']);
-        self::assertSame(self::PROTOCOL_VERSION, $responses[2]['result']['protocolVersion']);
+        self::assertSame('notifications/subscriptions/acknowledged', $responses[0]['method']);
+        self::assertSame(Error::UNSUPPORTED_PROTOCOL_VERSION, $responses[5]['error']['code']);
+        self::assertSame([self::MODERN_VERSION], $responses[5]['error']['data']['supported']);
+    }
+
+    /**
+     * The first request settles the era. A request that claims the modern
+     * revision on a connection that ran `initialize` is refused under its id.
+     */
+    #[Decision('D-ANS-175')]
+    #[Test]
+    public function aModernRequestAfterTheHandshakeIsRefused(): void
+    {
+        $response = $this->session([$this->request(2, 'server/discover', ['_meta' => [
+            'io.modelcontextprotocol/clientCapabilities' => new \stdClass(),
+            'io.modelcontextprotocol/clientInfo' => ['name' => 'phpunit', 'version' => '1'],
+            'io.modelcontextprotocol/protocolVersion' => self::MODERN_VERSION,
+        ]])])[2];
+
+        self::assertSame(-32600, $response['error']['code']);
     }
 
     /**

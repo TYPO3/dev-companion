@@ -14,9 +14,11 @@ fetches right after it.
 The four members
 ----------------
 
-* **``protocolVersion``** — the newest revision the stdio transport speaks. A
-  client that offers a newer one gets this one back rather than a refusal, and
-  ``StdioServerTest`` holds that.
+* **``protocolVersion``** — the newest revision the handshake reaches. A client
+  that offers a newer one gets this one back rather than a refusal, and
+  ``StdioServerTest`` holds that. A client that opens with ``server/discover``
+  instead gets ``2026-07-28`` and the same capabilities and instructions,
+  `D-ANS-175 <../../decisions/answers/ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md>`_.
 * **``capabilities``** — what `Factory <../../src/Server/Factory.php>`_
   declares, which is what the server does: tools, resources, prompts, and the
   completion of the two closed arguments of the ``commit_message`` prompt,

@@ -55,18 +55,13 @@ jobs:
       # checkout, so nothing about it reaches this package's own dependencies.
       # The theme brings phpDocumentor Guides with it, and the finish step is
       # the one bundled file it ships.
-      #
-      # doctrine/lexer 3.0.3 changed resetPosition() to take a character offset.
-      # The reStructuredText parser in phpdocumentor/guides 1.10.1 still passes a
-      # token index, and it loops on contributing/glossary.rst. Remove the pin
-      # when a guides release reads the new semantics.
       - name: Render the site
         env:
           RENDERER: ${{ runner.temp }}/renderer
         run: |
           mkdir -p "$RENDERER"
           composer init --working-dir="$RENDERER" --no-interaction --name=typo3/dev-companion-render
-          composer require --working-dir="$RENDERER" --no-interaction --no-progress typo3/soul-guides-theme doctrine/lexer:3.0.2
+          composer require --working-dir="$RENDERER" --no-interaction --no-progress typo3/soul-guides-theme
           "$RENDERER"/vendor/bin/guides --no-progress -c documentation
           node "$RENDERER"/vendor/typo3/soul-guides-theme/resources/dist/soul-finish.js .site/html
 

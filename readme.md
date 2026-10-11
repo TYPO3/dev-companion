@@ -22,8 +22,9 @@ points at, and it starts nothing on the machine as a side effect of a lookup.
 
 ## Quickstart
 
-Requirements: **PHP 8.2+** and Composer. One standalone checkout serves every
-project on the machine and stays out of each project's dependencies:
+Requirements: **PHP 8.2+** with the curl and dom extensions, and Composer. One
+standalone checkout serves every project on the machine and stays out of each
+project's dependencies:
 
 ```bash
 git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion

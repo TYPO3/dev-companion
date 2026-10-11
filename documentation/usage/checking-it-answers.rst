@@ -134,6 +134,11 @@ Run it from the project you installed into. The server has no directory of its
 own. Where it started decides what it reads, which is the same reason the wrong
 work directory produces answers about the wrong site.
 
+What the start has to say goes to stderr, each line opened by
+``typo3-dev-companion:``. A PHP without curl is one of those lines, and it names
+the PHP that ran. The server still starts, but every read of a host outside it
+fails until that PHP has the extension.
+
 The MCP Inspector asks the same two lines with a form around them. Its protocol
 era ``Legacy``, the default, opens with ``initialize``. The server answers with
 the handshake revision ``2025-11-25``. ``Modern`` and ``Auto`` open with

@@ -3,11 +3,12 @@
 Installing the server
 =====================
 
-Requirements: **PHP 8.2+** and Composer. A standalone checkout is the ordinary
-way in: one clone serves every project on the machine and stays out of each
-project's dependencies. A project can require the package instead, which is the
-second section. The `readme <../../readme.md>`_ has the short version; this page
-has the cases it leaves out.
+Requirements: **PHP 8.2+** with the curl and dom extensions, and Composer. A
+standalone checkout is the ordinary way in: one clone serves every project on
+the machine and stays out of each project's dependencies. A project can require
+the package instead, which is the second section. The
+`readme <../../readme.md>`_ has the short version; this page has the cases it
+leaves out.
 
 .. image:: ../images/install-flow.svg
     :zoomable:
@@ -379,6 +380,14 @@ answer for an hour. While it is behind, every answer opens with how far behind
 it is and the pull that ends it. ``typo3_server_scope`` reports the state under
 ``upstream``, and ``TYPO3_DEV_COMPANION_UPSTREAM_CHECK=off`` turns the read off,
 `D-DIS-031 <../../decisions/discovery/dis-031-a-checkout-behind-its-upstream-says-so-in-every-answer.md>`_.
+
+A read that fails leaves the state ``unavailable``, and the start writes why to
+stderr. ``typo3_server_scope`` carries the same sentence as ``reason``. Mostly
+GitHub did not answer, which the next start asks again. A PHP without curl is
+the cause you fix yourself. Every read of a host outside goes through curl: the
+manuals, the changelog, Forge, Gerrit and the TER. Without it, each of those
+lookups refuses and names the extension,
+`D-ANS-155 <../../decisions/answers/ans-155-a-read-on-a-php-without-curl-names-the-extension.md>`_.
 
 A published skill is a copy, so it goes stale the moment this package moves.
 ``update`` is what refreshes it, along with the client entry:

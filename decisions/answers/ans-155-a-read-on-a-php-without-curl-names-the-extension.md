@@ -5,6 +5,7 @@ date: 2026-09-15
 status: open
 coveredBy:
   - StdioServerTest::aPhpWithoutCurlIsRefusedWithTheExtensionNamed
+  - UpstreamTest::aRefusedReadIsReportedWithTheRefusal
 ---
 
 # D-ANS-155 — A read on a PHP without curl names the extension
@@ -73,6 +74,7 @@ GitHub where the server starts, through the same `Fetch::read()`. On a PHP
 without curl, the exception left the start uncaught, and the server exited with
 255 before the first request. That happened only where no answer from the last
 hour was kept. So the PHP 8.4 job of CI run 37581763708 failed on 2026-10-07 and
-passed when somebody ran it again. `Upstream::ask()` now takes the refusal as no
-answer, `unavailable`, and the first tool read names ext-curl. The test gives
-the server an empty temporary directory, so the start reads on every run.
+passed when somebody ran it again. `Upstream::ask()` now reports the refusal as
+`unavailable` and keeps its message as `reason`. The start writes that message
+to stderr, and `typo3_server_scope` answers with it. The test gives the server
+an empty temporary directory, so the start reads on every run.

@@ -36,7 +36,7 @@ final class Upstream
     private static ?string $root = null;
     private static ?string $directory = null;
 
-    /** @var array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string}|null */
+    /** @var array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string, reason: ?string}|null */
     private static ?array $known = null;
 
     /** Seams for a test: the reader, the checkout, and where the answer is kept. */
@@ -76,12 +76,12 @@ final class Upstream
      * What is known now, without the network. The kept answer is read again on
      * every call, so another session's newer check reaches this one.
      *
-     * @return array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string}
+     * @return array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string, reason: ?string}
      */
     public static function report(): array
     {
         if (self::$known === null) {
-            return ['state' => 'unknown', 'revision' => null, 'behind' => null, 'checkedAt' => null, 'lastAnswered' => null];
+            return ['state' => 'unknown', 'revision' => null, 'behind' => null, 'checkedAt' => null, 'lastAnswered' => null, 'reason' => null];
         }
         if (in_array(self::$known['state'], ['off', 'not-a-checkout'], true)) {
             return self::$known;
@@ -113,11 +113,11 @@ final class Upstream
     }
 
     /**
-     * @return array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string}
+     * @return array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string, reason: ?string}
      */
     private static function read(bool $mayAsk): array
     {
-        $none = ['revision' => null, 'behind' => null, 'checkedAt' => null, 'lastAnswered' => null];
+        $none = ['revision' => null, 'behind' => null, 'checkedAt' => null, 'lastAnswered' => null, 'reason' => null];
         $off = strtolower(trim((string) getenv(self::VARIABLE)));
         if (in_array($off, ['off', '0', 'false', 'no'], true)) {
             return ['state' => 'off'] + $none;
@@ -134,20 +134,19 @@ final class Upstream
         if ($fresh || !$mayAsk) {
             return $kept !== null && $kept['revision'] === $revision
                 ? $kept
-                : ['state' => 'unknown', 'revision' => $revision, 'behind' => null, 'checkedAt' => null, 'lastAnswered' => null];
+                : ['state' => 'unknown', 'revision' => $revision] + $none;
         }
 
         $now = gmdate('Y-m-d H:i') . ' UTC';
         $answer = self::ask($revision);
-        $report = $answer === null
-            ? [
-                'state' => 'unavailable',
-                'revision' => $revision,
-                'behind' => null,
-                'checkedAt' => $now,
-                'lastAnswered' => $kept['lastAnswered'] ?? null,
-            ]
-            : ['revision' => $revision, 'checkedAt' => $now, 'lastAnswered' => $now] + $answer;
+        $report = [
+            'state' => $answer['state'],
+            'revision' => $revision,
+            'behind' => $answer['behind'],
+            'checkedAt' => $now,
+            'lastAnswered' => $answer['state'] === 'unavailable' ? $kept['lastAnswered'] ?? null : $now,
+            'reason' => $answer['reason'],
+        ];
         self::keep($report);
 
         return $report;
@@ -155,12 +154,12 @@ final class Upstream
 
     /**
      * What GitHub's compare says of this commit against the upstream branch.
-     * Null where it did not answer. A commit the upstream does not have, a
-     * local one, is `unknown`: the compare has nothing to count against.
+     * A commit the upstream does not have, a local one, is `unknown`: the
+     * compare has nothing to count against.
      *
-     * @return array{state: string, behind: ?int}|null
+     * @return array{state: string, behind: ?int, reason: ?string}
      */
-    private static function ask(string $revision): ?array
+    private static function ask(string $revision): array
     {
         $fetch = self::$fetch ?? new Fetch(null, self::TIMEOUT);
         try {
@@ -168,21 +167,27 @@ final class Upstream
                 'https://api.github.com/repos/' . self::REPOSITORY . '/compare/' . $revision . '...' . self::BRANCH,
                 ['Accept: application/vnd.github+json'],
             );
-        } catch (\RuntimeException) {
-            // A PHP without curl, `D-ANS-155`. The start has no caller to name
-            // it to, and a tool's read names it on the first call.
-            return null;
+        } catch (\RuntimeException $refused) {
+            // A PHP without curl, `D-ANS-155`. The start has no caller to
+            // refuse, so the report carries the refusal.
+            return ['state' => 'unavailable', 'behind' => null, 'reason' => $refused->getMessage()];
         }
         if ($answer['status'] === 404 || $answer['status'] === 422) {
-            return ['state' => 'unknown', 'behind' => null];
+            return ['state' => 'unknown', 'behind' => null, 'reason' => null];
         }
         $decoded = Fetch::decode($answer['body']);
         if (!is_array($decoded) || !is_numeric($decoded['ahead_by'] ?? null)) {
-            return null;
+            return [
+                'state' => 'unavailable',
+                'behind' => null,
+                'reason' => $answer['status'] === 0
+                    ? sprintf('GitHub did not answer within %d seconds.', self::TIMEOUT)
+                    : sprintf('GitHub answered %d without a count.', $answer['status']),
+            ];
         }
         $behind = (int) $decoded['ahead_by'];
 
-        return ['state' => $behind > 0 ? 'behind' : 'current', 'behind' => $behind];
+        return ['state' => $behind > 0 ? 'behind' : 'current', 'behind' => $behind, 'reason' => null];
     }
 
     /**
@@ -234,7 +239,7 @@ final class Upstream
         return null;
     }
 
-    /** @return array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string}|null */
+    /** @return array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string, reason: ?string}|null */
     private static function kept(): ?array
     {
         $file = self::file();
@@ -252,10 +257,11 @@ final class Upstream
             'behind' => is_int($kept['behind'] ?? null) ? $kept['behind'] : null,
             'checkedAt' => is_string($kept['checkedAt'] ?? null) ? $kept['checkedAt'] : null,
             'lastAnswered' => is_string($kept['lastAnswered'] ?? null) ? $kept['lastAnswered'] : null,
+            'reason' => is_string($kept['reason'] ?? null) ? $kept['reason'] : null,
         ];
     }
 
-    /** @param array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string} $report */
+    /** @param array{state: string, revision: ?string, behind: ?int, checkedAt: ?string, lastAnswered: ?string, reason: ?string} $report */
     private static function keep(array $report): void
     {
         // A failed write keeps nothing, and the next start asks again.

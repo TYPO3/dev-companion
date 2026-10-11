@@ -156,8 +156,9 @@ final class ServerScope extends ReadOnlyTool
                 'behind' => Schema::nullable(Schema::integer('How many commits the upstream branch has that this checkout lacks. Null where nothing counted them.')),
                 'checkedAt' => Schema::nullableString('When the start last asked, in UTC. The answer is kept an hour and shared by every session of this checkout.'),
                 'lastAnswered' => Schema::nullableString('When a read last worked.'),
+                'reason' => Schema::nullableString('Why the last read failed: GitHub did not answer, or this PHP has no curl extension. Null unless the state is unavailable.'),
                 'variable' => Schema::string('Environment variable that turns the read off.'),
-            ], ['state', 'repository', 'revision', 'behind', 'checkedAt', 'lastAnswered', 'variable']),
+            ], ['state', 'repository', 'revision', 'behind', 'checkedAt', 'lastAnswered', 'reason', 'variable']),
             'withheld' => Schema::listOf(Schema::object([
                 'section' => Schema::string(),
                 'holds' => Schema::string('What that part of the answer would have carried.'),
@@ -297,10 +298,11 @@ final class ServerScope extends ReadOnlyTool
                 'behind' => Upstream::notice(),
                 'current' => sprintf('This checkout is current with github.com/%s, read at %s.', Upstream::REPOSITORY, (string) $upstream['checkedAt']),
                 'unavailable' => sprintf(
-                    'Whether this checkout is behind github.com/%s is not known: the read at %s failed, and the last one that worked was %s.',
+                    'Whether this checkout is behind github.com/%s is not known: the read at %s failed, and the last one that worked was %s. %s',
                     Upstream::REPOSITORY,
                     (string) $upstream['checkedAt'],
                     $upstream['lastAnswered'] ?? 'never',
+                    (string) $upstream['reason'],
                 ),
                 'off' => sprintf('Whether this checkout is behind its upstream is not read: %s is off.', Upstream::VARIABLE),
                 'not-a-checkout' => 'This server runs from an install without a git directory, so nothing here compares it with its upstream.',

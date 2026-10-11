@@ -679,9 +679,10 @@ final class StdioServerTest extends TestCase
         self::assertStringNotContainsString('undefined function', $said);
 
         // The read is the one answer lost. The server stands, and the next
-        // request is answered.
+        // request is answered, with the reason the start's read failed.
         self::assertArrayNotHasKey('error', $answers[3]);
         self::assertFalse($answers[3]['result']['isError'] ?? false);
+        self::assertStringContainsString('ext-curl', (string) $answers[3]['result']['structuredContent']['upstream']['reason']);
     }
 
     /**

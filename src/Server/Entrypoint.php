@@ -42,6 +42,10 @@ final class Entrypoint
             if (Upstream::notice() !== '') {
                 fwrite(STDERR, 'typo3-dev-companion: ' . Upstream::notice() . "\n");
             }
+            $failed = Upstream::report()['reason'];
+            if ($failed !== null) {
+                fwrite(STDERR, 'typo3-dev-companion: the read of github.com/' . Upstream::REPOSITORY . ' failed. ' . $failed . "\n");
+            }
             self::reportExclusionsThatTookNothingAway();
             Factory::create(self::refreshSkillsNobodyHasUpdated($binary))->run(new StdioTransport());
 

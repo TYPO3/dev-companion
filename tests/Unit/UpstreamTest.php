@@ -99,6 +99,23 @@ final class UpstreamTest extends TestCase
 
         self::assertSame('unavailable', Upstream::report()['state']);
         self::assertNull(Upstream::report()['lastAnswered']);
+        self::assertSame('GitHub did not answer within 2 seconds.', Upstream::report()['reason']);
+        self::assertSame('', Upstream::notice());
+    }
+
+    /** A PHP without curl refuses the read, and the start reports why rather than dies — `D-ANS-155`. */
+    #[Decision('D-ANS-155')]
+    #[Test]
+    public function aRefusedReadIsReportedWithTheRefusal(): void
+    {
+        Upstream::useFetch(new Fetch(static function (): ?string {
+            throw new \RuntimeException('The PHP that runs this server has no curl extension.');
+        }));
+
+        Upstream::check();
+
+        self::assertSame('unavailable', Upstream::report()['state']);
+        self::assertSame('The PHP that runs this server has no curl extension.', Upstream::report()['reason']);
         self::assertSame('', Upstream::notice());
     }
 

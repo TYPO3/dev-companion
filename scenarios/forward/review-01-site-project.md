@@ -1,6 +1,6 @@
 # REVIEW-01 — Review a TYPO3 site project
 
-**Environment:** `E-SITE` · **Status today:** `unrun`
+**Environment:** `E-SITE` · **Status today:** `partial`
 
 > Review this TYPO3 project and its site package. Identify the most important
 > concrete problems, risks, or missing safeguards, prioritize them, and tell me

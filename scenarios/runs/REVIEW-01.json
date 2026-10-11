@@ -1,0 +1,105 @@
+{
+    "scenario": "REVIEW-01",
+    "date": "2026-10-11",
+    "server": "739fd433",
+    "client": "claude-code",
+    "environment": "E-SITE",
+    "criteria": "22b7f8d8e96b",
+    "skills": [
+        "typo3-extension-health"
+    ],
+    "toolTrace": [
+        {
+            "tool": "typo3_project_describe",
+            "arguments": {}
+        },
+        {
+            "tool": "typo3_extension_describe",
+            "arguments": {
+                "extension": "events_sitepackage"
+            }
+        },
+        {
+            "tool": "typo3_extension_describe",
+            "arguments": {
+                "extension": "sessionplaner_extended"
+            }
+        },
+        {
+            "tool": "typo3_task_guide",
+            "arguments": {
+                "task": "Audit the project and its sitepackage for problems, risks and missing safeguards",
+                "changeType": "audit",
+                "paths": [
+                    "extensions/events_sitepackage",
+                    "extensions/sessionplaner_extended",
+                    "config/sites",
+                    "composer.json",
+                    ".ddev/config.yaml"
+                ],
+                "targetVersion": "14.3"
+            }
+        },
+        {
+            "tool": "typo3_changelog_lookup",
+            "arguments": {
+                "query": "afterBuildingFinished"
+            }
+        },
+        {
+            "tool": "typo3_changelog_lookup",
+            "arguments": {
+                "query": "UpgradeWizardInterface"
+            }
+        }
+    ],
+    "outcomes": [
+        {
+            "met": false,
+            "evidence": "Everything but the surfaces came first. The skill, its base and checklist, typo3_project_describe, typo3_extension_describe for both project extensions and typo3_task_guide with changeType audit were the first eight calls, and the only text before the first file read says \"TYPO3 14.3.7, PHP 8.4, two project extensions, declared checks: cgl, phpstan, rector\". No list of the surfaces it meant to cover stands anywhere before it started reading. The surfaces appear only in the closing coverage table, which is the 'after it' the criterion names."
+        },
+        {
+            "met": true,
+            "evidence": "Every finding names a file and mostly a line, a consequence and a fix, and says how sure it is: finding 2 is 'not confirmed on production', finding 3 carries the output of a render of the ViewHelper with a hostile header, finding 5 says it was worked out from code and changelog and not rendered. Spot-checked in the checkout: encryptionKey in config/system/settings.php since e287c12 of 2018-12-12, .env.dist loaded unconditionally in config/system/additional.php:7-8, pageNotFoundOnCHashError false at settings.php:106, the afterBuildingFinished hook in ext_localconf.php with no caller in the installed cms-form, and escapeOutput false in HighlightWordsViewHelper."
+        },
+        {
+            "met": true,
+            "evidence": "The order is consequence: a committed production secret, development values that may reach production, and a stored XSS reachable by any editor first; deployment without a gate and a broken per-site switch next; checks, constraints, Node and the icon last. Rector's pending changes are named style and ruled out of the findings, and nothing is ranked by how many files it touches."
+        },
+        {
+            "met": true,
+            "evidence": "The verdicts with weight stand on the source that governs them, read before the verdict: the hook on typo3_changelog_lookup for afterBuildingFinished and a grep of the installed cms-form, the cHash setting on PageArgumentValidator, the escape on Fluid's AbstractViewHelper and a render. The coverage table reports persistence of the sitepackage, site sets, TypoScript, TSconfig and the backend form JavaScript as not assessed, upgrade wizards as 2 of 5, and the missing manual as a finding, which is a surface with no files. One low claim rests on recall rather than a lookup: that TYPO3 13 and later no longer read ext_icon.png. It holds, by Deprecation-98093 in 12.4 and no reader in 13.4 or 14.3."
+        },
+        {
+            "met": true,
+            "evidence": "The answer keeps five kinds apart under their own headings: 'Fix first' and 'Next' for defects with a severity, 'Still open' for the speaker link and the raw content it did not trace, 'Ruled out' for four suspicions it disproved, and the coverage table for what it did not read. Findings outside this server's scope say so: 'none of the TYPO3 workflows covers this; it's operations work' for the key and the deployment."
+        },
+        {
+            "met": true,
+            "evidence": "It ends on a suggested order and 'Tell me which of these to take on', with no change made. Follow-up names the workflow that owns it: typo3-content-element-development and typo3-extension-testing for the ViewHelper, typo3-extension-upgrade for the hook and the constraint, typo3-extension-asset-build for Node, typo3-extension-documentation for the manual. The answer is long, at nine findings and a coverage table, and every part of it is review rather than implementation."
+        }
+    ],
+    "failures": [
+        {
+            "avoided": true,
+            "evidence": "No finding is a TYPO3 checklist item without a place in this checkout. Each names a file of site-events, and the coverage table lists this project's surfaces with their state rather than every subsystem a project could have; the extension repository is marked not applicable because both packages are Composer path packages."
+        },
+        {
+            "avoided": true,
+            "evidence": "The missing tests and the missing manual stand as findings in Next and Low with an owner, not as verified defects. The model name in ClaudeRepository is a recommendation to make it configurable. The production fallback is labelled not confirmed, with what would confirm it."
+        },
+        {
+            "avoided": true,
+            "evidence": "Where a source was missing the answer says so instead of concluding absence: registration 'assessed from files; I didn't ask the running installation', the form switch 'I didn't render the form', the speaker link 'I found no public form that writes it, but I didn't check further', the branches 'checked against the local copies of the remote branches without fetching'."
+        },
+        {
+            "avoided": true,
+            "evidence": "Every check it ran is the project's own composer script (t3g:cgl, t3g:phpstan, t3g:rector) under DDEV, and the follow-up names project workflows. No core command, no core process and no release-branch rule appears."
+        },
+        {
+            "avoided": true,
+            "evidence": "git status in site-events was empty before and after the run. The transcript carries no Edit or Write. The three checks are dry runs by their composer definitions (php-cs-fixer --dry-run, phpstan analyze, rector --dry-run), the rector reruns pass --dry-run, the ViewHelper render ran in memory through ddev exec, and the outputs went to /tmp outside the checkout."
+        }
+    ],
+    "notes": "The first REVIEW-01 run since the rewrite of 2026-09-19 reset it, and the first in /home/benji/projects/site-events, which plays E-SITE since 2026-10-05. Session 45700a88-ca7b-4444-a86e-ec1ecfe21841, 2026-10-11 14:50-14:55 UTC by its transcript, claude-opus-5-5, Claude Code 2.1.296 driven headless with the prompt on standard input and no steering; the maintainer started it, because the auto mode of the judging session refused to. 36 tool calls, 6 to this server, the skill activated at the first turn. The DDEV project events-site was started and the published skills refreshed with update before the run; the tree was clean on develop at 1123b1e. The server that answered is the checkout main stands on, 739fd433. The run it replaces is in commit a4470ee6e and ran in /home/benji/projects/site-new, which is gone. What the run teaches beyond this repository: the skill's step 'write the surface list down before you open a single file' did not produce a visible list. The session named its toolchain and went to the files, and the list arrived as the closing table. And after the brief it asked this server twice in 30 calls; the escaping, the cHash and the deployment verdicts came from the installed sources it read, which held, rather than from a hint."
+}

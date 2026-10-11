@@ -23,7 +23,8 @@ gate, whatever the request asked for.
    of it.
 2. Read [references/checklist.md](references/checklist.md) for the audit
    surfaces, the finding gate, and the severity rubric.
-3. Write the surface list down before you open a single file. Take the
+3. Write the surface list down before you open a single file. Write it into your
+   reply, so the reader sees what you will cover before you read. Take the
    checklist's surfaces, narrowed to the ones this kind of checkout can have. It
    is the work list. The coverage the report closes on is this same list with
    every entry answered.

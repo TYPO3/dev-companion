@@ -109,3 +109,13 @@ out. Whether a session told "security only" writes the whole list has no
 measure. One thing the wording decides that the entry did not. The state is
 **not requested** rather than "out of scope", because two phrases next to it
 already mean other things.
+
+## Since then
+
+`feedback/2026-10-11-145818` came from the `REVIEW-01` run of that day, the one
+criterion it missed. The skill activated and the session read step 3, and the
+only text before the first file read named the toolchain. The surfaces arrived
+as the closing table. That is step 4 of the ladder, the wording. "Write the
+surface list down" did not say where, and a list a session keeps to itself is
+one nobody can hold it to. Step 3 now says to write it into the reply.
+`SkillTest::theBaseIsEstablishedBeforeTheCheckoutIsOpened` reads the clause.

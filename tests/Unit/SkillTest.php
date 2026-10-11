@@ -4202,6 +4202,14 @@ final class SkillTest extends TestCase
             $position = $next;
         }
 
+        // A list the session keeps to itself is one nobody can hold it to.
+        // The REVIEW-01 run of 2026-10-11 named its toolchain, read the files,
+        // and showed its surfaces only in the closing table.
+        self::assertStringContainsString(
+            'Write it into your reply, so the reader sees what you will cover before you read',
+            self::flat($skill),
+        );
+
         // The file tree is a trap where a surface has no files. So the list
         // derives from the surfaces and never from what a listing happens to
         // show.
@@ -4288,7 +4296,8 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-extension-health/SKILL.md',
         );
 
-        $list = strpos($skill, 'Write the surface list down before opening a single file');
+        $list = strpos($skill, 'Write the surface list down before you open a single file');
+        self::assertNotFalse($list, 'the conformance skill does not say when the surface list is written');
         $narrow = strpos($skill, 'The request narrows the reading, never the');
         self::assertNotFalse($narrow, 'the conformance skill does not say what a focused request narrows');
         self::assertGreaterThan((int) $list, $narrow, 'the request narrows the list before the list exists');

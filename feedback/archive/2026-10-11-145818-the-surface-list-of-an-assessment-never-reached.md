@@ -1,7 +1,8 @@
 ---
 date: 2026-10-11T14:58:18+00:00
 category: wrong-answer
-status: open
+status: closed
+closed: 2026-10-11
 model: claude-opus-5-5
 tool: typo3-extension-health
 directory: /home/benji/projects/typo3-cms-mcp

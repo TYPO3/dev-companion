@@ -154,8 +154,8 @@ Answers with
       checkedAt: string or null
       # When a read last worked.
       lastAnswered: string or null
-      # Why the last read failed: GitHub did not answer, or this PHP has no curl
-      # extension. Null unless the state is unavailable.
+      # Why the last read failed: GitHub did not answer, or answered without a
+      # count. Null unless the state is unavailable.
       reason: string or null
       # Environment variable that turns the read off.
       variable: string

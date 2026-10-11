@@ -4,6 +4,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-ANS-176`][D-ANS-176] — A PHP that lacks a required extension is refused by every call · 2026-10-11
 - [`D-ANS-175`][D-ANS-175] — Stdio serves the modern revision through the SDK's dispatcher · 2026-10-07
 - [`D-ANS-173`][D-ANS-173] — A Forge issue number goes in as an integer · 2026-10-06
 - [`D-ANS-174`][D-ANS-174] — A branch of an input anyOf defines what it requires · 2026-10-06
@@ -18,7 +19,6 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-160`][D-ANS-160] — A nullable field is two anyOf branches · 2026-09-17
 - [`D-ANS-161`][D-ANS-161] — A field of no fixed type names the types it takes · 2026-09-17
 - [`D-ANS-162`][D-ANS-162] — The data half is the one a session reads · 2026-09-17
-- [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15
 - [`D-ANS-156`][D-ANS-156] — A change read by name lists the changes its messages name · 2026-09-15
 - [`D-ANS-157`][D-ANS-157] — A manual page is read as the Markdown the host publishes beside it · 2026-09-15
 - [`D-ANS-158`][D-ANS-158] — A declared class, method or command is reached by its own name · 2026-09-15
@@ -172,6 +172,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-176]: ans-176-a-php-that-lacks-a-required-extension-is-refused-by-every-call.md
 [D-ANS-175]: ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md
 [D-ANS-173]: ans-173-a-forge-issue-number-goes-in-as-an-integer.md
 [D-ANS-174]: ans-174-a-branch-of-an-input-anyof-defines-what-it-requires.md
@@ -186,7 +187,6 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 [D-ANS-160]: ans-160-a-nullable-field-is-two-anyof-branches.md
 [D-ANS-161]: ans-161-a-field-of-no-fixed-type-names-the-types-it-takes.md
 [D-ANS-162]: ans-162-the-data-half-is-the-one-a-session-reads.md
-[D-ANS-155]: ans-155-a-read-on-a-php-without-curl-names-the-extension.md
 [D-ANS-156]: ans-156-a-change-read-by-name-lists-the-changes-its-messages-name.md
 [D-ANS-157]: ans-157-a-manual-page-is-read-as-the-markdown-the-host-publishes-beside-it.md
 [D-ANS-158]: ans-158-a-declared-class-method-or-command-is-reached-by-its-own-name.md
@@ -343,6 +343,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 ### Revoked, and kept as the record
 
 - [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06 → D-ANS-175
+- [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15 → D-ANS-176
 - [`D-ANS-081`][D-ANS-081] — A symptom is answered across the domain it was observed in · 2026-08-18 → D-ANS-084
 - [`D-ANS-067`][D-ANS-067] — The changelog above the installed major comes from the manual · 2026-08-08 → D-ANS-165
 - [`D-ANS-034`][D-ANS-034] — A source outside this package answers JSON, or it did not answer · 2026-08-03 → D-ANS-096
@@ -351,6 +352,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-001`][D-ANS-001] — The unanswered result keeps its shape and gains a reason · 2026-07-29 → D-ANS-005
 
 [D-ANS-172]: ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
+[D-ANS-155]: ans-155-a-read-on-a-php-without-curl-names-the-extension.md
 [D-ANS-081]: ans-081-a-symptom-is-answered-across-the-domain-it-was-observed-in.md
 [D-ANS-067]: ans-067-the-changelog-above-the-installed-major-comes-from-the-manual.md
 [D-ANS-034]: ans-034-a-source-outside-this-package-answers-json-or-it-did-not-answer.md

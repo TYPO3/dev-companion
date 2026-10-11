@@ -9,6 +9,7 @@ use Mcp\Schema\Result\CallToolResult;
 use Mcp\Server\ClientGateway;
 use Mcp\Server\Handler\ToolHandlerInterface;
 use TYPO3\DevCompanion\Server\CodeAge;
+use TYPO3\DevCompanion\Server\PhpExtensions;
 use TYPO3\DevCompanion\Server\Upstream;
 use TYPO3\DevCompanion\Tool\Registry;
 
@@ -31,6 +32,13 @@ final class ToolHandler implements ToolHandlerInterface
      */
     public function execute(array $arguments, ClientGateway $gateway): CallToolResult
     {
+        // Before the tool, which would fail on the missing function and name
+        // that rather than the extension, `D-ANS-176`.
+        $refusal = PhpExtensions::refusal();
+        if ($refusal !== null) {
+            return new CallToolResult([new TextContent($refusal)], isError: true);
+        }
+
         try {
             $result = Registry::call($this->name, $arguments);
         } catch (\Throwable $failure) {

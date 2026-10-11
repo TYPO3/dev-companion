@@ -112,6 +112,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-176`][D-ANS-176] — A PHP that lacks a required extension is refused by every call · 2026-10-11
 - [`D-ANS-175`][D-ANS-175] — Stdio serves the modern revision through the SDK's dispatcher · 2026-10-07
 - [`D-ANS-173`][D-ANS-173] — A Forge issue number goes in as an integer · 2026-10-06
 - [`D-ANS-174`][D-ANS-174] — A branch of an input anyOf defines what it requires · 2026-10-06
@@ -126,7 +127,6 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-160`][D-ANS-160] — A nullable field is two anyOf branches · 2026-09-17
 - [`D-ANS-161`][D-ANS-161] — A field of no fixed type names the types it takes · 2026-09-17
 - [`D-ANS-162`][D-ANS-162] — The data half is the one a session reads · 2026-09-17
-- [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15
 - [`D-ANS-156`][D-ANS-156] — A change read by name lists the changes its messages name · 2026-09-15
 - [`D-ANS-157`][D-ANS-157] — A manual page is read as the Markdown the host publishes beside it · 2026-09-15
 - [`D-ANS-158`][D-ANS-158] — A declared class, method or command is reached by its own name · 2026-09-15
@@ -280,6 +280,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-176]: answers/ans-176-a-php-that-lacks-a-required-extension-is-refused-by-every-call.md
 [D-ANS-175]: answers/ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md
 [D-ANS-173]: answers/ans-173-a-forge-issue-number-goes-in-as-an-integer.md
 [D-ANS-174]: answers/ans-174-a-branch-of-an-input-anyof-defines-what-it-requires.md
@@ -294,7 +295,6 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-ANS-160]: answers/ans-160-a-nullable-field-is-two-anyof-branches.md
 [D-ANS-161]: answers/ans-161-a-field-of-no-fixed-type-names-the-types-it-takes.md
 [D-ANS-162]: answers/ans-162-the-data-half-is-the-one-a-session-reads.md
-[D-ANS-155]: answers/ans-155-a-read-on-a-php-without-curl-names-the-extension.md
 [D-ANS-156]: answers/ans-156-a-change-read-by-name-lists-the-changes-its-messages-name.md
 [D-ANS-157]: answers/ans-157-a-manual-page-is-read-as-the-markdown-the-host-publishes-beside-it.md
 [D-ANS-158]: answers/ans-158-a-declared-class-method-or-command-is-reached-by-its-own-name.md
@@ -1348,6 +1348,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 - [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06 → D-ANS-175
 - [`D-DOC-071`][D-DOC-071] — The initialize page is read off a session in the same process · 2026-09-17 → D-DOC-072
+- [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15 → D-ANS-176
 - [`D-AUD-016`][D-AUD-016] — A count is answered and the row behind it stays with the installation · 2026-09-01 → D-AUD-017
 - [`D-AUD-017`][D-AUD-017] — Records are read and the boundary is the table they are in · 2026-09-01 → D-AUD-018
 - [`D-AUD-013`][D-AUD-013] — A competing route is corrected where it is written · 2026-08-25 → D-AUD-014
@@ -1399,6 +1400,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 [D-ANS-172]: answers/ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
 [D-DOC-071]: documentation/doc-071-the-initialize-page-is-read-off-a-session-in-the-same-process.md
+[D-ANS-155]: answers/ans-155-a-read-on-a-php-without-curl-names-the-extension.md
 [D-AUD-016]: audience/aud-016-a-count-is-answered-and-the-row-behind-it-stays-with-the-installation.md
 [D-AUD-017]: audience/aud-017-records-are-read-and-the-boundary-is-the-table-they-are-in.md
 [D-AUD-013]: audience/aud-013-a-competing-route-is-corrected-where-it-is-written.md

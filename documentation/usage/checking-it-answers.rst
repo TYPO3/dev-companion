@@ -135,9 +135,9 @@ own. Where it started decides what it reads, which is the same reason the wrong
 work directory produces answers about the wrong site.
 
 What the start has to say goes to stderr, each line opened by
-``typo3-dev-companion:``. A PHP without curl is one of those lines, and it names
-the PHP that ran. The server still starts, but every read of a host outside it
-fails until that PHP has the extension.
+``typo3-dev-companion:``. A PHP that lacks an extension ``composer.json``
+requires is one of those lines, and it names the PHP that ran. Where a client
+did start the server, every call answers with the same sentence.
 
 The MCP Inspector asks the same two lines with a form around them. Its protocol
 era ``Legacy``, the default, opens with ``initialize``. The server answers with

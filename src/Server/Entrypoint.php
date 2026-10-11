@@ -38,7 +38,12 @@ final class Entrypoint
         if ($command === null) {
             Instance::discoverFrom(getcwd() ?: null);
             CodeAge::markStart();
-            Upstream::check();
+            $refusal = PhpExtensions::refusal();
+            if ($refusal !== null) {
+                fwrite(STDERR, 'typo3-dev-companion: ' . $refusal . "\n");
+            } else {
+                Upstream::check();
+            }
             if (Upstream::notice() !== '') {
                 fwrite(STDERR, 'typo3-dev-companion: ' . Upstream::notice() . "\n");
             }

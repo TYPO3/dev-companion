@@ -162,16 +162,10 @@ final class Upstream
     private static function ask(string $revision): array
     {
         $fetch = self::$fetch ?? new Fetch(null, self::TIMEOUT);
-        try {
-            $answer = $fetch->read(
-                'https://api.github.com/repos/' . self::REPOSITORY . '/compare/' . $revision . '...' . self::BRANCH,
-                ['Accept: application/vnd.github+json'],
-            );
-        } catch (\RuntimeException $refused) {
-            // A PHP without curl, `D-ANS-155`. The start has no caller to
-            // refuse, so the report carries the refusal.
-            return ['state' => 'unavailable', 'behind' => null, 'reason' => $refused->getMessage()];
-        }
+        $answer = $fetch->read(
+            'https://api.github.com/repos/' . self::REPOSITORY . '/compare/' . $revision . '...' . self::BRANCH,
+            ['Accept: application/vnd.github+json'],
+        );
         if ($answer['status'] === 404 || $answer['status'] === 422) {
             return ['state' => 'unknown', 'behind' => null, 'reason' => null];
         }

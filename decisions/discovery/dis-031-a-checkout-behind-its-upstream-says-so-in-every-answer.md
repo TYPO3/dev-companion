@@ -50,7 +50,7 @@ count and the pull that ends it.**
 
 ## Since then
 
-`unavailable` alone did not say why. A PHP without curl and a GitHub that did
-not answer read the same, and only the first is a fault the caller fixes. The
-report now carries `reason`, the start writes it to stderr, and the section
-states it. `D-ANS-155` records the refusal that made the difference visible.
+`unavailable` alone did not say why. The report now carries `reason`: GitHub did
+not answer, or answered without a count. The start writes it to stderr, and the
+section states it. A PHP that lacks a required extension never reads,
+`D-ANS-176`.

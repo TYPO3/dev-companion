@@ -12,6 +12,7 @@ use TYPO3\DevCompanion\Knowledge\Coverage;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Server\Entrypoint;
 use TYPO3\DevCompanion\Server\Installer;
+use TYPO3\DevCompanion\Server\PhpExtensions;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Directory;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
@@ -646,43 +647,46 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * The one case `read()` cannot get a handle in, over the wire where a lost
-     * answer costs the most.
+     * A PHP that lacks an extension `composer.json` requires, over the wire
+     * where a lost answer costs the most — `D-ANS-176`.
      *
-     * `composer.json` requires ext-curl, and two ways in pass it: an install
-     * with the platform check off, and an entry that starts a PHP other than
-     * the one Composer resolved against. PHP's own error named a function and
-     * no extension — `D-ANS-155`. `disable_functions` takes the function away
-     * from a PHP that has it, so the case runs on every PHP the suite runs on.
-     *
-     * The start reads GitHub too, unless an answer from the last hour is kept
-     * in the temporary directory. An empty one of its own makes that read
-     * happen on every run, and it died on 2026-10-07 only where it did.
+     * PHP's own error named a function and no extension. The server starts,
+     * says which extension on stderr, and answers every call with that
+     * sentence. The PHP here starts with no ini and loads back every extension
+     * the suite's PHP has but one. That one is the first required extension
+     * this PHP loads rather than has compiled in.
      */
-    #[Decision('D-ANS-155')]
+    #[Decision('D-ANS-176')]
     #[Test]
-    public function aPhpWithoutCurlIsRefusedWithTheExtensionNamed(): void
+    public function aPhpWithoutARequiredExtensionIsRefusedWithItsName(): void
     {
-        $this->temporaryRoot = sys_get_temp_dir() . '/typo3-dev-companion-no-curl-' . bin2hex(random_bytes(8));
-        self::assertTrue(mkdir($this->temporaryRoot));
+        $bare = [];
+        exec(escapeshellarg(PHP_BINARY) . ' -n -r ' . escapeshellarg('echo implode("\n", get_loaded_extensions());'), $bare);
+        PhpExtensions::useLoaded(static fn(string $name): bool => in_array($name, $bare, true));
+        $absent = PhpExtensions::missing()[0] ?? null;
+        PhpExtensions::useLoaded(null);
+        self::assertNotNull($absent, 'This PHP has every required extension compiled in, so none can be left out.');
+
+        $php = ['-n', '-d', 'display_errors=stderr'];
+        foreach (array_diff(get_loaded_extensions(), $bare, [$absent]) as $extension) {
+            if (!str_contains($extension, ' ')) {
+                array_push($php, '-d', 'extension=' . strtolower($extension));
+            }
+        }
 
         $answers = $this->session([
             $this->request(2, 'tools/call', ['name' => 'typo3_forge_lookup', 'arguments' => ['issue' => 110348]]),
             $this->request(3, 'tools/call', ['name' => 'typo3_server_scope', 'arguments' => new \stdClass()]),
-        ], php: ['-d', 'disable_functions=curl_init', '-d', 'sys_temp_dir=' . $this->temporaryRoot]);
+        ], php: $php, stderr: $stderr);
 
-        self::assertArrayNotHasKey('error', $answers[2]);
-        self::assertTrue($answers[2]['result']['isError']);
-        $said = $answers[2]['result']['content'][0]['text'];
-        self::assertStringContainsString('ext-curl', $said);
-        self::assertStringContainsString(PHP_BINARY, $said);
-        self::assertStringNotContainsString('undefined function', $said);
-
-        // The read is the one answer lost. The server stands, and the next
-        // request is answered, with the reason the start's read failed.
-        self::assertArrayNotHasKey('error', $answers[3]);
-        self::assertFalse($answers[3]['result']['isError'] ?? false);
-        self::assertStringContainsString('ext-curl', (string) $answers[3]['result']['structuredContent']['upstream']['reason']);
+        self::assertStringContainsString('typo3-dev-companion: The PHP that runs this server lacks ext-' . $absent, $stderr);
+        foreach ([2, 3] as $id) {
+            self::assertArrayNotHasKey('error', $answers[$id]);
+            self::assertTrue($answers[$id]['result']['isError']);
+            $said = $answers[$id]['result']['content'][0]['text'];
+            self::assertStringContainsString('lacks ext-' . $absent . ', which composer.json requires', $said);
+            self::assertStringContainsString(PHP_BINARY, $said);
+        }
     }
 
     /**
@@ -963,9 +967,11 @@ final class StdioServerTest extends TestCase
     /**
      * @param array<int, string> $requests
      * @param array<int, string> $php options for the interpreter that runs the server
+     * @param string|null $stderr what the server said beside the protocol
+     * @param-out string $stderr
      * @return array<int, array<string, mixed>> responses by request id
      */
-    private function session(array $requests, ?string $cwd = null, array $php = []): array
+    private function session(array $requests, ?string $cwd = null, array $php = [], ?string &$stderr = null): array
     {
         return $this->call(array_merge([
             $this->request(1, 'initialize', [
@@ -974,7 +980,7 @@ final class StdioServerTest extends TestCase
                 'clientInfo' => ['name' => 'phpunit', 'version' => '1'],
             ]),
             (string) json_encode(['jsonrpc' => '2.0', 'method' => 'notifications/initialized']),
-        ], $requests), $cwd, php: $php);
+        ], $requests), $cwd, $stderr, php: $php);
     }
 
     /**

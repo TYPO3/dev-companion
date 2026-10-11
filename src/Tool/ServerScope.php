@@ -156,7 +156,7 @@ final class ServerScope extends ReadOnlyTool
                 'behind' => Schema::nullable(Schema::integer('How many commits the upstream branch has that this checkout lacks. Null where nothing counted them.')),
                 'checkedAt' => Schema::nullableString('When the start last asked, in UTC. The answer is kept an hour and shared by every session of this checkout.'),
                 'lastAnswered' => Schema::nullableString('When a read last worked.'),
-                'reason' => Schema::nullableString('Why the last read failed: GitHub did not answer, or this PHP has no curl extension. Null unless the state is unavailable.'),
+                'reason' => Schema::nullableString('Why the last read failed: GitHub did not answer, or answered without a count. Null unless the state is unavailable.'),
                 'variable' => Schema::string('Environment variable that turns the read off.'),
             ], ['state', 'repository', 'revision', 'behind', 'checkedAt', 'lastAnswered', 'reason', 'variable']),
             'withheld' => Schema::listOf(Schema::object([

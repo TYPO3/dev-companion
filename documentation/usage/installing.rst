@@ -4,8 +4,11 @@ Installing the server
 =====================
 
 Requirements: **PHP 8.2+** with the extensions ``composer.json`` requires, and
-Composer. ``composer check-platform-reqs`` names one that is missing. A
-standalone checkout is the ordinary way in: one clone serves every project on
+Composer. ``composer check-platform-reqs`` names one that is missing. A PHP that
+lacks one still starts, names it on stderr, and answers every call with that
+sentence,
+`D-ANS-176 <../../decisions/answers/ans-176-a-php-that-lacks-a-required-extension-is-refused-by-every-call.md>`_.
+A standalone checkout is the ordinary way in: one clone serves every project on
 the machine and stays out of each project's dependencies. A project can require
 the package instead, which is the second section. The
 `readme <../../readme.md>`_ has the short version; this page has the cases it
@@ -383,12 +386,8 @@ it is and the pull that ends it. ``typo3_server_scope`` reports the state under
 `D-DIS-031 <../../decisions/discovery/dis-031-a-checkout-behind-its-upstream-says-so-in-every-answer.md>`_.
 
 A read that fails leaves the state ``unavailable``, and the start writes why to
-stderr. ``typo3_server_scope`` carries the same sentence as ``reason``. Mostly
-GitHub did not answer, which the next start asks again. A PHP without curl is
-the cause you fix yourself. Every read of a host outside goes through curl: the
-manuals, the changelog, Forge, Gerrit and the TER. Without it, each of those
-lookups refuses and names the extension,
-`D-ANS-155 <../../decisions/answers/ans-155-a-read-on-a-php-without-curl-names-the-extension.md>`_.
+stderr. ``typo3_server_scope`` carries the same sentence as ``reason``. The next
+start asks again.
 
 A published skill is a copy, so it goes stale the moment this package moves.
 ``update`` is what refreshes it, along with the client entry:

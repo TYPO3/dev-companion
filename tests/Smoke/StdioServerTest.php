@@ -654,15 +654,22 @@ final class StdioServerTest extends TestCase
      * the one Composer resolved against. PHP's own error named a function and
      * no extension — `D-ANS-155`. `disable_functions` takes the function away
      * from a PHP that has it, so the case runs on every PHP the suite runs on.
+     *
+     * The start reads GitHub too, unless an answer from the last hour is kept
+     * in the temporary directory. An empty one of its own makes that read
+     * happen on every run, and it died on 2026-10-07 only where it did.
      */
     #[Decision('D-ANS-155')]
     #[Test]
     public function aPhpWithoutCurlIsRefusedWithTheExtensionNamed(): void
     {
+        $this->temporaryRoot = sys_get_temp_dir() . '/typo3-dev-companion-no-curl-' . bin2hex(random_bytes(8));
+        self::assertTrue(mkdir($this->temporaryRoot));
+
         $answers = $this->session([
             $this->request(2, 'tools/call', ['name' => 'typo3_forge_lookup', 'arguments' => ['issue' => 110348]]),
             $this->request(3, 'tools/call', ['name' => 'typo3_server_scope', 'arguments' => new \stdClass()]),
-        ], php: ['-d', 'disable_functions=curl_init']);
+        ], php: ['-d', 'disable_functions=curl_init', '-d', 'sys_temp_dir=' . $this->temporaryRoot]);
 
         self::assertArrayNotHasKey('error', $answers[2]);
         self::assertTrue($answers[2]['result']['isError']);

@@ -163,10 +163,16 @@ final class Upstream
     private static function ask(string $revision): ?array
     {
         $fetch = self::$fetch ?? new Fetch(null, self::TIMEOUT);
-        $answer = $fetch->read(
-            'https://api.github.com/repos/' . self::REPOSITORY . '/compare/' . $revision . '...' . self::BRANCH,
-            ['Accept: application/vnd.github+json'],
-        );
+        try {
+            $answer = $fetch->read(
+                'https://api.github.com/repos/' . self::REPOSITORY . '/compare/' . $revision . '...' . self::BRANCH,
+                ['Accept: application/vnd.github+json'],
+            );
+        } catch (\RuntimeException) {
+            // A PHP without curl, `D-ANS-155`. The start has no caller to name
+            // it to, and a tool's read names it on the first call.
+            return null;
+        }
         if ($answer['status'] === 404 || $answer['status'] === 422) {
             return ['state' => 'unknown', 'behind' => null];
         }

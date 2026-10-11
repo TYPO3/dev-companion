@@ -65,3 +65,14 @@ Composer resolved against.
   data after all.
 - A refusal that names `PHP_BINARY` turns out to carry a path the caller may not
   see. Then the message names the version alone.
+
+## Since then
+
+The refusal reached a read with no caller behind it. `Upstream::check()` asks
+GitHub where the server starts, through the same `Fetch::read()`. On a PHP
+without curl, the exception left the start uncaught, and the server exited with
+255 before the first request. That happened only where no answer from the last
+hour was kept. So the PHP 8.4 job of CI run 37581763708 failed on 2026-10-07 and
+passed when somebody ran it again. `Upstream::ask()` now takes the refusal as no
+answer, `unavailable`, and the first tool read names ext-curl. The test gives
+the server an empty temporary directory, so the start reads on every run.

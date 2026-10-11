@@ -83,3 +83,15 @@ neither the official page nor the README states.
 
 The page names two files that look like the template and are not it. A session
 that copies from a real published extension can land on the replaced renderer.
+
+## Since then
+
+`feedback/2026-10-06-210159` reported the page behind render-guides 0.45.0, and
+the first **Wrong if** half fired. The scaffold moved with the renderer, not
+with a TYPO3 major. The command pulls `:latest`, so the page states the current
+renderer and carries no bound. Read from the release's pull requests on
+2026-10-11. The template carries `interlink-shortcode` with the Composer name,
+which the render warns without. The page names the two opt-in checks on
+`extension`, the lower-case `index.rst` warning, and "Rendering failed". The new
+`confval` fields, the roles, `literalinclude :diff:` and the float classes stay
+out. They are how a manual is written, and the page is what it consists of.

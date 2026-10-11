@@ -1,7 +1,8 @@
 ---
 date: 2026-10-06T21:01:59+02:00
 category: wrong-answer
-status: open
+status: closed
+closed: 2026-10-11
 model: claude-opus-5-5
 tool: typo3-extension-documentation, typo3_rule_lookup
 directory: /var/www/html

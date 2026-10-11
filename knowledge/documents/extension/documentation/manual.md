@@ -11,7 +11,9 @@ hints:
 
 Two files make a directory a manual: `Documentation/Index.rst` as the entry
 point and `Documentation/guides.xml` as the renderer configuration. Everything
-else is convention. docs.typo3.org renders the tree from those two.
+else is convention. docs.typo3.org renders the tree from those two. `Index.rst`
+starts with a capital. A manual that starts at `index.rst` renders locally, and
+docs.typo3.org opens it at a page that is not there. The render warns about it.
 
 ## Documentation/guides.xml
 
@@ -20,7 +22,8 @@ else is convention. docs.typo3.org renders the tree from those two.
 <guides xmlns="https://www.phpdoc.org/guides"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="https://www.phpdoc.org/guides ../vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd">
-    <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"/>
+    <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+               interlink-shortcode="vendor/my-extension"/>
     <project title="My Extension"
              version="local"
              copyright="since {year} by the extension's authors &amp; contributors"
@@ -29,11 +32,20 @@ else is convention. docs.typo3.org renders the tree from those two.
 ```
 
 The renderer needs the namespace, the `class` on `extension` and the `title` on
-`project`. The rest is optional. The deployment that publishes the manual sets
-`version`, so a repository carries `local`. The `extension` element takes the
-attributes that produce the edit link and the project header: `edit-on-github`,
-`edit-on-github-directory`, `project-home`, `project-issues`,
-`interlink-shortcode`. An extension that wants none of them leaves them out.
+`project`. The deployment that publishes the manual sets `version`, so a
+repository carries `local`.
+
+`interlink-shortcode` is the name every permalink and every other manual reaches
+this one by. For an extension it is the Composer name. A render without it
+warns, so a check that renders with `--fail-on-log` or `--minimal-test` fails.
+
+The rest is optional. The `extension` element takes the attributes that produce
+the edit link and the project header: `edit-on-github`,
+`edit-on-github-directory`, `project-home`, `project-issues`. An extension that
+wants none of them leaves them out. Two more attributes switch on a check the
+render otherwise skips. `check-headline-anchors="true"` warns about every
+headline without a label of its own. `confval-fields` lists the fields a
+`confval` may carry, separated by commas, and warns about every other field.
 
 Two files that look like this one are not the template. A core system
 extension's `guides.xml` points `edit-on-github` at `typo3/typo3` and carries
@@ -112,13 +124,13 @@ docker run --rm --pull always -v $(pwd):/project -it \
 `--config` names the directory that holds `guides.xml`. The rendered HTML lands
 below `Documentation-GENERATED-temp/`, which belongs in `.gitignore`.
 
-A run whose last line reads "Successfully placed" has not said that everything
-rendered. When `Index.rst` includes a file that is not there, the run logs the
-failed directive and exits 0. `--fail-on-log` makes the same run exit 1, and a
-check calls it with that flag. `--fail-on-error` is the narrower flag and lets a
-warning pass. In CI the command also takes `--no-progress`. `--minimal-test`
-renders a single page where the check only has to establish that the tree
-builds.
+A run without a flag logs a problem and exits 0. When `Index.rst` includes a
+file that is not there, the run logs the failed directive and its last line
+still reads "Successfully placed". `--fail-on-log` makes the same run exit 1 and
+end in "Rendering failed", and a check calls it with that flag.
+`--fail-on-error` is the narrower flag and lets a warning pass. In CI the
+command also takes `--no-progress`. `--minimal-test` renders a single page where
+the check only has to establish that the tree builds.
 
 Expect that include to fail first. `Index.rst` opens with
 `.. include:: /Includes.rst.txt` in every manual worth a copy, and the extension

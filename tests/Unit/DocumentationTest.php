@@ -166,8 +166,9 @@ final class DocumentationTest extends TestCase
     /**
      * A search reads each result page for its lead, and it reads the Markdown
      * where the host has it. The lead is the first paragraphs, and none of the
-     * front matter, the heading and the section list every page opens with —
-     * `D-ANS-157`.
+     * front matter, the heading and the section list every page opens with,
+     * and none of the comment the writer leaves for a directive it cannot
+     * render — `D-ANS-157`.
      */
     #[Decision('D-ANS-157')]
     #[Test]
@@ -192,7 +193,7 @@ final class DocumentationTest extends TestCase
 
                 ## Simple example
 
-                TYPO3 Core contains more than 2600 functional tests.
+                <!-- TODO: no Markdown rendering for "versionadded" --> TYPO3 Core contains more than 2600 functional tests.
 
                 ```php
                 final class GeneratorTest extends FunctionalTestCase

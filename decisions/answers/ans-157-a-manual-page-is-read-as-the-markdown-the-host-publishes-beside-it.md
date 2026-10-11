@@ -99,3 +99,11 @@ front matter that states its title.
 - One page of a rendered manual answers 404 as Markdown while the rest answer.
   Then the memo marks the manual as one without, and every later page of it is
   read as HTML for the rest of the process.
+
+## Since then
+
+render-guides 0.45.0 writes `<!-- TODO: no Markdown rendering for … -->` where
+it renders a directive as nothing, `versionadded` among them. Read on
+2026-10-11, the lead of `f:page.title` at 14.3 opened with that comment. The
+reader takes every comment out of a Markdown page before it reads the lead or
+the content.

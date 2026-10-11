@@ -692,7 +692,9 @@ final class Documentation
             if ($markdown !== null && preg_match(self::FRONT_MATTER, $markdown) === 1) {
                 self::$markdown[$base] = true;
 
-                return ['markdown' => $markdown];
+                // The writer leaves a comment where it renders a directive as
+                // nothing, and it is no part of the page — `D-ANS-157`.
+                return ['markdown' => (string) preg_replace('/<!--.*?-->[ \t]*/s', '', $markdown)];
             }
         }
 

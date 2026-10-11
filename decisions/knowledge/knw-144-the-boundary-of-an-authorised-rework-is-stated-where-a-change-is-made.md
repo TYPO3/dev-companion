@@ -4,6 +4,8 @@ title: The boundary of an authorised rework is stated where a change is made
 date: 2026-09-02
 status: open
 coveredBy: []
+readings:
+  - 2026-10-11
 ---
 
 # D-KNW-144 — The boundary of an authorised rework is stated where a change is made

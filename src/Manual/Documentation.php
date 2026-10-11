@@ -143,6 +143,14 @@ final class Documentation
      */
     private static array $confvals = [];
 
+    /**
+     * The ViewHelpers a manual lists in `viewhelpers.json`, by the path of the
+     * page that documents each, per base — `D-ANS-178`.
+     *
+     * @var array<string, array<string, array<string, mixed>>>
+     */
+    private static array $viewhelpers = [];
+
     private readonly Fetch $reader;
 
     private readonly Inventory $inventory;
@@ -159,6 +167,7 @@ final class Documentation
     {
         self::$markdown = [];
         self::$confvals = [];
+        self::$viewhelpers = [];
     }
 
     /**
@@ -180,7 +189,8 @@ final class Documentation
      *     content: string,
      *     coverage: float|null,
      *     matched: list<array{term: string, field: string}>,
-     *     property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null
+     *     property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null,
+     *     viewhelper: array{tag: string, class: string, xmlNamespace: ?string, arguments: list<array{name: string, type: ?string, required: bool, default: ?string}>}|null
      *   }>,
      *   unavailable: array{cause: string, reason: string}|null
      * }
@@ -301,8 +311,9 @@ final class Documentation
             $anchor = (string) parse_url($url, PHP_URL_FRAGMENT);
             $base = self::base($candidate['document'], $targetVersion);
             $property = $candidate['role'] === 'std:confval' ? $this->property($base, $anchor) : null;
+            $viewhelper = $candidate['role'] === self::PAGE && $anchor === '' ? $this->viewhelper($base, $url) : null;
             $page = match (true) {
-                $property !== null => null,
+                $property !== null, $viewhelper !== null => null,
                 $anchor === '' => $this->fetch($base, $url),
                 default => $this->html($url),
             };
@@ -315,6 +326,7 @@ final class Documentation
                 'section' => is_array($candidate['section']) ? $candidate['section']['title'] : $candidate['section'],
                 'excerpt' => match (true) {
                     $property !== null => $property['excerpt'],
+                    $viewhelper !== null => $viewhelper['excerpt'],
                     $page === null => '',
                     isset($page['markdown']) => self::lead($page['markdown']),
                     default => $this->excerpt($page['html'], $anchor),
@@ -323,6 +335,7 @@ final class Documentation
                 'coverage' => round($candidate['coverage'], 3),
                 'matched' => self::matched($candidate['matched']),
                 'property' => $property === null ? null : $property['property'],
+                'viewhelper' => $viewhelper === null ? null : $viewhelper['viewhelper'],
             ];
         }
 
@@ -349,7 +362,8 @@ final class Documentation
      *     content: string,
      *     coverage: float|null,
      *     matched: list<array{term: string, field: string}>,
-     *     property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null
+     *     property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null,
+     *     viewhelper: array{tag: string, class: string, xmlNamespace: ?string, arguments: list<array{name: string, type: ?string, required: bool, default: ?string}>}|null
      *   }>,
      *   unavailable: array{cause: string, reason: string}|null
      * }
@@ -403,6 +417,7 @@ final class Documentation
             'coverage' => null,
             'matched' => [],
             'property' => null,
+            'viewhelper' => null,
         ]], null);
     }
 
@@ -753,6 +768,65 @@ final class Documentation
     }
 
     /**
+     * What the manual's `viewhelpers.json` says of the ViewHelper a page
+     * documents, and the excerpt that says it. Null where the base publishes no
+     * such file or lists no ViewHelper on that page: the page is read then —
+     * `D-ANS-178`.
+     *
+     * @return array{excerpt: string, viewhelper: array{tag: string, class: string, xmlNamespace: ?string, arguments: list<array{name: string, type: ?string, required: bool, default: ?string}>}}|null
+     */
+    private function viewhelper(string $base, string $url): ?array
+    {
+        if (!isset(self::$viewhelpers[$base])) {
+            $decoded = Fetch::decode($this->get($base . 'viewhelpers.json'));
+            $listed = [];
+            foreach (is_array($decoded) && is_array($decoded['viewhelpers'] ?? null) ? $decoded['viewhelpers'] : [] as $tag => $entry) {
+                if (is_array($entry) && is_string($entry['path'] ?? null) && is_string($entry['class'] ?? null)) {
+                    $listed[$entry['path'] . '.html'] = ['tag' => (string) $tag] + $entry;
+                }
+            }
+            self::$viewhelpers[$base] = $listed;
+        }
+        $entry = self::$viewhelpers[$base][substr($url, strlen($base))] ?? null;
+        if ($entry === null) {
+            return null;
+        }
+
+        $text = static fn(mixed $value): ?string => is_string($value) && trim($value) !== '' ? self::plain($value) : null;
+        $arguments = [];
+        foreach (is_array($entry['arguments'] ?? null) ? $entry['arguments'] : [] as $name => $argument) {
+            if (is_array($argument)) {
+                $arguments[] = [
+                    'name' => (string) $name,
+                    'type' => $text($argument['type'] ?? null),
+                    'required' => ($argument['required'] ?? false) === true,
+                    'default' => $text($argument['default'] ?? null),
+                ];
+            }
+        }
+        $named = array_map(static fn(array $argument): string => $argument['name'] . ' ('
+            . implode(', ', array_filter([
+                $argument['type'],
+                $argument['required'] ? 'required' : null,
+                $argument['default'] === null ? null : 'default ' . $argument['default'],
+            ])) . ')', $arguments);
+        $excerpt = implode(' ', array_filter([
+            $text($entry['summary'] ?? null),
+            $named === [] ? null : 'Arguments: ' . implode(', ', $named) . '.',
+        ]));
+
+        return [
+            'excerpt' => mb_strlen($excerpt) > 700 ? mb_substr($excerpt, 0, 699) . '…' : $excerpt,
+            'viewhelper' => [
+                'tag' => $entry['tag'],
+                'class' => (string) $entry['class'],
+                'xmlNamespace' => $text($entry['xmlNamespace'] ?? null),
+                'arguments' => $arguments,
+            ],
+        ];
+    }
+
+    /**
      * The rendered page alone, for a read that needs the ids in it.
      *
      * @return array{html: string}|null
@@ -1046,7 +1120,7 @@ final class Documentation
      * @param 'answered'|'empty'|'unavailable' $status
      * @param list<string> $queries
      * @param 'search'|'page' $mode
-     * @param list<array{title: string, url: string, document: string, documentTitle: string, documentVersion: string, section: string, excerpt: string, content: string, coverage: float|null, matched: list<array{term: string, field: string}>, property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null}> $results
+     * @param list<array{title: string, url: string, document: string, documentTitle: string, documentVersion: string, section: string, excerpt: string, content: string, coverage: float|null, matched: list<array{term: string, field: string}>, property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null, viewhelper: array{tag: string, class: string, xmlNamespace: ?string, arguments: list<array{name: string, type: ?string, required: bool, default: ?string}>}|null}> $results
      * @param array{cause: string, reason: string}|null $unavailable
      * @return array{
      *   mode: 'search'|'page',
@@ -1054,7 +1128,7 @@ final class Documentation
      *   targetVersion: string,
      *   source: string,
      *   queries: list<string>,
-     *   results: list<array{title: string, url: string, document: string, documentTitle: string, documentVersion: string, section: string, excerpt: string, content: string, coverage: float|null, matched: list<array{term: string, field: string}>, property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null}>,
+     *   results: list<array{title: string, url: string, document: string, documentTitle: string, documentVersion: string, section: string, excerpt: string, content: string, coverage: float|null, matched: list<array{term: string, field: string}>, property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null, viewhelper: array{tag: string, class: string, xmlNamespace: ?string, arguments: list<array{name: string, type: ?string, required: bool, default: ?string}>}|null}>,
      *   unavailable: array{cause: string, reason: string}|null
      * }
      */

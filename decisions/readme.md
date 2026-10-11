@@ -114,6 +114,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 - [`D-ANS-176`][D-ANS-176] — A PHP that lacks a required extension is refused by every call · 2026-10-11
 - [`D-ANS-177`][D-ANS-177] — A property answers from what its manual states of it · 2026-10-11
+- [`D-ANS-178`][D-ANS-178] — A ViewHelper page answers with the arguments its reference lists · 2026-10-11
 - [`D-ANS-175`][D-ANS-175] — Stdio serves the modern revision through the SDK's dispatcher · 2026-10-07
 - [`D-ANS-173`][D-ANS-173] — A Forge issue number goes in as an integer · 2026-10-06
 - [`D-ANS-174`][D-ANS-174] — A branch of an input anyOf defines what it requires · 2026-10-06
@@ -283,6 +284,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 [D-ANS-176]: answers/ans-176-a-php-that-lacks-a-required-extension-is-refused-by-every-call.md
 [D-ANS-177]: answers/ans-177-a-property-answers-from-what-its-manual-states-of-it.md
+[D-ANS-178]: answers/ans-178-a-viewhelper-page-answers-with-the-arguments-its-reference-lists.md
 [D-ANS-175]: answers/ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md
 [D-ANS-173]: answers/ans-173-a-forge-issue-number-goes-in-as-an-integer.md
 [D-ANS-174]: answers/ans-174-a-branch-of-an-input-anyof-defines-what-it-requires.md

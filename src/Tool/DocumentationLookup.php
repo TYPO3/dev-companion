@@ -126,7 +126,18 @@ final class DocumentationLookup extends ReadOnlyTool
                         'url' => Schema::nullableString('The changelog entry that says so.'),
                     ], ['kind', 'version', 'url'])),
                 ], ['type', 'default', 'required', 'versions'], 'What the manual states of a property this result is, read from its confvals.json. The excerpt says the same. Null for a page, or where the manual publishes no such file.')),
-            ], ['title', 'url', 'document', 'documentTitle', 'documentVersion', 'section', 'excerpt', 'content', 'coverage', 'matched', 'property'])),
+                'viewhelper' => Schema::nullable(Schema::object([
+                    'tag' => Schema::string('The tag a template writes, such as f:if.'),
+                    'class' => Schema::string('The class that implements it.'),
+                    'xmlNamespace' => Schema::nullableString('The namespace a template declares to use it.'),
+                    'arguments' => Schema::listOf(Schema::object([
+                        'name' => Schema::string(),
+                        'type' => Schema::nullableString(),
+                        'required' => ['type' => 'boolean'],
+                        'default' => Schema::nullableString('Null where the reference states none.'),
+                    ], ['name', 'type', 'required', 'default']), 'Every argument the reference documents, in its order.'),
+                ], ['tag', 'class', 'xmlNamespace', 'arguments'], 'What the ViewHelper reference states of the ViewHelper this page documents, read from its viewhelpers.json. The excerpt names the same arguments. Null for every other page.')),
+            ], ['title', 'url', 'document', 'documentTitle', 'documentVersion', 'section', 'excerpt', 'content', 'coverage', 'matched', 'property', 'viewhelper'])),
             'unavailable' => Schema::unavailable([
                 'version-not-covered' => 'the release asked about is outside the ones this server knows the manuals '
                     . 'for, and a second call changes nothing.',

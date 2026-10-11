@@ -532,6 +532,58 @@ final class DocumentationTest extends TestCase
     }
 
     /**
+     * A page of the ViewHelper reference answers with the arguments its
+     * `viewhelpers.json` lists, and the page stays unread. A page the file
+     * lists nothing for answers from the page, as before — `D-ANS-178`.
+     */
+    #[Decision('D-ANS-178')]
+    #[Test]
+    public function aViewHelperPageAnswersWithTheArgumentsTheReferenceLists(): void
+    {
+        $read = [];
+        $manuals = $this->manuals();
+        $documentation = new Documentation(static function (string $url) use ($manuals, &$read): ?string {
+            $read[] = $url;
+
+            return str_ends_with($url, '/view-helper-reference/14.3/en-us/viewhelpers.json')
+                ? (string) json_encode(['viewhelpers' => [
+                    'f:if' => [
+                        'class' => 'TYPO3Fluid\\Fluid\\ViewHelpers\\IfViewHelper',
+                        'xmlNamespace' => 'http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers',
+                        'summary' => 'This ViewHelper implements an if/else condition.',
+                        'arguments' => [
+                            'condition' => ['type' => 'boolean', 'required' => false, 'default' => 'false'],
+                            'then' => ['type' => 'mixed', 'required' => false],
+                        ],
+                        'path' => 'Global/If',
+                    ],
+                ]])
+                : $manuals($url);
+        });
+
+        $if = $documentation->lookup(['f:if'], '14.3', 1)['results'][0];
+
+        self::assertSame([
+            'tag' => 'f:if',
+            'class' => 'TYPO3Fluid\\Fluid\\ViewHelpers\\IfViewHelper',
+            'xmlNamespace' => 'http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers',
+            'arguments' => [
+                ['name' => 'condition', 'type' => 'boolean', 'required' => false, 'default' => 'false'],
+                ['name' => 'then', 'type' => 'mixed', 'required' => false, 'default' => null],
+            ],
+        ], $if['viewhelper']);
+        self::assertSame(
+            'This ViewHelper implements an if/else condition. Arguments: condition (boolean, default false), then (mixed).',
+            $if['excerpt'],
+        );
+        self::assertSame([], array_filter($read, static fn(string $url): bool => str_contains($url, 'Global/If.')));
+
+        $translate = $documentation->lookup(['f:translate'], '14.3', 1)['results'][0];
+        self::assertStringEndsWith('Global/Translate.html', $translate['url']);
+        self::assertNull($translate['viewhelper']);
+    }
+
+    /**
      * TYPO3 Explained declares the classes, the methods and the console
      * commands it documents, with the anchor of the section that does. So a
      * query that names one reaches that section the way it reaches a property.

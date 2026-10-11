@@ -485,6 +485,52 @@ final class DocumentationTest extends TestCase
     }
 
     /**
+     * A property the manual describes in its `confvals.json` answers from
+     * there, and the page it is a section of stays unread. One the file lacks
+     * answers from the page, as before — `D-ANS-177`.
+     */
+    #[Decision('D-ANS-177')]
+    #[Test]
+    public function aPropertyIsAnsweredFromWhatTheManualStatesOfIt(): void
+    {
+        $read = [];
+        $manuals = $this->manuals();
+        $documentation = new Documentation(static function (string $url) use ($manuals, &$read): ?string {
+            $read[] = $url;
+
+            return str_ends_with($url, '/reference-tca/14.3/en-us/confvals.json')
+                ? (string) json_encode(['project' => ['title' => 'TCA Reference'], 'confvals' => [
+                    'confval-types-columnsoverrides' => [
+                        'name' => 'columnsOverrides',
+                        'type' => 'array (columns fields overrides)',
+                        'summary' => 'Changed or added [\'columns\'] field display definitions.',
+                        'versions' => [['kind' => 'changed', 'version' => '14.0', 'url' => 'https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Feature.html']],
+                        'path' => 'Types/Index',
+                    ],
+                ]])
+                : $manuals($url);
+        });
+
+        $property = $documentation->lookup(['columnsOverrides'], '14.3', 1)['results'][0];
+
+        self::assertSame(
+            ['type' => 'array (columns fields overrides)', 'default' => null, 'required' => false, 'versions' => [
+                ['kind' => 'changed', 'version' => '14.0', 'url' => 'https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Feature.html'],
+            ]],
+            $property['property'],
+        );
+        self::assertSame(
+            'Changed or added [\'columns\'] field display definitions. Type: array (columns fields overrides). Changed in 14.0.',
+            $property['excerpt'],
+        );
+        self::assertSame([], array_filter($read, static fn(string $url): bool => str_contains($url, 'Types/Index.html')));
+
+        $page = $documentation->lookup(['showitem'], '14.3', 1)['results'][0];
+        self::assertNull($page['property']);
+        self::assertContains('https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Types/Index.html#confval-types-showitem', $read);
+    }
+
+    /**
      * TYPO3 Explained declares the classes, the methods and the console
      * commands it documents, with the anchor of the section that does. So a
      * query that names one reaches that section the way it reaches a property.

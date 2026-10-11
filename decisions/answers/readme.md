@@ -5,6 +5,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-ANS-176`][D-ANS-176] — A PHP that lacks a required extension is refused by every call · 2026-10-11
+- [`D-ANS-177`][D-ANS-177] — A property answers from what its manual states of it · 2026-10-11
 - [`D-ANS-175`][D-ANS-175] — Stdio serves the modern revision through the SDK's dispatcher · 2026-10-07
 - [`D-ANS-173`][D-ANS-173] — A Forge issue number goes in as an integer · 2026-10-06
 - [`D-ANS-174`][D-ANS-174] — A branch of an input anyOf defines what it requires · 2026-10-06
@@ -173,6 +174,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-176]: ans-176-a-php-that-lacks-a-required-extension-is-refused-by-every-call.md
+[D-ANS-177]: ans-177-a-property-answers-from-what-its-manual-states-of-it.md
 [D-ANS-175]: ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md
 [D-ANS-173]: ans-173-a-forge-issue-number-goes-in-as-an-integer.md
 [D-ANS-174]: ans-174-a-branch-of-an-input-anyof-defines-what-it-requires.md

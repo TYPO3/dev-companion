@@ -135,6 +135,14 @@ final class Documentation
      */
     private static array $markdown = [];
 
+    /**
+     * The properties a manual describes in `confvals.json`, by the anchor of
+     * each, per base. An empty list is a base that publishes none — `D-ANS-177`.
+     *
+     * @var array<string, array<string, array<string, mixed>>>
+     */
+    private static array $confvals = [];
+
     private readonly Fetch $reader;
 
     private readonly Inventory $inventory;
@@ -150,6 +158,7 @@ final class Documentation
     public static function forget(): void
     {
         self::$markdown = [];
+        self::$confvals = [];
     }
 
     /**
@@ -170,7 +179,8 @@ final class Documentation
      *     excerpt: string,
      *     content: string,
      *     coverage: float|null,
-     *     matched: list<array{term: string, field: string}>
+     *     matched: list<array{term: string, field: string}>,
+     *     property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null
      *   }>,
      *   unavailable: array{cause: string, reason: string}|null
      * }
@@ -207,6 +217,7 @@ final class Documentation
                         'manual' => $manual['title'],
                     ],
                     'headings' => $page['headings'] ?? [],
+                    'role' => $page['role'] ?? self::PAGE,
                 ];
             }
         }
@@ -288,9 +299,13 @@ final class Documentation
                 $url .= '#' . $candidate['section']['anchor'];
             }
             $anchor = (string) parse_url($url, PHP_URL_FRAGMENT);
-            $page = $anchor === ''
-                ? $this->fetch(self::base($candidate['document'], $targetVersion), $url)
-                : $this->html($url);
+            $base = self::base($candidate['document'], $targetVersion);
+            $property = $candidate['role'] === 'std:confval' ? $this->property($base, $anchor) : null;
+            $page = match (true) {
+                $property !== null => null,
+                $anchor === '' => $this->fetch($base, $url),
+                default => $this->html($url),
+            };
             $results[] = [
                 'title' => $candidate['title'],
                 'url' => $url,
@@ -299,6 +314,7 @@ final class Documentation
                 'documentVersion' => $targetVersion,
                 'section' => is_array($candidate['section']) ? $candidate['section']['title'] : $candidate['section'],
                 'excerpt' => match (true) {
+                    $property !== null => $property['excerpt'],
                     $page === null => '',
                     isset($page['markdown']) => self::lead($page['markdown']),
                     default => $this->excerpt($page['html'], $anchor),
@@ -306,6 +322,7 @@ final class Documentation
                 'content' => '',
                 'coverage' => round($candidate['coverage'], 3),
                 'matched' => self::matched($candidate['matched']),
+                'property' => $property === null ? null : $property['property'],
             ];
         }
 
@@ -331,7 +348,8 @@ final class Documentation
      *     excerpt: string,
      *     content: string,
      *     coverage: float|null,
-     *     matched: list<array{term: string, field: string}>
+     *     matched: list<array{term: string, field: string}>,
+     *     property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null
      *   }>,
      *   unavailable: array{cause: string, reason: string}|null
      * }
@@ -384,6 +402,7 @@ final class Documentation
             // this page answers nothing.
             'coverage' => null,
             'matched' => [],
+            'property' => null,
         ]], null);
     }
 
@@ -398,7 +417,7 @@ final class Documentation
      * section that documents each.
      *
      * @param list<string> $named the lowercased names a question may reach one by
-     * @return list<array{title: string, path: string, url: string}>
+     * @return list<array{title: string, path: string, url: string, role: string}>
      */
     private function declared(string $base, array $named): array
     {
@@ -425,7 +444,7 @@ final class Documentation
             // It sits under the path of the page it is a section of. So it
             // stands in its chapter the way a page does, and the anchor's own
             // slug adds no words to match against.
-            $declared[] = ['title' => $title, 'path' => (string) strtok($object['uri'], '#'), 'url' => $url];
+            $declared[] = ['title' => $title, 'path' => (string) strtok($object['uri'], '#'), 'url' => $url, 'role' => $object['role']];
         }
 
         return $declared;
@@ -684,6 +703,51 @@ final class Documentation
         self::$markdown[$base] ??= false;
 
         return ['html' => $html];
+    }
+
+    /**
+     * What the manual's `confvals.json` says of the property at an anchor, and
+     * the excerpt that says it. Null where the base publishes no such file or
+     * the file lacks the anchor: the page is read then, as before —
+     * `D-ANS-177`.
+     *
+     * @return array{excerpt: string, property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}}|null
+     */
+    private function property(string $base, string $anchor): ?array
+    {
+        if (!isset(self::$confvals[$base])) {
+            $decoded = Fetch::decode($this->get($base . 'confvals.json'));
+            $confvals = is_array($decoded) && is_array($decoded['confvals'] ?? null) ? $decoded['confvals'] : [];
+            self::$confvals[$base] = array_filter($confvals, is_array(...));
+        }
+        $entry = self::$confvals[$base][$anchor] ?? null;
+        if ($entry === null) {
+            return null;
+        }
+
+        $text = static fn(mixed $value): ?string => is_string($value) && trim($value) !== '' ? self::plain($value) : null;
+        $versions = [];
+        foreach (is_array($entry['versions'] ?? null) ? $entry['versions'] : [] as $version) {
+            if (is_array($version) && $text($version['kind'] ?? null) !== null && $text($version['version'] ?? null) !== null) {
+                $versions[] = ['kind' => (string) $text($version['kind']), 'version' => (string) $text($version['version']), 'url' => $text($version['url'] ?? null)];
+            }
+        }
+        $property = [
+            'type' => $text($entry['type'] ?? null),
+            'default' => $text($entry['default'] ?? null),
+            'required' => ($entry['required'] ?? false) === true,
+            'versions' => $versions,
+        ];
+
+        $excerpt = array_filter([
+            $text($entry['summary'] ?? null),
+            $property['type'] === null ? null : 'Type: ' . $property['type'] . '.',
+            $property['default'] === null ? null : 'Default: ' . $property['default'] . '.',
+            $property['required'] ? 'Required.' : null,
+            ...array_map(static fn(array $version): string => ucfirst($version['kind']) . ' in ' . $version['version'] . '.', $versions),
+        ]);
+
+        return ['excerpt' => implode(' ', $excerpt), 'property' => $property];
     }
 
     /**
@@ -980,7 +1044,7 @@ final class Documentation
      * @param 'answered'|'empty'|'unavailable' $status
      * @param list<string> $queries
      * @param 'search'|'page' $mode
-     * @param list<array{title: string, url: string, document: string, documentTitle: string, documentVersion: string, section: string, excerpt: string, content: string, coverage: float|null, matched: list<array{term: string, field: string}>}> $results
+     * @param list<array{title: string, url: string, document: string, documentTitle: string, documentVersion: string, section: string, excerpt: string, content: string, coverage: float|null, matched: list<array{term: string, field: string}>, property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null}> $results
      * @param array{cause: string, reason: string}|null $unavailable
      * @return array{
      *   mode: 'search'|'page',
@@ -988,7 +1052,7 @@ final class Documentation
      *   targetVersion: string,
      *   source: string,
      *   queries: list<string>,
-     *   results: list<array{title: string, url: string, document: string, documentTitle: string, documentVersion: string, section: string, excerpt: string, content: string, coverage: float|null, matched: list<array{term: string, field: string}>}>,
+     *   results: list<array{title: string, url: string, document: string, documentTitle: string, documentVersion: string, section: string, excerpt: string, content: string, coverage: float|null, matched: list<array{term: string, field: string}>, property: array{type: ?string, default: ?string, required: bool, versions: list<array{kind: string, version: string, url: ?string}>}|null}>,
      *   unavailable: array{cause: string, reason: string}|null
      * }
      */

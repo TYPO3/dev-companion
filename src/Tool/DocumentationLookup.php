@@ -116,7 +116,17 @@ final class DocumentationLookup extends ReadOnlyTool
                     'term' => Schema::string('The query word, reduced to the stem the search used.'),
                     'field' => ['type' => 'string', 'enum' => ['title', 'path', 'manual', 'section'], 'description' => 'Where the word matched: the page title, the section path it sits in, the name of the manual, or a heading of the page.'],
                 ], ['term', 'field']), 'What this page matched on. Every query word absent from it reached this page nowhere. So a result whose match consists of the words around the subject is an aimed answer rather than one about the subject. Ask again with the subject alone. Empty in page mode.'),
-            ], ['title', 'url', 'document', 'documentTitle', 'documentVersion', 'section', 'excerpt', 'content', 'coverage', 'matched'])),
+                'property' => Schema::nullable(Schema::object([
+                    'type' => Schema::nullableString('The type the manual states, in its own words.'),
+                    'default' => Schema::nullableString('The default the manual states. Null where it states none.'),
+                    'required' => ['type' => 'boolean', 'description' => 'Whether the manual marks the property as required.'],
+                    'versions' => Schema::listOf(Schema::object([
+                        'kind' => Schema::string('added, changed, deprecated or removed.'),
+                        'version' => Schema::string('The TYPO3 version it happened in.'),
+                        'url' => Schema::nullableString('The changelog entry that says so.'),
+                    ], ['kind', 'version', 'url'])),
+                ], ['type', 'default', 'required', 'versions'], 'What the manual states of a property this result is, read from its confvals.json. The excerpt says the same. Null for a page, or where the manual publishes no such file.')),
+            ], ['title', 'url', 'document', 'documentTitle', 'documentVersion', 'section', 'excerpt', 'content', 'coverage', 'matched', 'property'])),
             'unavailable' => Schema::unavailable([
                 'version-not-covered' => 'the release asked about is outside the ones this server knows the manuals '
                     . 'for, and a second call changes nothing.',

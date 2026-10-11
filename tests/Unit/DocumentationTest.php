@@ -532,6 +532,35 @@ final class DocumentationTest extends TestCase
     }
 
     /**
+     * A tag reaches its own page ahead of the neighbours that share its first
+     * letters. The stem cut `form.textfield` to `form.t`, which every
+     * `f:form.t…` title carries, and the index order put the textarea first —
+     * `D-ANS-179`.
+     */
+    #[Decision('D-ANS-179')]
+    #[Test]
+    public function aViewHelperTagReachesItsOwnPageAheadOfItsNeighbours(): void
+    {
+        $index = $this->inventory([
+            'Global/Form/Textarea.html' => 'Form.textarea ViewHelper <f:form.textarea>',
+            'Global/Form/Textfield.html' => 'Form.textfield ViewHelper <f:form.textfield>',
+            'Global/Format/Htmlentities.html' => 'Format.htmlentities ViewHelper <f:format.htmlentities>',
+            'Global/Format/Html.html' => 'Format.html ViewHelper <f:format.html>',
+        ]);
+        $documentation = new Documentation(static fn(string $url): string => str_ends_with($url, 'objects.inv')
+            ? $index
+            : '<html><article role="main"><p>What this page says.</p></article></html>');
+
+        foreach (['f:form.textfield' => 'Textfield', 'f:form.textarea' => 'Textarea', 'f:format.html' => 'Html'] as $tag => $page) {
+            self::assertStringEndsWith(
+                '/' . $page . '.html',
+                $documentation->lookup([$tag], '14.3', 1)['results'][0]['url'],
+                $tag . ' did not reach its own page first',
+            );
+        }
+    }
+
+    /**
      * A page of the ViewHelper reference answers with the arguments its
      * `viewhelpers.json` lists, and the page stays unread. A page the file
      * lists nothing for answers from the page, as before — `D-ANS-178`.

@@ -253,6 +253,12 @@ final class TermSearch
      */
     public static function carries(string $text, string $term): bool
     {
+        // stem() leaves a name with a dot or an underscore whole, so it is the
+        // word it names rather than the start of one: `format.html` is not
+        // `format.htmlentities` — `D-ANS-179`.
+        if (strpbrk($term, '._') !== false) {
+            return Text::containsWord($text, $term);
+        }
         if (strlen($term) >= self::PREFIX_FROM_LENGTH) {
             return Text::startsWord($text, $term);
         }
@@ -300,6 +306,12 @@ final class TermSearch
      */
     private static function stem(string $word): string
     {
+        // A name with a dot or an underscore has no forms to share a stem, and
+        // shortened it is the prefix of its neighbours: `form.textfield` was
+        // `form.t`, which `form.textarea` carries as well — `D-ANS-179`.
+        if (strpbrk($word, '._') !== false) {
+            return $word;
+        }
         if (strlen($word) >= 6 && str_ends_with($word, 'ies')) {
             $word = substr($word, 0, -3);
         } elseif (strlen($word) >= 6 && str_ends_with($word, 'es')) {

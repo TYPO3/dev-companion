@@ -293,7 +293,7 @@ final class StructureTest extends TestCase
         $manifest = json_decode((string) file_get_contents(Paths::root() . '/composer.json'), true);
         self::assertIsArray($manifest);
         self::assertSame(
-            ['php', 'ext-curl', 'ext-dom', 'mcp/sdk', 'symfony/finder', 'symfony/yaml'],
+            ['php', 'ext-curl', 'ext-dom', 'ext-mbstring', 'ext-simplexml', 'ext-tokenizer', 'mcp/sdk', 'symfony/finder', 'symfony/yaml'],
             array_keys($manifest['require']),
             'the runtime dependencies changed, and D-ANS-003 is what a retrieval library would be added against',
         );

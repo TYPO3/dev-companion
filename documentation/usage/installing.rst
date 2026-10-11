@@ -3,7 +3,8 @@
 Installing the server
 =====================
 
-Requirements: **PHP 8.2+** with the curl and dom extensions, and Composer. A
+Requirements: **PHP 8.2+** with the extensions ``composer.json`` requires, and
+Composer. ``composer check-platform-reqs`` names one that is missing. A
 standalone checkout is the ordinary way in: one clone serves every project on
 the machine and stays out of each project's dependencies. A project can require
 the package instead, which is the second section. The

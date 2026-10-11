@@ -12,6 +12,9 @@
         "php": ">=8.2",
         "ext-curl": "*",
         "ext-dom": "*",
+        "ext-mbstring": "*",
+        "ext-simplexml": "*",
+        "ext-tokenizer": "*",
         "mcp/sdk": "^0.8.0",
         "symfony/finder": "^7.4",
         "symfony/yaml": "^7.4"

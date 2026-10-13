@@ -679,7 +679,6 @@ try {
             }
             $coreBuilder = new TYPO3\CMS\Core\DependencyInjection\ContainerBuilder($early);
             $build = new ReflectionMethod($coreBuilder, 'buildContainer');
-            $build->setAccessible(true);
             $registry = new TYPO3\CMS\Core\DependencyInjection\ServiceProviderRegistry($packageManager);
             $builder = null;
             try {

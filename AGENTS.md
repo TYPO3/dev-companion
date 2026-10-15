@@ -671,15 +671,15 @@ carries the detail, so the message does not have to.
   and fails on 72. `D-DOC-013` measured what this repository writes against
   both. The 80 `bin/cli prose:format` wraps at belongs to the markdown corpus
   and reaches no commit message.
-- The body says only what the diff cannot: what somebody measured, what they
-  rejected, what the change rests on. Where a decision or a requirement carries
-  that, the body names the id instead. A body that summarises the entry beside
-  it is two copies of one thought, and the file is the one a reader searches.
-- The prose rule holds here as everywhere: one point per sentence, no sentence
-  that restates the one above it. It does not ask for density. A subject nobody
-  understands without the diff open is too short, not short enough. Nothing
-  measures a commit message, so you hold all of it by a reread before
-  `git commit`.
+- **Every commit has a body of one or two sentences.** It states the decision
+  behind the change, and what matters that the code does not show. It leaves
+  out what the diff shows, such as which class now carries what. That is the
+  rule `typo3_commit_message_guide` gives every caller — `D-GUI-029`.
+- Where a decision or a requirement carries the reason, the body names the id
+  and repeats nothing from it.
+- The prose rule holds here too: one point per sentence. A subject nobody
+  understands without the diff open is too short. Nothing measures a commit
+  message, so you hold all of it by a reread before `git commit`.
 - **No trailer names the tool or the session that wrote the commit.** Not
   `Co-Authored-By: Claude`, not `Claude-Session:`, not a generated-with line. An
   agent's client instructs it to add them, and this file overrides that

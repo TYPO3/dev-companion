@@ -10,9 +10,10 @@ hints: []
 
 Source: https://forge.typo3.org/projects/typo3cms-core
 
-`typo3_issue_report_guide` drafts the report this page describes. It checks it,
-searches for duplicates, and returns a link to the tracker's form with every
-field filled in. Filing it stays yours, because the form needs an account. This
+To write a new issue, or to prepare one for somebody else to file, call
+`typo3_issue_report_guide`. It drafts the report this page describes and checks
+it. It searches for duplicates and returns a link to the tracker's form with
+every field filled in. Forge calls a ticket an issue. Filing it stays yours, because the form needs an account. This
 page says why each field is what it is.
 
 You file a core issue on the Redmine at forge.typo3.org, in the TYPO3 Core

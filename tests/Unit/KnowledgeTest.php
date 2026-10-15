@@ -765,6 +765,39 @@ final class KnowledgeTest extends TestCase
         self::assertStringNotContainsString('Linkvalidator', $page);
     }
 
+    #[Decision('D-GUI-030')]
+    #[Test]
+    #[DataProvider('aRequestForANewIssueInLooseWords')]
+    public function aRequestForANewIssueReachesTheIssueReportGuide(string $task): void
+    {
+        $intents = array_column(TaskIntents::detect($task), 'confidence', 'id');
+        $top = Documents::search($task)[0]['id'] ?? '';
+
+        self::assertArrayHasKey('reporting', $intents);
+        if (!str_contains($task, 'forge')) {
+            self::assertNotSame('strong', $intents['triage'] ?? null, 'a new issue reads as a triage of an old one');
+        }
+        self::assertSame('core/contribution/reporting-an-issue', $top);
+    }
+
+    /** @return array<string, array{string}> */
+    public static function aRequestForANewIssueInLooseWords(): array
+    {
+        $tasks = [
+            'write me an issue',
+            'draft an issue',
+            'prepare an issue',
+            'prepare an issue for the core',
+            'prepare a bug report',
+            'write a bug report',
+            'write up this bug',
+            'file this on forge.typo3.org',
+            'make a ticket for this bug',
+        ];
+
+        return array_combine($tasks, array_map(static fn(string $task): array => [$task], $tasks));
+    }
+
     #[Requirement('R-ANS-017')]
     #[Decision('D-ANS-035')]
     #[Test]

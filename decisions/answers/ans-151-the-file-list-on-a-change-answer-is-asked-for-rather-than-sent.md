@@ -5,6 +5,7 @@ date: 2026-09-09
 status: open
 coveredBy:
   - GerritTest::pathsTheCallerDeclinedAreNotReportedAsUnreadable
+  - GerritTest::theDataHalfCarriesTheSameCutAsTheText
   - GerritTest::theFileListIsCarriedAsFarAsTheCallerAsked
 ---
 
@@ -96,10 +97,12 @@ consists of.
 
 ## Since then
 
-Built on 2026-09-09, and the default is a size rather than a mode. `files` takes
-`auto`, `none`, `stat` and `full`; `auto` prints the list up to forty files and
-the count with the top-level directories past it. Forty is the ninetieth
-percentile `D-ANS-112` already measured. So the ordinary patch keeps the list
-the review workflow passes on and the refactor does not. A cheap default of
-`stat` would have taken those paths off every review that never asks for
-anything. That is the case that entry exists for.
+Built on 2026-09-09. `files` takes `auto`, `none`, `stat` and `full`; `auto`
+lists up to forty files, the ninetieth percentile `D-ANS-112` measured, and
+gives the count past it. A default of `stat` would have taken the paths off
+every review that asks for nothing, the case that entry exists for.
+
+On 2026-10-15 the cut reached the data half, which Claude Code hands the model
+alone (`D-ANS-162`). Before that, change 96543 sent 2,621 paths, 558 KB of a 595
+KB answer, and Claude Code refused it as too large. `fileStat` now carries the
+count and the areas beside the cut list, and that answer is 38 KB.

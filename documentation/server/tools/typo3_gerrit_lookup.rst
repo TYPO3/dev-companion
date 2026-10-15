@@ -89,8 +89,9 @@ Takes
     # refactor of 137 files does not spend the answer on one. "stat" is that count
     # whatever the size, and "full" the whole list whatever the size. "none" leaves
     # it out, which is what a caller with the fetch ref in hand and git diff next
-    # wants. The hunks are in none of them: the ref is what reads content. Narrows
-    # change and commit; every other way in ignores it.
+    # wants. The data half carries the same cut as the text, and fileStat carries
+    # the count and the directories. The hunks are in none of them: the ref is what
+    # reads content. Narrows change and commit; every other way in ignores it.
     files: string  # optional
     # One of: none, people, all. The review log of a change: every message its patch
     # sets and its reviewers left. Ask for it to find out why a vote is gone. Gerrit
@@ -247,9 +248,11 @@ Answers with
         # the argument typo3_hint_lookup and typo3_test_run_guide take, so you
         # triage a change without a fetch. The diff is not here: the hunks are what
         # a fetch is for. A path this list calls renamed can be one a read of the
-        # hunks calls rewritten. Null means the call did not read the paths, which
-        # is a search and an issue search. An empty list is a patch set that touches
-        # nothing.
+        # hunks calls rewritten. Null means the list is not here. Where fileStat
+        # beside it is set, the files argument left it out: "stat", or "auto" past
+        # 40 files. Where fileStat is null too, the call did not read the paths.
+        # That is a search, an issue search and files="none". An empty list is a
+        # patch set that touches nothing.
         files:  # optional
           - # The path as the review server spells it, from the repository root.
             path: string
@@ -270,6 +273,22 @@ Answers with
             # The path the rename or the copy took this file from, null on every
             # other action.
             movedFrom: string or null
+        # How many paths the current patch set touches and where they sit, whether
+        # or not files lists them. It answers which system extensions a patch
+        # touches without the list. Pass files="full" for the paths. Null where the
+        # call did not read the paths, which is a search, an issue search and
+        # files="none".
+        fileStat:  # optional
+          # Every path the patch set touches, listed or not.
+          count: integer
+          # The area with the most paths first.
+          areas:
+            - # The first three segments of a path, for example typo3/sysext/core. A
+              # path of three segments or fewer stands under its first one, for
+              # example Build.
+              area: string
+              # How many of the paths sit in this area.
+              files: integer
         # Whether the current patch set still merges into its target branch. It is
         # the review server's own last computation and not a merge run now. So false
         # says to expect a rebase and proves nothing. Null where it computed none,

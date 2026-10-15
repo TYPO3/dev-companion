@@ -93,7 +93,7 @@ final class GerritLookup extends ReadOnlyTool
                     'type' => 'string',
                     'enum' => ['auto', 'none', 'stat', 'full'],
                     'default' => 'auto',
-                    'description' => 'How much of the file list a change read by name carries. "auto", the default, prints a line per file up to 40 of them, and beyond that a count with the top-level directories. 40 is the ninetieth percentile of an open core change. So an ordinary patch keeps its list, and a refactor of 137 files does not spend the answer on one. "stat" is that count whatever the size, and "full" the whole list whatever the size. "none" leaves it out, which is what a caller with the fetch ref in hand and git diff next wants. The hunks are in none of them: the ref is what reads content. Narrows change and commit; every other way in ignores it.',
+                    'description' => 'How much of the file list a change read by name carries. "auto", the default, prints a line per file up to 40 of them, and beyond that a count with the top-level directories. 40 is the ninetieth percentile of an open core change. So an ordinary patch keeps its list, and a refactor of 137 files does not spend the answer on one. "stat" is that count whatever the size, and "full" the whole list whatever the size. "none" leaves it out, which is what a caller with the fetch ref in hand and git diff next wants. The data half carries the same cut as the text, and fileStat carries the count and the directories. The hunks are in none of them: the ref is what reads content. Narrows change and commit; every other way in ignores it.',
                 ],
                 'messages' => [
                     'type' => 'string',
@@ -212,9 +212,11 @@ final class GerritLookup extends ReadOnlyTool
                         . 'does to each. It is the changed paths a review establishes first and the argument '
                         . 'typo3_hint_lookup and typo3_test_run_guide take, so you triage a change without a '
                         . 'fetch. The diff is not here: the hunks are what a fetch is for. A path this list '
-                        . 'calls renamed can be one a read of the hunks calls rewritten. Null means the call did '
-                        . 'not read the paths, which is a search and an issue search. An empty list is a patch '
-                        . 'set that touches nothing.',
+                        . 'calls renamed can be one a read of the hunks calls rewritten. Null means the list is '
+                        . 'not here. Where fileStat beside it is set, the files argument left it out: "stat", '
+                        . 'or "auto" past 40 files. Where fileStat is null too, the call did not read the paths. '
+                        . 'That is a search, an issue search and files="none". An empty list is a patch set that '
+                        . 'touches nothing.',
                     'items' => Schema::object([
                         'path' => Schema::string('The path as the review server spells it, from the repository root.'),
                         'action' => [
@@ -229,6 +231,21 @@ final class GerritLookup extends ReadOnlyTool
                         'binary' => ['type' => 'boolean', 'description' => 'Whether the file is binary, which is what makes the two zero counts beside it mean nothing. An image or a fixture archive is not an untouched file.'],
                         'movedFrom' => Schema::nullable(['type' => 'string', 'description' => 'The path the rename or the copy took this file from, null on every other action.']),
                     ], ['path', 'action', 'insertions', 'deletions', 'binary', 'movedFrom']),
+                ]),
+                'fileStat' => Schema::nullable([
+                    'type' => 'object',
+                    'description' => 'How many paths the current patch set touches and where they sit, whether or '
+                        . 'not files lists them. It answers which system extensions a patch touches without the '
+                        . 'list. Pass files="full" for the paths. Null where the call did not read the paths, '
+                        . 'which is a search, an issue search and files="none".',
+                    'properties' => [
+                        'count' => Schema::integer('Every path the patch set touches, listed or not.'),
+                        'areas' => Schema::listOf(Schema::object([
+                            'area' => Schema::string('The first three segments of a path, for example typo3/sysext/core. A path of three segments or fewer stands under its first one, for example Build.'),
+                            'files' => Schema::integer('How many of the paths sit in this area.'),
+                        ], ['area', 'files']), 'The area with the most paths first.'),
+                    ],
+                    'required' => ['count', 'areas'],
                 ]),
                 'mergeable' => Schema::nullable([
                     'type' => 'boolean',
@@ -774,7 +791,10 @@ final class GerritLookup extends ReadOnlyTool
             'status' => $answer['status'],
             'source' => Gerrit::HOST,
             'query' => $answer['query'],
-            'changes' => $answer['changes'],
+            'changes' => array_map(
+                static fn(array $entry): array => [...$entry, ...self::carried($entry, $files)],
+                $answer['changes'],
+            ),
             'backlog' => $direction === 'backlog' && isset($answer['read'], $answer['complete']) ? [
                 'order' => $backlog,
                 'read' => $answer['read'],
@@ -852,7 +872,7 @@ final class GerritLookup extends ReadOnlyTool
                 $commented = $commented || ($entry['comments'] ?? []) !== [];
                 $stacked = $stacked || ($entry['chain'] ?? []) !== [];
                 $tracked = $tracked || ($entry['issues'] ?? []) !== [];
-                $touched = $touched || (self::listedFiles($entry, $files) !== []);
+                $touched = $touched || (self::carried($entry, $files)['files'] ?? []) !== [];
                 foreach ($entry['chain'] ?? [] as $related) {
                     $moved = $moved || self::behind($related);
                 }
@@ -1335,19 +1355,42 @@ final class GerritLookup extends ReadOnlyTool
     private const FILES_LISTED_AT_MOST = 40;
 
     /**
-     * The files to print one line each for, empty where the stat stands instead.
+     * The file list as far as the caller asked for it, and the stat beside it.
+     *
+     * Both halves carry the same cut. Claude Code hands the model the data half
+     * alone (`D-ANS-162`), so a cut in the text alone cut nothing there. Change
+     * 96543 came back with 2,621 paths, 558 KB of the 595 KB answer.
      *
      * @param array<string, mixed> $entry
-     * @return list<array<string, mixed>>
+     * @return array{
+     *     files: list<array<string, mixed>>|null,
+     *     fileStat: array{count: int, areas: list<array{area: string, files: int}>}|null
+     * }
      */
-    private static function listedFiles(array $entry, string $want): array
+    public static function carried(array $entry, string $want): array
     {
-        $files = is_array($entry['files'] ?? null) ? array_values($entry['files']) : [];
-        if ($want === 'none' || $want === 'stat') {
-            return [];
+        if (!is_array($entry['files'] ?? null) || $want === 'none') {
+            return ['files' => null, 'fileStat' => null];
         }
 
-        return $want === 'full' || count($files) <= self::FILES_LISTED_AT_MOST ? $files : [];
+        $files = array_values($entry['files']);
+        $counted = [];
+        foreach ($files as $file) {
+            $parts = explode('/', is_string($file['path'] ?? null) ? $file['path'] : '');
+            $area = count($parts) > 3 ? implode('/', array_slice($parts, 0, 3)) : $parts[0];
+            $counted[$area] = ($counted[$area] ?? 0) + 1;
+        }
+        arsort($counted);
+        $areas = [];
+        foreach ($counted as $area => $count) {
+            $areas[] = ['area' => (string) $area, 'files' => $count];
+        }
+        $listed = $want === 'full' || ($want !== 'stat' && count($files) <= self::FILES_LISTED_AT_MOST);
+
+        return [
+            'files' => $listed ? $files : null,
+            'fileStat' => ['count' => count($files), 'areas' => $areas],
+        ];
     }
 
     /**
@@ -1358,29 +1401,19 @@ final class GerritLookup extends ReadOnlyTool
      * ways to the list itself: `files="full"` here, and the `git diff --stat` a
      * caller with `fetch.ref` is one command away from.
      *
-     * @param array<string, mixed> $entry
+     * @param array{count: int, areas: list<array{area: string, files: int}>} $stat
      * @return list<string>
      */
-    private static function fileStat(array $entry): array
+    private static function fileStat(array $stat): array
     {
-        $files = is_array($entry['files'] ?? null) ? $entry['files'] : [];
-        $areas = [];
-        foreach ($files as $file) {
-            $path = is_string($file['path'] ?? null) ? $file['path'] : '';
-            $parts = explode('/', $path);
-            $area = count($parts) > 3 ? implode('/', array_slice($parts, 0, 3)) : $parts[0];
-            $areas[$area] = ($areas[$area] ?? 0) + 1;
-        }
-        arsort($areas);
-
         $said = [];
-        foreach ($areas as $area => $count) {
-            $said[] = $area . ' (' . $count . ')';
+        foreach ($stat['areas'] as $area) {
+            $said[] = $area['area'] . ' (' . $area['files'] . ')';
         }
 
         return [
             '',
-            sprintf('### Files (%d)', count($files)),
+            sprintf('### Files (%d)', $stat['count']),
             'Listed as a count past ' . self::FILES_LISTED_AT_MOST . ' files, which is where the ordinary patch '
                 . 'ends. Where each one sits: ' . implode(', ', $said) . '. Pass files="full" for the paths, or '
                 . 'run git diff --stat against the fetch ref above, which is the only way to the hunks anyway.',
@@ -1415,12 +1448,13 @@ final class GerritLookup extends ReadOnlyTool
         if ($entry['files'] === [] || $want === 'none') {
             return [];
         }
-        if (self::listedFiles($entry, $want) === []) {
-            return self::fileStat($entry);
+        $carried = self::carried($entry, $want);
+        if ($carried['files'] === null) {
+            return self::fileStat($carried['fileStat']);
         }
 
-        $lines = ['', sprintf('### Files (%d)', count($entry['files']))];
-        foreach ($entry['files'] as $file) {
+        $lines = ['', sprintf('### Files (%d)', count($carried['files']))];
+        foreach ($carried['files'] as $file) {
             $said = [$file['action'] . ' ' . $file['path']];
             if ($file['movedFrom'] !== null) {
                 $said[] = 'from ' . $file['movedFrom'];

@@ -494,6 +494,29 @@ final class GerritTest extends TestCase
         }
     }
 
+    /**
+     * Claude Code hands the model the data half alone (`D-ANS-162`). A cut in
+     * the text alone sent change 96543 with all of its 2,621 paths.
+     */
+    #[Decision('D-ANS-151')]
+    #[Test]
+    #[DataProvider('howMuchOfTheFileListIsAskedFor')]
+    public function theDataHalfCarriesTheSameCutAsTheText(int $count, string $want, bool $listed): void
+    {
+        $files = [];
+        for ($at = 0; $at < $count; $at++) {
+            $files[] = ['path' => 'typo3/sysext/core/Classes/Processor' . $at . '.php'];
+        }
+
+        $carried = GerritLookup::carried(['files' => $files], $want);
+
+        self::assertSame($listed ? $files : null, $carried['files']);
+        self::assertSame(
+            $want === 'none' ? null : ['count' => $count, 'areas' => [['area' => 'typo3/sysext/core', 'files' => $count]]],
+            $carried['fileStat'],
+        );
+    }
+
     /** @return array<string, array{0: int, 1: string, 2: bool}> */
     public static function howMuchOfTheFileListIsAskedFor(): array
     {

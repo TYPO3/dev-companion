@@ -295,6 +295,7 @@ final class CommitMessageTest extends TestCase
         $result = CommitMessage::create([
             'keyword' => 'TASK',
             'summary' => 'Do a thing',
+            'body' => 'Why the change goes this way.',
             'issue' => '1',
             'releases' => ['main'],
             'extraTrailers' => ['Signed-off-by: A <a@b.c>'],
@@ -305,6 +306,28 @@ final class CommitMessageTest extends TestCase
             ['no-issues-found', 'line-length-boundary', 'breaking-not-assessed'],
             array_column($result['checks'], 'code')
         );
+    }
+
+    #[Decision('D-GUI-029')]
+    #[Test]
+    #[DataProvider('workflows')]
+    public function aMessageWithoutABodyIsToldToCarryOne(string $workflow): void
+    {
+        $drafted = CommitMessage::create(['keyword' => 'TASK', 'summary' => 'Do a thing', 'workflow' => $workflow]);
+        $parsed = CommitMessage::parse("[TASK] Do a thing\n\nResolves: #1\nReleases: main", $workflow);
+        $checked = CommitMessage::create($parsed['input'] + ['workflow' => $workflow]);
+
+        self::assertContains('body-missing', array_column($drafted['checks'], 'code'));
+        self::assertContains('body-missing', array_column($checked['checks'], 'code'));
+    }
+
+    /** @return array<string, array{string}> */
+    public static function workflows(): array
+    {
+        return [
+            'core' => [CommitMessage::WORKFLOW_CORE],
+            'project' => [CommitMessage::WORKFLOW_PROJECT],
+        ];
     }
 
     #[Requirement('R-GUI-001')]
@@ -476,6 +499,7 @@ final class CommitMessageTest extends TestCase
         $result = CommitMessage::create([
             'keyword' => 'TASK',
             'summary' => 'Add a sponsor logo field',
+            'body' => 'Why the change goes this way.',
             'workflow' => CommitMessage::WORKFLOW_PROJECT,
         ]);
 
@@ -827,6 +851,7 @@ final class CommitMessageTest extends TestCase
         $unsigned = CommitMessage::create([
             'keyword' => 'TASK',
             'summary' => 'Do a thing',
+            'body' => 'Why the change goes this way.',
             'issue' => '1',
             'releases' => ['main'],
             'workflow' => CommitMessage::WORKFLOW_CORE,
@@ -836,7 +861,7 @@ final class CommitMessageTest extends TestCase
         self::assertContains('no-issues-found', array_column($unsigned['checks'], 'code'), 'an unsigned message reports a defect');
 
         $trailers = "Resolves: #1\nReleases: main\nSigned-off-by: A <a@b.c>\nChange-Id: I0123456789abcdef0123456789abcdef01234567";
-        $parsed = CommitMessage::parse("[TASK] Do a thing\n\n" . $trailers . "\n", CommitMessage::WORKFLOW_CORE);
+        $parsed = CommitMessage::parse("[TASK] Do a thing\n\nWhy the change goes this way.\n\n" . $trailers . "\n", CommitMessage::WORKFLOW_CORE);
         $signed = CommitMessage::create($parsed['input'] + ['workflow' => CommitMessage::WORKFLOW_CORE]);
 
         self::assertStringEndsWith("\n\n" . $trailers, $signed['message'], 'the sign-off moved or went');
@@ -1034,6 +1059,7 @@ final class CommitMessageTest extends TestCase
         $result = CommitMessage::create([
             'keyword' => 'BUGFIX',
             'summary' => 'Keep the line breaks',
+            'body' => 'Why the change goes this way.',
             'releases' => ['9.5', '14.1'],
             'workflow' => CommitMessage::WORKFLOW_PROJECT,
         ]);

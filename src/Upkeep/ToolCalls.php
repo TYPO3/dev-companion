@@ -353,6 +353,7 @@ final class ToolCalls
             'commit: from parts' => ['typo3_commit_message_guide', [
                 'keyword' => 'BUGFIX',
                 'summary' => 'Show hidden records in the import preview',
+                'body' => 'The preview reads the records the import writes, hidden ones included.',
                 'issue' => '106123',
             ]],
             'commit: from a message' => ['typo3_commit_message_guide', [

@@ -665,6 +665,16 @@ final class CommitMessage
             ];
         }
 
+        // Both workflows, because the rule is the message's shape, `D-GUI-029`.
+        if ($body === '') {
+            $checks[] = [
+                'level' => 'warning',
+                'code' => 'body-missing',
+                'message' => 'The message has no body. Add one or two sentences: the decision behind the change, '
+                    . 'and what matters that the diff does not show. Leave out what the diff shows.',
+            ];
+        }
+
         // What a reviewer takes out by hand. Measured over the 3396 commits on
         // main since 2025-01-01: twelve bodies name a count of what the change
         // touched, `D-KNW-155`. Core only, which is where the measurement ran.

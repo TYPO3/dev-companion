@@ -53,8 +53,16 @@ Guide.
 ## Body
 
 - Separate the summary and the body with a blank line.
-- Keep the body brief. Say what changed and why.
-- Do not repeat full reproduction instructions from the Forge issue.
+- Every commit message has a body, and the body is short: one or two
+  sentences.
+- The body states the decision behind the change. It also states what matters
+  and the code does not show, which is what a reviewer has to look out for.
+- Leave out what the diff shows. "The button now carries the class
+  `btn-primary`" is in the diff. The decision that put it there belongs in the
+  body.
+- Leave out what is incidental: how somebody found the problem, the steps
+  before the solution, the files the change touched.
+- Do not repeat reproduction instructions from the Forge issue.
 - Wrap body lines by hand at 72 characters.
 - Write the body as short, precise prose rather than as a list.
 - Name no count of what the change touched. "In 68 files", "in four spellings",

@@ -1482,6 +1482,34 @@ final class ProjectTest extends TestCase
         self::assertStringNotContainsString('typo3_test_run_guide', self::aboutThisRepository($text));
     }
 
+    /**
+     * A functional run on a system extension with unit tests alone. PHPUnit
+     * said the path was not found, and the summary said FAILURE, which a
+     * session read as a regression (`D-GUI-032`).
+     */
+    #[Decision('D-GUI-032')]
+    #[Test]
+    public function aTestPathTheCheckoutDoesNotHaveIsNamedWithTheLayersItHas(): void
+    {
+        $root = $this->coreCheckout('15.0.0-dev');
+        mkdir($root . '/typo3/sysext/core/Tests/Unit', 0o777, true);
+        mkdir($root . '/typo3/sysext/core/Tests/Functional', 0o777, true);
+        mkdir($root . '/typo3/sysext/backend/Tests/Unit', 0o777, true);
+        Instance::discoverFrom($root);
+
+        $answer = Registry::call('typo3_test_run_guide', ['paths' => [
+            'typo3/sysext/backend/Tests/Functional',
+            'typo3/sysext/core/Tests/Functional',
+        ]]);
+
+        self::assertSame(
+            [['path' => 'typo3/sysext/backend/Tests/Functional', 'extension' => 'backend', 'layers' => ['Tests/Unit']]],
+            $answer->data['missingPaths'],
+        );
+        self::assertStringContainsString('backend has Tests/Unit', $answer->text);
+        self::assertStringContainsString('That is a missing path and no test that failed', $answer->text);
+    }
+
     #[Decision('D-ANS-031')]
     #[Requirement('R-ANS-018')]
     #[Test]

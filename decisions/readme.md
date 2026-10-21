@@ -855,6 +855,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### guides
 
 - [`D-GUI-031`][D-GUI-031] — Translation beside record localization is no label work · 2026-10-21
+- [`D-GUI-032`][D-GUI-032] — A test path the checkout does not have is named before the run · 2026-10-21
 - [`D-GUI-029`][D-GUI-029] — A commit body is the decision in one or two sentences · 2026-10-15
 - [`D-GUI-030`][D-GUI-030] — A request for a new issue reaches the issue report guide in loose words · 2026-10-15
 - [`D-GUI-028`][D-GUI-028] — A word match is held to the paths its work touches · 2026-10-05
@@ -886,6 +887,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-GUI-001`][D-GUI-001] — A missing release target becomes a placeholder, not `main` · 2026-07-29
 
 [D-GUI-031]: guides/gui-031-translation-beside-record-localization-is-no-label-work.md
+[D-GUI-032]: guides/gui-032-a-test-path-the-checkout-does-not-have-is-named-before-the-run.md
 [D-GUI-029]: guides/gui-029-a-commit-body-is-the-decision-in-one-or-two-sentences.md
 [D-GUI-030]: guides/gui-030-a-request-for-a-new-issue-reaches-the-issue-report-guide-in-loose-words.md
 [D-GUI-028]: guides/gui-028-a-word-match-is-held-to-the-paths-its-work-touches.md

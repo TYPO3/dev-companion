@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Tool;
 
+use Symfony\Component\Finder\Finder;
+use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Knowledge\Domains;
 use TYPO3\DevCompanion\Knowledge\Scope;
 use TYPO3\DevCompanion\Knowledge\TestSuiteHints;
@@ -59,6 +61,11 @@ final class TestRunGuide extends ReadOnlyTool
             'uncoveredPaths' => Schema::listOf(Schema::string(), 'Given paths no suite covers. A path reaches a suite '
                 . 'through its domain, and these reach none. So nothing in suites is about them and '
                 . 'nothing in it fails on them.'),
+            'missingPaths' => Schema::listOf(Schema::object([
+                'path' => Schema::string('The given path, which the checkout does not have.'),
+                'extension' => Schema::string('The system extension the path is in.'),
+                'layers' => Schema::listOf(Schema::string(), 'The directories its Tests/ does have, for example Tests/Unit. Empty where it has no Tests/ at all.'),
+            ], ['path', 'extension', 'layers']), 'Given paths below a system extension\'s Tests/ that the checkout does not have. runTests.sh hands such a path to PHPUnit, which prints Test file "…" not found, and the summary reads FAILURE. That is a missing path and no test that failed. Empty where every such path exists, and where no core checkout was found to look in.'),
             'withheld' => Schema::object([
                 'domains' => Schema::listOf(Schema::string(), 'Domains no given path reached. A path that lands in one of them means a second call, because this answer holds for the path set the call gave it.'),
                 'suites' => Schema::integer('How many suites those domains hold on the target version. A count rather than a list: the list is what the narrowed answer exists to avoid.'),
@@ -82,7 +89,7 @@ final class TestRunGuide extends ReadOnlyTool
                     'command' => Schema::string(),
                 ], ['purpose', 'command'])),
             ], ['preconditions', 'beforeYouRun', 'notes', 'options', 'examples']),
-        ], ['scopes', 'uncoveredPaths', 'withheld', 'suites', 'invocation']);
+        ], ['scopes', 'uncoveredPaths', 'missingPaths', 'withheld', 'suites', 'invocation']);
     }
 
     public static function answer(array $args): ToolResult
@@ -139,6 +146,7 @@ final class TestRunGuide extends ReadOnlyTool
                     'scopes' => $scopes,
                     'domains' => $domains,
                     'uncoveredPaths' => $uncovered,
+                    'missingPaths' => [],
                     'withheld' => TestSuiteHints::withheld($domains, $target),
                     'suites' => [],
                     'invocation' => ['preconditions' => [], 'beforeYouRun' => '', 'notes' => [], 'options' => [], 'examples' => []],
@@ -193,6 +201,19 @@ final class TestRunGuide extends ReadOnlyTool
         // Beside the filter rather than after the suites, because both
         // sentences answer the same question. Which of the given paths this
         // list of commands is about (`D-GUI-022`).
+        $missing = self::missing($runnable);
+        if ($missing !== []) {
+            $blocks[] = implode(' ', array_map(
+                static fn(array $entry): string => sprintf(
+                    '%s is not in this checkout: %s has %s.',
+                    $entry['path'],
+                    $entry['extension'],
+                    $entry['layers'] === [] ? 'no Tests/ at all' : implode(' and ', $entry['layers']),
+                ),
+                $missing,
+            )) . ' runTests.sh hands a missing path to PHPUnit, which prints Test file "…" not found, and the summary'
+                . ' reads FAILURE. That is a missing path and no test that failed.';
+        }
         if ($uncovered !== []) {
             $blocks[] = sprintf(
                 'No runTests.sh suite covers %s. A suite is reached through the domain of a path and %s, so '
@@ -252,10 +273,49 @@ final class TestRunGuide extends ReadOnlyTool
             'scopes' => $scopes,
             'domains' => $domains,
             'uncoveredPaths' => $uncovered,
+            'missingPaths' => $missing,
             'withheld' => $withheld,
             'suites' => TestSuiteHints::records($hints),
             'invocation' => TestSuiteHints::invocation(),
         ]);
+    }
+
+    /**
+     * The paths below a system extension's Tests/ that the checkout does not
+     * have, each with the layers that extension does have.
+     *
+     * A session ran the functional suite on belog, which has unit tests alone.
+     * It filtered the output to the summary and read FAILURE as a regression
+     * (`D-GUI-032`). Only a core checkout carries typo3/sysext, so nothing
+     * else is looked in.
+     *
+     * @param array<int, string> $paths
+     * @return list<array{path: string, extension: string, layers: list<string>}>
+     */
+    private static function missing(array $paths): array
+    {
+        $root = Instance::root();
+        if ($root === null || !is_dir($root . '/typo3/sysext')) {
+            return [];
+        }
+
+        $missing = [];
+        foreach ($paths as $path) {
+            $path = trim($path, '/');
+            if (preg_match('~^typo3/sysext/([a-z0-9_]+)/Tests(?:/|$)~', $path, $named) !== 1 || file_exists($root . '/' . $path)) {
+                continue;
+            }
+            $tests = $root . '/typo3/sysext/' . $named[1] . '/Tests';
+            $layers = [];
+            if (is_dir($tests)) {
+                foreach (Finder::create()->directories()->in($tests)->depth(0)->sortByName() as $layer) {
+                    $layers[] = 'Tests/' . $layer->getFilename();
+                }
+            }
+            $missing[] = ['path' => $path, 'extension' => $named[1], 'layers' => $layers];
+        }
+
+        return $missing;
     }
 
     /**

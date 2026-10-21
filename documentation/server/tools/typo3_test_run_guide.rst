@@ -72,6 +72,19 @@ Answers with
     # these reach none. So nothing in suites is about them and nothing in it fails
     # on them.
     uncoveredPaths: [string]
+    # Given paths below a system extension's Tests/ that the checkout does not have.
+    # runTests.sh hands such a path to PHPUnit, which prints Test file "…" not
+    # found, and the summary reads FAILURE. That is a missing path and no test that
+    # failed. Empty where every such path exists, and where no core checkout was
+    # found to look in.
+    missingPaths:
+      - # The given path, which the checkout does not have.
+        path: string
+        # The system extension the path is in.
+        extension: string
+        # The directories its Tests/ does have, for example Tests/Unit. Empty where
+        # it has no Tests/ at all.
+        layers: [string]
     # What the narrowed answer left out. Both empty where nothing narrowed it.
     withheld:
       # Domains no given path reached. A path that lands in one of them means a
@@ -501,6 +514,7 @@ Data:
         "scopes": [],
         "domains": [],
         "uncoveredPaths": [],
+        "missingPaths": [],
         "withheld": {
             "domains": [],
             "suites": 0
@@ -1097,6 +1111,7 @@ Data:
         "scopes": [],
         "domains": [],
         "uncoveredPaths": [],
+        "missingPaths": [],
         "withheld": {
             "domains": [],
             "suites": 0
@@ -1288,6 +1303,7 @@ Data:
         "scopes": [],
         "domains": [],
         "uncoveredPaths": [],
+        "missingPaths": [],
         "withheld": {
             "domains": [],
             "suites": 0
@@ -1523,6 +1539,7 @@ Data:
             "css"
         ],
         "uncoveredPaths": [],
+        "missingPaths": [],
         "withheld": {
             "domains": [
                 "php",

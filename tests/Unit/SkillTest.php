@@ -2183,6 +2183,12 @@ final class SkillTest extends TestCase
             'Step 2 settled the first, the blast radius the second and the changelog section the third',
             $skill,
         );
+        // A fix that moved from ext:extbase to ext:fluid kept the sweep of the
+        // first, because the rule spoke of a request that grows (`D-SKL-079`).
+        self::assertStringContainsString(
+            'Run the deprecation sweep of the base order again, with the `ext:` tag of the extension the change touches now',
+            $skill,
+        );
         self::assertStringContainsString('To carry on derives none of them again', $skill);
         // What a widening costs where it gains a subsystem, which is the two
         // discarded rounds in one sentence.

@@ -117,3 +117,14 @@ a session meets a wider request and not where it decides anything. `D-SKL-075`
 settled the same shape one paragraph earlier. The paragraph points at the three
 rather than restates them, so a rewrite leaves no second copy here. The first
 **Wrong if** stays unmeasured for the same reason that entry is open on it.
+
+## Since then
+
+A fix moved rather than grew on 2026-10-21.
+[`feedback/2026-10-21-153139-deprecation-sweep`](../../feedback/archive/2026-10-21-153139-deprecation-sweep-ran-for-ext-extbase-and-was.md)
+swept v15 with `ext:extbase` for a change to `ObjectStorageConverter`. The fix
+then went to `SelectViewHelper` in ext:fluid, and the session did not sweep
+again. The section spoke of a request that widens, and a move is not one. It
+now says that a move to another system extension owes the sweep with that
+extension's tag. The brief's half of the suggestion stays unbuilt: a
+`typo3_task_guide` call cannot see an earlier call of the same task.

@@ -182,6 +182,11 @@ the third. Each did so against the narrower request. To carry on derives none of
 them again. A change that gains a second subsystem gains that subsystem's build,
 its checks and its backport constraint with it.
 
+The same holds where the fix moves to another system extension rather than
+grows into one. Run the deprecation sweep of the base order again, with the
+`ext:` tag of the extension the change touches now. A sweep for the first
+extension says nothing about what the second one deprecated.
+
 Find out whether the area moves before you build on it. Fetch and rebase onto
 the branch you target before you finalise. A patch written against code that
 changed underneath it is not a patch that needs adjustment. The method it called

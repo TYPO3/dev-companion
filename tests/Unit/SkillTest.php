@@ -2839,6 +2839,9 @@ final class SkillTest extends TestCase
         $triage = self::description('typo3-core-issue-triage');
         self::assertStringContainsString('backlog', $triage);
         self::assertStringContainsString('worth working on', $triage);
+        // A request that names a person rather than an area opened nothing
+        // while the description named the area alone.
+        self::assertStringContainsString('one person', $triage);
 
         // Named after the job a reader took it as a case of, the backlog
         // request meets a premise it does not hold. One issue somebody already
@@ -2859,6 +2862,7 @@ final class SkillTest extends TestCase
             'Triaging a backlog and triaging an issue are two different jobs',
             $body,
         );
+        self::assertStringContainsString('pass the name as `involving`', $body);
     }
 
     /**

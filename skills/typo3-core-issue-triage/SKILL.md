@@ -1,6 +1,6 @@
 ---
 name: typo3-core-issue-triage
-description: 'Find the issues worth working on in an area of the forge.typo3.org backlog — old or untouched ones, and whether anybody is on one already — or say what is still true about one issue: whether it still happens against the core checkout, was fixed, or was never a defect. A task that ends in a patch starts here; the patch is typo3-core-patch-development''s.'
+description: 'Find the issues worth working on in an area of the forge.typo3.org backlog or in one person''s — old or untouched ones, and whether anybody is on one — or say what is still true about one issue: whether it still happens in the checkout, was fixed, or was never a defect. A task that ends in a patch starts here; the patch is typo3-core-patch-development''s.'
 compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
@@ -30,6 +30,11 @@ valuable one.
    Narrow with `category` in the user's own words, and with `tracker`. An old
    Bug and an old Feature are two different findings. One claims something is
    broken today, the other that somebody wanted something once.
+
+   Where the request names a person rather than an area, pass the name as
+   `involving`. That is what they filed and what they hold, as one set. Never
+   pass a name as `query`, which matches the text of an issue rather than whose
+   it is.
 
    Read the count that comes back against the number of entries. A page is not
    the set. A triage that takes thirty of two thousand for the problem has

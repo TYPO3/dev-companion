@@ -95,3 +95,15 @@ A read of the eight on 2026-08-25 did not fire the third **Wrong if**. The first
 fired two days later, and the session names a clause no read here had weighed,
 the last sentence of the description. It is a handover, so the description names
 where it goes rather than drops it.
+
+## Since then
+
+A third job arrived on 2026-10-21, and the description did not name it.
+[`feedback/2026-10-21-154127-name-resolution`](../../feedback/archive/2026-10-21-154127-name-resolution-and-involving-worked-well.md)
+asked for one person's open issues and then for the stale ones. The session
+opened no skill, because the description names an area and the request named a
+person. Its sibling
+[`feedback/2026-10-21-154105`](../../feedback/archive/2026-10-21-154105-server-instructions-do-not-name-typo3-forge.md)
+is the cost: two curl calls the core's `AGENTS.md` describes, before the user
+said "use the mcp". The description now names one person's backlog beside the
+area. "Find the candidates" says to pass the name as `involving`.

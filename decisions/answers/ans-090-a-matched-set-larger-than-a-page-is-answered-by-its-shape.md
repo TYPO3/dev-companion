@@ -118,3 +118,12 @@ questions it is, and what an answer carries that nobody asked for.
   owes each row the reason it is in the set.
 - A caller passes no `category`, needs the area names, and has to call
   `typo3_server_scope` for them. Then the echo did work nobody had measured.
+
+## Since then
+
+[`feedback/2026-10-21-154127-name-resolution`](../../feedback/archive/2026-10-21-154127-name-resolution-and-involving-worked-well.md)
+reports the union as a strength. `reportedBy` resolved a plain name to its
+account, where curl needed 400 issues and a filter. `involving` counted 18,
+which is 17 filed and 1 held, without the AND the tracker applies. The third
+**Wrong if** did not fire. The session read the side off `reportedBy` and
+`assignedTo`.

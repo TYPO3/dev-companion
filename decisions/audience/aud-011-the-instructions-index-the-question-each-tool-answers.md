@@ -121,3 +121,12 @@ Every lever left is instruction-block characters that do not exist, twenty free
 in the longest assembly. So what goes up is the budget itself, which `D-ANS-004`
 measured on one client and `todo/waiting/T-260819-dcaf.md` carries.
 
+
+## Since then
+
+The third **Wrong if** fired again on 2026-10-21.
+[`feedback/2026-10-21-154105`](../../feedback/archive/2026-10-21-154105-server-instructions-do-not-name-typo3-forge.md)
+asks for an index line for `typo3_forge_lookup` and `typo3_gerrit_lookup`. The
+session followed the core's `AGENTS.md` to curl first. The line costs about 80
+characters, and the longest assembly stood at 2037. The maintainer chose the
+skill trigger instead (`D-SKL-076`), so the index stays as it is.

@@ -95,7 +95,7 @@ current code. The section below says what it owes before you commit anything.
 longer than one open link changes the whole of what follows. A large refactoring
 arrives this way, and the request says so. "Rebase the chain" names it outright.
 
-Read the chain before the fetch and take four things off it.
+Read the chain before the fetch and take five things off it.
 
 - **Which links are still open.** You have to carry those, and their number is
   how many commits the move is. The merged ones below them are already on the
@@ -114,9 +114,14 @@ Read the chain before the fetch and take four things off it.
   amend, apply again what sat on top, and move the branch. Budget for it rather
   than discover it at the end.
 
+- **Which links are red.** Every link carries its labels, and a link Verified
+  rejects names the jobs core-ci failed it on, each with its log. A rebase that
+  rebuilds output has to know whether the build is the failure.
+
 The stopping rules below are for somebody else's patch, and a chain is regularly
 the requester's own. The answer's owner field settles whether the change owner
-is the person who asks. Where they are, the rule that stops you from an absent
+is the person who asks. Hold its `email` against `git config user.email`. Every
+link carries an owner of its own, so the rule applies per link. Where they are, the rule that stops you from an absent
 author's decisions has nothing left to protect. To resolve past a handful of
 hunks is the right call. Say in the result that you did, and on whose change.
 

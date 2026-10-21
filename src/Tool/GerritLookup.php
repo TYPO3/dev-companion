@@ -51,7 +51,7 @@ final class GerritLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. A clone carries what landed and says nothing about what is open. So this tool asks the review server rather than a checkout. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its message and paths, votes, comments, relation chain and its Change-Id siblings. It adds the Forge issues its trailers name, the other changes its review log names, and whether it carries conflict markers. Four of those decide what a session does and no checkout has them. chain, with chainedAt for the patch set each link sits on. mergeable, which predicts the conflict before the fetch. fetch.ref, which git fetch takes as it stands. And the commit message body. path is the way in for "does somebody already work on this file" and for "has anybody attempted this before". The earlier attempt comes back whatever its name was. You read the diff itself in a checkout: fetch.ref gets you there, and files says how much of the file list to carry. An empty answer says whether it means an absence, since a private change is invisible to an anonymous read. The issue itself is typo3_forge_lookup. This tool reads only: you review, vote and upload yourself.';
+        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. A clone carries what landed and says nothing about what is open. So this tool asks the review server rather than a checkout. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its owner, message and paths, votes, comments, relation chain and its Change-Id siblings. Each link of the chain carries its owner and its label state. Where Verified rejects a patch set, the answer names the core-ci jobs that failed it, each with its public log. It adds the Forge issues its trailers name, the other changes its review log names, and whether it carries conflict markers. Four of those decide what a session does and no checkout has them. chain, with chainedAt for the patch set each link sits on. mergeable, which predicts the conflict before the fetch. fetch.ref, which git fetch takes as it stands. And the commit message body. path is the way in for "does somebody already work on this file" and for "has anybody attempted this before". The earlier attempt comes back whatever its name was. You read the diff itself in a checkout: fetch.ref gets you there, and files says how much of the file list to carry. An empty answer says whether it means an absence, since a private change is invisible to an anonymous read. The issue itself is typo3_forge_lookup. This tool reads only: you review, vote and upload yourself.';
     }
 
     public static function inputSchema(): array
@@ -197,6 +197,7 @@ final class GerritLookup extends ReadOnlyTool
                 'patchSet' => Schema::integer('The patch set that is current on the server, counted from 1. Zero where the server named none.'),
                 'commit' => Schema::string('The commit the current patch set is. A checkout whose HEAD is another commit is not the revision under review.'),
                 'project' => Schema::string('The Gerrit project the push went to.'),
+                'owner' => self::owner(),
                 'updated' => Schema::string('When the change last moved.'),
                 'created' => Schema::string('The push date, which says how long the change has waited. A change pushed years ago and touched last week is in work; one where the two dates are far apart is not.'),
                 'insertions' => Schema::nullable([
@@ -294,30 +295,9 @@ final class GerritLookup extends ReadOnlyTool
                     'description' => 'What the change stands at, one entry per label. The state of each label is on '
                         . 'every row, since the review server states it unasked. The call reads the voters behind it '
                         . 'for one change, so votes is null on a search and a list there.',
-                    'items' => Schema::object([
-                        'label' => Schema::string('Code-Review and Verified are the two the core project votes with.'),
-                        'state' => Schema::string('What the submit rule makes of this label. OK where the rule holds, NEED where it still wants a vote. REJECT where a vote blocks it, IMPOSSIBLE where no available vote could satisfy it. NEED is not "nobody has voted". A change at Code-Review+1 where the rule asks for +2 stands there too, and the votes beside it say which. The pair to tell apart is NEED against REJECT — a change that waits for a reviewer, and one somebody has already turned down. Empty where no rule names the label; where several rules name it, the most consequential of their states is here.'),
-                        'satisfied' => Schema::nullable([
-                            'type' => 'boolean',
-                            'description' => 'Whether the submit rule counts this label as met — the state beside it '
-                                . 'read as a boolean. False is the ordinary state of an open change, and null means '
-                                . 'no rule asks for it. The votes say what it stands at. The range is the '
-                                . 'project\'s own, and Verified runs to +2 here, so a +1 is not the top of it.',
-                        ]),
-                        'votes' => Schema::nullable([
-                            'type' => 'array',
-                            'description' => 'Everyone on the label, those with no vote included. Null where the call did '
-                                . 'not read the voters, which is every hit a search or an enumeration answers. A '
-                                . 'list with zeros in it means nobody has voted, a different answer. Pass the '
-                                . 'change number back as change for them.',
-                            'items' => Schema::object([
-                                'voter' => Schema::string(),
-                                'value' => Schema::integer('What this voter holds now. Zero is a reviewer somebody added and who has not voted. A vote a later patch set dropped is absent rather than zero, and only the review log says it was ever there.'),
-                                'on' => Schema::string('When the vote came in, empty where none did.'),
-                            ], ['voter', 'value', 'on']),
-                        ]),
-                    ], ['label', 'state', 'satisfied', 'votes']),
+                    'items' => self::label(),
                 ]),
+                'ci' => self::ci(),
                 'commentCount' => Schema::integer('How many comments the change carries, which the review server states whether or not the call read them.'),
                 'unresolvedCommentCount' => Schema::integer('How many of the threads those comments form are open, which the review server states whether or not the call read them. It counts threads and not comments, so it is smaller than the number of comments with the flag wherever somebody replied. It is the flag as each thread\'s last writer left it rather than a count of unanswered questions. On a change to pick up it is the work still owed to the last reviewer.'),
                 'comments' => Schema::nullable([
@@ -363,7 +343,14 @@ final class GerritLookup extends ReadOnlyTool
                         'chainedAt' => Schema::integer('The patch set of the entry that the chain stands on. Lower than patchSet means the stack holds the older one and that change has moved on since. Act on the entry by its number rather than on the patch set named here.'),
                         'url' => Schema::string('Where a person reads that change.'),
                         'place' => Schema::string('Where the entry stands against the change the answer is about: above is stacked on it, below is what it stands on, this is the change itself. Empty where the chain does not hold the change.'),
-                    ], ['number', 'status', 'subject', 'thisChange', 'patchSet', 'chainedAt', 'url', 'place']),
+                        'owner' => Schema::nullable(self::owner() + ['description' => 'Who owns the entry. A chain can mix owners, and the checkout skill\'s rule applies per link. Null where the read of the links did not answer.']),
+                        'labels' => Schema::nullable([
+                            'type' => 'array',
+                            'description' => 'What the entry\'s labels stand at for its current patch set, votes null. Which links are red is here without a read of each. Null where the read of the links did not answer.',
+                            'items' => self::label(),
+                        ]),
+                        'ci' => self::ci(),
+                    ], ['number', 'status', 'subject', 'thisChange', 'patchSet', 'chainedAt', 'url', 'place', 'owner', 'labels', 'ci']),
                 ]),
                 'namedInMessages' => Schema::nullable([
                     'type' => 'array',
@@ -471,6 +458,79 @@ final class GerritLookup extends ReadOnlyTool
                     . 'really does mean nothing matched.',
             ]),
         ], ['status', 'source', 'query', 'changes', 'backlog', 'releaseLines', 'unavailable', 'indistinguishable']);
+    }
+
+    /**
+     * One label as the change carries it, and as each link of its chain does.
+     *
+     * @return array<string, mixed>
+     */
+    private static function label(): array
+    {
+        return Schema::object([
+            'label' => Schema::string('Code-Review and Verified are the two the core project votes with.'),
+            'state' => Schema::string('What the submit rule makes of this label. OK where the rule holds, NEED where it still wants a vote. REJECT where a vote blocks it, IMPOSSIBLE where no available vote could satisfy it. NEED is not "nobody has voted". A change at Code-Review+1 where the rule asks for +2 stands there too, and the votes beside it say which. The pair to tell apart is NEED against REJECT — a change that waits for a reviewer, and one somebody has already turned down. Empty where no rule names the label; where several rules name it, the most consequential of their states is here.'),
+            'satisfied' => Schema::nullable([
+                'type' => 'boolean',
+                'description' => 'Whether the submit rule counts this label as met — the state beside it '
+                    . 'read as a boolean. False is the ordinary state of an open change, and null means '
+                    . 'no rule asks for it. The votes say what it stands at. The range is the '
+                    . 'project\'s own, and Verified runs to +2 here, so a +1 is not the top of it.',
+            ]),
+            'votes' => Schema::nullable([
+                'type' => 'array',
+                'description' => 'Everyone on the label, those with no vote included. Null where the call did '
+                    . 'not read the voters, which is every hit a search or an enumeration answers. A '
+                    . 'list with zeros in it means nobody has voted, a different answer. Pass the '
+                    . 'change number back as change for them.',
+                'items' => Schema::object([
+                    'voter' => Schema::string(),
+                    'value' => Schema::integer('What this voter holds now. Zero is a reviewer somebody added and who has not voted. A vote a later patch set dropped is absent rather than zero, and only the review log says it was ever there.'),
+                    'on' => Schema::string('When the vote came in, empty where none did.'),
+                ], ['voter', 'value', 'on']),
+            ]),
+        ], ['label', 'state', 'satisfied', 'votes']);
+    }
+
+    /**
+     * Who owns a change, which is who pushed it first and not who uploaded
+     * the current patch set.
+     *
+     * @return array<string, mixed>
+     */
+    private static function owner(): array
+    {
+        return Schema::object([
+            'name' => Schema::string('Empty where the call read the account id alone, which is a search.'),
+            'username' => Schema::string(),
+            'email' => Schema::string('Hold it against `git config user.email` in the checkout. Where the two agree, the change is the requester\'s own, and the checkout skill\'s rule about an absent author\'s decisions has nothing to protect.'),
+            'accountId' => Schema::integer('The review server\'s own account id, which every row carries.'),
+        ], ['name', 'username', 'email', 'accountId']);
+    }
+
+    /**
+     * What core-ci's pipeline reports for one patch set, where Verified
+     * rejects it.
+     *
+     * @return array<string, mixed>
+     */
+    private static function ci(): array
+    {
+        return Schema::nullable([
+            'type' => 'object',
+            'description' => 'The pipeline core-ci ran on git.typo3.org for the current patch set, and the jobs in it that failed. Read where Verified stands at REJECT, which on the core is core-ci\'s vote. Null where Verified does not reject, on a search, and where git.typo3.org did not answer.',
+            'properties' => [
+                'pipeline' => Schema::string('Where a person reads the pipeline. Empty where core-ci ran none for this patch set, which a Verified-1 from a person looks like.'),
+                'status' => Schema::string('The pipeline\'s own state: failed, running, success.'),
+                'failedJobs' => Schema::listOf(Schema::object([
+                    'name' => Schema::string('The job, which names the suite, the database, the PHP version and the chunk: "e2e playwright composer sqlite 8.5 pre-merge 2/4".'),
+                    'stage' => Schema::string(),
+                    'url' => Schema::string('Where a person reads the job.'),
+                    'log' => Schema::string('The job\'s whole log as plain text, readable without a login where the API answers 401 for the same trace. The failing test names are in it.'),
+                ], ['name', 'stage', 'url', 'log']), 'Empty where nothing failed, and where the pipeline is still running.'),
+            ],
+            'required' => ['pipeline', 'status', 'failedJobs'],
+        ]);
     }
 
     /**
@@ -830,6 +890,7 @@ final class GerritLookup extends ReadOnlyTool
             $voted = false;
             $stacked = false;
             $moved = false;
+            $failed = false;
             $tracked = false;
             $touched = false;
             if ($direction === 'backlog') {
@@ -839,6 +900,9 @@ final class GerritLookup extends ReadOnlyTool
                 $lines[] = '';
                 $lines[] = sprintf('## %s (%s)', $entry['subject'], $entry['status']);
                 $lines[] = sprintf('Change %d · %s · %s', $entry['number'], $entry['branch'], $entry['url']);
+                if (($entry['owner']['name'] ?? '') !== '') {
+                    $lines[] = 'Owner: ' . self::person($entry['owner']);
+                }
                 if ($entry['changeId'] !== '') {
                     $ids[] = strtolower($entry['changeId']);
                     $lines[] = 'Change-Id: ' . $entry['changeId'];
@@ -868,6 +932,10 @@ final class GerritLookup extends ReadOnlyTool
                     // voter for one to be gone from.
                     $voted = $voted || $label['votes'] !== null;
                     $lines[] = self::vote($label);
+                }
+                $lines = [...$lines, ...self::pipeline($entry['ci'] ?? null)];
+                foreach ([$entry, ...($entry['chain'] ?? [])] as $piped) {
+                    $failed = $failed || ($piped['ci']['failedJobs'] ?? []) !== [];
                 }
                 $commented = $commented || ($entry['comments'] ?? []) !== [];
                 $stacked = $stacked || ($entry['chain'] ?? []) !== [];
@@ -905,6 +973,11 @@ final class GerritLookup extends ReadOnlyTool
             }
             if ($stacked) {
                 $lines = [...$lines, ...self::relations($moved)];
+            }
+            if ($failed) {
+                $lines[] = '';
+                $lines[] = 'A failed job\'s log is public as plain text at the address beside it and names the failing '
+                    . 'tests. The GitLab API answers 401 for the same trace, which reads as a login it does not need.';
             }
             if ($commented) {
                 $lines[] = '';
@@ -1221,8 +1294,55 @@ final class GerritLookup extends ReadOnlyTool
             if (self::behind($related)) {
                 $said[] = sprintf('chained at patch set %d, now at %d', $related['chainedAt'], $related['patchSet']);
             }
+            foreach ($related['labels'] ?? [] as $label) {
+                if ($label['state'] !== '') {
+                    $said[] = $label['label'] . ' ' . $label['state'];
+                }
+            }
+            if (($related['owner']['name'] ?? '') !== '') {
+                $said[] = 'owned by ' . $related['owner']['name'];
+            }
             $said[] = $related['url'];
             $lines[] = '- ' . implode(' · ', $said);
+            foreach (self::pipeline($related['ci'] ?? null) as $line) {
+                $lines[] = '  ' . $line;
+            }
+        }
+
+        return $lines;
+    }
+
+    /**
+     * One person as a reader holds them against the requester.
+     *
+     * @param array<string, mixed> $owner
+     */
+    private static function person(array $owner): string
+    {
+        return $owner['name']
+            . ($owner['email'] !== '' ? ' <' . $owner['email'] . '>' : '')
+            . ($owner['username'] !== '' ? ' (' . $owner['username'] . ')' : '');
+    }
+
+    /**
+     * The pipeline core-ci failed a patch set on, and the jobs that failed in
+     * it, where Verified rejects it.
+     *
+     * @param array<string, mixed>|null $ci
+     * @return list<string>
+     */
+    public static function pipeline(?array $ci): array
+    {
+        if ($ci === null) {
+            return [];
+        }
+        if ($ci['pipeline'] === '') {
+            return ['Core CI ran no pipeline for this patch set, so the Verified vote is a person\'s.'];
+        }
+
+        $lines = [sprintf('Core CI: pipeline %s · %s', $ci['status'], $ci['pipeline'])];
+        foreach ($ci['failedJobs'] as $job) {
+            $lines[] = sprintf('Failed: %s · log %s', $job['name'], $job['log']);
         }
 
         return $lines;

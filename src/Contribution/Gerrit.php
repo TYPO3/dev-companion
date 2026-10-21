@@ -48,11 +48,14 @@ final class Gerrit
      */
     private ?Forge $tracker = null;
 
+    private readonly CoreCi $ci;
+
     /** @param (\Closure(string): ?string)|null $transport */
     public function __construct(?\Closure $transport = null)
     {
         $this->fetch = new Fetch($transport);
         $this->transport = $transport;
+        $this->ci = new CoreCi($transport);
     }
 
     /**
@@ -493,7 +496,10 @@ final class Gerrit
 
         foreach ($answer['changes'] as $index => $found) {
             $answer['changes'][$index]['comments'] = $this->comments($found['number'], $found['commentCount']);
-            $answer['changes'][$index]['chain'] = $this->chain($found['number']);
+            $answer['changes'][$index]['chain'] = $this->linked($this->chain($found['number']));
+            $answer['changes'][$index]['ci'] = self::rejected($found['labels'])
+                ? $this->ci->failed($found['branch'], $found['number'], $found['patchSet'])
+                : null;
             $message = is_string($found['message'] ?? null) ? $found['message'] : '';
             if ($message !== '') {
                 $answer['changes'][$index]['releases'] = self::releases($message);
@@ -905,6 +911,67 @@ final class Gerrit
     }
 
     /**
+     * Each link of a chain with who owns it, what its labels stand at, and
+     * where Verified rejects it, the jobs core-ci failed.
+     *
+     * One query for every link, because the endpoint the chain comes from
+     * carries neither. A session read the labels of thirteen links with
+     * thirteen calls, and the owner the checkout skill decides on with two
+     * more (`D-ANS-182`). Where that query does not answer, a link keeps the
+     * chain's own fields and says so with null.
+     *
+     * @param list<array<string, mixed>>|null $chain
+     * @return list<array<string, mixed>>|null
+     */
+    private function linked(?array $chain): ?array
+    {
+        if ($chain === null || $chain === []) {
+            return $chain;
+        }
+
+        $numbers = array_values(array_filter(array_column($chain, 'number'), static fn(mixed $number): bool => is_int($number) && $number > 0));
+        $read = [];
+        if ($numbers !== []) {
+            $answer = $this->page(
+                implode(' OR ', array_map(static fn(int $number): string => 'change:' . $number, $numbers)),
+                count($numbers),
+                0,
+                self::ACCOUNTS,
+            );
+            foreach ($answer['changes'] as $change) {
+                $read[$change['number']] = $change;
+            }
+        }
+
+        foreach ($chain as $at => $link) {
+            $change = $read[$link['number']] ?? null;
+            $chain[$at]['owner'] = $change['owner'] ?? null;
+            $chain[$at]['labels'] = $change['labels'] ?? null;
+            $chain[$at]['ci'] = $change !== null && $link['status'] === 'NEW' && self::rejected($change['labels'])
+                ? $this->ci->failed($change['branch'], $change['number'], $change['patchSet'])
+                : null;
+        }
+
+        return $chain;
+    }
+
+    /**
+     * Whether a vote blocks the Verified label, which on the core is core-ci's.
+     *
+     * @param list<array<string, mixed>>|null $labels
+     */
+    private static function rejected(?array $labels): bool
+    {
+        foreach ($labels ?? [] as $label) {
+            if ($label['label'] === 'Verified' && $label['state'] === 'REJECT') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * The changes this one stands on and the changes that stand on it, child
      * first.
      *
@@ -1026,6 +1093,12 @@ final class Gerrit
      * 2026-08-14.
      */
     private const REVIEW = '&o=DETAILED_LABELS&o=DETAILED_ACCOUNTS';
+
+    /**
+     * The option that names the owner of each change beyond the account id,
+     * for the links of a chain. Their labels come unasked, `D-ANS-182`.
+     */
+    private const ACCOUNTS = '&o=DETAILED_ACCOUNTS';
 
     /**
      * The review log, fetched on every change read by name and handed on only
@@ -1192,6 +1265,10 @@ final class Gerrit
             'patchSet' => $patchSet,
             'commit' => is_string($entry['current_revision'] ?? null) ? $entry['current_revision'] : '',
             'project' => $project,
+            // Every row carries the account id. The name, the username and
+            // the address come with `o=DETAILED_ACCOUNTS`, which a change read
+            // by name asks for (`D-ANS-182`).
+            'owner' => self::owner($entry['owner'] ?? null),
             'updated' => is_string($entry['updated'] ?? null) ? $entry['updated'] : '',
             // The five fields the review server sends unasked and this server
             // dropped until `D-ANS-107`. Size, whether it still merges and how
@@ -1239,6 +1316,8 @@ final class Gerrit
             'messages' => is_array($entry['messages'] ?? null) ? self::messages($entry['messages']) : null,
             // Counted by `change()`, before the filter it is the measure of.
             'botMessageCount' => null,
+            // Filled by `change()` where Verified rejects the patch set.
+            'ci' => null,
             // `change()` fills it out of that log, which is the only place
             // Gerrit reports a patch set with conflict markers. Null is a log
             // that did not come back; the empty list is a patch set with no
@@ -1268,6 +1347,23 @@ final class Gerrit
         return $project === ''
             ? self::HOST . '/c/' . $number
             : self::HOST . '/c/' . $project . '/+/' . $number;
+    }
+
+    /**
+     * Who owns a change, in the fields the review server sent for the account.
+     *
+     * @return array{name: string, username: string, email: string, accountId: int}
+     */
+    private static function owner(mixed $account): array
+    {
+        $account = is_array($account) ? $account : [];
+
+        return [
+            'name' => is_string($account['name'] ?? null) ? $account['name'] : '',
+            'username' => is_string($account['username'] ?? null) ? $account['username'] : '',
+            'email' => is_string($account['email'] ?? null) ? $account['email'] : '',
+            'accountId' => self::counted($account['_account_id'] ?? null) ?? 0,
+        ];
     }
 
     /** One number the review server stated, or null where it stated none. */

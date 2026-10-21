@@ -215,9 +215,9 @@ Text:
     Tools: typo3_forge_lookup
     Source: https://forge.typo3.org (network) (core)
     ## Gerrit changes: whether a patch already exists, what state its review is in, which changes touch a path or name a wording, and what stands open in the core's review backlog
-    The anonymous Gerrit REST API, read live. By change number, Change-Id or commit hash: the change and its Change-Id siblings, current patch set, message, paths, votes, comments, chain, the issues and branches its trailers name, and on request the review log. By words and path: every matching change, in any state or only under review; words match the commit message, not the diff. As a backlog: the open changes by age or neglect, narrowed by size, vote state, mergeability, branch, date and person. A private change is invisible to it.
+    The anonymous Gerrit REST API, read live. By change number, Change-Id or commit hash: the change and its Change-Id siblings, current patch set, message, paths, votes, comments, chain, the issues and branches its trailers name, the owner and label state of every link, and on request the review log. Where Verified rejects a patch set, the jobs core-ci failed it on, from git.typo3.org. By words and path: every matching change, in any state or only under review; words match the commit message, not the diff. As a backlog: the open changes by age or neglect, narrowed by size, vote state, mergeability, branch, date and person. A private change is invisible to it.
     Tools: typo3_gerrit_lookup
-    Source: https://review.typo3.org (network) (core)
+    Source: https://review.typo3.org and https://git.typo3.org (network) (core)
     ## Commit messages
     Rules plus a working draft and check, including 72-character body wrapping. The subject and body conventions are also served without the core workflow, for a commit in a repository that has no Forge issue and no release branches: workflow="project", where no trailer is demanded and the issues the call passed are written as Resolves: and Related: all the same. The same guide is exposed as the user-invoked prompt commit_message.
     Tools: typo3_commit_message_guide, typo3_rule_lookup
@@ -546,11 +546,11 @@ Data:
             },
             {
                 "topic": "Gerrit changes: whether a patch already exists, what state its review is in, which changes touch a path or name a wording, and what stands open in the core's review backlog",
-                "depth": "The anonymous Gerrit REST API, read live. By change number, Change-Id or commit hash: the change and its Change-Id siblings, current patch set, message, paths, votes, comments, chain, the issues and branches its trailers name, and on request the review log. By words and path: every matching change, in any state or only under review; words match the commit message, not the diff. As a backlog: the open changes by age or neglect, narrowed by size, vote state, mergeability, branch, date and person. A private change is invisible to it.",
+                "depth": "The anonymous Gerrit REST API, read live. By change number, Change-Id or commit hash: the change and its Change-Id siblings, current patch set, message, paths, votes, comments, chain, the issues and branches its trailers name, the owner and label state of every link, and on request the review log. Where Verified rejects a patch set, the jobs core-ci failed it on, from git.typo3.org. By words and path: every matching change, in any state or only under review; words match the commit message, not the diff. As a backlog: the open changes by age or neglect, narrowed by size, vote state, mergeability, branch, date and person. A private change is invisible to it.",
                 "tools": [
                     "typo3_gerrit_lookup"
                 ],
-                "source": "https://review.typo3.org (network)",
+                "source": "https://review.typo3.org and https://git.typo3.org (network)",
                 "scope": "core"
             },
             {

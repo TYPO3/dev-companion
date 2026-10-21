@@ -6,6 +6,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 - [`D-ANS-180`][D-ANS-180] — A backlog larger than a page is read by topic or by page · 2026-10-21
 - [`D-ANS-181`][D-ANS-181] — The stale end reads when a person last commented · 2026-10-21
+- [`D-ANS-182`][D-ANS-182] — A chain link says who owns it and which job failed it · 2026-10-21
 - [`D-ANS-176`][D-ANS-176] — A PHP that lacks a required extension is refused by every call · 2026-10-11
 - [`D-ANS-177`][D-ANS-177] — A property answers from what its manual states of it · 2026-10-11
 - [`D-ANS-178`][D-ANS-178] — A ViewHelper page answers with the arguments its reference lists · 2026-10-11
@@ -179,6 +180,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 [D-ANS-180]: ans-180-a-backlog-larger-than-a-page-is-read-by-topic-or-by-page.md
 [D-ANS-181]: ans-181-the-stale-end-reads-when-a-person-last-commented.md
+[D-ANS-182]: ans-182-a-chain-link-says-who-owns-it-and-which-job-failed-it.md
 [D-ANS-176]: ans-176-a-php-that-lacks-a-required-extension-is-refused-by-every-call.md
 [D-ANS-177]: ans-177-a-property-answers-from-what-its-manual-states-of-it.md
 [D-ANS-178]: ans-178-a-viewhelper-page-answers-with-the-arguments-its-reference-lists.md

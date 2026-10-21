@@ -1136,6 +1136,72 @@ final class GerritTest extends TestCase
     }
 
     /**
+     * A change read by name says who owns it, and every link of its chain says
+     * who owns it and what its labels stand at, from one query for all of them.
+     * A link Verified rejects carries the jobs core-ci failed it on.
+     *
+     * A session rebasing a thirteen-change chain read the labels with thirteen
+     * calls, the owner with two more, and the failed jobs off GitLab by hand
+     * (`D-ANS-182`).
+     */
+    #[Decision('D-ANS-182')]
+    #[Test]
+    public function aChainLinkSaysWhoOwnsItAndWhichJobFailedIt(): void
+    {
+        $owner = '"owner":{"_account_id":21249,"name":"Benjamin Kott","email":"benjamin.kott@outlook.com","username":"benjaminkott"}';
+        $asked = [];
+        $gerrit = new Gerrit(function (string $url) use (&$asked, $owner): string {
+            $asked[] = $url;
+            if (str_contains($url, 'git.typo3.org') && str_contains($url, '/jobs')) {
+                return '[{"name":"e2e playwright composer sqlite 8.5 pre-merge 2/4","stage":"integrity",'
+                    . '"web_url":"https://git.typo3.org/typo3/CI/cms/-/jobs/70"}]';
+            }
+            if (str_contains($url, 'git.typo3.org')) {
+                return str_contains($url, 'ref=main.92197.9')
+                    ? '[{"id":7,"status":"failed","web_url":"https://git.typo3.org/typo3/CI/cms/-/pipelines/7"}]'
+                    : '[]';
+            }
+            if (str_contains($url, '/related')) {
+                return self::RELATED;
+            }
+            if (str_contains($url, '%20OR%20change')) {
+                return ")]}'\n["
+                    . '{"project":"Packages/TYPO3.CMS","branch":"main","status":"NEW","_number":92197,"current_revision_number":9,' . $owner . ','
+                    . '"submit_records":[{"labels":[{"label":"Verified","status":"REJECT"},{"label":"Code-Review","status":"NEED"}]}]},'
+                    . '{"project":"Packages/TYPO3.CMS","branch":"main","status":"NEW","_number":93064,"current_revision_number":16,'
+                    . '"owner":{"_account_id":7,"name":"Somebody Else"},'
+                    . '"submit_records":[{"labels":[{"label":"Verified","status":"OK"},{"label":"Code-Review","status":"NEED"}]}]}]';
+            }
+
+            return str_replace('"status":"NEW",', '"status":"NEW",' . $owner . ',', self::STACKED);
+        });
+
+        $change = $gerrit->change('91563')['changes'][0];
+
+        self::assertSame(
+            ['name' => 'Benjamin Kott', 'username' => 'benjaminkott', 'email' => 'benjamin.kott@outlook.com', 'accountId' => 21249],
+            $change['owner'],
+        );
+        self::assertCount(1, array_filter($asked, static fn(string $url): bool => str_contains($url, '%20OR%20change')));
+
+        [$top, $merged, , $base] = $change['chain'];
+        self::assertSame('Somebody Else', $base['owner']['name']);
+        self::assertSame(['Verified' => 'REJECT', 'Code-Review' => 'NEED'], array_column($top['labels'], 'state', 'label'));
+        // A link the query did not answer for says so rather than reads green.
+        self::assertNull($merged['labels']);
+        // Only the red link asks git.typo3.org, by the ref core-ci gives its
+        // pipelines, and its log is the raw address the API's 401 hides.
+        self::assertSame('https://git.typo3.org/typo3/CI/cms/-/pipelines/7', $top['ci']['pipeline']);
+        self::assertSame('https://git.typo3.org/typo3/CI/cms/-/jobs/70/raw', $top['ci']['failedJobs'][0]['log']);
+        self::assertNull($base['ci']);
+        self::assertNull($change['ci'], 'the change itself carries no Verified state in this fixture');
+
+        $text = implode("\n", GerritLookup::chain($change, true));
+        self::assertStringContainsString('Verified REJECT · Code-Review NEED · owned by Benjamin Kott', $text);
+        self::assertStringContainsString('Failed: e2e playwright composer sqlite 8.5 pre-merge 2/4 · log https://git.typo3.org/typo3/CI/cms/-/jobs/70/raw', $text);
+    }
+
+    /**
      * By the number and not by the Change-Id. `/changes/<Change-Id>/…/related`
      * answered 404 `Multiple changes found` on 2026-08-21 for the backport pair
      * `D-ANS-080` puts in this answer. So the handle the caller passed is not

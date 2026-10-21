@@ -128,7 +128,7 @@ stands, which is what the old assertion could not.
 The first **Wrong if** fired twice, and the fourth is the reading the
 maintainer took. A chain rebase on 2026-10-16 skipped the sweep, the handover
 and the test guide and reported none of them
-([`feedback/2026-10-16-074733-the-checkout-skill`](../../feedback/2026-10-16-074733-the-checkout-skill-has-no-short-path-for-the.md)).
+([`feedback/2026-10-16-074733-the-checkout-skill`](../../feedback/archive/2026-10-16-074733-the-checkout-skill-has-no-short-path-for-the.md)).
 A backlog list on 2026-10-21 said the base was long and reported no step it
 passed
 ([`feedback/2026-10-21-154706-breakdown`](../../feedback/archive/2026-10-21-154706-breakdown-with-fuzzy-category-found-the-hidden.md)).

@@ -2769,6 +2769,32 @@ final class SkillTest extends TestCase
     }
 
     /**
+     * The requester's own chain, rebased with its content unchanged. The brief
+     * read it as a submission and named the development skill alone. The
+     * checkout skill then left the session to decide which of its steps fall
+     * away, and it skipped three in silence (`D-SKL-097`).
+     */
+    #[Decision('D-SKL-097')]
+    #[Test]
+    public function aRebaseOfOnesOwnChainReachesTheCheckoutAndSaysWhatStays(): void
+    {
+        $brief = Registry::call('typo3_task_guide', [
+            'task' => 'Rebase the 13-change relation chain ending at Gerrit 95437 onto current origin/main and rebuild the generated JavaScript in every commit',
+        ])->data;
+        self::assertContains('typo3-core-patch-checkout', $brief['skills']);
+
+        $body = self::flat((string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-checkout/SKILL.md',
+        ));
+        self::assertStringContainsString('## Your own chain, with its content unchanged', $body);
+        self::assertStringContainsString('three steps fall away: the ask, the comment on the change, and the stop', $body);
+        // The two a session skipped although the base and the development
+        // skill owe them: the sweep and the checks on the new base.
+        self::assertStringContainsString('**The deprecation sweep** of the base order', $body);
+        self::assertStringContainsString('**The checks on the new base.**', $body);
+    }
+
+    /**
      * `D-KNW-129`. Two published files disagreed about whether a session may
      * open a patch set on somebody else's change.
      * `typo3-core-patch-development` routed the case and this skill's checklist

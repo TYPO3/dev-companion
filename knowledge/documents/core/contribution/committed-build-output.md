@@ -1,8 +1,8 @@
 ---
 description: >-
-  The JavaScript and CSS the core commits beside the sources they come from: how you read a change to one without a build, rebuild one where nothing of yours is at risk, and resolve one a backport conflicted in.
+  The JavaScript and CSS the core commits beside the sources they come from: how you read a change to one without a build, rebuild one where nothing of yours is at risk, rebuild every link of a rebased chain, and resolve one a backport conflicted in.
 whenToUse: >-
-  When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
+  When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
 hints:
   - backend-typescript
 ---
@@ -112,6 +112,49 @@ The suite itself does not run there. The same run's build succeeded. Each of its
 git calls failed with `fatal: not a git repository: <the worktree's gitdir>`.
 That directory sits outside the one the container mounts, so the suite reported
 FAILURE over a clean tree.
+
+## Rebuilding Every Commit of a Chain
+
+Each link of a chain commits its own build output. So a rebase owes a build per
+link rather than one at the tip. `git rebase --exec` runs a command after each
+commit it picks. A command that fails stops the rebase on that commit. A command
+that amends the commit carries the amend into every commit above it.
+
+Build the target branch first, as above, and require an empty `git status`. Read
+the chain for a renamed or deleted source, because the build leaves its old
+output in place. Then run the rebase on the chain's branch, in a worktree of its
+own:
+
+```bash
+cat > ../rebuild.sh <<'SCRIPT'
+#!/bin/sh
+set -e
+CI=true ./Build/Scripts/runTests.sh -s "$suite"
+git checkout -- Build/package-lock.json
+outside=$(git status --porcelain | grep -v -E ' typo3/sysext/[^/]+/Resources/Public/(JavaScript|Css)/' || true)
+[ -z "$outside" ] || { echo "$outside"; exit 1; }
+git add -A typo3/sysext
+git diff --cached --quiet || git commit --amend --no-edit
+SCRIPT
+chmod +x ../rebuild.sh
+
+OLD_TIP=$(git rev-parse HEAD)
+OLD_BASE=$(git merge-base HEAD origin/main)
+git rebase --exec "suite=$suite ../rebuild.sh" origin/main
+git range-diff "$OLD_BASE..$OLD_TIP" origin/main..HEAD
+```
+
+The script puts the lock file back and stops at anything outside the generated
+JavaScript and CSS. That is a Sass source the stylefix rewrote, or a file the
+link did not own. It amends only where the output changed. A stop leaves the
+rebase on the link that caused it, and `git rebase --abort` puts the branch
+back.
+
+`git range-diff` is the check afterwards. `=` on a link says the rebased commit
+is the pushed one, output included. A link with a difference shows the
+generated file that moved, and the tokenised diff above reads it. A session
+rebuilt a chain of 13 links this way on 2026-10-16. Each build took about 40
+seconds, and every link came back `=`.
 
 ## A Backport That Conflicts in a Generated File
 

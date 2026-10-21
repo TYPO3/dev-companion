@@ -7,6 +7,7 @@ order it works.
 See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
+- [`D-SKL-097`][D-SKL-097] — A requester's own chain owes the build and the proof, not the ask · 2026-10-21
 - [`D-SKL-095`][D-SKL-095] — The checkout skill knows no worktree tool but git · 2026-10-05
 - [`D-SKL-096`][D-SKL-096] — The precedent passage stays where the finding arises · 2026-10-05
 - [`D-SKL-094`][D-SKL-094] — A review reads its change again before it reports · 2026-09-15
@@ -99,6 +100,7 @@ one is added.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-097]: skl-097-a-requesters-own-chain-owes-the-build-and-the-proof-not-the-ask.md
 [D-SKL-095]: skl-095-the-checkout-skill-knows-no-worktree-tool-but-git.md
 [D-SKL-096]: skl-096-the-precedent-passage-stays-where-the-finding-arises.md
 [D-SKL-094]: skl-094-a-review-reads-its-change-again-before-it-reports.md

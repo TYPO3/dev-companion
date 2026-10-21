@@ -112,7 +112,10 @@ Read the chain before the fetch and take five things off it.
 - **Every later amend is two steps.** You cannot amend a conflict resolution or
   a fixer finding that belongs to the lower commit from the tip. Detach to it,
   amend, apply again what sat on top, and move the branch. Budget for it rather
-  than discover it at the end.
+  than discover it at the end. A rebuild of the output in every link is one
+  step instead: `typo3_rule_lookup` with
+  `documentId="core/contribution/committed-build-output"`, section "Rebuilding
+  Every Commit of a Chain".
 
 - **Which links are red.** Every link carries its labels, and a link Verified
   rejects names the jobs core-ci failed it on, each with its log. A rebase that
@@ -124,6 +127,30 @@ is the person who asks. Hold its `email` against `git config user.email`. Every
 link carries an owner of its own, so the rule applies per link. Where they are, the rule that stops you from an absent
 author's decisions has nothing left to protect. To resolve past a handful of
 hunks is the right call. Say in the result that you did, and on whose change.
+
+## Your own chain, with its content unchanged
+
+A rebase of the requester's own chain is the third way in on every link. Most of
+this workflow guards somebody else's patch. Where every link's owner is the
+person who asks, three steps fall away: the ask, the comment on the change, and
+the stop at a conflict the change does not decide.
+
+The rest stays, in this order:
+
+- **The target branch**, established before anything moves.
+- **The build in every link**, where the chain commits build output. The
+  section on the rebuild is the one the chain bullets above name.
+- **`git range-diff`** from the old range to the new one. `=` on every link is
+  the proof that neither the content nor the message moved.
+- **The deprecation sweep** of the base order. The code under the chain moved,
+  and the sweep says whether it deprecated something a link calls. Narrow it
+  with the tag of each system extension the chain touches.
+- **The checks on the new base.** `typo3_test_run_guide` with the paths the
+  chain touches names them. A run before the rebase is evidence about the old
+  base.
+- **The push, in `typo3-core-patch-development`.** Where every link came back
+  `=`, that workflow owes its rebase section and the push. The message, the
+  changelog entry and the review stand as they were pushed.
 
 ## Before you change the checkout
 

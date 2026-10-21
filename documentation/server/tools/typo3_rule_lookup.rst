@@ -414,7 +414,7 @@ Text:
     - The Prose a Patch Carries: Say What Is, Name Who Acts, One Thought per Sentence, End on the Object, Name the Place Instead of Pointing at It, Use the Words the Codebase Uses, A Longer Correct Sentence Beats a Short Broken One, One Fact, One Place, Say Why, Length Is a Ceiling, The Check Before You Hand It Over
     - The Changelog Entry a Core Patch Owes: Which Change Owes a Changelog File, Where a Changelog File Goes, What a Changelog File Is Called, What a Changelog File Carries, What Checks a Changelog File, Reading Changelog Entries Instead of Writing One
     - TYPO3 Core Commit Message Rules: Who Reads It, Summary Line, Work in Progress, Body, The Longest Line The Hook Accepts, Relationships, Release Targets, The Trailers A Core Commit Carries, What The Commit Hook Writes, Breaking Changes, Changed Signatures, Deprecations, The Changelog Entry a Message Announces
-    - The Build Output the Core Commits: Where the Committed Build Output Comes From, Reading a Minified Diff Without a Build, Rebuilding It Where Nothing of Yours Is at Risk, Output No Source Produces Any More, A Backport That Conflicts in a Generated File, The Same Module Built on Two Branches
+    - The Build Output the Core Commits: Where the Committed Build Output Comes From, Reading a Minified Diff Without a Build, Rebuilding It Where Nothing of Yours Is at Risk, Output No Source Produces Any More, Rebuilding Every Commit of a Chain, A Backport That Conflicts in a Generated File, The Same Module Built on Two Branches
     - TYPO3 Gerrit Workflow: One-Time Setup, Where This Checkout Pushes, Fetch a Change Into This Checkout, Carry a Change Onto Current Code, Push a Patch for Review, Push a Private or Work in Progress Change, Pushing From a Git Worktree, Update an Existing Patch, Open a Patch Set on Somebody Else's Change, The Forge Issue a Change Hangs Off, Release Branches and Backports
     - Rebasing a Stale Patch: 1. What Main Landed on These Paths, 2. Whether a Fix Survived the Rewrite, 3. Removed Members That Still Have Callers, 4. The Suites That Cover What It Rewrote, The Committed JavaScript
     - Filing a TYPO3 Core Bug Report: Whether Somebody Has Already Reported It, What a Report Carries, The Area, The Target Version, The Markup, What the Description Says
@@ -581,6 +581,7 @@ Data:
                     "Reading a Minified Diff Without a Build",
                     "Rebuilding It Where Nothing of Yours Is at Risk",
                     "Output No Source Produces Any More",
+                    "Rebuilding Every Commit of a Chain",
                     "A Backport That Conflicts in a Generated File",
                     "The Same Module Built on Two Branches"
                 ]

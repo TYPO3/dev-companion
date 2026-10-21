@@ -532,7 +532,11 @@
       "try out the patch",
       "still applies",
       "amend",
-      "extend the patch"
+      "extend the patch",
+      "rebase the chain",
+      "relation chain",
+      "rebase the patch",
+      "rebase the change"
     ],
     "matchWeak": [
       "review.typo3.org",

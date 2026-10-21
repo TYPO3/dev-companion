@@ -353,6 +353,8 @@ final class Forge
                     'url' => $change['url'],
                 ];
             }
+            $states = array_unique(array_column($results[$at]['reviews'], 'status'));
+            $results[$at]['reviewAbandoned'] = $entry['status'] === 'Under Review' && $states === ['ABANDONED'];
         }
 
         return $results;
@@ -560,9 +562,10 @@ final class Forge
      * makes that end a set, `D-ANS-116`. `total` comes back with the page, so a
      * caller can see whether 30 was the set or a first screenful. The person
      * filters are the other way in, and `involving` is a union the tracker
-     * cannot answer, so it is two reads and a merge, `D-ANS-090`.
+     * cannot answer, so it is two reads and a merge, `D-ANS-090`. `words` and
+     * `offset` reach the rest of a set larger than a page, `D-ANS-180`.
      *
-     * @return array{status: 'answered'|'empty'|'unavailable', url: string, total: int, categories: list<string>, categoriesUsed: list<string>, people: list<array{filter: string, asked: string, name: string, id: int, candidates: list<string>}>, breakdown: ?array<string, mixed>, results: list<array<string, mixed>>, cause: ?string}
+     * @return array{status: 'answered'|'empty'|'unavailable', url: string, total: int, categories: list<string>, categoriesUsed: list<string>, people: list<array{filter: string, asked: string, name: string, id: int, candidates: list<string>}>, breakdown: ?array<string, mixed>, wordsScan: ?array{read: int, complete: bool}, results: list<array<string, mixed>>, cause: ?string}
      */
     public function backlog(
         string $order = 'oldest',
@@ -577,6 +580,8 @@ final class Forge
         string $assignedTo = '',
         string $involving = '',
         bool $breakdown = false,
+        string $words = '',
+        int $offset = 0,
     ): array {
         $categories = $this->categories();
         // The vocabulary asked for on purpose, and no issue read at all. Every
@@ -593,6 +598,7 @@ final class Forge
                 'categoriesUsed' => [],
                 'people' => [],
                 'breakdown' => null,
+                'wordsScan' => null,
                 'results' => [],
                 'cause' => $categories === [] ? Unreachable::NOT_ANSWERING : null,
             ];
@@ -672,14 +678,21 @@ final class Forge
         // (`feedback/2026-08-19-134717`).
         $known = $category !== '' && count($used) !== 1 ? array_keys($categories) : [];
 
+        // The whole set is read where the answer is over all of it: the counts,
+        // the words matched inside it, and a later page of a union, whose two
+        // sides the tracker cannot page as one.
+        $whole = $breakdown || $words !== '' || ($offset > 0 && count($sides) > 1);
+        $take = max(1, min(self::LISTED, $limit));
+
         // What the index answers for nothing where the call asks for it. The
         // journal is the one thing it will not serve however the call reads.
         // That is why the review server is a call of its own below. A counted
         // read wants none of it — it is reading a thousand rows for four
-        // fields.
-        $page = $breakdown
+        // fields. The rows it hands on are read again with them.
+        $page = $whole
             ? ['limit' => (string) self::COUNTED]
-            : ['limit' => (string) max(1, min(self::LISTED, $limit)), 'include' => 'relations,attachments'];
+            : ['limit' => (string) $take, 'include' => 'relations,attachments']
+                + ($offset > 0 ? ['offset' => (string) $offset] : []);
         $reads = array_map(
             static fn(array $side): string => self::HOST . '/projects/' . self::PROJECT . '/issues.json?'
                 . http_build_query($page + $side + $filters),
@@ -692,10 +705,10 @@ final class Forge
         // everything in the shape of a set about one thing.
         $unresolved = array_filter($people, static fn(array $person): bool => $person['id'] === 0);
         if (($category !== '' && $used === []) || $unresolved !== []) {
-            return ['status' => 'empty', 'url' => $url, 'total' => 0, 'categories' => $known, 'categoriesUsed' => $category !== '' ? $used : [], 'people' => $people, 'breakdown' => null, 'results' => [], 'cause' => null];
+            return ['status' => 'empty', 'url' => $url, 'total' => 0, 'categories' => $known, 'categoriesUsed' => $category !== '' ? $used : [], 'people' => $people, 'breakdown' => null, 'wordsScan' => null, 'results' => [], 'cause' => null];
         }
 
-        $answer = $breakdown ? $this->shape($reads) : $this->page($reads, max(1, min(self::LISTED, $limit)), $filters['sort']);
+        $answer = $whole ? $this->shape($reads) : $this->page($reads, $take, $filters['sort']);
         // Two reads answer one question, and their counts overlap by the issues
         // this person both filed and holds. The tracker ANDs its filters. So
         // that overlap is a third read of one row and the only thing that makes
@@ -704,29 +717,34 @@ final class Forge
             $answer['total'] -= $this->overlap($sides, $filters);
         }
         if ($answer['rows'] === null) {
-            return ['status' => 'unavailable', 'url' => $url, 'total' => 0, 'categories' => $known, 'categoriesUsed' => $used, 'people' => $people, 'breakdown' => null, 'results' => [], 'cause' => $answer['cause']];
+            return ['status' => 'unavailable', 'url' => $url, 'total' => 0, 'categories' => $known, 'categoriesUsed' => $used, 'people' => $people, 'breakdown' => null, 'wordsScan' => null, 'results' => [], 'cause' => $answer['cause']];
         }
 
+        $rows = $whole && count($reads) > 1 ? self::inOrder($answer['rows'], $filters['sort']) : $answer['rows'];
+        $total = $answer['total'];
+        $scan = null;
+        if ($words !== '') {
+            $scan = ['read' => count($rows), 'complete' => $answer['complete']];
+            $rows = self::about($rows, $words);
+            $total = count($rows);
+        }
+
+        $counted = null;
         if ($breakdown) {
-            return [
-                'status' => $answer['rows'] === [] ? 'empty' : 'answered',
-                'url' => $url,
-                'total' => $answer['total'],
-                'categories' => $known,
-                'categoriesUsed' => $used,
-                'people' => $people,
-                'breakdown' => [
-                    'read' => count($answer['rows']),
-                    'complete' => $answer['complete'],
-                    'counts' => self::counts($answer['rows']),
-                ],
-                'results' => [],
-                'cause' => null,
-            ];
+            $counted = ['read' => count($rows), 'complete' => $answer['complete'], 'counts' => self::counts($rows)];
+            // A set a page holds whole comes back with its rows. The counts
+            // alone sent a session back for the 18 rows they were read off
+            // (`D-ANS-090`).
+            $rows = $answer['complete'] && count($rows) <= self::LISTED ? $rows : [];
+        } elseif ($whole) {
+            $rows = array_slice($rows, $offset, $take);
+        }
+        if ($whole) {
+            $rows = $this->included($rows);
         }
 
         $results = [];
-        foreach ($answer['rows'] as $raw) {
+        foreach ($rows as $raw) {
             $row = self::entry($raw);
             // The index answer carries the description and no journal. So a row
             // reads for what its subject and its report name and says nothing
@@ -738,17 +756,116 @@ final class Forge
             $results[] = $row;
         }
 
+        $results = $this->reviewed($this->referenced($results));
+        if ($order === 'stale') {
+            $results = $this->noted($results);
+        }
+
         return [
-            'status' => $results === [] ? 'empty' : 'answered',
+            'status' => $results === [] && ($counted === null || $counted['read'] === 0) ? 'empty' : 'answered',
             'url' => $url,
-            'total' => $answer['total'],
+            'total' => $total,
             'categories' => $known,
             'categoriesUsed' => $used,
             'people' => $people,
-            'breakdown' => null,
-            'results' => $this->reviewed($this->referenced($results)),
+            'breakdown' => $counted,
+            'wordsScan' => $scan,
+            'results' => $results,
             'cause' => null,
         ];
+    }
+
+    /**
+     * The rows whose subject or description carries one of the words at the
+     * start of a word, so "translat" reaches translation and translated.
+     *
+     * Any of them rather than all, because the words of a topic are its
+     * synonyms. A topic triage left the tool for a regex of six stems
+     * (`D-ANS-180`).
+     *
+     * @param list<array<string, mixed>> $rows
+     * @return list<array<string, mixed>>
+     */
+    private static function about(array $rows, string $words): array
+    {
+        $terms = array_values(array_filter(preg_split('/[\s,]+/', mb_strtolower(trim($words))) ?: []));
+
+        return array_values(array_filter($rows, static function (array $row) use ($terms): bool {
+            $text = mb_strtolower(
+                (is_string($row['subject'] ?? null) ? $row['subject'] : '') . ' '
+                    . (is_string($row['description'] ?? null) ? $row['description'] : ''),
+            );
+            foreach ($terms as $term) {
+                if (Text::startsWord($text, $term)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }));
+    }
+
+    /**
+     * The rows read again with their relations and their files, in one
+     * request, in the order they came.
+     *
+     * A whole-set read asks for neither, because it reads a thousand rows for
+     * four fields. Where the read does not answer, the rows stand as they
+     * came, which is a row with no relation rather than no row.
+     *
+     * @param list<array<string, mixed>> $rows
+     * @return list<array<string, mixed>>
+     */
+    private function included(array $rows): array
+    {
+        $numbers = array_values(array_filter(array_map(
+            static fn(array $row): int => is_numeric($row['id'] ?? null) ? (int) $row['id'] : 0,
+            $rows,
+        )));
+        if ($numbers === []) {
+            return $rows;
+        }
+
+        $answer = $this->api(self::HOST . '/issues.json?' . http_build_query([
+            'issue_id' => implode(',', $numbers),
+            'status_id' => '*',
+            'include' => 'relations,attachments',
+            'limit' => (string) count($numbers),
+        ]), 'issues');
+        $read = self::merged([], $answer['part'] ?? []);
+
+        return array_map(
+            static fn(array $row): array => $read[is_numeric($row['id'] ?? null) ? (int) $row['id'] : 0] ?? $row,
+            $rows,
+        );
+    }
+
+    /**
+     * When a person last wrote a comment on each row, read off its journal.
+     *
+     * The tracker's own date moves on any edit. Four issues one person touched
+     * within minutes and without a word read as fresh on the stale end
+     * (`D-ANS-181`). One read per row, at the address a read of the issue
+     * takes too, so the next call for one of them is held.
+     *
+     * @param list<array<string, mixed>> $results
+     * @return list<array<string, mixed>>
+     */
+    private function noted(array $results): array
+    {
+        foreach ($results as $at => $row) {
+            $answer = $this->api(self::HOST . '/issues/' . $row['issue'] . '.json?include=journals,relations,attachments', 'issue');
+            $journals = is_array($answer['part']['journals'] ?? null) ? $answer['part']['journals'] : [];
+            foreach ($journals as $journal) {
+                $note = is_array($journal) && is_string($journal['notes'] ?? null) ? trim($journal['notes']) : '';
+                $on = is_array($journal) && is_string($journal['created_on'] ?? null) ? $journal['created_on'] : '';
+                if ($note !== '' && !in_array(self::name($journal['user'] ?? null), self::BOTS, true) && $on > $results[$at]['lastNoteOn']) {
+                    $results[$at]['lastNoteOn'] = $on;
+                }
+            }
+        }
+
+        return $results;
     }
 
     /**
@@ -892,7 +1009,7 @@ final class Forge
      */
     private static function counts(array $rows): array
     {
-        $counts = ['status' => [], 'tracker' => [], 'category' => [], 'year' => []];
+        $counts = ['status' => [], 'tracker' => [], 'category' => [], 'year' => [], 'touched' => []];
         foreach ($rows as $row) {
             foreach (['status', 'tracker', 'category'] as $dimension) {
                 // An issue nobody filed under an area is a bucket of its own.
@@ -902,10 +1019,15 @@ final class Forge
                 $counts[$dimension][$name === '' ? 'none' : $name] ??= 0;
                 $counts[$dimension][$name === '' ? 'none' : $name]++;
             }
-            $year = substr(is_string($row['created_on'] ?? null) ? $row['created_on'] : '', 0, 4);
-            if ($year !== '') {
-                $counts['year'][$year] ??= 0;
-                $counts['year'][$year]++;
+            // The year it was filed, and the year anything last moved on it.
+            // The second is what an updatedBefore that makes the set fit a
+            // page is chosen by.
+            foreach (['year' => 'created_on', 'touched' => 'updated_on'] as $dimension => $field) {
+                $year = substr(is_string($row[$field] ?? null) ? $row[$field] : '', 0, 4);
+                if ($year !== '') {
+                    $counts[$dimension][$year] ??= 0;
+                    $counts[$dimension][$year]++;
+                }
             }
         }
 
@@ -1293,6 +1415,8 @@ final class Forge
             'attachments' => [],
             'reviews' => [],
             'cites' => [],
+            'lastNoteOn' => '',
+            'reviewAbandoned' => false,
         ];
     }
 
@@ -1331,6 +1455,9 @@ final class Forge
             // `open()` fills it from the row the tracker sent, because only an
             // enumerated row carries the description this comes out of.
             'cites' => [],
+            // Filled by `noted()` on the stale end, and by `reviewed()`.
+            'lastNoteOn' => '',
+            'reviewAbandoned' => false,
         ];
     }
 

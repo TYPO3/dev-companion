@@ -89,7 +89,7 @@ final class ForgeLookup extends ReadOnlyTool
                 'backlog' => [
                     'type' => 'string',
                     'enum' => ['oldest', 'stale', 'newest'],
-                    'description' => 'Enumerate the core project\'s unresolved issues instead of a read of one or a match of words. "oldest" orders them by filing date, "stale" by how long nobody has touched them, "newest" by what came in last. The filing date describes the report, and how long it has gone untouched describes the attention it got. An issue that is both is the candidate a triage looks for. "stale" with tracker and category is where a triage of the backlog starts. "newest" is where a duplicate of a defect somebody has just found is. A wording reaches only the issues with that wording. So a read of the subjects filed since the defect could have appeared is what settles a negative. Pair it with createdSince, which turns that end into a set the count says you have seen the whole of. Unresolved is the tracker\'s own set of open statuses: New, Accepted, Under Review, Needs Feedback, On Hold and Postponed. tracker, category, createdBefore, createdSince, updatedBefore, reportedBy, assignedTo, involving and breakdown narrow this way in and no other; status widens it. Not with issue or query.',
+                    'description' => 'Enumerate the core project\'s unresolved issues instead of a read of one or a match of words. "oldest" orders them by filing date, "stale" by how long nobody has touched them, "newest" by what came in last. The filing date describes the report, and how long it has gone untouched describes the attention it got. An issue that is both is the candidate a triage looks for. "stale" with tracker and category is where a triage of the backlog starts. "newest" is where a duplicate of a defect somebody has just found is. A wording reaches only the issues with that wording. So a read of the subjects filed since the defect could have appeared is what settles a negative. Pair it with createdSince, which turns that end into a set the count says you have seen the whole of. Unresolved is the tracker\'s own set of open statuses: New, Accepted, Under Review, Needs Feedback, On Hold and Postponed. tracker, category, words, createdBefore, createdSince, updatedBefore, reportedBy, assignedTo, involving, breakdown and offset narrow this way in and no other; status widens it. Not with issue or query.',
                 ],
                 'notes' => [
                     'type' => 'string',
@@ -135,12 +135,23 @@ final class ForgeLookup extends ReadOnlyTool
                 'involving' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only issues this person is on either side of — what they filed and what they hold, as one set. The tracker cannot answer this: it ANDs its filters, so reportedBy and assignedTo together mean filed AND holds, a set nobody wants. Pass it instead of those two, not beside them. Every row says which side it came in on.',
+                    'description' => 'Only issues this person is on either side of — what they filed and what they hold, as one set. The tracker cannot answer this: it ANDs its filters, so reportedBy and assignedTo together mean filed AND holds, a set nobody wants. Pass it instead of those two, not beside them. Each row\'s reportedBy and assignedTo say which side it came in on.',
+                ],
+                'words' => [
+                    'type' => 'string',
+                    'minLength' => 1,
+                    'description' => 'Only issues whose subject or description carries one of these words at the start of a word, for example "translat l10n overlay fallback" — "translat" reaches translation and translated. Any of the words is enough, because the words of a topic are its synonyms. This is the topic inside an area, where category alone selects a hundred issues and query cannot take a category. The tool reads the whole set the other filters select, up to a thousand issues, and total counts the matches. wordsScan says how many it read. Narrows backlog; not with query.',
+                ],
+                'offset' => [
+                    'type' => 'integer',
+                    'minimum' => 0,
+                    'default' => 0,
+                    'description' => 'How many issues of the set to pass over before the page starts, so limit 50 and offset 50 is the second page. That is the way through a set larger than 50 a page at a time. Narrows backlog; a search and a read ignore it.',
                 ],
                 'breakdown' => [
                     'type' => 'boolean',
                     'default' => false,
-                    'description' => 'Answer how the matched set spreads instead of the rows of it: how many issues per status, per tracker, per area and per year. For a person this is the answer rather than a summary of it. "621 filed, 617 closed, 4 open, concentrated 2014-2016, mostly Backend User Interface" says what a page of 50 out of 621 cannot. Ask for it whenever the question is what somebody or some area has been about. Ask for the rows once the question is which issue to read. It costs a read per hundred issues and stops at a thousand, and it says so where it did.',
+                    'description' => 'Answer how the matched set spreads instead of the rows of it: how many issues per status, per tracker, per area, per year filed and per year last touched. The last one says which updatedBefore makes the set fit a page. A set of 50 or fewer comes back with its rows beside the counts. For a person this is the answer rather than a summary of it. "621 filed, 617 closed, 4 open, concentrated 2014-2016, mostly Backend User Interface" says what a page of 50 out of 621 cannot. Ask for it whenever the question is what somebody or some area has been about. Ask for the rows once the question is which issue to read. It costs a read per hundred issues and stops at a thousand, and it says so where it did.',
                 ],
                 'status' => [
                     'type' => 'string',
@@ -153,7 +164,7 @@ final class ForgeLookup extends ReadOnlyTool
                     'minimum' => 1,
                     'maximum' => 50,
                     'default' => 15,
-                    'description' => 'How many entries come back. A search answers with at most 25 whatever you ask for. Other words reach a set that needs a page, and more of these do not. Nothing reaches past 50 and there is no offset; breakdown answers a matched set larger than that.',
+                    'description' => 'How many entries come back. A search answers with at most 25 whatever you ask for. Other words reach a set that needs a page, and more of these do not. An enumeration stops at 50 a page; offset reaches the next one, and breakdown answers how a larger set spreads.',
                 ],
             ],
             'oneOf' => [
@@ -185,21 +196,30 @@ final class ForgeLookup extends ReadOnlyTool
             ], ['filter', 'asked', 'name', 'id', 'candidates']), 'What reportedBy, assignedTo and involving resolved to, one entry per name the call carried, in that order. The tool resolves a name against the core project\'s members. Where they hold no membership, it resolves it against the reporters and assignees of the issues that carry the name. Empty where the call passed no name.'),
             'breakdown' => Schema::nullable([
                 'type' => 'object',
-                'description' => 'How the matched set spreads, where breakdown is true. Null otherwise, and null where nothing matched.',
+                'description' => 'How the matched set spreads, where breakdown is true. Null otherwise. results carries the rows beside it where the set is complete and holds 50 or fewer.',
                 'properties' => [
                     'read' => Schema::integer('How many issues the counts are over. Equal to total where the read covered the whole set.'),
                     'complete' => ['type' => 'boolean', 'description' => 'Whether that is the whole matched set. False where the bound cut the read. Then the counts are over the first issues read in the order asked for, the oldest or the longest untouched. That is a shape of that end and not of the set. Narrow the filters for the whole one.'],
                     'counts' => Schema::listOf(Schema::object([
-                        'dimension' => ['type' => 'string', 'enum' => ['status', 'tracker', 'category', 'year'], 'description' => 'The dimension the count runs over. year is the filing year.'],
+                        'dimension' => ['type' => 'string', 'enum' => ['status', 'tracker', 'category', 'year', 'touched'], 'description' => 'The dimension the count runs over. year is the filing year, touched the year anything last moved on the issue.'],
                         'buckets' => Schema::listOf(Schema::object([
                             'name' => Schema::string('The value, or "none" for the issues that carry none. An issue filed under no area is a bucket rather than a row left out, so the buckets add up to read.'),
                             'count' => Schema::integer(),
                         ], ['name', 'count']), 'The largest buckets first, and by name where two are the same size.'),
                         'withheldBuckets' => Schema::integer('How many further buckets this dimension has, zero where it has none. The tail of an area count is subsystems with one issue each.'),
                         'withheldCount' => Schema::integer('How many issues those hold together, so the listed buckets and this add up to read.'),
-                    ], ['dimension', 'buckets', 'withheldBuckets', 'withheldCount']), 'One entry per dimension, always the four.'),
+                    ], ['dimension', 'buckets', 'withheldBuckets', 'withheldCount']), 'One entry per dimension, always the five.'),
                 ],
                 'required' => ['read', 'complete', 'counts'],
+            ]),
+            'wordsScan' => Schema::nullable([
+                'type' => 'object',
+                'description' => 'What words were matched against, where the call passed words. Null otherwise.',
+                'properties' => [
+                    'read' => Schema::integer('How many issues the other filters selected and the words were matched against.'),
+                    'complete' => ['type' => 'boolean', 'description' => 'Whether that is the whole set the other filters select. False where the read stopped at a thousand. Then total counts the matches in that part and is a floor.'],
+                ],
+                'required' => ['read', 'complete'],
             ]),
             'issue' => Schema::nullable([
                 'type' => 'object',
@@ -257,13 +277,15 @@ final class ForgeLookup extends ReadOnlyTool
                     Schema::changeReference('NEW while the change is open, MERGED once it landed, ABANDONED once somebody gave it up: where it stood at the read of the page. Empty where the review server named no state.'),
                     ['change', 'status', 'url'],
                 ), 'The changes whose commit message names this issue, each with the state it is in. One query to the review server reads them for the whole page. A state and not a verdict: what a reviewer objected to is the argument on the change, which is a typo3_gerrit_lookup call. An ABANDONED says to read that argument rather than pass the issue over. The approach can be the rejected part while the defect is real. Empty where nothing on the review server names the issue and where the review server did not answer, which this does not separate. Empty on a search hit too, where nothing asks for it.'),
-            ], ['issue', 'subject', 'tracker', 'status', 'category', 'reportedBy', 'assignedTo', 'createdOn', 'updatedOn', 'url', 'relations', 'attachments', 'cites', 'reviews']), 'The issues the query matched or the enumeration selected, in the tracker\'s own order — nothing here ranks them. An enumerated row also carries its relations, its attachments and its reviews. Those three say whether somebody answered it elsewhere or already attempted it, without a read of the whole row. Empty on a read by number.'),
+                'reviewAbandoned' => ['type' => 'boolean', 'description' => 'True where the issue stands Under Review and every change in reviews is ABANDONED. The status then claims a review nobody runs. False everywhere else, a search hit included.'],
+                'lastNoteOn' => Schema::string('When a person last wrote a comment on it, bots left out. updatedOn moves on any edit, a field somebody changed on many issues at once included, so this is the measure of attention on the stale end. Read from the journal, one read per row, on backlog "stale" alone. Empty everywhere else, and where nobody ever commented.'),
+            ], ['issue', 'subject', 'tracker', 'status', 'category', 'reportedBy', 'assignedTo', 'createdOn', 'updatedOn', 'url', 'relations', 'attachments', 'cites', 'reviews', 'reviewAbandoned', 'lastNoteOn']), 'The issues the query matched or the enumeration selected, in the tracker\'s own order — nothing here ranks them. An enumerated row also carries its relations, its attachments and its reviews. Those three say whether somebody answered it elsewhere or already attempted it, without a read of the whole row. Empty on a read by number.'),
             'unavailable' => Schema::unavailable([
                 'source-not-answering' => 'the tracker did not answer this time.',
                 'source-not-parseable' => 'something answered with a page rather than with the API, which is what '
                     . 'the bot protection in front of it looks like from here.',
             ]),
-        ], ['status', 'source', 'url', 'query', 'placedAgainst', 'total', 'terms', 'categories', 'categoriesUsed', 'people', 'breakdown', 'issue', 'results', 'unavailable']);
+        ], ['status', 'source', 'url', 'query', 'placedAgainst', 'total', 'terms', 'categories', 'categoriesUsed', 'people', 'breakdown', 'wordsScan', 'issue', 'results', 'unavailable']);
     }
 
     /**
@@ -486,6 +508,8 @@ final class ForgeLookup extends ReadOnlyTool
                 $assignedTo,
                 $involving,
                 ($args['breakdown'] ?? false) === true,
+                is_string($args['words'] ?? null) ? trim($args['words']) : '',
+                is_int($args['offset'] ?? null) ? max(0, $args['offset']) : 0,
             );
         }
 
@@ -509,6 +533,7 @@ final class ForgeLookup extends ReadOnlyTool
             'categoriesUsed' => [],
             'people' => [],
             'breakdown' => null,
+            'wordsScan' => null,
             'issue' => $answer['issue'],
             'results' => [],
             'unavailable' => Unreachable::of($answer['cause'], self::UNREACHABLE),
@@ -668,6 +693,7 @@ final class ForgeLookup extends ReadOnlyTool
             'categoriesUsed' => [],
             'people' => [],
             'breakdown' => null,
+            'wordsScan' => null,
             'issue' => null,
             'results' => $answer['results'],
             'unavailable' => Unreachable::of($answer['cause'], self::UNREACHABLE),
@@ -837,7 +863,7 @@ final class ForgeLookup extends ReadOnlyTool
      *
      * @param array<string, mixed> $breakdown
      */
-    private static function shaped(array $breakdown, int $total, string $selection): string
+    private static function shaped(array $breakdown, int $total, string $selection, bool $withRows): string
     {
         $lines = [
             sprintf('TYPO3 issue tracker: %d %s', $total, $selection),
@@ -849,7 +875,9 @@ final class ForgeLookup extends ReadOnlyTool
                     $breakdown['read'],
                     $total,
                 ),
-            'Ask again without breakdown, narrowed to the part this points at, for the issues themselves.',
+            $withRows
+                ? 'The set fits a page, so its rows follow the counts.'
+                : 'Ask again without breakdown, narrowed to the part this points at, for the issues themselves.',
         ];
         foreach ($breakdown['counts'] as $counted) {
             $named = implode(' · ', array_map(
@@ -862,6 +890,7 @@ final class ForgeLookup extends ReadOnlyTool
                     'status' => 'Status',
                     'tracker' => 'Tracker',
                     'category' => 'Area',
+                    'touched' => 'Last touched in',
                     default => 'Filed in',
                 },
                 $named !== '' ? $named : 'nothing',
@@ -919,6 +948,8 @@ final class ForgeLookup extends ReadOnlyTool
         string $assignedTo,
         string $involving,
         bool $breakdown,
+        string $words,
+        int $offset,
     ): ToolResult {
         $answer = (new Forge())->backlog(
             order: $order,
@@ -933,6 +964,8 @@ final class ForgeLookup extends ReadOnlyTool
             assignedTo: $assignedTo,
             involving: $involving,
             breakdown: $breakdown,
+            words: $words,
+            offset: $offset,
         );
 
         $data = [
@@ -947,6 +980,7 @@ final class ForgeLookup extends ReadOnlyTool
             'categoriesUsed' => $answer['categoriesUsed'],
             'people' => $answer['people'],
             'breakdown' => $answer['breakdown'],
+            'wordsScan' => $answer['wordsScan'],
             'issue' => null,
             'results' => $answer['results'],
             'unavailable' => Unreachable::of($answer['cause'], self::UNREACHABLE),
@@ -955,6 +989,7 @@ final class ForgeLookup extends ReadOnlyTool
         $narrowed = implode(', ', array_filter([
             $tracker !== '' ? 'tracker ' . $tracker : '',
             $answer['categoriesUsed'] !== [] ? 'in ' . implode(' and ', $answer['categoriesUsed']) : '',
+            $words !== '' ? 'about any of "' . $words . '"' : '',
             self::filedBy($answer['people'], 'reportedBy'),
             self::filedBy($answer['people'], 'assignedTo'),
             self::filedBy($answer['people'], 'involving'),
@@ -1031,28 +1066,46 @@ final class ForgeLookup extends ReadOnlyTool
             return ToolResult::create(
                 'TYPO3 issue tracker: nothing matches ' . $selection . ".\n"
                 . 'The filters excluded everything, which is an answer about them and not about the backlog. Widen the '
-                . 'dates, drop the tracker, or reach the closed ones with status.',
+                . 'dates, drop the tracker, add words in the reporters\' own terms, or reach the closed ones with status.'
+                . self::scanned($answer['wordsScan'], $answer['total']),
                 $data,
             );
         }
 
         if ($answer['breakdown'] !== null) {
-            return ToolResult::create(self::shaped($answer['breakdown'], $answer['total'], $selection), $data);
+            $lines = [self::shaped($answer['breakdown'], $answer['total'], $selection, $answer['results'] !== [])];
+            $scanned = self::scanned($answer['wordsScan'], $answer['total']);
+            if ($scanned !== '') {
+                $lines[] = ltrim($scanned);
+            }
+            if ($answer['results'] !== []) {
+                $lines = [...$lines, ...self::rows($answer['results'])];
+            }
+
+            return ToolResult::create(implode("\n", $lines), $data);
         }
 
         $shown = count($answer['results']);
         $lines = [
-            sprintf('TYPO3 issue tracker: %d of %d %s', $shown, $answer['total'], $selection),
+            $offset > 0
+                ? sprintf('TYPO3 issue tracker: %d to %d of %d %s', $offset + 1, $offset + $shown, $answer['total'], $selection)
+                : sprintf('TYPO3 issue tracker: %d of %d %s', $shown, $answer['total'], $selection),
         ];
-        if ($shown >= $answer['total']) {
-            $lines[] = 'That is the whole set on these filters.';
+        $scanned = self::scanned($answer['wordsScan'], $answer['total']);
+        if ($scanned !== '') {
+            $lines[] = ltrim($scanned);
+        }
+        if ($offset + $shown >= $answer['total']) {
+            $lines[] = $offset > 0 ? 'That is the last page of the set on these filters.' : 'That is the whole set on these filters.';
         } elseif ($answer['people'] !== []) {
             // Other words narrow a backlog and nothing narrows a person's
             // history. Every filter that would make it fit answers a smaller
             // question than the one asked (`feedback/2026-08-19-134651`).
-            $lines[] = 'This is a page and not the set, and limit stops at 50. What reaches the rest is breakdown, which'
-                . ' answers how the whole set is distributed — there are no other words to narrow a person by, and a'
-                . ' tracker or a date answers a smaller question than the one asked.';
+            $lines[] = sprintf(
+                'This is a page and not the set. offset=%d reads the next page, and breakdown answers how the whole set'
+                    . ' is distributed — a tracker or a date answers a smaller question than the one asked.',
+                $offset + $shown,
+            );
         } elseif ($order === 'newest') {
             // The narrower filter that reaches the rest of this end is a later
             // day and never an earlier one. That is what the sentence below
@@ -1063,9 +1116,12 @@ final class ForgeLookup extends ReadOnlyTool
                 . ' you passed one already — until total and the rows agree, and then the subjects here are every issue'
                 . ' filed since that day.';
         } else {
-            $lines[] = 'This is a page and not the set. What comes after it is reached by a narrower filter — an earlier'
-                . ' date, one tracker — rather than by a larger limit, because the order is the tracker\'s own and more of'
-                . ' it is more of the same end. breakdown answers how the whole of it is distributed.';
+            $lines[] = sprintf(
+                'This is a page and not the set. offset=%d reads the next page. words narrows it to a topic, and a'
+                    . ' narrower filter — an earlier date, one tracker — to a part of it. breakdown answers how the whole'
+                    . ' of it is distributed.',
+                $offset + $shown,
+            );
         }
         $lines[] = $order === 'newest'
             ? 'A subject that reads like yours is a candidate and never a duplicate: read it whole by passing its'
@@ -1100,7 +1156,32 @@ final class ForgeLookup extends ReadOnlyTool
                 . ' area, and thousands of the open bugs carry none, so no wording of this reaches one: ask again'
                 . ' without category, narrowed by createdSince instead, where the question is whether it was reported.';
         }
-        foreach ($answer['results'] as $entry) {
+        if ($order === 'stale') {
+            $lines[] = 'On this end a row also says when a person last commented. last touched moves on any edit, a field'
+                . ' somebody changed on many issues at once included, so the comment is the measure of attention.';
+        }
+        $lines = [...$lines, ...self::rows($answer['results'])];
+        // Under the rows and nowhere else. A breakdown returned above holds no
+        // candidates, and the paths that answered nothing have no row to decide.
+        $workflow = self::workflow($answer['status'], $order);
+        if ($workflow !== null) {
+            $lines[] = '';
+            $lines[] = $workflow;
+        }
+
+        return ToolResult::create(implode("\n", $lines), $data);
+    }
+
+    /**
+     * One block per issue of an enumeration.
+     *
+     * @param list<array<string, mixed>> $results
+     * @return list<string>
+     */
+    private static function rows(array $results): array
+    {
+        $lines = [];
+        foreach ($results as $entry) {
             $lines[] = '';
             $lines[] = sprintf('## #%d %s', $entry['issue'], $entry['subject']);
             $lines[] = implode(' · ', array_filter([
@@ -1111,6 +1192,7 @@ final class ForgeLookup extends ReadOnlyTool
                 $entry['assignedTo'] !== '' ? 'assigned to ' . $entry['assignedTo'] : 'unassigned',
                 $entry['createdOn'] !== '' ? 'filed ' . substr($entry['createdOn'], 0, 10) : '',
                 $entry['updatedOn'] !== '' ? 'last touched ' . substr($entry['updatedOn'], 0, 10) : '',
+                $entry['lastNoteOn'] !== '' ? 'last comment ' . substr($entry['lastNoteOn'], 0, 10) : '',
                 $entry['url'],
             ]));
             foreach ($entry['relations'] as $relation) {
@@ -1136,15 +1218,33 @@ final class ForgeLookup extends ReadOnlyTool
                     $review['url'],
                 ]));
             }
-        }
-        // Under the rows and nowhere else. A breakdown returned above holds no
-        // candidates, and the paths that answered nothing have no row to decide.
-        $workflow = self::workflow($answer['status'], $order);
-        if ($workflow !== null) {
-            $lines[] = '';
-            $lines[] = $workflow;
+            if ($entry['reviewAbandoned']) {
+                $lines[] = 'Under Review with every change abandoned: nobody runs the review the status claims.';
+            }
         }
 
-        return ToolResult::create(implode("\n", $lines), $data);
+        return $lines;
+    }
+
+    /**
+     * What words were matched against, where they were, and nothing
+     * otherwise.
+     *
+     * @param array{read: int, complete: bool}|null $scan
+     */
+    private static function scanned(?array $scan, int $total): string
+    {
+        if ($scan === null) {
+            return '';
+        }
+
+        return $scan['complete']
+            ? sprintf(' The words matched %d of the %d issues the other filters select.', $total, $scan['read'])
+            : sprintf(
+                ' The words matched %d of the first %d issues the other filters select, where the read stops. The'
+                    . ' count is a floor; narrow the other filters for the whole of it.',
+                $total,
+                $scan['read'],
+            );
     }
 }

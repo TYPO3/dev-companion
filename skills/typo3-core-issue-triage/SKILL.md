@@ -36,6 +36,10 @@ valuable one.
    pass a name as `query`, which matches the text of an issue rather than whose
    it is.
 
+   Where the request names a topic inside an area, pass its words as `words`.
+   They match the subject and the description inside the set the area selects.
+   `offset` pages through a set larger than 50.
+
    Read the count that comes back against the number of entries. A page is not
    the set. A triage that takes thirty of two thousand for the problem has
    measured the limit rather than the backlog.

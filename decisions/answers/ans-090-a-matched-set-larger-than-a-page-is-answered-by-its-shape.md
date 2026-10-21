@@ -127,3 +127,13 @@ account, where curl needed 400 issues and a filter. `involving` counted 18,
 which is 17 filed and 1 held, without the AND the tracker applies. The third
 **Wrong if** did not fire. The session read the side off `reportedBy` and
 `assignedTo`.
+
+## Since then
+
+The first **Wrong if** fired once.
+[`feedback/2026-10-21-154127-involving-with-breakdown`](../../feedback/archive/2026-10-21-154127-involving-with-breakdown-returns-no-rows-so-a.md)
+asked for a breakdown of 18 issues and then for the rows. The read had all 18
+and dropped them. A breakdown whose set is complete and fits a page of 50 now
+carries its rows beside the counts. The description of `involving` promised a
+side per row that no field carried. It now says that `reportedBy` and
+`assignedTo` carry the side.

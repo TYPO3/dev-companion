@@ -1951,9 +1951,14 @@ final class ForgeTest extends TestCase
         $answer = $forge->backlog(status: 'all', reportedBy: 'Frank Nägler', breakdown: true);
 
         $reads = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/projects/typo3cms-core/issues.json')));
-        // Nothing that decides which row to read, because no row comes back.
+        // A thousand rows are read for four fields, and the few a page holds
+        // are read again with what decides which one to open.
         self::assertStringNotContainsString('include=', $reads[0]);
-        self::assertSame([], $answer['results']);
+        $again = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, 'issue_id=1%2C2%2C3')));
+        self::assertStringContainsString('include=relations%2Cattachments', $again[0] ?? '');
+        // A set a page holds comes back with its rows beside the counts. A
+        // session asked for those 18 rows a second time (`D-ANS-090`).
+        self::assertSame([1, 2, 3], array_column($answer['results'], 'issue'));
         self::assertSame(3, $answer['breakdown']['read']);
         self::assertTrue($answer['breakdown']['complete']);
         self::assertSame(
@@ -1964,6 +1969,9 @@ final class ForgeTest extends TestCase
                 // out, so the areas add up to what the read took.
                 ['dimension' => 'category', 'buckets' => [['name' => 'Backend API', 'count' => 1], ['name' => 'Fluid', 'count' => 1], ['name' => 'none', 'count' => 1]], 'withheldBuckets' => 0, 'withheldCount' => 0],
                 ['dimension' => 'year', 'buckets' => [['name' => '2015', 'count' => 2], ['name' => '2024', 'count' => 1]], 'withheldBuckets' => 0, 'withheldCount' => 0],
+                // The year anything last moved, which is what an updatedBefore
+                // that makes the set fit a page is chosen by.
+                ['dimension' => 'touched', 'buckets' => [['name' => '2020', 'count' => 1], ['name' => '2026', 'count' => 1]], 'withheldBuckets' => 0, 'withheldCount' => 0],
             ],
             $answer['breakdown']['counts'],
         );
@@ -1978,6 +1986,7 @@ final class ForgeTest extends TestCase
                 'tracker' => ['name' => 'Bug'],
                 'category' => ['name' => 'Fluid'],
                 'created_on' => '2015-03-01T10:00:00Z',
+                'updated_on' => '2020-05-01T10:00:00Z',
             ],
             [
                 'id' => 2,
@@ -1991,6 +2000,7 @@ final class ForgeTest extends TestCase
                 'tracker' => ['name' => 'Bug'],
                 'category' => ['name' => 'Backend API'],
                 'created_on' => '2024-01-01T10:00:00Z',
+                'updated_on' => '2026-08-06T15:50:22Z',
             ],
         ],
         'total_count' => 3,
@@ -2020,6 +2030,118 @@ final class ForgeTest extends TestCase
         self::assertCount(2, $asked);
         self::assertStringContainsString('limit=100', $asked[0]);
         self::assertStringContainsString('offset=100', $asked[1]);
+    }
+
+    /**
+     * A topic inside an area, which category alone answers with a hundred
+     * issues and query cannot reach by area. A session left the tool for curl
+     * and a regex of six stems (`D-ANS-180`).
+     */
+    #[Decision('D-ANS-180')]
+    #[Test]
+    public function wordsNarrowTheWholeSetToTheIssuesAboutThem(): void
+    {
+        $asked = [];
+        $forge = new Forge(function (string $url) use (&$asked): string {
+            $asked[] = $url;
+            if (str_contains($url, 'review.typo3.org')) {
+                return ")]}'\n[]";
+            }
+            if (!str_contains($url, '/issues.json')) {
+                return (string) json_encode(self::PROJECT);
+            }
+
+            return (string) json_encode(['issues' => [
+                ['id' => 11, 'subject' => 'Overlay of a translated record loses its relation', 'description' => ''],
+                ['id' => 12, 'subject' => 'Repository count is wrong', 'description' => 'Only with l10n_mode exclude.'],
+                ['id' => 13, 'subject' => 'Validator message is cut', 'description' => 'Nothing about languages.'],
+                ['id' => 14, 'subject' => 'Untranslatable property', 'description' => 'A mid-word match is no match.'],
+            ], 'total_count' => 4]);
+        });
+
+        $answer = $forge->backlog('stale', category: 'backend api', words: 'translat l10n', limit: 1, offset: 1);
+
+        $reads = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/projects/typo3cms-core/issues.json')));
+        // The whole set the filters select, and no page of it.
+        self::assertStringContainsString('limit=100', $reads[0]);
+        self::assertStringNotContainsString('include=', $reads[0]);
+        // Any of the words at the start of a word, so the stem reaches the
+        // subject and the field name reaches the description.
+        self::assertSame(2, $answer['total']);
+        self::assertSame(['read' => 4, 'complete' => true], $answer['wordsScan']);
+        // The second of the two matches, read again with its relations.
+        self::assertSame([12], array_column($answer['results'], 'issue'));
+        self::assertNotEmpty(array_filter($asked, static fn(string $url): bool => str_contains($url, 'issue_id=12&')));
+    }
+
+    /**
+     * A page past the first, which the tracker pages itself on one read
+     * (`D-ANS-180`).
+     */
+    #[Decision('D-ANS-180')]
+    #[Test]
+    public function anOffsetReadsThePageAfterTheOnesBeforeIt(): void
+    {
+        $asked = [];
+        $forge = new Forge(self::tracker($asked));
+
+        $forge->backlog('oldest', limit: 50, offset: 50);
+
+        $read = self::pageRead($asked)[0];
+        self::assertStringContainsString('limit=50', $read);
+        self::assertStringContainsString('offset=50', $read);
+        self::assertStringContainsString('include=relations%2Cattachments', $read);
+    }
+
+    /**
+     * The stale end measured by what a person wrote, and a review the status
+     * claims while every change under it was given up (`D-ANS-181`).
+     *
+     * Four issues one person touched within minutes and without a word came
+     * back as fresh. The journal here holds a person's comment, a bot's ping
+     * after it, and a field edit after both.
+     */
+    #[Decision('D-ANS-181')]
+    #[Test]
+    public function theStaleEndSaysWhenAPersonLastCommented(): void
+    {
+        $asked = [];
+        $forge = new Forge(function (string $url) use (&$asked): string {
+            $asked[] = $url;
+            if (str_contains($url, 'review.typo3.org')) {
+                return ")]}'\n"
+                    . '[{"project":"Packages/TYPO3.CMS","branch":"main","subject":"[BUGFIX] Given up",'
+                    . '"status":"ABANDONED","_number":90001,"current_revision_number":1,"current_revision":"a1","revisions":{'
+                    . '"a1":{"commit":{"message":"[BUGFIX] Given up\n\nResolves: #21\nChange-Id: I9\n"}}}}]';
+            }
+            if (str_contains($url, '/issues/21.json')) {
+                return (string) json_encode(['issue' => ['id' => 21, 'journals' => [
+                    ['user' => ['name' => 'Garvin Hicking'], 'notes' => 'Still happens on main.', 'created_on' => '2026-04-23T07:56:51Z'],
+                    ['user' => ['name' => 'Gerrit Code Review'], 'notes' => 'Patch set 2 was pushed.', 'created_on' => '2026-05-01T09:00:00Z'],
+                    ['user' => ['name' => 'Georg Ringer'], 'notes' => '', 'created_on' => '2026-08-06T15:50:22Z'],
+                ]]]);
+            }
+            if (!str_contains($url, '/issues.json')) {
+                return (string) json_encode(self::PROJECT);
+            }
+
+            return (string) json_encode(['issues' => [[
+                'id' => 21,
+                'subject' => 'Copy of a record keeps its slug',
+                'status' => ['name' => 'Under Review'],
+                'updated_on' => '2026-08-06T15:50:22Z',
+            ]], 'total_count' => 1]);
+        });
+
+        $row = $forge->backlog('stale')['results'][0];
+        self::assertSame('2026-08-06T15:50:22Z', $row['updatedOn']);
+        self::assertSame('2026-04-23T07:56:51Z', $row['lastNoteOn']);
+        self::assertTrue($row['reviewAbandoned']);
+
+        // One read per row, on the stale end alone.
+        $asked = [];
+        self::assertSame('', $forge->backlog('oldest')['results'][0]['lastNoteOn']);
+        self::assertSame([], array_filter($asked, static fn(string $url): bool => str_contains($url, '/issues/21.json')));
     }
 
     /**

@@ -145,6 +145,24 @@ final class Domains
     ];
 
     /**
+     * Words that make "translation" a record in another language rather than
+     * a label.
+     *
+     * TYPO3 says translation for both. A triage of Extbase overlays and
+     * language fallback got the XLF hints, the label intent and two XLIFF
+     * suites off that one word (`D-GUI-031`). A word for a label itself, such
+     * as `xlf` or `label`, still names the domain beside these.
+     *
+     * @var array<int, string>
+     */
+    private const RECORD_LOCALIZATION = [
+        'localization', 'localisation', 'localized', 'localised', 'l10n',
+        'l10n_mode', 'l10n_parent', 'sys_language_uid', 'overlay', 'overlays',
+        'language fallback', 'language overlay', 'languageaspect', 'language aspect',
+        'records', 'translated record', 'translated records',
+    ];
+
+    /**
      * Words for a thing that renders the website and has its administration in
      * the backend.
      *
@@ -212,6 +230,21 @@ final class Domains
     ];
 
     /**
+     * The text with every translat… word taken out where it names record
+     * localization, and as it came everywhere else.
+     */
+    public static function withoutRecordTranslation(string $text): string
+    {
+        foreach (self::RECORD_LOCALIZATION as $marker) {
+            if (Text::containsWord($text, $marker)) {
+                return (string) preg_replace('/\btranslat\w*/iu', '', $text);
+            }
+        }
+
+        return $text;
+    }
+
+    /**
      * @param array<int, string> $paths
      * @return array<int, string> The matched domains, or PHP when the input
      *                            carries no signal at all.
@@ -235,7 +268,7 @@ final class Domains
         // file name mean something it does not. Classes/ViewHelpers/
         // Format/ScssViewHelper.php is PHP, and every word in it is a PHP
         // identifier, not a topic.
-        $description = mb_strtolower($text);
+        $description = self::withoutRecordTranslation(mb_strtolower($text));
         // The paths alone, because a negated mention in the description reads
         // exactly like a positive one — fromPaths().
         $pathDomains = self::fromPaths($paths);

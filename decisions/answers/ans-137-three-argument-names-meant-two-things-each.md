@@ -3,6 +3,8 @@ id: D-ANS-137
 title: Three argument names meant two things each
 date: 2026-09-02
 status: open
+coveredBy:
+  - ToolNamingTest::everyArgumentWrittenBesideAToolIsOneItTakes
 ---
 
 # D-ANS-137 — Three argument names meant two things each
@@ -92,3 +94,12 @@ Neither of the other two **Wrong if** has a report behind it. `query` on
 `typo3_feedback_record` had a look and stays, since that tool records rather
 than looks up. `status`, `category` and `tag` are each one concept in two
 vocabularies, which this entry already settled.
+
+## Since then
+
+The rename of `open` missed five call recipes. `task-intents.json`,
+`server-scope.json` and `reporting-an-issue.md` still wrote `open="stale"`, and
+a brief handed it on to a session on 2026-10-21
+([`feedback/2026-10-21-154706-task-guide-reads-translation`](../../feedback/archive/2026-10-21-154706-task-guide-reads-translation-as-xlf-labels-when.md)).
+The schemas were right, and nothing read the prose that composes a call.
+`ToolNamingTest::everyArgumentWrittenBesideAToolIsOneItTakes` reads it now.

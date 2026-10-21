@@ -54,3 +54,7 @@ A review of a speed-up got `installation-setup` from "typo3 setup" and
 `composer.json`, and `browser-tests` declares `playwright`, `.spec.ts` and
 `/Acceptance/`. `browser-tests` also gained the condition it lacked, and a test
 holds every intent that can come back weak to one.
+
+A third intent declares paths since 2026-10-21. `labels` came back `strong` off
+"translation" for a triage whose path was `typo3/sysext/extbase`. It now
+declares `Resources/Private/Language/` and `.xlf` (`D-GUI-031`).

@@ -29,7 +29,7 @@ Two calls, and the first of them does not settle it on its own.
 
 ```
 typo3_forge_lookup with query="<two or three words of the symptom>"
-typo3_forge_lookup with open="newest", createdSince="<YYYY-MM-DD>", limit=50
+typo3_forge_lookup with backlog="newest", createdSince="<YYYY-MM-DD>", limit=50
 ```
 
 A hit on the search is conclusive, and an empty answer is not. The search
@@ -80,7 +80,7 @@ The project administers the categories and the core adds to them, so this page
 does not copy them. One call answers which one a subject belongs to:
 
 ```
-typo3_forge_lookup with open="oldest", category="<your own words>", limit=1
+typo3_forge_lookup with backlog="oldest", category="<your own words>", limit=1
 ```
 
 `categoriesUsed` in that answer is the tracker's own spelling of the areas those

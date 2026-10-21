@@ -7715,6 +7715,40 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * A triage of Extbase issues about translated records, which TYPO3 calls
+     * translation as much as it calls a label that.
+     *
+     * The word confirmed the label intent and named the XLIFF domain, so the
+     * brief carried the language file hints and two XLIFF suites
+     * (`D-GUI-031`). A word for record localization beside it takes that sense
+     * away, and a path outside the language files holds the label intent to
+     * weak.
+     */
+    #[Decision('D-GUI-031')]
+    #[Test]
+    public function translationBesideRecordLocalizationIsNoLabelWork(): void
+    {
+        $brief = static fn(string $task, array $paths): array => Registry::call('typo3_task_guide', [
+            'task' => $task,
+            'changeType' => 'triage',
+            'paths' => $paths,
+        ])->data;
+
+        $records = $brief('List stale open issues about Extbase and translation/localization', ['typo3/sysext/extbase']);
+        self::assertNotContains('xliff', $records['domains']);
+        self::assertNotContains('labels', array_column($records['intents'], 'id'));
+        self::assertNotContains('CI=true ./Build/Scripts/runTests.sh -s checkIntegrityXliff', $records['checks']);
+
+        $intents = static fn(array $data): array => array_column($data['intents'], 'confidence', 'id');
+        self::assertSame('weak', $intents($brief('Fix a translation in ext:extbase', ['typo3/sysext/extbase']))['labels'] ?? null);
+        self::assertSame('strong', $intents($brief(
+            'Fix a translation in ext:extbase',
+            ['typo3/sysext/extbase/Resources/Private/Language/locallang.xlf'],
+        ))['labels'] ?? null);
+        self::assertContains('xliff', $brief('Reword the label translation of the overlay button', [])['domains']);
+    }
+
+    /**
      * Every item of a weak intent stands behind its condition. An intent that
      * can come back weak and states none put an item behind a bare colon
      * (`D-GUI-028`).

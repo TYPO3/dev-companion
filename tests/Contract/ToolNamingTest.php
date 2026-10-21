@@ -116,6 +116,49 @@ final class ToolNamingTest extends TestCase
     }
 
     /**
+     * An argument written beside a tool name is one that tool takes.
+     *
+     * The rename of `open` to `backlog` reached every schema and missed four
+     * call recipes in the knowledge base. A session then read
+     * `open="stale"` off a brief and got a rejection — `D-ANS-137`. A
+     * recipe is the tool name and the `name=` pairs after it, up to the next
+     * tool name or the end of the clause. A `name=` inside backticks is a value
+     * the recipe quotes, such as TCA's `type=flex`.
+     */
+    #[Decision('D-ANS-137')]
+    #[Test]
+    public function everyArgumentWrittenBesideAToolIsOneItTakes(): void
+    {
+        $taken = [];
+        foreach (Registry::definitions() as $definition) {
+            $taken[$definition['name']] = array_keys((array) ($definition['inputSchema']['properties'] ?? []));
+        }
+
+        $unknown = [];
+        foreach ([...$this->knowledgeFiles(), ...$this->skillFiles(), ...$this->recordFiles()] as $file) {
+            // A drawing writes `x=` and `fill=` beside the tool names it labels.
+            if (!preg_match('/\.(md|rst|json)$/', $file)) {
+                continue;
+            }
+            $text = str_replace('\\"', '"', (string) file_get_contents($file));
+            preg_match_all('/\b(typo3_[a-z_]+)\b(.*?)(?=typo3_[a-z]|[.;:]\s|\n\n|$)/s', $text, $recipes, PREG_SET_ORDER);
+            foreach ($recipes as [, $tool, $rest]) {
+                if (!isset($taken[$tool])) {
+                    continue;
+                }
+                preg_match_all('/(?<![\w.\/`-])([a-z][A-Za-z]*)=(?=["\'<\d\[`a-z*])/', $rest, $arguments);
+                foreach ($arguments[1] as $argument) {
+                    if (!in_array($argument, $taken[$tool], true)) {
+                        $unknown[] = basename($file) . ': ' . $tool . ' ' . $argument;
+                    }
+                }
+            }
+        }
+
+        self::assertSame([], array_values(array_unique($unknown)), 'written as an argument of a tool that does not take it');
+    }
+
+    /**
      * A decision names a tool in backticks, or names no tool.
      *
      * The corpus went stale with nobody to watch it, while this file read the

@@ -113,7 +113,7 @@ final class TaskIntents
      */
     public static function detect(string $text, array $stated = []): array
     {
-        $haystack = mb_strtolower($text);
+        $haystack = Domains::withoutRecordTranslation(mb_strtolower($text));
         $detected = [];
 
         foreach (self::load() as $intent) {

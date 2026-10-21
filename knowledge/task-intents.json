@@ -170,6 +170,10 @@
       "label",
       "wording"
     ],
+    "paths": [
+      "Resources/Private/Language/",
+      ".xlf"
+    ],
     "condition": "only if the change adds, edits, or retires an XLF trans-unit",
     "rulesQuery": "",
     "checklist": [
@@ -591,7 +595,7 @@
     ],
     "checks": [],
     "tools": [
-      "typo3_forge_lookup with open=\"oldest\" or open=\"stale\" to find candidates, then issue=<number> to read one whole; notes=\"people\" drops the patch-set pings when reading many",
+      "typo3_forge_lookup with backlog=\"oldest\" or backlog=\"stale\" to find candidates, then issue=<number> to read one whole; notes=\"people\" drops the patch-set pings when reading many",
       "typo3_gerrit_lookup for the changes the issue answer's reviews field names, which is where an abandoned attempt says why",
       "typo3_gerrit_lookup with commit=<hash> where the checkout has already produced one, for the change it belongs to, the backports sharing its Change-Id and the branches its Releases: trailer claims — which is what an issue is closed as fixed on"
     ]

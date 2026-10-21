@@ -4,6 +4,7 @@ A caller acts on a draft, so what it leaves out has to be visible in it. These a
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-GUI-031`][D-GUI-031] — Translation beside record localization is no label work · 2026-10-21
 - [`D-GUI-029`][D-GUI-029] — A commit body is the decision in one or two sentences · 2026-10-15
 - [`D-GUI-030`][D-GUI-030] — A request for a new issue reaches the issue report guide in loose words · 2026-10-15
 - [`D-GUI-028`][D-GUI-028] — A word match is held to the paths its work touches · 2026-10-05
@@ -34,6 +35,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-GUI-008`][D-GUI-008] — Operating an installation is a change type of its own · 2026-08-03
 - [`D-GUI-001`][D-GUI-001] — A missing release target becomes a placeholder, not `main` · 2026-07-29
 
+[D-GUI-031]: gui-031-translation-beside-record-localization-is-no-label-work.md
 [D-GUI-029]: gui-029-a-commit-body-is-the-decision-in-one-or-two-sentences.md
 [D-GUI-030]: gui-030-a-request-for-a-new-issue-reaches-the-issue-report-guide-in-loose-words.md
 [D-GUI-028]: gui-028-a-word-match-is-held-to-the-paths-its-work-touches.md

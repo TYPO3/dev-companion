@@ -137,3 +137,8 @@ and dropped them. A breakdown whose set is complete and fits a page of 50 now
 carries its rows beside the counts. The description of `involving` promised a
 side per row that no field carried. It now says that `reportedBy` and
 `assignedTo` carry the side.
+
+[`feedback/2026-10-21-154706-breakdown`](../../feedback/archive/2026-10-21-154706-breakdown-with-fuzzy-category-found-the-hidden.md)
+reports the breakdown as a strength. `category="extbase"` reached "Extbase +
+l10n" too and said so in `categoriesUsed`, an area the session did not know.
+`complete: true` over 110 told it in one call that a page of 50 was not the set.

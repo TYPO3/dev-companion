@@ -324,6 +324,9 @@ still is and why you kept it on purpose. Where you carried the patch, say that
 you deleted the branch you carried it on. "Restored" without those is the claim
 rather than the result.
 
+End the answer with the steps of the base order you did not reach, one line
+each: `Not reached: <step> — <what stood in for it>`.
+
 This skill owns how a change under review gets into a checkout and back out of
 it. What that covers, in order:
 

@@ -988,6 +988,17 @@ final class SkillTest extends TestCase
         // met one of them had no reason to look for the other.
         self::assertSame(1, substr_count($base, 'names every step of this order it did not reach'));
         self::assertStringNotContainsString('under either exemption', $base);
+
+        // Two sessions read that sentence and reported no skipped step, one of
+        // them because the base is long. So the skills whose report they wrote
+        // carry the form at the place the report is written.
+        foreach (['typo3-core-issue-triage', 'typo3-core-patch-checkout'] as $skill) {
+            self::assertStringContainsString(
+                '`Not reached: <step> — <what stood in for it>`',
+                self::flat((string) file_get_contents(Paths::root() . '/skills/' . $skill . '/SKILL.md')),
+                $skill . ' writes a report and carries no form for the steps it did not reach',
+            );
+        }
     }
 
     /**

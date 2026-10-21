@@ -145,9 +145,11 @@ final class Documentation
 
     /**
      * The ViewHelpers a manual lists in `viewhelpers.json`, by the path of the
-     * page that documents each, per base — `D-ANS-178`.
+     * page that documents each, per base — `D-ANS-178`. A page can document
+     * several: `Global/Form/Select` carries the select, its option and its
+     * optgroup.
      *
-     * @var array<string, array<string, array<string, mixed>>>
+     * @var array<string, array<string, list<array<string, mixed>>>>
      */
     private static array $viewhelpers = [];
 
@@ -311,7 +313,7 @@ final class Documentation
             $anchor = (string) parse_url($url, PHP_URL_FRAGMENT);
             $base = self::base($candidate['document'], $targetVersion);
             $property = $candidate['role'] === 'std:confval' ? $this->property($base, $anchor) : null;
-            $viewhelper = $candidate['role'] === self::PAGE && $anchor === '' ? $this->viewhelper($base, $url) : null;
+            $viewhelper = $candidate['role'] === self::PAGE && $anchor === '' ? $this->viewhelper($base, $url, $queries) : null;
             $page = match (true) {
                 $property !== null, $viewhelper !== null => null,
                 $anchor === '' => $this->fetch($base, $url),
@@ -773,24 +775,38 @@ final class Documentation
      * such file or lists no ViewHelper on that page: the page is read then —
      * `D-ANS-178`.
      *
+     * Of several on one page, the one a query names, and otherwise the page's
+     * own, whose tag the others extend. The last of them answered for
+     * `f:form.select`, with the optgroup's arguments (`D-ANS-183`).
+     *
+     * @param list<string> $queries
      * @return array{excerpt: string, viewhelper: array{tag: string, class: string, xmlNamespace: ?string, arguments: list<array{name: string, type: ?string, required: bool, default: ?string}>}}|null
      */
-    private function viewhelper(string $base, string $url): ?array
+    private function viewhelper(string $base, string $url, array $queries): ?array
     {
         if (!isset(self::$viewhelpers[$base])) {
             $decoded = Fetch::decode($this->get($base . 'viewhelpers.json'));
             $listed = [];
             foreach (is_array($decoded) && is_array($decoded['viewhelpers'] ?? null) ? $decoded['viewhelpers'] : [] as $tag => $entry) {
                 if (is_array($entry) && is_string($entry['path'] ?? null) && is_string($entry['class'] ?? null)) {
-                    $listed[$entry['path'] . '.html'] = ['tag' => (string) $tag] + $entry;
+                    $listed[$entry['path'] . '.html'][] = ['tag' => (string) $tag] + $entry;
                 }
             }
             self::$viewhelpers[$base] = $listed;
         }
-        $entry = self::$viewhelpers[$base][substr($url, strlen($base))] ?? null;
-        if ($entry === null) {
+        $entries = self::$viewhelpers[$base][substr($url, strlen($base))] ?? [];
+        if ($entries === []) {
             return null;
         }
+        $named = array_map(static fn(string $query): string => mb_strtolower(trim($query)), $queries);
+        usort($entries, static fn(array $one, array $other): int => [
+            !in_array(mb_strtolower($one['tag']), $named, true),
+            strlen($one['tag']),
+        ] <=> [
+            !in_array(mb_strtolower($other['tag']), $named, true),
+            strlen($other['tag']),
+        ]);
+        $entry = $entries[0];
 
         $text = static fn(mixed $value): ?string => is_string($value) && trim($value) !== '' ? self::plain($value) : null;
         $arguments = [];

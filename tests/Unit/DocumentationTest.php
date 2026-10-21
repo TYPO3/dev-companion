@@ -613,6 +613,36 @@ final class DocumentationTest extends TestCase
     }
 
     /**
+     * One page documents the select, its option and its optgroup, and the
+     * file lists all three under the same path. The last of them answered for
+     * `f:form.select`, so a session read the optgroup's arguments as the
+     * select's (`D-ANS-183`).
+     */
+    #[Decision('D-ANS-183')]
+    #[Test]
+    public function aPageOfSeveralViewHelpersAnswersWithTheOneTheQueryNames(): void
+    {
+        $manuals = $this->manuals();
+        $listed = static fn(string $class, string $argument): array => [
+            'class' => 'TYPO3\\CMS\\Fluid\\ViewHelpers\\Form\\' . $class,
+            'arguments' => [$argument => ['type' => 'string', 'required' => false]],
+            'path' => 'Global/Form/Select',
+        ];
+        $documentation = new Documentation(static fn(string $url): ?string => str_ends_with($url, '/view-helper-reference/14.3/en-us/viewhelpers.json')
+            ? (string) json_encode(['viewhelpers' => [
+                'f:form.select' => $listed('SelectViewHelper', 'multiple'),
+                'f:form.select.option' => $listed('Select\\OptionViewHelper', 'selected'),
+                'f:form.select.optgroup' => $listed('Select\\OptgroupViewHelper', 'label'),
+            ]])
+            : $manuals($url));
+
+        $select = $documentation->lookup(['f:form.select'], '14.3', 1)['results'][0];
+
+        self::assertSame('f:form.select', $select['viewhelper']['tag']);
+        self::assertSame(['multiple'], array_column($select['viewhelper']['arguments'], 'name'));
+    }
+
+    /**
      * TYPO3 Explained declares the classes, the methods and the console
      * commands it documents, with the anchor of the section that does. So a
      * query that names one reaches that section the way it reaches a property.
@@ -999,6 +1029,7 @@ final class DocumentationTest extends TestCase
                 'Global/Then.html' => 'Then ViewHelper <f:then>',
                 'Global/Else.html' => 'Else ViewHelper <f:else>',
                 'Global/Translate.html' => 'Translate ViewHelper <f:translate>',
+                'Global/Form/Select.html' => 'Form.select ViewHelper <f:form.select>',
             ],
         ];
 

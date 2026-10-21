@@ -94,6 +94,9 @@ final class ChangelogLookupTest extends TestCase
         self::assertStringContainsString('7.1/Deprecation-46770-', (string) $result->data['entries'][1]['file']);
         self::assertSame('body', $result->data['matchedIn']);
         self::assertStringContainsString('not the same as being about it', $result->text);
+        // What a class went through is its file's history, which a session
+        // found only after it left the answer for git log (`D-ANS-042`).
+        self::assertStringContainsString('typo3_gerrit_lookup with its path', $result->text);
     }
 
     #[Decision('D-ANS-042')]

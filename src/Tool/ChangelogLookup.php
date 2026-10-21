@@ -478,7 +478,9 @@ final class ChangelogLookup extends ReadOnlyTool
         if ($read) {
             $lines[] = 'No entry is named after that, so these are the ones carrying it inside the file — in the '
                 . 'title as it is stated, or as an identifier their text writes. Naming it is not the same as '
-                . 'being about it: the title says what each one changed.';
+                . 'being about it: the title says what each one changed. What happened to one class since is '
+                . 'the history of its file: typo3_gerrit_lookup with its path answers every change that touched it, '
+                . 'and a casual bugfix or a task among them owes no changelog entry.';
         }
         $only = self::oneSystemExtension($entries, $query);
         if ($only !== null) {

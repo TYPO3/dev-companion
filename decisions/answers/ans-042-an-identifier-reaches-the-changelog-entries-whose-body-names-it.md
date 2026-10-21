@@ -92,3 +92,15 @@ is the half of `D-ANS-030` the title alone does not answer.
   `output`, and reaches nothing. The index carries no word without a hump.
 - A caller reads a body match as an entry about the identifier, although the
   sentence beside it says that it is not.
+
+## Since then
+
+The first **Wrong if** fired on 2026-10-21, and the sentence beside the match
+held.
+[`feedback/2026-10-21-153139-class-name-query`](../../feedback/archive/2026-10-21-153139-class-name-query-returns-one-unrelated-strict.md)
+asked for `ObjectStorageConverter` and got Important-87603, which lists the
+class among many. The session read it as a mention and not as a rework. What it
+lacked was the next step, and it read the file's history with git log. A body
+match now names `typo3_gerrit_lookup` with the class's path. No mark for an
+identifier inside a long list: the sentence already says that a mention is not
+a change.

@@ -51,3 +51,15 @@ them, and each already has one:
 `KnowledgeTest::aSuiteThatAsksGitForItsFilesNamesWhereItDoesNotHold`,
 `KnowledgeTest::aSuiteThatWaitsForAKeypressSaysItNeedsATerminal` and
 `CommitMessageTest::aMaintainedLineFurtherBackSaysWhatItClaims`.
+
+## Since then
+
+A third core session, a fix of Forge #79571 pushed as change 96975 on
+2026-10-21, names eight answers that held
+([`feedback/2026-10-21-153139-what-worked`](../../feedback/archive/2026-10-21-153139-what-worked-triage-order-watch-it-fail-rule.md)).
+Three are the boundaries above: the `cglGit` warning, the changelog rule and the
+release rule. Five are new here. The backlog rows carried cites, the triage
+skill sent the session to the existing test and made it watch a red check fail,
+`typo3_gerrit_lookup` by path found two abandoned attempts, the commit message
+guide caught a long subject, and the review checklist found the precedent. The
+handovers between three skills fired as `D-SKL-022` says. Nothing changes.

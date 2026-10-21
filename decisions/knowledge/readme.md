@@ -5,6 +5,7 @@ Where a statement sits, what verifies it when the core cannot, and what a packag
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-KNW-168`][D-KNW-168] — The trusted properties are stated where a converter or a form field is written · 2026-10-21
+- [`D-KNW-169`][D-KNW-169] — The pre-commit hook reads the working directory and aborts on nothing · 2026-10-21
 - [`D-KNW-167`][D-KNW-167] — A core commit message may carry a sign-off and owes none · 2026-10-07
 - [`D-KNW-161`][D-KNW-161] — Every agent trailer comes off a core draft · 2026-10-05
 - [`D-KNW-162`][D-KNW-162] — The e2e suite passes a spec through where the script does · 2026-10-05
@@ -164,6 +165,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
 [D-KNW-168]: knw-168-the-trusted-properties-are-stated-where-a-converter-or-a-form-field-is-written.md
+[D-KNW-169]: knw-169-the-pre-commit-hook-reads-the-working-directory-and-aborts-on-nothing.md
 [D-KNW-167]: knw-167-a-core-commit-message-may-carry-a-sign-off-and-owes-none.md
 [D-KNW-161]: knw-161-every-agent-trailer-comes-off-a-core-draft.md
 [D-KNW-162]: knw-162-the-e2e-suite-passes-a-spec-through-where-the-script-does.md

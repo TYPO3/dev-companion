@@ -227,16 +227,17 @@ CI=true ./Build/Scripts/runTests.sh -s composerInstall
 ## The Pre-Commit Hook
 
 This is the git hooks side. It says what runs on `git commit` before git creates
-the commit and what it checks. It names the one error it reports that is not
-true. `composer gerrit:setup` installs both hooks, the commit-message one that
-adds the Change-Id and this one.
+the commit and what it checks. It names the two errors it reports that are not
+about the commit. `composer gerrit:setup` installs both hooks, the
+commit-message one that adds the Change-Id and this one.
 
-The repository's own pre-commit hook runs the same two scripts. It runs them on
-the host rather than in a container. `Build/git-hooks/unix+mac/pre-commit` calls
-`cglFixMyCommit.sh` and `cglFixMyCommitFileHeader.sh` directly, and they resolve
-`php` off the `PATH`. So on a checkout whose declared PHP is newer than the
-host's, the second script dies in `vendor/composer/platform_check.php`. It exits
-non-zero. The hook then reports what a non-zero exit means to it:
+The repository's own pre-commit hook runs the same two scripts and a third. It
+runs them on the host rather than in a container.
+`Build/git-hooks/unix+mac/pre-commit` calls `cglFixMyCommit.sh` and
+`cglFixMyCommitFileHeader.sh` directly, and they resolve `php` off the `PATH`.
+So on a checkout whose declared PHP is newer than the host's, the second script
+dies in `vendor/composer/platform_check.php`. It exits non-zero. The hook then
+reports what a non-zero exit means to it:
 
 ```text
 >> ERROR: There was a missing or wrong php file header in one or more
@@ -247,11 +248,25 @@ non-zero. The hook then reports what a non-zero exit means to it:
 The hook prints that message for every failure of that script, whatever the
 cause. So here it is false: the script never got as far as a file.
 
-Git creates the commit anyway, because the hook aborts only when
-`TYPO3_GIT_HOOK_ABORT_ON_ERROR` is `yes`. Do not amend on the strength of it.
-The suite that runs the same config as the script that failed settles whether
-there is a real finding. For this message that is `-s cglHeader` rather than
+Git creates the commit anyway. The hook means to abort where
+`TYPO3_GIT_HOOK_ABORT_ON_ERROR` is `yes`, and its test of that variable is the
+wrong way round. Set or unset, the hook aborts on nothing. Do not amend on the
+strength of it. The suite that runs the same config as the script that failed
+settles whether there is a real finding. For this message that is `-s cglHeader`
+rather than
 `-s cglGit`.
+
+The third script is `spacesInPathsAndFilenames.sh`. It runs `find . -name "* *"`
+over the working directory, so it reads the file system rather than the commit.
+A git-ignored folder counts as much as a staged file. A Chromium profile below
+`.cache`, which carries `Crash Reports`, makes the hook print this:
+
+```text
+>> ERROR: There are spaces in file or path names.
+```
+
+That is about the folder and not about the commit. A fresh clone carries no
+ignored folder, so CI never sees it.
 
 `-s cgl` settles the coding-guideline message the hook prints for the other
 script. Both suites run in the container on the PHP the branch asks for, and

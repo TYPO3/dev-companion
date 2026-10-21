@@ -98,12 +98,18 @@
       "It is not allowed to map property",
       "object argument",
       "uri builder",
-      "argument is missing from the link"
+      "argument is missing from the link",
+      "trusted properties",
+      "trustedProperties",
+      "Classes/ViewHelpers/Form/",
+      "Classes/Property/TypeConverter/",
+      "type converter"
     ],
     "hints": [
       "A search form submitted by GET on a cacheable action answers with a page-not-found, and putting the action into the non-cacheable list does not fix it: the cache hash is validated by a middleware, long before Extbase knows which action was called. The plugin's arguments have to be excluded from the hash as well, in $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters']. A name there carries an indicator: ^ matches the beginning of a parameter name, ~ any part of it, and no indicator at all is an exact match — the one entry that covers a whole plugin is the prefix form. The hidden fields a Fluid form adds need the same treatment.",
       "An object argument maps nothing until its properties are allowed. A request that hands a controller an object other than a persisted entity fails with \"It is not allowed to map property\" until the matching initialize<Action>Action() calls allowProperties() on that argument's property mapping configuration. That is the secure default rather than a defect.",
-      "An object that is not persisted is dropped from a generated link without a word: the URI builder serialises an entity by its uid, and something built for the request has none — so the filter of a search is gone on page two while the link looks correct. Pass such state to a link as plain arguments."
+      "An object that is not persisted is dropped from a generated link without a word: the URI builder serialises an entity by its uid, and something built for the request has none — so the filter of a search is gone on page two while the link looks correct. Pass such state to a link as plain arguments.",
+      "A Fluid form field registers its name in the trusted properties, and a real request maps only what they hold. A name that ends in [] registers a list, so its indices may map; f:form.select with multiple registers it once per option. A name without [] registers a scalar: the property may map and no child of it may. So a type converter that builds children from a scalar source fails in a request with \"It is not allowed to map property\". A test that builds its own PropertyMappingConfiguration passes all the same, because it never reads the trusted properties."
     ]
   },
   {

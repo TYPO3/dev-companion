@@ -464,6 +464,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### knowledge
 
+- [`D-KNW-168`][D-KNW-168] — The trusted properties are stated where a converter or a form field is written · 2026-10-21
 - [`D-KNW-167`][D-KNW-167] — A core commit message may carry a sign-off and owes none · 2026-10-07
 - [`D-KNW-161`][D-KNW-161] — Every agent trailer comes off a core draft · 2026-10-05
 - [`D-KNW-162`][D-KNW-162] — The e2e suite passes a spec through where the script does · 2026-10-05
@@ -622,6 +623,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-028`][D-KNW-028] — How a file becomes a processed one is a subject this server owns · 2026-08-02
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
+[D-KNW-168]: knowledge/knw-168-the-trusted-properties-are-stated-where-a-converter-or-a-form-field-is-written.md
 [D-KNW-167]: knowledge/knw-167-a-core-commit-message-may-carry-a-sign-off-and-owes-none.md
 [D-KNW-161]: knowledge/knw-161-every-agent-trailer-comes-off-a-core-draft.md
 [D-KNW-162]: knowledge/knw-162-the-e2e-suite-passes-a-spec-through-where-the-script-does.md

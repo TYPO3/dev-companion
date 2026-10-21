@@ -7724,6 +7724,29 @@ final class HintsTest extends TestCase
      * away, and a path outside the language files holds the label intent to
      * weak.
      */
+    /**
+     * A converter and a form ViewHelper decide together what a request maps,
+     * and the trusted properties stand between them. A fix in the converter
+     * failed in a real request and passed in its test; the hint that says why
+     * reached neither path. The ViewHelper path also reached the FormEngine
+     * hint through `/Form/` (`D-KNW-168`).
+     */
+    #[Decision('D-KNW-168')]
+    #[Test]
+    public function aConverterAndAFormViewHelperReachTheTrustedProperties(): void
+    {
+        $hints = static fn(array $paths): array => array_column(Registry::call('typo3_hint_lookup', [
+            'paths' => $paths,
+            'task' => 'a single select bound to an ObjectStorage',
+        ])->data['hints'], 'id');
+
+        self::assertContains('extbase-arguments', $hints(['typo3/sysext/extbase/Classes/Property/TypeConverter/ObjectStorageConverter.php']));
+        $viewHelper = $hints(['typo3/sysext/fluid/Classes/ViewHelpers/Form/SelectViewHelper.php']);
+        self::assertContains('extbase-arguments', $viewHelper);
+        self::assertNotContains('tca-formengine', $viewHelper);
+        self::assertContains('tca-formengine', $hints(['typo3/sysext/backend/Classes/Form/Element/InputTextElement.php']));
+    }
+
     #[Decision('D-GUI-031')]
     #[Test]
     public function translationBesideRecordLocalizationIsNoLabelWork(): void

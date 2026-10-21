@@ -58,3 +58,11 @@ the second as the thing it read past.
   the size the cost rather than the price of the recovery.
 - What has to arrive, moved beside the hit, leaves the hit itself unread, and
   the answer ends up with two surfaces nobody finishes.
+
+## Since then
+
+[`feedback/2026-10-21-153139-path-query-for-a-fluid-viewhelper`](../../feedback/archive/2026-10-21-153139-path-query-for-a-fluid-viewhelper-returns.md)
+measured the index at about 140 entries, most of the answer's size, and asked
+for it on request or by category. It reports the size and not a read that
+stopped at the index, so the first **Wrong if** did not fire. The maintainer
+kept the index whole on 2026-10-21.

@@ -1,11 +1,22 @@
 ---
 serves: [requirements/]
 every: 7 days
-checked: 2026-10-11
+checked: 2026-10-22
 run: [composer outdated mcp/sdk]
 ---
 
 # Check whether `mcp/sdk` has released a newer version
+
+`v0.9.0` shipped on 2026-10-18, and `^0.8.0` keeps it out. Tried on 2026-10-22
+in a throwaway worktree. With the raise alone, `composer stan` fails on one
+line: `Server\StdioTransport::handleMessage()` lacks the new `$accessToken`
+parameter. The release serves both eras over stdio in the SDK's own
+`StdioTransport`, with php-sdk#537 closed for #546, #547 and #550. With our
+class gone, one test fails:
+`StdioServerTest::aClientOpeningWithServerDiscoverIsServedTheModernRevision`.
+The SDK answers a notification that arrives before the first request with
+`-32600` and no `id`, and JSON-RPC answers no notification. The raise waits on
+the maintainer's choice between a fix upstream and an override of that one case.
 
 Take a patch or minor release on its own merit. `v0.8.1` shipped on 2026-08-29
 and is what `composer.lock` holds; it carries two server fixes and moves no

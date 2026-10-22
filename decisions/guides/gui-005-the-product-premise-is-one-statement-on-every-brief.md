@@ -117,5 +117,7 @@ item about content delivery that did not apply
 ([`feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper`](../../feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper-fix-carry-e2e.md)).
 That is the design reported as a cost, step 5 of the ladder. No **Wrong if**
 above names it. The premise is first on every brief, so it also stands first
-where nothing is delivered from a cache. Whether it stays on every brief, gets a
-condition, or gets a wording about the outcome alone is the maintainer's answer.
+where nothing is delivered from a cache. The maintainer chose on 2026-10-22 to
+keep it first on every brief and to word it as the outcome alone. The stale
+version stays the example in the evidence above, and the constant names no
+mechanism.

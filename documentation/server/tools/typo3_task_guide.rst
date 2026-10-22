@@ -443,7 +443,7 @@ Text:
     Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
 
     Suggested checklist:
-    - Content changes, so what is delivered has to be the version that is current after the change — that is what the editor and the visitor are owed. A defect is judged by that outcome: the old version still being served is the defect, and the error it eventually throws is the symptom.
+    - A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.
     - Confirm the target TYPO3 core branch and issue context.
     - Inspect nearby code, tests, and established subsystem conventions.
     - Sweep the deprecations before writing: typo3_changelog_lookup with type "deprecation" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.
@@ -835,7 +835,7 @@ Data:
         ],
         "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
         "checklist": [
-            "Content changes, so what is delivered has to be the version that is current after the change — that is what the editor and the visitor are owed. A defect is judged by that outcome: the old version still being served is the defect, and the error it eventually throws is the symptom.",
+            "A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.",
             "Confirm the target TYPO3 core branch and issue context.",
             "Inspect nearby code, tests, and established subsystem conventions.",
             "Sweep the deprecations before writing: typo3_changelog_lookup with type \"deprecation\" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.",
@@ -992,7 +992,7 @@ Text:
     Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.
 
     Suggested checklist:
-    - Content changes, so what is delivered has to be the version that is current after the change — that is what the editor and the visitor are owed. A defect is judged by that outcome: the old version still being served is the defect, and the error it eventually throws is the symptom.
+    - A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.
     - Confirm the target TYPO3 core branch and issue context.
     - Inspect nearby code, tests, and established subsystem conventions.
     - Sweep the deprecations before writing: typo3_changelog_lookup with type "deprecation" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.
@@ -1232,7 +1232,7 @@ Data:
         ],
         "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
         "checklist": [
-            "Content changes, so what is delivered has to be the version that is current after the change — that is what the editor and the visitor are owed. A defect is judged by that outcome: the old version still being served is the defect, and the error it eventually throws is the symptom.",
+            "A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.",
             "Confirm the target TYPO3 core branch and issue context.",
             "Inspect nearby code, tests, and established subsystem conventions.",
             "Sweep the deprecations before writing: typo3_changelog_lookup with type \"deprecation\" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.",
@@ -1390,7 +1390,7 @@ Text:
     Use when a deprecation or breaking change adds extension scanner matchers.
 
     Suggested checklist:
-    - Content changes, so what is delivered has to be the version that is current after the change — that is what the editor and the visitor are owed. A defect is judged by that outcome: the old version still being served is the defect, and the error it eventually throws is the symptom.
+    - A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.
     - Confirm the target TYPO3 core branch and issue context.
     - Inspect nearby code, tests, and established subsystem conventions.
     - Sweep the deprecations before writing: typo3_changelog_lookup with type "deprecation" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.
@@ -1659,7 +1659,7 @@ Data:
         ],
         "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
         "checklist": [
-            "Content changes, so what is delivered has to be the version that is current after the change — that is what the editor and the visitor are owed. A defect is judged by that outcome: the old version still being served is the defect, and the error it eventually throws is the symptom.",
+            "A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.",
             "Confirm the target TYPO3 core branch and issue context.",
             "Inspect nearby code, tests, and established subsystem conventions.",
             "Sweep the deprecations before writing: typo3_changelog_lookup with type \"deprecation\" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.",

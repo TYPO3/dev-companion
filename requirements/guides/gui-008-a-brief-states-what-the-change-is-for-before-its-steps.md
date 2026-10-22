@@ -9,8 +9,8 @@ heldBy:
 
 # R-GUI-008 — A brief states what the change is for before its steps
 
-**Every task brief opens on the premise: content changes, so the site has to
-deliver the current version, and that outcome judges a defect.**
+**Every task brief opens on the premise: a change is judged by what the editor
+and the visitor get once it is in place.**
 
 The steps under it are all about the code, and what the change does to the
 editor and the visitor decides which of them matter. A brief that starts at

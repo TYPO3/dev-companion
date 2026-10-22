@@ -28,10 +28,9 @@ use TYPO3\DevCompanion\Server\Installer;
 final class TaskGuide extends ReadOnlyTool
 {
     /** The premise under every checklist below, stated once (R-GUI-008). */
-    public const PRODUCT_PREMISE = 'Content changes, so what is delivered has to be the version that is '
-        . 'current after the change — that is what the editor and the visitor are owed. A defect is judged by '
-        . 'that outcome: the old version still being served is the defect, and the error it eventually throws '
-        . 'is the symptom.';
+    public const PRODUCT_PREMISE = 'A change is judged by what the editor and the visitor get once it is in '
+        . 'place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the '
+        . 'error it throws is the symptom.';
 
     /**
      * How many hints a brief carries for one group of paths.

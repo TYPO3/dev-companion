@@ -118,3 +118,14 @@ deprecation of that major for about half the characters. Tags dense enough to
 bound a sweep with is also what makes a sweep composed of them converge on the
 major. The statement stands — the axes are the changelog's own — and what
 changes is the third, which `D-ANS-093` decides.
+
+## Since then
+
+A core review on 2026-10-22 ran the sweep as one call: `type: deprecation`,
+`version: 15`, no query, `limit: 200`
+([`feedback/2026-10-22-105711-the-v15-deprecation-sweep`](../../feedback/archive/2026-10-22-105711-the-v15-deprecation-sweep-reframed-a-reviewer.md)).
+Of 17 entries, Deprecation #110347 on `LazyLoadingProxy` and `LazyObjectStorage`
+moved a reviewer's finding from main to the 14.3 backport. The entry is in
+`.checkouts/main` and not in 14.3. Nothing in the diff named it, so no query
+would have reached it. That is the axes on the side that answered, and nothing
+changes.

@@ -7,36 +7,21 @@ run: [composer outdated mcp/sdk]
 
 # Check whether `mcp/sdk` has released a newer version
 
-`v0.9.0` shipped on 2026-10-18, and `^0.8.0` keeps it out. Tried on 2026-10-22
-in a throwaway worktree. With the raise alone, `composer stan` fails on one
-line: `Server\StdioTransport::handleMessage()` lacks the new `$accessToken`
-parameter. The release serves both eras over stdio in the SDK's own
-`StdioTransport`, with php-sdk#537 closed for #546, #547 and #550. With our
-class gone, one test fails:
-`StdioServerTest::aClientOpeningWithServerDiscoverIsServedTheModernRevision`.
-The SDK answers a notification that arrives before the first request with
-`-32600` and no `id`, and JSON-RPC answers no notification. The raise waits on
-the maintainer's choice between a fix upstream and an override of that one case.
+Take a patch or minor release on its own merit. `v0.9.0` shipped on 2026-10-18
+and is what `composer.lock` holds since 2026-10-22. It serves both protocol eras
+over stdio in the SDK's own `StdioTransport`. `Server\StdioTransport` is left
+with one override: it drops a notification that arrives before the session,
+which the SDK answers with an error without id (`D-ANS-184`).
 
-Take a patch or minor release on its own merit. `v0.8.1` shipped on 2026-08-29
-and is what `composer.lock` holds; it carries two server fixes and moves no
-revision. The line it sits on is `v0.8.0`. That brought the `2026-07-28`
-specification, the protocol version negotiation this todo watched for (PR #403),
-and the extensions framework MCP Apps sits on. What that left where it was is
-the revision this server speaks. `2026-07-28` replaced `initialize` with
-per-request metadata and `server/discover`, which the SDK serves from
-`StreamableHttpTransport` alone. `Server\StdioTransport` connects that
-dispatcher over stdio itself since 2026-10-07 (`D-ANS-175`). The release to
-watch for now is one that carries php-sdk#537, which retires that class. One
-that adds a handshake revision above `2025-11-25` moves `PROTOCOL_VERSION` in
-`tests/Smoke/StdioServerTest.php`. Watch for a third: one that answers a request
-before `initialize` with the request's own id. On `v0.8.1`
-`Server\Protocol::resolveSession()` answers it with `-32600` and no `id`, read
-on 2026-09-17. A fourth is smaller: `Server\Protocol::doProcessInput()` answers
-an unknown method with `-32600`, where JSON-RPC defines `-32601`, read on
-2026-09-19. `D-DIS-006` rests on the same release notes with no undeprecated way
-for a client to state where the session is. Read them for that too. It serves no
-single requirement because it serves the precondition of all of them. Every
-answer this server gives travels over the protocol version the SDK speaks. On
-the day a client stops to offer that version, every requirement fails at once
-and not one of them says so.
+Watch for four things. A release that stops answering such a notification
+retires the override, and `Entrypoint` takes the SDK's transport. One that adds
+a handshake revision above `2025-11-25` moves `PROTOCOL_VERSION` in
+`tests/Smoke/StdioServerTest.php`. `Server\Protocol::doProcessInput()` answers
+an unknown method with `-32600`, where JSON-RPC defines `-32601`, read again on
+2026-10-22. `D-DIS-006` rests on the release notes with no undeprecated way for
+a client to state where the session is. Read them for that too.
+
+It serves no single requirement because it serves the precondition of all of
+them. Every answer this server gives travels over the protocol version the SDK
+speaks. On the day a client stops to offer that version, every requirement fails
+at once and not one of them says so.

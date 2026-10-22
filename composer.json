@@ -15,7 +15,7 @@
         "ext-mbstring": "*",
         "ext-simplexml": "*",
         "ext-tokenizer": "*",
-        "mcp/sdk": "^0.8.0",
+        "mcp/sdk": "^0.9.0",
         "symfony/finder": "^7.4",
         "symfony/yaml": "^7.4"
     },

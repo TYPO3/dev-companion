@@ -77,10 +77,7 @@ final class Factory
                 self::SERVER_TITLE,
             )
             ->setInstructions(Coverage::instructions($notice))
-            ->setCapabilities(self::capabilities())
-            // The one transport is stdio, which carries the request metadata
-            // in `_meta` and has no header to check it against.
-            ->setHeaderValidator(false);
+            ->setCapabilities(self::capabilities());
 
         foreach (Registry::definitions() as $definition) {
             // The two schemas as the SDK spells them. A tool declares them as

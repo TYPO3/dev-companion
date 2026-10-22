@@ -73,3 +73,10 @@ a host that reads the extension there found no skills.
   the release answers a notification with an error.
 - A host reads the skills from `server/discover` and lists none. Then something
   between the dispatcher and the host drops the extension.
+
+## Since then
+
+The first **Wrong if** fired on 2026-10-22. mcp/sdk v0.9.0 serves both eras over
+stdio, and the server runs it. The class shrank to one override, and the header
+switch in `Factory` is gone. The test named there showed the error without id,
+as predicted. `D-ANS-184` records the override.

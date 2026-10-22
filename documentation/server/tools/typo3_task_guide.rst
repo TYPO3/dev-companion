@@ -796,7 +796,7 @@ Data:
                 "body": "- A deprecation must not use `[!!!]`.\n- A deprecation may only use `[TASK]` or `[FEATURE]`.\n- A deprecation must have a changelog RST file.\n- A deprecation needs migration guidance and may need extension scanner\n  considerations.\n- All of the above is the author's side. The reader's side works the other way\n  round. It asks what a given version deprecated, and what that means for code\n  that uses it. The Extension Scanner in the Install Tool checks an installation\n  against two directories. Those are the changelog files below\n  `Documentation/Changelog/` of the core package, and the matchers below the\n  install package's `Configuration/ExtensionScanner/Php/`. Both ship with a\n  Composer installation.",
                 "versions": "",
                 "coverage": 1,
-                "score": 68,
+                "score": 69,
                 "truncated": false
             },
             {

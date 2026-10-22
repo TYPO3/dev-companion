@@ -1,8 +1,8 @@
 ---
 description: >-
-  How a core patch reaches review: the one-time git setup, how you fetch a patch set into the checkout, carry one onto current code, push, amend a patch set, open one on somebody else's change, and backport.
+  How a core patch reaches review: the one-time git setup, how you fetch a patch set into the checkout, carry one onto current code, push, amend a patch set, answer a review comment, open one on somebody else's change, and backport.
 whenToUse: >-
-  When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, or when you have to change a patch already under review — your own or another author's.
+  When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.
 hints: []
 ---
 
@@ -244,6 +244,73 @@ git push origin HEAD:refs/for/main
   so an amend is safe.
 - Before you amend, fetch the current patch set when it is not already the local
   commit. The fetch section says which ref that is and where you fetch it from.
+
+## Answer a Review Comment
+
+A reply goes into the thread of the comment it answers. Its `unresolved` flag
+keeps that thread open or resolves it. A reply is publication, like a push. Post
+it when the user asks for it.
+
+`typo3_gerrit_lookup` with the change number lists every comment with what a
+reply needs. That is its `id`, `patchSet`, `file` and `line`. The thread state
+is `threadUnresolved`.
+
+Write the reply as a `ReviewInput` in a file. `comments` maps a file path to a
+list of replies:
+
+```json
+{
+  "comments": {
+    "typo3/sysext/fluid/Classes/ViewHelpers/Form/SelectViewHelper.php": [
+      {
+        "in_reply_to": "0be009c7_c1375263",
+        "line": 68,
+        "message": "Agreed. Patch set 2 rewords the commit message.",
+        "unresolved": true
+      }
+    ]
+  }
+}
+```
+
+Post it over ssh, with the patch set the answered comment is on:
+
+```bash
+ssh -p 29418 <username>@review.typo3.org gerrit review --json 96975,1 < reply.json
+```
+
+- `in_reply_to` takes the `id` of the comment you answer. Without it, the reply
+  opens a thread of its own.
+- The path and the `line` are the ones of the answered comment. Without a
+  `line`, Gerrit files the reply as a comment on the whole file.
+- A comment on the change rather than on a file sits under the path
+  `/PATCHSET_LEVEL`. It has no line.
+- Post on the patch set the answered comment carries, which is `patchSet` in the
+  lookup. A line number belongs to one patch set. The same number on a later one
+  can be other code.
+- `unresolved` decides the thread. `true` keeps it open, and `false` resolves
+  it. Left out, the reply takes the value of the comment it answers. So a reply
+  without the field leaves an open thread open. Set it anyway, so the file says
+  what the reply does.
+- `--json` reads the input from stdin. It does not combine with `--message`,
+  `--submit`, `--abandon`, `--restore`, `--rebase` or `--move`. A top-level
+  `message` in the JSON is the summary comment instead.
+
+The REST API takes the same input. It needs an HTTP token from the account
+settings page, and the `/a/` prefix on the path:
+
+```bash
+curl -u <username>:<token> -H 'Content-Type: application/json' \
+  --data @reply.json https://review.typo3.org/a/changes/96975/revisions/1/review
+```
+
+Then call `typo3_gerrit_lookup` again. Each reply comes back under the comment
+it answers, and `threadUnresolved` says the state of each thread.
+
+Measured on 2026-10-22 against review.typo3.org, which runs Gerrit 3.11.11. The
+ssh form above answered three threads on patch set 1 of change 96975. Each reply
+came back with its `in_reply_to`, the line of its parent and `unresolved` true.
+The field rules are those of Gerrit's `CommentInput` and `ReviewInput`.
 
 ## Open a Patch Set on Somebody Else's Change
 

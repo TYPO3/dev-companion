@@ -182,10 +182,10 @@ the third. Each did so against the narrower request. To carry on derives none of
 them again. A change that gains a second subsystem gains that subsystem's build,
 its checks and its backport constraint with it.
 
-The same holds where the fix moves to another system extension rather than
-grows into one. Run the deprecation sweep of the base order again, with the
-`ext:` tag of the extension the change touches now. A sweep for the first
-extension says nothing about what the second one deprecated.
+The same holds where the fix moves to another system extension rather than grows
+into one. Run the deprecation sweep of the base order again, with the `ext:` tag
+of the extension the change touches now. A sweep for the first extension says
+nothing about what the second one deprecated.
 
 Find out whether the area moves before you build on it. Fetch and rebase onto
 the branch you target before you finalise. A patch written against code that
@@ -312,6 +312,12 @@ that exists, amend it, and keep the identifier that links it to its review.
 Address a reviewer's comment in the patch or answer it in the review. Never drop
 one in silence. A comment nobody replied to is the reason a change sits
 unmerged.
+
+The answer is a reply in the comment's own thread, and it decides whether the
+thread stays open. The same page has it under "Answer a Review Comment". It
+gives the reply's input, the patch set to post it on and how the lookup confirms
+it. Post a reply when the user asks for it, because a reply is publication like
+a push.
 
 Where the change is somebody else's, those steps hold and two more come with
 them. Ask the author before the patch set goes up. Say every decision you took

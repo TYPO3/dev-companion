@@ -4,6 +4,7 @@ Where a statement sits, what verifies it when the core cannot, and what a packag
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-KNW-170`][D-KNW-170] — A reply to a review thread is a section of the Gerrit workflow · 2026-10-22
 - [`D-KNW-168`][D-KNW-168] — The trusted properties are stated where a converter or a form field is written · 2026-10-21
 - [`D-KNW-169`][D-KNW-169] — The pre-commit hook reads the working directory and aborts on nothing · 2026-10-21
 - [`D-KNW-167`][D-KNW-167] — A core commit message may carry a sign-off and owes none · 2026-10-07
@@ -164,6 +165,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-028`][D-KNW-028] — How a file becomes a processed one is a subject this server owns · 2026-08-02
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
+[D-KNW-170]: knw-170-a-reply-to-a-review-thread-is-a-section-of-the-gerrit-workflow.md
 [D-KNW-168]: knw-168-the-trusted-properties-are-stated-where-a-converter-or-a-form-field-is-written.md
 [D-KNW-169]: knw-169-the-pre-commit-hook-reads-the-working-directory-and-aborts-on-nothing.md
 [D-KNW-167]: knw-167-a-core-commit-message-may-carry-a-sign-off-and-owes-none.md

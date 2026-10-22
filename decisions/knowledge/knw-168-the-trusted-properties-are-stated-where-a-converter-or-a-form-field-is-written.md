@@ -16,9 +16,9 @@ map. It reaches the paths of a type converter and of a form ViewHelper.
 ## Evidence
 
 - [`feedback/2026-10-21-153139-no-hint-says-trusted-properties`](../../feedback/archive/2026-10-21-153139-no-hint-says-trusted-properties-decide-whether.md).
-  A fix for Forge #79571 changed `ObjectStorageConverter` to map a scalar to
-  one child. Its own test passed, and a real request failed with "It is not
-  allowed to map property". The brief for the converter path did not carry
+  A fix for Forge #79571 changed `ObjectStorageConverter` to map a scalar to one
+  child. Its own test passed, and a real request failed with "It is not allowed
+  to map property". The brief for the converter path did not carry
   `extbase-arguments`.
 - [`feedback/2026-10-21-153139-path-query-for-a-fluid-viewhelper`](../../feedback/archive/2026-10-21-153139-path-query-for-a-fluid-viewhelper-returns.md).
   `SelectViewHelper.php` reached `tca-formengine` and `content-element-shape`.
@@ -40,8 +40,8 @@ map. It reaches the paths of a type converter and of a form ViewHelper.
   error message.
 - `appliesTo` gains `Classes/ViewHelpers/Form/`,
   `Classes/Property/TypeConverter/`, "trusted properties" and "type converter".
-  `ObjectStorage` stays out, because a model task names it as often as a
-  request task does.
+  `ObjectStorage` stays out, because a model task names it as often as a request
+  task does.
 - `content-element-shape` keeps "collection". It is the word a content element
   task uses for repeatable items, and one report of a stray match is no
   threshold for the matcher.
@@ -54,3 +54,15 @@ map. It reaches the paths of a type converter and of a form ViewHelper.
   request still fails for a reason the trusted properties explain.
 - An extension's FormEngine element lives outside `Classes/Form/`, and its path
   no longer reaches `tca-formengine`.
+
+## Since then
+
+A session finished change 96975 on 2026-10-22 and got this hint for
+`SelectViewHelper.php`
+([`feedback/2026-10-22-105711-the-trusted-properties-hint`](../../feedback/archive/2026-10-22-105711-the-trusted-properties-hint-stopped-a-mapping.md)).
+It stopped a test that builds its own `PropertyMappingConfiguration` and could
+not fail. The session then found `BlogPostEditingControllerTest` in ext:extbase,
+which maps through real trusted properties. That file is on 13.4, 14.3 and main
+and not on 12.4. So a name in the hint would bind it, for what one search found.
+The hint stays, and the re-run brief for the same paths carries it. The test
+above holds the keep. The first **Wrong if** did not fire.

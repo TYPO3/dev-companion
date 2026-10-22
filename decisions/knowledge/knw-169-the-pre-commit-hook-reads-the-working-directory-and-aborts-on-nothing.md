@@ -29,8 +29,8 @@ aborts on nothing. "The Pre-Commit Hook" in `core/testing/scripts` says both.**
 ## Decided
 
 - The section gains the third script, its message and what it reads, and the
-  abort sentence is corrected. Both hold on every covered line, so neither has
-  a bound.
+  abort sentence is corrected. Both hold on every covered line, so neither has a
+  bound.
 - What CI sees is said from the script rather than from the pipeline. A fresh
   clone carries no ignored folder, which is all the sentence claims.
 
@@ -38,3 +38,14 @@ aborts on nothing. "The Pre-Commit Hook" in `core/testing/scripts` says both.**
 
 - A core branch fixes the abort test, and the section says the hook aborts on
   nothing while it aborts.
+
+## Since then
+
+A second session met the space check on 2026-10-22
+([`feedback/2026-10-22-105711-the-core-pre-commit-hook`](../../feedback/archive/2026-10-22-105711-the-core-pre-commit-hook-scans-gitignored.md)).
+It never called `typo3_script_lookup`, and the development skill named no hook.
+So the section reached nobody, step 2 of the ladder. The skill's commit step now
+names it. The section gains the walk's cost in that checkout, 19 s cold against
+0.4 s with `.worktrees/` pruned. What ran past 120 s is not established. It also
+gains the two git calls that tell an ignored path apart. And `--no-verify` skips
+the `commit-msg` hook, which the feedback's proposal left out.

@@ -268,6 +268,22 @@ A git-ignored folder counts as much as a staged file. A Chromium profile below
 That is about the folder and not about the commit. A fresh clone carries no
 ignored folder, so CI never sees it.
 
+The walk grows with the working directory and not with the commit. Measured on
+2026-10-22 in a core checkout with 25 worktrees below an ignored `.worktrees/`.
+The `find` took 19 s on a cold cache and 2 s on a warm one. With that folder
+pruned it took 0.4 s. Fifteen of its sixteen hits were below `.worktrees/`, the
+last one below `.cache/`.
+
+A listed path is about the commit only where git tracks it.
+`git check-ignore -v <path>` names the rule that ignores a path.
+`git diff --cached --name-only` lists what the commit carries.
+
+`git commit --no-verify` skips this hook and the `commit-msg` hook as well. The
+second one writes the `Change-Id`. So take it only on an amend of a commit that
+already carries one. Then run the checks the hook stands for in the container.
+That is `-s cglGit` and `-s cglHeaderGit` from a normal checkout, and
+`-s cgl -n` and `-s cglHeader -n` from a worktree.
+
 `-s cgl` settles the coding-guideline message the hook prints for the other
 script. Both suites run in the container on the PHP the branch asks for, and
 both ask git nothing. Their quicker latest-commit forms, `-s cglHeaderGit` and

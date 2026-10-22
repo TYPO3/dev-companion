@@ -236,6 +236,13 @@ The rules behind it are one page: `typo3_rule_lookup` with
 trailers, the release targets and the changelog entry the change type owes. One
 read of it here is cheaper than the checks that teach it one call at a time.
 
+`git commit` runs the core's pre-commit hook on the host. It walks the whole
+working directory, ignored folders included, and it aborts on nothing. So a
+checkout that holds worktrees or caches makes it slow and makes it report paths
+the commit does not carry. Read what it prints against `typo3_rule_lookup` with
+`documentId="core/testing/scripts"`, section "The Pre-Commit Hook", before you
+amend on the strength of it.
+
 Then the Gerrit workflow. It says what the push is. It says how you amend a
 change into a new patch set rather than a second commit. It says what you must
 not edit between patch sets. That procedure exists whole as `typo3_rule_lookup`

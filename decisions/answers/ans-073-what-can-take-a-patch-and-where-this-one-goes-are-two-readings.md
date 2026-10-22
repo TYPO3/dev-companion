@@ -74,3 +74,14 @@ to.
 - The published contribution documentation changes to state the reach in
   branches. Then the statement has a source the next session can read again, and
   this entry is no longer the only evidence for it.
+
+## Since then
+
+A bugfix on 2026-10-22 named `Releases: main, 14.3`, and the guide said nothing
+about 13.4
+([`feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper`](../../feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper-fix-carry-e2e.md)).
+The session found the same code on 13.4 and left the line to the user. Re-run
+the same day, the guide still raises no check, which is this entry's rule. A
+bugfix goes to the two ordinary lines, and an older one is the author's severity
+claim. The session's question to the user is the answer the rule wants, so the
+guide adds no note for a line the trailer leaves out.

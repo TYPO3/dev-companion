@@ -109,3 +109,13 @@ assessment wrong.
 - A session agrees with the premise and ships a stale asset anyway. Then the
   outcome stands where the mechanism was the need, and the three cards are the
   answer rather than its corollaries.
+
+## Since then
+
+A session fixed the name that `f:form.select` renders. It read the premise as an
+item about content delivery that did not apply
+([`feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper`](../../feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper-fix-carry-e2e.md)).
+That is the design reported as a cost, step 5 of the ladder. No **Wrong if**
+above names it. The premise is first on every brief, so it also stands first
+where nothing is delivered from a cache. Whether it stays on every brief, gets a
+condition, or gets a wording about the outcome alone is the maintainer's answer.

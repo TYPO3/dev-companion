@@ -223,6 +223,12 @@ names. Write it into both `.x` directories where two maintained lines take the
 change. The branches the patch reaches decide that. The branch you write it on
 decides nothing.
 
+A change can also make a sentence in a manual false. A change to what a core
+ViewHelper renders is the usual case, because the Fluid ViewHelper Reference
+documents each one. `typo3_documentation_lookup` finds the page. What the patch
+owes that manual is in `typo3_rule_lookup` with
+`documentId="core/contribution/rules"`, section "Documentation".
+
 ## Commit and push
 
 `typo3_commit_message_guide` with `workflow="core"`, the drafted message and the

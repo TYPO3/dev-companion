@@ -2148,6 +2148,27 @@ final class SkillTest extends TestCase
     }
 
     /**
+     * The crossing into the checkout skill stands as an act because sessions
+     * did not cross it (`D-SKL-022`). An own change the checkout already holds
+     * is the case where crossing costs a skill text for one command.
+     */
+    #[Decision('D-SKL-098')]
+    #[Test]
+    public function anOwnChangeTheCheckoutHoldsIsBranchedWithoutTheCheckoutSkill(): void
+    {
+        $skill = self::flat((string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-development/SKILL.md',
+        ));
+
+        $crossing = strpos($skill, 'invoke `typo3-core-patch-checkout` for that one change');
+        $shortPath = strpos($skill, 'Your own change that this checkout still holds needs no handover');
+        self::assertNotFalse($crossing);
+        self::assertNotFalse($shortPath, 'the skill sends an own change it holds through the checkout skill');
+        self::assertGreaterThan($crossing, $shortPath);
+        self::assertStringContainsString('`git switch -c review/<change number> <commit>` is the whole step', $skill);
+    }
+
+    /**
      * The same section read for the other direction. `R-SKL-027` holds the
      * patch to the list its issue already carries. This one is for the list the
      * request grows once the patch is under way (`D-SKL-079`).

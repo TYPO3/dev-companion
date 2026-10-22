@@ -950,6 +950,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### task-skills
 
+- [`D-SKL-098`][D-SKL-098] — An own change the checkout holds is branched without the checkout skill · 2026-10-22
 - [`D-SKL-097`][D-SKL-097] — A requester's own chain owes the build and the proof, not the ask · 2026-10-21
 - [`D-SKL-095`][D-SKL-095] — The checkout skill knows no worktree tool but git · 2026-10-05
 - [`D-SKL-096`][D-SKL-096] — The precedent passage stays where the finding arises · 2026-10-05
@@ -1043,6 +1044,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-098]: task-skills/skl-098-an-own-change-the-checkout-holds-is-branched-without-the-checkout-skill.md
 [D-SKL-097]: task-skills/skl-097-a-requesters-own-chain-owes-the-build-and-the-proof-not-the-ask.md
 [D-SKL-095]: task-skills/skl-095-the-checkout-skill-knows-no-worktree-tool-but-git.md
 [D-SKL-096]: task-skills/skl-096-the-precedent-passage-stays-where-the-finding-arises.md

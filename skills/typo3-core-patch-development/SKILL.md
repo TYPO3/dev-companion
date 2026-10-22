@@ -285,6 +285,12 @@ What crosses back here is the working copy the patch sits in and the patch set
 you fetched. It is also whether you had to carry the patch onto current code to
 apply.
 
+Your own change that this checkout still holds needs no handover. That is the
+case where `git cat-file -e <commit>` finds the commit `typo3_gerrit_lookup`
+gives for the current patch set, and the tree is clean. Then
+`git switch -c review/<change number> <commit>` is the whole step, and the work
+stays here.
+
 The push is a step of its own, and you take it when the user asks for it.
 Everything above is local and reversible. The push is neither.
 

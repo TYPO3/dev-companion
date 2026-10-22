@@ -295,6 +295,7 @@
       "domains": [
         "docs"
       ],
+      "base": true,
       "description": "Checks .rst files for integrity.",
       "whenToUse": "Use for every changelog entry and other ReST documentation change."
     },

@@ -66,3 +66,14 @@ belongs to.
 - Somebody puts a suite back on a hint because the brief did not name it. The
   hint is not where the fix goes. Either the suite is base for the domain or the
   task guide's suite matcher missed it.
+
+## Since then
+
+A fix of `SelectViewHelper` with a changelog entry got 23 suites from
+`typo3_test_run_guide`, e2e among them
+([`feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper`](../../feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper-fix-carry-e2e.md)).
+The brief's base list named four and missed `checkRst`, because the `docs`
+domain had no base suite. `checkRst` is base for `docs` now, since every ReST
+change owes it. The test guide does not mark which suites are base, so its long
+list has no front. That is queued in `T-261022-0339`. The e2e suites stay in the
+`php` domain, since a backend change in PHP can fail them.

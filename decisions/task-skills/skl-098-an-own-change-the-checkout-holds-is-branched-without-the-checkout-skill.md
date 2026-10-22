@@ -4,6 +4,7 @@ title: An own change the checkout holds is branched without the checkout skill
 date: 2026-10-22
 status: open
 coveredBy:
+  - SkillTest::aFinalReviewAfterAnEarlierOneIsOwedWholeWithoutAReload
   - SkillTest::anOwnChangeTheCheckoutHoldsIsBranchedWithoutTheCheckoutSkill
 ---
 
@@ -11,11 +12,11 @@ coveredBy:
 
 **Where the checkout holds the current patch set's commit of the requester's own
 change and the tree is clean, `typo3-core-patch-development` branches it in
-place. It invokes `typo3-core-patch-checkout` for every other patch set.**
+place. Its final review stays whole and reuses a review skill already loaded.**
 
 ## Evidence
 
-- [`feedback/2026-10-22-105711-three-chained-skills`](../../feedback/2026-10-22-105711-three-chained-skills-for-an-own-change-that.md).
+- [`feedback/2026-10-22-105711-three-chained-skills`](../../feedback/archive/2026-10-22-105711-three-chained-skills-for-an-own-change-that.md).
   A session reviewed and finished the user's own change 96975. The review skill
   handed over to the development skill. That skill sent it on to the checkout
   skill, which did one thing: `git switch -c review/96975 <commit>`. The three
@@ -35,11 +36,12 @@ place. It invokes `typo3-core-patch-checkout` for every other patch set.**
   tree is clean. Each fails safe: the crossing stands for every other case.
 - The branch keeps the checkout skill's name, `review/<change number>`. The
   session that reported names it as what to keep.
-- The feedback's second ask is not decided here. It asks the review skill to say
-  what the development skill still owes after a review of the same change. The
-  development skill makes the final review a step, because a session skipped it
-  once. The reporting session skipped it too, on cost. Which of the two weighs
-  more is the maintainer's answer.
+- The feedback's second ask went to the maintainer. The development skill makes
+  the final review a step, because a session skipped it once. The reporting
+  session skipped it too, on what a second load of the skill costs. The
+  maintainer chose on 2026-10-22 to keep the step whole and drop the reload. The
+  final diff is new, so an earlier review of the change does not stand in for
+  it.
 
 ## Wrong if
 
@@ -48,3 +50,5 @@ place. It invokes `typo3-core-patch-checkout` for every other patch set.**
   are too few, and the short path needs the checkout skill's second check.
 - A session takes the short path for somebody else's change. Then "your own"
   needs the owner check the checkout skill makes on a chain.
+- A session reuses the loaded review skill and its final report leaves out a
+  surface. Then the reload was what made the session read the checklist again.

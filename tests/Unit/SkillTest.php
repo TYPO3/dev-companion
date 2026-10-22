@@ -2169,6 +2169,26 @@ final class SkillTest extends TestCase
     }
 
     /**
+     * The other half of the same report. A session that had reviewed the change
+     * skipped the final review on what a second load of the skill costs. The
+     * maintainer kept the step whole and dropped the reload (`D-SKL-098`).
+     */
+    #[Decision('D-SKL-098')]
+    #[Test]
+    public function aFinalReviewAfterAnEarlierOneIsOwedWholeWithoutAReload(): void
+    {
+        $skill = self::flat((string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-development/SKILL.md',
+        ));
+
+        self::assertStringContainsString(
+            'A review of the same change earlier in this session does not take its place',
+            $skill,
+        );
+        self::assertStringContainsString('Where the review skill is already loaded, do not load it again', $skill);
+    }
+
+    /**
      * The same section read for the other direction. `R-SKL-027` holds the
      * patch to the list its issue already carries. This one is for the list the
      * request grows once the patch is under way (`D-SKL-079`).

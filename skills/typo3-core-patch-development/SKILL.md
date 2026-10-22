@@ -323,6 +323,11 @@ and never opened the review. That was twenty turns after it invoked this skill
 out of a triage whose crossing stands as an act. The act fired and the boundary
 did not, in one session on one task.
 
+A review of the same change earlier in this session does not take its place. The
+final diff is new, and the earlier findings are about the old one. Where the
+review skill is already loaded, do not load it again. Work its checklist and its
+report section on the final diff from what you already hold.
+
 ## Amending after review
 
 A patch that came back is the same change, not a new one. Fetch the patch set

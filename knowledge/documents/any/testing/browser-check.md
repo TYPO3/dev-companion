@@ -6,6 +6,7 @@ whenToUse: >-
 hints:
   - browser-tests
   - browser-tests-outside-core
+  - page-cache-flushing
 ---
 
 # Looking at a Change in a Real Browser
@@ -36,6 +37,12 @@ Where the case needs content, look at the installation that has it. Content is
 several languages, a page long enough to scroll, a particular TCA, or a record
 only one installation has. That is usually a DDEV project that runs. The next
 section says how a browser in a container reaches it.
+
+The installation shows the change only after you flush the cache it left stale.
+A change to the wiring needs `typo3 cache:flush --group=di`: a constructor
+argument, `Services.yaml`, `Services.php` or an autoconfigured attribute. Until
+then the instance runs the container it built before the change. The hint
+`page-cache-flushing` names the group for every other kind of change.
 
 ## Reaching a DDEV Site From a Container
 

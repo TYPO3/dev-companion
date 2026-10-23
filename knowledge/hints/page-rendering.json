@@ -274,7 +274,11 @@
       "var/cache",
       "cache directory",
       "template change does not show",
-      "the change is not visible"
+      "the change is not visible",
+      "di cache",
+      "dependency injection cache",
+      "old constructor",
+      "Too few arguments to function"
     ],
     "hints": [
       "A changed Fluid template recompiles itself and needs no command for that. The identifier a compiled template is stored under is a hash of the file path and the file's modification time — createIdentifierForFile() in typo3fluid/fluid's TemplatePaths, the same mechanism in every Fluid release the covered majors pin — so an edited template, partial or layout is written under a new identifier and the stale entry is never read again. Deleting var/cache/code/fluid_template by hand removes entries nothing would have asked for, and it is not what makes an edit appear.",
@@ -282,6 +286,7 @@
       "That group is mostly not on disk. pages, hash and rootline are Typo3DatabaseBackend caches, in the tables cache_pages, cache_hash and cache_rootline, so nothing deleted under var/cache/ reaches any of them — typoscript is the one file-backed cache in the group, and a file deletion that misses the rest leaves the rendered output exactly where it was.",
       "TypoScript clears itself where it is a record and does not where it is a file. The typoscript cache keys a sys_template row on a hash of that row's own constants, config and include fields, so editing the record invalidates it; an @import target or an include_static_file set is keyed on the file name alone, so an edited .typoscript file in an extension keeps its parsed include tree until group pages is flushed.",
       "A TCA change needs group system. The compiled TCA sits in the core cache under an identifier made of the TYPO3 version, the project path and the installed package list, so nothing about a Configuration/TCA or TCA/Overrides file enters it and the old TCA is served until `typo3 cache:flush --group=system`.",
+      "A change to the wiring needs group di. The compiled container is cached under an identifier made of the TYPO3 version, the project path and the installed package list, in every application context. No class and no Configuration/Services.yaml or Services.php enters it. So a new constructor argument, a changed service definition and an attribute the container autoconfigures, such as #[AsCommand], reach the running instance only after `typo3 cache:flush --group=di`. Until then a constructor that gained a parameter fails with «Too few arguments to function ...::__construct()», and a new service is not found.",
       "`typo3 cache:flush` takes --group with system, pages, di or all and defaults to all, which is the one to reach for when the change touched more than one of them. di is not a group like the others — it has no cacheConfigurations entry, the command flushes the dependency injection container backend itself, and it does so for system and all as well. `typo3 cache:warmup` takes the same groups, for a deployment where the first request must not pay for the rebuild.",
       {
         "text": "`typo3 cache:flushtags <tags>` flushes by tag rather than by group, narrowed with --groups. Where the core has no such command, flushing by tag is reachable only through CacheManager.",

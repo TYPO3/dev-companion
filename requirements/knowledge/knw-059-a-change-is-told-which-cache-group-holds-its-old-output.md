@@ -13,8 +13,8 @@ heldBy:
 **A change learns which cache group holds its old output, the command that
 flushes it, and that a compiled Fluid template is not among them.**
 
-The change is a template, a TypoScript file or a TCA file, and the three do not
-answer the same.
+The change is a template, a TypoScript file, a TCA file or the wiring of a
+service, and the four do not answer the same.
 
 Which command clears a cache is the smaller half. The half that costs a session
 is that a Fluid template is the one thing in the list that clears itself. The

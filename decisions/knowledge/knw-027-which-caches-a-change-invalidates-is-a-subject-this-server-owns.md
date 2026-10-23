@@ -112,3 +112,16 @@ command, both of which survive a project's override of the configuration. Two
 results the entry did not anticipate are in the statement. One group comes from
 synthesis rather than configuration, and on the newest major a component cache
 keys on too little and keeps a stale declaration.
+
+## Confirmed on 2026-10-23
+
+`feedback/2026-10-23-002613` added the wiring as a fourth kind of change: a
+constructor gained two arguments and the instance kept the old container. The
+corpus named group `di` and no change that needs it, and `browser-check` did not
+name it either. On all four checkouts `Bootstrap` creates the `di` cache in
+every context but failsafe. `ContainerBuilder` keys the container on
+`PackageDependentCacheIdentifier`, which no class and no `Services.yaml` enters.
+The statement names `#[AsCommand]`, since `Services.php` registers
+`#[AsEventListener]` only from 13.4. The change landed in the same run
+(`D-FBK-052`). **Wrong if** still holds: a session that flushed `di` and saw the
+old wiring would show that the statement names the wrong cache.

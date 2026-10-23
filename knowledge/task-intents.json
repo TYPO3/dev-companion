@@ -353,11 +353,13 @@
     "rulesQuery": "",
     "checklist": [
       "Where no test asserts the change, opening the page is what settles it, so do it rather than offer it. Report a view nobody opened as unverified, in that word, rather than as something that was not available.",
+      "Flush the cache group the change left stale before you open it, or the instance shows what it built before the change. A changed constructor, Services.yaml, Services.php or an autoconfigured attribute needs typo3 cache:flush --group=di.",
       "Seeing it once is not coverage. Where the behaviour has to keep holding, the spec that asserts it is the step after this one."
     ],
     "checks": [],
     "tools": [
-      "typo3_project_describe, for the sites this installation serves and the base each answers on, which is what a browser is pointed at"
+      "typo3_project_describe, for the sites this installation serves and the base each answers on, which is what a browser is pointed at",
+      "typo3_hint_lookup id=page-cache-flushing, for the cache group each kind of change leaves stale"
     ]
   },
   {

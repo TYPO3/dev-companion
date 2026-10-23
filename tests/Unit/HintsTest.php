@@ -3506,11 +3506,14 @@ final class HintsTest extends TestCase
         $result = Hints::find([], 'clearing the fluid_template (and code) caches after template changes', 6);
         self::assertContains('page-cache-flushing', array_column($result['matchedHints'], 'id'));
 
-        // It arrives from three kinds of change, and they are three domains.
+        // It arrives from four kinds of change, and they are three domains.
+        // The last is `feedback/2026-10-23-002613`'s, whose session left the
+        // container it had compiled before a constructor gained two arguments.
         foreach ([
             'which cache do I flush after a TypoScript change',
             'clear the caches after a TCA change',
             'my Fluid template change does not show on the page',
+            'the container still uses the old constructor after I added a dependency',
         ] as $task) {
             $ids = array_column(Hints::find([], $task, 6)['matchedHints'], 'id');
             self::assertContains('page-cache-flushing', $ids, $task);
@@ -3525,6 +3528,13 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('--group=pages', $text);
         self::assertStringContainsString('--group=system', $text);
         self::assertStringContainsString('Typo3DatabaseBackend', $text);
+        self::assertStringContainsString('--group=di', $text);
+        self::assertStringContainsString('Too few arguments to function', $text);
+
+        // The step arrives where the session opens the instance, not only
+        // where it asks about caches.
+        $look = Registry::call('typo3_task_guide', ['task' => 'open the new styleguide page in the browser and check it renders']);
+        self::assertStringContainsString('typo3 cache:flush --group=di', implode("\n", $look->data['checklist']));
 
         // `cache:flushtags` is the core's own command on 14 and on neither of
         // the majors below it.

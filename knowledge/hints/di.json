@@ -22,7 +22,8 @@
       "Prefer constructor injection with a readonly promoted property. Services.yaml is for what autowiring cannot resolve: a scalar or non-autowirable argument, an alias, a service that has to be public, or a factory.",
       "For a single non-autowirable argument, the #[Autowire] attribute on the constructor parameter keeps the wiring in the class instead of splitting it across a YAML file.",
       "Avoid new GeneralUtility::makeInstance() calls for regular service dependencies unless lifecycle constraints require it.",
-      "A service the container resolves by class name rather than by injection is a different question: di-service-not-found."
+      "A service the container resolves by class name rather than by injection is a different question: di-service-not-found.",
+      "A change to the wiring reaches a running instance only once its DI cache is flushed, which page-cache-flushing says."
     ]
   },
   {

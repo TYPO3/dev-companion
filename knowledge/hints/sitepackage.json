@@ -1,5 +1,39 @@
 [
   {
+    "id": "sitepackage-start",
+    "title": "Where a New Sitepackage Comes From",
+    "domains": [
+      "fluid",
+      "typoscript"
+    ],
+    "appliesTo": [
+      "new sitepackage",
+      "create a sitepackage",
+      "start a sitepackage",
+      "generate a sitepackage",
+      "kickstart",
+      "kickstarter",
+      "sitepackage builder",
+      "site package builder",
+      "make:site-package",
+      "make:site-set",
+      "scaffold"
+    ],
+    "hints": [
+      "Nothing in the core creates a sitepackage, and three community tools divide the work. The Site Package Builder at get.typo3.org is a web form that hands the extension back as a download. The console tool is the extension friendsoftypo3/kickstarter, which writes single parts of a sitepackage into an export directory of its own and asks before it replaces what stands there. b13/make writes neither a site package nor an Extbase extension and says so, so it answers the rest of an extension instead.",
+      {
+        "text": "The set is the half the console covers: make:site-set writes Configuration/Sets/<Set>/config.yaml and prints the dependencies line the site configuration needs, and make:site-settings-definition writes the definitions beside it. make:site-package refuses here and names the reason, so the extension around that set comes from the builder, or from the layout theme_camino works out.",
+        "since": 14
+      },
+      {
+        "text": "make:site-package is the console form of the builder: it asks what the web form asks and fetches the result from get.typo3.org, so nothing is downloaded by hand.",
+        "since": 13,
+        "until": 13
+      },
+      "A generated sitepackage is a starting point rather than a layout to keep, and the builder's own documentation says it writes a large number of unnecessary, mostly empty files. What each directory in it is for is the sitepackage-layout hint."
+    ]
+  },
+  {
     "id": "sitepackage-layout",
     "title": "How a Sitepackage Is Laid Out",
     "domains": [

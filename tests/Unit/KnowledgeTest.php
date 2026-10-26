@@ -1421,6 +1421,35 @@ final class KnowledgeTest extends TestCase
     }
 
     /**
+     * A fix in one ViewHelper got every suite of its domains in file order, the
+     * browser ones among them. The suites every change there runs stood
+     * nowhere apart (`feedback/2026-10-22-105711`, `D-ANS-185`).
+     */
+    #[Decision('D-ANS-185')]
+    #[Test]
+    public function theTestRunGuideOpensOnTheBaseSuitesOfThePaths(): void
+    {
+        $paths = [
+            'typo3/sysext/fluid/Classes/ViewHelpers/Form/SelectViewHelper.php',
+            'typo3/sysext/fluid/Tests/Functional/ViewHelpers/Form/SelectViewHelperTest.php',
+        ];
+        $result = Registry::call('typo3_test_run_guide', ['paths' => $paths, 'targetVersion' => '14']);
+
+        $base = TestSuiteHints::baseFor($result->data['domains'], 14);
+        self::assertNotSame([], $base);
+        $suites = $result->data['suites'];
+        $leading = array_slice($suites, 0, count($base));
+        self::assertSame($base, array_column($leading, 'command'), 'the base suites do not open the list');
+        self::assertSame([true], array_values(array_unique(array_column($leading, 'base'))));
+        self::assertNotContains(true, array_column(array_slice($suites, count($base)), 'base'));
+        self::assertStringContainsString('typo3_task_guide makes them its checks', $result->text);
+
+        // A query ranks the list, and the ranking stays the caller's.
+        $ranked = Registry::call('typo3_test_run_guide', ['query' => 'e2e', 'paths' => $paths, 'targetVersion' => '14']);
+        self::assertStringStartsWith('e2e', $ranked->data['suites'][0]['suite']);
+    }
+
+    /**
      * The e2e suites hand over the page saying what to do with the browser.
      *
      * `feedback/2026-08-10-182417` reviewed a backend CSS patch and took `-s

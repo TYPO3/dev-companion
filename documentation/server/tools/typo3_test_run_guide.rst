@@ -93,10 +93,10 @@ Answers with
       # How many suites those domains hold on the target version. A count rather
       # than a list: the list is what the narrowed answer exists to avoid.
       suites: integer
-    # Every suite of the domains above, and where query scores on some of them,
-    # those alone, strongest first. This is the list typo3_task_guide narrows two
-    # ways. Its checks is what a task in these domains runs whatever it turns out to
-    # be. Its testSuites is the strongest few against the task text.
+    # Every suite of the domains above, the base ones first. Where query scores on
+    # some of them, those alone, strongest first. This is the list typo3_task_guide
+    # narrows two ways. Its checks is what a task in these domains runs whatever it
+    # turns out to be. Its testSuites is the strongest few against the task text.
     suites:
       - suite: string
         # Full command, run from the core root.
@@ -120,6 +120,11 @@ Answers with
         description: string  # optional
         whenToUse: string  # optional
         domains: [string]  # optional
+        # Whether every change in one of its domains runs this suite.
+        # typo3_task_guide makes these the checks of a brief whatever the task turns
+        # out to be. The others can fail on the same paths and need a reason of
+        # their own.
+        base: boolean
         # The TYPO3 majors whose runTests.sh has this suite, where that is not all
         # of them. Null means every covered version.
         versions: string or null
@@ -176,6 +181,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s unit`
     Running it: unknown — the body does not say what it does to the checkout.
+    Base: every change in its domains runs it.
     Targeted run while iterating:
     `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter <methodName> <path/to/Test.php>`
 
@@ -186,11 +192,66 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s functional`
     Running it: unknown — the body does not say what it does to the checkout.
+    Base: every change in its domains runs it.
     Targeted run while iterating:
     `CI=true ./Build/Scripts/runTests.sh -s functional -d sqlite -- <path/to/Test.php>`
 
     PHP functional tests, sqlite by default.
     Use for TYPO3 services, persistence, configuration, authentication, routing, and integration behavior.
+
+    ## checkIntegrityPhp
+    Command from the TYPO3 core root:
+    `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
+    Running it: check — it reports and hands the checkout back as it was.
+    Base: every change in its domains runs it.
+
+    Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.
+    Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
+
+    ## checkRst
+    Command from the TYPO3 core root:
+    `CI=true ./Build/Scripts/runTests.sh -s checkRst`
+    Running it: check — it reports and hands the checkout back as it was.
+    Base: every change in its domains runs it.
+
+    Checks .rst files for integrity.
+    Use for every changelog entry and other ReST documentation change.
+
+    ## build
+    Command from the TYPO3 core root:
+    `CI=true ./Build/Scripts/runTests.sh -s build`
+    Running it: change — it rewrites files in the checkout.
+    Base: every change in its domains runs it.
+
+    Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.
+    Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId="core/contribution/committed-build-output" is the procedure and what it was measured on.
+
+    ## lintScss
+    Command from the TYPO3 core root:
+    `CI=true ./Build/Scripts/runTests.sh -s lintScss`
+    Running it: check — it reports and hands the checkout back as it was.
+    Base: every change in its domains runs it.
+
+    SCSS linting with TYPO3's stylelint setup.
+    Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.
+
+    ## lintTypescript
+    Command from the TYPO3 core root:
+    `CI=true ./Build/Scripts/runTests.sh -s lintTypescript`
+    Running it: check — it reports and hands the checkout back as it was.
+    Base: every change in its domains runs it.
+
+    TypeScript linting.
+    Use when TypeScript or JavaScript code changes.
+
+    ## unitJavascript
+    Command from the TYPO3 core root:
+    `CI=true ./Build/Scripts/runTests.sh -s unitJavascript`
+    Running it: unknown — the body does not say what it does to the checkout.
+    Base: every change in its domains runs it.
+
+    JavaScript unit tests for the built backend modules.
+    Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. No targeted form goes through runTests.sh: this target passes nothing through, and -s npm runs in the Node image without a browser, so a run test -- --group there stops at ChromePathNotSetError. A targeted run is npm run test -- --group <package> in Build/ on a machine with Chrome, and --files narrows nothing because the config declares groups. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.
 
     ## cgl
     Command from the TYPO3 core root:
@@ -264,14 +325,6 @@ Text:
     YAML linting for every YAML file below typo3/ except Services.yaml.
     Use after changing any Configuration YAML: site set config.yaml and settings definitions, route enhancers, form setups, RTE presets. Services.yaml has its own suite, lintServicesYaml, because it needs tag parsing.
 
-    ## checkIntegrityPhp
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.
-    Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
-
     ## listExceptionCodes
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes`
@@ -320,14 +373,6 @@ Text:
     Normalizes .xlf files (formatting, attribute order).
     Use after editing XLF files, so the diff carries no formatting noise. Add `-n` to only report.
 
-    ## checkRst
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s checkRst`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Checks .rst files for integrity.
-    Use for every changelog entry and other ReST documentation change.
-
     ## checkExtensionScannerRst
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst`
@@ -352,22 +397,6 @@ Text:
     Creates a changelog file from the core's own template and serves the rendered page locally, reloading it as the file is saved.
     Use when writing a changelog entry: interactive asks for the type, the issue number and the title and writes the file from Build/rstTemplates/, and a path in place of it opens that file instead. It writes into the directory of the release the branch develops, so a backport's file is moved afterwards.
 
-    ## build
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s build`
-    Running it: change — it rewrites files in the checkout.
-
-    Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.
-    Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId="core/contribution/committed-build-output" is the procedure and what it was measured on.
-
-    ## lintScss
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s lintScss`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    SCSS linting with TYPO3's stylelint setup.
-    Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.
-
     ## build-css
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
@@ -375,22 +404,6 @@ Text:
 
     Focused CSS build from Build/package.json.
     Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.
-
-    ## lintTypescript
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s lintTypescript`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    TypeScript linting.
-    Use when TypeScript or JavaScript code changes.
-
-    ## unitJavascript
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s unitJavascript`
-    Running it: unknown — the body does not say what it does to the checkout.
-
-    JavaScript unit tests for the built backend modules.
-    Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. No targeted form goes through runTests.sh: this target passes nothing through, and -s npm runs in the Node image without a browser, so a run test -- --group there stops at ChromePathNotSetError. A targeted run is npm run test -- --group <package> in Build/ on a machine with Chrome, and --files narrows nothing because the config declares groups. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.
 
     ## checkGruntClean
     Command from the TYPO3 core root:
@@ -530,6 +543,7 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": true,
                 "versions": ""
             },
             {
@@ -544,102 +558,7 @@ Data:
                     "fluid",
                     "typoscript"
                 ],
-                "versions": ""
-            },
-            {
-                "suite": "cgl",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cgl",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
-                "description": "Checks and fixes coding guideline issues for all core PHP files.",
-                "whenToUse": "Use before review when PHP formatting or file headers may be affected. Add `-n` to only report.",
-                "domains": [
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "cglGit",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
-                "description": "Checks and fixes coding guideline issues in the latest committed patch.",
-                "whenToUse": "Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.",
-                "domains": [
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "cglHeader",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeader",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
-                "description": "Checks and fixes the licence header of all core PHP files.",
-                "whenToUse": "Use where a PHP file was added or its header touched, and to settle the file-header error the pre-commit hook reports. It runs php-cs-fixer over `Build/php-cs-fixer/header-comment.php`, which `cgl` does not: a green `cgl` says nothing about a header. Add `-n` to only report.",
-                "domains": [
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "cglHeaderGit",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
-                "description": "Checks and fixes the licence header in the latest committed patch.",
-                "whenToUse": "Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.",
-                "domains": [
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "lintPhp",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintPhp",
-                "runs": "check",
-                "targeted": null,
-                "description": "PHP syntax linting.",
-                "whenToUse": "Use for broad PHP syntax confidence after touching many PHP files.",
-                "domains": [
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "phpstan",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s phpstan",
-                "runs": "check",
-                "targeted": null,
-                "description": "Static analysis with phpstan.",
-                "whenToUse": "Use for type-sensitive PHP changes and API contract changes.",
-                "domains": [
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "lintServicesYaml",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintServicesYaml",
-                "runs": "check",
-                "targeted": null,
-                "description": "Lints Services.yaml files with tag parsing enabled.",
-                "whenToUse": "Use after changing dependency injection wiring in a Configuration/Services.yaml.",
-                "domains": [
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "lintYaml",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintYaml",
-                "runs": "check",
-                "targeted": null,
-                "description": "YAML linting for every YAML file below typo3/ except Services.yaml.",
-                "whenToUse": "Use after changing any Configuration YAML: site set config.yaml and settings definitions, route enhancers, form setups, RTE presets. Services.yaml has its own suite, lintServicesYaml, because it needs tag parsing.",
-                "domains": [
-                    "php"
-                ],
+                "base": true,
                 "versions": ""
             },
             {
@@ -652,79 +571,8 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": true,
                 "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "listExceptionCodes",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes",
-                "runs": "check",
-                "targeted": null,
-                "description": "Prints every exception code found below typo3/ as JSON. It runs the duplicate check with the flag that only prints, which skips both failure paths, so it exits successfully whatever it finds.",
-                "whenToUse": "Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.",
-                "domains": [
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "checkComposer",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkComposer",
-                "runs": "check",
-                "targeted": null,
-                "description": "Checks the composer.json files of the system extensions for version integrity.",
-                "whenToUse": "Use after editing any composer.json, for example when adding a dependency between system extensions.",
-                "domains": [
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "checkIntegritySetLabels",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegritySetLabels",
-                "runs": "check",
-                "targeted": null,
-                "description": "Checks the labels.xlf integrity of the site sets.",
-                "whenToUse": "Use after adding or changing a Configuration/Sets/<Set>/labels.xlf. It is the purpose-built check for site set labels; checkIntegrityXliff does not replace it.",
-                "domains": [
-                    "typoscript"
-                ],
-                "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "lintHtml",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintHtml",
-                "runs": "check",
-                "targeted": null,
-                "description": "Whitespace and EditorConfig linting of the templates below typo3/sysext/*/Resources/Private.",
-                "whenToUse": "Use after changing a Fluid template, partial, or layout.",
-                "domains": [
-                    "fluid"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "checkIntegrityXliff",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityXliff",
-                "runs": "check",
-                "targeted": null,
-                "description": "Checks all .xlf files for validity and deprecated usages.",
-                "whenToUse": "Use after adding, changing, or retiring XLF labels.",
-                "domains": [
-                    "xliff"
-                ],
-                "versions": "TYPO3 v14 and newer"
-            },
-            {
-                "suite": "normalizeXliff",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s normalizeXliff",
-                "runs": "change",
-                "targeted": null,
-                "description": "Normalizes .xlf files (formatting, attribute order).",
-                "whenToUse": "Use after editing XLF files, so the diff carries no formatting noise. Add `-n` to only report.",
-                "domains": [
-                    "xliff"
-                ],
-                "versions": "TYPO3 v14 and newer"
             },
             {
                 "suite": "checkRst",
@@ -736,43 +584,7 @@ Data:
                 "domains": [
                     "docs"
                 ],
-                "versions": ""
-            },
-            {
-                "suite": "checkExtensionScannerRst",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst",
-                "runs": "check",
-                "targeted": null,
-                "description": "Verifies that all .rst files referenced by the extension scanner exist.",
-                "whenToUse": "Use when a deprecation or breaking change adds extension scanner matchers.",
-                "domains": [
-                    "docs",
-                    "php"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "checkRstRenderingSingle",
-                "command": "./Build/Scripts/runTests.sh -s checkRstRenderingSingle core",
-                "runs": "check",
-                "targeted": null,
-                "description": "Renders one system extension's Documentation/ with the documentation team's container into Documentation-GENERATED-temp/ and reports what the renderer rejects.",
-                "whenToUse": "Use where a ReST change has to be looked at rather than validated: checkRst reads the structure of a file and says nothing about how the page comes out.",
-                "domains": [
-                    "docs"
-                ],
-                "versions": ""
-            },
-            {
-                "suite": "watchRst",
-                "command": "./Build/Scripts/runTests.sh -s watchRst core interactive",
-                "runs": "change",
-                "targeted": null,
-                "description": "Creates a changelog file from the core's own template and serves the rendered page locally, reloading it as the file is saved.",
-                "whenToUse": "Use when writing a changelog entry: interactive asks for the type, the issue number and the title and writes the file from Build/rstTemplates/, and a path in place of it opens that file instead. It writes into the directory of the release the branch develops, so a backport's file is moved afterwards.",
-                "domains": [
-                    "docs"
-                ],
+                "base": true,
                 "versions": ""
             },
             {
@@ -786,6 +598,7 @@ Data:
                     "typescript",
                     "css"
                 ],
+                "base": true,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -798,18 +611,7 @@ Data:
                 "domains": [
                     "css"
                 ],
-                "versions": ""
-            },
-            {
-                "suite": "build-css",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css",
-                "runs": "change",
-                "targeted": null,
-                "description": "Focused CSS build from Build/package.json.",
-                "whenToUse": "Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.",
-                "domains": [
-                    "css"
-                ],
+                "base": true,
                 "versions": ""
             },
             {
@@ -822,6 +624,7 @@ Data:
                 "domains": [
                     "typescript"
                 ],
+                "base": true,
                 "versions": ""
             },
             {
@@ -834,6 +637,242 @@ Data:
                 "domains": [
                     "typescript"
                 ],
+                "base": true,
+                "versions": ""
+            },
+            {
+                "suite": "cgl",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s cgl",
+                "runs": "change",
+                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
+                "description": "Checks and fixes coding guideline issues for all core PHP files.",
+                "whenToUse": "Use before review when PHP formatting or file headers may be affected. Add `-n` to only report.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "cglGit",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit",
+                "runs": "change",
+                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
+                "description": "Checks and fixes coding guideline issues in the latest committed patch.",
+                "whenToUse": "Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "cglHeader",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeader",
+                "runs": "change",
+                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
+                "description": "Checks and fixes the licence header of all core PHP files.",
+                "whenToUse": "Use where a PHP file was added or its header touched, and to settle the file-header error the pre-commit hook reports. It runs php-cs-fixer over `Build/php-cs-fixer/header-comment.php`, which `cgl` does not: a green `cgl` says nothing about a header. Add `-n` to only report.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "cglHeaderGit",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit",
+                "runs": "change",
+                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
+                "description": "Checks and fixes the licence header in the latest committed patch.",
+                "whenToUse": "Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "lintPhp",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s lintPhp",
+                "runs": "check",
+                "targeted": null,
+                "description": "PHP syntax linting.",
+                "whenToUse": "Use for broad PHP syntax confidence after touching many PHP files.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "phpstan",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s phpstan",
+                "runs": "check",
+                "targeted": null,
+                "description": "Static analysis with phpstan.",
+                "whenToUse": "Use for type-sensitive PHP changes and API contract changes.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "lintServicesYaml",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s lintServicesYaml",
+                "runs": "check",
+                "targeted": null,
+                "description": "Lints Services.yaml files with tag parsing enabled.",
+                "whenToUse": "Use after changing dependency injection wiring in a Configuration/Services.yaml.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "lintYaml",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s lintYaml",
+                "runs": "check",
+                "targeted": null,
+                "description": "YAML linting for every YAML file below typo3/ except Services.yaml.",
+                "whenToUse": "Use after changing any Configuration YAML: site set config.yaml and settings definitions, route enhancers, form setups, RTE presets. Services.yaml has its own suite, lintServicesYaml, because it needs tag parsing.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "listExceptionCodes",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes",
+                "runs": "check",
+                "targeted": null,
+                "description": "Prints every exception code found below typo3/ as JSON. It runs the duplicate check with the flag that only prints, which skips both failure paths, so it exits successfully whatever it finds.",
+                "whenToUse": "Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "checkComposer",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s checkComposer",
+                "runs": "check",
+                "targeted": null,
+                "description": "Checks the composer.json files of the system extensions for version integrity.",
+                "whenToUse": "Use after editing any composer.json, for example when adding a dependency between system extensions.",
+                "domains": [
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "checkIntegritySetLabels",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegritySetLabels",
+                "runs": "check",
+                "targeted": null,
+                "description": "Checks the labels.xlf integrity of the site sets.",
+                "whenToUse": "Use after adding or changing a Configuration/Sets/<Set>/labels.xlf. It is the purpose-built check for site set labels; checkIntegrityXliff does not replace it.",
+                "domains": [
+                    "typoscript"
+                ],
+                "base": false,
+                "versions": "TYPO3 v13 and newer"
+            },
+            {
+                "suite": "lintHtml",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s lintHtml",
+                "runs": "check",
+                "targeted": null,
+                "description": "Whitespace and EditorConfig linting of the templates below typo3/sysext/*/Resources/Private.",
+                "whenToUse": "Use after changing a Fluid template, partial, or layout.",
+                "domains": [
+                    "fluid"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "checkIntegrityXliff",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityXliff",
+                "runs": "check",
+                "targeted": null,
+                "description": "Checks all .xlf files for validity and deprecated usages.",
+                "whenToUse": "Use after adding, changing, or retiring XLF labels.",
+                "domains": [
+                    "xliff"
+                ],
+                "base": false,
+                "versions": "TYPO3 v14 and newer"
+            },
+            {
+                "suite": "normalizeXliff",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s normalizeXliff",
+                "runs": "change",
+                "targeted": null,
+                "description": "Normalizes .xlf files (formatting, attribute order).",
+                "whenToUse": "Use after editing XLF files, so the diff carries no formatting noise. Add `-n` to only report.",
+                "domains": [
+                    "xliff"
+                ],
+                "base": false,
+                "versions": "TYPO3 v14 and newer"
+            },
+            {
+                "suite": "checkExtensionScannerRst",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst",
+                "runs": "check",
+                "targeted": null,
+                "description": "Verifies that all .rst files referenced by the extension scanner exist.",
+                "whenToUse": "Use when a deprecation or breaking change adds extension scanner matchers.",
+                "domains": [
+                    "docs",
+                    "php"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "checkRstRenderingSingle",
+                "command": "./Build/Scripts/runTests.sh -s checkRstRenderingSingle core",
+                "runs": "check",
+                "targeted": null,
+                "description": "Renders one system extension's Documentation/ with the documentation team's container into Documentation-GENERATED-temp/ and reports what the renderer rejects.",
+                "whenToUse": "Use where a ReST change has to be looked at rather than validated: checkRst reads the structure of a file and says nothing about how the page comes out.",
+                "domains": [
+                    "docs"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "watchRst",
+                "command": "./Build/Scripts/runTests.sh -s watchRst core interactive",
+                "runs": "change",
+                "targeted": null,
+                "description": "Creates a changelog file from the core's own template and serves the rendered page locally, reloading it as the file is saved.",
+                "whenToUse": "Use when writing a changelog entry: interactive asks for the type, the issue number and the title and writes the file from Build/rstTemplates/, and a path in place of it opens that file instead. It writes into the directory of the release the branch develops, so a backport's file is moved afterwards.",
+                "domains": [
+                    "docs"
+                ],
+                "base": false,
+                "versions": ""
+            },
+            {
+                "suite": "build-css",
+                "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css",
+                "runs": "change",
+                "targeted": null,
+                "description": "Focused CSS build from Build/package.json.",
+                "whenToUse": "Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.",
+                "domains": [
+                    "css"
+                ],
+                "base": false,
                 "versions": ""
             },
             {
@@ -846,6 +885,7 @@ Data:
                 "domains": [
                     "typescript"
                 ],
+                "base": false,
                 "versions": ""
             },
             {
@@ -860,6 +900,7 @@ Data:
                     "typescript",
                     "fluid"
                 ],
+                "base": false,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -875,6 +916,7 @@ Data:
                     "fluid",
                     "css"
                 ],
+                "base": false,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -890,6 +932,7 @@ Data:
                     "fluid",
                     "css"
                 ],
+                "base": false,
                 "versions": "TYPO3 v14 and newer"
             },
             {
@@ -904,6 +947,7 @@ Data:
                     "fluid",
                     "typoscript"
                 ],
+                "base": false,
                 "versions": ""
             },
             {
@@ -917,6 +961,7 @@ Data:
                     "typescript",
                     "css"
                 ],
+                "base": false,
                 "versions": ""
             },
             {
@@ -929,6 +974,7 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": false,
                 "versions": ""
             }
         ],
@@ -1127,6 +1173,7 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": false,
                 "versions": ""
             }
         ],
@@ -1429,10 +1476,13 @@ Text:
 
     Narrowed to the css domain(s) the given paths touch. Suites outside them cannot fail on this change; call again without paths to see all of them. No given path reached php, fluid, typoscript, xliff, docs and typescript, which leaves 27 suites out. A path landing in one of those domains means calling again.
 
+    Every change in these domains runs build and lintScss, and typo3_task_guide makes them its checks. Each carries base below. The rest can fail on these paths and needs a reason of its own.
+
     ## build
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s build`
     Running it: change — it rewrites files in the checkout.
+    Base: every change in its domains runs it.
 
     Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.
     Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId="core/contribution/committed-build-output" is the procedure and what it was measured on.
@@ -1465,6 +1515,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s lintScss`
     Running it: check — it reports and hands the checkout back as it was.
+    Base: every change in its domains runs it.
 
     SCSS linting with TYPO3's stylelint setup.
     Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.
@@ -1563,6 +1614,7 @@ Data:
                     "typescript",
                     "css"
                 ],
+                "base": true,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -1578,6 +1630,7 @@ Data:
                     "fluid",
                     "css"
                 ],
+                "base": false,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -1590,6 +1643,7 @@ Data:
                 "domains": [
                     "css"
                 ],
+                "base": false,
                 "versions": ""
             },
             {
@@ -1605,6 +1659,7 @@ Data:
                     "fluid",
                     "css"
                 ],
+                "base": false,
                 "versions": "TYPO3 v14 and newer"
             },
             {
@@ -1617,6 +1672,7 @@ Data:
                 "domains": [
                     "css"
                 ],
+                "base": true,
                 "versions": ""
             }
         ],

@@ -264,6 +264,11 @@ Answers with
         description: string  # optional
         whenToUse: string  # optional
         domains: [string]  # optional
+        # Whether every change in one of its domains runs this suite.
+        # typo3_task_guide makes these the checks of a brief whatever the task turns
+        # out to be. The others can fail on the same paths and need a reason of
+        # their own.
+        base: boolean
         # The TYPO3 majors whose runTests.sh has this suite, where that is not all
         # of them. Null means every covered version.
         versions: string or null
@@ -830,6 +835,7 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": true,
                 "versions": "TYPO3 v13 and newer"
             }
         ],
@@ -1203,6 +1209,7 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": false,
                 "versions": ""
             },
             {
@@ -1215,6 +1222,7 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": false,
                 "versions": ""
             },
             {
@@ -1227,6 +1235,7 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": false,
                 "versions": ""
             }
         ],
@@ -1614,6 +1623,7 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": true,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -1629,6 +1639,7 @@ Data:
                     "fluid",
                     "css"
                 ],
+                "base": false,
                 "versions": "TYPO3 v14 and newer"
             },
             {
@@ -1641,6 +1652,7 @@ Data:
                 "domains": [
                     "php"
                 ],
+                "base": false,
                 "versions": ""
             },
             {
@@ -1654,6 +1666,7 @@ Data:
                     "docs",
                     "php"
                 ],
+                "base": false,
                 "versions": ""
             }
         ],

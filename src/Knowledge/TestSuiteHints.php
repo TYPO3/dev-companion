@@ -214,6 +214,7 @@ final class TestSuiteHints
             'description' => $hint['description'],
             'whenToUse' => $hint['whenToUse'],
             'domains' => $hint['domains'],
+            'base' => $hint['base'],
             // Rendered the same way a statement's range is, beside the entry
             // rather than inside it. So an unfiltered listing still says which
             // branches have the suite.

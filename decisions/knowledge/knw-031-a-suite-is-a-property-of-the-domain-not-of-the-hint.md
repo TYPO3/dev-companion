@@ -71,7 +71,7 @@ belongs to.
 
 A fix of `SelectViewHelper` with a changelog entry got 23 suites from
 `typo3_test_run_guide`, e2e among them
-([`feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper`](../../feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper-fix-carry-e2e.md)).
+([`feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper`](../../feedback/archive/2026-10-22-105711-briefs-for-a-fluid-viewhelper-fix-carry-e2e.md)).
 The brief's base list named four and missed `checkRst`, because the `docs`
 domain had no base suite. `checkRst` is base for `docs` now, since every ReST
 change owes it. The test guide does not mark which suites are base, so its long

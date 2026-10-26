@@ -114,7 +114,7 @@ assessment wrong.
 
 A session fixed the name that `f:form.select` renders. It read the premise as an
 item about content delivery that did not apply
-([`feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper`](../../feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper-fix-carry-e2e.md)).
+([`feedback/2026-10-22-105711-briefs-for-a-fluid-viewhelper`](../../feedback/archive/2026-10-22-105711-briefs-for-a-fluid-viewhelper-fix-carry-e2e.md)).
 That is the design reported as a cost, step 5 of the ladder. No **Wrong if**
 above names it. The premise is first on every brief, so it also stands first
 where nothing is delivered from a cache. The maintainer chose on 2026-10-22 to

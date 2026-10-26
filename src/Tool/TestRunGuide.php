@@ -70,8 +70,8 @@ final class TestRunGuide extends ReadOnlyTool
                 'domains' => Schema::listOf(Schema::string(), 'Domains no given path reached. A path that lands in one of them means a second call, because this answer holds for the path set the call gave it.'),
                 'suites' => Schema::integer('How many suites those domains hold on the target version. A count rather than a list: the list is what the narrowed answer exists to avoid.'),
             ], ['domains', 'suites'], 'What the narrowed answer left out. Both empty where nothing narrowed it.'),
-            'suites' => Schema::listOf(Schema::testSuiteRecord(), 'Every suite of the domains above, and where query '
-                . 'scores on some of them, those alone, strongest first. This is the list typo3_task_guide narrows '
+            'suites' => Schema::listOf(Schema::testSuiteRecord(), 'Every suite of the domains above, the base ones '
+                . 'first. Where query scores on some of them, those alone, strongest first. This is the list typo3_task_guide narrows '
                 . 'two ways. Its checks is what a task in these domains runs whatever it turns out to be. Its '
                 . 'testSuites is the strongest few against the task text.'),
             'invocation' => Schema::object([
@@ -155,6 +155,13 @@ final class TestRunGuide extends ReadOnlyTool
         }
 
         $hints = TestSuiteHints::find($query, $domains, $target);
+        // A list nobody ranked opens on the suites every change in these
+        // domains runs. Twenty-four suites in file order put the five a fix
+        // needs among the browser ones (`feedback/2026-10-22-105711`).
+        $ranked = trim((string) $query) !== '';
+        if (!$ranked) {
+            usort($hints, static fn(array $a, array $b): int => $b['base'] <=> $a['base']);
+        }
 
         $blocks = [];
         // The other half of the same answer. The suites below are for the paths
@@ -229,6 +236,16 @@ final class TestRunGuide extends ReadOnlyTool
                 (string) $query
             );
         } else {
+            $base = array_column(array_filter($hints, static fn(array $hint): bool => $hint['base']), 'suite');
+            if ($base !== [] && $domains !== []) {
+                $blocks[] = sprintf(
+                    'Every change in these domains runs %s, and typo3_task_guide makes %s its checks. %s The rest '
+                    . 'can fail on these paths and needs a reason of its own.',
+                    self::named($base),
+                    count($base) === 1 ? 'it' : 'them',
+                    $ranked ? 'Each carries base below.' : (count($base) === 1 ? 'It comes first.' : 'They come first.'),
+                );
+            }
             foreach ($hints as $hint) {
                 $block = [
                     '## ' . $hint['suite'],
@@ -236,6 +253,9 @@ final class TestRunGuide extends ReadOnlyTool
                     '`' . $hint['command'] . '`',
                     self::runsLine($hint['runs']),
                 ];
+                if ($hint['base']) {
+                    $block[] = 'Base: every change in its domains runs it.';
+                }
                 if ($hint['targeted'] !== null) {
                     $block[] = 'Targeted run while iterating:';
                     $block[] = '`' . $hint['targeted'] . '`';

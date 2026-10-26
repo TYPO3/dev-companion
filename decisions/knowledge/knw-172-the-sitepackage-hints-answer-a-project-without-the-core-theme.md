@@ -88,6 +88,7 @@ builder's defects of the day.
 The seventh run found no website title on a fresh site. A site that
 `typo3 setup` creates states none, read in `.checkouts/13.4` and `14.3`. The
 statement now says so and names a set setting as the last fallback. The same run
-asked for a list of the builder's files outside the template tree. The builder
-dropped the redundant `page-content` step and the `index_*` options upstream
-instead, so no list of them is kept here.
+asked for a list of the builder's files outside the template tree. The builder's
+own template drops the redundant `page-content` step and the `index_*` options
+instead, committed in get.typo3.org and not yet deployed that day. So no list of
+them is kept here.

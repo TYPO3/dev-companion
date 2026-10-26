@@ -46,6 +46,10 @@ Takes
     # Every answer lists the ids it did not return. So you request a subject a query
     # missed by name rather than guess at it in other words.
     id: string  # optional
+    # Ask for several hints by their ids in one call, where a brief or a skill names
+    # more than one. The answer carries each of them whole, in the order given,
+    # together with id where both are passed.
+    ids: [string]  # optional
     # The TYPO3 version the answer has to hold for, for example "13.4" or "14". The
     # answer leaves out statements that do not hold there, those the repository
     # needs for another major it declares included. Defaults to every major this

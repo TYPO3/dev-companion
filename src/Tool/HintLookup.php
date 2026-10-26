@@ -56,6 +56,7 @@ final class HintLookup extends ReadOnlyTool
                 'paths' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'File paths related to the task, as they are in the repository they belong to. The answer places each on its own, so a core path and an extension path in one call match separately. It labels a statement where it obliges the other one.'],
                 'task' => ['type' => 'string', 'description' => 'Short task description or topic, in English. A symptom is a query this takes as readily as a subject. The search reads a hint by its own statements. A phrase in its index reaches it from the layer that explains the failure rather than the one the failure showed in. Matching is lexical against English text, so another language reaches only the loanwords.'],
                 'id' => ['type' => 'string', 'description' => 'Ask for one hint by its id, for example language-files, instead of a match. Every answer lists the ids it did not return. So you request a subject a query missed by name rather than guess at it in other words.'],
+                'ids' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Ask for several hints by their ids in one call, where a brief or a skill names more than one. The answer carries each of them whole, in the order given, together with id where both are passed.'],
                 'targetVersion' => ['type' => 'string', 'description' => 'The TYPO3 version the answer has to hold for, for example "13.4" or "14". The answer leaves out statements that do not hold there, those the repository needs for another major it declares included. Defaults to every major this repository declares typo3/cms-core for, or to the installation this server started in where there is no declaration. Where there is neither, nothing filters and every statement carries the versions it holds for.'],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => self::MAX_HINTS, 'default' => 6, 'description' => 'Maximum number of hints.'],
                 'availableHints' => ['type' => 'boolean', 'default' => false, 'description' => 'Ask for the index of the ids beside it on a call that names an id. The answer withholds it there by default. A caller who names an id has already chosen, and the list was two thirds of what such an answer carried. A call that matches by paths or task carries it either way, and so does an id that matched nothing.'],
@@ -116,6 +117,12 @@ final class HintLookup extends ReadOnlyTool
         $task = isset($args['task']) ? (string) $args['task'] : null;
         $limit = (int) ($args['limit'] ?? 6);
         $id = isset($args['id']) ? trim((string) $args['id']) : '';
+        // Several by id in one call rather than one call each, which repeated
+        // the same envelope six times for a sitepackage (`D-ANS-188`).
+        $ids = array_values(array_unique(array_filter(
+            array_map(static fn(mixed $one): string => trim((string) $one), [$id, ...($args['ids'] ?? [])]),
+            static fn(string $one): bool => $one !== '',
+        )));
         $index = (bool) ($args['availableHints'] ?? false);
         $stated = isset($args['targetVersion']) ? (string) $args['targetVersion'] : null;
         $target = Versions::target($stated);
@@ -132,8 +139,10 @@ final class HintLookup extends ReadOnlyTool
 
         $found = [];
         foreach ($groups as $group) {
-            $matched = Hints::find($group['paths'], $task ?? '', $limit, $id, $targets, $index);
-            $found[] = ['scope' => $group['scope'], 'paths' => $group['paths'], 'result' => $matched];
+            foreach ($ids === [] ? [''] : $ids as $one) {
+                $matched = Hints::find($group['paths'], $task ?? '', $limit, $one, $targets, $index);
+                $found[] = ['scope' => $group['scope'], 'paths' => $group['paths'], 'result' => $matched];
+            }
         }
         $result = MatchedHints::merged($found);
 
@@ -161,8 +170,8 @@ final class HintLookup extends ReadOnlyTool
             );
             $lines[] = '';
         }
-        if ($id !== '') {
-            $lines[] = 'Hint requested by id: ' . $id;
+        if ($ids !== []) {
+            $lines[] = (count($ids) === 1 ? 'Hint requested by id: ' : 'Hints requested by id: ') . implode(', ', $ids);
         }
         if ($task !== null && $task !== '') {
             $lines[] = 'Task: ' . $task;

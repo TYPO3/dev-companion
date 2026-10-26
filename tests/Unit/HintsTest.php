@@ -7717,6 +7717,25 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * A sitepackage run fetched six hints by id in six calls, each with the
+     * same envelope (`D-ANS-188`).
+     */
+    #[Decision('D-ANS-188')]
+    #[Test]
+    public function severalHintsComeBackByIdInOneCall(): void
+    {
+        $ids = ['sitepackage-layout', 'page-content-areas', 'installation-setup'];
+        $result = Registry::call('typo3_hint_lookup', ['ids' => $ids, 'targetVersion' => '14']);
+
+        self::assertSame($ids, array_column($result->data['hints'], 'id'));
+        self::assertStringContainsString('Hints requested by id: ' . implode(', ', $ids), $result->text);
+        self::assertStringContainsString(
+            'in one call, with their ids in `ids`',
+            (string) preg_replace('/\s+/', ' ', (string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md')),
+        );
+    }
+
+    /**
      * A sitepackage brief told a project that a new TSconfig option needs a
      * changelog entry, which is the core's own process
      * (`feedback/2026-10-26-134232`).

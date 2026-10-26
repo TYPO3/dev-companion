@@ -65,7 +65,8 @@ why.
 
 ## Lay it out
 
-Ask `typo3_hint_lookup` for each part before you write it, by id:
+Ask `typo3_hint_lookup` for these parts in one call, with their ids in `ids`,
+before you write them:
 
 - `sitepackage-templates` for the template root, the layouts and the partials.
 - `sitepackage-backend-layouts` for the page layouts, where they live, and what

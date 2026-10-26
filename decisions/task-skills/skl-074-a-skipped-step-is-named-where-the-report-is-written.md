@@ -125,14 +125,23 @@ stands, which is what the old assertion could not.
 
 ## Since then
 
-The first **Wrong if** fired twice, and the fourth is the reading the
-maintainer took. A chain rebase on 2026-10-16 skipped the sweep, the handover
-and the test guide and reported none of them
+The first **Wrong if** fired twice, and the fourth is the reading the maintainer
+took. A chain rebase on 2026-10-16 skipped the sweep, the handover and the test
+guide and reported none of them
 ([`feedback/2026-10-16-074733-the-checkout-skill`](../../feedback/archive/2026-10-16-074733-the-checkout-skill-has-no-short-path-for-the.md)).
 A backlog list on 2026-10-21 said the base was long and reported no step it
 passed
 ([`feedback/2026-10-21-154706-breakdown`](../../feedback/archive/2026-10-21-154706-breakdown-with-fuzzy-category-found-the-hidden.md)).
 Both read the sentence at the end of the order. The maintainer chose a one-line
 form in the skills on 2026-10-21. `typo3-core-issue-triage` and
-`typo3-core-patch-checkout` now carry `Not reached: <step> — <what stood in for
-it>` where they write the report. The base keeps the obligation once.
+`typo3-core-patch-checkout` now carry
+`Not reached: <step> — <what stood in for it>` where they write the report. The
+base keeps the obligation once.
+
+## Since then
+
+A core review that crossed into a patch on 2026-10-26 named no skipped step in
+its report and pushed first. That is the third sighting, from the two skills the
+form did not reach yet. `typo3-core-patch-review` now carries the form in its
+*Report* section, and `typo3-core-patch-development` carries it before it asks
+for the push. `D-SKL-072` holds the account.

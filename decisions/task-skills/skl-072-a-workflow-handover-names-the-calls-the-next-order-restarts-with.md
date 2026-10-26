@@ -5,6 +5,7 @@ date: 2026-08-24
 status: open
 coveredBy:
   - SkillTest::theCrossingOutOfAReviewNamesTheCallsTheOrderRestartsWith
+  - SkillTest::theReportNamesTheStepsOfTheOrderItDidNotReach
 ---
 
 # D-SKL-072 — A workflow handover names the calls the next order restarts with
@@ -131,3 +132,15 @@ concrete cost, in this clause's own terms, and did not run it. That is not the
 first **Wrong if**, which asks for a session that crosses. What it says is that
 nothing can reach the **Wrong if** until the trigger holds, and the trigger is
 `D-SKL-077`'s.
+
+## Since then
+
+The first **Wrong if** fired on 2026-10-26
+([`feedback/2026-10-26-102428-a-review-skips`](../../feedback/archive/2026-10-26-102428-a-review-skips-task-guide-and-hint-lookup.md)).
+A review of change 97164 crossed with the three calls named, made none of them,
+pushed patch set 2 publicly and reported no skipped step. What remains is the
+gate `D-SKL-049` waits on, which the maintainer answered on 2026-10-21 with the
+`Not reached:` form. So the review skill carries that form in its *Report*
+section, and the patch skill before it asks for the push. Refused: an id one
+call hands out and another demands, and a question in the commit message guide.
+Both need state between calls, which this server does not hold (`D-DIS-011`).

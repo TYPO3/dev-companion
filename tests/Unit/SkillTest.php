@@ -946,8 +946,26 @@ final class SkillTest extends TestCase
         );
     }
 
+    /**
+     * A session asked for a document after a review wrote a summary page in a
+     * shape of its own, without ranks, paths or surfaces — `D-SKL-099`.
+     */
+    #[Decision('D-SKL-099')]
+    #[Test]
+    public function aDocumentOfAReviewTakesTheShapeOfTheReport(): void
+    {
+        $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-core-patch-review/SKILL.md'));
+        $report = (string) strstr($skill, '## Report');
+
+        self::assertStringContainsString(
+            'A document the caller asks for is this report, in this order and with every part above',
+            (string) strstr($report, '## Where the review ends', true),
+        );
+    }
+
     #[Requirement('R-SKL-005')]
     #[Decision('D-SKL-074')]
+    #[Decision('D-SKL-072')]
     #[Test]
     public function theReportNamesTheStepsOfTheOrderItDidNotReach(): void
     {
@@ -989,10 +1007,12 @@ final class SkillTest extends TestCase
         self::assertSame(1, substr_count($base, 'names every step of this order it did not reach'));
         self::assertStringNotContainsString('under either exemption', $base);
 
-        // Two sessions read that sentence and reported no skipped step, one of
-        // them because the base is long. So the skills whose report they wrote
-        // carry the form at the place the report is written.
-        foreach (['typo3-core-issue-triage', 'typo3-core-patch-checkout'] as $skill) {
+        // Three sessions read that sentence and reported no skipped step, one
+        // of them because the base is long, one after a public push. So the
+        // skills whose report they wrote carry the form at the place the
+        // report is written, and the patch skill before it asks for the push.
+        $skills = ['typo3-core-issue-triage', 'typo3-core-patch-checkout', 'typo3-core-patch-review', 'typo3-core-patch-development'];
+        foreach ($skills as $skill) {
             self::assertStringContainsString(
                 '`Not reached: <step> — <what stood in for it>`',
                 self::flat((string) file_get_contents(Paths::root() . '/skills/' . $skill . '/SKILL.md')),

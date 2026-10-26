@@ -282,12 +282,19 @@ Close on the checklist's surfaces with each one marked assessed, unassessed or
 not applicable to this diff. A reader cannot tell a review that reports only
 findings from one that looked at less.
 
+End the report with the steps of the base order you did not reach, one line
+each: `Not reached: <step> — <what stood in for it>`.
+
 **The report is markdown the reader can copy, and the answer is where it goes.**
 Everything this section asks for makes it long, and length makes the form
 matter. Somebody carries a review into the change, the issue or a chat, and
 rendered output does not survive the move. Write it to a file only where the
 caller asks for one, at a path outside the checkout under review. A modified or
 untracked file beside the patch is a surface this review reports on.
+
+**A document the caller asks for is this report, in this order and with every
+part above.** A summary in a shape of its own drops the ranks, the paths, the
+dropped candidates and the surfaces. Those are what a reader checks a review by.
 
 ## Where the review ends and the rework begins
 

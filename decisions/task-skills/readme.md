@@ -7,6 +7,7 @@ order it works.
 See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
+- [`D-SKL-099`][D-SKL-099] — A document of a review is the report in its own order · 2026-10-26
 - [`D-SKL-098`][D-SKL-098] — An own change the checkout holds is branched without the checkout skill · 2026-10-22
 - [`D-SKL-097`][D-SKL-097] — A requester's own chain owes the build and the proof, not the ask · 2026-10-21
 - [`D-SKL-095`][D-SKL-095] — The checkout skill knows no worktree tool but git · 2026-10-05
@@ -101,6 +102,7 @@ one is added.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-099]: skl-099-a-document-of-a-review-is-the-report-in-its-own-order.md
 [D-SKL-098]: skl-098-an-own-change-the-checkout-holds-is-branched-without-the-checkout-skill.md
 [D-SKL-097]: skl-097-a-requesters-own-chain-owes-the-build-and-the-proof-not-the-ask.md
 [D-SKL-095]: skl-095-the-checkout-skill-knows-no-worktree-tool-but-git.md

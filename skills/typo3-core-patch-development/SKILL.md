@@ -300,6 +300,12 @@ stays here.
 The push is a step of its own, and you take it when the user asks for it.
 Everything above is local and reversible. The push is neither.
 
+**Before you ask for the push, end your answer with the steps of the base order
+this change did not reach**, one line each:
+`Not reached: <step> — <what stood in for it>`. The user decides the push on
+that list. A walk of the base during an earlier review is not what stood in for
+a step, because it ran against files nobody was going to write.
+
 **Ask whether the change goes up visible to everyone or unlisted, every time.**
 The two are different refspecs, and the difference is not a preference. One
 publishes the change to whoever watches the project and notifies reviewers.

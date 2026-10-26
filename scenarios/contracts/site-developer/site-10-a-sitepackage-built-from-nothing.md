@@ -7,7 +7,8 @@ which holds that the prompt below confirms the `sitepackage` intent, and
 `HintsTest::aSitepackageIsGeneratedThroughTheBuildersApi`, which hold what that
 intent and its first hint route to. That a session then builds the package the
 way the hints say is **not guarded**. A run of this case is what measures it,
-and that run decides whether a sitepackage skill is owed (`T-261025-2da7`).
+and the first run without a skill is the baseline for
+`typo3-sitepackage-development` (`D-SKL-101`).
 
 > We have a fresh TYPO3 installation and nothing of our own in it yet. Create a
 > sitepackage for our site: the extension, its site set, a page template with

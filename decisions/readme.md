@@ -960,6 +960,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 - [`D-SKL-099`][D-SKL-099] — A document of a review is the report in its own order · 2026-10-26
 - [`D-SKL-100`][D-SKL-100] — The review skills report in one skeleton · 2026-10-26
+- [`D-SKL-101`][D-SKL-101] — A sitepackage has a task skill of its own · 2026-10-26
 - [`D-SKL-098`][D-SKL-098] — An own change the checkout holds is branched without the checkout skill · 2026-10-22
 - [`D-SKL-097`][D-SKL-097] — A requester's own chain owes the build and the proof, not the ask · 2026-10-21
 - [`D-SKL-095`][D-SKL-095] — The checkout skill knows no worktree tool but git · 2026-10-05
@@ -1056,6 +1057,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 [D-SKL-099]: task-skills/skl-099-a-document-of-a-review-is-the-report-in-its-own-order.md
 [D-SKL-100]: task-skills/skl-100-the-review-skills-report-in-one-skeleton.md
+[D-SKL-101]: task-skills/skl-101-a-sitepackage-has-a-task-skill-of-its-own.md
 [D-SKL-098]: task-skills/skl-098-an-own-change-the-checkout-holds-is-branched-without-the-checkout-skill.md
 [D-SKL-097]: task-skills/skl-097-a-requesters-own-chain-owes-the-build-and-the-proof-not-the-ask.md
 [D-SKL-095]: task-skills/skl-095-the-checkout-skill-knows-no-worktree-tool-but-git.md

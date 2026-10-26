@@ -190,6 +190,7 @@ final class InstallerTest extends TestCase
                     'typo3-extension-patch-review',
                     'typo3-extension-testing',
                     'typo3-extension-upgrade',
+                    'typo3-sitepackage-development',
                 ],
                 // What the names cannot say, and what a later session compares
                 // against to find out that an update is due — `R-DIS-025`.

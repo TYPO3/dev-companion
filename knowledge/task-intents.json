@@ -1041,6 +1041,7 @@
   {
     "id": "sitepackage",
     "title": "Starting or laying out a sitepackage",
+    "skill": "typo3-sitepackage-development",
     "match": [
       "new sitepackage",
       "new site package",

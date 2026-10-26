@@ -39,6 +39,13 @@ final class SkillTest extends TestCase
      * one order is what the base replaced.
      */
     private const ROUTING_SKILLS = [
+        // The extension it changes, then the builder or the tree, then the page
+        // that proves the wiring, then the message.
+        'typo3-sitepackage-development' => [
+            'typo3_extension_describe',
+            'typo3_rule_lookup',
+            'typo3_commit_message_guide',
+        ],
         // The browser-check procedure stands at the step that needs it rather
         // than in the gather list. A session had its id from the first call and
         // wrote its own spec fifteen times, with no task yet to match it to.
@@ -3683,6 +3690,9 @@ final class SkillTest extends TestCase
                 // lookups that say which majors a borrowed surface holds on
                 // answer what it would otherwise judge.
                 'typo3-extension-asset-build',
+                // So is the sitepackage. The hints it routes to and the page it
+                // renders at the end answer what it would otherwise judge.
+                'typo3-sitepackage-development',
             ],
         );
 

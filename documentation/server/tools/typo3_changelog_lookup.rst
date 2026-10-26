@@ -55,6 +55,11 @@ Takes
     # Restrict to a version, by prefix: "14" covers 14.0 through 14.3.x, "13.4"
     # covers 13.4 and 13.4.x.
     version: string  # optional
+    # Restrict to entries that carry any of these index tags, together with tag
+    # where both are passed. A package sweeps the major once with the kinds of file
+    # it ships, for example TypoScript, TSConfig, Fluid, YAML and Frontend, rather
+    # than reads every entry.
+    tags: [string]  # optional
     # Restrict to entries with this index tag. "ext:form" is the system extension a
     # change is in. "FullyScanned" or "NotScanned" is what the Extension Scanner has
     # a matcher for. "PHP-API", "TCA", "Backend" and "Frontend" are the surface.

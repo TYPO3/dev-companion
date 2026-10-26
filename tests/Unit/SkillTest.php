@@ -1044,7 +1044,8 @@ final class SkillTest extends TestCase
         $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md'));
 
         self::assertStringContainsString('The work ends on a frontend that renders, one page for each page layout', $skill);
-        self::assertStringContainsString('keep the entries tagged `TypoScript`, `TSConfig`, `Fluid`, `YAML` or `Frontend`', $skill);
+        self::assertStringContainsString('with `tags` set to `TypoScript`, `TSConfig`, `Fluid`, `YAML` and `Frontend`', $skill);
+        self::assertStringContainsString('check that each layout shows its title and columns', $skill);
         self::assertStringContainsString('set its `backend_layout` field to `pagets__<identifier>` for the request', $skill);
         self::assertStringContainsString('Where no shell runs Composer and the console, stop after the files.', $skill);
         self::assertStringContainsString('Read each generated file against the hints in *Lay it out*', $skill);

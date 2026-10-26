@@ -76,6 +76,7 @@ final class ChangelogLookup extends ReadOnlyTool
                 'query' => ['type' => 'string', 'description' => 'Words the entry has to carry, matched against its file name and the words that name spells. Where no entry carries all of them by name, the search reads the title inside the file as well. That reaches a method name the file name leaves out. A class, method or constant name reaches the entries that write it in their text. So you ask for a removed API by the identifier you have, in any spelling: bare, qualified by its class, or fully qualified. The issue number is among the words a file name carries. So a deprecation\'s own number reaches every entry filed under it, the Feature that announced the replacement with its release version among them. When nothing carries all of them there either, the answer names the largest part of the query that does reach entries. That is what to ask again with. Omit to list a version or a type as a whole.'],
                 'type' => ['type' => 'string', 'enum' => ['breaking', 'deprecation', 'feature', 'important'], 'description' => 'Restrict to one kind of change. Breaking and deprecation are what affects code you have.'],
                 'version' => ['type' => 'string', 'description' => 'Restrict to a version, by prefix: "14" covers 14.0 through 14.3.x, "13.4" covers 13.4 and 13.4.x.'],
+                'tags' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Restrict to entries that carry any of these index tags, together with tag where both are passed. A package sweeps the major once with the kinds of file it ships, for example TypoScript, TSConfig, Fluid, YAML and Frontend, rather than reads every entry.'],
                 'tag' => ['type' => 'string', 'description' => 'Restrict to entries with this index tag. "ext:form" is the system extension a change is in. "FullyScanned" or "NotScanned" is what the Extension Scanner has a matcher for. "PHP-API", "TCA", "Backend" and "Frontend" are the surface. This bounds one question inside a version and a type. The sweep of a major does not need it. That version and type come back whole under a raised limit, and every entry carries its own tags to read by. The changelog says nothing about which third-party extension a change affects, so an extension key of your own matches no tag.'],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 200, 'default' => 20, 'description' => 'Maximum number of entries. Raise it to list a version and a type whole. The largest covered major holds 128 deprecations, and that sweep is one call rather than one per tag.'],
             ],
@@ -177,7 +178,13 @@ final class ChangelogLookup extends ReadOnlyTool
         $query = trim((string) ($args['query'] ?? ''));
         $type = trim((string) ($args['type'] ?? ''));
         $version = trim((string) ($args['version'] ?? ''));
-        $tag = trim((string) ($args['tag'] ?? ''));
+        // Any of several tags in one call, so a sweep keeps the kinds of file a
+        // package ships rather than reads the whole major (`D-ANS-189`).
+        $wanted = array_values(array_unique(array_filter(
+            array_map(static fn(mixed $one): string => trim((string) $one), [$args['tag'] ?? '', ...($args['tags'] ?? [])]),
+            static fn(string $one): bool => $one !== '',
+        )));
+        $tag = implode('" or "', $wanted);
         $limit = (int) ($args['limit'] ?? 20);
 
         $terms = LabelSearch::terms($query);
@@ -291,9 +298,11 @@ final class ChangelogLookup extends ReadOnlyTool
                     $tags[$carriedTag] = true;
                 }
                 foreach ($carried as $carriedTag) {
-                    if (strcasecmp($carriedTag, $tag) === 0) {
-                        $carrying[] = $entry;
-                        break;
+                    foreach ($wanted as $one) {
+                        if (strcasecmp($carriedTag, $one) === 0) {
+                            $carrying[] = $entry;
+                            break 2;
+                        }
                     }
                 }
             }

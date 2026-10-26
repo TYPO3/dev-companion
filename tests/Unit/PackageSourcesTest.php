@@ -282,6 +282,26 @@ final class PackageSourcesTest extends TestCase
     }
 
     /**
+     * A sitepackage sweep read all of a major for the three entries about the
+     * kinds of file it ships (`D-ANS-189`).
+     */
+    #[Decision('D-ANS-189')]
+    #[Test]
+    public function aSweepKeepsTheEntriesThatCarryAnyOfTheTagsGiven(): void
+    {
+        $root = $this->composerProject();
+        $this->changelogEntry($root, '14.0', 'Deprecation-1-Scanned', 'Deprecation: #1 - Scanned', ['PHP-API', 'FullyScanned', 'ext:core']);
+        $this->changelogEntry($root, '14.0', 'Deprecation-2-Typoscript', 'Deprecation: #2 - Typoscript', ['TypoScript', 'NotScanned']);
+        $this->changelogEntry($root, '14.0', 'Deprecation-3-Fluid', 'Deprecation: #3 - Fluid', ['Fluid', 'NotScanned']);
+        Instance::discoverFrom($root);
+
+        $sweep = Registry::call('typo3_changelog_lookup', ['type' => 'deprecation', 'tags' => ['TypoScript', 'Fluid', 'YAML']]);
+
+        self::assertEqualsCanonicalizing(['2', '3'], array_column($sweep->data['entries'], 'issue'));
+        self::assertStringContainsString('tagged "TypoScript" or "Fluid" or "YAML"', $sweep->text);
+    }
+
+    /**
      * What the second and third call of a sweep read off rather than guess,
      * which `feedback/2026-08-03-164818` asks to keep. The tag list has a hold
      * on a miss, where it is what to ask again with. On a hit it is in no

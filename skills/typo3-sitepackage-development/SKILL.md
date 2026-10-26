@@ -32,9 +32,9 @@ Then, for this workflow:
   fluid_styled_content, unless the user said otherwise. `typo3_hint_lookup` with
   `id="sitepackage-fluid-styled-content"` says what the other choice costs. Put
   that in the report.
-- The base's deprecation sweep returns the whole major. For a sitepackage, keep
-  the entries tagged `TypoScript`, `TSConfig`, `Fluid`, `YAML` or `Frontend`,
-  and the ones about a file the package ships. Leave the rest unread.
+- Run the base's deprecation sweep with `tags` set to `TypoScript`, `TSConfig`,
+  `Fluid`, `YAML` and `Frontend`, the kinds of file a sitepackage ships. Add the
+  entries about a file the package ships, such as `ext_localconf.php`.
 - Take the vendor from the project's own packages, and the author from the root
   `composer.json` or the git configuration. Name the first page layout
   `Default`, so a page with no layout selected renders through it too.
@@ -114,9 +114,12 @@ The package is not done when its files exist. Work these steps in order:
    `pagets__<identifier>` for the request, and put the old value back. Report
    both writes.
 
-How a browser reaches the page is `typo3_rule_lookup` with
-`documentId="any/testing/browser-check"`. Ask for it at step 5, not earlier.
-Where you could not render a layout, report it as unproven and name it.
+A request to the page proves the render. Where the site's base names a host the
+environment does not serve, `typo3_project_describe` says so and names the Host
+header to send instead. For a look in a browser, ask `typo3_rule_lookup` with
+`documentId="any/testing/browser-check"` at step 5, not earlier. Then open the
+page module once, and check that each layout shows its title and columns. Where
+you could not render a layout, report it as unproven and name it.
 
 **Where no shell runs Composer and the console, stop after the files.** Leave
 the site's dependencies as they are, because a set nothing installed breaks

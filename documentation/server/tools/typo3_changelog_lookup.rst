@@ -55,6 +55,10 @@ Takes
     # Restrict to a version, by prefix: "14" covers 14.0 through 14.3.x, "13.4"
     # covers 13.4 and 13.4.x.
     version: string  # optional
+    # Leave out the entries that carry any of these index tags. A package that ships
+    # no PHP sweeps with PHP-API here, because those entries are about calls it
+    # cannot make.
+    excludeTags: [string]  # optional
     # Restrict to entries that carry any of these index tags, together with tag
     # where both are passed. A package sweeps the major once with the kinds of file
     # it ships, for example TypoScript, TSConfig, Fluid, YAML and Frontend, rather

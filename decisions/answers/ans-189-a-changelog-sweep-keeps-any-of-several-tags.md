@@ -34,3 +34,10 @@ a sitepackage ships.**
 
 - A sitepackage run misses a deprecation that bit it, because its tags were none
   of the five.
+
+## Since then
+
+The second run on 13.4 still read PHP hook entries in its tagged sweep. The
+lookup now takes `excludeTags` as well, and the sitepackage skill excludes
+`PHP-API`. The 13 sweep for a sitepackage came down from 19 entries to 5 on
+2026-10-26.

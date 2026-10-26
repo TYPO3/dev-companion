@@ -299,6 +299,11 @@ final class PackageSourcesTest extends TestCase
 
         self::assertEqualsCanonicalizing(['2', '3'], array_column($sweep->data['entries'], 'issue'));
         self::assertStringContainsString('tagged "TypoScript" or "Fluid" or "YAML"', $sweep->text);
+
+        // And an entry that also carries an excluded tag stays out.
+        $this->changelogEntry($root, '14.0', 'Deprecation-4-Hook', 'Deprecation: #4 - Hook', ['TypoScript', 'PHP-API']);
+        $narrowed = Registry::call('typo3_changelog_lookup', ['type' => 'deprecation', 'tags' => ['TypoScript', 'Fluid'], 'excludeTags' => ['PHP-API']]);
+        self::assertEqualsCanonicalizing(['2', '3'], array_column($narrowed->data['entries'], 'issue'));
     }
 
     /**

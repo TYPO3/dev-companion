@@ -101,3 +101,11 @@ The first run on 13.4 met the welcome page in a root `sys_template` row that
 clears, not in the site's file. Step 4 now names both places and hides the row
 rather than deletes it. The get.typo3.org 13.4 template got the same upstream
 fixes as 14.3, keeping what 13.4 still reads.
+
+## Since then
+
+The tenth run, the second on 13.4, rendered both layouts with the steps as they
+stand. Its debrief asked for small things. The skill now excludes `PHP-API` from
+its sweep and skips the hints the brief already carried. It also sends the
+builder the vendor and the key it means. The runs end here, with the skill
+carrying the task on 13.4 and on 14.3.

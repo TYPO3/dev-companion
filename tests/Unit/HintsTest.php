@@ -7803,6 +7803,10 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('This Fluid does not read .fluid.html', (string) Registry::call('typo3_hint_lookup', ['id' => 'sitepackage-templates', 'targetVersion' => '13.4'])->text);
         self::assertStringNotContainsString('This Fluid does not read .fluid.html', (string) Registry::call('typo3_hint_lookup', ['id' => 'sitepackage-templates', 'targetVersion' => '14'])->text);
         self::assertStringContainsString('{content.<identifier>.records}', (string) Registry::call('typo3_hint_lookup', ['id' => 'page-content-areas', 'targetVersion' => '13.4'])->text);
+        // The second run on 13.4 asked what else an area carries and how the
+        // builder names a package.
+        self::assertStringContainsString('{content.sidebar.identifier} in the rendered page proves', self::statementsOf('page-content-areas'));
+        self::assertStringContainsString('derives the Composer vendor and the PHP namespace from author.company', self::statementsOf('sitepackage-start'));
         // The eighth run took both from memory.
         self::assertStringContainsString('settings.description.<key>', self::statementsOf('site-set-settings'));
         self::assertStringContainsString('the identifier of a registered icon, which typo3_icon_lookup confirms', self::statementsOf('sitepackage-backend-layouts'));

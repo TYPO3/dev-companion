@@ -33,8 +33,9 @@ Then, for this workflow:
   `id="sitepackage-fluid-styled-content"` says what the other choice costs. Put
   that in the report.
 - Run the base's deprecation sweep with `tags` set to `TypoScript`, `TSConfig`,
-  `Fluid`, `YAML` and `Frontend`, the kinds of file a sitepackage ships. Add the
-  entries about a file the package ships, such as `ext_localconf.php`.
+  `Fluid`, `YAML` and `Frontend`, the kinds of file a sitepackage ships, and
+  `excludeTags` set to `PHP-API`. Add the entries about a file the package
+  ships, such as `ext_localconf.php`.
 - Take the vendor from the project's own packages, and the author from the root
   `composer.json` or the git configuration. Name the first page layout
   `Default`, so a page with no layout selected renders through it too.
@@ -67,7 +68,9 @@ the builder, and name the other start in the report.
    example. Choose the base package that matches the fluid_styled_content
    decision. The TYPO3 version is the line the installation runs. The request
    carries an author email to a service outside the project. Send a placeholder
-   unless the user agreed, and write the real author into the local files.
+   unless the user agreed, and write the real author into the local files. The
+   builder takes the vendor from the company and the key from the title, so send
+   the ones the package is meant to carry.
 2. **A tree written by hand.** `typo3_hint_lookup` with
    `id="sitepackage-layout"` gives the tree and what each directory is for. Take
    this start where the builder does not offer the installed line, or does not
@@ -86,7 +89,8 @@ why.
 ## Lay it out
 
 Ask `typo3_hint_lookup` for these parts in one call, with their ids in `ids`,
-before you write them:
+before you write them. Leave out the ones the brief of `typo3_task_guide`
+already carries in its hints:
 
 - `sitepackage-templates` for the template root, the layouts and the partials.
 - `sitepackage-backend-layouts` for the page layouts, where they live, and what

@@ -112,7 +112,9 @@
       "1770212183",
       "contentArea argument must be an instance of",
       "page-content",
-      "dataProcessing page-content"
+      "dataProcessing page-content",
+      "content.sidebar.identifier",
+      "colPos of an area"
     ],
     "hints": [
       {
@@ -153,6 +155,10 @@
       {
         "text": "A column the layout declares without an explicit identifier is refused while the page layout is resolved, exception 1780173420, so the page fails before any template is reached.",
         "since": 15
+      },
+      {
+        "text": "An area carries the column's identifier, name and colPos beside its records. So {content.sidebar.identifier} in the rendered page proves that the page layout which declares that column was loaded.",
+        "since": 13
       }
     ]
   },

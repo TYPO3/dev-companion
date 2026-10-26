@@ -1045,6 +1045,9 @@ final class SkillTest extends TestCase
 
         self::assertStringContainsString('The work ends on a frontend that renders, one page for each page layout', $skill);
         self::assertStringContainsString('with `tags` set to `TypoScript`, `TSConfig`, `Fluid`, `YAML` and `Frontend`', $skill);
+        self::assertStringContainsString('`excludeTags` set to `PHP-API`', $skill);
+        self::assertStringContainsString('Leave out the ones the brief of `typo3_task_guide` already carries', $skill);
+        self::assertStringContainsString('the vendor from the company and the key from the title', $skill);
         self::assertStringContainsString('check that each layout shows its title and columns', $skill);
         self::assertStringContainsString('Send a placeholder unless the user agreed', $skill);
         self::assertStringContainsString('or a root `sys_template` row that clears', $skill);

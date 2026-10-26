@@ -51,3 +51,13 @@ tree written by hand.**
   the wiring or the page layout fallback, or skips a step of the wiring.
 - A session offered both starts cannot finish the builder's one without the
   user's help beyond the base package and the author.
+
+## Since then
+
+The first run with the skill, the same day, loaded it and stopped on four
+questions with no package written. The maintainer ruled that a result without a
+rendered frontend is not one. So the skill ends on a page per page layout, and
+it takes a default where the request leaves a choice open. The defaults are
+fluid_styled_content kept, the builder as the start, the vendor and the author
+read from the project, and `Default` as the first page layout. The report names
+each of them with its alternative.

@@ -10,6 +10,12 @@ Build the sitepackage a site renders through, or change its layout. Keep this
 skill as routing and order. The tree, the TypoScript and the page layout rules
 are lookups. A copy of them here is one nobody can correct.
 
+**The work ends on a frontend that renders, one page for each page layout.** A
+list of questions is not that result. Where the request leaves a choice open,
+take the default this skill names and go on. Name every default in the report,
+with the alternative and what it costs. Ask only for what neither the request
+nor the project answers.
+
 ## Establish the site, then the package
 
 Work through [references/base.md](references/base.md) first. It fixes the order
@@ -17,26 +23,32 @@ every task here starts in.
 
 Then, for this workflow:
 
-- Read the sites and their sets out of the base's `typo3_project_describe`.
-  A sitepackage replaces the sets a site depends on, so note them now.
+- Read the sites and their sets out of the base's `typo3_project_describe`. A
+  sitepackage replaces the sets a site depends on, so note them now.
 - Where a sitepackage exists already, `typo3_extension_describe` with its key
   says what it registers. Change that package rather than start a second one.
-- Ask the user whether the site keeps the core's content elements. That decides
-  the dependency on fluid_styled_content before the first template does.
-  `typo3_hint_lookup` with `id="sitepackage-fluid-styled-content"` says what
-  each answer costs.
+- Keep the core's content elements, and with them the dependency on
+  fluid_styled_content, unless the user said otherwise. `typo3_hint_lookup` with
+  `id="sitepackage-fluid-styled-content"` says what the other choice costs. Put
+  that in the report.
+- Take the vendor from the project's own packages, and the author from the root
+  `composer.json` or the git configuration. Name the first page layout
+  `Default`, so a page with no layout selected renders through it too.
 
 ## Choose where a new package comes from
 
-**Offer the user two starts and let them choose.** Do not pick one silently.
+There are two starts. Use the one the user named. Where the user named none, use
+the builder, and name the other start in the report.
 
 1. **The builder at get.typo3.org.** It generates a base package from one
    request. Fetch `https://get.typo3.org/api/doc.json` first. Take the endpoint,
    the fields and the values each one accepts from that schema, never from an
-   example. The base package and the author are the user's answers. The TYPO3
-   version is the line the installation runs.
+   example. Choose the base package that matches the fluid_styled_content
+   decision. The TYPO3 version is the line the installation runs.
 2. **A tree written by hand.** `typo3_hint_lookup` with
-   `id="sitepackage-layout"` gives the tree and what each directory is for.
+   `id="sitepackage-layout"` gives the tree and what each directory is for. Take
+   this start where the builder does not offer the installed line, or does not
+   answer.
 
 `typo3_hint_lookup` with `id="sitepackage-start"` says what else creates a
 sitepackage, and what each tool writes on the installed major.
@@ -66,8 +78,8 @@ The package is not done when its files exist. Work these steps in order:
 
 1. Require the package through Composer, from the path it sits in.
 2. Set it up with the console's `extension:setup`.
-3. Add its set to the dependencies of the site configuration. Remove the sets
-   it replaces.
+3. Add its set to the dependencies of the site configuration. Remove the sets it
+   replaces.
 4. Check the site's own `setup.typoscript`. `typo3_hint_lookup` with
    `id="installation-setup"` says what an installer leaves there.
 5. Flush the caches, then render one page for each page layout.

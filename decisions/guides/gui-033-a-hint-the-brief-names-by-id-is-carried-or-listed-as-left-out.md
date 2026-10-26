@@ -14,7 +14,7 @@ coveredBy:
 
 ## Evidence
 
-- [`feedback/2026-10-26-134232-task-guide-omittedhints`](../../feedback/2026-10-26-134232-task-guide-omittedhints-left-out-five-hint-ids.md).
+- [`feedback/2026-10-26-134232-task-guide-omittedhints`](../../feedback/archive/2026-10-26-134232-task-guide-omittedhints-left-out-five-hint-ids.md).
   A brief for a new sitepackage named three hints by id in its checklist and
   listed none of them, because no path reached them. `skills/base.md` calls
   `omittedHints` the list the caller still owes. A caller that trusts it fetches

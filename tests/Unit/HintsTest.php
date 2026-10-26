@@ -7697,6 +7697,26 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * A sitepackage brief told a project that a new TSconfig option needs a
+     * changelog entry, which is the core's own process
+     * (`feedback/2026-10-26-134232`).
+     */
+    #[Test]
+    public function aTsconfigOptionOwesAChangelogEntryOnlyInTheCore(): void
+    {
+        $brief = Registry::call('typo3_task_guide', [
+            'task' => 'Create a sitepackage extension with site set and two backend layouts',
+            'changeType' => 'feature',
+            'paths' => ['packages/site_package/Configuration/page.tsconfig'],
+        ]);
+
+        self::assertStringContainsString(
+            'it needs a Feature changelog entry and documentation, not just the default. [binding for a core patch, a convention here]',
+            $brief->text,
+        );
+    }
+
+    /**
      * A brief named five hints by id in its own checklist and listed none of
      * them as left out, so a caller that trusts the list fetched none
      * (`D-GUI-033`).

@@ -21,8 +21,14 @@
         "since": 13
       },
       "An option is read from the merged page TSconfig. In FormEngine that merge is done by the PageTsConfigMerged data provider, so a provider that reads the option has to depend on it.",
-      "A new TSconfig option is user-facing configuration: it needs a Feature changelog entry and documentation, not just the default.",
-      "Behaviour that depends on TSconfig is covered by functional tests; the parser itself lives in typo3/sysext/core/Classes/TypoScript/."
+      {
+        "text": "A new TSconfig option is user-facing configuration: it needs a Feature changelog entry and documentation, not just the default.",
+        "scope": "core"
+      },
+      {
+        "text": "Behaviour that depends on TSconfig is covered by functional tests; the parser itself lives in typo3/sysext/core/Classes/TypoScript/.",
+        "scope": "core"
+      }
     ]
   },
   {

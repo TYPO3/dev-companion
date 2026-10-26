@@ -7652,6 +7652,37 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The first run of SITE-10 built a sitepackage without theme_camino and
+     * read three things out of the core that no hint said (`D-KNW-172`).
+     */
+    #[Decision('D-KNW-172')]
+    #[Test]
+    public function aSitepackageWithoutTheCoreThemeIsAnsweredOnItsOwnTerms(): void
+    {
+        $reference = self::statementsOf('sitepackage-typoscript-reference');
+        self::assertStringContainsString('lib.fluidPage is theme_camino\'s object', $reference);
+        self::assertStringContainsString('lib.contentElement is fluid_styled_content\'s object', $reference);
+
+        $layouts = self::statementsOf('sitepackage-backend-layouts');
+        self::assertStringContainsString('the core\'s default layout where no page sets one', $layouts);
+        self::assertStringContainsString('must not contain two underscores', $layouts);
+
+        self::assertStringContainsString(
+            'Where the project does not have theme_camino, the tree is this',
+            self::statementsOf('sitepackage-layout'),
+        );
+
+        // The checklist binds the object to the set that defines it.
+        $brief = Registry::call('typo3_task_guide', [
+            'task' => 'Create a new sitepackage with the page templates and backend layouts of this site',
+        ]);
+        self::assertStringContainsString(
+            'reach lib.fluidPage only where the set that defines it is a dependency',
+            implode("\n", $brief->data['checklist']),
+        );
+    }
+
+    /**
      * The builder takes a request, so a session generates a sitepackage in one
      * call rather than through a download. The values it accepts stand in its
      * schema, which the statement points at instead of copying.

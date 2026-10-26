@@ -63,6 +63,10 @@
         "since": 14
       },
       "All of this is the extension. What sits around it in a project — where the browser tests go, what belongs in Build/, which scripts the repository exposes — is its own subject, because the core has no answer for it: it is not a project. That is the project repository layout hint.",
+      {
+        "text": "Where the project does not have theme_camino, the tree is this. Configuration/Sets/<Set>/ holds config.yaml, settings.yaml where the set defines settings, setup.typoscript, page.tsconfig, TypoScript/ and BackendLayouts/. Resources/Private/Templates/ holds Pages/, Content/, Layouts/Pages/, Layouts/Content/ and Partials/. Resources/Private/Language/ holds the language files, and Resources/Public/ the CSS, the JavaScript and the icons.",
+        "since": 13
+      },
       "Where the files themselves go is its own hint: sitepackage-templates for the template root, sitepackage-backend-layouts for the page layouts, sitepackage-typoscript-reference for how one object reaches another."
     ]
   },
@@ -105,14 +109,22 @@
       "backend layout",
       "page layout",
       "mod.web_layout.BackendLayouts",
-      "BackendLayouts"
+      "BackendLayouts",
+      "no page layout selected",
+      "backend_layout_next_level",
+      "default backend layout"
     ],
     "hints": [
       "One page layout per file, and one name for it: the identifier the file declares below mod.web_layout.BackendLayouts is also what the page template is named after, so the file name, the identifier and Pages/<Name>.fluid.html are one name written in three places.",
       {
         "text": "Where those files live follows from one question — does anything reach a backend without the set? A project sitepackage ships one set and no Configuration/page.tsconfig of its own, so nothing does: the layouts belong in Configuration/Sets/<Set>/BackendLayouts/, pulled in with @import './BackendLayouts/*.tsconfig' from the set's page.tsconfig, which is the same place and the same form the TypoScript split already has. Configuration/BackendLayouts/ at extension level is for the other case — several sets, or a distributable theme like theme_camino, where the extension is the unit and an extension-level page.tsconfig carries what has to apply whether a site depends on the set or not. Where the extension has no such file, moving the layouts up there is an indirection with no effect. The directory keeps its name either way, because the name says what is in it: page TSconfig that is not a backend layout goes into page.tsconfig or a sibling directory, not in there.",
         "since": 13
-      }
+      },
+      {
+        "text": "A page with no layout selected takes the backend_layout_next_level of the nearest page above it, and the core's default layout where no page sets one. That layout has one column, colPos 0, with the identifier main. PAGEVIEW renders it with Pages/Default, so that template addresses content.main and no other area. A layout of the sitepackage's own named default shares that template with every page that selected nothing.",
+        "since": 13
+      },
+      "An identifier must not contain two underscores in a row: the backend refuses it, because the pagets__ prefix is split off there to find the page template."
     ]
   },
   {
@@ -127,10 +139,16 @@
       "copy operator",
       "lib.fluidPage",
       "data processor is missing",
-      "import order"
+      "import order",
+      "lib.fluidPage is not defined"
     ],
     "hints": [
-      "page.<n> =< lib.fluidPage is a reference and not a copy: it is resolved while the page renders, out of the merged setup, so a data processor added to lib.fluidPage in a file that is imported later still arrives. The copy operator < is the one where the order of the imports decides what the object ends up holding."
+      "An object reached with =< is a reference and not a copy: it is resolved while the page renders, out of the merged setup, so a data processor added to it in a file that is imported later still arrives. The copy operator < is the one where the order of the imports decides what the object ends up holding.",
+      "lib.contentElement is fluid_styled_content's object, so a sitepackage that depends on that extension reaches it with tt_content.<CType> =< lib.contentElement.",
+      {
+        "text": "lib.fluidPage is theme_camino's object: the camino set defines lib.fluidPage = PAGEVIEW and renders page.<n> =< lib.fluidPage. A sitepackage that does not depend on that set has no lib.fluidPage, and a reference to it renders nothing. It writes page.<n> = PAGEVIEW itself, or defines its own lib object before it references one.",
+        "since": 14
+      }
     ]
   },
   {

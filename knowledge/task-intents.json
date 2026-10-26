@@ -1072,7 +1072,7 @@
       "Lay it out after the theme the core ships rather than after a generated one. typo3_hint_lookup with id=sitepackage-layout says what each directory is for, and that the core's theme is read rather than required.",
       "Put every template under one template root, with the page layouts and the content element layouts in subdirectories of their own. typo3_hint_lookup with id=sitepackage-templates says why a shared Layouts/ without them renders the page frame inside every element.",
       "Declare each page layout in a file of its own, under the name its page template carries. typo3_hint_lookup with id=sitepackage-backend-layouts says whether those files belong to the set or to the extension.",
-      "Reach lib.fluidPage and lib.contentElement with the reference operator =< rather than copy them. typo3_hint_lookup with id=sitepackage-typoscript-reference says what a copy loses that a later import adds.",
+      "Reach lib.contentElement with the reference operator =< rather than copy it, and reach lib.fluidPage only where the set that defines it is a dependency. typo3_hint_lookup with id=sitepackage-typoscript-reference says which package defines each.",
       "Decide whether the site keeps fluid_styled_content before you write its first content element. typo3_hint_lookup with id=sitepackage-fluid-styled-content says what goes with the dependency, the rendering of every Extbase plugin included."
     ],
     "checks": [],

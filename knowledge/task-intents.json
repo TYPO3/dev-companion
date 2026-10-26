@@ -1067,6 +1067,9 @@
       "kickstart"
     ],
     "condition": "only if the task creates a sitepackage or changes how one is laid out, rather than one setting, one content element or the styling inside it",
+    "owes": [
+      "any/testing/browser-check"
+    ],
     "rulesQuery": "",
     "checklist": [
       "Settle where the sitepackage comes from before you write a file. Nothing in the core creates one, and typo3_hint_lookup with id=sitepackage-start says which tool writes which part on the major in front of you.",
@@ -1074,7 +1077,8 @@
       "Put every template under one template root, with the page layouts and the content element layouts in subdirectories of their own. typo3_hint_lookup with id=sitepackage-templates says why a shared Layouts/ without them renders the page frame inside every element.",
       "Declare each page layout in a file of its own, under the name its page template carries. typo3_hint_lookup with id=sitepackage-backend-layouts says whether those files belong to the set or to the extension.",
       "Reach lib.contentElement with the reference operator =< rather than copy it, and reach lib.fluidPage only where the set that defines it is a dependency. typo3_hint_lookup with id=sitepackage-typoscript-reference says which package defines each.",
-      "Decide whether the site keeps fluid_styled_content before you write its first content element. typo3_hint_lookup with id=sitepackage-fluid-styled-content says what goes with the dependency, the rendering of every Extbase plugin included."
+      "Decide whether the site keeps fluid_styled_content before you write its first content element. typo3_hint_lookup with id=sitepackage-fluid-styled-content says what goes with the dependency, the rendering of every Extbase plugin included.",
+      "Prove the package by rendering one page for each page layout, after the caches are flushed. A green suite and a declared command say nothing about a page template, and a project with neither still owes the rendered page."
     ],
     "checks": [],
     "tools": [

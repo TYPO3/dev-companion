@@ -7697,6 +7697,26 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * A project with no test command and no git repository got a brief whose
+     * only proof was tests (`D-GUI-034`).
+     */
+    #[Decision('D-GUI-034')]
+    #[Test]
+    public function aSitepackageBriefOwesARenderedPagePerLayout(): void
+    {
+        $brief = Registry::call('typo3_task_guide', [
+            'task' => 'Create a new sitepackage with the page templates and backend layouts of this site',
+            'changeType' => 'feature',
+        ]);
+
+        self::assertStringContainsString(
+            'Prove the package by rendering one page for each page layout',
+            implode("\n", $brief->data['checklist']),
+        );
+        self::assertContains('any/testing/browser-check', array_column($brief->data['guides'], 'id'));
+    }
+
+    /**
      * A sitepackage brief told a project that a new TSconfig option needs a
      * changelog entry, which is the core's own process
      * (`feedback/2026-10-26-134232`).

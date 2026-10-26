@@ -113,8 +113,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### answers
 
 - [`D-ANS-185`][D-ANS-185] — A test run answer opens on the base suites · 2026-10-26
-- [`D-ANS-187`][D-ANS-187] — The project answer says what a request and a database client reach · 2026-10-26
 - [`D-ANS-186`][D-ANS-186] — A document read whole answers with the scope it declares · 2026-10-26
+- [`D-ANS-187`][D-ANS-187] — The project answer says what a request and a database client reach · 2026-10-26
 - [`D-ANS-184`][D-ANS-184] — A notification before the session is answered by nothing · 2026-10-22
 - [`D-ANS-180`][D-ANS-180] — A backlog larger than a page is read by topic or by page · 2026-10-21
 - [`D-ANS-181`][D-ANS-181] — The stale end reads when a person last commented · 2026-10-21
@@ -292,8 +292,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-185]: answers/ans-185-a-test-run-answer-opens-on-the-base-suites.md
-[D-ANS-187]: answers/ans-187-the-project-answer-says-what-a-request-and-a-database-client-reach.md
 [D-ANS-186]: answers/ans-186-a-document-read-whole-answers-with-the-scope-it-declares.md
+[D-ANS-187]: answers/ans-187-the-project-answer-says-what-a-request-and-a-database-client-reach.md
 [D-ANS-184]: answers/ans-184-a-notification-before-the-session-is-answered-by-nothing.md
 [D-ANS-180]: answers/ans-180-a-backlog-larger-than-a-page-is-read-by-topic-or-by-page.md
 [D-ANS-181]: answers/ans-181-the-stale-end-reads-when-a-person-last-commented.md
@@ -870,6 +870,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### guides
 
+- [`D-GUI-033`][D-GUI-033] — A hint the brief names by id is carried or listed as left out · 2026-10-26
 - [`D-GUI-031`][D-GUI-031] — Translation beside record localization is no label work · 2026-10-21
 - [`D-GUI-032`][D-GUI-032] — A test path the checkout does not have is named before the run · 2026-10-21
 - [`D-GUI-029`][D-GUI-029] — A commit body is the decision in one or two sentences · 2026-10-15
@@ -902,6 +903,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-GUI-008`][D-GUI-008] — Operating an installation is a change type of its own · 2026-08-03
 - [`D-GUI-001`][D-GUI-001] — A missing release target becomes a placeholder, not `main` · 2026-07-29
 
+[D-GUI-033]: guides/gui-033-a-hint-the-brief-names-by-id-is-carried-or-listed-as-left-out.md
 [D-GUI-031]: guides/gui-031-translation-beside-record-localization-is-no-label-work.md
 [D-GUI-032]: guides/gui-032-a-test-path-the-checkout-does-not-have-is-named-before-the-run.md
 [D-GUI-029]: guides/gui-029-a-commit-body-is-the-decision-in-one-or-two-sentences.md

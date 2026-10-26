@@ -540,6 +540,16 @@ final class TaskGuide extends ReadOnlyTool
         $hints = MatchedHints::merged($found);
         // Per call rather than per group: a hint the brief carries for one group
         // of paths is in the answer, whichever group left it.
+        // And the hints the brief's own intents name by id, which the paths may
+        // not reach at all. The list is the one base.md says the caller still
+        // owes, so a hint named and in neither list is one nobody asks for
+        // (`D-GUI-033`).
+        foreach (self::namedHintIds($intents) as $id) {
+            $hint = Hints::byId($id, $targets);
+            if ($hint !== null) {
+                $held[$id] ??= ['id' => $id, 'title' => (string) $hint['title'], 'category' => (string) $hint['category']];
+            }
+        }
         $omitted = array_values(array_diff_key(
             $held,
             array_flip(array_column($hints['matchedHints'], 'id')),
@@ -970,6 +980,25 @@ final class TaskGuide extends ReadOnlyTool
         }
 
         return $records;
+    }
+
+    /**
+     * The hint ids the intents' checklists and tools name as `id=<hint>`.
+     *
+     * @param array<int, array<string, mixed>> $intents
+     * @return array<int, string>
+     */
+    private static function namedHintIds(array $intents): array
+    {
+        $text = '';
+        foreach ($intents as $intent) {
+            foreach ([...($intent['checklist'] ?? []), ...($intent['tools'] ?? [])] as $item) {
+                $text .= ' ' . (is_string($item) ? $item : '');
+            }
+        }
+        preg_match_all('/\bid=["\']?([a-z0-9-]+)/', $text, $matches);
+
+        return array_values(array_unique($matches[1]));
     }
 
     /**

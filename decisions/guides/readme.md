@@ -4,6 +4,7 @@ A caller acts on a draft, so what it leaves out has to be visible in it. These a
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-GUI-033`][D-GUI-033] — A hint the brief names by id is carried or listed as left out · 2026-10-26
 - [`D-GUI-031`][D-GUI-031] — Translation beside record localization is no label work · 2026-10-21
 - [`D-GUI-032`][D-GUI-032] — A test path the checkout does not have is named before the run · 2026-10-21
 - [`D-GUI-029`][D-GUI-029] — A commit body is the decision in one or two sentences · 2026-10-15
@@ -36,6 +37,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-GUI-008`][D-GUI-008] — Operating an installation is a change type of its own · 2026-08-03
 - [`D-GUI-001`][D-GUI-001] — A missing release target becomes a placeholder, not `main` · 2026-07-29
 
+[D-GUI-033]: gui-033-a-hint-the-brief-names-by-id-is-carried-or-listed-as-left-out.md
 [D-GUI-031]: gui-031-translation-beside-record-localization-is-no-label-work.md
 [D-GUI-032]: gui-032-a-test-path-the-checkout-does-not-have-is-named-before-the-run.md
 [D-GUI-029]: gui-029-a-commit-body-is-the-decision-in-one-or-two-sentences.md

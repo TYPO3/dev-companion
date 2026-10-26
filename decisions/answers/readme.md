@@ -5,8 +5,8 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-ANS-185`][D-ANS-185] — A test run answer opens on the base suites · 2026-10-26
-- [`D-ANS-187`][D-ANS-187] — The project answer says what a request and a database client reach · 2026-10-26
 - [`D-ANS-186`][D-ANS-186] — A document read whole answers with the scope it declares · 2026-10-26
+- [`D-ANS-187`][D-ANS-187] — The project answer says what a request and a database client reach · 2026-10-26
 - [`D-ANS-184`][D-ANS-184] — A notification before the session is answered by nothing · 2026-10-22
 - [`D-ANS-180`][D-ANS-180] — A backlog larger than a page is read by topic or by page · 2026-10-21
 - [`D-ANS-181`][D-ANS-181] — The stale end reads when a person last commented · 2026-10-21
@@ -184,8 +184,8 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-185]: ans-185-a-test-run-answer-opens-on-the-base-suites.md
-[D-ANS-187]: ans-187-the-project-answer-says-what-a-request-and-a-database-client-reach.md
 [D-ANS-186]: ans-186-a-document-read-whole-answers-with-the-scope-it-declares.md
+[D-ANS-187]: ans-187-the-project-answer-says-what-a-request-and-a-database-client-reach.md
 [D-ANS-184]: ans-184-a-notification-before-the-session-is-answered-by-nothing.md
 [D-ANS-180]: ans-180-a-backlog-larger-than-a-page-is-read-by-topic-or-by-page.md
 [D-ANS-181]: ans-181-the-stale-end-reads-when-a-person-last-commented.md

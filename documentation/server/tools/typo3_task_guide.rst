@@ -1332,6 +1332,8 @@ Text:
 
     Of the paths given, packages/acme_events/Classes/Domain/Repository/EventRepository.php is outside the TYPO3 core — a project or third-party extension. What follows is split accordingly: what only the core repository has is left out of the half that is about it. The checks below, the changelog and the submission route belong to the core repository, so they are steps for the paths that are in it and for none of the others.
 
+    Owed after this brief, and not carried below: events-extension-points. One typo3_hint_lookup call by id each, and a subject named here and not below is one this brief did not reach.
+
     Task: Fix the query that reads the events
     Change type: bugfix
     Domains: php
@@ -1346,7 +1348,7 @@ Text:
 
     Hints:
     The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
-    These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.
+    A brief carries the 4 strongest per group of paths, which is not everything the lookup holds on them — call it for the rest, by path, with a larger limit, or by id.
 
     # For typo3/sysext/core/Classes/Database/Query/QueryBuilder.php
 
@@ -1604,7 +1606,13 @@ Data:
                 ]
             }
         ],
-        "omittedHints": [],
+        "omittedHints": [
+            {
+                "id": "events-extension-points",
+                "title": "Events and Extension Points",
+                "category": "PHP"
+            }
+        ],
         "rules": [],
         "checks": [
             "CI=true ./Build/Scripts/runTests.sh -s unit",

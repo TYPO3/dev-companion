@@ -6795,14 +6795,16 @@ final class HintsTest extends TestCase
         ]);
 
         self::assertSame(['typo3-content-element-development'], $brief->data['skills']);
-        // The two halves are the lookup's own answer, whole: the name subtracts
-        // nothing from the block and nothing from the pointer to the rest.
+        // The two halves open on the lookup's own answer, whole: the name
+        // subtracts nothing from the block and nothing from the pointer to the
+        // rest. What follows it is what the intents name by id (`D-GUI-033`).
+        $lookupIds = array_column($lookup->data['hints'], 'id');
         self::assertSame(
-            array_column($lookup->data['hints'], 'id'),
-            array_merge(
+            $lookupIds,
+            array_slice(array_merge(
                 array_column($brief->data['hints'], 'id'),
                 array_column($brief->data['omittedHints'], 'id'),
-            ),
+            ), 0, count($lookupIds)),
         );
         // What step 4 of the skill needs, in the sentence that step reads.
         self::assertStringContainsString(
@@ -7692,6 +7694,30 @@ final class HintsTest extends TestCase
             'reach lib.fluidPage only where the set that defines it is a dependency',
             implode("\n", $brief->data['checklist']),
         );
+    }
+
+    /**
+     * A brief named five hints by id in its own checklist and listed none of
+     * them as left out, so a caller that trusts the list fetched none
+     * (`D-GUI-033`).
+     */
+    #[Decision('D-GUI-033')]
+    #[Test]
+    public function aHintTheBriefNamesByIdIsCarriedOrListedAsLeftOut(): void
+    {
+        $brief = Registry::call('typo3_task_guide', [
+            'task' => 'Create a sitepackage extension with site set, page template with header and footer, and two backend layouts',
+            'changeType' => 'feature',
+            'targetVersion' => '14.3',
+            'paths' => ['packages/site_package/composer.json', 'config/sites/main/config.yaml'],
+        ]);
+
+        preg_match_all('/\bid=([a-z0-9-]+)/', implode("\n", $brief->data['checklist']), $named);
+        $listed = [...array_column($brief->data['hints'], 'id'), ...array_column($brief->data['omittedHints'], 'id')];
+        self::assertNotSame([], $named[1]);
+        foreach (array_unique($named[1]) as $id) {
+            self::assertContains($id, $listed, $id . ' is named by the checklist and stands in neither list');
+        }
     }
 
     /**

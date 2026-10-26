@@ -117,13 +117,11 @@ the coverage list and no call.
 
 ## Report
 
-Order findings by severity and include:
-
-1. the concrete file or runtime registration;
-2. the observed behavior or configuration;
-3. the applicable MCP or official-documentation evidence;
-4. the consequence;
-5. a scoped remediation and relevant project check.
+**Write the report in the skeleton of
+[references/report.md](references/report.md), every heading in its order.** The
+three review skills share that skeleton, so two audits compare section by
+section. Order the findings by severity. Each one carries the fields the
+skeleton gives a finding, which are the checklist's finding gate.
 
 Beside them, report what you raised while you read and dropped, with what
 dropped it. A candidate let go in silence and a surface nobody opened leave the
@@ -147,6 +145,10 @@ The findings and the coverage list together make it long, and length makes the
 form matter. Somebody carries an audit into an issue, a ticket or a chat, and
 rendered output does not survive the move. Write it to a file only where the
 caller asks for one, at a path outside the checkout under assessment.
+
+**A document the caller asks for is this report, in this order and with every
+part above.** A summary in a shape of its own drops the ranks, the paths, the
+dropped candidates and the coverage. Those are what a reader checks an audit by.
 
 **A request that asked for a review ends here.** Report, name the owning
 workflow per finding as step 10 says, and stop. An instruction to change the

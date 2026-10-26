@@ -249,6 +249,13 @@ final class SkillTest extends TestCase
      * names. `typo3-core-patch-checkout` ends in a checkout and
      * `typo3-extension-upgrade` in a change, and neither closes on a document.
      */
+    /** The skills that report findings, with the one field of a finding that is theirs. */
+    private const REVIEW_REPORTS = [
+        'typo3-core-patch-review' => 'Introduced',
+        'typo3-extension-patch-review' => 'Introduced',
+        'typo3-extension-health' => 'Owner',
+    ];
+
     private const REPORTING_SKILLS = [
         'typo3-core-patch-review',
         'typo3-extension-health',
@@ -954,13 +961,67 @@ final class SkillTest extends TestCase
     #[Test]
     public function aDocumentOfAReviewTakesTheShapeOfTheReport(): void
     {
-        $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-core-patch-review/SKILL.md'));
-        $report = (string) strstr($skill, '## Report');
+        foreach (array_keys(self::REVIEW_REPORTS) as $name) {
+            self::assertStringContainsString(
+                'A document the caller asks for is this report, in this order and with every part above',
+                self::reportSection($name),
+                $name . ' leaves a document free to take a shape of its own',
+            );
+        }
+    }
 
-        self::assertStringContainsString(
-            'A document the caller asks for is this report, in this order and with every part above',
-            (string) strstr($report, '## Where the review ends', true),
-        );
+    /**
+     * Two reviews compare only where they share a skeleton. The three review
+     * skills write the same sections in the same order, and a finding carries
+     * the same fields. What differs is the head, the severity bands and one
+     * field — `D-SKL-100`.
+     */
+    #[Decision('D-SKL-100')]
+    #[Test]
+    public function theReviewSkillsReportInOneSkeleton(): void
+    {
+        $tail = ['Checked and correct', 'Open', 'Dropped', 'Verification', 'Surfaces', 'Not reached'];
+        $fields = ['Where', 'Observed', 'Rule', 'Consequence', 'Remediation', 'Evidence'];
+
+        foreach (self::REVIEW_REPORTS as $name => $ownField) {
+            self::assertStringContainsString(
+                '[references/report.md](references/report.md)',
+                self::reportSection($name),
+                $name . ' writes its report without the skeleton',
+            );
+
+            $reference = (string) file_get_contents(Paths::root() . '/skills/' . $name . '/references/report.md');
+            if (preg_match('/```markdown\n(.*?)\n```/s', $reference, $match) !== 1) {
+                self::fail($name . ' carries no skeleton in its report reference');
+            }
+            $skeleton = $match[1];
+
+            preg_match_all('/^## (.+)$/m', $skeleton, $headings);
+            $bands = array_slice($headings[1], 0, -count($tail));
+            self::assertSame($tail, array_slice($headings[1], -count($tail)), $name);
+
+            // The severity headings are the checklist's bands, so a rename on
+            // either side is caught here rather than by a reader.
+            $checklist = (string) file_get_contents(Paths::root() . '/skills/' . $name . '/references/checklist.md');
+            $severity = explode("\n## ", (string) strstr($checklist, "## Severity\n"))[0];
+            preg_match_all('/^- (?:\*\*)?([A-Z][^*:—]*?)(?:\*\*)?(?::| —)/m', $severity, $rubric);
+            self::assertSame(
+                array_values(array_diff($rubric[1], [$tail[0]])),
+                $bands,
+                $name . ' reports in bands its checklist does not rank by',
+            );
+
+            preg_match_all('/^- \*\*([A-Za-z ]+):\*\*/m', $skeleton, $finding);
+            self::assertSame(
+                array_merge(array_slice($fields, 0, 5), [$ownField], array_slice($fields, 5)),
+                $finding[1],
+                $name . ' gives a finding other fields than the other review skills',
+            );
+
+            preg_match_all('/^\| (\w+) +\|/m', $skeleton, $head);
+            self::assertSame('Field', $head[1][0], $name);
+            self::assertContains('Verdict', $head[1], $name . ' heads its report without a verdict');
+        }
     }
 
     #[Requirement('R-SKL-005')]
@@ -4867,6 +4928,15 @@ final class SkillTest extends TestCase
     private static function flat(string $skill): string
     {
         return (string) preg_replace('/\s+/', ' ', $skill);
+    }
+
+    /** The *Report* section of a skill, flattened, up to the next section. */
+    private static function reportSection(string $name): string
+    {
+        $skill = (string) file_get_contents(Paths::root() . '/skills/' . $name . '/SKILL.md');
+        $section = (string) strstr($skill, "\n## Report\n");
+
+        return self::flat((string) strstr(substr($section, 1), "\n## ", true));
     }
 
 

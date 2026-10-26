@@ -60,3 +60,11 @@ shape.**
 - A caller asks for a document that is not the review, such as a note for the
   issue. The sentence then forces the report shape onto a text that needs
   another one.
+
+## Since then
+
+The maintainer asked the same day for reports two reviews can be compared by. So
+the template this entry rejected exists after all, as `references/report.md` in
+each review skill rather than as a guide (`D-SKL-100`). The rejection of a guide
+in `knowledge/documents/` stands. The sentence about a document stays, and now
+points at the skeleton.

@@ -132,14 +132,12 @@ run.**
 
 ## Report
 
-Order by what stops the merge, and say why each one stops it:
-
-1. what blocks the merge;
-2. what the maintainer would send it back for;
-3. what is worth a change and would not block it;
-4. what you checked and found correct, briefly, so a reader can tell a silent
-   surface from a verified one;
-5. what you raised while you read and dropped, with what dropped it.
+**Write the report in the skeleton of
+[references/report.md](references/report.md), every heading in its order.** The
+three review skills share that skeleton, so two reports compare section by
+section. Order the findings by what stops the merge, and say why each one stops
+it. Beside them stands what you checked and found correct, and what you raised
+while you read and dropped, with what dropped it.
 
 Every finding names the changed path it is about. A statement about the package
 that ties to no line in this diff belongs in an issue. Close on the checklist's
@@ -153,6 +151,10 @@ matter. Somebody carries a review into a thread, an issue or a chat, and
 rendered output does not survive the move. Write it to a file only where the
 caller asks for one, at a path outside the checkout under review. A modified or
 untracked file beside the change is a surface this review reports on.
+
+**A document the caller asks for is this report, in this order and with every
+part above.** A summary in a shape of its own drops the ranks, the paths, the
+dropped candidates and the surfaces. Those are what a reader checks a review by.
 
 ## Where the review ends
 

@@ -269,14 +269,12 @@ changes arrive on the server with no signal in the checkout. One review read its
 change on the first day. It found the CI vote and two alternatives on the
 second, by a call made for another reason.
 
-Order by what stops the patch, and say why each one stops it:
-
-1. what blocks the submission of the patch at all;
-2. what a reviewer would send it back for;
-3. what is worth a change and would not block it;
-4. what you checked and found correct, briefly, so a reader can tell a silent
-   surface from a verified one;
-5. what you raised while you read and dropped, with what dropped it.
+**Write the report in the skeleton of
+[references/report.md](references/report.md), every heading in its order.** The
+three review skills share that skeleton, so two reports compare section by
+section. Order the findings by what stops the patch, and say why each one stops
+it. Beside them stands what you checked and found correct, and what you raised
+while you read and dropped, with what dropped it.
 
 Close on the checklist's surfaces with each one marked assessed, unassessed or
 not applicable to this diff. A reader cannot tell a review that reports only

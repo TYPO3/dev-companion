@@ -144,7 +144,7 @@ evidence written down.
   obligation not met.
 - **Worth a change** — real and not blocking. Say so, and do not spend the
   reader's first paragraphs on it.
-- **Correct and checked** — short, and kept in. It is the only thing that
+- **Checked and correct** — short, and kept in. It is the only thing that
   separates a surface you read from one you skipped. It names what you read, for
   the same reason a finding names what it collides with.
 

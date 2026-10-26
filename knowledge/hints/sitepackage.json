@@ -91,9 +91,19 @@
       "Layouts/",
       "Partials/",
       "template is not found",
-      "templateName"
+      "templateName",
+      ".fluid.html",
+      "template file extension"
     ],
     "hints": [
+      {
+        "text": "A template file ends in .fluid.html, and Fluid reads a plain .html as well.",
+        "since": 14
+      },
+      {
+        "text": "A template file ends in .html. This Fluid does not read .fluid.html, so a file named that way is not found.",
+        "until": 13
+      },
       "One template root carries all of it: Resources/Private/Templates/, with Pages/ for the page templates, Content/ for the content element templates, ContentPreviews/ for their backend previews, Layouts/, and Partials/ grouped in subdirectories. That directory is the single paths entry PAGEVIEW is given, and lib.contentElement is pointed at Templates/Content/ with the same Layouts/ and Partials/ — so the page and its content elements are rendered out of one tree instead of two.",
       "A layout is addressed with its subdirectory: <f:layout name=\"Pages/Default\" /> in a page template, <f:layout name=\"Content/Default\" /> in a content element. The page frame and the content element frame are both called Default, and fluid_styled_content ships a Default of its own, so a shared Layouts/ root without those subdirectories renders the site header and footer inside every single content element — on a page that still comes back without an error.",
       "The partial root is the same shared name space, and the collision there is not confined to the element that causes it: fluid_styled_content ships Partials/Header/Header and renders it from Partials/Header/All, so a partial of that name in a later root renders the header of every core element on the page. It is handed the core's arguments rather than its own, so a required argument the core does not pass turns every page carrying a core element into an exception, where the layout collision rendered the wrong thing without one. Footer/, Media/, Bullets/, Table/ and DropIn/ sit beside it in that root, so an extension adding partialRootPaths puts its own partials under a directory name nothing else uses.",
@@ -127,7 +137,7 @@
       "backend_layout config"
     ],
     "hints": [
-      "One page layout per file, and one name for it: the identifier the file declares below mod.web_layout.BackendLayouts is also what the page template is named after, so the file name, the identifier and Pages/<Name>.fluid.html are one name written in three places.",
+      "One page layout per file, and one name for it: the identifier the file declares below mod.web_layout.BackendLayouts is also what the page template is named after, so the file name, the identifier and the page template Pages/<Name> are one name written in three places.",
       {
         "text": "Where those files live follows from one question — does anything reach a backend without the set? A project sitepackage ships one set and no Configuration/page.tsconfig of its own, so nothing does: the layouts belong in Configuration/Sets/<Set>/BackendLayouts/, pulled in with @import './BackendLayouts/*.tsconfig' from the set's page.tsconfig, which is the same place and the same form the TypoScript split already has. Configuration/BackendLayouts/ at extension level is for the other case — several sets, or a distributable theme like theme_camino, where the extension is the unit and an extension-level page.tsconfig carries what has to apply whether a site depends on the set or not. Where the extension has no such file, moving the layouts up there is an indirection with no effect. The directory keeps its name either way, because the name says what is in it: page TSconfig that is not a backend layout goes into page.tsconfig or a sibling directory, not in there.",
         "since": 13
@@ -138,7 +148,7 @@
       },
       "An identifier must not contain two underscores in a row: the backend refuses it, because the pagets__ prefix is split off there to find the page template.",
       {
-        "text": "PAGEVIEW takes the identifier without its pagets__ prefix as the template name below Pages/. Where no file carries that name exactly, it takes the same name with its first letter upper-cased. Nothing else in the name changes, so two_columns asks for Pages/Two_columns.fluid.html, and twoColumns for Pages/TwoColumns.fluid.html.",
+        "text": "PAGEVIEW takes the identifier without its pagets__ prefix as the template name below Pages/. Where no file carries that name exactly, it takes the same name with its first letter upper-cased. Nothing else in the name changes, so two_columns asks for Pages/Two_columns, and twoColumns for Pages/TwoColumns.",
         "since": 13
       },
       "A page layout file declares mod.web_layout.BackendLayouts.<identifier> with a title, an optional icon, and config.backend_layout. That block carries colCount, rowCount and rows.<n>.columns.<n>, and each column a name, a colPos, an identifier for the content area, and a colspan where it is wider than one. The title and every column name are LLL references into a language file the extension ships, and a key that file lacks shows as the raw reference in the page module.",

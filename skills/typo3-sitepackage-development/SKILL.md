@@ -108,10 +108,11 @@ The package is not done when its files exist. Work these steps in order:
 2. Set it up with the console's `extension:setup`.
 3. Add its set to the dependencies of the site configuration. Remove the sets it
    replaces.
-4. Check the site's own `setup.typoscript`. `typo3_hint_lookup` with
-   `id="installation-setup"` says what an installer leaves there. Replace the
-   installer's welcome page with a comment rather than delete the file, and
-   report what it held.
+4. Find the installer's welcome page. `typo3_hint_lookup` with
+   `id="installation-setup"` says where the installed major puts it: the site's
+   own `setup.typoscript`, or a root `sys_template` row that clears. Replace the
+   file's content with a comment, or hide the row. Delete neither, and report
+   what it held.
 5. Flush the caches, then render one page for each page layout. Where the
    installation has no page with a layout, set one page's layout in its page
    properties. Without a backend at hand, set its `backend_layout` field to

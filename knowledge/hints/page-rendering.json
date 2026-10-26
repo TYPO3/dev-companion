@@ -125,6 +125,11 @@
         "until": 13
       },
       {
+        "text": "Each area is {content.<identifier>.records}, a list of records. A template renders them with <f:for each=\"{content.main.records}\" as=\"record\"> and, inside it, <f:cObject typoscriptObjectPath=\"{record.mainType}\" data=\"{record}\" table=\"{record.mainType}\" />.",
+        "since": 13,
+        "until": 13
+      },
+      {
         "text": "A page-content data processor beside PAGEVIEW is redundant. It runs after PAGEVIEW has assigned the areas and replaces that variable with its own result.",
         "since": 14
       },
@@ -179,7 +184,7 @@
         "since": 13
       },
       {
-        "text": "A site that typo3 setup created states websiteTitle neither for the site nor for a language. So a header that shows the title needs a last fallback, and a setting of the sitepackage's set that an editor fills is the one that stays correct. The first two read as {language.websiteTitle ? language.websiteTitle : site.configuration.websiteTitle}.",
+        "text": "A site that typo3 setup created states websiteTitle neither for the site nor for a language. So a header that shows the title needs a last fallback, and a setting of the sitepackage's set that an editor fills is the one that stays correct. Read the chain with f:variable and f:if: assign {language.websiteTitle}, and in the f:else of an f:if on it assign {site.configuration.websiteTitle}, then the setting.",
         "since": 13
       },
       {

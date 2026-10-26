@@ -1,7 +1,8 @@
 ---
 date: 2026-10-26T18:13:27+00:00
 category: wrong-answer
-status: open
+status: closed
+closed: 2026-10-26
 model: claude-opus-5-5
 tool: typo3_hint_lookup, typo3_task_guide
 directory: /home/benji/site10-run9

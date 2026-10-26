@@ -99,3 +99,11 @@ The eighth run took two shapes from memory. `site-set-settings` now names the
 label keys in the set's `labels.xlf`, read in `.checkouts/13.4` and `14.3`.
 `sitepackage-backend-layouts` says that a layout's icon becomes the icon of its
 entry in the layout field, so it takes an image path or a registered icon.
+
+## Since then
+
+The first run on 13.4 found three statements written for 14. The ternary title
+chain printed the unresolved path there, so the statement now uses f:variable
+and f:if. The template name carried `.fluid.html`, which Fluid on 13.4 does not
+read, so the extension is bound per major. And 13.4 renders an area as a list of
+records through `f:cObject`, which the hint now shows.

@@ -94,3 +94,10 @@ The builder takes the author's email to a service outside the project, so the
 skill now sends a placeholder unless the user agreed. `skills/base.md` leaves a
 deletion to the caller, so the installer's welcome page is replaced with a
 comment rather than deleted. The render step names where the database file is.
+
+## Since then
+
+The first run on 13.4 met the welcome page in a root `sys_template` row that
+clears, not in the site's file. Step 4 now names both places and hides the row
+rather than deletes it. The get.typo3.org 13.4 template got the same upstream
+fixes as 14.3, keeping what 13.4 still reads.

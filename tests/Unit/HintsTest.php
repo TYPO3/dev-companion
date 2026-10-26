@@ -7797,6 +7797,12 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('A page-content data processor beside PAGEVIEW is redundant', $areas);
 
         self::assertStringContainsString('{site.configuration.websiteTitle}', self::statementsOf('page-variables-and-processors'));
+        // The first run on 13.4 found the ternary form and the .fluid.html
+        // name wrong there, and the records form missing.
+        self::assertStringContainsString('Read the chain with f:variable and f:if', self::statementsOf('page-variables-and-processors'));
+        self::assertStringContainsString('This Fluid does not read .fluid.html', (string) Registry::call('typo3_hint_lookup', ['id' => 'sitepackage-templates', 'targetVersion' => '13.4'])->text);
+        self::assertStringNotContainsString('This Fluid does not read .fluid.html', (string) Registry::call('typo3_hint_lookup', ['id' => 'sitepackage-templates', 'targetVersion' => '14'])->text);
+        self::assertStringContainsString('{content.<identifier>.records}', (string) Registry::call('typo3_hint_lookup', ['id' => 'page-content-areas', 'targetVersion' => '13.4'])->text);
         // The eighth run took both from memory.
         self::assertStringContainsString('settings.description.<key>', self::statementsOf('site-set-settings'));
         self::assertStringContainsString('the identifier of a registered icon, which typo3_icon_lookup confirms', self::statementsOf('sitepackage-backend-layouts'));

@@ -1047,7 +1047,8 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('with `tags` set to `TypoScript`, `TSConfig`, `Fluid`, `YAML` and `Frontend`', $skill);
         self::assertStringContainsString('check that each layout shows its title and columns', $skill);
         self::assertStringContainsString('Send a placeholder unless the user agreed', $skill);
-        self::assertStringContainsString('Replace the installer\'s welcome page with a comment rather than delete the file', $skill);
+        self::assertStringContainsString('or a root `sys_template` row that clears', $skill);
+        self::assertStringContainsString('Delete neither, and report what it held', $skill);
         self::assertStringContainsString('for SQLite the file to write in', $skill);
         self::assertStringContainsString('set its `backend_layout` field to `pagets__<identifier>` for the request', $skill);
         self::assertStringContainsString('Where no shell runs Composer and the console, stop after the files.', $skill);

@@ -158,7 +158,7 @@
     ],
     "hints": [
       {
-        "text": "The site set settings are assigned as {settings.<path>}. PAGEVIEW assigns `site`, `language` and `page` itself and rejects a variables. entry that uses one of those names.",
+        "text": "The site set settings are assigned as {settings.<path>}, nested at each dot: a setting defined as sitepackage.brandName reads as {settings.sitepackage.brandName}. PAGEVIEW assigns `site`, `language` and `page` itself and rejects a variables. entry that uses one of those names.",
         "since": 13
       },
       {

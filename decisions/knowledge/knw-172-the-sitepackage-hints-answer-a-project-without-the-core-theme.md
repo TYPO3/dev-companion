@@ -66,3 +66,8 @@ file. One asked how its own `default` stands beside the core's.
 `sitepackage-backend-layouts` now answers all three. The name rule was read in
 `.checkouts/13.4`, where PAGEVIEW upper-cases the first letter, and in
 `.checkouts/14.3` and `main`, where Fluid 5 tries the exact name first.
+
+A fourth question had its answer already. `page-variables-and-processors` says
+that PAGEVIEW hands the set's settings to the template, and the run that asked
+never fetched it, because neither the skill nor the brief named it. The skill
+now names it, and the statement carries the dotted path as an example.

@@ -68,6 +68,8 @@ Ask `typo3_hint_lookup` for each part before you write it, by id:
 - `sitepackage-typoscript-reference` for which package defines each object you
   reference.
 - `page-content-areas` for the areas a page template may address.
+- `page-variables-and-processors` for what a page template is handed: the
+  settings of the set, the site, the page and the menu.
 
 A page layout and its page template are one name in three places. Write them in
 one step, not one after the other.

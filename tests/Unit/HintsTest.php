@@ -7671,6 +7671,14 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('colCount, rowCount and rows.<n>.columns.<n>', $layouts);
         self::assertStringContainsString('stands beside the core\'s default rather than replacing it', $layouts);
 
+        // A run read the settings in its template on an assumption. The hint
+        // had them, and nothing routed to it.
+        self::assertStringContainsString('{settings.sitepackage.brandName}', self::statementsOf('page-variables-and-processors'));
+        self::assertStringContainsString(
+            '`page-variables-and-processors`',
+            (string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md'),
+        );
+
         self::assertStringContainsString(
             'Where the project does not have theme_camino, the tree is this',
             self::statementsOf('sitepackage-layout'),

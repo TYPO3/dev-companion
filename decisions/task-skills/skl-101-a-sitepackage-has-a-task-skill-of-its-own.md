@@ -68,3 +68,11 @@ trimmed its output and rendered all three cases. What the runs still worked out
 alone now stands in the skill: the deprecation tags a sitepackage reads, a
 second layout rendered through a page set for the request, a stop without a
 shell, and each generated file read against the hints.
+
+## Since then
+
+The get.typo3.org builder was fixed upstream the same day and deployed. Its 14.3
+output no longer ships `ext_tables.php`, removed TypoScript options, a CKEditor
+4 preset or a backend layout label it lacks. What it still ships is its own tree
+and a few placeholder files. The skill's read of each generated file covers
+both, so no hint lists the builder's output.

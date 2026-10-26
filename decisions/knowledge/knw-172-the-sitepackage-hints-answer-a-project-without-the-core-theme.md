@@ -4,6 +4,7 @@ title: The sitepackage hints answer a project without the core theme
 date: 2026-10-26
 status: open
 coveredBy:
+  - HintsTest::aPageTemplateIsToldWhereItsAreasAndTitleComeFrom
   - HintsTest::aSitepackageWithoutTheCoreThemeIsAnsweredOnItsOwnTerms
 ---
 
@@ -71,3 +72,13 @@ A fourth question had its answer already. `page-variables-and-processors` says
 that PAGEVIEW hands the set's settings to the template, and the run that asked
 never fetched it, because neither the skill nor the brief named it. The skill
 now names it, and the statement carries the dotted path as an example.
+
+## Since then
+
+The sixth run asked three more things. `page-content-areas` now says that 13
+needs the `page-content` processor, and that in 14 the same processor beside
+PAGEVIEW replaces what PAGEVIEW assigned. Both are read in `.checkouts/13.4` and
+`14.3`. `page-variables-and-processors` names the site and the language title,
+and a language does not inherit the site's. `sitepackage-start` places each
+directory of the builder's tree in the hints' tree, rather than list the
+builder's defects of the day.

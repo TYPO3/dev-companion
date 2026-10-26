@@ -7780,6 +7780,22 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The sixth SITE-10 run asked where the content areas, the site title and
+     * the builder's directories come from (`D-KNW-172`).
+     */
+    #[Decision('D-KNW-172')]
+    #[Test]
+    public function aPageTemplateIsToldWhereItsAreasAndTitleComeFrom(): void
+    {
+        $areas = self::statementsOf('page-content-areas');
+        self::assertStringContainsString('dataProcessing.<n> = page-content puts them into the variable its option as names', $areas);
+        self::assertStringContainsString('A page-content data processor beside PAGEVIEW is redundant', $areas);
+
+        self::assertStringContainsString('{site.configuration.websiteTitle}', self::statementsOf('page-variables-and-processors'));
+        self::assertStringContainsString('Resources/Private/PageView/Pages', self::statementsOf('sitepackage-start'));
+    }
+
+    /**
      * The builder takes a request, so a session generates a sitepackage in one
      * call rather than through a download. The values it accepts stand in its
      * schema, which the statement points at instead of copying.

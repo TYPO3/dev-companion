@@ -110,11 +110,22 @@
       "column identifier",
       "the column is empty",
       "1770212183",
-      "contentArea argument must be an instance of"
+      "contentArea argument must be an instance of",
+      "page-content",
+      "dataProcessing page-content"
     ],
     "hints": [
       {
         "text": "The content of the page arrives as one variable holding the content areas, named by the `contentAs` option and \"content\" by default. A single area is addressed as {content.<identifier>} and rendered with <f:render.contentArea contentArea=\"{content.main}\" />.",
+        "since": 14
+      },
+      {
+        "text": "PAGEVIEW hands the template no content areas of its own. dataProcessing.<n> = page-content puts them into the variable its option as names, content by default.",
+        "since": 13,
+        "until": 13
+      },
+      {
+        "text": "A page-content data processor beside PAGEVIEW is redundant. It runs after PAGEVIEW has assigned the areas and replaces that variable with its own result.",
         "since": 14
       },
       {
@@ -154,11 +165,17 @@
       "menu",
       "navigation",
       "excludeDoktypes",
-      "variables."
+      "variables.",
+      "websiteTitle",
+      "site title in the header"
     ],
     "hints": [
       {
         "text": "The site set settings are assigned as {settings.<path>}, nested at each dot: a setting defined as sitepackage.brandName reads as {settings.sitepackage.brandName}. PAGEVIEW assigns `site`, `language` and `page` itself and rejects a variables. entry that uses one of those names.",
+        "since": 13
+      },
+      {
+        "text": "The title the site configuration states is {site.configuration.websiteTitle}, and the title one language states is {language.websiteTitle}. A language that sets none leaves its own empty rather than inherit the site's, so a header reads the language's and falls back to the site's.",
         "since": 13
       },
       {

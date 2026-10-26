@@ -1,7 +1,8 @@
 ---
 date: 2026-10-26T12:15:21+00:00
 category: tool-gap
-status: open
+status: closed
+closed: 2026-10-26
 model: claude-opus-5-5[1m]
 tool: bincli, environmentstatus, environmentcreate, typo3_project_describe
 ---

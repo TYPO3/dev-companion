@@ -5,7 +5,6 @@ date: 2026-08-02
 status: open
 coveredBy:
   - EnvironmentsTest::everyEnvironmentAScenarioNamesSaysWhereItComesFrom
-  - EnvironmentsTest::everyEnvironmentThatIsNotMadeHereSaysWhereItComesFromInstead
   - EnvironmentsTest::everyStepOfTheBuildRunsInTheProject
   - EnvironmentsTest::theBuildRequiresTheExtensionsThisServerAsksFor
   - EnvironmentsTest::theInstallationIsBuiltAtTheCoveredStableVersion

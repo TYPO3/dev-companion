@@ -78,6 +78,17 @@ final class Environments
     public const ADMIN_PASSWORD = 'Environment.Created.Here.1';
 
     /**
+     * Where a person opens a made installation, and what they log in with.
+     *
+     * The person who judges a run needs both, and neither stood anywhere they
+     * look (`feedback/2026-10-26-121521`).
+     */
+    public static function login(string $project): string
+    {
+        return sprintf('https://%s.ddev.site/, backend /typo3/ as admin with %s', $project, self::ADMIN_PASSWORD);
+    }
+
+    /**
      * TYPO3's own start site, which is what the build makes the installation
      * from.
      *

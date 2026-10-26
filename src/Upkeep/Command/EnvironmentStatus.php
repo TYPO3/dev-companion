@@ -64,7 +64,9 @@ final class EnvironmentStatus
 '
             . 'repository makes, and says where the rest come from. The database defaults
 '
-            . 'to %s; %s are the rest.',
+            . 'to %s; %s are the rest. A copy of one outside this checkout keeps its
+'
+            . 'site base: set it to the copy\'s DDEV host and flush the caches.',
             Environments::DEFAULT_DRIVER,
             implode(', ', array_filter(
                 Environments::drivers(),
@@ -116,10 +118,11 @@ final class EnvironmentStatus
         }
 
         return sprintf(
-            '%s — DDEV project %s is %s',
+            '%s — DDEV project %s is %s%s',
             $path,
             $name,
             $project === null ? 'not registered on this machine' : $project['status'],
+            $project !== null && $project['status'] === 'running' ? "\n             " . Environments::login($name) : '',
         );
     }
 }

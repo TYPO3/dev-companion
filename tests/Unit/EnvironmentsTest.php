@@ -47,6 +47,20 @@ final class EnvironmentsTest extends TestCase
      * the machine-bound reference left them — `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
+    /**
+     * The person who judged a run in a made installation could open neither
+     * its frontend nor its backend (`D-EVI-012`).
+     */
+    #[Decision('D-EVI-012')]
+    #[Test]
+    public function aMadeInstallationSaysWhereItOpensAndHowToLogIn(): void
+    {
+        $login = Environments::login('typo3-mcp-e-site-14-3');
+
+        self::assertStringContainsString('https://typo3-mcp-e-site-14-3.ddev.site/', $login);
+        self::assertStringContainsString('/typo3/ as admin with ' . Environments::ADMIN_PASSWORD, $login);
+    }
+
     #[Test]
     public function everyEnvironmentThatIsNotMadeHereSaysWhereItComesFromInstead(): void
     {

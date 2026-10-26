@@ -4,6 +4,7 @@ A prompt that already contains the answer measures nothing. These are the decisi
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-EVI-012`][D-EVI-012] — A running environment says where it opens and the login · 2026-10-26
 - [`D-EVI-011`][D-EVI-011] — Which half a client hands the model is measured in the client · 2026-09-17
 - [`D-EVI-010`][D-EVI-010] — A made installation carries an extension of the project's own · 2026-09-02
 - [`D-EVI-009`][D-EVI-009] — A run is read against its own trace · 2026-09-01
@@ -16,6 +17,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-EVI-002`][D-EVI-002] — A skill crossing is read rather than run · 2026-07-31 · confirmed
 - [`D-EVI-003`][D-EVI-003] — A review runs the checks that cannot change the code · 2026-07-31 · confirmed
 
+[D-EVI-012]: evi-012-a-running-environment-says-where-it-opens-and-the-login.md
 [D-EVI-011]: evi-011-which-half-a-client-hands-the-model-is-measured-in-the-client.md
 [D-EVI-010]: evi-010-a-made-installation-carries-an-extension-of-the-projects-own.md
 [D-EVI-009]: evi-009-a-run-is-read-against-its-own-trace.md

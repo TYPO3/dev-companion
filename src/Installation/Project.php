@@ -110,7 +110,8 @@ final class Project
      *     node: array{engines: ?string, enginesIn: ?string, nvmrc: ?string, nvmrcIn: ?string, environment: ?string, ci: array<int, array{workflow: string, from: string, states: string, version: ?string}>, relation: array{declared: string, declaredBy: string, nvmrcAgainstEngines: ?string, inEnvironment: ?string, ci: ?string, inCi: ?string}|null}|null,
      *     environment: array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null,
      *     extensions: array<int, array{key: string, path: string, origin: string, deprecatedFiles: array<int, array{file: string, changelog: string, predicate: string, cost: string}>}>,
-     *     sites: array<int, array{identifier: string, base: string, rootPageId: ?int, sets: array<int, string>, languages: array<int, string>}>,
+     *     sites: array<int, array{identifier: string, base: string, rootPageId: ?int, sets: array<int, string>, languages: array<int, string>, served: ?bool}>,
+     *     database: array{driver: string, source: string}|null,
      *     commands: array<int, array{command: string, source: string, declares: string, runs: string, runThrough: string|null}>,
      *     uncheckedKinds: array<int, string>,
      *     patches: array<int, array{package: string, description: string, file: string}>
@@ -152,7 +153,8 @@ final class Project
             'node' => Node::describe($root, $environment['node'] ?? null),
             'environment' => $environment,
             'extensions' => self::extensions($root),
-            'sites' => self::sites($root),
+            'sites' => self::served(self::sites($root), $environment),
+            'database' => self::database($root),
             'commands' => $commands,
             'uncheckedKinds' => self::uncheckedKinds($commands),
             'patches' => self::patches($manifest),
@@ -715,6 +717,53 @@ final class Project
         }
 
         return $sites;
+    }
+
+    /**
+     * Whether the environment serves the host each site's base names.
+     *
+     * A base on a host DDEV does not serve answers "No site configuration
+     * found" in a browser, with nothing in the files saying why. Null where no
+     * DDEV environment declares hostnames, or where the base names no host.
+     *
+     * @param array<int, array{identifier: string, base: string, rootPageId: ?int, sets: array<int, string>, languages: array<int, string>}> $sites
+     * @param array{via: string, hostnames: array<int, string>}|null $environment
+     * @return array<int, array{identifier: string, base: string, rootPageId: ?int, sets: array<int, string>, languages: array<int, string>, served: ?bool}>
+     */
+    private static function served(array $sites, ?array $environment): array
+    {
+        $hostnames = $environment !== null && $environment['via'] === Typo3Cli::VIA_DDEV ? $environment['hostnames'] : [];
+
+        return array_map(static function (array $site) use ($hostnames): array {
+            $host = parse_url($site['base'], PHP_URL_HOST);
+            $site['served'] = $hostnames === [] || !is_string($host) ? null : in_array($host, $hostnames, true);
+
+            return $site;
+        }, $sites);
+    }
+
+    /**
+     * The database driver the installation's configuration files state.
+     *
+     * Read off `config/system/settings.php` and then `additional.php`, the
+     * order TYPO3 applies them in, with the last one that names a driver
+     * winning. Read as text and never included, because both are the
+     * installation's code. A driver set by an environment variable or a
+     * computed value is not in the text, and the answer is then null.
+     *
+     * @return array{driver: string, source: string}|null
+     */
+    private static function database(string $root): ?array
+    {
+        $found = null;
+        foreach (['config/system/settings.php', 'config/system/additional.php'] as $file) {
+            $text = is_file($root . '/' . $file) ? (string) file_get_contents($root . '/' . $file) : '';
+            if (preg_match_all("/'driver'\s*=>\s*'([a-z_]+)'/", $text, $matches) > 0) {
+                $found = ['driver' => (string) end($matches[1]), 'source' => $file];
+            }
+        }
+
+        return $found;
     }
 
     /**

@@ -354,6 +354,22 @@ Answers with
         # The site sets this site depends on, by their composer-style name.
         sets: [string]
         languages: [string]
+        # Whether the DDEV environment serves the host the base names. False means a
+        # browser on that base gets "No site configuration found". Set the base to
+        # one of the environment's hostnames, or request the site from inside the
+        # container with the base's host as the Host header. Null where no DDEV
+        # environment declares hostnames, or where the base names no host.
+        served: boolean or null
+    # The database driver as the configuration files state it, read as text and
+    # never run. On pdo_sqlite the database is a file the connection names, so a
+    # database client of the environment, such as ddev mysql, has nothing to connect
+    # to. Null where neither file names a driver as a literal.
+    database:  # optional
+      # The Doctrine driver the files name, for example pdo_sqlite or mysqli.
+      driver: string
+      # The file that names it last: config/system/settings.php or
+      # config/system/additional.php.
+      source: string
     # What this repository declares. A check that is not here does not exist here.
     commands:  # optional
       - # As this repository declares it, run from the project root. Where
@@ -474,17 +490,17 @@ Answers with
 The answer carries exactly one of these sets of fields:
 
 - ``root``, ``installed``, ``installedAgainstLock``, ``phpRelation``, ``node``,
-  ``environment``, ``extensions``, ``sites``, ``commands``, ``uncheckedKinds``,
-  ``patches``, ``guides``, ``answeredBy``
+  ``environment``, ``extensions``, ``sites``, ``database``, ``commands``,
+  ``uncheckedKinds``, ``patches``, ``guides``, ``answeredBy``
 - ``unsupported``
 
 Answered
 --------
 
-Recorded on 2026-09-23 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-10-26 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
-fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
-14.3 core checkout below .checkouts/. Its console is out of reach:
+fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, an
+installation outside this repository. Its console is out of reach:
 <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3
 exists. Its dependencies are not installed — vendor/autoload.php is not there
 either, and composer install writes both. Answered against composer-project,
@@ -504,8 +520,8 @@ Called with:
 
     {}
 
-From the 14.3 core checkout
-"""""""""""""""""""""""""""
+From an outside installation
+""""""""""""""""""""""""""""
 
 Text:
 
@@ -555,8 +571,8 @@ Text:
     - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
     - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
     - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When you write or amend the message of a patch to the core, which is the only repository these rules describe.
-    - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
-    - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, or when you have to change a patch already under review — your own or another author's.
+    - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
+    - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.
     - core/contribution/rebasing-a-stale-patch (core) — Rebasing a Stale Patch. Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.
     - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.
     - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.
@@ -617,6 +633,7 @@ Data:
         "environment": null,
         "extensions": [],
         "sites": [],
+        "database": null,
         "commands": [
             {
                 "command": "composer gerrit:setup",
@@ -839,14 +856,14 @@ Data:
             {
                 "id": "core/contribution/committed-build-output",
                 "title": "The Build Output the Core Commits",
-                "when": "When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.",
+                "when": "When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.",
                 "scope": "core",
                 "tool": "typo3_rule_lookup"
             },
             {
                 "id": "core/contribution/gerrit-workflow",
                 "title": "TYPO3 Gerrit Workflow",
-                "when": "When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, or when you have to change a patch already under review — your own or another author's.",
+                "when": "When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.",
                 "scope": "core",
                 "tool": "typo3_rule_lookup"
             },
@@ -1000,8 +1017,8 @@ Text:
     - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
     - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
     - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When you write or amend the message of a patch to the core, which is the only repository these rules describe.
-    - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
-    - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, or when you have to change a patch already under review — your own or another author's.
+    - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
+    - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.
     - core/contribution/rebasing-a-stale-patch (core) — Rebasing a Stale Patch. Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.
     - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.
     - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.
@@ -1071,9 +1088,11 @@ Data:
                 ],
                 "languages": [
                     "English"
-                ]
+                ],
+                "served": null
             }
         ],
+        "database": null,
         "commands": [
             {
                 "command": "composer cgl",
@@ -1178,14 +1197,14 @@ Data:
             {
                 "id": "core/contribution/committed-build-output",
                 "title": "The Build Output the Core Commits",
-                "when": "When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.",
+                "when": "When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.",
                 "scope": "core",
                 "tool": "typo3_rule_lookup"
             },
             {
                 "id": "core/contribution/gerrit-workflow",
                 "title": "TYPO3 Gerrit Workflow",
-                "when": "When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, or when you have to change a patch already under review — your own or another author's.",
+                "when": "When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.",
                 "scope": "core",
                 "tool": "typo3_rule_lookup"
             },

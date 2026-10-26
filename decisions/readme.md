@@ -113,6 +113,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### answers
 
 - [`D-ANS-185`][D-ANS-185] — A test run answer opens on the base suites · 2026-10-26
+- [`D-ANS-187`][D-ANS-187] — The project answer says what a request and a database client reach · 2026-10-26
 - [`D-ANS-186`][D-ANS-186] — A document read whole answers with the scope it declares · 2026-10-26
 - [`D-ANS-184`][D-ANS-184] — A notification before the session is answered by nothing · 2026-10-22
 - [`D-ANS-180`][D-ANS-180] — A backlog larger than a page is read by topic or by page · 2026-10-21
@@ -291,6 +292,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-185]: answers/ans-185-a-test-run-answer-opens-on-the-base-suites.md
+[D-ANS-187]: answers/ans-187-the-project-answer-says-what-a-request-and-a-database-client-reach.md
 [D-ANS-186]: answers/ans-186-a-document-read-whole-answers-with-the-scope-it-declares.md
 [D-ANS-184]: answers/ans-184-a-notification-before-the-session-is-answered-by-nothing.md
 [D-ANS-180]: answers/ans-180-a-backlog-larger-than-a-page-is-read-by-topic-or-by-page.md

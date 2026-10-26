@@ -186,7 +186,12 @@ final class ProjectDescribe extends ReadOnlyTool
                 'rootPageId' => Schema::nullable(['type' => 'integer']),
                 'sets' => Schema::listOf(Schema::string(), 'The site sets this site depends on, by their composer-style name.'),
                 'languages' => Schema::listOf(Schema::string()),
-            ], ['identifier', 'base', 'rootPageId', 'sets', 'languages'])),
+                'served' => Schema::nullable(['type' => 'boolean', 'description' => 'Whether the DDEV environment serves the host the base names. False means a browser on that base gets "No site configuration found". Set the base to one of the environment\'s hostnames, or request the site from inside the container with the base\'s host as the Host header. Null where no DDEV environment declares hostnames, or where the base names no host.']),
+            ], ['identifier', 'base', 'rootPageId', 'sets', 'languages', 'served'])),
+            'database' => Schema::nullable(Schema::object([
+                'driver' => Schema::string('The Doctrine driver the files name, for example pdo_sqlite or mysqli.'),
+                'source' => Schema::string('The file that names it last: config/system/settings.php or config/system/additional.php.'),
+            ], ['driver', 'source'], 'The database driver as the configuration files state it, read as text and never run. On pdo_sqlite the database is a file the connection names, so a database client of the environment, such as ddev mysql, has nothing to connect to. Null where neither file names a driver as a literal.')),
             'commands' => Schema::listOf(Schema::object([
                 'command' => Schema::string('As this repository declares it, run from the project root. Where environment is not null, it runs inside that environment rather than in the caller\'s shell. An npm script declared below the root carries the --prefix that points npm at the manifest that declares it. So two manifests with a build script are two commands you can tell apart.'),
                 'source' => Schema::string('The manifest that declares it, relative to the project root: composer.json, package.json, or Build/package.json where the repository keeps its frontend build one directory down.'),
@@ -203,7 +208,7 @@ final class ProjectDescribe extends ReadOnlyTool
             ], ['package', 'description', 'file']), 'Patches from extra.patches. A patched package does not behave as its version says.'),
             'guides' => Schema::listOf(Schema::guideReference(), 'The whole procedures this server carries, named here because this is the call every task starts with. This server also serves them as typo3://guides resources, and a client that lists no resources renders none of them. Four sessions in one week finished without any knowledge that they exist. Each is one typo3_rule_lookup call by documentId, which needs no resource list. A search over sections answers a question and never hands one of these over whole.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
-        ], ['root', 'installed', 'installedAgainstLock', 'phpRelation', 'node', 'environment', 'extensions', 'sites', 'commands', 'uncheckedKinds', 'patches', 'guides', 'answeredBy'], []);
+        ], ['root', 'installed', 'installedAgainstLock', 'phpRelation', 'node', 'environment', 'extensions', 'sites', 'database', 'commands', 'uncheckedKinds', 'patches', 'guides', 'answeredBy'], []);
     }
 
     public static function answer(array $args): ToolResult
@@ -271,6 +276,21 @@ final class ProjectDescribe extends ReadOnlyTool
                 $site['rootPageId'] === null ? '' : ', root page ' . $site['rootPageId'],
                 $site['sets'] === [] ? ', no sets' : ', sets: ' . implode(', ', $site['sets']),
             );
+            if ($site['served'] === false) {
+                $lines[] = sprintf(
+                    '  The environment does not serve the host of that base, so a browser there gets "No site '
+                    . 'configuration found". Set the base to %s, or request the site from inside the container with '
+                    . 'the base\'s host as the Host header.',
+                    implode(' or ', $project['environment']['hostnames'] ?? []),
+                );
+            }
+        }
+        if ($project['database'] !== null) {
+            $lines[] = '';
+            $lines[] = sprintf('Database driver: %s, as %s states it.', $project['database']['driver'], $project['database']['source'])
+                . ($project['database']['driver'] === 'pdo_sqlite'
+                    ? ' The database is the file that connection names, so a database client such as ddev mysql has nothing to connect to.'
+                    : '');
         }
 
         $lines[] = '';

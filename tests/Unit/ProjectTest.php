@@ -1359,6 +1359,56 @@ final class ProjectTest extends TestCase
         self::assertStringContainsString('- blog at /, root page 2', $text);
     }
 
+    /**
+     * A copy of a DDEV project under another name kept its base, and a run
+     * spent three requests on "No site configuration found" (`D-ANS-187`).
+     */
+    #[Decision('D-ANS-187')]
+    #[Test]
+    public function aSiteWhoseBaseTheEnvironmentDoesNotServeIsSaidToBeUnreachable(): void
+    {
+        $root = $this->composerProject();
+        $this->declare($root . '/.ddev/config.yaml', "name: copy\ntype: typo3\n");
+        $this->site($root, 'main', ['base' => 'https://original.ddev.site/', 'rootPageId' => 1]);
+        $this->site($root, 'served', ['base' => 'https://copy.ddev.site/', 'rootPageId' => 2]);
+        $this->site($root, 'relative', ['base' => '/', 'rootPageId' => 3]);
+        Instance::discoverFrom($root);
+
+        $sites = array_column(Project::describe()['sites'], 'served', 'identifier');
+        self::assertSame(['main' => false, 'relative' => null, 'served' => true], $sites);
+
+        $text = Registry::call('typo3_project_describe', [])->text;
+        self::assertStringContainsString('The environment does not serve the host of that base', $text);
+        self::assertStringContainsString('Set the base to copy.ddev.site', $text);
+    }
+
+    /**
+     * Two runs reached for ddev mysql on an installation that runs on SQLite
+     * (`D-ANS-187`).
+     */
+    #[Decision('D-ANS-187')]
+    #[Test]
+    public function theDatabaseDriverIsTheOneTheLastConfigurationFileNames(): void
+    {
+        $root = $this->composerProject();
+        $this->declare($root . '/config/system/settings.php', "<?php\nreturn ['DB' => ['Connections' => ['Default' => ['driver' => 'mysqli']]]];\n");
+        Instance::discoverFrom($root);
+        self::assertSame(
+            ['driver' => 'mysqli', 'source' => 'config/system/settings.php'],
+            Project::describe()['database'],
+        );
+
+        $this->declare($root . '/config/system/additional.php', "<?php\n\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default'] = ['driver' => 'pdo_sqlite'];\n");
+        self::assertSame(
+            ['driver' => 'pdo_sqlite', 'source' => 'config/system/additional.php'],
+            Project::describe()['database'],
+        );
+        self::assertStringContainsString(
+            'a database client such as ddev mysql has nothing to connect to',
+            Registry::call('typo3_project_describe', [])->text,
+        );
+    }
+
     #[Requirement('R-PRJ-002')]
     #[Test]
     public function aSiteConfigurationThatCannotBeParsedCostsThatSiteAndNoOther(): void

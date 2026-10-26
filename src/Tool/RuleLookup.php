@@ -63,7 +63,12 @@ final class RuleLookup extends ReadOnlyTool
     public static function outputSchema(): array
     {
         $schema = Schema::knowledgeLookup();
+        // A document read whole by its id declares the work it holds for, and
+        // `any` is one of those (`D-ANS-186`).
         $schema['properties']['scope'] = Schema::scope();
+        $schema['properties']['scope']['enum'][] = Scope::Any->value;
+        $schema['properties']['scope']['description'] .= ' any: a document read whole by its id that holds for '
+            . 'every kind of work, and the answer to an id no document has.';
         $schema['properties']['matchedHeadings'] = Schema::listOf(Schema::string(), 'The headings the query '
             . 'matched, where more than one match was in one document and the answer is that document whole rather '
             . 'than the excerpts. Empty on every other answer, whose matches carry their own heading each. The text '

@@ -95,11 +95,12 @@ Answers with
     alsoInHints:  # optional
       - id: string
         title: string
-    # One of: core, uncertain, project, extension. Which kind of work this answer is
-    # for. core: a patch to the TYPO3 core itself. project: the site repository
-    # around an installation. extension: a package in it, a sitepackage or a
-    # third-party one. uncertain: nothing in the call placed the work, and the
-    # answer is the core's own.
+    # One of: core, uncertain, project, extension, any. Which kind of work this
+    # answer is for. core: a patch to the TYPO3 core itself. project: the site
+    # repository around an installation. extension: a package in it, a sitepackage
+    # or a third-party one. uncertain: nothing in the call placed the work, and the
+    # answer is the core's own. any: a document read whole by its id that holds for
+    # every kind of work, and the answer to an id no document has.
     scope: string
     # The headings the query matched, where more than one match was in one document
     # and the answer is that document whole rather than the excerpts. Empty on every

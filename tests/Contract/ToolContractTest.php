@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
+use TYPO3\DevCompanion\Knowledge\Documents;
 use TYPO3\DevCompanion\Knowledge\Hints;
 use TYPO3\DevCompanion\Manual\CoreChangelog;
 use TYPO3\DevCompanion\Result\Unsupported;
@@ -405,6 +406,29 @@ final class ToolContractTest extends TestCase
 
         $errors = (new SchemaValidator())->validateAgainstJsonSchema($data, $schema);
         self::assertSame([], $errors, $name . ' broke its output schema: ' . json_encode($errors));
+    }
+
+    /**
+     * A document read whole answers with the scope it declares, and a client
+     * that validates the answer rejected every `any/` page — `D-ANS-186`.
+     */
+    #[Decision('D-ANS-186')]
+    #[Test]
+    public function everyDocumentReadByItsIdKeepsTheOutputSchema(): void
+    {
+        $schema = $this->outputSchema('typo3_rule_lookup');
+        foreach (array_column(Documents::documents(), 'id') as $id) {
+            $data = json_decode((string) json_encode(
+                Registry::call('typo3_rule_lookup', ['documentId' => $id])->data,
+                JSON_THROW_ON_ERROR,
+            ), true);
+
+            self::assertSame(
+                [],
+                (new SchemaValidator())->validateAgainstJsonSchema($data, $schema),
+                $id . ' read by its id breaks the output schema',
+            );
+        }
     }
 
     /**

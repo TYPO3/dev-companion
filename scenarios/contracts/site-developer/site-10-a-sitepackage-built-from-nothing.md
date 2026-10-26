@@ -28,6 +28,9 @@ and the first run without a skill is the baseline for
 
 **What has to come out of it**
 
+- One question about the design before the first template: colours and fonts,
+  logo and favicon, a design to follow, a CSS framework. Each point names its
+  default, and the work goes on after one reply.
 - An extension the project requires through Composer, with a set the site
   configuration depends on. The answer names the file that carries that
   dependency.
@@ -48,6 +51,8 @@ and the first run without a skill is the baseline for
 
 **How it fails**
 
+- A second round of questions, or a question about something the request or the
+  project already answers.
 - A package written from a tutorial for another major: TypoScript constants
   where the installed line has set settings, or a page rendered without the
   mechanism that line renders pages with.

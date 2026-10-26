@@ -4,6 +4,7 @@ title: A sitepackage has a task skill of its own
 date: 2026-10-26
 status: open
 coveredBy:
+  - SkillTest::theSitepackageSkillAsksForTheDesignOnceBeforeTheFirstTemplate
   - SkillTest::theSitepackageSkillEndsOnEveryLayoutRendered
 ---
 
@@ -76,3 +77,12 @@ output no longer ships `ext_tables.php`, removed TypoScript options, a CKEditor
 4 preset or a backend layout label it lacks. What it still ships is its own tree
 and a few placeholder files. The skill's read of each generated file covers
 both, so no hint lists the builder's output.
+
+## Since then
+
+The maintainer asked on 2026-10-26 that the skill take the site's design into
+account. So it asks one question before the first template: colours and fonts,
+logo and favicon, a design to follow, and a CSS framework. Each point carries a
+default, and one reply that accepts them is enough. This is the one question the
+skill asks before it works. A session that gets no reply waits, which the
+maintainer accepted in exchange for a package built to the design.

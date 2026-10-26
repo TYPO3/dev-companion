@@ -1050,6 +1050,25 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('Read each generated file against the hints in *Lay it out*', $skill);
     }
 
+    /**
+     * The maintainer wants a sitepackage built to the site's design, and a run
+     * that only takes defaults builds it to none (`D-SKL-101`).
+     */
+    #[Decision('D-SKL-101')]
+    #[Test]
+    public function theSitepackageSkillAsksForTheDesignOnceBeforeTheFirstTemplate(): void
+    {
+        $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md'));
+        $design = (string) strstr((string) strstr($skill, '## Ask for the design once'), '## Choose where', true);
+
+        self::assertStringContainsString('ask one question before the first template', $design);
+        foreach (['Colours and fonts', 'A logo and a favicon', 'A website, a mockup or a styleguide', 'A CSS framework'] as $point) {
+            self::assertStringContainsString($point, $design);
+        }
+        self::assertStringContainsString('one reply such as "use the defaults" is enough', $design);
+        self::assertStringContainsString('`typo3-extension-asset-build`', $design);
+    }
+
     #[Requirement('R-SKL-005')]
     #[Decision('D-SKL-074')]
     #[Decision('D-SKL-072')]

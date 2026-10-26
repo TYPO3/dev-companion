@@ -14,7 +14,8 @@ are lookups. A copy of them here is one nobody can correct.
 list of questions is not that result. Where the request leaves a choice open,
 take the default this skill names and go on. Name every default in the report,
 with the alternative and what it costs. Ask only for what neither the request
-nor the project answers.
+nor the project answers. The design is the one exception, in *Ask for the design
+once*.
 
 ## Establish the site, then the package
 
@@ -37,6 +38,23 @@ Then, for this workflow:
 - Take the vendor from the project's own packages, and the author from the root
   `composer.json` or the git configuration. Name the first page layout
   `Default`, so a page with no layout selected renders through it too.
+
+## Ask for the design once
+
+**Where the request names no design, ask one question before the first
+template.** Bundle these four points into it, each with the default you take:
+
+- Colours and fonts. The default is a neutral palette and the system font stack.
+- A logo and a favicon. The default is the site title as text and no favicon.
+- A website, a mockup or a styleguide to follow. The default is none.
+- A CSS framework. The default is plain CSS without a build step.
+
+Say that one reply such as "use the defaults" is enough. Ask once, and do not
+ask again for a point the user left out. Take its default.
+
+Put colours and fonts into CSS custom properties. Make a value a setting of the
+set where an editor changes it per site. A framework with a build step is
+`typo3-extension-asset-build`'s, at the point the templates are written.
 
 ## Choose where a new package comes from
 

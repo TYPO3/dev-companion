@@ -7662,7 +7662,7 @@ final class HintsTest extends TestCase
         $result = Registry::call('typo3_hint_lookup', ['task' => 'generate a sitepackage through the get.typo3.org api']);
 
         self::assertSame('sitepackage-start', $result->data['hints'][0]['id'] ?? null);
-        self::assertStringContainsString('https://get.typo3.org/api/doc', self::statementsOf('sitepackage-start'));
+        self::assertStringContainsString('Fetch https://get.typo3.org/api/doc.json before you build the request', self::statementsOf('sitepackage-start'));
         self::assertStringContainsString('returns the extension as a zip', self::statementsOf('sitepackage-start'));
     }
 

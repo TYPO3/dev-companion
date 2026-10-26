@@ -24,7 +24,7 @@
     ],
     "hints": [
       "Nothing in the core creates a sitepackage, and three community tools divide the work. The Site Package Builder at get.typo3.org is a web form that hands the extension back as a download. The console tool is the extension friendsoftypo3/kickstarter, which writes single parts of a sitepackage into an export directory of its own and asks before it replaces what stands there. b13/make writes neither a site package nor an Extbase extension and says so, so it answers the rest of an extension instead.",
-      "The builder answers a request as well as the form. https://get.typo3.org/api/doc describes its sitepackage endpoint: a POST of JSON that returns the extension as a zip. The schema there names each field the request takes, and a value the builder refuses comes back as a Bad Request that names the field.",
+      "The builder answers a request as well as the form: a POST of JSON to its sitepackage endpoint returns the extension as a zip. Fetch https://get.typo3.org/api/doc.json before you build the request, and take the endpoint, the fields and the values each one accepts from there rather than from an example. A value the builder refuses comes back as a Bad Request that names the field.",
       {
         "text": "The set is the half the console covers: make:site-set writes Configuration/Sets/<Set>/config.yaml and prints the dependencies line the site configuration needs, and make:site-settings-definition writes the definitions beside it. make:site-package refuses here and names the reason, so the extension around that set comes from the builder, or from the layout theme_camino works out.",
         "since": 14

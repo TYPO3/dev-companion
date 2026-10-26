@@ -63,3 +63,17 @@ skill sent the session to the existing test and made it watch a red check fail,
 `typo3_gerrit_lookup` by path found two abandoned attempts, the commit message
 guide caught a long subject, and the review checklist found the precedent. The
 handovers between three skills fired as `D-SKL-022` says. Nothing changes.
+
+## Since then
+
+A fourth core session, a review and amend of change 97164 on 2026-10-26, names
+three answers that held
+([`feedback/2026-10-26-102428-what-worked`](../../feedback/archive/2026-10-26-102428-what-worked-in-the-review-of-change-97164.md)).
+They are the boundaries above: the fetch ref, patch set, commit and mergeable of
+`typo3_gerrit_lookup`, the `cglGit` worktree warning and the suites not run, and
+the commit message guide. Each field is required in the tool's output schema,
+and the warning has its test. So nothing changes.
+
+The same session says it reported those answers wrongly while the tools gave
+correct data. That is the other side of the boundary: the report, which the
+skill owns. `D-SKL-072` and `D-SKL-099` answer it from the same debrief.

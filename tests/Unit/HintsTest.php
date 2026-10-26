@@ -7618,6 +7618,40 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The sitepackage hints matched a task's words and no task named them as
+     * its work. So a brief for a new sitepackage carried no item about it, and
+     * the hints on the reference operator and on fluid_styled_content reached
+     * nothing at all.
+     */
+    #[Test]
+    public function aNewSitepackageIsRoutedToEverySitepackageHint(): void
+    {
+        $starting = Registry::call('typo3_task_guide', [
+            'task' => 'Create a new sitepackage for our TYPO3 site with page templates and a backend layout',
+            'changeType' => 'feature',
+        ]);
+
+        self::assertSame(
+            'strong',
+            array_column($starting->data['intents'], 'confidence', 'id')['sitepackage'] ?? null,
+        );
+        $checklist = implode("\n", $starting->data['checklist']);
+        $hints = json_decode((string) file_get_contents(Paths::knowledgeFile('hints', 'sitepackage.json')), true);
+        self::assertIsArray($hints);
+        foreach (array_column($hints, 'id') as $id) {
+            self::assertStringContainsString('id=' . $id, $checklist, $id . ' is routed to by no item');
+        }
+
+        // A task that only stands in a sitepackage is not one about it, so the
+        // theme of SITE-04 gets the items under their condition.
+        $styling = Registry::call('typo3_task_guide', [
+            'task' => 'Our site package theme is Bootstrap 5 with our own SCSS on top. Clean up the SCSS.',
+            'changeType' => 'bugfix',
+        ]);
+        self::assertSame('weak', array_column($styling->data['intents'], 'confidence', 'id')['sitepackage'] ?? null);
+    }
+
+    /**
      * A task that includes a site set, which is not a task that defines one of
      * its settings.
      *

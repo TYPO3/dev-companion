@@ -1039,6 +1039,51 @@
     ]
   },
   {
+    "id": "sitepackage",
+    "title": "Starting or laying out a sitepackage",
+    "match": [
+      "new sitepackage",
+      "new site package",
+      "create a sitepackage",
+      "create a site package",
+      "start a sitepackage",
+      "start a site package",
+      "build a sitepackage",
+      "build a site package",
+      "set up a sitepackage",
+      "set up a site package",
+      "sitepackage from scratch",
+      "site package from scratch",
+      "theme extension"
+    ],
+    "matchWeak": [
+      "sitepackage",
+      "site package",
+      "page template",
+      "backend layout",
+      "page layout",
+      "fluid_styled_content",
+      "kickstart"
+    ],
+    "condition": "only if the task creates a sitepackage or changes how one is laid out, rather than one setting, one content element or the styling inside it",
+    "rulesQuery": "",
+    "checklist": [
+      "Settle where the sitepackage comes from before you write a file. Nothing in the core creates one, and typo3_hint_lookup with id=sitepackage-start says which tool writes which part on the major in front of you.",
+      "Lay it out after the theme the core ships rather than after a generated one. typo3_hint_lookup with id=sitepackage-layout says what each directory is for, and that the core's theme is read rather than required.",
+      "Put every template under one template root, with the page layouts and the content element layouts in subdirectories of their own. typo3_hint_lookup with id=sitepackage-templates says why a shared Layouts/ without them renders the page frame inside every element.",
+      "Declare each page layout in a file of its own, under the name its page template carries. typo3_hint_lookup with id=sitepackage-backend-layouts says whether those files belong to the set or to the extension.",
+      "Reach lib.fluidPage and lib.contentElement with the reference operator =< rather than copy them. typo3_hint_lookup with id=sitepackage-typoscript-reference says what a copy loses that a later import adds.",
+      "Decide whether the site keeps fluid_styled_content before you write its first content element. typo3_hint_lookup with id=sitepackage-fluid-styled-content says what goes with the dependency, the rendering of every Extbase plugin included."
+    ],
+    "checks": [],
+    "tools": [
+      "typo3_project_describe, for the sites this project configures and the sets they already depend on",
+      "typo3_extension_describe, for what a sitepackage that exists already registers",
+      "typo3_hint_lookup with id=sitepackage-start, then id=sitepackage-layout, for where the extension comes from and what goes where in it",
+      "typo3_hint_lookup with id=site-sets, for the set the sitepackage ships"
+    ]
+  },
+  {
     "id": "site-setting",
     "title": "Adding a setting to a site set",
     "match": [

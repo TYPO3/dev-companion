@@ -32,3 +32,10 @@ about tests and the branch stay.**
 
 - A run in a project with tests skips the rendered page because the suite is
   green.
+
+## Since then
+
+A second run on 2026-10-26 reported the test and branch items as owed in a
+project with neither. The maintainer agreed to qualify them. Outside the core
+they now read "Where the project declares tests" and "Where this repository is
+under version control". The core keeps them unqualified.

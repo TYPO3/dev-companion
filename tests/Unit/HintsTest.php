@@ -7713,6 +7713,10 @@ final class HintsTest extends TestCase
             'Prove the package by rendering one page for each page layout',
             implode("\n", $brief->data['checklist']),
         );
+        // Outside the core the generic test and branch items carry their
+        // condition, because a project may have neither.
+        self::assertContains('Where the project declares tests, add or update the narrowest useful test coverage.', $brief->data['checklist']);
+        self::assertContains('Where this repository is under version control, confirm the target branch and the issue context.', $brief->data['checklist']);
         self::assertContains('any/testing/browser-check', array_column($brief->data['guides'], 'id'));
     }
 
@@ -7792,6 +7796,8 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('A page-content data processor beside PAGEVIEW is redundant', $areas);
 
         self::assertStringContainsString('{site.configuration.websiteTitle}', self::statementsOf('page-variables-and-processors'));
+        // A fresh site states no title at all, read in .checkouts/13.4 and 14.3.
+        self::assertStringContainsString('states websiteTitle neither for the site nor for a language', self::statementsOf('page-variables-and-processors'));
         self::assertStringContainsString('Resources/Private/PageView/Pages', self::statementsOf('sitepackage-start'));
     }
 

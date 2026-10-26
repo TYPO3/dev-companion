@@ -839,7 +839,7 @@ final class TaskGuide extends ReadOnlyTool
             $checklist = [
                 self::PRODUCT_PREMISE,
                 $outsideCore
-                    ? 'Confirm the target branch and the issue context of this repository.'
+                    ? 'Where this repository is under version control, confirm the target branch and the issue context.'
                     : 'Confirm the target TYPO3 core branch and issue context.',
                 'Inspect nearby code, tests, and established subsystem conventions.',
                 sprintf(
@@ -849,8 +849,14 @@ final class TaskGuide extends ReadOnlyTool
                         : 'at TYPO3 ' . VersionScope::majorList($targets),
                 ),
                 'Keep the patch focused on the stated task.',
-                'Add or update the narrowest useful test coverage.',
-                'Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.',
+                // Outside the core a project may declare no test at all, and two
+                // runs read these as owed anyway (`D-GUI-034`).
+                $outsideCore
+                    ? 'Where the project declares tests, add or update the narrowest useful test coverage.'
+                    : 'Add or update the narrowest useful test coverage.',
+                $outsideCore
+                    ? 'Where the project declares tests, run the targeted ones first; broaden to CGL, functional, or npm checks when relevant.'
+                    : 'Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.',
             ];
         }
         foreach (self::CHANGE_TYPE_CHECKLIST[$changeType] ?? [] as $entry) {

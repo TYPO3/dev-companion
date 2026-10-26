@@ -111,7 +111,7 @@ final class Project
      *     environment: array{via: string, php: ?string, node: ?string, source: string, project: ?string, hostnames: array<int, string>, entered: bool, running: ?bool, hooks: array<int, array{stage: string, command: string, service: ?string}>, providers: array<int, array{name: string, source: string, operations: array<int, string>}>}|null,
      *     extensions: array<int, array{key: string, path: string, origin: string, deprecatedFiles: array<int, array{file: string, changelog: string, predicate: string, cost: string}>}>,
      *     sites: array<int, array{identifier: string, base: string, rootPageId: ?int, sets: array<int, string>, languages: array<int, string>, served: ?bool}>,
-     *     database: array{driver: string, source: string}|null,
+     *     database: array{driver: string, source: string, path: ?string}|null,
      *     commands: array<int, array{command: string, source: string, declares: string, runs: string, runThrough: string|null}>,
      *     uncheckedKinds: array<int, string>,
      *     patches: array<int, array{package: string, description: string, file: string}>
@@ -751,7 +751,7 @@ final class Project
      * installation's code. A driver set by an environment variable or a
      * computed value is not in the text, and the answer is then null.
      *
-     * @return array{driver: string, source: string}|null
+     * @return array{driver: string, source: string, path: ?string}|null
      */
     private static function database(string $root): ?array
     {
@@ -759,7 +759,8 @@ final class Project
         foreach (['config/system/settings.php', 'config/system/additional.php'] as $file) {
             $text = is_file($root . '/' . $file) ? (string) file_get_contents($root . '/' . $file) : '';
             if (preg_match_all("/'driver'\s*=>\s*'([a-z_]+)'/", $text, $matches) > 0) {
-                $found = ['driver' => (string) end($matches[1]), 'source' => $file];
+                $path = preg_match_all("/'path'\s*=>\s*'([^']+)'/", $text, $paths) > 0 ? (string) end($paths[1]) : null;
+                $found = ['driver' => (string) end($matches[1]), 'source' => $file, 'path' => $path];
             }
         }
 

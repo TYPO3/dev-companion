@@ -1394,19 +1394,18 @@ final class ProjectTest extends TestCase
         $this->declare($root . '/config/system/settings.php', "<?php\nreturn ['DB' => ['Connections' => ['Default' => ['driver' => 'mysqli']]]];\n");
         Instance::discoverFrom($root);
         self::assertSame(
-            ['driver' => 'mysqli', 'source' => 'config/system/settings.php'],
+            ['driver' => 'mysqli', 'source' => 'config/system/settings.php', 'path' => null],
             Project::describe()['database'],
         );
 
-        $this->declare($root . '/config/system/additional.php', "<?php\n\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default'] = ['driver' => 'pdo_sqlite'];\n");
+        $this->declare($root . '/config/system/additional.php', "<?php\n\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default'] = ['driver' => 'pdo_sqlite', 'path' => '/var/www/html/var/sqlite/cms.sqlite'];\n");
         self::assertSame(
-            ['driver' => 'pdo_sqlite', 'source' => 'config/system/additional.php'],
+            ['driver' => 'pdo_sqlite', 'source' => 'config/system/additional.php', 'path' => '/var/www/html/var/sqlite/cms.sqlite'],
             Project::describe()['database'],
         );
-        self::assertStringContainsString(
-            'a database client such as ddev mysql has nothing to connect to',
-            Registry::call('typo3_project_describe', [])->text,
-        );
+        $text = Registry::call('typo3_project_describe', [])->text;
+        self::assertStringContainsString('a database client such as ddev mysql has nothing to connect to', $text);
+        self::assertStringContainsString('The database file is /var/www/html/var/sqlite/cms.sqlite.', $text);
     }
 
     #[Requirement('R-PRJ-002')]

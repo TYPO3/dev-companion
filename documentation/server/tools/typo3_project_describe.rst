@@ -370,6 +370,10 @@ Answers with
       # The file that names it last: config/system/settings.php or
       # config/system/additional.php.
       source: string
+      # The database file the same file names for pdo_sqlite, as the container sees
+      # it. Null for a server database, and where the file names no path as a
+      # literal.
+      path: string or null
     # What this repository declares. A check that is not here does not exist here.
     commands:  # optional
       - # As this repository declares it, run from the project root. Where

@@ -179,6 +179,10 @@
         "since": 13
       },
       {
+        "text": "A site that typo3 setup created states websiteTitle neither for the site nor for a language. So a header that shows the title needs a last fallback, and a setting of the sitepackage's set that an editor fills is the one that stays correct. The first two read as {language.websiteTitle ? language.websiteTitle : site.configuration.websiteTitle}.",
+        "since": 13
+      },
+      {
         "text": "Data processors are configured on the PAGEVIEW object as dataProcessing., the same way FLUIDTEMPLATE takes them.",
         "since": 13
       },

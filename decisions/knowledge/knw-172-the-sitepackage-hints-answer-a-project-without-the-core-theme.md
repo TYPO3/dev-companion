@@ -82,3 +82,12 @@ PAGEVIEW replaces what PAGEVIEW assigned. Both are read in `.checkouts/13.4` and
 and a language does not inherit the site's. `sitepackage-start` places each
 directory of the builder's tree in the hints' tree, rather than list the
 builder's defects of the day.
+
+## Since then
+
+The seventh run found no website title on a fresh site. A site that
+`typo3 setup` creates states none, read in `.checkouts/13.4` and `14.3`. The
+statement now says so and names a set setting as the last fallback. The same run
+asked for a list of the builder's files outside the template tree. The builder
+dropped the redundant `page-content` step and the `index_*` options upstream
+instead, so no list of them is kept here.

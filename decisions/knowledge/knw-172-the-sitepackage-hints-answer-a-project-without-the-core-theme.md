@@ -56,3 +56,13 @@ The first run of `SITE-10` on 2026-10-26, in `E-SITE` 14.3 without
   layout fallback or for the tree.
 - A session with the camino set as a dependency drops `lib.fluidPage` because of
   the new statement.
+
+## Since then
+
+Three runs with `typo3-sitepackage-development` on 2026-10-26 still read core
+source for the page layouts. They read `PageViewContentObject` for how an
+identifier becomes a template name, and `GridColumn` for the keys of a layout
+file. One asked how its own `default` stands beside the core's.
+`sitepackage-backend-layouts` now answers all three. The name rule was read in
+`.checkouts/13.4`, where PAGEVIEW upper-cases the first letter, and in
+`.checkouts/14.3` and `main`, where Fluid 5 tries the exact name first.

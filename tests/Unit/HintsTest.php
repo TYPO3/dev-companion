@@ -7666,6 +7666,10 @@ final class HintsTest extends TestCase
         $layouts = self::statementsOf('sitepackage-backend-layouts');
         self::assertStringContainsString('the core\'s default layout where no page sets one', $layouts);
         self::assertStringContainsString('must not contain two underscores', $layouts);
+        // Three runs read PageViewContentObject for these, `D-KNW-172`.
+        self::assertStringContainsString('the same name with its first letter upper-cased', $layouts);
+        self::assertStringContainsString('colCount, rowCount and rows.<n>.columns.<n>', $layouts);
+        self::assertStringContainsString('stands beside the core\'s default rather than replacing it', $layouts);
 
         self::assertStringContainsString(
             'Where the project does not have theme_camino, the tree is this',

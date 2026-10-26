@@ -112,7 +112,12 @@
       "BackendLayouts",
       "no page layout selected",
       "backend_layout_next_level",
-      "default backend layout"
+      "default backend layout",
+      "identifier case",
+      "template name of a page layout",
+      "colCount",
+      "rowCount",
+      "backend_layout config"
     ],
     "hints": [
       "One page layout per file, and one name for it: the identifier the file declares below mod.web_layout.BackendLayouts is also what the page template is named after, so the file name, the identifier and Pages/<Name>.fluid.html are one name written in three places.",
@@ -124,7 +129,16 @@
         "text": "A page with no layout selected takes the backend_layout_next_level of the nearest page above it, and the core's default layout where no page sets one. That layout has one column, colPos 0, with the identifier main. PAGEVIEW renders it with Pages/Default, so that template addresses content.main and no other area. A layout of the sitepackage's own named default shares that template with every page that selected nothing.",
         "since": 13
       },
-      "An identifier must not contain two underscores in a row: the backend refuses it, because the pagets__ prefix is split off there to find the page template."
+      "An identifier must not contain two underscores in a row: the backend refuses it, because the pagets__ prefix is split off there to find the page template.",
+      {
+        "text": "PAGEVIEW takes the identifier without its pagets__ prefix as the template name below Pages/. Where no file carries that name exactly, it takes the same name with its first letter upper-cased. Nothing else in the name changes, so two_columns asks for Pages/Two_columns.fluid.html, and twoColumns for Pages/TwoColumns.fluid.html.",
+        "since": 13
+      },
+      "A page layout file declares mod.web_layout.BackendLayouts.<identifier> with a title, an optional icon, and config.backend_layout. That block carries colCount, rowCount and rows.<n>.columns.<n>, and each column a name, a colPos, an identifier for the content area, and a colspan where it is wider than one. The title and every column name are LLL references into a language file the extension ships, and a key that file lacks shows as the raw reference in the page module.",
+      {
+        "text": "A page layout of the sitepackage's own named default stands beside the core's default rather than replacing it. The editor selects the sitepackage's one, and a page with nothing selected gets the core's one. Both render through Pages/Default, so that template works with the core's single area main as well as with the areas of the sitepackage's default.",
+        "since": 13
+      }
     ]
   },
   {

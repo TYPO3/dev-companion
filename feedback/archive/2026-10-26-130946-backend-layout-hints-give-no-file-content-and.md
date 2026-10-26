@@ -1,7 +1,8 @@
 ---
 date: 2026-10-26T13:09:46+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-10-26
 model: claude-opus-5-5[1m]
 tool: typo3_hint_lookup
 directory: /home/benji/site10-run2

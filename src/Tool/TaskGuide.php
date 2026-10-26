@@ -860,7 +860,10 @@ final class TaskGuide extends ReadOnlyTool
             ];
         }
         foreach (self::CHANGE_TYPE_CHECKLIST[$changeType] ?? [] as $entry) {
-            $checklist[] = $entry;
+            // The same condition the generic test items carry (`D-GUI-034`).
+            $checklist[] = $outsideCore && str_contains($entry, ' tests')
+                ? 'Where the project declares tests, ' . lcfirst($entry)
+                : $entry;
         }
         foreach ($confirmed as $intent) {
             foreach ($intent['checklist'] as $entry) {

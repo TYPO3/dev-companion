@@ -145,7 +145,8 @@
       {
         "text": "A page layout of the sitepackage's own named default stands beside the core's default rather than replacing it. The editor selects the sitepackage's one, and a page with nothing selected gets the core's one. Both render through Pages/Default, so that template works with the core's single area main as well as with the areas of the sitepackage's default.",
         "since": 13
-      }
+      },
+      "A page layout's icon becomes the icon of its entry in the page properties' layout field, so it takes what such an entry takes: an EXT: path to an image, or the identifier of a registered icon, which typo3_icon_lookup confirms."
     ]
   },
   {

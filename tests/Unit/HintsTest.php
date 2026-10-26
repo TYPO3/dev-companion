@@ -7717,6 +7717,7 @@ final class HintsTest extends TestCase
         // condition, because a project may have neither.
         self::assertContains('Where the project declares tests, add or update the narrowest useful test coverage.', $brief->data['checklist']);
         self::assertContains('Where this repository is under version control, confirm the target branch and the issue context.', $brief->data['checklist']);
+        self::assertContains('Where the project declares tests, cover the new behaviour with functional tests, not only unit tests.', $brief->data['checklist']);
         self::assertContains('any/testing/browser-check', array_column($brief->data['guides'], 'id'));
     }
 
@@ -7796,6 +7797,9 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('A page-content data processor beside PAGEVIEW is redundant', $areas);
 
         self::assertStringContainsString('{site.configuration.websiteTitle}', self::statementsOf('page-variables-and-processors'));
+        // The eighth run took both from memory.
+        self::assertStringContainsString('settings.description.<key>', self::statementsOf('site-set-settings'));
+        self::assertStringContainsString('the identifier of a registered icon, which typo3_icon_lookup confirms', self::statementsOf('sitepackage-backend-layouts'));
         // A fresh site states no title at all, read in .checkouts/13.4 and 14.3.
         self::assertStringContainsString('states websiteTitle neither for the site nor for a language', self::statementsOf('page-variables-and-processors'));
         self::assertStringContainsString('Resources/Private/PageView/Pages', self::statementsOf('sitepackage-start'));

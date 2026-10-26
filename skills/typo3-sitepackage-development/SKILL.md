@@ -65,7 +65,9 @@ the builder, and name the other start in the report.
    request. Fetch `https://get.typo3.org/api/doc.json` first. Take the endpoint,
    the fields and the values each one accepts from that schema, never from an
    example. Choose the base package that matches the fluid_styled_content
-   decision. The TYPO3 version is the line the installation runs.
+   decision. The TYPO3 version is the line the installation runs. The request
+   carries an author email to a service outside the project. Send a placeholder
+   unless the user agreed, and write the real author into the local files.
 2. **A tree written by hand.** `typo3_hint_lookup` with
    `id="sitepackage-layout"` gives the tree and what each directory is for. Take
    this start where the builder does not offer the installed line, or does not
@@ -107,12 +109,16 @@ The package is not done when its files exist. Work these steps in order:
 3. Add its set to the dependencies of the site configuration. Remove the sets it
    replaces.
 4. Check the site's own `setup.typoscript`. `typo3_hint_lookup` with
-   `id="installation-setup"` says what an installer leaves there.
+   `id="installation-setup"` says what an installer leaves there. Replace the
+   installer's welcome page with a comment rather than delete the file, and
+   report what it held.
 5. Flush the caches, then render one page for each page layout. Where the
    installation has no page with a layout, set one page's layout in its page
    properties. Without a backend at hand, set its `backend_layout` field to
-   `pagets__<identifier>` for the request, and put the old value back. Report
-   both writes.
+   `pagets__<identifier>` for the request, and put the old value back.
+   `typo3_project_describe` names the database driver, and for SQLite the file
+   to write in. Report both writes. A layout whose template addresses an area
+   other than `main` also proves that the set's page TSconfig loaded.
 
 A request to the page proves the render. Where the site's base names a host the
 environment does not serve, `typo3_project_describe` says so and names the Host

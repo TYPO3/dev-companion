@@ -92,3 +92,10 @@ asked for a list of the builder's files outside the template tree. The builder's
 own template drops the redundant `page-content` step and the `index_*` options
 instead, committed in get.typo3.org and not yet deployed that day. So no list of
 them is kept here.
+
+## Since then
+
+The eighth run took two shapes from memory. `site-set-settings` now names the
+label keys in the set's `labels.xlf`, read in `.checkouts/13.4` and `14.3`.
+`sitepackage-backend-layouts` says that a layout's icon becomes the icon of its
+entry in the layout field, so it takes an image path or a registered icon.

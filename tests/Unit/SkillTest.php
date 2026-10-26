@@ -1046,6 +1046,9 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('The work ends on a frontend that renders, one page for each page layout', $skill);
         self::assertStringContainsString('with `tags` set to `TypoScript`, `TSConfig`, `Fluid`, `YAML` and `Frontend`', $skill);
         self::assertStringContainsString('check that each layout shows its title and columns', $skill);
+        self::assertStringContainsString('Send a placeholder unless the user agreed', $skill);
+        self::assertStringContainsString('Replace the installer\'s welcome page with a comment rather than delete the file', $skill);
+        self::assertStringContainsString('for SQLite the file to write in', $skill);
         self::assertStringContainsString('set its `backend_layout` field to `pagets__<identifier>` for the request', $skill);
         self::assertStringContainsString('Where no shell runs Composer and the console, stop after the files.', $skill);
         self::assertStringContainsString('Read each generated file against the hints in *Lay it out*', $skill);

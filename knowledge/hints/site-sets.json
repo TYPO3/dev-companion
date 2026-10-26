@@ -94,7 +94,9 @@
       "constants",
       "dotted path",
       "{settings.",
-      "config/sites/"
+      "config/sites/",
+      "label of a setting",
+      "settings.description"
     ],
     "hints": [
       {
@@ -107,6 +109,10 @@
       },
       {
         "text": "A site's config/sites/<identifier>/settings.yaml and the settings key inline in its config.yaml are alternatives, not layers: when settings.yaml exists, TYPO3 uses it wholesale and does not merge the inline values into it. Set defaults sit below whichever site-local source wins. The backend settings editor persists to settings.yaml, so keep a site's own values in one place or the first backend save can silently leave inline values behind.",
+        "since": 13
+      },
+      {
+        "text": "A setting's label and description stand in the set's labels.xlf, under settings.<key> and settings.description.<key>, and a category's under categories.<category>. settings.definitions.yaml carries no label of its own.",
         "since": 13
       }
     ]

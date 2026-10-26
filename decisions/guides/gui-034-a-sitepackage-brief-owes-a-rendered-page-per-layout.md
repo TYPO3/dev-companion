@@ -39,3 +39,7 @@ A second run on 2026-10-26 reported the test and branch items as owed in a
 project with neither. The maintainer agreed to qualify them. Outside the core
 they now read "Where the project declares tests" and "Where this repository is
 under version control". The core keeps them unqualified.
+
+The eighth run found the feature item on functional tests unqualified. Outside
+the core, an item of a change type that asks for tests now carries the same
+condition.

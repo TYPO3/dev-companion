@@ -3,7 +3,8 @@ id: D-SKL-101
 title: A sitepackage has a task skill of its own
 date: 2026-10-26
 status: open
-coveredBy: []
+coveredBy:
+  - SkillTest::theSitepackageSkillEndsOnEveryLayoutRendered
 ---
 
 # D-SKL-101 — A sitepackage has a task skill of its own
@@ -61,3 +62,9 @@ it takes a default where the request leaves a choice open. The defaults are
 fluid_styled_content kept, the builder as the start, the vendor and the author
 read from the project, and `Default` as the first page layout. The report names
 each of them with its alternative.
+
+Three more runs followed, the last with a full shell. It took the builder,
+trimmed its output and rendered all three cases. What the runs still worked out
+alone now stands in the skill: the deprecation tags a sitepackage reads, a
+second layout rendered through a page set for the request, a stop without a
+shell, and each generated file read against the hints.

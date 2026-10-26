@@ -1031,6 +1031,25 @@ final class SkillTest extends TestCase
         }
     }
 
+    /**
+     * Four runs of SITE-10 with the skill each worked the same four things out
+     * alone: which deprecations a sitepackage reads, how a second layout gets
+     * rendered, what to do without a shell, and which generated files to keep
+     * (`D-SKL-101`).
+     */
+    #[Decision('D-SKL-101')]
+    #[Test]
+    public function theSitepackageSkillEndsOnEveryLayoutRendered(): void
+    {
+        $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md'));
+
+        self::assertStringContainsString('The work ends on a frontend that renders, one page for each page layout', $skill);
+        self::assertStringContainsString('keep the entries tagged `TypoScript`, `TSConfig`, `Fluid`, `YAML` or `Frontend`', $skill);
+        self::assertStringContainsString('set its `backend_layout` field to `pagets__<identifier>` for the request', $skill);
+        self::assertStringContainsString('Where no shell runs Composer and the console, stop after the files.', $skill);
+        self::assertStringContainsString('Read each generated file against the hints in *Lay it out*', $skill);
+    }
+
     #[Requirement('R-SKL-005')]
     #[Decision('D-SKL-074')]
     #[Decision('D-SKL-072')]

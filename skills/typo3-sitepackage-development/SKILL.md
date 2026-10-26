@@ -31,6 +31,9 @@ Then, for this workflow:
   fluid_styled_content, unless the user said otherwise. `typo3_hint_lookup` with
   `id="sitepackage-fluid-styled-content"` says what the other choice costs. Put
   that in the report.
+- The base's deprecation sweep returns the whole major. For a sitepackage, keep
+  the entries tagged `TypoScript`, `TSConfig`, `Fluid`, `YAML` or `Frontend`,
+  and the ones about a file the package ships. Leave the rest unread.
 - Take the vendor from the project's own packages, and the author from the root
   `composer.json` or the git configuration. Name the first page layout
   `Default`, so a page with no layout selected renders through it too.
@@ -53,10 +56,12 @@ the builder, and name the other start in the report.
 `typo3_hint_lookup` with `id="sitepackage-start"` says what else creates a
 sitepackage, and what each tool writes on the installed major.
 
-**A generated package is a starting point.** Remove the empty directories and
-files this site does not use, and say which ones you removed. Where the
-builder's tree differs from what the hints below describe, keep one convention
-for the whole package. Tell the user which one you kept and why.
+**A generated package is a starting point.** Read each generated file against
+the hints in *Lay it out* and the sweep before you keep it. Remove the empty
+directories and the files this site does not use, and say which ones you
+removed. Where the builder's tree differs from what the hints below describe,
+keep one convention for the whole package. Tell the user which one you kept and
+why.
 
 ## Lay it out
 
@@ -84,11 +89,20 @@ The package is not done when its files exist. Work these steps in order:
    replaces.
 4. Check the site's own `setup.typoscript`. `typo3_hint_lookup` with
    `id="installation-setup"` says what an installer leaves there.
-5. Flush the caches, then render one page for each page layout.
+5. Flush the caches, then render one page for each page layout. Where the
+   installation has no page with a layout, set one page's layout in its page
+   properties. Without a backend at hand, set its `backend_layout` field to
+   `pagets__<identifier>` for the request, and put the old value back. Report
+   both writes.
 
 How a browser reaches the page is `typo3_rule_lookup` with
 `documentId="any/testing/browser-check"`. Ask for it at step 5, not earlier.
 Where you could not render a layout, report it as unproven and name it.
+
+**Where no shell runs Composer and the console, stop after the files.** Leave
+the site's dependencies as they are, because a set nothing installed breaks
+every page. Hand the user steps 1 to 5 as commands, and say the frontend is
+untested.
 
 ## Where this stops
 

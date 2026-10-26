@@ -7652,6 +7652,21 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The builder takes a request, so a session generates a sitepackage in one
+     * call rather than through a download. The values it accepts stand in its
+     * schema, which the statement points at instead of copying.
+     */
+    #[Test]
+    public function aSitepackageIsGeneratedThroughTheBuildersApi(): void
+    {
+        $result = Registry::call('typo3_hint_lookup', ['task' => 'generate a sitepackage through the get.typo3.org api']);
+
+        self::assertSame('sitepackage-start', $result->data['hints'][0]['id'] ?? null);
+        self::assertStringContainsString('https://get.typo3.org/api/doc', self::statementsOf('sitepackage-start'));
+        self::assertStringContainsString('returns the extension as a zip', self::statementsOf('sitepackage-start'));
+    }
+
+    /**
      * A task that includes a site set, which is not a task that defines one of
      * its settings.
      *

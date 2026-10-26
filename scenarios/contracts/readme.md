@@ -47,7 +47,7 @@ the index.
 | ----------------------------------------------- | ----------------------- |
 | [core-contributor/](core-contributor/readme.md) | `CORE-01` … `CORE-07`   |
 | [extension-author/](extension-author/readme.md) | `EXT-01` … `EXT-08`     |
-| [site-developer/](site-developer/readme.md)     | `SITE-01` … `SITE-09`   |
+| [site-developer/](site-developer/readme.md)     | `SITE-01` … `SITE-10`   |
 | [cross-cutting/](cross-cutting/readme.md)       | `META-01` … `META-05`   |
 | [task-skills/](task-skills/readme.md)           | `SKILL-01` … `SKILL-15` |
 
@@ -60,7 +60,7 @@ that hold it; an empty cell is a hole in the contract suite.
 | ------------------------------------- | --------------------- | ---------------- | -------------------- |
 | Bug fix                               | `CORE-01`             | `EXT-03`         | `SITE-03`, `SITE-08` |
 | New feature / new code                | `CORE-02`             | `EXT-04`         | `SITE-05`            |
-| New project from scratch              | —                     | `EXT-02`         | `SITE-01`            |
+| New project from scratch              | —                     | `EXT-02`         | `SITE-01`, `SITE-10` |
 | Upgrade to a new TYPO3 version        | `CORE-04`             | `EXT-01`         | `SITE-02`            |
 | Testing                               | `CORE-05`             | `EXT-05`         | `SITE-06`            |
 | Review, commit, submission            | `CORE-03`, `CORE-07`  | `EXT-03`         | —                    |

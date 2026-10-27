@@ -93,3 +93,12 @@ The statement survives `D-CAT-006`. That entry adds a second derived range and
 gives it a field of its own, `coveredClasses`. It leaves the entry's own bound
 as it is, and one `derivedSince()` derives both. So the bound still sits on the
 whole entry and a derivation still produces it rather than a judgement.
+
+## Since then
+
+On 2026-10-27 the first half of **Wrong if** happened, and the digest did not
+notice it. The dropdown entry kept `since: 13` while the 13.4 demo writes
+Bootstrap's `data-bs-toggle` and the entry the Popover API. A digest compares a
+checkout with its own earlier read, not one major with another. `D-CAT-011`
+adds the attribute names in the markup to the derivation, and the entry now
+binds from v14.

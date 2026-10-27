@@ -447,7 +447,7 @@
     "sassPaths": [
       "Build/Sources/Sass/component/_dropdown.scss"
     ],
-    "since": 13,
+    "since": 14,
     "classesSince": 13,
     "jsModule": "EXT:backend/Resources/Public/JavaScript/dropdown.js"
   },

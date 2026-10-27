@@ -579,6 +579,19 @@ final class CatalogTest extends TestCase
         self::assertStringContainsString('13.4 branch', $result->text);
     }
 
+    #[Decision('D-CAT-011')]
+    #[Test]
+    public function aMarkupThatRestsOnABehaviourIsWithheldBeforeItArrives(): void
+    {
+        $onThirteen = Registry::call('typo3_component_lookup', ['query' => 'dropdown', 'targetVersion' => '13.4']);
+        self::assertContains('dropdown', array_column($onThirteen->data['withheld'], 'name'));
+        self::assertStringNotContainsString('popovertarget', $onThirteen->text);
+
+        $onFourteen = Registry::call('typo3_component_lookup', ['query' => 'dropdown', 'targetVersion' => '14.3']);
+        self::assertSame('dropdown', $onFourteen->data['components'][0]['name']);
+        self::assertStringContainsString('popovertarget', $onFourteen->text);
+    }
+
     #[Requirement('R-AUD-004')]
     #[Test]
     public function aComponentVerifiedOnTheTargetCarriesItsRange(): void

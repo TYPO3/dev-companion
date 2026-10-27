@@ -85,8 +85,10 @@ final class ComponentCheck
             foreach ($covered as $version) {
                 $sourced = self::isSourcedOn($component, $sources, $version, $checkouts);
                 $major = $version['major'];
-                $holds[$major] = $sourced && self::writesEvery(self::contractOf($component), $sources, $major, $newest);
-                $classesHold[$major] = $sourced && self::writesEvery(self::classesOf($component), $sources, $major, $newest);
+                $holds[$major] = $sourced
+                    && self::writesEvery(self::contractOf($component), $sources, 'scss', $major, $newest)
+                    && self::writesEvery(self::attributesOf($component), $sources, 'ts', $major, $newest);
+                $classesHold[$major] = $sourced && self::writesEvery(self::classesOf($component), $sources, 'scss', $major, $newest);
             }
 
             $problems += self::reportBinding($output, $component, 'since', RangeReport::since($holds));
@@ -143,8 +145,8 @@ final class ComponentCheck
     }
 
     /**
-     * Whether this version's Sass writes every name the newest covered version
-     * writes.
+     * Whether this version's corpus writes every name the newest covered
+     * version writes.
      *
      * The question covers only what the newest covered version writes. A
      * Bootstrap class the core never spells out, btn-secondary comes from a
@@ -153,11 +155,12 @@ final class ComponentCheck
      *
      * @param array<int, string> $named
      * @param array<int, array{scss: string, ts: string}> $sources
+     * @param 'scss'|'ts' $corpus
      */
-    private static function writesEvery(array $named, array $sources, int $major, int $newest): bool
+    private static function writesEvery(array $named, array $sources, string $corpus, int $major, int $newest): bool
     {
         foreach ($named as $token) {
-            if (self::carries($sources[$newest]['scss'], $token) && !self::carries($sources[$major]['scss'], $token)) {
+            if (self::carries($sources[$newest][$corpus], $token) && !self::carries($sources[$major][$corpus], $token)) {
                 return false;
             }
         }
@@ -175,6 +178,23 @@ final class ComponentCheck
     private static function contractOf(array $component): array
     {
         return array_merge($component['customProperties'] ?? [], self::classesOf($component));
+    }
+
+    /**
+     * The attribute names in an entry's markup. The TypeScript is where the
+     * core reads one, so a markup that rests on a behaviour binds where that
+     * behaviour arrives: `popovertarget` binds the dropdown to v14, where the
+     * class list alone holds from v13 (`D-CAT-011`).
+     *
+     * @param array<string, mixed> $component
+     * @return array<int, string>
+     */
+    private static function attributesOf(array $component): array
+    {
+        preg_match_all('/<[a-z][^>]*>/i', (string) ($component['markup'] ?? ''), $tags);
+        preg_match_all('/\s([a-z][a-z0-9-]*)(?=[\s=\/>])/i', implode(' ', $tags[0]), $names);
+
+        return array_values(array_unique(array_map('strtolower', $names[1])));
     }
 
     /**

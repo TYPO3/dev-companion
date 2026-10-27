@@ -824,6 +824,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### catalog
 
+- [`D-CAT-011`][D-CAT-011] — A component entry binds on the attributes its markup names · 2026-10-27
 - [`D-CAT-010`][D-CAT-010] — The catalog scope is kept and the miss carries its own re-check · 2026-09-02
 - [`D-CAT-008`][D-CAT-008] — A component entry's classes carry a derived position and range · 2026-08-24
 - [`D-CAT-009`][D-CAT-009] — The catalog lists what the styleguide lists · 2026-08-24
@@ -834,6 +835,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-CAT-003`][D-CAT-003] — The component index is curated; its contract comes from the installation · 2026-07-30
 - [`D-CAT-001`][D-CAT-001] — A catalog entry is bound whole, and the binding is derived · 2026-07-29 · confirmed
 
+[D-CAT-011]: catalog/cat-011-a-component-entry-binds-on-the-attributes-its-markup-names.md
 [D-CAT-010]: catalog/cat-010-the-catalog-scope-is-kept-and-the-miss-carries-its-own-re-check.md
 [D-CAT-008]: catalog/cat-008-a-component-entrys-classes-carry-a-derived-position-and-range.md
 [D-CAT-009]: catalog/cat-009-the-catalog-lists-what-the-styleguide-lists.md

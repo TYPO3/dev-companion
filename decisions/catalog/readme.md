@@ -5,6 +5,7 @@ from the covered checkouts. A curated index rots in silence, so each entry says 
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-CAT-011`][D-CAT-011] — A component entry binds on the attributes its markup names · 2026-10-27
 - [`D-CAT-010`][D-CAT-010] — The catalog scope is kept and the miss carries its own re-check · 2026-09-02
 - [`D-CAT-008`][D-CAT-008] — A component entry's classes carry a derived position and range · 2026-08-24
 - [`D-CAT-009`][D-CAT-009] — The catalog lists what the styleguide lists · 2026-08-24
@@ -15,6 +16,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-CAT-003`][D-CAT-003] — The component index is curated; its contract comes from the installation · 2026-07-30
 - [`D-CAT-001`][D-CAT-001] — A catalog entry is bound whole, and the binding is derived · 2026-07-29 · confirmed
 
+[D-CAT-011]: cat-011-a-component-entry-binds-on-the-attributes-its-markup-names.md
 [D-CAT-010]: cat-010-the-catalog-scope-is-kept-and-the-miss-carries-its-own-re-check.md
 [D-CAT-008]: cat-008-a-component-entrys-classes-carry-a-derived-position-and-range.md
 [D-CAT-009]: cat-009-the-catalog-lists-what-the-styleguide-lists.md

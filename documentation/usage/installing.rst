@@ -99,6 +99,22 @@ and the whole entry from the first of those wins rather than merges. And the
 task skills do not come with it. An MCP entry registers a server, while a skill
 is a file in a project, so ``install`` stays the way they get there.
 
+Codex has the same one entry in ``~/.codex/config.toml``. Its CLI, its IDE
+extension and the ChatGPT desktop app read that file, so one entry serves all
+three. ``codex mcp add`` writes it:
+
+.. code-block:: bash
+
+    codex mcp add typo3-dev-companion -- typo3-dev-companion
+
+
+``install --agent=codex`` writes the project's ``.codex/config.toml`` instead,
+which Codex reads in trusted projects only. The server finds the installation
+from the directory it starts in. Where that directory is not the project, the
+entry sets the root with ``--env TYPO3_DEV_COMPANION_ROOT=/path/to/project``,
+which holds every session of that entry to that one project. ChatGPT in the
+browser reads no local configuration and starts no local server.
+
 What this does buy for the skills is the refresh under
 :ref:`installing-keeping-it-current`. The server now starts in every project. So
 it puts a drifted publication back wherever one has drifted, instead of only

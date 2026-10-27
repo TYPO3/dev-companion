@@ -51,7 +51,9 @@ opening on `typo3_project_describe`. stderr says the same and names
 - The miss of `typo3_project_describe` names `targetVersion` and
   `TYPO3_DEV_COMPANION_ROOT` too. A Codex run on 2026-10-27 called it first
   outside any repository, and its model said it had received no server
-  instructions. That rests on what the model said, not on a log.
+  instructions. That rests on what the model said, not on a log. A second round
+  that day opened with `typo3_task_guide` and passed `targetVersion`, as the
+  instructions say. So whether Codex shows them to its model is open.
 
 ## Assumed
 

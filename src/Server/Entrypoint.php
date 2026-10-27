@@ -52,8 +52,14 @@ final class Entrypoint
                 fwrite(STDERR, 'typo3-dev-companion: the read of github.com/' . Upstream::REPOSITORY . ' failed. ' . $failed . "\n");
             }
             self::reportExclusionsThatTookNothingAway();
-            $outside = self::startedOutsideAnyRepository();
-            Factory::create($outside ? '' : self::refreshSkillsNobodyHasUpdated($binary), $outside)
+            $inRepository = self::startedInARepository();
+            $outside = !$inRepository && Instance::describe() === null && !getenv(Instance::ROOT_VARIABLE);
+            if ($outside) {
+                fwrite(STDERR, 'typo3-dev-companion: started in ' . getcwd() . ', which lies in no repository, so no '
+                    . 'project or installation is read. Pass targetVersion on every call, or set '
+                    . Instance::ROOT_VARIABLE . ' to a project root in this server\'s entry.' . "\n");
+            }
+            Factory::create($inRepository ? self::refreshSkillsNobodyHasUpdated($binary) : '', $outside)
                 ->run(new StdioTransport());
 
             return 0;
@@ -108,37 +114,27 @@ final class Entrypoint
     }
 
     /**
-     * Whether the server started where no project can be, said on stderr.
+     * Whether the start directory is one `install` can serve.
      *
-     * A client without a session directory starts it in `/` or in a home
-     * directory. There `install` would write into no project and
-     * `typo3_project_describe` has nothing to describe, so the opening and the
-     * skill refresh give way, `D-DIS-033`. A stated root, a found installation
-     * or a record of `install` is a project, whatever the directory holds.
+     * A client without a session directory starts the server in `/` or in a
+     * home directory. There `install` would write into no project, so no skill
+     * notice is due. Where nothing names a project either, the opening gives way
+     * too, `D-DIS-033`. A record of `install` makes any directory one.
      */
-    private static function startedOutsideAnyRepository(): bool
+    private static function startedInARepository(): bool
     {
         $start = getcwd() ?: '';
-        $project = $start === ''
-            || Instance::describe() !== null
-            || getenv(Instance::ROOT_VARIABLE)
-            || !Installer::absent($start);
-        if ($project) {
-            return false;
+        if ($start === '' || !Installer::absent($start)) {
+            return true;
         }
         for ($directory = $start; ; $directory = dirname($directory)) {
             if (file_exists($directory . '/.git') || is_file($directory . '/composer.json')) {
-                return false;
+                return true;
             }
             if (dirname($directory) === $directory) {
-                break;
+                return false;
             }
         }
-        fwrite(STDERR, 'typo3-dev-companion: started in ' . $start . ', which lies in no repository, so no project '
-            . 'or installation is read. Pass targetVersion on every call, or set ' . Instance::ROOT_VARIABLE
-            . ' to a project root in this server\'s entry.' . "\n");
-
-        return true;
     }
 
     /**

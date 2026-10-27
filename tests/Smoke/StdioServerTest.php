@@ -349,6 +349,44 @@ final class StdioServerTest extends TestCase
         self::assertStringNotContainsString(Installer::ABSENT, $instructions);
         self::assertStringNotContainsString('typo3_project_describe', $instructions);
         self::assertStringContainsString('started in ' . $this->temporaryRoot . ', which lies in no repository', (string) $stderr);
+
+        // Codex showed its model no instructions, so the miss says it too.
+        $describe = $this->call([...$initialize, $this->request(2, 'tools/call', [
+            'name' => 'typo3_project_describe',
+            'arguments' => new \stdClass(),
+        ])], $this->temporaryRoot)[2]['result']['content'][0]['text'];
+        self::assertStringContainsString('targetVersion', (string) $describe);
+        self::assertStringContainsString('TYPO3_DEV_COMPANION_ROOT', (string) $describe);
+    }
+
+    /**
+     * A user-scope entry that names the project to read still starts in no
+     * repository. The skills live in the project the client works in, so the
+     * start directory owes no notice to install there.
+     */
+    #[Decision('D-DIS-033')]
+    #[Test]
+    public function aStatedRootOutsideAnyRepositoryGetsTheOpeningAndNoSkillNotice(): void
+    {
+        $this->temporaryRoot = sys_get_temp_dir() . '/typo3-dev-companion-rooted-' . bin2hex(random_bytes(8));
+        self::assertTrue(mkdir($this->temporaryRoot));
+        $initialize = [$this->request(1, 'initialize', [
+            'protocolVersion' => self::PROTOCOL_VERSION,
+            'capabilities' => new \stdClass(),
+            'clientInfo' => ['name' => 'phpunit', 'version' => '1'],
+        ])];
+
+        $stderr = null;
+        $instructions = (string) $this->call(
+            $initialize,
+            $this->temporaryRoot,
+            $stderr,
+            ['TYPO3_DEV_COMPANION_ROOT' => Paths::root()],
+        )[1]['result']['instructions'];
+
+        self::assertStringStartsWith('Start every task with typo3_project_describe', $instructions);
+        self::assertStringNotContainsString('no task skills are installed', (string) $stderr);
+        self::assertStringNotContainsString('which lies in no repository', (string) $stderr);
     }
 
     private function install(string $directory): int

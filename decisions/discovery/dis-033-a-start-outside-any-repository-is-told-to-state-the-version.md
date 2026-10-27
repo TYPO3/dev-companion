@@ -6,6 +6,7 @@ status: open
 coveredBy:
   - ScopeTest::theInstructionsFitWhatAClientKeeps
   - StdioServerTest::aStartOutsideAnyRepositoryIsToldToStateTheVersion
+  - StdioServerTest::aStatedRootOutsideAnyRepositoryGetsTheOpeningAndNoSkillNotice
 ---
 
 # D-DIS-033 — A start outside any repository is told to state the version
@@ -38,16 +39,25 @@ opening on `typo3_project_describe`. stderr says the same and names
 - A `.git` file or directory or a `composer.json` anywhere up to the root makes
   the start directory a repository. `TYPO3_DEV_COMPANION_ROOT`, an installation
   the walk-up found and a record of `install` count as one too.
-- Outside, no skill refresh runs and `Installer::ABSENT` stays out. Nothing
-  there records a publication to read.
+- A start directory in no repository gets no skill notice and no refresh, also
+  where `TYPO3_DEV_COMPANION_ROOT` names a project. The skills belong to the
+  project the client works in, and the variable names only what to read. The
+  start-matrix run of 2026-10-27 found the old "run install in /" there.
 - The index entry for whole procedures sends the caller to `typo3_rule_lookup`
   by topic, because a match names the `documentId` that reads it whole.
   `typo3_project_describe`, which lists the guides, cannot answer there. The
   skills note names the `typo3://skill` resources, because no `install` put a
   skill in a listing.
+- The miss of `typo3_project_describe` names `targetVersion` and
+  `TYPO3_DEV_COMPANION_ROOT` too. A Codex run on 2026-10-27 called it first
+  outside any repository, and its model said it had received no server
+  instructions. That rests on what the model said, not on a log.
 
 ## Assumed
 
+- That an agent told to pass `targetVersion` asks or names its assumption.
+  Claude Code runs on 2026-10-27 picked 13.4 unasked and said nothing, so the
+  sentence now names both.
 - That a home directory is no repository. A home directory that is one, for its
   dotfiles, gets `Installer::ABSENT`, which costs one needless sentence.
 

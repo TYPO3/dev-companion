@@ -216,8 +216,12 @@ final class ProjectDescribe extends ReadOnlyTool
     {
         $project = Project::describe();
         if ($project === null) {
+            // The miss is where a client lands that never shows its model the
+            // initialize instructions, as Codex did on 2026-10-27, so it says
+            // the way in itself, `D-DIS-033`.
             return Unsupported::because(
-                'no repository declaring TYPO3 was found to describe',
+                'no repository declaring TYPO3 was found to describe. Pass targetVersion on every call, or set '
+                . Instance::ROOT_VARIABLE . ' to the project root in this server\'s entry',
             );
         }
 

@@ -186,6 +186,12 @@
     "demonstratedSince": null
   },
   {
+    "tag": "typo3-backend-formengine-item-count",
+    "source": "Build/Sources/TypeScript/backend/form-engine/element/extra/item-count.ts",
+    "since": 15,
+    "demonstratedSince": null
+  },
+  {
     "tag": "typo3-backend-formengine-online-media-form",
     "source": "Build/Sources/TypeScript/backend/form-engine/element/online-media-form-element.ts",
     "since": 13,
@@ -739,6 +745,12 @@
     "tag": "typo3-qrcode-modal-button",
     "source": "Build/Sources/TypeScript/backend/element/qrcode-modal-button.ts",
     "since": 14,
+    "demonstratedSince": null
+  },
+  {
+    "tag": "typo3-reactions-try-out",
+    "source": "Build/Sources/TypeScript/reactions/try-out-modal.ts",
+    "since": 15,
     "demonstratedSince": null
   },
   {

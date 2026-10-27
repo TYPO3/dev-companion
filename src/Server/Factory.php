@@ -64,8 +64,10 @@ final class Factory
     /**
      * @param string $notice what is wrong with this project before the first
      *     call, in front of the routing; empty where nothing is
+     * @param bool $outsideAnyRepository whether the server started in no
+     *     repository, `D-DIS-033`
      */
-    public static function create(string $notice = ''): Server
+    public static function create(string $notice = '', bool $outsideAnyRepository = false): Server
     {
         $builder = Server::builder()
             ->setServerInfo(
@@ -76,7 +78,7 @@ final class Factory
                 self::SERVER_WEBSITE,
                 self::SERVER_TITLE,
             )
-            ->setInstructions(Coverage::instructions($notice))
+            ->setInstructions(Coverage::instructions($notice, $outsideAnyRepository))
             ->setCapabilities(self::capabilities());
 
         foreach (Registry::definitions() as $definition) {

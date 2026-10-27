@@ -365,6 +365,7 @@ final class ScopeTest extends TestCase
     #[Decision('D-AUD-012')]
     #[Decision('D-DIS-013')]
     #[Decision('D-DIS-029')]
+    #[Decision('D-DIS-033')]
     #[Test]
     public function theInstructionsFitWhatAClientKeeps(): void
     {
@@ -382,6 +383,11 @@ final class ScopeTest extends TestCase
             Coverage::INSTRUCTIONS_BUDGET,
             mb_strlen(Coverage::instructions(Installer::NOTICE)),
             'instructions where the skills are stale',
+        );
+        self::assertLessThanOrEqual(
+            Coverage::INSTRUCTIONS_BUDGET,
+            mb_strlen(Coverage::instructions('', true)),
+            'instructions where the server started outside any repository',
         );
         self::assertLessThanOrEqual(
             mb_strlen(Installer::NOTICE),

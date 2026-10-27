@@ -304,6 +304,9 @@ final class StdioServerTest extends TestCase
     {
         $this->temporaryRoot = sys_get_temp_dir() . '/typo3-dev-companion-absent-' . bin2hex(random_bytes(8));
         self::assertTrue(mkdir($this->temporaryRoot));
+        // A repository, so the start is one `install` can serve; an empty
+        // directory in the temporary one lies in none, `D-DIS-033`.
+        self::assertNotFalse(file_put_contents($this->temporaryRoot . '/composer.json', '{}'));
         $initialize = [$this->request(1, 'initialize', [
             'protocolVersion' => self::PROTOCOL_VERSION,
             'capabilities' => new \stdClass(),
@@ -318,6 +321,34 @@ final class StdioServerTest extends TestCase
         self::assertSame(0, $this->install($this->temporaryRoot));
         $installed = $this->call($initialize, $this->temporaryRoot, $stderr)[1];
         self::assertStringNotContainsString(Installer::ABSENT, $installed['result']['instructions']);
+    }
+
+    /**
+     * Claude Desktop starts the server in `/`, and a user-scope entry wherever
+     * its client stands. There is no project to install into or describe.
+     */
+    #[Decision('D-DIS-033')]
+    #[Test]
+    public function aStartOutsideAnyRepositoryIsToldToStateTheVersion(): void
+    {
+        $this->temporaryRoot = sys_get_temp_dir() . '/typo3-dev-companion-outside-' . bin2hex(random_bytes(8));
+        self::assertTrue(mkdir($this->temporaryRoot));
+        $initialize = [$this->request(1, 'initialize', [
+            'protocolVersion' => self::PROTOCOL_VERSION,
+            'capabilities' => new \stdClass(),
+            'clientInfo' => ['name' => 'phpunit', 'version' => '1'],
+        ])];
+
+        $stderr = null;
+        $instructions = (string) $this->call($initialize, $this->temporaryRoot, $stderr)[1]['result']['instructions'];
+
+        self::assertStringStartsWith('This server started outside any repository', $instructions);
+        self::assertStringContainsString('targetVersion', $instructions);
+        self::assertStringContainsString('TYPO3_DEV_COMPANION_ROOT', $instructions);
+        self::assertStringContainsString('typo3://skill', $instructions);
+        self::assertStringNotContainsString(Installer::ABSENT, $instructions);
+        self::assertStringNotContainsString('typo3_project_describe', $instructions);
+        self::assertStringContainsString('started in ' . $this->temporaryRoot . ', which lies in no repository', (string) $stderr);
     }
 
     private function install(string $directory): int

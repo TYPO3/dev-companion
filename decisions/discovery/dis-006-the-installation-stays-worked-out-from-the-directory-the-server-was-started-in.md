@@ -56,3 +56,9 @@ raises there. The other half of the **Wrong if** is the corpus and it is silent:
 no feedback reports the server started anywhere but the session's directory.
 What would settle it is still an outside event, a revision that adds a mechanism
 not deprecated on arrival.
+
+The second half of the **Wrong if** has a first source. A bug report says Claude
+Desktop starts every MCP server in `/`, and a user-scope entry in
+`~/.codex/config.toml` names no `cwd` by default. The walk-up finds nothing
+there, as this entry predicted. `D-DIS-033` makes the server say so and name
+`TYPO3_DEV_COMPANION_ROOT`, the value this entry says such a setup has to state.

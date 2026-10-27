@@ -48,10 +48,15 @@ final class Coverage
     /**
      * @param string $notice what is wrong with the project this server was
      *     started in, which nothing here can work out; `Installer::NOTICE`
+     * @param bool $outsideAnyRepository whether the start directory lies in
+     *     no repository, which swaps the opening for `instructions.outside`,
+     *     `D-DIS-033`
      */
-    public static function instructions(string $notice = ''): string
+    public static function instructions(string $notice = '', bool $outsideAnyRepository = false): string
     {
-        $instructions = self::offered()['instructions'];
+        $instructions = $outsideAnyRepository
+            ? self::assembled(self::decoded()['instructions'] ?? null, true, true)
+            : self::offered()['instructions'];
         if (Channel::isAvailable()) {
             $instructions .= ' Every tool here is read-only except typo3_feedback_record, '
                 . 'which creates a new markdown feedback under feedback/ and writes nothing else.';
@@ -210,13 +215,20 @@ final class Coverage
      * The heading and the note under the entries travel with them. A caller
      * left with none of them is told nothing about a list it does not have.
      */
-    private static function assembled(mixed $stored, bool $offered): string
+    private static function assembled(mixed $stored, bool $offered, bool $outsideAnyRepository = false): string
     {
         $stored = is_array($stored) ? $stored : [];
+        $outside = $outsideAnyRepository && is_array($stored['outside'] ?? null) ? $stored['outside'] : [];
+        $calls = is_array($outside['calls'] ?? null) ? $outside['calls'] : [];
         $index = array_map(
-            static fn(array $entry): string => '- ' . (string) $entry['question'] . ': ' . (string) $entry['call'],
+            static fn(array $entry): string => '- ' . (string) $entry['question'] . ': '
+                . (string) ($calls[$entry['question']] ?? $entry['call']),
             is_array($stored['index'] ?? null) ? $stored['index'] : [],
         );
+        if ($outside !== []) {
+            $stored['start'] = $outside['start'] ?? $stored['start'] ?? '';
+            $stored['note'] = $outside['note'] ?? $stored['note'] ?? '';
+        }
         if ($offered) {
             $index = array_filter($index, static fn(string $entry): bool => !self::namesExcludedTool($entry));
         }

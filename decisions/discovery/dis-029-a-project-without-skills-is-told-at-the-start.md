@@ -49,3 +49,9 @@ skills are installed there and names `typo3-dev-companion install`.**
   second way in exists, and the check has to read it.
 - A second session that writes prose rather than code reports the scan of the
   `guides` list as a cost.
+
+## Since then
+
+On 2026-10-27 a start in `/` got this notice and was told to run `install`
+there. `D-DIS-033` takes that case out: a start that lies in no repository gets
+its own opening, and this notice stays where a repository is.

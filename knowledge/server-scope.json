@@ -29,7 +29,14 @@
       }
     ],
     "note": "Activate the typo3-* skill in your listing that covers the task: it makes these calls.",
-    "then": "targetVersion or the version the server read filters the answers, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user. Its match is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what it covers, by which tool, and which installation it reads."
+    "then": "targetVersion or the version the server read filters the answers, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user. Its match is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what it covers, by which tool, and which installation it reads.",
+    "outside": {
+      "start": "This server started outside any repository, so it reads no project and no installation. Pass targetVersion on every call. To read a project, set TYPO3_DEV_COMPANION_ROOT to its root in this server's entry. Call typo3_task_guide for the workflow the task belongs to. Call it again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch. It also answers a triage of the backlog, whether a report still reproduces, and what a fix costs.",
+      "calls": {
+        "the whole procedure, not one fact out of it": "typo3_rule_lookup by topic, then by the documentId a match names"
+      },
+      "note": "The typo3://skill resources are the task workflows; read the one that covers the task: it makes these calls."
+    }
   },
   "covers": [
     {

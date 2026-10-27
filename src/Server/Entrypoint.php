@@ -52,7 +52,9 @@ final class Entrypoint
                 fwrite(STDERR, 'typo3-dev-companion: the read of github.com/' . Upstream::REPOSITORY . ' failed. ' . $failed . "\n");
             }
             self::reportExclusionsThatTookNothingAway();
-            Factory::create(self::refreshSkillsNobodyHasUpdated($binary))->run(new StdioTransport());
+            $outside = self::startedOutsideAnyRepository();
+            Factory::create($outside ? '' : self::refreshSkillsNobodyHasUpdated($binary), $outside)
+                ->run(new StdioTransport());
 
             return 0;
         }
@@ -103,6 +105,40 @@ final class Entrypoint
                 count($offeredAnyway) === 1 ? 'it' : 'they',
             ));
         }
+    }
+
+    /**
+     * Whether the server started where no project can be, said on stderr.
+     *
+     * A client without a session directory starts it in `/` or in a home
+     * directory. There `install` would write into no project and
+     * `typo3_project_describe` has nothing to describe, so the opening and the
+     * skill refresh give way, `D-DIS-033`. A stated root, a found installation
+     * or a record of `install` is a project, whatever the directory holds.
+     */
+    private static function startedOutsideAnyRepository(): bool
+    {
+        $start = getcwd() ?: '';
+        $project = $start === ''
+            || Instance::describe() !== null
+            || getenv(Instance::ROOT_VARIABLE)
+            || !Installer::absent($start);
+        if ($project) {
+            return false;
+        }
+        for ($directory = $start; ; $directory = dirname($directory)) {
+            if (file_exists($directory . '/.git') || is_file($directory . '/composer.json')) {
+                return false;
+            }
+            if (dirname($directory) === $directory) {
+                break;
+            }
+        }
+        fwrite(STDERR, 'typo3-dev-companion: started in ' . $start . ', which lies in no repository, so no project '
+            . 'or installation is read. Pass targetVersion on every call, or set ' . Instance::ROOT_VARIABLE
+            . ' to a project root in this server\'s entry.' . "\n");
+
+        return true;
     }
 
     /**

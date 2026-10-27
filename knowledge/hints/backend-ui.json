@@ -92,5 +92,81 @@
       "A custom element's constructor takes no parameters, which wc/no-constructor-params enforces and the browser imposes anyway: it constructs the element with none. What the element needs arrives as an attribute, a property or a slot.",
       "A listener a component adds is removed again, which wc/require-listener-teardown enforces. The one that leaks is the listener on something outliving the element - document, window, or another element - because the element is torn down and the listener is not."
     ]
+  },
+  {
+    "id": "backend-dropdown",
+    "title": "The Backend Dropdown in JavaScript: How a Menu Opens, Closes and Reports Its State",
+    "domains": [
+      "typescript"
+    ],
+    "appliesTo": [
+      "Build/Sources/TypeScript/backend/dropdown.ts",
+      "dropdown",
+      "dropdown-menu",
+      "dropdown-toggle",
+      "dropdown-item",
+      "popovertarget",
+      "popover-open",
+      "beforetoggle",
+      "toggle event",
+      "data-bs-toggle",
+      "bs.dropdown",
+      "show.bs.dropdown",
+      "hidden.bs.dropdown",
+      "auto-close",
+      "data-bs-auto-close",
+      "aria-expanded",
+      "open menu",
+      "close menu",
+      "bootstrap dropdown",
+      "dropdown event",
+      "dropdown events",
+      "dropdown open",
+      "dropdown opens",
+      "dropdown close",
+      "dropdown closes",
+      "dropdown closing",
+      "dropdown state",
+      "dropdown test",
+      "dropdown keyboard"
+    ],
+    "hints": [
+      {
+        "text": "A backend dropdown is Bootstrap's dropdown plugin. The trigger carries data-bs-toggle=\"dropdown\", and Bootstrap fires show.bs.dropdown and hidden.bs.dropdown.",
+        "until": 13
+      },
+      {
+        "text": "A backend dropdown is a native popover. The trigger names its menu with popovertarget, and the .dropdown-menu carries the popover attribute.",
+        "since": 14
+      },
+      {
+        "text": "Markup with data-bs-toggle=\"dropdown\" still opens, because the backend dropdown module rewrites it to popovertarget and popover when the document is ready or on the first click.",
+        "since": 14
+      },
+      {
+        "text": "That rewrite removes data-bs-auto-close, data-bs-offset and the other data-bs-* options, and aria-expanded and aria-haspopup. It also replaces an anchor trigger with a button.",
+        "since": 14
+      },
+      {
+        "text": "No show.bs.dropdown or hidden.bs.dropdown event fires. A script listens for the menu's beforetoggle or toggle event and reads newState.",
+        "since": 14
+      },
+      {
+        "text": "An open menu matches :popover-open. A script or an end-to-end test reads the state there, because the rewrite removes aria-expanded and nothing sets .show.",
+        "since": 14
+      },
+      {
+        "text": "The browser closes the menu on a click outside it and on Escape. The dropdown module also closes it on a click on a .dropdown-item, when focus moves out of the menu, and when the window loses focus.",
+        "since": 14
+      },
+      {
+        "text": "The dropdown module moves focus with ArrowUp, ArrowDown, Home and End in an open menu. ArrowRight and ArrowLeft open and close a nested menu, mirrored in a right-to-left backend.",
+        "since": 14
+      },
+      {
+        "text": "An open popover renders in the top layer, so the overflow or z-index of an ancestor does not clip it.",
+        "since": 14
+      }
+    ]
   }
 ]

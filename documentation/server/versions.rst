@@ -10,6 +10,10 @@ from it.
 ``knowledge/versions.json`` and nowhere else declares which versions the server
 covers. Every check that needs the list reads it from there.
 
+The covered lines are the LTS line of each major and ``main``. A minor release
+before an LTS is outside them, so a bound at a major is exact for every covered
+line.
+
 .. image:: ../images/version-binding.svg
     :zoomable:
         :alt: TYPO3 12 through 15 form the covered timeline. Unbound statements

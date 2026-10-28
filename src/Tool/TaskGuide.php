@@ -205,8 +205,9 @@ final class TaskGuide extends ReadOnlyTool
      */
     public const BREAKING_ABOVE_INSTALLED = 'This repository declares TYPO3 %1$s, which the installation does '
         . 'not run, and the deprecation sweep\'s exemption does not cover it. Owed before the reading: '
-        . 'typo3_changelog_lookup with type "breaking", the query omitted and limit raised, once with version %2$s. '
-        . 'Hold each entry against the identifiers the code calls, and ask one you doubt under its own name.';
+        . 'typo3_changelog_lookup with type "breaking", the query omitted, limit raised and paths naming the '
+        . 'package\'s PHP directories, once with version %2$s. Hold each entry against the files its touches '
+        . 'names, and ask one you doubt under its own name.';
 
     /**
      * The change type of a task that changes nothing, and the id of the intent

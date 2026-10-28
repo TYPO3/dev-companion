@@ -6,6 +6,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 - [`D-ANS-190`][D-ANS-190] — A PHP identifier reaches a manual changelog entry through its listing · 2026-10-28
 - [`D-ANS-191`][D-ANS-191] — What an answer owes the caller stands in the data · 2026-10-28
+- [`D-ANS-192`][D-ANS-192] — A changelog sweep is held against the paths the caller gives · 2026-10-28
 - [`D-ANS-185`][D-ANS-185] — A test run answer opens on the base suites · 2026-10-26
 - [`D-ANS-186`][D-ANS-186] — A document read whole answers with the scope it declares · 2026-10-26
 - [`D-ANS-187`][D-ANS-187] — The project answer says what a request and a database client reach · 2026-10-26
@@ -188,6 +189,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 [D-ANS-190]: ans-190-a-php-identifier-reaches-a-manual-changelog-entry-through-its-listing.md
 [D-ANS-191]: ans-191-what-an-answer-owes-the-caller-stands-in-the-data.md
+[D-ANS-192]: ans-192-a-changelog-sweep-is-held-against-the-paths-the-caller-gives.md
 [D-ANS-185]: ans-185-a-test-run-answer-opens-on-the-base-suites.md
 [D-ANS-186]: ans-186-a-document-read-whole-answers-with-the-scope-it-declares.md
 [D-ANS-187]: ans-187-the-project-answer-says-what-a-request-and-a-database-client-reach.md

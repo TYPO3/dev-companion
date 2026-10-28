@@ -71,3 +71,11 @@ the base alone. The sweep's exemption in `skills/base.md` stays as it is.
   the line must name `tags`.
 - A review of a package that declares a major below the installed one misses an
   API that line lacks. Then that direction needs a line of its own.
+
+## Since then
+
+- **The first Wrong if fired on 2026-10-28.** The fourth `REVIEW-02` run made
+  the call, got 41 entries, held 10 and missed Breaking-110702. The repair is
+  not the identifier query this entry named, which is 61 calls for that package.
+  The line now asks for `paths`, and the answer keeps the entries naming a class
+  the code uses — `D-ANS-192`.

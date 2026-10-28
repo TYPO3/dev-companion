@@ -119,8 +119,8 @@ skill does not repeat:
 
 A declared major above the installed one owes its breaking changes before the
 reading, and the sweep's exemption does not cover them. The review brief names
-that call in `owed`. Hold each entry it returns against the identifiers the code
-calls.
+that call in `owed`, with the package's PHP as its paths. Hold each entry it
+returns against the files that entry names.
 
 An audit that runs neither procedure reports the gap rather than the range. The
 finding holds where you established it, and you name the majors you did not

@@ -1,7 +1,7 @@
 {
     "scenario": "REVIEW-02",
-    "date": "2026-09-19",
-    "server": "af5841e8",
+    "date": "2026-10-28",
+    "server": "c0a078b7",
     "client": "claude-code",
     "environment": "E-EXT",
     "criteria": "94e93ae735ee",
@@ -20,145 +20,21 @@
             }
         },
         {
-            "tool": "typo3_extension_describe",
-            "arguments": {
-                "extension": "demo_package"
-            }
-        },
-        {
             "tool": "typo3_task_guide",
             "arguments": {
-                "task": "Full health audit of the bootstrap_package extension: what prevents maintaining and supporting it confidently, in priority order. Review only, no changes.",
+                "task": "Audit the bootstrap_package extension for maintainability and supportability",
                 "changeType": "audit",
                 "paths": [
-                    "bootstrap_package",
-                    "composer.json",
-                    "ext_emconf.php",
-                    "Configuration/Sets",
-                    "Configuration/TCA",
-                    "Classes",
-                    "Resources/Private",
-                    "Resources/Public",
-                    "Initialisation",
-                    "Tests",
-                    "Build",
-                    ".github/workflows/ci.yml",
-                    "Documentation"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "task": "extension package manifest, composer constraints, ext_emconf, TER release, supported TYPO3 and PHP range",
-                "paths": [
-                    "composer.json",
-                    "ext_emconf.php",
-                    "ext_localconf.php",
-                    "ext_tables.sql"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "task": "content elements registration, TCA, flexforms, child record tables, upgrade wizards",
-                "paths": [
-                    "Configuration/TCA/Overrides/tt_content.php",
-                    "Configuration/TCA/tx_bootstrappackage_accordion_item.php",
-                    "Configuration/FlexForms/Accordion.xml",
-                    "Classes/Updates",
-                    "Configuration/Sets/ContentElements/TypoScript/Element/Accordion.typoscript"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "task": "site sets, settings definitions, TypoScript, page TSconfig, backend layouts, Fluid templates and namespaces",
-                "paths": [
-                    "Configuration/Sets/Full/config.yaml",
-                    "Configuration/Sets/Full/settings.definitions.yaml",
-                    "Configuration/Sets/Full/setup.typoscript",
-                    "Configuration/Sets/BackendLayouts/page.tsconfig",
-                    "Configuration/Fluid/Namespaces.php",
-                    "Resources/Private/Templates/ContentElements/Generic.html"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "task": "security of frontend rendering: ViewHelpers, raw output, escaping, data processors, expression language, parser, user controlled attributes",
-                "paths": [
-                    "Classes/ViewHelpers",
-                    "Classes/DataProcessing",
-                    "Classes/ExpressionLanguage",
-                    "Classes/Parser",
-                    "Classes/Service",
-                    "Resources/Private/Partials"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "task": "test suite, check layer, static analysis, coding standards, CI matrix, supported TYPO3 versions",
-                "paths": [
-                    "Tests/Unit",
-                    "Tests/Functional",
-                    "Tests/Packages/demo_package",
-                    "Build/phpunit-functional.xml",
-                    "Build/phpstan.neon",
-                    ".github/workflows/ci.yml"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "id": "extension-documentation"
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "task": "distribution initial content data.xml Initialisation site configuration shipped in extension",
-                "paths": [
-                    "Initialisation/data.xml",
-                    "Initialisation/Site/bootstrap-package/config.yaml",
-                    "Initialisation/Site/bootstrap-package/settings.yaml",
-                    "Initialisation/Files"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "task": "public assets, JavaScript modules, SCSS compilation, icons, asset build under Build directory, backend assets",
-                "paths": [
-                    "Resources/Public",
-                    "Configuration/JavaScriptModules.php",
-                    "Build/package.json",
-                    "Build/Gruntfile.js",
-                    "Classes/Icons",
-                    "Classes/Hooks"
-                ]
+                    "bootstrap_package"
+                ],
+                "targetVersion": "14.3"
             }
         },
         {
             "tool": "typo3_ter_lookup",
             "arguments": {
                 "extension": "bootstrap_package",
-                "limit": 8
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "type": "deprecation",
-                "version": "15",
-                "limit": 200
+                "limit": 5
             }
         },
         {
@@ -166,127 +42,66 @@
             "arguments": {
                 "type": "deprecation",
                 "version": "14",
-                "limit": 200
+                "tags": [
+                    "TypoScript",
+                    "TSConfig",
+                    "Fluid",
+                    "YAML",
+                    "TCA",
+                    "Frontend"
+                ],
+                "limit": 80
             }
         },
         {
             "tool": "typo3_hint_lookup",
             "arguments": {
-                "id": "upgrade-wizards"
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "id": "php-versions"
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "id": "extension-repository-dependencies"
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "query": "render-preProcess",
-                "limit": 10
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "query": "contentRenderingTemplates",
-                "limit": 10
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "type": "breaking",
-                "version": "15",
-                "limit": 200
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "query": "109575",
-                "limit": 5
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "query": "109286",
-                "limit": 3
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "id": "content-rendering-templates"
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "id": "site-set-migration"
-            }
-        },
-        {
-            "tool": "typo3_rule_lookup",
-            "arguments": {
-                "documentId": "extension/documentation/manual"
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "id": "impexp-artifact"
+                "ids": [
+                    "extension-documentation",
+                    "extension-ter-release"
+                ]
             }
         }
     ],
     "outcomes": [
         {
             "met": true,
-            "evidence": "The opening paragraph states the installed TYPO3 (15.0.0-dev on PHP 8.5 under DDEV), the declared range (^14.3 || 15.*.*@dev, php >=8.2), the checks it ran from the repository's own composer scripts with their results, the two suites it did not run and why, and that the checkout is on wip/dist with a dirty tree. typo3_project_describe and typo3_extension_describe for both packages were its first three calls."
+            "evidence": "The head table states bk2k/bootstrap-package as an extension, the declared range ^14.3 || 15.*.*@dev with PHP >=8.2, and 14.3.7 as the installed version. Verification lists the composer scripts it ran and the ones typo3_project_describe marks that it did not run. That the checkout is a standalone package with a development installation of its own stands only in finding 9, which says the lock reaches no consumer. typo3_project_describe and typo3_extension_describe were its first two calls."
         },
         {
             "met": true,
-            "evidence": "Every finding names a path and a line and a consequence: composer.json:34 and ScssParser.php:96-113 for the error-handler swap, ci.yml:76-85 and phpunit-functional.xml:16 for the test matrix, phpstan.neon:9 for the silenced baseline, ext_localconf.php:13-14 for a directory that no longer exists, .php-cs-fixer.dist.php:73-79 for the finder. Spot-checked in the checkout: reportUnmatchedIgnoredErrors false at line 9, the two contentRenderingTemplates lines, scssphp ^1.13, set_error_handler at :98, and the finder excludes without config/."
+            "evidence": "Every finding names a path and a line: Initialisation/Site/bootstrap-package/config.yaml:1, ci.yml:79,85, Build/phpstan.neon:2,9, composer.json phpstan:baseline, Tests/Functional/ContentElements. Spot-checked in the checkout: base / in the site config, matrix.php == '8.5' on both test steps, the -14 include beside a baseline script that writes Build/phpstan-baseline.neon, 73 baseline entries, three render tests, CHANGELOG.md opening on 16.0.0 with 16.0.1 tagged. The registry keys and the PackageSetup dispatch under finding 1 hold in .build/vendor."
         },
         {
             "met": true,
-            "evidence": "Compatibility from the declared range and a deprecation sweep over 14 and 15 with zero hits, tests from ci.yml and the phpunit config, documentation from the two dead links and the retired render image, static quality from the checks it ran, release from typo3_ter_lookup (16.0.1 published, this branch 17.0.0 unpublished). Nothing is judged on a suite it did not run, and the two it left are named with an offer."
+            "evidence": "Compatibility comes from the declared range, a v14 deprecation sweep through typo3_changelog_lookup and a grep, and the CI 15-dev cell. Tests come from ci.yml and an inventory, static quality from lint, cgl:ci and PHPStan with and without the baseline. Documentation comes from Settings.cfg against the extension-documentation hint, and release from typo3_ter_lookup and the tags. Nothing is judged on the unit or functional suites, which it did not run and says so."
         },
         {
             "met": true,
-            "evidence": "The order is support and maintenance consequence: the backlog and the end-of-line library first, the test matrix third, the in-flight distribution marked as not judgeable, cleanup and a release-policy recommendation last. Two findings stand as open with what would settle them (an SVG fixture test, a typo3_schema_lookup comparison), and #1 is labelled a process observation rather than a code severity."
+            "evidence": "The order is consequence: the distribution import into every existing installation first, rendering test coverage and the PHP floor next, cleanup last, the 15.4.99 constraint as a Recommendation. Finding 1 says it is reasoned from traced core listeners and the commit message, not run, because a run writes to the database. Surfaces marks Registration, Persistence and Rendering unassessed, and Open carries the SVG sink, GoogleFontService and the TER artefact with what would settle each."
         },
         {
             "met": true,
-            "evidence": "Each finding names the workflow that owns the follow-up: typo3-extension-upgrade for scssphp 2.x, typo3-extension-testing for the matrix and the baseline, typo3-extension-documentation for guides.xml, typo3-extension-patch-review for the PR triage, typo3-distribution-content for the in-flight export. The answer ends with an offer to run composer test, not with a change."
+            "evidence": "Every finding carries an Owner that is a published skill: typo3-distribution-content, typo3-extension-testing, typo3-extension-asset-build, typo3-extension-documentation, typo3-development-installation, and unassigned for the CGL fix. The answer ends with an offer to run the suites rather than a change or a fix."
         }
     ],
     "failures": [
         {
             "avoided": true,
-            "evidence": "The coverage table marks backend modules, middleware, Extbase plugins and console commands as not applicable because none is shipped, and the frontend asset build as partially assessed with what was not read. The seven typo3_hint_lookup calls each carry the subsystem's own paths."
+            "evidence": "The findings and the Checked and correct list are about this package: the v14 deprecations it grepped for by name, the iframe attributes at ExternalMediaUtility.php:58, the raw outputs in the indexed-search partial dropped with the core line that escapes them. No generic checklist item stands without a path."
         },
         {
             "avoided": true,
-            "evidence": "The range comes from composer.json, not from the installed 15.0.0-dev, and the PHP floor question is dropped with the reason that the floor is the union of the two declared majors. The 14-versus-15 split is closed by ci.yml running both."
+            "evidence": "Range reads both manifests, ^14.3 || 15.*.*@dev and emconf 14.3.0-15.4.99, beside Ran on 14.3.7. Finding 3 measures the declared PHP floor against the CI matrix. The v15 per-symbol check stands under Not reached with the CI cell and a core main checkout named as what stood in for it."
         },
         {
             "avoided": true,
-            "evidence": "No core command appears; the checks are the repository's own composer scripts, and the CI critique reads this extension's ci.yml rather than another package's setup. The gh pr list read is of this repository's own backlog."
+            "evidence": "Every check it ran or recommends is a composer script the repository declares, or composer audit and composer show. The one core-side read is the code of the core listeners and the core main checkout, read as code rather than taken as process. tailor create-artefact appears only under Open as the reading that would settle a question."
         },
         {
             "avoided": true,
-            "evidence": "git status before and after the run are byte-identical, the transcript carries no Edit or Write and no shell write into the checkout, and the checks it ran are lint, phpstan and cgl:ci, the dry form."
+            "evidence": "The transcript carries no Edit or Write. The shell wrote a PHPStan config copy below /tmp/bpaudit and the gitignored lint, cgl and PHPUnit caches, and the answer names both. git status was clean before and after the run. The 15.4.99 constraint stands as a Recommendation, and finding 1 rests on the author's own commit message beside the traced listeners."
         }
     ],
-    "notes": "The sixth recorded REVIEW-02 run, the first in /home/benji/projects/bootstrap_package since 2026-07-31 and the first after the rewrite of 2026-09-19 that has each review name the failures every review shares. Session 175017a9-0c93-4209-975e-aaa50b03ce7f, 2026-09-19 20:09-20:18 UTC, claude-opus-5, Claude Code 2.1.278 driven headless with the prompt on standard input and no steering. 76 tool calls, 27 to this server, the skill activated at the first turn. The run it replaces is in commit a4470ee6e and ran in /home/benji/projects/news, which is gone from this machine. The environment is the checkout on wip/dist at bcc15898 with the maintainer's own in-flight distribution work in the tree: Initialisation/data.xml modified, 64 of its .files deleted, Build/Files/Demo and Build/Images/Demo untracked. The review named that state and judged the distribution surface as unassessed in substance rather than pretended to read it. The server that answered is the checkout main stands on, af5841e8. The status moves from partial to covered on this run; the partial of 2026-07-31 came from a different checkout and a different wording of the failures."
+    "notes": "The seventh recorded REVIEW-02 run, and the first since the distribution work was committed. Session 86a6122a-0b47-447b-b9eb-aae035a4fd38, 2026-10-28 14:34-14:40 UTC, claude-opus-5-5, Claude Code 2.1.311 headless with -p, the prompt on standard input and no steering. It made 42 tool calls, six of them to this server, and activated the skill as its first call. A first launch minutes earlier, session bea02b62-543c-4bd3-87b5-b46f7a96aca0, lacked the server's tools in allowedTools. It stopped at the refused typo3_project_describe and asked whether to go on without the server, rather than review from memory. That launch is not the run. The environment is /home/benji/projects/bootstrap_package on wip/dist at 244d65a9, one commit ahead of master, with a clean tree before and after. The server is the checkout main stands on, c0a078b7, through a user-scope entry. The run it replaces is the one of 2026-09-19 in commit 16adab73. The criteria all hold, but the session left most of the skill's method out. It wrote no surface list before it read, made no typo3_hint_lookup with paths, no runtime lookup and no typo3_documentation_lookup, and ran neither compatibility procedure for the declared major 15. The report says so: three of eight surfaces unassessed under Request all, and two Not reached lines. The run of 2026-09-19 made 27 calls to this server on the same package. The v15 read went to /home/benji/projects/typo3-cms rather than to the .checkouts the rule documents name. Today's skeleton changes: the whole report stands in one markdown block with a four-backtick fence, and nothing in the block follows Not reached. Two notes follow the block in the answer. The line form holds only in part. Commit, Range and Owner carry a parenthesis beside the value, findings 8 and 9 have no Rule line, and Surfaces uses assessed (partly), which the skeleton does not offer. Checked and correct and Dropped use a colon where the skeleton gives a dash. Open uses the unverified form once, for GoogleFontService. The request named no surface, so no row is not requested and the cost line was not met."
 }

@@ -1637,6 +1637,26 @@ final class SkillTest extends TestCase
         );
     }
 
+    #[Decision('D-SKL-102')]
+    #[Test]
+    public function aReviewAsksForAWorktreeBeforeItSkipsTheSuites(): void
+    {
+        $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
+        ));
+
+        self::assertStringContainsString(
+            '**Run the suites in a `git worktree` on the patch set rather than in the main checkout.**',
+            $skill,
+        );
+        self::assertStringContainsString('Ask before you skip the run, never instead of the run.', $skill);
+
+        $report = (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/references/report.md',
+        );
+        self::assertStringContainsString('the question you asked and its answer', $report);
+    }
+
     #[Decision('D-SKL-071')]
     #[Test]
     public function aProbeIsPutBackToTheStateItFound(): void

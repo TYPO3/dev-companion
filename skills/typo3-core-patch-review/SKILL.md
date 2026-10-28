@@ -202,6 +202,16 @@ That is the claim a review is least able to support. "The tests would presumably
 still pass" is not a review sentence. And an unnamed suite is the same sentence
 with the words taken out.
 
+**Run the suites in a `git worktree` on the patch set rather than in the main
+checkout.** The worktree leaves the reader's branch and uncommitted work alone.
+So a review that must not touch the checkout has a reason for a worktree, not
+against a run. Where no worktree holds the patch yet, ask the user whether to
+create one. Ask before you skip the run, never instead of the run. A skipped run
+names that question and its answer on its `Not run:` line.
+
+One review skipped every suite to keep the checkout clean and leaned on the CI
+vote. The one before it detached the main checkout onto the patch set.
+
 **A scratch probe is one of the things it may run.** Add a temporary fixture
 column, a model property or a test of your own. Run a targeted suite against it,
 read what it prints, and put the tree back. You do not edit the patch under

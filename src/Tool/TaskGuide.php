@@ -172,8 +172,9 @@ final class TaskGuide extends ReadOnlyTool
      * last answer a review asks for before its first read.
      */
     public const SURFACES_OWED = 'Surfaces: write this list into your reply before the first file you read. It is '
-        . 'the work list, and the coverage the report closes on: mark every entry assessed, unassessed or not '
-        . 'requested, and drop none. Ask each one its own typo3_hint_lookup before you judge it, with the paths '
+        . 'the floor of the work list, and the coverage the report closes on: mark every entry assessed, unassessed '
+        . 'or not requested, and drop none. A subsystem the checkout ships that no entry names gets a row of its '
+        . 'own. Ask each one its own typo3_hint_lookup before you judge it, with the paths '
         . 'the checkout has for it, or with these ids where it has none:';
 
     /**

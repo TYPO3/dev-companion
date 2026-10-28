@@ -706,6 +706,15 @@
         ]
       },
       {
+        "surface": "Shipped content",
+        "hints": [
+          "sitepackage-initial-content",
+          "initial-content-import-once",
+          "initial-content-references",
+          "fresh-instance-seeding"
+        ]
+      },
+      {
         "surface": "Security",
         "hints": [
           "security-sinks",

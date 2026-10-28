@@ -16,6 +16,9 @@ of an optional subsystem is not a defect.
   paths.
 - Rendering: site sets, TypoScript, TSconfig, Fluid roots and namespaces,
   templates, translations, and public assets.
+- Shipped content: what `Initialisation/` imports into every installation that
+  sets the package up. That is the page tree, the site configuration and the
+  files. `typo3-distribution-content` owns it.
 - Security: authorization boundaries, state-changing requests, output-context
   escaping, raw rendering, query construction, user-controlled attributes, URLs
   and paths, and secret exposure. Every one of them is a value and a sink. The

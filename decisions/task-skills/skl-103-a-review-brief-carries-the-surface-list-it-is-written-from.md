@@ -39,8 +39,8 @@ write.
 ## Decided
 
 - **The answer carries the list, and the skill keeps its account.** The surface
-  names are the ones `references/checklist.md` writes under *Audit surfaces*,
-  in its order. `HintsTest::anExtensionReviewBriefCarriesTheSurfacesOfTheChecklist`
+  names are the ones `references/checklist.md` writes under *Audit surfaces*, in
+  its order. `HintsTest::anExtensionReviewBriefCarriesTheSurfacesOfTheChecklist`
   holds the two to each other, and holds every id to a hint that answers.
 - **Weighed against `D-SKL-074`.** That entry moved an obligation to where the
   session is when it acts, and its first **Wrong if** fired twice. A sentence at
@@ -50,8 +50,14 @@ write.
 - **Weighed against `SKILL-11`.** The list arrives whole from a source the
   request cannot narrow. The session marks what the request left out **not
   requested** on it, which step 4 already asks.
-- **A core review gets no list.** `typo3-core-patch-review` closes on surfaces of
-  its own, and a brief for a change carries none.
+- **A core review gets no list.** `typo3-core-patch-review` closes on surfaces
+  of its own, and a brief for a change carries none.
+- **The list is a floor, and the brief says so.** A subsystem the checkout ships
+  that no entry names gets a row of its own. `SURFACES_OWED` and step 3 carry
+  that sentence.
+- **Shipped content is an entry of its own.** It stands on every list, because
+  the brief does not read the checkout. A package without `Initialisation/`
+  marks it not applicable, at the cost of one line.
 - **Rejected: a third wording of step 3.** Two wordings did not produce the
   list, and `D-SKL-049` weighs a further one against corrections nobody has met.
 
@@ -73,3 +79,14 @@ write.
   `D-SKL-002`'s first **Assumed** failing.
 - A run asks the ids and finds a surface's hints off its subject. The routing is
   then a guess, and the field goes back to names alone.
+- A run again leaves a subsystem the checkout ships unread because no entry
+  names it. The sentence about the floor then did not reach the reading.
+
+## Since then
+
+The second `REVIEW-02` run of 2026-10-28 wrote the seven surfaces into its reply
+before the first read, so the first **Wrong if** did not fire. The run took the
+list as its whole work list instead. It never read `Initialisation/`, although
+`typo3_extension_describe` listed `Initialisation/data.xml`. The run before it
+had made that import its top finding. The **Decided** bullets on the floor and
+on shipped content answer that run.

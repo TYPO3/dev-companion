@@ -27,7 +27,8 @@ gate, whatever the request asked for.
    reply, so the reader sees what you will cover before you read. Take the
    checklist's surfaces, narrowed to the ones this kind of checkout can have.
    `typo3_task_guide` with `changeType="audit"` returns them as `surfaces`, and
-   that answer is the list to write. It is the work list. The
+   that answer is the list to write. It is the floor of the work list. A
+   subsystem the checkout ships that no entry names gets a row of its own. The
    coverage the report closes on is this same list with every entry answered.
 4. Where the request names what it is about (security only, configuration only,
    one subsystem), read the surfaces it names. Mark the rest **not requested**
@@ -55,8 +56,8 @@ already have:
   description. One query per surface in scope. A single broad query is not
   subsystem evidence, and neither is a query that states a finding you already
   formed. Ask for a surface the checkout has no files for by the hint ids
-  `surfaces` names for it instead. That is the surface whose absence is the finding, and the one
-  whose paths you cannot pass.
+  `surfaces` names for it instead. That is the surface whose absence is the
+  finding, and the one whose paths you cannot pass.
 - The runtime lookup that owns the surface, where one exists. The base names
   them and what each adds after the extension answer. An audit makes that call
   per surface in scope. An answer off what the package declares is about the

@@ -901,6 +901,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### guides
 
 - [`D-GUI-035`][D-GUI-035] — A brief opens on the hint its confirmed intent names first · 2026-10-28
+- [`D-GUI-036`][D-GUI-036] — A brief carries a hint for each path before a second for any · 2026-10-28
 - [`D-GUI-033`][D-GUI-033] — A hint the brief names by id is carried or listed as left out · 2026-10-26
 - [`D-GUI-034`][D-GUI-034] — A sitepackage brief owes a rendered page per layout · 2026-10-26
 - [`D-GUI-031`][D-GUI-031] — Translation beside record localization is no label work · 2026-10-21
@@ -936,6 +937,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-GUI-001`][D-GUI-001] — A missing release target becomes a placeholder, not `main` · 2026-07-29
 
 [D-GUI-035]: guides/gui-035-a-brief-opens-on-the-hint-its-confirmed-intent-names-first.md
+[D-GUI-036]: guides/gui-036-a-brief-carries-a-hint-for-each-path-before-a-second-for-any.md
 [D-GUI-033]: guides/gui-033-a-hint-the-brief-names-by-id-is-carried-or-listed-as-left-out.md
 [D-GUI-034]: guides/gui-034-a-sitepackage-brief-owes-a-rendered-page-per-layout.md
 [D-GUI-031]: guides/gui-031-translation-beside-record-localization-is-no-label-work.md

@@ -558,8 +558,9 @@ final class TaskGuide extends ReadOnlyTool
         $carried = [];
         foreach ($groups as $group) {
             $matched = Hints::find($group['paths'], $task, HintLookup::MAX_HINTS, null, $targets);
+            $groupLeads = array_diff($leads, $carried);
             $ranked = self::bindingFirst(
-                self::leadsFirst($matched['matchedHints'], array_diff($leads, $carried), $targets),
+                self::oneForEachPath(self::leadsFirst($matched['matchedHints'], $groupLeads, $targets), $groupLeads),
                 $group['scope'],
             );
             foreach ($ranked as $hint) {
@@ -1101,6 +1102,32 @@ final class TaskGuide extends ReadOnlyTool
         }
 
         return [...array_values($first), ...array_values(array_diff_key($byId, $first))];
+    }
+
+    /**
+     * The hints that reach a path no earlier hint reached, then the rest.
+     *
+     * The keyword tier sums over every path, so seven backend paths took all
+     * four slots and `DataHandler.php` got none (`D-GUI-036`). A lead stays in
+     * front and counts for the paths it reaches. Each half keeps its order.
+     *
+     * @param array<int, array<string, mixed>> $hints
+     * @param array<int, string> $leads
+     * @return array<int, array<string, mixed>>
+     */
+    private static function oneForEachPath(array $hints, array $leads): array
+    {
+        $first = [];
+        $reached = [];
+        foreach ($hints as $index => $hint) {
+            $paths = $hint['matchedOn']['paths'] ?? [];
+            if (in_array($hint['id'], $leads, true) || array_diff($paths, $reached) !== []) {
+                $first[$index] = $hint;
+                $reached = [...$reached, ...$paths];
+            }
+        }
+
+        return [...array_values($first), ...array_values(array_diff_key($hints, $first))];
     }
 
     /**

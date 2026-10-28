@@ -474,13 +474,19 @@ final class Hints
             // here because the question a probe opens with is which word
             // decided. A term is worth what it separates within the candidates.
             // So an unrelated statement with a common word in it makes that
-            // word cheaper for every query with it, `D-ANS-115`.
+            // word cheaper for every query with it, `D-ANS-115`. `paths` is
+            // the given paths a pattern reaches one by one, which a brief
+            // spreads its slots over (`D-GUI-036`).
             $hint['matchedOn'] = [
                 'keywords' => $keywords,
                 'score' => $score,
                 'coverage' => $coverage,
                 'terms' => $matchedTerms,
                 'weights' => $weights,
+                'paths' => array_values(array_filter(
+                    $paths,
+                    static fn(string $path): bool => self::scoreKeywords($hint, '', mb_strtolower($path)) > 0,
+                )),
             ];
             $scored[] = ['hint' => $hint, 'keywords' => $keywords, 'score' => $score];
         }

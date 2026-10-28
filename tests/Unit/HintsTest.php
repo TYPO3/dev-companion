@@ -8868,6 +8868,39 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The `REVIEW-03` call of 2026-10-28. Seven backend paths summed into the
+     * keyword tier and took all four slots, and `DataHandler.php` got none.
+     */
+    #[Decision('D-GUI-036')]
+    #[Test]
+    public function aBriefCarriesAHintForEachPathBeforeASecondForAny(): void
+    {
+        $paths = [
+            'typo3/sysext/core/Classes/DataHandling/DataHandler.php',
+            'typo3/sysext/backend/Classes/Controller/Wizard/LocalizationController.php',
+            'typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseUserPermissionCheck.php',
+            'typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseDefaultLanguagePageRow.php',
+            'typo3/sysext/backend/Classes/Wizard/PageWizardStepBuilder.php',
+            'typo3/sysext/backend/Classes/Localization/RequiredTranslationFieldResolver.php',
+            'typo3/sysext/backend/Configuration/Backend/AjaxRoutes.php',
+            'Build/Sources/TypeScript/backend/localization/localization-wizard.ts',
+            'typo3/sysext/core/Documentation/Changelog/14.3.x/Important-87328-LocalizationWizardAsksForRequiredPageFields.rst',
+        ];
+        $task = 'Review a core bugfix: localization wizard asks for required page fields before creating a page '
+            . 'translation; DataHandler localize command accepts fieldValues; FormEngine permission check for new '
+            . 'page translations';
+
+        $brief = Registry::call('typo3_task_guide', ['task' => $task, 'changeType' => 'bugfix', 'paths' => $paths]);
+
+        $carried = array_column($brief->data['hints'], 'id');
+        self::assertContains('datahandler-testing', $carried);
+        self::assertContains('documentation-changelog', $carried);
+        self::assertContains('backend-ui', $carried);
+        // The second backend hint for `AjaxRoutes.php` waits rather than goes.
+        self::assertContains('backend-routing-internals', array_column($brief->data['omittedHints'], 'id'));
+    }
+
+    /**
      * The mirror, measured the same day and worse. `core-tests` ranked first on
      * a functional-test task in a distributed extension, above
      * `project-extension-tests`, which is the hint that binds there

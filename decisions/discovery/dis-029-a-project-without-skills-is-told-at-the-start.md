@@ -2,10 +2,9 @@
 id: D-DIS-029
 title: A project without skills is told at the start
 date: 2026-10-05
-status: open
-coveredBy:
-  - ScopeTest::theInstructionsFitWhatAClientKeeps
-  - StdioServerTest::aProjectWithoutSkillsIsToldHowToGetThem
+status: revoked
+revokedBy: D-DIS-034
+coveredBy: []
 ---
 
 # D-DIS-029 — A project without skills is told at the start
@@ -55,3 +54,10 @@ skills are installed there and names `typo3-dev-companion install`.**
 On 2026-10-27 a start in `/` got this notice and was told to run `install`
 there. `D-DIS-033` takes that case out: a start that lies in no repository gets
 its own opening, and this notice stays where a repository is.
+
+## Revoked on 2026-10-27
+
+By `D-DIS-034`. The notice stays where it stood, and it names the
+`typo3://skill` resource rather than `install`. Runs that day showed that a
+Claude Code session without skill files read the skill when the sentence named
+the URI, and read none when it named the command.

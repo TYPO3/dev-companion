@@ -294,11 +294,11 @@ final class StdioServerTest extends TestCase
     }
 
     /**
-     * The instructions tell a session to activate a typo3-* skill. In a
-     * project where `install` never ran, the listing has none, and the session
-     * could not tell why — `D-DIS-029`.
+     * In a project where `install` never ran, the listing has no typo3-*
+     * skill, so the instructions name the resource that serves it —
+     * `D-DIS-034`.
      */
-    #[Decision('D-DIS-029')]
+    #[Decision('D-DIS-034')]
     #[Test]
     public function aProjectWithoutSkillsIsToldHowToGetThem(): void
     {
@@ -316,6 +316,7 @@ final class StdioServerTest extends TestCase
         $stderr = null;
         $absent = $this->call($initialize, $this->temporaryRoot, $stderr)[1];
         self::assertStringStartsWith(Installer::ABSENT, $absent['result']['instructions']);
+        self::assertStringContainsString('typo3://skill/', Installer::ABSENT);
         self::assertStringContainsString('no task skills are installed in ' . $this->temporaryRoot, (string) $stderr);
 
         self::assertSame(0, $this->install($this->temporaryRoot));

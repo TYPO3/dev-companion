@@ -149,14 +149,15 @@ final class Entrypoint
      * notice as it was, because a write into somebody else's project may not
      * stop a server. The directory is the one this process started in, where
      * `install` writes and so where the record is. A project without a record
-     * gets the notice that it has no skills at all, `D-DIS-029`.
+     * gets the notice that sends it to the skill resources, `D-DIS-034`.
      */
     private static function refreshSkillsNobodyHasUpdated(string $binary): string
     {
         $project = getcwd() ?: '';
         if (Installer::absent($project)) {
             fwrite(STDERR, 'typo3-dev-companion: no task skills are installed in ' . $project
-                . ', so no typo3-* skill is in a client\'s listing. Run typo3-dev-companion install there.' . "\n");
+                . ', so the instructions send a session to the typo3://skill resources. '
+                . 'Run typo3-dev-companion install there to put them in a client\'s listing.' . "\n");
 
             return Installer::ABSENT;
         }

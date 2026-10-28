@@ -41,9 +41,8 @@ What the instructions carry
 
 The instructions open with the first call of any task, because the tool
 descriptions are not a channel a deferred session reads. Then they route the
-questions a session asks most, name the skill listing, and say that the server
-answers in English. The whole of it fits the 2048 characters the recorded client
-keeps,
+questions a session asks most, name the skills, and say that the server answers
+in English. The whole of it fits the 2048 characters the recorded client keeps,
 `R-ANS-013 <../../requirements/answers/ans-013-the-instructions-fit-what-a-client-keeps.md>`_.
 A client cuts past that without a word to either side, so the budget covers
 everything assembled, prefix and suffix included.
@@ -55,8 +54,9 @@ Three things change the text from one start to the next:
   sentence that says so,
   `D-DIS-021 <../../decisions/discovery/dis-021-a-stale-publication-is-put-back-where-the-server-starts.md>`_.
   Where ``install`` never ran in the project, the sentence says that no task
-  skills are installed and names the command,
-  `D-DIS-029 <../../decisions/discovery/dis-029-a-project-without-skills-is-told-at-the-start.md>`_.
+  skills are installed and names the ``typo3://skill`` resource that serves each
+  one,
+  `D-DIS-034 <../../decisions/discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md>`_.
 * **The exclusion in front of the routing.** Where
   ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` names tools, the instructions say which
   are left out and drop every index entry that routed to one,
@@ -152,7 +152,7 @@ The fourth member is ``instructions``, and it reads:
     - the commit message, yours as much as the core's, and its branches: typo3_commit_message_guide
     - the whole procedure, not one fact out of it: typo3_rule_lookup with a documentId typo3_project_describe lists
 
-    Activate the typo3-* skill in your listing that covers the task: it makes these calls.
+    Activate the typo3-* skill that covers the task: it makes these calls.
 
     targetVersion or the version the server read filters the answers, and a statement that does not hold on every covered line carries its range.
 
@@ -160,7 +160,7 @@ The fourth member is ``instructions``, and it reads:
 
     typo3_server_scope says what it covers, by which tool, and which installation it reads. Every tool here is read-only except typo3_feedback_record, which creates a new markdown feedback under feedback/ and writes nothing else.
 
-1,952 characters of the 2,048 a client keeps, ``Coverage::INSTRUCTIONS_BUDGET``.
+1,936 characters of the 2,048 a client keeps, ``Coverage::INSTRUCTIONS_BUDGET``.
 
 The prompts
 -----------

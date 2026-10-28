@@ -364,7 +364,7 @@ final class ScopeTest extends TestCase
     #[Decision('D-AUD-011')]
     #[Decision('D-AUD-012')]
     #[Decision('D-DIS-013')]
-    #[Decision('D-DIS-029')]
+    #[Decision('D-DIS-034')]
     #[Decision('D-DIS-033')]
     #[Test]
     public function theInstructionsFitWhatAClientKeeps(): void
@@ -390,9 +390,9 @@ final class ScopeTest extends TestCase
             'instructions where the server started outside any repository',
         );
         self::assertLessThanOrEqual(
-            mb_strlen(Installer::NOTICE),
-            mb_strlen(Installer::ABSENT),
-            'the notice for a project without skills stands where the stale one stands, so it may not be longer',
+            Coverage::INSTRUCTIONS_BUDGET,
+            mb_strlen(Coverage::instructions(Installer::ABSENT)),
+            'instructions where no skills are installed',
         );
 
         // The measure takes the prefix that names the exclusions too, because
@@ -411,6 +411,11 @@ final class ScopeTest extends TestCase
             Coverage::INSTRUCTIONS_BUDGET,
             mb_strlen(Coverage::instructions(Installer::NOTICE)),
             'instructions where the caller excluded everything and the skills are stale too',
+        );
+        self::assertLessThanOrEqual(
+            Coverage::INSTRUCTIONS_BUDGET,
+            mb_strlen(Coverage::instructions(Installer::ABSENT)),
+            'instructions where the caller excluded everything and no skills are installed',
         );
     }
 

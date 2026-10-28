@@ -28,7 +28,7 @@
         "call": "typo3_rule_lookup with a documentId typo3_project_describe lists"
       }
     ],
-    "note": "Activate the typo3-* skill in your listing that covers the task: it makes these calls.",
+    "note": "Activate the typo3-* skill that covers the task: it makes these calls.",
     "then": "targetVersion or the version the server read filters the answers, and a statement that does not hold on every covered line carries its range.\n\nQuery this server in English whatever language you speak with the user. Its match is lexical, so a query in another language reaches only the loanwords. Translate the subject before you call, and the answer back.\n\ntypo3_server_scope says what it covers, by which tool, and which installation it reads.",
     "outside": {
       "start": "This server started outside any repository, so it reads no project and no installation. Pass targetVersion on every call: the version the user named, or ask, or say in the answer which one you assumed. Where the answer depends on the user's project, tell them that TYPO3_DEV_COMPANION_ROOT in this server's entry lets it read that project. Call typo3_task_guide for the workflow the task belongs to. Call it again at the first test, check, commit or shipped file the task did not name. Not every task ends in a patch. It also answers a triage of the backlog, whether a report still reproduces, and what a fix costs.",

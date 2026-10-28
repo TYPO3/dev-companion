@@ -27,12 +27,11 @@ final class Installer
      */
     public const NOTICE = 'The task skills installed in this project are stale; run typo3-dev-companion update. ';
     /**
-     * What stands there instead where `install` never ran in the project. The
-     * instructions tell a session to activate a typo3-* skill, which it cannot
-     * do with none in its listing, `D-DIS-029`. No longer than `NOTICE`, which
-     * the budget is measured with.
+     * What stands there instead where `install` never ran in the project. A
+     * session has no typo3-* skill in its listing there, so the sentence sends
+     * it to the resource that serves the same file, `D-DIS-034`.
      */
-    public const ABSENT = 'No task skills are installed in this project; run typo3-dev-companion install. ';
+    public const ABSENT = 'No task skills are installed here; read the one typo3_task_guide names at typo3://skill/<name>/SKILL.md. ';
     /**
      * The same fact once the server has acted on it, in the same budget.
      *

@@ -6527,6 +6527,34 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('so a report owes it no Not run line', $answer->text);
     }
 
+    /**
+     * The marks as one list, in the order of the suites. A review that read
+     * them off the entries left five verifying suites off both of its lines.
+     */
+    #[Decision('D-SKL-107')]
+    #[Test]
+    public function theGuideListsTheSuitesThatVerifyByName(): void
+    {
+        $answer = Registry::call('typo3_test_run_guide', [
+            'paths' => ['typo3/sysext/core/Classes/DataHandling/DataHandler.php'],
+            'targetVersion' => 'main',
+        ]);
+        $marked = array_column(array_filter(
+            $answer->data['suites'],
+            static fn(array $suite): bool => $suite['verifies'],
+        ), 'suite');
+
+        self::assertSame($marked, $answer->data['verifying']);
+        self::assertContains('lintPhp', $answer->data['verifying']);
+        self::assertNotContains('composerInstall', $answer->data['verifying']);
+        self::assertStringContainsString('minus what ran', $answer->data['verifyingOwed']);
+        self::assertStringContainsString('The suites that verify: ', $answer->text);
+
+        $outside = Registry::call('typo3_test_run_guide', ['paths' => ['packages/site/Classes/Foo.php']]);
+        self::assertSame([], $outside->data['verifying']);
+        self::assertSame('', $outside->data['verifyingOwed']);
+    }
+
     #[Decision('D-SKL-106')]
     #[Test]
     public function aSuiteThatAsksGitForItsFilesVerifiesNothingFromAWorktree(): void
@@ -6541,7 +6569,7 @@ final class HintsTest extends TestCase
                 'targetVersion' => 'main',
             ]);
 
-            return [array_column($answer->data['suites'], 'verifies', 'suite'), $answer->text];
+            return [array_column($answer->data['suites'], 'verifies', 'suite'), $answer->text, $answer->data['verifying']];
         };
 
         try {
@@ -6550,7 +6578,8 @@ final class HintsTest extends TestCase
 
             rmdir($root . '/.git');
             file_put_contents($root . '/.git', "gitdir: /home/somebody/typo3/.git/worktrees/review\n");
-            [$inWorktree, $text] = $verifies();
+            [$inWorktree, $text, $verifying] = $verifies();
+            self::assertNotContains('cglGit', $verifying);
             self::assertFalse($inWorktree['cglGit']);
             self::assertFalse($inWorktree['cglHeaderGit']);
             self::assertTrue($inWorktree['cgl']);

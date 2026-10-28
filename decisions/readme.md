@@ -1009,6 +1009,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-104`][D-SKL-104] — A review with nobody to ask runs the suite · 2026-10-28
 - [`D-SKL-105`][D-SKL-105] — A review's Not run line lists the suites that verify · 2026-10-28
 - [`D-SKL-106`][D-SKL-106] — A review's Not run line names one of three reasons · 2026-10-28
+- [`D-SKL-107`][D-SKL-107] — The test run guide lists the suites that verify by name · 2026-10-28
 - [`D-SKL-099`][D-SKL-099] — A document of a review is the report in its own order · 2026-10-26
 - [`D-SKL-100`][D-SKL-100] — The review skills report in one skeleton · 2026-10-26
 - [`D-SKL-101`][D-SKL-101] — A sitepackage has a task skill of its own · 2026-10-26
@@ -1111,6 +1112,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-SKL-104]: task-skills/skl-104-a-review-with-nobody-to-ask-runs-the-suite.md
 [D-SKL-105]: task-skills/skl-105-a-reviews-not-run-line-lists-the-suites-that-verify.md
 [D-SKL-106]: task-skills/skl-106-a-reviews-not-run-line-names-one-of-three-reasons.md
+[D-SKL-107]: task-skills/skl-107-the-test-run-guide-lists-the-suites-that-verify-by-name.md
 [D-SKL-099]: task-skills/skl-099-a-document-of-a-review-is-the-report-in-its-own-order.md
 [D-SKL-100]: task-skills/skl-100-the-review-skills-report-in-one-skeleton.md
 [D-SKL-101]: task-skills/skl-101-a-sitepackage-has-a-task-skill-of-its-own.md

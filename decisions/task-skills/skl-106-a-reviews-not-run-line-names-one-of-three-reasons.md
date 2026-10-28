@@ -55,3 +55,11 @@ reasons, and names that reason on its `Not run:` line.**
   read is what the client did with the session's time.
 - A review lists `cglGit` as not run from a worktree the server read. Then the
   mark did not arrive.
+
+## Since then
+
+The first **Wrong if** fired in the third `REVIEW-03` run of 2026-10-28. The
+session quoted the three reasons and skipped with a fourth. The second **Wrong
+if** held: neither git-based cgl suite stood on its lines. The guide now lists
+the suites a report owes a line, which the second bullet of **Decided** rejected
+(`D-SKL-107`).

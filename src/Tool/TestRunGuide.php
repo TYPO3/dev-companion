@@ -74,6 +74,10 @@ final class TestRunGuide extends ReadOnlyTool
                 . 'first. Where query scores on some of them, those alone, strongest first. This is the list typo3_task_guide narrows '
                 . 'two ways. Its checks is what a task in these domains runs whatever it turns out to be. Its '
                 . 'testSuites is the strongest few against the task text.'),
+            'verifying' => Schema::listOf(Schema::string(), 'The suites above that verify, by name and in their order: '
+                . 'every one marked verifies. Empty where suites is.'),
+            'verifyingOwed' => Schema::string('What a report on the change does with verifying, stated beside it. Empty '
+                . 'where verifying is.'),
             'invocation' => Schema::object([
                 'preconditions' => Schema::listOf(Schema::string(), 'What has to be true before any suite runs: the container the script starts, and the vendor/ and bin/ the checkout may not have. This is the question a caller holds at the moment it starts to check for vendor/bin/phpunit by hand. The shell\'s PHP is not the interpreter the answer is about.'),
                 'beforeYouRun' => Schema::string('The one note about lost work rather than about a suite. '
@@ -89,7 +93,7 @@ final class TestRunGuide extends ReadOnlyTool
                     'command' => Schema::string(),
                 ], ['purpose', 'command'])),
             ], ['preconditions', 'beforeYouRun', 'notes', 'options', 'examples']),
-        ], ['scopes', 'uncoveredPaths', 'missingPaths', 'withheld', 'suites', 'invocation']);
+        ], ['scopes', 'uncoveredPaths', 'missingPaths', 'withheld', 'suites', 'verifying', 'verifyingOwed', 'invocation']);
     }
 
     public static function answer(array $args): ToolResult
@@ -146,6 +150,8 @@ final class TestRunGuide extends ReadOnlyTool
                     'missingPaths' => [],
                     'withheld' => TestSuiteHints::withheld($domains, $target),
                     'suites' => [],
+                    'verifying' => [],
+                    'verifyingOwed' => '',
                     'invocation' => ['preconditions' => [], 'beforeYouRun' => '', 'notes' => [], 'options' => [], 'examples' => []],
                 ],
                 [self::OUTSIDE_THE_CORE],
@@ -168,6 +174,7 @@ final class TestRunGuide extends ReadOnlyTool
         if (!$ranked) {
             usort($hints, static fn(array $a, array $b): int => $b['base'] <=> $a['base']);
         }
+        $verifying = array_column(array_filter($hints, static fn(array $hint): bool => $hint['verifies']), 'suite');
 
         $blocks = [];
         $owed = [];
@@ -259,6 +266,12 @@ final class TestRunGuide extends ReadOnlyTool
                     $ranked ? 'Each carries base below.' : (count($base) === 1 ? 'It comes first.' : 'They come first.'),
                 );
             }
+            // A list rather than a mark on every entry. A review built its Not
+            // run line from the marks and left five suites off both lines
+            // (`D-SKL-107`).
+            if ($verifying !== []) {
+                $blocks[] = 'The suites that verify: ' . self::named($verifying) . '. ' . self::VERIFYING_OWED;
+            }
             foreach ($hints as $hint) {
                 $block = [
                     '## ' . $hint['suite'],
@@ -319,6 +332,8 @@ final class TestRunGuide extends ReadOnlyTool
             'missingPaths' => $missing,
             'withheld' => $withheld,
             'suites' => TestSuiteHints::records($hints),
+            'verifying' => $verifying,
+            'verifyingOwed' => $verifying === [] ? '' : self::VERIFYING_OWED,
             'invocation' => TestSuiteHints::invocation(),
         ], [...$owed, self::withoutHeading(self::SCRIPTS_GUIDE)]);
     }
@@ -436,6 +451,9 @@ final class TestRunGuide extends ReadOnlyTool
     private const OUTSIDE_THE_CORE = 'What such a repository needs instead — its own phpunit suite, the browser '
         . 'tests beside it, and the static analysis the phpstan suite is the core\'s half of — is typo3_hint_lookup '
         . 'with id=project-extension-tests, id=browser-tests and id=extension-static-analysis.';
+
+    private const VERIFYING_OWED = 'A report on the change names each of them on a Ran line or on a Not run line, so '
+        . 'its Not run line is this list minus what ran.';
 
     public const SCRIPTS_GUIDE = "## The whole procedure\n"
         . 'This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with '

@@ -1717,7 +1717,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-patch-review/references/checklist.md',
         ));
         self::assertStringContainsString(
-            'Answer the surface with both halves: what ran, and which of the suites the guide returned nobody started',
+            'Answer the surface with both halves: what ran, and which of the suites in the guide\'s `verifying` nobody started',
             $checklist,
         );
     }
@@ -1749,12 +1749,22 @@ final class SkillTest extends TestCase
         $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
         ));
-        self::assertStringContainsString('The list is every entry the guide marks `verifies`.', $skill);
+        self::assertStringContainsString('The list is the guide\'s `verifying`: every entry it marks `verifies`', $skill);
 
         $report = (string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-review/references/report.md',
         );
-        self::assertStringContainsString('every suite typo3_test_run_guide marks `verifies`', $report);
+        self::assertStringContainsString('every suite in typo3_test_run_guide\'s `verifying`', $report);
+    }
+
+    #[Decision('D-SKL-107')]
+    #[Test]
+    public function aReviewsNotRunLineIsTheGuidesVerifyingMinusWhatRan(): void
+    {
+        $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
+        ));
+        self::assertStringContainsString('the `Not run:` line is that list minus what ran.', $skill);
     }
 
     #[Decision('D-SKL-104')]

@@ -33,8 +33,8 @@ a reader cannot check. So where the reading did not happen, write unassessed.
 - **Tests.** What exercises the changed behaviour, and whether the layer is the
   one that can fail on it. A change with no coverage is a finding. Coverage that
   cannot fail on this change is a worse one, because it reads as coverage.
-  Answer the surface with both halves: what ran, and which of the suites the
-  guide returned nobody started, of those it marks `verifies`.
+  Answer the surface with both halves: what ran, and which of the suites in the
+  guide's `verifying` nobody started.
 
   Where the change sits in a chain, what the follow-up touches decides what a
   test is worth. One that pins behaviour the next change rewrites is churn. One

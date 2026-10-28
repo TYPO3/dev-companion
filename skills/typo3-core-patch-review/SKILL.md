@@ -208,9 +208,11 @@ That is the claim a review is least able to support. "The tests would presumably
 still pass" is not a review sentence. And an unnamed suite is the same sentence
 with the words taken out.
 
-The list is every entry the guide marks `verifies`. An install, a dispatcher or
-a server for a browser checks nothing. A line for each buries the suites that
-do, and one review dropped three of those.
+The list is the guide's `verifying`: every entry it marks `verifies`, by name.
+Every name on it stands on a `Ran:` line or a `Not run:` line, so the `Not run:`
+line is that list minus what ran. An install, a dispatcher or a server for a
+browser checks nothing and is not on it. One review built the list from the
+marks and left five suites off both lines.
 
 **A suite on that list stays unrun for one of three reasons, and its `Not run:`
 line names the reason.** The suite writes into the checkout and has no

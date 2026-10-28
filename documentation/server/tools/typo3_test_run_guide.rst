@@ -134,6 +134,12 @@ Answers with
         # The TYPO3 majors whose runTests.sh has this suite, where that is not all
         # of them. Null means every covered version.
         versions: string or null
+    # The suites above that verify, by name and in their order: every one marked
+    # verifies. Empty where suites is.
+    verifying: [string]
+    # What a report on the change does with verifying, stated beside it. Empty where
+    # verifying is.
+    verifyingOwed: string
     invocation:
       # What has to be true before any suite runs: the container the script starts,
       # and the vendor/ and bin/ the checkout may not have. This is the question a
@@ -187,6 +193,8 @@ Text:
     - A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.
     - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
     - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
+
+    The suites that verify: unit, functional, checkIntegrityPhp, checkRst, build, lintScss, lintTypescript, unitJavascript, cgl, cglGit, cglHeader, cglHeaderGit, lintPhp, phpstan, lintServicesYaml, lintYaml, checkComposer, checkIntegritySetLabels, lintHtml, checkIntegrityXliff, normalizeXliff, checkExtensionScannerRst, checkRstRenderingSingle, build-css, checkGruntClean and e2e. A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.
 
     ## unit
     Command from the TYPO3 core root:
@@ -1030,6 +1038,35 @@ Data:
                 "versions": ""
             }
         ],
+        "verifying": [
+            "unit",
+            "functional",
+            "checkIntegrityPhp",
+            "checkRst",
+            "build",
+            "lintScss",
+            "lintTypescript",
+            "unitJavascript",
+            "cgl",
+            "cglGit",
+            "cglHeader",
+            "cglHeaderGit",
+            "lintPhp",
+            "phpstan",
+            "lintServicesYaml",
+            "lintYaml",
+            "checkComposer",
+            "checkIntegritySetLabels",
+            "lintHtml",
+            "checkIntegrityXliff",
+            "normalizeXliff",
+            "checkExtensionScannerRst",
+            "checkRstRenderingSingle",
+            "build-css",
+            "checkGruntClean",
+            "e2e"
+        ],
+        "verifyingOwed": "A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.",
         "invocation": {
             "preconditions": [
                 "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
@@ -1151,6 +1188,8 @@ Text:
     - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
     - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
 
+    The suites that verify: phpstan. A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.
+
     ## phpstan
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s phpstan`
@@ -1237,6 +1276,10 @@ Data:
                 "versions": ""
             }
         ],
+        "verifying": [
+            "phpstan"
+        ],
+        "verifyingOwed": "A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.",
         "invocation": {
             "preconditions": [
                 "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
@@ -1421,6 +1464,8 @@ Data:
             "suites": 0
         },
         "suites": [],
+        "verifying": [],
+        "verifyingOwed": "",
         "invocation": {
             "preconditions": [
                 "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
@@ -1546,6 +1591,8 @@ Text:
     Narrowed to the css domain(s) the given paths touch. Suites outside them cannot fail on this change; call again without paths to see all of them. No given path reached php, fluid, typoscript, xliff, docs and typescript, which leaves 27 suites out. A path landing in one of those domains means calling again.
 
     Every change in these domains runs build and lintScss, and typo3_task_guide makes them its checks. Each carries base below. The rest can fail on these paths and needs a reason of its own.
+
+    The suites that verify: build, build-css and lintScss. A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.
 
     ## build
     Command from the TYPO3 core root:
@@ -1753,6 +1800,12 @@ Data:
                 "versions": ""
             }
         ],
+        "verifying": [
+            "build",
+            "build-css",
+            "lintScss"
+        ],
+        "verifyingOwed": "A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.",
         "invocation": {
             "preconditions": [
                 "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",

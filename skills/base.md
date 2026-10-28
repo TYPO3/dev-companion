@@ -46,9 +46,13 @@ ones that matter too.
    Where step 1 reported no extension, that answer is this step, and there is
    nothing to call. Say so. A core checkout is that case, because step 1 names
    the project's own extensions and not TYPO3's.
-3. **`typo3_task_guide`** with a short English task, the paths it touches, the
-   target version and the change type. It answers the workflow this task belongs
-   to and the checks that come with it.
+3. **`typo3_task_guide`** with a short English task, the paths it touches and
+   the change type. It answers the workflow this task belongs to and the checks
+   that come with it.
+
+   Leave `targetVersion` out unless the task is about one major alone. Without
+   it, the guide answers for every major the package declares. The installed
+   version is one of those majors. A version you state narrows the answer to it.
 
    Run it in every session, this skill's own tasks included. The guide builds
    the brief from the paths as well as the task text. No skill knows which paths

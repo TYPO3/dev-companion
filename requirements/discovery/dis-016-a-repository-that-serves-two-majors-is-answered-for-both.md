@@ -3,6 +3,7 @@ id: R-DIS-016
 title: 'A repository that serves two majors is answered for both'
 status: held
 heldBy:
+  - SkillTest::theBaseLeavesTheTargetVersionToTheDeclaration
   - VersionsTest::aConstraintIsReadByAskingItAboutEachCoveredMajor
   - VersionsTest::aStatedMajorSaysWhichOtherOneItLeftOut
   - VersionsTest::anExtensionThatServesTwoMajorsIsAnsweredForBoth
@@ -37,4 +38,6 @@ accumulated drift (2026-07-31). The run of that afternoon then never reached the
 widened answer. The session read `14.3.0` out of `typo3_project_describe` and
 stated it. The input description invited that with its promise of the installed
 version as the default, and the narrowed answer said nothing about itself
-(2026-07-31).
+(2026-07-31). On a package that declares `^14.3 || 15.*.*@dev`, the session
+again stated `14.3`. `skills/base.md` asked for the target version in its step
+for the guide, so the base now says to leave it out (2026-10-28).

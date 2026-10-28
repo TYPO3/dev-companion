@@ -799,6 +799,19 @@ final class SkillTest extends TestCase
         self::assertStringNotContainsString('improve', self::description('typo3-extension-health'));
     }
 
+    #[Requirement('R-DIS-016')]
+    #[Test]
+    public function theBaseLeavesTheTargetVersionToTheDeclaration(): void
+    {
+        // REVIEW-02 of 2026-10-28, on a package that declares
+        // `^14.3 || 15.*.*@dev`. The base told it to pass the target version,
+        // so it passed the installed 14.3 and the brief narrowed to v14.
+        $base = self::flat((string) file_get_contents(Paths::root() . '/skills/base.md'));
+
+        self::assertStringContainsString('Leave `targetVersion` out unless the task is about one major alone', $base);
+        self::assertStringNotContainsString('the target version and the change type', $base);
+    }
+
     #[Decision('D-SKL-003')]
     #[Requirement('R-SKL-004')]
     #[Requirement('R-SKL-005')]

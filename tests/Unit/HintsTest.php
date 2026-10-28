@@ -1832,6 +1832,23 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('returns nothing at all', $result->text);
     }
 
+    /**
+     * A REVIEW-01 run dropped a stored XSS in these words: Fluid escapes the
+     * children of a ViewHelper. The call stood inside `f:format.raw`, which
+     * renders it raw on Fluid 2.15, 4.6 and 5.3 alike.
+     */
+    #[Test]
+    public function aViewHelperInsideFormatRawIsNotClearedByTheEscapeOfItsChildren(): void
+    {
+        $result = Registry::call('typo3_hint_lookup', [
+            'task' => 'XSS through HighlightWordsViewHelper on header, dropped because Fluid escapes children',
+            'targetVersion' => '12',
+        ]);
+
+        self::assertStringContainsString('switches escaping off for everything Fluid parses inside it', $result->text);
+        self::assertStringContainsString('escapes neither its children nor its output', $result->text);
+    }
+
     /** @return array<string, array{0: string}> */
     public static function securityQueries(): array
     {

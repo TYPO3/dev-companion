@@ -6726,6 +6726,21 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('rather than widening the path set', $notes);
     }
 
+    /**
+     * The REVIEW-03 run of 2026-10-28 waited on `! pgrep -f runTests.sh` in a
+     * loop whose own command line carried the name. Every covered
+     * runTests.sh ends in the SUCCESS or FAILURE line the note names.
+     */
+    #[Test]
+    public function theInvocationNoteSaysHowASessionWaitsForARun(): void
+    {
+        $notes = implode("\n", TestSuiteHints::invocation()['notes']);
+
+        self::assertStringContainsString("on the client's own notice that the task is complete", $notes);
+        self::assertStringContainsString('`SUCCESS` or `FAILURE` to stderr', $notes, 'the marker a poll reads');
+        self::assertStringContainsString("matches the loop's own command line", $notes, 'why a process search hangs');
+    }
+
     #[Test]
     public function aDeprecationTaskIsRecognizedAsOne(): void
     {

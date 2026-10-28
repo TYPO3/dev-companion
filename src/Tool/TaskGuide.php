@@ -207,7 +207,8 @@ final class TaskGuide extends ReadOnlyTool
         . 'not run, and the deprecation sweep\'s exemption does not cover it. Owed before the reading: '
         . 'typo3_changelog_lookup with type "breaking", the query omitted, limit raised and paths naming the '
         . 'package\'s PHP directories, once with version %2$s. Hold each entry against the files its touches '
-        . 'names, and ask one you doubt under its own name.';
+        . 'names, and ask one you doubt under its own name. A check that runs on the installed major clears '
+        . 'none of these entries. Read each file an entry\'s touches names, or report the entry under Open.';
 
     /**
      * The change type of a task that changes nothing, and the id of the intent

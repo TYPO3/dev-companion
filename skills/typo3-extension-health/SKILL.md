@@ -120,7 +120,9 @@ skill does not repeat:
 A declared major above the installed one owes its breaking changes before the
 reading, and the sweep's exemption does not cover them. The review brief names
 that call in `owed`, with the package's PHP as its paths. Hold each entry it
-returns against the files that entry names.
+returns against the files that entry names. A check that runs on the installed
+major clears none of these entries, because its analysis reads the installed
+core. Read each file an entry names, or report the entry under **Open**.
 
 An audit that runs neither procedure reports the gap rather than the range. The
 finding holds where you established it, and you name the majors you did not

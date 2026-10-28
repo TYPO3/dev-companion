@@ -67,6 +67,8 @@ the base alone. The sweep's exemption in `skills/base.md` stays as it is.
 - A review gets the line, makes the call and still misses a breaking entry the
   code calls. Then the list was the wrong shape, and the identifier query is
   what the line must ask for.
+- A run reads the files an entry names and still clears an entry the code calls.
+  Then the read needs the newer major's signature beside it.
 - A run makes the call and the answer is too long to read against the code. Then
   the line must name `tags`.
 - A review of a package that declares a major below the installed one misses an
@@ -79,3 +81,9 @@ the base alone. The sweep's exemption in `skills/base.md` stays as it is.
   not the identifier query this entry named, which is 61 calls for that package.
   The line now asks for `paths`, and the answer keeps the entries naming a class
   the code uses — `D-ANS-192`.
+- **The fifth `REVIEW-02` run of 2026-10-28 got 110702 and cleared it.** The
+  entry named `Classes/Service/ImageInfoService.php`, and the session cleared it
+  with a PHPStan run against the installed 14.3.7. That analysis reads the
+  installed core, so it cannot show a v15 signature. The line and the skill now
+  say that such a check clears no entry: the session reads the file, or the
+  entry stands under **Open**.

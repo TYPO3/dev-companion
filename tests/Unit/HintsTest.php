@@ -1399,6 +1399,25 @@ final class HintsTest extends TestCase
         }
     }
 
+    /**
+     * The withhold keeps the backend's own accessibility hint from a site, and
+     * the site needs the WCAG half of it: a focus ring that reaches 3:1.
+     */
+    #[Decision('D-KNW-033')]
+    #[Test]
+    public function aFrontendFocusQueryReachesTheContrastTheRingOwes(): void
+    {
+        $result = Hints::find(
+            [],
+            'make the frontend of a sitepackage accessible: visible keyboard focus and sufficient colour contrast on the site design',
+            4
+        );
+
+        self::assertContains(Hints::CATEGORY_CSS, $result['withheldCategories']);
+        self::assertContains('sitepackage-focus-contrast', array_column($result['matchedHints'], 'id'));
+        self::assertStringContainsString('3:1', self::statementsOf('sitepackage-focus-contrast'));
+    }
+
     #[Requirement('R-SCO-004')]
     #[Test]
     public function stylingABackendModuleStillReachesTheBackendCssHints(): void

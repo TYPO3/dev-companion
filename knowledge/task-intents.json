@@ -1078,6 +1078,7 @@
       "Declare each page layout in a file of its own, under the name its page template carries. typo3_hint_lookup with id=sitepackage-backend-layouts says whether those files belong to the set or to the extension.",
       "Reach lib.contentElement with the reference operator =< rather than copy it, and reach lib.fluidPage only where the set that defines it is a dependency. typo3_hint_lookup with id=sitepackage-typoscript-reference says which package defines each.",
       "Decide whether the site keeps fluid_styled_content before you write its first content element. typo3_hint_lookup with id=sitepackage-fluid-styled-content says what goes with the dependency, the rendering of every Extbase plugin included.",
+      "Compute the contrast of the focus colour against every surface a link sits on before you call the design done. typo3_hint_lookup with id=sitepackage-focus-contrast says what the ring owes and how one token serves a dark component.",
       "Prove the package by rendering one page for each page layout, after the caches are flushed. A green suite and a declared command say nothing about a page template, and a project with neither still owes the rendered page."
     ],
     "checks": [],

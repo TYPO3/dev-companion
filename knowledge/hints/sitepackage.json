@@ -226,5 +226,34 @@
       "The Default layout renders Before, Header, Footer and After as optional sections whose fallback child is a partial — DropIn/Before/All, Header/All, Footer/All and DropIn/After/All. An element declaring none of those sections still renders those partials, so a layout written to replace this one owes the partials too or drops the sections deliberately.",
       "The styles.templates.* and styles.content.* settings the shipped objects read are declared by this extension and by no other. A constant nothing declares is left as its own text — ConstantAwareTokenStream::__toString() falls back to the token — so a reference surviving the removal puts the literal {$styles...} into the value instead of emptying it."
     ]
+  },
+  {
+    "id": "sitepackage-focus-contrast",
+    "title": "Contrast and Visible Keyboard Focus on a Site Design",
+    "domains": [
+      "fluid",
+      "css"
+    ],
+    "appliesTo": [
+      "focus",
+      "focus-visible",
+      "focus ring",
+      "focus indicator",
+      "keyboard focus",
+      "outline",
+      "contrast",
+      "colour contrast",
+      "color contrast",
+      "wcag",
+      "accessible",
+      "accessibility"
+    ],
+    "hints": [
+      "A visible focus is a condition, not a selector. The WCAG non-text contrast criterion, level AA, asks the focus indicator for 3:1 against the colours adjacent to it.",
+      "So a :focus-visible rule satisfies nothing where its outline colour is close to the surface it lands on. Never remove an outline without an equal or better indicator in its place.",
+      "One focus colour cannot reach 3:1 against a light surface and a dark one at once. Declare it as a custom property and redefine it on each dark component, so the one :focus-visible rule takes the right value wherever it lands.",
+      "This ratio is computed rather than observed. The focus colour and every surface are declared values, so the WCAG relative luminance formula gives each ratio from two hex values before any browser runs.",
+      "Check it against every surface a link or a control sits on: the navigation, the header, the hero, the footer. browser-test-accessibility is the scan of the rendered page after it."
+    ]
   }
 ]

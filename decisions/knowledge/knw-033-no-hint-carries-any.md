@@ -4,6 +4,7 @@ title: 'No hint carries `any`'
 date: 2026-08-03
 status: open
 coveredBy:
+  - HintsTest::aFrontendFocusQueryReachesTheContrastTheRingOwes
   - HintsTest::aFrontendThemeIsNotAnsweredWithTheBackendsOwnCssConventions
   - HintsTest::hintsAreGroupedByDomainWithPhpFirst
   - HintsTest::nothingIsTaggedAnyWithoutSayingWhy
@@ -70,3 +71,18 @@ because a split inherits the tag of its origin.
   in a longer form and the failure this replaced.
 - The withhold lets a backend Sass convention through to a theme extension,
   which would mean the domains-subset test is the wrong rule for it.
+
+## Since then
+
+On 2026-10-28 a feedback reported that the withhold takes the WCAG statements
+of `css-accessibility-states` from a site. Contrast and a visible focus hold on
+both sides. The rule held: that hint carries `css` alone and is the backend's.
+The gap was a hint for the site. `sitepackage-focus-contrast` is that hint, with
+`fluid` as its third domain. It states the condition the ring owes: 3:1 against
+the adjacent colours, from the WCAG non-text contrast criterion at level AA. The
+W3C understanding page for that criterion names the focus indicator. The probe
+of the feedback's own query now ranks it first.
+
+The other half of that report says the backend hint names the mechanism rather
+than that condition. A second feedback from the same session carries it, and
+its card `T-261028-cbdf` owns the rewrite.

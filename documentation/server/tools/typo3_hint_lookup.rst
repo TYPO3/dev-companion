@@ -1157,6 +1157,7 @@ Text:
     - css-accessibility-states — CSS Accessibility, Contrast, and States (Backend CSS)
     - css-tokens-specificity — CSS Tokens and Specificity (Backend CSS)
     - css-container-queries — Container Queries and Responsive Components (Backend CSS)
+    - sitepackage-focus-contrast — Contrast and Visible Keyboard Focus on a Site Design (Fluid)
     - css-icon-text-layout-stability — Icons, Text, and Layout Stability (Backend CSS)
     - css-light-dark-mode — Light and Dark Mode CSS (Backend CSS)
     - css-minimal-reusable-components — Minimal CSS and Reusable Components (Backend CSS)
@@ -1532,6 +1533,11 @@ Data:
                 "id": "css-container-queries",
                 "title": "Container Queries and Responsive Components",
                 "category": "Backend CSS"
+            },
+            {
+                "id": "sitepackage-focus-contrast",
+                "title": "Contrast and Visible Keyboard Focus on a Site Design",
+                "category": "Fluid"
             },
             {
                 "id": "css-icon-text-layout-stability",

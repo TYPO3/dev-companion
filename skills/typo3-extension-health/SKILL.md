@@ -31,9 +31,10 @@ gate, whatever the request asked for.
 4. Where the request names what it is about (security only, configuration only,
    one subsystem), read the surfaces it names. Mark the rest **not requested**
    on that same list. The request narrows the reading, never the list. An entry
-   nobody asked about costs one line. A dropped entry is what leaves the reader
-   unable to ask for the rest. A request that names no surface is not a focused
-   one, and you read every entry.
+   nobody asked about costs one line. That line says what a review of the
+   surface would read: the lookups and the files. A dropped entry is what leaves
+   the reader unable to ask for the rest. A request that names no surface is not
+   a focused one, and you read every entry.
 
 A surface is in scope because the checklist names it, not because the file tree
 shows it. A file list first inverts that. `find` cannot show a manual nobody

@@ -4546,6 +4546,19 @@ final class SkillTest extends TestCase
             self::flat($skill),
         );
 
+        // SKILL-11 asks that the reader can price the rest before asking for
+        // it, so the unrequested row carries what a review of it would read.
+        self::assertStringContainsString(
+            'That line says what a review of the surface would read',
+            self::flat($skill),
+        );
+        self::assertStringContainsString(
+            'A **not requested** row names in **Backed by** what a review of it would read',
+            self::flat((string) file_get_contents(
+                Paths::root() . '/skills/typo3-extension-health/references/report.md',
+            )),
+        );
+
         // The report is where the two states come apart, and the number comes
         // off the step that writes the list. It said step 5 for two days after
         // the block became step three.

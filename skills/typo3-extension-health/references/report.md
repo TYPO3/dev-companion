@@ -74,3 +74,7 @@ the whole report. A finding the checklist's finding gate leaves unverified
 stands under **Open** and under no severity. Its entry names the class you did
 not read. The **Surfaces** table is the list step 3 wrote, one row per
 entry and in its order.
+
+A **not requested** row names in **Backed by** what a review of it would read:
+the lookups and the files. That is the cost of the rest, and the reader asks for
+it off that row. The report ends on **Not reached**, and no summary follows it.

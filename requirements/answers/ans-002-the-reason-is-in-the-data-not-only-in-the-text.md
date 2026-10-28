@@ -9,6 +9,7 @@ heldBy:
   - PackageSourcesTest::theNarrowingAMissComputesIsAField
   - ScopeTest::anUnanswerableLookupCarriesItsReasonInTheData
   - ScopeTest::theInstallationDiagnosticIsData
+  - ToolContractTest::everyToolTheTextNamesStandsInTheData
 ---
 
 # R-ANS-002 — The reason is in the data, not only in the text

@@ -126,6 +126,12 @@ Answers with
     # one you are in. Empty means no published skill owns what the brief recognized,
     # which is not a statement that the work has no workflow.
     skills: [string]
+    # What the caller does with skills, stated beside them: load them, and in which
+    # order. Empty where skills is.
+    skillsOwed: string
+    # What the caller does with staleSkills, stated beside them: the command that
+    # updates them, or which copy a report names. Empty where staleSkills is.
+    staleSkillsOwed: string
     # The whole procedures that write this work up or that it owes. They are the
     # corpus typo3_project_describe lists at orientation and this server serves as
     # typo3://guides resources. Owes is the second half and the one a task text
@@ -204,6 +210,10 @@ Answers with
             # wherever somebody writes TYPO3: an API that throws throws in a
             # sitepackage too.
             scope: string or null
+    # Whose the hints are, and whether typo3_hint_lookup holds more of them for
+    # these paths or nothing more. Where no hint matched, the call to make once the
+    # paths are known.
+    hintsOwed: string
     # What typo3_hint_lookup also holds for these paths and this brief did not
     # carry, named rather than counted. A hint declared for another kind of
     # repository is here for that reason rather than for a weak match. Empty means
@@ -216,6 +226,9 @@ Answers with
         title: string
         # PHP, TypeScript, JavaScript, CSS, or General.
         category: string
+    # The call each omitted hint still owes, stated beside them. Empty where
+    # omittedHints is.
+    omittedHintsOwed: string
     # Rule sections that apply to this task.
     rules:  # optional
       - documentId: string
@@ -244,6 +257,9 @@ Answers with
     # the same corpus a second way, and a suite named there and not here is one to
     # decide about.
     checks: [string]
+    # Where the work is outside the core and checks is empty for that reason, what
+    # to verify with instead. Empty inside the core.
+    checksOwed: string
     # Checks that only apply if the task really is the kind of work a weakly matched
     # intent suggests.
     conditionalChecks:  # optional
@@ -548,7 +564,9 @@ Data:
         "skills": [
             "typo3-core-patch-development"
         ],
+        "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.",
         "staleSkills": [],
+        "staleSkillsOwed": "",
         "guides": [
             {
                 "id": "any/writing/the-prose-a-patch-carries",
@@ -818,7 +836,9 @@ Data:
                 ]
             }
         ],
+        "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.",
         "omittedHints": [],
+        "omittedHintsOwed": "",
         "rules": [
             {
                 "documentId": "core/contribution/commit-messages",
@@ -850,6 +870,7 @@ Data:
             "CI=true ./Build/Scripts/runTests.sh -s checkRst",
             "CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst"
         ],
+        "checksOwed": "",
         "conditionalChecks": [],
         "testSuites": [
             {
@@ -939,7 +960,11 @@ Data:
                 "when": "when one of these answers was wrong or incomplete"
             }
         ],
-        "owed": []
+        "owed": [
+            "A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.",
+            "Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list.",
+            "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
+        ]
     }
 
 brief: task only
@@ -1087,7 +1112,9 @@ Data:
             }
         ],
         "skills": [],
+        "skillsOwed": "",
         "staleSkills": [],
+        "staleSkillsOwed": "",
         "guides": [
             {
                 "id": "any/testing/browser-check",
@@ -1207,7 +1234,9 @@ Data:
                 ]
             }
         ],
+        "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.",
         "omittedHints": [],
+        "omittedHintsOwed": "",
         "rules": [
             {
                 "documentId": "core/contribution/rules",
@@ -1228,6 +1257,7 @@ Data:
             "CI=true ./Build/Scripts/runTests.sh -s lintScss",
             "CI=true ./Build/Scripts/runTests.sh -s build"
         ],
+        "checksOwed": "",
         "conditionalChecks": [],
         "testSuites": [
             {
@@ -1342,7 +1372,11 @@ Data:
                 "when": "when one of these answers was wrong or incomplete"
             }
         ],
-        "owed": []
+        "owed": [
+            "A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.",
+            "Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list.",
+            "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
+        ]
     }
 
 brief: paths of two kinds
@@ -1521,7 +1555,9 @@ Data:
         "skills": [
             "typo3-core-patch-development"
         ],
+        "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.",
         "staleSkills": [],
+        "staleSkillsOwed": "",
         "guides": [
             {
                 "id": "any/writing/the-prose-a-patch-carries",
@@ -1643,6 +1679,7 @@ Data:
                 ]
             }
         ],
+        "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. A brief carries the 4 strongest per group of paths, which is not everything the lookup holds on them — call it for the rest, by path, with a larger limit, or by id.",
         "omittedHints": [
             {
                 "id": "events-extension-points",
@@ -1650,12 +1687,14 @@ Data:
                 "category": "PHP"
             }
         ],
+        "omittedHintsOwed": "Owed after this brief, and not carried below: events-extension-points. One typo3_hint_lookup call by id each, and a subject named here and not below is one this brief did not reach.",
         "rules": [],
         "checks": [
             "CI=true ./Build/Scripts/runTests.sh -s unit",
             "CI=true ./Build/Scripts/runTests.sh -s functional",
             "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp"
         ],
+        "checksOwed": "",
         "conditionalChecks": [],
         "testSuites": [
             {
@@ -1793,5 +1832,7 @@ Data:
                 "when": "when one of these answers was wrong or incomplete"
             }
         ],
-        "owed": []
+        "owed": [
+            "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
+        ]
     }

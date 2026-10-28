@@ -88,6 +88,7 @@ final class ProjectDescribe extends ReadOnlyTool
             'root' => Schema::nullableString('Absolute path of the repository this describes. Null when the discovery found no project root to describe.'),
             'kind' => Schema::string('core-checkout or composer-project. What the root declares itself to be, not whether anything sits installed in it; installed says that.'),
             'installed' => ['type' => 'boolean', 'description' => 'Whether the packages this repository declares sit installed below it. False is a clone nobody has run composer install in, which is the state a boot or an installation task starts in. Everything else here comes from the repository\'s own files and answers either way. What false costs is the four fields that come out of the installed tree: typo3Version, corePhpConstraint and installedPhpBound are null and extensions is empty. None of the four tells you that on its own.'],
+            'installedAgainstLockOwed' => Schema::string('The command that makes the install what composer.lock names, to run before any suite here, where state is differs or not-installed. Empty otherwise.'),
             'installedAgainstLock' => Schema::object([
                 'state' => [
                     'type' => 'string',
@@ -209,7 +210,7 @@ final class ProjectDescribe extends ReadOnlyTool
             ], ['package', 'description', 'file']), 'Patches from extra.patches. A patched package does not behave as its version says.'),
             'guides' => Schema::listOf(Schema::guideReference(), 'The whole procedures this server carries, named here because this is the call every task starts with. This server also serves them as typo3://guides resources, and a client that lists no resources renders none of them. Four sessions in one week finished without any knowledge that they exist. Each is one typo3_rule_lookup call by documentId, which needs no resource list. A search over sections answers a question and never hands one of these over whole.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
-        ], ['root', 'installed', 'installedAgainstLock', 'phpRelation', 'node', 'environment', 'extensions', 'sites', 'database', 'commands', 'uncheckedKinds', 'patches', 'guides', 'answeredBy'], []);
+        ], ['root', 'installed', 'installedAgainstLock', 'installedAgainstLockOwed', 'phpRelation', 'node', 'environment', 'extensions', 'sites', 'database', 'commands', 'uncheckedKinds', 'patches', 'guides', 'answeredBy'], []);
     }
 
     public static function answer(array $args): ToolResult
@@ -267,7 +268,8 @@ final class ProjectDescribe extends ReadOnlyTool
         foreach ($project['extensions'] as $extension) {
             $lines[] = sprintf('- %s (%s) — %s', $extension['key'], $extension['origin'], $extension['path']);
         }
-        $lines = array_merge($lines, self::deprecations($project['extensions']));
+        $deprecations = self::deprecations($project['extensions']);
+        $lines = array_merge($lines, $deprecations);
 
         $lines[] = '';
         $lines[] = $project['sites'] === []
@@ -365,9 +367,21 @@ final class ProjectDescribe extends ReadOnlyTool
             $lines[] = $line;
         }
 
+        $lockState = $project['installedAgainstLock']['state'];
+
         return ToolResult::create(
             implode("\n", $lines),
-            $project + ['guides' => $guides['records'], 'answeredBy' => 'packages'],
+            $project + [
+                'installedAgainstLockOwed' => in_array($lockState, [Instance::LOCK_DIFFERS, Instance::LOCK_NOT_INSTALLED], true)
+                    ? sprintf('Run "%s" before any suite here.', self::install($project['kind'], $project['environment']))
+                    : '',
+                'guides' => $guides['records'],
+                'answeredBy' => 'packages',
+            ],
+            [
+                trim(self::suites($project['kind'], $project['commands'])),
+                $deprecations === [] ? '' : self::UPGRADE_CHECK,
+            ],
         );
     }
 
@@ -401,6 +415,10 @@ final class ProjectDescribe extends ReadOnlyTool
 
         return ['lines' => $lines, 'records' => $records];
     }
+
+    private const UPGRADE_CHECK = 'It is not an upgrade check: nothing else these extensions ship was read for a '
+        . 'deprecation, and typo3_changelog_lookup is what answers that. typo3_extension_describe carries the same '
+        . 'verdict beside everything one extension registers.';
 
     /**
      * Which files the repository's own extensions ship that core has stopped to
@@ -448,10 +466,8 @@ final class ProjectDescribe extends ReadOnlyTool
         $lines[] = 'Four predicates are checked, each off the extension\'s own tree: ext_tables.php, '
             . 'ext_emconf.php, ext_icon.svg/.png/.gif, and ext_typoscript_setup.txt beside '
             . 'ext_typoscript_constants.txt. One of them missing above was looked at rather than skipped — the '
-            . 'extension ships no such file, or what core reads first stands beside it. It is not an upgrade '
-            . 'check: nothing else these extensions ship was read for a deprecation, and typo3_changelog_lookup '
-            . 'is what answers that. typo3_extension_describe carries the same verdict beside everything one '
-            . 'extension registers.';
+            . 'extension ships no such file, or what core reads first stands beside it. '
+            . self::UPGRADE_CHECK;
 
         return $lines;
     }

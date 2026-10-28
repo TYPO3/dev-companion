@@ -409,6 +409,32 @@ final class ToolContractTest extends TestCase
     }
 
     /**
+     * A tool the text sends the caller to stands in the data as well. Claude
+     * Code hands the model the data half alone, so a call named only in the
+     * text reaches no session there (`D-EVI-011`). A sentence about one value
+     * stands beside it, and the rest in `owed`.
+     *
+     * @param array<string, mixed> $arguments
+     */
+    #[Requirement('R-ANS-002')]
+    #[Decision('D-ANS-191')]
+    #[DataProvider('toolCalls')]
+    #[Test]
+    public function everyToolTheTextNamesStandsInTheData(string $name, array $arguments): void
+    {
+        $result = Registry::call($name, $arguments);
+        $data = (string) json_encode($result->data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        preg_match_all('/\btypo3_[a-z_]*[a-z]\b/', $result->text, $named);
+        $missing = array_values(array_filter(
+            array_unique($named[0]),
+            static fn(string $tool): bool => !str_contains($data, $tool),
+        ));
+
+        self::assertSame([], $missing, $name . ' names these in its text alone');
+    }
+
+    /**
      * A document read whole answers with the scope it declares, and a client
      * that validates the answer rejected every `any/` page — `D-ANS-186`.
      */

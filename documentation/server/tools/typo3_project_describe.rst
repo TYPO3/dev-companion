@@ -52,6 +52,9 @@ Answers with
     # installedPhpBound are null and extensions is empty. None of the four tells you
     # that on its own.
     installed: boolean  # optional
+    # The command that makes the install what composer.lock names, to run before any
+    # suite here, where state is differs or not-installed. Empty otherwise.
+    installedAgainstLockOwed: string  # optional
     # Whether what sits installed below the vendor directory is what composer.lock
     # names, package by package and version by version. The one thing installed
     # cannot say. A vendor directory a month older than the lock satisfies that
@@ -498,18 +501,19 @@ Answers with
 
 The answer carries exactly one of these sets of fields:
 
-- ``root``, ``installed``, ``installedAgainstLock``, ``phpRelation``, ``node``,
-  ``environment``, ``extensions``, ``sites``, ``database``, ``commands``,
-  ``uncheckedKinds``, ``patches``, ``guides``, ``answeredBy``
+- ``root``, ``installed``, ``installedAgainstLock``,
+  ``installedAgainstLockOwed``, ``phpRelation``, ``node``, ``environment``,
+  ``extensions``, ``sites``, ``database``, ``commands``, ``uncheckedKinds``,
+  ``patches``, ``guides``, ``answeredBy``
 - ``unsupported``
 
 Answered
 --------
 
-Recorded on 2026-10-26 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-10-28 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
-fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, an
-installation outside this repository. Its console is out of reach:
+fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
+14.3 core checkout below .checkouts/. Its console is out of reach:
 <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3
 exists. Its dependencies are not installed — vendor/autoload.php is not there
 either, and composer install writes both. Answered against composer-project,
@@ -529,8 +533,8 @@ Called with:
 
     {}
 
-From an outside installation
-""""""""""""""""""""""""""""
+From the 14.3 core checkout
+"""""""""""""""""""""""""""
 
 Text:
 
@@ -791,6 +795,7 @@ Data:
         ],
         "uncheckedKinds": [],
         "patches": [],
+        "installedAgainstLockOwed": "Run \"CI=true ./Build/Scripts/runTests.sh -s composerInstall\" before any suite here.",
         "guides": [
             {
                 "id": "any/assets/how-an-asset-reaches-a-page",
@@ -983,7 +988,9 @@ Data:
             }
         ],
         "answeredBy": "packages",
-        "owed": []
+        "owed": [
+            "The core's suites are run by Build/Scripts/runTests.sh, which no manifest here declares. typo3_test_run_guide names the ones a change needs, with the invocation."
+        ]
     }
 
 From the fixture installation
@@ -1133,6 +1140,7 @@ Data:
             "XLIFF"
         ],
         "patches": [],
+        "installedAgainstLockOwed": "",
         "guides": [
             {
                 "id": "any/assets/how-an-asset-reaches-a-page",
@@ -1325,5 +1333,8 @@ Data:
             }
         ],
         "answeredBy": "packages",
-        "owed": []
+        "owed": [
+            "One of them runs PHPUnit, and its functional half stops before the first assertion where nothing gave it database credentials — an error that reads like a broken suite rather than like a missing setting. typo3_hint_lookup with id=project-extension-tests is what such a run needs: the variables, an account allowed to create one database per test class, and the interpreter it is run on.",
+            "It is not an upgrade check: nothing else these extensions ship was read for a deprecation, and typo3_changelog_lookup is what answers that. typo3_extension_describe carries the same verdict beside everything one extension registers."
+        ]
     }

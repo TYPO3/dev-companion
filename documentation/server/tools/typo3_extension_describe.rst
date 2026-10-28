@@ -217,6 +217,9 @@ Answers with
     # Registration files it ships, from ext_localconf.php to
     # Initialisation/data.t3d.
     files: [string]  # optional
+    # Where deprecatedFiles lists one, what this check is not and the call that
+    # answers the rest. Empty where deprecatedFiles is.
+    deprecatedFilesOwed: string  # optional
     # The files this extension ships that the core no longer reads, or stops to
     # read, each with what the shipped file costs. The check reads four predicates,
     # each a file and what stands beside it. ext_tables.php. ext_emconf.php beside a
@@ -326,13 +329,13 @@ The answer carries exactly one of these sets of fields:
   ``contentElements``, ``renderedContentTypes``, ``pluginFrame``,
   ``unlistedFlexForms``, ``backendModules``, ``icons``, ``siteSets``,
   ``formConfigurations``, ``serviceTags``, ``files``, ``deprecatedFiles``,
-  ``notReadStatically``, ``artifacts``, ``answeredBy``
+  ``deprecatedFilesOwed``, ``notReadStatically``, ``artifacts``, ``answeredBy``
 - ``key``, ``unsupported``
 
 Answered
 --------
 
-Recorded on 2026-09-23 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-10-28 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
 fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
 14.3 core checkout below .checkouts/. Its console is out of reach:
@@ -1107,8 +1110,13 @@ Data:
                 }
             ]
         },
+        "deprecatedFilesOwed": "",
         "answeredBy": "packages",
-        "owed": []
+        "owed": [
+            "typo3_schema_lookup with one of those table names answers what columns the core derives for it, with the type, the default and the length of each. That is the resolved schema rather than what the TCA file declares, and two tables generated from one TCA do not have to agree on the order they come back in.",
+            "The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.",
+            "It ships no manual: `typo3-extension-documentation` is the workflow that writes one."
+        ]
     }
 
 From the fixture installation
@@ -1208,6 +1216,11 @@ Data:
                 }
             ]
         },
+        "deprecatedFilesOwed": "",
         "answeredBy": "installation",
-        "owed": []
+        "owed": [
+            "The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.",
+            "It ships no manual and no README: `typo3-extension-documentation` is the workflow that writes them.",
+            "It ships no test: `typo3-extension-testing` is the workflow that sets the first one up."
+        ]
     }

@@ -405,6 +405,8 @@ final class TaskGuide extends ReadOnlyTool
             ], ['id', 'title', 'confidence', 'condition']), 'The kinds of core work recognized in the task text.'),
             'staleSkills' => Schema::listOf(Schema::string(), 'Which of the skills above this project holds an older copy of, read from what stands published there against what this server writes now. Empty where every named copy is current, where this server never installed into this project, and where skills names none. So it is a subset of skills and never a statement that one is missing. What to do about it is one command, typo3-dev-companion update, and what it costs is a change to the caller\'s own checkout.'),
             'skills' => Schema::listOf(Schema::string(), 'The task skills that own the recognized work, named so that a caller who reached this server without one can load it. A skill is a file in your own project rather than something this server can see. So a name here is not a promise that the project holds it. A review, a triage, a boot and a diagnosis name only the workflows that change nothing either. intents still recognizes the kind of change under review, and the workflow that writes one is not the one you are in. Empty means no published skill owns what the brief recognized, which is not a statement that the work has no workflow.'),
+            'skillsOwed' => Schema::string('What the caller does with skills, stated beside them: load them, and in which order. Empty where skills is.'),
+            'staleSkillsOwed' => Schema::string('What the caller does with staleSkills, stated beside them: the command that updates them, or which copy a report names. Empty where staleSkills is.'),
             'guides' => Schema::listOf(Schema::guideReference(), 'The whole procedures that write this work up or that it owes. They are the corpus typo3_project_describe lists at orientation and this server serves as typo3://guides resources. Owes is the second half and the one a task text never asks for. A change that ends in a backend UI owes the browser check whether or not it says so. Named rather than carried: a brief is one call inside a procedure, and the page is one typo3_rule_lookup call by documentId. Empty means no page here writes up what the brief recognized. It does not say that none of them is worth a read; the whole list is in that orientation call.'),
             'surfaces' => Schema::listOf(Schema::object([
                 'surface' => Schema::string(),
@@ -412,12 +414,15 @@ final class TaskGuide extends ReadOnlyTool
             ], ['surface', 'hints']), 'The surfaces a review of a project or an extension writes into its reply before the first read, and closes on with each marked assessed, unassessed or not requested. Empty for every other brief, and for a review of the core, whose skill carries surfaces of its own.'),
             'surfacesOwed' => Schema::string('What the caller does with surfaces, stated beside them. Empty where surfaces is.'),
             'hints' => Schema::listOf(Schema::hintRecord(), 'What typo3_hint_lookup answers for these paths, quoted whole and carried here — the strongest few per group of paths, not everything it holds on them. The hint a recognized kind of work names first opens the list, fetched by id where the paths do not reach it. A hint that declares a different kind of repository from the paths given ranks below the ones that bind them. A rule taken from one of these belongs to that lookup. So a report that cites it names typo3_hint_lookup, and a caller who needs more of the subject calls it directly. omittedHints names what the brief left out.'),
+            'hintsOwed' => Schema::string('Whose the hints are, and whether typo3_hint_lookup holds more of them for these paths or nothing more. Where no hint matched, the call to make once the paths are known.'),
             'omittedHints' => Schema::listOf(Schema::hintReference(), 'What typo3_hint_lookup also holds for these paths and this brief did not carry, named rather than counted. A hint declared for another kind of repository is here for that reason rather than for a weak match. Empty means what it carries is everything that matched. A subject listed here and not in hints is one the brief did not reach. It is the gap the pointer to that lookup stands for.'),
+            'omittedHintsOwed' => Schema::string('The call each omitted hint still owes, stated beside them. Empty where omittedHints is.'),
             'rules' => Schema::listOf(Schema::knowledgeMatch(), 'Rule sections that apply to this task.'),
             'checks' => Schema::listOf(Schema::string(), 'Commands to run, ready to execute from the core root. They '
                 . 'are the base suites of the domains above, which run whatever the task turns out to be, plus the '
                 . 'ones the recognized work names. This is the list to run. testSuites narrows the same corpus a '
                 . 'second way, and a suite named there and not here is one to decide about.'),
+            'checksOwed' => Schema::string('Where the work is outside the core and checks is empty for that reason, what to verify with instead. Empty inside the core.'),
             'conditionalChecks' => Schema::listOf(Schema::object([
                 'title' => Schema::string(),
                 'condition' => Schema::string(),
@@ -439,7 +444,7 @@ final class TaskGuide extends ReadOnlyTool
                 'how' => Schema::string(),
             ], ['establish', 'how']), 'What this server cannot see and the agent has to establish itself.'),
             'nextTools' => Schema::listOf(Schema::nextTool()),
-        ], ['task', 'changeType', 'domains', 'skills', 'staleSkills', 'guides', 'surfaces', 'surfacesOwed', 'hints', 'omittedHints', 'checks', 'checklist', 'beforeYouRun', 'nextTools']);
+        ], ['task', 'changeType', 'domains', 'skills', 'skillsOwed', 'staleSkills', 'staleSkillsOwed', 'guides', 'surfaces', 'surfacesOwed', 'hints', 'hintsOwed', 'omittedHints', 'omittedHintsOwed', 'checks', 'checksOwed', 'checklist', 'beforeYouRun', 'nextTools']);
     }
 
     public static function answer(array $args): ToolResult
@@ -594,10 +599,10 @@ final class TaskGuide extends ReadOnlyTool
         $testHints = array_slice(TestSuiteHints::find($task, $domains, $target), 0, self::SUITES_PER_BRIEF);
 
         $lines = [];
+        $owed = [];
         if ($outsideCore) {
-            $lines[] = Scope::OUTSIDE_CORE_NOTICE . ' Take what follows as conventions that may transfer, not as '
-                . 'a checklist for this task. '
-                . 'typo3_server_scope states the boundary.';
+            $owed[] = 'Take what follows as conventions that may transfer, not as a checklist for this task.';
+            $lines[] = Scope::OUTSIDE_CORE_NOTICE . ' ' . end($owed) . ' typo3_server_scope states the boundary.';
             $lines[] = '';
         } elseif ($outside !== []) {
             $lines[] = Scope::outsideCoreAmong($outside)
@@ -610,14 +615,14 @@ final class TaskGuide extends ReadOnlyTool
         // first. The changelog and the Gerrit route are steps a caller in their
         // own repository cannot take at all.
         if ($scope === Scope::Uncertain) {
-            $lines[] = Scope::UNCERTAIN_NOTICE . ' Name a path the work touches, and this brief is composed '
-                . 'for the repository it is in.';
+            $lines[] = $owed[] = Scope::UNCERTAIN_NOTICE . ' Name a path the work touches, and this brief is '
+                . 'composed for the repository it is in.';
             $lines[] = '';
         }
         // Said once, because the steps a caller expects and does not find are
         // the ones they search for a second time.
         if ($changesNothing) {
-            $lines[] = 'This is a brief for work that changes nothing, so what a patch owes — the deprecation '
+            $lines[] = $owed[] = 'This is a brief for work that changes nothing, so what a patch owes — the deprecation '
                 . 'sweep, the focused diff, the test coverage, the commit message — is left out below. Pass '
                 . 'changeType where the task does change something.';
             $lines[] = '';
@@ -626,8 +631,9 @@ final class TaskGuide extends ReadOnlyTool
         // Above the brief rather than under its `Hints:` heading. A caller
         // reads what they still owe while they decide what to do, and a line
         // below a payload after they have decided (`D-ANS-146`).
+        $omittedHintsOwed = $omitted === [] ? '' : sprintf(self::HINTS_OMITTED, implode(', ', array_column($omitted, 'id')));
         if ($omitted !== []) {
-            $lines[] = sprintf(self::HINTS_OMITTED, implode(', ', array_column($omitted, 'id')));
+            $lines[] = $omittedHintsOwed;
             $lines[] = '';
         }
 
@@ -668,18 +674,20 @@ final class TaskGuide extends ReadOnlyTool
         // workflow is in it for the whole answer, and the line is worth nothing
         // once the read has started.
         $stale = Installer::behind(Instance::startedFrom() ?? '', $skills);
+        $skillsOwed = $skills === [] ? '' : sprintf(
+            $spansBoth && count($skills) > 1 ? self::SKILLS_IN_ORDER : self::SKILLS_OWNING,
+            implode(', ', $skills),
+        );
+        $staleSkillsOwed = $stale === [] ? '' : sprintf(
+            self::SKILLS_STALE,
+            implode(', ', $stale),
+            count($stale) === 1 ? 'it' : 'them',
+        );
         if ($skills !== []) {
-            $lines[] = sprintf(
-                $spansBoth && count($skills) > 1 ? self::SKILLS_IN_ORDER : self::SKILLS_OWNING,
-                implode(', ', $skills),
-            );
+            $lines[] = $skillsOwed;
         }
         if ($stale !== []) {
-            $lines[] = sprintf(
-                self::SKILLS_STALE,
-                implode(', ', $stale),
-                count($stale) === 1 ? 'it' : 'them',
-            );
+            $lines[] = $staleSkillsOwed;
         }
         // Under the skill and above the payload for the same reason, and two
         // lines rather than one. The skill is a file in the caller's own
@@ -712,15 +720,14 @@ final class TaskGuide extends ReadOnlyTool
             // Said above the blocks rather than under them. What it corrects is
             // a citation, and the citation happens while the reader is in the
             // block.
-            $lines[] = self::HINTS_SOURCE;
             // Which of the two follows is what the brief did, not a standing
             // disclaimer. A caller told there is more when there is not spends
             // the call the pointer promised on nothing.
-            if ($omitted !== []) {
-                $lines[] = sprintf(self::HINTS_TRUNCATED, self::HINTS_PER_GROUP);
-            } else {
-                $lines[] = self::HINTS_COMPLETE;
-            }
+            $hintsOwed = self::HINTS_SOURCE . ' ' . ($omitted !== []
+                ? sprintf(self::HINTS_TRUNCATED, self::HINTS_PER_GROUP)
+                : self::HINTS_COMPLETE);
+            $lines[] = self::HINTS_SOURCE;
+            $lines[] = $omitted !== [] ? sprintf(self::HINTS_TRUNCATED, self::HINTS_PER_GROUP) : self::HINTS_COMPLETE;
             $lines[] = '';
             // One block per group, and the heading only where there is more
             // than one. The caller named two repositories, and which half of
@@ -744,9 +751,11 @@ final class TaskGuide extends ReadOnlyTool
                 );
             }
             $lines[] = implode("\n\n", $sectionTexts);
+            $owed = [...$owed, ...MatchedHints::owed($hints['matchedHints'], $target)];
         } else {
-            $lines[] = '- No hint matched this task text. That means no convention was recognized, '
-                . 'not that none applies: call typo3_hint_lookup again with the concrete file paths once they are known.';
+            $hintsOwed = 'No hint matched this task text. That means no convention was recognized, not that none '
+                . 'applies: call typo3_hint_lookup again with the concrete file paths once they are known.';
+            $lines[] = '- ' . $hintsOwed;
         }
 
         // Only the confirmed intents may state a rule as one that applies. A
@@ -758,6 +767,7 @@ final class TaskGuide extends ReadOnlyTool
             $lines[] = 'Rules that apply to this task:';
             $lines[] = '';
             $lines[] = Prose::sections($rules, $outsideCore);
+            $owed = [...$owed, ...Prose::owedBySections($outsideCore)];
         }
 
         // The checks of a matched hint belong in the list as much
@@ -778,10 +788,13 @@ final class TaskGuide extends ReadOnlyTool
         }
 
         $lines[] = '';
+        $checksOwed = $outsideCore
+            ? 'None of the core\'s own apply here, so none is listed. Verify with what this repository provides — the '
+                . 'scripts in its composer.json, its package.json, and its CI configuration are where its own suites '
+                . 'are declared.'
+            : '';
         if ($outsideCore) {
-            $lines[] = 'Checks: none of the core\'s own apply here, so none is listed. Verify with what this '
-                . 'repository provides — the scripts in its composer.json, its package.json, and its CI '
-                . 'configuration are where its own suites are declared.';
+            $lines[] = 'Checks: ' . $checksOwed;
         } else {
             $lines[] = 'Relevant TYPO3 core checks — the list to run, whatever this task turns out to be:';
             foreach ($checks as $check) {
@@ -793,8 +806,8 @@ final class TaskGuide extends ReadOnlyTool
                 // took the shorter one for the authoritative one and the longer
                 // one for suites the first had dropped (`D-ANS-108`).
                 $lines[] = '';
-                $lines[] = 'Suites that match this task, strongest first. Each is one to decide about rather than '
-                    . 'one the list above left out, and typo3_test_run_guide holds the rest for these paths.';
+                $lines[] = $owed[] = 'Suites that match this task, strongest first. Each is one to decide about '
+                    . 'rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.';
                 // The one caveat that belongs to the answer that hands over the
                 // command rather than to the one a session may never call. A
                 // suite can take untracked work with it, and this brief is step
@@ -997,21 +1010,26 @@ final class TaskGuide extends ReadOnlyTool
                 'condition' => (string) $intent['condition'],
             ], $intents),
             'skills' => $skills,
+            'skillsOwed' => $skillsOwed,
             'staleSkills' => $stale,
+            'staleSkillsOwed' => $staleSkillsOwed,
             'guides' => $guides,
             'surfaces' => $surfaces,
             'surfacesOwed' => $surfaces === [] ? '' : self::SURFACES_OWED,
             'hints' => MatchedHints::records($hints['matchedHints']),
+            'hintsOwed' => $hintsOwed,
             'omittedHints' => $omitted,
+            'omittedHintsOwed' => $omittedHintsOwed,
             'rules' => Prose::records($rules),
             'checks' => $checks,
+            'checksOwed' => $checksOwed,
             'conditionalChecks' => $conditionalChecks,
             'testSuites' => TestSuiteHints::records($testHints),
             'beforeYouRun' => $testHints === [] ? '' : TestSuiteHints::invocation()['beforeYouRun'],
             'checklist' => $checklist,
             'checkoutDiscovery' => $checkoutDiscovery,
             'nextTools' => $nextTools,
-        ]);
+        ], $owed);
     }
 
     /**

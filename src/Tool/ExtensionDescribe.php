@@ -66,6 +66,10 @@ final class ExtensionDescribe extends ReadOnlyTool
         . 'and the names a template and a settings array read them by: the table, the type=flex column the binding '
         . 'sits on, and record={"CType": "<the identifier>"} for the element it applies to.';
 
+    private const DEPRECATED_FILES_OWED = 'It is not an upgrade check: nothing else above was looked at for a '
+        . 'deprecation, and typo3_changelog_lookup is what answers that — #109438, #108345, #98093 and #96518 whole, '
+        . 'and everything they leave out.';
+
     public static function name(): string
     {
         return 'typo3_extension_describe';
@@ -160,6 +164,7 @@ final class ExtensionDescribe extends ReadOnlyTool
                 'total' => Schema::integer('Every PHP file below Classes/, which is what `find Classes -name \'*.php\' | wc -l` gives. The rows above and looseFiles add up to it.'),
             ], ['directories', 'looseFiles', 'total'], 'The shape of its Classes/ directory, read off the file tree rather than off a registration.'),
             'files' => Schema::listOf(Schema::string(), 'Registration files it ships, from ext_localconf.php to Initialisation/data.t3d.'),
+            'deprecatedFilesOwed' => Schema::string('Where deprecatedFiles lists one, what this check is not and the call that answers the rest. Empty where deprecatedFiles is.'),
             'deprecatedFiles' => Schema::listOf(Schema::deprecatedFile(), 'The files this extension ships that the core no longer reads, or stops to read, each with what the shipped file costs. The check reads four predicates, each a file and what stands beside it. ext_tables.php. ext_emconf.php beside a composer.json that declares neither providesPackages nor a version. ext_icon.svg/.png/.gif where no Resources/Public/Icons/Extension.* stands for the core to read first. An ext_typoscript_*.txt with no .typoscript file of the same name beside it. The check reads each from the extension\'s own tree, which is where every one of these predicates lives. So no changelog sweep over what its code calls reaches any of them. An empty list says none of the four holds here, not that the extension is ready for the next major. The check reads nothing else here for a deprecation, and typo3_changelog_lookup answers that question.'),
             'notReadStatically' => Schema::listOf(Schema::string(), 'Declaration files that are there but whose entries do not stand in their own text. Each assembles its list while it runs, so the lists above lack what it registers rather than say it is absent. The booted installation is what answers for them. An empty list says each declaration file that exists stood in its own text, not that the tool read everything the extension ships. ext_localconf.php and ext_tables.php register at run time, and nothing here reads them.'),
             'artifacts' => Schema::object([
@@ -174,7 +179,7 @@ final class ExtensionDescribe extends ReadOnlyTool
             ], ['manual', 'readme', 'tests', 'languageFiles'], 'What it ships beside its registrations. Every key is present even when the artifact is not. The absence of a manual, a test or a translation is the answer a file listing cannot give.'),
             'installed' => Schema::listOf(Schema::string(), 'On a miss: the extension keys this installation does have.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
-        ], ['key', 'path', 'origin', 'tcaTables', 'tcaOverrides', 'contentElements', 'renderedContentTypes', 'pluginFrame', 'unlistedFlexForms', 'backendModules', 'icons', 'siteSets', 'formConfigurations', 'serviceTags', 'files', 'deprecatedFiles', 'notReadStatically', 'artifacts', 'answeredBy'], ['key']);
+        ], ['key', 'path', 'origin', 'tcaTables', 'tcaOverrides', 'contentElements', 'renderedContentTypes', 'pluginFrame', 'unlistedFlexForms', 'backendModules', 'icons', 'siteSets', 'formConfigurations', 'serviceTags', 'files', 'deprecatedFiles', 'deprecatedFilesOwed', 'notReadStatically', 'artifacts', 'answeredBy'], ['key']);
     }
 
     public static function answer(array $args): ToolResult
@@ -192,6 +197,7 @@ final class ExtensionDescribe extends ReadOnlyTool
             $extension['path'],
             $extension['description'] === null ? '' : "\n" . $extension['description'],
         )];
+        $owed = [];
 
         $sections = [
             'TCA tables it defines' => $extension['tcaTables'],
@@ -217,7 +223,7 @@ final class ExtensionDescribe extends ReadOnlyTool
         // columns through `SHOW COLUMNS`, and called neither tool all day,
         // `D-ANS-129`.
         if ($extension['tcaTables'] !== [] || $extension['tcaOverrides'] !== []) {
-            $lines[] = 'typo3_schema_lookup with one of those table names answers what columns the core derives '
+            $lines[] = $owed[] = 'typo3_schema_lookup with one of those table names answers what columns the core derives '
                 . 'for it, with the type, the default and the length of each. That is the resolved schema rather '
                 . 'than what the TCA file declares, and two tables generated from one TCA do not have to agree on '
                 . 'the order they come back in.';
@@ -262,9 +268,7 @@ final class ExtensionDescribe extends ReadOnlyTool
                 . 'than skipped: the extension ships no such file, or what core reads first stands beside it — '
                 . 'for ext_emconf.php a composer.json declaring the providesPackages and the version, for '
                 . 'ext_icon.* a Resources/Public/Icons/Extension.*, for an ext_typoscript_*.txt the .typoscript '
-                . 'file of the same name. It is not an upgrade check: nothing else above was looked at for a '
-                . 'deprecation, and typo3_changelog_lookup is what answers that — #109438, #108345, #98093 and '
-                . '#96518 whole, and everything they leave out.';
+                . 'file of the same name. ' . self::DEPRECATED_FILES_OWED;
         }
 
         if ($extension['contentElements'] !== []) {
@@ -282,7 +286,7 @@ final class ExtensionDescribe extends ReadOnlyTool
                 . 'same files, from addPiFlexFormValue(), from the data structure argument addPlugin() and '
                 . 'registerPlugin() take since v14.2, and from a columnsOverrides assignment on pi_flexform.';
             if (array_filter(array_column($extension['contentElements'], 'flexForm')) !== []) {
-                $lines[] = self::FLEX_FORM_CALL;
+                $lines[] = $owed[] = self::FLEX_FORM_CALL;
             }
             if (in_array('plugin', array_column($extension['contentElements'], 'kind'), true)) {
                 $lines[] = 'A plugin renders through the Extbase dispatcher: configurePlugin() generates '
@@ -325,7 +329,7 @@ final class ExtensionDescribe extends ReadOnlyTool
             }
             $lines[] = 'Each identifier is registered by a call this answer does not read, so the element is real '
                 . 'and what else it registers was not established. It is not a stray file.';
-            $lines[] = self::FLEX_FORM_CALL;
+            $lines[] = $owed[] = self::FLEX_FORM_CALL;
         }
 
         if ($extension['siteSets'] !== []) {
@@ -421,7 +425,7 @@ final class ExtensionDescribe extends ReadOnlyTool
                         : 'translated into ' . implode(', ', $file['translations']),
                 );
             }
-            $lines[] = 'The source language is what each file declares, not what it should declare — '
+            $lines[] = $owed[] = 'The source language is what each file declares, not what it should declare — '
                 . 'typo3_hint_lookup owns that rule.';
         }
 
@@ -441,12 +445,12 @@ final class ExtensionDescribe extends ReadOnlyTool
             $absent[] = 'README';
         }
         if ($absent !== []) {
-            $lines[] = 'It ships no ' . implode(' and no ', $absent)
+            $lines[] = $owed[] = 'It ships no ' . implode(' and no ', $absent)
                 . ': `typo3-extension-documentation` is the workflow that writes '
                 . (count($absent) === 1 ? 'one' : 'them') . '.';
         }
         if ($artifacts['tests'] === []) {
-            $lines[] = 'It ships no test: `typo3-extension-testing` is the workflow that sets the first one up.';
+            $lines[] = $owed[] = 'It ships no test: `typo3-extension-testing` is the workflow that sets the first one up.';
         }
 
         $lines[] = '';
@@ -483,7 +487,10 @@ final class ExtensionDescribe extends ReadOnlyTool
                 . 'from the lists above rather than absent.';
         }
 
-        return ToolResult::create(implode("\n", $lines), $extension + ['answeredBy' => Extension::answeredBy()]);
+        return ToolResult::create(implode("\n", $lines), $extension + [
+            'deprecatedFilesOwed' => $extension['deprecatedFiles'] === [] ? '' : self::DEPRECATED_FILES_OWED,
+            'answeredBy' => Extension::answeredBy(),
+        ], array_values(array_unique($owed)));
     }
 
     /**

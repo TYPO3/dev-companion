@@ -428,6 +428,9 @@ the tool declares. So a field a schema requires has to be present on every path
 through the tool, misses included. Add fields rather than rename them. A record
 shape more than one tool answers with belongs in
 `TYPO3\DevCompanion\Result\Schema`, so a client reads one model rather than two.
+A sentence that tells the caller what to do stands in the data too. It takes a
+`<value>Owed` field beside the one value it is about, and `owed` otherwise —
+`D-ANS-191`.
 
 ## Checks
 

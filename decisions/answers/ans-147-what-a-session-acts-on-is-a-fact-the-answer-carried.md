@@ -72,3 +72,13 @@ has waited on.
 - A prescribed step turns out to drop out no more often than a session ignores a
   fact. That would make the second half of this a pair of instances rather than
   a pattern.
+
+## Since then
+
+The first **Wrong if** fired once, on 2026-10-21. `feedback/2026-10-21-153139`
+credits three prescriptions as what changed its work. The triage skill told it
+to search for an existing test first. The rule "a green that ran over no files
+is not a green" made it repeat a red check. The review checklist sent it to a
+precedent that became the fix's main argument. So a prescription pays too, where
+a session executes it. One report against two does not settle the boundary, and
+the entry stays open. The gate question is `D-SKL-049`, parked since 2026-10-05.

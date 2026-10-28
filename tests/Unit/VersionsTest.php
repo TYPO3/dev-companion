@@ -18,6 +18,7 @@ use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 use TYPO3\DevCompanion\Tool\Registry;
+use TYPO3\DevCompanion\Tool\TaskGuide;
 use TYPO3\DevCompanion\Tool\TranslationDomainLookup;
 
 /**
@@ -420,6 +421,44 @@ final class VersionsTest extends TestCase
             'Answered for TYPO3',
             Registry::call('typo3_task_guide', ['task' => 'Review this extension', 'targetVersion' => '14.3'])->text,
             'and the ordinary task guide says nothing about versions at all',
+        );
+    }
+
+    /**
+     * The third `REVIEW-02` run of 2026-10-28 took the sweep's exemption and
+     * never asked the changelog about v15. The second run had found
+     * Breaking-110702 there by an identifier.
+     */
+    #[Decision('D-SKL-108')]
+    #[Test]
+    public function aReviewOwesTheBreakingChangesOfADeclaredMajorAboveTheInstalledOne(): void
+    {
+        $root = $this->composerProject('vendor', '14.3.5');
+        file_put_contents($root . '/composer.json', json_encode([
+            'name' => 'acme/extension',
+            'type' => 'typo3-cms-extension',
+            'require' => ['typo3/cms-core' => '^13.4 || ^14.3 || ^15.0'],
+        ], JSON_THROW_ON_ERROR));
+        Instance::discoverFrom($root);
+
+        $review = Registry::call('typo3_task_guide', ['task' => 'Review this extension', 'changeType' => 'audit']);
+
+        $owed = sprintf(TaskGuide::BREAKING_ABOVE_INSTALLED, 'v15', '"15"');
+        self::assertContains($owed, $review->data['owed']);
+        self::assertStringContainsString($owed, $review->text);
+
+        // A change owes the sweep already, and a range at or below the
+        // installed major is what the installed core shows.
+        $change = Registry::call('typo3_task_guide', ['task' => 'Add a content element', 'changeType' => 'feature']);
+        self::assertStringNotContainsString('which the installation does not run', $change->text);
+        file_put_contents($root . '/composer.json', json_encode([
+            'name' => 'acme/extension',
+            'require' => ['typo3/cms-core' => '^13.4 || ^14.3'],
+        ], JSON_THROW_ON_ERROR));
+        Instance::discoverFrom($root);
+        self::assertStringNotContainsString(
+            'which the installation does not run',
+            Registry::call('typo3_task_guide', ['task' => 'Review this extension', 'changeType' => 'audit'])->text,
         );
     }
 

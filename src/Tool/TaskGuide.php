@@ -6,6 +6,7 @@ namespace TYPO3\DevCompanion\Tool;
 
 use TYPO3\DevCompanion\Feedback\Channel;
 use TYPO3\DevCompanion\Installation\Instance;
+use TYPO3\DevCompanion\Installation\Project;
 use TYPO3\DevCompanion\Knowledge\Coverage;
 use TYPO3\DevCompanion\Knowledge\Documents;
 use TYPO3\DevCompanion\Knowledge\Domains;
@@ -184,6 +185,19 @@ final class TaskGuide extends ReadOnlyTool
      * `typo3-extension-health`'s report gives.
      */
     public const SURFACE_STATUSES = 'assessed, unassessed, not requested or not applicable';
+
+    /**
+     * What a review owes a declared major above the installed one
+     * (`D-SKL-108`).
+     *
+     * The sweep's exemption covers what a package will have to stop calling.
+     * This is what already fails on a major the package declares, and no read of
+     * the installed core shows it.
+     */
+    public const BREAKING_ABOVE_INSTALLED = 'This repository declares TYPO3 %1$s, which the installation does '
+        . 'not run, and the deprecation sweep\'s exemption does not cover it. Owed before the reading: '
+        . 'typo3_changelog_lookup with type "breaking", the query omitted and limit raised, once with version %2$s. '
+        . 'Hold each entry against the identifiers the code calls, and ask one you doubt under its own name.';
 
     /**
      * The change type of a task that changes nothing, and the id of the intent
@@ -631,6 +645,19 @@ final class TaskGuide extends ReadOnlyTool
             $lines[] = $owed[] = 'This is a brief for work that changes nothing, so what a patch owes — the deprecation '
                 . 'sweep, the focused diff, the test coverage, the commit message — is left out below. Pass '
                 . 'changeType where the task does change something.';
+            $lines[] = '';
+        }
+        $installed = Instance::typo3Major();
+        $above = $reviews && $installed !== null ? array_values(array_filter(
+            Versions::declared(Project::coreConstraint()),
+            static fn(int $major): bool => $major > $installed,
+        )) : [];
+        if ($above !== []) {
+            $lines[] = $owed[] = sprintf(
+                self::BREAKING_ABOVE_INSTALLED,
+                VersionScope::majorList($above),
+                implode(' and once with version ', array_map(static fn(int $major): string => '"' . $major . '"', $above)),
+            );
             $lines[] = '';
         }
 

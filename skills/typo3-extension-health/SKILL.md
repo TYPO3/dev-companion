@@ -116,10 +116,15 @@ skill does not repeat:
   anything. It says how a Composer root of its own stands the other major up
   beside the installation.
 
-An audit that runs neither reports the gap rather than the range. The finding
-holds where you established it, and you name the majors you did not establish it
-on. Where the constraint names the installed major alone, this is one line on
-the coverage list and no call.
+A declared major above the installed one owes its breaking changes before the
+reading, and the sweep's exemption does not cover them. The review brief names
+that call in `owed`. Hold each entry it returns against the identifiers the code
+calls.
+
+An audit that runs neither procedure reports the gap rather than the range. The
+finding holds where you established it, and you name the majors you did not
+establish it on. Where the constraint names the installed major alone, this is
+one line on the coverage list and no call.
 
 ## Report
 

@@ -165,6 +165,18 @@ final class TaskGuide extends ReadOnlyTool
         . 'repeat. Read the one whose sentence names the work you are about to do:';
 
     /**
+     * What a review brief asks of the surfaces it carries (`D-SKL-103`).
+     *
+     * Step 3 of `typo3-extension-health` asks the same in the skill, and three
+     * runs read it there and wrote the list only at the end. This brief is the
+     * last answer a review asks for before its first read.
+     */
+    public const SURFACES_OWED = 'Surfaces: write this list into your reply before the first file you read. It is '
+        . 'the work list, and the coverage the report closes on: mark every entry assessed, unassessed or not '
+        . 'requested, and drop none. Ask each one its own typo3_hint_lookup before you judge it, with the paths '
+        . 'the checkout has for it, or with these ids where it has none:';
+
+    /**
      * The change type of a task that changes nothing, and the id of the intent
      * that recognizes one described rather than classified. They are the same
      * word because a caller states one or writes the other.
@@ -354,7 +366,7 @@ final class TaskGuide extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Answers what one change owes, which a repository\'s own conventions file cannot. That file states its rules once for every task. This narrows them to the kind of change, the paths and the TYPO3 majors in front of you. It goes down to whether this fix owes a changelog entry. Where such a rule stays general it names the call that settles it, the branches a Releases: trailer takes among them. The answer is a task checklist with the hints and core checks that match. Not only for work that ends in a patch. Whether an open bug report still holds is changeType "triage", and a review of a body of code is "audit". A boot of an installation is "operations", and the cause of a defect before anybody changes it is "diagnosis". All four get a brief of their own rather than the steps a patch owes. Built from bundled conventions only: it does not read your checkout, so it also names what you have to establish there yourself. It routes to the lookups that fit the task. It names the task skill that owns the work where a published one does. It names the guide that writes the work up where this server carries one. The hints for a set of paths without the checklist around them are typo3_hint_lookup, and a procedure read whole is typo3_rule_lookup. Work that reads as a project or third-party extension gets what transfers only. The answer leaves out the core checks, checklist items and steps that name something only the core repository has.';
+        return 'Answers what one change owes, which a repository\'s own conventions file cannot. That file states its rules once for every task. This narrows them to the kind of change, the paths and the TYPO3 majors in front of you. It goes down to whether this fix owes a changelog entry. Where such a rule stays general it names the call that settles it, the branches a Releases: trailer takes among them. The answer is a task checklist with the hints and core checks that match. Not only for work that ends in a patch. Whether an open bug report still holds is changeType "triage", and a review of a body of code is "audit". An audit of a project or an extension comes back with the surfaces to write down before the first read. A boot of an installation is "operations", and the cause of a defect before anybody changes it is "diagnosis". All four get a brief of their own rather than the steps a patch owes. Built from bundled conventions only: it does not read your checkout, so it also names what you have to establish there yourself. It routes to the lookups that fit the task. It names the task skill that owns the work where a published one does. It names the guide that writes the work up where this server carries one. The hints for a set of paths without the checklist around them are typo3_hint_lookup, and a procedure read whole is typo3_rule_lookup. Work that reads as a project or third-party extension gets what transfers only. The answer leaves out the core checks, checklist items and steps that name something only the core repository has.';
     }
 
     public static function inputSchema(): array
@@ -391,6 +403,10 @@ final class TaskGuide extends ReadOnlyTool
             'staleSkills' => Schema::listOf(Schema::string(), 'Which of the skills above this project holds an older copy of, read from what stands published there against what this server writes now. Empty where every named copy is current, where this server never installed into this project, and where skills names none. So it is a subset of skills and never a statement that one is missing. What to do about it is one command, typo3-dev-companion update, and what it costs is a change to the caller\'s own checkout.'),
             'skills' => Schema::listOf(Schema::string(), 'The task skills that own the recognized work, named so that a caller who reached this server without one can load it. A skill is a file in your own project rather than something this server can see. So a name here is not a promise that the project holds it. A review, a triage, a boot and a diagnosis name only the workflows that change nothing either. intents still recognizes the kind of change under review, and the workflow that writes one is not the one you are in. Empty means no published skill owns what the brief recognized, which is not a statement that the work has no workflow.'),
             'guides' => Schema::listOf(Schema::guideReference(), 'The whole procedures that write this work up or that it owes. They are the corpus typo3_project_describe lists at orientation and this server serves as typo3://guides resources. Owes is the second half and the one a task text never asks for. A change that ends in a backend UI owes the browser check whether or not it says so. Named rather than carried: a brief is one call inside a procedure, and the page is one typo3_rule_lookup call by documentId. Empty means no page here writes up what the brief recognized. It does not say that none of them is worth a read; the whole list is in that orientation call.'),
+            'surfaces' => Schema::listOf(Schema::object([
+                'surface' => Schema::string(),
+                'hints' => Schema::listOf(Schema::string(), 'The hint ids typo3_hint_lookup answers this surface by where the checkout has no paths for it.'),
+            ], ['surface', 'hints']), 'The surfaces a review of a project or an extension writes into its reply before the first read, and closes on with each marked assessed, unassessed or not requested. Empty for every other brief, and for a review of the core, whose skill carries surfaces of its own.'),
             'hints' => Schema::listOf(Schema::hintRecord(), 'What typo3_hint_lookup answers for these paths, quoted whole and carried here — the strongest few per group of paths, not everything it holds on them. The hint a recognized kind of work names first opens the list, fetched by id where the paths do not reach it. A hint that declares a different kind of repository from the paths given ranks below the ones that bind them. A rule taken from one of these belongs to that lookup. So a report that cites it names typo3_hint_lookup, and a caller who needs more of the subject calls it directly. omittedHints names what the brief left out.'),
             'omittedHints' => Schema::listOf(Schema::hintReference(), 'What typo3_hint_lookup also holds for these paths and this brief did not carry, named rather than counted. A hint declared for another kind of repository is here for that reason rather than for a weak match. Empty means what it carries is everything that matched. A subject listed here and not in hints is one the brief did not reach. It is the gap the pointer to that lookup stands for.'),
             'rules' => Schema::listOf(Schema::knowledgeMatch(), 'Rule sections that apply to this task.'),
@@ -419,7 +435,7 @@ final class TaskGuide extends ReadOnlyTool
                 'how' => Schema::string(),
             ], ['establish', 'how']), 'What this server cannot see and the agent has to establish itself.'),
             'nextTools' => Schema::listOf(Schema::nextTool()),
-        ], ['task', 'changeType', 'domains', 'skills', 'staleSkills', 'guides', 'hints', 'omittedHints', 'checks', 'checklist', 'beforeYouRun', 'nextTools']);
+        ], ['task', 'changeType', 'domains', 'skills', 'staleSkills', 'guides', 'surfaces', 'hints', 'omittedHints', 'checks', 'checklist', 'beforeYouRun', 'nextTools']);
     }
 
     public static function answer(array $args): ToolResult
@@ -510,6 +526,16 @@ final class TaskGuide extends ReadOnlyTool
         // the caller does (`D-SKL-039`).
         $skills = TaskIntents::skills($confirmed, $coreWork && !$outsideCore, $changesNothing);
         $guides = self::guideRecords(TaskIntents::guides($confirmed, $coreWork && !$outsideCore, $changesNothing));
+        // The core's review owns a checklist of other surfaces, so only the
+        // side `typo3-extension-health` owns gets these.
+        $surfaces = [];
+        if ($reviews && !($coreWork && !$outsideCore)) {
+            foreach ($confirmed as $intent) {
+                if ($intent['id'] === self::AUDIT) {
+                    $surfaces = $intent['surfaces'];
+                }
+            }
+        }
 
         $stated = isset($args['targetVersion']) ? (string) $args['targetVersion'] : null;
         $target = Versions::target($stated);
@@ -664,6 +690,14 @@ final class TaskGuide extends ReadOnlyTool
                     $guide['title'],
                     $guide['when'],
                 );
+            }
+        }
+
+        if ($surfaces !== []) {
+            $lines[] = '';
+            $lines[] = self::SURFACES_OWED;
+            foreach ($surfaces as $surface) {
+                $lines[] = '- ' . $surface['surface'] . ' — ids ' . implode(', ', $surface['hints']);
             }
         }
 
@@ -960,6 +994,7 @@ final class TaskGuide extends ReadOnlyTool
             'skills' => $skills,
             'staleSkills' => $stale,
             'guides' => $guides,
+            'surfaces' => $surfaces,
             'hints' => MatchedHints::records($hints['matchedHints']),
             'omittedHints' => $omitted,
             'rules' => Prose::records($rules),

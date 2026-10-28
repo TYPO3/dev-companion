@@ -119,3 +119,11 @@ as the closing table. That is step 4 of the ladder, the wording. "Write the
 surface list down" did not say where, and a list a session keeps to itself is
 one nobody can hold it to. Step 3 now says to write it into the reply.
 `SkillTest::theBaseIsEstablishedBeforeTheCheckoutIsOpened` reads the clause.
+
+## Since then
+
+The `REVIEW-01` and `REVIEW-02` runs of 2026-10-28 read that clause and still
+wrote the list only at the end. So the wording was not the lever twice.
+[`D-SKL-103`](skl-103-a-review-brief-carries-the-surface-list-it-is-written-from.md)
+moves the list into the audit brief, which both runs asked for before their
+first read.

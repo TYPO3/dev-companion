@@ -41,7 +41,7 @@ final class TaskIntents
     ];
 
     /**
-     * @return array<int, array{id: string, title: string, skill: string, skillCore: string, guide: string, guideCore: string, owes: array<int, string>, changesNothing: bool, scope: ?Scope, match: array<int, string>, matchWeak: array<int, string>, paths: array<int, string>, condition: string, rulesQuery: string, checklist: array<int, string>, checks: array<int, string>, tools: array<int, string>}>
+     * @return array<int, array{id: string, title: string, skill: string, skillCore: string, guide: string, guideCore: string, owes: array<int, string>, changesNothing: bool, scope: ?Scope, match: array<int, string>, matchWeak: array<int, string>, paths: array<int, string>, condition: string, rulesQuery: string, checklist: array<int, string>, checks: array<int, string>, tools: array<int, string>, surfaces: array<int, array{surface: string, hints: array<int, string>}>}>
      */
     public static function load(): array
     {
@@ -92,6 +92,13 @@ final class TaskIntents
             'checklist' => array_map('strval', $entry['checklist'] ?? []),
             'checks' => array_map('strval', $entry['checks'] ?? []),
             'tools' => array_map('strval', $entry['tools'] ?? []),
+            // The surfaces a review of this kind writes down before it reads,
+            // each with the hints it asks by id. Only `audit` has them, and
+            // only outside the core (`D-SKL-103`).
+            'surfaces' => array_map(static fn(array $surface): array => [
+                'surface' => (string) $surface['surface'],
+                'hints' => array_map('strval', $surface['hints'] ?? []),
+            ], $entry['surfaces'] ?? []),
         ], $decoded);
     }
 

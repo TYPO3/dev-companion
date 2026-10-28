@@ -7764,6 +7764,49 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The surface list a review writes before it reads, carried by the brief
+     * the review asks for last before that (`D-SKL-103`). The skill's
+     * checklist is the account of each surface and this list is the same
+     * names, so the two cannot drift apart. Every id answers, because a dead
+     * one is the call the list exists to make.
+     */
+    #[Decision('D-SKL-103')]
+    #[Test]
+    public function anExtensionReviewBriefCarriesTheSurfacesOfTheChecklist(): void
+    {
+        $review = Registry::call('typo3_task_guide', [
+            'task' => 'Audit the extension for problems, risks and missing safeguards',
+            'changeType' => 'audit',
+            'paths' => ['packages/my_extension'],
+        ]);
+
+        $checklist = (string) file_get_contents(
+            Paths::root() . '/skills/typo3-extension-health/references/checklist.md',
+        );
+        preg_match('/## Audit surfaces\n\n(.*?)\n## /s', $checklist, $section);
+        preg_match_all('/^- ([^:]+):/m', $section[1] ?? '', $names);
+
+        self::assertNotSame([], $names[1]);
+        self::assertSame($names[1], array_column($review->data['surfaces'], 'surface'));
+        self::assertStringContainsString(TaskGuide::SURFACES_OWED, $review->text);
+        foreach ($review->data['surfaces'] as $surface) {
+            self::assertNotSame([], $surface['hints'], $surface['surface']);
+            foreach ($surface['hints'] as $id) {
+                self::assertNotNull(Hints::byId($id), $surface['surface'] . ' names ' . $id);
+            }
+        }
+
+        // A core review closes on the patch review's own surfaces, and a brief
+        // for a change carries none.
+        foreach ([
+            ['task' => 'review the core patch for the backend login', 'changeType' => 'audit', 'paths' => ['typo3/sysext/backend/Classes/Controller/LoginController.php']],
+            ['task' => 'add a content element to the extension', 'changeType' => 'feature', 'paths' => ['packages/my_extension']],
+        ] as $arguments) {
+            self::assertSame([], Registry::call('typo3_task_guide', $arguments)->data['surfaces'], $arguments['task']);
+        }
+    }
+
+    /**
      * A review brief names what the change removes, whatever the task says.
      *
      * `R-GUI-010`, on a core patch review that under-stated the removal of an

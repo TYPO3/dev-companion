@@ -12,18 +12,19 @@ this fix owes a changelog entry. Where such a rule stays general it names the
 call that settles it, the branches a Releases: trailer takes among them. The
 answer is a task checklist with the hints and core checks that match. Not only
 for work that ends in a patch. Whether an open bug report still holds is
-changeType "triage", and a review of a body of code is "audit". A boot of an
-installation is "operations", and the cause of a defect before anybody changes
-it is "diagnosis". All four get a brief of their own rather than the steps a
-patch owes. Built from bundled conventions only: it does not read your checkout,
-so it also names what you have to establish there yourself. It routes to the
-lookups that fit the task. It names the task skill that owns the work where a
-published one does. It names the guide that writes the work up where this server
-carries one. The hints for a set of paths without the checklist around them are
-typo3_hint_lookup, and a procedure read whole is typo3_rule_lookup. Work that
-reads as a project or third-party extension gets what transfers only. The answer
-leaves out the core checks, checklist items and steps that name something only
-the core repository has. Answers from: knowledge.
+changeType "triage", and a review of a body of code is "audit". An audit of a
+project or an extension comes back with the surfaces to write down before the
+first read. A boot of an installation is "operations", and the cause of a defect
+before anybody changes it is "diagnosis". All four get a brief of their own
+rather than the steps a patch owes. Built from bundled conventions only: it does
+not read your checkout, so it also names what you have to establish there
+yourself. It routes to the lookups that fit the task. It names the task skill
+that owns the work where a published one does. It names the guide that writes
+the work up where this server carries one. The hints for a set of paths without
+the checklist around them are typo3_hint_lookup, and a procedure read whole is
+typo3_rule_lookup. Work that reads as a project or third-party extension gets
+what transfers only. The answer leaves out the core checks, checklist items and
+steps that name something only the core repository has. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
 
@@ -147,6 +148,15 @@ Answers with
         scope: string
         # The tool that takes the id above and returns the page whole.
         tool: string
+    # The surfaces a review of a project or an extension writes into its reply
+    # before the first read, and closes on with each marked assessed, unassessed or
+    # not requested. Empty for every other brief, and for a review of the core,
+    # whose skill carries surfaces of its own.
+    surfaces:
+      - surface: string
+        # The hint ids typo3_hint_lookup answers this surface by where the checkout
+        # has no paths for it.
+        hints: [string]
     # What typo3_hint_lookup answers for these paths, quoted whole and carried here
     # — the strongest few per group of paths, not everything it holds on them. The
     # hint a recognized kind of work names first opens the list, fetched by id where
@@ -534,6 +544,7 @@ Data:
                 "tool": "typo3_rule_lookup"
             }
         ],
+        "surfaces": [],
         "hints": [
             {
                 "id": "system-extension-boundaries",
@@ -1076,6 +1087,7 @@ Data:
                 "tool": "typo3_rule_lookup"
             }
         ],
+        "surfaces": [],
         "hints": [
             {
                 "id": "public-api-surface",
@@ -1497,6 +1509,7 @@ Data:
                 "tool": "typo3_rule_lookup"
             }
         ],
+        "surfaces": [],
         "hints": [
             {
                 "id": "persistence-reading",

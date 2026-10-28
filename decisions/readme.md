@@ -1001,6 +1001,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### task-skills
 
 - [`D-SKL-102`][D-SKL-102] — A core review runs its suites in a worktree or asks for one · 2026-10-28
+- [`D-SKL-103`][D-SKL-103] — A review brief carries the surface list it is written from · 2026-10-28
 - [`D-SKL-099`][D-SKL-099] — A document of a review is the report in its own order · 2026-10-26
 - [`D-SKL-100`][D-SKL-100] — The review skills report in one skeleton · 2026-10-26
 - [`D-SKL-101`][D-SKL-101] — A sitepackage has a task skill of its own · 2026-10-26
@@ -1099,6 +1100,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
 [D-SKL-102]: task-skills/skl-102-a-core-review-runs-its-suites-in-a-worktree-or-asks-for-one.md
+[D-SKL-103]: task-skills/skl-103-a-review-brief-carries-the-surface-list-it-is-written-from.md
 [D-SKL-099]: task-skills/skl-099-a-document-of-a-review-is-the-report-in-its-own-order.md
 [D-SKL-100]: task-skills/skl-100-the-review-skills-report-in-one-skeleton.md
 [D-SKL-101]: task-skills/skl-101-a-sitepackage-has-a-task-skill-of-its-own.md

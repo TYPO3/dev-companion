@@ -25,9 +25,10 @@ gate, whatever the request asked for.
    surfaces, the finding gate, and the severity rubric.
 3. Write the surface list down before you open a single file. Write it into your
    reply, so the reader sees what you will cover before you read. Take the
-   checklist's surfaces, narrowed to the ones this kind of checkout can have. It
-   is the work list. The coverage the report closes on is this same list with
-   every entry answered.
+   checklist's surfaces, narrowed to the ones this kind of checkout can have.
+   `typo3_task_guide` with `changeType="audit"` returns them as `surfaces`, and
+   that answer is the list to write. It is the work list. The
+   coverage the report closes on is this same list with every entry answered.
 4. Where the request names what it is about (security only, configuration only,
    one subsystem), read the surfaces it names. Mark the rest **not requested**
    on that same list. The request narrows the reading, never the list. An entry
@@ -52,8 +53,9 @@ already have:
 
 - `typo3_hint_lookup` with the subsystem's concrete paths and a short English
   description. One query per surface in scope. A single broad query is not
-  subsystem evidence. Ask for a surface the checkout has no files for by its
-  hint id instead. That is the surface whose absence is the finding, and the one
+  subsystem evidence, and neither is a query that states a finding you already
+  formed. Ask for a surface the checkout has no files for by the hint ids
+  `surfaces` names for it instead. That is the surface whose absence is the finding, and the one
   whose paths you cannot pass.
 - The runtime lookup that owns the surface, where one exists. The base names
   them and what each adds after the extension answer. An audit makes that call

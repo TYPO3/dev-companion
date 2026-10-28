@@ -664,6 +664,71 @@
       "typo3_project_describe, for the TYPO3 and PHP versions this repository supports and the commands it declares",
       "typo3_extension_describe, for what each extension in scope registers",
       "typo3_configuration_lookup, where a finding turns on a configuration default: what this installation resolved after every extension has had its say, which the shipped DefaultConfiguration.php cannot state. A configurationPath names a subtree as readily as a leaf, so which writers LOG/writerConfiguration holds is one call."
+    ],
+    "surfaces": [
+      {
+        "surface": "Package",
+        "hints": [
+          "extension-manifest",
+          "extension-repository-dependencies",
+          "php-versions"
+        ]
+      },
+      {
+        "surface": "Registration and runtime",
+        "hints": [
+          "dependency-injection",
+          "events-extension-points",
+          "routing-request-handling",
+          "backend-modules",
+          "content-elements",
+          "configuration-reach"
+        ]
+      },
+      {
+        "surface": "Persistence",
+        "hints": [
+          "tca-formengine",
+          "extension-schema-sql",
+          "core-tca-derived-schema",
+          "datahandler-basics",
+          "upgrade-wizards"
+        ]
+      },
+      {
+        "surface": "Rendering",
+        "hints": [
+          "site-sets",
+          "fluid-templates",
+          "tsconfig",
+          "language-files",
+          "public-assets"
+        ]
+      },
+      {
+        "surface": "Security",
+        "hints": [
+          "security-sinks",
+          "authentication-permissions"
+        ]
+      },
+      {
+        "surface": "Quality",
+        "hints": [
+          "project-extension-tests",
+          "extension-static-analysis",
+          "extension-coding-standards",
+          "extension-documentation",
+          "deprecated-apis"
+        ]
+      },
+      {
+        "surface": "Pinned versions",
+        "hints": [
+          "extension-asset-build",
+          "extension-repository-dependencies"
+        ]
+      }
     ]
   },
   {

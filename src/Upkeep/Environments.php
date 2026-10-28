@@ -617,6 +617,41 @@ final class Environments
     }
 
     /**
+     * What `SYS/exceptionalErrors` is in a made installation: the value of
+     * TYPO3's Debug preset, which adds `E_DEPRECATED` and `E_USER_DEPRECATED`
+     * to the `E_RECOVERABLE_ERROR` the setup writes.
+     *
+     * At the setup's 4096 a deprecation in `src/Installation/probe.php` passes
+     * in silence. Issue #12 was a `setAccessible()` that failed on PHP 8.5 at
+     * 12290 alone.
+     */
+    public const EXCEPTIONAL_ERRORS = 12290;
+
+    /**
+     * The step that sets it, through the installation's own
+     * `ConfigurationManager`.
+     *
+     * Not `configuration:set`, which 12.4 and 13.4 do not have. The manager
+     * and its setter are the same on every covered line, so one step serves all
+     * of them. It runs after a resume too, so an environment made before this
+     * step gains the value on the next request. `ddev exec` passes the code
+     * uninterpreted, because `--raw` is its default.
+     *
+     * @return list<string>
+     */
+    public static function exceptionalErrors(): array
+    {
+        return [
+            'ddev', 'exec', 'php', '-r',
+            '$classLoader = require "vendor/autoload.php";'
+                . ' TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run(0, TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::REQUESTTYPE_CLI);'
+                . ' TYPO3\CMS\Core\Core\Bootstrap::init($classLoader);'
+                . ' exit(TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Configuration\ConfigurationManager::class)'
+                . '->setLocalConfigurationValueByPath("SYS/exceptionalErrors", ' . self::EXCEPTIONAL_ERRORS . ') ? 0 : 1);',
+        ];
+    }
+
+    /**
      * The build, as the commands in the order they run.
      *
      * Every one of them is idempotent or forced. So a second run of this
@@ -747,6 +782,7 @@ final class Environments
             '--server-type=other',
             '--create-site=https://' . $project . '.ddev.site/',
         ];
+        $steps['A deprecation turned into an exception, as the Debug preset does'] = self::exceptionalErrors();
         $steps['The extensions set up against that database'] = [
             'ddev', 'exec', 'vendor/bin/typo3', 'extension:setup',
         ];

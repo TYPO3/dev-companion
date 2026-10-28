@@ -511,6 +511,39 @@ final class EnvironmentsTest extends TestCase
     }
 
     /**
+     * At the setup's 4096 a deprecation in the probe passes in silence, which
+     * is how issue #12 reached a release. So the step comes after the setup
+     * that writes 4096, on every line, and sets the Debug preset's value —
+     * `D-EVI-006`.
+     */
+    #[Decision('D-EVI-006')]
+    #[Test]
+    public function everyLineTurnsADeprecationIntoAnExceptionAfterTheSetup(): void
+    {
+        self::assertSame(12290, Environments::EXCEPTIONAL_ERRORS);
+
+        foreach (Environments::branches() as $branch) {
+            $build = array_values(Environments::build($branch));
+            $setup = null;
+            foreach ($build as $position => $command) {
+                if (in_array('setup', $command, true)) {
+                    $setup = $position;
+                }
+            }
+
+            $step = array_search(Environments::exceptionalErrors(), $build, true);
+            self::assertIsInt($step, $branch . ' never sets SYS/exceptionalErrors');
+            self::assertIsInt($setup, $branch . ' has no setup step');
+            self::assertGreaterThan($setup, $step, $branch . ' sets the value before the setup writes 4096 over it');
+        }
+
+        self::assertStringContainsString(
+            '"SYS/exceptionalErrors", 12290',
+            implode(' ', Environments::exceptionalErrors()),
+        );
+    }
+
+    /**
      * The site the installation exists for is the one DDEV routes to it. A base
      * URL that names another project is a frontend that answers nothing. Every
      * case that opens a page in it fails for a reason none of them is about.

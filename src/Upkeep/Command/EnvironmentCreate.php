@@ -249,6 +249,15 @@ final class EnvironmentCreate
             $output->writeln('');
         }
 
+        $stopped = $this->steps($output, [
+            'A deprecation turned into an exception, as the Debug preset does' => Environments::exceptionalErrors(),
+        ], $path);
+        if ($stopped !== null) {
+            Voice::problem($output, 'The installation still lets a deprecation pass in silence.');
+
+            return 1;
+        }
+
         if (!$this->ownExtension($output, $path)) {
             return 1;
         }

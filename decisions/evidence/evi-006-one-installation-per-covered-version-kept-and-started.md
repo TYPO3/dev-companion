@@ -11,6 +11,7 @@ coveredBy:
   - EnvironmentsTest::eachCoveredLineIsItsOwnProjectAndItsOwnDirectory
   - EnvironmentsTest::eachDriverPassesTheValuesItsOwnToolsTake
   - EnvironmentsTest::everyCoveredLineIsOneAnInstallationIsMadeOf
+  - EnvironmentsTest::everyLineTurnsADeprecationIntoAnExceptionAfterTheSetup
   - EnvironmentsTest::theDevelopmentLineIsBuiltFromDevMainOnThePhpItsCoreDeclares
   - EnvironmentsTest::theInstallationIsBuiltAtTheCoveredStableVersion
 ---
@@ -116,15 +117,13 @@ client on another covered line would get.
 ## Since then
 
 The development line comes after all, by decision of the person who queued the
-card. These environments exist to develop this server, so an installation that
-moves daily is a development cost. The build unsets the platform PHP the
-distribution pinned against its own requirement, which no file said and only a
-build found.
+card. Its build unsets the platform PHP the distribution pins against its own
+requirement. A build found `setup` failing on MySQL and MariaDB on three
+branches: Forge #110258, fixed. sqlite is the default on every line since, and
+the database is the third argument of `environment:create`.
 
-The build found the other thing a read could not. `setup` could not finish
-against MySQL or MariaDB on three branches. This entry first wrote that up as a
-DBAL bump; it was Forge #110258's introspection change, filed by somebody else
-and fixed.
-
-sqlite is the default on every line for reasons of its own, and the database is
-the third argument of `environment:create` since.
+The build sets `SYS/exceptionalErrors` to 12290 after the setup, and a resume
+sets it again. At the setup's 4096 a deprecation in the probe passed in silence,
+as issue #12 did. `ConfigurationManager` sets it, because 12.4 and 13.4 lack
+`configuration:set`. On copies of all four environments on 2026-10-28 it
+changed that one line.

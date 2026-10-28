@@ -634,15 +634,16 @@ final class Environments
      * Not `configuration:set`, which 12.4 and 13.4 do not have. The manager
      * and its setter are the same on every covered line, so one step serves all
      * of them. It runs after a resume too, so an environment made before this
-     * step gains the value on the next request. `ddev exec` passes the code
-     * uninterpreted, because `--raw` is its default.
+     * step gains the value on the next request. `--raw` hands the code to PHP
+     * as it stands. Without it, `ddev exec` runs it through bash, which expands
+     * `$classLoader` to nothing and fails under `set -u`.
      *
      * @return list<string>
      */
     public static function exceptionalErrors(): array
     {
         return [
-            'ddev', 'exec', 'php', '-r',
+            'ddev', 'exec', '--raw', 'php', '-r',
             '$classLoader = require "vendor/autoload.php";'
                 . ' TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run(0, TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::REQUESTTYPE_CLI);'
                 . ' TYPO3\CMS\Core\Core\Bootstrap::init($classLoader);'

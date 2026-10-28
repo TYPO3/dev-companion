@@ -391,7 +391,7 @@ final class TaskGuide extends ReadOnlyTool
             'staleSkills' => Schema::listOf(Schema::string(), 'Which of the skills above this project holds an older copy of, read from what stands published there against what this server writes now. Empty where every named copy is current, where this server never installed into this project, and where skills names none. So it is a subset of skills and never a statement that one is missing. What to do about it is one command, typo3-dev-companion update, and what it costs is a change to the caller\'s own checkout.'),
             'skills' => Schema::listOf(Schema::string(), 'The task skills that own the recognized work, named so that a caller who reached this server without one can load it. A skill is a file in your own project rather than something this server can see. So a name here is not a promise that the project holds it. A review, a triage, a boot and a diagnosis name only the workflows that change nothing either. intents still recognizes the kind of change under review, and the workflow that writes one is not the one you are in. Empty means no published skill owns what the brief recognized, which is not a statement that the work has no workflow.'),
             'guides' => Schema::listOf(Schema::guideReference(), 'The whole procedures that write this work up or that it owes. They are the corpus typo3_project_describe lists at orientation and this server serves as typo3://guides resources. Owes is the second half and the one a task text never asks for. A change that ends in a backend UI owes the browser check whether or not it says so. Named rather than carried: a brief is one call inside a procedure, and the page is one typo3_rule_lookup call by documentId. Empty means no page here writes up what the brief recognized. It does not say that none of them is worth a read; the whole list is in that orientation call.'),
-            'hints' => Schema::listOf(Schema::hintRecord(), 'What typo3_hint_lookup answers for these paths, quoted whole and carried here — the strongest few per group of paths, not everything it holds on them. A hint that declares a different kind of repository from the paths given ranks below the ones that bind them. A rule taken from one of these belongs to that lookup. So a report that cites it names typo3_hint_lookup, and a caller who needs more of the subject calls it directly. omittedHints names what the brief left out.'),
+            'hints' => Schema::listOf(Schema::hintRecord(), 'What typo3_hint_lookup answers for these paths, quoted whole and carried here — the strongest few per group of paths, not everything it holds on them. The hint a recognized kind of work names first opens the list, fetched by id where the paths do not reach it. A hint that declares a different kind of repository from the paths given ranks below the ones that bind them. A rule taken from one of these belongs to that lookup. So a report that cites it names typo3_hint_lookup, and a caller who needs more of the subject calls it directly. omittedHints names what the brief left out.'),
             'omittedHints' => Schema::listOf(Schema::hintReference(), 'What typo3_hint_lookup also holds for these paths and this brief did not carry, named rather than counted. A hint declared for another kind of repository is here for that reason rather than for a weak match. Empty means what it carries is everything that matched. A subject listed here and not in hints is one the brief did not reach. It is the gap the pointer to that lookup stands for.'),
             'rules' => Schema::listOf(Schema::knowledgeMatch(), 'Rule sections that apply to this task.'),
             'checks' => Schema::listOf(Schema::string(), 'Commands to run, ready to execute from the core root. They '
@@ -524,9 +524,14 @@ final class TaskGuide extends ReadOnlyTool
         // these paths.
         $found = [];
         $held = [];
+        $leads = self::leadHintIds($confirmed);
+        $carried = [];
         foreach ($groups as $group) {
             $matched = Hints::find($group['paths'], $task, HintLookup::MAX_HINTS, null, $targets);
-            $ranked = self::bindingFirst($matched['matchedHints'], $group['scope']);
+            $ranked = self::bindingFirst(
+                self::leadsFirst($matched['matchedHints'], array_diff($leads, $carried), $targets),
+                $group['scope'],
+            );
             foreach ($ranked as $hint) {
                 $held[(string) $hint['id']] ??= [
                     'id' => (string) $hint['id'],
@@ -535,6 +540,7 @@ final class TaskGuide extends ReadOnlyTool
                 ];
             }
             $matched['matchedHints'] = array_slice($ranked, 0, self::HINTS_PER_GROUP);
+            $carried = [...$carried, ...array_column($matched['matchedHints'], 'id')];
             $found[] = ['scope' => $group['scope'], 'paths' => $group['paths'], 'result' => $matched];
         }
         $hints = MatchedHints::merged($found);
@@ -1011,6 +1017,53 @@ final class TaskGuide extends ReadOnlyTool
     }
 
     /**
+     * The first hint each confirmed intent names by id, in intent order.
+     *
+     * Only the first, because an intent names its subject first and a
+     * sitepackage intent names six. All six took every slot from the hint the
+     * paths reached (`D-GUI-035`).
+     *
+     * @param array<int, array<string, mixed>> $intents
+     * @return array<int, string>
+     */
+    private static function leadHintIds(array $intents): array
+    {
+        $leads = [];
+        foreach ($intents as $intent) {
+            $leads = [...$leads, ...array_slice(self::namedHintIds([$intent]), 0, 1)];
+        }
+
+        return array_values(array_unique($leads));
+    }
+
+    /**
+     * The lead hints of the confirmed intents, then the matched rest.
+     *
+     * The matcher ranks a hint on the words of the task, and those name the
+     * subject rather than the work. A mail listener matched `backend-modules`
+     * and left `events-extension-points`, which the `event-listener` intent
+     * names (`D-GUI-035`). A lead the paths do not reach comes in by id.
+     *
+     * @param array<int, array<string, mixed>> $matched
+     * @param array<int, string> $leads
+     * @param array<int, int> $targets
+     * @return array<int, array<string, mixed>>
+     */
+    private static function leadsFirst(array $matched, array $leads, array $targets): array
+    {
+        $byId = array_column($matched, null, 'id');
+        $first = [];
+        foreach ($leads as $id) {
+            $hint = $byId[$id] ?? Hints::byId($id, $targets);
+            if ($hint !== null) {
+                $first[$id] = $hint;
+            }
+        }
+
+        return [...array_values($first), ...array_values(array_diff_key($byId, $first))];
+    }
+
+    /**
      * The matched hints with the ones declared for another repository last.
      *
      * A brief carries `HINTS_PER_GROUP` per group, and there a hint about
@@ -1022,7 +1075,7 @@ final class TaskGuide extends ReadOnlyTool
      *
      * What moves down is what `MatchedHints::scopeNotice()` has something to
      * say about. So the order and the notice above a block answer one question
-     * and not two. Within each tier the matcher's own rank stands.
+     * and not two. Within each tier the order it is handed stands.
      *
      * @param array<int, array<string, mixed>> $hints
      * @return array<int, array<string, mixed>>

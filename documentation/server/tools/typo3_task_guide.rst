@@ -148,12 +148,13 @@ Answers with
         # The tool that takes the id above and returns the page whole.
         tool: string
     # What typo3_hint_lookup answers for these paths, quoted whole and carried here
-    # — the strongest few per group of paths, not everything it holds on them. A
-    # hint that declares a different kind of repository from the paths given ranks
-    # below the ones that bind them. A rule taken from one of these belongs to that
-    # lookup. So a report that cites it names typo3_hint_lookup, and a caller who
-    # needs more of the subject calls it directly. omittedHints names what the brief
-    # left out.
+    # — the strongest few per group of paths, not everything it holds on them. The
+    # hint a recognized kind of work names first opens the list, fetched by id where
+    # the paths do not reach it. A hint that declares a different kind of repository
+    # from the paths given ranks below the ones that bind them. A rule taken from
+    # one of these belongs to that lookup. So a report that cites it names
+    # typo3_hint_lookup, and a caller who needs more of the subject calls it
+    # directly. omittedHints names what the brief left out.
     hints:
       - id: string
         title: string

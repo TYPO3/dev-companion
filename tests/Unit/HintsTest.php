@@ -6805,16 +6805,17 @@ final class HintsTest extends TestCase
         ]);
 
         self::assertSame(['typo3-content-element-development'], $brief->data['skills']);
-        // The two halves open on the lookup's own answer, whole: the name
-        // subtracts nothing from the block and nothing from the pointer to the
-        // rest. What follows it is what the intents name by id (`D-GUI-033`).
+        // The two halves open on the hint the intent names first (`D-GUI-035`)
+        // and then on the lookup's own answer, whole: the name subtracts
+        // nothing from the block and nothing from the pointer to the rest.
+        // What follows it is what the intents name by id (`D-GUI-033`).
         $lookupIds = array_column($lookup->data['hints'], 'id');
         self::assertSame(
-            $lookupIds,
+            ['extbase', ...$lookupIds],
             array_slice(array_merge(
                 array_column($brief->data['hints'], 'id'),
                 array_column($brief->data['omittedHints'], 'id'),
-            ), 0, count($lookupIds)),
+            ), 0, count($lookupIds) + 1),
         );
         // What step 4 of the skill needs, in the sentence that step reads.
         self::assertStringContainsString(
@@ -7792,6 +7793,32 @@ final class HintsTest extends TestCase
         foreach (array_unique($named[1]) as $id) {
             self::assertContains($id, $listed, $id . ' is named by the checklist and stands in neither list');
         }
+    }
+
+    /**
+     * The contract reading of 2026-10-28 found the hint a case is about among
+     * the omitted ones, behind a hint the words matched (`D-GUI-035`).
+     */
+    #[Decision('D-GUI-035')]
+    #[DataProvider('theHintTheConfirmedIntentNamesFirst')]
+    #[Test]
+    public function aBriefOpensOnTheHintItsConfirmedIntentNames(string $case, string $hint): void
+    {
+        $brief = Registry::call('typo3_task_guide', [
+            'task' => Scenarios::contracts()[$case]['prompt'],
+            'targetVersion' => '14',
+        ]);
+
+        self::assertSame($hint, $brief->data['hints'][0]['id'] ?? null);
+    }
+
+    /** @return array<string, array{0: string, 1: string}> */
+    public static function theHintTheConfirmedIntentNamesFirst(): array
+    {
+        return [
+            'a mail listener' => ['EXT-08', 'events-extension-points'],
+            'a setting in a site set' => ['SITE-09', 'site-set-settings'],
+        ];
     }
 
     /**

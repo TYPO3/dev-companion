@@ -17,7 +17,9 @@
       "addTcaSelectItemGroup",
       "Configuration/TCA/Overrides/",
       "content type",
-      "wizard"
+      "wizard",
+      "tab label",
+      "core.form.tabs"
     ],
     "hints": [
       {
@@ -34,6 +36,20 @@
       },
       {
         "text": "A plugin is a CType like any other. The list_type detour, where one CType held every plugin and a second field chose between them, is gone, so what used to be a list_type value is a CType value now.",
+        "since": 14
+      },
+      {
+        "text": "A tab label in the showitem is a translation domain reference: the core's own types write --div--;core.form.tabs:appearance, and the keys are those of EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf — general, access, appearance, categories, language, notes, extended. The LLL:EXT: path to that file still resolves to the same labels. translation-domain says how a domain follows from a path.",
+        "since": 14
+      },
+      {
+        "text": "A tab label in the showitem is LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:<key>, the keys general, access, appearance, categories, language, notes and extended.",
+        "since": 13,
+        "until": 13
+      },
+      "LGL.general, LGL.appearance, LGL.access and LGL.visibility of locallang_general.xlf are keys of no covered branch. A tab that names one renders without a name, and tca-showitem says why nothing reports it.",
+      {
+        "text": "The addPlugin() arguments, the list_type detour and the tab label are the stale idioms an example from the branch before this one most often carries, and they are a part of the list. The whole list is the branch's breaking changes: typo3_changelog_lookup with type \"breaking\", tag \"TCA\" and the major as version.",
         "since": 14
       },
       "ExtensionManagementUtility::addTcaSelectItemGroup() adds a group to the CType selector, positioned with before:<group> or after:<group>, so several elements of one extension arrive together instead of scattered through the list.",

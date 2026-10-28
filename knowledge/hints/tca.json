@@ -80,6 +80,11 @@
       "So a palette's label lives in the palettes section and not in showitem, and writing one into the item's middle segment overrides it for that type. palettes.<name>.description is the sentence rendered under the legend, and it has no place in showitem at all.",
       "A palette is one row of fields, however wide they are. Nothing refuses a rich text field or any other full-width element inside one; what shapes the rows is --linebreak--, and a palette whose items do not fit is a layout decision rather than a configuration error.",
       "An item naming a column the columns section does not have is skipped, in the type's own list and inside a palette alike, and nothing is logged: PaletteAndSingleContainer moves past a field name that is not an array in processedTca.columns. So a regrouping is exactly where a field goes missing, and what catches it is a test holding every item of every type against the columns — no name twice, every editable column reached — rather than a reading of the string.",
+      "A --div-- label that resolves to nothing is the silent case beside the absent one. LanguageService::sL() answers an empty string for an LLL: reference whose file or key does not exist, so the tab renders without a name and nothing is logged.",
+      {
+        "text": "A label written without the LLL: prefix — core.form.tabs:appearance — that resolves to nothing renders as the reference string itself rather than as an empty tab.",
+        "since": 14
+      },
       "This is the type's own form, where the whole string is yours. Appending to a palette a core table owns is the other direction and has rules of its own: tca-core-palette."
     ]
   },

@@ -81,3 +81,16 @@ stops the check.
 - A third feedback reports a list in `knowledge/` that a reader took as
   complete, after this rule stood. Then a rule a writer has to remember does not
   hold the corpus, and the need is a field on the list rather than a word in it.
+
+## Since then
+
+`feedback/2026-10-28-052314` is closed against this entry. Its premise did not
+hold: `LGL.general`, `LGL.appearance`, `LGL.access` and `LGL.visibility` are in
+`locallang_general.xlf` on none of `12.4`, `13.4`, `14.3` and `main`. So the
+idiom is older than every covered branch rather than a v13 one. `14.3` writes a
+tab as `core.form.tabs:<key>`, and `13.4` as the `LLL:EXT:` path to the same
+`Form/locallang_tabs.xlf`, which still resolves on `14.3`. `content-elements`
+now names the tab label beside the other two idioms. Its own list of three says
+that it is a part, and it names the changelog call that reads the whole.
+`tca-showitem` carries the silent case: `sL()` answers an empty string for an
+unresolved `LLL:` label on every covered branch, and nothing logs it.

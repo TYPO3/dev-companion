@@ -16,7 +16,7 @@ coveredBy:
 
 ## Evidence
 
-- [`feedback/2026-10-28-074334`](../../feedback/2026-10-28-074334-the-page-sitemap-fact-sits-in-a-record-table.md).
+- [`feedback/2026-10-28-074334`](../../feedback/archive/2026-10-28-074334-the-page-sitemap-fact-sits-in-a-record-table.md).
   A sitepackage session on 14.3 required `typo3/cms-seo` and got a 404 on
   `/sitemap.xml`. The corpus stated that case, in a hint titled for a record
   table, and the session never reached it.
@@ -67,3 +67,9 @@ Step 1b went in as one pass in `typo3-sitepackage-development`, after the
 render. It covers search engines and the keyboard together, because the
 accessibility feedback closed with a hint and no pass. Nobody has reviewed the
 pass yet, which `writing-a-skill.rst` asks before it publishes.
+
+## Since then
+
+The maintainer reviewed the pass "Read what the finished site serves" on
+2026-10-28 and released it as written: the skill fixes the templates, the
+partials and the CSS, and reports the rest.

@@ -131,6 +131,7 @@
     },
     {
       "suite": "cglGit",
+      "filesFromGit": true,
       "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit",
       "runs": "change",
       "domains": [
@@ -153,6 +154,7 @@
     },
     {
       "suite": "cglHeaderGit",
+      "filesFromGit": true,
       "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit",
       "runs": "change",
       "domains": [

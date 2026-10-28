@@ -47,3 +47,9 @@ coveredBy:
 - A review lists an entry the guide marks false, or leaves out one it marks
   true. Then the mark did not arrive, and its place in the text is the next
   read.
+
+## Since then
+
+`cglGit` and `cglHeaderGit` keep the mark in a normal checkout alone. From a git
+worktree they read nothing, so the guide marks them false where the checkout it
+reads is one (`D-SKL-106`).

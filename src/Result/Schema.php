@@ -392,7 +392,7 @@ final class Schema
             'whenToUse' => self::string(),
             'domains' => self::listOf(self::string()),
             'base' => ['type' => 'boolean', 'description' => 'Whether every change in one of its domains runs this suite. typo3_task_guide makes these the checks of a brief whatever the task turns out to be. The others can fail on the same paths and need a reason of their own.'],
-            'verifies' => ['type' => 'boolean', 'description' => 'Whether a run says anything about the change. False for an install, a dispatcher, a listing and a suite that serves an instance to look at. A report of what ran and what did not owes those no line.'],
+            'verifies' => ['type' => 'boolean', 'description' => 'Whether a run says anything about the change. False for an install, a dispatcher, a listing and a suite that serves an instance to look at. False too for a suite that asks git for its files, where the checkout this server reads is a git worktree: it reads nothing there and reports SUCCESS. A report of what ran and what did not owes those no line.'],
             'versions' => self::nullableString('The TYPO3 majors whose runTests.sh has this suite, where that is not all of them. Null means every covered version.'),
         ], ['suite', 'command', 'runs', 'targeted', 'base', 'verifies', 'versions']);
     }

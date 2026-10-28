@@ -43,3 +43,10 @@ question.**
   Then the default needs a bound, and the report has to come first.
 - A headless review still skips a suite on a budget of its own. Then the
   sentence did not arrive, and its place in the section is the next read.
+
+## Since then
+
+The second **Wrong if** fired in the second `REVIEW-03` run of 2026-10-28. The
+session gave "scoped to targeted suites" as its reason. A sentence above this
+one in the section still said a review names the broader suites. `D-SKL-106`
+rewrote it and closed the list of reasons.

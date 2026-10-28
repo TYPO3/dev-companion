@@ -11,6 +11,7 @@ one is added.
 - [`D-SKL-103`][D-SKL-103] — A review brief carries the surface list it is written from · 2026-10-28
 - [`D-SKL-104`][D-SKL-104] — A review with nobody to ask runs the suite · 2026-10-28
 - [`D-SKL-105`][D-SKL-105] — A review's Not run line lists the suites that verify · 2026-10-28
+- [`D-SKL-106`][D-SKL-106] — A review's Not run line names one of three reasons · 2026-10-28
 - [`D-SKL-099`][D-SKL-099] — A document of a review is the report in its own order · 2026-10-26
 - [`D-SKL-100`][D-SKL-100] — The review skills report in one skeleton · 2026-10-26
 - [`D-SKL-101`][D-SKL-101] — A sitepackage has a task skill of its own · 2026-10-26
@@ -112,6 +113,7 @@ one is added.
 [D-SKL-103]: skl-103-a-review-brief-carries-the-surface-list-it-is-written-from.md
 [D-SKL-104]: skl-104-a-review-with-nobody-to-ask-runs-the-suite.md
 [D-SKL-105]: skl-105-a-reviews-not-run-line-lists-the-suites-that-verify.md
+[D-SKL-106]: skl-106-a-reviews-not-run-line-names-one-of-three-reasons.md
 [D-SKL-099]: skl-099-a-document-of-a-review-is-the-report-in-its-own-order.md
 [D-SKL-100]: skl-100-the-review-skills-report-in-one-skeleton.md
 [D-SKL-101]: skl-101-a-sitepackage-has-a-task-skill-of-its-own.md

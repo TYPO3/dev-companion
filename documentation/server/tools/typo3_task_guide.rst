@@ -281,8 +281,10 @@ Answers with
         # their own.
         base: boolean
         # Whether a run says anything about the change. False for an install, a
-        # dispatcher, a listing and a suite that serves an instance to look at. A
-        # report of what ran and what did not owes those no line.
+        # dispatcher, a listing and a suite that serves an instance to look at.
+        # False too for a suite that asks git for its files, where the checkout this
+        # server reads is a git worktree: it reads nothing there and reports
+        # SUCCESS. A report of what ran and what did not owes those no line.
         verifies: boolean
         # The TYPO3 majors whose runTests.sh has this suite, where that is not all
         # of them. Null means every covered version.

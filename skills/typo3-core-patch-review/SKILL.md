@@ -193,8 +193,7 @@ later one that settles it.
 
 `typo3_test_run_guide` with the changed paths returns the suites that can fail
 on this change and the targeted invocation for each. That is the verification a
-review proposes: the narrowest applicable suite first, the broader ones named
-after it.
+review runs: the narrowest applicable suite first, the broader ones after it.
 
 The core's suites are not among the commands `typo3_project_describe` declares.
 That answer is about the repository's own composer scripts. The test runner is a
@@ -212,6 +211,12 @@ with the words taken out.
 The list is every entry the guide marks `verifies`. An install, a dispatcher or
 a server for a browser checks nothing. A line for each buries the suites that
 do, and one review dropped three of those.
+
+**A suite on that list stays unrun for one of three reasons, and its `Not run:`
+line names the reason.** The suite writes into the checkout and has no
+report-only form. The user, asked before the skip, answered no. No worktree
+holds the patch, and nobody was there to ask. A narrower suite that passed, a
+scope the session chose and a time budget are none of the three.
 
 **Run the suites in a `git worktree` on the patch set rather than in the main
 checkout.** The worktree leaves the reader's branch and uncommitted work alone.

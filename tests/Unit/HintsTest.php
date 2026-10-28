@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
+use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Knowledge\CommitMessage;
 use TYPO3\DevCompanion\Knowledge\Documents;
 use TYPO3\DevCompanion\Knowledge\Domains;
@@ -6524,6 +6525,42 @@ final class HintsTest extends TestCase
         self::assertFalse($verifies['composerInstall']);
         self::assertTrue($verifies['lintPhp']);
         self::assertStringContainsString('so a report owes it no Not run line', $answer->text);
+    }
+
+    #[Decision('D-SKL-106')]
+    #[Test]
+    public function aSuiteThatAsksGitForItsFilesVerifiesNothingFromAWorktree(): void
+    {
+        $root = sys_get_temp_dir() . '/typo3-core-worktree-' . bin2hex(random_bytes(4));
+        mkdir($root . '/.git', 0o777, true);
+        file_put_contents($root . '/composer.json', '{"name": "typo3/cms", "type": "typo3-cms-core"}');
+        $verifies = static function () use ($root): array {
+            Instance::discoverFrom($root);
+            $answer = Registry::call('typo3_test_run_guide', [
+                'paths' => ['typo3/sysext/core/Classes/DataHandling/DataHandler.php'],
+                'targetVersion' => 'main',
+            ]);
+
+            return [array_column($answer->data['suites'], 'verifies', 'suite'), $answer->text];
+        };
+
+        try {
+            [$inCheckout] = $verifies();
+            self::assertTrue($inCheckout['cglGit']);
+
+            rmdir($root . '/.git');
+            file_put_contents($root . '/.git', "gitdir: /home/somebody/typo3/.git/worktrees/review\n");
+            [$inWorktree, $text] = $verifies();
+            self::assertFalse($inWorktree['cglGit']);
+            self::assertFalse($inWorktree['cglHeaderGit']);
+            self::assertTrue($inWorktree['cgl']);
+            self::assertStringContainsString('Verifies nothing here: this checkout is a git worktree', $text);
+        } finally {
+            Instance::discoverFrom(null);
+            is_dir($root . '/.git') ? rmdir($root . '/.git') : unlink($root . '/.git');
+            unlink($root . '/composer.json');
+            rmdir($root);
+        }
     }
 
     /**

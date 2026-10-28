@@ -1762,7 +1762,23 @@ final class SkillTest extends TestCase
         $report = (string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-review/references/report.md',
         );
-        self::assertStringContainsString('or that nobody was there to ask', $report);
+        self::assertStringContainsString('no worktree stood and nobody was there to ask', $report);
+    }
+
+    #[Decision('D-SKL-106')]
+    #[Test]
+    public function aReviewsNotRunLineNamesOneOfThreeReasons(): void
+    {
+        $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
+        ));
+        self::assertStringContainsString('the broader ones after it.', $skill);
+        self::assertStringContainsString('stays unrun for one of three reasons', $skill);
+
+        $report = (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/references/report.md',
+        );
+        self::assertStringContainsString('<one of three reasons: it writes into the checkout; the question you asked and its answer;', $report);
     }
 
     #[Decision('D-SKL-071')]

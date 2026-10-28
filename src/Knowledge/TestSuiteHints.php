@@ -11,7 +11,7 @@ use TYPO3\DevCompanion\Paths;
  * invocation notes (CI=true, targeted runs, option flags) that apply to every
  * suite.
  *
- * @phpstan-type Suite array{suite: string, command: string, runs: string, description: string, whenToUse: string, domains: array<int, string>, base: bool, verifies: bool, targeted: ?string, since: ?int, until: ?int}
+ * @phpstan-type Suite array{suite: string, command: string, runs: string, description: string, whenToUse: string, domains: array<int, string>, base: bool, verifies: bool, filesFromGit: bool, targeted: ?string, since: ?int, until: ?int}
  */
 final class TestSuiteHints
 {
@@ -67,6 +67,7 @@ final class TestSuiteHints
                 'domains' => array_map('strval', $entry['domains'] ?? []),
                 'base' => (bool) ($entry['base'] ?? false),
                 'verifies' => (bool) ($entry['verifies'] ?? true),
+                'filesFromGit' => (bool) ($entry['filesFromGit'] ?? false),
                 'targeted' => isset($entry['targeted']) ? (string) $entry['targeted'] : null,
                 'since' => isset($entry['since']) ? (int) $entry['since'] : null,
                 'until' => isset($entry['until']) ? (int) $entry['until'] : null,

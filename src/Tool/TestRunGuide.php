@@ -155,6 +155,14 @@ final class TestRunGuide extends ReadOnlyTool
         }
 
         $hints = TestSuiteHints::find($query, $domains, $target);
+        // The mount holds the worktree and not its gitdir, so a suite that asks
+        // git for its files reads none and reports SUCCESS (`D-SKL-106`).
+        if (self::gitdirOutsideTheCheckout()) {
+            $hints = array_map(
+                static fn(array $hint): array => $hint['filesFromGit'] ? ['verifies' => false] + $hint : $hint,
+                $hints,
+            );
+        }
         // A list nobody ranked opens on the suites every change in these
         // domains runs. Twenty-four suites in file order put the five a fix
         // needs among the browser ones (`feedback/2026-10-22-105711`).
@@ -259,7 +267,10 @@ final class TestRunGuide extends ReadOnlyTool
                 // Beside the command, because a review's Not run line is built
                 // from this list (`D-SKL-105`).
                 if (!$hint['verifies']) {
-                    $block[] = 'Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.';
+                    $block[] = $hint['filesFromGit']
+                        ? 'Verifies nothing here: this checkout is a git worktree, so the suite reads no file and '
+                            . 'reports SUCCESS. A report owes it no Not run line.'
+                        : 'Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.';
                 }
                 if ($hint['targeted'] !== null) {
                     $block[] = 'Targeted run while iterating:';
@@ -341,6 +352,26 @@ final class TestRunGuide extends ReadOnlyTool
         }
 
         return $missing;
+    }
+
+    /**
+     * Whether the checkout this server reads keeps its git directory outside
+     * itself, as a worktree does. runTests.sh mounts the checkout alone.
+     */
+    private static function gitdirOutsideTheCheckout(): bool
+    {
+        $root = Instance::root();
+        if ($root === null || !is_file($root . '/.git')) {
+            return false;
+        }
+        $line = trim((string) file_get_contents($root . '/.git'));
+        if (!str_starts_with($line, 'gitdir:')) {
+            return false;
+        }
+        $gitdir = trim(substr($line, 7));
+        $gitdir = str_starts_with($gitdir, '/') ? $gitdir : $root . '/' . $gitdir;
+
+        return !str_starts_with((realpath($gitdir) ?: $gitdir) . '/', $root . '/');
     }
 
     /**

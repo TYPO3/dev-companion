@@ -29,7 +29,11 @@
       "createNamedParameter",
       "quoteIdentifier",
       "path traversal",
-      "header injection"
+      "header injection",
+      "secret exposure",
+      "committed secret",
+      "leaked secret",
+      "git log -S"
     ],
     "hints": [
       "A finding about a user-controlled value is a claim about its sink: the place the value leaves PHP — the markup it is printed into, the statement that is executed, the header that is sent, the path that is opened, the process that is started. Everything between the source and that point is the path, and nothing on the path decides the question. Name the sink and read the code at it, or report the finding as unverified and say which class went unread.",
@@ -37,6 +41,7 @@
       "Rendering: the sink of a value a template outputs is whatever writes it into the response, which is not always the template. A value handed to a page title, a meta tag or a header is emitted by that API instead, and the ViewHelper that passed it there returns nothing at all.",
       "Rendering: `f:format.raw` switches escaping off for everything Fluid parses inside it, not only for its own output. That Fluid escapes the children of a ViewHelper holds only outside it. A ViewHelper nested in it, as a tag or as `{header -> vendor:format.highlight()}`, escapes neither its children nor its output, so the stored value reaches the response unless that ViewHelper's own PHP encodes it. Every ViewHelper whose `escapeChildren` is false does the same: Fluid's `Escape` interceptor switches off at its opening tag and on again only after it closes.",
       "Database: the QueryBuilder quotes identifiers, not values. expr()->eq('field', $value) quotes the field name and puts $value into the statement exactly as it was handed over — createNamedParameter() is what makes it a bound parameter, and a LIKE value needs escapeLikeWildcards() before that or its wildcards are the caller's. The sink is the executed statement, so what decides the finding is how the value arrived there rather than which builder method was called.",
+      "Secrets: the sink of a committed secret is the repository's history, and every clone holds the value from the commit that added it. That commit dates the exposure, and `git log -S<value> -- <path>` names the wrong one after a rename: the commit that moved the file is the first to add the value under its new path. Search the value with no path, or with `--follow` on the one path, and add `--all` for the branches that carried it. Deleting the file leaves the value in every clone, so the remediation is a new secret.",
       "Executing the path is cheaper evidence than reading it: a functional test that renders the template or runs the query and asserts what came out answers the question in one run, and leaves the answer behind for the next reader. Where a value reaches a sink and no test covers that path, the missing coverage is a finding in its own right."
     ]
   },

@@ -84,6 +84,8 @@ Code still listed this server as connecting at the first prompt, which
 `claude -p` never shows. Instructions that do not arrive carry no sentence, so
 the maintainer kept the skill files and `install` on 2026-10-28. This sentence
 stays as the fallback. And `Installer::absent()` read a record that named
-Antigravity only. That is a delivery gap this server can close: the SDK keeps
-`clientInfo` from `initialize`, and its `Builder` takes a request handler of
-this server's own. `todo/open/T-261028-c00d.md` decides the sentence per client.
+Antigravity only. That is a delivery gap this server can close, if it knows the
+client. Claude Code 2.1.312 sends no `initialize` to this server, and mcp/sdk
+v0.9.0 answers its `server/discover` before any request handler, as logged on
+2026-10-28. `todo/waiting/T-261028-c00d.md` holds the question of where the
+client's name is read.

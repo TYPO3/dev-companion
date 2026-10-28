@@ -1,7 +1,7 @@
 ---
 serves: [scenarios/, decisions/]
 every: 14 days
-checked: 2026-10-11
+checked: 2026-10-28
 run: [bin/cli scenarios:contract]
 ---
 

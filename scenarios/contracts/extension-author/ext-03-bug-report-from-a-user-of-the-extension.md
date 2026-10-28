@@ -13,10 +13,10 @@ that the brief asks for it by name, but that a session passes
 `missing-issue` error besides. Measured on 2026-08-02 and recorded on
 [`D-GUI-002`](../../../decisions/guides/gui-002-the-commit-workflow-is-asked-for-not-inferred.md).
 
-**Read 2026-09-02, again 2026-09-19 and 2026-10-11:** the 2026-08-02 measurement still does not reproduce. With the workflow left out the guide answers `workflow: "project"`. The draft carries no `Releases:` trailer, the only check is `no-issues-found`, and the answer says the Forge issue and that trailer do not apply. On 2026-10-11 the draft and
-the checks were the same over stdio. The core sign-off is optional since
-2026-10-07 and reaches neither workflow. Nothing guards that a session names the
-workflow at all, and that costs it nothing.
+**Read 2026-09-02, again 2026-09-19, 2026-10-11 and 2026-10-28:** the 2026-08-02 measurement still does not reproduce. With the workflow left out the guide answers `workflow: "project"`. The draft carries no `Releases:` trailer, the only check is `no-issues-found`, and the answer says the Forge issue and that trailer do not apply. Since 2026-10-15 a draft without a body also gets the
+warning `body-missing` (`D-GUI-029`), in either workflow. The core sign-off is
+optional since 2026-10-07 and reaches neither workflow. Nothing guards that a
+session names the workflow at all, and that costs it nothing.
 
 > Somebody reported that our list plugin crashes when the storage page is empty.
 > Reproduce it, fix it, and commit it — we tag a patch release afterwards.

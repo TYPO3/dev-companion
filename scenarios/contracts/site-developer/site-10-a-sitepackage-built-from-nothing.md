@@ -10,6 +10,8 @@ way the hints say is **not guarded**. A run of this case is what measures it,
 and the first run without a skill is the baseline for
 `typo3-sitepackage-development` (`D-SKL-101`).
 
+**Read 2026-10-28:** the prompt confirms the `sitepackage` intent, and the brief names `typo3-sitepackage-development`. The skill asks the design question once, takes the builder from its schema and ends on one rendered page per page layout. Ten recorded runs on 14.3 and 13.4 stand in `D-SKL-101`, the last of which rendered both layouts. No file below `scenarios/runs/` records them.
+
 > We have a fresh TYPO3 installation and nothing of our own in it yet. Create a
 > sitepackage for our site: the extension, its site set, a page template with
 > header and footer, and two page layouts the editors can choose from.

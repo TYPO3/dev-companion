@@ -1892,6 +1892,35 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('new labels in English in the source XLF', $result->text);
     }
 
+    /**
+     * A session read 30 of the 51 lines and missed the statement whose absence
+     * fails silently — `D-KNW-050`.
+     */
+    #[Decision('D-KNW-050')]
+    #[Test]
+    public function whatAMissingTargetLanguageCostsIsTheFirstStatementOfItsHint(): void
+    {
+        $statements = array_column((array) Hints::byId('language-files', 14)['hints'], 'text');
+
+        self::assertStringContainsString('declares no target-language', $statements[0]);
+    }
+
+    /**
+     * 14.3 reads `LANG/resourceOverrides` in `LabelFileResolver`, and 12.4 and
+     * 13.4 read `SYS/locallangXMLOverride` in `LocalizationFactory`.
+     */
+    #[Test]
+    #[TestWith([12, "['SYS']['locallangXMLOverride']", 'resourceOverrides'])]
+    #[TestWith([13, "['SYS']['locallangXMLOverride']", 'resourceOverrides'])]
+    #[TestWith([14, "['LANG']['resourceOverrides']", 'locallangXMLOverride'])]
+    public function anOverrideOfAnotherPackagesLabelsNamesTheKeyItsMajorReads(int $major, string $read, string $ignored): void
+    {
+        $text = implode("\n", array_column((array) Hints::byId('language-files', $major)['hints'], 'text'));
+
+        self::assertStringContainsString($read, $text);
+        self::assertStringNotContainsString($ignored, $text);
+    }
+
     #[Requirement('R-KNW-036')]
     #[Test]
     public function labelReuseStaysAtTheUsageContext(): void

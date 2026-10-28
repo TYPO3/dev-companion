@@ -5,6 +5,7 @@ date: 2026-08-03
 status: open
 coveredBy:
   - HintsTest::aTranslationFileIsToldWhatAMissingTargetLanguageCostsIt
+  - HintsTest::whatAMissingTargetLanguageCostsIsTheFirstStatementOfItsHint
   - HintsTest::whatAMissingTargetLanguageCostsIsWithheldWhereItIsFree
 ---
 
@@ -82,6 +83,18 @@ direction, because it never says what the file that lacks the attribute does.
 - Where the XLF schema check belongs is the todo's rather than settled here. It
   is a question about the check layer `typo3-extension-testing` describes, and
   nothing read for this judgement says which answer is right.
+- The two v14 statements open the hint. On 2026-10-28
+  `feedback/archive/2026-10-28-080646` got them on v14, read 30 of 51 lines and
+  missed them at line 41. That is step 4 of the ladder, a rule buried below the
+  common case.
+- An answer that lists its silent failures above its statements stays unbuilt,
+  as that feedback asked for it. No hint declares that property, so the field
+  would be a schema change for one case. A second hint a session reads past is
+  what earns it.
+- The override key is bound per major. `.checkouts/12.4` and `13.4` read
+  `SYS/locallangXMLOverride` in `LocalizationFactory`, and `.checkouts/14.3`
+  reads `LANG/resourceOverrides` in `LabelFileResolver`. The hint had named the
+  new key on every major.
 
 ## Assumed
 

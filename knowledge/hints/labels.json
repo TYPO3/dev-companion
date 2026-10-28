@@ -32,13 +32,6 @@
       "label in a JavaScript module"
     ],
     "hints": [
-      "Use clear, stable label identifiers and concise wording.",
-      "Author new labels in English in the source XLF. Put a translation in the locale-prefixed file beside it — for example de.locallang.xlf for locallang.xlf — with the same unit id. An existing source file whose labels are not English is a defect to report, not a convention to continue.",
-      "Start at the consuming code or registration and identify the translation resource it already uses. Reuse a label only when the same meaning already exists in that resource and local context; a matching label elsewhere in the installation is not a reference to import across module or package boundaries. Call typo3_label_lookup with that resource rather than treating its instance-wide search as a shared vocabulary.",
-      "When the local resource needs a new unit, make its id express the meaning at that use site and fit the resource's existing hierarchy — for example actions.createRecord or import.emptyState — rather than a context-free id such as new.",
-      "Which trans-units exist is a property of the installation — every extension ships its own and an installation can override a language file through LANG/resourceOverrides — so search with typo3_label_lookup rather than working from memory.",
-      "Correct such a file in place rather than beside it: it keeps its path and it keeps its unit ids, and its wording becomes English. The wording that was there moves into the locale-prefixed file next to it — de.locallang.xlf for a German source — whose file element declares source-language=\"en\" target-language=\"de\" and points original= at the source path, and where each unit repeats the id with the English text as <source> and the wording it replaced as <target>.",
-      "Adding an en.-prefixed file is never the correction. The unprefixed file is read as the default locale, and default is the fallback of every other locale, so the non-English wording keeps surfacing everywhere a locale has no translation of its own — while en.locallang.xlf is reached only by the en locale itself. The core ships no en.-prefixed language file outside one test fixture.",
       {
         "text": "A locale-prefixed file whose file element declares no target-language is read as a default-language template: XliffLoader::parseXliff1() decides that on the attribute alone, takes every unit from <source> and discards the <target> wording. Nothing is raised, logged or deprecated, so the symptom is a maintained German file whose labels render in English. XliffParser no longer decides it and carries a deprecation of its own, so reading that class answers a different question.",
         "since": 14
@@ -47,6 +40,21 @@
         "text": "No schema check reports this. XLIFF 1.2 requires original, source-language and datatype on the file element and leaves target-language optional, so the file that loses its translations is valid XLIFF. Read the attribute off each locale-prefixed file itself.",
         "since": 14
       },
+      "Author new labels in English in the source XLF. Put a translation in the locale-prefixed file beside it — for example de.locallang.xlf for locallang.xlf — with the same unit id. An existing source file whose labels are not English is a defect to report, not a convention to continue.",
+      {
+        "text": "Another package's labels are replaced from your own XLF through $GLOBALS['TYPO3_CONF_VARS']['LANG']['resourceOverrides'][<locale>][<the file's EXT: path or its translation domain>][] = <your file>. An entry without the locale level applies to every locale.",
+        "since": 14
+      },
+      {
+        "text": "Another package's labels are replaced from your own XLF through $GLOBALS['TYPO3_CONF_VARS']['SYS']['locallangXMLOverride'][<language>][<the file's EXT: path>][] = <your file>. An entry without the language level applies to every language.",
+        "until": 13
+      },
+      "Use clear, stable label identifiers and concise wording.",
+      "Start at the consuming code or registration and identify the translation resource it already uses. Reuse a label only when the same meaning already exists in that resource and local context; a matching label elsewhere in the installation is not a reference to import across module or package boundaries. Call typo3_label_lookup with that resource rather than treating its instance-wide search as a shared vocabulary.",
+      "When the local resource needs a new unit, make its id express the meaning at that use site and fit the resource's existing hierarchy — for example actions.createRecord or import.emptyState — rather than a context-free id such as new.",
+      "Which trans-units exist is a property of the installation — every extension ships its own and an installation can override a language file — so search with typo3_label_lookup rather than working from memory.",
+      "Correct a source file that is not English in place rather than beside it: it keeps its path and it keeps its unit ids, and its wording becomes English. The wording that was there moves into the locale-prefixed file next to it — de.locallang.xlf for a German source — whose file element declares source-language=\"en\" target-language=\"de\" and points original= at the source path, and where each unit repeats the id with the English text as <source> and the wording it replaced as <target>.",
+      "Adding an en.-prefixed file is never the correction. The unprefixed file is read as the default locale, and default is the fallback of every other locale, so the non-English wording keeps surfacing everywhere a locale has no translation of its own — while en.locallang.xlf is reached only by the en locale itself. The core ships no en.-prefixed language file outside one test fixture.",
       "The XLIFF linter symfony/translation ships is what these files are checked with, and a TYPO3 installation already has the package: it validates against the XLIFF schema rather than only parsing the XML. Its requireStrictFileNames constructor argument defaults to true, which is Symfony's own locale-suffix convention — messages.de.xlf — so at the default it rejects every locale-prefixed file with a mismatch between the file name and the target-language attribute. Pass false.",
       "Schema validity is the whole of what that linter establishes. That a translation declares target-language at all, that a source file is authored in English, and that a translation carries no unit its source has dropped are checks the project owns.",
       "Two neighbours: translation-domain for how a label is referenced, label-retirement for one that is no longer used.",

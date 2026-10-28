@@ -697,7 +697,7 @@ Answered
 --------
 
 Recorded on 2026-10-28 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/. Its
+core-checkout, TYPO3 14.3.8-dev, the 14.3 core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -757,7 +757,7 @@ Data:
             "readAt": "2026-08-05"
         },
         "indistinguishable": "This server reads https://review.typo3.org without credentials, so a change that is private or work in progress is invisible to it. Such a change answers exactly like a path nothing touches, so this is either \"nobody is working on it\" or \"nobody an anonymous reader may see is\", and nothing here separates them. What is matched is the paths a change touches, so a fix for this file that landed elsewhere is not in the answer either.",
-        "readAt": "2026-10-28T10:32:16Z",
+        "readAt": "2026-10-28T17:35:42Z",
         "unavailable": null,
         "owed": []
     }
@@ -1427,9 +1427,18 @@ Data:
             "readAt": "2026-08-05"
         },
         "indistinguishable": null,
-        "readAt": "2026-10-28T10:32:16Z",
+        "readAt": "2026-10-28T17:35:42Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "The paths above are what the current patch set touches, and they are the argument the work after this takes: `typo3_hint_lookup` for the conventions of each subsystem in the list, `typo3_test_run_guide` for the suites that can fail on them. What is not here is the diff — the hunks are what a fetch is for, and a shortlist is triaged without fetching anything.",
+            "The issues above are what the commit message names, and a status there is the issue's own rather than this change's. Pass one to `typo3_forge_lookup` as `issue` to read it whole, which is where a maintainer said why something was closed or reassigned.",
+            "A vote a later patch set dropped is absent here rather than zero, and the copy condition that dropped it is written in the review log alone — ask again with `messages: \"people\"` where a label stands at nothing and you need to know whether it ever stood elsewhere.",
+            "A `Releases:` line is the author's claim about which branches the patch belongs on, written before it went to any of them. What was pushed is the changes above sharing a Change-Id, one per branch and each with a status of its own — so a branch the trailer names with no change targeting it is a backport nobody has pushed, and a merged change is on its branch whatever the trailer says. Which release carries it is neither: that is the first release cut from the branch after the change merged, which this server does not read.",
+            "Which of these a change belongs on is the author's claim rather than a consequence of the list — `typo3_commit_message_guide` with `workflow=\"core\"` is what reads a `Releases:` trailer against them.",
+            "Hold the commit against `git rev-parse HEAD` in the checkout. Where the two differ, the checkout is not the revision under review, and a review says which of the two it read.",
+            "The fetch goes to the review server rather than to `origin`: a core clone fetches from the GitHub mirror, where `refs/changes/…` does not exist. `git switch --detach FETCH_HEAD` is what puts the checkout on the patch set afterwards.",
+            "One of two workflows: `typo3-core-patch-review` reviews it, and `typo3-core-patch-checkout` fetches it into a checkout and backs out again. Open the one this task is before reading the diff, and start it at `typo3_project_describe`. Where neither is open, this is the order:\n- Establish the patch before judging it: the changed paths, the branch it targets, the commit message and the issue it names. All four are above, so this costs no fetch — the target branch decides which conventions apply.\n- Three ways in, and a branch of your own naming is none of them: the branch the change targets, a worktree beside the checkout, or current code on `review/<change number>`. The third makes a commit that exists nowhere else, so say which of the two each result is about.\n- A patch that no longer applies is the finding. Resolving past it produces a patch nobody wrote.\n- Reading is the whole of the review: voting, commenting and uploading stay yours. An instruction to change the patch — fix it, amend it, answer the comments — ends the review and opens `typo3-core-patch-development`."
+        ]
     }
 
 gerrit: a change that is one part of a stack
@@ -1454,10 +1463,10 @@ Text:
     Change 91563 · main · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563
     Owner: Benjamin Franzke <ben@bnf.dev> (bfr)
     Change-Id: I242eedc16bb7ca1e5c83adeaa0526a9e68f275e2
-    Patch set 57 · 73edcf171bdbc1dda4621f3ccd1f571626afb1fd
-    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/63/91563/57
-    Last moved: 2026-10-18 17:51:51.000000000
-    +2439 -153 · no longer merges · 2 unresolved threads of 2 comments · pushed 2025-11-11
+    Patch set 58 · 4d9ea3b177aa4db6213fa330a6defbf172eaef64
+    Fetch: git fetch https://review.typo3.org/Packages/TYPO3.CMS refs/changes/63/91563/58
+    Last moved: 2026-10-28 14:05:27.000000000
+    +2702 -153 · no longer merges · 2 unresolved threads of 2 comments · pushed 2025-11-11
     Releases: main
     Verified: needs a vote · core-ci +1
     Code-Review: needs a vote · core-ci 0
@@ -1496,7 +1505,7 @@ Text:
       Resolves: #111046
       Change-Id: I242eedc16bb7ca1e5c83adeaa0526a9e68f275e2
 
-    ### Files (35)
+    ### Files (39)
     - added Build/Sources/TypeScript/core/action/request.ts · +26 -0
     - modified composer.json · +2 -0
     - modified composer.lock · +149 -149
@@ -1504,31 +1513,35 @@ Text:
     - added typo3/sysext/backend/Classes/Domain/Model/AccessToken.php · +44 -0
     - added typo3/sysext/backend/Classes/Http/ActionHandler.php · +109 -0
     - added typo3/sysext/backend/Classes/Middleware/BackendScopes.php · +75 -0
+    - added typo3/sysext/backend/Classes/Scope/ContentReadScope.php · +75 -0
+    - added typo3/sysext/backend/Classes/Scope/ContentWriteScope.php · +78 -0
     - modified typo3/sysext/backend/Configuration/RequestMiddlewares.php · +7 -1
-    - added typo3/sysext/backend/Tests/Functional/Http/ActionHandlerTest.php · +291 -0
+    - added typo3/sysext/backend/Tests/Functional/Http/ActionHandlerTest.php · +305 -0
     - modified typo3/sysext/backend/Tests/Functional/Routing/RouteAccessTest.php · +4 -1
+    - added typo3/sysext/backend/Tests/Functional/Scope/ContentScopeTest.php · +74 -0
+    - added typo3/sysext/backend/Tests/Functional/Scope/Fixtures/be_users.csv · +18 -0
     - added typo3/sysext/core/Classes/Action/ActionContext.php · +38 -0
     - added typo3/sysext/core/Classes/Action/ActionDescriptor.php · +53 -0
     - added typo3/sysext/core/Classes/Action/ActionException.php · +26 -0
     - added typo3/sysext/core/Classes/Action/ActionExceptionInterface.php · +26 -0
-    - added typo3/sysext/core/Classes/Action/ActionInvoker.php · +138 -0
+    - added typo3/sysext/core/Classes/Action/ActionInvoker.php · +143 -0
     - added typo3/sysext/core/Classes/Action/ActionRegistry.php · +143 -0
     - added typo3/sysext/core/Classes/Action/ActionType.php · +54 -0
     - added typo3/sysext/core/Classes/Action/Error/NotFoundError.php · +28 -0
     - added typo3/sysext/core/Classes/Action/Error/PermissionDeniedError.php · +28 -0
-    - added typo3/sysext/core/Classes/Action/RequestHandler.php · +225 -0
-    - added typo3/sysext/core/Classes/Action/RequestHandlerFactory.php · +56 -0
+    - added typo3/sysext/core/Classes/Action/ParameterSource.php · +28 -0
+    - added typo3/sysext/core/Classes/Action/RequestHandler.php · +228 -0
+    - added typo3/sysext/core/Classes/Action/RequestHandlerFactory.php · +59 -0
+    - added typo3/sysext/core/Classes/Attribute/ActionParameter.php · +38 -0
     - added typo3/sysext/core/Classes/Attribute/AsAction.php · +40 -0
-    - added typo3/sysext/core/Classes/DependencyInjection/ActionPass.php · +291 -0
-    - added typo3/sysext/core/Classes/Scope/ContentReadScope.php · +53 -0
-    - added typo3/sysext/core/Classes/Scope/ContentWriteScope.php · +44 -0
+    - added typo3/sysext/core/Classes/DependencyInjection/ActionPass.php · +300 -0
     - added typo3/sysext/core/Classes/Scope/ScopeInterface.php · +32 -0
     - added typo3/sysext/core/Classes/Scope/ScopeRegistry.php · +60 -0
     - added typo3/sysext/core/Classes/Scope/ScopeUser.php · +27 -0
     - modified typo3/sysext/core/Configuration/Services.php · +18 -0
     - added typo3/sysext/core/Documentation/Changelog/15.0/Feature-111046-IntroduceActionAPI.rst · +161 -0
     - added typo3/sysext/core/Resources/Public/JavaScript/action/request.js · +13 -0
-    - added typo3/sysext/core/Tests/Functional/Fixtures/Extensions/test_action/Classes/Action/TestAction.php · +136 -0
+    - added typo3/sysext/core/Tests/Functional/Fixtures/Extensions/test_action/Classes/Action/TestAction.php · +151 -0
     - added typo3/sysext/core/Tests/Functional/Fixtures/Extensions/test_action/Configuration/Services.yaml · +8 -0
     - added typo3/sysext/core/Tests/Functional/Fixtures/Extensions/test_action/composer.json · +23 -0
     - modified typo3/sysext/core/composer.json · +1 -0
@@ -1537,14 +1550,6 @@ Text:
     - resolves #111046 — Feature · Under Review · Introduce Action API as typed RPC layer for remote systems · https://forge.typo3.org/issues/111046
 
     ### Relation chain (18 changes, 16 stacked on this one and 1 under it)
-    - 92721 · ABANDONED · [WIP][BUGFIX] Fix referrer for login redirect · stacked on this change · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92721
-    - 88507 · NEW · [WIP][FEATURE] AI suggest demo using tools API · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507
-    - 93527 · MERGED · [WIP][BUGFIX] Avoid invalidly showing login form when opening a shared link · stacked on this change · chained at patch set 3, now at 9 · Verified OK · Code-Review OK · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527
-    - 95448 · MERGED · [FEATURE] Add `patch()` to ajax-request · stacked on this change · chained at patch set 1, now at 3 · Verified OK · Code-Review OK · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448
-    - 92724 · ABANDONED · [WIP][FEATURE] Implement OAuth authorization server · stacked on this change · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724
-    - 92323 · MERGED · [TASK] Avoid `json_encode()` workarounds in Settings API · stacked on this change · chained at patch set 8, now at 10 · Verified OK · Code-Review OK · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323
-    - 92197 · NEW · [WIP][FEATURE] Provide Record Actions · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92197
-    - 92196 · NEW · [WIP][TASK] Add Record DTO, Schema and Serializer · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196
     - 93599 · NEW · [WIP][TASK] Migrate resource endpoints to Actions API · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93599
     - 92191 · NEW · [WIP][TASK] Migrate PageTree to Action API · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92191
     - 92322 · NEW · [WIP][TASK] Migrate Dashboard to Actions API · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92322
@@ -1552,6 +1557,17 @@ Text:
     - 92223 · NEW · [TASK] Provide AI tool provider based on Actions API · stacked on this change · Verified REJECT · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92223
       Core CI: pipeline failed · https://git.typo3.org/typo3/CI/cms/-/pipelines/111104
       Failed: e2e playwright classic sqlite 8.5 pre-merge 2/4 · log https://git.typo3.org/typo3/CI/cms/-/jobs/5949690/raw
+    - 92721 · ABANDONED · [WIP][BUGFIX] Fix referrer for login redirect · stacked on this change · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92721
+    - 88507 · NEW · [WIP][FEATURE] AI suggest demo using tools API · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507
+    - 93527 · MERGED · [WIP][BUGFIX] Avoid invalidly showing login form when opening a shared link · stacked on this change · chained at patch set 3, now at 9 · Verified OK · Code-Review OK · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527
+    - 95448 · MERGED · [FEATURE] Add `patch()` to ajax-request · stacked on this change · chained at patch set 1, now at 3 · Verified OK · Code-Review OK · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448
+    - 92724 · ABANDONED · [WIP][FEATURE] Implement OAuth authorization server · stacked on this change · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724
+    - 92323 · MERGED · [TASK] Avoid `json_encode()` workarounds in Settings API · stacked on this change · chained at patch set 8, now at 10 · Verified OK · Code-Review OK · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323
+    - 92197 · NEW · [WIP][FEATURE] Provide Record Actions · stacked on this change · Verified REJECT · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92197
+      Core CI: pipeline failed · https://git.typo3.org/typo3/CI/cms/-/pipelines/112723
+      Failed: e2e playwright classic sqlite 8.5 pre-merge 1/4 · log https://git.typo3.org/typo3/CI/cms/-/jobs/6013449/raw
+      Failed: e2e playwright composer sqlite 8.5 pre-merge 1/4 · log https://git.typo3.org/typo3/CI/cms/-/jobs/6013448/raw
+    - 92196 · NEW · [WIP][TASK] Add Record DTO, Schema and Serializer · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196
     - 91486 · NEW · [FEATURE] Implement API Hub · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91486
     - 93423 · NEW · [FEATURE] Implement standalone redirect route option · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423
     - 91666 · NEW · [TASK] Provide OpenAPI spec w/ Swagger UI for Actions API · stacked on this change · Verified NEED · Code-Review NEED · owned by Benjamin Franzke · https://review.typo3.org/c/Packages/TYPO3.CMS/+/91666
@@ -1674,6 +1690,22 @@ Data:
                         "movedFrom": null
                     },
                     {
+                        "path": "typo3/sysext/backend/Classes/Scope/ContentReadScope.php",
+                        "action": "added",
+                        "insertions": 75,
+                        "deletions": 0,
+                        "binary": false,
+                        "movedFrom": null
+                    },
+                    {
+                        "path": "typo3/sysext/backend/Classes/Scope/ContentWriteScope.php",
+                        "action": "added",
+                        "insertions": 78,
+                        "deletions": 0,
+                        "binary": false,
+                        "movedFrom": null
+                    },
+                    {
                         "path": "typo3/sysext/backend/Configuration/RequestMiddlewares.php",
                         "action": "modified",
                         "insertions": 7,
@@ -1684,7 +1716,7 @@ Data:
                     {
                         "path": "typo3/sysext/backend/Tests/Functional/Http/ActionHandlerTest.php",
                         "action": "added",
-                        "insertions": 291,
+                        "insertions": 305,
                         "deletions": 0,
                         "binary": false,
                         "movedFrom": null
@@ -1694,6 +1726,22 @@ Data:
                         "action": "modified",
                         "insertions": 4,
                         "deletions": 1,
+                        "binary": false,
+                        "movedFrom": null
+                    },
+                    {
+                        "path": "typo3/sysext/backend/Tests/Functional/Scope/ContentScopeTest.php",
+                        "action": "added",
+                        "insertions": 74,
+                        "deletions": 0,
+                        "binary": false,
+                        "movedFrom": null
+                    },
+                    {
+                        "path": "typo3/sysext/backend/Tests/Functional/Scope/Fixtures/be_users.csv",
+                        "action": "added",
+                        "insertions": 18,
+                        "deletions": 0,
                         "binary": false,
                         "movedFrom": null
                     },
@@ -1732,7 +1780,7 @@ Data:
                     {
                         "path": "typo3/sysext/core/Classes/Action/ActionInvoker.php",
                         "action": "added",
-                        "insertions": 138,
+                        "insertions": 143,
                         "deletions": 0,
                         "binary": false,
                         "movedFrom": null
@@ -1770,9 +1818,17 @@ Data:
                         "movedFrom": null
                     },
                     {
+                        "path": "typo3/sysext/core/Classes/Action/ParameterSource.php",
+                        "action": "added",
+                        "insertions": 28,
+                        "deletions": 0,
+                        "binary": false,
+                        "movedFrom": null
+                    },
+                    {
                         "path": "typo3/sysext/core/Classes/Action/RequestHandler.php",
                         "action": "added",
-                        "insertions": 225,
+                        "insertions": 228,
                         "deletions": 0,
                         "binary": false,
                         "movedFrom": null
@@ -1780,7 +1836,15 @@ Data:
                     {
                         "path": "typo3/sysext/core/Classes/Action/RequestHandlerFactory.php",
                         "action": "added",
-                        "insertions": 56,
+                        "insertions": 59,
+                        "deletions": 0,
+                        "binary": false,
+                        "movedFrom": null
+                    },
+                    {
+                        "path": "typo3/sysext/core/Classes/Attribute/ActionParameter.php",
+                        "action": "added",
+                        "insertions": 38,
                         "deletions": 0,
                         "binary": false,
                         "movedFrom": null
@@ -1796,23 +1860,7 @@ Data:
                     {
                         "path": "typo3/sysext/core/Classes/DependencyInjection/ActionPass.php",
                         "action": "added",
-                        "insertions": 291,
-                        "deletions": 0,
-                        "binary": false,
-                        "movedFrom": null
-                    },
-                    {
-                        "path": "typo3/sysext/core/Classes/Scope/ContentReadScope.php",
-                        "action": "added",
-                        "insertions": 53,
-                        "deletions": 0,
-                        "binary": false,
-                        "movedFrom": null
-                    },
-                    {
-                        "path": "typo3/sysext/core/Classes/Scope/ContentWriteScope.php",
-                        "action": "added",
-                        "insertions": 44,
+                        "insertions": 300,
                         "deletions": 0,
                         "binary": false,
                         "movedFrom": null
@@ -1868,7 +1916,7 @@ Data:
                     {
                         "path": "typo3/sysext/core/Tests/Functional/Fixtures/Extensions/test_action/Classes/Action/TestAction.php",
                         "action": "added",
-                        "insertions": 136,
+                        "insertions": 151,
                         "deletions": 0,
                         "binary": false,
                         "movedFrom": null
@@ -1902,8 +1950,8 @@ Data:
                 "subject": "[FEATURE] Introduce Action API",
                 "status": "NEW",
                 "branch": "main",
-                "patchSet": 57,
-                "commit": "73edcf171bdbc1dda4621f3ccd1f571626afb1fd",
+                "patchSet": 58,
+                "commit": "4d9ea3b177aa4db6213fa330a6defbf172eaef64",
                 "project": "Packages/TYPO3.CMS",
                 "owner": {
                     "name": "Benjamin Franzke",
@@ -1911,14 +1959,14 @@ Data:
                     "email": "ben@bnf.dev",
                     "accountId": 41468
                 },
-                "updated": "2026-10-18 17:51:51.000000000",
+                "updated": "2026-10-28 14:05:27.000000000",
                 "created": "2025-11-11 17:18:39.000000000",
-                "insertions": 2439,
+                "insertions": 2702,
                 "deletions": 153,
                 "mergeable": false,
                 "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563",
                 "fetch": {
-                    "ref": "refs/changes/63/91563/57",
+                    "ref": "refs/changes/63/91563/58",
                     "remote": "https://review.typo3.org/Packages/TYPO3.CMS"
                 },
                 "labels": [
@@ -1930,7 +1978,7 @@ Data:
                             {
                                 "voter": "core-ci",
                                 "value": 1,
-                                "on": "2026-10-14 13:10:57.000000000"
+                                "on": "2026-10-28 14:05:27.000000000"
                             }
                         ]
                     },
@@ -1978,228 +2026,6 @@ Data:
                     }
                 ],
                 "chain": [
-                    {
-                        "number": 92721,
-                        "status": "ABANDONED",
-                        "subject": "[WIP][BUGFIX] Fix referrer for login redirect",
-                        "thisChange": false,
-                        "patchSet": 5,
-                        "chainedAt": 5,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92721",
-                        "place": "above",
-                        "owner": {
-                            "name": "Benjamin Franzke",
-                            "username": "bfr",
-                            "email": "ben@bnf.dev",
-                            "accountId": 41468
-                        },
-                        "labels": null,
-                        "ci": null
-                    },
-                    {
-                        "number": 88507,
-                        "status": "NEW",
-                        "subject": "[WIP][FEATURE] AI suggest demo using tools API",
-                        "thisChange": false,
-                        "patchSet": 15,
-                        "chainedAt": 15,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507",
-                        "place": "above",
-                        "owner": {
-                            "name": "Benjamin Franzke",
-                            "username": "bfr",
-                            "email": "ben@bnf.dev",
-                            "accountId": 41468
-                        },
-                        "labels": [
-                            {
-                                "label": "Verified",
-                                "state": "NEED",
-                                "satisfied": false,
-                                "votes": null
-                            },
-                            {
-                                "label": "Code-Review",
-                                "state": "NEED",
-                                "satisfied": false,
-                                "votes": null
-                            }
-                        ],
-                        "ci": null
-                    },
-                    {
-                        "number": 93527,
-                        "status": "MERGED",
-                        "subject": "[WIP][BUGFIX] Avoid invalidly showing login form when opening a shared link",
-                        "thisChange": false,
-                        "patchSet": 9,
-                        "chainedAt": 3,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527",
-                        "place": "above",
-                        "owner": {
-                            "name": "Benjamin Franzke",
-                            "username": "bfr",
-                            "email": "ben@bnf.dev",
-                            "accountId": 41468
-                        },
-                        "labels": [
-                            {
-                                "label": "Verified",
-                                "state": "OK",
-                                "satisfied": true,
-                                "votes": null
-                            },
-                            {
-                                "label": "Code-Review",
-                                "state": "OK",
-                                "satisfied": true,
-                                "votes": null
-                            }
-                        ],
-                        "ci": null
-                    },
-                    {
-                        "number": 95448,
-                        "status": "MERGED",
-                        "subject": "[FEATURE] Add `patch()` to ajax-request",
-                        "thisChange": false,
-                        "patchSet": 3,
-                        "chainedAt": 1,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448",
-                        "place": "above",
-                        "owner": {
-                            "name": "Benjamin Franzke",
-                            "username": "bfr",
-                            "email": "ben@bnf.dev",
-                            "accountId": 41468
-                        },
-                        "labels": [
-                            {
-                                "label": "Verified",
-                                "state": "OK",
-                                "satisfied": true,
-                                "votes": null
-                            },
-                            {
-                                "label": "Code-Review",
-                                "state": "OK",
-                                "satisfied": true,
-                                "votes": null
-                            }
-                        ],
-                        "ci": null
-                    },
-                    {
-                        "number": 92724,
-                        "status": "ABANDONED",
-                        "subject": "[WIP][FEATURE] Implement OAuth authorization server",
-                        "thisChange": false,
-                        "patchSet": 6,
-                        "chainedAt": 6,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724",
-                        "place": "above",
-                        "owner": {
-                            "name": "Benjamin Franzke",
-                            "username": "bfr",
-                            "email": "ben@bnf.dev",
-                            "accountId": 41468
-                        },
-                        "labels": null,
-                        "ci": null
-                    },
-                    {
-                        "number": 92323,
-                        "status": "MERGED",
-                        "subject": "[TASK] Avoid `json_encode()` workarounds in Settings API",
-                        "thisChange": false,
-                        "patchSet": 10,
-                        "chainedAt": 8,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323",
-                        "place": "above",
-                        "owner": {
-                            "name": "Benjamin Franzke",
-                            "username": "bfr",
-                            "email": "ben@bnf.dev",
-                            "accountId": 41468
-                        },
-                        "labels": [
-                            {
-                                "label": "Verified",
-                                "state": "OK",
-                                "satisfied": true,
-                                "votes": null
-                            },
-                            {
-                                "label": "Code-Review",
-                                "state": "OK",
-                                "satisfied": true,
-                                "votes": null
-                            }
-                        ],
-                        "ci": null
-                    },
-                    {
-                        "number": 92197,
-                        "status": "NEW",
-                        "subject": "[WIP][FEATURE] Provide Record Actions",
-                        "thisChange": false,
-                        "patchSet": 14,
-                        "chainedAt": 14,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92197",
-                        "place": "above",
-                        "owner": {
-                            "name": "Benjamin Franzke",
-                            "username": "bfr",
-                            "email": "ben@bnf.dev",
-                            "accountId": 41468
-                        },
-                        "labels": [
-                            {
-                                "label": "Verified",
-                                "state": "NEED",
-                                "satisfied": false,
-                                "votes": null
-                            },
-                            {
-                                "label": "Code-Review",
-                                "state": "NEED",
-                                "satisfied": false,
-                                "votes": null
-                            }
-                        ],
-                        "ci": null
-                    },
-                    {
-                        "number": 92196,
-                        "status": "NEW",
-                        "subject": "[WIP][TASK] Add Record DTO, Schema and Serializer",
-                        "thisChange": false,
-                        "patchSet": 14,
-                        "chainedAt": 14,
-                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196",
-                        "place": "above",
-                        "owner": {
-                            "name": "Benjamin Franzke",
-                            "username": "bfr",
-                            "email": "ben@bnf.dev",
-                            "accountId": 41468
-                        },
-                        "labels": [
-                            {
-                                "label": "Verified",
-                                "state": "NEED",
-                                "satisfied": false,
-                                "votes": null
-                            },
-                            {
-                                "label": "Code-Review",
-                                "state": "NEED",
-                                "satisfied": false,
-                                "votes": null
-                            }
-                        ],
-                        "ci": null
-                    },
                     {
                         "number": 93599,
                         "status": "NEW",
@@ -2367,12 +2193,251 @@ Data:
                         }
                     },
                     {
+                        "number": 92721,
+                        "status": "ABANDONED",
+                        "subject": "[WIP][BUGFIX] Fix referrer for login redirect",
+                        "thisChange": false,
+                        "patchSet": 5,
+                        "chainedAt": 5,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92721",
+                        "place": "above",
+                        "owner": {
+                            "name": "Benjamin Franzke",
+                            "username": "bfr",
+                            "email": "ben@bnf.dev",
+                            "accountId": 41468
+                        },
+                        "labels": null,
+                        "ci": null
+                    },
+                    {
+                        "number": 88507,
+                        "status": "NEW",
+                        "subject": "[WIP][FEATURE] AI suggest demo using tools API",
+                        "thisChange": false,
+                        "patchSet": 15,
+                        "chainedAt": 15,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/88507",
+                        "place": "above",
+                        "owner": {
+                            "name": "Benjamin Franzke",
+                            "username": "bfr",
+                            "email": "ben@bnf.dev",
+                            "accountId": 41468
+                        },
+                        "labels": [
+                            {
+                                "label": "Verified",
+                                "state": "NEED",
+                                "satisfied": false,
+                                "votes": null
+                            },
+                            {
+                                "label": "Code-Review",
+                                "state": "NEED",
+                                "satisfied": false,
+                                "votes": null
+                            }
+                        ],
+                        "ci": null
+                    },
+                    {
+                        "number": 93527,
+                        "status": "MERGED",
+                        "subject": "[WIP][BUGFIX] Avoid invalidly showing login form when opening a shared link",
+                        "thisChange": false,
+                        "patchSet": 9,
+                        "chainedAt": 3,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93527",
+                        "place": "above",
+                        "owner": {
+                            "name": "Benjamin Franzke",
+                            "username": "bfr",
+                            "email": "ben@bnf.dev",
+                            "accountId": 41468
+                        },
+                        "labels": [
+                            {
+                                "label": "Verified",
+                                "state": "OK",
+                                "satisfied": true,
+                                "votes": null
+                            },
+                            {
+                                "label": "Code-Review",
+                                "state": "OK",
+                                "satisfied": true,
+                                "votes": null
+                            }
+                        ],
+                        "ci": null
+                    },
+                    {
+                        "number": 95448,
+                        "status": "MERGED",
+                        "subject": "[FEATURE] Add `patch()` to ajax-request",
+                        "thisChange": false,
+                        "patchSet": 3,
+                        "chainedAt": 1,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/95448",
+                        "place": "above",
+                        "owner": {
+                            "name": "Benjamin Franzke",
+                            "username": "bfr",
+                            "email": "ben@bnf.dev",
+                            "accountId": 41468
+                        },
+                        "labels": [
+                            {
+                                "label": "Verified",
+                                "state": "OK",
+                                "satisfied": true,
+                                "votes": null
+                            },
+                            {
+                                "label": "Code-Review",
+                                "state": "OK",
+                                "satisfied": true,
+                                "votes": null
+                            }
+                        ],
+                        "ci": null
+                    },
+                    {
+                        "number": 92724,
+                        "status": "ABANDONED",
+                        "subject": "[WIP][FEATURE] Implement OAuth authorization server",
+                        "thisChange": false,
+                        "patchSet": 6,
+                        "chainedAt": 6,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92724",
+                        "place": "above",
+                        "owner": {
+                            "name": "Benjamin Franzke",
+                            "username": "bfr",
+                            "email": "ben@bnf.dev",
+                            "accountId": 41468
+                        },
+                        "labels": null,
+                        "ci": null
+                    },
+                    {
+                        "number": 92323,
+                        "status": "MERGED",
+                        "subject": "[TASK] Avoid `json_encode()` workarounds in Settings API",
+                        "thisChange": false,
+                        "patchSet": 10,
+                        "chainedAt": 8,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92323",
+                        "place": "above",
+                        "owner": {
+                            "name": "Benjamin Franzke",
+                            "username": "bfr",
+                            "email": "ben@bnf.dev",
+                            "accountId": 41468
+                        },
+                        "labels": [
+                            {
+                                "label": "Verified",
+                                "state": "OK",
+                                "satisfied": true,
+                                "votes": null
+                            },
+                            {
+                                "label": "Code-Review",
+                                "state": "OK",
+                                "satisfied": true,
+                                "votes": null
+                            }
+                        ],
+                        "ci": null
+                    },
+                    {
+                        "number": 92197,
+                        "status": "NEW",
+                        "subject": "[WIP][FEATURE] Provide Record Actions",
+                        "thisChange": false,
+                        "patchSet": 15,
+                        "chainedAt": 15,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92197",
+                        "place": "above",
+                        "owner": {
+                            "name": "Benjamin Franzke",
+                            "username": "bfr",
+                            "email": "ben@bnf.dev",
+                            "accountId": 41468
+                        },
+                        "labels": [
+                            {
+                                "label": "Verified",
+                                "state": "REJECT",
+                                "satisfied": false,
+                                "votes": null
+                            },
+                            {
+                                "label": "Code-Review",
+                                "state": "NEED",
+                                "satisfied": false,
+                                "votes": null
+                            }
+                        ],
+                        "ci": {
+                            "pipeline": "https://git.typo3.org/typo3/CI/cms/-/pipelines/112723",
+                            "status": "failed",
+                            "failedJobs": [
+                                {
+                                    "name": "e2e playwright classic sqlite 8.5 pre-merge 1/4",
+                                    "stage": "main",
+                                    "url": "https://git.typo3.org/typo3/CI/cms/-/jobs/6013449",
+                                    "log": "https://git.typo3.org/typo3/CI/cms/-/jobs/6013449/raw"
+                                },
+                                {
+                                    "name": "e2e playwright composer sqlite 8.5 pre-merge 1/4",
+                                    "stage": "main",
+                                    "url": "https://git.typo3.org/typo3/CI/cms/-/jobs/6013448",
+                                    "log": "https://git.typo3.org/typo3/CI/cms/-/jobs/6013448/raw"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "number": 92196,
+                        "status": "NEW",
+                        "subject": "[WIP][TASK] Add Record DTO, Schema and Serializer",
+                        "thisChange": false,
+                        "patchSet": 15,
+                        "chainedAt": 15,
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/92196",
+                        "place": "above",
+                        "owner": {
+                            "name": "Benjamin Franzke",
+                            "username": "bfr",
+                            "email": "ben@bnf.dev",
+                            "accountId": 41468
+                        },
+                        "labels": [
+                            {
+                                "label": "Verified",
+                                "state": "NEED",
+                                "satisfied": false,
+                                "votes": null
+                            },
+                            {
+                                "label": "Code-Review",
+                                "state": "NEED",
+                                "satisfied": false,
+                                "votes": null
+                            }
+                        ],
+                        "ci": null
+                    },
+                    {
                         "number": 91486,
                         "status": "NEW",
                         "subject": "[FEATURE] Implement API Hub",
                         "thisChange": false,
-                        "patchSet": 42,
-                        "chainedAt": 42,
+                        "patchSet": 43,
+                        "chainedAt": 43,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91486",
                         "place": "above",
                         "owner": {
@@ -2402,8 +2467,8 @@ Data:
                         "status": "NEW",
                         "subject": "[FEATURE] Implement standalone redirect route option",
                         "thisChange": false,
-                        "patchSet": 17,
-                        "chainedAt": 17,
+                        "patchSet": 18,
+                        "chainedAt": 18,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93423",
                         "place": "above",
                         "owner": {
@@ -2433,8 +2498,8 @@ Data:
                         "status": "NEW",
                         "subject": "[TASK] Provide OpenAPI spec w/ Swagger UI for Actions API",
                         "thisChange": false,
-                        "patchSet": 33,
-                        "chainedAt": 33,
+                        "patchSet": 34,
+                        "chainedAt": 34,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91666",
                         "place": "above",
                         "owner": {
@@ -2464,8 +2529,8 @@ Data:
                         "status": "NEW",
                         "subject": "[FEATURE] Introduce Action API",
                         "thisChange": true,
-                        "patchSet": 57,
-                        "chainedAt": 57,
+                        "patchSet": 58,
+                        "chainedAt": 58,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/91563",
                         "place": "this",
                         "owner": {
@@ -2495,8 +2560,8 @@ Data:
                         "status": "NEW",
                         "subject": "[FEATURE] Introduce JSON SchemaBuilder and Schema based Hydrator",
                         "thisChange": false,
-                        "patchSet": 24,
-                        "chainedAt": 24,
+                        "patchSet": 25,
+                        "chainedAt": 25,
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/93064",
                         "place": "below",
                         "owner": {
@@ -2537,12 +2602,12 @@ Data:
                     "main"
                 ],
                 "messages": null,
-                "botMessageCount": 58,
+                "botMessageCount": 59,
                 "ci": null,
                 "conflicts": [],
                 "cherryPickOf": null,
                 "fileStat": {
-                    "count": 35,
+                    "count": 39,
                     "areas": [
                         {
                             "area": "typo3/sysext/core",
@@ -2550,7 +2615,7 @@ Data:
                         },
                         {
                             "area": "typo3/sysext/backend",
-                            "files": 7
+                            "files": 11
                         },
                         {
                             "area": "Build/Sources/TypeScript",
@@ -2591,9 +2656,18 @@ Data:
             "readAt": "2026-08-05"
         },
         "indistinguishable": null,
-        "readAt": "2026-10-28T10:32:17Z",
+        "readAt": "2026-10-28T17:35:42Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "The paths above are what the current patch set touches, and they are the argument the work after this takes: `typo3_hint_lookup` for the conventions of each subsystem in the list, `typo3_test_run_guide` for the suites that can fail on them. What is not here is the diff — the hunks are what a fetch is for, and a shortlist is triaged without fetching anything.",
+            "The issues above are what the commit message names, and a status there is the issue's own rather than this change's. Pass one to `typo3_forge_lookup` as `issue` to read it whole, which is where a maintainer said why something was closed or reassigned.",
+            "A vote a later patch set dropped is absent here rather than zero, and the copy condition that dropped it is written in the review log alone — ask again with `messages: \"people\"` where a label stands at nothing and you need to know whether it ever stood elsewhere.",
+            "A `Releases:` line is the author's claim about which branches the patch belongs on, written before it went to any of them. What was pushed is the changes above sharing a Change-Id, one per branch and each with a status of its own — so a branch the trailer names with no change targeting it is a backport nobody has pushed, and a merged change is on its branch whatever the trailer says. Which release carries it is neither: that is the first release cut from the branch after the change merged, which this server does not read.",
+            "Which of these a change belongs on is the author's claim rather than a consequence of the list — `typo3_commit_message_guide` with `workflow=\"core\"` is what reads a `Releases:` trailer against them.",
+            "Hold the commit against `git rev-parse HEAD` in the checkout. Where the two differ, the checkout is not the revision under review, and a review says which of the two it read.",
+            "The fetch goes to the review server rather than to `origin`: a core clone fetches from the GitHub mirror, where `refs/changes/…` does not exist. `git switch --detach FETCH_HEAD` is what puts the checkout on the patch set afterwards.",
+            "One of two workflows: `typo3-core-patch-review` reviews it, and `typo3-core-patch-checkout` fetches it into a checkout and backs out again. Open the one this task is before reading the diff, and start it at `typo3_project_describe`. Where neither is open, this is the order:\n- Establish the patch before judging it: the changed paths, the branch it targets, the commit message and the issue it names. All four are above, so this costs no fetch — the target branch decides which conventions apply.\n- Three ways in, and a branch of your own naming is none of them: the branch the change targets, a worktree beside the checkout, or current code on `review/<change number>`. The third makes a commit that exists nowhere else, so say which of the two each result is about.\n- A patch that no longer applies is the finding. Resolving past it produces a patch nobody wrote.\n- Reading is the whole of the review: voting, commenting and uploading stay yours. An instruction to change the patch — fix it, amend it, answer the comments — ends the review and opens `typo3-core-patch-development`."
+        ]
     }
 
 gerrit: the open review backlog
@@ -2618,7 +2692,7 @@ Text:
 
     TYPO3 core review server: https://review.typo3.org
     Query: project:"Packages/TYPO3.CMS" status:open -is:wip delta:<=60 label:Code-Review>=1 -label:Code-Review<=-1 -label:Verified<=-1 is:mergeable
-    3 of 37 open core changes, oldest pushed first.
+    3 of 38 open core changes, oldest pushed first.
     This is a page and not the set, and limit stops at 25. What comes after it is reached by a narrower filter — a smaller maxSize, a branch, an earlier updatedBefore — rather than by a larger limit, because more of one order is more of the same end.
     Age is a candidate and never a finding. The oldest changes are regularly the largest and the ones that no longer merge, so maxSize and mergeable are what turn this order into a shortlist — and what a change is actually waiting on is read by passing its number back as change, which answers the votes with their voters and the comments with their threads.
     `typo3-core-patch-review` is the workflow a change picked off this page opens, and `typo3-core-patch-checkout` is what gets the patch set into a checkout. Open the one this task is before reading a diff.
@@ -2834,7 +2908,7 @@ Data:
         ],
         "backlog": {
             "order": "oldest",
-            "read": 37,
+            "read": 38,
             "complete": true
         },
         "releaseLines": {
@@ -2859,7 +2933,12 @@ Data:
             "readAt": "2026-08-05"
         },
         "indistinguishable": null,
-        "readAt": "2026-10-28T10:32:18Z",
+        "readAt": "2026-10-28T17:35:43Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "Age is a candidate and never a finding. The oldest changes are regularly the largest and the ones that no longer merge, so maxSize and mergeable are what turn this order into a shortlist — and what a change is actually waiting on is read by passing its number back as change, which answers the votes with their voters and the comments with their threads.",
+            "`typo3-core-patch-review` is the workflow a change picked off this page opens, and `typo3-core-patch-checkout` is what gets the patch set into a checkout. Open the one this task is before reading a diff.",
+            "Which of these a change belongs on is the author's claim rather than a consequence of the list — `typo3_commit_message_guide` with `workflow=\"core\"` is what reads a `Releases:` trailer against them.",
+            "The fetch goes to the review server rather than to `origin`: a core clone fetches from the GitHub mirror, where `refs/changes/…` does not exist. `git switch --detach FETCH_HEAD` is what puts the checkout on the patch set afterwards."
+        ]
     }

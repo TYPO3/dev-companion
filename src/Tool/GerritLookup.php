@@ -23,6 +23,23 @@ final class GerritLookup extends ReadOnlyTool
     /** The change comes from the review server at review.typo3.org. */
     protected const OPEN_WORLD = true;
 
+    private const AGE_IS_A_CANDIDATE = 'Age is a candidate and never a finding. The oldest changes are regularly the '
+        . 'largest and the ones that no longer merge, so maxSize and mergeable are what turn this order into a '
+        . 'shortlist — and what a change is actually waiting on is read by passing its number back as change, which '
+        . 'answers the votes with their voters and the comments with their threads.';
+
+    private const OPEN_THE_WORKFLOW = '`typo3-core-patch-review` is the workflow a change picked off this page opens, '
+        . 'and `typo3-core-patch-checkout` is what gets the patch set into a checkout. Open the one this task is before '
+        . 'reading a diff.';
+
+    private const NO_ISSUE = 'No Forge issue: the trailers of this change name none. `Resolves: #<number>` is required '
+        . 'before it can be pushed, and typo3_forge_lookup is what says whether an issue for this work already exists '
+        . '— by words, or by the area it would be filed under.';
+
+    private const RELEASE_TRAILER = 'Which of these a change belongs on is the author\'s claim rather than a '
+        . 'consequence of the list — `typo3_commit_message_guide` with `workflow="core"` is what reads a `Releases:` '
+        . 'trailer against them.';
+
     /**
      * Why no answer came, in the caller's terms rather than the transport's.
      */
@@ -576,12 +593,11 @@ final class GerritLookup extends ReadOnlyTool
             'lines' => ['', sprintf(
                 'The branches that take a patch today, whichever one the change above targets: %s. Read from %s on '
                     . '%s; a core clone carries no such list, since "git branch -r" reaches back to TYPO3_3-6 and '
-                    . 'says nothing about which of those is still maintained. Which of these a change belongs on is '
-                    . 'the author\'s claim rather than a consequence of the list — `typo3_commit_message_guide` with '
-                    . '`workflow="core"` is what reads a `Releases:` trailer against them.',
+                    . 'says nothing about which of those is still maintained. %s',
                 implode('; ', $said),
                 ReleaseLines::source(),
                 ReleaseLines::readAt(),
+                self::RELEASE_TRAILER,
             )],
             'record' => [
                 'branches' => $branches,
@@ -868,6 +884,7 @@ final class GerritLookup extends ReadOnlyTool
         ];
 
         $lines = ['TYPO3 core review server: ' . Gerrit::HOST, 'Query: ' . $answer['query']];
+        $owed = [];
         if ($answer['status'] === 'unavailable') {
             $lines[] = 'Could not answer: ' . $data['unavailable']['reason'];
         } elseif ($answer['status'] === 'empty') {
@@ -897,6 +914,7 @@ final class GerritLookup extends ReadOnlyTool
             $touched = false;
             if ($direction === 'backlog') {
                 $lines = [...$lines, ...self::page($data['backlog'], count($answer['changes']), $reviewableBy)];
+                $owed = [self::AGE_IS_A_CANDIDATE, self::OPEN_THE_WORKFLOW];
             }
             foreach ($answer['changes'] as $entry) {
                 $lines[] = '';
@@ -943,6 +961,9 @@ final class GerritLookup extends ReadOnlyTool
                 $stacked = $stacked || ($entry['chain'] ?? []) !== [];
                 $tracked = $tracked || ($entry['issues'] ?? []) !== [];
                 $touched = $touched || (self::carried($entry, $files)['files'] ?? []) !== [];
+                if (self::noIssueNamed($entry) !== [] && ($entry['issues'] ?? null) === []) {
+                    $owed[] = self::NO_ISSUE;
+                }
                 foreach ($entry['chain'] ?? [] as $related) {
                     $moved = $moved || self::behind($related);
                 }
@@ -962,16 +983,17 @@ final class GerritLookup extends ReadOnlyTool
             }
             if ($touched) {
                 $lines[] = '';
-                $lines[] = 'The paths above are what the current patch set touches, and they are the argument the '
-                    . 'work after this takes: `typo3_hint_lookup` for the conventions of each subsystem in the list, '
-                    . '`typo3_test_run_guide` for the suites that can fail on them. What is not here is the diff — '
-                    . 'the hunks are what a fetch is for, and a shortlist is triaged without fetching anything.';
+                $lines[] = $owed[] = 'The paths above are what the current patch set touches, and they are the '
+                    . 'argument the work after this takes: `typo3_hint_lookup` for the conventions of each subsystem '
+                    . 'in the list, `typo3_test_run_guide` for the suites that can fail on them. What is not here is '
+                    . 'the diff — the hunks are what a fetch is for, and a shortlist is triaged without fetching '
+                    . 'anything.';
             }
             if ($tracked) {
                 $lines[] = '';
-                $lines[] = 'The issues above are what the commit message names, and a status there is the issue\'s '
-                    . 'own rather than this change\'s. Pass one to `typo3_forge_lookup` as `issue` to read it whole, '
-                    . 'which is where a maintainer said why something was closed or reassigned.';
+                $lines[] = $owed[] = 'The issues above are what the commit message names, and a status there is the '
+                    . 'issue\'s own rather than this change\'s. Pass one to `typo3_forge_lookup` as `issue` to read '
+                    . 'it whole, which is where a maintainer said why something was closed or reassigned.';
             }
             if ($stacked) {
                 $lines = [...$lines, ...self::relations($moved)];
@@ -992,7 +1014,7 @@ final class GerritLookup extends ReadOnlyTool
             }
             if ($voted && $messages === 'none') {
                 $lines[] = '';
-                $lines[] = 'A vote a later patch set dropped is absent here rather than zero, and the copy '
+                $lines[] = $owed[] = 'A vote a later patch set dropped is absent here rather than zero, and the copy '
                     . 'condition that dropped it is written in the review log alone — ask again with '
                     . '`messages: "people"` where a label stands at nothing and you need to know whether it '
                     . 'ever stood elsewhere.';
@@ -1008,6 +1030,10 @@ final class GerritLookup extends ReadOnlyTool
             // What the trailer above is worth, before the lines it names meet
             // the ones that take a patch today.
             $lines = [...$lines, ...self::releaseClaim($answer['changes'])];
+            $owed = [...$owed, ...array_filter(self::releaseClaim($answer['changes']))];
+            if ($releaseLines['lines'] !== []) {
+                $owed[] = self::RELEASE_TRAILER;
+            }
             // Printed where a change came back, because that is where a branch
             // has its name, the placement `D-ANS-104` asks for. A search that
             // matched nothing named none, and the data half carries the list
@@ -1019,7 +1045,7 @@ final class GerritLookup extends ReadOnlyTool
             // there is one to make.
             if ($named) {
                 $lines[] = '';
-                $lines[] = 'Hold the commit against `git rev-parse HEAD` in the checkout. Where the two '
+                $lines[] = $owed[] = 'Hold the commit against `git rev-parse HEAD` in the checkout. Where the two '
                     . 'differ, the checkout is not the revision under review, and a review says which of '
                     . 'the two it read.';
             }
@@ -1028,7 +1054,7 @@ final class GerritLookup extends ReadOnlyTool
             // `D-SKL-021` measured the fetch come back empty over the mirror.
             if ($fetchable) {
                 $lines[] = '';
-                $lines[] = 'The fetch goes to the review server rather than to `origin`: a core clone fetches '
+                $lines[] = $owed[] = 'The fetch goes to the review server rather than to `origin`: a core clone fetches '
                     . 'from the GitHub mirror, where `refs/changes/…` does not exist. `git switch --detach '
                     . 'FETCH_HEAD` is what puts the checkout on the patch set afterwards.';
             }
@@ -1056,9 +1082,10 @@ final class GerritLookup extends ReadOnlyTool
         if ($workflow !== null) {
             $lines[] = '';
             $lines[] = $workflow;
+            $owed[] = substr($workflow, strpos($workflow, "\n") + 1);
         }
 
-        return ToolResult::create(implode("\n", $lines), $data);
+        return ToolResult::create(implode("\n", $lines), $data, array_values(array_unique($owed)));
     }
 
     /**
@@ -1154,13 +1181,8 @@ final class GerritLookup extends ReadOnlyTool
                 $reviewableBy,
             );
         }
-        $lines[] = 'Age is a candidate and never a finding. The oldest changes are regularly the largest and the ones '
-            . 'that no longer merge, so maxSize and mergeable are what turn this order into a shortlist — and what a '
-            . 'change is actually waiting on is read by passing its number back as change, which answers the votes '
-            . 'with their voters and the comments with their threads.';
-        $lines[] = '`typo3-core-patch-review` is the workflow a change picked off this page opens, and '
-            . '`typo3-core-patch-checkout` is what gets the patch set into a checkout. Open the one this task is '
-            . 'before reading a diff.';
+        $lines[] = self::AGE_IS_A_CANDIDATE;
+        $lines[] = self::OPEN_THE_WORKFLOW;
 
         return $lines;
     }
@@ -1438,9 +1460,7 @@ final class GerritLookup extends ReadOnlyTool
             return [];
         }
 
-        return ['', 'No Forge issue: the trailers of this change name none. `Resolves: #<number>` is required '
-            . 'before it can be pushed, and typo3_forge_lookup is what says whether an issue for this work '
-            . 'already exists — by words, or by the area it would be filed under.'];
+        return ['', self::NO_ISSUE];
     }
 
     /**

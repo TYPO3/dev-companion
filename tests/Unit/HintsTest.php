@@ -953,6 +953,16 @@ final class HintsTest extends TestCase
         self::assertNotContains('Fluid', array_column($php['matchedHints'], 'category'));
     }
 
+    #[Decision('D-KNW-173')]
+    #[Test]
+    public function anInlineConditionInAnAttributeIsToldWhereItsEscapingHappens(): void
+    {
+        $reached = Hints::find([], 'inline f:if in an attribute escaped', 6);
+
+        self::assertSame('fluid-conditions-and-arrays', $reached['matchedHints'][0]['id']);
+        self::assertStringContainsString('An inline f:if escapes the variables in its then and else strings once', self::statementsOf('fluid-conditions-and-arrays'));
+    }
+
     #[Decision('D-KNW-043')]
     #[Test]
     public function aFluidResourceUriTaskIsAnsweredWithWhoAppliesCacheBusting(): void

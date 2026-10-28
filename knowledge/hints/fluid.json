@@ -124,6 +124,8 @@
       "f:else",
       "escapeOutput",
       "escaping",
+      "inline f:if",
+      "escaped attribute",
       "array literal",
       "empty array",
       "additionalParams",
@@ -137,6 +139,7 @@
     ],
     "hints": [
       "Fluid escapes output by default. Do not work around it in the template; if a ViewHelper has to return markup, that decision belongs in the ViewHelper via escapeOutput.",
+      "An inline f:if escapes the variables in its then and else strings once, as a bare {variable} would, and passes the literal text around them through as written. So title=\"{f:if(condition: active, then: '{title} more')}\" turns an & in the title into &amp;, which is the correct attribute value and no double escape. A tag-based ViewHelper and f:link.typolink escape such an attribute once too, and a block <f:if> in the attribute renders the same string. A literal in then is the part that stays raw: a double quote in it ends a plain HTML attribute.",
       "A comparison inside a condition attribute is written with single quotes: condition=\"{cell} != ''\". With double quotes, condition=\"{cell}!=\"\", the attribute value ends at the second double quote, what follows matches no ViewHelper tag, and the template stops at the closing tag with \"You closed a templating tag which you never opened!\", exception 1224485838. It is reported at the line of the </f:if> rather than at the condition's, so the line number in the message points away from the defect. The same holds for any attribute value carrying a string literal.",
       "A variable compared in a condition is written unquoted — condition=\"{demand.orderField} === {field}\" — and quoting it makes it a literal that never matches. BooleanNode rewrites every non-text part of the expression as a {node<n>} placeholder and hands the values over beside it. BooleanParser resolves such a term only where it begins with a brace, so a quoted one is compared as the placeholder text itself. Quotes around a fixed string are right: condition=\"{demand.orderField} === 'title'\" compares against title.",
       "A bare condition=\"{value}\" is false for every spelling of zero, not only for empty and null: BooleanNode::convertToBoolean() sends anything is_numeric() accepts through (bool)(float), so 0, \"0\", a string of two zeros and a zero written with a decimal point all take the else branch. PHP's own casting does not — it reads the last two as true — so a value an editor legitimately typed disappears into whatever the else branch is, usually a placeholder. condition=\"{cell} != ''\" is what tells an empty value from a zero.",

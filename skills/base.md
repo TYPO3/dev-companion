@@ -113,9 +113,9 @@ ones that matter too.
    TypoScript setting. The manual matches page titles, section paths and what
    each manual declares by name, never the text of a page. Declared is a
    property, a class or method the manual documents, a console command. You
-   reach one by its own name where the query writes that name the way code
-   does. You also reach it where the query is nothing but the name. A PHP
-   identifier the manual does not declare has no page named after it.
+   reach one by its own name where the query writes that name the way code does.
+   You also reach it where the query is nothing but the name. A PHP identifier
+   the manual does not declare has no page named after it.
 
    An identifier goes to `typo3_changelog_lookup` under its own name. That
    reaches the entries that write it, however the core titled the change. Then
@@ -267,6 +267,10 @@ Three things carry one. A file you read, at its path and its line. A command you
 ran, with what it printed. A mechanism you traced into an installed package. Say
 which of the three it is. If you leave it unsaid, a finding from a CI file
 weighs as much as one with a verified line.
+
+Read several files with one call per file, and send the calls together. One
+command that prints them all numbers its own output. A line cited from that
+output is wrong in every file after the first.
 
 Where one of the project's own commands would settle it, run it.
 `typo3_project_describe` marks each command it lists **check**, **change** or

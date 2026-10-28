@@ -84,9 +84,9 @@ On 2026-10-28 a core review of change 97177
 ([`feedback/2026-10-28-031023`](../../feedback/archive/2026-10-28-031023-the-review-report-keeps-the-headings-but-not.md))
 wrote paragraphs under the headings. So the fence, the named rules, one value
 per head row and the audit's `Key`, `Checkout` and package rows followed. The
-fourth runs, against `49b0adbc`, each cited a rule known by its id alone: a hint
-id the brief named without its text, a document "named, not read" and one "via
-the skill". So the gate's Rule clause says a name is no source and the session
-fetches it. No form for an unread rule exists, because a finding would rest on
-it. `REVIEW-02` still wrote a backport paragraph after the fence, which the gate
-rules out. The next such breach makes the filled example the step to weigh.
+fourth runs, against `49b0adbc`, each cited a rule known by its id alone, so the
+Rule clause says a name is no source. `REVIEW-02` still wrote a paragraph after
+the fence, and the next such breach makes the filled example the step to weigh.
+The fifth `REVIEW-01` and `REVIEW-03` runs cited line numbers out of one output
+of several files. So a sixth rule ties a `<path>:<line>` to a read of that one
+file, and `skills/base.md` says to read each file with a call of its own.

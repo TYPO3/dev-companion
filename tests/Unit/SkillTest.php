@@ -376,6 +376,7 @@ final class SkillTest extends TestCase
             'A file you read, at its path and its line. A command you ran, with what it printed. A mechanism you traced into an installed package',
             self::flat($base),
         );
+        self::assertStringContainsString('Read several files with one call per file, and send the calls together.', self::flat($base));
         // And what it owes to the commands the repository already declares. The
         // same three runs had the order to change no files and read that as
         // permission to run nothing. Two of the checks on offer change nothing
@@ -1021,6 +1022,9 @@ final class SkillTest extends TestCase
                 'A **Rule** line ends on the call that returned the rule, as the trace holds it',
                 // Each fourth run of 2026-10-28 cited an id it knew by name alone.
                 'An id the brief or the skill names without its text is no source yet.',
+                // The fifth REVIEW-01 run cited `.mage.yml:516` out of one dump
+                // of thirteen files, in a file of 58 lines.
+                'A `<path>:<line>` comes from a read of that one file.',
                 'The answer opens with the fence, and nothing follows **Not reached** inside it.',
                 'After the fence stands at most what happens next',
             ] as $rule) {

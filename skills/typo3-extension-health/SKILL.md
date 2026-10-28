@@ -23,13 +23,15 @@ gate, whatever the request asked for.
    of it.
 2. Read [references/checklist.md](references/checklist.md) for the audit
    surfaces, the finding gate, and the severity rubric.
-3. Write the surface list down before you open a single file. Write it into your
-   reply, so the reader sees what you will cover before you read. Take the
-   checklist's surfaces, narrowed to the ones this kind of checkout can have.
-   `typo3_task_guide` with `changeType="audit"` returns them as `surfaces`, and
-   that answer is the list to write. It is the floor of the work list. A
-   subsystem the checkout ships that no entry names gets a row of its own. The
-   coverage the report closes on is this same list with every entry answered.
+3. Write the surface list down before you open a single file. Put it into your
+   client's task or todo list, one item per surface, so the reader sees what you
+   will cover before you read. A client without such a tool gets it in your
+   reply. Take the checklist's surfaces, narrowed to the ones this kind of
+   checkout can have. `typo3_task_guide` with `changeType="audit"` returns them
+   as `surfaces`, and that answer is the list to write. It is the floor of the
+   work list. A subsystem the checkout ships that no entry names gets a row of
+   its own. The coverage the report closes on is this same list with every entry
+   answered.
 4. Where the request names what it is about (security only, configuration only,
    one subsystem), read the surfaces it names. Mark the rest **not requested**
    on that same list. The request narrows the reading, never the list. An entry

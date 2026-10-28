@@ -154,7 +154,7 @@ Answers with
         scope: string
         # The tool that takes the id above and returns the page whole.
         tool: string
-    # The surfaces a review of a project or an extension writes into its reply
+    # The surfaces a review of a project or an extension puts into its task list
     # before the first read, and closes on with each marked assessed, unassessed,
     # not requested or not applicable. Empty for every other brief, and for a review
     # of the core, whose skill carries surfaces of its own.

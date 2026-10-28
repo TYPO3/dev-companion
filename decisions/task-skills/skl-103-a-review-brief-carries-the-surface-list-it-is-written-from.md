@@ -68,6 +68,8 @@ its text and as `surfacesOwed` beside the list. Step 3 of
 - That the hint ids per surface are the right first question for a surface with
   no files. They are this server's routing, read off the hint titles, and no run
   has asked them yet.
+- That a session makes the task-list call it is told to make, as it made the
+  hint lookups.
 
 ## Wrong if
 
@@ -81,6 +83,11 @@ its text and as `surfacesOwed` beside the list. Step 3 of
   then a guess, and the field goes back to names alone.
 - A run again leaves a subsystem the checkout ships unread because no entry
   names it. The sentence about the floor then did not reach the reading.
+- The next run still opens no task list before the first read. Then a session
+  follows a call to this server alone, and the list has to come back from one.
+- A judge reads a task list as hidden from the reader and marks the surface
+  criterion missed on it. Then the criterion wants text, and the question goes
+  to the maintainer.
 
 ## Since then
 
@@ -97,3 +104,15 @@ The second `REVIEW-01` run got `surfaces` and never the sentence. So that run
 tested the list without the instruction, and the first **Wrong if** has not
 fired yet. `surfacesOwed` now carries the sentence in the data, as `R-ANS-002`
 asks.
+
+## Since then
+
+The first **Wrong if** fired on the third `REVIEW-01` and `REVIEW-02` runs of
+2026-10-28. Both got `surfacesOwed` and wrote no list before the first read.
+Both asked `typo3_hint_lookup` per surface, the half that names a call. A gate
+that refuses the first read is out of reach, because the read is the client's
+own tool. So the list became a call. `SURFACES_OWED` and step 3 now ask for it
+in the client's task or todo list, one item per surface, and in the reply only
+where the client has no such tool. The criterion asks that the review
+**establishes** its surfaces before the read, and a task list in the trace does
+that. **Assumed** and **Wrong if** carry the task list's own bullets.

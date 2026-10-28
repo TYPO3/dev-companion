@@ -4631,9 +4631,11 @@ final class SkillTest extends TestCase
 
         // A list the session keeps to itself is one nobody can hold it to.
         // The REVIEW-01 run of 2026-10-11 named its toolchain, read the files,
-        // and showed its surfaces only in the closing table.
+        // and showed its surfaces only in the closing table. A task list is a
+        // call, and a call is the half of an instruction a session follows
+        // (`D-SKL-103`).
         self::assertStringContainsString(
-            'Write it into your reply, so the reader sees what you will cover before you read',
+            'Put it into your client\'s task or todo list, one item per surface, so the reader sees what you will cover before you read',
             self::flat($skill),
         );
 
@@ -4736,7 +4738,7 @@ final class SkillTest extends TestCase
 
         // What narrows the list stays the kind of checkout. The entries the
         // request left out stay on it under a state of their own.
-        self::assertStringContainsString('narrowed to the ones this kind of checkout can have', $skill);
+        self::assertStringContainsString('narrowed to the ones this kind of checkout can have', self::flat($skill));
         self::assertStringContainsString('Mark the rest **not', $skill);
         self::assertStringContainsString(
             'A request that names no surface is not a focused one',

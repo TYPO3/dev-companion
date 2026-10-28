@@ -32,18 +32,17 @@ severity headings and one field of a finding are this skill's own.
 ```markdown
 # Audit: <package name>
 
-| Field    | Value                                                                 |
-|----------|-----------------------------------------------------------------------|
-| Package  | <composer name>                                                       |
-| Key      | <extension key>, or `none` for a project                              |
-| Kind     | `extension`, `sitepackage` or `project`                               |
-| Checkout | `standalone`, `inside an installation` or `the installation`          |
-| Commit   | <hash of the checkout you read>                                       |
-| TYPO3    | <the TYPO3 constraint the manifest declares>                          |
-| PHP      | <the PHP constraint the manifest declares>                            |
-| Ran on   | <the installation's TYPO3 version>, or `no installation`              |
-| Request  | <the surfaces the request named>, or `all`                            |
-| Verdict  | <the highest heading below with a finding>, or `Clean`                |
+| Field    | Value                                                        |
+|----------|--------------------------------------------------------------|
+| Checkout | `standalone`, `inside an installation` or `the installation` |
+| Commit   | <hash of the checkout you read>                              |
+| Ran on   | <the installation's TYPO3 version>, or `no installation`     |
+| Request  | <the surfaces the request named>, or `all`                   |
+| Verdict  | <the highest heading below with a finding>, or `Clean`       |
+
+| Package         | Key                                      | Kind                                    | TYPO3                                       | PHP                                       |
+|-----------------|------------------------------------------|-----------------------------------------|---------------------------------------------|-------------------------------------------|
+| <composer name> | <extension key>, or `none` for a project | `extension`, `sitepackage` or `project` | <the TYPO3 constraint its manifest declares> | <the PHP constraint its manifest declares> |
 
 ## Critical
 
@@ -93,6 +92,10 @@ severity headings and one field of a finding are this skill's own.
 
 - Not reached: <step> — <what stood in for it>
 ```
+
+The package table takes one row per package you audit. A project takes its root
+package first, then each extension of its own that `typo3_project_describe`
+lists. A cell holds one value, as a head field does.
 
 Number the findings across the severity headings, so `3` names one finding in
 the whole report. A finding the checklist's finding gate leaves unverified

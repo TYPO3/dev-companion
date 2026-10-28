@@ -4,7 +4,8 @@ title: The review skills report in one skeleton
 date: 2026-10-26
 status: open
 coveredBy:
-  - SkillTest::theAuditHeadNamesTheKeyAndWhereTheCheckoutStands
+  - SkillTest::theAuditGivesEachPackageARowOfItsOwn
+  - SkillTest::theAuditHeadNamesWhereTheCheckoutStands
   - SkillTest::theReviewSkillsReportInOneSkeleton
 ---
 
@@ -88,3 +89,5 @@ wrote before it which checks ran and that nothing changed, because the audit's
 *Report* section named no place for that. That section now names
 **Verification** and says that the answer opens with the fence. The filled
 example stays unused until a `REVIEW-02` run writes a summary before it again.
+The third `REVIEW-01` run put three packages into one head, so the audit takes
+a package table with one row per package.

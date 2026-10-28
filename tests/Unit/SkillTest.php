@@ -1070,20 +1070,34 @@ final class SkillTest extends TestCase
     }
 
     /**
-     * `REVIEW-02` asks for the extension key and whether the checkout stands
-     * alone. The run that followed the head named neither, because no field
-     * asked for them.
+     * `REVIEW-02` asks whether the checkout stands alone. The run that
+     * followed the head did not say, because no field asked for it.
      */
     #[Decision('D-SKL-100')]
     #[Test]
-    public function theAuditHeadNamesTheKeyAndWhereTheCheckoutStands(): void
+    public function theAuditHeadNamesWhereTheCheckoutStands(): void
     {
         $report = (string) file_get_contents(Paths::root() . '/skills/typo3-extension-health/references/report.md');
         preg_match_all('/^\| (\w+) +\|/m', $report, $head);
 
-        foreach (['Package', 'Key', 'Kind', 'Checkout', 'TYPO3', 'PHP'] as $field) {
-            self::assertContains($field, $head[1], 'the audit head asks for no ' . $field);
+        self::assertContains('Checkout', $head[1], 'the audit head asks for no Checkout');
+    }
+
+    /**
+     * `REVIEW-01` audits a project with two extensions of its own, and a head
+     * that asked for one package got three values in each field.
+     */
+    #[Decision('D-SKL-100')]
+    #[Test]
+    public function theAuditGivesEachPackageARowOfItsOwn(): void
+    {
+        $report = (string) file_get_contents(Paths::root() . '/skills/typo3-extension-health/references/report.md');
+        if (preg_match('/^\| Package .*$/m', $report, $row) !== 1) {
+            self::fail('the audit carries no package table');
         }
+
+        self::assertSame(['Package', 'Key', 'Kind', 'TYPO3', 'PHP'], array_map(trim(...), explode('|', trim($row[0], '| '))));
+        self::assertStringContainsString('one row per package you audit', self::flat($report));
     }
 
     /**

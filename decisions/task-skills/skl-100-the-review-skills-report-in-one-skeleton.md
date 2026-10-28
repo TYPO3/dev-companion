@@ -82,12 +82,11 @@ and the fields of a finding.**
 
 On 2026-10-28 a core review of change 97177
 ([`feedback/2026-10-28-031023`](../../feedback/archive/2026-10-28-031023-the-review-report-keeps-the-headings-but-not.md))
-wrote paragraphs under the headings, and the forward runs broke the form where
-the gate had no rule. So the fence, five named rules, one value per head row and
-the audit's `Key` and `Checkout` rows followed. The third runs, against
-`3482d798`, opened with the fence in `REVIEW-01` and `REVIEW-03`. `REVIEW-02`
-wrote before it which checks ran, so the audit's *Report* section now names
-**Verification** for that. It also called a standalone extension
-`the installation`, so each `Checkout` value now has a definition. `REVIEW-01`
-put three packages into one head, so the audit takes one row per package. The
-filled example stays unused until a summary before the fence returns.
+wrote paragraphs under the headings. So the fence, the named rules, one value
+per head row and the audit's `Key`, `Checkout` and package rows followed. The
+fourth runs, against `49b0adbc`, each cited a rule known by its id alone: a hint
+id the brief named without its text, a document "named, not read" and one "via
+the skill". So the gate's Rule clause says a name is no source and the session
+fetches it. No form for an unread rule exists, because a finding would rest on
+it. `REVIEW-02` still wrote a backport paragraph after the fence, which the gate
+rules out. The next such breach makes the filled example the step to weigh.

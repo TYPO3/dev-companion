@@ -20,6 +20,8 @@ audit. The form is five rules:
 - A **Rule** line ends on the call that returned the rule, as the trace holds
   it: the tool and the id or query it took. A rule the brief carried names
   `typo3_task_guide`, and a rule you read in the code names its `<path>:<line>`.
+  An id the brief or the skill names without its text is no source yet. Fetch
+  it with `typo3_hint_lookup` or `typo3_rule_lookup` and cite that call.
 
 The answer opens with the fence, and nothing follows **Not reached** inside it.
 After the fence stands at most what happens next: the finding numbers in the

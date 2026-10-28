@@ -1019,6 +1019,8 @@ final class SkillTest extends TestCase
                 'An entry under **Checked and correct**, **Open** and **Dropped** is one line: the claim, an em dash and its source.',
                 'A **Status** cell holds one of its words alone.',
                 'A **Rule** line ends on the call that returned the rule, as the trace holds it',
+                // Each fourth run of 2026-10-28 cited an id it knew by name alone.
+                'An id the brief or the skill names without its text is no source yet.',
                 'The answer opens with the fence, and nothing follows **Not reached** inside it.',
                 'After the fence stands at most what happens next',
             ] as $rule) {

@@ -33,6 +33,13 @@ The changed paths are the argument, not the subject. Pass them to
 `typo3_hint_lookup` for the conventions of the subsystem the patch is in, one
 call per subsystem. Do that before you form a view of whether the code is right.
 
+`typo3_task_guide` names the hints its brief left out, in `omittedHints` and in
+the line above the brief. **An omitted id that names a subsystem the diff
+changes is a call you owe before any finding about that subsystem.** Fetch it
+with `typo3_hint_lookup` by id. `datahandler-testing` on a patch that adds
+DataHandler tests is that case. The hints the brief carried do not stand in for
+it. One review said they did, and stated the subsystem's TCA defaults wrongly.
+
 **Where the review needs the patch on disk, invoke `typo3-core-patch-checkout`
 for that one change. Say in the report which ref it fetched.** A read of the
 hunks needs it, because the answer above carries the paths and not the diff. So

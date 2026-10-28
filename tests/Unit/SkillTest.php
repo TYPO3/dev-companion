@@ -1831,6 +1831,17 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('no worktree stood and nobody was there to ask; skipped to finish faster>', $report);
     }
 
+    #[Decision('D-SKL-109')]
+    #[Test]
+    public function aSpeedSkipRunsTheTestABlockingFindingRestsOn(): void
+    {
+        $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
+        ));
+        self::assertStringContainsString('**A skip for speed never takes the test a High or blocking finding rests on.**', $skill);
+        self::assertStringContainsString('in the targeted form `typo3_test_run_guide` returns for its suite', $skill);
+    }
+
     #[Decision('D-SKL-071')]
     #[Test]
     public function aProbeIsPutBackToTheStateItFound(): void

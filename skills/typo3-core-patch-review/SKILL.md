@@ -225,6 +225,14 @@ fourth reason, and the line names it so.
 **Where a worktree holds the patch, the third reason is false.** A suite left
 unrun there takes the fourth.
 
+**A skip for speed never takes the test a High or blocking finding rests on.**
+Run that test alone, in the targeted form `typo3_test_run_guide` returns for its
+suite. Give it the database the failure was seen on, in place of the form's
+`-d`. Its `Ran:` line names the test, and the suite's `Not run:` line keeps the
+rest. One review skipped `functional` whole, and its blocker rested on a CI log
+alone. The review before it had reproduced that failure with one test on
+MariaDB.
+
 **Run the suites in a `git worktree` on the patch set rather than in the main
 checkout.** The worktree leaves the reader's branch and uncommitted work alone.
 So a review that must not touch the checkout has a reason for a worktree, not

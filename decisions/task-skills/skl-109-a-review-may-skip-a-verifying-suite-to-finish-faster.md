@@ -7,6 +7,7 @@ coveredBy:
   - HintsTest::aSuiteThatAsksGitForItsFilesVerifiesNothingFromAWorktree
   - SkillTest::aReviewWithNobodyToAskCreatesNoWorktree
   - SkillTest::aReviewsNotRunLineNamesOneOfFourReasons
+  - SkillTest::aSpeedSkipRunsTheTestABlockingFindingRestsOn
 ---
 
 # D-SKL-109 — A review may skip a verifying suite to finish faster
@@ -25,6 +26,11 @@ reasons, and speed is the fourth. Its `Not run:` line names the reason.**
   That reason is for a review where no worktree holds the patch, and one stood.
 - The maintainer answered on 2026-10-28: a review may skip a suite to finish
   faster, and it notes each skip.
+- The fifth `REVIEW-03` run of 2026-10-28 skipped `functional` for speed, and
+  with it the one test its blocker rests on. The blocker rested on the CI log
+  alone. The fourth run had reproduced that failure with the test on MariaDB.
+- The maintainer answered on 2026-10-29: whole suites may go for speed, and the
+  narrowest test a High or blocking finding rests on runs anyway.
 
 ## Decided
 
@@ -38,6 +44,9 @@ reasons, and speed is the fourth. Its `Not run:` line names the reason.**
   without it.
 - This entry revokes `D-SKL-104` and `D-SKL-106` and is the `revokedBy` of both.
   Their statements forbade the skip the maintainer allows.
+- A skip for speed never takes the test a High or blocking finding rests on. The
+  review runs that test alone, in the targeted form `typo3_test_run_guide`
+  returns for its suite, on the database the failure was seen on.
 - `filesFromGit` stays as `D-SKL-106` decided it. From a worktree the guide
   marks `cglGit` and `cglHeaderGit` `verifies: false`.
 
@@ -52,5 +61,8 @@ reasons, and speed is the fourth. Its `Not run:` line names the reason.**
   reason, and the list of names is the next read.
 - A review in a worktree still says that nobody was there to ask. Then the
   sentence about the third reason did not arrive.
+- A review skips for speed the suite of a test a High or blocking finding rests
+  on, and runs no test of it. Then the exception needs a place in the report
+  skeleton, beside the finding.
 - A maintainer reading a report cannot tell a speed skip from a finished
   verification. Then the label needs a place above the `Ran:` line.

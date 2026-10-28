@@ -483,6 +483,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-175`][D-KNW-175] — A statement names the condition a reader can check · 2026-10-28
 - [`D-KNW-176`][D-KNW-176] — A plugin template override is a subject of its own · 2026-10-28
 - [`D-KNW-177`][D-KNW-177] — A form rejection without a message is answered by where the message comes from · 2026-10-28
+- [`D-KNW-178`][D-KNW-178] — A content element showitem is told which tabs the core adds · 2026-10-28
 - [`D-KNW-172`][D-KNW-172] — The sitepackage hints answer a project without the core theme · 2026-10-26
 - [`D-KNW-171`][D-KNW-171] — A tool outside the core is read at a release and dated here · 2026-10-25
 - [`D-KNW-170`][D-KNW-170] — A reply to a review thread is a section of the Gerrit workflow · 2026-10-22
@@ -651,6 +652,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-KNW-175]: knowledge/knw-175-a-statement-names-the-condition-a-reader-can-check.md
 [D-KNW-176]: knowledge/knw-176-a-plugin-template-override-is-a-subject-of-its-own.md
 [D-KNW-177]: knowledge/knw-177-a-form-rejection-without-a-message-is-answered-by-where-the-message-comes-from.md
+[D-KNW-178]: knowledge/knw-178-a-content-element-showitem-is-told-which-tabs-the-core-adds.md
 [D-KNW-172]: knowledge/knw-172-the-sitepackage-hints-answer-a-project-without-the-core-theme.md
 [D-KNW-171]: knowledge/knw-171-a-tool-outside-the-core-is-read-at-a-release-and-dated-here.md
 [D-KNW-170]: knowledge/knw-170-a-reply-to-a-review-thread-is-a-section-of-the-gerrit-workflow.md

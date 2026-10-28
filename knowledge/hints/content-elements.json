@@ -27,6 +27,10 @@
         "since": 13
       },
       {
+        "text": "That showitem list names the element's own fields and stops there. When the TCA is built, TcaPreparation::addSystemFieldsToShowitemTypes() rebuilds the list of every tt_content type: the general palette first, the type's own items after it, then a language tab, an access tab with the hidden and access palettes, a notes tab, and the extended tab last, which addRecordType() appends where the list lacks it. It first strips those system fields and palettes from the type's list, and the general, language, access and notes tabs where they carry the core's own label. A tab under a label of its own stays: the form drops it where nothing else is left in it, and shows it beside the core's tab where something is. The core's text type is the shape to copy: the headers palette, bodytext, an appearance tab with the frames and appearanceLinks palettes, a categories tab, and the extended tab.",
+        "since": 13
+      },
+      {
         "text": "The predecessor is addPlugin() plus addToAllTCAtypes(), which registers the item and then patches the field list of every type. It is what an older extension looks like; a new record type is better added in one call.",
         "until": 12
       },

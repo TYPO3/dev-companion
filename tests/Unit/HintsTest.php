@@ -3500,6 +3500,30 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * A session wrote a language and an access tab into a content element's
+     * showitem and got each twice (`D-KNW-178`).
+     */
+    #[Decision('D-KNW-178')]
+    #[Test]
+    public function aContentElementShowitemIsToldWhichTabsTheCoreAdds(): void
+    {
+        foreach ([13, 14, 15] as $major) {
+            $text = implode("\n", array_column(Hints::byId('content-elements', $major)['hints'], 'text'));
+
+            self::assertStringContainsString('names the element\'s own fields and stops there', $text);
+            self::assertStringContainsString('TcaPreparation::addSystemFieldsToShowitemTypes()', $text);
+            self::assertStringContainsString('where they carry the core\'s own label', $text);
+        }
+
+        // The rebuild arrived with addRecordType(), so the predecessor's line
+        // has no system tabs to warn about.
+        self::assertStringNotContainsString(
+            'addSystemFieldsToShowitemTypes',
+            implode("\n", array_column(Hints::byId('content-elements', 12)['hints'], 'text')),
+        );
+    }
+
+    /**
      * The environment answering before TYPO3 does.
      *
      * A correct static route for robots.txt answered HTTP 404 from DDEV's own

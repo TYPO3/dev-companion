@@ -1124,6 +1124,23 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('user-defined-locale', self::statementsOf('site-label-language'));
     }
 
+    #[Decision('D-KNW-180')]
+    #[Test]
+    public function indexedSearchNamesThePageCountGuardItsPaginationPartialLacks(): void
+    {
+        $task = 'the indexed_search results page shows a page browser for a single page of results';
+        self::assertSame('indexed-search-output', Hints::find([], $task, 6)['matchedHints'][0]['id']);
+
+        $on = static fn(int $major): string => implode(
+            "\n",
+            array_column((array) Hints::byId('indexed-search-output', $major)['hints'], 'text'),
+        );
+        self::assertStringContainsString('{pagination.lastPageNumber} > 1', $on(14));
+        self::assertStringContainsString('renders the Pagination partial twice', $on(13));
+        self::assertStringContainsString('returns nothing where the results fit one page', $on(12));
+        self::assertStringContainsString('tx-indexedsearch-percent', $on(12));
+    }
+
     /**
      * The chain is the v14 half of that answer. Fluid 2.15.0 and 4.6.1, read in
      * `.environments/`, try the format and then the bare name and nothing else.

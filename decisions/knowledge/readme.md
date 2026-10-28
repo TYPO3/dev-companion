@@ -11,6 +11,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-177`][D-KNW-177] — A form rejection without a message is answered by where the message comes from · 2026-10-28
 - [`D-KNW-178`][D-KNW-178] — A content element showitem is told which tabs the core adds · 2026-10-28
 - [`D-KNW-179`][D-KNW-179] — A language the core does not list is a subject of its own · 2026-10-28
+- [`D-KNW-180`][D-KNW-180] — indexed_search output on a small site is a subject of its own · 2026-10-28
 - [`D-KNW-172`][D-KNW-172] — The sitepackage hints answer a project without the core theme · 2026-10-26
 - [`D-KNW-171`][D-KNW-171] — A tool outside the core is read at a release and dated here · 2026-10-25
 - [`D-KNW-170`][D-KNW-170] — A reply to a review thread is a section of the Gerrit workflow · 2026-10-22
@@ -181,6 +182,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 [D-KNW-177]: knw-177-a-form-rejection-without-a-message-is-answered-by-where-the-message-comes-from.md
 [D-KNW-178]: knw-178-a-content-element-showitem-is-told-which-tabs-the-core-adds.md
 [D-KNW-179]: knw-179-a-language-the-core-does-not-list-is-a-subject-of-its-own.md
+[D-KNW-180]: knw-180-indexed-search-output-is-a-subject-of-its-own.md
 [D-KNW-172]: knw-172-the-sitepackage-hints-answer-a-project-without-the-core-theme.md
 [D-KNW-171]: knw-171-a-tool-outside-the-core-is-read-at-a-release-and-dated-here.md
 [D-KNW-170]: knw-170-a-reply-to-a-review-thread-is-a-section-of-the-gerrit-workflow.md

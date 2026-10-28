@@ -131,6 +131,43 @@
     ]
   },
   {
+    "id": "indexed-search-output",
+    "title": "The indexed_search Page Browser, Relevance Percentage and Advanced Search Link",
+    "domains": [
+      "fluid",
+      "typoscript"
+    ],
+    "appliesTo": [
+      "indexed_search",
+      "tx_indexedsearch",
+      "search results page",
+      "page browser",
+      "Pagination partial",
+      "single page of results",
+      "lastPageNumber",
+      "relevance percentage",
+      "tx-indexedsearch-percent",
+      "advanced search link"
+    ],
+    "hints": [
+      {
+        "text": "The Pagination partial checks only that a pagination object exists, and the controller builds one for every result set. So results that fit one page still get a page browser: one link labelled \"Page 1\" whose href is \"#\". The guard that reads the page count is {pagination.lastPageNumber} > 1.",
+        "since": 13
+      },
+      {
+        "text": "The is:pageBrowsing ViewHelper writes the page browser and returns nothing where the results fit one page. A template that keeps that ViewHelper needs no guard of its own.",
+        "until": 12
+      },
+      {
+        "text": "Templates/Search/Search renders the Pagination partial twice: once above the results beside the count line, and once alone below them. A copy of the Pagination partial with the guard corrects both places. Only a copy of the Search template removes one of the two.",
+        "since": 13
+      },
+      "Partials/Searchresult writes a span with the class tx-indexedsearch-percent beside every title, and no setting turns it off. settings.defaultOptions.sortOrder decides what the span shows, a percentage under the default rank_flag.",
+      "settings.displayAdvancedSearchLink = 0 drops the advanced search link without a template; plugin-template-override says why a setting comes before a copy.",
+      "A stylesheet reaches what carries a class: display: none on .tx-indexedsearch-percent hides the span, and the markup stays in the response. A stylesheet cannot read the number of pages, so the page browser for a single page needs the copied partial."
+    ]
+  },
+  {
     "id": "fluid-layouts-sections",
     "title": "What a Fluid Layout Renders, and What Is Never Executed",
     "domains": [

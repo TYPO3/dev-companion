@@ -29,8 +29,6 @@ typo3_hint_lookup task='make the pages of a sitepackage site search engine frien
 
 ## Suggestion
 
-Lift the page sitemap fact out of record-xml-sitemap into a subject of its own, and leave a pointer behind. A caller who wants a sitemap of pages does not search for a record table.
-
 Add an SEO pass to the sitepackage skill, beside the step that proves a page renders. It reads the rendered head and the heading order: one h1 per page, a description that is not the abstract column, the canonical, the hreflang set, and whether /sitemap.xml and /robots.txt answer. Each of those is read off a response rather than off a file.
 
 Say that a sitepackage on a multilingual site owes hreflang and a description per language. Nothing in the corpus names either today.

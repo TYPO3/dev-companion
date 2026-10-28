@@ -3342,15 +3342,12 @@ final class HintsTest extends TestCase
             self::assertStringContainsString('rather than replacing it', $text);
         }
 
-        // What brings the sitemap at all, and the routing that arrived with the
-        // set a major later.
-        $thirteen = implode("\n", array_column(Hints::byId('record-xml-sitemap', 13)['hints'], 'text'));
-        $fourteen = implode("\n", array_column(Hints::byId('record-xml-sitemap', 14)['hints'], 'text'));
-        self::assertStringContainsString('typo3/seo-sitemap', $thirteen);
-        self::assertStringNotContainsString('PageType enhancer', $thirteen);
-        self::assertStringContainsString('PageType enhancer', $fourteen);
         // The null coalescing that makes a setting of zero a page id.
+        $fourteen = implode("\n", array_column(Hints::byId('record-xml-sitemap', 14)['hints'], 'text'));
         self::assertStringContainsString('?? the requested page', $fourteen);
+        // What brings the sitemap at all stands where a sitemap of pages is
+        // looked for, and the records hint names it.
+        self::assertStringContainsString('is xml-sitemap', $fourteen);
 
         // Reaching the record and advertising it are two configurations, and
         // each names the other.
@@ -3358,6 +3355,27 @@ final class HintsTest extends TestCase
             'record-xml-sitemap',
             implode("\n", array_column(Hints::byId('record-routing', 14)['hints'], 'text')),
         );
+    }
+
+    /**
+     * The set that brings a sitemap of pages, under a subject of its own.
+     *
+     * A session that wanted a sitemap of pages never reached the statement,
+     * because it stood in the hint about a record table (`D-KNW-174`).
+     */
+    #[Decision('D-KNW-174')]
+    #[Test]
+    public function theSetThatBringsTheSitemapIsFoundByASitemapOfPages(): void
+    {
+        $thirteen = implode("\n", array_column(Hints::byId('xml-sitemap', 13)['hints'], 'text'));
+        $fourteen = implode("\n", array_column(Hints::byId('xml-sitemap', 14)['hints'], 'text'));
+        self::assertStringContainsString('typo3/seo-sitemap', $thirteen);
+        self::assertStringNotContainsString('PageType enhancer', $thirteen);
+        self::assertStringContainsString('PageType enhancer', $fourteen);
+        self::assertStringContainsString('record-xml-sitemap', $fourteen);
+
+        $result = Hints::find([], 'make the pages of a sitepackage site search engine friendly: an XML sitemap', 1, target: 14);
+        self::assertSame(['xml-sitemap'], array_column($result['matchedHints'], 'id'));
     }
 
     /**

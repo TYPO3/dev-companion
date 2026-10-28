@@ -147,6 +147,36 @@
     ]
   },
   {
+    "id": "xml-sitemap",
+    "title": "The Page Sitemap and the Site Set That Brings It",
+    "domains": [
+      "typoscript"
+    ],
+    "appliesTo": [
+      "xml sitemap",
+      "sitemap.xml",
+      "page sitemap",
+      "sitemap of pages",
+      "typo3/seo-sitemap",
+      "typo3/cms-seo",
+      "cms-seo",
+      "sitemap 404",
+      "seo",
+      "search engine"
+    ],
+    "hints": [
+      {
+        "text": "The sitemap arrives with the site set typo3/seo-sitemap. Requiring typo3/cms-seo installs the extension and leaves /sitemap.xml answering HTTP 404 until a set of the site depends on that one, which is what brings the TypoScript declaring page type 1533906435.",
+        "since": 13
+      },
+      {
+        "text": "That set ships the routing with it: a PageType enhancer mapping sitemap.xml onto that type, and the Sitemap enhancer whose StaticValueMapper carries the sitemap name in the path.",
+        "since": 14
+      },
+      "A sitemap of a record table beside the pages is record-xml-sitemap, and it is where the address of each row can point at a page that renders no record."
+    ]
+  },
+  {
     "id": "site-set-migration",
     "title": "What Moving TypoScript Into a Set Leaves Behind",
     "domains": [

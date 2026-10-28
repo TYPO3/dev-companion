@@ -97,6 +97,17 @@ The package table takes one row per package you audit. A project takes its root
 package first, then each extension of its own that `typo3_project_describe`
 lists. A cell holds one value, as a head field does.
 
+**Checkout** says what the repository root holds. That is the `root`
+`typo3_project_describe` answers with. Its `kind` is `composer-project` in all
+three cases, so read the `composer.json` at that root:
+
+- `standalone`: that `composer.json` declares the package under audit. A TYPO3
+  that `composer install` set up below it for development leaves it standalone.
+- `inside an installation`: that `composer.json` is a project, and the package
+  sits in a directory below it, such as `packages/<key>`.
+- `the installation`: the package under audit is that project, and its **Kind**
+  is `project`.
+
 Number the findings across the severity headings, so `3` names one finding in
 the whole report. A finding the checklist's finding gate leaves unverified
 stands under **Open** and under no severity. Its entry names the class you did

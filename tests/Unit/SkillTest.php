@@ -1101,6 +1101,27 @@ final class SkillTest extends TestCase
     }
 
     /**
+     * The third `REVIEW-02` run of 2026-10-28 called a standalone extension
+     * repository `the installation`, because no value the row offered had a
+     * definition.
+     */
+    #[Decision('D-SKL-100')]
+    #[Test]
+    public function everyCheckoutValueTheAuditHeadOffersHasADefinition(): void
+    {
+        $report = (string) file_get_contents(Paths::root() . '/skills/typo3-extension-health/references/report.md');
+        if (preg_match('/^\| Checkout +\| (.+?) +\|$/m', $report, $row) !== 1) {
+            self::fail('the audit head has no Checkout row');
+        }
+        preg_match_all('/`([^`]+)`/', $row[1], $values);
+
+        self::assertNotEmpty($values[1], 'the Checkout row offers no value');
+        foreach ($values[1] as $value) {
+            self::assertStringContainsString("\n- `" . $value . '`: ', $report, 'the audit skeleton does not define the Checkout value ' . $value);
+        }
+    }
+
+    /**
      * Four runs of SITE-10 with the skill each worked the same four things out
      * alone: which deprecations a sitepackage reads, how a second layout gets
      * rendered, what to do without a shell, and which generated files to keep

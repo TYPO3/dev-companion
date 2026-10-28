@@ -4,6 +4,7 @@ title: The review skills report in one skeleton
 date: 2026-10-26
 status: open
 coveredBy:
+  - SkillTest::everyCheckoutValueTheAuditHeadOffersHasADefinition
   - SkillTest::theAuditGivesEachPackageARowOfItsOwn
   - SkillTest::theAuditHeadNamesWhereTheCheckoutStands
   - SkillTest::theReviewSkillsReportInOneSkeleton
@@ -85,9 +86,8 @@ wrote paragraphs under the headings, and the forward runs broke the form where
 the gate had no rule. So the fence, five named rules, one value per head row and
 the audit's `Key` and `Checkout` rows followed. The third runs, against
 `3482d798`, opened with the fence in `REVIEW-01` and `REVIEW-03`. `REVIEW-02`
-wrote before it which checks ran and that nothing changed, because the audit's
-*Report* section named no place for that. That section now names
-**Verification** and says that the answer opens with the fence. The filled
-example stays unused until a `REVIEW-02` run writes a summary before it again.
-The third `REVIEW-01` run put three packages into one head, so the audit takes
-a package table with one row per package.
+wrote before it which checks ran, so the audit's *Report* section now names
+**Verification** for that. It also called a standalone extension
+`the installation`, so each `Checkout` value now has a definition. `REVIEW-01`
+put three packages into one head, so the audit takes one row per package. The
+filled example stays unused until a summary before the fence returns.

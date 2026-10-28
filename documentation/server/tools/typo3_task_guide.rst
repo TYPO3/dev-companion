@@ -157,6 +157,9 @@ Answers with
         # The hint ids typo3_hint_lookup answers this surface by where the checkout
         # has no paths for it.
         hints: [string]
+    # What the caller does with surfaces, stated beside them. Empty where surfaces
+    # is.
+    surfacesOwed: string
     # What typo3_hint_lookup answers for these paths, quoted whole and carried here
     # — the strongest few per group of paths, not everything it holds on them. The
     # hint a recognized kind of work names first opens the list, fetched by id where
@@ -551,6 +554,7 @@ Data:
             }
         ],
         "surfaces": [],
+        "surfacesOwed": "",
         "hints": [
             {
                 "id": "system-extension-boundaries",
@@ -1095,6 +1099,7 @@ Data:
             }
         ],
         "surfaces": [],
+        "surfacesOwed": "",
         "hints": [
             {
                 "id": "public-api-surface",
@@ -1520,6 +1525,7 @@ Data:
             }
         ],
         "surfaces": [],
+        "surfacesOwed": "",
         "hints": [
             {
                 "id": "persistence-reading",

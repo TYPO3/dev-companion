@@ -12,9 +12,9 @@ coveredBy:
 **`typo3_task_guide` with `changeType="audit"` returns the surfaces of a project
 or an extension review as `surfaces`, each with the hint ids that answer it.**
 
-The brief also says in its text that the list goes into the reply before the
-first read. Step 3 of `typo3-extension-health` names that answer as the list to
-write.
+The brief also says that the list goes into the reply before the first read, in
+its text and as `surfacesOwed` beside the list. Step 3 of
+`typo3-extension-health` names that answer as the list to write.
 
 ## Evidence
 
@@ -90,3 +90,10 @@ list as its whole work list instead. It never read `Initialisation/`, although
 `typo3_extension_describe` listed `Initialisation/data.xml`. The run before it
 had made that import its top finding. The **Decided** bullets on the floor and
 on shipped content answer that run.
+
+The instruction reached no Claude Code session on 2026-10-28. It stood in the
+text half alone, and Claude Code hands the model the data half (`D-EVI-011`).
+The second `REVIEW-01` run got `surfaces` and never the sentence. So that run
+tested the list without the instruction, and the first **Wrong if** has not
+fired yet. `surfacesOwed` now carries the sentence in the data, as `R-ANS-002`
+asks.

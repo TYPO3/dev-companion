@@ -7838,6 +7838,7 @@ final class HintsTest extends TestCase
      * one is the call the list exists to make.
      */
     #[Decision('D-SKL-103')]
+    #[Requirement('R-ANS-002')]
     #[Test]
     public function anExtensionReviewBriefCarriesTheSurfacesOfTheChecklist(): void
     {
@@ -7856,6 +7857,9 @@ final class HintsTest extends TestCase
         self::assertNotSame([], $names[1]);
         self::assertSame($names[1], array_column($review->data['surfaces'], 'surface'));
         self::assertStringContainsString(TaskGuide::SURFACES_OWED, $review->text);
+        // In the data too, beside the list. Claude Code hands the model that
+        // half alone, and a run got the list without the sentence (`R-ANS-002`).
+        self::assertSame(TaskGuide::SURFACES_OWED, $review->data['surfacesOwed']);
         foreach ($review->data['surfaces'] as $surface) {
             self::assertNotSame([], $surface['hints'], $surface['surface']);
             foreach ($surface['hints'] as $id) {
@@ -7869,7 +7873,9 @@ final class HintsTest extends TestCase
             ['task' => 'review the core patch for the backend login', 'changeType' => 'audit', 'paths' => ['typo3/sysext/backend/Classes/Controller/LoginController.php']],
             ['task' => 'add a content element to the extension', 'changeType' => 'feature', 'paths' => ['packages/my_extension']],
         ] as $arguments) {
-            self::assertSame([], Registry::call('typo3_task_guide', $arguments)->data['surfaces'], $arguments['task']);
+            $brief = Registry::call('typo3_task_guide', $arguments);
+            self::assertSame([], $brief->data['surfaces'], $arguments['task']);
+            self::assertSame('', $brief->data['surfacesOwed'], $arguments['task']);
         }
     }
 

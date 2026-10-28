@@ -169,7 +169,9 @@ final class TaskGuide extends ReadOnlyTool
      *
      * Step 3 of `typo3-extension-health` asks the same in the skill, and three
      * runs read it there and wrote the list only at the end. This brief is the
-     * last answer a review asks for before its first read.
+     * last answer a review asks for before its first read. It stands in the
+     * data beside the list, because Claude Code hands the model that half alone
+     * (`D-EVI-011`, `R-ANS-002`).
      */
     public const SURFACES_OWED = 'Surfaces: write this list into your reply before the first file you read. It is '
         . 'the floor of the work list, and the coverage the report closes on: mark every entry assessed, unassessed '
@@ -408,6 +410,7 @@ final class TaskGuide extends ReadOnlyTool
                 'surface' => Schema::string(),
                 'hints' => Schema::listOf(Schema::string(), 'The hint ids typo3_hint_lookup answers this surface by where the checkout has no paths for it.'),
             ], ['surface', 'hints']), 'The surfaces a review of a project or an extension writes into its reply before the first read, and closes on with each marked assessed, unassessed or not requested. Empty for every other brief, and for a review of the core, whose skill carries surfaces of its own.'),
+            'surfacesOwed' => Schema::string('What the caller does with surfaces, stated beside them. Empty where surfaces is.'),
             'hints' => Schema::listOf(Schema::hintRecord(), 'What typo3_hint_lookup answers for these paths, quoted whole and carried here — the strongest few per group of paths, not everything it holds on them. The hint a recognized kind of work names first opens the list, fetched by id where the paths do not reach it. A hint that declares a different kind of repository from the paths given ranks below the ones that bind them. A rule taken from one of these belongs to that lookup. So a report that cites it names typo3_hint_lookup, and a caller who needs more of the subject calls it directly. omittedHints names what the brief left out.'),
             'omittedHints' => Schema::listOf(Schema::hintReference(), 'What typo3_hint_lookup also holds for these paths and this brief did not carry, named rather than counted. A hint declared for another kind of repository is here for that reason rather than for a weak match. Empty means what it carries is everything that matched. A subject listed here and not in hints is one the brief did not reach. It is the gap the pointer to that lookup stands for.'),
             'rules' => Schema::listOf(Schema::knowledgeMatch(), 'Rule sections that apply to this task.'),
@@ -436,7 +439,7 @@ final class TaskGuide extends ReadOnlyTool
                 'how' => Schema::string(),
             ], ['establish', 'how']), 'What this server cannot see and the agent has to establish itself.'),
             'nextTools' => Schema::listOf(Schema::nextTool()),
-        ], ['task', 'changeType', 'domains', 'skills', 'staleSkills', 'guides', 'surfaces', 'hints', 'omittedHints', 'checks', 'checklist', 'beforeYouRun', 'nextTools']);
+        ], ['task', 'changeType', 'domains', 'skills', 'staleSkills', 'guides', 'surfaces', 'surfacesOwed', 'hints', 'omittedHints', 'checks', 'checklist', 'beforeYouRun', 'nextTools']);
     }
 
     public static function answer(array $args): ToolResult
@@ -996,6 +999,7 @@ final class TaskGuide extends ReadOnlyTool
             'staleSkills' => $stale,
             'guides' => $guides,
             'surfaces' => $surfaces,
+            'surfacesOwed' => $surfaces === [] ? '' : self::SURFACES_OWED,
             'hints' => MatchedHints::records($hints['matchedHints']),
             'omittedHints' => $omitted,
             'rules' => Prose::records($rules),

@@ -4,6 +4,7 @@ title: 'The reason is in the data, not only in the text'
 status: held
 heldBy:
   - CommitMessageGuideTest::theGuideTheDraftNamesIsInTheDataToo
+  - HintsTest::anExtensionReviewBriefCarriesTheSurfacesOfTheChecklist
   - PackageSourcesTest::theNarrowingAMissComputesIsAField
   - ScopeTest::anUnanswerableLookupCarriesItsReasonInTheData
   - ScopeTest::theInstallationDiagnosticIsData

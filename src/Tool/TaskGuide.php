@@ -171,17 +171,16 @@ final class TaskGuide extends ReadOnlyTool
      *
      * It stands in the data beside the list, because Claude Code hands the
      * model that half alone (`D-EVI-011`, `R-ANS-002`). The list goes into the
-     * client's task list rather than the reply: a session follows the part of
-     * an answer that names a call and drops the part that asks for text. The
-     * lookup is a field of each entry, because a session made the first step of
-     * this sentence and not the step after it.
+     * reply in every case: a client whose task tool is deferred never loads it.
+     * The report holds the lookups, because a field the session reads is not a
+     * step it takes.
      */
-    public const SURFACES_OWED = 'Surfaces: put this list into your client\'s task or todo list now, one item per '
-        . 'surface, before any other lookup or read. A client without such a tool gets the list in your reply '
-        . 'instead. It is the floor of the work list, and the coverage the report closes on: mark every entry '
-        . self::SURFACE_STATUSES . ', and drop none. A subsystem the checkout ships that no entry names gets a row of its '
-        . 'own. Each item names its surface and the lookup that entry carries, and that call comes before you '
-        . 'judge the surface:';
+    public const SURFACES_OWED = 'Surfaces: write this list into your reply now, one line per surface with the '
+        . 'lookup its entry carries, before any other lookup or read. A client with a task or todo list takes the '
+        . 'items there too. It is the floor of the work list, and the coverage the report closes on: mark every '
+        . 'entry ' . self::SURFACE_STATUSES . ', and drop none. A subsystem the checkout ships that no entry names '
+        . 'gets a row of its own. Make each lookup before you judge its surface. An assessed row cites that call, '
+        . 'and a surface without it is unassessed:';
 
     /** The call one surface entry owes, its task item's second half. */
     private const SURFACE_LOOKUP = 'typo3_hint_lookup with the paths the checkout has for %s, or with ids %s where it has none';
@@ -443,7 +442,7 @@ final class TaskGuide extends ReadOnlyTool
                 'surface' => Schema::string(),
                 'hints' => Schema::listOf(Schema::string(), 'The hint ids typo3_hint_lookup answers this surface by where the checkout has no paths for it.'),
                 'lookup' => Schema::string('The call this surface owes before anybody judges it, for the task item that names the surface.'),
-            ], ['surface', 'hints', 'lookup']), 'The surfaces a review of a project or an extension puts into its task list before the first read, and closes on with each marked ' . self::SURFACE_STATUSES . '. Empty for every other brief, and for a review of the core, whose skill carries surfaces of its own.'),
+            ], ['surface', 'hints', 'lookup']), 'The surfaces a review of a project or an extension writes into its reply before the first read, and closes on with each marked ' . self::SURFACE_STATUSES . '. Empty for every other brief, and for a review of the core, whose skill carries surfaces of its own.'),
             'surfacesOwed' => Schema::string('What the caller does with surfaces, stated beside them. Empty where surfaces is.'),
             'hints' => Schema::listOf(Schema::hintRecord(), 'What typo3_hint_lookup answers for these paths, quoted whole and carried here — the strongest few per group of paths, not everything it holds on them. The hint a recognized kind of work names first opens the list, fetched by id where the paths do not reach it. A hint that declares a different kind of repository from the paths given ranks below the ones that bind them. A rule taken from one of these belongs to that lookup. So a report that cites it names typo3_hint_lookup, and a caller who needs more of the subject calls it directly. omittedHints names what the brief left out.'),
             'hintsOwed' => Schema::string('Whose the hints are, and whether typo3_hint_lookup holds more of them for these paths or nothing more. Where no hint matched, the call to make once the paths are known.'),

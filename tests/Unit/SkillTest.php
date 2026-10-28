@@ -4612,6 +4612,7 @@ final class SkillTest extends TestCase
     }
 
     #[Requirement('R-SKL-004')]
+    #[Decision('D-SKL-103')]
     #[Test]
     public function theBaseIsEstablishedBeforeTheCheckoutIsOpened(): void
     {
@@ -4643,12 +4644,20 @@ final class SkillTest extends TestCase
 
         // A list the session keeps to itself is one nobody can hold it to.
         // The REVIEW-01 run of 2026-10-11 named its toolchain, read the files,
-        // and showed its surfaces only in the closing table. A task list is a
-        // call, and a call is the half of an instruction a session follows
-        // (`D-SKL-103`).
+        // and showed its surfaces only in the closing table. The reply is the
+        // place in every client: one loaded no deferred task tool (`D-SKL-103`).
         self::assertStringContainsString(
-            'Put it into your client\'s task or todo list, one item per surface, so the reader sees what you will cover before you read',
+            'Write it into your reply, one line per surface, so the reader sees what you will cover before you read',
             self::flat($skill),
+        );
+        // A field the session reads is not a step it takes, so the report holds
+        // the lookup: a run judged three surfaces it never asked.
+        self::assertStringContainsString('**An assessed row cites the lookup its entry carries.**', self::flat($skill));
+        self::assertStringContainsString(
+            'An `assessed` row cites in **Backed by** the lookup its surface entry carries, as the trace holds it. A surface whose lookup the trace lacks is `unassessed`, whatever you read.',
+            self::flat((string) file_get_contents(
+                Paths::root() . '/skills/typo3-extension-health/references/report.md',
+            )),
         );
 
         // The file tree is a trap where a surface has no files. So the list
@@ -4708,7 +4717,7 @@ final class SkillTest extends TestCase
         // than off what the session remembers it skipped.
         self::assertStringContainsString('**unassessed**, and unassessed is', $skill);
         self::assertStringContainsString('every entry marked assessed, unassessed, not requested or not', $skill);
-        self::assertStringContainsString('not a recollection at the end', $skill);
+        self::assertStringContainsString('not a recollection at the end', self::flat($skill));
 
         // "Do not change files" had read as "run nothing": the audit branch
         // named no command at all, and only the improvement branch did.

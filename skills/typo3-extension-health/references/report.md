@@ -7,7 +7,7 @@ audit never reached.
 
 Every entry keeps the line form the skeleton gives it. Audits kept every heading
 and broke the form below it, so no line compared with the same line of another
-audit. The form is six rules:
+audit. The form is seven rules:
 
 - A head field holds its value alone. An explanation beside it goes into a
   finding or under **Open**.
@@ -17,6 +17,9 @@ audit. The form is six rules:
   sentence breaks the line.
 - A **Status** cell holds one of its words alone. A surface you read in part
   takes two rows, the part you read and the rest as `unassessed`.
+- An `assessed` row cites in **Backed by** the lookup its surface entry carries,
+  as the trace holds it. A surface whose lookup the trace lacks is `unassessed`,
+  whatever you read.
 - A **Rule** line ends on the call that returned the rule, as the trace holds
   it: the tool and the id or query it took. A rule the brief carried names
   `typo3_task_guide`, and a rule you read in the code names its `<path>:<line>`.

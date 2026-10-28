@@ -23,13 +23,13 @@ gate, whatever the request asked for.
    of it.
 2. Read [references/checklist.md](references/checklist.md) for the audit
    surfaces, the finding gate, and the severity rubric.
-3. Write the surface list down before you open a single file. Put it into your
-   client's task or todo list, one item per surface, so the reader sees what you
-   will cover before you read. A client without such a tool gets it in your
-   reply. Take the checklist's surfaces, narrowed to the ones this kind of
-   checkout can have. `typo3_task_guide` with `changeType="audit"` returns them
-   as `surfaces`, and that answer is the list to write. Each entry carries its
-   `lookup`, and the item names that call beside the surface. It is the floor of
+3. Write the surface list down before you open a single file. Write it into your
+   reply, one line per surface, so the reader sees what you will cover before
+   you read. A client with a task or todo list takes the items there too. Take
+   the checklist's surfaces, narrowed to the ones this kind of checkout can
+   have. `typo3_task_guide` with `changeType="audit"` returns them as
+   `surfaces`, and that answer is the list to write. Each entry carries its
+   `lookup`, and the line names that call beside the surface. It is the floor of
    the work list. A subsystem the checkout ships that no entry names gets a row
    of its own. The coverage the report closes on is this same list with every
    entry answered.
@@ -146,8 +146,11 @@ disprove, which you report as open rather than dropped.
 
 Close on coverage rather than on a summary. That is the surface list written in
 step 3, every entry marked assessed, unassessed, not requested or not
-applicable, clean ones briefly. It is that list and not a recollection at the end. A summary from
-memory reports what the session noticed it skipped, never what it never reached.
+applicable, clean ones briefly. It is that list and not a recollection at the
+end. A summary from memory reports what the session noticed it skipped, never
+what it never reached. **An assessed row cites the lookup its entry carries.** A
+surface you read and never asked is unassessed, because the reading alone cannot
+say whether it is right.
 
 Without the list a thorough report and a narrow one look alike. The cheapest way
 to look thorough is to examine less. Unassessed and not requested both mean that

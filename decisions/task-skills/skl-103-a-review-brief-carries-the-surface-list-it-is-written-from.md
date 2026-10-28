@@ -6,6 +6,7 @@ status: open
 coveredBy:
   - HintsTest::aBriefNamesTheHintsItLeftBehind
   - HintsTest::anExtensionReviewBriefCarriesTheSurfacesOfTheChecklist
+  - SkillTest::theBaseIsEstablishedBeforeTheCheckoutIsOpened
 ---
 
 # D-SKL-103 — A review brief carries the surface list it is written from
@@ -130,3 +131,17 @@ owed sentence and dropped the step after it. So each `surfaces` entry and each
 an entry names that call. This entry is wrong on that change too if the next
 `REVIEW-01` run writes items with the lookup and still judges a surface without
 it.
+
+## Since then
+
+That bullet fired on the fifth `REVIEW-01` run of 2026-10-28. The brief gave
+eight surfaces with their `lookup`, and the session made none of the eight
+calls. Registration and runtime, Rendering and Pinned versions got no lookup,
+and findings judged all three. It made no task list either: in Claude Code
+`TaskCreate` is a deferred tool the session never loaded.
+
+So `SURFACES_OWED` and step 3 ask for the list in the reply in every case. The
+report now holds the lookup: an **assessed** row in **Surfaces** cites the call
+its entry carries, and a surface without it is **unassessed**. A judge reads
+that off the trace and the table. This entry is wrong on that change too if the
+next run marks a surface assessed without its call.

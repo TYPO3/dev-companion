@@ -1106,6 +1106,25 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The activation `site-label-language` gives ends in a command that refuses
+     * every language the core does not list — `D-KNW-179`.
+     */
+    #[Decision('D-KNW-179')]
+    #[Test]
+    public function aLanguageTheCoreDoesNotListIsToldWhereItIsRegistered(): void
+    {
+        $task = 'add a site language TYPO3 does not ship a locale or a language pack for, and translate the labels of a third party extension for it';
+        self::assertContains('user-defined-locale', array_column(Hints::find([], $task, 6)['matchedHints'], 'id'));
+
+        $text = self::statementsOf('user-defined-locale');
+        self::assertStringContainsString("['SYS']['localization']['locales']['user']", $text);
+        self::assertStringContainsString('returns false and throws nothing', $text);
+        self::assertStringContainsString('The operating system locale is a step of its own', $text);
+
+        self::assertStringContainsString('user-defined-locale', self::statementsOf('site-label-language'));
+    }
+
+    /**
      * The chain is the v14 half of that answer. Fluid 2.15.0 and 4.6.1, read in
      * `.environments/`, try the format and then the bare name and nothing else.
      * The action name gets its capital before the lookup rather than after it.

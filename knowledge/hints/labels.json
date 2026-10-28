@@ -204,7 +204,43 @@
         "until": 13
       },
       "typo3 language:update exits 0 whether or not a pack arrived: a download the server answered with nothing is a warning the progress bar hides, --no-progress prints one line per pack instead, and --fail-on-warnings is what turns a miss into a failure. What says it worked is the labels directory holding the extension's .xlf files under that iso code — var/labels/<iso>/<extension key>/ in a Composer installation — because a pack that never arrived leaves the English labels and looks exactly like the typo3Language mismatch above.",
-      "A pack only translates labels that are translation references. EXT:form's standard submit button fallback is the literal Submit; set renderingOptions.submitButtonLabel in the form definition for the site's language."
+      "A pack only translates labels that are translation references. EXT:form's standard submit button fallback is the literal Submit; set renderingOptions.submitButtonLabel in the form definition for the site's language.",
+      "The activation above assumes that TYPO3 lists the language. One it does not list is user-defined-locale."
+    ]
+  },
+  {
+    "id": "user-defined-locale",
+    "title": "A Site Language TYPO3 Does Not List",
+    "domains": [
+      "xliff",
+      "php"
+    ],
+    "appliesTo": [
+      "locales",
+      "SYS/localization",
+      "locales/user",
+      "user-defined locale",
+      "custom locale",
+      "language TYPO3 does not ship",
+      "locale TYPO3 does not ship",
+      "no language pack",
+      "not available or active",
+      "Language iso code",
+      "Locale not found",
+      "setlocale",
+      "locale -a"
+    ],
+    "hints": [
+      "TYPO3 knows the languages that Locales::$languages lists. typo3 language:update refuses an iso code outside that list, and one that is not active, with \"Language iso code <iso> not available or active\".",
+      "Register such a language in config/system/additional.php: $GLOBALS['TYPO3_CONF_VARS']['SYS']['localization']['locales']['user']['<iso>'] = '<name>'. Register it before the activation site-label-language describes, because the pack check needs both.",
+      "One entry for the base language covers its regions. Locales::isValidLanguageKey() accepts sw_KE once sw is registered.",
+      "ConfigurationManager::setLocalConfigurationValueByPath() does not write that path. SYS/localization is neither in DefaultConfiguration.php nor in allowedSettingsPaths, so the method returns false and throws nothing.",
+      {
+        "text": "typo3 configuration:set fails on the same path with \"Could not set\" and exit code 1. So the registration is a line in additional.php rather than a command.",
+        "since": 14
+      },
+      "Where no pack exists, the project supplies the labels itself, in a locale-prefixed file or in an override of the extension's language file. language-files is that subject.",
+      "The operating system locale is a step of its own. SiteResolver calls Locales::setSystemLocaleFromSiteLanguage() on every frontend request, and a locale the system lacks logs Locale \"<locale>\" not found. as an error each time. locale -a lists the locales the container has."
     ]
   }
 ]

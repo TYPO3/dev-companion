@@ -230,6 +230,7 @@ Text:
     What matched above is a guess at your words. The rest of these domains, closest first, requestable by id:
     - environment-placeholders — %env() in a YAML Configuration (PHP)
     - di-service-not-found — A Service the Container Cannot Find at Runtime (PHP)
+    - user-defined-locale — A Site Language TYPO3 Does Not List (Labels)
     - frontend-access-restriction — Access Restricted Pages and extendToSubpages in the Frontend (PHP)
     - tca-core-palette — Adding a Field to a Core Palette (PHP)
     - record-xml-sitemap — An XML Sitemap of a Record Table (TypoScript)
@@ -477,6 +478,11 @@ Data:
                 "id": "di-service-not-found",
                 "title": "A Service the Container Cannot Find at Runtime",
                 "category": "PHP"
+            },
+            {
+                "id": "user-defined-locale",
+                "title": "A Site Language TYPO3 Does Not List",
+                "category": "Labels"
             },
             {
                 "id": "frontend-access-restriction",
@@ -1618,6 +1624,7 @@ Text:
     Hints that exist in these domains, closest first, requestable by id:
     - environment-placeholders — %env() in a YAML Configuration (PHP)
     - di-service-not-found — A Service the Container Cannot Find at Runtime (PHP)
+    - user-defined-locale — A Site Language TYPO3 Does Not List (Labels)
     - frontend-access-restriction — Access Restricted Pages and extendToSubpages in the Frontend (PHP)
     - tca-core-palette — Adding a Field to a Core Palette (PHP)
     - record-xml-sitemap — An XML Sitemap of a Record Table (TypoScript)
@@ -1766,6 +1773,11 @@ Data:
                 "id": "di-service-not-found",
                 "title": "A Service the Container Cannot Find at Runtime",
                 "category": "PHP"
+            },
+            {
+                "id": "user-defined-locale",
+                "title": "A Site Language TYPO3 Does Not List",
+                "category": "Labels"
             },
             {
                 "id": "frontend-access-restriction",

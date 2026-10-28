@@ -30,7 +30,7 @@ severity headings and one field of a finding are this skill's own.
 - **Consequence:** <what breaks, for whom, and when somebody would notice>
 - **Remediation:** <the scoped change>; check: `<the project check that proves it>`
 - **Owner:** <the skill that owns the change, or `unassigned`>
-- **Evidence:** <verified: the command, the sink read or the test run> or <reasoned: the reading>
+- **Evidence:** <verified: the command, the sink read or the test run> or <reasoned: the reading>; <unverified: the class you did not read> goes to Open
 
 ## High
 
@@ -47,6 +47,7 @@ severity headings and one field of a finding are this skill's own.
 ## Open
 
 - <candidate> — <the reading or the run that would settle it>
+- <candidate> — unverified: <the class you did not read>
 
 ## Dropped
 
@@ -69,5 +70,7 @@ severity headings and one field of a finding are this skill's own.
 ```
 
 Number the findings across the severity headings, so `3` names one finding in
-the whole report. The **Surfaces** table is the list step 3 wrote, one row per
+the whole report. A finding the checklist's finding gate leaves unverified
+stands under **Open** and under no severity. Its entry names the class you did
+not read. The **Surfaces** table is the list step 3 wrote, one row per
 entry and in its order.

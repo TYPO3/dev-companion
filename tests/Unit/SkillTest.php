@@ -1479,6 +1479,11 @@ final class SkillTest extends TestCase
         // because the sink escapes.
         self::assertStringContainsString('is on the path, not at its end', $checklist);
         self::assertStringContainsString('report the finding as unverified', $checklist);
+        // The skeleton a session fills in offered verified or reasoned only, so
+        // an unread class could land under a severity as reasoned.
+        $report = (string) file_get_contents(Paths::root() . '/skills/typo3-extension-health/references/report.md');
+        self::assertStringContainsString('<unverified: the class you did not read> goes to Open', $report);
+        self::assertStringContainsString('- <candidate> — unverified: <the class you did not read>', $report);
         // The sinks themselves are a tool's to answer, so the checklist asks
         // rather than carrying a list that goes stale in a published copy.
         self::assertStringContainsString('`typo3_hint_lookup` for the sinks', $checklist);

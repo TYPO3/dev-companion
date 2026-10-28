@@ -4,6 +4,7 @@ title: The review skills report in one skeleton
 date: 2026-10-26
 status: open
 coveredBy:
+  - SkillTest::theAuditHeadNamesTheKeyAndWhereTheCheckoutStands
   - SkillTest::theReviewSkillsReportInOneSkeleton
 ---
 
@@ -77,14 +78,13 @@ and the fields of a finding.**
 
 ## Since then
 
-On 2026-10-28 the first report under the skeleton, a core review of change 97177
-([`feedback/2026-10-28-031023`](../../feedback/archive/2026-10-28-031023-the-review-report-keeps-the-headings-but-not.md)),
-kept every heading in its order. It filled the entries as paragraphs and added a
-summary after *Not reached*, so the first **Wrong if** held. The fence and the
-first gate sentence followed.
-
-The forward runs `REVIEW-01` to `REVIEW-03` of the same day kept the fence and
-ended the block on *Not reached*. They broke the form where the gate had no rule
-of its own: lists as paragraphs or with a colon, a parenthesis in a head field,
-`assessed (partly)`, a finding without *Rule*. Each also put a summary or a list
-around the fence. The named rules in **Decided** answer each of these.
+On 2026-10-28 a core review of change 97177
+([`feedback/2026-10-28-031023`](../../feedback/archive/2026-10-28-031023-the-review-report-keeps-the-headings-but-not.md))
+wrote paragraphs under the headings, and the fence followed. The forward runs of
+that day broke the form where the gate had no rule, and the named rules
+followed. The second runs, against `c0768e3b`, still wrote a summary before the
+fence and a parenthesis in a head field: the third **Wrong if** held. So each
+head row now asks for one value, and the audit head asks for `Key` and
+`Checkout`, which `REVIEW-02` reads. A **Rule** line named a lookup the trace
+lacked, so a fifth rule names the call. The filled example for the summary is
+still unweighed.

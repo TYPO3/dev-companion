@@ -7,7 +7,7 @@ review never reached.
 
 Every entry keeps the line form the skeleton gives it. Reviews kept every
 heading and broke the form below it, so no line compared with the same line of
-another review. The form is four rules:
+another review. The form is five rules:
 
 - A head field holds its value alone. An explanation beside it goes into a
   finding or under **Open**.
@@ -17,6 +17,9 @@ another review. The form is four rules:
   sentence breaks the line.
 - A **Status** cell holds one of its words alone. A surface you read in part
   takes two rows, the part you read and the rest as `unassessed`.
+- A **Rule** line ends on the call that returned the rule, as the trace holds
+  it: the tool and the id or query it took. A rule the brief carried names
+  `typo3_task_guide`, and a rule you read in the code names its `<path>:<line>`.
 
 The answer opens with the fence, and nothing follows **Not reached** inside it.
 After the fence stands at most what happens next: the finding numbers in the
@@ -33,8 +36,10 @@ severity headings and one field of a finding are this skill's own.
 |----------|-------------------------------------------------------------|
 | Change   | <pull request, patch or branch, with its link or ref>       |
 | Head     | <hash of the head commit you read>                          |
-| Target   | <branch>; merges <yes, or no with the conflicting paths>    |
-| Range    | <the TYPO3 and PHP versions the manifest declares>          |
+| Target   | <branch>                                                    |
+| Merges   | `yes`, or the conflicting paths                             |
+| TYPO3    | <the TYPO3 constraint the manifest declares>                |
+| PHP      | <the PHP constraint the manifest declares>                  |
 | Ran on   | <the installation's TYPO3 version>, or `no installation`    |
 | Pipeline | <what the forge reported, as read>                          |
 | Verdict  | <the highest heading below with a finding>, or `Ready`      |

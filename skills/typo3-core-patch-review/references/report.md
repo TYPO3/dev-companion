@@ -7,7 +7,7 @@ review never reached.
 
 Every entry keeps the line form the skeleton gives it. Reviews kept every
 heading and broke the form below it, so no line compared with the same line of
-another review. The form is four rules:
+another review. The form is five rules:
 
 - A head field holds its value alone. An explanation beside it goes into a
   finding or under **Open**.
@@ -17,6 +17,9 @@ another review. The form is four rules:
   sentence breaks the line.
 - A **Status** cell holds one of its words alone. A surface you read in part
   takes two rows, the part you read and the rest as `unassessed`.
+- A **Rule** line ends on the call that returned the rule, as the trace holds
+  it: the tool and the id or query it took. A rule the brief carried names
+  `typo3_task_guide`, and a rule you read in the code names its `<path>:<line>`.
 
 The answer opens with the fence, and nothing follows **Not reached** inside it.
 After the fence stands at most what happens next: the finding numbers in the
@@ -29,15 +32,17 @@ severity headings and one field of a finding are this skill's own.
 ```markdown
 # Review: <subject line of the commit under review>
 
-| Field    | Value                                                     |
-|----------|-----------------------------------------------------------|
-| Change   | <change number>, patch set <n>, or `not pushed`           |
-| Commit   | <hash of the patch set>; HEAD <same, or the other hash>   |
-| Target   | <branch>; `Releases:` <branches>                          |
-| Issue    | #<number> — <title of the issue>                          |
-| Fetched  | <ref the checkout skill fetched>, or `not fetched`        |
-| Read on  | <date of the last typo3_gerrit_lookup>                    |
-| Verdict  | <the highest heading below with a finding>, or `Ready`    |
+| Field    | Value                                                        |
+|----------|--------------------------------------------------------------|
+| Change   | <change number>, patch set <n>, or `not pushed`              |
+| Commit   | <hash of the patch set>                                      |
+| HEAD     | <hash of the checkout's HEAD>                                |
+| Target   | <branch>                                                     |
+| Releases | <the branches `Releases:` names>                             |
+| Issue    | #<number> — <title of the issue>                             |
+| Fetched  | <every ref this review fetched>, or `not fetched`            |
+| Read on  | <date of the last typo3_gerrit_lookup>                       |
+| Verdict  | <the highest heading below with a finding>, or `Ready`       |
 
 ## Blocks submission
 

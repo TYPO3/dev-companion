@@ -1018,6 +1018,7 @@ final class SkillTest extends TestCase
                 'A finding carries every field, in the order the skeleton gives.',
                 'An entry under **Checked and correct**, **Open** and **Dropped** is one line: the claim, an em dash and its source.',
                 'A **Status** cell holds one of its words alone.',
+                'A **Rule** line ends on the call that returned the rule, as the trace holds it',
                 'The answer opens with the fence, and nothing follows **Not reached** inside it.',
                 'After the fence stands at most what happens next',
             ] as $rule) {
@@ -1057,6 +1058,23 @@ final class SkillTest extends TestCase
             preg_match_all('/^\| (\w+) +\|/m', $skeleton, $head);
             self::assertSame('Field', $head[1][0], $name);
             self::assertContains('Verdict', $head[1], $name . ' heads its report without a verdict');
+        }
+    }
+
+    /**
+     * `REVIEW-02` asks for the extension key and whether the checkout stands
+     * alone. The run that followed the head named neither, because no field
+     * asked for them.
+     */
+    #[Decision('D-SKL-100')]
+    #[Test]
+    public function theAuditHeadNamesTheKeyAndWhereTheCheckoutStands(): void
+    {
+        $report = (string) file_get_contents(Paths::root() . '/skills/typo3-extension-health/references/report.md');
+        preg_match_all('/^\| (\w+) +\|/m', $report, $head);
+
+        foreach (['Package', 'Key', 'Kind', 'Checkout', 'TYPO3', 'PHP'] as $field) {
+            self::assertContains($field, $head[1], 'the audit head asks for no ' . $field);
         }
     }
 

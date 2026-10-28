@@ -77,11 +77,13 @@ written.
 
 ## Since then
 
-On 2026-10-27 the skill copies in thirteen projects went away to test this route
-alone. A Claude Code session in the core checkout then got neither a skill nor
-the URI, for two reasons. Claude Code still listed this server as connecting at
-the first prompt, which `claude -p` above never shows. And `Installer::absent()`
-reads the project record, which named Antigravity only.
-`feedback/2026-10-28-031023-a-session-that-starts-before-the-server.md` holds
-both. On 2026-10-28 the maintainer kept the skill files and `install` as they
-were. The copies went back, and this sentence stays as the fallback.
+On 2026-10-27 the skill copies in thirteen projects went away. A Claude Code
+session in the core checkout then got neither a skill nor the URI
+(`feedback/2026-10-28-031023-a-session-that-starts-before-the-server.md`). Claude
+Code still listed this server as connecting at the first prompt, which
+`claude -p` never shows. Instructions that do not arrive carry no sentence, so
+the maintainer kept the skill files and `install` on 2026-10-28. This sentence
+stays as the fallback. And `Installer::absent()` read a record that named
+Antigravity only. That is a delivery gap this server can close: the SDK keeps
+`clientInfo` from `initialize`, and its `Builder` takes a request handler of
+this server's own. `todo/open/T-261028-c00d.md` decides the sentence per client.

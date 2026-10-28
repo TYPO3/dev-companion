@@ -32,8 +32,4 @@ The headless runs behind D-DIS-034 used claude -p, which waits for the MCP conne
 
 ## Suggestion
 
-Keep the skill files from install as the main way for Claude Code. They are in the listing at session start, also when the server connects late. Treat the typo3://skill sentence of D-DIS-034 as a fallback only.
-
 Make the absence check per client: a record without the client that started the server counts as absent for that client. clientInfo at initialize names the client.
-
-Add to D-DIS-034 that its runs did not cover a late connection.

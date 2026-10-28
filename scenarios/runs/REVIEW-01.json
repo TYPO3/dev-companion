@@ -1,7 +1,7 @@
 {
     "scenario": "REVIEW-01",
     "date": "2026-10-28",
-    "server": "3482d798",
+    "server": "49b0adbc",
     "client": "claude-code",
     "environment": "E-SITE",
     "criteria": "22b7f8d8e96b",
@@ -35,8 +35,7 @@
                     "extensions/events_sitepackage",
                     "extensions/sessionplaner_extended",
                     "config/sites",
-                    "config/system",
-                    ".ddev/config.yaml"
+                    "config/system"
                 ]
             }
         },
@@ -49,9 +48,9 @@
                     "php-versions"
                 ],
                 "paths": [
+                    "composer.json",
                     "extensions/events_sitepackage/composer.json",
-                    "extensions/sessionplaner_extended/composer.json",
-                    "composer.json"
+                    "extensions/sessionplaner_extended/composer.json"
                 ]
             }
         },
@@ -63,142 +62,61 @@
                     "authentication-permissions"
                 ],
                 "paths": [
-                    "extensions/events_sitepackage/Classes",
-                    "extensions/events_sitepackage/Resources/Private/Templates"
+                    "extensions/events_sitepackage/Classes/Controller",
+                    "extensions/events_sitepackage/Classes/Client",
+                    "extensions/events_sitepackage/Classes/ViewHelpers",
+                    "extensions/events_sitepackage/Classes/Form"
                 ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "ids": [
-                    "project-extension-tests",
-                    "extension-static-analysis",
-                    "extension-coding-standards",
-                    "extension-documentation",
-                    "deprecated-apis"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "ids": [
-                    "tca-formengine",
-                    "extension-schema-sql",
-                    "core-tca-derived-schema",
-                    "datahandler-basics",
-                    "upgrade-wizards"
-                ],
-                "paths": [
-                    "extensions/events_sitepackage/Configuration/TCA",
-                    "extensions/events_sitepackage/ext_tables.sql",
-                    "extensions/sessionplaner_extended/ext_tables.sql",
-                    "extensions/events_sitepackage/Classes/Updates"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "ids": [
-                    "site-sets",
-                    "fluid-templates",
-                    "tsconfig",
-                    "language-files",
-                    "public-assets"
-                ],
-                "paths": [
-                    "extensions/events_sitepackage/Configuration/Sets",
-                    "extensions/events_sitepackage/Resources/Private",
-                    "extensions/events_sitepackage/Resources/Public"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "ids": [
-                    "dependency-injection",
-                    "events-extension-points",
-                    "configuration-reach",
-                    "content-elements",
-                    "extension-asset-build",
-                    "sitepackage-initial-content"
-                ],
-                "paths": [
-                    "extensions/events_sitepackage/Configuration/Services.yaml",
-                    "extensions/events_sitepackage/ext_localconf.php",
-                    "extensions/events_sitepackage/Classes"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "query": "getAbsoluteWebPath"
-            }
-        },
-        {
-            "tool": "typo3_changelog_lookup",
-            "arguments": {
-                "query": "afterBuildingFinished"
-            }
-        },
-        {
-            "tool": "typo3_ter_lookup",
-            "arguments": {
-                "extension": "events_sitepackage"
             }
         }
     ],
     "outcomes": [
         {
+            "met": true,
+            "evidence": "The surface list stood before the first checkout read, for the first time in five REVIEW-01 runs. typo3_project_describe at 18:53:19 established the installation, TYPO3 14.3.7 and the five declared composer scripts. typo3_extension_describe for both extensions and typo3_task_guide with changeType audit followed at 18:53:22-23. surfacesOwed now said to put the surfaces into the client's task list before any other lookup or read. The session wrote 'now writing the surface list, then reading the code' and made eight TaskCreate calls at 18:53:26-31, one per surface, each with its hint ids or its likely status. The first hint lookup came at 18:53:34 and the first checkout read, a Bash listing, at 18:53:36. The only reads before the list are the skill's own references at 18:53:15."
+        },
+        {
+            "met": true,
+            "evidence": "Each of the twelve findings carries Where, Observed, Rule, Consequence, Remediation, Owner and Evidence, and the Evidence line says verified or reasoned. The checkout confirms the spot-checked claims. Header.html:9,16 wrap `{header -> events:format.highlightWords()}` in `<f:format.raw>`. settings.php:142 holds the literal encryptionKey. .mage.yml:54 runs upgrade:run on deploy. ci.yml carries no rector step. ext_localconf.php:48 registers the afterBuildingFinished hook. Finding 2 dates the key to e287c12 '[TASK] Initialize repository', which git log dates 2018-12-12; the answer names the commit and not the year."
+        },
+        {
+            "met": true,
+            "evidence": "The order is consequence. The stored XSS in the header ViewHelper and the committed production key stand under High. Under Medium stand the .env.dist debug fallbacks that deploy, the dead form hook, the geocoding hook that blocks a save, and the missing tests beside five wizards that upgrade:run executes on every deploy. Rector drift, Node 16, the FAL global, the version ranges and the icon stand under Low. The README stands under Recommendation. Rector's 12 files rank by what CI misses, not by their count."
+        },
+        {
             "met": false,
-            "evidence": "The surfaces never came before the read. typo3_project_describe at 16:55:46 established the installation, the TYPO3 version 14.3.7 and the declared commands. typo3_extension_describe for both extensions and typo3_task_guide with changeType audit followed at 16:55:49-51. The instruction now reached the data half: the answer carried `surfacesOwed`, 'Surfaces: write this list into your reply before the first file you read'. The session obeyed its last sentence and asked one typo3_hint_lookup per surface at 16:55:58-16:56:06. It wrote no list. The only text before the first checkout read at 16:56:07 is 'Conventions gathered for most surfaces. Fetching the last few, then reading the checkout.' A client reminder that the user had heard nothing prompted that line. The surfaces appear only in the closing Surfaces table, the 'after it' the criterion names. This is the fourth REVIEW-01 run in a row with this miss, and the first with the instruction in the data."
+            "evidence": "The session asked conventions for two of eight surfaces before it judged them. The two hint lookups at 18:53:34-35 cover Package and Security, with the brief's ids and the checkout's paths. Registration and runtime, Persistence, Rendering, Quality and Pinned versions got no typo3_hint_lookup, although surfacesOwed ends 'Ask each one its own typo3_hint_lookup before you judge it'. omittedHintsOwed owed seven lookups by id, site-sets among them, and the session made none. Findings 4, 5, 7 and 8 judge those surfaces anyway. Finding 5's Rule cites 'typo3_task_guide (datahandler-basics surface)', an id the brief carried without its text. Finding 6 cites security-sinks for test coverage. The Surfaces table marks all five assessed. Not reached admits the missing lookups for Persistence, Rendering and Pinned versions only, and leaves Registration and Quality out. The absent-surface half holds: Shipped content stands as not applicable for want of Initialisation/, and TCA detail, sets, TypoScript, TSconfig, XLF and the action tags stand as unassessed rows."
         },
         {
             "met": true,
-            "evidence": "Each of the eleven findings carries Where, Observed, Rule, Consequence, Remediation, Owner and Evidence in that order. The checkout confirms the spot-checked claims. Header.html:9,16,23 wrap `{header -> events:format.highlightWords()}` in `<f:format.raw>`. settings.php:142 holds the literal encryptionKey. deployment.yml runs on push to master with no needs. vendor/typo3/cms-form/Classes names afterBuildingFinished in one docblock and calls it nowhere, and only config/sites/t3con25/config.yaml:63 sets sessionplaner_suggest_length. .ddev/config.yaml:37 pins nodejs_version 16. Finding 2 dates the key to e287c12, and git log -S over all refs finds that commit of 2018-12-12. Finding 1 rests on a read of the sink and of AbstractViewHelper, and its Evidence line says 'not rendered'."
+            "evidence": "The kinds stay apart under the report's headings. High to Low hold defects with an Evidence line marked verified or reasoned. Recommendation holds the missing README. Open holds six questions, each with what would settle it: the production .env, speaker.website in an href, three raw `{content}` outputs, the Maps key restriction, a strict_types question and the v13 claim. Dropped holds two disproved candidates with their reason. Checked and correct holds six claims that held. The key, the env defaults and the FAL global carry Owner unassigned, which marks them as work no TYPO3 workflow here owns."
         },
         {
             "met": true,
-            "evidence": "The order is consequence. The stored XSS any editor can place on every site and the committed production key stand under High. Under Medium stand the fail-open .env.dist defaults, the deploy CI does not gate, the dead form hook and the save a Google failure blocks. The missing tests stand there too, as the reason findings 1 and 5 shipped. The version range, Node 16, the dev-develop branches and the icon stand under Low. Rector's 12 files rank by what CI misses, not by their count."
-        },
-        {
-            "met": true,
-            "evidence": "The conventions came before the judgment. The six hint lookups at 16:55:58-16:56:06 stand before the first checkout read at 16:56:07, one per surface, with the brief's ids and the checkout's paths. They cover all eight surfaces. Registration and runtime left routing-request-handling and backend-modules out, and Shipped content asked sitepackage-initial-content alone. The two changelog lookups at 16:57:48 asked for identifiers the reading found, before finding 5 judged one of them. Finding 1 cites security-sinks as its Rule and stays High. The raw `{content}` in SponsorList, IconGroup and CardGroup is a fact the session read and placed under Checked and correct, not a verdict. The Surfaces table reports Shipped content as not applicable for want of Initialisation/. Rendering's site sets, TypoScript, TSconfig and XLF stand as an unassessed row. The session added Project configuration as a row of its own."
-        },
-        {
-            "met": true,
-            "evidence": "The kinds stay apart under the report's headings. High to Low hold defects with an Evidence line marked verified or reasoned. Recommendation holds the Rector batch and the redundant ext_tables.sql column. Open holds five questions, each with what would settle it. Dropped holds two disproved candidates with their reason. Checked and correct holds five claims that held. The key, the env defaults, the geocoding hook and the dev branches carry Owner unassigned, which marks them as work no TYPO3 workflow here owns."
-        },
-        {
-            "met": true,
-            "evidence": "The report ends on Not reached, then a seven-step order by finding number with the skill for each. The last line asks which items to take on. The session changed no file. Every finding names typo3-content-element-development, typo3-extension-testing, typo3-extension-upgrade, typo3-extension-asset-build, typo3-sitepackage-development or unassigned. The answer opens with the fence this time. The head still breaks report.md's one-value rule: Package, Key and TYPO3 each carry two values with parentheses. A recap of the checks stands after the fence. Both are form defects rather than started work."
+            "evidence": "The answer opens with the four-backtick fence, and the head carries one value per field: Checkout `the installation`, which report.md defines for a root that is the project. The package table has one row each for t3g/events-site, events_sitepackage and sessionplaner_extended. The report ends on Not reached, then an order by finding number with the skill for each, and the last line asks which items to take on. The session changed no file. Every owner is a typo3-* workflow or unassigned; typo3-extension-documentation and typo3-extension-testing come from the owed list of typo3_extension_describe."
         }
     ],
     "failures": [
         {
             "avoided": true,
-            "evidence": "No finding is a TYPO3 checklist item without a place in this checkout. Each names a file of site-events or a value a call returned for it. The sitepackage hints the brief carried and omitted left no mark on the report."
+            "evidence": "No finding is a TYPO3 checklist item without a place in this checkout. Each names a file of site-events or a value a call returned for it. The sitepackage hints the brief carried left no mark on the report."
         },
         {
             "avoided": true,
-            "evidence": "The missing tests stand in finding 7 with the concrete code they leave unguarded, and findings 1 and 5 as the cost. The Rector batch and the redundant column stand under Recommendation. The production .env and the Maps key restriction stand under Open with what would confirm each. The getenv fallback was dropped after the session read additional.php:7-8."
+            "evidence": "The missing tests stand in finding 6 with the wizards and the deploy step they leave unguarded. The README stands under Recommendation. The production .env, the Maps key restriction and the raw `{content}` outputs stand under Open with what would confirm each. The getenv fallback and the deployment interpolation were dropped after a read."
         },
         {
             "avoided": true,
-            "evidence": "typo3_ter_lookup returned empty, and finding 8 reads it as an unpublished package rather than a missing release. The runtime lookups the session skipped stand under Not reached with the lookups they would be. The production .env it could not read goes to Open, not to a verdict. Finding 5 rests on a grep of the installed EXT:form, and its Evidence line says the rendered form went unchecked."
+            "evidence": "No call answered unavailable or partial. Finding 4 rests on a grep of the installed EXT:form and on the sibling listener's comment, and its Evidence line names the grep. The production .env the session could not read goes to Open, not to a verdict. Finding 11 takes ext_icon.png from typo3_extension_describe deprecatedFiles. The runtime lookups it skipped stand under Not reached."
         },
         {
             "avoided": true,
-            "evidence": "Every check the session ran is the project's own composer script, t3g:cgl, t3g:phpstan and t3g:rector, under DDEV, as typo3_project_describe declared them. No core command or core process appears. The deprecation sweep stands as exempt under Not reached, which base.md grants a task that writes nothing."
+            "evidence": "Every check the session ran is the project's own composer script, t3g:cgl, t3g:phpstan and t3g:rector, under DDEV, as typo3_project_describe declared them. The extra rector call passes --dry-run. No core command or core process appears. One remediation names `composer validate` and marks it 'not declared', which the server's instructions count as a wrong recommendation; it is not another context's convention. No major stands above the installed 14, so no breaking-changes changelog call was owed, and the deprecation sweep stands as exempt under Not reached."
         },
         {
             "avoided": true,
-            "evidence": "git status in site-events was clean on develop at 1123b1e before and after the run. The transcript carries no Edit or Write. The three checks are dry runs by their composer definitions, and the extra rector call passes --dry-run. gh repo view only reads the repository's visibility."
+            "evidence": "git status in site-events was clean on develop at 1123b1e before and after the run. The transcript carries no Edit or Write. cgl and rector are dry runs by their composer definitions. The eight TaskCreate calls write the client's own task list and nothing in the checkout."
         }
     ],
-    "notes": "Session 3cfdb7e7-b109-4d1a-a7a8-91820a3f3d32, 2026-10-28 16:55:34-16:59:34 UTC by its transcript, claude-opus-5-5. Claude Code 2.1.31x ran headless with -p --session-id, the prompt on standard input and no steering. It ran with --permission-mode acceptEdits, and allowedTools included Skill and mcp__typo3-dev-companion. The server is the checkout main stands on, 3482d798, which carries c0768e3b..3482d798 through a user-scope MCP entry. The server start refreshed the stale published skills. The maintainer started the DDEV project events-site before the run, and site-events was clean on develop at 1123b1e before and after it. 32 tool calls, 13 to this server, and the skill activated at the first call. The run it replaces is in commit f29da520 (session ff4d1f81-fba9-4353-81de-f6ce6ad99c68, server c0768e3b), with met 1 and met 4 missed. Three changes met their first run here. typo3_task_guide carried surfacesOwed in its data half, and the session asked every surface its own lookup before the first read. It still wrote no list, so the data half moved met 4 and left met 1 where it stood. security-sinks now says to search a secret with no path, and the session dated the key to e287c12 of 2018. The surface list carried Shipped content, and the session reported it as not applicable. The head rule of 5a72ac05 still breaks for a project with two own extensions, because the skeleton asks one package. The omitted-hint rule of 172fc20d belongs to typo3-core-patch-review and does not reach this skill. surfacesOwed names three status words, and report.md names four with not applicable, which this run used. What the run teaches beyond this repository is two things. An instruction in the data reaches Claude Code, and the model follows the part that names a call. An instruction to write text before a read is the part it drops."
+    "notes": "Session d5d92320-872e-43ec-abca-4951bc9cdc00, 2026-10-28 18:53:12-18:56:07 UTC by its transcript, claude-opus-5-5. Claude Code 2.1.312 ran headless with -p --session-id, the prompt on standard input and no steering. It ran with --permission-mode acceptEdits, and allowedTools included Skill, TodoWrite and mcp__typo3-dev-companion. This client offers TaskCreate and TaskUpdate rather than TodoWrite, and the session loaded them through ToolSearch beside the server's tools. The server is the checkout main stands on, 49b0adbc, which carries 3482d798..49b0adbc through a user-scope MCP entry. The server start refreshed the stale published skills. The maintainer started the DDEV project events-site before the run, and site-events was clean on develop at 1123b1e before and after it. 31 tool calls, 6 to this server, and the skill activated at the first call. The run it replaces is in commit 49b0adbc (session 3cfdb7e7-b109-4d1a-a7a8-91820a3f3d32, server 3482d798), with met 1 missed. Four changes met their first run here. surfacesOwed put the list into the task tool first, and met 1 held for the first time. The health answer opened with the fence, the head carried one value per field, and the package table carried one row per package. No major stands above the installed 14, so the changelog rule had nothing to ask. The surfaces moved met 1 and cost met 4. The third run asked six hint lookups and wrote no list; this one wrote the list and asked two. The eight tasks were never updated, so the coverage closed in the reply's table alone. What the run teaches beyond this repository is one thing. The model follows the first instruction of a long owed string and drops the one at its end."
 }

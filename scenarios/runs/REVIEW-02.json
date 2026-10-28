@@ -1,7 +1,7 @@
 {
     "scenario": "REVIEW-02",
     "date": "2026-10-28",
-    "server": "3482d798",
+    "server": "49b0adbc",
     "client": "claude-code",
     "environment": "E-EXT",
     "criteria": "94e93ae735ee",
@@ -28,31 +28,38 @@
                     "bootstrap_package",
                     "composer.json",
                     "ext_emconf.php",
-                    "Configuration/",
-                    "Classes/",
-                    "Resources/",
-                    "Tests/",
-                    "Documentation/",
-                    "Initialisation/",
-                    ".github/workflows/",
-                    "Build/"
+                    "Classes",
+                    "Configuration",
+                    "Resources",
+                    "Tests",
+                    "Documentation",
+                    "Initialisation",
+                    "Build",
+                    ".github/workflows"
                 ]
+            }
+        },
+        {
+            "tool": "typo3_changelog_lookup",
+            "arguments": {
+                "type": "breaking",
+                "version": "15",
+                "limit": 200
+            }
+        },
+        {
+            "tool": "typo3_ter_lookup",
+            "arguments": {
+                "extension": "bootstrap_package",
+                "limit": 5
             }
         },
         {
             "tool": "typo3_hint_lookup",
             "arguments": {
                 "ids": [
-                    "extension-manifest",
                     "extension-repository-dependencies",
-                    "php-versions"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "ids": [
+                    "php-versions",
                     "sitepackage-initial-content",
                     "initial-content-import-once",
                     "initial-content-references",
@@ -68,77 +75,67 @@
                     "extension-static-analysis",
                     "extension-coding-standards",
                     "extension-documentation",
-                    "deprecated-apis"
+                    "deprecated-apis",
+                    "extension-asset-build",
+                    "security-sinks",
+                    "upgrade-wizards",
+                    "extension-schema-sql",
+                    "core-tca-derived-schema"
                 ]
             }
         },
         {
-            "tool": "typo3_ter_lookup",
+            "tool": "typo3_changelog_lookup",
             "arguments": {
-                "extension": "bootstrap_package",
-                "limit": 5
+                "query": "render-preProcess"
             }
         },
         {
-            "tool": "typo3_hint_lookup",
+            "tool": "typo3_changelog_lookup",
             "arguments": {
-                "ids": [
-                    "security-sinks",
-                    "upgrade-wizards",
-                    "site-sets",
-                    "public-assets",
-                    "extension-asset-build",
-                    "dependency-injection"
-                ],
-                "limit": 10
-            }
-        },
-        {
-            "tool": "typo3_rule_lookup",
-            "arguments": {
-                "query": "Settings.cfg guides.xml migration extension manual"
+                "query": "Breaking-110361-RemoveFalFallbackStorage"
             }
         }
     ],
     "outcomes": [
         {
-            "met": false,
-            "evidence": "The head table now gives the key bootstrap_package, beside bk2k/bootstrap-package, the range ^14.3 || 15.*.*@dev, PHP >=8.2.0 and Ran on 14.3.7. Verification and the remediations name the composer scripts cgl:ci, phpstan, phpstan:baseline, test:php:unit and test:php:functional, and the npm lint script. The Checkout row says `the installation`. The checkout is a standalone extension repository: typo3_project_describe placed the extension bootstrap_package at the root, and the answer itself says config/ and var/ are not committed. So the answer gives the wrong one of the three values, beside Kind `extension`."
+            "met": true,
+            "evidence": "The head gives Checkout `standalone`, the key bootstrap_package beside bk2k/bootstrap-package, the range ^14.3 || 15.*.*@dev, PHP >=8.2.0 and Ran on 14.3.7. That is the right value: typo3_project_describe placed the extension bootstrap_package at the root, and config/ and var/ are not committed. Verification names the composer scripts test:php:lint, cgl:ci and phpstan, which it ran, and test:php:unit and test:php:functional, which it did not. Finding 6 names the grunt lint script and why it stayed unrun. The Commit field still carries a parenthesis beside the hash."
         },
         {
             "met": true,
-            "evidence": "Every finding names a path, and the spot checks hold at 244d65a9. ImportContentOnPackageInitialization::__invoke() returns early on the two registry keys alone. ext_localconf.php:13-14 registers Configuration/TypoScript/, which does not exist. The phpstan:baseline script writes Build/phpstan-baseline.neon, while Build/phpstan.neon includes Build/phpstan-baseline-14.neon of 597 lines. Documentation/ has Settings.cfg and no guides.xml. Build/phpunit-functional.xml has no failOnDeprecation. Dropped reads the IndexedSearch sinks down to SearchController.php:401,437. Every surface it read is one the checkout has, and a subsystem without an entry, the SCSS parser, gets a row of its own."
+            "evidence": "Every finding names a path, and the spot checks hold at 244d65a9. StaticFilesProcessor.php:66 calls retrieveFileOrFolderObject() with an EXT: string. ResourceFactory.php:260-263 in the core checkout at a5e4e3236df throws 1785715205 for that prefix. Build/package.json declares the runtime dependencies audit and fix. The session read Initialisation/ and the core impexp listener before finding 1. Every surface it read is one the checkout has, and the Surfaces table splits a surface it read in part into two rows."
         },
         {
             "met": true,
-            "evidence": "Behaviour comes from the core impexp listeners and SetupExtensionsCommand read in the installed 14.3.7. Tests come from ci.yml, the phpunit configs and DataImportTest. Static quality comes from phplint, php-cs-fixer and PHPStan, which it ran. Documentation comes from Settings.cfg, Build/render-docs.sh and README.rst, and release from typo3_ter_lookup and the two manifests. Compatibility with v15 is finding 9 and a Not reached line. It did not read the CI results or the v15 core, and it says so."
+            "evidence": "Behaviour comes from the impexp listener and Build/deploy.php:30. Compatibility comes from the v15 breaking list and the core main branch, in findings 2 and 8. Tests come from ci.yml and the phpunit configs, static quality from phplint, php-cs-fixer and PHPStan, which it ran. Documentation comes from Documentation/Installation/Index.rst, release from typo3_ter_lookup and the missing export-ignore. Open says that only 10 of the 41 breaking entries were held against the code."
         },
         {
             "met": true,
-            "evidence": "The order is consequence: the demo import into live installations and the failing fresh setup first, the untested PHP floor and the renderer next, red CGL, the dead baseline path and the stale registrations last. Every finding marks its Evidence as verified or reasoned, and finding 2 says not reproduced. Open names what would settle each question. Verification names the two unrun suites and what they would settle. Not reached names v15, the runtime lookups and the deprecation sweep."
+            "evidence": "The order is consequence: the demo import into live installations and the v15 page failure first, the npm advisories next, the check layer and the dead registration last. Every finding marks its Evidence as verified or reasoned, and finding 2 says not run. Verification names the two unrun suites and that DDEV was not running. Open names what would settle each question, the partial breaking sweep included. Not reached names the deprecation sweep, the runtime lookups and the open pull requests."
         },
         {
             "met": true,
-            "evidence": "Every finding has an Owner, and each named owner is a published skill: typo3-distribution-content, typo3-extension-testing, typo3-extension-documentation, typo3-extension-upgrade and typo3-sitepackage-development. Finding 5 says unassigned. After the fence the answer gives the work order per owner. It makes no change and starts no fix."
+            "evidence": "Every finding has an Owner, and each owner is a published skill: typo3-distribution-content, typo3-extension-upgrade, typo3-extension-asset-build, typo3-extension-testing and typo3-sitepackage-development. After the fence the answer gives the order to work them per owner. It makes no change and starts no fix."
         }
     ],
     "failures": [
         {
             "avoided": true,
-            "evidence": "The findings are about this package: the Initialisation/ demo on wip/dist, the 244d65a9 commit message, DataImportTest.php:55, the baseline path in composer.json, ext_localconf.php:13-14. Each Rule names the typo3_hint_lookup id or the typo3_rule_lookup document that answered. No generic checklist item stands without a path."
+            "evidence": "The findings are about this package: the Initialisation/ demo of 244d65a9, the logo default in Sets/Full/settings.definitions.yaml:79,86, the audit and fix entries in Build/package.json, the dead baseline include, ext_localconf.php:13-14. Each Rule names a typo3_hint_lookup id, a typo3_changelog_lookup query or a checklist section, except finding 8. No generic checklist item stands without a path."
         },
         {
             "avoided": true,
-            "evidence": "The head states the declared constraint beside Ran on 14.3.7. Not reached says v15 is not installed and that the findings hold for 14.3.7 only. Finding 9 rests on the declared ext_emconf.php and composer.json ranges, not on the installed major. Finding 3 measures the declared PHP 8.2 floor against the CI matrix."
+            "evidence": "The head states the declared constraint beside Ran on 14.3.7. The session asked typo3_changelog_lookup for the v15 breaking entries because the range declares 15, and traced finding 2 into the v15 core rather than the installed 14.3.7. Finding 8 measures the ext_emconf.php range 14.3.0-15.4.99 against what the CI cells prove. Finding 6 measures the PHP 8.2 floor against the matrix."
         },
         {
             "avoided": true,
-            "evidence": "The checks it ran are phplint and the binaries behind the composer scripts cgl:ci and phpstan. It left out the npm lint script because the project marks it as one that may change files. Each remediation names a composer script the repository declares, or the CI matrix. The render-guides command in finding 4 comes from the extension/documentation/manual procedure for an extension, not from a core process."
+            "evidence": "The checks it ran are phplint and the composer scripts cgl:ci and phpstan, and npm and composer audits. It left the grunt lint and the test suites unrun because describe marks them change or unknown. Each remediation names a composer script, the CI matrix, or npm audit, which the repository does not declare. The backport line after the fence comes from the repository's own CLAUDE.md, not from the core process."
         },
         {
             "avoided": true,
-            "evidence": "The transcript carries no Edit or Write. php-cs-fixer ran with --dry-run and phplint with --no-cache, and git status was clean before and after. Finding 2 is reasoned from the commit message and says not reproduced. The second-site routing question and the escaping ViewHelpers stand under Open rather than as verified defects. Finding 9 stands under Recommendation."
+            "evidence": "The transcript carries no Edit or Write. php-cs-fixer ran with --dry-run, and the PHPStan probe used a configuration in /tmp. git status was clean before and after. Finding 3 says the two npm entries look like a typo and rests the defect on the advisories. The external media escaping and the other escapeOutput=false ViewHelpers stand under Open rather than as verified defects. Finding 8 stands under Recommendation."
         }
     ],
-    "notes": "The ninth recorded REVIEW-02 run and the third of 2026-10-28. Session ba0b1b28-bcd7-4c2e-8977-91fa2689ef7c, 16:55-16:59 UTC, claude-opus-5-5, Claude Code 2.1.312 headless with -p --session-id, prompt on standard input, acceptEdits, no steering. Environment /home/benji/projects/bootstrap_package on wip/dist at 244d65a9, clean before and after. Server 3482d798, the checkout main stands on. The server start refreshed the stale published skills, and the copy in the environment matches skills/. The run it replaces is session af0d65a6 against c0768e3b, in commit 3482d798. 38 tool calls, 9 of them to this server, against 37 and 8. The skill activated as the first call. e5e0277e took effect: the guide answered a Shipped content surface with four hints, the session asked them by id, read Initialisation/ and made the demo import findings 1 and 2. The second run had no Initialisation/ row. 5a72ac05 took effect in part: the head has a Key row and every row one value, but Checkout took the wrong value and Commit still carries a parenthesis. The skeleton offers `standalone`, `inside an installation` and `the installation` and defines none of them. typo3_project_describe answered kind composer-project with the extension at the root, and nothing maps that to one of the three. 4139a503: surfacesOwed arrived, and the session added a row for a subsystem no entry names. It did not write the list into its reply before the first read, where the second run did (D-SKL-103). It asked four typo3_hint_lookup calls, none with paths, for 18 of the 31 hint ids the surfaces name. Registration, Persistence and Rendering got one or two ids each and rows marked unassessed. 63bd1880 was not exercised: no typo3_changelog_lookup ran. The v15 finding of the second run, ImageInfoService against Breaking-110702, is absent. The session read no CI results and swept no changelog, and Not reached exempts the sweep for a review. Finding 9 and the v15 Not reached line are what stands for v15. 172fc20d belongs to typo3-core-patch-review and does not apply. Not tested here: the test run guide note, because no suite ran. The answer opens with four sentences before the fence, which the skeleton rules out (T-261028-c3a9). The first says four checks ran and names three."
+    "notes": "The tenth recorded REVIEW-02 run and the fourth of 2026-10-28. Session 814bde32-ddad-4d54-9bc0-902380b0cdcc, 18:53-18:57 UTC, claude-opus-5-5, Claude Code 2.1.312 headless with -p --session-id, prompt on standard input, acceptEdits, no steering. Environment /home/benji/projects/bootstrap_package on wip/dist at 244d65a9, clean before and after. Server 49b0adbc, the checkout main stands on, and the server start refreshed the stale published skills. The run it replaces is session ba0b1b28 against 3482d798, in commit 49b0adbc. 53 tool calls, 9 of them to this server, against 38 and 9. The skill activated as the first call. 7c6da109 took effect: Checkout says `standalone`. a16bdd89 took effect: after the guide the session created one TaskCreate item per surface, eight in all, before its first file read, and closed each before the answer. The client's tool is TaskCreate rather than TodoWrite. 49b0adbc took effect in part: the session asked the v15 breaking entries as its first call after the surface list, and finding 2 rests on Breaking-110361 and the v15 core. The list it got carries Breaking-110702, and the session did not hold it against the code. ImageInfoService::__invoke() stores AfterFileProcessingEvent::getProcessedFile(), which now returns ProcessedResourceInterface, and findByUri() still declares ?ProcessedFile. So the v15 finding of the second run is absent again, and Open says only 10 of 41 entries were held. 3d73d035 took effect: the answer opens with the fence. After the fence stand the order to work them and a paragraph on backports and the files left unchanged, which is more than report.md allows. Initialisation/ is still read and makes finding 1. The Rule of finding 8 names a compatibility procedure document with `(named, not read)`, and the trace has no call for it, which report.md rules out. Each surface took one or two hint calls with ids and no paths. Not tested here: the test run guide note, because no suite ran."
 }

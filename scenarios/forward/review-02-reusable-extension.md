@@ -1,6 +1,6 @@
 # REVIEW-02 — Review a reusable TYPO3 extension
 
-**Environment:** `E-EXT` · **Status today:** `partial`
+**Environment:** `E-EXT` · **Status today:** `covered`
 
 > Review this TYPO3 extension. Tell me the most important things that would
 > prevent us maintaining and supporting it confidently, in priority order. Do

@@ -1,7 +1,7 @@
 {
     "scenario": "REVIEW-03",
     "date": "2026-10-28",
-    "server": "3482d798",
+    "server": "49b0adbc",
     "client": "claude-code",
     "environment": "E-CORE",
     "criteria": "e8685940c1c9",
@@ -30,7 +30,7 @@
         {
             "tool": "typo3_task_guide",
             "arguments": {
-                "task": "Review a core bugfix patch: localization wizard asks for required page fields, FormEngine permission check for page translations, DataHandler localize accepts fieldValues",
+                "task": "Review a bugfix patch: localization wizard asks for required page fields via FormEngine step, localize command accepts fieldValues, FormEngine permission check for new page translations",
                 "changeType": "bugfix",
                 "paths": [
                     "typo3/sysext/core/Classes/DataHandling/DataHandler.php",
@@ -39,9 +39,9 @@
                     "typo3/sysext/backend/Classes/Controller/Wizard/LocalizationController.php",
                     "typo3/sysext/backend/Classes/Wizard/PageWizardStepBuilder.php",
                     "typo3/sysext/backend/Classes/Localization/RequiredTranslationFieldResolver.php",
+                    "typo3/sysext/backend/Configuration/Backend/AjaxRoutes.php",
                     "Build/Sources/TypeScript/backend/localization/localization-wizard.ts",
                     "typo3/sysext/core/Documentation/Changelog/14.3.x/Important-87328-LocalizationWizardAsksForRequiredPageFields.rst",
-                    "typo3/sysext/backend/Configuration/Backend/AjaxRoutes.php",
                     "typo3/sysext/backend/Resources/Private/Language/Wizards/localization.xlf"
                 ]
             }
@@ -50,32 +50,11 @@
             "tool": "typo3_hint_lookup",
             "arguments": {
                 "ids": [
-                    "datahandler-testing",
                     "tca-formengine",
                     "documentation-changelog",
+                    "backend-routing-internals",
                     "backend-typescript",
-                    "javascript-unit-tests",
-                    "backend-lit-task"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_rule_lookup",
-            "arguments": {
-                "documentId": "core/contribution/changelog"
-            }
-        },
-        {
-            "tool": "typo3_test_run_guide",
-            "arguments": {
-                "paths": [
-                    "typo3/sysext/core/Classes/DataHandling/DataHandler.php",
-                    "typo3/sysext/core/Tests/Functional/DataHandling/DataHandler/LocalizePageWithFieldValuesTest.php",
-                    "typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseUserPermissionCheck.php",
-                    "typo3/sysext/backend/Tests/Functional/Controller/Wizard/LocalizationControllerTest.php",
-                    "Build/Sources/TypeScript/backend/localization/localization-wizard.ts",
-                    "typo3/sysext/core/Documentation/Changelog/14.3.x/Important-87328-LocalizationWizardAsksForRequiredPageFields.rst",
-                    "typo3/sysext/backend/Resources/Private/Language/Wizards/localization.xlf"
+                    "javascript-unit-tests"
                 ]
             }
         },
@@ -87,47 +66,76 @@
                 "isBreaking": false,
                 "isDeprecation": false
             }
+        },
+        {
+            "tool": "typo3_test_run_guide",
+            "arguments": {
+                "paths": [
+                    "typo3/sysext/core/Classes/DataHandling/DataHandler.php",
+                    "typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseUserPermissionCheck.php",
+                    "typo3/sysext/backend/Classes/Controller/Wizard/LocalizationController.php",
+                    "Build/Sources/TypeScript/backend/localization/localization-wizard.ts",
+                    "typo3/sysext/core/Documentation/Changelog/14.3.x/Important-87328-LocalizationWizardAsksForRequiredPageFields.rst",
+                    "typo3/sysext/backend/Resources/Private/Language/Wizards/localization.xlf"
+                ]
+            }
+        },
+        {
+            "tool": "typo3_rule_lookup",
+            "arguments": {
+                "query": "bugfix backport features"
+            }
+        },
+        {
+            "tool": "typo3_hint_lookup",
+            "arguments": {
+                "ids": [
+                    "public-api-surface",
+                    "breaking-without-a-moved-member"
+                ],
+                "targetVersion": "14"
+            }
         }
     ],
     "outcomes": [
         {
             "met": true,
-            "evidence": "The skill activated at the first turn, and the session read base.md, checklist.md and report.md next. git log and git show --stat read the commit 1bdd0eddcbb, and the session then read the whole non-test diff. typo3_gerrit_lookup with the Change-Id returned change 97164 at patch set 3 with Verified -1, and typo3_forge_lookup read issue 87328. typo3_task_guide took ten changed paths without a targetVersion and left six ids in omittedHints. The session fetched all six with one typo3_hint_lookup by id, datahandler-testing first, at 16:56:17. It read the CI log of job 6008819, then the new test, its two CSV fixtures and page_translator.csv after that."
+            "evidence": "The skill activated at the first turn, and the session read base.md, checklist.md and report.md next. git log and git show --stat read the commit 1bdd0eddcbb against main. typo3_gerrit_lookup with the Change-Id returned change 97164 at patch set 3 with Verified -1, and typo3_forge_lookup read issue 87328. The session read the CI log of job 6008819 and then called typo3_task_guide with ten changed paths. It read the PHP, configuration and TypeScript hunks, the new test, its two CSV fixtures and page_translator.csv. It listed the test methods of both new test files and ran ManualLocalizationHandlerTest beside them."
         },
         {
             "met": true,
-            "evidence": "Every finding has a Where line at a changed path, a Rule line and a Consequence line. Spot-checked in the worktree: the Editors CSV has no workspace_perms column, DataHandler.php:119 declares a class that is not final, and line 4756 carries the new parameter. The workspaces load is at line 39, where the answer says 38. Finding 1 now states the defaults as the datahandler-testing hint states them, and the workspaces TCA override sets 0. Four of five Rule lines end on a call the trace holds. Finding 2 also names typo3_rule_lookup with documentId core/contribution/gerrit-workflow, which the trace does not carry; typo3_project_describe listed that id. Its other source is a section of the core AGENTS.md, not a path and a line."
+            "evidence": "Every finding has a Where line at a changed path, a Rule line and a Consequence line. Spot-checked in the worktree: the Editors CSV has no workspace_perms column, and LocalizePageWithFieldValuesTest.php:39 loads workspaces. DataHandler.php:4756 carries the new parameter, :3314 the array form, and :7477 the PAGE_EDIT branch. The subject has 56 characters. Finding 1 states the fixture rule as the datahandler-testing hint states it. Four of five Rule lines end on a call the trace holds. Finding 3 cites core/contribution/gerrit-workflow \"via the skill\", a typo3_rule_lookup the trace does not carry."
         },
         {
             "met": true,
-            "evidence": "The first suite was the one failing test file on MariaDB, which reproduced the CI failure. Two targeted functional files on SQLite, one unit directory and five static suites followed, cgl in its -n form. Every Ran line matches the summary file the chain wrote. The wait was the client's background task and its notification, with one poll of the summary between; no process search. Every suite on the Not run lines is labeled. Their reason is off the list for most: \"none of the three accepted reasons applies; I limited the scope to the targeted suites\". Five verifying suites stand on neither line: lintYaml, lintServicesYaml, checkComposer, checkExtensionScannerRst and normalizeXliff. cglGit and cglHeaderGit, marked not verifying by the guide, are absent as they should be."
+            "evidence": "The first suite was the one failing test file on MariaDB, which reproduced the CI failure with SQLSTATE 22003. Three targeted functional files on SQLite, two on MariaDB, one unit directory and five static suites followed, cgl in its -n form. Every Ran line matches the log the chain wrote. All twenty names in the guide's verifying list stand on a Ran line or a Not run line, and none stands on neither. Most Not run reasons are off the closed list. The answer says so itself: \"skipped by my own choice ... not one of the three valid reasons\". unitJavascript and e2e carry \"nobody was there to ask\", although the worktree the session ran in stood."
         },
         {
             "met": true,
-            "evidence": "Each surface comes from the diff. The changelog is checked because the patch ships an Important entry in 14.3.x, through typo3_rule_lookup with documentId core/contribution/changelog and a checkRst run. Compatibility comes up because Releases names an LTS line and the patch adds a parameter to a public method on a non-final class. git merge-tree against origin/14.3 backs it with two conflicts. Commit shape went through typo3_commit_message_guide with workflow core, and its one warning stands as a cosmetic finding. The missing Signed-off-by stands as correct, because the checkout's CLAUDE.local.md asks for none. Security is two traced access paths, because the patch adds an endpoint and changes a permission check."
+            "evidence": "Each surface comes from the diff. The changelog is checked because the patch ships an Important entry in 14.3.x, by the documentation-changelog hint and a checkRst run. Compatibility comes up because Releases names an LTS line and the patch adds a parameter to a public method on a non-final class. A second typo3_hint_lookup took public-api-surface at targetVersion 14 for it. git merge-tree against origin/14.3 backs the backport finding with two conflicts. Commit shape went through typo3_commit_message_guide with workflow core, and its one warning stands as a cosmetic finding. Security is the permission branch and the access checks of the new endpoint."
         },
         {
             "met": true,
-            "evidence": "Five numbered findings sit under three severity headings, with Checked and correct, Open and Dropped after them. The answer names one blocker and one decision about Releases. The session edited nothing and ran neither build nor checkGruntClean. git status --short was empty at the first call and after the suites, and the worktree is clean at 1bdd0eddcbb after the run."
+            "evidence": "Five numbered findings sit under three severity headings, with Checked and correct, Open and Dropped after them. The answer names one blocker and one decision about Releases, and an order of work after the fence. The session edited nothing and ran neither build, checkGruntClean nor normalizeXliff, because they write into the checkout. git status --short was empty after the suites, and the worktree is clean at 1bdd0eddcbb after the run."
         }
     ],
     "failures": [
         {
             "avoided": true,
-            "evidence": "Every finding carries a path and a line from this diff or the checkout. The blocker rests on a local MariaDB run of the new test, the CI log of job 6008819 and the Editors CSV. The SQLite half is labeled reasoned from the hint and not probed."
+            "evidence": "Every finding carries a path and a line from this diff or the checkout. The blocker rests on a local MariaDB run of the new test, the CI log of job 6008819 and the Editors CSV. Finding 2 and finding 4 say that their evidence is reasoned."
         },
         {
             "avoided": true,
-            "evidence": "No generic TYPO3 checklist stands in the answer. One typo3_hint_lookup took exactly the six omitted ids, and one typo3_rule_lookup took the changelog document by id. Every Checked and correct entry is a claim of this patch at its line, and the Surfaces table is the skill's own."
+            "evidence": "No generic TYPO3 checklist stands in the answer. One typo3_hint_lookup took five of the six omitted ids, and one more took two ids for the public method. Every Checked and correct entry is a claim of this patch at its line, and the Surfaces table is the skill's own."
         },
         {
             "avoided": true,
-            "evidence": "The session applied core rules to a core patch: the backport reach of a bugfix, the changelog directory of the oldest Releases branch and the core commit-message guide. It ran cgl -n and listed neither cglGit nor cglHeaderGit, as the guide marks them for a worktree. No extension or site rule appears."
+            "evidence": "The session applied core rules to a core patch: the backport reach of a bugfix, the changelog directory of the oldest Releases branch and the core commit-message guide. It ran cgl -n and listed neither cglGit nor cglHeaderGit, which the guide marks as not verifying. No extension or site rule appears."
         },
         {
             "avoided": true,
-            "evidence": "The session wrote no file in the worktree and fetched nothing. git merge-tree --write-tree wrote objects only, and its output went to /tmp/review-97164-mt.txt. The suite logs went to /tmp/review-97164/, outside the checkout."
+            "evidence": "The session wrote no file in the worktree. git fetch -q origin 14.3 moved the remote-tracking ref only, and the Fetched field names it. git merge-tree --write-tree wrote objects only. The suite logs went to /tmp, outside the checkout."
         }
     ],
-    "notes": "The ninth recorded REVIEW-03 run, and the third in this git worktree today. Session 8d90cf45-032e-43b2-ae10-16436ad2b3b9, claude-opus-5-5, client 2.1.312, headless with -p, the prompt on standard input, --permission-mode acceptEdits and no steering. The prompt started at 16:55:36 UTC and the final answer stands at 17:00:06. The client exited on its own after it. The session made 35 tool calls, 8 of them to this server. The run it replaces is in commit 3482d798, session c05ed6f0 against server c0768e3b. The environment is the worktree /home/benji/projects/typo3-cms/.worktrees/bugfix-87328, branch bugfix-87328 at 1bdd0eddcbb, one commit by the maintainer over origin/main and pushed as change 97164 patch set 3. The tree was clean before and after the run. The server is the checkout main stands on at 3482d798, and its start refreshed the stale published skills. Today's changes, held against this run. Omitted hint (172fc20d): took effect. The brief again carried language-files, backend-ui, backend-modules and backend-routing-internals and left datahandler-testing among six omitted ids. The session fetched all six by id before its first fixture read, and finding 1 cites datahandler-testing. The TCA defaults are right this time, where the second run stated them wrongly. Closed reasons (f42024f9, D-SKL-106): not met. phpstan, e2e, unitJavascript, lintPhp, cglHeader -n, checkRstRenderingSingle and the full unit and functional suites stay Not run. The session wrote that none of the three reasons applies and that it limited the scope. So the first Wrong if of D-SKL-106 fired: the sentence arrived, was read and was quoted, and the session skipped anyway. Five verifying suites stand on neither line, against seven in the second run. Git-based cgl (f42024f9): took effect. typo3_test_run_guide marked cglGit and cglHeaderGit verifies false, and neither stands on the answer. Head fields (5a72ac05): took effect. Commit, HEAD, Target and Releases hold one value each, and Fetched says not fetched, which is right because the session fetched nothing. Rule lines end on a call for four of five findings; finding 2 cites a rule_lookup id the trace lacks. Line form: Checked and correct, Open and Dropped are one line each, claim, dash and source. Summary before the fence: the out file opens with a progress sentence. In the transcript that sentence is the text of the turn before the background task notified, and the final turn opens with the fence. The headless output joined the two turns. After the fence stand only the order of work and an offer to hand over to typo3-core-patch-development."
+    "notes": "The tenth recorded REVIEW-03 run, and the fourth in this git worktree today. Session de36f6e6-1378-4905-b5fc-9d6c0c15c9fd, claude-opus-5-5, client 2.1.312, headless with -p, the prompt on standard input, --permission-mode acceptEdits and no steering. The prompt started at 18:53:12 UTC and the final answer stands at 18:57:36. The session made 40 tool calls, 9 of them to this server. The run it replaces is in commit 49b0adbc, session 8d90cf45 against server 3482d798. The environment is the worktree /home/benji/projects/typo3-cms/.worktrees/bugfix-87328, branch bugfix-87328 at 1bdd0eddcbb, one commit by the maintainer over origin/main and pushed as change 97164 patch set 3. The tree was clean before and after the run. The server is the checkout main stands on at 49b0adbc, and its start refreshed the stale published skills. Today's changes, held against this run. One hint per path first (27ab6eff): took effect. The brief carried language-files, backend-ui, datahandler-testing and backend-modules, so datahandler-testing reached the session inline. The session did not fetch it again, and finding 1 cites it with the right defaults. Owed in the data (d3e21af3 and the commits after it): took effect in part. The session fetched five of the six ids omittedHintsOwed names and left backend-lit-task, which no Not reached line names. The diff changes a LitElement that loads data asynchronously, localization-wizard.ts:75 and :177, and finding 4 is about its error fallback. Verifying list (80e76a9f, D-SKL-107): took effect. All twenty verifying names stand on Ran or Not run, against five on neither line in the third run. Closed reasons (D-SKL-106): not met for the second run in a row. Full unit and functional stay Not run \"to save time\", and phpstan, lintPhp, cglHeader -n and five more \"by my own choice\". The session now labels each of those as off the list, where the third run wrote one sentence for all. unitJavascript and e2e carry the no-worktree reason, although the session ran in the worktree that holds the patch. Head fields: Commit, HEAD, Target and Releases hold one value each. Fetched holds origin 14.3 with a gloss beside it, and this is the first of today's runs that fetched a ref. Rule lines end on a call for four of five findings; finding 3 cites gerrit-workflow \"via the skill\", the same defect as finding 2 of the third run. Line form: Checked and correct, Open and Dropped are claim, dash and source, but some sources are a run or a grep rather than a path and a line. The second Open entry runs to three sentences. Summary before the fence: the final turn opens with two summary sentences and then the fence."
 }

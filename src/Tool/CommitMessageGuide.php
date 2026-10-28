@@ -222,6 +222,6 @@ final class CommitMessageGuide extends ReadOnlyTool
             'checks' => $checks,
             'workflow' => $workflow,
             'nextTools' => [$next],
-        ]);
+        ], $workflow === CommitMessage::WORKFLOW_CORE ? [self::CORE_GUIDE] : []);
     }
 }

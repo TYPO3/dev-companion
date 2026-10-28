@@ -390,7 +390,11 @@ Data:
                 "title": "Linking Into the Official Documentation From a Template or From PHP"
             }
         ],
-        "owed": []
+        "owed": [
+            "A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.",
+            "Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list.",
+            "The hints also cover this — call typo3_hint_lookup with the id"
+        ]
     }
 
 rules: miss
@@ -789,5 +793,7 @@ Data:
                 ]
             }
         ],
-        "owed": []
+        "owed": [
+            "For backend UI components use typo3_component_lookup, and call typo3_server_scope for what this server covers at all. If the topic should be covered here, leave a feedback with typo3_feedback_record."
+        ]
     }

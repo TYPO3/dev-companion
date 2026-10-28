@@ -20,6 +20,10 @@ use TYPO3\DevCompanion\Server\Upstream;
  */
 final class ServerScope extends ReadOnlyTool
 {
+    private const RECORD_A_GAP = 'Record one with typo3_feedback_record instead of going elsewhere.';
+
+    private const ASK_AGAIN = 'Ask again naming those, or call this tool with no arguments for the whole orientation.';
+
     /**
      * The parts of this answer a caller can ask for by name, each with what it
      * holds, in the order the payload carries them.
@@ -226,7 +230,7 @@ final class ServerScope extends ReadOnlyTool
             // for opposite reactions: leave, or say what was absent.
             $lines[] = 'Deliberately not covered — and this list is the boundary: a subject that is not on it is in '
                 . 'scope, so a thin answer to it is a gap in the knowledge base rather than a limit of it.'
-                . (Channel::isAvailable() ? ' Record one with typo3_feedback_record instead of going elsewhere.' : '');
+                . (Channel::isAvailable() ? ' ' . self::RECORD_A_GAP : '');
             foreach ($coverage['doesNotCover'] as $entry) {
                 $lines[] = '## ' . $entry['topic'];
                 $lines[] = $entry['why'];
@@ -314,10 +318,17 @@ final class ServerScope extends ReadOnlyTool
         if ($withheld !== []) {
             $lines[] = '';
             $lines[] = 'Left out, because this call named sections: ' . implode(', ', array_column($withheld, 'section'))
-                . '. Ask again naming those, or call this tool with no arguments for the whole orientation.';
+                . '. ' . self::ASK_AGAIN;
         }
 
-        return ToolResult::create(implode("\n", $lines), self::payload($coverage, $sections, $console, $reason, $caveat));
+        return ToolResult::create(
+            implode("\n", $lines),
+            self::payload($coverage, $sections, $console, $reason, $caveat),
+            [
+                in_array('doesNotCover', $sections, true) && Channel::isAvailable() ? self::RECORD_A_GAP : '',
+                $withheld === [] ? '' : self::ASK_AGAIN,
+            ],
+        );
     }
 
     /**

@@ -1096,7 +1096,9 @@ Data:
         ],
         "availableHintsWithheld": 0,
         "documents": [],
-        "owed": []
+        "owed": [
+            "The next call is typo3_documentation_lookup with queries [\"your question\"] and targetVersion \"14\"."
+        ]
     }
 
 hints: topic
@@ -1627,7 +1629,9 @@ Data:
                 "hint": "css-styleguide-demos"
             }
         ],
-        "owed": []
+        "owed": [
+            "Worked example: typo3/sysext/styleguide — typo3_reference_list for what it demonstrates and where an installation has it."
+        ]
     }
 
 hints: miss
@@ -2408,5 +2412,7 @@ Data:
         ],
         "availableHintsWithheld": 0,
         "documents": [],
-        "owed": []
+        "owed": [
+            "Name a path or a more specific topic, or ask for one of the ids below."
+        ]
     }

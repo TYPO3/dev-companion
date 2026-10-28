@@ -127,6 +127,9 @@ Answers with
         # Stable identifier of the check, for example missing-typo3-version.
         code: string
         message: string
+    # What the caller does with url, stated beside it: nothing is filed until a
+    # person submits the form.
+    urlOwed: string
     # What follows the draft, named as the call that answers it.
     nextTools:
       - tool: string
@@ -141,8 +144,8 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-10-05 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/. Its
+Recorded on 2026-10-28 by ``bin/cli tools:record``. Answered against
+core-checkout, TYPO3 14.3.8-dev, the 14.3 core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -317,6 +320,7 @@ Data:
                 "message": "7 issues match \"styleguide password\". Read them before you file this one."
             }
         ],
+        "urlOwed": "Nothing was filed: open the link, read the form, submit.",
         "nextTools": [
             {
                 "tool": "typo3_forge_lookup",
@@ -370,19 +374,19 @@ Text:
     - WARNING: A backtick renders as a backtick. Inline code is @Foo::bar()@.
     - WARNING: A line that starts with ## is a nested list item in Textile. A heading is h2. or h3.
     - ERROR: A Bug does not go without its TYPO3 Version: the major you saw it on. Pass typo3Version.
-    - WARNING: 14 issues match "Something renders wrong". Read them before you file this one.
+    - WARNING: 15 issues match "Something renders wrong". Read them before you file this one.
 
     Possible duplicates:
+    - #111111 · Bug · Under Review · Text & Images in Camino theme only renders one image · https://forge.typo3.org/issues/111111
     - #110427 · Task · Under Review · Rework the database analyzer stack onto objects · https://forge.typo3.org/issues/110427
     - #109681 · Bug · Needs Feedback · SVG image processing only one path · https://forge.typo3.org/issues/109681
     - #104440 · Bug · Closed · stripPathSitePrefix breaks file path · https://forge.typo3.org/issues/104440
     - #101928 · Bug · Under Review · f:image(.uri) and other FAL/File ViewHelpers should never raise an Exception for missing files! · https://forge.typo3.org/issues/101928
     - #99372 · Bug · Closed · TYPO3 11.5.20 - after upgrade, error message "get_class_methods(): Argument #1 ($object_or_class) must be an object or a valid class name, string given" · https://forge.typo3.org/issues/99372
     - #96830 · Bug · Closed · Forms: Confirmation message Finisher overriding issues · https://forge.typo3.org/issues/96830
-    - #96823 · Bug · Needs Feedback · <f:image src="{file-path-to-image}"> with config.absRefPrefix not working in TYPO3 11 · https://forge.typo3.org/issues/96823
+    - #96823 · Bug · Closed · <f:image src="{file-path-to-image}"> with config.absRefPrefix not working in TYPO3 11 · https://forge.typo3.org/issues/96823
     - #94202 · Bug · Closed · show details for BE user (non-admin) leads to exception: An argument "key" or "id" has to be provided · https://forge.typo3.org/issues/94202
     - #93079 · Bug · Closed · Site appearing twice in HMENU Navigation in Workspace Preview · https://forge.typo3.org/issues/93079
-    - #86762 · Bug · Closed · Site-Configuration defined language fallbacks not working · https://forge.typo3.org/issues/86762
 
     typo3_forge_lookup — with issue and the number of each possible duplicate, and with backlog="newest" and createdSince where the search matched nothing.
     typo3_commit_message_guide — with workflow="core" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it.
@@ -414,9 +418,16 @@ Data:
         "duplicateSearch": {
             "query": "Something renders wrong",
             "status": "answered",
-            "total": 14
+            "total": 15
         },
         "possibleDuplicates": [
+            {
+                "issue": 111111,
+                "subject": "Text & Images in Camino theme only renders one image",
+                "tracker": "Bug",
+                "status": "Under Review",
+                "url": "https://forge.typo3.org/issues/111111"
+            },
             {
                 "issue": 110427,
                 "subject": "Rework the database analyzer stack onto objects",
@@ -463,7 +474,7 @@ Data:
                 "issue": 96823,
                 "subject": "<f:image src=\"{file-path-to-image}\"> with config.absRefPrefix not working in TYPO3 11",
                 "tracker": "Bug",
-                "status": "Needs Feedback",
+                "status": "Closed",
                 "url": "https://forge.typo3.org/issues/96823"
             },
             {
@@ -479,13 +490,6 @@ Data:
                 "tracker": "Bug",
                 "status": "Closed",
                 "url": "https://forge.typo3.org/issues/93079"
-            },
-            {
-                "issue": 86762,
-                "subject": "Site-Configuration defined language fallbacks not working",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/86762"
             }
         ],
         "checks": [
@@ -512,9 +516,10 @@ Data:
             {
                 "level": "warning",
                 "code": "possible-duplicates",
-                "message": "14 issues match \"Something renders wrong\". Read them before you file this one."
+                "message": "15 issues match \"Something renders wrong\". Read them before you file this one."
             }
         ],
+        "urlOwed": "Nothing was filed: open the link, read the form, submit.",
         "nextTools": [
             {
                 "tool": "typo3_forge_lookup",

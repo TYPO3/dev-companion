@@ -48,11 +48,18 @@ final class LabelLookup extends ReadOnlyTool
      * label, which a session that describes its work as a content element has
      * no reason to type.
      */
-    private const SOURCE_LANGUAGE = "\n\nWrite a new trans-unit in English in the unprefixed source file, and put any "
+    private const SOURCE_LANGUAGE = 'Write a new trans-unit in English in the unprefixed source file, and put any '
         . 'other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same '
         . 'unit id. A source file that is not English is a defect to correct in place rather than a convention to '
         . 'continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with '
         . 'id=language-files has what it is.';
+
+    private const REUSE_BOUNDARY = 'A match is reusable only when its resource is the one already used at the '
+        . 'consuming code. A label from another module or package is not a shared vocabulary merely because its text '
+        . 'matches; call again with resource once that usage context is known.';
+
+    private const REFERENCE_BY_REF = 'Reference a label by the ref shown first. Package resources use a translation '
+        . 'domain; project-site resources use the full LLL file reference.';
 
     public static function name(): string
     {
@@ -97,6 +104,7 @@ final class LabelLookup extends ReadOnlyTool
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
             'terms' => Schema::termCounts('How many labels each word of the query reaches on its own, inside the extension and the resource the call named. That says where to narrow when the query as a whole reaches none. A label answers the query only where it carries every word.'),
             'termCountsWithoutTheNarrowing' => Schema::termCounts('The same words counted outside the resource, inside the extension the call named or the resource implies. Returned only where a word reaches there and nothing inside the resource, which makes the resource what emptied this answer rather than the words.'),
+            'resourceOwed' => Schema::string('Where the call named no resource, what makes a match reusable and the call to make once the consuming code\'s resource is known. Empty where the call named one.'),
             'resources' => Schema::listOf(Schema::string(), 'The resources that hold a label with every word of the query. Returned where the call named a resource and no label at all in it reaches the query. So you replace a guessed path with one that exists. Empty means no resource holds such a label.'),
             'resourceDiagnostics' => Schema::listOf(Schema::object([
                 'resource' => Schema::string('The XLF resource this diagnosis describes.'),
@@ -113,7 +121,7 @@ final class LabelLookup extends ReadOnlyTool
                 'source' => Schema::string('The label text in the searched locale.'),
                 'resource' => Schema::string('The XLF file it lives in.'),
             ], ['ref', 'domain', 'key', 'source'])),
-        ], ['query', 'resource', 'matchCount', 'answeredBy', 'terms', 'labels'], ['query']);
+        ], ['query', 'resource', 'resourceOwed', 'matchCount', 'answeredBy', 'terms', 'labels'], ['query']);
     }
 
     public static function answer(array $args): ToolResult
@@ -249,10 +257,9 @@ final class LabelLookup extends ReadOnlyTool
             ? "\n\nProject-site XLF files were read beside the console result because TYPO3 does not enumerate config/sites as package labels."
             : '';
         $diagnosticText = self::diagnosticText($diagnostics);
+        $resourceOwed = $resource === '' ? self::REUSE_BOUNDARY : '';
         $reuseBoundary = $resource === ''
-            ? "\n\nA match is reusable only when its resource is the one already used at the consuming code. "
-                . 'A label from another module or package is not a shared vocabulary merely because its text matches; '
-                . 'call again with resource once that usage context is known.'
+            ? "\n\n" . self::REUSE_BOUNDARY
             : "\n\nSearch restricted to the translation resource used at the consuming code: " . $resource . '.';
 
         if ($shown === []) {
@@ -330,6 +337,7 @@ final class LabelLookup extends ReadOnlyTool
             $data = [
                 'query' => $query,
                 'resource' => $resource === '' ? null : $resource,
+                'resourceOwed' => $resourceOwed,
                 'matchCount' => 0,
                 'labels' => [],
                 'terms' => $termCounts,
@@ -349,9 +357,10 @@ final class LabelLookup extends ReadOnlyTool
             }
 
             return ToolResult::create(
-                implode("\n", $lines) . $reuseBoundary . self::SOURCE_LANGUAGE . $fromFiles
+                implode("\n", $lines) . $reuseBoundary . "\n\n" . self::SOURCE_LANGUAGE . $fromFiles
                     . $fromProjectSites . $diagnosticText,
                 $data,
+                [self::SOURCE_LANGUAGE],
             );
         }
 
@@ -368,19 +377,19 @@ final class LabelLookup extends ReadOnlyTool
             $lines[] = '  ' . $label['resource'];
         }
         $lines[] = '';
-        $lines[] = 'Reference a label by the ref shown first. Package resources use a translation domain; '
-            . 'project-site resources use the full LLL file reference.';
+        $lines[] = self::REFERENCE_BY_REF;
 
-        return ToolResult::create(implode("\n", $lines) . $reuseBoundary . self::SOURCE_LANGUAGE . $fromFiles
+        return ToolResult::create(implode("\n", $lines) . $reuseBoundary . "\n\n" . self::SOURCE_LANGUAGE . $fromFiles
             . $fromProjectSites . $diagnosticText, [
                 'query' => $query,
                 'resource' => $resource === '' ? null : $resource,
+                'resourceOwed' => $resourceOwed,
                 'matchCount' => $total,
                 'labels' => array_map(self::publicLabel(...), $shown),
                 'terms' => $termCounts,
                 'resourceDiagnostics' => $diagnostics,
                 'answeredBy' => $answeredBy,
-            ]);
+            ], [self::REFERENCE_BY_REF, self::SOURCE_LANGUAGE]);
     }
 
     /**

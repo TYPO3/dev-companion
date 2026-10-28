@@ -139,6 +139,17 @@ final class MatchedHints
     }
 
     /**
+     * The example lines the text gives these hints, for the data half.
+     *
+     * @param array<int, array<string, mixed>> $hints
+     * @return array<int, string>
+     */
+    public static function owed(array $hints, ?int $target): array
+    {
+        return array_values(array_intersect_key(self::examples($target), array_flip(array_column($hints, 'id'))));
+    }
+
+    /**
      * The matched hints as text: one section per category, one block per hint.
      *
      * `$of` is the scope of the paths this block matched for. So a statement

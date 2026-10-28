@@ -220,5 +220,7 @@ Data:
             14,
             15
         ],
-        "owed": []
+        "owed": [
+            "Where an entry names a hint, typo3_hint_lookup with that id answers the conventions it demonstrates."
+        ]
     }

@@ -97,6 +97,10 @@ final class ReferenceList extends ReadOnlyTool
             }
         }
 
+        $owed = array_filter(array_column($entries, 'hint'), static fn(?string $hint): bool => $hint !== null) === []
+            ? []
+            : ['Where an entry names a hint, typo3_hint_lookup with that id answers the conventions it demonstrates.'];
+
         return ToolResult::create(implode("\n", $lines), [
             'targetVersion' => $target,
             'matchCount' => count($entries),
@@ -112,6 +116,6 @@ final class ReferenceList extends ReadOnlyTool
                 'existsOn' => Versions::label($entry['since'], $entry['until']),
             ], $entries),
             'coveredVersions' => Versions::majors(),
-        ]);
+        ], $owed);
     }
 }

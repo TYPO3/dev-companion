@@ -265,7 +265,11 @@ Data:
             }
         ],
         "scope": "core",
-        "owed": []
+        "owed": [
+            "A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.",
+            "Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list.",
+            "These commands run in a TYPO3 core checkout. In any other repository, what to run is declared in its own composer.json, package.json and CI configuration."
+        ]
     }
 
 scripts: miss

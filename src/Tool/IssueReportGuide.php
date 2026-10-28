@@ -17,6 +17,8 @@ final class IssueReportGuide extends ReadOnlyTool
 {
     protected const OPEN_WORLD = true;
 
+    private const NOT_FILED = 'Nothing was filed: open the link, read the form, submit.';
+
     public static function name(): string
     {
         return 'typo3_issue_report_guide';
@@ -100,8 +102,9 @@ final class IssueReportGuide extends ReadOnlyTool
                 'code' => Schema::string('Stable identifier of the check, for example missing-typo3-version.'),
                 'message' => Schema::string(),
             ], ['level', 'code', 'message'])),
+            'urlOwed' => Schema::string('What the caller does with url, stated beside it: nothing is filed until a person submits the form.'),
             'nextTools' => Schema::listOf(Schema::nextTool(), 'What follows the draft, named as the call that answers it.'),
-        ], ['subject', 'tracker', 'description', 'form', 'url', 'descriptionInLink', 'duplicateSearch', 'possibleDuplicates', 'checks', 'nextTools']);
+        ], ['subject', 'tracker', 'description', 'form', 'url', 'descriptionInLink', 'duplicateSearch', 'possibleDuplicates', 'checks', 'urlOwed', 'nextTools']);
     }
 
     public static function answer(array $args): ToolResult
@@ -112,7 +115,7 @@ final class IssueReportGuide extends ReadOnlyTool
             ['tool' => 'typo3_commit_message_guide', 'when' => 'with workflow="core" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it.'],
         ];
 
-        $lines = ['Forge issue draft for the TYPO3 Core project. Nothing was filed: open the link, read the form, submit.', ''];
+        $lines = ['Forge issue draft for the TYPO3 Core project. ' . self::NOT_FILED, ''];
         foreach ($draft['form'] as $field) {
             $lines[] = '- ' . $field['field'] . ': ' . $field['value'];
         }
@@ -140,6 +143,6 @@ final class IssueReportGuide extends ReadOnlyTool
             $lines[] = $tool['tool'] . ' — ' . $tool['when'];
         }
 
-        return ToolResult::create(implode("\n", $lines), $draft + ['nextTools' => $next]);
+        return ToolResult::create(implode("\n", $lines), $draft + ['urlOwed' => self::NOT_FILED, 'nextTools' => $next]);
     }
 }

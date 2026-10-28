@@ -95,6 +95,23 @@ final class RuleLookup extends ReadOnlyTool
      */
     private const CONCENTRATED = 2;
 
+    private const WITHHELD_READABLE = 'Each is readable in full as typo3://guides/<id> where the work really is a '
+        . 'core patch.';
+
+    /**
+     * What stays back here has a counterpart outside the core, and it is a tool
+     * rather than a second copy of the page. That is the one measure this
+     * repository writes by as well, D-DOC-013.
+     */
+    private const WITHHELD_COUNTERPART = 'For a repository of your own, the same subjects are answered by '
+        . 'typo3_commit_message_guide with workflow="project" and by typo3_hint_lookup.';
+
+    private const ALSO_IN_HINTS = 'The hints also cover this — call typo3_hint_lookup with the id';
+
+    private const MISS_ADVICE = 'For backend UI components use typo3_component_lookup, and call typo3_server_scope '
+        . 'for what this server covers at all. If the topic should be covered here, leave a feedback with '
+        . 'typo3_feedback_record.';
+
     /**
      * The one document every match came out of, or null where they are spread
      * or where a single section is the whole of the evidence.
@@ -157,28 +174,29 @@ final class RuleLookup extends ReadOnlyTool
         }
 
         $lines = [];
+        $owed = [];
         if ($withheld !== []) {
             $lines[] = Scope::OUTSIDE_CORE_NOTICE;
             $lines[] = '';
             $lines[] = 'Withheld for that reason: ' . implode(', ', array_map(
                 static fn(array $document): string => $document['title'],
                 $withheld,
-            )) . '. Each is readable in full as typo3://guides/<id> where the work really is a core patch.';
+            )) . '. ' . self::WITHHELD_READABLE;
             $lines[] = '';
-            // What stays back here has a counterpart outside the core, and it
-            // is a tool rather than a second copy of the page. The commit
-            // conventions of a repository of your own are what
-            // typo3_commit_message_guide composes for workflow="project". That
-            // is the one measure this repository writes by as well, D-DOC-013.
-            $lines[] = 'For a repository of your own, the same subjects are answered by '
-                . 'typo3_commit_message_guide with workflow="project" and by typo3_hint_lookup.';
+            $lines[] = self::WITHHELD_COUNTERPART;
             $lines[] = '';
+            $owed = [self::WITHHELD_READABLE, self::WITHHELD_COUNTERPART];
         }
         // Where several matches are in one page, the page is the answer. The
         // cut is what a caller pays a second call to undo, and two sessions
         // have now paid it into the same document, `D-ANS-076`. One match is
         // below the floor and gets the section, `D-ANS-101`.
         $concentrated = self::oneDocument($results);
+        $owed = [...$owed, ...match (true) {
+            $results === [] => [],
+            $concentrated !== null => Prose::owedByWholePage($outsideCore),
+            default => Prose::owedBySections($outsideCore),
+        }];
         $lines[] = match (true) {
             $results === [] => sprintf('No section that holds outside the core matched "%s".', $query),
             $concentrated !== null => Prose::wholePage($concentrated, $results, $outsideCore),
@@ -189,6 +207,7 @@ final class RuleLookup extends ReadOnlyTool
         // block here said the same thing twice in one answer.
         if ($hints !== []) {
             $lines[] = "\n" . self::alsoInHints($hints);
+            $owed[] = self::ALSO_IN_HINTS;
         }
 
         return ToolResult::create(implode("\n", $lines), [
@@ -204,7 +223,7 @@ final class RuleLookup extends ReadOnlyTool
                 static fn(array $hint): array => ['id' => $hint['id'], 'title' => $hint['title']],
                 $hints,
             ),
-        ]);
+        ], $owed);
     }
 
     /**
@@ -278,7 +297,7 @@ final class RuleLookup extends ReadOnlyTool
             'scope' => $scope->value,
             'withheldDocuments' => [],
             'alsoInHints' => $alsoInHints,
-        ]);
+        ], $alsoInHints === [] ? [] : [self::ALSO_IN_HINTS]);
     }
 
     /**
@@ -312,9 +331,7 @@ final class RuleLookup extends ReadOnlyTool
             static fn(array $document): string => '- ' . $document['title'] . ': ' . implode(', ', $document['topics']),
             Documents::topics()
         ));
-        $blocks[] = 'For backend UI components use typo3_component_lookup, and call typo3_server_scope for what '
-            . 'this server covers at all. '
-            . 'If the topic should be covered here, leave a feedback with typo3_feedback_record.';
+        $blocks[] = self::MISS_ADVICE;
 
         return ToolResult::create(implode("\n\n", $blocks), [
             'query' => $query,
@@ -328,7 +345,7 @@ final class RuleLookup extends ReadOnlyTool
                 $hints,
             ),
             'documents' => Documents::topics(),
-        ]);
+        ], [...($hints === [] ? [] : [self::ALSO_IN_HINTS]), self::MISS_ADVICE]);
     }
 
     /**
@@ -338,7 +355,7 @@ final class RuleLookup extends ReadOnlyTool
      */
     private static function alsoInHints(array $hints): string
     {
-        return "The hints also cover this — call typo3_hint_lookup with the id:\n"
+        return self::ALSO_IN_HINTS . ":\n"
             . implode("\n", array_map(
                 static fn(array $hint): string => '- ' . $hint['id'] . ' — ' . $hint['title'],
                 $hints,

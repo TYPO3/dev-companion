@@ -18,6 +18,13 @@ use TYPO3\DevCompanion\Result\VersionScope;
  */
 final class HintLookup extends ReadOnlyTool
 {
+    private const NAME_THE_BACKEND = 'Frontend theming: https://docs.typo3.org. Name the backend in the task if you '
+        . 'are styling a backend module, or the styleguide if the work is a backend component and its demo.';
+
+    private const NAME_MORE = 'Name a path or a more specific topic, or ask for one of the ids below.';
+
+    private const LIST_WITHHELD = 'call again with availableHints true to list them.';
+
     /**
      * The most hints one call answers with, and the ceiling of `limit`.
      *
@@ -147,6 +154,7 @@ final class HintLookup extends ReadOnlyTool
         $result = MatchedHints::merged($found);
 
         $lines = [];
+        $owed = [];
         if ($outsideCore) {
             $lines[] = Scope::OUTSIDE_CORE_NOTICE . ' The hints below are conventions that may transfer. '
                 . 'typo3_server_scope states the boundary.';
@@ -163,12 +171,12 @@ final class HintLookup extends ReadOnlyTool
             $lines[] = sprintf(
                 'This task names the frontend, so %s is withheld: it describes the TYPO3 backend interface — its '
                 . 'Sass sources, its --typo3-* properties, its color schemes — and would be inverted advice for '
-                . 'what a website renders. Frontend theming: https://docs.typo3.org. Name the backend in the task '
-                . 'if you are styling a backend module, or the styleguide if the work is a backend component and '
-                . 'its demo.',
+                . 'what a website renders. %s',
                 implode(' and ', $result['withheldCategories']),
+                self::NAME_THE_BACKEND,
             );
             $lines[] = '';
+            $owed[] = self::NAME_THE_BACKEND;
         }
         if ($ids !== []) {
             $lines[] = (count($ids) === 1 ? 'Hint requested by id: ' : 'Hints requested by id: ') . implode(', ', $ids);
@@ -203,16 +211,20 @@ final class HintLookup extends ReadOnlyTool
             // The next call stands whole, with its arguments: a caller who
             // read "where none of them is it" decided it was, and never
             // searched the manual (`D-ANS-130`).
-            $lines[] = sprintf(
-                'The closest of these carries %d%% of your question. Each got here by claiming a path you named or '
-                . 'a phrase this corpus anticipated, rather than by being about what you asked. So these hints '
-                . 'are the nearest subjects and not the answer. The next call is typo3_documentation_lookup with '
-                . 'queries %s and targetVersion "%s".',
-                (int) round($coverage * 100),
+            $next = sprintf(
+                'The next call is typo3_documentation_lookup with queries %s and targetVersion "%s".',
                 (string) json_encode([$task !== null && $task !== '' ? $task : 'your question'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
                 $stated ?? ($target === null ? 'your TYPO3 version' : (string) $target),
             );
+            $lines[] = sprintf(
+                'The closest of these carries %d%% of your question. Each got here by claiming a path you named or '
+                . 'a phrase this corpus anticipated, rather than by being about what you asked. So these hints '
+                . 'are the nearest subjects and not the answer. %s',
+                (int) round($coverage * 100),
+                $next,
+            );
             $lines[] = '';
+            $owed[] = $next;
         }
 
         if ($result['matchedHints'] !== []) {
@@ -238,13 +250,15 @@ final class HintLookup extends ReadOnlyTool
                 );
             }
             $lines[] = implode("\n\n", $sectionTexts);
+            $owed = [...$owed, ...MatchedHints::owed($result['matchedHints'], $target)];
         } elseif ($result['withheldCategories'] !== []) {
             $lines[] = 'Nothing is left to show: the only domain this task touched is one this server answers for '
                 . 'the backend alone.';
         } elseif ($id !== '') {
             $lines[] = sprintf('There is no hint with the id "%s".', $id);
         } else {
-            $lines[] = 'No hint matched. Name a path or a more specific topic, or ask for one of the ids below.';
+            $lines[] = 'No hint matched. ' . self::NAME_MORE;
+            $owed[] = self::NAME_MORE;
         }
 
         // The long form of a returned hint, where a document declares itself as
@@ -294,9 +308,11 @@ final class HintLookup extends ReadOnlyTool
             $lines[] = '';
             $lines[] = sprintf(
                 '%d more hints stand beside this one in its domains. They are left out because you named an id '
-                . 'rather than searched; call again with availableHints true to list them.',
+                . 'rather than searched; %s',
                 $result['availableHintsWithheld'],
+                self::LIST_WITHHELD,
             );
+            $owed[] = self::LIST_WITHHELD;
         }
 
         return ToolResult::create(implode("\n", $lines), [
@@ -318,6 +334,6 @@ final class HintLookup extends ReadOnlyTool
                 ],
                 array_keys($expanding),
             ),
-        ]);
+        ], $owed);
     }
 }

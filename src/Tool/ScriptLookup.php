@@ -19,6 +19,14 @@ final class ScriptLookup extends ReadOnlyTool
     /** The one document this tool answers from. */
     private const DOCUMENT = 'core/testing/scripts';
 
+    private const DECLARED_HERE = 'What to run here is declared in this repository: its composer.json scripts, its '
+        . 'package.json, its CI configuration.';
+
+    private const CORE_CHECKOUT_ONLY = 'These commands run in a TYPO3 core checkout. In any other repository, what '
+        . 'to run is declared in its own composer.json, package.json and CI configuration.';
+
+    private const ELSEWHERE = 'Other knowledge documents do match this query — call typo3_rule_lookup for';
+
     public static function name(): string
     {
         return 'typo3_script_lookup';
@@ -79,9 +87,9 @@ final class ScriptLookup extends ReadOnlyTool
         if ($scope->isOutsideTheCore()) {
             return ToolResult::create(
                 Scope::OUTSIDE_CORE_NOTICE . ' The scripts these notes describe are the core checkout\'s own, so '
-                . 'none is returned. What to run here is declared in this repository: its composer.json scripts, '
-                . 'its package.json, its CI configuration.',
+                . 'none is returned. ' . self::DECLARED_HERE,
                 ['query' => $task, 'matchCount' => 0, 'matches' => [], 'scope' => $scope->value],
+                [self::DECLARED_HERE],
             );
         }
 
@@ -89,11 +97,12 @@ final class ScriptLookup extends ReadOnlyTool
 
         if ($results !== []) {
             $text = Prose::sections($results, $scope->isOutsideTheCore());
+            $owed = Prose::owedBySections($scope->isOutsideTheCore());
             // Where nothing said which repository this is, the commands come
             // under their condition rather than as the answer.
             if (!Scope::isCoreWork([], $task)) {
-                $text .= "\n\nThese commands run in a TYPO3 core checkout. In any other repository, what to run is "
-                    . 'declared in its own composer.json, package.json and CI configuration.';
+                $text .= "\n\n" . self::CORE_CHECKOUT_ONLY;
+                $owed[] = self::CORE_CHECKOUT_ONLY;
             }
 
             return ToolResult::create($text, [
@@ -101,7 +110,7 @@ final class ScriptLookup extends ReadOnlyTool
                 'matchCount' => count($results),
                 'matches' => Prose::records($results),
                 'scope' => $scope->value,
-            ]);
+            ], $owed);
         }
 
         // Nothing about scripts matched. Say so, and route to the documents
@@ -119,10 +128,7 @@ final class ScriptLookup extends ReadOnlyTool
             $elsewhere
         )));
         if ($titles !== []) {
-            $message .= sprintf(
-                "\n\nOther knowledge documents do match this query — call typo3_rule_lookup for: %s.",
-                implode(', ', $titles)
-            );
+            $message .= "\n\n" . self::ELSEWHERE . ': ' . implode(', ', $titles) . '.';
         }
 
         return ToolResult::create($message, [
@@ -131,6 +137,6 @@ final class ScriptLookup extends ReadOnlyTool
             'matches' => [],
             'elsewhere' => $titles,
             'scope' => $scope->value,
-        ]);
+        ], $titles === [] ? [] : [self::ELSEWHERE . ', which elsewhere names.']);
     }
 }

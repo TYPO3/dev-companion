@@ -37,6 +37,10 @@ final class Prose
      */
     private const BOUND_TO_A_SUITE = ', and typo3_test_run_guide with targetVersion for a runTests.sh command';
 
+    /** The call that reads a page whole, which a match names by its documentId. */
+    private const READ_WHOLE = 'Where the task is the whole procedure rather than the fact you searched for, read the '
+        . 'page — typo3_rule_lookup with documentId, which needs no resource list.';
+
     /**
      * Renders matched knowledge sections as coherent excerpts. The section
      * keeps its own heading and original format, so code blocks and nested
@@ -48,6 +52,26 @@ final class Prose
     {
         return self::boundElsewhere($outsideCore) . "\n\n"
             . self::excerpts($results) . "\n\n" . self::readWhole($results);
+    }
+
+    /**
+     * The sentences of `sections()` the caller acts on, for the data half.
+     *
+     * @return array<int, string>
+     */
+    public static function owedBySections(bool $outsideCore): array
+    {
+        return [self::boundElsewhere($outsideCore), self::READ_WHOLE];
+    }
+
+    /**
+     * The sentence of `wholePage()` the caller acts on, for the data half.
+     *
+     * @return array<int, string>
+     */
+    public static function owedByWholePage(bool $outsideCore): array
+    {
+        return [self::boundElsewhere($outsideCore)];
     }
 
     /**
@@ -219,8 +243,7 @@ final class Prose
         // resources. `typo3_rule_lookup` reaches every client there is,
         // `D-ANS-061`, `R-ANS-028`.
         return 'Each excerpt above is one section of a longer document, and each page below carries the `##` '
-            . 'headings that are not above. Where the task is the whole procedure rather than the fact you '
-            . 'searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list:'
+            . 'headings that are not above. ' . rtrim(self::READ_WHOLE, '.') . ':'
             . "\n" . implode("\n", $pages);
     }
 

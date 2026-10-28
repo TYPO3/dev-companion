@@ -72,6 +72,10 @@ Answers with
       - # The word, lowercased as the search used it.
         term: string
         matchCount: integer
+    # Where the call named no resource, what makes a match reusable and the call to
+    # make once the consuming code's resource is known. Empty where the call named
+    # one.
+    resourceOwed: string  # optional
     # The resources that hold a label with every word of the query. Returned where
     # the call named a resource and no label at all in it reaches the query. So you
     # replace a guessed path with one that exists. Empty means no resource holds
@@ -148,13 +152,14 @@ Answers with
 
 The answer carries exactly one of these sets of fields:
 
-- ``query``, ``resource``, ``matchCount``, ``answeredBy``, ``terms``, ``labels``
+- ``query``, ``resource``, ``resourceOwed``, ``matchCount``, ``answeredBy``,
+  ``terms``, ``labels``
 - ``query``, ``unsupported``
 
 Answered
 --------
 
-Recorded on 2026-09-23 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-10-28 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
 fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
 14.3 core checkout below .checkouts/. Its console is out of reach:
@@ -278,6 +283,7 @@ Data:
     {
         "query": "save",
         "resource": null,
+        "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
         "matchCount": 109,
         "labels": [
             {
@@ -512,7 +518,10 @@ Data:
             }
         ],
         "answeredBy": "packages",
-        "owed": []
+        "owed": [
+            "Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.",
+            "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
+        ]
     }
 
 From the fixture installation
@@ -550,6 +559,7 @@ Data:
     {
         "query": "save",
         "resource": null,
+        "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
         "matchCount": 3,
         "labels": [
             {
@@ -603,7 +613,10 @@ Data:
             }
         ],
         "answeredBy": "installation",
-        "owed": []
+        "owed": [
+            "Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.",
+            "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
+        ]
     }
 
 labels: miss
@@ -639,6 +652,7 @@ Data:
     {
         "query": "quantumflux",
         "resource": null,
+        "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
         "matchCount": 0,
         "labels": [],
         "terms": [
@@ -649,7 +663,9 @@ Data:
         ],
         "resourceDiagnostics": [],
         "answeredBy": "packages",
-        "owed": []
+        "owed": [
+            "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
+        ]
     }
 
 From the fixture installation
@@ -672,6 +688,7 @@ Data:
     {
         "query": "quantumflux",
         "resource": null,
+        "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
         "matchCount": 0,
         "labels": [],
         "terms": [
@@ -682,5 +699,7 @@ Data:
         ],
         "resourceDiagnostics": [],
         "answeredBy": "installation",
-        "owed": []
+        "owed": [
+            "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
+        ]
     }

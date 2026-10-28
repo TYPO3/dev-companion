@@ -73,52 +73,40 @@ Everything above is per project, and a machine with a dozen of them can carry
 one entry instead. Nothing here writes it. The client documents its own command
 and what ``install`` writes stays inside the project it pointed at, see
 `D-DIS-018 <../../decisions/discovery/dis-018-what-install-writes-stays-inside-the-project.md>`_.
-Two steps on the machine, written down rather than scripted for the same reason.
-
-Put the entrypoint where the shell finds it, so no entry has to spell the
-checkout out:
+In Claude Code that entry is the user scope. Its documentation describes it as
+the place for the development tools somebody uses across projects:
 
 .. code-block:: bash
 
-    ln -s /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion ~/.local/bin/
+    claude mcp add --scope user typo3-dev-companion -- php /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion
 
 
-The symlink resolves to the checkout, so the autoloader turns up and ``install``
-still records the real path. Then register it once, for every project, with the
-client's own command. That is Claude Code's user scope, which its documentation
-describes as the place for the development tools somebody uses across projects:
+The entry names the checkout by its absolute path. Each machine has its own user
+scope, so each machine writes its own path. A bare command name would rest on
+the ``PATH`` the client starts with, and a client started from a desktop does
+not always have the one a shell has.
 
-.. code-block:: bash
+The server then starts in every session, in a project without TYPO3 as much as
+in one with it. Its tool list costs context in each of them. That is the price
+of the entry, and the reason ``install`` per project stays the default.
 
-    claude mcp add --scope user typo3-dev-companion -- typo3-dev-companion
+The client starts the server in the session's directory, and that is where the
+server finds the project. Claude Code does not document that directory, so it
+was measured: a session in a project got that project, on 2026-10-27.
 
+Three things follow from the client's own rules:
 
-Two things follow, and both are the client's rule rather than this package's. A
-project that has its own entry keeps it. The scopes rank local, project, user,
-and the whole entry from the first of those wins rather than merges. And the
-task skills do not come with it. An MCP entry registers a server, while a skill
-is a file in a project, so ``install`` stays the way they get there.
-
-Codex has the same one entry in ``~/.codex/config.toml``. Its CLI, its IDE
-extension and the ChatGPT desktop app read that file, so one entry serves all
-three. ``codex mcp add`` writes it:
-
-.. code-block:: bash
-
-    codex mcp add typo3-dev-companion -- typo3-dev-companion
-
-
-``install --agent=codex`` writes the project's ``.codex/config.toml`` instead,
-which Codex reads in trusted projects only. The server finds the installation
-from the directory it starts in. Where that directory is not the project, the
-entry sets the root with ``--env TYPO3_DEV_COMPANION_ROOT=/path/to/project``,
-which holds every session of that entry to that one project. ChatGPT in the
-browser reads no local configuration and starts no local server.
-
-What this does buy for the skills is the refresh under
-:ref:`installing-keeping-it-current`. The server now starts in every project. So
-it puts a drifted publication back wherever one has drifted, instead of only
-where somebody remembered to look.
+* A project entry wins. The scopes rank local, project, user, and the whole
+  entry from the first of those wins rather than merges. ``install`` writes a
+  project entry, so a project where it ran starts the server from that entry.
+* The task skills do not come with the entry, so ``install`` still puts them
+  into each project. A client lists them at session start, also where it
+  connects this server later. A project without them gets instructions that name
+  the ``typo3://skill`` resources instead, which a session reads only once the
+  server is connected,
+  `D-DIS-034 <../../decisions/discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md>`_.
+* A Codex session without skill files called no tool of this server at all, in
+  runs on 2026-10-27. So ``install`` stays the way in there.
 
 As a dependency
 ---------------
@@ -449,8 +437,9 @@ skill the client loaded when the session opened is the copy that was there
 before.
 
 A project with no record stays as it is. Its instructions open with one sentence
-that no task skills are installed there and that ``install`` adds them,
-`D-DIS-029 <../../decisions/discovery/dis-029-a-project-without-skills-is-told-at-the-start.md>`_.
+that no task skills are installed there, and it names the ``typo3://skill``
+resource that serves each one,
+`D-DIS-034 <../../decisions/discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md>`_.
 A refresh that fails leaves the notice as it was and the server starts anyway.
 Why the server does it rather than a command somebody runs is
 `D-DIS-021 <../../decisions/discovery/dis-021-a-stale-publication-is-put-back-where-the-server-starts.md>`_.

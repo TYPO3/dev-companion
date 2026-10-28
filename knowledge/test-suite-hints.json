@@ -228,6 +228,7 @@
     },
     {
       "suite": "listExceptionCodes",
+      "verifies": false,
       "command": "CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes",
       "runs": "check",
       "domains": [
@@ -323,6 +324,7 @@
     },
     {
       "suite": "watchRst",
+      "verifies": false,
       "command": "./Build/Scripts/runTests.sh -s watchRst core interactive",
       "runs": "change",
       "domains": [
@@ -436,6 +438,7 @@
     },
     {
       "suite": "e2e-prepare",
+      "verifies": false,
       "since": 13,
       "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-prepare",
       "runs": "unknown",
@@ -450,6 +453,7 @@
     },
     {
       "suite": "e2e-browser",
+      "verifies": false,
       "since": 14,
       "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-browser",
       "runs": "unknown",
@@ -464,6 +468,7 @@
     },
     {
       "suite": "composerInstall",
+      "verifies": false,
       "command": "CI=true ./Build/Scripts/runTests.sh -s composerInstall",
       "runs": "change",
       "domains": [
@@ -476,6 +481,7 @@
     },
     {
       "suite": "npm",
+      "verifies": false,
       "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- <npm command>",
       "runs": "unknown",
       "domains": [
@@ -487,6 +493,7 @@
     },
     {
       "suite": "composer",
+      "verifies": false,
       "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- <composer command>",
       "runs": "unknown",
       "domains": [

@@ -125,6 +125,10 @@ Answers with
         # out to be. The others can fail on the same paths and need a reason of
         # their own.
         base: boolean
+        # Whether a run says anything about the change. False for an install, a
+        # dispatcher, a listing and a suite that serves an instance to look at. A
+        # report of what ran and what did not owes those no line.
+        verifies: boolean
         # The TYPO3 majors whose runTests.sh has this suite, where that is not all
         # of them. Null means every covered version.
         versions: string or null
@@ -329,6 +333,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes`
     Running it: check — it reports and hands the checkout back as it was.
+    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
     Prints every exception code found below typo3/ as JSON. It runs the duplicate check with the flag that only prints, which skips both failure paths, so it exits successfully whatever it finds.
     Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.
@@ -393,6 +398,7 @@ Text:
     Command from the TYPO3 core root:
     `./Build/Scripts/runTests.sh -s watchRst core interactive`
     Running it: change — it rewrites files in the checkout.
+    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
     Creates a changelog file from the core's own template and serves the rendered page locally, reloading it as the file is saved.
     Use when writing a changelog entry: interactive asks for the type, the issue number and the title and writes the file from Build/rstTemplates/, and a path in place of it opens that file instead. It writes into the directory of the release the branch develops, so a backport's file is moved afterwards.
@@ -425,6 +431,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s e2e-prepare`
     Running it: unknown — the body does not say what it does to the checkout.
+    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
     Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.
     Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.
@@ -433,6 +440,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s e2e-browser`
     Running it: unknown — the body does not say what it does to the checkout.
+    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
     The e2e suite in Playwright's own UI, served from the container.
     Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.
@@ -441,6 +449,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s composerInstall`
     Running it: change — it rewrites files in the checkout.
+    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
     Installs the PHP dependencies of the checkout it is run in, into its own vendor/ and bin/, inside the container.
     Use once in a checkout that has no vendor/ or bin/ in it, before any other suite. Look in the directory the suite will mount rather than reasoning from its kind: a fresh clone has neither, and so does a git worktree, which starts without both because /vendor/* and /bin/* are gitignored — unless whatever made the worktree copied them across. Without it every PHP suite stops at `exec: line 9: bin/phpunit: not found`. It is a precondition and not a step — a checkout that already has vendor/ needs it again only after composer.json or composer.lock changed. Whether the lock changed since the install is what `typo3_project_describe` says, package by package; a vendor/ behind it fails the suite in classes the patch never touched. It needs no PHP on the host, unlike `composer install` run there.
@@ -449,6 +458,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s npm -- <npm command>`
     Running it: unknown — the body does not say what it does to the checkout.
+    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
     Dispatcher for npm commands inside the TYPO3 core build environment.
     Use for npm install, audit, build, watch, and package-script tasks.
@@ -457,6 +467,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s composer -- <composer command>`
     Running it: unknown — the body does not say what it does to the checkout.
+    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
     Dispatcher for composer commands inside the TYPO3 core build environment.
     Use for composer dumpautoload, require, info, and dependency tasks.
@@ -545,6 +556,7 @@ Data:
                     "php"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -560,6 +572,7 @@ Data:
                     "typoscript"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -573,6 +586,7 @@ Data:
                     "php"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -586,6 +600,7 @@ Data:
                     "docs"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -600,6 +615,7 @@ Data:
                     "css"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -613,6 +629,7 @@ Data:
                     "css"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -626,6 +643,7 @@ Data:
                     "typescript"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -639,6 +657,7 @@ Data:
                     "typescript"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -652,6 +671,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -665,6 +685,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -678,6 +699,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -691,6 +713,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -704,6 +727,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -717,6 +741,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -730,6 +755,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -743,6 +769,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -756,6 +783,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": ""
             },
             {
@@ -769,6 +797,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -782,6 +811,7 @@ Data:
                     "typoscript"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -795,6 +825,7 @@ Data:
                     "fluid"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -808,6 +839,7 @@ Data:
                     "xliff"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": "TYPO3 v14 and newer"
             },
             {
@@ -821,6 +853,7 @@ Data:
                     "xliff"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": "TYPO3 v14 and newer"
             },
             {
@@ -835,6 +868,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -848,6 +882,7 @@ Data:
                     "docs"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -861,6 +896,7 @@ Data:
                     "docs"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": ""
             },
             {
@@ -874,6 +910,7 @@ Data:
                     "css"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -887,6 +924,7 @@ Data:
                     "typescript"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -902,6 +940,7 @@ Data:
                     "fluid"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -918,6 +957,7 @@ Data:
                     "css"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -934,6 +974,7 @@ Data:
                     "css"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": "TYPO3 v14 and newer"
             },
             {
@@ -949,6 +990,7 @@ Data:
                     "typoscript"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": ""
             },
             {
@@ -963,6 +1005,7 @@ Data:
                     "css"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": ""
             },
             {
@@ -976,6 +1019,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": ""
             }
         ],
@@ -1177,6 +1221,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             }
         ],
@@ -1497,6 +1542,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s e2e-prepare`
     Running it: unknown — the body does not say what it does to the checkout.
+    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
     Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.
     Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.
@@ -1513,6 +1559,7 @@ Text:
     Command from the TYPO3 core root:
     `CI=true ./Build/Scripts/runTests.sh -s e2e-browser`
     Running it: unknown — the body does not say what it does to the checkout.
+    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
     The e2e suite in Playwright's own UI, served from the container.
     Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.
@@ -1622,6 +1669,7 @@ Data:
                     "css"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -1638,6 +1686,7 @@ Data:
                     "css"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -1651,6 +1700,7 @@ Data:
                     "css"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -1667,6 +1717,7 @@ Data:
                     "css"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": "TYPO3 v14 and newer"
             },
             {
@@ -1680,6 +1731,7 @@ Data:
                     "css"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": ""
             }
         ],

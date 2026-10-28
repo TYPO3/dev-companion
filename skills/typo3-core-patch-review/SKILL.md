@@ -202,12 +202,23 @@ That is the claim a review is least able to support. "The tests would presumably
 still pass" is not a review sentence. And an unnamed suite is the same sentence
 with the words taken out.
 
+The list is every entry the guide marks `verifies`. An install, a dispatcher or
+a server for a browser checks nothing. A line for each buries the suites that
+do, and one review dropped three of those.
+
 **Run the suites in a `git worktree` on the patch set rather than in the main
 checkout.** The worktree leaves the reader's branch and uncommitted work alone.
 So a review that must not touch the checkout has a reason for a worktree, not
 against a run. Where no worktree holds the patch yet, ask the user whether to
-create one. Ask before you skip the run, never instead of the run. A skipped run
-names that question and its answer on its `Not run:` line.
+create one. Ask before you skip the run, never instead of the run. That holds
+for every suite you leave out, whatever the reason. A skipped run names that
+question and its answer on its `Not run:` line.
+
+**Where nobody can answer the question, run the suite.** A headless session has
+no user to ask. It runs the suites in the worktree that stands. A time budget
+the session set itself is no reason to skip. It creates no worktree without the
+question, because that writes into the user's repository. Its `Not run:` line
+says that nobody was there to ask.
 
 One review skipped every suite to keep the checkout clean and leaned on the CI
 vote. The one before it detached the main checkout onto the patch set.

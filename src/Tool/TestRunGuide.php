@@ -256,6 +256,11 @@ final class TestRunGuide extends ReadOnlyTool
                 if ($hint['base']) {
                     $block[] = 'Base: every change in its domains runs it.';
                 }
+                // Beside the command, because a review's Not run line is built
+                // from this list (`D-SKL-105`).
+                if (!$hint['verifies']) {
+                    $block[] = 'Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.';
+                }
                 if ($hint['targeted'] !== null) {
                     $block[] = 'Targeted run while iterating:';
                     $block[] = '`' . $hint['targeted'] . '`';

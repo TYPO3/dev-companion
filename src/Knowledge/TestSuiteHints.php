@@ -11,7 +11,7 @@ use TYPO3\DevCompanion\Paths;
  * invocation notes (CI=true, targeted runs, option flags) that apply to every
  * suite.
  *
- * @phpstan-type Suite array{suite: string, command: string, runs: string, description: string, whenToUse: string, domains: array<int, string>, base: bool, targeted: ?string, since: ?int, until: ?int}
+ * @phpstan-type Suite array{suite: string, command: string, runs: string, description: string, whenToUse: string, domains: array<int, string>, base: bool, verifies: bool, targeted: ?string, since: ?int, until: ?int}
  */
 final class TestSuiteHints
 {
@@ -66,6 +66,7 @@ final class TestSuiteHints
                 'whenToUse' => (string) $entry['whenToUse'],
                 'domains' => array_map('strval', $entry['domains'] ?? []),
                 'base' => (bool) ($entry['base'] ?? false),
+                'verifies' => (bool) ($entry['verifies'] ?? true),
                 'targeted' => isset($entry['targeted']) ? (string) $entry['targeted'] : null,
                 'since' => isset($entry['since']) ? (int) $entry['since'] : null,
                 'until' => isset($entry['until']) ? (int) $entry['until'] : null,
@@ -215,6 +216,7 @@ final class TestSuiteHints
             'whenToUse' => $hint['whenToUse'],
             'domains' => $hint['domains'],
             'base' => $hint['base'],
+            'verifies' => $hint['verifies'],
             // Rendered the same way a statement's range is, beside the entry
             // rather than inside it. So an unfiltered listing still says which
             // branches have the suite.

@@ -6497,6 +6497,36 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The entries a review owes no Not run line, by name. A new suite verifies
+     * unless its entry says otherwise — `D-SKL-105`.
+     */
+    #[Decision('D-SKL-105')]
+    #[Test]
+    public function theEntriesThatVerifyNothingPrepareServeOrList(): void
+    {
+        $unmarked = array_column(array_filter(
+            TestSuiteHints::load(),
+            static fn(array $suite): bool => !$suite['verifies'],
+        ), 'suite');
+        sort($unmarked);
+
+        self::assertSame(
+            ['composer', 'composerInstall', 'e2e-browser', 'e2e-prepare', 'listExceptionCodes', 'npm', 'watchRst'],
+            $unmarked,
+        );
+
+        $answer = Registry::call('typo3_test_run_guide', [
+            'paths' => ['typo3/sysext/core/Classes/DataHandling/DataHandler.php'],
+            'targetVersion' => 'main',
+        ]);
+        $verifies = array_column($answer->data['suites'], 'verifies', 'suite');
+
+        self::assertFalse($verifies['composerInstall']);
+        self::assertTrue($verifies['lintPhp']);
+        self::assertStringContainsString('so a report owes it no Not run line', $answer->text);
+    }
+
+    /**
      * How to confirm that a suite exists on a branch, and the glob that makes
      * the obvious grep answer nothing.
      *

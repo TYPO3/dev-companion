@@ -1716,6 +1716,37 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('the question you asked and its answer', $report);
     }
 
+    #[Decision('D-SKL-105')]
+    #[Test]
+    public function aReviewsNotRunLineListsTheSuitesThatVerify(): void
+    {
+        $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
+        ));
+        self::assertStringContainsString('The list is every entry the guide marks `verifies`.', $skill);
+
+        $report = (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/references/report.md',
+        );
+        self::assertStringContainsString('every suite typo3_test_run_guide marks `verifies`', $report);
+    }
+
+    #[Decision('D-SKL-104')]
+    #[Test]
+    public function aReviewWithNobodyToAskRunsTheSuite(): void
+    {
+        $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
+        ));
+        self::assertStringContainsString('**Where nobody can answer the question, run the suite.**', $skill);
+        self::assertStringContainsString('It creates no worktree without the question', $skill);
+
+        $report = (string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/references/report.md',
+        );
+        self::assertStringContainsString('or that nobody was there to ask', $report);
+    }
+
     #[Decision('D-SKL-071')]
     #[Test]
     public function aProbeIsPutBackToTheStateItFound(): void

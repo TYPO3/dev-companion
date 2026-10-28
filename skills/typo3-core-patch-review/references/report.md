@@ -70,7 +70,7 @@ severity headings and one field of a finding are this skill's own.
 ## Verification
 
 - Ran: `<command>` — <what it printed>
-- Not run: <every suite typo3_test_run_guide returned that nobody started> — <why; where no worktree stood, the question you asked and its answer>
+- Not run: <every suite typo3_test_run_guide marks `verifies` that nobody started> — <why; the question you asked and its answer, or that nobody was there to ask>
 
 ## Surfaces
 

@@ -280,6 +280,10 @@ Answers with
         # out to be. The others can fail on the same paths and need a reason of
         # their own.
         base: boolean
+        # Whether a run says anything about the change. False for an install, a
+        # dispatcher, a listing and a suite that serves an instance to look at. A
+        # report of what ran and what did not owes those no line.
+        verifies: boolean
         # The TYPO3 majors whose runTests.sh has this suite, where that is not all
         # of them. Null means every covered version.
         versions: string or null
@@ -848,6 +852,7 @@ Data:
                     "php"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": "TYPO3 v13 and newer"
             }
         ],
@@ -1223,6 +1228,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": ""
             },
             {
@@ -1236,6 +1242,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -1249,6 +1256,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             }
         ],
@@ -1646,6 +1654,7 @@ Data:
                     "php"
                 ],
                 "base": true,
+                "verifies": true,
                 "versions": "TYPO3 v13 and newer"
             },
             {
@@ -1662,6 +1671,7 @@ Data:
                     "css"
                 ],
                 "base": false,
+                "verifies": false,
                 "versions": "TYPO3 v14 and newer"
             },
             {
@@ -1675,6 +1685,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             },
             {
@@ -1689,6 +1700,7 @@ Data:
                     "php"
                 ],
                 "base": false,
+                "verifies": true,
                 "versions": ""
             }
         ],

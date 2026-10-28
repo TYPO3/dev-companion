@@ -213,6 +213,14 @@ final class CoreChangelog
         return self::BASE . 'Changelog/' . $version . '/' . $key . '.html';
     }
 
+    /** The name of the entry a URL is the page of, and null where it is no entry of this manual. */
+    public static function entryAt(string $url): ?string
+    {
+        $pattern = '#^' . preg_quote(self::BASE . 'Changelog/', '#') . '[^/]+/([^/]+)\.html(?:\#.*)?$#';
+
+        return preg_match($pattern, $url, $entry) === 1 ? $entry[1] : null;
+    }
+
     /** One page, held under its tag and asked for again the way a listing is. */
     private function page(string $url): ?string
     {

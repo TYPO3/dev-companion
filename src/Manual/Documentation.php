@@ -380,6 +380,15 @@ final class Documentation
                 break;
             }
         }
+        // A changelog entry is one page of a manual this does not read, and the
+        // tool that reads it answers its migration as data — `D-ANS-139`.
+        $entry = CoreChangelog::entryAt($url);
+        if ($entry !== null) {
+            throw new \InvalidArgumentException(sprintf(
+                'page is a changelog entry: ask typo3_changelog_lookup with query "%s", which answers its migration',
+                $entry,
+            ));
+        }
         if ($owner === null) {
             throw new \InvalidArgumentException(
                 'page must be a canonical result URL for targetVersion from typo3_documentation_lookup',

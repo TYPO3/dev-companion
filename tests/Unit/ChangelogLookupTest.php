@@ -75,7 +75,14 @@ final class ChangelogLookupTest extends TestCase
             array_values(array_filter(array_column($sweep->data['entries'], 'migration'))),
             'a sweep of seventy-five is a list of titles and not seventy-five migrations',
         );
-        self::assertStringContainsString('ask again for the one entry by its issue number', $sweep->text);
+        // The handover names a query that reaches one entry. An issue number
+        // reaches a Breaking and the Feature filed beside it, and the review
+        // that asked again by one got two migrations short (`D-ANS-139`).
+        $name = $sweep->data['entries'][0]['name'];
+        self::assertStringContainsString('ask again with the name of one entry as the query, such as "' . $name . '"', $sweep->text);
+        $again = Registry::call('typo3_changelog_lookup', ['query' => $name]);
+        self::assertSame(1, $again->data['matchCount']);
+        self::assertNotSame('', $again->data['entries'][0]['migration']);
     }
 
     #[Decision('D-ANS-042')]

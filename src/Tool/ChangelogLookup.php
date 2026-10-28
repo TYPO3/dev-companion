@@ -93,12 +93,13 @@ final class ChangelogLookup extends ReadOnlyTool
                 'issue' => Schema::string('Forge issue number.'),
                 'title' => Schema::string(),
                 'removal' => Schema::string('The version a Deprecation states the deprecated thing stops to work in, which is what an upgrade decides on. Empty on the other three types, and on a deprecation whose entry states none. That is most of a major and does not mean "no removal planned"; removalRule answers it there.'),
-                'migration' => Schema::string('What to write instead, as the entry\'s own Migration section states it, code blocks included. Carried where the call reached one entry, by an issue number or a query that matched one. A sweep of seventy-five is a list of titles and not seventy-five migrations. Empty on every entry of a longer answer, and on an entry whose file states no migration.'),
+                'name' => Schema::string('The name of the entry\'s page, which as the query reaches this entry alone. An issue number can reach several, a Breaking and the Feature beside it.'),
+                'migration' => Schema::string('What to write instead, as the entry\'s own Migration section states it, code blocks included. Carried where the call reached one entry: by its name, or by any query that matched one. A sweep of seventy-five is a list of titles and not seventy-five migrations. Empty on every entry of a longer answer, and on an entry whose file states no migration.'),
                 'tags' => Schema::listOf(Schema::string(), 'Index tags. FullyScanned or PartiallyScanned means the extension scanner has a matcher for it.'),
                 'file' => Schema::string('Where to read the description and the migration: an EXT: reference where the installation ships the entry, and the docs.typo3.org URL where it does not.'),
                 'url' => Schema::string('The entry as docs.typo3.org renders it, on every entry.'),
                 'publishedIn' => Schema::string('Which side the entry came from. "manual" is docs.typo3.org, which renders the changelog after every merge and is the ordinary source. "installation" is the core package on disk, read where docs.typo3.org did not answer or does not list the version. An entry for a major without a release yet moves either way.'),
-            ], ['type', 'version', 'issue', 'title', 'removal', 'migration', 'tags', 'file', 'url', 'publishedIn'])),
+            ], ['type', 'version', 'issue', 'title', 'name', 'removal', 'migration', 'tags', 'file', 'url', 'publishedIn'])),
             'termCounts' => Schema::termCounts('What each word of the query reaches on its own, inside the version and the type the call named. A word at 0 is the one that emptied the answer: a misspelt word, or nothing here carries its name. Returned on a miss that carried words. These are counts and not a query; termSubsets is what you ask outright.'),
             'termCountsWithoutTheNarrowing' => Schema::termCounts('The same words counted over the whole changelog rather than inside the version and the type. Returned only where a word reaches there and nothing inside the narrowed set. Then the filter emptied this answer rather than the words: ask again without it.'),
             'termSubsets' => Schema::listOf(Schema::object([
@@ -339,6 +340,7 @@ final class ChangelogLookup extends ReadOnlyTool
                 'version' => $entry['version'],
                 'issue' => $entry['issue'],
                 'title' => $read['title'] === '' ? $entry['source'] : $read['title'],
+                'name' => $entry['key'],
                 'removal' => $read['removal'],
                 'migration' => $whole ? $read['migration'] : '',
                 'tags' => $read['tags'],
@@ -542,10 +544,13 @@ final class ChangelogLookup extends ReadOnlyTool
             ? 'The migration above is the entry\'s own section. Read the file for the rest of the description. A '
                 . 'Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner '
                 . 'matcher behind it, so the Install Tool can find the call sites for you.'
-            : 'Read the file for the description and the migration, or ask again for the one entry by its issue '
-                . 'number, which carries its migration section whole. A Deprecation or Breaking entry tagged '
-                . 'FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool '
-                . 'can find the call sites for you.';
+            : sprintf(
+                'Read the file for the description and the migration, or ask again with the name of one entry as '
+                . 'the query, such as "%s". That reaches the one entry and carries its migration section whole. A '
+                . 'Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner '
+                . 'matcher behind it, so the Install Tool can find the call sites for you.',
+                $entries[0]['name'],
+            );
         // A hit says nothing about what it could not see, and that is the one
         // silence this must not leave. Entries came back, so the answer looks
         // complete, while the versions an upgrade is about never came in.

@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Tests\Unit;
 use Mcp\Capability\Discovery\SchemaValidator;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use TYPO3\DevCompanion\Manual\CoreChangelog;
 use TYPO3\DevCompanion\Manual\Documentation;
 use TYPO3\DevCompanion\Manual\Manuals;
 use TYPO3\DevCompanion\Tests\Support\Decision;
@@ -273,6 +274,23 @@ final class DocumentationTest extends TestCase
 
         (new Documentation(static fn(string $url): ?string => null))->page(
             'https://docs.typo3.org/m/typo3/reference-coreapi/13.4/en-us/ApiOverview/Backend/Index.html',
+            '14.3',
+        );
+    }
+
+    /**
+     * A review handed the changelog URL of an entry over to read its
+     * migration, and the refusal named no tool that reads it (`D-ANS-139`).
+     */
+    #[Decision('D-ANS-139')]
+    #[Test]
+    public function aChangelogEntryIsRefusedWithTheQueryThatReadsIt(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('typo3_changelog_lookup with query "Breaking-110702-WidenedFalProcessingTaskInterfaces"');
+
+        (new Documentation(static fn(string $url): ?string => null))->page(
+            CoreChangelog::url('15.0', 'Breaking-110702-WidenedFalProcessingTaskInterfaces'),
             '14.3',
         );
     }

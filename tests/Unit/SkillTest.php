@@ -1011,13 +1011,22 @@ final class SkillTest extends TestCase
             );
 
             $reference = (string) file_get_contents(Paths::root() . '/skills/' . $name . '/references/report.md');
-            // A session kept every heading and wrote paragraphs under them, then
-            // a summary after the last one: the gate this entry's Wrong if asks for.
-            self::assertStringContainsString(
-                'Every entry keeps the line form the skeleton gives it, and nothing follows **Not reached**.',
-                self::flat($reference),
-                $name . ' keeps the headings of its skeleton and frees the entries',
-            );
+            // Sessions kept every heading and wrote paragraphs under them, with
+            // a summary around the fence: the gate this entry's Wrong if asks for.
+            foreach ([
+                'A head field holds its value alone.',
+                'A finding carries every field, in the order the skeleton gives.',
+                'An entry under **Checked and correct**, **Open** and **Dropped** is one line: the claim, an em dash and its source.',
+                'A **Status** cell holds one of its words alone.',
+                'The answer opens with the fence, and nothing follows **Not reached** inside it.',
+                'After the fence stands at most what happens next',
+            ] as $rule) {
+                self::assertStringContainsString(
+                    $rule,
+                    self::flat($reference),
+                    $name . ' keeps the headings of its skeleton and frees the entries',
+                );
+            }
             if (preg_match('/```markdown\n(.*?)\n```/s', $reference, $match) !== 1) {
                 self::fail($name . ' carries no skeleton in its report reference');
             }
@@ -1519,9 +1528,13 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('is on the path, not at its end', $checklist);
         self::assertStringContainsString('report the finding as unverified', $checklist);
         // The skeleton a session fills in offered verified or reasoned only, so
-        // an unread class could land under a severity as reasoned.
+        // an unread class could land under a severity as reasoned. The rule
+        // stands outside the finding's lines, which sessions copied verbatim.
         $report = (string) file_get_contents(Paths::root() . '/skills/typo3-extension-health/references/report.md');
-        self::assertStringContainsString('<unverified: the class you did not read> goes to Open', $report);
+        self::assertStringContainsString(
+            'leaves unverified stands under **Open** and under no severity',
+            self::flat($report),
+        );
         self::assertStringContainsString('- <candidate> — unverified: <the class you did not read>', $report);
         // The sinks themselves are a tool's to answer, so the checklist asks
         // rather than carrying a list that goes stale in a published copy.

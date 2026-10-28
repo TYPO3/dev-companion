@@ -43,10 +43,22 @@ and the fields of a finding.**
   merge and an audit are three decisions. One set of bands for all three would
   rank by a decision none of them makes. The core band *Correct and checked*
   became *Checked and correct*, so the shared heading has one name.
+- **The line form is a gate of named rules**, one per place a report drifted. A
+  head field holds its value alone, and a finding carries every field. The three
+  lists hold one line each, the claim, an em dash and its source. A status cell
+  holds one word, and a surface read in part takes two rows.
+- **The answer is the fence and at most a handover after it.** The handover is
+  the order of the work and the skill that takes each finding. `REVIEW-01` asks
+  "what should happen next", and a ban on the handover would leave that half to
+  the *Owner* field. A summary before the fence repeats the head.
+- **A rule stands outside a finding's lines.** The health skeleton's *Evidence*
+  line said "goes to Open", and two findings copied it as text.
 - **Rejected: one shared file that `Installer` copies into each skill**, as it
   copies `skills/base.md`. That is a second publication mechanism for one file,
   and the head and the bands differ per skill anyway. The test holds the three
   copies to each other instead.
+- **Rejected: a contract case for the form.** A contract case records no run.
+  Every forward review writes this report, so each recorded run measures it.
 
 ## Assumed
 
@@ -60,17 +72,19 @@ and the fields of a finding.**
   invents one. The skeleton then needs a gate in the skill, not more fields.
 - A reader who compares two reports still has to read them whole to compare one
   section. The headings then name the wrong units.
+- A report still breaks a rule the gate names. Then a rule in prose is not the
+  lever, and a filled example in the skeleton is the next step to weigh.
 
 ## Since then
 
-[`feedback/2026-10-28-031023-the-review-report-keeps-the-headings-but-not`](../../feedback/archive/2026-10-28-031023-the-review-report-keeps-the-headings-but-not.md)
-is the first report under the skeleton, a core review of change 97177. It kept
-every heading in its order, which is the half the **Assumed** predicted. It
-filled the entries as paragraphs and added a summary after *Not reached*. That
-summary is an invented section, so the first **Wrong if** holds.
+On 2026-10-28 the first report under the skeleton, a core review of change 97177
+([`feedback/2026-10-28-031023`](../../feedback/archive/2026-10-28-031023-the-review-report-keeps-the-headings-but-not.md)),
+kept every heading in its order. It filled the entries as paragraphs and added a
+summary after *Not reached*, so the first **Wrong if** held. The fence and the
+first gate sentence followed.
 
-The gate it asks for now opens all three `references/report.md`. Every entry
-keeps the line form the skeleton gives it, a head field holds its value alone,
-and nothing follows *Not reached*.
-`SkillTest::theReviewSkillsReportInOneSkeleton` asserts the sentence. Whether a
-session holds the gate is the next report's to show.
+The forward runs `REVIEW-01` to `REVIEW-03` of the same day kept the fence and
+ended the block on *Not reached*. They broke the form where the gate had no rule
+of its own: lists as paragraphs or with a colon, a parenthesis in a head field,
+`assessed (partly)`, a finding without *Rule*. Each also put a summary or a list
+around the fence. The named rules in **Decided** answer each of these.

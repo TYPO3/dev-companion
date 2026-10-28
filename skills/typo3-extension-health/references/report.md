@@ -5,10 +5,23 @@ write `None.` under a heading that has nothing. Two audits in one skeleton are
 two audits a reader can compare. A heading you leave out reads as a section the
 audit never reached.
 
-Every entry keeps the line form the skeleton gives it, and nothing follows **Not
-reached**. A head field holds its value alone. What explains a value goes into a
-finding or under **Open**. One review kept every heading and wrote each entry as
-a paragraph, so no line compared with the same line of another audit.
+Every entry keeps the line form the skeleton gives it. Audits kept every heading
+and broke the form below it, so no line compared with the same line of another
+audit. The form is four rules:
+
+- A head field holds its value alone. An explanation beside it goes into a
+  finding or under **Open**.
+- A finding carries every field, in the order the skeleton gives.
+- An entry under **Checked and correct**, **Open** and **Dropped** is one line:
+  the claim, an em dash and its source. A bold label, a colon or a second
+  sentence breaks the line.
+- A **Status** cell holds one of its words alone. A surface you read in part
+  takes two rows, the part you read and the rest as `unassessed`.
+
+The answer opens with the fence, and nothing follows **Not reached** inside it.
+After the fence stands at most what happens next: the finding numbers in the
+order to work them, and the skill that takes each. A summary before the fence or
+a recap after it repeats the report in a shape of its own.
 
 The skeleton is the same in the three review skills. The fields of the head, the
 severity headings and one field of a finding are this skill's own.
@@ -35,7 +48,7 @@ severity headings and one field of a finding are this skill's own.
 - **Consequence:** <what breaks, for whom, and when somebody would notice>
 - **Remediation:** <the scoped change>; check: `<the project check that proves it>`
 - **Owner:** <the skill that owns the change, or `unassigned`>
-- **Evidence:** <verified: the command, the sink read or the test run> or <reasoned: the reading>; <unverified: the class you did not read> goes to Open
+- **Evidence:** <verified: the command, the sink read or the test run> or <reasoned: the reading>
 
 ## High
 

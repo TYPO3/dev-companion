@@ -55,10 +55,10 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### discovery
 
 - [`D-DIS-033`][D-DIS-033] — A start outside any repository is told to state the version · 2026-10-27
+- [`D-DIS-034`][D-DIS-034] — A project without skills is sent to the skill resources · 2026-10-27
 - [`D-DIS-032`][D-DIS-032] — Antigravity gets a workspace plugin that starts the server in the project · 2026-10-06
 - [`D-DIS-027`][D-DIS-027] — An argument install does not take ends the run before a write · 2026-10-05
 - [`D-DIS-028`][D-DIS-028] — A DDEV container is entered only by its own project · 2026-10-05
-- [`D-DIS-029`][D-DIS-029] — A project without skills is told at the start · 2026-10-05
 - [`D-DIS-030`][D-DIS-030] — A process older than its code says so in every answer · 2026-10-05
 - [`D-DIS-031`][D-DIS-031] — A checkout behind its upstream says so in every answer · 2026-10-05
 - [`D-DIS-026`][D-DIS-026] — The project's instruction files belong to the project · 2026-10-02
@@ -84,10 +84,10 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DIS-004`][D-DIS-004] — The version comes from the core package, not from the console · 2026-07-29 · confirmed
 
 [D-DIS-033]: discovery/dis-033-a-start-outside-any-repository-is-told-to-state-the-version.md
+[D-DIS-034]: discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md
 [D-DIS-032]: discovery/dis-032-antigravity-gets-a-workspace-plugin-that-starts-the-server-in-the-project.md
 [D-DIS-027]: discovery/dis-027-an-argument-install-does-not-take-ends-the-run-before-a-write.md
 [D-DIS-028]: discovery/dis-028-a-ddev-container-is-entered-only-by-its-own-project.md
-[D-DIS-029]: discovery/dis-029-a-project-without-skills-is-told-at-the-start.md
 [D-DIS-030]: discovery/dis-030-a-process-older-than-its-code-says-so-in-every-answer.md
 [D-DIS-031]: discovery/dis-031-a-checkout-behind-its-upstream-says-so-in-every-answer.md
 [D-DIS-026]: discovery/dis-026-the-projects-instruction-files-belong-to-the-project.md
@@ -1411,6 +1411,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### Revoked, and kept as the record
 
 - [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06 → D-ANS-175
+- [`D-DIS-029`][D-DIS-029] — A project without skills is told at the start · 2026-10-05 → D-DIS-034
 - [`D-DOC-071`][D-DOC-071] — The initialize page is read off a session in the same process · 2026-09-17 → D-DOC-072
 - [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15 → D-ANS-176
 - [`D-AUD-016`][D-AUD-016] — A count is answered and the row behind it stays with the installation · 2026-09-01 → D-AUD-017
@@ -1463,6 +1464,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-VER-002`][D-VER-002] — The prose is not bound; it says which half it is · 2026-07-29 → D-VER-005
 
 [D-ANS-172]: answers/ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
+[D-DIS-029]: discovery/dis-029-a-project-without-skills-is-told-at-the-start.md
 [D-DOC-071]: documentation/doc-071-the-initialize-page-is-read-off-a-session-in-the-same-process.md
 [D-ANS-155]: answers/ans-155-a-read-on-a-php-without-curl-names-the-extension.md
 [D-AUD-016]: audience/aud-016-a-count-is-answered-and-the-row-behind-it-stays-with-the-installation.md

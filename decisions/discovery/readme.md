@@ -6,10 +6,10 @@ because it looks exactly like an installation that has nothing to say.
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-DIS-033`][D-DIS-033] — A start outside any repository is told to state the version · 2026-10-27
+- [`D-DIS-034`][D-DIS-034] — A project without skills is sent to the skill resources · 2026-10-27
 - [`D-DIS-032`][D-DIS-032] — Antigravity gets a workspace plugin that starts the server in the project · 2026-10-06
 - [`D-DIS-027`][D-DIS-027] — An argument install does not take ends the run before a write · 2026-10-05
 - [`D-DIS-028`][D-DIS-028] — A DDEV container is entered only by its own project · 2026-10-05
-- [`D-DIS-029`][D-DIS-029] — A project without skills is told at the start · 2026-10-05
 - [`D-DIS-030`][D-DIS-030] — A process older than its code says so in every answer · 2026-10-05
 - [`D-DIS-031`][D-DIS-031] — A checkout behind its upstream says so in every answer · 2026-10-05
 - [`D-DIS-026`][D-DIS-026] — The project's instruction files belong to the project · 2026-10-02
@@ -35,10 +35,10 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-DIS-004`][D-DIS-004] — The version comes from the core package, not from the console · 2026-07-29 · confirmed
 
 [D-DIS-033]: dis-033-a-start-outside-any-repository-is-told-to-state-the-version.md
+[D-DIS-034]: dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md
 [D-DIS-032]: dis-032-antigravity-gets-a-workspace-plugin-that-starts-the-server-in-the-project.md
 [D-DIS-027]: dis-027-an-argument-install-does-not-take-ends-the-run-before-a-write.md
 [D-DIS-028]: dis-028-a-ddev-container-is-entered-only-by-its-own-project.md
-[D-DIS-029]: dis-029-a-project-without-skills-is-told-at-the-start.md
 [D-DIS-030]: dis-030-a-process-older-than-its-code-says-so-in-every-answer.md
 [D-DIS-031]: dis-031-a-checkout-behind-its-upstream-says-so-in-every-answer.md
 [D-DIS-026]: dis-026-the-projects-instruction-files-belong-to-the-project.md
@@ -65,11 +65,13 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 
 ### Revoked, and kept as the record
 
+- [`D-DIS-029`][D-DIS-029] — A project without skills is told at the start · 2026-10-05 → D-DIS-034
 - [`D-DIS-015`][D-DIS-015] — The installed entrypoint is named relatively wherever it exists · 2026-08-08 → D-DIS-016
 - [`D-DIS-008`][D-DIS-008] — The columns TYPO3 derives are reachable where the database server is · 2026-08-02 → D-DIS-012
 - [`D-DIS-002`][D-DIS-002] — Discovery honours the declared vendor-dir and bin-dir · 2026-07-29 → D-DIS-007
 - [`D-DIS-003`][D-DIS-003] — A label query is words and the console is asked with a regex · 2026-07-29
 
+[D-DIS-029]: dis-029-a-project-without-skills-is-told-at-the-start.md
 [D-DIS-015]: dis-015-the-installed-entrypoint-is-named-relatively-wherever-it-exists.md
 [D-DIS-008]: dis-008-the-columns-typo3-derives-are-reachable-where-the-database-server-is.md
 [D-DIS-002]: dis-002-discovery-honours-the-declared-vendor-dir-and-bin-dir.md

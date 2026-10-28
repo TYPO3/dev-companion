@@ -1,7 +1,7 @@
 {
     "scenario": "REVIEW-01",
     "date": "2026-10-28",
-    "server": "c0a078b7",
+    "server": "c0768e3b",
     "client": "claude-code",
     "environment": "E-SITE",
     "criteria": "22b7f8d8e96b",
@@ -28,7 +28,7 @@
         {
             "tool": "typo3_task_guide",
             "arguments": {
-                "task": "Audit the project and its sitepackage for problems, risks and missing safeguards",
+                "task": "Audit a TYPO3 project and its sitepackage for problems, risks and missing safeguards",
                 "changeType": "audit",
                 "paths": [
                     "extensions/events_sitepackage",
@@ -36,88 +36,122 @@
                     "composer.json",
                     "config/sites",
                     ".ddev/config.yaml"
-                ],
-                "targetVersion": "14.3"
+                ]
             }
         },
         {
             "tool": "typo3_hint_lookup",
             "arguments": {
-                "task": "encryption key committed in settings.php, secrets in version control, debug and devIPmask defaults",
+                "ids": [
+                    "security-sinks",
+                    "authentication-permissions"
+                ],
                 "paths": [
-                    "config/system/settings.php",
+                    "extensions/events_sitepackage/Classes/ViewHelpers/Format/HighlightWordsViewHelper.php",
+                    "extensions/sessionplaner_extended/Resources/Private/Partials/Speaker/Connect.html",
                     "config/system/additional.php",
                     ".env.dist"
-                ],
-                "targetVersion": "14.3"
+                ]
             }
         },
         {
             "tool": "typo3_hint_lookup",
             "arguments": {
-                "task": "upgrade wizards modifying records, DataHandler hook calling external API",
+                "ids": [
+                    "project-extension-tests",
+                    "extension-static-analysis",
+                    "extension-documentation",
+                    "extension-manifest",
+                    "php-versions"
+                ],
                 "paths": [
-                    "extensions/events_sitepackage/Classes/Updates/SynchronizeTranslationsWithHiddenParent.php",
-                    "extensions/events_sitepackage/Classes/Hooks/DataHandlerHook.php"
-                ],
-                "targetVersion": "14.3"
+                    "extensions/events_sitepackage/composer.json",
+                    ".github/workflows/ci.yml",
+                    "build/phpstan.neon",
+                    "rector.php"
+                ]
             }
         },
         {
             "tool": "typo3_hint_lookup",
             "arguments": {
-                "id": "core-tca-derived-schema",
-                "targetVersion": "14.3"
+                "ids": [
+                    "core-tca-derived-schema",
+                    "extension-schema-sql",
+                    "datahandler-basics",
+                    "upgrade-wizards",
+                    "extension-asset-build"
+                ],
+                "paths": [
+                    "extensions/sessionplaner_extended/ext_tables.sql",
+                    "extensions/events_sitepackage/Classes/Hooks/DataHandlerHook.php",
+                    "extensions/events_sitepackage/Classes/Updates",
+                    "extensions/events_sitepackage/package.json"
+                ]
+            }
+        },
+        {
+            "tool": "typo3_changelog_lookup",
+            "arguments": {
+                "query": "UpgradeWizardInterface",
+                "limit": 5
+            }
+        },
+        {
+            "tool": "typo3_ter_lookup",
+            "arguments": {
+                "extension": "events_sitepackage",
+                "limit": 3
             }
         }
     ],
     "outcomes": [
         {
             "met": false,
-            "evidence": "Everything but the surfaces came first. The skill, its base, checklist and report, then typo3_project_describe, typo3_extension_describe for both project extensions and typo3_task_guide with changeType audit were calls 1-9, before the first checkout read at 14:34:34. The only text before that read is \"Progress: server and extension descriptions are in; next I'm reading the checkout and running the three declared checks.\" No surface list stands anywhere before the reading, although SKILL.md step 3 says to write it into the reply first. The surfaces appear only in the closing Surfaces table, which is the 'after it' the criterion names. This is the same miss as the run of 2026-10-11."
+            "evidence": "Everything but the surfaces came first. The skill and its base, checklist and report were calls 1-4. typo3_project_describe, typo3_extension_describe for both extensions and typo3_task_guide with changeType audit followed at 15:57:38-43. The brief carried `surfaces` with seven entries and their hint ids. Eleven seconds later the session started the declared checks and read the checkout, at calls 10 and 11. No text stands before that read. The first text, at 15:58:00, names the files it reads next and no surface. The surfaces appear only in the closing Surfaces table, the 'after it' the criterion names. The instruction that goes with the list, TaskGuide::SURFACES_OWED, stands in the text half of the answer. The transcript holds the data half alone and contains 'Surfaces: write this list' nowhere, which is D-EVI-011's measurement holding. This is the third REVIEW-01 run in a row with this miss."
         },
         {
             "met": true,
-            "evidence": "Each of the twelve findings carries Where with a path and mostly a line, Observed, Consequence, Remediation, Owner and an Evidence line marked verified or reasoned. Spot-checked in the checkout: the literal encryptionKey in config/system/settings.php, .env.dist loaded unconditionally in config/system/additional.php:7-8, deployment.yml triggered on push to master with no CI gate, ci.yml running t3g:cgl and t3g:phpstan only, five wizards in Classes/Updates and upgrade:run in the .mage.yml post-release, nodejs_version 16, dependabot for github-actions only, 'ddev composer export' in README.md with no such script. Two details are off. The key is in history since e287c12 of 2018-12-12, not 2023-06-30: the session's git log -S was restricted to the renamed settings.php. And .mage.yml also links two site settings.yaml from shared, which the finding leaves out."
+            "evidence": "Each of the nine findings carries Where, Observed, Rule, Consequence, Remediation, Owner and Evidence in that order. The checkout confirms the spot-checked claims. Header.html:9,16,23,30,37,44 wrap `{header -> events:format.highlightWords()}` in `<f:format.raw>`, and Connect.html:6 prints `href=\"{speaker.website}\"`. deployment.yml runs on push to master with no needs. additional.php:53 reads `getenv('ANTHROPIC_API_KEY') ?? ''`. ext_icon.png has no Extension.svg beside it, and 13.0 removed that location after Deprecation-98093. Finding 1 is verified by a render through ddev exec php (call 20) that printed `<img src=x onerror=alert(1)>` unescaped. One detail is off again. Finding 2 dates the key to f41998c of 2023-06-30. git log -S with the key's value over all paths finds e287c12 of 2018-12-12, because the session again restricted the search to the renamed settings.php."
         },
         {
             "met": true,
-            "evidence": "The order is consequence: the committed production key, development values that reach production where a key is missing, and an ungated deploy that runs data-changing wizards come first. The editor save that a Google failure aborts and the missing tests come next. The failing rector check, the version range, the icon and the documentation stand under Low. Rector's pending changes are ranked by what CI misses, not by their file count. The order follows what the session found. It found the stored XSS the previous run ranked high and dropped it, which is judged under criterion 4."
+            "evidence": "The order is consequence. The stored XSS any editor can place on every site and the committed production key stand under High. The unsafe .env.dist fallback, the ungated deploy, the save that a Google failure aborts and the javascript: link come under Medium. Rector drift, the version range and the toolchain pins stand under Low. Finding 6 ranks below finding 1 with its reason, 'it needs a click'. Rector's 12 files rank by what CI misses, not by their count."
         },
         {
             "met": false,
-            "evidence": "The conventions came after the judgment. Apart from the generic sitepackage hints typo3_task_guide returned at call 9, the session asked typo3_hint_lookup only at calls 31-33, after twenty checkout reads. Each query is a finding already formed: 'encryption key committed in settings.php, secrets in version control, debug and devIPmask defaults'. That is the confirmation the skill's 'Ask before you judge' forbids, and no surface got a query of its own. No runtime lookup ran, although the task guide offered typo3_configuration_lookup. One verdict also contradicts its governing rule. Under Dropped the answer clears 'XSS through HighlightWordsViewHelper on header' because Fluid escapes children. The six Header.html call sites wrap the ViewHelper in f:format.raw, which the session's own grep (call 23) printed and the security-sinks hint lists as a sink. A render of that call site with the host PHP against the installed Fluid outputs '<img src=x onerror=alert(1)>' unescaped. The Surfaces table marks all eight surfaces assessed, while its Backed by says TypoScript was read 'only partly' and the FormEngine elements are unassessed. TSconfig, translations and public assets appear in no row."
+            "evidence": "The conventions came after the judgment. The session proved the XSS from vendor/typo3fluid/fluid AbstractViewHelper.php at call 19 and the render at call 20, at 15:59:17-27. The first typo3_hint_lookup came at 16:00:17, after 15 reads, under the text 'Next: the convention lookups for each surface'. The three lookups took ids from the brief's surface list rather than a finding as the query, which is new. They covered Security, Quality, Persistence and part of Package and Pinned versions. Registration and runtime and Rendering got no lookup, so fluid-templates, site-sets, tsconfig, language-files and public-assets were never asked. The security-sinks answer carried the new f:format.raw statement, and finding 1 cites it as its Rule. The verdict on the XSS is right this time, and the session kept it at High. The absent surfaces now show: Rendering's TypoScript, TSconfig and XLF and the TCA of the own tables stand as unassessed rows. No runtime lookup ran, and Not reached says so."
         },
         {
             "met": true,
-            "evidence": "The kinds stay apart under the report's headings. Critical to Low hold defects with an Evidence line, Recommendation holds the try/finally and the privacy note, Open holds six claims with what would settle each. Dropped holds four disproved candidates, Checked and correct holds what held, and Not reached holds the skipped steps. The key, the env fallback and the deploy gate carry Owner unassigned, which marks them as work no TYPO3 workflow here owns. Finding 2 says 'design risk rather than a confirmed exposure' because production's .env was not read."
+            "evidence": "The kinds stay apart under the report's headings. High to Low hold defects with an Evidence line marked verified or reasoned. Recommendation holds the docs, the icon, the redundant ext_tables.sql, the finally block and the getenv fallback. Open holds four questions with what would settle each. Dropped holds three disproved candidates with their source. Checked and correct holds eight claims that held. The key, the env fallback and the deployment pins carry Owner unassigned, which marks them as operations no TYPO3 workflow here owns."
         },
         {
             "met": true,
-            "evidence": "It ends on an ordered next-step list and 'If you want me to start on any of these, say which', with no change made. Every finding names its owner: typo3-extension-testing for the tests and the advisory check, typo3-content-element-development for the hook and the ViewHelper, typo3-extension-upgrade for rector, the range and the icon, typo3-extension-asset-build for Node, typo3-extension-documentation for the READMEs. It names the branch and pull request check as the step before any fix. The answer is long, at twelve findings, and every part of it is review."
+            "evidence": "The report ends on Not reached, then a six-step order with the skill for each. The last line asks which of these to work on, and on which branch. The session changed no file. Every finding names its owner: typo3-content-element-development, typo3-extension-testing, typo3-extension-upgrade, typo3-extension-asset-build or unassigned. Nine findings and five recommendations stay within review. The three-sentence summary before the fence breaks report.md's rule, which is a form defect rather than started work."
         }
     ],
     "failures": [
         {
             "avoided": true,
-            "evidence": "No finding is a TYPO3 checklist item without a place in this checkout. Each names a file of site-events or a value typo3_extension_describe returned for it. The Surfaces table lists the checklist's surfaces rather than every subsystem a project could have. typo3_ter_lookup is marked not reached because both packages come through the Composer path repository."
+            "evidence": "No finding is a TYPO3 checklist item without a place in this checkout. Each names a file of site-events or a value a call returned for it. The two sitepackage hints that opened the brief's list, under the weak intent 'sitepackage', left no mark on the report."
         },
         {
             "avoided": true,
-            "evidence": "The missing tests and documentation stand as findings with an owner and a stated consequence, not as violated rules. The advisory check and the dependabot entries rest on the checklist's 'Manifests and dependencies' and 'Pinned versions'. The try/finally and the privacy note stand under Recommendation. The env fallback is labelled a design risk with what would confirm it."
+            "evidence": "The missing tests stand inside finding 4 with the ungated deploy, as the reason a broken change reaches production. The docs and the icon stand under Recommendation. The env fallback is labelled with what would confirm it under Open. The DataHandler TypeError candidate was dropped after the session read DataHandler.php:719."
         },
         {
             "avoided": true,
-            "evidence": "Where a source was missing the answer says so: production's .env 'couldn't read', the wizard SQL 'not reviewed (goes to Open)', the FormEngine elements 'unverified, classes not read', the runtime lookups 'reading the checkout stood in for them'. The derived-schema question on ext_tables.sql goes to Open with the typo3_schema_lookup call that would settle it."
+            "evidence": "typo3_ter_lookup returned empty, and the session read it as a path-repository package rather than a missing release. The runtime lookups it skipped stand under Not reached with the lookups they would be. The production .env it could not read goes to Open, not to a verdict."
         },
         {
             "avoided": true,
-            "evidence": "Every check it ran is the project's own composer script (t3g:cgl, t3g:phpstan, t3g:rector) under DDEV, and the follow-up names project workflows. No core command, core process or release-branch rule appears. One remediation tells the user to verify the production key with typo3_configuration_lookup 'on each environment', a lookup the session never called and that reads only the local installation."
+            "evidence": "Every check it ran is the project's own composer script, t3g:cgl, t3g:phpstan and t3g:rector, under DDEV, as typo3_project_describe declared them. No core command or core process appears. One remediation again says to confirm the key with typo3_configuration_lookup, which reads the local installation only and not production."
         },
         {
             "avoided": true,
-            "evidence": "git status in site-events was clean before and after the run. The transcript carries no Edit or Write. The three checks are dry runs by their composer definitions (php-cs-fixer --dry-run, phpstan analyze, rector --dry-run), the rector rerun at call 25 passes --dry-run, and the check output went to the client's task file below /tmp."
+            "evidence": "git status in site-events was clean on develop at 1123b1e before and after the run. The transcript carries no Edit or Write. The three checks are dry runs by their composer definitions. The rector reruns at calls 15 and 16 pass --dry-run, and the render read its template from stdin. Call 34 ran git fetch --prune, which updates remote-tracking refs in .git and no file of the checkout."
         }
     ],
-    "notes": "Session c7442365-485d-40bc-ab0e-cfda7b43aad9, 2026-10-28 14:34:04-14:37:57 UTC by its transcript, claude-opus-5-5. Claude Code 2.1.311, the VS Code extension's native binary, ran headless with -p --session-id, the prompt on standard input and no steering. It ran with --permission-mode acceptEdits and allowedTools Bash, Read, Edit, Write, Glob, Grep, TodoWrite, WebFetch, WebSearch, Skill and mcp__typo3-dev-companion. The server is the checkout main stands on, c0a078b7, through a user-scope MCP entry and no project .mcp.json. The published skills in .claude/skills carry a state for the agent claude. The maintainer started the DDEV project events-site right before the run, and site-events was clean on develop at 1123b1e before and after it. 33 tool calls, 7 to this server, and the skill activated at the first call. The run it replaces is in commit c0a078b7 (session 45700a88-ca7b-4444-a86e-ec1ecfe21841, server 739fd433). A first launch minutes earlier, session 6b20237d-22ce-45d6-a6e6-8688f19c00d2, lacked the MCP tools in allowedTools and is not the run. There the skill read base.md, the checklist and the report, and the refused typo3_project_describe was its first server call. It stopped there, quoted the refusal, and asked whether to proceed without the server rather than review from memory. That is the base's 'Nothing starts until the server answers' holding. The report rules of 2026-10-28 meet their first run here. The whole report stands in one fenced markdown block with four backticks, and every heading is there in its order. Findings keep the line form, and Verification and Not reached keep the em-dash form. Checked and correct, Open and Dropped drift to a colon or a parenthesis instead of the dash. The Package and Range head fields carry parenthetical explanations, where a head field holds its value alone. Every Surfaces row says assessed and moves its qualifier into Backed by, so the status column compares nothing. The third Evidence form appears once, as 'unverified, classes not read' under Open, and findings 2 and 4 copy '(goes to Open)' from the skeleton. Nothing follows Not reached inside the block, but the answer opens with a three-finding summary before the fence and closes with a next-step list after it. Whether 'nothing follows Not reached' covers the answer around the fence is a reading the rule leaves open. The request named no surface, so the not-requested cost does not apply, and the table has no such row. What the run teaches beyond this repository is four things. Step 3's surface list before the reading failed for the second run in a row. The hint lookups came after the reading with the finding as the query. A stored XSS the previous run proved with a render was dropped on a reading of AbstractViewHelper that missed the f:format.raw around the call. No statement in knowledge/ says that f:format.raw turns off the escaping of a nested ViewHelper's children. typo3_task_guide placed the root composer.json and config/sites of a composer-project in scope extension."
+    "notes": "Session ff4d1f81-fba9-4353-81de-f6ce6ad99c68, 2026-10-28 15:57:23-16:02:26 UTC by its transcript, claude-opus-5-5. Claude Code 2.1.311 ran headless with -p --session-id, the prompt on standard input and no steering. It ran with --permission-mode acceptEdits and allowedTools Bash, Read, Edit, Write, Glob, Grep, TodoWrite, WebFetch, WebSearch, Skill and mcp__typo3-dev-companion. The server is the checkout main stands on, c0768e3b, through a user-scope MCP entry. The server start refreshed the stale published skills, and the published SKILL.md, checklist and report match this checkout. The maintainer started the DDEV project events-site right before the run, and site-events was clean on develop at 1123b1e before and after it. 35 tool calls, 9 to this server, and the skill activated at the first call. The run it replaces is in commit c0768e3b (session c7442365-485d-40bc-ab0e-cfda7b43aad9, server c0a078b7), with the same two criteria missed. Four changes met their first run here. The f:format.raw statement in security-sinks reached the session and stands as finding 1's Rule. The session had proved the XSS from the Fluid source and a render before it asked. typo3_task_guide carried the surface list in its data half, and the session used its ids for three lookups. The instruction to write the list before the first read stands in the text half, which Claude Code does not hand the model (D-EVI-011). D-SCO-017 holds: the brief placed composer.json, config/sites and .ddev/config.yaml in scope project, and the hint lookups placed config/system/additional.php, .env.dist, ci.yml, phpstan.neon and rector.php there too. The brief's top-level scope still says extension for three project paths of five. The report rules of 90b38fc4 hold in part. Checked and correct, Open and Dropped now keep the em dash, and Surfaces splits a partly read surface into an unassessed row. The Package and Range head fields still carry parentheses, and a summary stands before the fence. Findings 2 and 3 name typo3_hint_lookup for project-configuration-files, which typo3_task_guide answered. What the run teaches beyond this repository is three things. The surface instruction has to reach the data half to reach Claude Code. The hint lookups still come after the reading, now by the right ids. A git log -S on the renamed settings.php dated the key five years late in two runs."
 }

@@ -1,7 +1,7 @@
 {
     "scenario": "REVIEW-03",
     "date": "2026-10-28",
-    "server": "c0a078b7",
+    "server": "c0768e3b",
     "client": "claude-code",
     "environment": "E-CORE",
     "criteria": "e8685940c1c9",
@@ -17,7 +17,8 @@
             "tool": "typo3_gerrit_lookup",
             "arguments": {
                 "change": "I5bb50ec12503518871e9aef429ad51dc9697f0c2",
-                "messages": "people"
+                "messages": "people",
+                "files": "none"
             }
         },
         {
@@ -30,46 +31,19 @@
         {
             "tool": "typo3_task_guide",
             "arguments": {
-                "task": "Review a bugfix: localization wizard asks for required page fields; DataHandler localize accepts fieldValues; FormEngine permission check for new page translations",
+                "task": "Review a core bugfix: localization wizard asks for required page fields before creating a page translation; DataHandler localize command accepts fieldValues; FormEngine permission check for new page translations",
                 "changeType": "bugfix",
-                "targetVersion": "15",
                 "paths": [
                     "typo3/sysext/core/Classes/DataHandling/DataHandler.php",
+                    "typo3/sysext/backend/Classes/Controller/Wizard/LocalizationController.php",
                     "typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseUserPermissionCheck.php",
                     "typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseDefaultLanguagePageRow.php",
-                    "typo3/sysext/backend/Classes/Controller/Wizard/LocalizationController.php",
-                    "typo3/sysext/backend/Classes/Localization/RequiredTranslationFieldResolver.php",
                     "typo3/sysext/backend/Classes/Wizard/PageWizardStepBuilder.php",
+                    "typo3/sysext/backend/Classes/Localization/RequiredTranslationFieldResolver.php",
                     "typo3/sysext/backend/Configuration/Backend/AjaxRoutes.php",
-                    "typo3/sysext/backend/Resources/Private/Language/Wizards/localization.xlf",
                     "Build/Sources/TypeScript/backend/localization/localization-wizard.ts",
                     "typo3/sysext/core/Documentation/Changelog/14.3.x/Important-87328-LocalizationWizardAsksForRequiredPageFields.rst"
                 ]
-            }
-        },
-        {
-            "tool": "typo3_hint_lookup",
-            "arguments": {
-                "ids": [
-                    "documentation-changelog",
-                    "datahandler-testing",
-                    "tca-formengine",
-                    "javascript-unit-tests"
-                ]
-            }
-        },
-        {
-            "tool": "typo3_test_run_guide",
-            "arguments": {
-                "paths": [
-                    "typo3/sysext/core/Classes/DataHandling/DataHandler.php",
-                    "typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseUserPermissionCheck.php",
-                    "typo3/sysext/backend/Classes/Controller/Wizard/LocalizationController.php",
-                    "typo3/sysext/backend/Resources/Private/Language/Wizards/localization.xlf",
-                    "Build/Sources/TypeScript/backend/localization/localization-wizard.ts",
-                    "typo3/sysext/core/Documentation/Changelog/14.3.x/Important-87328-LocalizationWizardAsksForRequiredPageFields.rst"
-                ],
-                "targetVersion": "15"
             }
         },
         {
@@ -77,7 +51,6 @@
             "arguments": {
                 "workflow": "core",
                 "message": "[BUGFIX] Ask for required fields when translating a page\n\nThe localization wizard created page translations with required fields\nleft empty, like a title without l10n_mode. It now asks for them in a\nFormEngine step, as the page wizard does for a new page, and passes the\nvalues to the localize command, which now accepts them as fieldValues.\n\nTo render that step for editors who may translate but not create pages,\nFormEngine checks a new page translation like DataHandler does: page\nedit permission on the default language page instead of page creation\npermission on its parent page.\n\nResolves: #87328\nReleases: main, 14.3\nChange-Id: I5bb50ec12503518871e9aef429ad51dc9697f0c2",
-                "keyword": "BUGFIX",
                 "isBreaking": false,
                 "isDeprecation": false
             }
@@ -85,50 +58,62 @@
         {
             "tool": "typo3_rule_lookup",
             "arguments": {
-                "query": "changelog entry backport",
-                "targetVersion": "14.3"
+                "documentId": "core/contribution/changelog"
+            }
+        },
+        {
+            "tool": "typo3_test_run_guide",
+            "arguments": {
+                "paths": [
+                    "typo3/sysext/core/Classes/DataHandling/DataHandler.php",
+                    "typo3/sysext/backend/Classes/Controller/Wizard/LocalizationController.php",
+                    "typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseUserPermissionCheck.php",
+                    "Build/Sources/TypeScript/backend/localization/localization-wizard.ts",
+                    "typo3/sysext/core/Documentation/Changelog/14.3.x/Important-87328-LocalizationWizardAsksForRequiredPageFields.rst",
+                    "typo3/sysext/backend/Resources/Private/Language/Wizards/localization.xlf"
+                ]
             }
         }
     ],
     "outcomes": [
         {
             "met": true,
-            "evidence": "The skill activated at the first turn. Then git status, git log and git show HEAD read the commit 1bdd0eddcbb, and typo3_gerrit_lookup with its Change-Id returned change 97164 at patch set 3, target main, Releases main and 14.3. typo3_forge_lookup read issue 87328, and typo3_task_guide and typo3_hint_lookup took the changed paths before any rule was weighed. The session read the new LocalizePageWithFieldValuesTest with its CSV fixtures and the LocalizationControllerTest fixture beside the code. It fetched the failing CI job log and reproduced that failure before it formed a view."
+            "evidence": "The skill activated at the first turn, and the session read base.md, checklist.md and report.md next. git log, git show --stat and git merge-base read the commit 1bdd0eddcbb. typo3_gerrit_lookup with its Change-Id returned change 97164 at patch set 3, target main, Releases main and 14.3. typo3_forge_lookup read issue 87328, and typo3_task_guide took the changed paths without a targetVersion. The session read the new LocalizePageWithFieldValuesTest, its CSV fixtures and the backend test methods. It fetched the failing CI job log before it formed a view. It did not call typo3_hint_lookup for the ids the brief left in omittedHints."
         },
         {
             "met": true,
-            "evidence": "Every finding has a Where line at a changed path and a Rule and a Consequence line. Finding 1 ties LocalizePageWithFieldValuesEditors.csv to the red CI vote, and finding 2 ties Releases: 14.3 to the backport rule typo3_rule_lookup returned and to two merge-tree conflicts. Spot-checked in the worktree: the CSV has no workspace_perms column, BackendUserAuthentication.php returns -99 as the fallback, DataHandler.php:781 writes that workspace, and localize() at :4756 has the new parameter. Two Rule lines are weaker. Finding 1 cites the core's own AGENTS.md and reads 'must be the real ones' into the datahandler-testing hint, which says to preserve workspace behaviour. Finding 5 names behaviour and no contribution rule."
+            "evidence": "Every finding has a Where line at a changed path, a Rule line and a Consequence line. Spot-checked in the worktree: the Editors CSV has no workspace_perms column, and DataHandler.php:782 writes BE_USER->workspace into t3ver_wsid. Line 3314 passes the language with a default of 0, and line 4756 has the new parameter. Three Rule lines are weaker. Finding 1 names column behaviour and no contribution rule. Finding 3 names a DataHandler habit and no lookup. Finding 4 cites typo3_hint_lookup, which the trace does not carry; the backend-ui hint came in the typo3_task_guide answer. One evidence sentence is wrong: be_groups.php:124 and be_users.php:257 declare a workspace_perms default of 0 and 1."
         },
         {
             "met": true,
-            "evidence": "The first run was the one failing test file on MariaDB, which reproduced the CI failure. A scratch probe on the same file came next, then five targeted unit and functional files, then six static suites with cgl and cglHeader in their -n form. Every Ran line pastes what the suite printed. The Not run lines name full unit, full functional, unitJavascript, build, checkGruntClean, phpstan, e2e and cglGit, each with a reason. They leave out other suites typo3_test_run_guide returned, among them lintPhp, normalizeXliff and checkExtensionScannerRst."
+            "evidence": "The first suite was the one failing test file on MariaDB, which reproduced the CI failure. Two targeted functional files, one unit directory and four static suites followed, cgl in its -n form. Every Ran line pastes what the suite printed, and the log confirms each verdict. The wait was a background subshell that appends DONE to its log, then a foreground until-grep loop on that marker. It ended ten seconds later. The Not run line names ten suites with one reason: scoped to targeted suites, not asked. It leaves out full unit, checkExtensionScannerRst, checkComposer, lintYaml, lintServicesYaml, cglGit and cglHeaderGit. Nothing on it checks nothing."
         },
         {
             "met": true,
-            "evidence": "Each surface comes from the diff. The changelog is checked because the patch ships an Important entry in 14.3.x, and its directory is held against Releases: through the rule lookup. Compatibility comes up because Releases: names an LTS line and the patch adds a parameter, a command format and a route. Commit shape went through typo3_commit_message_guide with workflow core, and its only warning stands as a cosmetic finding. Security is one traced access path, because the patch changes a FormEngine permission check."
+            "evidence": "Each surface comes from the diff. The changelog is checked because the patch ships an Important entry in 14.3.x, through typo3_rule_lookup with documentId core/contribution/changelog. Compatibility comes up because Releases names an LTS line and the patch adds a parameter to a public method on a non-final class. git merge-tree per Releases branch backs it with two conflicts on 14.3. Commit shape went through typo3_commit_message_guide with workflow core, and its one warning stands as a cosmetic finding. Security is one traced access path, because the patch changes a FormEngine permission check."
         },
         {
             "met": true,
-            "evidence": "Six numbered findings sit under three severity headings, with checked-and-correct, open and dropped candidates after them. The answer names one blocker and two decisions. The session edited one fixture for a probe, restored it from a copy it made first, and checked the restoration with git diff --stat and git status in the same call. git status in the worktree was clean before and after the run, at the same HEAD."
+            "evidence": "Five numbered findings sit under three severity headings, with Checked and correct, Open and Dropped after them. The answer names one blocker and one decision. The session ran no probe this time and edited nothing. git status --short was empty at the first call and again after the suites, with git diff --stat empty. The worktree is clean at 1bdd0eddcbb after the run."
         }
     ],
     "failures": [
         {
             "avoided": true,
-            "evidence": "Every finding carries a path and line from this diff or the checkout. The blocker rests on a MariaDB run of the new test and on the CI log of patch set 3, not on what DataHandler is known to do."
+            "evidence": "Every finding carries a path and a line from this diff or the checkout. The blocker rests on a MariaDB run of the new test, the CI log of job 6008819 and DataHandler.php:775-785. It does not rest on what DataHandler is known to do."
         },
         {
             "avoided": true,
-            "evidence": "The hint lookup took the four ids typo3_task_guide named for these paths, and one typo3_rule_lookup asked for the changelog and backport sections. No generic TYPO3 checklist stands in the answer. Every Checked and correct entry is a claim of this patch read at its line."
+            "evidence": "No generic TYPO3 checklist stands in the answer. One typo3_rule_lookup took the changelog document by id, and the hints came from the typo3_task_guide brief alone. Every Checked and correct entry is a claim of this patch at its line, and the Surfaces table is the skill's own."
         },
         {
             "avoided": true,
-            "evidence": "Core rules applied to a core patch: the backport reach of a bugfix, the changelog directory of the oldest Releases: branch, the core commit-message guide. The session used cgl -n and cglHeader -n instead of cglGit, which the test run guide says reads nothing in a git worktree. No extension or site rule appears."
+            "evidence": "The session applied core rules to a core patch. Those are the backport reach of a bugfix, the changelog directory of the oldest Releases branch and the core commit-message guide. The session ran cgl -n instead of cglGit, which the test run guide says reads nothing in a git worktree. No extension or site rule appears."
         },
         {
             "avoided": true,
-            "evidence": "The only write into the worktree was the scratch probe the skill permits: a copy to /tmp, a sed on the fixture, the test run, the copy back, then git diff --stat and git status, both empty. It did not run build or checkGruntClean, because both write into the tree. git fetch of origin 14.3 moved a remote-tracking ref, and git merge-tree wrote objects only. The tree was clean at 1bdd0eddcbb after the run."
+            "evidence": "The session wrote no file in the worktree. git fetch of origin 14.3 and main moved remote-tracking refs, and git merge-tree --write-tree wrote objects only. It did not run build or checkGruntClean, because both write into the tree. The suite log went to /tmp/review-97164.log, outside the checkout."
         }
     ],
-    "notes": "The seventh recorded REVIEW-03 run, and the first in a git worktree. Session f2e690d7-695f-45b1-b603-c7c56fbbe394, claude-opus-5-5, Claude Code 2.1.311, headless with -p, the prompt on standard input, --permission-mode acceptEdits and no steering. The prompt started at 14:44:06 UTC and the final answer stands at 14:50:42. The session made 47 tool calls, 8 of them to this server, and the skill activated at the first turn. The run it replaces is in commit c0a078b7. The environment is the worktree /home/benji/projects/typo3-cms/.worktrees/bugfix-87328, branch bugfix-87328 at 1bdd0eddcbb. That is one commit by the maintainer over origin/main, 27 files, two days old, pushed as change 97164 patch set 3. The main checkout was clean on main with nothing to review, so the maintainer chose the worktree. It has its own .mcp.json naming this server and its own .claude/skills, and a user-scope entry names the same server. The tree was clean before and after the run. The DDEV project of typo3-cms was running. The server that answered is the checkout main stands on, c0a078b7. The client did not exit after the final answer. At 14:48:42 the session started a background wait loop: until grep -q checkIntegrityXliff on the output file, a last line without ===, and ! pgrep -f runTests.sh, sleep 3. pgrep -f matched the loop's own command line, which contains runTests.sh, so the loop never ended. The suites it waited for had finished at 14:49:38, and the client had already notified the session of that. The maintainer killed the loop at about 15:16 UTC and the client exited. The session then answered the notification with one line that the review stood. Its first try had been sleep 240, which the client blocks. The wait it then wrote cannot end. Today's changes to the core review skill, held against this run. Worktree: the session already stood in a worktree on the patch set, so no question was due and it ran the suites there. Ask before a skip: phpstan and e2e are Not run for the time budget, and no question to the user stands before either. A headless run cannot answer one, and the skill does not say what a session does then. Not run names a reason on every line it has, but the list leaves out suites the guide returned. Fence: the whole report stands in one fenced markdown block with four backticks. Line form: the findings, Ran, Not run and Not reached keep it. Checked and correct, Open and Dropped are a bold claim with a paragraph rather than the claim, a dash and what established it. The Fetched and Commit head fields carry an explanation in parentheses. Nothing follows Not reached inside the fence. A summary paragraph stands before the fence and a closing one after it, which the rule does not reach outside the block. The cause of the blocker is a fact this server does not hold. A functional fixture user without workspace_perms, with EXT:workspaces loaded, works in workspace -99. MariaDB then rejects t3ver_wsid with SQLSTATE 22003, and SQLite passes the same test. The session established it with a MariaDB run and a probe."
+    "notes": "The eighth recorded REVIEW-03 run, and the second in this git worktree today. Session c05ed6f0-14bb-4d77-8722-d4fe88b9cdfb, claude-opus-5-5, headless with -p, the prompt on standard input, --permission-mode acceptEdits and no steering. The transcript records client version 2.1.312, where the launch notes say 2.1.311. The prompt started at 15:57:26 UTC and the final answer stands at 16:00:51. Nothing follows the answer in the transcript, so the client exited on its own. The session made 41 tool calls, 7 of them to this server, and the skill activated at the first turn. The run it replaces is in commit c0768e3b, session f2e690d7 against server c0a078b7. The environment is the worktree /home/benji/projects/typo3-cms/.worktrees/bugfix-87328, branch bugfix-87328 at 1bdd0eddcbb. That is one commit by the maintainer over origin/main, pushed as change 97164 patch set 3. The maintainer chose it because the main checkout had no change, and the tree was clean before and after the run. The server is the checkout main stands on, c0768e3b. The published skills were stale at the start, and the server start refreshed them. Today's changes, held against this run. Wait: the session wrote its own DONE marker and polled for it, with no process search; the wait ended in ten seconds. The earlier run hung 26 minutes on pgrep -f runTests.sh. Target version: typo3_task_guide and typo3_test_run_guide ran without targetVersion, as 80569fc8 asks; the earlier run passed 15. Run before a skip (D-SKL-104): not met. phpstan, e2e, unitJavascript, the xliff checks, lintPhp and cglHeader -n stay Not run, with the reason scoped to targeted suites and not asked. Nobody was there to ask, the worktree stood, and the answer then offers to run them. The patch adds two PHP files, so cglHeader -n applies, and the earlier run ran it. Not run list (D-SKL-105): no entry that checks nothing stands on it. Ten suites stand there against eight earlier, lintPhp and normalizeXliff now included, but seven verifying ones are still missing. Line form: Checked and correct, Open and Dropped are one line each, claim, dash and source, where the earlier run wrote paragraphs. Status cells hold one word, the answer opens with the fence, and nothing follows Not reached inside it. Two drifts remain. The Commit field carries (same), and a closing paragraph after the next steps repeats that nothing changed and offers more runs. The Rule field has no line-form rule, and three of its five lines name no lookup or one the trace lacks. Fetched says not fetched, while the session fetched origin 14.3 and main for merge-tree. Hints: typo3_task_guide left datahandler-testing, tca-formengine and four more ids in omittedHints and carried backend-modules, backend-routing-internals and backend-lit-task. The session called no typo3_hint_lookup and wrote that the task guide hints stood in. So the new workspace -99 hint in datahandler-testing never reached it. It found the same cause from the CSV, the TCA and DataHandler.php:782, and stated the TCA defaults wrongly."
 }

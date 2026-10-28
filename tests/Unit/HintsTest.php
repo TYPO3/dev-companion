@@ -1093,6 +1093,18 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('plugin-template-override', self::statementsOf('sitepackage-templates'));
     }
 
+    #[Decision('D-KNW-177')]
+    #[Test]
+    public function aFormRejectionWithoutAMessageIsAnsweredByWhereTheMessageComesFrom(): void
+    {
+        $text = self::statementsOf('form-framework');
+        self::assertStringContainsString('a validator on a Hidden element or a readonly field runs', $text);
+        self::assertStringContainsString('The Hidden partial renders no validation result', $text);
+        self::assertStringContainsString('never reads properties.fluidAdditionalAttributes', $text);
+        self::assertStringContainsString('validation.error.<code>', $text);
+        self::assertStringContainsString('never against the form\'s translationFiles', $text);
+    }
+
     /**
      * The chain is the v14 half of that answer. Fluid 2.15.0 and 4.6.1, read in
      * `.environments/`, try the format and then the bare name and nothing else.

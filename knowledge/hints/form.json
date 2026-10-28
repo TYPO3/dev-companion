@@ -16,7 +16,10 @@
       "prefill form",
       "prefill field",
       "AfterCurrentPageIsResolvedEvent",
-      "afterFormStateInitialized"
+      "afterFormStateInitialized",
+      "Honeypot",
+      "validationErrorMessages",
+      "translateErrorMessage"
     ],
     "hints": [
       {
@@ -39,7 +42,10 @@
         "since": 14
       },
       "Two EXT:form SC_OPTIONS hooks are still called: ext/form/afterFormStateInitialized changes the runtime after request state is loaded, and ext/form/buildFormDefinitionValidationConfiguration changes the validation rules while the definition is built. Their existence is not a reason to choose them by default: use the narrower PSR-14 event where one exposes the payload the task needs.",
-      "plugin.tx_form.settings.formDefinitionOverrides is keyed by the declared, unsuffixed identifier. It is merged with ArrayUtility::mergeRecursiveWithOverrule, so nested maps such as finisher recipients are merged unless their keys are explicitly replaced."
+      "plugin.tx_form.settings.formDefinitionOverrides is keyed by the declared, unsuffixed identifier. It is merged with ArrayUtility::mergeRecursiveWithOverrule, so nested maps such as finisher recipients are merged unless their keys are explicitly replaced.",
+      "FormRuntime validates every enabled element on the submitted page, whatever its type or HTML attributes: a validator on a Hidden element or a readonly field runs. The Hidden partial renders no validation result. A rejection there shows the page again with no message, which looks like a validator that never ran. A field that must be validated and stay unseen is a visible element moved out of view, the shape of the Honeypot partial.",
+      "The Honeypot partial writes its attributes as a literal and never reads properties.fluidAdditionalAttributes, so a value set there is resolved and not rendered. Only an override of the partial changes that markup.",
+      "A validation error renders by its code. The element's validationErrorMessages answer first, then the form's translationFiles under validation.error.<code>, also prefixed by the form or element identifier. Only then does the validator's own message render. translateErrorMessage() in a custom validator resolves through LocalizationUtility against the extension or an LLL: path, never against the form's translationFiles. A key missing there renders an empty message, so give the message under the error code in the form's translation file."
     ]
   }
 ]

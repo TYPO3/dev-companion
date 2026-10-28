@@ -61,3 +61,17 @@ the question, and nothing in the answer told them apart.
   hint was there under a wording they did not use. The index in the same answer
   is what stands against that, and this sentence names the manual rather than
   the end of the road.
+
+## Since then
+
+A third case arrived on 2026-10-28, and neither **Wrong if** describes it.
+`feedback/2026-10-28-060232-a-36-percent-answer-names-typo3-documentation.md`
+asked for a frontend site search on v14. The re-run on the same day gives the
+same answer: one hit, `extbase-arguments`, at 0.358, admitted by the curated
+vocabulary. The caller read the sentence. One correct warning in that hint made
+the whole answer feel sufficient, and the caller never called the manual.
+
+The judgement is wording, step 4. The clause "where none of them is it" hands
+the caller the decision the coverage already made. So under the floor the answer
+says it is not one and names the next call whole, with its arguments. The change
+touches `src/`, so it is queued (`D-FBK-052`).

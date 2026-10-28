@@ -79,6 +79,11 @@ Answers with
         # The same range as a sentence, empty when the entry holds on every covered
         # version.
         verifiedOn: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -152,5 +157,6 @@ Data:
         "targetVersion": 14,
         "verifiedCount": 22,
         "componentSource": "installation",
-        "withheld": []
+        "withheld": [],
+        "owed": []
     }

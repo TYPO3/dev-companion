@@ -287,7 +287,7 @@ final class ProjectTest extends TestCase
         // Last in the answer. A caller calls this tool for the installation,
         // and an inventory above those facts has traded one discovery problem
         // for another.
-        self::assertSame('guides', array_key_last(array_diff_key($answer, ['answeredBy' => null])));
+        self::assertSame('guides', array_key_last(array_diff_key($answer, ['answeredBy' => null, 'owed' => null])));
 
         // And every entry says what the caller has to be doing for it to be the
         // page to read, in the page's own words. An id and a title were what
@@ -1434,7 +1434,7 @@ final class ProjectTest extends TestCase
         self::assertNull(Project::describe());
 
         $result = Registry::call('typo3_project_describe', []);
-        self::assertSame(['unsupported'], array_keys($result->data));
+        self::assertSame(['unsupported', 'owed'], array_keys($result->data));
     }
 
     #[Decision('D-ANS-085')]
@@ -1509,7 +1509,7 @@ final class ProjectTest extends TestCase
         Instance::discoverFrom($root);
 
         self::assertNull(Project::describe());
-        self::assertSame(['unsupported'], array_keys(Registry::call('typo3_project_describe', [])->data));
+        self::assertSame(['unsupported', 'owed'], array_keys(Registry::call('typo3_project_describe', [])->data));
     }
 
     #[Test]

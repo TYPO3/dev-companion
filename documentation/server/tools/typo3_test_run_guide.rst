@@ -152,6 +152,11 @@ Answers with
       examples:
         - purpose: string
           command: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -1116,7 +1121,8 @@ Data:
                     "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
                 }
             ]
-        }
+        },
+        "owed": []
     }
 
 runTests: hit
@@ -1318,7 +1324,8 @@ Data:
                     "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
                 }
             ]
-        }
+        },
+        "owed": []
     }
 
 runTests: miss
@@ -1499,7 +1506,8 @@ Data:
                     "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
                 }
             ]
-        }
+        },
+        "owed": []
     }
 
 runTests: narrowed by paths
@@ -1828,5 +1836,6 @@ Data:
                     "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
                 }
             ]
-        }
+        },
+        "owed": []
     }

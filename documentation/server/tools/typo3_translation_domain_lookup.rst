@@ -66,6 +66,11 @@ Answers with
     # prefix arrived with the domains themselves, so there is nothing to write on a
     # version below them.
     moduleImport: string or null  # optional
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -111,7 +116,8 @@ Data:
         "targetVersion": 14,
         "domain": "backend.alt_doc",
         "domainOnNewerVersions": null,
-        "moduleImport": "~labels/backend.alt_doc"
+        "moduleImport": "~labels/backend.alt_doc",
+        "owed": []
     }
 
 domain: checkout path
@@ -147,7 +153,8 @@ Data:
         "targetVersion": 14,
         "domain": "core.messages",
         "domainOnNewerVersions": null,
-        "moduleImport": "~labels/core.messages"
+        "moduleImport": "~labels/core.messages",
+        "owed": []
     }
 
 domain: on an older target
@@ -180,7 +187,8 @@ Data:
         "path": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf",
         "targetVersion": 13,
         "domain": null,
-        "domainOnNewerVersions": "backend.alt_doc"
+        "domainOnNewerVersions": "backend.alt_doc",
+        "owed": []
     }
 
 domain: miss
@@ -208,5 +216,6 @@ Data:
     {
         "path": "somewhere/else.xlf",
         "targetVersion": 14,
-        "domain": null
+        "domain": null,
+        "owed": []
     }

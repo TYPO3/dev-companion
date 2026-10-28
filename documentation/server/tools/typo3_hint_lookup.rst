@@ -170,6 +170,11 @@ Answers with
       - uri: string
         # The returned hint this document is the long form of.
         hint: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -1090,7 +1095,8 @@ Data:
             }
         ],
         "availableHintsWithheld": 0,
-        "documents": []
+        "documents": [],
+        "owed": []
     }
 
 hints: topic
@@ -1620,7 +1626,8 @@ Data:
                 "uri": "typo3://guides/any/backend/using-the-styleguide",
                 "hint": "css-styleguide-demos"
             }
-        ]
+        ],
+        "owed": []
     }
 
 hints: miss
@@ -2400,5 +2407,6 @@ Data:
             }
         ],
         "availableHintsWithheld": 0,
-        "documents": []
+        "documents": [],
+        "owed": []
     }

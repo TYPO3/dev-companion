@@ -125,6 +125,11 @@ Answers with
         root: string
         # Environment variable that names the console command.
         console: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 The answer carries exactly one of these sets of fields:
 
@@ -189,7 +194,8 @@ Data:
                 "root": "TYPO3_DEV_COMPANION_ROOT",
                 "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        }
+        },
+        "owed": []
     }
 
 From the fixture installation
@@ -221,7 +227,8 @@ Data:
                 "root": "TYPO3_DEV_COMPANION_ROOT",
                 "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        }
+        },
+        "owed": []
     }
 
 services: by tag
@@ -265,7 +272,8 @@ Data:
                 "root": "TYPO3_DEV_COMPANION_ROOT",
                 "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        }
+        },
+        "owed": []
     }
 
 From the fixture installation
@@ -297,5 +305,6 @@ Data:
                 "root": "TYPO3_DEV_COMPANION_ROOT",
                 "console": "TYPO3_DEV_COMPANION_CONSOLE"
             }
-        }
+        },
+        "owed": []
     }

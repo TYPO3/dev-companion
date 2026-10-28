@@ -132,6 +132,11 @@ Answers with
       - tool: string
         # What to pass and why this call is the next one.
         when: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -321,7 +326,8 @@ Data:
                 "tool": "typo3_commit_message_guide",
                 "when": "with workflow=\"core\" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it."
             }
-        ]
+        ],
+        "owed": []
     }
 
 issue report: Markdown where the tracker reads Textile
@@ -518,5 +524,6 @@ Data:
                 "tool": "typo3_commit_message_guide",
                 "when": "with workflow=\"core\" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it."
             }
-        ]
+        ],
+        "owed": []
     }

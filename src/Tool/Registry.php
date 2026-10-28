@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Tool;
 use TYPO3\DevCompanion\Feedback\Channel;
 use TYPO3\DevCompanion\Installation\Icons;
 use TYPO3\DevCompanion\Installation\Typo3Runtime;
+use TYPO3\DevCompanion\Result\Schema;
 use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Server\ExcludedTools;
 
@@ -105,7 +106,7 @@ final class Registry
             // answers as if it was never sent, `D-ANS-053`.
             'inputSchema' => $tool::inputSchema() + ['additionalProperties' => false],
             'annotations' => $tool::annotations(),
-            'outputSchema' => $tool::outputSchema(),
+            'outputSchema' => Schema::withOwed($tool::outputSchema()),
         ], self::offered());
     }
 

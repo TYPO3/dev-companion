@@ -203,6 +203,11 @@ Answers with
       # What to do when that installation and the snapshot are different TYPO3
       # majors. Null when they agree or the server knows nothing.
       skew: string or null  # optional
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -1281,7 +1286,8 @@ Data:
             "verifyCommand": "bin/cli components:paths /path/to/typo3-core-checkout",
             "installedVersion": "14.3.8-dev",
             "skew": null
-        }
+        },
+        "owed": []
     }
 
 components: hit
@@ -1493,7 +1499,8 @@ Data:
             "verifyCommand": "bin/cli components:paths /path/to/typo3-core-checkout",
             "installedVersion": "14.3.8-dev",
             "skew": null
-        }
+        },
+        "owed": []
     }
 
 components: miss
@@ -1536,5 +1543,6 @@ Data:
             "verifyCommand": "bin/cli components:paths /path/to/typo3-core-checkout",
             "installedVersion": "14.3.8-dev",
             "skew": null
-        }
+        },
+        "owed": []
     }

@@ -524,7 +524,7 @@ final class StdioServerTest extends TestCase
         ])], $this->temporaryRoot)[2]['result'];
 
         self::assertFalse($result['isError'], 'an unmet precondition is not a tool error');
-        self::assertSame(['query', 'unsupported'], self::sorted($result['structuredContent']));
+        self::assertSame(['owed', 'query', 'unsupported'], self::sorted($result['structuredContent']));
         self::assertSame('no-installation', $result['structuredContent']['unsupported']['cause']);
         self::assertContains(
             $this->temporaryRoot,

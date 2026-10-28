@@ -622,6 +622,11 @@ Answers with
       # protection in front of it looks like from here.
       cause: string
       reason: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -677,7 +682,8 @@ Data:
         "issue": null,
         "results": [],
         "readAt": "2026-10-28T10:31:19Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: an issue whose evidence hangs off it
@@ -723,7 +729,8 @@ Data:
         "issue": null,
         "results": [],
         "readAt": "2026-10-28T10:31:19Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: an issue without the patch-set pings
@@ -770,7 +777,8 @@ Data:
         "issue": null,
         "results": [],
         "readAt": "2026-10-28T10:31:19Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: no such issue
@@ -816,7 +824,8 @@ Data:
         "issue": null,
         "results": [],
         "readAt": "2026-10-28T10:31:19Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: which other issues describe this
@@ -923,7 +932,8 @@ Data:
             }
         ],
         "readAt": "2026-10-28T10:31:19Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: nothing matches these words
@@ -979,7 +989,8 @@ Data:
         "issue": null,
         "results": [],
         "readAt": "2026-10-28T10:31:23Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: which of the words emptied the answer
@@ -1044,7 +1055,8 @@ Data:
         "issue": null,
         "results": [],
         "readAt": "2026-10-28T10:31:32Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: the oldest issues nobody has resolved
@@ -1291,7 +1303,8 @@ Data:
             }
         ],
         "readAt": "2026-10-28T10:31:47Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: what is known about one area
@@ -1536,7 +1549,8 @@ Data:
             }
         ],
         "readAt": "2026-10-28T10:31:48Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: a word that names no area
@@ -1634,7 +1648,8 @@ Data:
         "issue": null,
         "results": [],
         "readAt": "2026-10-28T10:31:49Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: what one person has filed
@@ -1807,7 +1822,8 @@ Data:
             }
         ],
         "readAt": "2026-10-28T10:31:49Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: a name naming more than one person
@@ -1865,7 +1881,8 @@ Data:
         "issue": null,
         "results": [],
         "readAt": "2026-10-28T10:31:50Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: everything one person has touched
@@ -2105,7 +2122,8 @@ Data:
             }
         ],
         "readAt": "2026-10-28T10:31:50Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 forge: the shape of one person's history
@@ -2387,5 +2405,6 @@ Data:
         "issue": null,
         "results": [],
         "readAt": "2026-10-28T10:31:52Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }

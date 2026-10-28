@@ -531,8 +531,10 @@ final class ToolContractTest extends TestCase
             // The echo is in both branches on purpose. What separates them is
             // that one adds the result and the other adds the reason there is
             // none.
+            // `owed` stands on every answer, so the root requires it and no
+            // branch has to.
             self::assertSame(
-                [...$schema['required'], 'unsupported'],
+                [...array_values(array_diff($schema['required'], ['owed'])), 'unsupported'],
                 $unsupported['required'],
                 $name . ' asks the unsupported branch for more than the reason and the echo'
             );

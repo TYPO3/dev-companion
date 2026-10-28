@@ -110,6 +110,11 @@ Answers with
       # answered with a page rather than with the API.
       cause: string
       reason: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -191,7 +196,8 @@ Data:
                 "constraint": ">=12.4.22 <=13.4.99"
             }
         ],
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 ter: is this version already out
@@ -266,7 +272,8 @@ Data:
                 "constraint": ">=12.4.22 <=13.4.99"
             }
         ],
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 ter: nothing is published under this key
@@ -301,7 +308,8 @@ Data:
         "held": null,
         "total": 0,
         "versions": [],
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 ter: a composer package name
@@ -336,5 +344,6 @@ Data:
         "held": null,
         "total": 0,
         "versions": [],
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }

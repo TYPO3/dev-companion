@@ -687,6 +687,11 @@ Answers with
     # private or work in progress is invisible to it and looks exactly like one
     # nobody pushed. Null means empty really does mean nothing matched.
     indistinguishable: string or null
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -753,7 +758,8 @@ Data:
         },
         "indistinguishable": "This server reads https://review.typo3.org without credentials, so a change that is private or work in progress is invisible to it. Such a change answers exactly like a path nothing touches, so this is either \"nobody is working on it\" or \"nobody an anonymous reader may see is\", and nothing here separates them. What is matched is the paths a change touches, so a fix for this file that landed elsewhere is not in the answer either.",
         "readAt": "2026-10-28T10:32:16Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 gerrit: one change by number
@@ -1422,7 +1428,8 @@ Data:
         },
         "indistinguishable": null,
         "readAt": "2026-10-28T10:32:16Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 gerrit: a change that is one part of a stack
@@ -2585,7 +2592,8 @@ Data:
         },
         "indistinguishable": null,
         "readAt": "2026-10-28T10:32:17Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 gerrit: the open review backlog
@@ -2852,5 +2860,6 @@ Data:
         },
         "indistinguishable": null,
         "readAt": "2026-10-28T10:32:18Z",
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }

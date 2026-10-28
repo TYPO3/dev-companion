@@ -166,6 +166,11 @@ Answers with
       - section: string
         # What that part of the answer would have carried.
         holds: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -1337,7 +1342,8 @@ Data:
             "reason": null,
             "variable": "TYPO3_DEV_COMPANION_UPSTREAM_CHECK"
         },
-        "withheld": []
+        "withheld": [],
+        "owed": []
     }
 
 scope: one section
@@ -1434,5 +1440,6 @@ Data:
                 "section": "upstream",
                 "holds": "whether this server's checkout is behind the repository it comes from"
             }
-        ]
+        ],
+        "owed": []
     }

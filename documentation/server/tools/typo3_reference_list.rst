@@ -67,6 +67,11 @@ Answers with
         existsOn: string
     # The TYPO3 majors this answer derives from.
     coveredVersions: [integer]
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -214,5 +219,6 @@ Data:
             13,
             14,
             15
-        ]
+        ],
+        "owed": []
     }

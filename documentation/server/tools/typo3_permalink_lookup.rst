@@ -143,6 +143,11 @@ Answers with
       # not answer this time, and the same call may answer the next.
       cause: string
       reason: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -300,7 +305,8 @@ Data:
                 "reason": "TCA Reference at 14.3 has no page Columns/Properties/OnChange.html. The near names below are what its inventory carries."
             }
         ],
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 permalink: no manual is known for the shortcode
@@ -356,7 +362,8 @@ Data:
         "unavailable": {
             "cause": "source-not-answering",
             "reason": "No manual named by this call could be read from docs.typo3.org."
-        }
+        },
+        "owed": []
     }
 
 permalink: unsupported version
@@ -394,5 +401,6 @@ Data:
         "unavailable": {
             "cause": "version-not-covered",
             "reason": "TYPO3 999 is outside the covered versions: 12.4, 13.4, 14.3, main."
-        }
+        },
+        "owed": []
     }

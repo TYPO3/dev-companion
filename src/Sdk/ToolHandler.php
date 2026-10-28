@@ -58,12 +58,12 @@ final class ToolHandler implements ToolHandlerInterface
 
         // In front of the answer, because what follows may be the old one and
         // a tool the answer names may be missing, `D-DIS-030`, `D-DIS-031`.
-        $notices = array_filter([CodeAge::isStale() ? CodeAge::NOTICE : '', Upstream::notice()]);
+        $result = $result->withNotices(array_values(array_filter([
+            CodeAge::isStale() ? CodeAge::NOTICE : '',
+            Upstream::notice(),
+        ])));
 
-        return new CallToolResult(
-            [new TextContent($notices === [] ? $result->text : implode("\n", $notices) . "\n\n" . $result->text)],
-            structuredContent: $result->data,
-        );
+        return new CallToolResult([new TextContent($result->text)], structuredContent: $result->data);
     }
 
     /**

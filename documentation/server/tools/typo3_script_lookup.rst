@@ -84,6 +84,11 @@ Answers with
     # third-party one. uncertain: nothing in the call placed the work, and the
     # answer is the core's own.
     scope: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -259,7 +264,8 @@ Data:
                 "truncated": true
             }
         ],
-        "scope": "core"
+        "scope": "core",
+        "owed": []
     }
 
 scripts: miss
@@ -288,5 +294,6 @@ Data:
         "matchCount": 0,
         "matches": [],
         "elsewhere": [],
-        "scope": "core"
+        "scope": "core",
+        "owed": []
     }

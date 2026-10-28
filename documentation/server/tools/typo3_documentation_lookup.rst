@@ -144,6 +144,11 @@ Answers with
       # not answer this time, and the same call may answer the next.
       cause: string
       reason: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -284,7 +289,8 @@ Data:
                 "viewhelper": null
             }
         ],
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 documentation: page
@@ -654,7 +660,8 @@ Data:
                 "viewhelper": null
             }
         ],
-        "unavailable": null
+        "unavailable": null,
+        "owed": []
     }
 
 documentation: unsupported version
@@ -695,5 +702,6 @@ Data:
         "unavailable": {
             "cause": "version-not-covered",
             "reason": "TYPO3 999 is outside the covered versions: 12.4, 13.4, 14.3, main."
-        }
+        },
+        "owed": []
     }

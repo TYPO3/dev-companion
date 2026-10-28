@@ -151,6 +151,11 @@ Answers with
         root: string
         # Environment variable that names the console command.
         console: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 The answer carries exactly one of these sets of fields:
 
@@ -590,7 +595,8 @@ Data:
         ],
         "terms": [],
         "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
-        "answeredBy": "packages"
+        "answeredBy": "packages",
+        "owed": []
     }
 
 From the fixture installation
@@ -652,7 +658,8 @@ Data:
         ],
         "terms": [],
         "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
-        "answeredBy": "installation"
+        "answeredBy": "installation",
+        "owed": []
     }
 
 icons: several validated at once
@@ -727,7 +734,8 @@ Data:
             }
         ],
         "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
-        "answeredBy": "packages"
+        "answeredBy": "packages",
+        "owed": []
     }
 
 From the fixture installation
@@ -786,7 +794,8 @@ Data:
             }
         ],
         "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
-        "answeredBy": "installation"
+        "answeredBy": "installation",
+        "owed": []
     }
 
 icons: everything
@@ -908,7 +917,8 @@ Data:
             "extension"
         ],
         "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
-        "answeredBy": "packages"
+        "answeredBy": "packages",
+        "owed": []
     }
 
 From the fixture installation
@@ -1002,5 +1012,6 @@ Data:
             "extension"
         ],
         "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
-        "answeredBy": "installation"
+        "answeredBy": "installation",
+        "owed": []
     }

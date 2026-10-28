@@ -13,6 +13,7 @@ use TYPO3\DevCompanion\Sdk\ToolHandler;
 use TYPO3\DevCompanion\Server\CodeAge;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Directory;
+use TYPO3\DevCompanion\Tests\Support\Requirement;
 
 /**
  * A guide named a tool the running process did not serve, because the checkout
@@ -32,6 +33,7 @@ final class CodeAgeTest extends TestCase
         }
     }
 
+    #[Requirement('R-ANS-002')]
     #[Test]
     public function aCheckoutThatMovedAfterTheStartMakesEveryAnswerSaySo(): void
     {
@@ -49,6 +51,19 @@ final class CodeAgeTest extends TestCase
 
         self::assertTrue(CodeAge::isStale());
         self::assertStringStartsWith(CodeAge::NOTICE, $this->answer());
+        self::assertSame(CodeAge::NOTICE, $this->owed()[0] ?? null);
+    }
+
+    /** @return array<int, string> */
+    private function owed(): array
+    {
+        $result = (new ToolHandler('typo3_server_scope'))->execute(
+            ['sections' => ['versions']],
+            self::createStub(ClientGateway::class),
+        );
+        self::assertIsArray($result->structuredContent);
+
+        return $result->structuredContent['owed'];
     }
 
     #[Test]

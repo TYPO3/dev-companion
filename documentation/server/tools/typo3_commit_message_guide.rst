@@ -119,6 +119,11 @@ Answers with
       - tool: string
         # What to pass and why this call is the next one.
         when: string
+    # What the caller has to do with this answer that no field states beside the
+    # value it is about: the next call, a command to run first, a boundary on what
+    # to reuse. A notice that this server is stale or behind its repository opens
+    # the list. Empty where nothing is owed.
+    owed: [string]
 
 Answered
 --------
@@ -183,7 +188,8 @@ Data:
                 "tool": "typo3_task_guide",
                 "when": "with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths."
             }
-        ]
+        ],
+        "owed": []
     }
 
 commit: from a message
@@ -237,5 +243,6 @@ Data:
                 "tool": "typo3_task_guide",
                 "when": "with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths."
             }
-        ]
+        ],
+        "owed": []
     }

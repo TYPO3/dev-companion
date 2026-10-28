@@ -516,6 +516,29 @@ final class Schema
     }
 
     /**
+     * A tool's output schema with the `owed` list every answer carries, added
+     * here so no tool can declare it in other words.
+     *
+     * @param array<string, mixed>|null $schema
+     * @return array<string, mixed>|null
+     */
+    public static function withOwed(?array $schema): ?array
+    {
+        if ($schema === null) {
+            return null;
+        }
+        $schema['properties'] = (array) ($schema['properties'] ?? []) + ['owed' => self::listOf(
+            self::string(),
+            'What the caller has to do with this answer that no field states beside the value it is about: '
+                . 'the next call, a command to run first, a boundary on what to reuse. A notice that this '
+                . 'server is stale or behind its repository opens the list. Empty where nothing is owed.',
+        )];
+        $schema['required'] = [...(array) ($schema['required'] ?? []), 'owed'];
+
+        return $schema;
+    }
+
+    /**
      * @param array<string, mixed> $properties
      * @param array<int, string> $required
      * @return array<string, mixed>

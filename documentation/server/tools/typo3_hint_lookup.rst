@@ -225,6 +225,9 @@ Text:
     - DataHandler and persistence changes are high-impact and usually need functional tests.
     - Preserve workspace, localization, permissions, and hook or event behavior unless intentionally changed.
     - Test edge cases with deleted, hidden, localized, versioned, or workspace records when relevant.
+    - Where EXT:workspaces is loaded, a non-admin user without live access and in no workspace works in workspace -99. DataHandler writes that id into t3ver_wsid, an unsigned integer column.
+    - MariaDB rejects the value with SQLSTATE 22003, and SQLite stores it. So the test passes on SQLite and fails on MariaDB. A fixture for an editor in live sets workspace_perms to 1 on the user's group row.
+    - With EXT:workspaces loaded, workspace_perms defaults to 0 on be_users and on be_groups. So a fixture user whose rows omit the column has no live access. [TYPO3 v13 and newer]
     - DataHandler scenarios extend AbstractDataHandlerActionTestCase instead of FunctionalTestCase; it carries the scenario setup those tests share. It lives in typo3/sysext/core/Tests/Functional/DataScenarios/, which is the core's own test tree — an extension writes an ordinary FunctionalTestCase and primes its records with CSV fixtures.
 
     What matched above is a guess at your words. The rest of these domains, closest first, requestable by id:
@@ -455,6 +458,27 @@ Data:
                         "since": null,
                         "until": null,
                         "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "Where EXT:workspaces is loaded, a non-admin user without live access and in no workspace works in workspace -99. DataHandler writes that id into t3ver_wsid, an unsigned integer column.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "MariaDB rejects the value with SQLSTATE 22003, and SQLite stores it. So the test passes on SQLite and fails on MariaDB. A fixture for an editor in live sets workspace_perms to 1 on the user's group row.",
+                        "since": null,
+                        "until": null,
+                        "versions": "",
+                        "scope": null
+                    },
+                    {
+                        "text": "With EXT:workspaces loaded, workspace_perms defaults to 0 on be_users and on be_groups. So a fixture user whose rows omit the column has no live access.",
+                        "since": 13,
+                        "until": null,
+                        "versions": "TYPO3 v13 and newer",
                         "scope": null
                     },
                     {

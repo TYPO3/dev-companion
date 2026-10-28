@@ -6136,7 +6136,9 @@ final class HintsTest extends TestCase
             // NULL. MySQL has written it that way for longer than any covered
             // branch. It is the string a caller greps for after a row turned up
             // that their query could not see. Only these three, and only quoted
-            // — an unquoted run of zeroes is not one of them.
+            // — an unquoted run of zeroes is not one of them. A SQLSTATE is the
+            // SQL standard's error class, and workspace -99 is the id
+            // BackendUserAuthentication falls back to on every covered branch.
             $text = (string) preg_replace(
                 [
                     '/\bPSR-\d+/i', '/\bXLIFF \d+\.\d+/i', '/\bHTTP \d{3}\b/i',
@@ -6144,8 +6146,9 @@ final class HintsTest extends TestCase
                     '/\bexit (status|code) (above )?\d{1,3}\b/i',
                     '/\bPHP \^?\d+\.\d+(\.\d+)?/i',
                     "/'0000-00-00 00:00:00'|'0000-00-00'|'00:00:00'/",
+                    '/\bSQLSTATE [0-9A-Z]{5}\b/', '/\bworkspace -99\b/i',
                 ],
-                ['PSR', 'XLIFF', 'HTTP', 'exception', 'doktype', 'page type', 'exit status', 'PHP', 'zero-date'],
+                ['PSR', 'XLIFF', 'HTTP', 'exception', 'doktype', 'page type', 'exit status', 'PHP', 'zero-date', 'SQLSTATE', 'workspace'],
                 $hint['title'] . "\n" . implode("\n", array_column($hint['hints'], 'text'))
             );
 

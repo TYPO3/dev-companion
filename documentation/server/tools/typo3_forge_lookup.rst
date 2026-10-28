@@ -606,6 +606,13 @@ Answers with
         # one read per row, on backlog "stale" alone. Empty everywhere else, and
         # where nobody ever commented.
         lastNoteOn: string
+    # When this server read the tracker for this answer, in UTC as ISO 8601:
+    # 2026-10-27T14:03:09Z. The process holds an answered read for 300 seconds, so
+    # this can be earlier than the call. Where the answer stands on several reads,
+    # this is the earliest of them. updatedOn says when the issue last moved, and
+    # this says how old the read of it is. The list of areas and of people is held
+    # for a day and does not count here.
+    readAt: string
     # Why the source answered nothing, where status says unavailable. Null
     # otherwise.
     unavailable:
@@ -619,7 +626,7 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-10-21 by ``bin/cli tools:record``. Answered against
+Recorded on 2026-10-28 by ``bin/cli tools:record``. Answered against
 core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
@@ -669,6 +676,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
+        "readAt": "2026-10-28T10:31:19Z",
         "unavailable": null
     }
 
@@ -714,6 +722,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
+        "readAt": "2026-10-28T10:31:19Z",
         "unavailable": null
     }
 
@@ -760,6 +769,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
+        "readAt": "2026-10-28T10:31:19Z",
         "unavailable": null
     }
 
@@ -805,6 +815,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
+        "readAt": "2026-10-28T10:31:19Z",
         "unavailable": null
     }
 
@@ -911,6 +922,7 @@ Data:
                 "reviewAbandoned": false
             }
         ],
+        "readAt": "2026-10-28T10:31:19Z",
         "unavailable": null
     }
 
@@ -966,6 +978,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
+        "readAt": "2026-10-28T10:31:23Z",
         "unavailable": null
     }
 
@@ -987,7 +1000,7 @@ Text:
     TYPO3 issue tracker: no issue matches "file renderer RendererRegistry FileRendererInterface" at https://forge.typo3.org.
     These words matched nothing, which is not that nobody reported it: an issue worded differently is invisible to a full-text search.
     Every word has to be in the same issue, so one word nobody wrote empties the answer whatever else is in it.
-    Asked one word at a time: "file" reaches 14075 · "renderer" reaches 1195 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
+    Asked one word at a time: "file" reaches 14094 · "renderer" reaches 1197 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
     No issue on the tracker carries "FileRendererInterface". A query it is in is empty whatever else is in it, so drop it.
     "RendererRegistry" is the narrowest of the rest and reaches something: ask it on its own, then read the subjects.
     What no wording of the report reaches is enumerated instead: backlog "newest" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — "import export", "rte" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.
@@ -1008,11 +1021,11 @@ Data:
         "terms": [
             {
                 "term": "file",
-                "matchCount": 14075
+                "matchCount": 14094
             },
             {
                 "term": "renderer",
-                "matchCount": 1195
+                "matchCount": 1197
             },
             {
                 "term": "RendererRegistry",
@@ -1030,6 +1043,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
+        "readAt": "2026-10-28T10:31:32Z",
         "unavailable": null
     }
 
@@ -1049,13 +1063,13 @@ Text:
 
 .. code-block:: text
 
-    TYPO3 issue tracker: 3 of 2057 open issues of the TYPO3 Core project, oldest filed first
+    TYPO3 issue tracker: 3 of 1950 open issues of the TYPO3 Core project, oldest filed first
     This is a page and not the set. offset=3 reads the next page. words narrows it to a topic, and a narrower filter — an earlier date, one tracker — to a part of it. breakdown answers how the whole of it is distributed.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
 
     ## #14277 Start/Stop time for pages is ignored in standard menu objects
-    Feature · Under Review · Frontend · filed by Michael Stucki · unassigned · filed 2004-08-20 · last touched 2026-10-20 · https://forge.typo3.org/issues/14277
+    Feature · Under Review · Frontend · filed by Michael Stucki · unassigned · filed 2004-08-20 · last touched 2026-10-22 · https://forge.typo3.org/issues/14277
     Relation: relates #16815 — Bug · Closed · Sitemap ignoring "Start" and "End" flags · https://forge.typo3.org/issues/16815
     Relation: relates #98964 — Bug · Closed · Menu object caching creates too many records resulting in huge cache_hash table · https://forge.typo3.org/issues/98964
     Review: change 96945 · NEW · https://review.typo3.org/c/Packages/TYPO3.CMS/+/96945
@@ -1099,7 +1113,7 @@ Data:
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
         "placedAgainst": "15.0.0-dev",
-        "total": 2057,
+        "total": 1950,
         "terms": [],
         "categories": [],
         "categoriesUsed": [],
@@ -1117,7 +1131,7 @@ Data:
                 "reportedBy": "Michael Stucki",
                 "assignedTo": "",
                 "createdOn": "2004-08-20T08:45:13Z",
-                "updatedOn": "2026-10-20T16:36:02Z",
+                "updatedOn": "2026-10-22T10:28:38Z",
                 "url": "https://forge.typo3.org/issues/14277",
                 "relations": [
                     {
@@ -1276,6 +1290,7 @@ Data:
                 "reviewAbandoned": false
             }
         ],
+        "readAt": "2026-10-28T10:31:47Z",
         "unavailable": null
     }
 
@@ -1297,7 +1312,7 @@ Text:
 
 .. code-block:: text
 
-    TYPO3 issue tracker: 3 of 13 open issues of the TYPO3 Core project, tracker Bug, in RTE (rtehtmlarea + ckeditor), longest untouched first
+    TYPO3 issue tracker: 3 of 12 open issues of the TYPO3 Core project, tracker Bug, in RTE (rtehtmlarea + ckeditor), longest untouched first
     This is a page and not the set. offset=3 reads the next page. words narrows it to a topic, and a narrower filter — an earlier date, one tracker — to a part of it. breakdown answers how the whole of it is distributed.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
@@ -1346,7 +1361,7 @@ Data:
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=open&sort=updated_on%3Aasc&tracker_id=1&category_id=1001",
         "query": "",
         "placedAgainst": "15.0.0-dev",
-        "total": 13,
+        "total": 12,
         "terms": [],
         "categories": [],
         "categoriesUsed": [
@@ -1520,6 +1535,7 @@ Data:
                 "reviewAbandoned": false
             }
         ],
+        "readAt": "2026-10-28T10:31:48Z",
         "unavailable": null
     }
 
@@ -1617,6 +1633,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
+        "readAt": "2026-10-28T10:31:49Z",
         "unavailable": null
     }
 
@@ -1789,6 +1806,7 @@ Data:
                 "reviewAbandoned": false
             }
         ],
+        "readAt": "2026-10-28T10:31:49Z",
         "unavailable": null
     }
 
@@ -1846,6 +1864,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
+        "readAt": "2026-10-28T10:31:50Z",
         "unavailable": null
     }
 
@@ -1878,7 +1897,8 @@ Text:
     Relation: relates #89325 — Task · Resolved · Prevent duplicate redirects in backend module · https://forge.typo3.org/issues/89325
     Relation: relates #89301 — Task · Accepted · Streamline automatic slug & redirects handling · https://forge.typo3.org/issues/89301
     Relation: relates #92448 — Bug · New · changing slug again after reverting an auto update causes wrong URLs on sub pages · https://forge.typo3.org/issues/92448
-    Review: change 96706 · NEW · https://review.typo3.org/c/Packages/TYPO3.CMS/+/96706
+    Review: change 97034 · MERGED · https://review.typo3.org/c/Packages/TYPO3.CMS/+/97034
+    Review: change 96706 · MERGED · https://review.typo3.org/c/Packages/TYPO3.CMS/+/96706
 
     ## #105403 f:image and cache busting issue
     Bug · Needs Feedback · Fluid · filed by Frank Nägler · unassigned · filed 2024-10-23 · last touched 2026-09-03 · last comment 2026-09-03 · https://forge.typo3.org/issues/105403
@@ -1971,8 +1991,13 @@ Data:
                 "attachments": [],
                 "reviews": [
                     {
+                        "change": 97034,
+                        "status": "MERGED",
+                        "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/97034"
+                    },
+                    {
                         "change": 96706,
-                        "status": "NEW",
+                        "status": "MERGED",
                         "url": "https://review.typo3.org/c/Packages/TYPO3.CMS/+/96706"
                     }
                 ],
@@ -2079,6 +2104,7 @@ Data:
                 "reviewAbandoned": false
             }
         ],
+        "readAt": "2026-10-28T10:31:50Z",
         "unavailable": null
     }
 
@@ -2360,5 +2386,6 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
+        "readAt": "2026-10-28T10:31:52Z",
         "unavailable": null
     }

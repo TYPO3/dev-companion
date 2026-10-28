@@ -46,6 +46,21 @@ final class Recent
     }
 
     /**
+     * When what stands under this key was read, and now where nothing does,
+     * which is the moment of the fetch about to happen.
+     */
+    public static function since(string $key): int
+    {
+        return self::$held[$key]['at'] ?? self::now();
+    }
+
+    /** A moment as an answer states it: ISO 8601 in UTC, and now where null. */
+    public static function stated(?int $at): string
+    {
+        return gmdate('Y-m-d\TH:i:s\Z', $at ?? self::now());
+    }
+
+    /**
      * Holds one answer under a key. What may stand in the hold is the caller's
      * judgement.
      */

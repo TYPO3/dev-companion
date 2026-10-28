@@ -6,6 +6,8 @@ status: open
 coveredBy:
   - RecentTest::aBodyTheTrackerDidNotAnswerIsNotHeld
   - RecentTest::aChangeThatExistsIsReadFromTheReviewServerOnce
+  - RecentTest::aHeldAnswerSaysWhenTheReviewServerWasRead
+  - RecentTest::aHeldAnswerSaysWhenTheTrackerWasRead
   - RecentTest::anAnsweredIssueIsReadFromTheTrackerOnce
   - RecentTest::anIssueIsReadAgainOnceWhatWasHeldIsOld
   - RecentTest::noChangeForAnIssueIsAskedEveryTime
@@ -63,3 +65,12 @@ per call.
   long enough to act on it.
 - Sessions turn out to hammer the hosts across processes rather than inside one.
   A per-process store does nothing about that, and a store on disk would.
+
+## Since then
+
+A measurement of 2026-10-27 read 140 Forge and 202 Gerrit calls in the
+maintainer's sessions. It found no call that repeated an earlier one inside
+either hold. So the hold has spared no measured round trip yet, and a held
+answer has not been what a caller acted on. Both tools now answer `readAt`, the
+moment of the earliest read the answer stands on. A caller can tell a held read
+from a fresh one, and the first **Wrong if** has a field to show on.

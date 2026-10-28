@@ -178,6 +178,9 @@ final class Forge
      */
     private readonly Gerrit $review;
 
+    /** The earliest of this instance's reads of an issue, null before the first. */
+    private ?int $readAt = null;
+
     /** @param (\Closure(string): ?string)|null $transport */
     public function __construct(?\Closure $transport = null)
     {
@@ -194,6 +197,15 @@ final class Forge
     public static function useReader(?\Closure $reader): void
     {
         self::$transport = $reader;
+    }
+
+    /**
+     * When the answer this instance gave was read from the tracker. A tool
+     * builds one instance per call, so that is the call's answer — `D-ANS-049`.
+     */
+    public function readAt(): string
+    {
+        return Recent::stated($this->readAt);
     }
 
     /**
@@ -1312,6 +1324,11 @@ final class Forge
     {
         /** @var array{status: int, part: ?array<mixed>, total: int, cause: ?string}|null $held */
         $held = Recent::held($url, $heldFor);
+        // The areas and the people are held for a day and describe no issue,
+        // so they do not age the answer.
+        if ($heldFor === self::HELD_FOR) {
+            $this->readAt = min($this->readAt ?? PHP_INT_MAX, Recent::since($url));
+        }
         if ($held !== null) {
             return $held;
         }

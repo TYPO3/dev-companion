@@ -50,12 +50,31 @@ final class Gerrit
 
     private readonly CoreCi $ci;
 
+    /** The earliest of this instance's reads of the review server, null before the first. */
+    private ?int $readAt = null;
+
     /** @param (\Closure(string): ?string)|null $transport */
     public function __construct(?\Closure $transport = null)
     {
         $this->fetch = new Fetch($transport);
         $this->transport = $transport;
         $this->ci = new CoreCi($transport);
+    }
+
+    /**
+     * When the answer this instance gave was read from the review server. A
+     * tool builds one instance per call, so that is the call's answer —
+     * `D-ANS-049`.
+     */
+    public function readAt(): string
+    {
+        return Recent::stated($this->readAt);
+    }
+
+    /** Ages the answer by one read, the held one or the fetch about to happen. */
+    private function read(string $url): void
+    {
+        $this->readAt = min($this->readAt ?? PHP_INT_MAX, Recent::since($url));
     }
 
     /**
@@ -824,6 +843,7 @@ final class Gerrit
         $url = self::HOST . '/changes/' . $number . '/comments';
         /** @var list<array<string, mixed>>|null $held */
         $held = Recent::held($url, self::HELD_FOR);
+        $this->read($url);
         if ($held !== null) {
             return $held;
         }
@@ -995,6 +1015,7 @@ final class Gerrit
         $url = self::HOST . '/changes/' . $number . '/revisions/current/related';
         /** @var list<array<string, mixed>>|null $held */
         $held = Recent::held($url, self::HELD_FOR);
+        $this->read($url);
         if ($held !== null) {
             return $held;
         }
@@ -1176,6 +1197,7 @@ final class Gerrit
             . ($skip > 0 ? '&S=' . $skip : '') . $options;
         /** @var Answer|null $held */
         $held = Recent::held($url, self::HELD_FOR);
+        $this->read($url);
         if ($held !== null) {
             return $held;
         }

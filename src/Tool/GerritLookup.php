@@ -439,6 +439,7 @@ final class GerritLookup extends ReadOnlyTool
                 'source' => Schema::string('Where this server read the calendar, so you can read it again rather than trust it.'),
                 'readAt' => Schema::string('The day of that read. This list cannot carry a branch released since. A change above that targets a branch absent here is either that or a line out of regular support.'),
             ], ['branches', 'source', 'readAt'], 'The branches that take a patch today, from a list this server ships rather than from the review server. So it answers whatever the status above says. It is what a Releases: trailer may name, and a core clone supplies it nowhere. git branch -r reaches back to TYPO3_3-6 and says nothing about which of those is still maintained. Which of these lines a change belongs on is not here; that is the author\'s claim. typo3_commit_message_guide with workflow="core" reads a trailer against them.'),
+            'readAt' => Schema::readAt('the review server', Gerrit::HELD_FOR, 'updated says when a change last moved, and this says how old the read of it is.'),
             'unavailable' => Schema::unavailable([
                 'source-not-answering' => 'review.typo3.org did not answer this time, and the same call may answer '
                     . 'the next.',
@@ -457,7 +458,7 @@ final class GerritLookup extends ReadOnlyTool
                     . 'progress is invisible to it and looks exactly like one nobody pushed. Null means empty '
                     . 'really does mean nothing matched.',
             ]),
-        ], ['status', 'source', 'query', 'changes', 'backlog', 'releaseLines', 'unavailable', 'indistinguishable']);
+        ], ['status', 'source', 'query', 'changes', 'backlog', 'releaseLines', 'readAt', 'unavailable', 'indistinguishable']);
     }
 
     /**
@@ -862,6 +863,7 @@ final class GerritLookup extends ReadOnlyTool
             ] : null,
             'releaseLines' => $releaseLines['record'],
             'indistinguishable' => $indistinguishable,
+            'readAt' => $gerrit->readAt(),
             'unavailable' => Unreachable::of($answer['cause'], self::UNREACHABLE),
         ];
 

@@ -280,12 +280,13 @@ final class ForgeLookup extends ReadOnlyTool
                 'reviewAbandoned' => ['type' => 'boolean', 'description' => 'True where the issue stands Under Review and every change in reviews is ABANDONED. The status then claims a review nobody runs. False everywhere else, a search hit included.'],
                 'lastNoteOn' => Schema::string('When a person last wrote a comment on it, bots left out. updatedOn moves on any edit, a field somebody changed on many issues at once included, so this is the measure of attention on the stale end. Read from the journal, one read per row, on backlog "stale" alone. Empty everywhere else, and where nobody ever commented.'),
             ], ['issue', 'subject', 'tracker', 'status', 'category', 'reportedBy', 'assignedTo', 'createdOn', 'updatedOn', 'url', 'relations', 'attachments', 'cites', 'reviews', 'reviewAbandoned', 'lastNoteOn']), 'The issues the query matched or the enumeration selected, in the tracker\'s own order — nothing here ranks them. An enumerated row also carries its relations, its attachments and its reviews. Those three say whether somebody answered it elsewhere or already attempted it, without a read of the whole row. Empty on a read by number.'),
+            'readAt' => Schema::readAt('the tracker', Forge::HELD_FOR, 'updatedOn says when the issue last moved, and this says how old the read of it is. The list of areas and of people is held for a day and does not count here.'),
             'unavailable' => Schema::unavailable([
                 'source-not-answering' => 'the tracker did not answer this time.',
                 'source-not-parseable' => 'something answered with a page rather than with the API, which is what '
                     . 'the bot protection in front of it looks like from here.',
             ]),
-        ], ['status', 'source', 'url', 'query', 'placedAgainst', 'total', 'terms', 'categories', 'categoriesUsed', 'people', 'breakdown', 'wordsScan', 'issue', 'results', 'unavailable']);
+        ], ['status', 'source', 'url', 'query', 'placedAgainst', 'total', 'terms', 'categories', 'categoriesUsed', 'people', 'breakdown', 'wordsScan', 'issue', 'results', 'readAt', 'unavailable']);
     }
 
     /**
@@ -519,7 +520,8 @@ final class ForgeLookup extends ReadOnlyTool
     /** One issue, whole, which is what a number asks for. */
     private static function read(int $issue, string $notes): ToolResult
     {
-        $answer = (new Forge())->issue($issue, $notes);
+        $forge = new Forge();
+        $answer = $forge->issue($issue, $notes);
 
         $data = [
             'status' => $answer['status'],
@@ -536,6 +538,7 @@ final class ForgeLookup extends ReadOnlyTool
             'wordsScan' => null,
             'issue' => $answer['issue'],
             'results' => [],
+            'readAt' => $forge->readAt(),
             'unavailable' => Unreachable::of($answer['cause'], self::UNREACHABLE),
         ];
 
@@ -679,7 +682,8 @@ final class ForgeLookup extends ReadOnlyTool
      */
     private static function searched(string $query, int $limit): ToolResult
     {
-        $answer = (new Forge())->search($query, $limit);
+        $forge = new Forge();
+        $answer = $forge->search($query, $limit);
 
         $data = [
             'status' => $answer['status'],
@@ -696,6 +700,7 @@ final class ForgeLookup extends ReadOnlyTool
             'wordsScan' => null,
             'issue' => null,
             'results' => $answer['results'],
+            'readAt' => $forge->readAt(),
             'unavailable' => Unreachable::of($answer['cause'], self::UNREACHABLE),
         ];
 
@@ -951,7 +956,8 @@ final class ForgeLookup extends ReadOnlyTool
         string $words,
         int $offset,
     ): ToolResult {
-        $answer = (new Forge())->backlog(
+        $forge = new Forge();
+        $answer = $forge->backlog(
             order: $order,
             tracker: $tracker,
             category: $category,
@@ -983,6 +989,7 @@ final class ForgeLookup extends ReadOnlyTool
             'wordsScan' => $answer['wordsScan'],
             'issue' => null,
             'results' => $answer['results'],
+            'readAt' => $forge->readAt(),
             'unavailable' => Unreachable::of($answer['cause'], self::UNREACHABLE),
         ];
 

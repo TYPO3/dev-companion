@@ -667,6 +667,12 @@ Answers with
       # change above that targets a branch absent here is either that or a line out
       # of regular support.
       readAt: string
+    # When this server read the review server for this answer, in UTC as ISO 8601:
+    # 2026-10-27T14:03:09Z. The process holds an answered read for 30 seconds, so
+    # this can be earlier than the call. Where the answer stands on several reads,
+    # this is the earliest of them. updated says when a change last moved, and this
+    # says how old the read of it is.
+    readAt: string
     # Why the source answered nothing, where status says unavailable. Null
     # otherwise.
     unavailable:
@@ -685,7 +691,7 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-10-21 by ``bin/cli tools:record``. Answered against
+Recorded on 2026-10-28 by ``bin/cli tools:record``. Answered against
 core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
@@ -746,6 +752,7 @@ Data:
             "readAt": "2026-08-05"
         },
         "indistinguishable": "This server reads https://review.typo3.org without credentials, so a change that is private or work in progress is invisible to it. Such a change answers exactly like a path nothing touches, so this is either \"nobody is working on it\" or \"nobody an anonymous reader may see is\", and nothing here separates them. What is matched is the paths a change touches, so a fix for this file that landed elsewhere is not in the answer either.",
+        "readAt": "2026-10-28T10:32:16Z",
         "unavailable": null
     }
 
@@ -1414,6 +1421,7 @@ Data:
             "readAt": "2026-08-05"
         },
         "indistinguishable": null,
+        "readAt": "2026-10-28T10:32:16Z",
         "unavailable": null
     }
 
@@ -2576,6 +2584,7 @@ Data:
             "readAt": "2026-08-05"
         },
         "indistinguishable": null,
+        "readAt": "2026-10-28T10:32:17Z",
         "unavailable": null
     }
 
@@ -2601,7 +2610,7 @@ Text:
 
     TYPO3 core review server: https://review.typo3.org
     Query: project:"Packages/TYPO3.CMS" status:open -is:wip delta:<=60 label:Code-Review>=1 -label:Code-Review<=-1 -label:Verified<=-1 is:mergeable
-    3 of 34 open core changes, oldest pushed first.
+    3 of 37 open core changes, oldest pushed first.
     This is a page and not the set, and limit stops at 25. What comes after it is reached by a narrower filter — a smaller maxSize, a branch, an earlier updatedBefore — rather than by a larger limit, because more of one order is more of the same end.
     Age is a candidate and never a finding. The oldest changes are regularly the largest and the ones that no longer merge, so maxSize and mergeable are what turn this order into a shortlist — and what a change is actually waiting on is read by passing its number back as change, which answers the votes with their voters and the comments with their threads.
     `typo3-core-patch-review` is the workflow a change picked off this page opens, and `typo3-core-patch-checkout` is what gets the patch set into a checkout. Open the one this task is before reading a diff.
@@ -2817,7 +2826,7 @@ Data:
         ],
         "backlog": {
             "order": "oldest",
-            "read": 34,
+            "read": 37,
             "complete": true
         },
         "releaseLines": {
@@ -2842,5 +2851,6 @@ Data:
             "readAt": "2026-08-05"
         },
         "indistinguishable": null,
+        "readAt": "2026-10-28T10:32:18Z",
         "unavailable": null
     }

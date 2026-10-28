@@ -122,6 +122,46 @@ final class RecentTest extends TestCase
     }
 
     /**
+     * A held answer says when it was read rather than when it was asked for,
+     * so a caller can tell the two apart — `D-ANS-049`.
+     */
+    #[Decision('D-ANS-049')]
+    #[Test]
+    public function aHeldAnswerSaysWhenTheTrackerWasRead(): void
+    {
+        $transport = $this->transport('{"issue": {"id": 105403, "subject": "f:image and cache busting"}}');
+        $read = Recent::stated($this->now);
+
+        $first = new Forge($transport);
+        $first->issue(105403);
+        $this->now += 60;
+        $second = new Forge($transport);
+        $second->issue(105403);
+
+        self::assertSame($read, $first->readAt());
+        self::assertSame($read, $second->readAt(), 'the second answer came from what was held');
+    }
+
+    #[Decision('D-ANS-049')]
+    #[Test]
+    public function aHeldAnswerSaysWhenTheReviewServerWasRead(): void
+    {
+        $transport = $this->transport(")]}'\n" . '[{"_number": 90210, "subject": "[BUGFIX] Do the thing", "project": "Packages/TYPO3.CMS"}]');
+        $read = Recent::stated($this->now);
+
+        (new Gerrit($transport))->changesForIssue(105403);
+        $this->now += 10;
+        $held = new Gerrit($transport);
+        $held->changesForIssue(105403);
+        $this->now += Gerrit::HELD_FOR;
+        $fresh = new Gerrit($transport);
+        $fresh->changesForIssue(105403);
+
+        self::assertSame($read, $held->readAt());
+        self::assertSame(Recent::stated($this->now), $fresh->readAt());
+    }
+
+    /**
      * A transport that answers the same body every time and counts the calls.
      */
     private function transport(string $body): \Closure

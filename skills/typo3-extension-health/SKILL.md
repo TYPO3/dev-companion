@@ -154,6 +154,10 @@ answer hands a copy over as rendered text, and the fence keeps the source. Write
 it to a file only where the caller asks for one, at a path outside the checkout
 under assessment.
 
+**The answer opens with that fence.** A sentence before it repeats the report in
+a shape of its own. That includes the sentence that says which checks ran and
+that nothing changed, which belongs under **Verification**.
+
 **A document the caller asks for is this report, in this order and with every
 part above.** A summary in a shape of its own drops the ranks, the paths, the
 dropped candidates and the coverage. Those are what a reader checks an audit by.
@@ -170,7 +174,8 @@ either, ask which the user meant.
 
 Stopping at findings is not stopping at reading. The commands
 `typo3_project_describe` marks as checks hand the code back as it was. So an
-audit told not to change files runs them. It reports what they printed.
+audit told not to change files runs them. It reports what they printed under
+**Verification**.
 
 ## The list is written down and agreed before anything changes
 

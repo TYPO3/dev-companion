@@ -80,11 +80,11 @@ and the fields of a finding.**
 
 On 2026-10-28 a core review of change 97177
 ([`feedback/2026-10-28-031023`](../../feedback/archive/2026-10-28-031023-the-review-report-keeps-the-headings-but-not.md))
-wrote paragraphs under the headings, and the fence followed. The forward runs of
-that day broke the form where the gate had no rule, and the named rules
-followed. The second runs, against `c0768e3b`, still wrote a summary before the
-fence and a parenthesis in a head field: the third **Wrong if** held. So each
-head row now asks for one value, and the audit head asks for `Key` and
-`Checkout`, which `REVIEW-02` reads. A **Rule** line named a lookup the trace
-lacked, so a fifth rule names the call. The filled example for the summary is
-still unweighed.
+wrote paragraphs under the headings, and the forward runs broke the form where
+the gate had no rule. So the fence, five named rules, one value per head row and
+the audit's `Key` and `Checkout` rows followed. The third runs, against
+`3482d798`, opened with the fence in `REVIEW-01` and `REVIEW-03`. `REVIEW-02`
+wrote before it which checks ran and that nothing changed, because the audit's
+*Report* section named no place for that. That section now names
+**Verification** and says that the answer opens with the fence. The filled
+example stays unused until a `REVIEW-02` run writes a summary before it again.

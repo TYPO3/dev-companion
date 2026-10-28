@@ -1059,6 +1059,14 @@ final class SkillTest extends TestCase
             self::assertSame('Field', $head[1][0], $name);
             self::assertContains('Verdict', $head[1], $name . ' heads its report without a verdict');
         }
+
+        // REVIEW-02 kept a summary of the checks before the fence with the
+        // reference's gate in front of it, so the audit says it in its own section.
+        self::assertStringContainsString(
+            '**The answer opens with that fence.**',
+            self::flat(self::reportSection('typo3-extension-health')),
+            'typo3-extension-health lets a summary stand before the fence',
+        );
     }
 
     /**

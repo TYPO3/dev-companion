@@ -63,3 +63,17 @@ move, doubt of the route, is the wrong one.
   about something that no longer happens.
 - A session reports the same failure on `apache-fpm`, which would mean the
   webserver type is not what decides it.
+
+## Since then
+
+The first **Wrong if** fired for `/robots.txt` on 2026-10-28
+(`feedback/2026-10-28-074920`). DDEV issue 8607 is titled "v1.25.3: dynamic
+robots.txt no longer works". The v1.25.4 release notes, published 2026-09-02,
+remove that block, and `e-site-14.3` rendered on v1.25.4 keeps only
+`/favicon.ico`. The hint binds the robots.txt block to one release and names
+neither it nor the issue, because a hint carries no number (`R-ANS-037`). It also names the takeover by removal of `#ddev-generated`, which
+the file's own header states. And it says that `.ddev/nginx/*.conf` cannot
+replace a location, because line 192 includes it in the same server block.
+`webserver_type: apache-fpm` stays the fix that leaves DDEV the file. The
+report's claim that a restart put a removed marker back is not in the hint,
+because the file's header says the opposite and nothing here reproduced it.

@@ -3441,9 +3441,15 @@ final class HintsTest extends TestCase
     {
         $text = implode("\n", array_column(Hints::byId('project-configuration-files', 14)['hints'], 'text'));
 
+        self::assertStringContainsString('location = /favicon.ico', $text);
+        // The robots.txt block is one DDEV release, and an upgrade removes it.
         self::assertStringContainsString('location = /robots.txt', $text);
+        self::assertStringContainsString('the next release removed it again', $text);
         // Why the same route works on the deploy target.
         self::assertStringContainsString('public/.htaccess', $text);
+        // The file taken over, and the include that cannot replace a location.
+        self::assertStringContainsString('Remove the marker to take the file over', $text);
+        self::assertStringContainsString('duplicate location', $text);
         // And the fix that does not fight DDEV for a generated file.
         self::assertStringContainsString('webserver_type: apache-fpm', $text);
 

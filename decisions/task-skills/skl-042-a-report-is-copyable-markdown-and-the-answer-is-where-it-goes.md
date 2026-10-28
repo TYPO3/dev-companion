@@ -67,16 +67,15 @@ issue, a chat. Rich rendering is what it does not survive.
 
 ## Since then
 
-All four skills whose product is a report carry the sentence, and a test holds
-the set rather than one file.
-`SkillTest::aReportIsCopyableMarkdownAndTheAnswerIsWhereItGoes` reads
-`typo3-core-patch-review`, `typo3-extension-health`, `typo3-core-issue-triage`
-and `typo3-extension-patch-review` for both halves. Those are the form, and what
-makes it the form, "rendered output is what does not survive being moved".
-`typo3-extension-conformance`, which the reporting feedback named beside triage,
-is inside `typo3-extension-health` since `8a67338a`.
+All four skills whose product is a report carry the sentence, and
+`SkillTest::aReportIsCopyableMarkdownAndTheAnswerIsWhereItGoes` holds the set.
+`typo3-extension-conformance` is inside `typo3-extension-health` since
+`8a67338a`.
 
-None of the three **Wrong if** has a report behind it. Nothing since 2026-08-14
-describes a review in a form the reader could not lift out. Nothing describes a
-user who asks for the report at a path, or a report nobody copied because of its
-length.
+On 2026-10-28
+[`feedback/2026-10-28-031023-the-review-report-keeps-the-headings-but-not`](../../feedback/archive/2026-10-28-031023-the-review-report-keeps-the-headings-but-not.md)
+showed the first **Assumed** false. A review in the Claude Code terminal stood
+as rendered markdown, and a copy gave the rendered text. A fence is a form the
+session controls, so the answer stays where the report goes. The four skills put
+the report in one `markdown` fence of four backticks. A path comes back only
+where a fenced report still cannot be lifted out.

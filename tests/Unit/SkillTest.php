@@ -998,6 +998,13 @@ final class SkillTest extends TestCase
             );
 
             $reference = (string) file_get_contents(Paths::root() . '/skills/' . $name . '/references/report.md');
+            // A session kept every heading and wrote paragraphs under them, then
+            // a summary after the last one: the gate this entry's Wrong if asks for.
+            self::assertStringContainsString(
+                'Every entry keeps the line form the skeleton gives it, and nothing follows **Not reached**.',
+                self::flat($reference),
+                $name . ' keeps the headings of its skeleton and frees the entries',
+            );
             if (preg_match('/```markdown\n(.*?)\n```/s', $reference, $match) !== 1) {
                 self::fail($name . ' carries no skeleton in its report reference');
             }
@@ -1602,6 +1609,13 @@ final class SkillTest extends TestCase
                 'rendered output does not survive the move',
                 $skill,
                 $name . ' states the form without what makes it the form',
+            );
+            // The Claude Code terminal copies a rendered answer as rendered
+            // text, so markdown alone is a form the session does not hand over.
+            self::assertStringContainsString(
+                'in one fenced `markdown` block, with a fence of four backticks',
+                $skill,
+                $name . ' leaves the source of its report to the client that renders it',
             );
             // The path is the caller's, so nothing decides a name or a
             // directory and no accident dirties the assessed checkout.

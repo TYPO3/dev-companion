@@ -5,6 +5,11 @@ write `None.` under a heading that has nothing. Two audits in one skeleton are
 two audits a reader can compare. A heading you leave out reads as a section the
 audit never reached.
 
+Every entry keeps the line form the skeleton gives it, and nothing follows **Not
+reached**. A head field holds its value alone. What explains a value goes into a
+finding or under **Open**. One review kept every heading and wrote each entry as
+a paragraph, so no line compared with the same line of another audit.
+
 The skeleton is the same in the three review skills. The fields of the head, the
 severity headings and one field of a finding are this skill's own.
 
@@ -72,9 +77,9 @@ severity headings and one field of a finding are this skill's own.
 Number the findings across the severity headings, so `3` names one finding in
 the whole report. A finding the checklist's finding gate leaves unverified
 stands under **Open** and under no severity. Its entry names the class you did
-not read. The **Surfaces** table is the list step 3 wrote, one row per
-entry and in its order.
+not read. The **Surfaces** table is the list step 3 wrote, one row per entry and
+in its order.
 
 A **not requested** row names in **Backed by** what a review of it would read:
 the lookups and the files. That is the cost of the rest, and the reader asks for
-it off that row. The report ends on **Not reached**, and no summary follows it.
+it off that row.

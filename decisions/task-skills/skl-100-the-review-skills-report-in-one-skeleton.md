@@ -60,3 +60,17 @@ and the fields of a finding.**
   invents one. The skeleton then needs a gate in the skill, not more fields.
 - A reader who compares two reports still has to read them whole to compare one
   section. The headings then name the wrong units.
+
+## Since then
+
+[`feedback/2026-10-28-031023-the-review-report-keeps-the-headings-but-not`](../../feedback/archive/2026-10-28-031023-the-review-report-keeps-the-headings-but-not.md)
+is the first report under the skeleton, a core review of change 97177. It kept
+every heading in its order, which is the half the **Assumed** predicted. It
+filled the entries as paragraphs and added a summary after *Not reached*. That
+summary is an invented section, so the first **Wrong if** holds.
+
+The gate it asks for now opens all three `references/report.md`. Every entry
+keeps the line form the skeleton gives it, a head field holds its value alone,
+and nothing follows *Not reached*.
+`SkillTest::theReviewSkillsReportInOneSkeleton` asserts the sentence. Whether a
+session holds the gate is the next report's to show.

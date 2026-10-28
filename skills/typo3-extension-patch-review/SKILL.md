@@ -133,11 +133,12 @@ run.**
 ## Report
 
 **Write the report in the skeleton of
-[references/report.md](references/report.md), every heading in its order.** The
-three review skills share that skeleton, so two reports compare section by
-section. Order the findings by what stops the merge, and say why each one stops
-it. Beside them stands what you checked and found correct, and what you raised
-while you read and dropped, with what dropped it.
+[references/report.md](references/report.md), every heading in its order and
+every entry in its line form.** The three review skills share that skeleton, so
+two reports compare section by section. Order the findings by what stops the
+merge, and say why each one stops it. Beside them stands what you checked and
+found correct, and what you raised while you read and dropped, with what dropped
+it.
 
 Every finding names the changed path it is about. A statement about the package
 that ties to no line in this diff belongs in an issue. Close on the checklist's
@@ -148,9 +149,12 @@ looked at less.
 **The report is markdown the reader can copy, and the answer is where it goes.**
 Everything this section asks for makes it long, and length makes the form
 matter. Somebody carries a review into a thread, an issue or a chat, and
-rendered output does not survive the move. Write it to a file only where the
-caller asks for one, at a path outside the checkout under review. A modified or
-untracked file beside the change is a surface this review reports on.
+rendered output does not survive the move. Put the whole report in one fenced
+`markdown` block, with a fence of four backticks. A client that renders the
+answer hands a copy over as rendered text, and the fence keeps the source. Write
+it to a file only where the caller asks for one, at a path outside the checkout
+under review. A modified or untracked file beside the change is a surface this
+review reports on.
 
 **A document the caller asks for is this report, in this order and with every
 part above.** A summary in a shape of its own drops the ranks, the paths, the

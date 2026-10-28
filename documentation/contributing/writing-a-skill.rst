@@ -368,10 +368,11 @@ on specifies a document. That is not a chat reply. It is what makes that
 document long. So it says the report is markdown the reader can copy and that
 the answer is where it goes
 (`R-SKL-023 <../../requirements/task-skills/skl-023-a-skill-whose-product-is-a-report-says-the-report-is-copyable-markdown.md>`_,
-held by ``SkillTest::aReportIsCopyableMarkdownAndTheAnswerIsWhereItGoes``). A
-path is the caller's to ask for, and where the caller asks for one it is outside
-the checkout the skill assessed. Which skills produce a report is the author's
-too, read off the bodies.
+held by ``SkillTest::aReportIsCopyableMarkdownAndTheAnswerIsWhereItGoes``). The
+report stands in one fenced block, because a client that renders the answer
+copies the rendered text. A path is the caller's to ask for, and where the
+caller asks for one it is outside the checkout the skill assessed. Which skills
+produce a report is the author's too, read off the bodies.
 
 Publishing it
 -------------

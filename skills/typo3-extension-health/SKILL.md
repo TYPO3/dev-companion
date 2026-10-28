@@ -119,10 +119,11 @@ the coverage list and no call.
 ## Report
 
 **Write the report in the skeleton of
-[references/report.md](references/report.md), every heading in its order.** The
-three review skills share that skeleton, so two audits compare section by
-section. Order the findings by severity. Each one carries the fields the
-skeleton gives a finding, which are the checklist's finding gate.
+[references/report.md](references/report.md), every heading in its order and
+every entry in its line form.** The three review skills share that skeleton, so
+two audits compare section by section. Order the findings by severity. Each one
+carries the fields the skeleton gives a finding, which are the checklist's
+finding gate.
 
 Beside them, report what you raised while you read and dropped, with what
 dropped it. A candidate let go in silence and a surface nobody opened leave the
@@ -144,8 +145,11 @@ entry, and let neither read as clean.
 **The report is markdown the reader can copy, and the answer is where it goes.**
 The findings and the coverage list together make it long, and length makes the
 form matter. Somebody carries an audit into an issue, a ticket or a chat, and
-rendered output does not survive the move. Write it to a file only where the
-caller asks for one, at a path outside the checkout under assessment.
+rendered output does not survive the move. Put the whole report in one fenced
+`markdown` block, with a fence of four backticks. A client that renders the
+answer hands a copy over as rendered text, and the fence keeps the source. Write
+it to a file only where the caller asks for one, at a path outside the checkout
+under assessment.
 
 **A document the caller asks for is this report, in this order and with every
 part above.** A summary in a shape of its own drops the ranks, the paths, the

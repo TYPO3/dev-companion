@@ -18,6 +18,10 @@ report long. A section that specifies severity bands, what each finding owes and
 the surfaces it closes on cannot produce four lines. Length is why the form
 matters at all.
 
+The report stands in one fenced block with a fence of four backticks. A client
+that renders the answer copies the rendered text, and the fence keeps the
+source. Four backticks leave a code block inside the report inside the fence.
+
 A path is what the caller asks for rather than what the skill prescribes, so
 nothing has to decide a file name or a directory. Where the caller asks for one,
 it is outside the checkout the skill assessed. The same workflow either reports

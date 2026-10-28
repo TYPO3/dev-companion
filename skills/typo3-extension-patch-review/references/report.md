@@ -5,6 +5,11 @@ write `None.` under a heading that has nothing. Two reviews in one skeleton are
 two reviews a reader can compare. A heading you leave out reads as a section the
 review never reached.
 
+Every entry keeps the line form the skeleton gives it, and nothing follows **Not
+reached**. A head field holds its value alone. What explains a value goes into a
+finding or under **Open**. One review kept every heading and wrote each entry as
+a paragraph, so no line compared with the same line of another review.
+
 The skeleton is the same in the three review skills. The fields of the head, the
 severity headings and one field of a finding are this skill's own.
 

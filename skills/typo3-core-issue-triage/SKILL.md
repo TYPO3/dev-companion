@@ -278,8 +278,11 @@ form: `Not reached: <step> — <what stood in for it>`.
 
 **The verdict is markdown the reader can copy, and the answer is where it
 goes.** You write it for the person who will act on it, and rendered output does
-not survive the move. Write it to a file only where the caller asks for one, at
-a path outside the checkout. This workflow leaves that tree as it found it.
+not survive the move. Put the whole verdict in one fenced `markdown` block, with
+a fence of four backticks. A client that renders the answer hands a copy over as
+rendered text, and the fence keeps the source. Write it to a file only where the
+caller asks for one, at a path outside the checkout. This workflow leaves that
+tree as it found it.
 
 **A verdict that ends the issue carries the comment that closes it.** Three of
 them do. The checklist says which, what that comment holds and which markup the

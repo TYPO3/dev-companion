@@ -55,3 +55,16 @@ the link names the core-ci jobs that failed it, read from git.typo3.org.**
   it. Then the answer owes the test names, read out of the log.
 - A chain long enough to hold many red links makes the read slow enough that a
   session reports the wait.
+
+## Since then
+
+2026-10-29: the first **Wrong if** has not fired. The fourth and fifth REVIEW-03
+runs of 2026-10-28 read change 97164 at Verified -1. Each then read the log of
+job 6008819 with two `curl` calls and found the failing test. A read of that
+`raw` address on 2026-10-29 returned 32 KB. PHPUnit's block "There were 2
+failures:" names both tests of `LocalizePageWithFieldValuesTest`.
+
+Under `D-FBK-027`, a field would save those two calls on a red review. The cost
+is a parser per log format, which this decision kept out. Two calls in a run of
+33 do not outweigh that. A session that reads a log and cannot find the test
+reopens it.

@@ -1,7 +1,8 @@
 ---
 date: 2026-10-28T03:10:23+00:00
 category: bug
-status: open
+status: closed
+closed: 2026-10-28
 model: claude-opus-5-5
 tool: typo3_task_guide, typo3-core-patch-review, typo3-core-patch-development
 directory: /home/benji/projects/typo3-cms-mcp

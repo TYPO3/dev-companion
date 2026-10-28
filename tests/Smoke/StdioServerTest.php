@@ -299,6 +299,7 @@ final class StdioServerTest extends TestCase
      * `D-DIS-034`.
      */
     #[Decision('D-DIS-034')]
+    #[Decision('D-DIS-035')]
     #[Test]
     public function aProjectWithoutSkillsIsToldHowToGetThem(): void
     {
@@ -322,6 +323,11 @@ final class StdioServerTest extends TestCase
         self::assertSame(0, $this->install($this->temporaryRoot));
         $installed = $this->call($initialize, $this->temporaryRoot, $stderr)[1];
         self::assertStringNotContainsString(Installer::ABSENT, $installed['result']['instructions']);
+        // Another client in the same project reads another directory, and no
+        // side of the connection can tell which client this is. So the
+        // instructions name where the skills are and where the rest goes.
+        self::assertStringStartsWith('Task skills are installed in .agents/skills here.', $installed['result']['instructions']);
+        self::assertStringContainsString('typo3://skill/', $installed['result']['instructions']);
     }
 
     /**

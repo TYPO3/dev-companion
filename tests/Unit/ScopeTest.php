@@ -417,6 +417,16 @@ final class ScopeTest extends TestCase
             mb_strlen(Coverage::instructions(Installer::ABSENT)),
             'instructions where the caller excluded everything and no skills are installed',
         );
+        // Every skills directory a client of `install` reads, which is the
+        // longest the sentence `D-DIS-035` adds can get.
+        $everyDirectory = 'Task skills are installed in .agents/skills, .junie/skills, .cursor/skills, .claude/skills, '
+            . '.github/skills, .factory/skills, .kiro/skills, .pi/skills, .grok/skills here. A client that reads '
+            . 'another directory reads the one typo3_task_guide names at typo3://skill/<name>/SKILL.md. ';
+        self::assertLessThanOrEqual(
+            Coverage::INSTRUCTIONS_BUDGET,
+            mb_strlen(Coverage::instructions($everyDirectory)),
+            'instructions where the caller excluded everything and every client has its skills',
+        );
     }
 
     #[Requirement('R-AUD-006')]

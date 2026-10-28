@@ -295,6 +295,26 @@ final class Installer
      * those ignore themselves). And a digest that no longer matches, which a
      * record from before the digest existed counts as.
      */
+    /**
+     * What stands there where `install` recorded some clients. A session cannot
+     * tell which client it runs in, and neither can the server. So the
+     * sentence names the directories that hold the skills, and sends every
+     * other client to the resource, `D-DIS-035`.
+     */
+    public static function installedIn(string $project): string
+    {
+        $directories = array_values(array_unique(array_map(
+            static fn(string $agent): string => (self::AGENTS[$agent] ?? self::GENERIC_DEFINITION)['skills'],
+            self::readState($project)['agents'],
+        )));
+        if ($directories === []) {
+            return '';
+        }
+
+        return 'Task skills are installed in ' . implode(', ', $directories) . ' here. A client that reads '
+            . 'another directory reads the one typo3_task_guide names at typo3://skill/<name>/SKILL.md. ';
+    }
+
     /** Whether `install` never recorded a client or a skill in the project. */
     public static function absent(string $project): bool
     {

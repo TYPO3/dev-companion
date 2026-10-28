@@ -149,7 +149,8 @@ final class Entrypoint
      * notice as it was, because a write into somebody else's project may not
      * stop a server. The directory is the one this process started in, where
      * `install` writes and so where the record is. A project without a record
-     * gets the notice that sends it to the skill resources, `D-DIS-034`.
+     * gets the notice that sends it to the skill resources, `D-DIS-034`. One
+     * with a current record names where the skills are, `D-DIS-035`.
      */
     private static function refreshSkillsNobodyHasUpdated(string $binary): string
     {
@@ -163,7 +164,7 @@ final class Entrypoint
         }
         $outdated = Installer::outdated($project);
         if ($outdated === null) {
-            return '';
+            return Installer::installedIn($project);
         }
         fwrite(STDERR, 'typo3-dev-companion: ' . $outdated . "\n");
 

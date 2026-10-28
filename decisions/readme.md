@@ -54,6 +54,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### discovery
 
+- [`D-DIS-035`][D-DIS-035] — A recorded install names where the skills are · 2026-10-28
 - [`D-DIS-033`][D-DIS-033] — A start outside any repository is told to state the version · 2026-10-27
 - [`D-DIS-034`][D-DIS-034] — A project without skills is sent to the skill resources · 2026-10-27
 - [`D-DIS-032`][D-DIS-032] — Antigravity gets a workspace plugin that starts the server in the project · 2026-10-06
@@ -83,6 +84,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DIS-001`][D-DIS-001] — The root package counts as an installed package · 2026-07-29 · confirmed
 - [`D-DIS-004`][D-DIS-004] — The version comes from the core package, not from the console · 2026-07-29 · confirmed
 
+[D-DIS-035]: discovery/dis-035-a-recorded-install-names-where-the-skills-are.md
 [D-DIS-033]: discovery/dis-033-a-start-outside-any-repository-is-told-to-state-the-version.md
 [D-DIS-034]: discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md
 [D-DIS-032]: discovery/dis-032-antigravity-gets-a-workspace-plugin-that-starts-the-server-in-the-project.md

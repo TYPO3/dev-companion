@@ -79,13 +79,12 @@ written.
 
 On 2026-10-27 the skill copies in thirteen projects went away. A Claude Code
 session in the core checkout then got neither a skill nor the URI
-(`feedback/2026-10-28-031023-a-session-that-starts-before-the-server.md`). Claude
-Code still listed this server as connecting at the first prompt, which
+(`feedback/archive/2026-10-28-031023-a-session-that-starts-before-the-server.md`).
+Claude Code still listed this server as connecting at the first prompt, which
 `claude -p` never shows. Instructions that do not arrive carry no sentence, so
 the maintainer kept the skill files and `install` on 2026-10-28. This sentence
 stays as the fallback. And `Installer::absent()` read a record that named
 Antigravity only. That is a delivery gap this server can close, if it knows the
 client. Claude Code 2.1.312 sends no `initialize` to this server, and mcp/sdk
 v0.9.0 answers its `server/discover` before any request handler, as logged on
-2026-10-28. `todo/waiting/T-261028-c00d.md` holds the question of where the
-client's name is read.
+2026-10-28. `D-DIS-035` closes the gap without the client's name.

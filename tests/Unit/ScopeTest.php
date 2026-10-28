@@ -278,6 +278,26 @@ final class ScopeTest extends TestCase
         self::assertSame(Scope::Extension, Scope::of('Build/Sources/Sass/theme.scss'));
     }
 
+    /**
+     * Call 9 of the REVIEW-01 run of 2026-10-28, with its arguments. The word
+     * "sitepackage" in the task took the two project paths that carry no
+     * marker of their own — `D-SCO-017`.
+     */
+    #[Requirement('R-SCO-001')]
+    #[Decision('D-SCO-017')]
+    #[Test]
+    public function theRootOfAComposerProjectIsPlacedAsTheProject(): void
+    {
+        Instance::discoverFrom($this->composerProject());
+        $task = 'Audit the project and its sitepackage for problems, risks and missing safeguards';
+
+        self::assertSame(Scope::Project, Scope::of('composer.json', $task), 'the root manifest');
+        self::assertSame(Scope::Project, Scope::of('composer.lock', $task), 'the lock beside it');
+        self::assertSame(Scope::Project, Scope::of('config/sites', $task), 'a project directory without its slash');
+        self::assertSame(Scope::Extension, Scope::of('extensions/events_sitepackage', $task));
+        self::assertSame(Scope::Extension, Scope::of('packages/my_sitepackage/composer.json', $task));
+    }
+
     #[Requirement('R-SCO-001')]
     #[Decision('D-SCO-012')]
     #[Test]

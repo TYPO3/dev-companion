@@ -870,6 +870,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### scope
 
+- [`D-SCO-017`][D-SCO-017] — The root manifest belongs to the repository the session stands in · 2026-10-28
 - [`D-SCO-015`][D-SCO-015] — An intent's routing line names the core artifact it needs · 2026-08-28
 - [`D-SCO-016`][D-SCO-016] — A path placed outside the core decides a call nothing places in it · 2026-08-28
 - [`D-SCO-013`][D-SCO-013] — A declared command carries the interpreter it runs on · 2026-08-19
@@ -883,6 +884,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SCO-005`][D-SCO-005] — The installation is evidence about the task, and the weakest kind · 2026-07-29 · confirmed
 - [`D-SCO-006`][D-SCO-006] — Every surface says who this server answers for · 2026-07-29 · confirmed
 
+[D-SCO-017]: scope/sco-017-the-root-manifest-belongs-to-the-repository-the-session-stands-in.md
 [D-SCO-015]: scope/sco-015-an-intents-routing-line-names-the-core-artifact-it-needs.md
 [D-SCO-016]: scope/sco-016-a-path-placed-outside-the-core-decides-a-call-nothing-places-in-it.md
 [D-SCO-013]: scope/sco-013-a-declared-command-carries-the-interpreter-it-runs-on.md

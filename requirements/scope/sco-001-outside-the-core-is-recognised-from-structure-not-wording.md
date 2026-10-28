@@ -14,6 +14,7 @@ heldBy:
   - ScopeTest::namingTheCoreInOrderToRuleItOutIsNotEvidenceOfCoreWork
   - ScopeTest::theDeclaredExtensionKeyPlacesAPath
   - ScopeTest::theNamedInstallationIsTheEvidenceWhereNothingElseIs
+  - ScopeTest::theRootOfAComposerProjectIsPlacedAsTheProject
 ---
 
 # R-SCO-001 — Outside the core is recognised from structure, not wording

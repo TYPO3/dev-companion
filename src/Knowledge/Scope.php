@@ -67,6 +67,15 @@ enum Scope: string
     ];
 
     /**
+     * The files that stand at the root of whatever repository holds them. So
+     * the repository the session stands in places them, and no word in the
+     * task does (`D-SCO-017`).
+     *
+     * @var array<int, string>
+     */
+    private const ROOT_MANIFEST = ['composer.json', 'composer.lock'];
+
+    /**
      * Paths and phrases that place a task inside core contribution.
      *
      * Positive evidence, and narrow on purpose. It decides whether an answer
@@ -210,9 +219,17 @@ enum Scope: string
             // After the extension containers, not before. A sitepackage below
             // packages/ has a Configuration/ of its own. The site configuration
             // this looks for is the one the project keeps outside any package.
+            // The slash a caller leaves off a directory is put back, so
+            // `config/sites` reads as `config/sites/` (`D-SCO-017`).
             foreach (self::PROJECT_WORK as $marker) {
-                if (str_starts_with($lowered, $marker)) {
+                if (str_starts_with($lowered . '/', $marker)) {
                     return self::Project;
+                }
+            }
+            if (in_array($lowered, self::ROOT_MANIFEST, true)) {
+                $repository = self::ofTheRepositoryStartedIn();
+                if ($repository !== self::Uncertain) {
+                    return $repository;
                 }
             }
         }
@@ -273,6 +290,12 @@ enum Scope: string
         // That signal, and where there is no installation either, nothing in
         // the call has placed the work at all. That is not the core by default:
         // it is the case R-AUD-002 names, and the answer says so.
+        return self::ofTheRepositoryStartedIn();
+    }
+
+    /** What the repository the session stands in is, as a scope. */
+    private static function ofTheRepositoryStartedIn(): self
+    {
         return match (Instance::startedIn()) {
             // The project rather than an extension inside it: nothing named a
             // package, and the repository the session sits in is the site.

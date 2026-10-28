@@ -1122,7 +1122,11 @@ Data:
                 }
             ]
         },
-        "owed": []
+        "owed": [
+            "The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId \"any/testing/browser-check\", which needs no resource list.\n- The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.\n- Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.",
+            "A functional suite answers pass or fail, and a finding that turns on what a rendering contains needs the output itself. The procedure is one call away — typo3_rule_lookup with documentId \"core/testing/proving-a-rendering\", which needs no resource list.\n- How the output is got out of a run that would otherwise print nothing, and why what a content object echoes may never arrive.\n- One marker per region of the response, so a rendering says which part of it changed rather than that it changed, and how what a service holds mid-request is printed.",
+            "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
+        ]
     }
 
 runTests: hit
@@ -1325,7 +1329,9 @@ Data:
                 }
             ]
         },
-        "owed": []
+        "owed": [
+            "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
+        ]
     }
 
 runTests: miss
@@ -1507,7 +1513,9 @@ Data:
                 }
             ]
         },
-        "owed": []
+        "owed": [
+            "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
+        ]
     }
 
 runTests: narrowed by paths
@@ -1837,5 +1845,9 @@ Data:
                 }
             ]
         },
-        "owed": []
+        "owed": [
+            "Every change in these domains runs build and lintScss, and typo3_task_guide makes them its checks. The rest can fail on these paths and needs a reason of its own.",
+            "The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId \"any/testing/browser-check\", which needs no resource list.\n- The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.\n- Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.",
+            "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
+        ]
     }

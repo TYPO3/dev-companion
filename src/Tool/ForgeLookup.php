@@ -28,6 +28,28 @@ final class ForgeLookup extends ReadOnlyTool
     /** The issue comes from the tracker at forge.typo3.org. */
     protected const OPEN_WORLD = true;
 
+    /** @var list<string> */
+    private const EMPTY_SEARCH = [
+        'What no wording of the report reaches is enumerated instead: backlog "newest" with createdSince from the day '
+            . 'the defect could first have been reported, and limit 50. Add category in your own words — "import '
+            . 'export", "rte" — only where the area is certain: thousands of the open bugs carry no Category at all, '
+            . 'and an area filter reaches none of them.',
+        'Those subjects settle whether somebody already reported this where total and the rows agree, and are the '
+            . 'recent end of a larger set where they do not — narrow the window until they do.',
+        'Where the words are a person, pass them as reportedBy or assignedTo with backlog.',
+    ];
+
+    /** @var list<string> */
+    private const SEARCH_HIT = [
+        'Read one whole by passing its number as issue.',
+        'Where those words are a person\'s name, this is the issues that mention them and not the issues that are '
+            . 'theirs: pass the name as reportedBy or assignedTo with backlog for that, which is a different set and '
+            . 'regularly two orders of magnitude larger.',
+    ];
+
+    private const WIDEN = 'Widen the dates, drop the tracker, add words in the reporters\' own terms, or reach the '
+        . 'closed ones with status.';
+
     /**
      * How many cited names a row prints; the rest are in the data.
      *
@@ -572,10 +594,11 @@ final class ForgeLookup extends ReadOnlyTool
         // citation says the same kind of thing. Where `relations` is empty this
         // is the whole of what the answer had to say about prior art, which is
         // the sentence behind `D-ANS-123`.
+        $owed = [];
         if ($found['mentioned'] !== []) {
-            $lines[] = 'Cited in the text below and filed as no relation, so this is the writer\'s own claim about'
-                . ' prior art rather than somebody\'s triage. It is regularly wrong: read it before framing a patch'
-                . ' against it, and never pass this issue over as a duplicate of it.';
+            $lines[] = $owed[] = 'Cited in the text below and filed as no relation, so this is the writer\'s own'
+                . ' claim about prior art rather than somebody\'s triage. It is regularly wrong: read it before framing'
+                . ' a patch against it, and never pass this issue over as a duplicate of it.';
             foreach ($found['mentioned'] as $mention) {
                 $lines[] = sprintf(
                     'Mentioned in the %s: #%d — %s',
@@ -592,12 +615,13 @@ final class ForgeLookup extends ReadOnlyTool
         if ($found['reviews'] !== []) {
             $lines[] = '';
             $lines[] = sprintf('## Changes on review.typo3.org (%d)', count($found['reviews']));
+            $owed[] = 'What a reviewer objected to is the argument on the change — pass the number as change to'
+                . ' typo3_gerrit_lookup, or the Change-Id, which is what survives a rebase onto another branch.';
             $lines[] = 'Two sources joined: the handles the report and the comments name, and the changes whose commit'
                 . ' message names this issue, asked of the review server. Neither half contains the other, so this'
                 . ' list being empty is what says no change is in flight. A patch set and a date are what the prose'
-                . ' said the day it was written; the state beside them is where the change stood just now. What a'
-                . ' reviewer objected to is the argument on the change — pass the number as change to'
-                . ' typo3_gerrit_lookup, or the Change-Id, which is what survives a rebase onto another branch.';
+                . ' said the day it was written; the state beside them is where the change stood just now. '
+                . end($owed);
             foreach ($found['reviews'] as $review) {
                 $lines[] = '- ' . implode(' · ', array_filter([
                     $review['change'] > 0 ? 'change ' . $review['change'] : '',
@@ -647,7 +671,7 @@ final class ForgeLookup extends ReadOnlyTool
             }
         }
 
-        return ToolResult::create(implode("\n", $lines), $data);
+        return ToolResult::create(implode("\n", $lines), $data, $owed);
     }
 
     /**
@@ -720,26 +744,16 @@ final class ForgeLookup extends ReadOnlyTool
                         . 'else is in it.',
                 ],
                 self::reached($answer['terms']),
-                [
-                    'What no wording of the report reaches is enumerated instead: backlog "newest" with createdSince from '
-                        . 'the day the defect could first have been reported, and limit 50. Add category in your own '
-                        . 'words — "import export", "rte" — only where the area is certain: thousands of the open bugs '
-                        . 'carry no Category at all, and an area filter reaches none of them.',
-                    'Those subjects settle whether somebody already reported this where total and the rows agree, and '
-                        . 'are the recent end of a larger set where they do not — narrow the window until they do.',
-                    'Where the words are a person, pass them as reportedBy or assignedTo with backlog.',
-                ],
-            )), $data);
+                self::EMPTY_SEARCH,
+            )), $data, self::EMPTY_SEARCH);
         }
 
         $lines = [
             sprintf('TYPO3 issue tracker: %d issues match "%s"', count($answer['results']), $answer['query']),
             'A full-text match over subject, description and comments, in the tracker\'s own order and unranked.'
                 . ' Another wording finds another set, so this is which issues mention it rather than which one it'
-                . ' duplicates. Read one whole by passing its number as issue.',
-            'Where those words are a person\'s name, this is the issues that mention them and not the issues that are'
-                . ' theirs: pass the name as reportedBy or assignedTo with backlog for that, which is a different set and'
-                . ' regularly two orders of magnitude larger.',
+                . ' duplicates. ' . self::SEARCH_HIT[0],
+            self::SEARCH_HIT[1],
         ];
         foreach ($answer['results'] as $hit) {
             $lines[] = '';
@@ -760,7 +774,7 @@ final class ForgeLookup extends ReadOnlyTool
             ]));
         }
 
-        return ToolResult::create(implode("\n", $lines), $data);
+        return ToolResult::create(implode("\n", $lines), $data, self::SEARCH_HIT);
     }
 
     /**
@@ -1072,10 +1086,10 @@ final class ForgeLookup extends ReadOnlyTool
         if ($answer['status'] === 'empty') {
             return ToolResult::create(
                 'TYPO3 issue tracker: nothing matches ' . $selection . ".\n"
-                . 'The filters excluded everything, which is an answer about them and not about the backlog. Widen the '
-                . 'dates, drop the tracker, add words in the reporters\' own terms, or reach the closed ones with status.'
-                . self::scanned($answer['wordsScan'], $answer['total']),
+                . 'The filters excluded everything, which is an answer about them and not about the backlog. '
+                . self::WIDEN . self::scanned($answer['wordsScan'], $answer['total']),
                 $data,
+                [self::WIDEN],
             );
         }
 
@@ -1092,6 +1106,7 @@ final class ForgeLookup extends ReadOnlyTool
             return ToolResult::create(implode("\n", $lines), $data);
         }
 
+        $owed = [];
         $shown = count($answer['results']);
         $lines = [
             $offset > 0
@@ -1130,11 +1145,13 @@ final class ForgeLookup extends ReadOnlyTool
                 $offset + $shown,
             );
         }
-        $lines[] = $order === 'newest'
+        $lines[] = $owed[] = $order === 'newest'
             ? 'A subject that reads like yours is a candidate and never a duplicate: read it whole by passing its'
                 . ' number as issue, and what it actually reports is decided there. Nothing here decides that for you.'
             : 'Age is a candidate and never a finding: read one whole by passing its number as issue, and what it'
                 . ' still claims is established in the checkout rather than off this list.';
+        $owed[] = 'An ABANDONED change on a row is grounds to read the argument on it with typo3_gerrit_lookup, where'
+            . ' the objection was written down and is regularly to the approach rather than to the defect.';
         $lines[] = 'A row carries what the page came back with: the issues it is filed against, the files hanging off'
             . ' it, and the changes on review.typo3.org whose commit message names it, each with the state it is in.'
             . ' That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read'
@@ -1157,7 +1174,7 @@ final class ForgeLookup extends ReadOnlyTool
             // subject. Three of the RTE reports a session searched for on
             // 2026-08-05 sat under System/Bootstrap/Configuration and under
             // Link Handling.
-            $lines[] = 'An area is where an issue was filed and not everything it is about. A report about this one'
+            $lines[] = $owed[] = 'An area is where an issue was filed and not everything it is about. A report about this one'
                 . ' regularly sits under another area, so what came back is a floor rather than the set — query the'
                 . ' words as well where the question is about a subject. An issue carrying no Category at all is in no'
                 . ' area, and thousands of the open bugs carry none, so no wording of this reaches one: ask again'
@@ -1174,9 +1191,10 @@ final class ForgeLookup extends ReadOnlyTool
         if ($workflow !== null) {
             $lines[] = '';
             $lines[] = $workflow;
+            $owed[] = substr($workflow, strpos($workflow, "\n") + 1);
         }
 
-        return ToolResult::create(implode("\n", $lines), $data);
+        return ToolResult::create(implode("\n", $lines), $data, $owed);
     }
 
     /**

@@ -452,7 +452,9 @@ Data:
             "12.0"
         ],
         "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
-        "owed": []
+        "owed": [
+            "The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
+        ]
     }
 
 From the fixture installation
@@ -604,7 +606,9 @@ Data:
             "12.0"
         ],
         "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
-        "owed": []
+        "owed": [
+            "The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
+        ]
     }
 
 changelog: swept by tag
@@ -1161,7 +1165,9 @@ Data:
             "12.0"
         ],
         "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
-        "owed": []
+        "owed": [
+            "Read the file for the description and the migration, or ask again with the name of one entry as the query, such as \"Deprecation-110202-StringUtilityMultibyteStringPad\". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
+        ]
     }
 
 From the fixture installation
@@ -1636,7 +1642,9 @@ Data:
             "12.0"
         ],
         "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
-        "owed": []
+        "owed": [
+            "Read the file for the description and the migration, or ask again with the name of one entry as the query, such as \"Deprecation-110202-StringUtilityMultibyteStringPad\". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
+        ]
     }
 
 changelog: miss
@@ -1753,7 +1761,9 @@ Data:
                 "matchCount": 0
             }
         ],
-        "owed": []
+        "owed": [
+            "A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId \"core/contribution/changelog\"."
+        ]
     }
 
 From the fixture installation
@@ -1806,5 +1816,7 @@ Data:
                 "matchCount": 0
             }
         ],
-        "owed": []
+        "owed": [
+            "A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId \"core/contribution/changelog\"."
+        ]
     }

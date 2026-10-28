@@ -136,10 +136,7 @@ final class TestRunGuide extends ReadOnlyTool
             return ToolResult::create(
                 Scope::OUTSIDE_CORE_NOTICE . ' Build/Scripts/runTests.sh is part of the core repository, so the '
                 . 'suites this guide knows cannot be run from here and are left out rather than handed over. '
-                . 'What such a repository needs instead — assembling a phpunit suite of its own, the browser '
-                . 'tests that go with it, and the static analysis the phpstan suite is the core\'s half of — is '
-                . 'typo3_hint_lookup with id=project-extension-tests, id=browser-tests and '
-                . 'id=extension-static-analysis. typo3_server_scope states the boundary.',
+                . self::OUTSIDE_THE_CORE . ' typo3_server_scope states the boundary.',
                 [
                     'query' => $query,
                     'paths' => $paths,
@@ -151,6 +148,7 @@ final class TestRunGuide extends ReadOnlyTool
                     'suites' => [],
                     'invocation' => ['preconditions' => [], 'beforeYouRun' => '', 'notes' => [], 'options' => [], 'examples' => []],
                 ],
+                [self::OUTSIDE_THE_CORE],
             );
         }
 
@@ -172,14 +170,15 @@ final class TestRunGuide extends ReadOnlyTool
         }
 
         $blocks = [];
+        $owed = [];
         // The other half of the same answer. The suites below are for the paths
         // that can run them. The paths that cannot stand by name rather than
         // read the answer as theirs.
         if ($outside !== []) {
             $blocks[] = Scope::outsideCoreAmong($outside) . ' Build/Scripts/runTests.sh is not there, so no suite '
-                . 'below is about ' . (count($outside) === 1 ? 'that path' : 'those paths') . '. What such a '
-                . 'repository needs instead is typo3_hint_lookup with id=project-extension-tests, '
-                . 'id=browser-tests and id=extension-static-analysis.';
+                . 'below is about ' . (count($outside) === 1 ? 'that path' : 'those paths') . '. '
+                . self::OUTSIDE_THE_CORE;
+            $owed[] = self::OUTSIDE_THE_CORE;
         }
         // A call that named no path answers from the core root, and every
         // command below says so itself. A named path that nothing could place
@@ -246,6 +245,12 @@ final class TestRunGuide extends ReadOnlyTool
         } else {
             $base = array_column(array_filter($hints, static fn(array $hint): bool => $hint['base']), 'suite');
             if ($base !== [] && $domains !== []) {
+                $owed[] = sprintf(
+                    'Every change in these domains runs %s, and typo3_task_guide makes %s its checks. The rest can '
+                    . 'fail on these paths and needs a reason of its own.',
+                    self::named($base),
+                    count($base) === 1 ? 'it' : 'them',
+                );
                 $blocks[] = sprintf(
                     'Every change in these domains runs %s, and typo3_task_guide makes %s its checks. %s The rest '
                     . 'can fail on these paths and needs a reason of its own.',
@@ -289,6 +294,7 @@ final class TestRunGuide extends ReadOnlyTool
             $browser = array_filter($hints, static fn(array $hint): bool => str_starts_with($hint['suite'], 'e2e'));
             if ($browser !== []) {
                 $blocks[] = self::BROWSER_CHECK_GUIDE;
+                $owed[] = self::withoutHeading(self::BROWSER_CHECK_GUIDE);
             }
 
             // A functional suite says whether it passed and not what it
@@ -297,6 +303,7 @@ final class TestRunGuide extends ReadOnlyTool
             $functional = array_filter($hints, static fn(array $hint): bool => str_starts_with($hint['suite'], 'functional'));
             if ($functional !== []) {
                 $blocks[] = self::RENDERING_PROBE_GUIDE;
+                $owed[] = self::withoutHeading(self::RENDERING_PROBE_GUIDE);
             }
         }
 
@@ -313,7 +320,13 @@ final class TestRunGuide extends ReadOnlyTool
             'withheld' => $withheld,
             'suites' => TestSuiteHints::records($hints),
             'invocation' => TestSuiteHints::invocation(),
-        ]);
+        ], [...$owed, self::withoutHeading(self::SCRIPTS_GUIDE)]);
+    }
+
+    /** A guide block as the data carries it, where no heading stands above a list entry. */
+    private static function withoutHeading(string $guide): string
+    {
+        return substr($guide, strpos($guide, "\n") + 1);
     }
 
     /**
@@ -420,6 +433,10 @@ final class TestRunGuide extends ReadOnlyTool
      * That is why the pointer sits here rather than waits for somebody to ask
      * what exists.
      */
+    private const OUTSIDE_THE_CORE = 'What such a repository needs instead — its own phpunit suite, the browser '
+        . 'tests beside it, and the static analysis the phpstan suite is the core\'s half of — is typo3_hint_lookup '
+        . 'with id=project-extension-tests, id=browser-tests and id=extension-static-analysis.';
+
     public const SCRIPTS_GUIDE = "## The whole procedure\n"
         . 'This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with '
         . "documentId \"core/testing/scripts\", which needs no resource list.\n"

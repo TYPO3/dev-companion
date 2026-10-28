@@ -632,7 +632,7 @@ Answered
 --------
 
 Recorded on 2026-10-28 by ``bin/cli tools:record``. Answered against
-core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/. Its
+core-checkout, TYPO3 14.3.8-dev, the 14.3 core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
 vendor/autoload.php is not there either, and composer install writes both.
@@ -681,9 +681,13 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
-        "readAt": "2026-10-28T10:31:19Z",
+        "readAt": "2026-10-28T17:31:14Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "What no wording of the report reaches is enumerated instead: backlog \"newest\" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — \"import export\", \"rte\" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.",
+            "Those subjects settle whether somebody already reported this where total and the rows agree, and are the recent end of a larger set where they do not — narrow the window until they do.",
+            "Where the words are a person, pass them as reportedBy or assignedTo with backlog."
+        ]
     }
 
 forge: an issue whose evidence hangs off it
@@ -728,9 +732,13 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
-        "readAt": "2026-10-28T10:31:19Z",
+        "readAt": "2026-10-28T17:31:14Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "What no wording of the report reaches is enumerated instead: backlog \"newest\" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — \"import export\", \"rte\" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.",
+            "Those subjects settle whether somebody already reported this where total and the rows agree, and are the recent end of a larger set where they do not — narrow the window until they do.",
+            "Where the words are a person, pass them as reportedBy or assignedTo with backlog."
+        ]
     }
 
 forge: an issue without the patch-set pings
@@ -776,9 +784,13 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
-        "readAt": "2026-10-28T10:31:19Z",
+        "readAt": "2026-10-28T17:31:14Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "What no wording of the report reaches is enumerated instead: backlog \"newest\" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — \"import export\", \"rte\" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.",
+            "Those subjects settle whether somebody already reported this where total and the rows agree, and are the recent end of a larger set where they do not — narrow the window until they do.",
+            "Where the words are a person, pass them as reportedBy or assignedTo with backlog."
+        ]
     }
 
 forge: no such issue
@@ -823,9 +835,13 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
-        "readAt": "2026-10-28T10:31:19Z",
+        "readAt": "2026-10-28T17:31:14Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "What no wording of the report reaches is enumerated instead: backlog \"newest\" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — \"import export\", \"rte\" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.",
+            "Those subjects settle whether somebody already reported this where total and the rows agree, and are the recent end of a larger set where they do not — narrow the window until they do.",
+            "Where the words are a person, pass them as reportedBy or assignedTo with backlog."
+        ]
     }
 
 forge: which other issues describe this
@@ -931,9 +947,12 @@ Data:
                 "reviewAbandoned": false
             }
         ],
-        "readAt": "2026-10-28T10:31:19Z",
+        "readAt": "2026-10-28T17:31:14Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "Read one whole by passing its number as issue.",
+            "Where those words are a person's name, this is the issues that mention them and not the issues that are theirs: pass the name as reportedBy or assignedTo with backlog for that, which is a different set and regularly two orders of magnitude larger."
+        ]
     }
 
 forge: nothing matches these words
@@ -988,9 +1007,13 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
-        "readAt": "2026-10-28T10:31:23Z",
+        "readAt": "2026-10-28T17:31:17Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "What no wording of the report reaches is enumerated instead: backlog \"newest\" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — \"import export\", \"rte\" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.",
+            "Those subjects settle whether somebody already reported this where total and the rows agree, and are the recent end of a larger set where they do not — narrow the window until they do.",
+            "Where the words are a person, pass them as reportedBy or assignedTo with backlog."
+        ]
     }
 
 forge: which of the words emptied the answer
@@ -1011,7 +1034,7 @@ Text:
     TYPO3 issue tracker: no issue matches "file renderer RendererRegistry FileRendererInterface" at https://forge.typo3.org.
     These words matched nothing, which is not that nobody reported it: an issue worded differently is invisible to a full-text search.
     Every word has to be in the same issue, so one word nobody wrote empties the answer whatever else is in it.
-    Asked one word at a time: "file" reaches 14094 · "renderer" reaches 1197 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
+    Asked one word at a time: "file" reaches 14096 · "renderer" reaches 1197 · "RendererRegistry" reaches 5 · "FileRendererInterface" reaches 0.
     No issue on the tracker carries "FileRendererInterface". A query it is in is empty whatever else is in it, so drop it.
     "RendererRegistry" is the narrowest of the rest and reaches something: ask it on its own, then read the subjects.
     What no wording of the report reaches is enumerated instead: backlog "newest" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — "import export", "rte" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.
@@ -1032,7 +1055,7 @@ Data:
         "terms": [
             {
                 "term": "file",
-                "matchCount": 14094
+                "matchCount": 14096
             },
             {
                 "term": "renderer",
@@ -1054,9 +1077,13 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
-        "readAt": "2026-10-28T10:31:32Z",
+        "readAt": "2026-10-28T17:31:25Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "What no wording of the report reaches is enumerated instead: backlog \"newest\" with createdSince from the day the defect could first have been reported, and limit 50. Add category in your own words — \"import export\", \"rte\" — only where the area is certain: thousands of the open bugs carry no Category at all, and an area filter reaches none of them.",
+            "Those subjects settle whether somebody already reported this where total and the rows agree, and are the recent end of a larger set where they do not — narrow the window until they do.",
+            "Where the words are a person, pass them as reportedBy or assignedTo with backlog."
+        ]
     }
 
 forge: the oldest issues nobody has resolved
@@ -1075,7 +1102,7 @@ Text:
 
 .. code-block:: text
 
-    TYPO3 issue tracker: 3 of 1950 open issues of the TYPO3 Core project, oldest filed first
+    TYPO3 issue tracker: 3 of 1947 open issues of the TYPO3 Core project, oldest filed first
     This is a page and not the set. offset=3 reads the next page. words narrows it to a topic, and a narrower filter — an earlier date, one tracker — to a part of it. breakdown answers how the whole of it is distributed.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
@@ -1124,8 +1151,8 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
-        "total": 1950,
+        "placedAgainst": "14.3.8-dev",
+        "total": 1947,
         "terms": [],
         "categories": [],
         "categoriesUsed": [],
@@ -1302,9 +1329,13 @@ Data:
                 "reviewAbandoned": false
             }
         ],
-        "readAt": "2026-10-28T10:31:47Z",
+        "readAt": "2026-10-28T17:31:39Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.",
+            "An ABANDONED change on a row is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect.",
+            "`typo3-core-issue-triage` is the workflow a caller holding this page is in, and opening it comes before deciding anything about a row. Hand the page over rather than choosing from it: triaging a backlog and triaging one issue are two jobs, and the second takes a number. Where the choice is yours, read these in order and stop at the first that decides:\n- What has already happened to it. The row carries the change and the state it stands in; the reading is the argument under that state. `typo3_gerrit_lookup` answers it by the number, before the checkout is opened, and an ABANDONED is grounds to read it rather than to pass the row over.\n- Whether the code it names is still there. The row carries every class, method and core file its text cites with where each stands in the packages installed here, so a report whose names are all gone is settled without opening the checkout. A name it could not place decides nothing.\n- The category, against the branch you are standing on. One naming a subsystem the branch no longer ships settles the issue unread.\n- Where the symptom appears. A rendered fragment, a stored row or a resolved value needs no installation; one that shows only after a backend interaction needs one standing up.\n- How far the mechanism reaches. One class and the behaviour in it is the settleable shape, and several with the order between them is an interaction.\n- What the suite already models. A case added to a test file that exists is a reproduction with no fixture to build.\n`typo3_changelog_lookup` is what says whether the area was reworked since, which is what turns a valid report into one about code that is gone. Say which reading decided, and say of the rows you passed over that you passed over them."
+        ]
     }
 
 forge: what is known about one area
@@ -1329,7 +1360,7 @@ Text:
     This is a page and not the set. offset=3 reads the next page. words narrows it to a topic, and a narrower filter — an earlier date, one tracker — to a part of it. breakdown answers how the whole of it is distributed.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
-    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 15.0.0-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
+    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 14.3.8-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
     An area is where an issue was filed and not everything it is about. A report about this one regularly sits under another area, so what came back is a floor rather than the set — query the words as well where the question is about a subject. An issue carrying no Category at all is in no area, and thousands of the open bugs carry none, so no wording of this reaches one: ask again without category, narrowed by createdSince instead, where the question is whether it was reported.
     On this end a row also says when a person last commented. last touched moves on any edit, a field somebody changed on many issues at once included, so the comment is the measure of attention.
 
@@ -1373,7 +1404,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=open&sort=updated_on%3Aasc&tracker_id=1&category_id=1001",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.8-dev",
         "total": 12,
         "terms": [],
         "categories": [],
@@ -1548,9 +1579,14 @@ Data:
                 "reviewAbandoned": false
             }
         ],
-        "readAt": "2026-10-28T10:31:48Z",
+        "readAt": "2026-10-28T17:31:40Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.",
+            "An ABANDONED change on a row is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect.",
+            "An area is where an issue was filed and not everything it is about. A report about this one regularly sits under another area, so what came back is a floor rather than the set — query the words as well where the question is about a subject. An issue carrying no Category at all is in no area, and thousands of the open bugs carry none, so no wording of this reaches one: ask again without category, narrowed by createdSince instead, where the question is whether it was reported.",
+            "`typo3-core-issue-triage` is the workflow a caller holding this page is in, and opening it comes before deciding anything about a row. Hand the page over rather than choosing from it: triaging a backlog and triaging one issue are two jobs, and the second takes a number. Where the choice is yours, read these in order and stop at the first that decides:\n- What has already happened to it. The row carries the change and the state it stands in; the reading is the argument under that state. `typo3_gerrit_lookup` answers it by the number, before the checkout is opened, and an ABANDONED is grounds to read it rather than to pass the row over.\n- Whether the code it names is still there. The row carries every class, method and core file its text cites with where each stands in the packages installed here, so a report whose names are all gone is settled without opening the checkout. A name it could not place decides nothing.\n- The category, against the branch you are standing on. One naming a subsystem the branch no longer ships settles the issue unread.\n- Where the symptom appears. A rendered fragment, a stored row or a resolved value needs no installation; one that shows only after a backend interaction needs one standing up.\n- How far the mechanism reaches. One class and the behaviour in it is the settleable shape, and several with the order between them is an interaction.\n- What the suite already models. A case added to a test file that exists is a reproduction with no fixture to build.\n`typo3_changelog_lookup` is what says whether the area was reworked since, which is what turns a valid report into one about code that is gone. Say which reading decided, and say of the rows you passed over that you passed over them."
+        ]
     }
 
 forge: a word that names no area
@@ -1581,7 +1617,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=15&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.8-dev",
         "total": 0,
         "terms": [],
         "categories": [
@@ -1647,7 +1683,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
-        "readAt": "2026-10-28T10:31:49Z",
+        "readAt": "2026-10-28T17:31:40Z",
         "unavailable": null,
         "owed": []
     }
@@ -1674,7 +1710,7 @@ Text:
     This is a page and not the set. offset=3 reads the next page, and breakdown answers how the whole set is distributed — a tracker or a date answers a smaller question than the one asked.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
-    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 15.0.0-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
+    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 14.3.8-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
 
     ## #15488 miscellaneous extensions dont work
     Bug · Closed · filed by Frank Nägler · unassigned · filed 2006-01-23 · last touched 2006-01-24 · https://forge.typo3.org/issues/15488
@@ -1708,7 +1744,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&status_id=%2A&sort=created_on%3Aasc&author_id=52",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.8-dev",
         "total": 621,
         "terms": [],
         "categories": [],
@@ -1821,9 +1857,13 @@ Data:
                 "reviewAbandoned": false
             }
         ],
-        "readAt": "2026-10-28T10:31:49Z",
+        "readAt": "2026-10-28T17:31:41Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.",
+            "An ABANDONED change on a row is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect.",
+            "`typo3-core-issue-triage` is the workflow a caller holding this page is in, and opening it comes before deciding anything about a row. Hand the page over rather than choosing from it: triaging a backlog and triaging one issue are two jobs, and the second takes a number. Where the choice is yours, read these in order and stop at the first that decides:\n- What has already happened to it. The row carries the change and the state it stands in; the reading is the argument under that state. `typo3_gerrit_lookup` answers it by the number, before the checkout is opened, and an ABANDONED is grounds to read it rather than to pass the row over.\n- Whether the code it names is still there. The row carries every class, method and core file its text cites with where each stands in the packages installed here, so a report whose names are all gone is settled without opening the checkout. A name it could not place decides nothing.\n- The category, against the branch you are standing on. One naming a subsystem the branch no longer ships settles the issue unread.\n- Where the symptom appears. A rendered fragment, a stored row or a resolved value needs no installation; one that shows only after a backend interaction needs one standing up.\n- How far the mechanism reaches. One class and the behaviour in it is the settleable shape, and several with the order between them is an interaction.\n- What the suite already models. A case added to a test file that exists is a reproduction with no fixture to build.\n`typo3_changelog_lookup` is what says whether the area was reworked since, which is what turns a valid report into one about code that is gone. Say which reading decided, and say of the rows you passed over that you passed over them."
+        ]
     }
 
 forge: a name naming more than one person
@@ -1854,7 +1894,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=15&include=relations%2Cattachments&status_id=open&sort=created_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.8-dev",
         "total": 0,
         "terms": [],
         "categories": [],
@@ -1880,7 +1920,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
-        "readAt": "2026-10-28T10:31:50Z",
+        "readAt": "2026-10-28T17:31:41Z",
         "unavailable": null,
         "owed": []
     }
@@ -1906,7 +1946,7 @@ Text:
     That is the whole set on these filters.
     Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.
     A row carries what the page came back with: the issues it is filed against, the files hanging off it, and the changes on review.typo3.org whose commit message names it, each with the state it is in. That state is where a change stands and not a verdict on the issue: an ABANDONED one is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect. A row with no such line is one nothing there names — or one the review server did not answer for, which this list does not separate.
-    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 15.0.0-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
+    A row that names code carries it: the classes, methods and core files its own text cites, each with whether the packages installed here still carry it, at TYPO3 14.3.8-dev. A report whose names are all gone is a candidate to drop without opening the checkout, and one whose names all stand is a candidate to read. It is read from the subject and the description, because the page carries no comment, and a name it could not place is unplaced rather than gone.
     On this end a row also says when a person last commented. last touched moves on any edit, a field somebody changed on many issues at once included, so the comment is the measure of attention.
 
     ## #89326 Prevent duplicate redirects in auto redirects
@@ -1950,7 +1990,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&author_id=52&status_id=open&sort=updated_on%3Aasc https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=3&include=relations%2Cattachments&assigned_to_id=52&status_id=open&sort=updated_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.8-dev",
         "total": 3,
         "terms": [],
         "categories": [],
@@ -2121,9 +2161,13 @@ Data:
                 "reviewAbandoned": false
             }
         ],
-        "readAt": "2026-10-28T10:31:50Z",
+        "readAt": "2026-10-28T17:31:41Z",
         "unavailable": null,
-        "owed": []
+        "owed": [
+            "Age is a candidate and never a finding: read one whole by passing its number as issue, and what it still claims is established in the checkout rather than off this list.",
+            "An ABANDONED change on a row is grounds to read the argument on it with typo3_gerrit_lookup, where the objection was written down and is regularly to the approach rather than to the defect.",
+            "`typo3-core-issue-triage` is the workflow a caller holding this page is in, and opening it comes before deciding anything about a row. Hand the page over rather than choosing from it: triaging a backlog and triaging one issue are two jobs, and the second takes a number. Where the choice is yours, read these in order and stop at the first that decides:\n- What has already happened to it. The row carries the change and the state it stands in; the reading is the argument under that state. `typo3_gerrit_lookup` answers it by the number, before the checkout is opened, and an ABANDONED is grounds to read it rather than to pass the row over.\n- Whether the code it names is still there. The row carries every class, method and core file its text cites with where each stands in the packages installed here, so a report whose names are all gone is settled without opening the checkout. A name it could not place decides nothing.\n- The category, against the branch you are standing on. One naming a subsystem the branch no longer ships settles the issue unread.\n- Where the symptom appears. A rendered fragment, a stored row or a resolved value needs no installation; one that shows only after a backend interaction needs one standing up.\n- How far the mechanism reaches. One class and the behaviour in it is the settleable shape, and several with the order between them is an interaction.\n- What the suite already models. A case added to a test file that exists is a reproduction with no fixture to build.\n`typo3_changelog_lookup` is what says whether the area was reworked since, which is what turns a valid report into one about code that is gone. Say which reading decided, and say of the rows you passed over that you passed over them."
+        ]
     }
 
 forge: the shape of one person's history
@@ -2162,7 +2206,7 @@ Data:
         "source": "https://forge.typo3.org",
         "url": "https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=100&author_id=52&status_id=%2A&sort=created_on%3Aasc https://forge.typo3.org/projects/typo3cms-core/issues.json?limit=100&assigned_to_id=52&status_id=%2A&sort=created_on%3Aasc",
         "query": "",
-        "placedAgainst": "15.0.0-dev",
+        "placedAgainst": "14.3.8-dev",
         "total": 764,
         "terms": [],
         "categories": [],
@@ -2404,7 +2448,7 @@ Data:
         "wordsScan": null,
         "issue": null,
         "results": [],
-        "readAt": "2026-10-28T10:31:52Z",
+        "readAt": "2026-10-28T17:31:42Z",
         "unavailable": null,
         "owed": []
     }

@@ -413,6 +413,7 @@ final class ChangelogLookup extends ReadOnlyTool
             // promise entries the same call does not return. On the narrowed
             // set, for the same reason.
             $subsets = $tag === '' ? LabelSearch::largestReachingSubsets($narrowed, $terms) : [];
+            $owed = [];
             if (count($terms) > 1 && $reached !== []) {
                 $lines[] = ($narrowing === [] ? 'On its own, ' : sprintf('Inside %s, on its own, ', implode(' and ', $narrowing)))
                     . Miss::reaching($reached, 'entry', 'entries')
@@ -435,9 +436,10 @@ final class ChangelogLookup extends ReadOnlyTool
                 // away from it (`D-ANS-043`). Offered nowhere else, because
                 // "that" is the re-query and a miss with none has nothing for
                 // this sentence to follow.
-                $lines[] = 'Where that comes back empty too, ask typo3_documentation_lookup with targetVersion: a '
+                $owed[] = 'Where that comes back empty too, ask typo3_documentation_lookup with targetVersion: a '
                     . 'changelog records change events, so a mechanism nobody changed has no entry here, and '
                     . 'whether one still holds in a version is what the manual answers.';
+                $lines[] = end($owed);
             } elseif ($terms !== [] && $outside === [] && $tag === '') {
                 // Nothing came out to ask this corpus again with, so the next
                 // call is a different corpus rather than a different query.
@@ -448,10 +450,11 @@ final class ChangelogLookup extends ReadOnlyTool
                 // filter or a tag emptied the answer. Those name their own way
                 // back into this corpus, and a route out of it ahead of a
                 // re-query that answers is what `D-ANS-043` declined.
-                $lines[] = 'A changelog records change events, so a miss can mean the question belongs to another '
+                $owed[] = 'A changelog records change events, so a miss can mean the question belongs to another '
                     . 'corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with '
                     . 'targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with '
                     . 'documentId "core/contribution/changelog".';
+                $lines[] = end($owed);
             }
             $lines[] = self::covers($versions, $ahead, $listings);
 
@@ -487,7 +490,7 @@ final class ChangelogLookup extends ReadOnlyTool
                 $data['termSubsets'] = $subsets;
             }
 
-            return ToolResult::create(implode("\n", $lines), $data);
+            return ToolResult::create(implode("\n", $lines), $data, $owed);
         }
 
         $lines = [sprintf(
@@ -497,21 +500,25 @@ final class ChangelogLookup extends ReadOnlyTool
             $query === '' ? '' : sprintf(' carrying %s', LabelSearch::quoted($terms)),
             count($matching) > count($entries) ? sprintf(' — showing the first %d', count($entries)) : '',
         )];
+        $owed = [];
         if ($read) {
+            $owed[] = 'What happened to one class since is the history of its file: typo3_gerrit_lookup with its '
+                . 'path answers every change that touched it, and a casual bugfix or a task among them owes no '
+                . 'changelog entry.';
             $lines[] = 'No entry is named after that, so these are the ones carrying it inside the file — in the '
                 . 'title as it is stated, or as an identifier their text writes. Naming it is not the same as '
-                . 'being about it: the title says what each one changed. What happened to one class since is '
-                . 'the history of its file: typo3_gerrit_lookup with its path answers every change that touched it, '
-                . 'and a casual bugfix or a task among them owes no changelog entry.';
+                . 'being about it: the title says what each one changed. ' . end($owed);
         }
         $only = self::oneSystemExtension($entries, $query);
         if ($only !== null) {
+            $owed[] = 'Ask again in the words the changelog writes that subject in, which are not always the ones '
+                . 'the code uses.';
             $lines[] = sprintf(
                 'Every one of these is in %s, which the query did not name. A changelog records change events, so an '
                 . 'area nobody has reworked has no entry at all — an answer that comes from one system extension is '
-                . 'usually the place that happens to spell the word rather than the subject. Ask again in the words '
-                . 'the changelog writes that subject in, which are not always the ones the code uses.',
+                . 'usually the place that happens to spell the word rather than the subject. %s',
                 $only,
+                end($owed),
             );
         }
         if ($tag !== '') {
@@ -540,7 +547,7 @@ final class ChangelogLookup extends ReadOnlyTool
             }
         }
         $lines[] = '';
-        $lines[] = count($entries) === 1
+        $lines[] = $owed[] = count($entries) === 1
             ? 'The migration above is the entry\'s own section. Read the file for the rest of the description. A '
                 . 'Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner '
                 . 'matcher behind it, so the Install Tool can find the call sites for you.'
@@ -590,7 +597,7 @@ final class ChangelogLookup extends ReadOnlyTool
             $data['removalRule'] = self::REMOVAL_RULE;
         }
 
-        return ToolResult::create(implode("\n", $lines), $data);
+        return ToolResult::create(implode("\n", $lines), $data, $owed);
     }
 
     /**

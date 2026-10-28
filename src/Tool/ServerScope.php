@@ -22,6 +22,10 @@ final class ServerScope extends ReadOnlyTool
 {
     private const RECORD_A_GAP = 'Record one with typo3_feedback_record instead of going elsewhere.';
 
+    private const THE_ONE_WRITE = 'The one exception is typo3_feedback_record, this server\'s only write: it creates '
+        . 'a new markdown feedback under feedback/ and touches nothing else. Missing something that belongs here? '
+        . 'Leave feedback about it.';
+
     private const ASK_AGAIN = 'Ask again naming those, or call this tool with no arguments for the whole orientation.';
 
     /**
@@ -279,9 +283,7 @@ final class ServerScope extends ReadOnlyTool
             // The one write stands next to the read-only claim, not after it. A
             // blanket "everything is read only" followed by a tool that creates
             // a file contradicts both the annotations and the behaviour.
-            $lines[] = 'The one exception is typo3_feedback_record, this server\'s only write: '
-                . 'it creates a new markdown feedback under feedback/ and touches nothing else. '
-                . 'Missing something that belongs here? Leave feedback about it.';
+            $lines[] = self::THE_ONE_WRITE;
         }
 
         if (in_array('answersFrom', $sections, true)) {
@@ -325,6 +327,7 @@ final class ServerScope extends ReadOnlyTool
             implode("\n", $lines),
             self::payload($coverage, $sections, $console, $reason, $caveat),
             [
+                Channel::isAvailable() ? self::THE_ONE_WRITE : '',
                 in_array('doesNotCover', $sections, true) && Channel::isAvailable() ? self::RECORD_A_GAP : '',
                 $withheld === [] ? '' : self::ASK_AGAIN,
             ],

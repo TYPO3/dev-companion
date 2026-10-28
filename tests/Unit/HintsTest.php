@@ -3428,6 +3428,35 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The head of a page, per language, beside the sitemap.
+     *
+     * The same session found the meta description, the canonical and hreflang
+     * nowhere in the corpus, and every page had an empty description beside a
+     * filled abstract (`D-KNW-174`).
+     */
+    #[Decision('D-KNW-174')]
+    #[Test]
+    public function theHeadOfAPageIsFoundBesideTheSitemap(): void
+    {
+        $head = self::statementsOf('page-head-seo');
+        self::assertStringContainsString('never reads abstract', $head);
+        self::assertStringContainsString('Each language owes a description of its own', $head);
+        self::assertStringContainsString('x-default', $head);
+        self::assertStringContainsString('the page template\'s to render', self::statementsOf('page-heading-levels'));
+
+        $result = Hints::find(
+            [],
+            'make the pages of a sitepackage site search engine friendly: an XML sitemap, meta descriptions and one h1 per page',
+            3,
+            target: 14
+        );
+        self::assertSame(
+            ['page-head-seo', 'xml-sitemap', 'page-heading-levels'],
+            array_column($result['matchedHints'], 'id'),
+        );
+    }
+
+    /**
      * The grammar of a new group layout, and the item that disappears.
      *
      * A session that regrouped its own table into palettes and tabs got the

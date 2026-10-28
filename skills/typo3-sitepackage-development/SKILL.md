@@ -137,6 +137,28 @@ the site's dependencies as they are, because a set nothing installed breaks
 every page. Hand the user steps 1 to 5 as commands, and say the frontend is
 untested.
 
+## Read what the finished site serves
+
+**A page that renders is not yet a page a search engine can index or a
+keyboard user can work.** Run this pass after step 5, on the responses of that
+step. Read the home page and one subpage in each language.
+
+Ask `typo3_hint_lookup` once, with `ids` set to `page-head-seo`,
+`page-heading-levels`, `xml-sitemap` and `sitepackage-focus-contrast`. Then
+read each point off a response, not off a file:
+
+- One h1 per page, and no heading before it.
+- The meta description and the canonical in the head. Where the page has a
+  translation, also the hreflang set.
+- `/sitemap.xml` and `/robots.txt`, each answered by the site.
+- The focus colour against every surface a link sits on. Compute that ratio from
+  the declared colours.
+
+Fix what this skill owns: the page templates, the partials and the CSS. Report
+the rest with the page and the language. An empty description is the editors'
+text to write. For a sitemap or a `robots.txt` that is missing, report the fix
+the hints name.
+
 ## Where this stops
 
 **When the user asks for a content element, invoke

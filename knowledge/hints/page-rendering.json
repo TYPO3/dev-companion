@@ -1,5 +1,61 @@
 [
   {
+    "id": "page-head-seo",
+    "title": "The Description, the Canonical and hreflang in the Head of a Page",
+    "domains": [
+      "typoscript"
+    ],
+    "appliesTo": [
+      "meta description",
+      "description meta tag",
+      "canonical",
+      "rel=canonical",
+      "canonical_link",
+      "hreflang",
+      "x-default",
+      "rel=alternate",
+      "multilingual seo",
+      "no_index",
+      "disableCanonical",
+      "disableHrefLang",
+      "seo",
+      "search engine",
+      "head of a page"
+    ],
+    "hints": [
+      "typo3/cms-seo renders all three, and nothing else in the core does. Without it a page carries no meta description, no canonical and no hreflang, and the page properties show no description field. Requiring the package is enough, because it hooks into the render rather than through a set.",
+      "The meta description is the page's description column and nothing else. MetaTagGenerator writes <meta name=\"description\"> where that column is not empty and never reads abstract. So a page with a filled abstract and an empty description has no description.",
+      "Each language owes a description of its own. The tag reads the page record the request renders, which is the translation in a translated language. An empty description in the translation renders no tag, and the default language's text does not stand in.",
+      "CanonicalGenerator writes <link rel=\"canonical\"> on every page below a site root. It takes the page's canonical_link where that is set, then the page whose content the page shows, then the page's own absolute URL. A page with no_index set, or config.disableCanonical, gets none.",
+      "hreflang is one <link rel=\"alternate\"> per site language in which the page has a translation, and x-default for the first language the site configuration lists. Each value is the site language's hreflang key, and its locale where that key is empty. A language whose page record sets canonical_link is left out.",
+      "The frontend writes that set only where it has two entries or more. So a page that exists in one language carries no hreflang. no_index and config.disableHrefLang remove the whole set.",
+      "The sitemap is the other half of what a search engine reads, and xml-sitemap says which set brings it. page-heading-levels says where each heading level of a page comes from."
+    ]
+  },
+  {
+    "id": "page-heading-levels",
+    "title": "Where Each Heading Level of a Page Comes From",
+    "domains": [
+      "fluid",
+      "typoscript"
+    ],
+    "appliesTo": [
+      "h1",
+      "heading level",
+      "heading order",
+      "heading hierarchy",
+      "one h1 per page",
+      "header_layout",
+      "defaultHeaderType",
+      "styles.content.defaultHeaderType"
+    ],
+    "hints": [
+      "fluid_styled_content renders the header of a content element as an h2 where its header layout is the default. The setting styles.content.defaultHeaderType carries that level, and its default is 2.",
+      "So the h1 of a page is the page template's to render. No element of the core supplies it unless an editor sets the element's header layout to 1.",
+      "The order of the headings is read off the rendered page. A header partial or a hero that renders an h2 above the page template's h1 puts that h2 first on every page."
+    ]
+  },
+  {
     "id": "frontend-page-rendering",
     "title": "Frontend Page Rendering with PAGEVIEW",
     "domains": [

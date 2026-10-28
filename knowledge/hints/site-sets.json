@@ -173,7 +173,8 @@
         "text": "That set ships the routing with it: a PageType enhancer mapping sitemap.xml onto that type, and the Sitemap enhancer whose StaticValueMapper carries the sitemap name in the path.",
         "since": 14
       },
-      "A sitemap of a record table beside the pages is record-xml-sitemap, and it is where the address of each row can point at a page that renders no record."
+      "A sitemap of a record table beside the pages is record-xml-sitemap, and it is where the address of each row can point at a page that renders no record.",
+      "The description, the canonical and hreflang in the head of each page come with the extension alone, and page-head-seo says what each one reads."
     ]
   },
   {

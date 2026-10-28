@@ -4,7 +4,9 @@ title: The set that brings the sitemap is a subject of its own
 date: 2026-10-28
 status: open
 coveredBy:
+  - HintsTest::theHeadOfAPageIsFoundBesideTheSitemap
   - HintsTest::theSetThatBringsTheSitemapIsFoundByASitemapOfPages
+  - SkillTest::theSitepackageSkillReadsWhatTheFinishedSiteServes
 ---
 
 # D-KNW-174 — The set that brings the sitemap is a subject of its own
@@ -49,3 +51,19 @@ coveredBy:
 
 - A session that wants a sitemap of pages still reaches only
   `record-xml-sitemap`, or neither.
+
+## Since then
+
+On 2026-10-28 step 1a went in as `page-head-seo` and `page-heading-levels`. The
+read was `typo3/sysext/seo` in `.checkouts/12.4`, `13.4`, `14.3` and `main`:
+`MetaTagGenerator`, `CanonicalGenerator`, `HrefLangGenerator` and the core
+`pages` TCA. The behaviour is the same on all four, so no statement carries a
+bound. The heading level came from the `fluid_styled_content` header partials
+and `styles.content.defaultHeaderType` on the same four. The feedback's query
+now reaches `page-head-seo`, `xml-sitemap` and `page-heading-levels` in that
+order.
+
+Step 1b went in as one pass in `typo3-sitepackage-development`, after the
+render. It covers search engines and the keyboard together, because the
+accessibility feedback closed with a hint and no pass. Nobody has reviewed the
+pass yet, which `writing-a-skill.rst` asks before it publishes.

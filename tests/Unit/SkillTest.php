@@ -1059,6 +1059,25 @@ final class SkillTest extends TestCase
     }
 
     /**
+     * Two sessions from one project judged the finished site for search
+     * engines and for keyboard users only when the user asked (`D-KNW-174`).
+     */
+    #[Decision('D-KNW-174')]
+    #[Test]
+    public function theSitepackageSkillReadsWhatTheFinishedSiteServes(): void
+    {
+        $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md'));
+        $pass = (string) strstr((string) strstr($skill, '## Read what the finished site serves'), '## Where this stops', true);
+
+        self::assertStringContainsString('Run this pass after step 5', $pass);
+        foreach (['page-head-seo', 'page-heading-levels', 'xml-sitemap', 'sitepackage-focus-contrast'] as $id) {
+            self::assertNotNull(Hints::byId($id), $id . ' is not a hint');
+            self::assertStringContainsString('`' . $id . '`', $pass);
+        }
+        self::assertStringContainsString('read each point off a response, not off a file', $pass);
+    }
+
+    /**
      * The maintainer wants a sitepackage built to the site's design, and a run
      * that only takes defaults builds it to none (`D-SKL-101`).
      */

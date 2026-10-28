@@ -1006,11 +1006,10 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 - [`D-SKL-102`][D-SKL-102] — A core review runs its suites in a worktree or asks for one · 2026-10-28
 - [`D-SKL-103`][D-SKL-103] — A review brief carries the surface list it is written from · 2026-10-28
-- [`D-SKL-104`][D-SKL-104] — A review with nobody to ask runs the suite · 2026-10-28
 - [`D-SKL-105`][D-SKL-105] — A review's Not run line lists the suites that verify · 2026-10-28
-- [`D-SKL-106`][D-SKL-106] — A review's Not run line names one of three reasons · 2026-10-28
 - [`D-SKL-107`][D-SKL-107] — The test run guide lists the suites that verify by name · 2026-10-28
 - [`D-SKL-108`][D-SKL-108] — A review owes the breaking changes of a declared major above the installed one · 2026-10-28
+- [`D-SKL-109`][D-SKL-109] — A review may skip a verifying suite to finish faster · 2026-10-28
 - [`D-SKL-099`][D-SKL-099] — A document of a review is the report in its own order · 2026-10-26
 - [`D-SKL-100`][D-SKL-100] — The review skills report in one skeleton · 2026-10-26
 - [`D-SKL-101`][D-SKL-101] — A sitepackage has a task skill of its own · 2026-10-26
@@ -1110,11 +1109,10 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 [D-SKL-102]: task-skills/skl-102-a-core-review-runs-its-suites-in-a-worktree-or-asks-for-one.md
 [D-SKL-103]: task-skills/skl-103-a-review-brief-carries-the-surface-list-it-is-written-from.md
-[D-SKL-104]: task-skills/skl-104-a-review-with-nobody-to-ask-runs-the-suite.md
 [D-SKL-105]: task-skills/skl-105-a-reviews-not-run-line-lists-the-suites-that-verify.md
-[D-SKL-106]: task-skills/skl-106-a-reviews-not-run-line-names-one-of-three-reasons.md
 [D-SKL-107]: task-skills/skl-107-the-test-run-guide-lists-the-suites-that-verify-by-name.md
 [D-SKL-108]: task-skills/skl-108-a-review-owes-the-breaking-changes-of-a-declared-major-above-the-installed-one.md
+[D-SKL-109]: task-skills/skl-109-a-review-may-skip-a-verifying-suite-to-finish-faster.md
 [D-SKL-099]: task-skills/skl-099-a-document-of-a-review-is-the-report-in-its-own-order.md
 [D-SKL-100]: task-skills/skl-100-the-review-skills-report-in-one-skeleton.md
 [D-SKL-101]: task-skills/skl-101-a-sitepackage-has-a-task-skill-of-its-own.md
@@ -1452,6 +1450,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### Revoked, and kept as the record
 
+- [`D-SKL-104`][D-SKL-104] — A review with nobody to ask runs the suite · 2026-10-28 → D-SKL-109
+- [`D-SKL-106`][D-SKL-106] — A review's Not run line names one of three reasons · 2026-10-28 → D-SKL-109
 - [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06 → D-ANS-175
 - [`D-DIS-029`][D-DIS-029] — A project without skills is told at the start · 2026-10-05 → D-DIS-034
 - [`D-ANS-168`][D-ANS-168] — A PHP identifier reaches a manual changelog entry through the class index · 2026-09-23 → D-ANS-190
@@ -1506,6 +1506,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SCO-004`][D-SCO-004] — The frontend is recognised by name · 2026-07-29
 - [`D-VER-002`][D-VER-002] — The prose is not bound; it says which half it is · 2026-07-29 → D-VER-005
 
+[D-SKL-104]: task-skills/skl-104-a-review-with-nobody-to-ask-runs-the-suite.md
+[D-SKL-106]: task-skills/skl-106-a-reviews-not-run-line-names-one-of-three-reasons.md
 [D-ANS-172]: answers/ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
 [D-DIS-029]: discovery/dis-029-a-project-without-skills-is-told-at-the-start.md
 [D-ANS-168]: answers/ans-168-a-php-identifier-reaches-a-manual-changelog-entry-through-the-class-index.md

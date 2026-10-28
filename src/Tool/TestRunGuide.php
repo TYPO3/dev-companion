@@ -160,7 +160,7 @@ final class TestRunGuide extends ReadOnlyTool
 
         $hints = TestSuiteHints::find($query, $domains, $target);
         // The mount holds the worktree and not its gitdir, so a suite that asks
-        // git for its files reads none and reports SUCCESS (`D-SKL-106`).
+        // git for its files reads none and reports SUCCESS (`D-SKL-109`).
         if (self::gitdirOutsideTheCheckout()) {
             $hints = array_map(
                 static fn(array $hint): array => $hint['filesFromGit'] ? ['verifies' => false] + $hint : $hint,

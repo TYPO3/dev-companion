@@ -2,9 +2,8 @@
 id: D-SKL-104
 title: A review with nobody to ask runs the suite
 date: 2026-10-28
-status: open
-coveredBy:
-  - SkillTest::aReviewWithNobodyToAskRunsTheSuite
+status: revoked
+revokedBy: D-SKL-109
 ---
 
 # D-SKL-104 — A review with nobody to ask runs the suite
@@ -50,3 +49,9 @@ The second **Wrong if** fired in the second `REVIEW-03` run of 2026-10-28. The
 session gave "scoped to targeted suites" as its reason. A sentence above this
 one in the section still said a review names the broader suites. `D-SKL-106`
 rewrote it and closed the list of reasons.
+
+## Revoked on 2026-10-28
+
+The maintainer allowed a review to skip a suite to finish faster. So a headless
+review may skip one, and the time budget this entry ruled out is a reason it
+names. `D-SKL-109` carries what stands: no worktree without the question.

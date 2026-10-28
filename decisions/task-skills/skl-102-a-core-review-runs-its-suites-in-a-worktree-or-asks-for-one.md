@@ -9,8 +9,8 @@ coveredBy:
 
 # D-SKL-102 — A core review runs its suites in a worktree or asks for one
 
-**`typo3-core-patch-review` runs the suites in a `git worktree` on the patch set.
-Where none exists, the review asks the user before it skips the run.**
+**`typo3-core-patch-review` runs the suites in a `git worktree` on the patch
+set. Where none exists, the review asks the user before it skips the run.**
 
 ## Evidence
 
@@ -28,9 +28,9 @@ Where none exists, the review asks the user before it skips the run.**
 
 ## Decided
 
-- The verification section of the review skill states the worktree as the
-  place, the question as the step before a skip, and the `Not run:` line as
-  where a skip records both.
+- The verification section of the review skill states the worktree as the place,
+  the question as the step before a skip, and the `Not run:` line as where a
+  skip records both.
 - The skill names `git worktree` only. A worktree tool of the user's own is the
   project's business, as `D-SKL-095` decided for both core skills.
 
@@ -46,3 +46,8 @@ Where none exists, the review asks the user before it skips the run.**
   Then the sentence arrived and did not take, and placement is the next read.
 - A review creates a worktree without the question and the user objects to it.
   Then the default runs the other way: ask first, create on yes.
+
+## Since then
+
+A review may skip a suite to finish faster without the question (`D-SKL-109`).
+The question still gates a worktree the review would create.

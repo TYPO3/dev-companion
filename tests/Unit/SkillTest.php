@@ -1802,36 +1802,31 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('the `Not run:` line is that list minus what ran.', $skill);
     }
 
-    #[Decision('D-SKL-104')]
+    #[Decision('D-SKL-109')]
     #[Test]
-    public function aReviewWithNobodyToAskRunsTheSuite(): void
+    public function aReviewWithNobodyToAskCreatesNoWorktree(): void
     {
         $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
         ));
-        self::assertStringContainsString('**Where nobody can answer the question, run the suite.**', $skill);
         self::assertStringContainsString('It creates no worktree without the question', $skill);
-
-        $report = (string) file_get_contents(
-            Paths::root() . '/skills/typo3-core-patch-review/references/report.md',
-        );
-        self::assertStringContainsString('no worktree stood and nobody was there to ask', $report);
     }
 
-    #[Decision('D-SKL-106')]
+    #[Decision('D-SKL-109')]
     #[Test]
-    public function aReviewsNotRunLineNamesOneOfThreeReasons(): void
+    public function aReviewsNotRunLineNamesOneOfFourReasons(): void
     {
         $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
         ));
-        self::assertStringContainsString('the broader ones after it.', $skill);
-        self::assertStringContainsString('stays unrun for one of three reasons', $skill);
+        self::assertStringContainsString('stays unrun for one of four reasons', $skill);
+        self::assertStringContainsString('The review skipped it to finish faster.', $skill);
+        self::assertStringContainsString('**Where a worktree holds the patch, the third reason is false.**', $skill);
 
         $report = (string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-review/references/report.md',
         );
-        self::assertStringContainsString('<one of three reasons: it writes into the checkout; the question you asked and its answer;', $report);
+        self::assertStringContainsString('no worktree stood and nobody was there to ask; skipped to finish faster>', $report);
     }
 
     #[Decision('D-SKL-071')]

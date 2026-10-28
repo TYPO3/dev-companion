@@ -2,10 +2,8 @@
 id: D-SKL-106
 title: A review's Not run line names one of three reasons
 date: 2026-10-28
-status: open
-coveredBy:
-  - HintsTest::aSuiteThatAsksGitForItsFilesVerifiesNothingFromAWorktree
-  - SkillTest::aReviewsNotRunLineNamesOneOfThreeReasons
+status: revoked
+revokedBy: D-SKL-109
 ---
 
 # D-SKL-106 — A review's Not run line names one of three reasons
@@ -63,3 +61,10 @@ session quoted the three reasons and skipped with a fourth. The second **Wrong
 if** held: neither git-based cgl suite stood on its lines. The guide now lists
 the suites a report owes a line, which the second bullet of **Decided** rejected
 (`D-SKL-107`).
+
+## Revoked on 2026-10-28
+
+The first **Wrong if** fired again in the fourth `REVIEW-03` run of the day,
+after a third rewording. The maintainer then allowed a skip to finish faster,
+which the closed list had excluded. `D-SKL-109` takes speed as a fourth reason
+and keeps `filesFromGit` as this entry decided it.

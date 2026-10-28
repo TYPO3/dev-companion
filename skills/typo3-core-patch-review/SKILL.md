@@ -214,25 +214,27 @@ line is that list minus what ran. An install, a dispatcher or a server for a
 browser checks nothing and is not on it. One review built the list from the
 marks and left five suites off both lines.
 
-**A suite on that list stays unrun for one of three reasons, and its `Not run:`
+**A suite on that list stays unrun for one of four reasons, and its `Not run:`
 line names the reason.** The suite writes into the checkout and has no
 report-only form. The user, asked before the skip, answered no. No worktree
-holds the patch, and nobody was there to ask. A narrower suite that passed, a
-scope the session chose and a time budget are none of the three.
+holds the patch, and nobody was there to ask. The review skipped it to finish
+faster. A narrower suite that passed and a scope the session chose are the
+fourth reason, and the line names it so.
+
+**Where a worktree holds the patch, the third reason is false.** A suite left
+unrun there takes the fourth.
 
 **Run the suites in a `git worktree` on the patch set rather than in the main
 checkout.** The worktree leaves the reader's branch and uncommitted work alone.
 So a review that must not touch the checkout has a reason for a worktree, not
 against a run. Where no worktree holds the patch yet, ask the user whether to
-create one. Ask before you skip the run, never instead of the run. That holds
-for every suite you leave out, whatever the reason. A skipped run names that
-question and its answer on its `Not run:` line.
+create one. Ask before you skip the run, never instead of the run. A skip after
+that question names the question and its answer on its `Not run:` line.
 
-**Where nobody can answer the question, run the suite.** A headless session has
-no user to ask. It runs the suites in the worktree that stands. A time budget
-the session set itself is no reason to skip. It creates no worktree without the
-question, because that writes into the user's repository. Its `Not run:` line
-says that nobody was there to ask.
+**Where nobody can answer the question, run the suites in the worktree that
+stands.** A headless session has no user to ask. It may skip a suite to finish
+faster, and says so. It creates no worktree without the question, because that
+writes into the user's repository.
 
 One review skipped every suite to keep the checkout clean and leaned on the CI
 vote. The one before it detached the main checkout onto the patch set.

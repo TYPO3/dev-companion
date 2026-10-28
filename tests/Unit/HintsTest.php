@@ -6555,7 +6555,7 @@ final class HintsTest extends TestCase
         self::assertSame('', $outside->data['verifyingOwed']);
     }
 
-    #[Decision('D-SKL-106')]
+    #[Decision('D-SKL-109')]
     #[Test]
     public function aSuiteThatAsksGitForItsFilesVerifiesNothingFromAWorktree(): void
     {

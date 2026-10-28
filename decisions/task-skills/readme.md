@@ -9,11 +9,10 @@ one is added.
 
 - [`D-SKL-102`][D-SKL-102] — A core review runs its suites in a worktree or asks for one · 2026-10-28
 - [`D-SKL-103`][D-SKL-103] — A review brief carries the surface list it is written from · 2026-10-28
-- [`D-SKL-104`][D-SKL-104] — A review with nobody to ask runs the suite · 2026-10-28
 - [`D-SKL-105`][D-SKL-105] — A review's Not run line lists the suites that verify · 2026-10-28
-- [`D-SKL-106`][D-SKL-106] — A review's Not run line names one of three reasons · 2026-10-28
 - [`D-SKL-107`][D-SKL-107] — The test run guide lists the suites that verify by name · 2026-10-28
 - [`D-SKL-108`][D-SKL-108] — A review owes the breaking changes of a declared major above the installed one · 2026-10-28
+- [`D-SKL-109`][D-SKL-109] — A review may skip a verifying suite to finish faster · 2026-10-28
 - [`D-SKL-099`][D-SKL-099] — A document of a review is the report in its own order · 2026-10-26
 - [`D-SKL-100`][D-SKL-100] — The review skills report in one skeleton · 2026-10-26
 - [`D-SKL-101`][D-SKL-101] — A sitepackage has a task skill of its own · 2026-10-26
@@ -113,11 +112,10 @@ one is added.
 
 [D-SKL-102]: skl-102-a-core-review-runs-its-suites-in-a-worktree-or-asks-for-one.md
 [D-SKL-103]: skl-103-a-review-brief-carries-the-surface-list-it-is-written-from.md
-[D-SKL-104]: skl-104-a-review-with-nobody-to-ask-runs-the-suite.md
 [D-SKL-105]: skl-105-a-reviews-not-run-line-lists-the-suites-that-verify.md
-[D-SKL-106]: skl-106-a-reviews-not-run-line-names-one-of-three-reasons.md
 [D-SKL-107]: skl-107-the-test-run-guide-lists-the-suites-that-verify-by-name.md
 [D-SKL-108]: skl-108-a-review-owes-the-breaking-changes-of-a-declared-major-above-the-installed-one.md
+[D-SKL-109]: skl-109-a-review-may-skip-a-verifying-suite-to-finish-faster.md
 [D-SKL-099]: skl-099-a-document-of-a-review-is-the-report-in-its-own-order.md
 [D-SKL-100]: skl-100-the-review-skills-report-in-one-skeleton.md
 [D-SKL-101]: skl-101-a-sitepackage-has-a-task-skill-of-its-own.md
@@ -217,12 +215,16 @@ one is added.
 
 ### Revoked, and kept as the record
 
+- [`D-SKL-104`][D-SKL-104] — A review with nobody to ask runs the suite · 2026-10-28 → D-SKL-109
+- [`D-SKL-106`][D-SKL-106] — A review's Not run line names one of three reasons · 2026-10-28 → D-SKL-109
 - [`D-SKL-040`][D-SKL-040] — A skill whose product is a report says it is a file · 2026-08-14 → D-SKL-042
 - [`D-SKL-027`][D-SKL-027] — A draft declares itself under this server's own metadata key · 2026-08-08 → D-SKL-087
 - [`D-SKL-015`][D-SKL-015] — A step is skipped only where it has already run · 2026-08-04 → D-SKL-034
 - [`D-SKL-016`][D-SKL-016] — Acting on a conformance report earns a task skill of its own · 2026-08-04 → D-SKL-064
 - [`D-SKL-011`][D-SKL-011] — The call plan a skill writes down is measured · 2026-08-03 → D-SKL-043
 
+[D-SKL-104]: skl-104-a-review-with-nobody-to-ask-runs-the-suite.md
+[D-SKL-106]: skl-106-a-reviews-not-run-line-names-one-of-three-reasons.md
 [D-SKL-040]: skl-040-a-skill-whose-product-is-a-report-says-it-is-a-file.md
 [D-SKL-027]: skl-027-a-draft-declares-itself-under-this-servers-own-metadata-key.md
 [D-SKL-015]: skl-015-a-step-is-skipped-only-where-it-has-already-run.md

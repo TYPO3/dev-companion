@@ -200,12 +200,17 @@ final class HintLookup extends ReadOnlyTool
         // them about the question at all.
         $coverage = self::bestCoverage($result['matchedHints']);
         if ($coverage !== null && $coverage < Hints::MIN_COVERAGE) {
+            // The next call stands whole, with its arguments: a caller who
+            // read "where none of them is it" decided it was, and never
+            // searched the manual (`D-ANS-130`).
             $lines[] = sprintf(
                 'The closest of these carries %d%% of your question. Each got here by claiming a path you named or '
-                . 'a phrase this corpus anticipated, rather than by being about what you asked — so read them as '
-                . 'the nearest subjects rather than as the answer, and search the official manual with '
-                . 'typo3_documentation_lookup where none of them is it.',
+                . 'a phrase this corpus anticipated, rather than by being about what you asked. So these hints '
+                . 'are the nearest subjects and not the answer. The next call is typo3_documentation_lookup with '
+                . 'queries %s and targetVersion "%s".',
                 (int) round($coverage * 100),
+                (string) json_encode([$task !== null && $task !== '' ? $task : 'your question'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+                $stated ?? ($target === null ? 'your TYPO3 version' : (string) $target),
             );
             $lines[] = '';
         }

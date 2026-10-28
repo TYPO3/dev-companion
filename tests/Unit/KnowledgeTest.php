@@ -1962,6 +1962,13 @@ final class KnowledgeTest extends TestCase
         self::assertNotSame([], $adjacent->data['hints'], 'the path matched nothing, so there is no answer to read');
         self::assertLessThan(Hints::MIN_COVERAGE, $adjacent->data['bestCoverage']);
         self::assertStringContainsString('of your question', $adjacent->text);
+        // The next call stands whole, so a caller makes it rather than decides
+        // it is not needed (`D-ANS-130`).
+        self::assertStringContainsString(
+            'The next call is typo3_documentation_lookup with queries ["measure the memory a content element costs '
+            . 'while rendering"] and targetVersion "14".',
+            $adjacent->text,
+        );
         // Above the hints, because it says how to read them.
         self::assertLessThan(
             strpos($adjacent->text, '### '),

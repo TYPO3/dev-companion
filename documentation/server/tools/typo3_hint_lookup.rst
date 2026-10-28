@@ -204,7 +204,7 @@ Text:
     Domains: php (a hint outside these domains is shown only where the task names its own vocabulary)
 
     Hints:
-    The closest of these carries 0% of your question. Each got here by claiming a path you named or a phrase this corpus anticipated, rather than by being about what you asked — so read them as the nearest subjects rather than as the answer, and search the official manual with typo3_documentation_lookup where none of them is it.
+    The closest of these carries 0% of your question. Each got here by claiming a path you named or a phrase this corpus anticipated, rather than by being about what you asked. So these hints are the nearest subjects and not the answer. The next call is typo3_documentation_lookup with queries ["your question"] and targetVersion "14".
 
     ### PHP
 

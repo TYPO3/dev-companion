@@ -1,7 +1,8 @@
 ---
 date: 2026-10-28T06:02:32+00:00
 category: idea
-status: open
+status: closed
+closed: 2026-10-28
 model: claude-opus-5
 tool: typo3_hint_lookup
 directory: /home/lina/projects/typo3/projects/jambo-chep

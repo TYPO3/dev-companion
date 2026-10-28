@@ -114,6 +114,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-190`][D-ANS-190] — A PHP identifier reaches a manual changelog entry through its listing · 2026-10-28
 - [`D-ANS-185`][D-ANS-185] — A test run answer opens on the base suites · 2026-10-26
 - [`D-ANS-186`][D-ANS-186] — A document read whole answers with the scope it declares · 2026-10-26
 - [`D-ANS-187`][D-ANS-187] — The project answer says what a request and a database client reach · 2026-10-26
@@ -134,7 +135,6 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-169`][D-ANS-169] — The project answer says whether its DDEV project runs · 2026-10-05
 - [`D-ANS-170`][D-ANS-170] — A chain entry says where it stands · 2026-10-05
 - [`D-ANS-171`][D-ANS-171] — A core issue is drafted and handed over as the filled form · 2026-10-05
-- [`D-ANS-168`][D-ANS-168] — A PHP identifier reaches a manual changelog entry through the class index · 2026-09-23
 - [`D-ANS-166`][D-ANS-166] — Initialize declares the capabilities the server honours · 2026-09-19
 - [`D-ANS-167`][D-ANS-167] — The text block is prose rather than the serialized data · 2026-09-19
 - [`D-ANS-163`][D-ANS-163] — The Skills extension is served over the typo3:// resources · 2026-09-18
@@ -295,6 +295,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-190]: answers/ans-190-a-php-identifier-reaches-a-manual-changelog-entry-through-its-listing.md
 [D-ANS-185]: answers/ans-185-a-test-run-answer-opens-on-the-base-suites.md
 [D-ANS-186]: answers/ans-186-a-document-read-whole-answers-with-the-scope-it-declares.md
 [D-ANS-187]: answers/ans-187-the-project-answer-says-what-a-request-and-a-database-client-reach.md
@@ -315,7 +316,6 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-ANS-169]: answers/ans-169-the-project-answer-says-whether-its-ddev-project-runs.md
 [D-ANS-170]: answers/ans-170-a-chain-entry-says-where-it-stands.md
 [D-ANS-171]: answers/ans-171-a-core-issue-is-drafted-and-handed-over-as-the-filled-form.md
-[D-ANS-168]: answers/ans-168-a-php-identifier-reaches-a-manual-changelog-entry-through-the-class-index.md
 [D-ANS-166]: answers/ans-166-initialize-declares-the-capabilities-the-server-honours.md
 [D-ANS-167]: answers/ans-167-the-text-block-is-prose-rather-than-the-serialized-data.md
 [D-ANS-163]: answers/ans-163-the-skills-extension-is-served-over-the-typo3-resources.md
@@ -1412,6 +1412,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 - [`D-ANS-172`][D-ANS-172] — A modern request over stdio gets the handshake revisions under its id · 2026-10-06 → D-ANS-175
 - [`D-DIS-029`][D-DIS-029] — A project without skills is told at the start · 2026-10-05 → D-DIS-034
+- [`D-ANS-168`][D-ANS-168] — A PHP identifier reaches a manual changelog entry through the class index · 2026-09-23 → D-ANS-190
 - [`D-DOC-071`][D-DOC-071] — The initialize page is read off a session in the same process · 2026-09-17 → D-DOC-072
 - [`D-ANS-155`][D-ANS-155] — A read on a PHP without curl names the extension · 2026-09-15 → D-ANS-176
 - [`D-AUD-016`][D-AUD-016] — A count is answered and the row behind it stays with the installation · 2026-09-01 → D-AUD-017
@@ -1465,6 +1466,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 [D-ANS-172]: answers/ans-172-a-modern-request-over-stdio-gets-the-handshake-revisions-under-its-id.md
 [D-DIS-029]: discovery/dis-029-a-project-without-skills-is-told-at-the-start.md
+[D-ANS-168]: answers/ans-168-a-php-identifier-reaches-a-manual-changelog-entry-through-the-class-index.md
 [D-DOC-071]: documentation/doc-071-the-initialize-page-is-read-off-a-session-in-the-same-process.md
 [D-ANS-155]: answers/ans-155-a-read-on-a-php-without-curl-names-the-extension.md
 [D-AUD-016]: audience/aud-016-a-count-is-answered-and-the-row-behind-it-stays-with-the-installation.md

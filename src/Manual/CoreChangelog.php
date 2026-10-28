@@ -18,8 +18,8 @@ use TYPO3\DevCompanion\Knowledge\Versions;
  * is one listing per major, as JSON, and every page as the Markdown the build
  * rendered from the RST (`D-ANS-165`). One read per covered major, held under
  * its entity tag and revalidated per call, and one page read per entry an
- * answer shows, held the same way. The class index is the third read, and only
- * a search that the names and titles did not answer makes it (`D-ANS-168`).
+ * answer shows, held the same way. The listing also names the PHP classes each
+ * page writes, so an identifier costs no read of its own (`D-ANS-190`).
  */
 final class CoreChangelog
 {
@@ -37,7 +37,7 @@ final class CoreChangelog
      * artefact for the process. `Documentation` holds its indexes the same way
      * and for the same reason.
      *
-     * @var array<int, array{etag: string, entries: list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string}>}>
+     * @var array<int, array{etag: string, entries: list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string, named: list<string>}>}>
      */
     private static array $index = [];
 
@@ -47,13 +47,6 @@ final class CoreChangelog
      * @var array<string, array{etag: string, body: string}>
      */
     private static array $pages = [];
-
-    /**
-     * The identifiers the class index names per page, as it was last read.
-     *
-     * @var array{etag: string, names: array<string, list<string>>}|null
-     */
-    private static ?array $classes = null;
 
     /**
      * Whether docs.typo3.org has already failed to answer in this process.
@@ -90,7 +83,6 @@ final class CoreChangelog
         self::$transport = $reader;
         self::$index = [];
         self::$pages = [];
-        self::$classes = null;
         self::$unreachable = false;
     }
 
@@ -103,7 +95,7 @@ final class CoreChangelog
      * different thing from a major it publishes nothing for. The answer tells
      * the caller that the gap is unread rather than that there is none.
      *
-     * @return array<int, list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string}>|null>
+     * @return array<int, list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string, named: list<string>}>|null>
      */
     public function entries(): array
     {
@@ -124,7 +116,7 @@ final class CoreChangelog
      * payload for a listing that is still current, and a render after a merge
      * arrives with the next call.
      *
-     * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string}>|null
+     * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string, named: list<string>}>|null
      */
     private function major(int $major): ?array
     {
@@ -188,78 +180,31 @@ final class CoreChangelog
     }
 
     /**
-     * The PHP classes and members each page names, under its path, or null
-     * where docs.typo3.org published no class index.
+     * The PHP classes and members one entry of the listing names.
      *
-     * The index lists a class once per page that writes it, as a role or in a
-     * `use` line, with the member where one follows. Each is read as one
+     * The listing names a class once per section that writes it, inline or in
+     * a code block, with the members that follow it. Each is read as one
      * inline literal. So the rule `Changelog::named()` applies to a body
      * applies here: a word with a hump or an underscore, and the case merged
-     * that the index keeps apart in `\TYPO3\CMS\core\…` — `D-ANS-168`.
+     * that the listing keeps apart in `\TYPO3\CMS\core\…` — `D-ANS-190`.
      *
-     * @return array<string, list<string>>|null
+     * @return list<string>
      */
-    public function identifiers(): ?array
+    private static function identifiers(mixed $classes): array
     {
-        $held = self::$classes;
-        if ($held === null && self::$unreachable) {
-            return null;
-        }
-
-        $response = $this->reader->read(
-            self::BASE . 'classes.json',
-            $held === null ? [] : ['If-None-Match: ' . $held['etag']],
-        );
-        if ($held !== null && $response['status'] === 304) {
-            return $held['names'];
-        }
-
-        $names = self::indexed(Fetch::decode($response['body']));
-        if ($names === null) {
-            return $held['names'] ?? null;
-        }
-        if (is_string($response['etag']) && $response['etag'] !== '') {
-            self::$classes = ['etag' => $response['etag'], 'names' => $names];
-        }
-
-        return $names;
-    }
-
-    /**
-     * @param array<mixed>|null $index
-     * @return array<string, list<string>>|null
-     */
-    private static function indexed(?array $index): ?array
-    {
-        if (!is_array($index['classes'] ?? null)) {
-            return null;
-        }
-
-        $literals = [];
-        foreach ($index['classes'] as $class => $entry) {
-            foreach (is_array($entry['places'] ?? null) ? $entry['places'] : [] as $place) {
-                if (!is_array($place) || !is_string($place['path'] ?? null)) {
-                    continue;
-                }
-                // `member` is one member per place, `members` is the list
-                // render-guides#1464 writes instead. Reading both lets the
-                // lookup keep working through the redeploy.
-                $members = is_array($place['members'] ?? null) && $place['members'] !== []
+        $written = [];
+        foreach (is_array($classes) ? $classes : [] as $class => $places) {
+            foreach (is_array($places) ? $places : [] as $place) {
+                $members = is_array($place) && is_array($place['members'] ?? null) && $place['members'] !== []
                     ? $place['members']
-                    : [$place['member'] ?? ''];
+                    : [''];
                 foreach ($members as $member) {
-                    $literals[$place['path']][] = '`' . $class . (string) $member . '`';
+                    $written[] = '`' . $class . (string) $member . '`';
                 }
             }
         }
 
-        return array_map(
-            static fn(array $written): array => array_values(array_unique(array_map(
-                'strtolower',
-                Changelog::named(implode(' ', $written)),
-            ))),
-            $literals,
-        );
+        return array_values(array_unique(array_map('strtolower', Changelog::named(implode(' ', $written)))));
     }
 
     /** Where a caller reads the entry itself. */
@@ -323,7 +268,7 @@ final class CoreChangelog
      * an answer without one entry read.
      *
      * @param array<mixed>|null $listing
-     * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string}>|null
+     * @return list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string, named: list<string>}>|null
      */
     private static function listed(?array $listing): ?array
     {
@@ -360,6 +305,7 @@ final class CoreChangelog
                 'tags' => array_values(array_filter(array_map('strval', is_array($entry['tags'] ?? null) ? $entry['tags'] : []))),
                 'url' => self::BASE . $path . '.html',
                 'path' => $path,
+                'named' => self::identifiers($entry['classes'] ?? null),
             ];
         }
 

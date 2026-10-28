@@ -22,10 +22,10 @@ version. A version and a type with the query omitted list whole under a raised
 limit. That is the deprecation sweep of one major in a single call. A method or
 class you found in the code is a query of its own. An identifier reaches the
 entries that name it, whether or not the change has its title. A PHP class or
-method does so in every version, by the class index docs.typo3.org publishes.
-Any other identifier, a constant or a configuration key, does so only where the
-installation answers for the version, from the text on disk. Answers from:
-packages, network.
+method does so in every version, by the classes docs.typo3.org lists for each
+entry. Any other identifier, a constant or a configuration key, does so only
+where the installation answers for the version, from the text on disk. Answers
+from: packages, network.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
 

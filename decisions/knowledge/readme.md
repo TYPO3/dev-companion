@@ -182,7 +182,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 [D-KNW-177]: knw-177-a-form-rejection-without-a-message-is-answered-by-where-the-message-comes-from.md
 [D-KNW-178]: knw-178-a-content-element-showitem-is-told-which-tabs-the-core-adds.md
 [D-KNW-179]: knw-179-a-language-the-core-does-not-list-is-a-subject-of-its-own.md
-[D-KNW-180]: knw-180-indexed-search-output-is-a-subject-of-its-own.md
+[D-KNW-180]: knw-180-indexed-search-output-on-a-small-site-is-a-subject-of-its-own.md
 [D-KNW-172]: knw-172-the-sitepackage-hints-answer-a-project-without-the-core-theme.md
 [D-KNW-171]: knw-171-a-tool-outside-the-core-is-read-at-a-release-and-dated-here.md
 [D-KNW-170]: knw-170-a-reply-to-a-review-thread-is-a-section-of-the-gerrit-workflow.md

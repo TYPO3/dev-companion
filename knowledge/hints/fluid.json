@@ -93,6 +93,44 @@
     ]
   },
   {
+    "id": "plugin-template-override",
+    "title": "Overriding the Templates of a Third-Party Plugin",
+    "domains": [
+      "fluid",
+      "typoscript"
+    ],
+    "appliesTo": [
+      "plugin.tx_",
+      "view.templateRootPaths",
+      "view.partialRootPaths",
+      "view.layoutRootPaths",
+      "override a plugin template",
+      "third party extension",
+      "third-party plugin",
+      "plugin templates",
+      "restyle a plugin",
+      "plugin output",
+      "extension templates in the sitepackage",
+      "_LOCAL_LANG"
+    ],
+    "hints": [
+      "An Extbase plugin reads its view roots from plugin.tx_<extension key without underscores>.view, merged with plugin.tx_<that key>_<plugin name>.view: templateRootPaths, partialRootPaths and layoutRootPaths. A sitepackage adds a root of its own under a higher integer key, and the highest key answers first.",
+      "A file the sitepackage root does not hold is still looked for in the extension's own root, file by file. So the sitepackage copies the one template or partial it changes and nothing else.",
+      {
+        "text": "Extbase puts EXT:<key>/Resources/Private/Templates/, Partials/ and Layouts/ at the front of each list where the configuration leaves them out. A list that replaces the extension's entries therefore still falls back to its files.",
+        "since": 13
+      },
+      {
+        "text": "A configured list replaces the default here, and Extbase adds nothing to it. A list without the extension's own EXT: path loses every file the sitepackage did not copy.",
+        "until": 12
+      },
+      "An extension may fill keys above 0 itself. indexed_search fills a second key from a constant of its own, so a sitepackage root takes a key above that one or sets the constant. Read the extension's setup.typoscript before picking a key.",
+      "These roots belong to that plugin alone. lib.contentElement and PAGEVIEW never read them, so the collisions sitepackage-templates and page-content-element-rendering describe do not arise here. The name space inside them is the extension's: a root shared with the sitepackage's own Partials/ overloads every extension partial of the same name. Give each extension a directory of its own.",
+      "A copied template is a fork. The extension's next release changes its own copy and leaves the sitepackage's alone, and nothing reports the difference. So read what the plugin lets TypoScript decide first: indexed_search's settings.displayAdvancedSearchLink = 0 drops the advanced search link without a template.",
+      "plugin.tx_<key>._LOCAL_LANG.<language key>.<label key> replaces a label the plugin translates, also without a template. CSS reaches neither of the two: it cannot change the text the extension writes, nor whether a field or a link is written at all."
+    ]
+  },
+  {
     "id": "fluid-layouts-sections",
     "title": "What a Fluid Layout Renders, and What Is Never Executed",
     "domains": [

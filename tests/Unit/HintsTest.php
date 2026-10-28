@@ -1064,6 +1064,36 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * A sitepackage that restyles another extension's plugin asks in the words
+     * of the plugin, and the template-root hints it got instead warned about
+     * roots the plugin never reads — `D-KNW-176`.
+     */
+    #[Decision('D-KNW-176')]
+    #[Test]
+    public function overridingAPluginsTemplatesIsAnsweredWithItsOwnViewRoots(): void
+    {
+        $task = 'override the Fluid templates of a third party extension plugin so its frontend output matches the sitepackage design';
+        self::assertSame('plugin-template-override', Hints::find([], $task, 6)['matchedHints'][0]['id']);
+
+        $text = self::statementsOf('plugin-template-override');
+        self::assertStringContainsString('plugin.tx_<extension key without underscores>.view', $text);
+        self::assertStringContainsString('the highest key answers first', $text);
+        self::assertStringContainsString('These roots belong to that plugin alone', $text);
+        self::assertStringContainsString('A copied template is a fork', $text);
+        self::assertStringContainsString('_LOCAL_LANG', $text);
+
+        $on = static fn(int $major): string => implode(
+            "\n",
+            array_column((array) Hints::byId('plugin-template-override', $major)['hints'], 'text'),
+        );
+        self::assertStringContainsString('still falls back to its files', $on(13));
+        self::assertStringContainsString('loses every file the sitepackage did not copy', $on(12));
+
+        // The collision warning names the roots it covers.
+        self::assertStringContainsString('plugin-template-override', self::statementsOf('sitepackage-templates'));
+    }
+
+    /**
      * The chain is the v14 half of that answer. Fluid 2.15.0 and 4.6.1, read in
      * `.environments/`, try the format and then the bare name and nothing else.
      * The action name gets its capital before the lookup rather than after it.

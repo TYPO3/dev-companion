@@ -174,10 +174,16 @@ final class TaskGuide extends ReadOnlyTool
      * (`D-EVI-011`, `R-ANS-002`).
      */
     public const SURFACES_OWED = 'Surfaces: write this list into your reply before the first file you read. It is '
-        . 'the floor of the work list, and the coverage the report closes on: mark every entry assessed, unassessed '
-        . 'or not requested, and drop none. A subsystem the checkout ships that no entry names gets a row of its '
+        . 'the floor of the work list, and the coverage the report closes on: mark every entry '
+        . self::SURFACE_STATUSES . ', and drop none. A subsystem the checkout ships that no entry names gets a row of its '
         . 'own. Ask each one its own typo3_hint_lookup before you judge it, with the paths '
         . 'the checkout has for it, or with these ids where it has none:';
+
+    /**
+     * The words a surface's status takes, the same list the **Status** cell of
+     * `typo3-extension-health`'s report gives.
+     */
+    public const SURFACE_STATUSES = 'assessed, unassessed, not requested or not applicable';
 
     /**
      * The change type of a task that changes nothing, and the id of the intent
@@ -411,7 +417,7 @@ final class TaskGuide extends ReadOnlyTool
             'surfaces' => Schema::listOf(Schema::object([
                 'surface' => Schema::string(),
                 'hints' => Schema::listOf(Schema::string(), 'The hint ids typo3_hint_lookup answers this surface by where the checkout has no paths for it.'),
-            ], ['surface', 'hints']), 'The surfaces a review of a project or an extension writes into its reply before the first read, and closes on with each marked assessed, unassessed or not requested. Empty for every other brief, and for a review of the core, whose skill carries surfaces of its own.'),
+            ], ['surface', 'hints']), 'The surfaces a review of a project or an extension writes into its reply before the first read, and closes on with each marked ' . self::SURFACE_STATUSES . '. Empty for every other brief, and for a review of the core, whose skill carries surfaces of its own.'),
             'surfacesOwed' => Schema::string('What the caller does with surfaces, stated beside them. Empty where surfaces is.'),
             'hints' => Schema::listOf(Schema::hintRecord(), 'What typo3_hint_lookup answers for these paths, quoted whole and carried here — the strongest few per group of paths, not everything it holds on them. The hint a recognized kind of work names first opens the list, fetched by id where the paths do not reach it. A hint that declares a different kind of repository from the paths given ranks below the ones that bind them. A rule taken from one of these belongs to that lookup. So a report that cites it names typo3_hint_lookup, and a caller who needs more of the subject calls it directly. omittedHints names what the brief left out.'),
             'hintsOwed' => Schema::string('Whose the hints are, and whether typo3_hint_lookup holds more of them for these paths or nothing more. Where no hint matched, the call to make once the paths are known.'),

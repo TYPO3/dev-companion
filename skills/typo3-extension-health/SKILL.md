@@ -135,8 +135,8 @@ bar each one has to meet. That includes the one you could neither establish nor
 disprove, which you report as open rather than dropped.
 
 Close on coverage rather than on a summary. That is the surface list written in
-step 3, every entry marked assessed, unassessed or not requested, clean ones
-briefly. It is that list and not a recollection at the end. A summary from
+step 3, every entry marked assessed, unassessed, not requested or not
+applicable, clean ones briefly. It is that list and not a recollection at the end. A summary from
 memory reports what the session noticed it skipped, never what it never reached.
 
 Without the list a thorough report and a narrow one look alike. The cheapest way

@@ -7860,6 +7860,11 @@ final class HintsTest extends TestCase
         // In the data too, beside the list. Claude Code hands the model that
         // half alone, and a run got the list without the sentence (`R-ANS-002`).
         self::assertSame(TaskGuide::SURFACES_OWED, $review->data['surfacesOwed']);
+        // The brief and the report the skill writes give one list of status
+        // words, so a row the report marks is a word the brief named.
+        self::assertStringContainsString(TaskGuide::SURFACE_STATUSES, (string) file_get_contents(
+            Paths::root() . '/skills/typo3-extension-health/references/report.md',
+        ));
         foreach ($review->data['surfaces'] as $surface) {
             self::assertNotSame([], $surface['hints'], $surface['surface']);
             foreach ($surface['hints'] as $id) {

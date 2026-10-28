@@ -4648,7 +4648,7 @@ final class SkillTest extends TestCase
         // about it looks like a clean result. Read off the written list rather
         // than off what the session remembers it skipped.
         self::assertStringContainsString('**unassessed**, and unassessed is', $skill);
-        self::assertStringContainsString('every entry marked assessed, unassessed or not requested', $skill);
+        self::assertStringContainsString('every entry marked assessed, unassessed, not requested or not', $skill);
         self::assertStringContainsString('not a recollection at the end', $skill);
 
         // "Do not change files" had read as "run nothing": the audit branch

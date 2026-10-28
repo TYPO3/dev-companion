@@ -155,9 +155,9 @@ Answers with
         # The tool that takes the id above and returns the page whole.
         tool: string
     # The surfaces a review of a project or an extension writes into its reply
-    # before the first read, and closes on with each marked assessed, unassessed or
-    # not requested. Empty for every other brief, and for a review of the core,
-    # whose skill carries surfaces of its own.
+    # before the first read, and closes on with each marked assessed, unassessed,
+    # not requested or not applicable. Empty for every other brief, and for a review
+    # of the core, whose skill carries surfaces of its own.
     surfaces:
       - surface: string
         # The hint ids typo3_hint_lookup answers this surface by where the checkout

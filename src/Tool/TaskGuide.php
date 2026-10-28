@@ -98,8 +98,9 @@ final class TaskGuide extends ReadOnlyTool
      * the four blocks below it, moved on to the code, and made about a hundred
      * further calls. The id never came back.
      */
-    public const HINTS_OMITTED = 'Owed after this brief, and not carried below: %s. One typo3_hint_lookup '
-        . 'call by id each, and a subject named here and not below is one this brief did not reach.';
+    public const HINTS_OMITTED = 'Owed after this brief, and not carried below: %s. Each is the one '
+        . 'typo3_hint_lookup call by id its entry names as lookup, and an id left out of a batch is still owed. '
+        . 'A subject named here and not below is one this brief did not reach.';
 
     /**
      * Where the task belongs, said in the answer that recognized it
@@ -171,14 +172,22 @@ final class TaskGuide extends ReadOnlyTool
      * It stands in the data beside the list, because Claude Code hands the
      * model that half alone (`D-EVI-011`, `R-ANS-002`). The list goes into the
      * client's task list rather than the reply: a session follows the part of
-     * an answer that names a call and drops the part that asks for text.
+     * an answer that names a call and drops the part that asks for text. The
+     * lookup is a field of each entry, because a session made the first step of
+     * this sentence and not the step after it.
      */
     public const SURFACES_OWED = 'Surfaces: put this list into your client\'s task or todo list now, one item per '
         . 'surface, before any other lookup or read. A client without such a tool gets the list in your reply '
         . 'instead. It is the floor of the work list, and the coverage the report closes on: mark every entry '
         . self::SURFACE_STATUSES . ', and drop none. A subsystem the checkout ships that no entry names gets a row of its '
-        . 'own. Ask each one its own typo3_hint_lookup before you judge it, with the paths '
-        . 'the checkout has for it, or with these ids where it has none:';
+        . 'own. Each item names its surface and the lookup that entry carries, and that call comes before you '
+        . 'judge the surface:';
+
+    /** The call one surface entry owes, its task item's second half. */
+    private const SURFACE_LOOKUP = 'typo3_hint_lookup with the paths the checkout has for %s, or with ids %s where it has none';
+
+    /** The call one omitted hint owes. */
+    private const OMITTED_LOOKUP = 'typo3_hint_lookup with id "%s"';
 
     /**
      * The words a surface's status takes, the same list the **Status** cell of
@@ -431,12 +440,16 @@ final class TaskGuide extends ReadOnlyTool
             'surfaces' => Schema::listOf(Schema::object([
                 'surface' => Schema::string(),
                 'hints' => Schema::listOf(Schema::string(), 'The hint ids typo3_hint_lookup answers this surface by where the checkout has no paths for it.'),
-            ], ['surface', 'hints']), 'The surfaces a review of a project or an extension puts into its task list before the first read, and closes on with each marked ' . self::SURFACE_STATUSES . '. Empty for every other brief, and for a review of the core, whose skill carries surfaces of its own.'),
+                'lookup' => Schema::string('The call this surface owes before anybody judges it, for the task item that names the surface.'),
+            ], ['surface', 'hints', 'lookup']), 'The surfaces a review of a project or an extension puts into its task list before the first read, and closes on with each marked ' . self::SURFACE_STATUSES . '. Empty for every other brief, and for a review of the core, whose skill carries surfaces of its own.'),
             'surfacesOwed' => Schema::string('What the caller does with surfaces, stated beside them. Empty where surfaces is.'),
             'hints' => Schema::listOf(Schema::hintRecord(), 'What typo3_hint_lookup answers for these paths, quoted whole and carried here — the strongest few per group of paths, not everything it holds on them. The hint a recognized kind of work names first opens the list, fetched by id where the paths do not reach it. A hint that declares a different kind of repository from the paths given ranks below the ones that bind them. A rule taken from one of these belongs to that lookup. So a report that cites it names typo3_hint_lookup, and a caller who needs more of the subject calls it directly. omittedHints names what the brief left out.'),
             'hintsOwed' => Schema::string('Whose the hints are, and whether typo3_hint_lookup holds more of them for these paths or nothing more. Where no hint matched, the call to make once the paths are known.'),
-            'omittedHints' => Schema::listOf(Schema::hintReference(), 'What typo3_hint_lookup also holds for these paths and this brief did not carry, named rather than counted. A hint declared for another kind of repository is here for that reason rather than for a weak match. Empty means what it carries is everything that matched. A subject listed here and not in hints is one the brief did not reach. It is the gap the pointer to that lookup stands for.'),
-            'omittedHintsOwed' => Schema::string('The call each omitted hint still owes, stated beside them. Empty where omittedHints is.'),
+            'omittedHints' => Schema::listOf(Schema::object([
+                ...Schema::hintReference()['properties'],
+                'lookup' => Schema::string('The call this hint still owes, one per id.'),
+            ], ['id', 'title', 'category', 'lookup']), 'What typo3_hint_lookup also holds for these paths and this brief did not carry, named rather than counted. A hint declared for another kind of repository is here for that reason rather than for a weak match. Empty means what it carries is everything that matched. A subject listed here and not in hints is one the brief did not reach. It is the gap the pointer to that lookup stands for.'),
+            'omittedHintsOwed' => Schema::string('What the caller does with omittedHints, stated beside them: the lookup of each entry. Empty where omittedHints is.'),
             'rules' => Schema::listOf(Schema::knowledgeMatch(), 'Rule sections that apply to this task.'),
             'checks' => Schema::listOf(Schema::string(), 'Commands to run, ready to execute from the core root. They '
                 . 'are the base suites of the domains above, which run whatever the task turns out to be, plus the '
@@ -561,7 +574,14 @@ final class TaskGuide extends ReadOnlyTool
         if ($reviews && !($coreWork && !$outsideCore)) {
             foreach ($confirmed as $intent) {
                 if ($intent['id'] === self::AUDIT) {
-                    $surfaces = $intent['surfaces'];
+                    $surfaces = array_map(static fn(array $surface): array => [
+                        ...$surface,
+                        'lookup' => sprintf(
+                            self::SURFACE_LOOKUP,
+                            $surface['surface'],
+                            json_encode($surface['hints'], JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR),
+                        ),
+                    ], $intent['surfaces']);
                 }
             }
         }
@@ -612,10 +632,10 @@ final class TaskGuide extends ReadOnlyTool
                 $held[$id] ??= ['id' => $id, 'title' => (string) $hint['title'], 'category' => (string) $hint['category']];
             }
         }
-        $omitted = array_values(array_diff_key(
-            $held,
-            array_flip(array_column($hints['matchedHints'], 'id')),
-        ));
+        $omitted = array_map(
+            static fn(array $hint): array => [...$hint, 'lookup' => sprintf(self::OMITTED_LOOKUP, $hint['id'])],
+            array_values(array_diff_key($held, array_flip(array_column($hints['matchedHints'], 'id')))),
+        );
         $testHints = array_slice(TestSuiteHints::find($task, $domains, $target), 0, self::SUITES_PER_BRIEF);
 
         $lines = [];
@@ -667,6 +687,9 @@ final class TaskGuide extends ReadOnlyTool
         $omittedHintsOwed = $omitted === [] ? '' : sprintf(self::HINTS_OMITTED, implode(', ', array_column($omitted, 'id')));
         if ($omitted !== []) {
             $lines[] = $omittedHintsOwed;
+            foreach ($omitted as $hint) {
+                $lines[] = '- ' . $hint['lookup'] . ' — ' . $hint['title'];
+            }
             $lines[] = '';
         }
 
@@ -743,7 +766,7 @@ final class TaskGuide extends ReadOnlyTool
             $lines[] = '';
             $lines[] = self::SURFACES_OWED;
             foreach ($surfaces as $surface) {
-                $lines[] = '- ' . $surface['surface'] . ' — ids ' . implode(', ', $surface['hints']);
+                $lines[] = '- ' . $surface['surface'] . ' — ' . $surface['lookup'];
             }
         }
 

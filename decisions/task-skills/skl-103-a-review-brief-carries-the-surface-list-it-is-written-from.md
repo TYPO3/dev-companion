@@ -4,6 +4,7 @@ title: 'A review brief carries the surface list it is written from'
 date: 2026-10-28
 status: open
 coveredBy:
+  - HintsTest::aBriefNamesTheHintsItLeftBehind
   - HintsTest::anExtensionReviewBriefCarriesTheSurfacesOfTheChecklist
 ---
 
@@ -116,3 +117,16 @@ in the client's task or todo list, one item per surface, and in the reply only
 where the client has no such tool. The criterion asks that the review
 **establishes** its surfaces before the read, and a task list in the trace does
 that. **Assumed** and **Wrong if** carry the task list's own bullets.
+
+## Since then
+
+The fourth `REVIEW-01` run of 2026-10-28 made one task item per surface before
+the first read, so the task-list bullet of **Wrong if** did not fire. It then
+asked `typo3_hint_lookup` for two of eight surfaces and none of the seven ids
+`omittedHintsOwed` named. The fourth `REVIEW-03` run fetched five of six omitted
+ids in one batch and left `backend-lit-task`. Both made the first step of an
+owed sentence and dropped the step after it. So each `surfaces` entry and each
+`omittedHints` entry now carries its call as `lookup`, and a task item made from
+an entry names that call. This entry is wrong on that change too if the next
+`REVIEW-01` run writes items with the lookup and still judges a surface without
+it.

@@ -163,6 +163,9 @@ Answers with
         # The hint ids typo3_hint_lookup answers this surface by where the checkout
         # has no paths for it.
         hints: [string]
+        # The call this surface owes before anybody judges it, for the task item
+        # that names the surface.
+        lookup: string
     # What the caller does with surfaces, stated beside them. Empty where surfaces
     # is.
     surfacesOwed: string
@@ -226,8 +229,10 @@ Answers with
         title: string
         # PHP, TypeScript, JavaScript, CSS, or General.
         category: string
-    # The call each omitted hint still owes, stated beside them. Empty where
-    # omittedHints is.
+        # The call this hint still owes, one per id.
+        lookup: string
+    # What the caller does with omittedHints, stated beside them: the lookup of each
+    # entry. Empty where omittedHints is.
     omittedHintsOwed: string
     # Rule sections that apply to this task.
     rules:  # optional
@@ -1401,7 +1406,8 @@ Text:
 
     Of the paths given, packages/acme_events/Classes/Domain/Repository/EventRepository.php is outside the TYPO3 core — a project or third-party extension. What follows is split accordingly: what only the core repository has is left out of the half that is about it. The checks below, the changelog and the submission route belong to the core repository, so they are steps for the paths that are in it and for none of the others.
 
-    Owed after this brief, and not carried below: events-extension-points. One typo3_hint_lookup call by id each, and a subject named here and not below is one this brief did not reach.
+    Owed after this brief, and not carried below: events-extension-points. Each is the one typo3_hint_lookup call by id its entry names as lookup, and an id left out of a batch is still owed. A subject named here and not below is one this brief did not reach.
+    - typo3_hint_lookup with id "events-extension-points" — Events and Extension Points
 
     Task: Fix the query that reads the events
     Change type: bugfix
@@ -1684,10 +1690,11 @@ Data:
             {
                 "id": "events-extension-points",
                 "title": "Events and Extension Points",
-                "category": "PHP"
+                "category": "PHP",
+                "lookup": "typo3_hint_lookup with id \"events-extension-points\""
             }
         ],
-        "omittedHintsOwed": "Owed after this brief, and not carried below: events-extension-points. One typo3_hint_lookup call by id each, and a subject named here and not below is one this brief did not reach.",
+        "omittedHintsOwed": "Owed after this brief, and not carried below: events-extension-points. Each is the one typo3_hint_lookup call by id its entry names as lookup, and an id left out of a batch is still owed. A subject named here and not below is one this brief did not reach.",
         "rules": [],
         "checks": [
             "CI=true ./Build/Scripts/runTests.sh -s unit",

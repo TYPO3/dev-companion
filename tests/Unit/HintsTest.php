@@ -7898,7 +7898,12 @@ final class HintsTest extends TestCase
             self::assertNotSame([], $surface['hints'], $surface['surface']);
             foreach ($surface['hints'] as $id) {
                 self::assertNotNull(Hints::byId($id), $surface['surface'] . ' names ' . $id);
+                // The call stands on the entry, so the task item made from it
+                // names the call. A run made the items and asked two of eight.
+                self::assertStringContainsString('"' . $id . '"', $surface['lookup'], $surface['surface']);
             }
+            self::assertStringStartsWith('typo3_hint_lookup ', $surface['lookup']);
+            self::assertStringContainsString($surface['surface'] . ' — ' . $surface['lookup'], $review->text);
         }
 
         // A core review closes on the patch review's own surfaces, and a brief
@@ -8804,6 +8809,7 @@ final class HintsTest extends TestCase
     #[Requirement('R-GUI-012')]
     #[Decision('D-ANS-050')]
     #[Decision('D-ANS-146')]
+    #[Decision('D-SKL-103')]
     #[Test]
     public function aBriefNamesTheHintsItLeftBehind(): void
     {
@@ -8855,6 +8861,10 @@ final class HintsTest extends TestCase
             self::assertNotSame('', $entry['title']);
             self::assertNotSame('', $entry['category']);
             self::assertArrayNotHasKey('hints', $entry);
+            // One call per id, on the entry. A review batched five of six ids
+            // and the sixth never came back (`D-SKL-103`).
+            self::assertSame('typo3_hint_lookup with id "' . $entry['id'] . '"', $entry['lookup']);
+            self::assertStringContainsString('- ' . $entry['lookup'] . ' — ' . $entry['title'], $brief->text);
         }
     }
 

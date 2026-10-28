@@ -36,9 +36,10 @@ call per subsystem. Do that before you form a view of whether the code is right.
 `typo3_task_guide` names the hints its brief left out, in `omittedHints` and in
 the line above the brief. **An omitted id that names a subsystem the diff
 changes is a call you owe before any finding about that subsystem.** Fetch it
-with `typo3_hint_lookup` by id. `datahandler-testing` on a patch that adds
-DataHandler tests is that case. The hints the brief carried do not stand in for
-it. One review said they did, and stated the subsystem's TCA defaults wrongly.
+with `typo3_hint_lookup` by id, the `lookup` its entry names. An id left out of
+a batch is still owed. `datahandler-testing` on a patch that adds DataHandler
+tests is that case. The hints the brief carried do not stand in for it. One
+review said they did, and stated the subsystem's TCA defaults wrongly.
 
 **Where the review needs the patch on disk, invoke `typo3-core-patch-checkout`
 for that one change. Say in the report which ref it fetched.** A read of the

@@ -480,6 +480,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 - [`D-KNW-173`][D-KNW-173] — An inline condition escapes its variables once · 2026-10-28
 - [`D-KNW-174`][D-KNW-174] — The set that brings the sitemap is a subject of its own · 2026-10-28
+- [`D-KNW-175`][D-KNW-175] — A statement names the condition a reader can check · 2026-10-28
 - [`D-KNW-172`][D-KNW-172] — The sitepackage hints answer a project without the core theme · 2026-10-26
 - [`D-KNW-171`][D-KNW-171] — A tool outside the core is read at a release and dated here · 2026-10-25
 - [`D-KNW-170`][D-KNW-170] — A reply to a review thread is a section of the Gerrit workflow · 2026-10-22
@@ -645,6 +646,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 [D-KNW-173]: knowledge/knw-173-an-inline-condition-escapes-its-variables-once.md
 [D-KNW-174]: knowledge/knw-174-the-set-that-brings-the-sitemap-is-a-subject-of-its-own.md
+[D-KNW-175]: knowledge/knw-175-a-statement-names-the-condition-a-reader-can-check.md
 [D-KNW-172]: knowledge/knw-172-the-sitepackage-hints-answer-a-project-without-the-core-theme.md
 [D-KNW-171]: knowledge/knw-171-a-tool-outside-the-core-is-read-at-a-release-and-dated-here.md
 [D-KNW-170]: knowledge/knw-170-a-reply-to-a-review-thread-is-a-section-of-the-gerrit-workflow.md

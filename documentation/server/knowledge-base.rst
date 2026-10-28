@@ -27,6 +27,29 @@ effect at once. No restart and no rebuild. Which TYPO3 lines a statement holds
 for is data on the statement rather than a version number in its sentence:
 :doc:`versions`.
 
+How a statement is worded
+-------------------------
+
+A reader acts on a statement and does not check it again. So the statement says
+what the reader can check:
+
+* **The condition, where one can be measured.** A reader meets a mechanism by
+  its use and a condition only by its result. "The focus indicator reaches the
+  contrast WCAG sets against the surface it sits on" is a check. "Focus is
+  visible with ``:focus-visible``" is met by a ring nobody can see. Where the
+  mechanism is the fact, the statement keeps it and adds the condition it has to
+  meet.
+* **Whether a list is the whole list.** A reader takes a list of stale idioms as
+  every stale idiom and stops the check. "The four types below are the whole
+  list" and "two of them are" tell the reader what is left to do.
+* **The correction, where the statement names a defect.**
+  `D-KNW-011 <../../decisions/knowledge/knw-011-a-rule-that-names-a-defect-names-its-correction.md>`_.
+* **The strength of the claim and its source.**
+  `D-KNW-043 <../../decisions/knowledge/knw-043-a-rule-carries-the-strength-of-its-claim-and-its-source.md>`_.
+
+`D-KNW-175 <../../decisions/knowledge/knw-175-a-statement-names-the-condition-a-reader-can-check.md>`_
+records the first two and the feedback they came from.
+
 Two upstream sources this corpus stands against, for a reader who wants the
 original:
 

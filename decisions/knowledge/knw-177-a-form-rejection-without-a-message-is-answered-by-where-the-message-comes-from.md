@@ -14,7 +14,7 @@ partials ignore an error or a property, and where a message comes from.**
 
 ## Evidence
 
-- [`feedback/2026-10-28-085931`](../../feedback/2026-10-28-085931-what-ext-form-accepts-and-then-ignores.md)
+- [`feedback/2026-10-28-085931`](../../feedback/archive/2026-10-28-085931-what-ext-form-accepts-and-then-ignores.md)
   came from a 14.3 sitepackage that added a spam guard to a contact form. Step
   1a: `typo3_hint_lookup ids=[form-framework]` said nothing about validation or
   the Honeypot, and nothing else below `knowledge/` did.
@@ -62,3 +62,10 @@ partials ignore an error or a property, and where a message comes from.**
   `FormRuntime` intervenes, and the first statement is too strong.
 - A session gets an empty validation message after this hint was in its answer.
   Then the gap is delivery rather than knowledge.
+
+## Since then
+
+`D-KNW-181` closed the two notes this entry left open, read in the `E-SITE`
+environments. A `.form.yaml` file turns the string `'true'` into a boolean
+before it reaches the `TagBuilder`, so quotes change nothing. The first request
+after a flush rendered the changed definition on every covered line.

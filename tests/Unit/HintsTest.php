@@ -1106,6 +1106,34 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The negative assertions hold the Fluid 2 boundary: a 12 caller who gets
+     * the attribute-name statement writes a fix for markup it never renders.
+     */
+    #[Decision('D-KNW-181')]
+    #[Test]
+    public function aFormAttributeThatMustRenderAsTrueIsToldWhereTheStringComesFrom(): void
+    {
+        $task = 'fluidAdditionalAttributes aria-hidden true renders as the attribute name';
+        self::assertSame('form-framework', Hints::find([], $task, 6)['matchedHints'][0]['id']);
+
+        $text = self::statementsOf('form-framework');
+        self::assertStringContainsString("every string 'true' or 'false' turned into a boolean, quoted or not", $text);
+        self::assertStringContainsString('under element.<element identifier>.properties.<attribute>', $text);
+        self::assertStringContainsString('The first request after typo3 cache:flush renders the new definition', $text);
+
+        $on = static fn(int $major): string => implode(
+            "\n",
+            array_column((array) Hints::byId('form-framework', $major)['hints'], 'text'),
+        );
+        self::assertStringContainsString('aria-hidden="1"', $on(12));
+        self::assertStringNotContainsString('aria-hidden="aria-hidden"', $on(12));
+        foreach ([13, 14, 15] as $major) {
+            self::assertStringContainsString('aria-hidden="aria-hidden"', $on($major));
+            self::assertStringNotContainsString('aria-hidden="1"', $on($major));
+        }
+    }
+
+    /**
      * The activation `site-label-language` gives ends in a command that refuses
      * every language the core does not list — `D-KNW-179`.
      */

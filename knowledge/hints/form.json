@@ -19,7 +19,9 @@
       "afterFormStateInitialized",
       "Honeypot",
       "validationErrorMessages",
-      "translateErrorMessage"
+      "translateErrorMessage",
+      "fluidAdditionalAttributes",
+      "form definition cache"
     ],
     "hints": [
       {
@@ -45,7 +47,17 @@
       "plugin.tx_form.settings.formDefinitionOverrides is keyed by the declared, unsuffixed identifier. It is merged with ArrayUtility::mergeRecursiveWithOverrule, so nested maps such as finisher recipients are merged unless their keys are explicitly replaced.",
       "FormRuntime validates every enabled element on the submitted page, whatever its type or HTML attributes: a validator on a Hidden element or a readonly field runs. The Hidden partial renders no validation result. A rejection there shows the page again with no message, which looks like a validator that never ran. A field that must be validated and stay unseen is a visible element moved out of view, the shape of the Honeypot partial.",
       "The Honeypot partial writes its attributes as a literal and never reads properties.fluidAdditionalAttributes, so a value set there is resolved and not rendered. Only an override of the partial changes that markup.",
-      "A validation error renders by its code. The element's validationErrorMessages answer first, then the form's translationFiles under validation.error.<code>, also prefixed by the form or element identifier. Only then does the validator's own message render. translateErrorMessage() in a custom validator resolves through LocalizationUtility against the extension or an LLL: path, never against the form's translationFiles. A key missing there renders an empty message, so give the message under the error code in the form's translation file."
+      "A validation error renders by its code. The element's validationErrorMessages answer first, then the form's translationFiles under validation.error.<code>, also prefixed by the form or element identifier. Only then does the validator's own message render. translateErrorMessage() in a custom validator resolves through LocalizationUtility against the extension or an LLL: path, never against the form's translationFiles. A key missing there renders an empty message, so give the message under the error code in the form's translation file.",
+      "EXT:form loads a .form.yaml file with every string 'true' or 'false' turned into a boolean, quoted or not. A fluidAdditionalAttributes value that must render as the string true comes from the form's translationFiles, under element.<element identifier>.properties.<attribute>, or from an override of the partial.",
+      {
+        "text": "The tag renders a boolean true in fluidAdditionalAttributes as 1 and false as an empty value, so aria-hidden: true renders aria-hidden=\"1\".",
+        "until": 12
+      },
+      {
+        "text": "The tag renders a boolean true in fluidAdditionalAttributes as the attribute name and leaves out false, so aria-hidden: true renders aria-hidden=\"aria-hidden\".",
+        "since": 13
+      },
+      "The first page of a form renders in a cached action, so a changed .form.yaml reaches the frontend after a flush of the page cache. The first request after typo3 cache:flush renders the new definition. An old definition after the flush comes from a cache outside TYPO3 or from a flush before the save."
     ]
   }
 ]

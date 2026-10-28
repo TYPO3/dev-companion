@@ -203,6 +203,56 @@ final class ChangelogLookupTest extends TestCase
     }
 
     /**
+     * The fourth `REVIEW-02` run of 2026-10-28 got 41 breaking entries and
+     * held 10 against the code. Breaking-110702 names the event
+     * `ImageInfoService` listens to and was among the other 31 — `D-ANS-192`.
+     */
+    #[Decision('D-ANS-192')]
+    #[Test]
+    public function aSweepHeldAgainstPathsKeepsTheEntriesNamingAClassTheCodeUses(): void
+    {
+        $root = $this->composerProject();
+        $changelog = $root . '/vendor/typo3/cms-core/Documentation/Changelog/15.0';
+        mkdir($changelog, 0o777, true);
+        foreach ([
+            'Breaking-110702-WidenedFalProcessingTaskInterfaces' => 'The event '
+                . ':php:`\\TYPO3\\CMS\\Core\\Resource\\Event\\AfterFileProcessingEvent` now returns a '
+                . ':php:`ProcessedResourceInterface`.',
+            'Breaking-110218-LogRecordDeclaredFinal' => 'The class :php:`\\TYPO3\\CMS\\Core\\Log\\LogRecord` is final.',
+            'Breaking-109998-RemovedJQuery' => 'The backend no longer ships jQuery.',
+        ] as $name => $body) {
+            file_put_contents($changelog . '/' . $name . '.rst', "Breaking: #1 - Title\n\nDescription\n===========\n\n" . $body . "\n");
+        }
+        mkdir($root . '/Classes/Service', 0o777, true);
+        file_put_contents(
+            $root . '/Classes/Service/ImageInfoService.php',
+            "<?php\nnamespace Acme\\LogRecord\\Service;\n\nuse TYPO3\\CMS\\Core\\Resource\\Event\\AfterFileProcessingEvent;\n\n"
+            . "final class ImageInfoService\n{\n    public function __invoke(AfterFileProcessingEvent \$event): void {}\n}\n",
+        );
+        Instance::discoverFrom($root);
+
+        $held = Registry::call('typo3_changelog_lookup', ['type' => 'breaking', 'version' => '15', 'paths' => ['Classes']]);
+
+        self::assertSame(1, $held->data['filesRead']);
+        self::assertSame(
+            [
+                'Breaking-109998-RemovedJQuery' => [],
+                'Breaking-110702-WidenedFalProcessingTaskInterfaces' => [
+                    ['class' => 'AfterFileProcessingEvent', 'files' => ['Classes/Service/ImageInfoService.php']],
+                ],
+            ],
+            array_column($held->data['entries'], 'touches', 'name'),
+            'the entry naming a class the code does not use goes, and the one naming no class stays',
+        );
+        self::assertStringContainsString('names AfterFileProcessingEvent: Classes/Service/ImageInfoService.php', $held->text);
+
+        // Without paths the sweep is what it was.
+        $sweep = Registry::call('typo3_changelog_lookup', ['type' => 'breaking', 'version' => '15']);
+        self::assertSame(3, $sweep->data['matchCount']);
+        self::assertArrayNotHasKey('filesRead', $sweep->data);
+    }
+
+    /**
      * The second question a dual-major sweep asks of every deprecation it got
      * back, and the call that answers it — `D-VER-009`.
      *

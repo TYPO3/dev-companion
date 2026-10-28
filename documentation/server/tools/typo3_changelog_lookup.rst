@@ -73,6 +73,13 @@ Takes
     # about which third-party extension a change affects, so an extension key of
     # your own matches no tag.
     tag: string  # optional
+    # The PHP of your own code, as files or directories, absolute or relative to the
+    # directory the session runs in. The answer keeps the entries that name a class
+    # this PHP imports or writes fully qualified, and each one names the files. It
+    # also keeps the entries that name no class at all, because nothing here can
+    # hold those against PHP. That is the sweep of a major held against the code in
+    # one call: pass the package's Classes directory with the version and the type.
+    paths: [string]  # optional
     # Maximum number of entries. Raise it to list a version and a type whole. The
     # largest covered major holds 128 deprecations, and that sweep is one call
     # rather than one per tag.
@@ -133,6 +140,17 @@ Answers with
         # does not list the version. An entry for a major without a release yet
         # moves either way.
         publishedIn: string
+        # The classes of the code at paths this entry names. Empty where the call
+        # gave no paths, and on an entry that names no class.
+        touches:  # optional
+          - # The class as the code spells it, without its namespace.
+            class: string
+            # The files that import it or write it fully qualified, in the form the
+            # call gave the path.
+            files: [string]
+    # The PHP files read at paths. Returned where the call gave paths, so 0 says
+    # that nothing was held against the code.
+    filesRead: integer  # optional
     # What each word of the query reaches on its own, inside the version and the
     # type the call named. A word at 0 is the one that emptied the answer: a
     # misspelt word, or nothing here carries its name. Returned on a miss that

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Tool;
 
+use Symfony\Component\Finder\Finder;
 use TYPO3\DevCompanion\Installation\Changelog;
+use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Manual\CoreChangelog;
 use TYPO3\DevCompanion\Result\Miss;
@@ -75,6 +77,7 @@ final class ChangelogLookup extends ReadOnlyTool
                 'excludeTags' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Leave out the entries that carry any of these index tags. A package that ships no PHP sweeps with PHP-API here, because those entries are about calls it cannot make.'],
                 'tags' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Restrict to entries that carry any of these index tags, together with tag where both are passed. A package sweeps the major once with the kinds of file it ships, for example TypoScript, TSConfig, Fluid, YAML and Frontend, rather than reads every entry.'],
                 'tag' => ['type' => 'string', 'description' => 'Restrict to entries with this index tag. "ext:form" is the system extension a change is in. "FullyScanned" or "NotScanned" is what the Extension Scanner has a matcher for. "PHP-API", "TCA", "Backend" and "Frontend" are the surface. This bounds one question inside a version and a type. The sweep of a major does not need it. That version and type come back whole under a raised limit, and every entry carries its own tags to read by. The changelog says nothing about which third-party extension a change affects, so an extension key of your own matches no tag.'],
+                'paths' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'The PHP of your own code, as files or directories, absolute or relative to the directory the session runs in. The answer keeps the entries that name a class this PHP imports or writes fully qualified, and each one names the files. It also keeps the entries that name no class at all, because nothing here can hold those against PHP. That is the sweep of a major held against the code in one call: pass the package\'s Classes directory with the version and the type.'],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 200, 'default' => 20, 'description' => 'Maximum number of entries. Raise it to list a version and a type whole. The largest covered major holds 128 deprecations, and that sweep is one call rather than one per tag.'],
             ],
         ];
@@ -99,7 +102,12 @@ final class ChangelogLookup extends ReadOnlyTool
                 'file' => Schema::string('Where to read the description and the migration: an EXT: reference where the installation ships the entry, and the docs.typo3.org URL where it does not.'),
                 'url' => Schema::string('The entry as docs.typo3.org renders it, on every entry.'),
                 'publishedIn' => Schema::string('Which side the entry came from. "manual" is docs.typo3.org, which renders the changelog after every merge and is the ordinary source. "installation" is the core package on disk, read where docs.typo3.org did not answer or does not list the version. An entry for a major without a release yet moves either way.'),
+                'touches' => Schema::listOf(Schema::object([
+                    'class' => Schema::string('The class as the code spells it, without its namespace.'),
+                    'files' => Schema::listOf(Schema::string(), 'The files that import it or write it fully qualified, in the form the call gave the path.'),
+                ], ['class', 'files']), 'The classes of the code at paths this entry names. Empty where the call gave no paths, and on an entry that names no class.'),
             ], ['type', 'version', 'issue', 'title', 'name', 'removal', 'migration', 'tags', 'file', 'url', 'publishedIn'])),
+            'filesRead' => Schema::integer('The PHP files read at paths. Returned where the call gave paths, so 0 says that nothing was held against the code.'),
             'termCounts' => Schema::termCounts('What each word of the query reaches on its own, inside the version and the type the call named. A word at 0 is the one that emptied the answer: a misspelt word, or nothing here carries its name. Returned on a miss that carried words. These are counts and not a query; termSubsets is what you ask outright.'),
             'termCountsWithoutTheNarrowing' => Schema::termCounts('The same words counted over the whole changelog rather than inside the version and the type. Returned only where a word reaches there and nothing inside the narrowed set. Then the filter emptied this answer rather than the words: ask again without it.'),
             'termSubsets' => Schema::listOf(Schema::object([
@@ -188,6 +196,10 @@ final class ChangelogLookup extends ReadOnlyTool
             static fn(string $one): bool => $one !== '',
         ));
         $limit = (int) ($args['limit'] ?? 20);
+        $paths = array_values(array_filter(
+            array_map(static fn(mixed $one): string => trim((string) $one), $args['paths'] ?? []),
+            static fn(string $one): bool => $one !== '',
+        ));
 
         $terms = LabelSearch::terms($query);
         $installed = Changelog::versions();
@@ -323,6 +335,28 @@ final class ChangelogLookup extends ReadOnlyTool
                 return true;
             }));
         }
+        // A review that got the 41 breaking entries of 15 held 10 of them
+        // against the code, and the one its code calls was among the rest
+        // (`D-ANS-192`).
+        $filesRead = null;
+        $beforePaths = count($matching);
+        if ($paths !== []) {
+            [$used, $filesRead] = self::classesUsed($paths);
+            $matching = array_values(array_filter(array_map(
+                static function (array $entry) use ($used): ?array {
+                    $named = self::named($entry);
+                    $touches = [];
+                    foreach ($named as $identifier) {
+                        if (isset($used[$identifier])) {
+                            $touches[] = $used[$identifier];
+                        }
+                    }
+
+                    return $named !== [] && $touches === [] ? null : $entry + ['touches' => $touches];
+                },
+                $matching,
+            )));
+        }
         ksort($tags);
         usort($matching, static fn(array $a, array $b): int => version_compare($b['version'], $a['version'])
             ?: strcmp($a['key'], $b['key']));
@@ -349,6 +383,7 @@ final class ChangelogLookup extends ReadOnlyTool
                     : 'EXT:core/Documentation/Changelog/' . $entry['version'] . '/' . $entry['key'] . '.rst',
                 'url' => $entry['url'],
                 'publishedIn' => $entry['publishedIn'],
+                'touches' => $entry['touches'] ?? [],
             ];
         }, $shown);
 
@@ -391,6 +426,13 @@ final class ChangelogLookup extends ReadOnlyTool
                 $terms === [] ? 'matched those filters' : 'carries all of ' . LabelSearch::quoted($terms),
                 $tag === '' ? '' : sprintf(' and the tag "%s"', $tag),
             )];
+            if ($filesRead !== null && $beforePaths > 0) {
+                $lines[0] = sprintf(
+                    'None of the %d entries this call matched names a class the %d PHP files at those paths use.',
+                    $beforePaths,
+                    $filesRead,
+                );
+            }
             if ($outside !== []) {
                 $lines[] = sprintf(
                     'Narrowed to %s — %s what emptied this, not the words: without %s, %s. Ask again without %s.',
@@ -480,6 +522,9 @@ final class ChangelogLookup extends ReadOnlyTool
             if ($answered !== []) {
                 $data['versionsFromTheManual'] = $ahead;
             }
+            if ($filesRead !== null) {
+                $data['filesRead'] = $filesRead;
+            }
             if ($counts !== []) {
                 $data['termCounts'] = $counts;
             }
@@ -530,6 +575,18 @@ final class ChangelogLookup extends ReadOnlyTool
                 count($matching) > count($entries) ? sprintf(' — showing the first %d', count($entries)) : '',
             );
         }
+        if ($filesRead !== null) {
+            $unnamed = count(array_filter($matching, static fn(array $entry): bool => $entry['touches'] === []));
+            $lines[] = sprintf(
+                'Held against the %d PHP files at those paths: %d of the %d entries name a class they use, and %d '
+                . 'name no class at all, so read %s against the rest of the code yourself.',
+                $filesRead,
+                count($matching) - $unnamed,
+                $beforePaths,
+                $unnamed,
+                $unnamed === 1 ? 'that one' : 'those',
+            );
+        }
         foreach ($entries as $entry) {
             $lines[] = sprintf(
                 '- %s %s: %s (#%s)%s',
@@ -540,6 +597,13 @@ final class ChangelogLookup extends ReadOnlyTool
                 $entry['removal'] === '' ? '' : sprintf(' — removed in v%s', $entry['removal']),
             );
             $lines[] = '  ' . $entry['file'] . ($entry['tags'] === [] ? '' : ' — ' . implode(', ', $entry['tags']));
+            foreach ($entry['touches'] as $touched) {
+                // `GeneralUtility` is in 32 files of one package, and the data
+                // carries them all.
+                $more = count($touched['files']) - 3;
+                $lines[] = '  names ' . $touched['class'] . ': ' . implode(', ', array_slice($touched['files'], 0, 3))
+                    . ($more > 0 ? sprintf(' and %d more', $more) : '');
+            }
             if ($entry['migration'] !== '') {
                 $lines[] = '';
                 $lines[] = 'Migration';
@@ -592,12 +656,87 @@ final class ChangelogLookup extends ReadOnlyTool
         if ($answered !== []) {
             $data['versionsFromTheManual'] = $ahead;
         }
+        if ($filesRead !== null) {
+            $data['filesRead'] = $filesRead;
+        }
         if (in_array('Deprecation', array_column($entries, 'type'), true)) {
             $lines[] = self::REMOVAL_RULE;
             $data['removalRule'] = self::REMOVAL_RULE;
         }
 
         return ToolResult::create(implode("\n", $lines), $data, $owed);
+    }
+
+    /**
+     * The classes the PHP at the given paths imports or writes fully
+     * qualified, under the name an entry's identifiers carry, and the number of
+     * files read.
+     *
+     * The name without its namespace, lowercased, because that is the form
+     * `Changelog::named()` gives an entry on both sides. A method name is left
+     * out: `makeInstance` is in most of a package and in many entries, and
+     * matched 19 of 41 entries where the classes matched 17 (`D-ANS-192`).
+     *
+     * @param list<string> $paths
+     * @return array{0: array<string, array{class: string, files: list<string>}>, 1: int}
+     */
+    private static function classesUsed(array $paths): array
+    {
+        $base = Instance::startedFrom();
+        $files = [];
+        foreach ($paths as $given) {
+            $path = str_starts_with($given, '/') || $base === null ? $given : $base . '/' . $given;
+            if (is_file($path)) {
+                $files[$given] = $path;
+            } elseif (is_dir($path)) {
+                foreach (Finder::create()->files()->in($path)->name('*.php')->sortByName() as $file) {
+                    $files[rtrim($given, '/') . '/' . $file->getRelativePathname()] = $file->getPathname();
+                }
+            }
+        }
+
+        $used = [];
+        foreach ($files as $shown => $file) {
+            // The namespace declaration names the file's own namespace and no
+            // class it uses.
+            $code = (string) preg_replace('/^\s*namespace\s+[^;{]+[;{]/m', '', (string) file_get_contents($file));
+            preg_match_all('/\\\\?(?:[A-Za-z_][A-Za-z0-9_]*\\\\)+([A-Za-z_][A-Za-z0-9_]*)/', $code, $qualified);
+            preg_match_all('/^\s*use\s+[^;{]+\\\\\{([^}]*)\}/m', $code, $grouped);
+            $names = $qualified[1];
+            foreach ($grouped[1] as $group) {
+                foreach (explode(',', $group) as $member) {
+                    $names[] = (string) preg_replace('/^.*\\\\|\s+as\s+.*$/', '', trim($member));
+                }
+            }
+            foreach ($names as $name) {
+                $key = strtolower($name);
+                $used[$key] ??= ['class' => $name, 'files' => []];
+                if (!in_array($shown, $used[$key]['files'], true)) {
+                    $used[$key]['files'][] = $shown;
+                }
+            }
+        }
+
+        return [$used, count($files)];
+    }
+
+    /**
+     * The identifiers one entry names, lowercased, from the side that lists it.
+     *
+     * @param array<string, mixed> $entry
+     * @return list<string>
+     */
+    private static function named(array $entry): array
+    {
+        if ($entry['publishedIn'] === 'manual') {
+            /** @var list<string> $named */
+            $named = $entry['named'];
+
+            return $named;
+        }
+
+        /** @var array{file: string} $entry */
+        return array_values(array_unique(array_map('strtolower', Changelog::identifiers($entry))));
     }
 
     /**

@@ -82,9 +82,9 @@ sitepackage, and what each tool writes on the installed major.
 **A generated package is a starting point.** Read each generated file against
 the hints in *Lay it out* and the sweep before you keep it. Remove the empty
 directories and the files this site does not use, and say which ones you
-removed. Where the builder's tree differs from what the hints below describe,
-keep one convention for the whole package. Tell the user which one you kept and
-why.
+removed. Move each part that stands outside the tree of `sitepackage-layout`
+into that tree. Where `sitepackage-start` names the place of a builder part,
+take that place. Report the moves.
 
 ## Lay it out
 

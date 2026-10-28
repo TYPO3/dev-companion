@@ -36,9 +36,9 @@ tree written by hand.**
 
 - **Construction, so no checklist.** The hints and a rendered page per page
   layout answer what the skill would otherwise judge.
-- **The builder's tree and the hints' tree are left to one convention per
-  package**, which the session names to the user. Which of the two the skill
-  prefers is open.
+- **The builder is the start and the hints' tree is the layout.** The session
+  moves each generated part into the tree `sitepackage-layout` gives. The last
+  *Since then* says how this was settled.
 - **The wiring is the skill's last section**, ending on one rendered page per
   page layout.
 
@@ -109,3 +109,15 @@ stand. Its debrief asked for small things. The skill now excludes `PHP-API` from
 its sweep and skips the hints the brief already carried. It also sends the
 builder the vendor and the key it means. The runs end here, with the skill
 carrying the task on 13.4 and on 14.3.
+
+## Since then
+
+The contract reading of 2026-10-28 found two answers that disagreed. The
+`sitepackage` checklist told a session to lay the package out after the core's
+theme, which 13.4 does not ship. The skill left the tree to the session. The
+hints had already chosen: `sitepackage-start` calls a generated package a
+starting point rather than a layout to keep, and names the place of each builder
+part in the tree of `sitepackage-layout`. So the skill and the checklist now say
+the same. The builder stays the start, and its parts move into that tree. The
+checklist item names no theme, because `sitepackage-layout` binds the theme to
+the majors that ship it as data.

@@ -1073,7 +1073,7 @@
     "rulesQuery": "",
     "checklist": [
       "Settle where the sitepackage comes from before you write a file. Nothing in the core creates one, and typo3_hint_lookup with id=sitepackage-start says which tool writes which part on the major in front of you.",
-      "Lay it out after the theme the core ships rather than after a generated one. typo3_hint_lookup with id=sitepackage-layout says what each directory is for, and that the core's theme is read rather than required.",
+      "Lay the package out in the tree typo3_hint_lookup with id=sitepackage-layout gives, also where the builder wrote the first files. The hint says what each directory is for, and names the core's theme as a model to read where the installed major ships one.",
       "Put every template under one template root, with the page layouts and the content element layouts in subdirectories of their own. typo3_hint_lookup with id=sitepackage-templates says why a shared Layouts/ without them renders the page frame inside every element.",
       "Declare each page layout in a file of its own, under the name its page template carries. typo3_hint_lookup with id=sitepackage-backend-layouts says whether those files belong to the set or to the extension.",
       "Reach lib.contentElement with the reference operator =< rather than copy it, and reach lib.fluidPage only where the set that defines it is a dependency. typo3_hint_lookup with id=sitepackage-typoscript-reference says which package defines each.",

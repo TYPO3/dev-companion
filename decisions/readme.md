@@ -1220,6 +1220,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### feedback
 
+- [`D-FBK-057`][D-FBK-057] — A new project is told which line it starts on · 2026-10-29
 - [`D-FBK-056`][D-FBK-056] — A core patch review read the server as its route · 2026-10-05
 - [`D-FBK-054`][D-FBK-054] — The server answers what is registered and a person answers what it looks like · 2026-09-02
 - [`D-FBK-055`][D-FBK-055] — A registration file is checked after the cache flush or not at all · 2026-09-02
@@ -1263,6 +1264,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-FBK-002`][D-FBK-002] — The order of the work is declared, not inferred · 2026-07-31 · confirmed
 - [`D-FBK-004`][D-FBK-004] — A feedback asks the caller which model is recording it · 2026-07-31 · confirmed
 
+[D-FBK-057]: feedback/fbk-057-a-new-project-is-told-which-line-it-starts-on.md
 [D-FBK-056]: feedback/fbk-056-a-core-patch-review-read-the-server-as-its-route.md
 [D-FBK-054]: feedback/fbk-054-the-server-answers-what-is-registered-and-a-person-answers-what-it-looks-like.md
 [D-FBK-055]: feedback/fbk-055-a-registration-file-is-checked-after-the-cache-flush-or-not-at-all.md

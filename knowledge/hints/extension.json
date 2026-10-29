@@ -284,6 +284,31 @@
     ]
   },
   {
+    "id": "extension-reuse",
+    "title": "Taking a Published Extension or Building Your Own",
+    "domains": [
+      "php"
+    ],
+    "appliesTo": [
+      "existing extension",
+      "third-party extension",
+      "published extension",
+      "already does this",
+      "build it yourself",
+      "build your own",
+      "own record table",
+      "reuse an extension",
+      "new feature",
+      "georgringer/news"
+    ],
+    "hints": [
+      "Before the first file of a feature, name the published extension that already covers it. typo3_ter_lookup with query searches the TER and the typo3-cms-extension packages on Packagist by subject. So the name comes from the registries and not from recall. The key of a match then goes back to typo3_ter_lookup with extension, which answers every version and the TYPO3 majors each one declares.",
+      "That answer settles that a current release declares the target major. It does not settle that anybody tested the release there, because majors and constraint are the author's declaration. A stable release uploaded after the target major came out is the stronger sign, and the extension's own issue tracker is the evidence.",
+      "A published extension brings a documented data model, an upgrade path that other sites share, and a maintainer outside the project. A table of your own is one more model that every maintainer of the site has to learn. The cost of a switch rises with every record and every shared URL, so the question is cheap only before the first file.",
+      "The counterweight is the dependency. It couples the site's upgrade to the extension's release schedule, and an extension with no release for the next major holds that upgrade back. What the site does not use is still surface that a maintainer reads and an upgrade carries. A feature that uses a small part of a large extension, or that the extension covers only with a workaround, is the case for a build of your own."
+    ]
+  },
+  {
     "id": "extension-ter-release",
     "title": "What Publishing to the TER Requires of an Extension",
     "domains": [

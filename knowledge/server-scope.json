@@ -471,13 +471,13 @@
       "scope": "any"
     },
     {
-      "topic": "Which versions of an extension the TYPO3 Extension Repository has published",
-      "depth": "The registry's own API, read live by extension key: every published version with its number, its state, the day it was uploaded, the TYPO3 majors it declares and the constraints.depends.typo3 it was released with, highest number first — and, where a version is named, whether the registry already holds that number. It is the question a release audit cannot answer from the repository it is auditing, because ext_emconf.php names the released version afterwards as much as before. It reports what is published and judges no version free to release, and it reads nothing inside the package: a key nothing is published under is an answer rather than a statement that no such extension exists.",
+      "topic": "Which published extensions cover a subject, and which versions of one the TYPO3 Extension Repository has published",
+      "depth": "The registry's own API, read live by extension key: every published version with its number, its state, the day it was uploaded, the TYPO3 majors it declares and the constraints.depends.typo3 it was released with, highest number first — and, where a version is named, whether the registry already holds that number. It is the question a release audit cannot answer from the repository it is auditing, because ext_emconf.php names the released version afterwards as much as before. It reports what is published and judges no version free to release, and it reads nothing inside the package: a key nothing is published under is an answer rather than a statement that no such extension exists. A query searches the TER and the typo3-cms-extension packages on Packagist by subject, so a feature task can find the extension that already does it rather than recall its name.",
       "tools": [
         "typo3_ter_lookup"
       ],
-      "source": "https://extensions.typo3.org (network)",
-      "scope": "extension"
+      "source": "https://extensions.typo3.org and https://packagist.org (network)",
+      "scope": "any"
     }
   ],
   "doesNotCover": [
@@ -714,6 +714,10 @@
     {
       "when": "Auditing or preparing a release of an extension — before saying that a version is unreleased, because ext_emconf.php names the released version afterwards as much as before and the checkout reads the same either way",
       "call": "typo3_ter_lookup with the extension key, and with version for the number ext_emconf.php names, then typo3_hint_lookup with id=\"extension-ter-release\" for what publishing requires of the extension itself"
+    },
+    {
+      "when": "About to build a feature — before the first file, because a published extension may already do it and a switch costs more with every record",
+      "call": "typo3_ter_lookup with query for the subject, then typo3_hint_lookup with id=\"extension-reuse\" to weigh the best match against your own build"
     },
     {
       "when": "Working in one extension and needing what it registers",

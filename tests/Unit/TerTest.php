@@ -8,7 +8,9 @@ use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use TYPO3\DevCompanion\Publication\Packagist;
 use TYPO3\DevCompanion\Publication\Ter;
+use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tool\Registry;
 
 /**
@@ -28,6 +30,7 @@ final class TerTest extends TestCase
     public function putTheHostBack(): void
     {
         Ter::useReader(null);
+        Packagist::useReader(null);
     }
 
     /**
@@ -44,6 +47,23 @@ final class TerTest extends TestCase
         . '"dependencies":{"typo3":">=13.4.15 <=13.4.99"},"upload_date":1764028800},'
         . '{"number":"14.0.1","state":"stable","typo3_versions":[13,14],'
         . '"dependencies":{"typo3":">=13.4.15 <=14.3.99"},"upload_date":1787237811}]]';
+
+    /**
+     * A search as the TER answered it on 2026-10-29, cut to two entries. The
+     * second stands under its key alone and has nothing uploaded, so its
+     * current version is an empty list.
+     */
+    private const TER_SEARCH = '{"results":522,"page":1,"per_page":10,"filter":{"search":"news"},"extensions":['
+        . '{"key":"news","downloads":4354780,"meta":{"composer_name":"georgringer/news"},'
+        . '"current_version":{"description":"Versatile news system.","number":"14.1.2","state":"stable",'
+        . '"typo3_versions":[13,14],"dependencies":{"typo3":">=13.4.29 <=14.99.99"},"upload_date":1791793777}},'
+        . '{"key":"legacy_news","downloads":12,"meta":{"composer_name":""},"current_version":[]}]}';
+
+    /** The Packagist search for the same subject, cut to two results. */
+    private const PACKAGIST_SEARCH = '{"results":['
+        . '{"name":"georgringer/news","description":"News system","downloads":5781129},'
+        . '{"name":"georgringer/eventnews","description":"Extend EXT:news with events","downloads":678167}'
+        . '],"total":283}';
 
     /**
      * The list is a level down from where the endpoint's name puts it, and a
@@ -216,6 +236,76 @@ final class TerTest extends TestCase
 
         self::assertSame('unavailable', $result->data['status']);
         self::assertNull($result->data['held']);
+    }
+
+    /**
+     * One match per package, from both searches. The TER entry joins the
+     * Packagist one by its Composer name and adds the key and the current
+     * version. What only the TER found follows what Packagist found.
+     */
+    #[Decision('D-ANS-193')]
+    #[Test]
+    public function aSearchJoinsBothRegistriesByThePackageName(): void
+    {
+        Packagist::useReader(static fn(): string => self::PACKAGIST_SEARCH);
+        Ter::useReader(static fn(): string => self::TER_SEARCH);
+
+        $result = Registry::call('typo3_ter_lookup', ['query' => 'news']);
+
+        self::assertSame('answered', $result->data['status']);
+        self::assertSame(
+            ['georgringer/news', 'georgringer/eventnews', ''],
+            array_column($result->data['matches'], 'package'),
+        );
+        $news = $result->data['matches'][0];
+        self::assertSame('news', $news['key']);
+        self::assertSame('14.1.2', $news['version']);
+        self::assertSame([13, 14], $news['majors']);
+        self::assertSame([Packagist::HOST, Ter::HOST], $news['foundIn']);
+        self::assertSame('', $result->data['matches'][1]['key']);
+        self::assertSame('legacy_news', $result->data['matches'][2]['key']);
+        self::assertSame([522, 283], array_column($result->data['searches'], 'total'));
+        self::assertContains('Read every version of one with typo3_ter_lookup and extension set to its key.', $result->data['owed']);
+    }
+
+    /**
+     * A registry that did not answer leaves a gap, and the answer says where.
+     * The other one still answers.
+     */
+    #[Test]
+    public function aSearchSaysWhichRegistryWentUnsearched(): void
+    {
+        Packagist::useReader(static fn(): string => self::PACKAGIST_SEARCH);
+        Ter::useReader(static fn(): ?string => null);
+
+        $result = Registry::call('typo3_ter_lookup', ['query' => 'news']);
+
+        self::assertSame('answered', $result->data['status']);
+        self::assertSame(['unavailable', 'answered'], array_column($result->data['searches'], 'status'));
+        self::assertStringContainsString('Not searched: The registry did not answer. It is reachable at ' . Ter::HOST, $result->text);
+    }
+
+    /** No match on either side is an answer, not a failure. */
+    #[Test]
+    public function aSearchNothingMatchesIsAnAnswer(): void
+    {
+        Packagist::useReader(static fn(): string => '{"results":[],"total":0}');
+        Ter::useReader(static fn(): string => '{"results":0,"page":1,"per_page":10,"filter":{"search":"x"},"extensions":[]}');
+
+        $result = Registry::call('typo3_ter_lookup', ['query' => 'quantumflux transponder']);
+
+        self::assertSame('empty', $result->data['status']);
+        self::assertNull($result->data['unavailable']);
+        self::assertSame([], $result->data['matches']);
+    }
+
+    /** The parameter the list route reads, where `q` answers every extension it holds. */
+    #[Test]
+    public function theTerIsSearchedThroughItsFilterParameter(): void
+    {
+        $answer = (new Ter(static fn(): string => self::TER_SEARCH))->search('cookie consent', 5);
+
+        self::assertSame(Ter::HOST . '/api/v1/extension?filter%5Bsearch%5D=cookie%20consent&per_page=5', $answer['url']);
     }
 
     /** A page with a 200 in front of it is not an answer either. */

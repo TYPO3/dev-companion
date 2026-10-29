@@ -1645,6 +1645,31 @@ final class ScopeTest extends TestCase
         self::assertContains('typo3_record_lookup', array_column($element->data['nextTools'], 'tool'));
     }
 
+    /**
+     * The brief for a feature asks for the published extension that already
+     * does it, before the first file. The hint it names exists.
+     */
+    #[Decision('D-ANS-193')]
+    #[Test]
+    public function aFeatureBriefAsksForThePublishedExtensionFirst(): void
+    {
+        $result = Registry::call('typo3_task_guide', [
+            'task' => 'turn the notices on the home page into dated news items',
+            'changeType' => 'feature',
+        ]);
+
+        $asked = array_values(array_filter(
+            $result->data['checklist'],
+            static fn(string $entry): bool => str_contains($entry, 'typo3_ter_lookup and query'),
+        ));
+        self::assertCount(1, $asked);
+        self::assertStringContainsString('id="extension-reuse"', $asked[0]);
+        self::assertSame(
+            ['extension-reuse'],
+            array_column(Registry::call('typo3_hint_lookup', ['id' => 'extension-reuse'])->data['hints'], 'id'),
+        );
+    }
+
     #[Requirement('R-SCO-002')]
     #[Test]
     public function aBriefOutsideTheCoreKeepsNothingThatOnlyTheCoreHas(): void

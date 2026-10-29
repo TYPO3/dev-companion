@@ -114,6 +114,57 @@ final class Ter
     }
 
     /**
+     * The extensions that match a query, in the order the registry ranks them.
+     *
+     * `filter[search]` is the parameter the list route reads. A `q` beside it
+     * is ignored, and the route then answers every extension it holds.
+     * `current` is the newest version, null where nothing is uploaded under
+     * the key.
+     *
+     * @return array{status: 'answered'|'empty'|'unavailable', url: string, total: int, extensions: list<array{key: string, package: string, description: string, downloads: int, current: ?array<string, mixed>}>, cause: ?string}
+     */
+    public function search(string $query, int $limit): array
+    {
+        $url = self::HOST . '/api/v1/extension?' . http_build_query([
+            'filter' => ['search' => $query],
+            'per_page' => $limit,
+        ], '', '&', PHP_QUERY_RFC3986);
+        $body = $this->fetch->get($url, ['Accept: application/json']);
+        if ($body === null) {
+            return ['status' => 'unavailable', 'url' => $url, 'total' => 0, 'extensions' => [], 'cause' => 'source-not-answering'];
+        }
+        $decoded = Fetch::decode($body);
+        if ($decoded === null || !is_array($decoded['extensions'] ?? null)) {
+            return ['status' => 'unavailable', 'url' => $url, 'total' => 0, 'extensions' => [], 'cause' => 'source-not-parseable'];
+        }
+
+        $extensions = [];
+        foreach ($decoded['extensions'] as $entry) {
+            if (!is_array($entry) || !is_string($entry['key'] ?? null)) {
+                continue;
+            }
+            $meta = is_array($entry['meta'] ?? null) ? $entry['meta'] : [];
+            // An empty list rather than an object where nothing is uploaded.
+            $current = is_array($entry['current_version'] ?? null) ? $entry['current_version'] : [];
+            $extensions[] = [
+                'key' => $entry['key'],
+                'package' => is_string($meta['composer_name'] ?? null) ? $meta['composer_name'] : '',
+                'description' => is_string($current['description'] ?? null) ? $current['description'] : '',
+                'downloads' => is_int($entry['downloads'] ?? null) ? $entry['downloads'] : 0,
+                'current' => is_string($current['number'] ?? null) ? self::version($current) : null,
+            ];
+        }
+
+        return [
+            'status' => $extensions === [] ? 'empty' : 'answered',
+            'url' => $url,
+            'total' => is_int($decoded['results'] ?? null) ? $decoded['results'] : count($extensions),
+            'extensions' => $extensions,
+            'cause' => null,
+        ];
+    }
+
+    /**
      * One published version, in the fields a release audit turns on.
      *
      * @param array<string, mixed> $entry

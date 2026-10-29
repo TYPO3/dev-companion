@@ -314,6 +314,11 @@ final class TaskGuide extends ReadOnlyTool
                 . 'rule is one typo3_rule_lookup call with documentId "core/contribution/changelog".',
         ],
         'feature' => [
+            // A session built its own table for what georgringer/news does,
+            // and nothing in its brief asked (`D-ANS-193`).
+            'Before the first file, search the published extensions for this feature with typo3_ter_lookup and '
+                . 'query, and weigh the best match against your own build with typo3_hint_lookup and '
+                . 'id="extension-reuse".',
             'Add a changelog feature file under typo3/sysext/core/Documentation/Changelog/ for public API additions.',
             'Cover the new behaviour with functional tests, not only unit tests.',
         ],

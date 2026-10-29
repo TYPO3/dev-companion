@@ -225,7 +225,8 @@ Each page names the sources that can answer that tool, under its annotations and
         :action: Open reference
 
         Read what the TYPO3 Extension Repository has published under an
-        extension key, live from extensions.typo3.org.
+        extension key, live from extensions.typo3.org, or find the published
+        extensions for a subject.
 
     .. card:: :doc:`typo3_test_run_guide <typo3_test_run_guide>`
         :label: Guide

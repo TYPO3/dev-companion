@@ -347,6 +347,15 @@ final class ToolCalls
             'ter: a composer package name' => ['typo3_ter_lookup', [
                 'extension' => 'georgringer/news',
             ]],
+            // The question a feature task asks before its first file, against
+            // both registries (`D-ANS-193`).
+            'ter: the extensions for a subject' => ['typo3_ter_lookup', [
+                'query' => 'news',
+                'limit' => 3,
+            ]],
+            'ter: no extension for a subject' => ['typo3_ter_lookup', [
+                'query' => 'quantumflux transponder',
+            ]],
             'project' => ['typo3_project_describe', []],
             'extension' => ['typo3_extension_describe', ['extension' => 'backend']],
             'catalog scope' => ['typo3_snapshot_scope', []],

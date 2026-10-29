@@ -58,7 +58,7 @@ src/Installation/Typo3Runtime.php  # boots it in a subprocess and asks its conta
 src/Installation/probe.php  # what runs over there; never included here
 src/Manual/        # the third source: the versioned TYPO3 manuals, and the core changelog above what an installation ships
 src/Contribution/  # the fourth source: the services the core's own process runs through
-src/Publication/   # the fifth source: the registry a TYPO3 extension is published to, and what it already holds
+src/Publication/   # the fifth source: the registries a TYPO3 extension is published to, what they already hold, and what they find by subject
 src/Http/Fetch.php # the one way this server reads a host outside itself: the timeouts, the redirect limit and the agent
 src/Search/        # the lexical matching every prose and label lookup goes through
 src/Feedback/      # the feedback channel; a development tool, offered from a standalone checkout alone

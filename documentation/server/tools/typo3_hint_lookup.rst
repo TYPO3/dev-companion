@@ -297,6 +297,7 @@ Text:
     - fal-storages-drivers — Storages and the Drivers Behind Them (PHP)
     - tca-schema-api — TCA Schema API (PHP)
     - tca-formengine — TCA, FormEngine, and Backend Forms (PHP)
+    - extension-reuse — Taking a Published Extension or Building Your Own (PHP)
     - php-value-checks — Testing a Value Rather Than Its Falsiness (PHP)
     - content-element-preview — The Backend Preview of a Content Element (Fluid)
     - core-database-platforms — The Core's Own Database Platforms (PHP)
@@ -801,6 +802,11 @@ Data:
             {
                 "id": "tca-formengine",
                 "title": "TCA, FormEngine, and Backend Forms",
+                "category": "PHP"
+            },
+            {
+                "id": "extension-reuse",
+                "title": "Taking a Published Extension or Building Your Own",
                 "category": "PHP"
             },
             {
@@ -1719,6 +1725,7 @@ Text:
     - fal-storages-drivers — Storages and the Drivers Behind Them (PHP)
     - tca-schema-api — TCA Schema API (PHP)
     - tca-formengine — TCA, FormEngine, and Backend Forms (PHP)
+    - extension-reuse — Taking a Published Extension or Building Your Own (PHP)
     - datahandler-testing — Testing DataHandler Behaviour (PHP)
     - php-value-checks — Testing a Value Rather Than Its Falsiness (PHP)
     - content-element-preview — The Backend Preview of a Content Element (Fluid)
@@ -2107,6 +2114,11 @@ Data:
             {
                 "id": "tca-formengine",
                 "title": "TCA, FormEngine, and Backend Forms",
+                "category": "PHP"
+            },
+            {
+                "id": "extension-reuse",
+                "title": "Taking a Published Extension or Building Your Own",
                 "category": "PHP"
             },
             {

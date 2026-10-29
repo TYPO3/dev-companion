@@ -144,6 +144,10 @@ the moment the file is written costs one line; a statement nobody rereads
 costs its whole entry. A test of that serves the August report as well, whose
 suggestion is to make the brief smaller rather than to repeat it.
 
+`feedback/2026-10-29-163000-the-installation-setup-entry-hands-the-session-a.md`
+carries the administrator account as a defect of its own, with the repairs
+this report only names.
+
 Two repairs stand on their own, whatever that test finds. Write a name the
 caller chooses into the `installation-setup` example, because
 `TYPO3_SETUP_ADMIN_USERNAME=admin` is the name every scanner tries first. Say

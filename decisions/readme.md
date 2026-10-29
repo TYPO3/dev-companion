@@ -116,6 +116,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-193`][D-ANS-193] — A feature task is asked for the extension that already does it · 2026-10-29
 - [`D-ANS-190`][D-ANS-190] — A PHP identifier reaches a manual changelog entry through its listing · 2026-10-28
 - [`D-ANS-191`][D-ANS-191] — What an answer owes the caller stands in the data · 2026-10-28
 - [`D-ANS-192`][D-ANS-192] — A changelog sweep is held against the paths the caller gives · 2026-10-28
@@ -299,6 +300,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-193]: answers/ans-193-a-feature-task-is-asked-for-the-extension-that-already-does-it.md
 [D-ANS-190]: answers/ans-190-a-php-identifier-reaches-a-manual-changelog-entry-through-its-listing.md
 [D-ANS-191]: answers/ans-191-what-an-answer-owes-the-caller-stands-in-the-data.md
 [D-ANS-192]: answers/ans-192-a-changelog-sweep-is-held-against-the-paths-the-caller-gives.md

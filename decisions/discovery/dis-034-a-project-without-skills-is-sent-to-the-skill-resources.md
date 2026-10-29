@@ -101,7 +101,36 @@ written.
   text. Both had already made the guide call.
 
 So the line reaches every session that calls the guide, and half of them act on
-it. Why the other half do not is still open, and a todo of its own carries it.
+it. **What the two runs did with the line** reads why the other half do not.
+
+### What the two runs did with the line
+
+The JSON output of the four runs stayed in `/tmp/oc-measure-261029`, and
+opencode keeps the reasoning of each step in its own database. So this read
+needed no new run.
+
+- opencode 2.1.4 runs the model in Code Mode. The model calls a tool inside
+  `execute` and gets the data half of the answer as JSON. No run got the text
+  half, so the place of `Recognized as:` there changes nothing in opencode.
+- Every run got `skillsOwed` whole, with the URI, about 1.5 KB into an answer of
+  about 30 KB. Only `task`, `paths`, `scopes`, `intents` and `skills` stand
+  above it. Run 3 read the skill and run 4 did not. Both sent
+  `typo3_project_describe` and `typo3_task_guide` in one `execute`, and the line
+  stood at the same place in both answers.
+- Run 3 reasoned that no skill was installed and that the server said to read
+  `typo3://skill/typo3-content-element-development/SKILL.md`. Then it read it.
+- Run 4 went from the guide straight to the design question, Extbase or a plain
+  CType. It took the hint ids in the brief as its list of calls. Its reasoning
+  names no skill.
+- Run 1 followed the worked example the brief names to `theme_camino` through
+  `webfetch`. Its second guide call returned `skills`, `guides`, `checklist`,
+  `checks`, `checksOwed`, `hints` and `owed`, and left `skillsOwed` out.
+
+So no run shows that something above the line wins over it, or that a word in it
+loses the reader. The two runs that did not read the skill planned from the
+brief's own hints and checklist. Nothing here changes the order or the wording
+on that evidence, so no new count stands. Two to two on one model also does not
+separate a cause from the spread of that model.
 
 ## Decided
 

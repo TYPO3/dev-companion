@@ -54,8 +54,9 @@ disagree about `ext_emconf.php` anyway. So reading is not what decides the
 outcome, and nothing in this server measures the step after it.
 
 One mechanism is worth testing before any other. The hints arrive early and in
-batches, and the work runs long: 707 tool calls for Opus and 374 for Fable. A
-statement read at call 20 is not in the working set at call 400. The server
+batches, and the work runs long: 707 tool calls over 506 minutes for Opus, and
+374 over 407 minutes for Fable. A statement read at call 20 is not in the
+working set at call 400. The server
 delivers once and never again.
 
 `feedback/2026-08-25-105324-task-guide-returned-a-large-brief-that-changed.md`
@@ -109,10 +110,15 @@ design in design/. I want to build this site in TYPO3." Two runs:
 `/home/lina/trials/jambo-fabian`, each from a pristine greenfield directory.
 The checkout stood at `a884f130` when both started.
 
-Measured from the two transcripts: Opus ran 07:52 to 15:52 for 707 tool calls,
-660 of them Bash, 39 to this server, at $13.29 and 86,674 output tokens. Fable
-ran 09:49 to 15:50 for 374 tool calls, 172 Bash, 100 Edit, 64 Write, 20 to
-this server, at $6.92 and 33,957 output tokens.
+Measured from the two transcripts. Opus ran 07:52 to 15:52 for 707 tool calls,
+660 of them Bash and 39 to this server, at $163.80 over two sessions and
+593,950 output tokens. Fable ran 09:49 to 15:50 for 374 tool calls, 172 Bash,
+100 Edit, 64 Write and 20 to this server, at $112.85 and 323,069 output
+tokens.
+
+The line counters are not comparable between the two. Opus wrote its files
+through shell heredocs, so its run reports no line added, while Fable's
+reports 2,702 added and 98 removed.
 
 ## Suggestion
 

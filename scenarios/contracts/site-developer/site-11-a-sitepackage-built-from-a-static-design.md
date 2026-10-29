@@ -9,12 +9,14 @@ which holds that the prompt below confirms the `sitepackage` intent, and
 `SkillTest::theSitepackageSkillConvertsADesignAndCountsTheDocument`, which hold
 what that intent and its skill say about a design. That a session converts the
 design rather than pastes it is **not guarded**. Three runs of this case, each
-graded blind, measure it (`D-EVI-013`), and they answer whether a conversion
-needs a skill of its own (`todo/open/T-261028-5e8b.md`).
+graded blind, measure it (`D-EVI-013`), and they answered whether a conversion
+needs a skill of its own (`D-SKL-035`).
 
 The design is an ordinary small site. A session of this repository wrote it on
 2026-10-29, the maintainer's choice over the design of the run that failed. It
 knows no TYPO3 idiom and carries no hint of what a conversion owes.
+
+**Run 2026-10-29:** three runs against `cde808bd`, each in a fresh copy of `E-SITE` 14.3 and graded blind, met all eleven criteria. All three loaded `typo3-sitepackage-development`. None created pages or content, and all three tested their layouts by SQL written straight into the database.
 
 > We have a fresh TYPO3 installation, and our agency delivered a static HTML
 > design in the design/ folder. Build it into TYPO3 as our sitepackage, so the

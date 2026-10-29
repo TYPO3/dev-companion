@@ -69,3 +69,12 @@ and no run of any kind, and the maintainer published on the review alone —
 `D-SKL-064`. So the maintainer has overruled what this entry decided once, in
 the open. The first thing that would show it right is a finding in either skill
 that a baseline run would have caught.
+
+## Since then
+
+The conversion of a static design got its answer on 2026-10-29 without a skill
+of its own. `SITE-11` ran three times against `cde808bd`, each in a fresh copy
+of `E-SITE` 14.3 and graded blind (`D-EVI-013`). All three loaded
+`typo3-sitepackage-development` and met all eleven criteria. The failures of
+2026-10-28 came from runs that loaded no skill, so the skill is the lever and a
+second one is not.

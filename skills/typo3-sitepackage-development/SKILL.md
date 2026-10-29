@@ -135,11 +135,15 @@ The package is not done when its files exist. Work these steps in order:
    what it held.
 5. Flush the caches, then render one page for each page layout. Where the
    installation has no page with a layout, set one page's layout in its page
-   properties. Without a backend at hand, set its `backend_layout` field to
-   `pagets__<identifier>` for the request, and put the old value back.
-   `typo3_project_describe` names the database driver, and for SQLite the file
-   to write in. Report both writes. A layout whose template addresses an area
-   other than `main` also proves that the set's page TSconfig loaded.
+   properties. Without a backend at hand, write its `backend_layout` field as
+   `pagets__<identifier>` through DataHandler, never by SQL. A write by SQL
+   skips the caches, the history and the reference index. `typo3_hint_lookup`
+   with `ids` set to `datahandler-seeding` and `datahandler-writing` gives the
+   script and its datamap. Read the old value first with `typo3_record_lookup`.
+   Put it back the same way after the request, and report both writes. A
+   layout whose template addresses an area other than `main` also proves that
+   the set's page TSconfig loaded. Place a content element in that area the
+   same way, and delete it the same way afterwards.
 6. Count the tags in each response of step 5. Each page holds one `<html>`,
    one `<head>` and one `<body>`. A second set passes every other check. Take
    it out of the templates, and keep the page object. Never meet the count with

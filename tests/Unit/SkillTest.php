@@ -1148,8 +1148,11 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('Send a placeholder unless the user agreed', $skill);
         self::assertStringContainsString('or a root `sys_template` row that clears', $skill);
         self::assertStringContainsString('Delete neither, and report what it held', $skill);
-        self::assertStringContainsString('for SQLite the file to write in', $skill);
-        self::assertStringContainsString('set its `backend_layout` field to `pagets__<identifier>` for the request', $skill);
+        self::assertStringContainsString('write its `backend_layout` field as `pagets__<identifier>` through DataHandler, never by SQL', $skill);
+        foreach (['datahandler-seeding', 'datahandler-writing'] as $id) {
+            self::assertNotNull(Hints::byId($id), $id . ' is not a hint');
+            self::assertStringContainsString('`' . $id . '`', $skill);
+        }
         self::assertStringContainsString('Where no shell runs Composer and the console, stop after the files.', $skill);
         self::assertStringContainsString('Read each generated file against the hints in *Lay it out*', $skill);
     }

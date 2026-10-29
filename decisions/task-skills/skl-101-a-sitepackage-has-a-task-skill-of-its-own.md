@@ -121,3 +121,12 @@ part in the tree of `sitepackage-layout`. So the skill and the checklist now say
 the same. The builder stays the start, and its parts move into that tree. The
 checklist item names no theme, because `sitepackage-layout` binds the theme to
 the majors that ship it as data.
+
+## Since then
+
+All three `SITE-11` runs of 2026-10-29 set a page layout by SQL, as step 5 then
+said. That skips the DataHandler, and on a shared database it reaches the
+project's data. So step 5 now writes the field through DataHandler and routes
+to `datahandler-seeding` for the script. DataHandler checks a select without a
+foreign table against no item list, on 13.4 and 14.3. So it stores
+`pagets__<identifier>` as written.

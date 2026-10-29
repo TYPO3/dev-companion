@@ -47,6 +47,35 @@ written.
   and `D-DIS-033` records a round that followed them. So why Codex stays away is
   open, and the outcome is not.
 
+### Measured in opencode on 2026-10-29
+
+`feedback/2026-10-28-163000-a-client-reached-the-server-with-no-task-skill.md`
+reports two opencode runs without skill files. One of them ended on a site that
+served an exception. The feedback could not say whether opencode hands the model
+this sentence. Five headless runs then used opencode 2.1.4 on
+`opencode/big-pickle`, in the same kind of bare extension. Four of them had the
+two tasks above. The fifth asked for the instructions and called no tool.
+
+| Client         | Setup                                 | Skill read | Server called |
+| -------------- | ------------------------------------- | ---------- | ------------- |
+| opencode 2.1.4 | no skill files, `ABSENT` as committed | 0 of 4     | yes           |
+
+- The model gets the sentence. opencode stores a system message that holds
+  `<mcp_instructions>` with `ABSENT` in it. The message arrives after the first
+  step, because the server connects while that step runs. The fifth run ended
+  after one step, so it never got the message.
+- The model can read the resource, through the `read_mcp_resource` tool that
+  opencode gives it.
+- All four called `typo3_project_describe` first. One called
+  `typo3_task_guide` and got a skill name, and three went to
+  `typo3_rule_lookup`. That answer's `skillsOwed` said "load it where this
+  project has it installed" and named no `typo3://skill` URI.
+
+So the gap in opencode is wording, step 4 of the judging ladder, and not
+delivery. The URI stands once at the start of the session, and the line that
+names the skill does not repeat it. The card that serves the feedback carries
+the repair.
+
 ## Decided
 
 - `ABSENT` names the resource and stands where the stale notice stands. The
@@ -63,7 +92,8 @@ written.
 ## Assumed
 
 - That a client which shows instructions and reads resources acts like Claude
-  Code here. Only Claude Code was measured.
+  Code here. opencode 2.1.4 does both and does not, as **Measured in opencode on
+  2026-10-29** shows.
 
 ## Wrong if
 

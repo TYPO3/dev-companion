@@ -165,6 +165,7 @@ final class ScenariosTest extends TestCase
             'the goal, where the needles were the mechanism' => ['EXT-08', 'event-listener'],
             'a setting a site set defines' => ['SITE-09', 'site-setting'],
             'a sitepackage built from nothing' => ['SITE-10', 'sitepackage'],
+            'a sitepackage built from an agency\'s static design' => ['SITE-11', 'sitepackage'],
             'the majors a package declares, in the words a maintainer states them' => ['EXT-01', 'compatibility'],
         ];
     }

@@ -1,0 +1,19 @@
+:root { --blue: #1f5f8b; --light: #eef4f8; --text: #222; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Georgia, serif; color: var(--text); line-height: 1.5; }
+a { color: var(--blue); }
+.site-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: var(--blue); }
+.site-header a { color: #fff; text-decoration: none; }
+.brand { font-size: 1.4rem; font-weight: bold; }
+.main-nav a { margin-left: 1.5rem; }
+.main-nav a.active, .main-nav a:focus-visible { text-decoration: underline; outline: 2px solid #fff; outline-offset: 4px; }
+.hero { padding: 4rem 2rem; background: var(--light); text-align: center; }
+.button { display: inline-block; padding: .75rem 1.5rem; background: var(--blue); color: #fff; text-decoration: none; border-radius: 4px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.5rem; padding: 2rem; }
+.tile { padding: 1.5rem; border: 1px solid #cdd; border-radius: 4px; }
+.notices, .content-page { padding: 2rem; }
+.content-page { display: grid; grid-template-columns: 14rem 1fr; gap: 2rem; }
+.person { display: inline-block; margin: 0 1rem 1rem 0; text-align: center; }
+.site-footer { padding: 1.5rem 2rem; background: #333; color: #eee; }
+.site-footer a { color: #fff; }
+@media (max-width: 40rem) { .content-page { grid-template-columns: 1fr; } .site-header { flex-direction: column; } }

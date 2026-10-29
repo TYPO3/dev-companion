@@ -47,7 +47,7 @@ the index.
 | ----------------------------------------------- | ----------------------- |
 | [core-contributor/](core-contributor/readme.md) | `CORE-01` … `CORE-07`   |
 | [extension-author/](extension-author/readme.md) | `EXT-01` … `EXT-08`     |
-| [site-developer/](site-developer/readme.md)     | `SITE-01` … `SITE-10`   |
+| [site-developer/](site-developer/readme.md)     | `SITE-01` … `SITE-11`   |
 | [cross-cutting/](cross-cutting/readme.md)       | `META-01` … `META-05`   |
 | [task-skills/](task-skills/readme.md)           | `SKILL-01` … `SKILL-15` |
 
@@ -56,16 +56,16 @@ the index.
 Rows are task shapes, columns are audiences. A cell names the targeted cases
 that hold it; an empty cell is a hole in the contract suite.
 
-| Task                                  | Core contributor      | Extension author | Site developer       |
-| ------------------------------------- | --------------------- | ---------------- | -------------------- |
-| Bug fix                               | `CORE-01`             | `EXT-03`         | `SITE-03`, `SITE-08` |
-| New feature / new code                | `CORE-02`             | `EXT-04`         | `SITE-05`            |
-| New project from scratch              | —                     | `EXT-02`         | `SITE-01`, `SITE-10` |
-| Upgrade to a new TYPO3 version        | `CORE-04`             | `EXT-01`         | `SITE-02`            |
-| Testing                               | `CORE-05`             | `EXT-05`         | `SITE-06`            |
-| Review, commit, submission            | `CORE-03`, `CORE-07`  | `EXT-03`         | —                    |
-| Labels, icons, i18n                   | `CORE-02`             | `EXT-06`         | `EXT-06`             |
-| Official API documentation            | —                     | `EXT-07`         | `SITE-07`            |
-| Frontend / theming                    | —                     | —                | `SITE-04`            |
-| Version and branch spread             | `CORE-06`             | `EXT-01`         | `SITE-02`            |
-| Orientation, setup and degraded state | `META-01` … `META-05` |                  |                      |
+| Task                                  | Core contributor      | Extension author | Site developer                  |
+| ------------------------------------- | --------------------- | ---------------- | ------------------------------- |
+| Bug fix                               | `CORE-01`             | `EXT-03`         | `SITE-03`, `SITE-08`            |
+| New feature / new code                | `CORE-02`             | `EXT-04`         | `SITE-05`                       |
+| New project from scratch              | —                     | `EXT-02`         | `SITE-01`, `SITE-10`, `SITE-11` |
+| Upgrade to a new TYPO3 version        | `CORE-04`             | `EXT-01`         | `SITE-02`                       |
+| Testing                               | `CORE-05`             | `EXT-05`         | `SITE-06`                       |
+| Review, commit, submission            | `CORE-03`, `CORE-07`  | `EXT-03`         | —                               |
+| Labels, icons, i18n                   | `CORE-02`             | `EXT-06`         | `EXT-06`                        |
+| Official API documentation            | —                     | `EXT-07`         | `SITE-07`                       |
+| Frontend / theming                    | —                     | —                | `SITE-04`, `SITE-11`            |
+| Version and branch spread             | `CORE-06`             | `EXT-01`         | `SITE-02`                       |
+| Orientation, setup and degraded state | `META-01` … `META-05` |                  |                                 |

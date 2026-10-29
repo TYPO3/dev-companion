@@ -978,6 +978,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### evidence
 
+- [`D-EVI-013`][D-EVI-013] — A forward review is measured three times and graded blind · 2026-10-29
 - [`D-EVI-012`][D-EVI-012] — A running environment says where it opens and the login · 2026-10-26
 - [`D-EVI-011`][D-EVI-011] — Which half a client hands the model is measured in the client · 2026-09-17
 - [`D-EVI-010`][D-EVI-010] — A made installation carries an extension of the project's own · 2026-09-02
@@ -991,6 +992,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-EVI-002`][D-EVI-002] — A skill crossing is read rather than run · 2026-07-31 · confirmed
 - [`D-EVI-003`][D-EVI-003] — A review runs the checks that cannot change the code · 2026-07-31 · confirmed
 
+[D-EVI-013]: evidence/evi-013-a-forward-review-is-measured-three-times-and-graded-blind.md
 [D-EVI-012]: evidence/evi-012-a-running-environment-says-where-it-opens-and-the-login.md
 [D-EVI-011]: evidence/evi-011-which-half-a-client-hands-the-model-is-measured-in-the-client.md
 [D-EVI-010]: evidence/evi-010-a-made-installation-carries-an-extension-of-the-projects-own.md

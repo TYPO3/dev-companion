@@ -57,6 +57,22 @@ Put colours and fonts into CSS custom properties. Make a value a setting of the
 set where an editor changes it per site. A framework with a build step is
 `typo3-extension-asset-build`'s, at the point the templates are written.
 
+## Convert a design
+
+**Where the user hands in a design, convert it rather than paste it.** Before
+the first template, ask `typo3_hint_lookup` with `ids` set to
+`sitepackage-from-a-design` and `content-model-vs-markup`. Put each part of a
+static page where that hint says:
+
+- The doctype and the html, head and body tags go to the page object. A partial
+  is a fragment of the body.
+- The stylesheets and scripts go to `includeCSS` and `includeJS`. Each other
+  asset goes through `f:uri.resource`.
+- The navigation is a menu processor, not a list of page uids.
+- Each kind of page in the design is a page layout of its own.
+- Each block that repeats is a content element with fields, not markup in the
+  page template. Name each one in the report as a content element still owed.
+
 ## Choose where a new package comes from
 
 There are two starts. Use the one the user named. Where the user named none, use
@@ -124,6 +140,11 @@ The package is not done when its files exist. Work these steps in order:
    `typo3_project_describe` names the database driver, and for SQLite the file
    to write in. Report both writes. A layout whose template addresses an area
    other than `main` also proves that the set's page TSconfig loaded.
+6. Count the tags in each response of step 5. Each page holds one `<html>`,
+   one `<head>` and one `<body>`. A second set passes every other check. Take
+   it out of the templates, and keep the page object. Never meet the count with
+   `config.disableAllHeaderCode`, because that drops every asset the page
+   object includes.
 
 A request to the page proves the render. Where the site's base names a host the
 environment does not serve, `typo3_project_describe` says so and names the Host

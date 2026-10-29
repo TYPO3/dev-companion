@@ -8101,6 +8101,34 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * A run that had a static design pasted the design into its partials and
+     * hardcoded its tiles in Fluid. The newcomer's words reached no intent, and
+     * the intent reached no hint about either defect.
+     *
+     * @return array<string, array{string}>
+     */
+    public static function newcomerTasks(): array
+    {
+        return [
+            'a static design' => ['I have a static design and want to build this site in TYPO3'],
+            'html templates' => ['How do I get my HTML templates into TYPO3?'],
+            'a theme' => ['I want my own theme for our TYPO3 website'],
+        ];
+    }
+
+    #[DataProvider('newcomerTasks')]
+    #[Test]
+    public function aNewcomersDesignReachesTheHintsOnConvertingIt(string $task): void
+    {
+        $brief = Registry::call('typo3_task_guide', ['task' => $task, 'changeType' => 'feature']);
+
+        self::assertSame('strong', array_column($brief->data['intents'], 'confidence', 'id')['sitepackage'] ?? null);
+        $checklist = implode("\n", $brief->data['checklist']);
+        self::assertStringContainsString('id=sitepackage-from-a-design', $checklist);
+        self::assertStringContainsString('id=content-model-vs-markup', $checklist);
+    }
+
+    /**
      * The first run of SITE-10 built a sitepackage without theme_camino and
      * read three things out of the core that no hint said (`D-KNW-172`).
      */

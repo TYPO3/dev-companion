@@ -79,6 +79,35 @@
     ]
   },
   {
+    "id": "sitepackage-from-a-design",
+    "title": "How a Static Design Becomes a Sitepackage",
+    "domains": [
+      "fluid",
+      "typoscript"
+    ],
+    "appliesTo": [
+      "static design",
+      "html design",
+      "html mockup",
+      "html templates",
+      "static html",
+      "design into typo3",
+      "templates into typo3",
+      "convert a design",
+      "own theme",
+      "DOCTYPE",
+      "two head",
+      "second body"
+    ],
+    "hints": [
+      "A static design is converted into a sitepackage, not pasted into it. The page object writes the doctype, the html, head and body tags, the title, and every stylesheet and script. The page template renders only what stands inside the body, and a partial is a fragment of that body.",
+      "So a header partial that opens a document puts a second document into the first. That page answers with a success status and reports no error, while the browser moves the content out of the structure the stylesheet targets. The rendered response holds one <html>, one <head> and one <body>, and a count over that response is the check.",
+      "The repair takes the skeleton out of the templates and keeps the page object. config.disableAllHeaderCode meets the same count from the other side: it keeps the document in the template and returns the body as the whole response. That drops includeCSS, the meta tags and every asset an extension registers, and frontend-render-pipeline-state says where that exit sits.",
+      "Each other part of the design has a place of its own. The stylesheets and scripts go to includeCSS and includeJS of the page object, and an image the template names goes through f:uri.resource. The navigation is the menu processor rather than a list of page uids, and page-variables-and-processors says what the template is handed. A second kind of page in the design is a second page layout.",
+      "A block that repeats in the design, such as a service tile or a notice, is a content element with fields. Markup in the page template behind a condition on a page uid is one an editor cannot change, and content-model-vs-markup says why."
+    ]
+  },
+  {
     "id": "sitepackage-templates",
     "title": "The Fluid Template Root and What Is Addressed From It",
     "domains": [

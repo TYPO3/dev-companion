@@ -1129,7 +1129,14 @@
       "set up a site package",
       "sitepackage from scratch",
       "site package from scratch",
-      "theme extension"
+      "theme extension",
+      "static design",
+      "html design",
+      "html mockup",
+      "templates into typo3",
+      "design into typo3",
+      "build this site in typo3",
+      "own theme"
     ],
     "matchWeak": [
       "sitepackage",
@@ -1147,6 +1154,7 @@
     "rulesQuery": "",
     "checklist": [
       "Settle where the sitepackage comes from before you write a file. Nothing in the core creates one, and typo3_hint_lookup with id=sitepackage-start says which tool writes which part on the major in front of you.",
+      "Convert a design the task hands in rather than paste it. typo3_hint_lookup with id=sitepackage-from-a-design says where each part of a static page goes, and id=content-model-vs-markup says why a block that repeats is a content element with fields.",
       "Lay the package out in the tree typo3_hint_lookup with id=sitepackage-layout gives, also where the builder wrote the first files. The hint says what each directory is for, and names the core's theme as a model to read where the installed major ships one.",
       "Put every template under one template root, with the page layouts and the content element layouts in subdirectories of their own. typo3_hint_lookup with id=sitepackage-templates says why a shared Layouts/ without them renders the page frame inside every element.",
       "Declare each page layout in a file of its own, under the name its page template carries. typo3_hint_lookup with id=sitepackage-backend-layouts says whether those files belong to the set or to the extension.",

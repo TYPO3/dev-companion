@@ -1174,6 +1174,25 @@ final class SkillTest extends TestCase
     }
 
     /**
+     * Both agents of 2026-10-28 that pasted a design repaired the second
+     * document once somebody named it, and one met the count by switching the
+     * page object's head off. So the check carries its direction.
+     */
+    #[Test]
+    public function theSitepackageSkillConvertsADesignAndCountsTheDocument(): void
+    {
+        $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md'));
+
+        self::assertStringContainsString('convert it rather than paste it', $skill);
+        foreach (['sitepackage-from-a-design', 'content-model-vs-markup'] as $id) {
+            self::assertNotNull(Hints::byId($id), $id . ' is not a hint');
+            self::assertStringContainsString('`' . $id . '`', $skill);
+        }
+        self::assertStringContainsString('Each page holds one `<html>`, one `<head>` and one `<body>`', $skill);
+        self::assertStringContainsString('Never meet the count with `config.disableAllHeaderCode`', $skill);
+    }
+
+    /**
      * The maintainer wants a sitepackage built to the site's design, and a run
      * that only takes defaults builds it to none (`D-SKL-101`).
      */

@@ -1,7 +1,8 @@
 ---
 date: 2026-10-28T16:30:00+00:00
 category: tool-gap
-status: open
+status: closed
+closed: 2026-10-29
 model: claude-opus-5
 tool: typo3-dev-companion install
 directory: /home/lina/projects/typo3/projects/jambo-open

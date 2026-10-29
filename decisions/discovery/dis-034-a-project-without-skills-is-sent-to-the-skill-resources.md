@@ -50,7 +50,7 @@ written.
 
 ### Measured in opencode on 2026-10-29
 
-`feedback/2026-10-28-163000-a-client-reached-the-server-with-no-task-skill.md`
+`feedback/archive/2026-10-28-163000-a-client-reached-the-server-with-no-task-skill.md`
 reports two opencode runs without skill files. One of them ended on a site that
 served an exception. The feedback could not say whether opencode hands the model
 this sentence. Five headless runs then used opencode 2.1.4 on
@@ -67,15 +67,41 @@ two tasks above. The fifth asked for the instructions and called no tool.
   after one step, so it never got the message.
 - The model can read the resource, through the `read_mcp_resource` tool that
   opencode gives it.
-- All four called `typo3_project_describe` first. One called
-  `typo3_task_guide` and got a skill name, and three went to
-  `typo3_rule_lookup`. That answer's `skillsOwed` said "load it where this
-  project has it installed" and named no `typo3://skill` URI.
+- All four called `typo3_project_describe` first. One called `typo3_task_guide`
+  and got a skill name, and three went to `typo3_rule_lookup`. That answer's
+  `skillsOwed` said "load it where this project has it installed" and named no
+  `typo3://skill` URI.
 
 So the gap in opencode is wording, step 4 of the judging ladder, and not
 delivery. The URI stands once at the start of the session, and the line that
 names the skill does not repeat it. Since 2026-10-29 `skillsOwed` in
 `typo3_task_guide` names the URI of each skill too.
+
+### Measured again on 2026-10-29, after the URI moved into `skillsOwed`
+
+Four headless runs used opencode 2.1.4 on `opencode/big-pickle`. Each ran in a
+bare extension with a `composer.json`, an `opencode.json` entry for this server
+and no skill files. The task was a testimonial content element, planned and not
+written.
+
+| Client         | Setup                                    | Guide called | Skill read |
+| -------------- | ---------------------------------------- | ------------ | ---------- |
+| opencode 2.1.4 | no skill files, URI only in `ABSENT`     | 1 of 4       | 0 of 4     |
+| opencode 2.1.4 | no skill files, URI also in `skillsOwed` | 4 of 4       | 2 of 4     |
+
+- Every run called `typo3_project_describe` first and `typo3_task_guide` next,
+  or after one `typo3_hint_lookup`. So the earlier three that went to
+  `typo3_rule_lookup` do not recur, and no gap of their own stands for them.
+- Two runs read `typo3://skill/typo3-content-element-development/SKILL.md`
+  through `read_mcp_resource`, directly after the guide or after one hint
+  lookup.
+- The other two got the same `skillsOwed`, with the URI in it, and read no
+  resource. One went on to `typo3_rule_lookup` and `typo3_documentation_lookup`.
+  One run hit the ten-minute limit, and one exited with code 1 and no error
+  text. Both had already made the guide call.
+
+So the line reaches every session that calls the guide, and half of them act on
+it. Why the other half do not is still open, and a todo of its own carries it.
 
 ## Decided
 

@@ -107,3 +107,12 @@ chain printed the unresolved path there, so the statement now uses f:variable
 and f:if. The template name carried `.fluid.html`, which Fluid on 13.4 does not
 read, so the extension is bound per major. And 13.4 renders an area as a list of
 records through `f:cObject`, which the hint now shows.
+
+## Since then
+
+An opencode run with no task skill wrote a complete package on 2026-10-28 and
+never required it. **Step 2 of the ladder, delivery:** only the skill's *Wire it
+in* said to. `sitepackage-start` and the `sitepackage` checklist now say it, and
+what a set no active package ships renders. Read in `.checkouts/13.4`, `14.3`
+and `main`: `AbstractServiceProvider` collects an active package's sets, and
+`SetRegistry::getSets()` drops an unknown name without an error.

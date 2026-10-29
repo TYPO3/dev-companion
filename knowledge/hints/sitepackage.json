@@ -42,6 +42,11 @@
         "since": 13,
         "until": 13
       },
+      "A package below packages/ renders nothing until the project's root composer.json requires it. The path repository on packages/* that a new project declares makes the package available to Composer and installs nothing. So the step after the files is composer require <vendor>/<name>, under the name the package's own composer.json declares.",
+      {
+        "text": "A set exists only where its package is installed, because each active package contributes the sets below its own Configuration/Sets/. A site configuration whose dependencies name a set no active package ships loses that name without an error. The site then has no TypoScript, and the page answers No page configured for type=0.",
+        "since": 13
+      },
       "A generated sitepackage is a starting point rather than a layout to keep, and the builder's own documentation says it writes a large number of unnecessary, mostly empty files. What each directory in it is for is the sitepackage-layout hint."
     ]
   },

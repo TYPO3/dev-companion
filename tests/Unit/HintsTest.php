@@ -8314,6 +8314,9 @@ final class HintsTest extends TestCase
         // A fresh site states no title at all, read in .checkouts/13.4 and 14.3.
         self::assertStringContainsString('states websiteTitle neither for the site nor for a language', self::statementsOf('page-variables-and-processors'));
         self::assertStringContainsString('Resources/Private/PageView/Pages', self::statementsOf('sitepackage-start'));
+        // A run without the skill wrote a complete package and never required it.
+        self::assertStringContainsString('composer require <vendor>/<name>', self::statementsOf('sitepackage-start'));
+        self::assertStringContainsString('No page configured for type=0', self::statementsOf('sitepackage-start'));
     }
 
     /**

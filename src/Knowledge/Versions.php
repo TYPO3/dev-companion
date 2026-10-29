@@ -34,6 +34,9 @@ final class Versions
      */
     private const COMPARATOR = '/^(\^|~|>=|<=|>|<|=|v)?\s*v?(\d+)(?:\.(\d+|\*|x))?/i';
 
+    /** The status of a line with long-term support, as `knowledge/versions.json` writes it. */
+    public const LTS = 'lts';
+
     /** What `knowledge/versions.json` calls the line that has no release. */
     public const DEVELOPMENT = 'development';
 
@@ -60,6 +63,34 @@ final class Versions
         usort($covered, static fn(array $a, array $b): int => $a['major'] <=> $b['major']);
 
         return $covered;
+    }
+
+    /**
+     * The newest covered line that has a release. `main` is covered too and is
+     * the development line, which no installation in use runs. Null where the
+     * file covers no released line.
+     *
+     * @return array{major: int, branch: string, status: string}|null
+     */
+    public static function newestReleased(): ?array
+    {
+        $released = array_filter(self::covered(), static fn(array $version): bool => $version['status'] !== self::DEVELOPMENT);
+
+        return $released === [] ? null : end($released);
+    }
+
+    /**
+     * The newest covered line with long-term support, which is the line TYPO3
+     * recommends a new project start on — `D-FBK-057`. Null where no covered
+     * line has that status.
+     *
+     * @return array{major: int, branch: string, status: string}|null
+     */
+    public static function newestLts(): ?array
+    {
+        $lts = array_filter(self::covered(), static fn(array $version): bool => $version['status'] === self::LTS);
+
+        return $lts === [] ? null : end($lts);
     }
 
     /** @return array<int, int> */

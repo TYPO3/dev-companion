@@ -86,12 +86,7 @@ final class EnvironmentsTest extends TestCase
     #[Test]
     public function theInstallationIsBuiltAtTheNewestReleasedVersion(): void
     {
-        $newest = null;
-        foreach (Versions::covered() as $version) {
-            if ($version['status'] !== Versions::DEVELOPMENT) {
-                $newest = $version['branch'];
-            }
-        }
+        $newest = Versions::newestReleased()['branch'] ?? null;
 
         self::assertNotNull($newest, 'knowledge/versions.json covers no released version');
         self::assertSame($newest, Environments::branch());

@@ -8,6 +8,7 @@ use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Installation\Project;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Knowledge\Documents;
+use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Result\Schema;
 use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Result\Unsupported;
@@ -209,8 +210,13 @@ final class ProjectDescribe extends ReadOnlyTool
                 'file' => Schema::string('The patch file, relative to the project root.'),
             ], ['package', 'description', 'file']), 'Patches from extra.patches. A patched package does not behave as its version says.'),
             'guides' => Schema::listOf(Schema::guideReference(), 'The whole procedures this server carries, named here because this is the call every task starts with. This server also serves them as typo3://guides resources, and a client that lists no resources renders none of them. Four sessions in one week finished without any knowledge that they exist. Each is one typo3_rule_lookup call by documentId, which needs no resource list. A search over sections answers a question and never hands one of these over whole.'),
+            'newProjectLine' => Schema::nullable(Schema::object([
+                'major' => Schema::integer(),
+                'branch' => Schema::string('The branch of that line, as typo3_server_scope lists it.'),
+            ], ['major', 'branch'], 'The newest covered LTS line, which TYPO3 recommends a new project start on. Present where no TYPO3 core is installed here, on the answer that found no repository too. It is the fact and not the choice. Null where a core is installed, because typo3Version then says which line this project is on.')),
+            'newProjectLineOwed' => Schema::string('The lookup that says what decides for an older line than newProjectLine, and why a new project is a Composer installation. Empty where newProjectLine is null.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
-        ], ['root', 'installed', 'installedAgainstLock', 'installedAgainstLockOwed', 'phpRelation', 'node', 'environment', 'extensions', 'sites', 'database', 'commands', 'uncheckedKinds', 'patches', 'guides', 'answeredBy'], []);
+        ], ['root', 'installed', 'installedAgainstLock', 'installedAgainstLockOwed', 'phpRelation', 'node', 'environment', 'extensions', 'sites', 'database', 'commands', 'uncheckedKinds', 'patches', 'guides', 'answeredBy'], ['newProjectLine', 'newProjectLineOwed']);
     }
 
     public static function answer(array $args): ToolResult
@@ -220,10 +226,14 @@ final class ProjectDescribe extends ReadOnlyTool
             // The miss is where a client lands that never shows its model the
             // initialize instructions, as Codex did on 2026-10-27, so it says
             // the way in itself, `D-DIS-033`.
-            return Unsupported::because(
+            $line = self::newProjectLine(null);
+            $miss = Unsupported::because(
                 'no repository declaring TYPO3 was found to describe. Pass targetVersion on every call, or set '
                 . Instance::ROOT_VARIABLE . ' to the project root in this server\'s entry',
+                ['newProjectLine' => $line, 'newProjectLineOwed' => self::newProjectOwed($line)],
             );
+
+            return ToolResult::create($miss->text . self::newProjectSentence($line), $miss->data);
         }
 
         $lines = [sprintf(
@@ -240,9 +250,10 @@ final class ProjectDescribe extends ReadOnlyTool
             self::floor($project['corePhpConstraint']),
         )];
 
+        $newProjectLine = self::newProjectLine($project['typo3Version']);
         if (!$project['installed']) {
             $lines[] = '';
-            $lines[] = self::NOTHING_INSTALLED;
+            $lines[] = self::NOTHING_INSTALLED . self::newProjectSentence($newProjectLine);
         } else {
             foreach (self::lock($project['installedAgainstLock'], $project['kind'], $project['environment']) as $line) {
                 $lines[] = $line;
@@ -375,6 +386,8 @@ final class ProjectDescribe extends ReadOnlyTool
                 'installedAgainstLockOwed' => in_array($lockState, [Instance::LOCK_DIFFERS, Instance::LOCK_NOT_INSTALLED], true)
                     ? sprintf('Run "%s" before any suite here.', self::install($project['kind'], $project['environment']))
                     : '',
+                'newProjectLine' => $newProjectLine,
+                'newProjectLineOwed' => self::newProjectOwed($newProjectLine),
                 'guides' => $guides['records'],
                 'answeredBy' => 'packages',
             ],
@@ -414,6 +427,47 @@ final class ProjectDescribe extends ReadOnlyTool
         }
 
         return ['lines' => $lines, 'records' => $records];
+    }
+
+    /**
+     * The line TYPO3 recommends a new project start on, where no core says
+     * which line this one is on.
+     *
+     * The first call of every task is the one that has to name it. Four
+     * greenfield runs of four chose no line on their own (`D-FBK-057`).
+     *
+     * @return array{major: int, branch: string}|null
+     */
+    private static function newProjectLine(?string $typo3Version): ?array
+    {
+        $lts = $typo3Version === null ? Versions::newestLts() : null;
+
+        return $lts === null ? null : ['major' => $lts['major'], 'branch' => $lts['branch']];
+    }
+
+    /** @param array{major: int, branch: string}|null $line */
+    private static function newProjectSentence(?array $line): string
+    {
+        if ($line === null) {
+            return '';
+        }
+
+        return sprintf(
+            "\nNo TYPO3 core is installed here. TYPO3 recommends its newest LTS line for a new project, and that is "
+                . 'TYPO3 v%d (%s). %s',
+            $line['major'],
+            $line['branch'],
+            self::newProjectOwed($line),
+        );
+    }
+
+    /** @param array{major: int, branch: string}|null $line */
+    private static function newProjectOwed(?array $line): string
+    {
+        return $line === null
+            ? ''
+            : 'typo3_hint_lookup with id=new-project-line says what decides for an older line and why the '
+                . 'installation is a Composer one.';
     }
 
     private const UPGRADE_CHECK = 'It is not an upgrade check: nothing else these extensions ship was read for a '

@@ -227,15 +227,12 @@ final class Environments
      */
     public static function branch(): string
     {
-        $released = array_filter(
-            Versions::covered(),
-            static fn(array $version): bool => $version['status'] !== Versions::DEVELOPMENT,
-        );
-        if ($released === []) {
+        $released = Versions::newestReleased();
+        if ($released === null) {
             throw new \RuntimeException('knowledge/versions.json covers no released version to build an installation of');
         }
 
-        return end($released)['branch'];
+        return $released['branch'];
     }
 
     /**

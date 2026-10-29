@@ -453,6 +453,18 @@ Answers with
         scope: string
         # The tool that takes the id above and returns the page whole.
         tool: string
+    # The newest covered LTS line, which TYPO3 recommends a new project start on.
+    # Present where no TYPO3 core is installed here, on the answer that found no
+    # repository too. It is the fact and not the choice. Null where a core is
+    # installed, because typo3Version then says which line this project is on.
+    newProjectLine:
+      major: integer
+      # The branch of that line, as typo3_server_scope lists it.
+      branch: string
+    # The lookup that says what decides for an older line than newProjectLine, and
+    # why a new project is a Composer installation. Empty where newProjectLine is
+    # null.
+    newProjectLineOwed: string
     # One of: packages. packages: the server read the files the installed packages
     # ship, because it could not ask the console. The answer misses the overrides
     # that apply at runtime.
@@ -505,12 +517,12 @@ The answer carries exactly one of these sets of fields:
   ``installedAgainstLockOwed``, ``phpRelation``, ``node``, ``environment``,
   ``extensions``, ``sites``, ``database``, ``commands``, ``uncheckedKinds``,
   ``patches``, ``guides``, ``answeredBy``
-- ``unsupported``
+- ``newProjectLine``, ``newProjectLineOwed``, ``unsupported``
 
 Answered
 --------
 
-Recorded on 2026-10-28 by ``bin/cli tools:record``. Of two working directories,
+Recorded on 2026-10-29 by ``bin/cli tools:record``. Of two working directories,
 because what this server answers depends on the one a client stands in. Neither
 fills the whole surface. Answered against core-checkout, TYPO3 14.3.8-dev, the
 14.3 core checkout below .checkouts/. Its console is out of reach:
@@ -796,6 +808,8 @@ Data:
         "uncheckedKinds": [],
         "patches": [],
         "installedAgainstLockOwed": "Run \"CI=true ./Build/Scripts/runTests.sh -s composerInstall\" before any suite here.",
+        "newProjectLine": null,
+        "newProjectLineOwed": "",
         "guides": [
             {
                 "id": "any/assets/how-an-asset-reaches-a-page",
@@ -1141,6 +1155,8 @@ Data:
         ],
         "patches": [],
         "installedAgainstLockOwed": "",
+        "newProjectLine": null,
+        "newProjectLineOwed": "",
         "guides": [
             {
                 "id": "any/assets/how-an-asset-reaches-a-page",

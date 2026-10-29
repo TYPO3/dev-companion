@@ -196,18 +196,11 @@ final class ToolRecord
 
     /**
      * The newest covered branch with a release, which is the version a client
-     * is most likely to be on. `main` is in the covered set too and is a
-     * development line. A record against it would make the sample say
-     * `15.0.0-dev`, which is true of nobody's installation.
+     * is most likely to be on. A record against `main` would make the sample
+     * say `15.0.0-dev`, which is true of nobody's installation.
      */
     private static function newestCheckout(): string
     {
-        $released = array_values(array_filter(
-            Versions::covered(),
-            static fn(array $version): bool => $version['status'] !== 'development',
-        ));
-        $newest = $released === [] ? Versions::covered() : $released;
-
-        return Checkouts::directory() . '/' . ($newest[count($newest) - 1]['branch'] ?? '');
+        return Checkouts::directory() . '/' . (Versions::newestReleased()['branch'] ?? 'main');
     }
 }

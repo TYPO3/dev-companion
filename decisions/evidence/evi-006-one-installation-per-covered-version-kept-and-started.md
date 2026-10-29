@@ -91,8 +91,8 @@ client on another covered line would get.
   lines come on the day a case asks for one. Nothing holds that. It is what the
   case files say today. 260 MB per line is cheap enough that a session can be
   wrong about it for the price of a `create`.
-- That the newest released line stays the version a case with no version runs on.
-  `branch()` reads that off `knowledge/versions.json`, so a new stable major
+- That the newest released line stays the version a case with no version runs
+  on. `branch()` reads that off `knowledge/versions.json`, so a new stable major
   moves it and the old installation stays behind under its own name.
 
 ## Wrong if
@@ -125,5 +125,5 @@ the database is the third argument of `environment:create`.
 The build sets `SYS/exceptionalErrors` to 12290 after the setup, and a resume
 sets it again. At the setup's 4096 a deprecation in the probe passed in silence,
 as issue #12 did. `ConfigurationManager` sets it, because 12.4 and 13.4 lack
-`configuration:set`. On copies of all four environments on 2026-10-28 it
-changed that one line.
+`configuration:set`. On copies of all four environments on 2026-10-28 it changed
+that one line.

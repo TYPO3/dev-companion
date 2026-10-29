@@ -13,6 +13,7 @@ use TYPO3\DevCompanion\Installation\Project;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
 use TYPO3\DevCompanion\Installation\Typo3Runtime;
 use TYPO3\DevCompanion\Knowledge\Documents;
+use TYPO3\DevCompanion\Knowledge\Versions;
 use TYPO3\DevCompanion\Process\CommandRunner;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\MachineWithoutDdev;
@@ -1434,7 +1435,7 @@ final class ProjectTest extends TestCase
         self::assertNull(Project::describe());
 
         $result = Registry::call('typo3_project_describe', []);
-        self::assertSame(['unsupported', 'owed'], array_keys($result->data));
+        self::assertSame(['newProjectLine', 'newProjectLineOwed', 'unsupported', 'owed'], array_keys($result->data));
     }
 
     #[Decision('D-ANS-085')]
@@ -1491,6 +1492,38 @@ final class ProjectTest extends TestCase
         self::assertStringContainsString('Extensions: not readable until the install has run', $result->text);
     }
 
+    #[Decision('D-FBK-057')]
+    #[Test]
+    public function whereNoCoreIsInstalledTheAnswerNamesTheNewestLtsLine(): void
+    {
+        $lts = Versions::newestLts();
+        self::assertNotNull($lts, 'knowledge/versions.json covers no LTS line');
+        $expected = ['major' => $lts['major'], 'branch' => $lts['branch']];
+
+        Instance::discoverFrom(null);
+        $miss = Registry::call('typo3_project_describe', []);
+        self::assertSame($expected, $miss->data['newProjectLine']);
+        self::assertStringContainsString($miss->data['newProjectLineOwed'], $miss->text);
+        self::assertStringContainsString('id=new-project-line', $miss->data['newProjectLineOwed']);
+
+        $root = $this->temporaryDirectory();
+        file_put_contents($root . '/composer.json', json_encode([
+            'name' => 'acme/site',
+            'type' => 'project',
+            'require' => ['typo3/cms-core' => '*'],
+        ], JSON_THROW_ON_ERROR));
+        Instance::discoverFrom($root);
+        $pending = Registry::call('typo3_project_describe', []);
+        self::assertSame($expected, $pending->data['newProjectLine']);
+        self::assertStringContainsString(sprintf('TYPO3 v%d (%s)', $lts['major'], $lts['branch']), $pending->text);
+
+        Instance::discoverFrom($this->composerProject('vendor', '13.4.33'));
+        $installed = Registry::call('typo3_project_describe', []);
+        self::assertNull($installed->data['newProjectLine'], 'an installed core says its own line');
+        self::assertSame('', $installed->data['newProjectLineOwed']);
+        self::assertStringNotContainsString('id=new-project-line', $installed->text);
+    }
+
     #[Requirement('R-PRJ-011')]
     #[Decision('D-DIS-019')]
     #[Test]
@@ -1509,7 +1542,10 @@ final class ProjectTest extends TestCase
         Instance::discoverFrom($root);
 
         self::assertNull(Project::describe());
-        self::assertSame(['unsupported', 'owed'], array_keys(Registry::call('typo3_project_describe', [])->data));
+        self::assertSame(
+            ['newProjectLine', 'newProjectLineOwed', 'unsupported', 'owed'],
+            array_keys(Registry::call('typo3_project_describe', [])->data),
+        );
     }
 
     #[Test]

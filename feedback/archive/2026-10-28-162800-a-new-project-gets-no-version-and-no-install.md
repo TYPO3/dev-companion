@@ -1,7 +1,8 @@
 ---
 date: 2026-10-28T16:28:00+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-10-29
 model: claude-opus-5
 tool: typo3_project_describe, typo3_server_scope
 directory: /home/lina/projects/typo3/projects/jambo-chep

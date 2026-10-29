@@ -73,6 +73,17 @@ What the two packages show beside the table:
   search. The packages absent from the second include `beuser`, `setup`,
   `lowlevel`, `tstemplate`, `recycler`, `scheduler`, `info`, `viewpage`,
   `belog`, `impexp` and `redirects`.
+- **The manifest.** The Opus package carries `ext_emconf.php` on 14.3.
+  `extension-manifest` says TYPO3 then reads the deprecated file and raises
+  `E_USER_DEPRECATED` during cache warm-up. The Fable package carries none.
+  Neither `composer.json` declares a version or `providesPackages`, which that
+  hint asks of a v14 manifest. Neither session read it.
+- **The labels.** The Opus package writes 51 label references in the long
+  `LLL:EXT:<key>/Resources/Private/Language/` form, and also ships
+  `Configuration/Sets/JamboSite/labels.xlf`, which is the v14 form. That one
+  package writes in two eras. The Fable package writes 29 in the long form and
+  ships no set labels. `translation-domain` says a label is
+  `package.resource:key`, and `claude-fable-5-1` fetched that hint by id.
 - **The TCA.** The Opus package writes four columns into
   `$GLOBALS['TCA']['tt_content']['columns']` and calls neither
   `addToAllTCAtypes()` nor `addFieldsToPalette()`. The field

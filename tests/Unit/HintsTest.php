@@ -4480,6 +4480,21 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('submitted value still wins', $text);
     }
 
+    #[Decision('D-KNW-182')]
+    #[Test]
+    public function aValueAboutTheVisitIsToldThatTheFirstPageOfAFormIsCached(): void
+    {
+        $result = Hints::find([], 'form prefill AfterCurrentPageIsResolvedEvent timestamp page cache honeypot', 6);
+        self::assertSame('form-framework', $result['matchedHints'][0]['id']);
+
+        $hint = Hints::byId('form-framework');
+        self::assertNotNull($hint);
+        $text = implode("\n", array_column($hint['hints'], 'text'));
+        self::assertStringContainsString('once per page-cache entry', $text);
+        self::assertStringContainsString('render among the non-cacheable actions', $text);
+        self::assertStringContainsString('honeypot validator', $text);
+    }
+
     #[Requirement('R-KNW-028')]
     #[Test]
     public function survivingHooksAreNamedByTheirSubsystemAndIntent(): void

@@ -4,6 +4,7 @@ Where a statement sits, what verifies it when the core cannot, and what a packag
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-KNW-182`][D-KNW-182] — A value about the visit is told that the first page of a form is cached · 2026-10-29
 - [`D-KNW-173`][D-KNW-173] — An inline condition escapes its variables once · 2026-10-28
 - [`D-KNW-174`][D-KNW-174] — The set that brings the sitemap is a subject of its own · 2026-10-28
 - [`D-KNW-175`][D-KNW-175] — A statement names the condition a reader can check · 2026-10-28
@@ -176,6 +177,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-028`][D-KNW-028] — How a file becomes a processed one is a subject this server owns · 2026-08-02
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
+[D-KNW-182]: knw-182-a-value-about-the-visit-is-told-that-the-first-page-of-a-form-is-cached.md
 [D-KNW-173]: knw-173-an-inline-condition-escapes-its-variables-once.md
 [D-KNW-174]: knw-174-the-set-that-brings-the-sitemap-is-a-subject-of-its-own.md
 [D-KNW-175]: knw-175-a-statement-names-the-condition-a-reader-can-check.md

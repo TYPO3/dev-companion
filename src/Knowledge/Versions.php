@@ -34,6 +34,9 @@ final class Versions
      */
     private const COMPARATOR = '/^(\^|~|>=|<=|>|<|=|v)?\s*v?(\d+)(?:\.(\d+|\*|x))?/i';
 
+    /** What `knowledge/versions.json` calls the line that has no release. */
+    public const DEVELOPMENT = 'development';
+
     /**
      * Never empty. A server that covers no version has no answer to give, and
      * every read that asks for the newest or the oldest would get `false`. The

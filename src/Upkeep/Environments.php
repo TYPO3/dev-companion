@@ -36,9 +36,6 @@ final class Environments
     /** Not a directory at all: a state the environment above it goes into. */
     public const STATE = 'state';
 
-    /** What `knowledge/versions.json` calls the line that has no release. */
-    private const DEVELOPMENT = 'development';
-
     /** What DDEV writes into a file it owns and regenerates. */
     private const DDEV_MARKER = '#ddev-generated';
 
@@ -221,22 +218,24 @@ final class Environments
 
     /**
      * The line a made installation stands on where nobody says which: the
-     * covered version that is stable.
+     * newest covered line that has a release.
      *
      * Read off `knowledge/versions.json` rather than written down, because a
      * run that names no version validates against the version this server
-     * answers for. A repository that starts to cover a new stable and keeps to
+     * answers for. A repository that starts to cover a new release and keeps to
      * installations of the old one measures itself in the wrong place.
      */
     public static function branch(): string
     {
-        foreach (Versions::covered() as $version) {
-            if ($version['status'] === 'stable') {
-                return $version['branch'];
-            }
+        $released = array_filter(
+            Versions::covered(),
+            static fn(array $version): bool => $version['status'] !== Versions::DEVELOPMENT,
+        );
+        if ($released === []) {
+            throw new \RuntimeException('knowledge/versions.json covers no released version to build an installation of');
         }
 
-        throw new \RuntimeException('knowledge/versions.json covers no stable version to build an installation of');
+        return end($released)['branch'];
     }
 
     /**
@@ -265,7 +264,7 @@ final class Environments
     {
         foreach (Versions::covered() as $version) {
             if ($version['branch'] === $branch) {
-                return $version['status'] === self::DEVELOPMENT;
+                return $version['status'] === Versions::DEVELOPMENT;
             }
         }
 

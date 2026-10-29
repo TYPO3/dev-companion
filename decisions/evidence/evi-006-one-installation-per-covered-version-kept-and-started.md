@@ -13,7 +13,7 @@ coveredBy:
   - EnvironmentsTest::everyCoveredLineIsOneAnInstallationIsMadeOf
   - EnvironmentsTest::everyLineTurnsADeprecationIntoAnExceptionAfterTheSetup
   - EnvironmentsTest::theDevelopmentLineIsBuiltFromDevMainOnThePhpItsCoreDeclares
-  - EnvironmentsTest::theInstallationIsBuiltAtTheCoveredStableVersion
+  - EnvironmentsTest::theInstallationIsBuiltAtTheNewestReleasedVersion
 ---
 
 # D-EVI-006 — One installation per covered version, kept and started
@@ -63,7 +63,7 @@ client on another covered line would get.
   its own. `create` already takes the environment id, and the build is the same
   six commands with one constraint changed. A second command would carry the
   whole of it a second time.
-- With no version named it is the covered stable one, which is what a case that
+- With no version named it is the newest released one, which is what a case that
   says nothing about a version runs on. That keeps
   `bin/cli environment:create E-SITE` at what it meant.
 - One DDEV project name and one directory per version, both with the branch in
@@ -91,7 +91,7 @@ client on another covered line would get.
   lines come on the day a case asks for one. Nothing holds that. It is what the
   case files say today. 260 MB per line is cheap enough that a session can be
   wrong about it for the price of a `create`.
-- That the covered stable line stays the version a case with no version runs on.
+- That the newest released line stays the version a case with no version runs on.
   `branch()` reads that off `knowledge/versions.json`, so a new stable major
   moves it and the old installation stays behind under its own name.
 

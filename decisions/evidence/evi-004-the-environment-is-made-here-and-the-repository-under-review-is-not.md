@@ -7,7 +7,7 @@ coveredBy:
   - EnvironmentsTest::everyEnvironmentAScenarioNamesSaysWhereItComesFrom
   - EnvironmentsTest::everyStepOfTheBuildRunsInTheProject
   - EnvironmentsTest::theBuildRequiresTheExtensionsThisServerAsksFor
-  - EnvironmentsTest::theInstallationIsBuiltAtTheCoveredStableVersion
+  - EnvironmentsTest::theInstallationIsBuiltAtTheNewestReleasedVersion
   - EnvironmentsTest::theSetupStepPassesEveryOptionItCannotBeAskedFor
   - EnvironmentsTest::theSiteIsCreatedForTheAddressDdevGivesTheProject
   - EnvironmentsTest::whatIsMadeHereIsNeverCommitted
@@ -21,7 +21,7 @@ about.**
 
 The line is what a case needs from the directory. Where that is a property this
 repository can state, `bin/cli environment:create` builds it. That is a Composer
-installation under DDEV, at the covered stable version, whose console answers.
+installation under DDEV, at the newest released version, whose console answers.
 Where it is a property of somebody else's repository at a real revision, it
 stays named in `todo/reference/`.
 

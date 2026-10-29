@@ -123,7 +123,7 @@ final class ServerScope extends ReadOnlyTool
             'versions' => Schema::listOf(Schema::object([
                 'major' => Schema::integer(),
                 'branch' => Schema::string('The branch this server verifies that line against.'),
-                'status' => Schema::string('lts, stable, or development.'),
+                'status' => Schema::string('elts, lts, stable, or development. lts and elts are long-term support, elts the paid extension past its end. stable is a released line before its LTS release.'),
             ], ['major', 'branch', 'status']), 'The TYPO3 versions the knowledge binds to. The answer leaves out a statement outside a range when it knows a target version.'),
             'answersFrom' => Schema::listOf(Schema::object([
                 'source' => Schema::string('installation, packages, knowledge, network or checkout.'),

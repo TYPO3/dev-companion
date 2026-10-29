@@ -77,24 +77,26 @@ final class EnvironmentsTest extends TestCase
 
     /**
      * The build is at the version this server answers for. A repository that
-     * starts to cover a new stable major and keeps its environments on the old
+     * starts to cover a new release and keeps its environments on the old
      * one measures itself against the wrong TYPO3. Nothing about the
      * environment would say so — `D-EVI-006`, `D-EVI-004`.
      */
     #[Decision('D-EVI-004')]
     #[Decision('D-EVI-006')]
     #[Test]
-    public function theInstallationIsBuiltAtTheCoveredStableVersion(): void
+    public function theInstallationIsBuiltAtTheNewestReleasedVersion(): void
     {
-        $stable = array_values(array_filter(
-            Versions::covered(),
-            static fn(array $version): bool => $version['status'] === 'stable',
-        ));
+        $newest = null;
+        foreach (Versions::covered() as $version) {
+            if ($version['status'] !== Versions::DEVELOPMENT) {
+                $newest = $version['branch'];
+            }
+        }
 
-        self::assertCount(1, $stable, 'knowledge/versions.json covers no single stable version');
-        self::assertSame($stable[0]['branch'], Environments::branch());
+        self::assertNotNull($newest, 'knowledge/versions.json covers no released version');
+        self::assertSame($newest, Environments::branch());
         self::assertStringContainsString(
-            Environments::DISTRIBUTION . ':^' . $stable[0]['branch'],
+            Environments::DISTRIBUTION . ':^' . $newest,
             implode(' ', array_merge(...array_values(Environments::build(Environments::branch())))),
         );
     }
@@ -116,7 +118,7 @@ final class EnvironmentsTest extends TestCase
     {
         $made = Environments::branches();
 
-        self::assertContains(Environments::branch(), $made, 'the covered stable line is not made');
+        self::assertContains(Environments::branch(), $made, 'the newest released line is not made');
         foreach (Versions::covered() as $version) {
             self::assertContains(
                 $version['branch'],

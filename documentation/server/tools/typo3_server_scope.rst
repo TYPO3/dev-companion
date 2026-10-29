@@ -66,7 +66,9 @@ Answers with
       - major: integer
         # The branch this server verifies that line against.
         branch: string
-        # lts, stable, or development.
+        # elts, lts, stable, or development. lts and elts are long-term support,
+        # elts the paid extension past its end. stable is a released line before its
+        # LTS release.
         status: string
     # Which tools are worth a call in the state this machine is in. Where nothing
     # runs, the tools answer from knowledge and packages alone. Every tool states

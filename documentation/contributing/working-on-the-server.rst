@@ -114,7 +114,7 @@ on a cold Composer cache, seconds on a warm one, and a second run finishes one
 that stopped halfway.
 
 There is one installation per covered version, each its own directory and its
-own DDEV project. The version named none is the covered stable one. Asked for
+own DDEV project. The version named none is the newest released one. Asked for
 one that already exists the command starts its containers and puts that
 extension in rather than builds anything. So an environment comes once and
 stays, see ``D-EVI-006``, which also has what one costs on disk.

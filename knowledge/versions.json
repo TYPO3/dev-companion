@@ -3,7 +3,7 @@
     {
       "major": 12,
       "branch": "12.4",
-      "status": "lts"
+      "status": "elts"
     },
     {
       "major": 13,
@@ -13,7 +13,7 @@
     {
       "major": 14,
       "branch": "14.3",
-      "status": "stable"
+      "status": "lts"
     },
     {
       "major": 15,
@@ -21,6 +21,6 @@
       "status": "development"
     }
   ],
-  "verifiedAt": "2026-07-29",
+  "verifiedAt": "2026-10-29",
   "verifyCommand": "git -C <typo3-core-checkout> branch -r"
 }

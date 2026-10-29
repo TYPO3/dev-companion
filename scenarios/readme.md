@@ -71,7 +71,7 @@ bin/cli environment:create E-SITE 13.4 # the same, on another covered version
 database, a docker daemon a CI job may not have. This repository makes it
 because everything a case needs from it is a property this repository can state.
 One installation runs one version, so there is one per covered version. Named
-none, the covered stable one, which is what a case that says nothing about a
+none, the newest released one, which is what a case that says nothing about a
 version runs on. `SITE-02` is the case that says otherwise, and
 `bin/cli environment:create E-SITE 13.4` is the previous major it names
 ([`D-EVI-006`](../decisions/evidence/evi-006-one-installation-per-covered-version-kept-and-started.md)).

@@ -24,7 +24,7 @@
 
 - The configuration value comes from this installation's runtime, and the answer
   says it did — on every covered line. This case runs on `E-SITE`, which unnamed
-  is the covered stable one. So the environment alone would never have shown
+  is the newest released one. So the environment alone would never have shown
   that the console command behind this answer exists on two of the four
   (`D-ANS-052`).
 - The subsystem conventions explain the mechanism, and the agent then finds the

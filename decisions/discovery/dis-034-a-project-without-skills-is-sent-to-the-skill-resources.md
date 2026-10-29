@@ -4,6 +4,7 @@ title: A project without skills is sent to the skill resources
 date: 2026-10-27
 status: open
 coveredBy:
+  - HintsTest::aBriefNamesTheSkillThatOwnsTheWork
   - ScopeTest::theInstructionsFitWhatAClientKeeps
   - StdioServerTest::aProjectWithoutSkillsIsToldHowToGetThem
 ---
@@ -73,8 +74,8 @@ two tasks above. The fifth asked for the instructions and called no tool.
 
 So the gap in opencode is wording, step 4 of the judging ladder, and not
 delivery. The URI stands once at the start of the session, and the line that
-names the skill does not repeat it. The card that serves the feedback carries
-the repair.
+names the skill does not repeat it. Since 2026-10-29 `skillsOwed` in
+`typo3_task_guide` names the URI of each skill too.
 
 ## Decided
 

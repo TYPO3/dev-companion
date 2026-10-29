@@ -92,10 +92,10 @@ queued them answered it on 2026-08-03. This entry closes both cards.
   The needles are the words a package that deprecates its own API would use too,
   and no run has been through that route. The two audit routes and the
   content-element one are the ones a filed session measured.
-- **That naming a skill the project has not installed costs nothing.** The line
-  says "where this project has it installed" and the payload's own description
-  says a name is not a promise. But nothing measures what a session does with a
-  name it cannot load.
+- **That naming a skill the project has not installed costs nothing.** This
+  assumption was wrong. In opencode on 2026-10-29 a session without skill files
+  got the name and read no skill, `D-DIS-034`. So the line now also names the
+  `typo3://skill/<name>/SKILL.md` resource for a project without a copy.
 - **That the answer reaches a model the descriptions did not.** The route rides
   the same channel that already failed for `003356`. Whether that client passes
   `instructions` and the skill listing to the model at all has no measure, which

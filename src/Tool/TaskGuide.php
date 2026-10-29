@@ -20,6 +20,7 @@ use TYPO3\DevCompanion\Result\Prose;
 use TYPO3\DevCompanion\Result\Schema;
 use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Result\VersionScope;
+use TYPO3\DevCompanion\Sdk\ResourceHandler;
 use TYPO3\DevCompanion\Server\Installer;
 
 /**
@@ -106,12 +107,13 @@ final class TaskGuide extends ReadOnlyTool
      * Where the task belongs, said in the answer that recognized it
      * (`D-SKL-013`).
      *
-     * The skill is a file in the caller's own project and this server cannot
-     * see it, so the line names it and stops there. What it is worth is the
-     * order it carries, and a brief is one call inside that order.
+     * This server cannot see whether the project holds a copy, so the line
+     * names both ways in. A session in opencode got the name alone and read
+     * no resource (`D-DIS-034`). What the skill is worth is the order it
+     * carries, and a brief is one call inside that order.
      */
-    public const SKILLS_OWNING = 'Owned by: %s. Load it where this project has it installed — the skill carries '
-        . 'the working order for this kind of work, and this brief is one call inside it.';
+    public const SKILLS_OWNING = 'Owned by: %s. Load it where this project has it installed, and read %s where it '
+        . 'has none — the skill carries the working order for this kind of work, and this brief is one call inside it.';
 
     /**
      * The same line where the task reads something and then changes it
@@ -122,8 +124,8 @@ final class TaskGuide extends ReadOnlyTool
      * what is there comes before what writes the change.
      */
     public const SKILLS_IN_ORDER = 'Owned by: %s — in that order, because this task establishes what is there '
-        . 'before it changes it. Load both where this project has them installed: each carries the working order '
-        . 'for its half, and this brief is one call inside the first.';
+        . 'before it changes it. Load both where this project has them installed, and read %s where it has none: '
+        . 'each carries the working order for its half, and this brief is one call inside the first.';
 
     /**
      * Said where the skill's name stands, for the copy this project has of it
@@ -439,7 +441,7 @@ final class TaskGuide extends ReadOnlyTool
                 'condition' => Schema::string('When a weakly matched intent applies. Empty for a strong match.'),
             ], ['id', 'title', 'confidence', 'condition']), 'The kinds of core work recognized in the task text.'),
             'staleSkills' => Schema::listOf(Schema::string(), 'Which of the skills above this project holds an older copy of, read from what stands published there against what this server writes now. Empty where every named copy is current, where this server never installed into this project, and where skills names none. So it is a subset of skills and never a statement that one is missing. What to do about it is one command, typo3-dev-companion update, and what it costs is a change to the caller\'s own checkout.'),
-            'skills' => Schema::listOf(Schema::string(), 'The task skills that own the recognized work, named so that a caller who reached this server without one can load it. A skill is a file in your own project rather than something this server can see. So a name here is not a promise that the project holds it. A review, a triage, a boot and a diagnosis name only the workflows that change nothing either. intents still recognizes the kind of change under review, and the workflow that writes one is not the one you are in. Empty means no published skill owns what the brief recognized, which is not a statement that the work has no workflow.'),
+            'skills' => Schema::listOf(Schema::string(), 'The task skills that own the recognized work, named so that a caller who reached this server without one can load it. This server cannot see whether your project holds a copy, so skillsOwed names the typo3://skill resource it serves each one at as well. A review, a triage, a boot and a diagnosis name only the workflows that change nothing either. intents still recognizes the kind of change under review, and the workflow that writes one is not the one you are in. Empty means no published skill owns what the brief recognized, which is not a statement that the work has no workflow.'),
             'skillsOwed' => Schema::string('What the caller does with skills, stated beside them: load them, and in which order. Empty where skills is.'),
             'staleSkillsOwed' => Schema::string('What the caller does with staleSkills, stated beside them: the command that updates them, or which copy a report names. Empty where staleSkills is.'),
             'guides' => Schema::listOf(Schema::guideReference(), 'The whole procedures that write this work up or that it owes. They are the corpus typo3_project_describe lists at orientation and this server serves as typo3://guides resources. Owes is the second half and the one a task text never asks for. A change that ends in a backend UI owes the browser check whether or not it says so. Named rather than carried: a brief is one call inside a procedure, and the page is one typo3_rule_lookup call by documentId. Empty means no page here writes up what the brief recognized. It does not say that none of them is worth a read; the whole list is in that orientation call.'),
@@ -739,6 +741,10 @@ final class TaskGuide extends ReadOnlyTool
         $skillsOwed = $skills === [] ? '' : sprintf(
             $spansBoth && count($skills) > 1 ? self::SKILLS_IN_ORDER : self::SKILLS_OWNING,
             implode(', ', $skills),
+            implode(' and ', array_map(
+                static fn(string $skill): string => ResourceHandler::SKILL_PREFIX . $skill . '/SKILL.md',
+                $skills,
+            )),
         );
         $staleSkillsOwed = $stale === [] ? '' : sprintf(
             self::SKILLS_STALE,

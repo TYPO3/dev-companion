@@ -118,12 +118,12 @@ Answers with
     # update, and what it costs is a change to the caller's own checkout.
     staleSkills: [string]
     # The task skills that own the recognized work, named so that a caller who
-    # reached this server without one can load it. A skill is a file in your own
-    # project rather than something this server can see. So a name here is not a
-    # promise that the project holds it. A review, a triage, a boot and a diagnosis
-    # name only the workflows that change nothing either. intents still recognizes
-    # the kind of change under review, and the workflow that writes one is not the
-    # one you are in. Empty means no published skill owns what the brief recognized,
+    # reached this server without one can load it. This server cannot see whether
+    # your project holds a copy, so skillsOwed names the typo3://skill resource it
+    # serves each one at as well. A review, a triage, a boot and a diagnosis name
+    # only the workflows that change nothing either. intents still recognizes the
+    # kind of change under review, and the workflow that writes one is not the one
+    # you are in. Empty means no published skill owns what the brief recognized,
     # which is not a statement that the work has no workflow.
     skills: [string]
     # What the caller does with skills, stated beside them: load them, and in which
@@ -367,7 +367,7 @@ Text:
     Paths:
     - typo3/sysext/core/Classes/Utility/GeneralUtility.php
     Recognized as: Deprecation
-    Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.
+    Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.
     Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
     - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
@@ -569,7 +569,7 @@ Data:
         "skills": [
             "typo3-core-patch-development"
         ],
-        "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.",
+        "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.",
         "staleSkills": [],
         "staleSkillsOwed": "",
         "guides": [
@@ -1417,7 +1417,7 @@ Text:
     - typo3/sysext/core/Classes/Database/Query/QueryBuilder.php
     Recognized as: Writing the change
     Possibly also: Registering an event listener, only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this. Its checklist items are marked as conditional below and its checks are listed separately.
-    Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.
+    Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.
     Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
     - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
@@ -1561,7 +1561,7 @@ Data:
         "skills": [
             "typo3-core-patch-development"
         ],
-        "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed — the skill carries the working order for this kind of work, and this brief is one call inside it.",
+        "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.",
         "staleSkills": [],
         "staleSkillsOwed": "",
         "guides": [

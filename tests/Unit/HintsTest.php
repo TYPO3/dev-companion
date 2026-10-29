@@ -7098,6 +7098,7 @@ final class HintsTest extends TestCase
      * `D-SKL-039`.
      */
     #[Decision('D-ANS-050')]
+    #[Decision('D-DIS-034')]
     #[Decision('D-SKL-013')]
     #[Decision('D-SKL-039')]
     #[Test]
@@ -7112,6 +7113,12 @@ final class HintsTest extends TestCase
 
         self::assertSame(['typo3-content-element-development'], $element->data['skills']);
         self::assertStringContainsString('typo3-content-element-development', $element->text);
+        // The way in for a project without a copy, said where the name stands
+        // (`D-DIS-034`).
+        self::assertStringContainsString(
+            'typo3://skill/typo3-content-element-development/SKILL.md',
+            $element->data['skillsOwed'],
+        );
         self::assertStringNotContainsString('typo3-extension-testing', $element->text);
         self::assertNotContains('tests', array_column($element->data['intents'], 'id'));
         // Above the payload, because a caller in the wrong workflow is in it

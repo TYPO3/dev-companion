@@ -89,6 +89,12 @@ nothing, and you read it from **The installation that already answers** below.
 
 ## Create one where none is declared
 
+Where the repository declares no TYPO3 version yet, decide the line first. Every
+later step installs against it. `typo3_hint_lookup` with `id=new-project-line`
+says which line TYPO3 recommends and what decides for an older one. It also says
+why the installation is a Composer one. Name the line and the reason in your
+answer before you install.
+
 1. **Make the package's own manifest the Composer root package.** It has to
    install TYPO3 beneath itself, into a directory git ignores.
    `typo3_hint_lookup` owns what that takes:

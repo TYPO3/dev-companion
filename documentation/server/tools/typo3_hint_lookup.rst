@@ -349,6 +349,7 @@ Text:
     - fal-processing — Which Processor Claims a File, and What Runs Below It (PHP)
     - backend-client-server-boundary — Which Side of a Backend Module Resolves a Resource (PHP)
     - site-base-collision — Which Site Answers When Two Bases Collide (PHP)
+    - new-project-line — Which TYPO3 Line a New Project Starts On, and How It Is Installed (PHP)
     - initial-content-import-once — Why a Changed Data File Does Not Arrive (PHP)
     - dependency-injection — Wiring a Service (PHP)
     - core-tests — Writing Core Tests (PHP)
@@ -1062,6 +1063,11 @@ Data:
             {
                 "id": "site-base-collision",
                 "title": "Which Site Answers When Two Bases Collide",
+                "category": "PHP"
+            },
+            {
+                "id": "new-project-line",
+                "title": "Which TYPO3 Line a New Project Starts On, and How It Is Installed",
                 "category": "PHP"
             },
             {
@@ -1779,6 +1785,7 @@ Text:
     - fal-processing — Which Processor Claims a File, and What Runs Below It (PHP)
     - backend-client-server-boundary — Which Side of a Backend Module Resolves a Resource (PHP)
     - site-base-collision — Which Site Answers When Two Bases Collide (PHP)
+    - new-project-line — Which TYPO3 Line a New Project Starts On, and How It Is Installed (PHP)
     - initial-content-import-once — Why a Changed Data File Does Not Arrive (PHP)
     - dependency-injection — Wiring a Service (PHP)
     - core-tests — Writing Core Tests (PHP)
@@ -2384,6 +2391,11 @@ Data:
             {
                 "id": "site-base-collision",
                 "title": "Which Site Answers When Two Bases Collide",
+                "category": "PHP"
+            },
+            {
+                "id": "new-project-line",
+                "title": "Which TYPO3 Line a New Project Starts On, and How It Is Installed",
                 "category": "PHP"
             },
             {

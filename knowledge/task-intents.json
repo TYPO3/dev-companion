@@ -951,6 +951,7 @@
     "checks": [],
     "tools": [
       "typo3_project_describe, for what the installation around this repository already is",
+      "typo3_hint_lookup with id=new-project-line, for the line a new project starts on and why it is a Composer installation, before anything is created",
       "typo3_hint_lookup with id=installation-setup, for what typo3 setup accepts, what it refuses, and which of its options are inert in Composer mode",
       "typo3_hint_lookup with id=sitepackage-initial-content, for what a sitepackage seeds an empty installation with and why the order of the two setup commands decides it"
     ]

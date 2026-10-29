@@ -3,6 +3,8 @@ id: D-KNW-154
 title: 'The fluid_styled_content hint carries the inventory a removal owes'
 date: 2026-09-04
 status: open
+readings:
+  - 2026-10-29
 ---
 
 # D-KNW-154 — The fluid_styled_content hint carries the inventory a removal owes

@@ -25,12 +25,29 @@ that call as the cost.
   appears at 10,000 tokens.
 - `D-EVI-011`: Claude Code hands the model `JSON.stringify` of
   `structuredContent`. opencode hands over the text, or the data in Code Mode.
-- Measured on 2026-10-30 against `main` at `11d82bce`, the whole answer
-  through `Registry::call()`: 65,786 characters of data and 60,473 of text. Both
-  were over the threshold. `covers` held 35,258 characters of the data, and its
-  45 `depth` texts about 22,000 of those.
-- After the change, on this branch: 44,746 characters of data and 39,439 of
-  text. Every entry stays, with its topic, its tools, its source and its scope.
+- Measured on 2026-10-30 against `main` at `11d82bce`, the whole answer through
+  `Registry::call()`: 65,786 characters of data and 60,473 of text. Both were
+  over the threshold. `covers` held 35,258 characters of the data, and its 45
+  `depth` texts about 22,000 of those.
+- After the change, at `843c9a52`: 44,746 characters of data and 39,439 of text.
+  Every entry stays, with its topic, its tools, its source and its scope.
+- Measured on 2026-10-30 with
+  `bin/cli tools:tokens typo3_server_scope '{}' --runs=2` on Haiku 4.5, against
+  `11d82bce` and against `14e2fde6`, plus three runs of the "as served" mode on
+  `14e2fde6`. Haiku did not call the tool in seven of the fifteen sessions. The
+  table holds the sessions that called it.
+
+| State      | Mode                 | The model received                          | Tokens           |
+| ---------- | -------------------- | ------------------------------------------- | ---------------- |
+| `11d82bce` | as served            | a 2,246-character preview and a file path   | 637              |
+| `11d82bce` | without outputSchema | the same preview, then a `Read` of the file | 655, then 16,111 |
+| `14e2fde6` | as served            | the whole answer, 44,905 characters of JSON | 11,603           |
+| `14e2fde6` | without outputSchema | the whole answer, twice                     | 11,595, 11,589   |
+
+- Before, the preview said "Output too large (64.3KB)". One session answered
+  from it and never read the answer. The other paid a second call and 16,766
+  tokens for the whole answer. After, every session that called the tool read
+  the whole answer in that one call.
 
 ## Decided
 
@@ -60,3 +77,4 @@ that call as the cost.
   entry, and the dropped detail would have prevented that.
 - Claude Code changes the threshold, or another client documents a lower one.
   Then the budget moves to that number.
+

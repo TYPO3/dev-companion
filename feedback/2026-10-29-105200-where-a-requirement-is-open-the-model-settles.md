@@ -26,7 +26,6 @@ and the two runs did not settle them alike.
 | how long stored data lives | its form stores nothing | rows kept without end | nothing |
 | what holds a group of pages | standard pages, hidden from the menu | no container page | nothing |
 | what a sent mail carries | the core layout, not raised | the core layout, not raised | nothing |
-| where a database query lives | a repository class, injected | inline in the command | nothing |
 
 Neither run asked the user about any row of that table.
 
@@ -130,28 +129,6 @@ them with `pid: 0`, where the list module shows them to an administrator alone.
 The installation has no `typo3/cms-scheduler`, so a cleanup command runs from a
 cron entry or not at all.
 
-**Where a database query lives is the row the corpus names for Extbase alone.**
-Both runs wrote a console command over `tx_jambositepackage_waste_report`.
-`claude-opus-5` wrote `Classes/Domain/Repository/WasteReportRepository.php` and
-gave the command two methods to call. `claude-fable-5-1` gave
-`WasteDigestCommand` a `ConnectionPool` and built four query builders in the
-command body. Neither run raised the choice.
-
-The corpus states a placement once, and for the route with no PHP in it.
-`frontend-records` says a table of your own needs no model, no repository, and
-no controller, because a data processor reads it. `persistence-reading` is the
-hint a query task reaches, and it answers which rows come back rather than
-which class asks for them. `extbase-domain-mapping` carries
-`Classes/Domain/Repository/` in `appliesTo` rather than in a hint, so the
-string matches a query and instructs nobody.
-
-The core settles nothing here, and a statement that names the repository as the
-TYPO3 way contradicts it. On `typo3/cms-core` v14.3.10, 204 classes below
-`Classes/` use `ConnectionPool` or `QueryBuilder`. The class name ends in
-`Repository` for 27 of them, in `Controller` for 23, and in `Service` for 13.
-The count comes from the core the `claude-opus-5` trial installed, because the
-machine has no `.checkouts/`.
-
 **What the runs did with the subjects this repository does cover.** The
 Swahili locale is covered by `user-defined-locale`, and it landed:
 `claude-fable-5-1` fetched it by id with `site-label-language` and registered
@@ -235,15 +212,6 @@ boundary. This server has answered for the core. A statement that weighs a
 package outside it is a new kind of answer. `knw-012` records what happened
 when a session blurred that line once. Whatever the decision settles, a
 statement naming such a package says that the package is not core.
-
-Say where a query belongs when an extension writes PHP of its own. The core
-queries from controllers, services, and upgrade wizards as well as from
-repositories, so the corpus cannot call the repository the TYPO3 way. What it
-can say is what a repository buys: one place per table, the restrictions set
-once, and a seam a test replaces. That statement moves the same boundary the
-content blocks one moves, because the layout of somebody's own `Classes/` is
-architecture rather than TYPO3. `typo3_extension_describe` already reads that
-layout and states nothing about it.
 
 The general point is worth an entry of its own. This corpus covers the APIs of
 TYPO3 well and the decisions a new site makes hardly at all. A newcomer cannot

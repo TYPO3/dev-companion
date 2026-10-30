@@ -23,6 +23,7 @@ use TYPO3\DevCompanion\Tests\Support\MachineWithoutDdev;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
 use TYPO3\DevCompanion\Tool\Registry;
+use TYPO3\DevCompanion\Tool\ServerScope;
 
 #[Requirement('R-KNW-022')]
 final class ScopeTest extends TestCase
@@ -447,6 +448,22 @@ final class ScopeTest extends TestCase
             mb_strlen(Coverage::instructions($everyDirectory)),
             'instructions where the caller excluded everything and every client has its skills',
         );
+    }
+
+    /**
+     * Counted as Claude Code counts the data half: the length of the JSON it
+     * hands the model, slashes and unicode unescaped — `D-ANS-194`.
+     */
+    #[Requirement('R-ANS-039')]
+    #[Decision('D-ANS-194')]
+    #[Test]
+    public function theWholeOrientationFitsWhatAClientKeeps(): void
+    {
+        $result = Registry::call('typo3_server_scope', []);
+        $data = json_encode($result->data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+
+        self::assertLessThanOrEqual(ServerScope::ANSWER_BUDGET, mb_strlen($result->text), 'the text half');
+        self::assertLessThanOrEqual(ServerScope::ANSWER_BUDGET, mb_strlen($data), 'the data half');
     }
 
     #[Requirement('R-AUD-006')]

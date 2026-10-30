@@ -29,6 +29,11 @@ final class ServerScope extends ReadOnlyTool
     private const ASK_AGAIN = 'Ask again naming those, or call this tool with no arguments for the whole orientation.';
 
     /**
+     * The characters either half of the whole answer may take, `R-ANS-039`.
+     */
+    public const ANSWER_BUDGET = 50_000;
+
+    /**
      * The parts of this answer a caller can ask for by name, each with what it
      * holds, in the order the payload carries them.
      *

@@ -4,6 +4,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-ANS-194`][D-ANS-194] — The whole orientation stays under what Claude Code keeps in context · 2026-10-30
 - [`D-ANS-193`][D-ANS-193] — A feature task is asked for the extension that already does it · 2026-10-29
 - [`D-ANS-190`][D-ANS-190] — A PHP identifier reaches a manual changelog entry through its listing · 2026-10-28
 - [`D-ANS-191`][D-ANS-191] — What an answer owes the caller stands in the data · 2026-10-28
@@ -188,6 +189,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-194]: ans-194-the-whole-orientation-stays-under-what-claude-code-keeps-in-context.md
 [D-ANS-193]: ans-193-a-feature-task-is-asked-for-the-extension-that-already-does-it.md
 [D-ANS-190]: ans-190-a-php-identifier-reaches-a-manual-changelog-entry-through-its-listing.md
 [D-ANS-191]: ans-191-what-an-answer-owes-the-caller-stands-in-the-data.md

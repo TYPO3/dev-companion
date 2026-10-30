@@ -1163,6 +1163,7 @@
       "Decide whether the site keeps fluid_styled_content before you write its first content element. typo3_hint_lookup with id=sitepackage-fluid-styled-content says what goes with the dependency, the rendering of every Extbase plugin included.",
       "Compute the contrast of the focus colour against every surface a link sits on before you call the design done. typo3_hint_lookup with id=sitepackage-focus-contrast says what the ring owes and how one token serves a dark component.",
       "Require the package through Composer before the site configuration depends on its set. A package below packages/ is installed by composer require and by no file you write, and typo3_hint_lookup with id=sitepackage-start says what a dependency on a set nothing installed renders.",
+      "Put the decisions a site makes before it goes live to the user rather than settle them alone. typo3_hint_lookup with id=site-language-fallback, id=page-group-container, id=form-mail-layout, id=form-data-retention and id=site-search states the options and what each one costs.",
       "Prove the package by rendering one page for each page layout, after the caches are flushed. A green suite and a declared command say nothing about a page template, and a project with neither still owes the rendered page."
     ],
     "checks": [],

@@ -1,7 +1,8 @@
 ---
 date: 2026-10-29T10:52:00+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-10-30
 model: claude-opus-5, claude-fable-5-1
 tool: typo3_task_guide, typo3_hint_lookup
 directory: /home/lina/trials/jambo-1029, /home/lina/trials/jambo-fabian

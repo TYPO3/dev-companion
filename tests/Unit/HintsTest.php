@@ -8136,6 +8136,48 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * Two runs of 2026-10-29 settled each of these alone, and not alike —
+     * `D-KNW-183`.
+     */
+    #[Decision('D-KNW-183')]
+    #[DataProvider('newcomerTasks')]
+    #[Test]
+    public function aNewSitesOpenDecisionsAreHandedToTheUser(string $task): void
+    {
+        $brief = Registry::call('typo3_task_guide', ['task' => $task, 'changeType' => 'feature']);
+        $checklist = implode("\n", $brief->data['checklist']);
+
+        self::assertStringContainsString('to the user rather than settle them alone', $checklist);
+        foreach (['site-language-fallback', 'page-group-container', 'form-mail-layout', 'form-data-retention', 'site-search'] as $id) {
+            self::assertStringContainsString('id=' . $id, $checklist);
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function aNewSitesOpenQuestions(): array
+    {
+        return [
+            'a partial translation' => ['the site has a second language and not every page is translated yet', 'site-language-fallback'],
+            'a group of pages' => ['a page that only groups the footer links', 'page-group-container'],
+            'the mail of a contact form' => ['the contact form mail shows the TYPO3 logo', 'form-mail-layout'],
+            'stored submissions' => ['how long are stored form submissions kept and what deletes them', 'form-data-retention'],
+            'a site search' => ['add a search box to the site', 'site-search'],
+        ];
+    }
+
+    #[Decision('D-KNW-183')]
+    #[DataProvider('aNewSitesOpenQuestions')]
+    #[Test]
+    public function aNewSitesOpenQuestionReachesItsHint(string $task, string $id): void
+    {
+        $result = Registry::call('typo3_hint_lookup', ['task' => $task]);
+
+        self::assertContains($id, array_column($result->data['hints'], 'id'));
+    }
+
+    /**
      * The first run of SITE-10 built a sitepackage without theme_camino and
      * read three things out of the core that no hint said (`D-KNW-172`).
      */

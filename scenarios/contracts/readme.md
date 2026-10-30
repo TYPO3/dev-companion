@@ -47,7 +47,7 @@ the index.
 | ----------------------------------------------- | ----------------------- |
 | [core-contributor/](core-contributor/readme.md) | `CORE-01` … `CORE-07`   |
 | [extension-author/](extension-author/readme.md) | `EXT-01` … `EXT-08`     |
-| [site-developer/](site-developer/readme.md)     | `SITE-01` … `SITE-11`   |
+| [site-developer/](site-developer/readme.md)     | `SITE-01` … `SITE-12`   |
 | [cross-cutting/](cross-cutting/readme.md)       | `META-01` … `META-05`   |
 | [task-skills/](task-skills/readme.md)           | `SKILL-01` … `SKILL-15` |
 
@@ -66,6 +66,6 @@ that hold it; an empty cell is a hole in the contract suite.
 | Review, commit, submission            | `CORE-03`, `CORE-07`  | `EXT-03`         | —                               |
 | Labels, icons, i18n                   | `CORE-02`             | `EXT-06`         | `EXT-06`                        |
 | Official API documentation            | —                     | `EXT-07`         | `SITE-07`                       |
-| Frontend / theming                    | —                     | —                | `SITE-04`, `SITE-11`            |
+| Frontend / theming                    | —                     | —                | `SITE-04`, `SITE-11`, `SITE-12` |
 | Version and branch spread             | `CORE-06`             | `EXT-01`         | `SITE-02`                       |
 | Orientation, setup and degraded state | `META-01` … `META-05` |                  |                                 |

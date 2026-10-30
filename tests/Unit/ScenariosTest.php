@@ -166,6 +166,7 @@ final class ScenariosTest extends TestCase
             'a setting a site set defines' => ['SITE-09', 'site-setting'],
             'a sitepackage built from nothing' => ['SITE-10', 'sitepackage'],
             'a sitepackage built from an agency\'s static design' => ['SITE-11', 'sitepackage'],
+            'a sitepackage for a site that already renders' => ['SITE-12', 'sitepackage'],
             'the majors a package declares, in the words a maintainer states them' => ['EXT-01', 'compatibility'],
         ];
     }

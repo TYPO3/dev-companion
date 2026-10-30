@@ -1,0 +1,28 @@
+[
+  {
+    "id": "site-search",
+    "title": "What indexed_search Indexes Without a Crawler",
+    "domains": [
+      "php",
+      "typoscript"
+    ],
+    "appliesTo": [
+      "indexed_search",
+      "indexed search",
+      "site search",
+      "search box",
+      "search function",
+      "full text search",
+      "crawler",
+      "index_config",
+      "search the site"
+    ],
+    "hints": [
+      "typo3/cms-indexed-search indexes a page when the frontend renders it into the page cache with config.index_enable set. A page nobody has requested yet is not in the index.",
+      "An uncached render indexes nothing, and neither does a page with its no_search flag set.",
+      "A translated page is indexed only where it renders its own content. A page that shows fallback content in that language is skipped.",
+      "An indexing configuration record does nothing on its own. No core code processes one, and a crawler extension outside the core does.",
+      "The package is a system extension a project requires on its own, and typo3_system_extension_lookup says on which lines. For search packages outside the core, ask typo3_ter_lookup with a query such as site search."
+    ]
+  }
+]

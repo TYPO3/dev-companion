@@ -386,5 +386,35 @@
       },
       "Its neighbour is page-cache-headers, for the page that is still wrong after every one of these: that one is not a server cache at all."
     ]
+  },
+  {
+    "id": "page-group-container",
+    "title": "Which Page Type Holds a Group of Pages",
+    "domains": [
+      "typoscript"
+    ],
+    "appliesTo": [
+      "folder",
+      "sysfolder",
+      "spacer",
+      "doktype",
+      "nav_hide",
+      "hide in menu",
+      "group of pages",
+      "container page",
+      "footer pages",
+      "legal pages",
+      "utility pages",
+      "footer links",
+      "groups the footer",
+      "page that only groups",
+      "group the pages"
+    ],
+    "hints": [
+      "A group of pages that is not itself a page sits under a folder, doktype 254, or under a spacer, doktype 199.",
+      "A standard page hidden from the menu stays a page. nav_hide keeps it out of the menu and out of nothing else, so it has an address and answers there.",
+      "The XML sitemap leaves out folders, spacers, links, shortcuts, mount points and backend user sections, and every page with no_index set. It reads nav_hide nowhere, so it lists a hidden standard page.",
+      "What the menu processor leaves out is page-variables-and-processors, and xml-sitemap says which set brings the sitemap."
+    ]
   }
 ]

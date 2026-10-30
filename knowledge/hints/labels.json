@@ -250,5 +250,36 @@
       "Where no pack exists, the project supplies the labels itself, in a locale-prefixed file or in an override of the extension's language file. language-files is that subject.",
       "The operating system locale is a step of its own. SiteResolver calls Locales::setSystemLocaleFromSiteLanguage() on every frontend request, and a locale the system lacks logs Locale \"<locale>\" not found. as an error each time. locale -a lists the locales the container has."
     ]
+  },
+  {
+    "id": "site-language-fallback",
+    "title": "What a Site Language Shows Where a Translation Is Missing",
+    "domains": [
+      "typoscript"
+    ],
+    "appliesTo": [
+      "fallbackType",
+      "fallbacks:",
+      "config/sites/",
+      "untranslated",
+      "translation is missing",
+      "partial translation",
+      "language fallback",
+      "site language",
+      "fallback language",
+      "not translated",
+      "second language",
+      "not every page is translated",
+      "translated yet",
+      "untranslated page"
+    ],
+    "hints": [
+      "A site language takes two settings for what is not translated, and the two decide different things. fallbacks decides the page, and fallbackType decides the content elements on a translated page.",
+      "A page without a translation renders in the first language listed in fallbacks that has the page. Where fallbacks is empty, or none of its languages has the page, the request answers HTTP 404.",
+      "fallbackType strict shows the translated records and the records created in that language alone. A default-language record without a translation is absent rather than shown in English.",
+      "fallbackType fallback shows the translation where one exists and the default-language record where none does. fallbackType free shows only the records created in that language, with no overlay.",
+      "A configuration that states neither setting gets strict and an empty fallbacks list. A site launched half translated then answers HTTP 404 for every untranslated page and leaves gaps on the others.",
+      "Which of these a site needs is the site owner's decision, so ask before you write it. Both choices render a half-translated site that looks finished."
+    ]
   }
 ]

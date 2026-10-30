@@ -19,8 +19,8 @@ frontend. The subjects are assets, authentication, backend css, backend modules,
 backend ui, caching, configuration, console commands, content elements,
 database, datahandler, dataprocessors, di, distribution, documentation, events,
 extbase, extension, fal, fluid, form, icons, labels, page rendering,
-persistence, php, project, public api, records, routing, security, site sets,
-sitepackage, tca, testing, typo3 tsconfig, typoscript condition providers,
+persistence, php, project, public api, records, routing, search, security, site
+sets, sitepackage, tca, testing, typo3 tsconfig, typoscript condition providers,
 typoscript conditions, upgrade. Answers from: knowledge.
 
 ``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
@@ -315,6 +315,7 @@ Text:
     - installation-upgrade — Upgrading an Installation (PHP)
     - verifying-a-change-against-the-installation — Verifying a Change Against the Installation Rather Than Against Its Own Output (PHP)
     - extbase-arguments — What Arrives From a Request, and What Silently Does Not (PHP)
+    - form-data-retention — What Deletes What a Form Stored (PHP)
     - extbase — What Extbase Is For, and When It Is Not Needed (PHP)
     - fal-processed-file-cache — What Keys a Processed Image, and What Clears It (PHP)
     - extension-manifest — What Makes a Directory an Extension (PHP)
@@ -335,6 +336,7 @@ Text:
     - content-element-record-row — What a Row Handed to lib.contentElement Must Carry (PHP)
     - typoscript-conditions — What a TypoScript Condition Is Handed (TypoScript)
     - tca-inline-children — What an Inline Child Table Needs (PHP)
+    - site-search — What indexed_search Indexes Without a Crawler (PHP)
     - project-configuration-files — What the Installation Is Configured By (PHP)
     - tca-sub-schema — What the Schema of One Record Type Holds (PHP)
     - installation-setup — What typo3 setup Takes and What It Refuses (PHP)
@@ -896,6 +898,11 @@ Data:
                 "category": "PHP"
             },
             {
+                "id": "form-data-retention",
+                "title": "What Deletes What a Form Stored",
+                "category": "PHP"
+            },
+            {
                 "id": "extbase",
                 "title": "What Extbase Is For, and When It Is Not Needed",
                 "category": "PHP"
@@ -993,6 +1000,11 @@ Data:
             {
                 "id": "tca-inline-children",
                 "title": "What an Inline Child Table Needs",
+                "category": "PHP"
+            },
+            {
+                "id": "site-search",
+                "title": "What indexed_search Indexes Without a Crawler",
                 "category": "PHP"
             },
             {
@@ -1750,6 +1762,7 @@ Text:
     - installation-upgrade — Upgrading an Installation (PHP)
     - verifying-a-change-against-the-installation — Verifying a Change Against the Installation Rather Than Against Its Own Output (PHP)
     - extbase-arguments — What Arrives From a Request, and What Silently Does Not (PHP)
+    - form-data-retention — What Deletes What a Form Stored (PHP)
     - extbase — What Extbase Is For, and When It Is Not Needed (PHP)
     - fal-processed-file-cache — What Keys a Processed Image, and What Clears It (PHP)
     - extension-manifest — What Makes a Directory an Extension (PHP)
@@ -1770,6 +1783,7 @@ Text:
     - content-element-record-row — What a Row Handed to lib.contentElement Must Carry (PHP)
     - typoscript-conditions — What a TypoScript Condition Is Handed (TypoScript)
     - tca-inline-children — What an Inline Child Table Needs (PHP)
+    - site-search — What indexed_search Indexes Without a Crawler (PHP)
     - project-configuration-files — What the Installation Is Configured By (PHP)
     - tca-sub-schema — What the Schema of One Record Type Holds (PHP)
     - installation-setup — What typo3 setup Takes and What It Refuses (PHP)
@@ -2219,6 +2233,11 @@ Data:
                 "category": "PHP"
             },
             {
+                "id": "form-data-retention",
+                "title": "What Deletes What a Form Stored",
+                "category": "PHP"
+            },
+            {
                 "id": "extbase",
                 "title": "What Extbase Is For, and When It Is Not Needed",
                 "category": "PHP"
@@ -2316,6 +2335,11 @@ Data:
             {
                 "id": "tca-inline-children",
                 "title": "What an Inline Child Table Needs",
+                "category": "PHP"
+            },
+            {
+                "id": "site-search",
+                "title": "What indexed_search Indexes Without a Crawler",
                 "category": "PHP"
             },
             {

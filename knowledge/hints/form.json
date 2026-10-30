@@ -60,5 +60,58 @@
       },
       "The first page of a form renders in a cached action, so a changed .form.yaml reaches the frontend after a flush of the page cache. The first request after typo3 cache:flush renders the new definition. An old definition after the flush comes from a cache outside TYPO3 or from a flush before the save."
     ]
+  },
+  {
+    "id": "form-mail-layout",
+    "title": "The Mail Layout of a Form",
+    "domains": [
+      "fluid"
+    ],
+    "appliesTo": [
+      "EmailToReceiver",
+      "EmailToSender",
+      "email finisher",
+      "form mail",
+      "SystemEmail",
+      "contact form",
+      "mail template",
+      "mail layout",
+      "loginLogo"
+    ],
+    "hints": [
+      "The templates EXT:form ships for EmailToReceiver and EmailToSender declare <f:layout name=\"SystemEmail\" />. That is the core's layout for system mail to an administrator.",
+      "SystemEmail renders the logo BE/loginLogo names, and the TYPO3 logo where it names none. Its footer renders typo3.information.copyrightNotice.",
+      "So a public contact form answers a visitor under TYPO3 branding, with copy written for an administrator, until the site replaces the layout.",
+      "The finisher is built to take another layout. It reads templateName, templateRootPaths, layoutRootPaths and partialRootPaths from its options, and a template of the site's own never has to name SystemEmail.",
+      "BE/loginLogo changes the logo in every system mail and on the backend login at once, and changes no text."
+    ]
+  },
+  {
+    "id": "form-data-retention",
+    "title": "What Deletes What a Form Stored",
+    "domains": [
+      "php"
+    ],
+    "appliesTo": [
+      "SaveToDatabase",
+      "form data",
+      "stored submissions",
+      "retention",
+      "delete form data",
+      "personal data",
+      "form:cleanup:uploads",
+      "DeleteUploadsFinisher",
+      "form uploads"
+    ],
+    "hints": [
+      {
+        "text": "form:cleanup:uploads removes the upload folders EXT:form writes once they are older than a retention period, which the command takes as an option.",
+        "since": 14
+      },
+      "DeleteUploadsFinisher removes the files one submission uploaded.",
+      "Nothing in typo3/cms-form deletes a row that SaveToDatabase wrote. The row stays until the site deletes it.",
+      "So the retention of stored rows is the site's to build: a command of its own, and a scheduler task or a cron entry that runs it.",
+      "How long a site keeps personal data is law rather than TYPO3, so ask the site owner before a form stores any."
+    ]
   }
 ]

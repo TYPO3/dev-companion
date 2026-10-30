@@ -8167,6 +8167,39 @@ final class HintsTest extends TestCase
         ];
     }
 
+    /**
+     * A tender list the visitor filters and pages is the case both runs of
+     * 2026-10-29 never reached Extbase from — `D-KNW-185`.
+     *
+     * @return array<string, array{array<string, string>}>
+     */
+    public static function aFilteredListWithAndWithoutAChangeType(): array
+    {
+        return [
+            'no change type' => [[]],
+            'a feature' => [['changeType' => 'feature']],
+        ];
+    }
+
+    /**
+     * @param array<string, string> $changeType
+     */
+    #[Decision('D-KNW-185')]
+    #[DataProvider('aFilteredListWithAndWithoutAChangeType')]
+    #[Test]
+    public function aFilteredListReachesExtbaseAndTheReuseQuestionOnce(array $changeType): void
+    {
+        $brief = Registry::call('typo3_task_guide', [
+            'task' => 'Add a list of tenders to the site that visitors can filter by ward, ten per page, from a table the sitepackage owns.',
+        ] + $changeType);
+
+        self::assertContains('extbase', array_column($brief->data['hints'], 'id'));
+        self::assertCount(1, array_filter(
+            $brief->data['checklist'],
+            static fn(string $entry): bool => str_contains($entry, 'id="extension-reuse"'),
+        ));
+    }
+
     #[Decision('D-KNW-183')]
     #[DataProvider('aNewSitesOpenQuestions')]
     #[Test]

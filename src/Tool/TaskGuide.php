@@ -991,14 +991,20 @@ final class TaskGuide extends ReadOnlyTool
                 ? 'Where the project declares tests, ' . lcfirst($entry)
                 : $entry;
         }
+        // An intent may carry an item a change type carries too, and the brief
+        // says it once (`D-KNW-185`).
         foreach ($confirmed as $intent) {
             foreach ($intent['checklist'] as $entry) {
-                $checklist[] = (string) $entry;
+                if (!in_array($entry, $checklist, true)) {
+                    $checklist[] = (string) $entry;
+                }
             }
         }
         foreach ($conditional as $intent) {
             foreach ($intent['checklist'] as $entry) {
-                $checklist[] = ucfirst((string) $intent['condition']) . ': ' . lcfirst((string) $entry);
+                if (!in_array($entry, $checklist, true)) {
+                    $checklist[] = ucfirst((string) $intent['condition']) . ': ' . lcfirst((string) $entry);
+                }
             }
         }
         if (!$changesNothing) {

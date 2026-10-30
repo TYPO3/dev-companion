@@ -490,6 +490,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 - [`D-KNW-183`][D-KNW-183] — A decision a new site makes is handed to the user with its options · 2026-10-30
 - [`D-KNW-184`][D-KNW-184] — The corpus weighs no package outside the core against the core · 2026-10-30
+- [`D-KNW-185`][D-KNW-185] — The reuse question reaches a feature without a change type · 2026-10-30
 - [`D-KNW-182`][D-KNW-182] — A value about the visit is told that the first page of a form is cached · 2026-10-29
 - [`D-KNW-173`][D-KNW-173] — An inline condition escapes its variables once · 2026-10-28
 - [`D-KNW-174`][D-KNW-174] — The set that brings the sitemap is a subject of its own · 2026-10-28
@@ -665,6 +666,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 [D-KNW-183]: knowledge/knw-183-a-decision-a-new-site-makes-is-handed-to-the-user-with-its-options.md
 [D-KNW-184]: knowledge/knw-184-the-corpus-weighs-no-package-outside-the-core-against-the-core.md
+[D-KNW-185]: knowledge/knw-185-the-reuse-question-reaches-a-feature-without-a-change-type.md
 [D-KNW-182]: knowledge/knw-182-a-value-about-the-visit-is-told-that-the-first-page-of-a-form-is-cached.md
 [D-KNW-173]: knowledge/knw-173-an-inline-condition-escapes-its-variables-once.md
 [D-KNW-174]: knowledge/knw-174-the-set-that-brings-the-sitemap-is-a-subject-of-its-own.md

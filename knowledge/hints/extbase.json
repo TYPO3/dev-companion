@@ -12,9 +12,20 @@
       "extbase plugin",
       "extbase extension",
       "extbase controller",
-      "without extbase"
+      "without extbase",
+      "filter by",
+      "visitors can filter",
+      "filtered list",
+      "filter the list",
+      "per page",
+      "paged list",
+      "pagination",
+      "paginate",
+      "search form",
+      "form that validates"
     ],
     "hints": [
+      "A list the visitor filters and pages through, over a table of the site's own, is the case Extbase is built for. A controller action takes the filter as an argument, a repository builds the query, and extbase-pagination pages the result.",
       "Extbase is what a frontend needs beyond reading records: pagination, a search with arguments, validation, forms. Rendering records read-only needs none of it — see the records hint — and mixing the two questions is where most of the wrong answers here come from.",
       "The rest is its own hint: extbase-plugin-registration for the two calls that declare a plugin, extbase-domain-mapping for models and repositories, extbase-arguments for what arrives from a request, extbase-pagination for paging a list."
     ]

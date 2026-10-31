@@ -18,6 +18,20 @@ knows no TYPO3 idiom and carries no hint of what a conversion owes.
 
 **Run 2026-10-29:** three runs against `cde808bd`, each in a fresh copy of `E-SITE` 14.3 and graded blind, met all eleven criteria. All three loaded `typo3-sitepackage-development`. None created pages or content, and all three tested their layouts by SQL written straight into the database.
 
+**Run 2026-10-30:** one run of an opencode client, on another design than this
+case's own. It installed TYPO3 14.3.10, where the run of 2026-10-28 on the same
+client installed 13.4.37. It stopped twice on a free-message quota, and the
+second stop came before it ran its own seeder. Every criterion the files can
+answer held. No partial carries a document frame. The menu is an HMENU from the
+page tree, with `aria-current` on the active item. No link of `design/`
+survives, and no condition on a page uid selects content. It declared three page
+layouts, and modelled the tiles and the notices as record types of its own. The
+installation held one page and one content element, so the content criterion is
+unknown rather than failed. The run wrote `scripts/seed.php`, which seeds
+seventeen pages through DataHandler and resolves their ids into the site's
+settings. The server checkout moved between the run's two halves, so no single
+commit stands behind it.
+
 > We have a fresh TYPO3 installation, and our agency delivered a static HTML
 > design in the design/ folder. Build it into TYPO3 as our sitepackage, so the
 > editors can maintain the pages themselves.

@@ -2,7 +2,7 @@
 id: D-FBK-057
 title: A new project is told which line it starts on
 date: 2026-10-29
-status: open
+status: confirmed
 coveredBy:
   - ProjectTest::whereNoCoreIsInstalledTheAnswerNamesTheNewestLtsLine
 ---
@@ -79,3 +79,12 @@ installed yet.**
   that requires it. Then it is step 4, wording, and the statement did not take.
 - A run that called `typo3_project_describe` still names no line. Then the field
   is not where the session reads, and the instructions are the place.
+
+## Confirmed on 2026-10-31
+
+The opencode client of the 2026-10-28 comparison ran the same task again on
+2026-10-30 and installed TYPO3 14.3.10. On 2026-10-28 it installed 13.4.37 and
+named this server as the warrant. The project requires no third-party extension
+on either run, so the first **Wrong if** had its case and did not fire. One run
+of one client settles the **Wrong if** rather than measures the wording.
+`SITE-11` carries the run.

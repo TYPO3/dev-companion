@@ -25,6 +25,24 @@ longer than the client waits.
 handshake returned the full `initialize` result with no stderr. So nothing was
 wrong with the server, the entry, or the installation.
 
+## A running project does it too
+
+The same client hit a second form on 2026-10-31, with the project running. Two
+calls returned nothing for 1829 seconds, and the client aborted both. The
+identical command answered by hand in two seconds, against that same container:
+
+```
+ddev exec php bin/typo3-dev-companion
+```
+
+Its first line of stdout is a valid JSON-RPC frame. DDEV's two warnings about
+`npm` and `npx` go to stderr, so they corrupt no stream.
+
+So this session did not establish what the second form is. It established what
+it is not. The launch form answers, the stream is clean, and the project runs. A
+stdio server answers one request at a time, so the second call may have queued
+behind the first. That is a guess and stays one.
+
 ## Why the entry is right and still fails
 
 `Installer::startedBy()` takes `['ddev', 'exec', 'php', <entrypoint>]` wherever
@@ -64,6 +82,9 @@ container, so a stopped project reads as a connection timeout.
 
 Weigh that against the alternative of naming the state in `documentation/`
 alone, which the person who meets the timeout a month later does not read.
+
+The second form needs a judgement of its own. The install run cannot name a
+state that begins after the entry already works.
 
 Do not make the entry start the project. That is the side effect `AGENTS.md`
 bars, and a client that launches a server has no consent to bring a container

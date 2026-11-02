@@ -37,14 +37,31 @@ name 'library.site12-with.ddev.site'
 
 ## Why both runs could believe it worked
 
-A request over HTTP answers, and so does a request that skips the check. The
-site is correct, the base is correct, and the page renders. Only a client that
-validates the certificate refuses, and that client is the user's browser rather
-than anything the session runs.
+A request that skips the check answers with the second site. A request over
+HTTP answers too, with the first site rather than the second. The site is
+correct, the base is correct, and the page renders. Only a client that
+validates the certificate refuses, and that client is the user's browser
+rather than anything the session runs.
 
 So the run tests the site and the user tests the certificate. The session reports
 success in good faith, and the user cannot open the one artifact the brief asked
 for.
+
+## What the HTTP address answers with
+
+Neither host redirects HTTP to HTTPS. That redirect is the web server's work
+rather than TYPO3's, and a DDEV project writes none, so both schemes answer.
+
+Both runs wrote `https://library.<project>.ddev.site/` into the second site's
+base. An HTTP request matches no base, so the site on `base: /` answers it:
+
+    http://library.site12-with.ddev.site/   13914 bytes, "Jambo County Council"
+    https://site12-with.ddev.site/          the same 13914 bytes
+
+So an HTTP probe of the new host reads the first site and reports success. A
+deployment redirects the scheme and never meets this. What the runs needed is
+the check rather than the base: the session reads a handover URL the way the
+browser does, over HTTPS and with the certificate validated.
 
 ## What the corpus says and does not say
 
@@ -72,5 +89,8 @@ read of DDEV rather than of TYPO3.
 Leave out what to do about it. Whether the user accepts a warning, takes a
 sibling name, or issues a certificate is the user's call, and the hint states
 the options rather than picks one.
+
+Judge separately whether a session's own check belongs in the corpus. An HTTP
+probe of a new host proves nothing about the URL the session hands over.
 
 `SITE-13` carries both runs.

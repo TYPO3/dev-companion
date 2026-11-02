@@ -251,7 +251,10 @@ final class Extension
         return $files;
     }
 
-    /** The source-language of an XLF, from its <file> element and nothing else. */
+    /**
+     * The source-language of an XLF. XLIFF 2.0 declares it as srcLang on the
+     * root, XLIFF 1.2 as source-language on each <file>.
+     */
     private static function sourceLanguage(string $file): ?string
     {
         $handle = @fopen($file, 'rb');
@@ -261,9 +264,13 @@ final class Extension
         $head = (string) fread($handle, 4096);
         fclose($handle);
 
-        return preg_match('/<file\b[^>]*\bsource-language="([^"]*)"/', $head, $matches) === 1
-            ? $matches[1]
-            : null;
+        foreach (['/<xliff\b[^>]*\bsrcLang="([^"]*)"/', '/<file\b[^>]*\bsource-language="([^"]*)"/'] as $pattern) {
+            if (preg_match($pattern, $head, $matches) === 1) {
+                return $matches[1];
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -158,6 +158,29 @@ final class ExtensionTest extends TestCase
         self::assertSame(['ext_typoscript_constants.txt'], array_column($found, 'file'));
     }
 
+    #[Test]
+    public function theSourceLanguageComesFromTheRootOfXliff20AndFromTheFileOfXliff12(): void
+    {
+        $extension = $this->describedWith([
+            'Resources/Private/Language/locallang.xlf' => '<?xml version="1.0" encoding="UTF-8"?>'
+                . '<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en">'
+                . '<file id="f"><unit id="u"><segment><source>Hello</source></segment></unit></file></xliff>',
+            'Resources/Private/Language/legacy.xlf' => '<?xml version="1.0" encoding="UTF-8"?>'
+                . '<xliff version="1.0"><file source-language="de" datatype="plaintext"></file></xliff>',
+            'Resources/Private/Language/undeclared.xlf' => '<?xml version="1.0" encoding="UTF-8"?>'
+                . '<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0"></xliff>',
+        ], []);
+
+        self::assertSame(
+            [
+                'Resources/Private/Language/legacy.xlf' => 'de',
+                'Resources/Private/Language/locallang.xlf' => 'en',
+                'Resources/Private/Language/undeclared.xlf' => null,
+            ],
+            array_column($extension['artifacts']['languageFiles'], 'sourceLanguage', 'path'),
+        );
+    }
+
     /**
      * An extension that ships exactly those files, described.
      *
@@ -167,23 +190,37 @@ final class ExtensionTest extends TestCase
      */
     private function deprecatedFilesOf(array $files, array $manifest): array
     {
+        return $this->describedWith(array_fill_keys($files, "<?php\n"), $manifest)['deprecatedFiles'];
+    }
+
+    /**
+     * An extension that ships exactly those files, with the contents given, described.
+     *
+     * @param array<string, string> $files contents by path inside the extension
+     * @param array<string, mixed> $manifest what its composer.json declares beside the key
+     * @return array<string, mixed>
+     */
+    private function describedWith(array $files, array $manifest): array
+    {
         $root = $this->composerProject();
         $path = $root . '/packages/my_sitepackage';
         file_put_contents($path . '/composer.json', json_encode(
             $manifest + ['name' => 'acme/my-sitepackage', 'type' => 'typo3-cms-extension'],
             JSON_THROW_ON_ERROR,
         ));
-        foreach ($files as $file) {
+        foreach ($files as $file => $contents) {
             if (!is_dir(dirname($path . '/' . $file))) {
                 mkdir(dirname($path . '/' . $file), 0777, true);
             }
-            file_put_contents($path . '/' . $file, "<?php\n");
+            file_put_contents($path . '/' . $file, $contents);
         }
         Instance::discoverFrom($root);
 
         $extension = Extension::describe('my_sitepackage');
-        self::assertNotNull($extension);
+        if ($extension === null) {
+            self::fail('The extension was not found in the installation it was written to.');
+        }
 
-        return $extension['deprecatedFiles'];
+        return $extension;
     }
 }

@@ -1,7 +1,7 @@
 # SITE-12 — A sitepackage for an installation that already renders
 
 **Environment:** `E-SITE` 14.3 with `typo3/theme-camino` required, and
-[`site-11-design/`](site-11-design/index.html) copied to `design/` at the
+[`site-12-design/`](site-12-design/index.html) copied to `design/` at the
 project root · **Contract:** `open`
 **Held by:** `HintsTest::aNewcomersDesignReachesTheHintsOnConvertingIt` and
 `SkillTest::theSitepackageSkillConvertsADesignAndCountsTheDocument`, which hold
@@ -48,14 +48,18 @@ the set takes the nine types away instead. The elements standing on them lose
 what renders them, and what opens them in the backend. Neither way is free, so
 this case asks the session to name the cost it takes.
 
-The design is the one `SITE-11` uses. Reusing it keeps the theme and the content
-as the only difference between the two cases, so a run that goes differently
-says which of the two moved it. The design is a clinic and the content is a
-hiking route, which no agency would deliver together. The 2026-10-30 run shows
-that trade does not hold. The design has no counterpart for a hero, a teaser, an
-author box, or a social links row. So it asks the session nothing about them.
-Both runs layered over camino, and neither met the decision this case is about.
-The next run needs a design whose shape meets the content.
+The first two runs used `SITE-11`'s design. That reuse kept the theme and the
+content as the only difference between the two cases. The design is a clinic and
+the content is a hiking route, which no agency would deliver together. The
+2026-10-30 run shows that trade does not hold. The design has no counterpart for
+a hero, a teaser, an author box, or a social links row. So it asks the session
+nothing about them. Both runs layered over camino, and neither met the decision
+this case is about.
+
+`site-12-design/` carries a block for each of camino's nine types. They are two
+page heads, a card grid, a teaser, a media teaser, an author box, four link
+columns, and a social row. So a session cannot layer over `theme_camino` without
+meeting all nine.
 
 > Our site runs on the default theme and the editors have already filled it.
 > Our agency delivered a static HTML design in the design/ folder. Build it

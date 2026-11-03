@@ -76,6 +76,19 @@ dependency and followed none of it.
 `feedback/2026-10-30-164400-the-statement-that-forbids-depending-on-theme.md`
 records it.
 
+**Run 2026-11-02:** two runs against `af25c0f7`, on the design this case now
+carries, one with this server and one without. The run with it made 20 calls and
+opened 4 skills. It removed `typo3/theme-camino` from the project, registered
+the design's nine blocks as its own types, and shipped
+`jamboSitepackage_caminoContentMigration`, which moved all 18 rows that stood on
+camino's types. The run without it kept camino installed, built its set on top,
+and said in as many words that the storage still depends on it and that a move
+off it is a migration of its own. Both kept all 50 elements, and both compared
+the stored content against a dump from before the change. Both found that the
+design's `.page-grid` put the running text in the narrow column, and both
+repaired it on their side. So the first of the three pairs took the cost, and
+the shape of the design is what asked for it.
+
 **What the agent needs from this server**
 
 - That the installation already has a theme, what the camino set defines, and

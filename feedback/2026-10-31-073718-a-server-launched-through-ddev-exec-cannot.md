@@ -43,6 +43,25 @@ it is not. The launch form answers, the stream is clean, and the project runs. A
 stdio server answers one request at a time, so the second call may have queued
 behind the first. That is a guess and stays one.
 
+## What a second host measured on a cold project
+
+Another session measured this entry on a throwaway project: TYPO3 14.3.10, PHP
+8.4, DDEV v1.25.3, this server at `af25c0f7` as a `require-dev` dependency, and
+the entry `install --agent=claude` wrote.
+
+With the project running, `initialize` and `tools/list` answered in 3.6 seconds
+with 30 tools, and a `claude -p` session called two tools.
+
+With the project stopped, nothing answered. `ddev exec` brought the containers
+up in about 18 seconds, and no frame arrived in the 75 seconds the pipe stayed
+open. `ddev start` wrote its progress to stdout, so text that is not JSON-RPC
+reaches the client on the stream the protocol owns.
+
+So the cold state is not a slow answer. It is no answer, on a stream with other
+text in it. This session measured the clean stream on a warm project, and that
+statement holds there. The second measurement is one host with a piped stdin
+rather than a client run, and nobody has confirmed what the start does to stdin.
+
 ## Why the entry is right and still fails
 
 `Installer::startedBy()` takes `['ddev', 'exec', 'php', <entrypoint>]` wherever

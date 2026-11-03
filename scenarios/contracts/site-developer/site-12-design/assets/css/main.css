@@ -310,7 +310,7 @@ input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
 .page-grid {
   display: grid;
-  grid-template-columns: 16rem minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 16rem;
   gap: 3rem;
   align-items: start;
   padding-bottom: 4rem;

@@ -87,11 +87,8 @@ wrote paragraphs under the headings. So the fence, the named rules, one value
 per head row and the audit's `Key`, `Checkout` and package rows followed. The
 fourth runs, against `49b0adbc`, each cited a rule known by its id alone, so the
 Rule clause says a name is no source. `REVIEW-02` still wrote a paragraph after
-the fence, and the next such breach makes the filled example the step to weigh.
-The fifth `REVIEW-01` and `REVIEW-03` runs cited line numbers out of one output
-of several files. So a sixth rule ties a `<path>:<line>` to a read of that one
-file, and `skills/base.md` says to read each file with a call of its own.
-
-The fifth `REVIEW-02` run was that breach, and the maintainer chose the filled
-example on 2026-11-06, over the work order inside the fence and a last comparing
-step. Each `report.md` now carries one after its skeleton.
+the fence. So the maintainer chose the filled example on 2026-11-06, and each
+`report.md` carries one after its skeleton. The fifth `REVIEW-01` and
+`REVIEW-03` runs cited line numbers out of one output of several files. So a
+sixth rule ties a `<path>:<line>` to a read of that one file, and
+`skills/base.md` says to read each file with a call of its own.

@@ -350,8 +350,15 @@ stays open rather than gets a fill:
 * **Cursor** — unestablished. Servers stand under *Customize*, where a toggle
   switches one off, and "Cursor asks for approval before using MCP tools by
   default". That is the tool call, not the server. Whether a window that was
-  already open reads a new file is not documented.
-  (`MCP <https://cursor.com/docs/mcp>`_)
+  already open reads a new file is not documented. In the CLI,
+  ``--approve-mcps`` approves the server and not its tools. So a first task asks
+  once per tool. ``install`` writes no permission. A project that wants fewer
+  questions lists the read-only tools under ``permissions.allow`` in
+  ``.cursor/cli.json``, one ``Mcp(typo3-dev-companion:typo3_hint_lookup)`` per
+  tool. ``Mcp(typo3-dev-companion:*)`` also allows ``typo3_feedback_record``, the
+  tool that writes.
+  (`MCP <https://cursor.com/docs/mcp>`_,
+  `Permissions <https://cursor.com/docs/cli/reference/permissions>`_)
 * **opencode** — unestablished. ``enabled: false`` switches a server off, which
   the written entry does not. Whether a session that was already open reads the
   file again has no documentation.

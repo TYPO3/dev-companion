@@ -28,14 +28,14 @@ use TYPO3\DevCompanion\Paths;
 final class ToolProxy
 {
     /** What `--without` takes. Anything else is a typo the caller hears about. */
-    public const HALVES = ['structuredContent', 'outputSchema'];
+    public const HALVES = ['structuredContent', 'outputSchema', 'guides', 'guidesAsLinks'];
 
     /**
      * @param list<string> $without
      */
     public function __invoke(
         OutputInterface $output,
-        #[Option('what to strip on the way back: structuredContent, outputSchema, or both')]
+        #[Option('what to strip on the way back: structuredContent, outputSchema, guides, or guidesAsLinks, which puts a resource_link in place of each guide')]
         array $without = [],
     ): int {
         $unknown = array_diff($without, self::HALVES);
@@ -140,6 +140,9 @@ final class ToolProxy
         if (in_array('structuredContent', $without, true)) {
             unset($result->structuredContent);
         }
+        if (array_intersect(['guides', 'guidesAsLinks'], $without) !== []) {
+            self::withoutGuides($result, in_array('guidesAsLinks', $without, true));
+        }
         if (in_array('outputSchema', $without, true) && is_array($result->tools ?? null)) {
             foreach ($result->tools as $tool) {
                 if ($tool instanceof \stdClass) {
@@ -149,5 +152,35 @@ final class ToolProxy
         }
 
         return $message;
+    }
+
+    /**
+     * `typo3_project_describe` without the procedures it quotes, for the
+     * measures of `D-ANS-087` and `D-EVI-011`. Only that answer has the field.
+     */
+    private static function withoutGuides(\stdClass $result, bool $asLinks): void
+    {
+        $guides = $result->structuredContent->guides ?? null;
+        if (!is_array($guides)) {
+            return;
+        }
+        $result->structuredContent->guides = [];
+        foreach ($result->content ?? [] as $block) {
+            if (($block->type ?? '') === 'text') {
+                $block->text = (string) preg_replace('/^Whole procedures .*\n(?:- .*(?:\n|$))*/m', '', (string) $block->text);
+            }
+        }
+        if (!$asLinks) {
+            return;
+        }
+        foreach ($guides as $guide) {
+            $result->content[] = (object) [
+                'type' => 'resource_link',
+                'uri' => 'typo3://guides/' . $guide->id,
+                'name' => $guide->title,
+                'description' => $guide->when,
+                'mimeType' => 'text/markdown',
+            ];
+        }
     }
 }

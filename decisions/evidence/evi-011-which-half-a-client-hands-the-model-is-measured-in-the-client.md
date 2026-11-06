@@ -108,3 +108,11 @@ the session read two clients' code and then measured both.
 The maintainer answered the question on the day: the session reads what it acts
 on best, and that is the data, at the cost measured here. `D-ANS-162` records it
 and the waiting todo went with it.
+
+Measured on 2026-11-06 on `claude-fable-5-1`, the `SITE-06` prompt in two copies
+of `E-SITE` 14.3, `bin/cli tools:proxy` taking the quoted `guides` away for one.
+With the text the session called `typo3_rule_lookup` for
+`project/testing/playwright`, in 45 calls for $3.35. With `resource_link` blocks
+it read that resource, in 41 calls for $3.32. Claude Code hands each link over
+as a line with its title and `when`, so no quoted text went. The links save
+neither, and one pair says no more, so the answer keeps its quoted `guides`.

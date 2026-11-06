@@ -990,6 +990,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### evidence
 
+- [`D-EVI-014`][D-EVI-014] — A paired run measures the answer rather than the tokens · 2026-10-30
 - [`D-EVI-013`][D-EVI-013] — A forward review is measured three times and graded blind · 2026-10-29
 - [`D-EVI-012`][D-EVI-012] — A running environment says where it opens and the login · 2026-10-26
 - [`D-EVI-011`][D-EVI-011] — Which half a client hands the model is measured in the client · 2026-09-17
@@ -1004,6 +1005,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-EVI-002`][D-EVI-002] — A skill crossing is read rather than run · 2026-07-31 · confirmed
 - [`D-EVI-003`][D-EVI-003] — A review runs the checks that cannot change the code · 2026-07-31 · confirmed
 
+[D-EVI-014]: evidence/evi-014-a-paired-run-measures-the-answer-rather-than-the-tokens.md
 [D-EVI-013]: evidence/evi-013-a-forward-review-is-measured-three-times-and-graded-blind.md
 [D-EVI-012]: evidence/evi-012-a-running-environment-says-where-it-opens-and-the-login.md
 [D-EVI-011]: evidence/evi-011-which-half-a-client-hands-the-model-is-measured-in-the-client.md
@@ -1228,7 +1230,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### feedback
 
-- [`D-FBK-057`][D-FBK-057] — A new project is told which line it starts on · 2026-10-29
+- [`D-FBK-057`][D-FBK-057] — A new project is told which line it starts on · 2026-10-29 · confirmed
 - [`D-FBK-056`][D-FBK-056] — A core patch review read the server as its route · 2026-10-05
 - [`D-FBK-054`][D-FBK-054] — The server answers what is registered and a person answers what it looks like · 2026-09-02
 - [`D-FBK-055`][D-FBK-055] — A registration file is checked after the cache flush or not at all · 2026-09-02

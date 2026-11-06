@@ -6,7 +6,7 @@ These hold the assumptions about how this repository keeps track of itself. That
 The requirements of the same name are in
 [requirements/feedback/](../../requirements/feedback/readme.md). See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
-- [`D-FBK-057`][D-FBK-057] — A new project is told which line it starts on · 2026-10-29
+- [`D-FBK-057`][D-FBK-057] — A new project is told which line it starts on · 2026-10-29 · confirmed
 - [`D-FBK-056`][D-FBK-056] — A core patch review read the server as its route · 2026-10-05
 - [`D-FBK-054`][D-FBK-054] — The server answers what is registered and a person answers what it looks like · 2026-09-02
 - [`D-FBK-055`][D-FBK-055] — A registration file is checked after the cache flush or not at all · 2026-09-02

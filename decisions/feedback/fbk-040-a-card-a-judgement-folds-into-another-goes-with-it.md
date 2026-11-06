@@ -4,6 +4,7 @@ title: 'A card a judgement folds into another goes with it'
 date: 2026-08-03
 status: open
 coveredBy:
+  - TodoTest::everySentenceOfTheCardStepKeepsTheProseMeasure
   - TodoTest::noJudgementLeavesBehindTheCardItReplaced
   - TodoTest::theCardAJudgementReplacedIsFoundByTheStepItStillCarries
 ---
@@ -69,3 +70,8 @@ second card is not a duplicate anybody can see.
 - The deletion loses a judgement rather than a duplicate: a card goes whose
   feedback the todo that stays does not actually carry. That is the failure
   `D-FBK-017` names, reached from the other side.
+
+## Since then
+
+On 2026-11-06 `Card::STEP` came down to the 25-word measure. The same commit
+rewrote the open cards, so the comparison keeps one text and no list of old ones.

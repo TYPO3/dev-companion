@@ -109,6 +109,19 @@ final class TodoTest extends TestCase
     }
 
     /**
+     * Every card carries the step, so a sentence over the measure put each new
+     * card at the head of `bin/cli prose:check`.
+     */
+    #[Decision('D-FBK-040')]
+    #[Test]
+    public function everySentenceOfTheCardStepKeepsTheProseMeasure(): void
+    {
+        foreach (preg_split('/(?<=\.)\s+/', Card::STEP) ?: [] as $sentence) {
+            self::assertLessThanOrEqual(25, str_word_count($sentence), $sentence);
+        }
+    }
+
+    /**
      * What tells the two apart is the step, and the step is a constant. Every
      * card carries the same sentence, because the judgement of one feedback is
      * the same work whichever it is. A judgement is what replaces it. So a body

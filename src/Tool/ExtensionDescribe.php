@@ -173,7 +173,7 @@ final class ExtensionDescribe extends ReadOnlyTool
                 'tests' => Schema::listOf(Schema::string(), 'The layers below Tests/, for example Unit and Functional. Empty where the extension ships no tests.'),
                 'languageFiles' => Schema::listOf(Schema::object([
                     'path' => Schema::string('Relative to the extension.'),
-                    'sourceLanguage' => Schema::nullableString('The source-language its own <file> element declares, null where it declares none. This is what the file says, not what it should say.'),
+                    'sourceLanguage' => Schema::nullableString('The source language the file declares: srcLang on its root in XLIFF 2.0, source-language on its <file> element in XLIFF 1.2. Null where it declares none. This is what the file says, not what it should say.'),
                     'translations' => Schema::listOf(Schema::string(), 'Locales of the prefixed files beside it, such as de for de.messages.xlf.'),
                 ], ['path', 'sourceLanguage', 'translations'])),
             ], ['manual', 'readme', 'tests', 'languageFiles'], 'What it ships beside its registrations. Every key is present even when the artifact is not. The absence of a manual, a test or a translation is the answer a file listing cannot give.'),

@@ -269,7 +269,8 @@ Answers with
       languageFiles:
         - # Relative to the extension.
           path: string
-          # The source-language its own <file> element declares, null where it
+          # The source language the file declares: srcLang on its root in XLIFF 2.0,
+          # source-language on its <file> element in XLIFF 1.2. Null where it
           # declares none. This is what the file says, not what it should say.
           sourceLanguage: string or null
           # Locales of the prefixed files beside it, such as de for de.messages.xlf.

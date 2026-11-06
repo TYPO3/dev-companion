@@ -856,7 +856,8 @@ final class Installer
      * DDEV comes before the variable because it is not only a way to name the
      * path. The entry has to start the container's PHP, which sees the project
      * directory rather than the host. A `${...}` expanded to a host path would
-     * name a directory that container has never had.
+     * name a directory that container has never had. The launcher stands in
+     * front of `ddev exec` for the stream's sake — `D-DIS-037`.
      *
      * @param ?string $root what this client resolves to the project root, null
      *     where its documentation says it resolves nothing there
@@ -869,7 +870,10 @@ final class Installer
             return ['command' => 'php', 'args' => [$this->entrypoint]];
         }
         if (is_file($this->project . '/.ddev/config.yaml')) {
-            return ['command' => 'ddev', 'args' => ['exec', 'php', $installed]];
+            // Windows has no `sh` to rely on, and nobody measured a launcher there.
+            return PHP_OS_FAMILY === 'Windows'
+                ? ['command' => 'ddev', 'args' => ['exec', 'php', $installed]]
+                : ['command' => 'sh', 'args' => [dirname($installed) . '/' . self::SERVER . '-ddev', $installed]];
         }
         if ($root !== null) {
             return ['command' => 'php', 'args' => [$root . '/' . $installed]];

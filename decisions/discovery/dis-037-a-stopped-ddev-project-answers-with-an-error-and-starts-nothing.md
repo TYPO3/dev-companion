@@ -3,7 +3,9 @@ id: D-DIS-037
 title: A stopped DDEV project answers with an error and starts nothing
 date: 2026-11-06
 status: open
-coveredBy: []
+coveredBy:
+  - DdevLauncherTest::aRunningProjectHandsTheServerTheClientsFirstRequest
+  - DdevLauncherTest::aStoppedProjectAnswersEveryRequestWithTheCommandOnACleanStream
 ---
 
 # D-DIS-037 — A stopped DDEV project answers with an error and starts nothing
@@ -13,11 +15,20 @@ JSON-RPC error that names `ddev start`, and it starts nothing.**
 
 ## Evidence
 
-- `feedback/2026-11-05-180136-a-cold-ddev-exec-launch-writes-ddev-s-own.md`
+- `feedback/archive/2026-11-05-180136-a-cold-ddev-exec-launch-writes-ddev-s-own.md`
   measured 292 bytes of DDEV's output on stdout, and then either exit 0 or a
   hang on identical input.
 - `feedback/2026-10-31-073718-a-server-launched-through-ddev-exec-cannot.md`
-  reports the same entry from the symptom.
+  reported the same entry from the symptom, and keeps the half that is open: a
+  silence with the project running.
+- On 2026-11-06, DDEV v1.25.5 on Linux: `ddev describe -j` answers in about a
+  second with JSON on stdout, starts nothing, and reports `status_desc`. On a
+  stopped project the launcher wrote only JSON-RPC errors, and the project
+  stayed stopped. On a running one the server read the client's first request.
+- Not measured: Windows and macOS, and an idle project. `ddev pause` is no
+  command in this version. The launcher reads anything but `running` as not
+  running.
+- Windows keeps `ddev exec php`, so the defect stands there.
 
 ## Decided
 
@@ -27,8 +38,10 @@ JSON-RPC error that names `ddev start`, and it starts nothing.**
 
 ## Assumed
 
-- That an entry can read the state without writing to stdout on every platform
-  `install` serves. Nobody has measured it, and `T-261105-6e1f` starts there.
+- That a client shows the person the error text. Claude Code 2.1.319 handed it
+  to the session word for word. A Codex run on 2026-11-06 printed no line that
+  named the server, and that run did not establish whether Codex started it at
+  all.
 
 ## Wrong if
 

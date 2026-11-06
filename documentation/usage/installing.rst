@@ -203,8 +203,8 @@ repositories use:
       "mcpServers": {
         "typo3-dev-companion": {
           "type": "stdio",
-          "command": "ddev",
-          "args": ["exec", "php", ".build/bin/typo3-dev-companion"]
+          "command": "sh",
+          "args": [".build/bin/typo3-dev-companion-ddev", ".build/bin/typo3-dev-companion"]
         }
       }
     }

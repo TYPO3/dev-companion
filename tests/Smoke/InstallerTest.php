@@ -262,8 +262,8 @@ final class InstallerTest extends TestCase
 
             $server = [
                 'type' => 'stdio',
-                'command' => 'ddev',
-                'args' => ['exec', 'php', 'vendor/bin/typo3-dev-companion'],
+                'command' => 'sh',
+                'args' => ['vendor/bin/typo3-dev-companion-ddev', 'vendor/bin/typo3-dev-companion'],
             ];
             $mcpConfiguration = json_decode(
                 (string) file_get_contents($directory . '/.mcp.json'),
@@ -273,9 +273,9 @@ final class InstallerTest extends TestCase
             self::assertSame($server, $mcpConfiguration['mcpServers']['typo3-dev-companion']);
 
             $codexConfiguration = (string) file_get_contents($directory . '/.codex/config.toml');
-            self::assertStringContainsString('command = "ddev"', $codexConfiguration);
+            self::assertStringContainsString('command = "sh"', $codexConfiguration);
             self::assertStringContainsString(
-                'args = ["exec","php","vendor/bin/typo3-dev-companion"]',
+                'args = ["vendor/bin/typo3-dev-companion-ddev","vendor/bin/typo3-dev-companion"]',
                 $codexConfiguration,
             );
             self::assertFileExists(
@@ -457,8 +457,8 @@ final class InstallerTest extends TestCase
 
             self::assertSame([
                 'type' => 'stdio',
-                'command' => 'ddev',
-                'args' => ['exec', 'php', 'vendor/bin/typo3-dev-companion'],
+                'command' => 'sh',
+                'args' => ['vendor/bin/typo3-dev-companion-ddev', 'vendor/bin/typo3-dev-companion'],
             ], json_decode(
                 (string) file_get_contents($directory . '/.cursor/mcp.json'),
                 true,
@@ -525,8 +525,8 @@ final class InstallerTest extends TestCase
             );
             self::assertSame([
                 'type' => 'stdio',
-                'command' => 'ddev',
-                'args' => ['exec', 'php', '.build/bin/typo3-dev-companion'],
+                'command' => 'sh',
+                'args' => ['.build/bin/typo3-dev-companion-ddev', '.build/bin/typo3-dev-companion'],
             ], $configuration['mcpServers']['typo3-dev-companion']);
         } finally {
             Directory::remove($directory);
@@ -561,8 +561,8 @@ final class InstallerTest extends TestCase
             );
             self::assertSame([
                 'type' => 'stdio',
-                'command' => 'ddev',
-                'args' => ['exec', 'php', 'bin/typo3-dev-companion'],
+                'command' => 'sh',
+                'args' => ['bin/typo3-dev-companion-ddev', 'bin/typo3-dev-companion'],
             ], $configuration['mcpServers']['typo3-dev-companion']);
         } finally {
             Directory::remove($directory);
@@ -619,8 +619,8 @@ final class InstallerTest extends TestCase
             );
             self::assertSame([
                 'type' => 'stdio',
-                'command' => 'ddev',
-                'args' => ['exec', 'php', 'vendor/bin/typo3-dev-companion'],
+                'command' => 'sh',
+                'args' => ['vendor/bin/typo3-dev-companion-ddev', 'vendor/bin/typo3-dev-companion'],
             ], $configuration['mcpServers']['typo3-dev-companion']);
         } finally {
             Directory::remove($directory);

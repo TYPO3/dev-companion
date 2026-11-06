@@ -25,7 +25,8 @@
         }
     },
     "bin": [
-        "bin/typo3-dev-companion"
+        "bin/typo3-dev-companion",
+        "bin/typo3-dev-companion-ddev"
     ],
     "config": {
         "sort-packages": true,

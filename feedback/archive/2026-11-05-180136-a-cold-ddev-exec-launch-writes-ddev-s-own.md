@@ -1,7 +1,8 @@
 ---
 date: 2026-11-05T18:01:36+00:00
 category: tool-gap
-status: open
+status: closed
+closed: 2026-11-06
 model: claude-opus-5
 tool: typo3-dev-companion, install
 directory: /home/lina/projects/typo3/tools/dev-companion

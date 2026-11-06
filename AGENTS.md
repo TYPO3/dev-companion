@@ -32,6 +32,7 @@ Two more rules follow, and each is worth its own statement:
 
 ```
 bin/typo3-dev-companion  # stdio entrypoint; the client launches it as a subprocess
+bin/typo3-dev-companion-ddev  # what a DDEV project's entry launches: the server, or an error on a stopped project
 bin/cli            # everything this repository is kept in order by; run it with nothing for the list
 src/               # grouped by what a class is: only Paths and the bootstrap sit loose
 src/Server/        # starting this server and setting a project up for it

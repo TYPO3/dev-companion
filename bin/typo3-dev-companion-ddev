@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# Starts the server in a DDEV project, and starts nothing else (D-DIS-037).
+# `ddev exec` on a stopped project starts it and writes its progress to stdout,
+# which is the stream the protocol runs on. So a stopped project answers every
+# request with an error that names the command, on a clean stream.
+#
+# Usage: typo3-dev-companion-ddev <the server's entrypoint, relative to the project>
+
+ddev=${TYPO3_DEV_COMPANION_DDEV:-ddev}
+
+# stdin stays with the server: a child that reads it takes the client's first request.
+if "$ddev" describe -j </dev/null 2>/dev/null | grep -q '"status_desc":"running"'; then
+    exec "$ddev" exec php "$1"
+fi
+
+message='This DDEV project is not running, and this server starts nothing on its own. Run ddev start in the project, then reconnect this MCP server.'
+
+while IFS= read -r request; do
+    id=$(printf '%s\n' "$request" | sed -n -E 's/.*"id"[[:space:]]*:[[:space:]]*([0-9]+|"[^"]*").*/\1/p')
+    if [ -n "$id" ]; then
+        printf '{"jsonrpc":"2.0","id":%s,"error":{"code":-32603,"message":"%s"}}\n' "$id" "$message"
+    fi
+done

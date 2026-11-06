@@ -1,0 +1,8 @@
+#!/bin/sh
+# The double for a running DDEV project: tests/Smoke/DdevLauncherTest.php.
+if [ "$1" = describe ]; then
+    echo '{"raw":{"status_desc":"running"}}'
+    exit 0
+fi
+read -r request
+printf 'server %s %s\n' "$3" "$request"

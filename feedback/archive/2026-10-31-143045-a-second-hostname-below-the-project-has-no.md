@@ -1,7 +1,8 @@
 ---
 date: 2026-10-31T14:30:45+00:00
 category: missing-knowledge
-status: open
+status: closed
+closed: 2026-11-06
 model: claude-opus-5-5
 tool: typo3_project_describe, typo3_task_guide
 directory: /home/lina/trials/site12-with, /home/lina/trials/site12-without

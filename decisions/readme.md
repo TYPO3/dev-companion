@@ -116,6 +116,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-195`][D-ANS-195] — A changelog lookup takes the word the other tools take · 2026-11-06
 - [`D-ANS-194`][D-ANS-194] — The whole orientation stays under what Claude Code keeps in context · 2026-10-30
 - [`D-ANS-193`][D-ANS-193] — A feature task is asked for the extension that already does it · 2026-10-29
 - [`D-ANS-190`][D-ANS-190] — A PHP identifier reaches a manual changelog entry through its listing · 2026-10-28
@@ -301,6 +302,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-195]: answers/ans-195-a-changelog-lookup-takes-the-word-the-other-tools-take.md
 [D-ANS-194]: answers/ans-194-the-whole-orientation-stays-under-what-claude-code-keeps-in-context.md
 [D-ANS-193]: answers/ans-193-a-feature-task-is-asked-for-the-extension-that-already-does-it.md
 [D-ANS-190]: answers/ans-190-a-php-identifier-reaches-a-manual-changelog-entry-through-its-listing.md
@@ -489,6 +491,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### knowledge
 
 - [`D-KNW-186`][D-KNW-186] — A password question reaches the install tool and a project commits settings.php · 2026-11-06
+- [`D-KNW-187`][D-KNW-187] — The describe answer carries the caveat the catalog holds · 2026-11-06
+- [`D-KNW-188`][D-KNW-188] — A sitepackage ships the migration its layouts cause · 2026-11-06
 - [`D-KNW-183`][D-KNW-183] — A decision a new site makes is handed to the user with its options · 2026-10-30
 - [`D-KNW-184`][D-KNW-184] — The corpus weighs no package outside the core against the core · 2026-10-30
 - [`D-KNW-185`][D-KNW-185] — The reuse question reaches a feature without a change type · 2026-10-30
@@ -666,6 +670,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
 [D-KNW-186]: knowledge/knw-186-a-password-question-reaches-the-install-tool-and-a-project-commits-settings-php.md
+[D-KNW-187]: knowledge/knw-187-the-describe-answer-carries-the-caveat-the-catalog-holds.md
+[D-KNW-188]: knowledge/knw-188-a-sitepackage-ships-the-migration-its-layouts-cause.md
 [D-KNW-183]: knowledge/knw-183-a-decision-a-new-site-makes-is-handed-to-the-user-with-its-options.md
 [D-KNW-184]: knowledge/knw-184-the-corpus-weighs-no-package-outside-the-core-against-the-core.md
 [D-KNW-185]: knowledge/knw-185-the-reuse-question-reaches-a-feature-without-a-change-type.md
@@ -992,6 +998,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### evidence
 
+- [`D-EVI-015`][D-EVI-015] — Which hosts a DDEV certificate covers differs per machine · 2026-11-06
 - [`D-EVI-014`][D-EVI-014] — A paired run measures the answer rather than the tokens · 2026-10-30
 - [`D-EVI-013`][D-EVI-013] — A forward review is measured three times and graded blind · 2026-10-29
 - [`D-EVI-012`][D-EVI-012] — A running environment says where it opens and the login · 2026-10-26
@@ -1007,6 +1014,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-EVI-002`][D-EVI-002] — A skill crossing is read rather than run · 2026-07-31 · confirmed
 - [`D-EVI-003`][D-EVI-003] — A review runs the checks that cannot change the code · 2026-07-31 · confirmed
 
+[D-EVI-015]: evidence/evi-015-which-hosts-a-ddev-certificate-covers-differs-per-machine.md
 [D-EVI-014]: evidence/evi-014-a-paired-run-measures-the-answer-rather-than-the-tokens.md
 [D-EVI-013]: evidence/evi-013-a-forward-review-is-measured-three-times-and-graded-blind.md
 [D-EVI-012]: evidence/evi-012-a-running-environment-says-where-it-opens-and-the-login.md

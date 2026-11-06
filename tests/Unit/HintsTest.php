@@ -9778,4 +9778,24 @@ final class HintsTest extends TestCase
         self::assertNotContains(Domains::TYPESCRIPT, $domains);
         self::assertNotContains(Domains::CSS, $domains);
     }
+
+    #[Decision('D-EVI-015')]
+    #[Test]
+    public function aHandoverUrlIsReadWithItsCertificateValidated(): void
+    {
+        self::assertStringContainsString('with the certificate validated', self::statementsOf('site-base-collision'));
+    }
+
+    #[Decision('D-KNW-188')]
+    #[Test]
+    public function aSitepackageThatMovesContentIsSentToTheUpgradeWizards(): void
+    {
+        $item = array_values(array_filter(
+            array_column(TaskIntents::load(), null, 'id')['sitepackage']['checklist'] ?? [],
+            static fn(string $line): bool => str_contains($line, 'id=upgrade-wizards'),
+        ));
+
+        self::assertCount(1, $item);
+        self::assertStringContainsString('A site with nothing in it owes nothing here.', $item[0]);
+    }
 }

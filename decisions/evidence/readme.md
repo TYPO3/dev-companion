@@ -4,6 +4,7 @@ A prompt that already contains the answer measures nothing. These are the decisi
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-EVI-015`][D-EVI-015] — Which hosts a DDEV certificate covers differs per machine · 2026-11-06
 - [`D-EVI-014`][D-EVI-014] — A paired run measures the answer rather than the tokens · 2026-10-30
 - [`D-EVI-013`][D-EVI-013] — A forward review is measured three times and graded blind · 2026-10-29
 - [`D-EVI-012`][D-EVI-012] — A running environment says where it opens and the login · 2026-10-26
@@ -19,6 +20,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-EVI-002`][D-EVI-002] — A skill crossing is read rather than run · 2026-07-31 · confirmed
 - [`D-EVI-003`][D-EVI-003] — A review runs the checks that cannot change the code · 2026-07-31 · confirmed
 
+[D-EVI-015]: evi-015-which-hosts-a-ddev-certificate-covers-differs-per-machine.md
 [D-EVI-014]: evi-014-a-paired-run-measures-the-answer-rather-than-the-tokens.md
 [D-EVI-013]: evi-013-a-forward-review-is-measured-three-times-and-graded-blind.md
 [D-EVI-012]: evi-012-a-running-environment-says-where-it-opens-and-the-login.md

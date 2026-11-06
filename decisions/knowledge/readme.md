@@ -5,6 +5,8 @@ Where a statement sits, what verifies it when the core cannot, and what a packag
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
 - [`D-KNW-186`][D-KNW-186] — A password question reaches the install tool and a project commits settings.php · 2026-11-06
+- [`D-KNW-187`][D-KNW-187] — The describe answer carries the caveat the catalog holds · 2026-11-06
+- [`D-KNW-188`][D-KNW-188] — A sitepackage ships the migration its layouts cause · 2026-11-06
 - [`D-KNW-183`][D-KNW-183] — A decision a new site makes is handed to the user with its options · 2026-10-30
 - [`D-KNW-184`][D-KNW-184] — The corpus weighs no package outside the core against the core · 2026-10-30
 - [`D-KNW-185`][D-KNW-185] — The reuse question reaches a feature without a change type · 2026-10-30
@@ -182,6 +184,8 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-KNW-004`][D-KNW-004] — Package knowledge needs a producer before it needs discovery · 2026-07-30 · confirmed
 
 [D-KNW-186]: knw-186-a-password-question-reaches-the-install-tool-and-a-project-commits-settings-php.md
+[D-KNW-187]: knw-187-the-describe-answer-carries-the-caveat-the-catalog-holds.md
+[D-KNW-188]: knw-188-a-sitepackage-ships-the-migration-its-layouts-cause.md
 [D-KNW-183]: knw-183-a-decision-a-new-site-makes-is-handed-to-the-user-with-its-options.md
 [D-KNW-184]: knw-184-the-corpus-weighs-no-package-outside-the-core-against-the-core.md
 [D-KNW-185]: knw-185-the-reuse-question-reaches-a-feature-without-a-change-type.md

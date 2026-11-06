@@ -80,7 +80,7 @@ final class ToolProxyRelayTest extends TestCase
         fclose($pipes[2]);
 
         self::assertSame(1, proc_close($process));
-        self::assertStringContainsString('structuredContent or outputSchema, not isError', $stderr);
+        self::assertStringContainsString('structuredContent or outputSchema or guides, not isError', $stderr);
     }
 
     /**

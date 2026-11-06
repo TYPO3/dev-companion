@@ -28,14 +28,14 @@ use TYPO3\DevCompanion\Paths;
 final class ToolProxy
 {
     /** What `--without` takes. Anything else is a typo the caller hears about. */
-    public const HALVES = ['structuredContent', 'outputSchema', 'guides', 'guidesAsLinks'];
+    public const HALVES = ['structuredContent', 'outputSchema', 'guides'];
 
     /**
      * @param list<string> $without
      */
     public function __invoke(
         OutputInterface $output,
-        #[Option('what to strip on the way back: structuredContent, outputSchema, guides, or guidesAsLinks, which puts a resource_link in place of each guide')]
+        #[Option('what to strip on the way back: structuredContent, outputSchema or guides')]
         array $without = [],
     ): int {
         $unknown = array_diff($without, self::HALVES);
@@ -140,8 +140,8 @@ final class ToolProxy
         if (in_array('structuredContent', $without, true)) {
             unset($result->structuredContent);
         }
-        if (array_intersect(['guides', 'guidesAsLinks'], $without) !== []) {
-            self::withoutGuides($result, in_array('guidesAsLinks', $without, true));
+        if (in_array('guides', $without, true)) {
+            self::withoutGuides($result);
         }
         if (in_array('outputSchema', $without, true) && is_array($result->tools ?? null)) {
             foreach ($result->tools as $tool) {
@@ -155,10 +155,10 @@ final class ToolProxy
     }
 
     /**
-     * `typo3_project_describe` without the procedures it quotes, for the
-     * measures of `D-ANS-087` and `D-EVI-011`. Only that answer has the field.
+     * `typo3_project_describe` without the procedures it quotes, for the measure
+     * of `D-ANS-087`. Only that answer has the field.
      */
-    private static function withoutGuides(\stdClass $result, bool $asLinks): void
+    private static function withoutGuides(\stdClass $result): void
     {
         $guides = $result->structuredContent->guides ?? null;
         if (!is_array($guides)) {
@@ -169,18 +169,6 @@ final class ToolProxy
             if (($block->type ?? '') === 'text') {
                 $block->text = (string) preg_replace('/^Whole procedures .*\n(?:- .*(?:\n|$))*/m', '', (string) $block->text);
             }
-        }
-        if (!$asLinks) {
-            return;
-        }
-        foreach ($guides as $guide) {
-            $result->content[] = (object) [
-                'type' => 'resource_link',
-                'uri' => 'typo3://guides/' . $guide->id,
-                'name' => $guide->title,
-                'description' => $guide->when,
-                'mimeType' => 'text/markdown',
-            ];
         }
     }
 }

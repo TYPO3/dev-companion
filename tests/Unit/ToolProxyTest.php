@@ -92,7 +92,7 @@ final class ToolProxyTest extends TestCase
     }
 
     #[Test]
-    public function theGuidesLeaveTheProjectAnswerAndCanComeBackAsLinks(): void
+    public function theGuidesLeaveTheProjectAnswer(): void
     {
         $line = (string) json_encode(['jsonrpc' => '2.0', 'id' => 3, 'result' => [
             'content' => [['type' => 'text', 'text' => "Sites\nWhole procedures this server carries\n- any/one (any) — One.\nLast"]],
@@ -103,9 +103,5 @@ final class ToolProxyTest extends TestCase
         self::assertSame("Sites\nLast", $cut->result->content[0]->text);
         self::assertSame([], $cut->result->structuredContent->guides);
         self::assertCount(1, $cut->result->content);
-
-        $linked = json_decode(ToolProxy::rewritten($line, ['guidesAsLinks']));
-        self::assertSame('resource_link', $linked->result->content[1]->type);
-        self::assertSame('typo3://guides/any/one', $linked->result->content[1]->uri);
     }
 }

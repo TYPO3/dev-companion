@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Server;
 
 use TYPO3\DevCompanion\Installation\Instance;
+use TYPO3\DevCompanion\Knowledge\Coverage;
 
 /**
  * What `bin/typo3-dev-companion` runs.
@@ -164,7 +165,7 @@ final class Entrypoint
         }
         $outdated = Installer::outdated($project);
         if ($outdated === null) {
-            return Installer::installedIn($project);
+            return Installer::installedIn($project, Coverage::INSTRUCTIONS_BUDGET - mb_strlen(Coverage::instructions()));
         }
         fwrite(STDERR, 'typo3-dev-companion: ' . $outdated . "\n");
 

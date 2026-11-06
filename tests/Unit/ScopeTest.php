@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Tests\Unit;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Installation\Typo3Cli;
@@ -447,6 +448,26 @@ final class ScopeTest extends TestCase
             Coverage::INSTRUCTIONS_BUDGET,
             mb_strlen(Coverage::instructions($everyDirectory)),
             'instructions where the caller excluded everything and every client has its skills',
+        );
+    }
+
+    /**
+     * CI has no install record, so the smoke test holds the bare string there
+     * and the assembled one only on a machine that ran `install` — `D-ANS-004`.
+     *
+     * @param array<int, string> $directories
+     */
+    #[Decision('D-ANS-004')]
+    #[Test]
+    #[TestWith([['.agents/skills']])]
+    #[TestWith([['.agents/skills', '.claude/skills']])]
+    #[TestWith([['.agents/skills', '.junie/skills', '.cursor/skills', '.claude/skills', '.github/skills', '.factory/skills', '.kiro/skills', '.pi/skills', '.grok/skills']])]
+    public function theInstallNoticeFitsTheBudgetBesideTheWholeRouting(array $directories): void
+    {
+        $room = Coverage::INSTRUCTIONS_BUDGET - mb_strlen(Coverage::instructions());
+        self::assertLessThanOrEqual(
+            Coverage::INSTRUCTIONS_BUDGET,
+            mb_strlen(Coverage::instructions(Installer::installedNotice($directories, $room))),
         );
     }
 

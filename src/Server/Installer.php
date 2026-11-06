@@ -301,18 +301,28 @@ final class Installer
      * sentence names the directories that hold the skills, and sends every
      * other client to the resource, `D-DIS-035`.
      */
-    public static function installedIn(string $project): string
+    public static function installedIn(string $project, int $room = PHP_INT_MAX): string
     {
         $directories = array_values(array_unique(array_map(
             static fn(string $agent): string => (self::AGENTS[$agent] ?? self::GENERIC_DEFINITION)['skills'],
             self::readState($project)['agents'],
         )));
-        if ($directories === []) {
-            return '';
-        }
 
-        return 'Task skills are installed in ' . implode(', ', $directories) . ' here. A client that reads '
-            . 'another directory reads the one typo3_task_guide names at typo3://skill/<name>/SKILL.md. ';
+        return $directories === [] ? '' : self::installedNotice($directories, $room);
+    }
+
+    /**
+     * The names are the useful form and the one that does not fit every time,
+     * and a client cuts what passes the budget without a word — `D-ANS-004`.
+     *
+     * @param array<int, string> $directories
+     */
+    public static function installedNotice(array $directories, int $room): string
+    {
+        $rest = ' Another client reads typo3://skill/<name>/SKILL.md. ';
+        $named = 'Task skills are installed in ' . implode(', ', $directories) . ' here.' . $rest;
+
+        return mb_strlen($named) <= $room ? $named : 'Task skills are installed here.' . $rest;
     }
 
     /** Whether `install` never recorded a client or a skill in the project. */

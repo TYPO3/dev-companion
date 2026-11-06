@@ -1,7 +1,8 @@
 ---
 date: 2026-11-03T13:11:26+00:00
 category: bug
-status: open
+status: closed
+closed: 2026-11-06
 model: claude-opus-5
 ---
 

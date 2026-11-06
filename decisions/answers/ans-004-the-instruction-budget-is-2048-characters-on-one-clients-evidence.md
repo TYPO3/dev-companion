@@ -4,6 +4,7 @@ title: The instruction budget is 2048 characters, on one client's evidence
 date: 2026-07-31
 status: open
 coveredBy:
+  - ScopeTest::theInstallNoticeFitsTheBudgetBesideTheWholeRouting
   - ScopeTest::theInstructionsFitWhatAClientKeeps
 ---
 
@@ -61,3 +62,8 @@ numbered markers. The client cut them at exactly 2048 with an ellipsis in place
 of the rest. So the number now comes off the cut rather than from a client's
 report of it. The largest assembly this server sends today is 2033, which leaves
 fifteen characters.
+
+On 2026-11-03 the install notice took the assembly to 2111, and the cut fell inside
+the write posture. Since 2026-11-06 `Installer::installedNotice()` measures itself
+against the room left, so a project with many directories gets the shorter form
+(`feedback/archive/2026-11-03-131126-the-initialize-instructions-pass-the-budget-by.md`).

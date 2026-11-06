@@ -1,7 +1,7 @@
 ---
 serves: [todo/]
 every: 7 days
-checked: 2026-10-28
+checked: 2026-11-06
 run: [bin/cli todo:waiting]
 ---
 

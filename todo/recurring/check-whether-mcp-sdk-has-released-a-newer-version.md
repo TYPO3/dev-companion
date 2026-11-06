@@ -1,7 +1,7 @@
 ---
 serves: [requirements/]
 every: 7 days
-checked: 2026-10-29
+checked: 2026-11-06
 run: [composer outdated mcp/sdk]
 ---
 

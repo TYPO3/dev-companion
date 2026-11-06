@@ -3,6 +3,8 @@ id: D-FBK-011
 title: The suite holds what one branch can be right about
 date: 2026-08-02
 status: open
+readings:
+  - 2026-11-06
 coveredBy: []
 ---
 

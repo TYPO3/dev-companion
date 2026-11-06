@@ -470,4 +470,14 @@ final class ChangelogLookupTest extends TestCase
 
         return $root;
     }
+
+    #[Decision('D-ANS-195')]
+    #[Test]
+    public function targetVersionFiltersAsVersionDoes(): void
+    {
+        $byVersion = Registry::call('typo3_changelog_lookup', ['type' => 'breaking', 'version' => '15']);
+        $byTarget = Registry::call('typo3_changelog_lookup', ['type' => 'breaking', 'targetVersion' => '15']);
+
+        self::assertSame($byVersion->text, $byTarget->text);
+    }
 }

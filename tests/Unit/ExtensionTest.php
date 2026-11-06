@@ -11,6 +11,7 @@ use TYPO3\DevCompanion\Installation\Extension;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\TemporaryInstallation;
+use TYPO3\DevCompanion\Tool\ExtensionDescribe;
 
 /**
  * What the extension answer says about the files the core no longer reads.
@@ -222,5 +223,13 @@ final class ExtensionTest extends TestCase
         }
 
         return $extension;
+    }
+
+    #[Decision('D-KNW-187')]
+    #[Test]
+    public function theCatalogsCaveatReachesTheAnswerAboutThatExtension(): void
+    {
+        self::assertStringContainsString('do not depend on it', (string) ExtensionDescribe::catalogCaveat('theme_camino'));
+        self::assertNull(ExtensionDescribe::catalogCaveat('my_sitepackage'));
     }
 }

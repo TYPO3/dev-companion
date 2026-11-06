@@ -55,6 +55,9 @@ Takes
     # Restrict to a version, by prefix: "14" covers 14.0 through 14.3.x, "13.4"
     # covers 13.4 and 13.4.x.
     version: string  # optional
+    # The same as version, under the word the other tools take. Where a call passes
+    # both, version answers.
+    targetVersion: string  # optional
     # Leave out the entries that carry any of these index tags. A package that ships
     # no PHP sweeps with PHP-API here, because those entries are about calls it
     # cannot make.

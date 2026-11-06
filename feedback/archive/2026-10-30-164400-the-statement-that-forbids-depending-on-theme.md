@@ -1,7 +1,8 @@
 ---
 date: 2026-10-30T16:44:00+00:00
 category: idea
-status: open
+status: closed
+closed: 2026-11-06
 model: claude-fable-5
 tool: typo3_hint_lookup, typo3_extension_describe, typo3_project_describe
 directory: /home/lina/trials/site12-with, /home/lina/trials/site12-without

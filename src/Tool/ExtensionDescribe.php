@@ -7,6 +7,7 @@ namespace TYPO3\DevCompanion\Tool;
 use TYPO3\DevCompanion\Installation\Extension;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Installation\Typo3Runtime;
+use TYPO3\DevCompanion\Knowledge\Catalog\References;
 use TYPO3\DevCompanion\Result\Schema;
 use TYPO3\DevCompanion\Result\ToolResult;
 use TYPO3\DevCompanion\Result\Unsupported;
@@ -96,7 +97,7 @@ final class ExtensionDescribe extends ReadOnlyTool
         return [
             'type' => 'object',
             'properties' => [
-                'extension' => ['type' => 'string', 'minLength' => 1, 'description' => 'The extension key, as typo3_project_describe reports it, for example "my_sitepackage" or "news".'],
+                'extension' => ['type' => 'string', 'minLength' => 1, 'description' => 'The parameter is extension, and it takes the extension key as typo3_project_describe reports it, for example "my_sitepackage" or "news".'],
             ],
             'required' => ['extension'],
         ];
@@ -178,6 +179,7 @@ final class ExtensionDescribe extends ReadOnlyTool
                 ], ['path', 'sourceLanguage', 'translations'])),
             ], ['manual', 'readme', 'tests', 'languageFiles'], 'What it ships beside its registrations. Every key is present even when the artifact is not. The absence of a manual, a test or a translation is the answer a file listing cannot give.'),
             'installed' => Schema::listOf(Schema::string(), 'On a miss: the extension keys this installation does have.'),
+            'catalogCaveat' => Schema::nullableString('What the reference catalog says before anybody depends on this extension, null where it says nothing.'),
             'answeredBy' => Schema::answeredBy(self::answersFrom()),
         ], ['key', 'path', 'origin', 'tcaTables', 'tcaOverrides', 'contentElements', 'renderedContentTypes', 'pluginFrame', 'unlistedFlexForms', 'backendModules', 'icons', 'siteSets', 'formConfigurations', 'serviceTags', 'files', 'deprecatedFiles', 'deprecatedFilesOwed', 'notReadStatically', 'artifacts', 'answeredBy'], ['key']);
     }
@@ -198,6 +200,10 @@ final class ExtensionDescribe extends ReadOnlyTool
             $extension['description'] === null ? '' : "\n" . $extension['description'],
         )];
         $owed = [];
+        $caveat = self::catalogCaveat($extension['key']);
+        if ($caveat !== null) {
+            $lines[] = $caveat;
+        }
 
         $sections = [
             'TCA tables it defines' => $extension['tcaTables'],
@@ -488,6 +494,7 @@ final class ExtensionDescribe extends ReadOnlyTool
         }
 
         return ToolResult::create(implode("\n", $lines), $extension + [
+            'catalogCaveat' => $caveat,
             'deprecatedFilesOwed' => $extension['deprecatedFiles'] === [] ? '' : self::DEPRECATED_FILES_OWED,
             'answeredBy' => Extension::answeredBy(),
         ], array_values(array_unique($owed)));
@@ -524,6 +531,17 @@ final class ExtensionDescribe extends ReadOnlyTool
     }
 
     /** The keys there are, so a miss is a question a caller can ask again. */
+    public static function catalogCaveat(string $key): ?string
+    {
+        foreach (References::load() as $entry) {
+            if (basename($entry['path']) === $key && $entry['caveat'] !== null) {
+                return $entry['caveat'];
+            }
+        }
+
+        return null;
+    }
+
     private static function miss(string $key): ToolResult
     {
         $installed = array_keys(Instance::packages());
@@ -545,7 +563,7 @@ final class ExtensionDescribe extends ReadOnlyTool
             // The package list is what answered, and it comes from the metadata
             // the installed packages ship rather than from the booted
             // container. That is what "packages" says.
-            self::MISS_FIELDS + ['key' => $key, 'installed' => $installed, 'answeredBy' => 'packages'],
+            self::MISS_FIELDS + ['key' => $key, 'catalogCaveat' => null, 'installed' => $installed, 'answeredBy' => 'packages'],
         );
     }
 }

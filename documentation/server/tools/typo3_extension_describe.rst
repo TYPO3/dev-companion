@@ -33,8 +33,8 @@ Takes
 
 .. code-block:: yaml
 
-    # The extension key, as typo3_project_describe reports it, for example
-    # "my_sitepackage" or "news".
+    # The parameter is extension, and it takes the extension key as
+    # typo3_project_describe reports it, for example "my_sitepackage" or "news".
     extension: string
 
 Answers with
@@ -277,6 +277,9 @@ Answers with
           translations: [string]
     # On a miss: the extension keys this installation does have.
     installed: [string]  # optional
+    # What the reference catalog says before anybody depends on this extension, null
+    # where it says nothing.
+    catalogCaveat: string or null  # optional
     # One of: installation, packages. installation: its assembled runtime state
     # answered. packages: the server read the files the installed packages ship,
     # because it could not ask the console. The answer misses the overrides that

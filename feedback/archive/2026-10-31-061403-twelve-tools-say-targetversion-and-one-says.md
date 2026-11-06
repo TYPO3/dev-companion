@@ -1,7 +1,8 @@
 ---
 date: 2026-10-31T06:14:03+00:00
 category: bug
-status: open
+status: closed
+closed: 2026-11-06
 model: claude-fable-5
 tool: typo3_changelog_lookup, typo3_extension_describe, typo3_task_guide
 directory: /home/lina/trials/site12-with

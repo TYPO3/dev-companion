@@ -6,6 +6,7 @@ namespace TYPO3\DevCompanion\Upkeep\Command;
 
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Upkeep\Environments;
 use TYPO3\DevCompanion\Upkeep\SiteExtension;
@@ -38,6 +39,8 @@ final class EnvironmentCreate
         string $version = '',
         #[Argument('which database to install it on: sqlite, mariadb, mysql or postgres')]
         string $database = Environments::DEFAULT_DRIVER,
+        #[Option('install the content theme_camino ships, in an installation of its own')]
+        bool $camino = false,
     ): int {
         $id = strtoupper(trim($environment));
         $sources = Environments::sources();
@@ -73,7 +76,7 @@ final class EnvironmentCreate
             return 1;
         }
 
-        return $this->site($output, trim($version) === '' ? Environments::branch() : trim($version), $driver);
+        return $this->site($output, trim($version) === '' ? Environments::branch() : trim($version), $driver, $camino);
     }
 
     /**
@@ -118,17 +121,17 @@ final class EnvironmentCreate
     }
 
     /** The DDEV project with a TYPO3 installation of one covered line in it. */
-    private function site(OutputInterface $output, string $branch, string $driver): int
+    private function site(OutputInterface $output, string $branch, string $driver, bool $camino): int
     {
-        $refusal = Environments::refusal($branch);
+        $refusal = Environments::refusal($branch) ?: ($camino ? Environments::caminoRefusal($branch) : '');
         if ($refusal !== '') {
             Voice::problem($output, $refusal);
 
             return 1;
         }
 
-        $path = Environments::path('E-SITE', $branch, $driver);
-        $project = Environments::project($branch, $driver);
+        $path = Environments::path('E-SITE', $branch, $driver, $camino);
+        $project = Environments::project($branch, $driver, $camino);
         if (!Environments::ddev()) {
             Voice::problem(
                 $output,
@@ -174,8 +177,8 @@ final class EnvironmentCreate
             return 1;
         }
 
-        if (Environments::installed($branch, $driver)) {
-            return $this->resume($output, $branch, $driver, $registered['status'] ?? null);
+        if (Environments::installed($branch, $driver, $camino)) {
+            return $this->resume($output, $branch, $driver, $camino, $registered['status'] ?? null);
         }
 
         if (!is_dir($path) && !mkdir($path, 0o777, true) && !is_dir($path)) {
@@ -184,7 +187,7 @@ final class EnvironmentCreate
             return 2;
         }
 
-        $stopped = $this->steps($output, Environments::build($branch, $driver), $path);
+        $stopped = $this->steps($output, Environments::build($branch, $driver, $camino), $path);
         if ($stopped !== null) {
             Voice::problem($output, sprintf(
                 'Stopped at "%s". What is there stays, and this command carries on from it.',
@@ -218,7 +221,7 @@ final class EnvironmentCreate
         }
 
         $output->writeln('');
-        $this->where($output, $branch, $driver);
+        $this->where($output, $branch, $driver, $camino);
 
         return 0;
     }
@@ -231,9 +234,9 @@ final class EnvironmentCreate
      * second request costs the seconds. DDEV pauses an idle project by itself,
      * which is the state this meets most of the time.
      */
-    private function resume(OutputInterface $output, string $branch, string $driver, ?string $status): int
+    private function resume(OutputInterface $output, string $branch, string $driver, bool $camino, ?string $status): int
     {
-        $path = Environments::path('E-SITE', $branch, $driver);
+        $path = Environments::path('E-SITE', $branch, $driver, $camino);
         $resume = Environments::resume($status);
         if ($resume !== null) {
             Voice::note($output, sprintf('The installation is at %s, and its containers are %s.', $path, $status ?? 'not registered'));
@@ -262,7 +265,7 @@ final class EnvironmentCreate
             return 1;
         }
 
-        $this->where($output, $branch, $driver);
+        $this->where($output, $branch, $driver, $camino);
 
         return 0;
     }
@@ -328,14 +331,14 @@ final class EnvironmentCreate
     }
 
     /** Where the environment is, and what it takes to open it. */
-    private function where(OutputInterface $output, string $branch, string $driver): void
+    private function where(OutputInterface $output, string $branch, string $driver, bool $camino): void
     {
-        $project = Environments::project($branch, $driver);
+        $project = Environments::project($branch, $driver, $camino);
         Voice::ok($output, sprintf(
             'E-SITE on TYPO3 %s, on %s, is %s, as DDEV project %s.',
             $branch,
             $driver,
-            Environments::path('E-SITE', $branch, $driver),
+            Environments::path('E-SITE', $branch, $driver, $camino),
             $project,
         ));
         Voice::row($output, sprintf('https://%s.ddev.site/typo3 — admin / %s', $project, Environments::ADMIN_PASSWORD));
@@ -343,7 +346,7 @@ final class EnvironmentCreate
         Voice::row($output, sprintf(
             'ddev delete --omit-snapshot -y %s && rm -rf %s',
             $project,
-            Environments::path('E-SITE', $branch, $driver),
+            Environments::path('E-SITE', $branch, $driver, $camino),
         ));
         Voice::note($output, 'is what takes it away, and this command then makes it again.');
     }

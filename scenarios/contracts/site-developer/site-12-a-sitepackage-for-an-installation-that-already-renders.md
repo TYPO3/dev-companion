@@ -1,6 +1,6 @@
 # SITE-12 — A sitepackage for an installation that already renders
 
-**Environment:** `E-SITE` 14.3 with `typo3/theme-camino` required, and
+**Environment:** `E-SITE` 14.3, made with `--camino`, and
 [`site-12-design/`](site-12-design/index.html) copied to `design/` at the
 project root · **Contract:** `open`
 **Held by:** `HintsTest::aNewcomersDesignReachesTheHintsOnConvertingIt` and
@@ -20,14 +20,14 @@ invented the same workaround.
 
 This case gives the session a site that already answers. `theme_camino` ships
 its own content, and the core's `setup` command imports it where the package is
-already active. So the package is required before the setup runs, and
-`--distribution` is for a package that is not active yet. Measured on v14.3.10,
-the content is 7 pages and 50 content elements: a root page, three content
-pages, and a folder holding the imprint and the privacy page.
+already active. So the environment command requires the package before the setup
+runs, and\n`--distribution` is for a package that is not active yet. Measured on
+v14.3.10, the content is 7 pages and 50 content elements: a root page, three
+content pages, and a folder holding the imprint and the privacy page.
 
 Two things the import writes are worth knowing before a run. The site
-configuration it creates carries `base: /camino/`, so the environment sets it to
-`/` and the site answers at the project root. It also carries
+configuration it creates carries `base: /camino/`, so the environment command
+sets it to\n`/` and the site answers at the project root. It also carries
 `dependencies: typo3/theme-camino`, which is the line that puts the camino set
 on the site.
 

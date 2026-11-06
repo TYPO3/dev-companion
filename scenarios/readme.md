@@ -65,6 +65,7 @@ Two of the five this repository makes for itself, below `.environments/`:
 bin/cli environment:status             # which ones this checkout has, and which are missing
 bin/cli environment:create E-SITE      # a DDEV project with TYPO3 installed in it
 bin/cli environment:create E-SITE 13.4 # the same, on another covered version
+bin/cli environment:create E-SITE 14.3 --camino # with theme_camino's content, for SITE-12
 ```
 
 `E-SITE` is the one a run needs and the one that costs something: containers, a

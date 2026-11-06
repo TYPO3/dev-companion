@@ -100,6 +100,7 @@ machine:
 
     bin/cli environment:status             # which ones this checkout has, and which are missing
     bin/cli environment:create E-SITE      # a DDEV project with TYPO3 installed in it
+    bin/cli environment:create E-SITE 14.3 --camino # with the content theme_camino ships, beside the empty one
     bin/cli environment:create E-SITE 13.4 # the same, on another covered version
     bin/cli environment:create E-NONE      # a directory with no installation above it
 

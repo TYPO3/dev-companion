@@ -50,6 +50,13 @@ final class EnvironmentStatus
                         }
                         Voice::row($output, sprintf('  %s %s', Voice::key('  ' . $driver, 8), $this->site($branch, $driver, $projects)));
                     }
+                    if (Environments::installed($branch, Environments::DEFAULT_DRIVER, true)) {
+                        Voice::row($output, sprintf(
+                            '  %s %s',
+                            Voice::key('  camino', 8),
+                            $projects[Environments::project($branch, Environments::DEFAULT_DRIVER, true)]['status'] ?? 'installed',
+                        ));
+                    }
                 }
 
                 continue;

@@ -48,9 +48,9 @@ final class Environments
      * the name. The version and a database that is not the default are in the
      * name because they are in the installation — `D-EVI-006`.
      */
-    public static function project(string $branch, string $driver = self::DEFAULT_DRIVER): string
+    public static function project(string $branch, string $driver = self::DEFAULT_DRIVER, bool $camino = false): string
     {
-        return 'typo3-mcp-e-site-' . str_replace('.', '-', $branch) . self::suffix($driver);
+        return 'typo3-mcp-e-site-' . str_replace('.', '-', $branch) . self::suffix($driver) . ($camino ? self::CAMINO_SUFFIX : '');
     }
 
     /**
@@ -204,16 +204,34 @@ final class Environments
      * it is one installation per covered line and per database. `E-NONE` has
      * neither to be of.
      */
-    public static function path(string $id, ?string $branch = null, string $driver = self::DEFAULT_DRIVER): string
+    public static function path(string $id, ?string $branch = null, string $driver = self::DEFAULT_DRIVER, bool $camino = false): string
     {
         return self::directory() . '/' . strtolower($id)
-            . ($branch === null ? '' : '-' . $branch . self::suffix($driver));
+            . ($branch === null ? '' : '-' . $branch . self::suffix($driver) . ($camino ? self::CAMINO_SUFFIX : ''));
+    }
+
+    /**
+     * The package whose shipped content makes an installation that already
+     * renders, and the part of the name that tells such an installation apart.
+     * `SITE-12` runs in one, and `SITE-10` and `SITE-11` need the empty one, so
+     * the content is asked for by name — `D-EVI-016`.
+     */
+    public const CAMINO_PACKAGE = 'typo3/theme-camino';
+
+    private const CAMINO_SUFFIX = '-camino';
+
+    /** Whether a covered line ships that package at all. */
+    public static function caminoRefusal(string $branch): string
+    {
+        return version_compare($branch, '14', '<') && $branch !== 'main'
+            ? self::CAMINO_PACKAGE . ' does not exist on ' . $branch . '. The content starts on the next major.'
+            : '';
     }
 
     /** Whether the installation of a covered line is there to run in. */
-    public static function installed(string $branch, string $driver = self::DEFAULT_DRIVER): bool
+    public static function installed(string $branch, string $driver = self::DEFAULT_DRIVER, bool $camino = false): bool
     {
-        return is_file(self::path('E-SITE', $branch, $driver) . '/config/system/settings.php');
+        return is_file(self::path('E-SITE', $branch, $driver, $camino) . '/config/system/settings.php');
     }
 
     /**
@@ -668,10 +686,10 @@ final class Environments
      *
      * @return array<string, list<string>>
      */
-    public static function build(string $branch, string $driver = self::DEFAULT_DRIVER): array
+    public static function build(string $branch, string $driver = self::DEFAULT_DRIVER, bool $camino = false): array
     {
         $database = self::driver($driver);
-        $project = self::project($branch, $driver);
+        $project = self::project($branch, $driver, $camino);
         $constraint = self::constraint($branch);
         $create = ['ddev', 'composer', 'create-project', self::DISTRIBUTION . ':' . $constraint];
         if (self::development($branch)) {
@@ -734,6 +752,14 @@ final class Environments
             ];
         }
 
+        // Before the setup, because the setup imports the content of a package
+        // that is already active and `--distribution` takes only an inactive one.
+        if ($camino) {
+            $steps['The content the setup imports, from ' . self::CAMINO_PACKAGE] = [
+                'ddev', 'composer', 'require', self::CAMINO_PACKAGE . ':' . $constraint, '--no-interaction',
+            ];
+        }
+
         $setup = [
             'ddev', 'exec', 'vendor/bin/typo3', 'setup',
             '--no-interaction',
@@ -777,8 +803,15 @@ final class Environments
             // `false` and 14.3.5 dies on the type — measured on 2026-08-02.
             // `other` is the answer for the nginx DDEV runs anyway.
             '--server-type=other',
-            '--create-site=https://' . $project . '.ddev.site/',
+            // The setup refuses the option where a distribution is active.
+            ...($camino ? [] : ['--create-site=https://' . $project . '.ddev.site/']),
         ];
+        if ($camino) {
+            // The import writes base: /camino/, and the project root then answers 404.
+            $steps['The imported site at the project root'] = [
+                'ddev', 'exec', 'sed', '-i', 's#^base: .*#base: /#', 'config/sites/camino/config.yaml',
+            ];
+        }
         $steps['A deprecation turned into an exception, as the Debug preset does'] = self::exceptionalErrors();
         $steps['The extensions set up against that database'] = [
             'ddev', 'exec', 'vendor/bin/typo3', 'extension:setup',

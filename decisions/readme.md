@@ -1005,6 +1005,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### evidence
 
 - [`D-EVI-015`][D-EVI-015] — Which hosts a DDEV certificate covers differs per machine · 2026-11-06
+- [`D-EVI-016`][D-EVI-016] — Seeded content is an installation of its own · 2026-11-06
 - [`D-EVI-014`][D-EVI-014] — A paired run measures the answer rather than the tokens · 2026-10-30
 - [`D-EVI-013`][D-EVI-013] — A forward review is measured three times and graded blind · 2026-10-29
 - [`D-EVI-012`][D-EVI-012] — A running environment says where it opens and the login · 2026-10-26
@@ -1021,6 +1022,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-EVI-003`][D-EVI-003] — A review runs the checks that cannot change the code · 2026-07-31 · confirmed
 
 [D-EVI-015]: evidence/evi-015-which-hosts-a-ddev-certificate-covers-differs-per-machine.md
+[D-EVI-016]: evidence/evi-016-seeded-content-is-an-installation-of-its-own.md
 [D-EVI-014]: evidence/evi-014-a-paired-run-measures-the-answer-rather-than-the-tokens.md
 [D-EVI-013]: evidence/evi-013-a-forward-review-is-measured-three-times-and-graded-blind.md
 [D-EVI-012]: evidence/evi-012-a-running-environment-says-where-it-opens-and-the-login.md

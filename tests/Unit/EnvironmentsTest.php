@@ -721,4 +721,38 @@ final class EnvironmentsTest extends TestCase
         rmdir($path . '/config');
         rmdir($path);
     }
+
+    /**
+     * The setup imports the content of a package that is already active, so
+     * the order decides whether any content arrives — `D-EVI-016`.
+     */
+    #[Decision('D-EVI-016')]
+    #[Test]
+    public function theCaminoContentIsRequiredBeforeTheSetupAndMovedToTheRoot(): void
+    {
+        $steps = array_values(Environments::build('14.3', Environments::DEFAULT_DRIVER, true));
+        $lines = array_map(static fn(array $step): string => implode(' ', $step), $steps);
+
+        $required = array_search('ddev composer require typo3/theme-camino:' . Environments::constraint('14.3') . ' --no-interaction', $lines, true);
+        $setup = array_keys(array_filter($lines, static fn(string $line): bool => str_contains($line, 'typo3 setup')))[0];
+        $base = array_keys(array_filter($lines, static fn(string $line): bool => str_contains($line, 'config/sites/camino/config.yaml')))[0];
+
+        self::assertIsInt($required);
+        self::assertLessThan($setup, $required);
+        self::assertGreaterThan($setup, $base);
+        self::assertStringNotContainsString('--create-site', $lines[$setup]);
+        self::assertStringContainsString('--create-site', implode(' ', array_merge(...array_values(Environments::build('14.3')))));
+    }
+
+    /** The seeded installation stands beside the empty one that `SITE-11` needs. */
+    #[Decision('D-EVI-016')]
+    #[Test]
+    public function aSeededInstallationHasANameAndADirectoryOfItsOwn(): void
+    {
+        self::assertNotSame(Environments::project('14.3'), Environments::project('14.3', Environments::DEFAULT_DRIVER, true));
+        self::assertNotSame(Environments::path('E-SITE', '14.3'), Environments::path('E-SITE', '14.3', Environments::DEFAULT_DRIVER, true));
+        self::assertNotSame('', Environments::caminoRefusal('13.4'));
+        self::assertSame('', Environments::caminoRefusal('14.3'));
+        self::assertSame('', Environments::caminoRefusal('main'));
+    }
 }

@@ -57,3 +57,8 @@ where its secrets go. `installation-setup` stays as it is until the run
   alone. Then the statement arrives and does not take.
 - A later TYPO3 Explained moves `settings.php` out of the files to always
   commit.
+
+## Since then
+
+On 2026-11-06 two `SITE-11` runs read this statement and still ignored
+`settings.php`, so `D-KNW-190` carries it into the setup checklist.

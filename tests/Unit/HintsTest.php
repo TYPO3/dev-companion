@@ -4300,9 +4300,9 @@ final class HintsTest extends TestCase
             'changeType' => 'operations',
         ])->data['checklist']);
 
-        self::assertStringContainsString('State the admin username and the password in your reply', $checklist);
-        self::assertStringContainsString('the URL of the backend they belong to', $checklist);
-        self::assertStringContainsString('Generate that password rather than inventing a quiet default', $checklist);
+        self::assertStringContainsString('state the admin username and the password in your reply', $checklist);
+        self::assertStringContainsString('with the URL of the backend', $checklist);
+        self::assertStringContainsString('generate the password rather than invent a quiet default', $checklist);
         self::assertStringContainsString('sets BE/installToolPassword in config/system/settings.php', $checklist);
         self::assertStringContainsString('backend:resetpassword', $checklist);
     }
@@ -9805,5 +9805,19 @@ final class HintsTest extends TestCase
     {
         self::assertStringContainsString('The sitepackage is not the Composer root of a site.', self::statementsOf('sitepackage-start'));
         self::assertStringContainsString('a site project does not take it', self::statementsOf('extension-repository-installation'));
+    }
+
+    #[Decision('D-KNW-190')]
+    #[Test]
+    public function theWorkedExamplesNameNoAccountACallerCopies(): void
+    {
+        foreach (Finder::create()->files()->in(Paths::root() . '/knowledge')->name('*.json') as $file) {
+            self::assertStringNotContainsString('TYPO3_SETUP_ADMIN_USERNAME=admin', $file->getContents(), $file->getPathname());
+        }
+
+        $checklist = implode("\n", array_column(TaskIntents::load(), null, 'id')['installation-setup']['checklist'] ?? []);
+        self::assertStringContainsString('other than admin', $checklist);
+        self::assertStringContainsString('Commit config/system/settings.php', $checklist);
+        self::assertStringContainsString('id=install-tool-password', $checklist);
     }
 }

@@ -72,6 +72,7 @@
       "What decides for an older line is an extension the project requires that has no release for the newer one. typo3_ter_lookup with the extension key lists the TYPO3 majors each release declares. Packagist is the source for an extension that ships through Composer alone.",
       "A project that requires no third-party extension has nothing that decides for an older line. Name the line in the answer and the reason for it, so the user can disagree before the install.",
       "The Getting Started tutorial installs a new project with Composer under DDEV, and every later step in it assumes that installation. The command is composer create-project typo3/cms-base-distribution, with a caret constraint on the major of that line.",
+      "The package set the base distribution requires is a default and not a question. Keep it, and name in the answer what you dropped from it.",
       "The classic installation from an archive is supported too. It suits managed hosting and extensions that an editor installs from the TER in the backend. A later move to Composer restructures the project, so a project with a repository and a team starts on Composer.",
       "installation-setup is what typo3 setup takes and refuses once the packages are installed. sitepackage-initial-content is what a sitepackage seeds the empty installation with."
     ]

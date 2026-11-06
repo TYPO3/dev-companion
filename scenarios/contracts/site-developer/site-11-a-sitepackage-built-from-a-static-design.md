@@ -32,6 +32,14 @@ seventeen pages through DataHandler and resolves their ids into the site's
 settings. The server checkout moved between the run's two halves, so no single
 commit stands behind it.
 
+**Run 2026-11-06:** one run each of `claude-opus-5-5` and `claude-fable-5-1`
+against `39fd0169`, from a pristine directory with this server and the skills,
+on the newcomer sentence of `feedback/2026-10-29-105043`, and graded blind. Each
+met five criteria, and the sixth, what the answer owes the editors, in part.
+None of the failures occurred. Opus took 19 minutes and $4.47, Fable 33 minutes
+and $17.67. Neither asked the user anything. `D-KNW-190` holds what they did
+with the administrator account.
+
 > We have a fresh TYPO3 installation, and our agency delivered a static HTML
 > design in the design/ folder. Build it into TYPO3 as our sitepackage, so the
 > editors can maintain the pages themselves.

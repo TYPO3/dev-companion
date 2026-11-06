@@ -33,3 +33,7 @@ extension repository.**
 
 - A `SITE-11` run reads `sitepackage-start` and still makes the package the
   root.
+
+## Since then
+
+On 2026-11-06 both `SITE-11` runs took the project package below `packages/`.

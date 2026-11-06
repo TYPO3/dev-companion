@@ -64,3 +64,7 @@ that contradicted the project
 (`feedback/archive/2026-10-31-143000-a-session-that-asks-the-server-builds-before-it.md`).
 The maintainer chose `skills/base.md` on 2026-11-06 over the instructions, which
 have no room left for a sentence that holds for every task.
+
+The **Wrong if** fired on 2026-11-06. Two `SITE-11` runs against `39fd0169` asked
+the user nothing. The Fable run read this item, looked up none of the five hints,
+and left out forms and search unasked. `T-261106-a7c1` asks which lever holds it.

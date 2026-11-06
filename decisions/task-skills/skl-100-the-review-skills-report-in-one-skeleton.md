@@ -4,6 +4,7 @@ title: The review skills report in one skeleton
 date: 2026-10-26
 status: open
 coveredBy:
+  - SkillTest::aFilledExampleKeepsTheFormOfItsSkeleton
   - SkillTest::everyCheckoutValueTheAuditHeadOffersHasADefinition
   - SkillTest::theAuditGivesEachPackageARowOfItsOwn
   - SkillTest::theAuditHeadNamesWhereTheCheckoutStands
@@ -90,3 +91,7 @@ the fence, and the next such breach makes the filled example the step to weigh.
 The fifth `REVIEW-01` and `REVIEW-03` runs cited line numbers out of one output
 of several files. So a sixth rule ties a `<path>:<line>` to a read of that one
 file, and `skills/base.md` says to read each file with a call of its own.
+
+The fifth `REVIEW-02` run was that breach, and the maintainer chose the filled
+example on 2026-11-06, over the work order inside the fence and a last comparing
+step. Each `report.md` now carries one after its skeleton.

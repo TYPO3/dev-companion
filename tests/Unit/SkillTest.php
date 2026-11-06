@@ -992,6 +992,40 @@ final class SkillTest extends TestCase
     }
 
     /**
+     * The fifth REVIEW-02 run broke two rules of the gate with the gate in
+     * front of it. The maintainer chose a filled example as the next lever on
+     * 2026-11-06 — `D-SKL-100`.
+     */
+    #[Decision('D-SKL-100')]
+    #[Test]
+    public function aFilledExampleKeepsTheFormOfItsSkeleton(): void
+    {
+        foreach (array_keys(self::REVIEW_REPORTS) as $name) {
+            $reference = (string) file_get_contents(Paths::root() . '/skills/' . $name . '/references/report.md');
+            if (preg_match_all('/```markdown\n(.*?)\n```/s', $reference, $blocks) !== 2) {
+                self::fail($name . ' carries no filled example beside its skeleton');
+            }
+            [$skeleton, $example] = $blocks[1];
+
+            foreach (['/^## (.+)$/m', '/^- \*\*([A-Za-z ]+):\*\*/m'] as $form) {
+                preg_match_all($form, $skeleton, $wanted);
+                preg_match_all($form, $example, $written);
+                self::assertSame($wanted[1], $written[1], $name);
+            }
+
+            preg_match_all('/^\| (\w+) +\|/m', $skeleton, $wanted);
+            preg_match_all('/^\| (\w+) +\|/m', (string) strstr($example, "\n## ", true), $written);
+            self::assertSame(array_slice($wanted[1], 0, count($written[1])), $written[1], $name);
+
+            self::assertMatchesRegularExpression('/^- \*\*Rule:\*\* .+ — `typo3_[a-z_]+` id=[a-z-]+$/m', $example, $name);
+            self::assertStringEndsWith('Not reached', substr($example, (int) strrpos($example, '## Not reached'), 14), $name);
+
+            $after = trim(substr($reference, (int) strrpos($reference, '```') + 3));
+            self::assertStringStartsWith('Work 1 first', $after, $name . ' ends its example on something else than the work order');
+        }
+    }
+
+    /**
      * Two reviews compare only where they share a skeleton. The three review
      * skills write the same sections in the same order, and a finding carries
      * the same fields. What differs is the head, the severity bands and one

@@ -106,3 +106,77 @@ severity headings and one field of a finding are this skill's own.
 Number the findings across the severity headings, so `3` names one finding in
 the whole report. A finding about a declared version nobody ran says so in its
 **Evidence** line, with the reading that would settle it.
+
+The answer stands as the example below stands, cut here to one finding. The
+**Rule** line ends on its call, and the last line after the fence is the work
+order:
+
+```markdown
+# Review: Keep the sort order of a copied record
+
+| Field    | Value                                                       |
+|----------|-------------------------------------------------------------|
+| Change   | pull request 12, refs/pull/12/head                          |
+| Head     | 1a2b3c4d                                                    |
+| Target   | main                                                        |
+| Merges   | `yes`                                                       |
+| TYPO3    | ^13.4 \|\| ^14.3                                            |
+| PHP      | ^8.2                                                        |
+| Ran on   | no installation                                             |
+| Pipeline | passed                                                      |
+| Verdict  | Blocks the merge                                            |
+
+## Blocks the merge
+
+### 1. The query reaches the database with an unquoted title
+
+- **Where:** `Classes/Service/Example.php:42`
+- **Observed:** The change concatenates the title into the WHERE clause.
+- **Rule:** A value reaches a query as a named parameter — `typo3_hint_lookup` id=security-sinks
+- **Consequence:** An editor who controls the title runs SQL on the next copy.
+- **Remediation:** Bind the title with `createNamedParameter()`.
+- **Introduced:** by this change
+- **Evidence:** verified: read `Classes/Service/Example.php:42`
+
+## Send it back
+
+None.
+
+## Worth a change
+
+None.
+
+## Recommendation
+
+None.
+
+## Checked and correct
+
+- The sort order after a copy — read `Classes/Service/Example.php:50`
+
+## Open
+
+- A copy across two pages — `composer test` on an installation settles it
+
+## Dropped
+
+- A removed public method — the method stays, at `Classes/Service/Example.php:12`
+
+## Verification
+
+- Ran: `composer lint` — printed no error
+- Not run: `composer test`
+
+## Surfaces
+
+| Surface           | Status   | Backed by                              |
+|-------------------|----------|----------------------------------------|
+| The change itself | assessed | `Classes/Service/Example.php`          |
+| Security          | assessed | `typo3_hint_lookup` id=security-sinks  |
+
+## Not reached
+
+- Not reached: a run on a declared version — no installation stood here
+```
+
+Work 1 first, and send it back to the author.

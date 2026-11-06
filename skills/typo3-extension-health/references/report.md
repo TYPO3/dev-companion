@@ -124,3 +124,80 @@ in its order.
 A **not requested** row names in **Backed by** what a review of it would read:
 the lookups and the files. That is the cost of the rest, and the reader asks for
 it off that row.
+
+The answer stands as the example below stands, cut here to one finding. The
+**Rule** line ends on its call, and the last line after the fence is the work
+order:
+
+```markdown
+# Audit: acme/example
+
+| Field    | Value        |
+|----------|--------------|
+| Checkout | `standalone` |
+| Commit   | 1a2b3c4d     |
+| Ran on   | 14.3.0       |
+| Request  | `all`        |
+| Verdict  | High         |
+
+| Package      | Key     | Kind        | TYPO3   | PHP   |
+|--------------|---------|-------------|---------|-------|
+| acme/example | example | `extension` | ^14.3   | ^8.2  |
+
+## Critical
+
+None.
+
+## High
+
+### 1. The query reaches the database with an unquoted title
+
+- **Where:** `Classes/Service/Example.php:42`
+- **Observed:** The service concatenates the title into the WHERE clause.
+- **Rule:** A value reaches a query as a named parameter — `typo3_hint_lookup` id=security-sinks
+- **Consequence:** An editor who controls the title runs SQL on the next copy.
+- **Remediation:** Bind the title with `createNamedParameter()`; check: `composer test`
+- **Owner:** `unassigned`
+- **Evidence:** verified: read `Classes/Service/Example.php:42`
+
+## Medium
+
+None.
+
+## Low
+
+None.
+
+## Recommendation
+
+None.
+
+## Checked and correct
+
+- The declared range — read `composer.json:12`
+
+## Open
+
+- A copy across two pages — `composer test` on an installation settles it
+
+## Dropped
+
+- A deprecated call — the call is gone, at `Classes/Service/Example.php:12`
+
+## Verification
+
+- Ran: `composer lint` — printed no error
+- Not run: `composer test`
+
+## Surfaces
+
+| Surface  | Status   | Backed by                              |
+|----------|----------|----------------------------------------|
+| Security | assessed | `typo3_hint_lookup` id=security-sinks  |
+
+## Not reached
+
+- Not reached: a run on a second line — one installation stood here
+```
+
+Work 1 first, and give it an owner.

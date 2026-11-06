@@ -105,3 +105,73 @@ severity headings and one field of a finding are this skill's own.
 Number the findings across the severity headings, so `3` names one finding in
 the whole report. A finding whose evidence is reasoned says so in its
 **Evidence** line. A reader weighs a pasted error and a reading differently.
+
+The answer stands as the example below stands, cut here to one finding. The
+**Rule** line ends on its call, and the last line after the fence is the work
+order:
+
+```markdown
+# Review: [BUGFIX] Keep the sort order of a copied record
+
+| Field    | Value                                                        |
+|----------|--------------------------------------------------------------|
+| Change   | 90000, patch set 2                                           |
+| Commit   | 1a2b3c4d                                                     |
+| HEAD     | 5e6f7a8b                                                     |
+| Target   | main                                                         |
+| Releases | main                                                         |
+| Issue    | #100000 — Copied record lands at the end of the list         |
+| Fetched  | refs/changes/00/90000/2                                      |
+| Read on  | 2026-01-15                                                   |
+| Verdict  | Blocks submission                                            |
+
+## Blocks submission
+
+### 1. The query reaches the database with an unquoted title
+
+- **Where:** `typo3/sysext/backend/Classes/Example.php:42`
+- **Observed:** The patch concatenates the title into the WHERE clause.
+- **Rule:** A value reaches a query as a named parameter — `typo3_hint_lookup` id=security-sinks
+- **Consequence:** An editor who controls the title runs SQL on the next copy.
+- **Remediation:** Bind the title with `createNamedParameter()`.
+- **Introduced:** by this patch
+- **Evidence:** verified: read `typo3/sysext/backend/Classes/Example.php:42`
+
+## Sent back in review
+
+None.
+
+## Worth a change
+
+None.
+
+## Checked and correct
+
+- The sort order after a copy — read `typo3/sysext/backend/Classes/Example.php:50`
+
+## Open
+
+- A copy across two pages — the functional suite of the backend settles it
+
+## Dropped
+
+- A missing changelog — the patch adds no API, at `typo3/sysext/backend/Classes/Example.php:12`
+
+## Verification
+
+- Ran: `git log -1 --format=%H` — printed the commit in the head
+- Not run: the functional suite — skipped to finish faster
+
+## Surfaces
+
+| Surface   | Status   | Backed by                                  |
+|-----------|----------|--------------------------------------------|
+| Behaviour | assessed | `typo3/sysext/backend/Classes/Example.php` |
+| Security  | assessed | `typo3_hint_lookup` id=security-sinks      |
+
+## Not reached
+
+- Not reached: the review this patch is in — no reviewer had commented
+```
+
+Work 1 first, with `typo3-core-patch-development`.

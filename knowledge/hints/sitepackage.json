@@ -23,7 +23,9 @@
       "site package api",
       "builder output",
       "PageView",
-      "ContentElements"
+      "ContentElements",
+      "project package",
+      "root composer.json of a site"
     ],
     "hints": [
       "Nothing in the core creates a sitepackage, and three community tools divide the work. The Site Package Builder at get.typo3.org is a web form that hands the extension back as a download. The console tool is the extension friendsoftypo3/kickstarter, which writes single parts of a sitepackage into an export directory of its own and asks before it replaces what stands there. b13/make writes neither a site package nor an Extbase extension and says so, so it answers the rest of an extension instead.",
@@ -42,6 +44,7 @@
         "since": 13,
         "until": 13
       },
+      "A site project takes one shape before the first file: a project package at the root, the sitepackage below packages/, a path repository on packages/*, and composer require. The sitepackage is not the Composer root of a site.",
       "A package below packages/ renders nothing until the project's root composer.json requires it. The path repository on packages/* that a new project declares makes the package available to Composer and installs nothing. So the step after the files is composer require <vendor>/<name>, under the name the package's own composer.json declares.",
       {
         "text": "A set exists only where its package is installed, because each active package contributes the sets below its own Configuration/Sets/. A site configuration whose dependencies name a set no active package ships loses that name without an error. The site then has no TypoScript, and the page answers No page configured for type=0.",

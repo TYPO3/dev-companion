@@ -9798,4 +9798,12 @@ final class HintsTest extends TestCase
         self::assertCount(1, $item);
         self::assertStringContainsString('A site with nothing in it owes nothing here.', $item[0]);
     }
+
+    #[Decision('D-KNW-189')]
+    #[Test]
+    public function eachProjectShapeSaysWhereItHolds(): void
+    {
+        self::assertStringContainsString('The sitepackage is not the Composer root of a site.', self::statementsOf('sitepackage-start'));
+        self::assertStringContainsString('a site project does not take it', self::statementsOf('extension-repository-installation'));
+    }
 }

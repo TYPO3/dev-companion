@@ -54,6 +54,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### discovery
 
+- [`D-DIS-036`][D-DIS-036] — Install writes no permission into a Cursor project · 2026-11-06
+- [`D-DIS-037`][D-DIS-037] — A stopped DDEV project answers with an error and starts nothing · 2026-11-06
 - [`D-DIS-035`][D-DIS-035] — A recorded install names where the skills are · 2026-10-28
 - [`D-DIS-033`][D-DIS-033] — A start outside any repository is told to state the version · 2026-10-27
 - [`D-DIS-034`][D-DIS-034] — A project without skills is sent to the skill resources · 2026-10-27
@@ -84,6 +86,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DIS-001`][D-DIS-001] — The root package counts as an installed package · 2026-07-29 · confirmed
 - [`D-DIS-004`][D-DIS-004] — The version comes from the core package, not from the console · 2026-07-29 · confirmed
 
+[D-DIS-036]: discovery/dis-036-install-writes-no-permission-into-a-cursor-project.md
+[D-DIS-037]: discovery/dis-037-a-stopped-ddev-project-answers-with-an-error-and-starts-nothing.md
 [D-DIS-035]: discovery/dis-035-a-recorded-install-names-where-the-skills-are.md
 [D-DIS-033]: discovery/dis-033-a-start-outside-any-repository-is-told-to-state-the-version.md
 [D-DIS-034]: discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md
@@ -493,6 +497,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-KNW-186`][D-KNW-186] — A password question reaches the install tool and a project commits settings.php · 2026-11-06
 - [`D-KNW-187`][D-KNW-187] — The describe answer carries the caveat the catalog holds · 2026-11-06
 - [`D-KNW-188`][D-KNW-188] — A sitepackage ships the migration its layouts cause · 2026-11-06
+- [`D-KNW-189`][D-KNW-189] — A site project takes one shape · 2026-11-06
 - [`D-KNW-183`][D-KNW-183] — A decision a new site makes is handed to the user with its options · 2026-10-30
 - [`D-KNW-184`][D-KNW-184] — The corpus weighs no package outside the core against the core · 2026-10-30
 - [`D-KNW-185`][D-KNW-185] — The reuse question reaches a feature without a change type · 2026-10-30
@@ -672,6 +677,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-KNW-186]: knowledge/knw-186-a-password-question-reaches-the-install-tool-and-a-project-commits-settings-php.md
 [D-KNW-187]: knowledge/knw-187-the-describe-answer-carries-the-caveat-the-catalog-holds.md
 [D-KNW-188]: knowledge/knw-188-a-sitepackage-ships-the-migration-its-layouts-cause.md
+[D-KNW-189]: knowledge/knw-189-a-site-project-takes-one-shape.md
 [D-KNW-183]: knowledge/knw-183-a-decision-a-new-site-makes-is-handed-to-the-user-with-its-options.md
 [D-KNW-184]: knowledge/knw-184-the-corpus-weighs-no-package-outside-the-core-against-the-core.md
 [D-KNW-185]: knowledge/knw-185-the-reuse-question-reaches-a-feature-without-a-change-type.md

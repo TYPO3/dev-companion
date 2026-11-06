@@ -11,7 +11,11 @@ directory: /home/lina/projects/typo3/tools/dev-companion
 
 ## Observation
 
-`install` writes `ddev exec php <entrypoint>` as the launch command wherever the project has a `.ddev/config.yaml`. `Installer::startedBy()` decides that. The wrapper is not transparent, so the entry fails on a project that is stopped.
+`feedback/2026-10-31-073718-a-server-launched-through-ddev-exec-cannot.md` reports this launch entry first, and a reader judges the two together. This report measures the mechanism and corrects the cause. It is not a second report of the same symptom.
+
+That report reads the failure as a container start that takes longer than the client waits. The measurement says otherwise. A longer client timeout repairs nothing, because the stream itself carries DDEV's output.
+
+`install` writes `ddev exec php <entrypoint>` as the launch command wherever the project has a `.ddev/config.yaml`. `Installer::startedBy()` decides that.
 
 Measured on 2026-11-05 in a fresh project. `ddev config --project-type=typo3 --docroot=public`, then `ddev composer create-project "typo3/cms-base-distribution:^14"` for TYPO3 14.3.10, then `composer require --dev typo3/dev-companion:@dev` for dev-main af25c0f. `install` wrote the entry above.
 
@@ -33,7 +37,7 @@ The process then ends in one of two ways on identical input. One run answered ex
 
 Warm, the identical command is correct. It answers 6263 bytes with `{` as the first byte.
 
-This repository's own `.mcp.json` carries that entry. On 2026-11-04 two `typo3_feedback_record` calls from a session here hung for about 1800 seconds and wrote nothing. That session recorded its two feedbacks over a direct stdio connection with plain `php` instead. So the defect already reached the work on this server.
+This repository's own `.mcp.json` carries that entry, so the defect reaches the work here. A session on 2026-11-04 lost two `typo3_feedback_record` calls to about 1800 seconds of silence, and recorded over a direct stdio connection with plain `php` instead. Which form that was is open. The earlier report carries a 1829 second case with the project running, and this session did not establish whether its own project was up.
 
 One trap sits in front of any repair. A first wrapper ran `ddev start` before the server and left stdin attached to it. `ddev start` consumed the client's `initialize` request. The result was zero bytes of stdout, exit 0, and a silent dead handshake, which reads like a server that answers nothing.
 
@@ -45,16 +49,16 @@ A cold project, with the entry `install` writes. `printf '<initialize request>' 
 
 Whatever the repair, stdout carries the protocol and nothing else. That is the part no reading of the rules disputes.
 
-Two repairs answer it, and they disagree with each other.
+The earlier report bars the repair this session verified. Its words are: do not make the entry start the project.
 
-The wrapper works, and this session verified it. `sh -c 'ddev start -y >/dev/null 2>&1 </dev/null; exec ddev exec php <entrypoint>'` answers a cold project correctly in 22 seconds, 6263 bytes, `{` first. It must withhold stdin from the start step, for the reason the observation gives.
+So the wrapper stands here as evidence rather than as a proposal. `sh -c 'ddev start -y >/dev/null 2>&1 </dev/null; exec ddev exec php <entrypoint>'` answers a cold project in 22 seconds, 6263 bytes, `{` first. It shows that the stream is the fault and that the server is sound.
 
-`AGENTS.md` argues against it: "Never start something on the caller's machine as a side effect of a lookup. The server reports a stopped DDEV project with the command that would fix it." A handshake is not a lookup, and a maintainer decides whether the rule reaches it.
+A sentence in the install output does not reach this, and the earlier report proposes one. It serves the reader who meets the entry a month later. It leaves the entry broken.
 
-The repair that rule points at is a clean refusal. The entry detects the stopped project, writes a JSON-RPC error that names `ddev start`, and starts nothing.
+The server cannot refuse either. `ddev exec` writes its progress before PHP starts, so nothing this repository runs is in the stream yet.
 
-Two costs belong in that decision. The wrapper spends 22 seconds on the first launch, which a client with a short handshake timeout may not wait for. It also runs `ddev start` on every later launch, where the project is already up.
+That leaves the entry itself, and two shapes nobody has measured. One reaches the container without `ddev exec`. The other reads the project's state, writes a JSON-RPC error that names `ddev start`, and starts nothing.
 
-A cold launch that asserts the first byte of stdout is `{` measures either repair.
+A cold launch that asserts the first byte of stdout is `{` measures any of them.
 
-The Getting Started tutorial depends on this. Its draft tells a reader to close the client, run `ddev start`, and start the client again. That step exists because of this defect, and a repair here removes the reason for it.
+The Getting Started tutorial depends on the answer. Its draft tells a reader to close the client, run `ddev start`, and start the client again. That step exists because of this defect, and a repair here removes the reason for it.

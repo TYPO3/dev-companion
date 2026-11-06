@@ -6,6 +6,7 @@ status: open
 coveredBy:
   - HintsTest::aNewSitesOpenDecisionsAreHandedToTheUser
   - HintsTest::aNewSitesOpenQuestionReachesItsHint
+  - SkillTest::theBaseSendsAContradictionToThePersonBeforeTheWork
 ---
 
 # D-KNW-183 — A decision a new site makes is handed to the user with its options
@@ -37,8 +38,8 @@ user rather than settle it alone.**
   `page-group-container`, `form-mail-layout`, `form-data-retention` and
   `site-search`. `content-model-vs-markup` carries the statement on an
   accessible variant.
-- Each hint states what TYPO3 does and leaves the choice to the site owner.
-  What Easy Read requires and how long a site keeps personal data are named as
+- Each hint states what TYPO3 does and leaves the choice to the site owner. What
+  Easy Read requires and how long a site keeps personal data are named as
   outside TYPO3.
 - One checklist item of the `sitepackage` intent routes all five and asks the
   session to hand the decision over.
@@ -55,3 +56,11 @@ user rather than settle it alone.**
 
 - A forward run of a greenfield case reaches the checklist item and still
   settles one of these decisions without asking the user.
+
+## Since then
+
+A second-site run on 2026-10-31 built first and asked afterwards, on a brief
+that contradicted the project
+(`feedback/archive/2026-10-31-143000-a-session-that-asks-the-server-builds-before-it.md`).
+The maintainer chose `skills/base.md` on 2026-11-06 over the instructions, which
+have no room left for a sentence that holds for every task.

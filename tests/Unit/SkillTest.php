@@ -5371,4 +5371,13 @@ final class SkillTest extends TestCase
         self::assertFileExists(Paths::root() . '/skills/base.md');
     }
 
+    #[Decision('D-KNW-183')]
+    #[Test]
+    public function theBaseSendsAContradictionToThePersonBeforeTheWork(): void
+    {
+        self::assertStringContainsString(
+            'Where the project contradicts the brief, say so before you build on either reading.',
+            self::flat((string) file_get_contents(Paths::root() . '/skills/base.md')),
+        );
+    }
 }

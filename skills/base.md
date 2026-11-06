@@ -261,6 +261,13 @@ defect. Name it with its cost and its alternative. Where you cannot find one,
 the finding says that you could not establish one, not that none exists. If you
 skip this, your review is a list of everything the author did on purpose.
 
+## What contradicts the brief goes to the person first
+
+Where the project contradicts the brief, say so before you build on either
+reading. This server states what the project holds, and it does not state what
+the person meant. Where two answers are both right, name them and ask. A
+question after the work is a correction with a sunk cost beside it.
+
 ## What a finding rests on is part of the finding
 
 Three things carry one. A file you read, at its path and its line. A command you

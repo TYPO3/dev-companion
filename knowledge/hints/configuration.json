@@ -179,5 +179,48 @@
       "web_environment in the project's .ddev/config.yaml is a different set of variables, and an extension repository commonly carries typo3DatabaseHost, typo3DatabaseName, typo3DatabaseUsername and typo3DatabasePassword there against a database named t3func. That is the family a functional test run reads, which is project-extension-tests, and setup reads none of it. So those lines in a file the caller is reading anyway say the container is configured for the tests, not that the installation is ready to be created.",
       "Which TYPO3_ variables the command reads, and why nothing reads them once it has run, is environment-runtime-readers."
     ]
+  },
+  {
+    "id": "install-tool-password",
+    "title": "The Install Tool Password Is a Value of Its Own",
+    "domains": [
+      "php"
+    ],
+    "appliesTo": [
+      "install tool password",
+      "installToolPassword",
+      "BE/installToolPassword",
+      "install:password:set",
+      "change the admin password",
+      "change the install tool password",
+      "admin password",
+      "backend password",
+      "backend:resetpassword",
+      "ENABLE_INSTALL_TOOL",
+      "__typo3_install",
+      "install.php",
+      "Admin Tools",
+      "system maintainer",
+      "systemMaintainers",
+      "Calculated hash"
+    ],
+    "hints": [
+      "The install tool password and a backend user's password are two values. typo3 setup sets both from the one value it was handed. backend:resetpassword and the backend change the user's password alone, so the install tool still opens with the old value. A question about the administrator password therefore owes the install tool password in the same answer.",
+      {
+        "text": "install:password:set changes the install tool password. It asks for the password and generates one where the answer is empty, and it writes the hash to BE/installToolPassword in config/system/settings.php. It fails where additional.php overrides that value, because a change in settings.php would have no effect there.",
+        "since": 14
+      },
+      "Every covered line accepts the hash by hand. Enter the new password at the install tool login. The refusal says \"Given password does not match the install tool login password. Calculated hash:\" and carries the hash. Write that hash into BE/installToolPassword in config/system/settings.php.",
+      "The hash travels with the committed config/system/settings.php. Where an agent chose or printed the password, anybody who holds that value opens the install tool of every environment the repository reaches. Change the password before the project is deployed or public, or keep the value out of settings.php as project-configuration-files states.",
+      {
+        "text": "The install tool has four backend modules under System: /module/system/maintenance, /module/system/settings, /module/system/upgrade and /module/system/environment. /typo3/install and /typo3/install.php redirect to /?__typo3_install, the standalone form, which needs the ENABLE_INSTALL_TOOL file and the install tool password.",
+        "since": 14
+      },
+      {
+        "text": "The install tool has four backend modules under Admin Tools: /module/tools/maintenance, /module/tools/settings, /module/tools/upgrade and /module/tools/environment. /typo3/install.php is the standalone form, which needs the ENABLE_INSTALL_TOOL file and the install tool password.",
+        "until": 14
+      },
+      "Those modules declare access systemMaintainer and sudo mode. In the Development context every administrator passes. In another context a non-empty SYS/systemMaintainers admits the users it lists and nobody else, so an administrator outside the list sees none of the modules. typo3 setup adds the administrator it creates to that list."
+    ]
   }
 ]

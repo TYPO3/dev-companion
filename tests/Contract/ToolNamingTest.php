@@ -104,7 +104,7 @@ final class ToolNamingTest extends TestCase
 
         $unknown = [];
         foreach ([...$this->knowledgeFiles(), ...$this->skillFiles(), ...$this->recordFiles()] as $file) {
-            preg_match_all('/typo3_[a-z_]+/', (string) file_get_contents($file), $matches);
+            preg_match_all('/(?<![a-z_])typo3_[a-z_]+/', (string) file_get_contents($file), $matches);
             foreach (array_unique($matches[0]) as $name) {
                 if (!in_array($name, $known, true)) {
                     $unknown[] = basename($file) . ': ' . $name;

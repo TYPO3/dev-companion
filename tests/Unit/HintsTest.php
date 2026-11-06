@@ -453,6 +453,39 @@ final class HintsTest extends TestCase
     }
 
     /**
+     * The reports asked these words and reached neither statement. Read on
+     * `.checkouts/13.4` and `14.3` — `D-KNW-186`.
+     */
+    #[Decision('D-KNW-186')]
+    #[Test]
+    #[TestWith(['how can I change the admin password'])]
+    #[TestWith(['how can I change the install tool password'])]
+    public function aPasswordQuestionReachesTheInstallToolPassword(string $task): void
+    {
+        $ids = array_column(Hints::find([], $task, 6)['matchedHints'], 'id');
+        self::assertSame('install-tool-password', $ids[0] ?? null);
+
+        $text = self::statementsOf('install-tool-password');
+        self::assertStringContainsString('install:password:set', $text);
+        self::assertStringContainsString('Calculated hash:', $text);
+        self::assertStringContainsString('/module/system/maintenance', $text);
+        self::assertStringContainsString('/module/tools/maintenance', $text);
+        self::assertStringContainsString('Development context', $text);
+    }
+
+    #[Decision('D-KNW-186')]
+    #[Test]
+    public function theQuestionWhatToCommitReachesSettingsPhp(): void
+    {
+        $ids = array_column(Hints::find([], 'which files should I commit in a TYPO3 project', 6)['matchedHints'], 'id');
+        self::assertSame('project-configuration-files', $ids[0] ?? null);
+
+        $text = self::statementsOf('project-configuration-files');
+        self::assertStringContainsString('A project commits config/system/settings.php', $text);
+        self::assertStringContainsString('untracked credentials file', $text);
+    }
+
+    /**
      * `D-KNW-097`. The statement carries no version bound because the sort
      * reads the same on all four checkouts. `sortMatchedRoutes()` compares the
      * host score before the path on 12.4, 13.4, 14.3 and main alike. The only
